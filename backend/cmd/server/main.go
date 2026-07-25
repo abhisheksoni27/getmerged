@@ -41,7 +41,7 @@ func main() {
 	defer database.Close()
 	slog.Info("db connected", "url", cfg.DatabaseURL)
 
-	cacheMiddleware, vkClient, err := middleware.Cache(cfg.ValkeyURL, cfg.ValkeyPassword)
+	cacheMiddleware, vkClient, err := middleware.Cache(cfg.ValkeyURL, cfg.ValkeyUsername, cfg.ValkeyPassword)
 	if err != nil {
 		slog.Error("cache connection failed", "url", cfg.ValkeyURL, "err", err)
 		os.Exit(1)

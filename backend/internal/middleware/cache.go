@@ -12,9 +12,12 @@ import (
 const cacheKey = "cache"
 
 // Cache attaches a valkey.Client to the gin context under the key "cache".
-func Cache(url, password string) (gin.HandlerFunc, valkey.Client, error) {
+func Cache(url, username, password string) (gin.HandlerFunc, valkey.Client, error) {
 	opts := valkey.ClientOption{
 		InitAddress: []string{url},
+	}
+	if username != "" {
+		opts.Username = username
 	}
 	if password != "" {
 		opts.Password = password
