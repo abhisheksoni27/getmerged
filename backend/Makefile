@@ -8,6 +8,14 @@ dev:
 	@which air > /dev/null 2>&1 || (echo "Installing air for live reload..." && go install github.com/air-verse/air@latest)
 	air -c .air.toml
 
+# Cross-compile Linux x86_64 binary locally (fast, low memory)
+build-linux:
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/server-linux ./cmd/server
+
+# Cross-compile Linux ARM64 binary locally (Oracle Ampere ARM)
+build-linux-arm:
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o bin/server-linux-arm ./cmd/server
+
 test:
 	go test -v ./...
 
