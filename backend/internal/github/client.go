@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"net/http"
 	"time"
 )
@@ -21,7 +21,7 @@ type Client struct {
 // NewClient creates a Client using the given personal access token.
 func NewClient(token string) *Client {
 	return &Client{
-		token: token,
+		token:      token,
 		httpClient: &http.Client{Timeout: 30 * time.Second},
 	}
 }
@@ -72,7 +72,6 @@ type Issue struct {
 // --- Public API ---
 
 // SearchRepos queries GitHub for top repos matching the given language.
-// Returns at most maxRepos results (100 per page, paginated).
 func (c *Client) SearchRepos(language string, minStars, maxRepos int) ([]Repo, error) {
 	query := fmt.Sprintf("language:%s stars:>%d sort:stars-desc", language, minStars)
 	var (
@@ -94,10 +93,10 @@ func (c *Client) SearchRepos(language string, minStars, maxRepos int) ([]Repo, e
 						EndCursor   string `json:"endCursor"`
 					} `json:"pageInfo"`
 					Nodes []struct {
-						ID          string `json:"id"`
-						NameWithOwner string `json:"nameWithOwner"`
-						Owner       struct{ Login string `json:"login"` } `json:"owner"`
-						Name        string `json:"name"`
+						ID              string `json:"id"`
+						NameWithOwner   string `json:"nameWithOwner"`
+						Owner           struct{ Login string `json:"login"` } `json:"owner"`
+						Name            string `json:"name"`
 						PrimaryLanguage *struct{ Name string `json:"name"` } `json:"primaryLanguage"`
 						StargazerCount  int    `json:"stargazerCount"`
 						Description     string `json:"description"`
@@ -225,6 +224,7 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, error) {
 		c.cursor(&cursor, resp.Data.Repository.PullRequests.PageInfo.EndCursor)
 	}
 
+	slog.Debug("fetched PRs", "repo", owner+"/"+name, "count", len(prs), "window_days", windowDays)
 	return prs, nil
 }
 
@@ -293,6 +293,7 @@ func (c *Client) FetchIssues(owner, name string, windowDays int) ([]Issue, error
 		c.cursor(&cursor, resp.Data.Repository.Issues.PageInfo.EndCursor)
 	}
 
+	slog.Debug("fetched issues", "repo", owner+"/"+name, "count", len(issues), "window_days", windowDays)
 	return issues, nil
 }
 
@@ -331,6 +332,8 @@ func (c *Client) IsStalenessFlag(owner, name string) (bool, error) {
 			}
 		}
 	}
+
+	slog.Debug("staleness check", "repo", owner+"/"+name, "stale", true)
 	return true, nil
 }
 
@@ -351,12 +354,14 @@ func (c *Client) do(query string, vars map[string]any, out any) error {
 
 	res, err := c.httpClient.Do(req)
 	if err != nil {
+		slog.Error("github graphql request failed", "err", err)
 		return err
 	}
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
 		b, _ := io.ReadAll(res.Body)
+		slog.Error("github api error", "status", res.StatusCode, "body", string(b))
 		return fmt.Errorf("GitHub API returned %d: %s", res.StatusCode, string(b))
 	}
 
@@ -364,16 +369,23 @@ func (c *Client) do(query string, vars map[string]any, out any) error {
 }
 
 func (c *Client) handleRateLimit(rl rateLimitInfo) {
-	log.Printf("github: rate limit remaining=%d cost=%d", rl.Remaining, rl.Cost)
+	slog.Debug("github rate limit", "remaining", rl.Remaining, "cost", rl.Cost)
+
 	if rl.Remaining >= 100 {
 		return
 	}
+
 	resetAt, err := time.Parse(time.RFC3339, rl.ResetAt)
 	if err != nil || time.Now().UTC().After(resetAt) {
 		return
 	}
+
 	wait := time.Until(resetAt) + 5*time.Second
-	log.Printf("github: rate limit low (%d remaining), sleeping %s until reset", rl.Remaining, wait)
+	slog.Warn("github rate limit low — sleeping",
+		"remaining", rl.Remaining,
+		"reset_at", rl.ResetAt,
+		"sleep", wait.String(),
+	)
 	time.Sleep(wait)
 }
 

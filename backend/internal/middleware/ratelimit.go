@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -33,6 +34,7 @@ func RateLimit() gin.HandlerFunc {
 		count, err := incrWithExpiry(client, ctx, key)
 		if err != nil {
 			// On error, fail open.
+			slog.Error("rate limit: valkey error — failing open", "ip", ip, "err", err)
 			c.Next()
 			return
 		}
@@ -45,6 +47,7 @@ func RateLimit() gin.HandlerFunc {
 		c.Header("X-RateLimit-Remaining", fmt.Sprintf("%d", remaining))
 
 		if count > int64(rateLimitMax) {
+			slog.Warn("rate limit exceeded", "ip", ip, "count", count, "path", c.FullPath())
 			c.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{"error": "rate limit exceeded"})
 			return
 		}
@@ -54,9 +57,7 @@ func RateLimit() gin.HandlerFunc {
 }
 
 // incrWithExpiry atomically increments the key and sets expiry on first call.
-// Uses valkey-go's Lua script execution for atomicity.
 func incrWithExpiry(client valkey.Client, ctx context.Context, key string) (int64, error) {
-	// INCR then EXPIRE NX (only set expiry if key is new)
 	incrResp := client.Do(ctx, client.B().Incr().Key(key).Build())
 	if incrResp.Error() != nil {
 		return 0, incrResp.Error()
@@ -67,7 +68,7 @@ func incrWithExpiry(client valkey.Client, ctx context.Context, key string) (int6
 		return 0, err
 	}
 
-	// Set expiry only on the first request (count == 1) to avoid resetting the window.
+	// Set expiry only on first request to avoid resetting the window.
 	if count == 1 {
 		client.Do(ctx, client.B().Expire().Key(key).Seconds(int64(rateLimitWindow.Seconds())).Build())
 	}

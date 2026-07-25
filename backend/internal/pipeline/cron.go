@@ -2,7 +2,7 @@ package pipeline
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 	"time"
 
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
@@ -19,10 +19,10 @@ const (
 
 // repoRow mirrors the repositories table for scanning.
 type repoRow struct {
-	ID       string    `db:"id"`
-	FullName string    `db:"full_name"`
-	Owner    string    `db:"owner"`
-	Name     string    `db:"name"`
+	ID        string    `db:"id"`
+	FullName  string    `db:"full_name"`
+	Owner     string    `db:"owner"`
+	Name      string    `db:"name"`
 	UpdatedAt time.Time `db:"updated_at"`
 }
 
@@ -33,13 +33,14 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 	if err != nil {
 		return fmt.Errorf("fetch repos: %w", err)
 	}
-	log.Printf("cron: updating %d repos", len(repos))
+
+	slog.Info("cron started", "repos_to_update", len(repos))
 
 	if len(repos) == 0 {
+		slog.Info("cron: nothing to update")
 		return nil
 	}
 
-	// Fetch metrics for all repos first, then normalise across the full set.
 	type repoMetrics struct {
 		repo repoRow
 		raw  scoring.RawMetrics
@@ -47,22 +48,26 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 	all := make([]repoMetrics, 0, len(repos))
 
 	for _, r := range repos {
-		log.Printf("cron: processing %s", r.FullName)
+		slog.Info("cron: processing repo", "repo", r.FullName)
 
 		prs, err := gh.FetchPRs(r.Owner, r.Name, prWindowDays)
 		if err != nil {
-			log.Printf("cron: FetchPRs %s: %v (skipping)", r.FullName, err)
+			slog.Error("cron: FetchPRs failed — skipping", "repo", r.FullName, "err", err)
 			continue
 		}
+
 		issues, err := gh.FetchIssues(r.Owner, r.Name, issueWindowDays)
 		if err != nil {
-			log.Printf("cron: FetchIssues %s: %v (skipping)", r.FullName, err)
+			slog.Error("cron: FetchIssues failed — skipping", "repo", r.FullName, "err", err)
 			continue
 		}
+
 		stale, err := gh.IsStalenessFlag(r.Owner, r.Name)
 		if err != nil {
-			log.Printf("cron: IsStalenessFlag %s: %v (assuming not stale)", r.FullName, err)
+			slog.Warn("cron: IsStalenessFlag failed — assuming not stale", "repo", r.FullName, "err", err)
 		}
+
+		slog.Debug("cron: fetched data", "repo", r.FullName, "prs", len(prs), "issues", len(issues), "stale", stale)
 
 		// Convert github.PR → scoring.PR
 		scoringPRs := make([]scoring.PR, len(prs))
@@ -91,6 +96,7 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 	}
 
 	if len(all) == 0 {
+		slog.Warn("cron: no repos scored after fetching (all failed)")
 		return nil
 	}
 
@@ -103,15 +109,23 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 
 	for i, rm := range all {
 		score, tier := scoring.ComputeCRank(normed[i], rm.raw.StalenessFlag)
+
+		slog.Info("cron: scored repo",
+			"repo", rm.repo.FullName,
+			"score", score,
+			"tier", tier,
+			"stale", rm.raw.StalenessFlag,
+		)
+
 		if err := insertSnapshot(db, rm.repo.ID, rm.raw, score, tier); err != nil {
-			log.Printf("cron: insertSnapshot %s: %v", rm.repo.FullName, err)
+			slog.Error("cron: insertSnapshot failed", "repo", rm.repo.FullName, "err", err)
 		}
 		if err := touchRepo(db, rm.repo.ID); err != nil {
-			log.Printf("cron: touchRepo %s: %v", rm.repo.FullName, err)
+			slog.Error("cron: touchRepo failed", "repo", rm.repo.FullName, "err", err)
 		}
 	}
 
-	log.Printf("cron: done. scored %d repos", len(all))
+	slog.Info("cron complete", "scored", len(all), "attempted", len(repos))
 	return nil
 }
 

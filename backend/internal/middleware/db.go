@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 
 	"github.com/abhisheksoni27/opendoor/internal/db"
@@ -24,7 +24,7 @@ func DB(database *sqlx.DB) gin.HandlerFunc {
 func MustDB(c *gin.Context) *sqlx.DB {
 	v, ok := c.Get(dbKey)
 	if !ok {
-		log.Println("middleware: db not found in context")
+		slog.Error("db not found in context — is DB middleware registered?")
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return nil
 	}
