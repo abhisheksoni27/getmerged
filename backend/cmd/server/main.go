@@ -90,13 +90,9 @@ func main() {
 }
 
 // setupLogger configures the global slog default to write to stdout AND a persistent log file.
-// JSON handler in release (structured, machine-readable).
-// Text handler in debug (human-readable).
+// Forces LevelDebug so all detailed GraphQL/cache logs are preserved even in release mode.
 func setupLogger(ginMode, logFilePath string) {
-	level := slog.LevelInfo
-	if ginMode == "debug" {
-		level = slog.LevelDebug
-	}
+	level := slog.LevelDebug
 
 	opts := &slog.HandlerOptions{Level: level}
 
