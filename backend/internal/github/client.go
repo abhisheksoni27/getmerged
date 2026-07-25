@@ -187,7 +187,28 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, error) {
 
 		c.handleRateLimit(resp.Data.Repository.RateLimit)
 
-		for _, n := range resp.Data.Repository.PullRequests.Nodes {
+		nodes := resp.Data.Repository.PullRequests.Nodes
+		slog.Debug("github: PR page fetched",
+			"repo", owner+"/"+name,
+			"nodes_in_page", len(nodes),
+			"has_next_page", resp.Data.Repository.PullRequests.PageInfo.HasNextPage,
+		)
+
+		for idx, n := range nodes {
+			slog.Debug("github: PR node",
+				"repo", owner+"/"+name,
+				"index", idx,
+				"state", n.State,
+				"author_association", n.AuthorAssociation,
+				"created_at", n.CreatedAt,
+				"merged_at", n.MergedAt,
+				"first_comment_at", func() string {
+					if len(n.Comments.Nodes) > 0 {
+						return n.Comments.Nodes[0].CreatedAt
+					}
+					return "(none)"
+				}(),
+			)
 			createdAt, err := time.Parse(time.RFC3339, n.CreatedAt)
 			if err != nil {
 				continue
@@ -268,6 +289,13 @@ func (c *Client) FetchIssues(owner, name string, windowDays int) ([]Issue, error
 		}
 
 		c.handleRateLimit(resp.Data.Repository.RateLimit)
+
+		nodeCount := len(resp.Data.Repository.Issues.Nodes)
+		slog.Debug("github: issues page fetched",
+			"repo", owner+"/"+name,
+			"nodes_in_page", nodeCount,
+			"has_next_page", resp.Data.Repository.Issues.PageInfo.HasNextPage,
+		)
 
 		for _, n := range resp.Data.Repository.Issues.Nodes {
 			createdAt, err := time.Parse(time.RFC3339, n.CreatedAt)
@@ -369,6 +397,11 @@ func (c *Client) do(query string, vars map[string]any, out any) error {
 }
 
 func (c *Client) handleRateLimit(rl rateLimitInfo) {
+	if rl.Remaining == 0 && rl.Cost == 0 {
+		slog.Warn("github: rate limit info is all-zero — GitHub may have returned empty/null rateLimit (check repo name, token scope, or query errors)")
+		return
+	}
+
 	slog.Debug("github rate limit", "remaining", rl.Remaining, "cost", rl.Cost)
 
 	if rl.Remaining >= 100 {

@@ -51,6 +51,13 @@ update:
 	curl -s -X POST http://localhost:$(PORT)/internal/update-scores \
 	  -H "x-api-key: $(INTERNAL_API_KEY)" | jq .
 
+## Score a single repo (diagnostic, no DB write). Usage: make score-repo OWNER=gin-gonic NAME=gin
+score-repo:
+	curl -s -X POST http://localhost:$(PORT)/internal/score-repo \
+	  -H "x-api-key: $(INTERNAL_API_KEY)" \
+	  -H "Content-Type: application/json" \
+	  -d '{"owner":"$(OWNER)","name":"$(NAME)"}' | jq .
+
 ## Trigger score update on prod
 update-prod:
 	ssh $(ORACLE_USER)@$(ORACLE_HOST) \
