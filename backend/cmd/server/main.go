@@ -13,6 +13,7 @@ import (
 	"log/slog"
 	"os"
 
+	_ "github.com/abhisheksoni27/opendoor/docs"
 	"github.com/abhisheksoni27/opendoor/internal/config"
 	"github.com/abhisheksoni27/opendoor/internal/db"
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
@@ -79,8 +80,11 @@ func main() {
 		internal.DELETE("/repos/:id", handler.DeleteRepo())
 	}
 
-	// Swagger docs
-	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// Swagger docs (only registered in debug mode to prevent API documentation leaks in production)
+	if cfg.GinMode == "debug" {
+		r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+		slog.Info("swagger docs enabled", "path", "/docs/index.html")
+	}
 
 	slog.Info("server starting", "port", cfg.Port, "mode", cfg.GinMode)
 	if err := r.Run("localhost:" + cfg.Port); err != nil {
