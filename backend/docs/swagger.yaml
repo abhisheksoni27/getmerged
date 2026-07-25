@@ -1,0 +1,305 @@
+basePath: /
+definitions:
+  handler.HealthResponse:
+    properties:
+      cache:
+        type: string
+      commit:
+        type: string
+      database:
+        type: string
+      status:
+        type: string
+      timestamp:
+        type: string
+      uptime:
+        type: string
+    type: object
+  handler.ScoreRepoBody:
+    properties:
+      name:
+        type: string
+      owner:
+        type: string
+    required:
+    - name
+    - owner
+    type: object
+  handler.SeedBody:
+    properties:
+      force:
+        type: boolean
+      languages:
+        items:
+          type: string
+        type: array
+    type: object
+  handler.repoResponse:
+    properties:
+      c_rank_score:
+        type: number
+      c_rank_tier:
+        type: string
+      description:
+        type: string
+      distinct_maintainer_count:
+        type: number
+      external_pr_merge_rate:
+        type: number
+      first_timer_success_rate:
+        type: number
+      full_name:
+        type: string
+      github_url:
+        type: string
+      id:
+        type: string
+      issue_triage_speed_hours:
+        type: number
+      language:
+        type: string
+      last_activity_days:
+        type: number
+      maintainer_responsiveness:
+        type: number
+      repeat_contributor_rate:
+        type: number
+      review_rounds:
+        type: number
+      snapshot_date:
+        type: string
+      staleness_flag:
+        type: boolean
+      stars:
+        type: integer
+      time_to_first_response_hours:
+        type: number
+      time_to_merge_hours:
+        type: number
+    type: object
+host: opendoor.abhishekco.de
+info:
+  contact: {}
+  description: Find open-source repositories that welcome contributors — ranked by
+    C-Rank™.
+  title: OpenDoor API
+  version: "1.0"
+paths:
+  /api/v1/repos:
+    get:
+      description: Returns a paginated list of repositories with their latest C-Rank
+        scores.
+      parameters:
+      - description: Filter by language (e.g. Go)
+        in: query
+        name: language
+        type: string
+      - description: Minimum star count
+        in: query
+        name: min_stars
+        type: integer
+      - description: Partial name search
+        in: query
+        name: name
+        type: string
+      - description: Sort column (c_rank_score, stars, time_to_first_response_hours)
+        in: query
+        name: sort
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: order
+        type: string
+      - description: Page number (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 20, max 100)
+        in: query
+        name: per_page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List repositories
+      tags:
+      - repos
+  /api/v1/repos/{id}:
+    get:
+      description: Returns details and latest C-Rank score for a single repository.
+      parameters:
+      - description: Repository ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.repoResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get repository details
+      tags:
+      - repos
+  /health:
+    get:
+      description: Returns service health status, uptime, database/cache connectivity,
+        and deployed git commit hash.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.HealthResponse'
+      summary: Health Check
+      tags:
+      - system
+  /internal/repos/{id}:
+    delete:
+      description: Deletes a repository record and all of its daily snapshot history.
+      parameters:
+      - description: Repository ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete repository and snapshots
+      tags:
+      - internal
+  /internal/score-repo:
+    post:
+      consumes:
+      - application/json
+      description: Fetches live GitHub data, computes metrics and C-Rank, and saves
+        to DB.
+      parameters:
+      - description: Repository to score
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.ScoreRepoBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Score a single repository & store to DB
+      tags:
+      - internal
+  /internal/seed:
+    post:
+      consumes:
+      - application/json
+      description: Searches top repositories per language and runs initial C-Rank
+        scoring.
+      parameters:
+      - description: Target languages
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.SeedBody'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Trigger database seed job
+      tags:
+      - internal
+  /internal/update-scores:
+    post:
+      description: Fetches GitHub data for stale repos and recomputes C-Rank scores.
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Trigger score update
+      tags:
+      - internal
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: x-api-key
+    type: apiKey
+swagger: "2.0"

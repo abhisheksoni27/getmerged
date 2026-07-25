@@ -1,0 +1,463 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Find open-source repositories that welcome contributors — ranked by C-Rank™.",
+        "title": "OpenDoor API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "opendoor.abhishekco.de",
+    "basePath": "/",
+    "paths": {
+        "/api/v1/repos": {
+            "get": {
+                "description": "Returns a paginated list of repositories with their latest C-Rank scores.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "repos"
+                ],
+                "summary": "List repositories",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Filter by language (e.g. Go)",
+                        "name": "language",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimum star count",
+                        "name": "min_stars",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Partial name search",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort column (c_rank_score, stars, time_to_first_response_hours)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort order (asc, desc)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Items per page (default 20, max 100)",
+                        "name": "per_page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/repos/{id}": {
+            "get": {
+                "description": "Returns details and latest C-Rank score for a single repository.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "repos"
+                ],
+                "summary": "Get repository details",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Repository ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.repoResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "description": "Returns service health status, uptime, database/cache connectivity, and deployed git commit hash.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "system"
+                ],
+                "summary": "Health Check",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.HealthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/internal/repos/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Deletes a repository record and all of its daily snapshot history.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "internal"
+                ],
+                "summary": "Delete repository and snapshots",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Repository ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/internal/score-repo": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Fetches live GitHub data, computes metrics and C-Rank, and saves to DB.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "internal"
+                ],
+                "summary": "Score a single repository \u0026 store to DB",
+                "parameters": [
+                    {
+                        "description": "Repository to score",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.ScoreRepoBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/internal/seed": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Searches top repositories per language and runs initial C-Rank scoring.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "internal"
+                ],
+                "summary": "Trigger database seed job",
+                "parameters": [
+                    {
+                        "description": "Target languages",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.SeedBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/internal/update-scores": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Fetches GitHub data for stale repos and recomputes C-Rank scores.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "internal"
+                ],
+                "summary": "Trigger score update",
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "handler.HealthResponse": {
+            "type": "object",
+            "properties": {
+                "cache": {
+                    "type": "string"
+                },
+                "commit": {
+                    "type": "string"
+                },
+                "database": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "string"
+                },
+                "uptime": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.ScoreRepoBody": {
+            "type": "object",
+            "required": [
+                "name",
+                "owner"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "owner": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.SeedBody": {
+            "type": "object",
+            "properties": {
+                "force": {
+                    "type": "boolean"
+                },
+                "languages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "handler.repoResponse": {
+            "type": "object",
+            "properties": {
+                "c_rank_score": {
+                    "type": "number"
+                },
+                "c_rank_tier": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "distinct_maintainer_count": {
+                    "type": "number"
+                },
+                "external_pr_merge_rate": {
+                    "type": "number"
+                },
+                "first_timer_success_rate": {
+                    "type": "number"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "github_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "issue_triage_speed_hours": {
+                    "type": "number"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "last_activity_days": {
+                    "type": "number"
+                },
+                "maintainer_responsiveness": {
+                    "type": "number"
+                },
+                "repeat_contributor_rate": {
+                    "type": "number"
+                },
+                "review_rounds": {
+                    "type": "number"
+                },
+                "snapshot_date": {
+                    "type": "string"
+                },
+                "staleness_flag": {
+                    "type": "boolean"
+                },
+                "stars": {
+                    "type": "integer"
+                },
+                "time_to_first_response_hours": {
+                    "type": "number"
+                },
+                "time_to_merge_hours": {
+                    "type": "number"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "x-api-key",
+            "in": "header"
+        }
+    }
+}

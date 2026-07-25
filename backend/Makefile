@@ -1,22 +1,26 @@
-.PHONY: build test lint run dev build-linux build-linux-arm deploy score-repo check-pat
+.PHONY: build swagger test lint run dev build-linux build-linux-arm deploy score-repo check-pat
 
 COMMIT_HASH ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
 LDFLAGS := -s -w -X github.com/abhisheksoni27/opendoor/internal/handler.CommitHash=$(COMMIT_HASH)
 
-build:
+swagger:
+	@which swag > /dev/null 2>&1 || (echo "Installing swag..." && go install github.com/swaggo/swag/cmd/swag@latest)
+	swag init -g cmd/server/main.go
+
+build: swagger
 	go build -ldflags="$(LDFLAGS)" -o bin/server ./cmd/server
 
 # Live-reloading development server using air
-dev:
+dev: swagger
 	@which air > /dev/null 2>&1 || (echo "Installing air for live reload..." && go install github.com/air-verse/air@latest)
 	air -c .air.toml
 
 # Cross-compile Linux x86_64 binary locally (fast, low memory)
-build-linux:
+build-linux: swagger
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o bin/server-linux ./cmd/server
 
 # Cross-compile Linux ARM64 binary locally (Oracle Ampere ARM)
-build-linux-arm:
+build-linux-arm: swagger
 	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="$(LDFLAGS)" -o bin/server-linux-arm ./cmd/server
 
 test:
@@ -25,7 +29,7 @@ test:
 lint:
 	go vet ./...
 
-run:
+run: swagger
 	go run ./cmd/server
 
 # Zero-downtime deployment (cross-compile locally -> scp to /tmp -> atomic mv -> systemctl restart)
