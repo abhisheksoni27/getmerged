@@ -31,11 +31,11 @@ run:
 # Zero-downtime deployment (cross-compile locally -> scp to /tmp -> atomic mv -> systemctl restart)
 deploy: build-linux
 	@echo "=== Ensuring target directory exists on server ==="
-	ssh ubuntu@opendoor.abhishekco.de "mkdir -p /data/apps/opendoor/backend"
+	ssh ubuntu@opendoor.opendoor "mkdir -p /data/apps/opendoor/backend"
 	@echo "=== Copying binary to /tmp/server ==="
-	scp bin/server-linux ubuntu@opendoor.abhishekco.de:/tmp/server
+	scp bin/server-linux ubuntu@opendoor.opendoor:/tmp/server
 	@echo "=== Atomically replacing server binary & restarting service ==="
-	ssh ubuntu@opendoor.abhishekco.de "mv -f /tmp/server /data/apps/opendoor/backend/server && chmod +x /data/apps/opendoor/backend/server && sudo systemctl restart opendoor.service && sudo systemctl status opendoor.service --no-pager"
+	ssh ubuntu@opendoor.opendoor "mv -f /tmp/server /data/apps/opendoor/backend/server && chmod +x /data/apps/opendoor/backend/server && sudo systemctl restart opendoor.service && sudo systemctl status opendoor.service --no-pager"
 
 score-repo:
 	@curl -X POST 'http://localhost:10000/internal/score-repo' \
