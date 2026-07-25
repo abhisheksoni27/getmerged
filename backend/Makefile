@@ -1,15 +1,12 @@
-.PHONY: build test lint run build-linux build-linux-arm deploy score-repo check-pat
+.PHONY: build test lint run dev build-linux build-linux-arm deploy score-repo check-pat
 
 build:
 	go build -o bin/server ./cmd/server
 
-# Cross-compile Linux x86_64 binary locally (fast, low memory)
-build-linux:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/server-linux ./cmd/server
-
-# Cross-compile Linux ARM64 binary locally (Oracle Ampere ARM)
-build-linux-arm:
-	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o bin/server-linux-arm ./cmd/server
+# Live-reloading development server using air
+dev:
+	@which air > /dev/null 2>&1 || (echo "Installing air for live reload..." && go install github.com/air-verse/air@latest)
+	air -c .air.toml
 
 test:
 	go test -v ./...
@@ -20,12 +17,14 @@ lint:
 run:
 	go run ./cmd/server
 
-# One-command deployment to Oracle VM (cross-compiles locally + scp + systemctl restart)
+# Zero-downtime deployment (cross-compile locally -> scp to /tmp -> atomic mv -> systemctl restart)
 deploy: build-linux
-	@echo "=== Copying binary to opendoor.abhishekco.de ==="
-	scp bin/server-linux ubuntu@opendoor.abhishekco.de:/data/apps/opendoor/backend/server
-	@echo "=== Restarting opendoor.service ==="
-	ssh ubuntu@opendoor.abhishekco.de "sudo systemctl restart opendoor.service && sudo systemctl status opendoor.service --no-pager"
+	@echo "=== Ensuring target directory exists on server ==="
+	ssh ubuntu@opendoor.abhishekco.de "mkdir -p /data/apps/opendoor/backend"
+	@echo "=== Copying binary to /tmp/server ==="
+	scp bin/server-linux ubuntu@opendoor.abhishekco.de:/tmp/server
+	@echo "=== Atomically replacing server binary & restarting service ==="
+	ssh ubuntu@opendoor.abhishekco.de "mv -f /tmp/server /data/apps/opendoor/backend/server && chmod +x /data/apps/opendoor/backend/server && sudo systemctl restart opendoor.service && sudo systemctl status opendoor.service --no-pager"
 
 score-repo:
 	@curl -X POST 'http://localhost:10000/internal/score-repo' \
