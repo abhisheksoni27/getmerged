@@ -57,12 +57,15 @@ func main() {
 	r.Use(middleware.DB(database))
 	r.Use(cacheMiddleware)
 
+	// Health Check
+	r.GET("/health", handler.Health())
+
 	// Public API
-	v1 := r.Group("/api/v1")
-	v1.Use(middleware.RateLimit())
+	api := r.Group("/api/v1")
 	{
-		v1.GET("/repos", handler.ListRepos)
-		v1.GET("/repos/:id", handler.GetRepo)
+		api.GET("/health", handler.Health())
+		api.GET("/repos", handler.ListRepos)
+		api.GET("/repos/:id", handler.GetRepo)
 	}
 
 	// Internal routes — nginx blocks these externally

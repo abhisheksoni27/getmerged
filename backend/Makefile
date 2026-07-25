@@ -1,7 +1,10 @@
 .PHONY: build test lint run dev build-linux build-linux-arm deploy score-repo check-pat
 
+COMMIT_HASH ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+LDFLAGS := -s -w -X github.com/abhisheksoni27/opendoor/internal/handler.CommitHash=$(COMMIT_HASH)
+
 build:
-	go build -o bin/server ./cmd/server
+	go build -ldflags="$(LDFLAGS)" -o bin/server ./cmd/server
 
 # Live-reloading development server using air
 dev:
@@ -10,11 +13,11 @@ dev:
 
 # Cross-compile Linux x86_64 binary locally (fast, low memory)
 build-linux:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/server-linux ./cmd/server
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o bin/server-linux ./cmd/server
 
 # Cross-compile Linux ARM64 binary locally (Oracle Ampere ARM)
 build-linux-arm:
-	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o bin/server-linux-arm ./cmd/server
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="$(LDFLAGS)" -o bin/server-linux-arm ./cmd/server
 
 test:
 	go test -v ./...
