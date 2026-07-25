@@ -45,22 +45,24 @@ func UpdateScores(gh *github.Client) gin.HandlerFunc {
 	}
 }
 
-// SeedBody is the optional request body for the seed endpoint.
+// SeedBody is the request body for triggering the initial database seed.
 type SeedBody struct {
 	Languages []string `json:"languages"`
+	Force     bool     `json:"force"`
 }
 
 // Seed handles POST /internal/seed
-// Seeds the repositories table with top repos for the given languages.
+// Triggers an asynchronous seed job to populate top repos across target languages.
 //
-//	@Summary      Seed repositories
-//	@Description  Fetches and inserts top repositories from GitHub for the given languages.
+//	@Summary      Trigger database seed job
+//	@Description  Searches top repositories per language and runs initial C-Rank scoring.
 //	@Tags         internal
 //	@Accept       json
 //	@Produce      json
 //	@Security     ApiKeyAuth
-//	@Param        body  body  SeedBody  false  "Language list (defaults to Go, Python, JavaScript)"
-//	@Success      202  {object}  map[string]string
+//	@Param        body  body      SeedBody  true  "Target languages"
+//	@Success      202   {object}  map[string]string
+//	@Failure      500   {object}  map[string]string
 //	@Router       /internal/seed [post]
 func Seed(gh *github.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -75,10 +77,10 @@ func Seed(gh *github.Client) gin.HandlerFunc {
 
 		jobID := uuid.New().String()
 
-		slog.Info("seed triggered", "job_id", jobID, "languages", body.Languages, "ip", c.ClientIP())
+		slog.Info("seed triggered", "job_id", jobID, "languages", body.Languages, "force", body.Force, "ip", c.ClientIP())
 
 		go func() {
-			if err := pipeline.Seed(db, gh, body.Languages); err != nil {
+			if err := pipeline.Seed(db, gh, body.Languages, body.Force); err != nil {
 				slog.Error("seed: pipeline error", "job_id", jobID, "err", err)
 			}
 		}()
