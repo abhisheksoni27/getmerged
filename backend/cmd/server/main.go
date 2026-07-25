@@ -70,6 +70,7 @@ func main() {
 	{
 		internal.POST("/update-scores", handler.UpdateScores(gh))
 		internal.POST("/seed", handler.Seed(gh))
+		internal.POST("/score-repo", handler.ScoreRepo(gh))
 	}
 
 	// Swagger docs
