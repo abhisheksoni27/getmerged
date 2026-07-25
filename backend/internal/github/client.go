@@ -71,6 +71,36 @@ type Issue struct {
 
 // --- Public API ---
 
+// CheckToken tests if the token is valid by querying the viewer.
+func (c *Client) CheckToken() (string, rateLimitInfo, error) {
+	query := `
+	query {
+		viewer {
+			login
+		}
+		rateLimit {
+			remaining
+			resetAt
+			cost
+		}
+	}`
+
+	var resp struct {
+		Data struct {
+			Viewer struct {
+				Login string `json:"login"`
+			} `json:"viewer"`
+			RateLimit rateLimitInfo `json:"rateLimit"`
+		} `json:"data"`
+	}
+
+	if err := c.do(query, nil, &resp); err != nil {
+		return "", rateLimitInfo{}, err
+	}
+
+	return resp.Data.Viewer.Login, resp.Data.RateLimit, nil
+}
+
 // SearchRepos queries GitHub for top repos matching the given language.
 func (c *Client) SearchRepos(language string, minStars, maxRepos int) ([]Repo, error) {
 	query := fmt.Sprintf("language:%s stars:>%d sort:stars-desc", language, minStars)
@@ -176,8 +206,8 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, error) {
 							} `json:"comments"`
 						} `json:"nodes"`
 					} `json:"pullRequests"`
-					RateLimit rateLimitInfo `json:"rateLimit"`
 				} `json:"repository"`
+				RateLimit rateLimitInfo `json:"rateLimit"`
 			} `json:"data"`
 		}
 
@@ -185,7 +215,7 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, error) {
 			return nil, fmt.Errorf("FetchPRs(%s/%s): %w", owner, name, err)
 		}
 
-		c.handleRateLimit(resp.Data.Repository.RateLimit)
+		c.handleRateLimit(resp.Data.RateLimit)
 
 		nodes := resp.Data.Repository.PullRequests.Nodes
 		slog.Debug("github: PR page fetched",
@@ -279,8 +309,8 @@ func (c *Client) FetchIssues(owner, name string, windowDays int) ([]Issue, error
 							} `json:"comments"`
 						} `json:"nodes"`
 					} `json:"issues"`
-					RateLimit rateLimitInfo `json:"rateLimit"`
 				} `json:"repository"`
+				RateLimit rateLimitInfo `json:"rateLimit"`
 			} `json:"data"`
 		}
 
@@ -288,7 +318,7 @@ func (c *Client) FetchIssues(owner, name string, windowDays int) ([]Issue, error
 			return nil, fmt.Errorf("FetchIssues(%s/%s): %w", owner, name, err)
 		}
 
-		c.handleRateLimit(resp.Data.Repository.RateLimit)
+		c.handleRateLimit(resp.Data.RateLimit)
 
 		nodeCount := len(resp.Data.Repository.Issues.Nodes)
 		slog.Debug("github: issues page fetched",
@@ -338,8 +368,8 @@ func (c *Client) IsStalenessFlag(owner, name string) (bool, error) {
 						AuthorAssociation string `json:"authorAssociation"`
 					} `json:"nodes"`
 				} `json:"pullRequests"`
-				RateLimit rateLimitInfo `json:"rateLimit"`
 			} `json:"repository"`
+			RateLimit rateLimitInfo `json:"rateLimit"`
 		} `json:"data"`
 	}
 
@@ -347,7 +377,7 @@ func (c *Client) IsStalenessFlag(owner, name string) (bool, error) {
 		return false, err
 	}
 
-	c.handleRateLimit(resp.Data.Repository.RateLimit)
+	c.handleRateLimit(resp.Data.RateLimit)
 
 	externalAssoc := map[string]bool{"CONTRIBUTOR": true, "FIRST_TIME_CONTRIBUTOR": true, "NONE": true}
 	for _, pr := range resp.Data.Repository.PullRequests.Nodes {
@@ -368,12 +398,12 @@ func (c *Client) IsStalenessFlag(owner, name string) (bool, error) {
 // --- Internal helpers ---
 
 func (c *Client) do(query string, vars map[string]any, out any) error {
-	body, err := json.Marshal(graphqlRequest{Query: query, Variables: vars})
+	reqBody, err := json.Marshal(graphqlRequest{Query: query, Variables: vars})
 	if err != nil {
 		return err
 	}
 
-	req, err := http.NewRequest(http.MethodPost, graphqlEndpoint, bytes.NewReader(body))
+	req, err := http.NewRequest(http.MethodPost, graphqlEndpoint, bytes.NewReader(reqBody))
 	if err != nil {
 		return err
 	}
@@ -382,19 +412,42 @@ func (c *Client) do(query string, vars map[string]any, out any) error {
 
 	res, err := c.httpClient.Do(req)
 	if err != nil {
-		slog.Error("github graphql request failed", "err", err)
+		slog.Error("github: http request failed", "err", err)
 		return err
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode != http.StatusOK {
-		b, _ := io.ReadAll(res.Body)
-		slog.Error("github api error", "status", res.StatusCode, "body", string(b))
-		return fmt.Errorf("GitHub API returned %d: %s", res.StatusCode, string(b))
+	// Read the full body — we need it for both logging and decoding.
+	raw, err := io.ReadAll(res.Body)
+	if err != nil {
+		return fmt.Errorf("read response body: %w", err)
 	}
 
-	return json.NewDecoder(res.Body).Decode(out)
+	// Log the raw response so local dev can see exactly what GitHub returned.
+	slog.Debug("github: raw response", "status", res.StatusCode, "body", string(raw))
+
+	if res.StatusCode != http.StatusOK {
+		slog.Error("github: non-200 response", "status", res.StatusCode, "body", string(raw))
+		return fmt.Errorf("GitHub API returned %d: %s", res.StatusCode, string(raw))
+	}
+
+	// GitHub GraphQL ALWAYS returns HTTP 200 — errors are in the body `errors` field.
+	var envelope struct {
+		Errors []struct {
+			Message string `json:"message"`
+			Type    string `json:"type"`
+		} `json:"errors"`
+	}
+	if jsonErr := json.Unmarshal(raw, &envelope); jsonErr == nil && len(envelope.Errors) > 0 {
+		for _, e := range envelope.Errors {
+			slog.Error("github: graphql error", "message", e.Message, "type", e.Type)
+		}
+		return fmt.Errorf("graphql error: %s", envelope.Errors[0].Message)
+	}
+
+	return json.Unmarshal(raw, out)
 }
+
 
 func (c *Client) handleRateLimit(rl rateLimitInfo) {
 	if rl.Remaining == 0 && rl.Cost == 0 {

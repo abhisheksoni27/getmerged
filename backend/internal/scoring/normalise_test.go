@@ -15,9 +15,9 @@ func TestPercentileRank_Empty(t *testing.T) {
 
 func TestPercentileRank_SingleValue(t *testing.T) {
 	got := scoring.PercentileRank(42, []float64{42})
-	if got != 0 {
-		// Only element, nothing below it → 0th percentile
-		t.Errorf("expected 0, got %.2f", got)
+	if got != 50 {
+		// Only element, default to 50th percentile
+		t.Errorf("expected 50 for single value, got %.2f", got)
 	}
 }
 
