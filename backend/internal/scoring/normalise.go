@@ -11,6 +11,9 @@ type NormalisedMetrics struct {
 	RepeatContributor float64
 	IssueTriageSpeed  float64 // lower hours → higher score; 0 if no data
 	Responsiveness    float64 // lower hours → higher score; 0 if no data
+	ActivityRecency   float64 // lower days → higher score (decay)
+	ReviewRounds      float64 // moderate/low rounds → higher score
+	MaintainerBreadth float64 // higher maintainer count → higher score
 }
 
 // PercentileRank returns the percentile rank (0–100) of value within all.
@@ -44,6 +47,7 @@ func NormaliseAll(all []RawMetrics) []NormalisedMetrics {
 	repeatRates    := extractField(all, func(m RawMetrics) float64 { return m.RepeatContributorRate })
 	triageSpeeds   := extractField(all, func(m RawMetrics) float64 { return m.IssueTriageSpeedHours })
 	responsiveness := extractField(all, func(m RawMetrics) float64 { return m.MaintainerResponsiveness })
+	reviewRounds   := extractField(all, func(m RawMetrics) float64 { return m.ReviewRounds })
 
 	result := make([]NormalisedMetrics, n)
 	for i, m := range all {
@@ -55,9 +59,69 @@ func NormaliseAll(all []RawMetrics) []NormalisedMetrics {
 			RepeatContributor: PercentileRank(m.RepeatContributorRate, repeatRates),
 			IssueTriageSpeed:  scoreTimeMetric(m.IssueTriageSpeedHours, triageSpeeds),
 			Responsiveness:    scoreTimeMetric(m.MaintainerResponsiveness, responsiveness),
+			ActivityRecency:   scoreDaysMetric(m.LastActivityDays),
+			ReviewRounds:      scoreRoundsMetric(m.ReviewRounds, reviewRounds),
+			MaintainerBreadth: scoreMaintainerMetric(m.DistinctMaintainerCount),
 		}
 	}
 	return result
+}
+
+// scoreDaysMetric scores activity recency in days (lower is better).
+// Always uses absolute benchmark scoring regardless of population size.
+func scoreDaysMetric(days float64) float64 {
+	switch {
+	case days <= 7:
+		return 100
+	case days <= 30:
+		return 80
+	case days <= 60:
+		return 60
+	case days <= 90:
+		return 40
+	case days <= 180:
+		return 20
+	default:
+		return 0
+	}
+}
+
+// scoreRoundsMetric scores review rounds (comments per merged PR).
+// Ideal is 1-3 comments; >6 indicates excessive nitpicking.
+func scoreRoundsMetric(rounds float64, population []float64) float64 {
+	if len(population) > 1 {
+		return 100 - PercentileRank(rounds, population)
+	}
+
+	switch {
+	case rounds <= 2.0:
+		return 100
+	case rounds <= 4.0:
+		return 80
+	case rounds <= 6.0:
+		return 50
+	default:
+		return 20
+	}
+}
+
+// scoreMaintainerMetric scores distinct maintainer count (higher is better).
+// Always uses absolute benchmark scoring regardless of population size.
+func scoreMaintainerMetric(count float64) float64 {
+	switch {
+	case count >= 5:
+		return 100
+	case count == 4:
+		return 85
+	case count == 3:
+		return 70
+	case count == 2:
+		return 50
+	case count == 1:
+		return 30
+	default:
+		return 0
+	}
 }
 
 // scoreTimeMetric scores time-in-hours (lower is better).

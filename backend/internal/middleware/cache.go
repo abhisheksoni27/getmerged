@@ -12,7 +12,7 @@ import (
 const cacheKey = "cache"
 
 // Cache attaches a valkey.Client to the gin context under the key "cache".
-func Cache(url, password string) (gin.HandlerFunc, error) {
+func Cache(url, password string) (gin.HandlerFunc, valkey.Client, error) {
 	opts := valkey.ClientOption{
 		InitAddress: []string{url},
 	}
@@ -22,11 +22,11 @@ func Cache(url, password string) (gin.HandlerFunc, error) {
 
 	client, err := valkey.NewClient(opts)
 	if err != nil {
-		return nil, fmt.Errorf("valkey connect: %w", err)
+		return nil, nil, fmt.Errorf("valkey connect: %w", err)
 	}
 
 	if err := client.Do(context.Background(), client.B().Ping().Build()).Error(); err != nil {
-		return nil, fmt.Errorf("valkey ping: %w", err)
+		return nil, nil, fmt.Errorf("valkey ping: %w", err)
 	}
 
 	slog.Info("cache connected", "url", url)
@@ -34,7 +34,7 @@ func Cache(url, password string) (gin.HandlerFunc, error) {
 	return func(c *gin.Context) {
 		c.Set(cacheKey, client)
 		c.Next()
-	}, nil
+	}, client, nil
 }
 
 // MustCache retrieves the valkey.Client from the gin context.

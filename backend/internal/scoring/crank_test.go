@@ -10,9 +10,12 @@ func TestComputeCRank_WeightedSum(t *testing.T) {
 	n := scoring.NormalisedMetrics{
 		MergeRate:         100,
 		ResponseTime:      100,
+		ActivityRecency:   100,
 		FirstTimer:        100,
 		TimeToMerge:       100,
 		RepeatContributor: 100,
+		ReviewRounds:      100,
+		MaintainerBreadth: 100,
 		IssueTriageSpeed:  100,
 		Responsiveness:    100,
 	}
@@ -32,9 +35,12 @@ func TestComputeCRank_StalenessForceD(t *testing.T) {
 	n := scoring.NormalisedMetrics{
 		MergeRate:         100,
 		ResponseTime:      100,
+		ActivityRecency:   100,
 		FirstTimer:        100,
 		TimeToMerge:       100,
 		RepeatContributor: 100,
+		ReviewRounds:      100,
+		MaintainerBreadth: 100,
 		IssueTriageSpeed:  100,
 		Responsiveness:    100,
 	}
@@ -70,9 +76,12 @@ func TestComputeCRank_TierBoundaries(t *testing.T) {
 		n := scoring.NormalisedMetrics{
 			MergeRate:         tc.score,
 			ResponseTime:      tc.score,
+			ActivityRecency:   tc.score,
 			FirstTimer:        tc.score,
 			TimeToMerge:       tc.score,
 			RepeatContributor: tc.score,
+			ReviewRounds:      tc.score,
+			MaintainerBreadth: tc.score,
 			IssueTriageSpeed:  tc.score,
 			Responsiveness:    tc.score,
 		}

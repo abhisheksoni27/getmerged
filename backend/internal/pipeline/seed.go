@@ -16,7 +16,7 @@ var SeedLanguages = []string{"Go", "Python", "JavaScript"}
 
 const (
 	seedMinStars = 1000
-	seedMaxRepos = 100 // per language
+	seedMaxRepos = 20
 )
 
 // Seed fetches top repos for each language and upserts them into the repositories table.

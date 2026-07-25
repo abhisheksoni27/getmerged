@@ -9,6 +9,7 @@
 package main
 
 import (
+	"io"
 	"log/slog"
 	"os"
 
@@ -30,7 +31,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	setupLogger(cfg.GinMode)
+	setupLogger(cfg.GinMode, cfg.LogFile)
 
 	database, err := db.Connect(cfg.DatabaseURL)
 	if err != nil {
@@ -40,14 +41,14 @@ func main() {
 	defer database.Close()
 	slog.Info("db connected", "url", cfg.DatabaseURL)
 
-	cacheMiddleware, err := middleware.Cache(cfg.ValkeyURL, cfg.ValkeyPassword)
+	cacheMiddleware, vkClient, err := middleware.Cache(cfg.ValkeyURL, cfg.ValkeyPassword)
 	if err != nil {
 		slog.Error("cache connection failed", "url", cfg.ValkeyURL, "err", err)
 		os.Exit(1)
 	}
 	slog.Info("cache connected", "url", cfg.ValkeyURL)
 
-	gh := ghclient.NewClient(cfg.GithubToken)
+	gh := ghclient.NewClient(cfg.GithubToken, vkClient)
 
 	gin.SetMode(cfg.GinMode)
 	r := gin.New()
@@ -84,10 +85,10 @@ func main() {
 	}
 }
 
-// setupLogger configures the global slog default.
-// JSON handler in release (structured, machine-readable for journald/log aggregators).
-// Text handler in debug (human-readable for local dev).
-func setupLogger(ginMode string) {
+// setupLogger configures the global slog default to write to stdout AND a persistent log file.
+// JSON handler in release (structured, machine-readable).
+// Text handler in debug (human-readable).
+func setupLogger(ginMode, logFilePath string) {
 	level := slog.LevelInfo
 	if ginMode == "debug" {
 		level = slog.LevelDebug
@@ -95,12 +96,21 @@ func setupLogger(ginMode string) {
 
 	opts := &slog.HandlerOptions{Level: level}
 
+	logFile, err := os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	var writer io.Writer = os.Stdout
+	if err != nil {
+		slog.Error("failed to open log file, logging to stdout only", "file", logFilePath, "err", err)
+	} else {
+		writer = io.MultiWriter(os.Stdout, logFile)
+	}
+
 	var handler slog.Handler
 	if ginMode == "release" {
-		handler = slog.NewJSONHandler(os.Stdout, opts)
+		handler = slog.NewJSONHandler(writer, opts)
 	} else {
-		handler = slog.NewTextHandler(os.Stdout, opts)
+		handler = slog.NewTextHandler(writer, opts)
 	}
 
 	slog.SetDefault(slog.New(handler))
+	slog.Info("logging initialized", "file", logFilePath, "level", level.String())
 }

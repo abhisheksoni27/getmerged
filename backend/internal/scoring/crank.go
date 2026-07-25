@@ -15,19 +15,25 @@ const (
 var weights = struct {
 	MergeRate         float64
 	ResponseTime      float64
+	ActivityRecency   float64
 	FirstTimer        float64
 	TimeToMerge       float64
 	RepeatContributor float64
+	ReviewRounds      float64
+	MaintainerBreadth float64
 	IssueTriageSpeed  float64
 	Responsiveness    float64
 }{
-	MergeRate:         0.35,
-	ResponseTime:      0.20,
-	FirstTimer:        0.15,
+	MergeRate:         0.25,
+	ResponseTime:      0.15,
+	ActivityRecency:   0.15,
+	FirstTimer:        0.10,
 	TimeToMerge:       0.10,
 	RepeatContributor: 0.10,
-	IssueTriageSpeed:  0.05,
-	Responsiveness:    0.05,
+	ReviewRounds:      0.05,
+	MaintainerBreadth: 0.05,
+	IssueTriageSpeed:  0.025,
+	Responsiveness:    0.025,
 }
 
 // ComputeCRank calculates the C-Rank score and tier from normalised metrics.
@@ -35,9 +41,12 @@ var weights = struct {
 func ComputeCRank(n NormalisedMetrics, staleness bool) (score float64, tier string) {
 	rawScore := weights.MergeRate*n.MergeRate +
 		weights.ResponseTime*n.ResponseTime +
+		weights.ActivityRecency*n.ActivityRecency +
 		weights.FirstTimer*n.FirstTimer +
 		weights.TimeToMerge*n.TimeToMerge +
 		weights.RepeatContributor*n.RepeatContributor +
+		weights.ReviewRounds*n.ReviewRounds +
+		weights.MaintainerBreadth*n.MaintainerBreadth +
 		weights.IssueTriageSpeed*n.IssueTriageSpeed +
 		weights.Responsiveness*n.Responsiveness
 

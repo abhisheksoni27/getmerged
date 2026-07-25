@@ -29,7 +29,7 @@ query SearchRepos($query: String!, $cursor: String) {
 }
 `
 
-// RepoPRsQuery fetches closed/merged PRs with first-comment info, paginated.
+// RepoPRsQuery fetches closed/merged PRs with first-comment info, total comment counts, and reviewer info.
 const RepoPRsQuery = `
 query RepoPRs($owner: String!, $name: String!, $cursor: String) {
   repository(owner: $owner, name: $name) {
@@ -50,10 +50,12 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
         closedAt
         authorAssociation
         author { login }
-        comments(first: 1, orderBy: { field: UPDATED_AT, direction: ASC }) {
+        comments(first: 100) {
+          totalCount
           nodes {
             createdAt
             authorAssociation
+            author { login }
           }
         }
       }
@@ -83,9 +85,10 @@ query RepoIssues($owner: String!, $name: String!, $cursor: String) {
       }
       nodes {
         createdAt
-        comments(first: 1, orderBy: { field: UPDATED_AT, direction: ASC }) {
+        comments(first: 10, orderBy: { field: UPDATED_AT, direction: ASC }) {
           nodes {
             createdAt
+            author { login }
           }
         }
       }

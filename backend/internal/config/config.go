@@ -17,6 +17,7 @@ type Config struct {
 	InternalAPIKey string
 	Port           string
 	GinMode        string
+	LogFile        string
 }
 
 // Load reads .env (if present) then validates all required variables are set.
@@ -26,6 +27,10 @@ func Load() (*Config, error) {
 
 	c := &Config{
 		ValkeyPassword: os.Getenv("VALKEY_PASSWORD"), // optional — empty OK for local dev
+		LogFile:        os.Getenv("LOG_FILE"),        // optional — defaults to opendoor.log if empty
+	}
+	if c.LogFile == "" {
+		c.LogFile = "opendoor.log"
 	}
 
 	required := map[string]*string{
