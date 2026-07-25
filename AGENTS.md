@@ -4,5 +4,3 @@
 It scores public GitHub repositories using a proprietary **C‑Rank™** system (S to D) based on objective metrics: merge rates, response times, and first‑timer success.
 
 Think of it as *Glassdoor for open‑source repos*: don't guess which door is open. Opendoor shows you.
-
-## Work In Progress
