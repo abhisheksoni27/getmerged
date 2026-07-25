@@ -14,7 +14,7 @@ import (
 )
 
 // SeedLanguages is the default set of languages to seed.
-var SeedLanguages = []string{"Go", "Python", "JavaScript", "TypeScript"}
+var SeedLanguages = []string{"Go", "Python", "JavaScript", "TypeScript", "Java", "PHP", "Rust", "Kotlin", "Shell", "C++", "Dart", "Swift"}
 
 const (
 	seedMinStars = 500

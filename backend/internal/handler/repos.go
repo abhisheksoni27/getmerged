@@ -1,16 +1,23 @@
 package handler
 
 import (
+	"context"
 	"crypto/md5"
 	"database/sql"
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"net/http"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/gin-gonic/gin"
 )
+
+const apiCacheTTL = 6 * time.Hour
 
 // repoResponse is the shape returned to API consumers.
 type repoResponse struct {
@@ -58,13 +65,12 @@ var allowedSortFields = map[string]string{
 //	@Param        language  query  string  false  "Filter by language (e.g. Go)"
 //	@Param        min_stars query  int     false  "Minimum star count"
 //	@Param        name      query  string  false  "Partial name search"
-//	@Param        sort_by   query  string  false  "Sort field: c_rank_score|stars|time_to_first_response_hours"  default(c_rank_score)
-//	@Param        order     query  string  false  "Sort direction: asc|desc"                                     default(desc)
-//	@Param        page      query  int     false  "Page number"                                                  default(1)
-//	@Param        per_page  query  int     false  "Results per page (max 100)"                                   default(20)
-//	@Success      200  {object}  map[string]any
-//	@Failure      400  {object}  map[string]string
-//	@Failure      500  {object}  map[string]string
+//	@Param        sort      query  string  false  "Sort column (c_rank_score, stars, time_to_first_response_hours)"
+//	@Param        order     query  string  false  "Sort order (asc, desc)"
+//	@Param        page      query  int     false  "Page number (default 1)"
+//	@Param        per_page  query  int     false  "Items per page (default 20, max 100)"
+//	@Success      200       {object}  map[string]any
+//	@Failure      500       {object}  map[string]string
 //	@Router       /api/v1/repos [get]
 func ListRepos(c *gin.Context) {
 	db := middleware.MustDB(c)
@@ -72,79 +78,104 @@ func ListRepos(c *gin.Context) {
 		return
 	}
 
-	// --- Parse & validate query params ---
-	language := strings.TrimSpace(c.Query("language"))
+	vk := middleware.MustCache(c)
+	useCache := strings.ToLower(c.GetHeader("X-Use-Cache")) != "false"
+
+	// Construct cache key based on full URL request query
+	queryHash := md5.Sum([]byte(c.Request.URL.RequestURI()))
+	cacheKey := "apicache:repos:" + hex.EncodeToString(queryHash[:])
+
+	ctx := context.Background()
+
+	// Try reading from Valkey cache if useCache is true
+	if useCache && vk != nil {
+		if cached, err := vk.Do(ctx, vk.B().Get().Key(cacheKey).Build()).ToString(); err == nil && cached != "" {
+			slog.Debug("api/v1/repos: cache HIT", "key", cacheKey)
+			c.Header("X-Cache", "HIT")
+			c.Data(http.StatusOK, "application/json; charset=utf-8", []byte(cached))
+			return
+		}
+	}
+
+	c.Header("X-Cache", "MISS")
+
+	// Parse query params
+	lang := strings.TrimSpace(c.Query("language"))
 	name := strings.TrimSpace(c.Query("name"))
-	minStars := queryInt(c, "min_stars", 0)
-	page := queryInt(c, "page", 1)
-	perPage := queryInt(c, "per_page", 20)
-	sortBy := c.DefaultQuery("sort_by", "c_rank_score")
-	order := strings.ToLower(c.DefaultQuery("order", "desc"))
+	minStarsStr := strings.TrimSpace(c.Query("min_stars"))
+	sortParam := strings.TrimSpace(c.Query("sort"))
+	orderParam := strings.TrimSpace(strings.ToLower(c.Query("order")))
+	pageStr := strings.TrimSpace(c.Query("page"))
+	perPageStr := strings.TrimSpace(c.Query("per_page"))
 
-	if page < 1 {
-		page = 1
+	page := 1
+	if p, err := strconv.Atoi(pageStr); err == nil && p > 0 {
+		page = p
 	}
-	if perPage < 1 || perPage > 100 {
-		perPage = 20
+	perPage := 20
+	if pp, err := strconv.Atoi(perPageStr); err == nil && pp > 0 {
+		perPage = pp
 	}
-	if order != "asc" && order != "desc" {
-		order = "desc"
+	if perPage > 100 {
+		perPage = 100
+	}
+	offset := (page - 1) * perPage
+
+	// Build dynamic WHERE clause
+	whereParts := []string{"1=1"}
+	args := []any{}
+
+	if lang != "" {
+		whereParts = append(whereParts, "LOWER(r.language) = LOWER(?)")
+		args = append(args, lang)
+	}
+	if name != "" {
+		whereParts = append(whereParts, "LOWER(r.full_name) LIKE LOWER(?)")
+		args = append(args, "%"+name+"%")
+	}
+	if minStarsStr != "" {
+		if ms, err := strconv.Atoi(minStarsStr); err == nil {
+			whereParts = append(whereParts, "r.stars >= ?")
+			args = append(args, ms)
+		}
 	}
 
-	sortCol, ok := allowedSortFields[sortBy]
+	where := strings.Join(whereParts, " AND ")
+
+	// Validate sort column
+	sortCol, ok := allowedSortFields[sortParam]
 	if !ok {
 		sortCol = "s.c_rank_score"
 	}
-
-	// --- Build WHERE clause ---
-	var (
-		conditions []string
-		args       []any
-	)
-
-	if language != "" {
-		conditions = append(conditions, "r.language = ?")
-		args = append(args, language)
-	}
-	if minStars > 0 {
-		conditions = append(conditions, "r.stars >= ?")
-		args = append(args, minStars)
-	}
-	if name != "" {
-		conditions = append(conditions, "r.name LIKE ?")
-		args = append(args, "%"+name+"%")
+	order := "DESC"
+	if orderParam == "asc" {
+		order = "ASC"
 	}
 
-	where := ""
-	if len(conditions) > 0 {
-		where = "WHERE " + strings.Join(conditions, " AND ")
-	}
-
-	// --- Count total ---
+	// 1. Total count query
 	countQuery := fmt.Sprintf(`
-		SELECT COUNT(*) FROM repositories r
+		SELECT COUNT(1)
+		FROM repositories r
 		INNER JOIN daily_snapshots s ON s.repository_id = r.id
 		  AND s.snapshot_date = (
 		    SELECT MAX(s2.snapshot_date) FROM daily_snapshots s2 WHERE s2.repository_id = r.id
 		  )
-		%s
+		WHERE %s
 	`, where)
 
 	var total int
-	if err := db.QueryRow(countQuery, args...).Scan(&total); err != nil {
+	if err := db.Get(&total, countQuery, args...); err != nil {
 		slog.Error("list repos: count query failed", "err", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "count failed"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "query failed"})
 		return
 	}
 
-	// --- Fetch page ---
-	offset := (page - 1) * perPage
-	//nolint:gosec // sortCol and order are validated against allowlists above
+	// 2. Data query
 	dataQuery := fmt.Sprintf(`
 		SELECT
 			r.id, r.full_name, COALESCE(r.language,'') as language, r.stars,
 			COALESCE(r.description,'') as description, r.github_url,
-			COALESCE(s.c_rank_tier,'') as c_rank_tier,
+			COALESCE(s.c_rank_tier,'D') as c_rank_tier,
 			COALESCE(s.c_rank_score,0) as c_rank_score,
 			COALESCE(s.external_pr_merge_rate,0) as external_pr_merge_rate,
 			COALESCE(s.time_to_first_response_hours,0) as time_to_first_response_hours,
@@ -163,7 +194,7 @@ func ListRepos(c *gin.Context) {
 		  AND s.snapshot_date = (
 		    SELECT MAX(s2.snapshot_date) FROM daily_snapshots s2 WHERE s2.repository_id = r.id
 		  )
-		%s
+		WHERE %s
 		ORDER BY %s %s
 		LIMIT ? OFFSET ?
 	`, where, sortCol, order)
@@ -200,43 +231,66 @@ func ListRepos(c *gin.Context) {
 		repos = append(repos, r)
 	}
 
-	// ETag from content hash
-	etag := fmt.Sprintf(`"%x"`, md5.Sum([]byte(fmt.Sprintf("%v%d%d", repos, page, perPage))))
-	if c.GetHeader("If-None-Match") == etag {
-		c.Status(http.StatusNotModified)
-		return
-	}
-	c.Header("ETag", etag)
-	c.Header("Cache-Control", "public, max-age=60")
-
-	c.JSON(http.StatusOK, gin.H{
+	respPayload := gin.H{
 		"data": repos,
-		"meta": metaResponse{Page: page, PerPage: perPage, Total: total},
-	})
+		"meta": metaResponse{
+			Page:    page,
+			PerPage: perPage,
+			Total:   total,
+		},
+	}
+
+	// Cache payload in Valkey for 6 hours
+	if vk != nil {
+		if rawJSON, err := json.Marshal(respPayload); err == nil {
+			_ = vk.Do(ctx, vk.B().Set().Key(cacheKey).Value(string(rawJSON)).Ex(apiCacheTTL).Build())
+		}
+	}
+
+	c.JSON(http.StatusOK, respPayload)
 }
 
 // GetRepo handles GET /api/v1/repos/:id
 //
-//	@Summary      Get repository
-//	@Description  Returns a single repository with its latest C-Rank snapshot.
+//	@Summary      Get repository details
+//	@Description  Returns details and latest C-Rank score for a single repository.
 //	@Tags         repos
 //	@Produce      json
-//	@Param        id  path  string  true  "Repository UUID"
+//	@Param        id   path      string  true  "Repository ID"
 //	@Success      200  {object}  repoResponse
 //	@Failure      404  {object}  map[string]string
+//	@Failure      500  {object}  map[string]string
 //	@Router       /api/v1/repos/{id} [get]
 func GetRepo(c *gin.Context) {
+	id := c.Param("id")
 	db := middleware.MustDB(c)
 	if db == nil {
 		return
 	}
 
-	id := c.Param("id")
+	vk := middleware.MustCache(c)
+	useCache := strings.ToLower(c.GetHeader("X-Use-Cache")) != "false"
+	cacheKey := "apicache:repo:" + id
+
+	ctx := context.Background()
+
+	// Try reading from Valkey cache if useCache is true
+	if useCache && vk != nil {
+		if cached, err := vk.Do(ctx, vk.B().Get().Key(cacheKey).Build()).ToString(); err == nil && cached != "" {
+			slog.Debug("api/v1/repos/:id: cache HIT", "id", id)
+			c.Header("X-Cache", "HIT")
+			c.Data(http.StatusOK, "application/json; charset=utf-8", []byte(cached))
+			return
+		}
+	}
+
+	c.Header("X-Cache", "MISS")
+
 	row := db.QueryRow(`
 		SELECT
 			r.id, r.full_name, COALESCE(r.language,'') as language, r.stars,
 			COALESCE(r.description,'') as description, r.github_url,
-			COALESCE(s.c_rank_tier,'') as c_rank_tier,
+			COALESCE(s.c_rank_tier,'D') as c_rank_tier,
 			COALESCE(s.c_rank_score,0) as c_rank_score,
 			COALESCE(s.external_pr_merge_rate,0) as external_pr_merge_rate,
 			COALESCE(s.time_to_first_response_hours,0) as time_to_first_response_hours,
@@ -272,28 +326,22 @@ func GetRepo(c *gin.Context) {
 		&r.SnapshotDate,
 	)
 	if err == sql.ErrNoRows {
-		c.JSON(http.StatusNotFound, gin.H{"error": "repo not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "repository not found"})
 		return
-	}
-	if err != nil {
-		slog.Error("get repo: query failed", "id", id, "err", err)
+	} else if err != nil {
+		slog.Error("get repo failed", "id", id, "err", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "query failed"})
 		return
 	}
-	r.StalenessFlag = staleInt == 1
-	c.JSON(http.StatusOK, r)
-}
 
-// queryInt reads a query parameter as int with a fallback default.
-func queryInt(c *gin.Context, key string, def int) int {
-	v := c.Query(key)
-	if v == "" {
-		return def
+	r.StalenessFlag = staleInt == 1
+
+	// Cache response in Valkey for 6 hours
+	if vk != nil {
+		if rawJSON, err := json.Marshal(r); err == nil {
+			_ = vk.Do(ctx, vk.B().Set().Key(cacheKey).Value(string(rawJSON)).Ex(apiCacheTTL).Build())
+		}
 	}
-	n := 0
-	fmt.Sscanf(v, "%d", &n)
-	if n == 0 {
-		return def
-	}
-	return n
+
+	c.JSON(http.StatusOK, r)
 }
