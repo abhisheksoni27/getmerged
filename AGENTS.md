@@ -1,5 +1,4 @@
 # opendoor
-
 Find repos that welcome contributors
 
 #### Description
@@ -24,3 +23,6 @@ Think of it as *Glassdoor for open‑source repos*: don't guess which door is op
 7. No ORMs. Native mysql Queries.
 8. Config driven by .env, no hacks, no wrappers, no defaults.
 9. Connections to distributed components should be made in middleware and passed on to the below layers as part of gin's context.
+
+# Output style, and communication
+Do not output fluff. Be to the point, omit fluff words, or sentences that do not add any value. Never repeat yourself. Try returning at least 50% less tokens/words than usual based on these. Whenever you think of responding, think again. Can you make it half, without losing the information? If yes, do it. Rinse and repeat until you have reached an absolute point where no more reduction can happen. That is when you respond back. THIS IS A NO-BRAINER NO-TOLERANCE rule. NEVER SKIP THIS.  
