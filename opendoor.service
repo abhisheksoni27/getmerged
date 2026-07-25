@@ -1,0 +1,30 @@
+[Unit]
+Description=Opendoor Backend Service
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/data/apps/opendoor/backend
+ExecStart=/data/apps/opendoor/backend/server
+Restart=always
+RestartSec=5s
+
+# Environment configuration
+Environment=GIN_MODE=release
+Environment=PORT=10000
+Environment=DATABASE_URL=/data/apps/opendoor/opendoor.db
+Environment=VALKEY_URL=localhost:6379
+Environment=LOG_FILE=/data/apps/opendoor/opendoor.log
+
+# Read sensitive secrets (.env) from WorkingDirectory if present
+EnvironmentFile=-/data/apps/opendoor/backend/.env
+
+# Security Hardening
+ProtectSystem=full
+ProtectHome=read-only
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
