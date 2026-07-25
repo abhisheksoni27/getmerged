@@ -44,13 +44,14 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 	type repoMetrics struct {
 		repo repoRow
 		raw  scoring.RawMetrics
+		meta ghclient.RepoMeta
 	}
 	all := make([]repoMetrics, 0, len(repos))
 
 	for _, r := range repos {
 		slog.Info("cron: processing repo", "repo", r.FullName)
 
-		prs, err := gh.FetchPRs(r.Owner, r.Name, prWindowDays)
+		prs, meta, err := gh.FetchPRs(r.Owner, r.Name, prWindowDays)
 		if err != nil {
 			slog.Error("cron: FetchPRs failed — skipping", "repo", r.FullName, "err", err)
 			continue
@@ -94,7 +95,7 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 		}
 
 		raw := scoring.ComputeMetrics(scoringPRs, scoringIssues, stale)
-		all = append(all, repoMetrics{repo: r, raw: raw})
+		all = append(all, repoMetrics{repo: r, raw: raw, meta: meta})
 	}
 
 	if len(all) == 0 {
@@ -122,7 +123,7 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 		if err := insertSnapshot(db, rm.repo.ID, rm.raw, score, tier); err != nil {
 			slog.Error("cron: insertSnapshot failed", "repo", rm.repo.FullName, "err", err)
 		}
-		if err := touchRepo(db, rm.repo.ID); err != nil {
+		if err := touchRepo(db, rm.repo.ID, rm.meta.Language, rm.meta.Stars, rm.meta.Description); err != nil {
 			slog.Error("cron: touchRepo failed", "repo", rm.repo.FullName, "err", err)
 		}
 	}
@@ -191,7 +192,11 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 	return err
 }
 
-func touchRepo(db *sqlx.DB, id string) error {
-	_, err := db.Exec(`UPDATE repositories SET updated_at = ? WHERE id = ?`, time.Now().UTC(), id)
+func touchRepo(db *sqlx.DB, id, language string, stars int, description string) error {
+	_, err := db.Exec(`
+		UPDATE repositories
+		SET updated_at = ?, language = ?, stars = ?, description = ?
+		WHERE id = ?
+	`, time.Now().UTC(), language, stars, description, id)
 	return err
 }
