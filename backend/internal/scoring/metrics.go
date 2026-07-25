@@ -4,6 +4,7 @@ package scoring
 
 import (
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -13,6 +14,18 @@ var ExternalAssociations = map[string]bool{
 	"CONTRIBUTOR":           true,
 	"FIRST_TIME_CONTRIBUTOR": true,
 	"NONE":                  true,
+}
+
+// isBot checks if a login belongs to an automated bot account.
+func isBot(login string) bool {
+	l := strings.ToLower(login)
+	return strings.HasSuffix(l, "[bot]") ||
+		l == "vercel" ||
+		l == "github-actions" ||
+		l == "codecov" ||
+		l == "dependabot" ||
+		l == "stale" ||
+		l == "sentry-io"
 }
 
 // FirstTimerAssociation marks a contributor's first PR to this repo.
@@ -26,6 +39,8 @@ type PR struct {
 	AuthorAssociation string
 	AuthorLogin       string
 	FirstCommentAt    *time.Time // first human comment timestamp (may be nil)
+	TotalComments     int
+	CommentAuthors    []string
 }
 
 // Issue represents a single issue for triage speed computation.
@@ -43,14 +58,17 @@ type RawMetrics struct {
 	RepeatContributorRate     float64 // percentage 0–100
 	IssueTriageSpeedHours     float64 // median hours; 0 = no data
 	MaintainerResponsiveness  float64 // derived: same as TimeToFirstResponseHours (lower = better)
+	LastActivityDays          float64 // days since last merged PR (lower = better)
+	ReviewRounds              float64 // median review comments per merged PR (lower = better)
+	DistinctMaintainerCount   float64 // number of distinct maintainers commenting on PRs (higher = better)
 	StalenessFlag             bool
 }
 
 // ComputeMetrics derives all raw metrics from a slice of PRs and Issues.
-// Only PRs within the last 90 days are considered.
+// Only PRs within the last 180 days are considered.
 // staleness is true if no external PR was merged in the last 6 months.
 func ComputeMetrics(prs []PR, issues []Issue, staleness bool) RawMetrics {
-	window90 := time.Now().UTC().Add(-90 * 24 * time.Hour)
+	window180 := time.Now().UTC().Add(-180 * 24 * time.Hour)
 
 	var (
 		externalClosed    int
@@ -64,7 +82,7 @@ func ComputeMetrics(prs []PR, issues []Issue, staleness bool) RawMetrics {
 	)
 
 	for _, pr := range prs {
-		if pr.CreatedAt.Before(window90) {
+		if pr.CreatedAt.Before(window180) {
 			continue
 		}
 		if !ExternalAssociations[pr.AuthorAssociation] {
@@ -105,8 +123,39 @@ func ComputeMetrics(prs []PR, issues []Issue, staleness bool) RawMetrics {
 		}
 	}
 
+	// Calculate ReviewRounds (median comments per merged external PR) and DistinctMaintainerCount
+	var reviewCounts []float64
+	maintainerSet := map[string]bool{}
+
+	for _, pr := range prs {
+		if pr.CreatedAt.Before(window180) || !ExternalAssociations[pr.AuthorAssociation] {
+			continue
+		}
+		if pr.State == "MERGED" {
+			reviewCounts = append(reviewCounts, float64(pr.TotalComments))
+		}
+		for _, author := range pr.CommentAuthors {
+			if author != pr.AuthorLogin && author != "" && !isBot(author) {
+				maintainerSet[author] = true
+			}
+		}
+	}
+
+	// Calculate LastActivityDays from the most recent merged external PR
+	var lastActivityDays float64 = 999
+	for _, pr := range prs {
+		if pr.State == "MERGED" && pr.MergedAt != nil {
+			days := time.Since(*pr.MergedAt).Hours() / 24
+			if days >= 0 && days < lastActivityDays {
+				lastActivityDays = days
+			}
+		}
+	}
+	if lastActivityDays == 999 {
+		lastActivityDays = 180 // Default to 180 days if no merged PRs in window
+	}
 	for _, issue := range issues {
-		if issue.CreatedAt.Before(window90) {
+		if issue.CreatedAt.Before(window180) {
 			continue
 		}
 		if issue.FirstCommentAt != nil {
@@ -117,7 +166,12 @@ func ComputeMetrics(prs []PR, issues []Issue, staleness bool) RawMetrics {
 		}
 	}
 
-	m := RawMetrics{StalenessFlag: staleness}
+	m := RawMetrics{
+		StalenessFlag:           staleness,
+		LastActivityDays:        lastActivityDays,
+		ReviewRounds:            median(reviewCounts),
+		DistinctMaintainerCount: float64(len(maintainerSet)),
+	}
 
 	if externalClosed > 0 {
 		m.ExternalPRMergeRate = float64(externalMerged) / float64(externalClosed) * 100

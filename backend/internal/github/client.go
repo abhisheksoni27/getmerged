@@ -2,27 +2,36 @@ package github
 
 import (
 	"bytes"
+	"context"
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
+
+	"github.com/valkey-io/valkey-go"
 )
 
 const graphqlEndpoint = "https://api.github.com/graphql"
+const cacheTTL = 1 * time.Hour
 
-// Client is a GitHub GraphQL client with built-in rate-limit handling.
+// Client is a GitHub GraphQL client with built-in rate-limit handling and Valkey caching.
 type Client struct {
 	token      string
 	httpClient *http.Client
+	valkey     valkey.Client
 }
 
-// NewClient creates a Client using the given personal access token.
-func NewClient(token string) *Client {
+// NewClient creates a Client using the given personal access token and optional Valkey client.
+func NewClient(token string, vk valkey.Client) *Client {
 	return &Client{
 		token:      token,
 		httpClient: &http.Client{Timeout: 30 * time.Second},
+		valkey:     vk,
 	}
 }
 
@@ -61,6 +70,8 @@ type PR struct {
 	AuthorAssociation string
 	AuthorLogin       string
 	FirstCommentAt    *time.Time
+	TotalComments     int
+	CommentAuthors    []string
 }
 
 // Issue holds issue data needed for triage speed.
@@ -202,7 +213,12 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, error) {
 							AuthorAssociation string `json:"authorAssociation"`
 							Author            *struct{ Login string `json:"login"` } `json:"author"`
 							Comments          struct {
-								Nodes []struct{ CreatedAt string `json:"createdAt"` } `json:"nodes"`
+								TotalCount int `json:"totalCount"`
+								Nodes      []struct {
+									CreatedAt         string `json:"createdAt"`
+									AuthorAssociation string `json:"authorAssociation"`
+									Author            *struct{ Login string `json:"login"` } `json:"author"`
+								} `json:"nodes"`
 							} `json:"comments"`
 						} `json:"nodes"`
 					} `json:"pullRequests"`
@@ -252,6 +268,7 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, error) {
 				State:             n.State,
 				CreatedAt:         createdAt,
 				AuthorAssociation: n.AuthorAssociation,
+				TotalComments:     n.Comments.TotalCount,
 			}
 			if n.Author != nil {
 				pr.AuthorLogin = n.Author.Login
@@ -261,9 +278,16 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, error) {
 					pr.MergedAt = &t
 				}
 			}
-			if len(n.Comments.Nodes) > 0 && n.Comments.Nodes[0].CreatedAt != "" {
-				if t, err := time.Parse(time.RFC3339, n.Comments.Nodes[0].CreatedAt); err == nil {
-					pr.FirstCommentAt = &t
+			if len(n.Comments.Nodes) > 0 {
+				for _, c := range n.Comments.Nodes {
+					if c.Author != nil && c.Author.Login != "" {
+						if !isBotLogin(c.Author.Login) && pr.FirstCommentAt == nil && c.CreatedAt != "" {
+							if t, err := time.Parse(time.RFC3339, c.CreatedAt); err == nil {
+								pr.FirstCommentAt = &t
+							}
+						}
+						pr.CommentAuthors = append(pr.CommentAuthors, c.Author.Login)
+					}
 				}
 			}
 			prs = append(prs, pr)
@@ -305,7 +329,10 @@ func (c *Client) FetchIssues(owner, name string, windowDays int) ([]Issue, error
 						Nodes []struct {
 							CreatedAt string `json:"createdAt"`
 							Comments  struct {
-								Nodes []struct{ CreatedAt string `json:"createdAt"` } `json:"nodes"`
+								Nodes []struct {
+									CreatedAt string `json:"createdAt"`
+									Author    *struct{ Login string `json:"login"` } `json:"author"`
+								} `json:"nodes"`
 							} `json:"comments"`
 						} `json:"nodes"`
 					} `json:"issues"`
@@ -337,9 +364,14 @@ func (c *Client) FetchIssues(owner, name string, windowDays int) ([]Issue, error
 				break
 			}
 			issue := Issue{CreatedAt: createdAt}
-			if len(n.Comments.Nodes) > 0 && n.Comments.Nodes[0].CreatedAt != "" {
-				if t, err := time.Parse(time.RFC3339, n.Comments.Nodes[0].CreatedAt); err == nil {
-					issue.FirstCommentAt = &t
+			if len(n.Comments.Nodes) > 0 {
+				for _, c := range n.Comments.Nodes {
+					if c.CreatedAt != "" && c.Author != nil && c.Author.Login != "" && !isBotLogin(c.Author.Login) {
+						if t, err := time.Parse(time.RFC3339, c.CreatedAt); err == nil {
+							issue.FirstCommentAt = &t
+							break
+						}
+					}
 				}
 			}
 			issues = append(issues, issue)
@@ -403,6 +435,20 @@ func (c *Client) do(query string, vars map[string]any, out any) error {
 		return err
 	}
 
+	// Calculate cache key
+	hash := md5.Sum(reqBody)
+	cacheKey := "ghcache:" + hex.EncodeToString(hash[:])
+
+	ctx := context.Background()
+
+	// Check Valkey cache
+	if c.valkey != nil {
+		if cached, err := c.valkey.Do(ctx, c.valkey.B().Get().Key(cacheKey).Build()).ToString(); err == nil && cached != "" {
+			slog.Debug("github: cache HIT", "key", cacheKey)
+			return json.Unmarshal([]byte(cached), out)
+		}
+	}
+
 	req, err := http.NewRequest(http.MethodPost, graphqlEndpoint, bytes.NewReader(reqBody))
 	if err != nil {
 		return err
@@ -423,7 +469,6 @@ func (c *Client) do(query string, vars map[string]any, out any) error {
 		return fmt.Errorf("read response body: %w", err)
 	}
 
-	// Log the raw response so local dev can see exactly what GitHub returned.
 	slog.Debug("github: raw response", "status", res.StatusCode, "body", string(raw))
 
 	if res.StatusCode != http.StatusOK {
@@ -443,6 +488,12 @@ func (c *Client) do(query string, vars map[string]any, out any) error {
 			slog.Error("github: graphql error", "message", e.Message, "type", e.Type)
 		}
 		return fmt.Errorf("graphql error: %s", envelope.Errors[0].Message)
+	}
+
+	// Store in Valkey cache if request succeeded
+	if c.valkey != nil {
+		slog.Debug("github: caching response in Valkey", "key", cacheKey, "ttl", cacheTTL.String())
+		_ = c.valkey.Do(ctx, c.valkey.B().Set().Key(cacheKey).Value(string(raw)).Ex(cacheTTL).Build())
 	}
 
 	return json.Unmarshal(raw, out)
@@ -477,4 +528,15 @@ func (c *Client) handleRateLimit(rl rateLimitInfo) {
 
 func (c *Client) cursor(ptr **string, val string) {
 	*ptr = &val
+}
+
+func isBotLogin(login string) bool {
+	l := strings.ToLower(login)
+	return strings.HasSuffix(l, "[bot]") ||
+		l == "vercel" ||
+		l == "github-actions" ||
+		l == "codecov" ||
+		l == "dependabot" ||
+		l == "stale" ||
+		l == "sentry-io"
 }

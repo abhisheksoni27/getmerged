@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	prWindowDays    = 90
-	issueWindowDays = 90
+	prWindowDays    = 180
+	issueWindowDays = 180
 	staleHours      = 24
 )
 
@@ -79,6 +79,8 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 				AuthorAssociation: p.AuthorAssociation,
 				AuthorLogin:       p.AuthorLogin,
 				FirstCommentAt:    p.FirstCommentAt,
+				TotalComments:     p.TotalComments,
+				CommentAuthors:    p.CommentAuthors,
 			}
 		}
 
@@ -151,8 +153,9 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			id, repository_id, snapshot_date,
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate, issue_triage_speed_hours,
-			maintainer_responsiveness, staleness_flag, c_rank_score, c_rank_tier
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			maintainer_responsiveness, last_activity_days, review_rounds,
+			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(repository_id, snapshot_date) DO UPDATE SET
 			external_pr_merge_rate        = excluded.external_pr_merge_rate,
 			time_to_first_response_hours  = excluded.time_to_first_response_hours,
@@ -161,6 +164,9 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			repeat_contributor_rate       = excluded.repeat_contributor_rate,
 			issue_triage_speed_hours      = excluded.issue_triage_speed_hours,
 			maintainer_responsiveness     = excluded.maintainer_responsiveness,
+			last_activity_days            = excluded.last_activity_days,
+			review_rounds                 = excluded.review_rounds,
+			distinct_maintainer_count     = excluded.distinct_maintainer_count,
 			staleness_flag                = excluded.staleness_flag,
 			c_rank_score                  = excluded.c_rank_score,
 			c_rank_tier                   = excluded.c_rank_tier
@@ -175,6 +181,9 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 		m.RepeatContributorRate,
 		m.IssueTriageSpeedHours,
 		m.MaintainerResponsiveness,
+		m.LastActivityDays,
+		m.ReviewRounds,
+		m.DistinctMaintainerCount,
 		staleness,
 		score,
 		tier,

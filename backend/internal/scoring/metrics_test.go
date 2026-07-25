@@ -51,15 +51,15 @@ func TestComputeMetrics_NoExternalPRs_NoPanic(t *testing.T) {
 	}
 }
 
-func TestComputeMetrics_SkipsBeyond90Days(t *testing.T) {
+func TestComputeMetrics_SkipsBeyond180Days(t *testing.T) {
 	prs := []scoring.PR{
-		{State: "MERGED", CreatedAt: prAt(91), MergedAt: ptr(prAt(90)), AuthorAssociation: "CONTRIBUTOR", AuthorLogin: "old"},
+		{State: "MERGED", CreatedAt: prAt(181), MergedAt: ptr(prAt(180)), AuthorAssociation: "CONTRIBUTOR", AuthorLogin: "old"},
 	}
 
 	m := scoring.ComputeMetrics(prs, nil, false)
 
 	if m.ExternalPRMergeRate != 0 {
-		t.Errorf("expected 0 for PRs older than 90 days, got %.2f", m.ExternalPRMergeRate)
+		t.Errorf("expected 0 for PRs older than 180 days, got %.2f", m.ExternalPRMergeRate)
 	}
 }
 

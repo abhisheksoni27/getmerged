@@ -29,6 +29,9 @@ type repoResponse struct {
 	RepeatContributorRate       float64 `json:"repeat_contributor_rate"`
 	IssueTriageSpeedHours       float64 `json:"issue_triage_speed_hours"`
 	MaintainerResponsiveness    float64 `json:"maintainer_responsiveness"`
+	LastActivityDays            float64 `json:"last_activity_days"`
+	ReviewRounds                float64 `json:"review_rounds"`
+	DistinctMaintainerCount     float64 `json:"distinct_maintainer_count"`
 	StalenessFlag               bool    `json:"staleness_flag"`
 	SnapshotDate                string  `json:"snapshot_date"`
 }
@@ -150,6 +153,9 @@ func ListRepos(c *gin.Context) {
 			COALESCE(s.repeat_contributor_rate,0) as repeat_contributor_rate,
 			COALESCE(s.issue_triage_speed_hours,0) as issue_triage_speed_hours,
 			COALESCE(s.maintainer_responsiveness,0) as maintainer_responsiveness,
+			COALESCE(s.last_activity_days,180) as last_activity_days,
+			COALESCE(s.review_rounds,0) as review_rounds,
+			COALESCE(s.distinct_maintainer_count,0) as distinct_maintainer_count,
 			COALESCE(s.staleness_flag,0) as staleness_flag,
 			COALESCE(s.snapshot_date,'') as snapshot_date
 		FROM repositories r
@@ -182,7 +188,8 @@ func ListRepos(c *gin.Context) {
 			&r.ExternalPRMergeRate, &r.TimeToFirstResponseHours,
 			&r.TimeToMergeHours, &r.FirstTimerSuccessRate,
 			&r.RepeatContributorRate, &r.IssueTriageSpeedHours,
-			&r.MaintainerResponsiveness, &staleInt,
+			&r.MaintainerResponsiveness, &r.LastActivityDays,
+			&r.ReviewRounds, &r.DistinctMaintainerCount, &staleInt,
 			&r.SnapshotDate,
 		); err != nil {
 			slog.Error("list repos: scan failed", "err", err)
@@ -238,6 +245,9 @@ func GetRepo(c *gin.Context) {
 			COALESCE(s.repeat_contributor_rate,0) as repeat_contributor_rate,
 			COALESCE(s.issue_triage_speed_hours,0) as issue_triage_speed_hours,
 			COALESCE(s.maintainer_responsiveness,0) as maintainer_responsiveness,
+			COALESCE(s.last_activity_days,180) as last_activity_days,
+			COALESCE(s.review_rounds,0) as review_rounds,
+			COALESCE(s.distinct_maintainer_count,0) as distinct_maintainer_count,
 			COALESCE(s.staleness_flag,0) as staleness_flag,
 			COALESCE(s.snapshot_date,'') as snapshot_date
 		FROM repositories r
@@ -257,7 +267,8 @@ func GetRepo(c *gin.Context) {
 		&r.ExternalPRMergeRate, &r.TimeToFirstResponseHours,
 		&r.TimeToMergeHours, &r.FirstTimerSuccessRate,
 		&r.RepeatContributorRate, &r.IssueTriageSpeedHours,
-		&r.MaintainerResponsiveness, &staleInt,
+		&r.MaintainerResponsiveness, &r.LastActivityDays,
+		&r.ReviewRounds, &r.DistinctMaintainerCount, &staleInt,
 		&r.SnapshotDate,
 	)
 	if err == sql.ErrNoRows {
