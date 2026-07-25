@@ -9,7 +9,8 @@
 package main
 
 import (
-	"log"
+	"log/slog"
+	"os"
 
 	"github.com/abhisheksoni27/opendoor/internal/config"
 	"github.com/abhisheksoni27/opendoor/internal/db"
@@ -19,27 +20,32 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-
 )
 
 func main() {
 	cfg, err := config.Load()
 	if err != nil {
-		log.Fatalf("config: %v", err)
+		// slog not set up yet — use stderr directly.
+		slog.Error("config load failed", "err", err)
+		os.Exit(1)
 	}
+
+	setupLogger(cfg.GinMode)
 
 	database, err := db.Connect(cfg.DatabaseURL)
 	if err != nil {
-		log.Fatalf("db: %v", err)
+		slog.Error("db connection failed", "url", cfg.DatabaseURL, "err", err)
+		os.Exit(1)
 	}
 	defer database.Close()
-	log.Println("db: connected")
+	slog.Info("db connected", "url", cfg.DatabaseURL)
 
 	cacheMiddleware, err := middleware.Cache(cfg.ValkeyURL, cfg.ValkeyPassword)
 	if err != nil {
-		log.Fatalf("cache: %v", err)
+		slog.Error("cache connection failed", "url", cfg.ValkeyURL, "err", err)
+		os.Exit(1)
 	}
-	log.Println("cache: ready")
+	slog.Info("cache connected", "url", cfg.ValkeyURL)
 
 	gh := ghclient.NewClient(cfg.GithubToken)
 
@@ -47,11 +53,10 @@ func main() {
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
 
-	// Shared middleware — attach db and cache to all requests.
 	r.Use(middleware.DB(database))
 	r.Use(cacheMiddleware)
 
-	// --- Public API ---
+	// Public API
 	v1 := r.Group("/api/v1")
 	v1.Use(middleware.RateLimit())
 	{
@@ -59,7 +64,7 @@ func main() {
 		v1.GET("/repos/:id", handler.GetRepo)
 	}
 
-	// --- Internal routes (nginx blocks these from the internet) ---
+	// Internal routes — nginx blocks these externally
 	internal := r.Group("/internal")
 	internal.Use(middleware.Auth(cfg.InternalAPIKey))
 	{
@@ -67,11 +72,33 @@ func main() {
 		internal.POST("/seed", handler.Seed(gh))
 	}
 
-	// --- Swagger docs ---
+	// Swagger docs
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	log.Printf("server: listening on :%s (mode: %s)", cfg.Port, cfg.GinMode)
-	if err := r.Run(":" + cfg.Port); err != nil {
-		log.Fatalf("server: %v", err)
+	slog.Info("server starting", "port", cfg.Port, "mode", cfg.GinMode)
+	if err := r.Run("localhost:" + cfg.Port); err != nil {
+		slog.Error("server exited", "err", err)
+		os.Exit(1)
 	}
+}
+
+// setupLogger configures the global slog default.
+// JSON handler in release (structured, machine-readable for journald/log aggregators).
+// Text handler in debug (human-readable for local dev).
+func setupLogger(ginMode string) {
+	level := slog.LevelInfo
+	if ginMode == "debug" {
+		level = slog.LevelDebug
+	}
+
+	opts := &slog.HandlerOptions{Level: level}
+
+	var handler slog.Handler
+	if ginMode == "release" {
+		handler = slog.NewJSONHandler(os.Stdout, opts)
+	} else {
+		handler = slog.NewTextHandler(os.Stdout, opts)
+	}
+
+	slog.SetDefault(slog.New(handler))
 }

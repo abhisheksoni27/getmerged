@@ -2,7 +2,7 @@ package pipeline
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 	"strings"
 	"time"
 
@@ -25,22 +25,32 @@ func Seed(db *sqlx.DB, gh *github.Client, languages []string) error {
 		languages = SeedLanguages
 	}
 
+	slog.Info("seed started", "languages", languages)
+
 	for _, lang := range languages {
-		log.Printf("seed: fetching top %s repos (stars>%d)...", lang, seedMinStars)
+		slog.Info("seed: fetching repos", "language", lang, "min_stars", seedMinStars, "max", seedMaxRepos)
 
 		repos, err := gh.SearchRepos(lang, seedMinStars, seedMaxRepos)
 		if err != nil {
 			return fmt.Errorf("seed %s: %w", lang, err)
 		}
 
-		log.Printf("seed: inserting %d %s repos", len(repos), lang)
+		slog.Info("seed: upserting repos", "language", lang, "count", len(repos))
 
+		inserted, skipped := 0, 0
 		for _, r := range repos {
 			if err := upsertRepo(db, r); err != nil {
-				log.Printf("seed: upsert %s failed: %v", r.FullName, err)
+				slog.Error("seed: upsert failed", "repo", r.FullName, "err", err)
+				skipped++
+				continue
 			}
+			inserted++
 		}
+
+		slog.Info("seed: language done", "language", lang, "inserted", inserted, "skipped", skipped)
 	}
+
+	slog.Info("seed complete")
 	return nil
 }
 

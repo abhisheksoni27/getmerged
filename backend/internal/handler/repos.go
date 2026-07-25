@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"database/sql"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"strings"
 
@@ -128,6 +129,7 @@ func ListRepos(c *gin.Context) {
 
 	var total int
 	if err := db.QueryRow(countQuery, args...).Scan(&total); err != nil {
+		slog.Error("list repos: count query failed", "err", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "count failed"})
 		return
 	}
@@ -163,6 +165,7 @@ func ListRepos(c *gin.Context) {
 	pageArgs := append(args, perPage, offset)
 	rows, err := db.Query(dataQuery, pageArgs...)
 	if err != nil {
+		slog.Error("list repos: data query failed", "err", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "query failed"})
 		return
 	}
@@ -182,6 +185,7 @@ func ListRepos(c *gin.Context) {
 			&r.MaintainerResponsiveness, &staleInt,
 			&r.SnapshotDate,
 		); err != nil {
+			slog.Error("list repos: scan failed", "err", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "scan failed"})
 			return
 		}
@@ -261,6 +265,7 @@ func GetRepo(c *gin.Context) {
 		return
 	}
 	if err != nil {
+		slog.Error("get repo: query failed", "id", id, "err", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "query failed"})
 		return
 	}

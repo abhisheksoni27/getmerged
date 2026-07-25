@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log/slog"
 	"net/http"
 
 	"github.com/abhisheksoni27/opendoor/internal/github"
@@ -29,10 +30,11 @@ func UpdateScores(gh *github.Client) gin.HandlerFunc {
 
 		jobID := uuid.New().String()
 
+		slog.Info("update-scores triggered", "job_id", jobID, "ip", c.ClientIP())
+
 		go func() {
 			if err := pipeline.UpdateScores(db, gh); err != nil {
-				// Errors are logged inside UpdateScores.
-				_ = err
+				slog.Error("update-scores: pipeline error", "job_id", jobID, "err", err)
 			}
 		}()
 
@@ -73,9 +75,11 @@ func Seed(gh *github.Client) gin.HandlerFunc {
 
 		jobID := uuid.New().String()
 
+		slog.Info("seed triggered", "job_id", jobID, "languages", body.Languages, "ip", c.ClientIP())
+
 		go func() {
 			if err := pipeline.Seed(db, gh, body.Languages); err != nil {
-				_ = err
+				slog.Error("seed: pipeline error", "job_id", jobID, "err", err)
 			}
 		}()
 

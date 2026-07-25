@@ -3,7 +3,7 @@ package middleware
 import (
 	"context"
 	"fmt"
-	"log"
+	"log/slog"
 
 	"github.com/gin-gonic/gin"
 	"github.com/valkey-io/valkey-go"
@@ -25,11 +25,11 @@ func Cache(url, password string) (gin.HandlerFunc, error) {
 		return nil, fmt.Errorf("valkey connect: %w", err)
 	}
 
-	// Ping to verify connectivity.
 	if err := client.Do(context.Background(), client.B().Ping().Build()).Error(); err != nil {
 		return nil, fmt.Errorf("valkey ping: %w", err)
 	}
-	log.Println("cache: connected to Valkey")
+
+	slog.Info("cache connected", "url", url)
 
 	return func(c *gin.Context) {
 		c.Set(cacheKey, client)
