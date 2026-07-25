@@ -13,6 +13,7 @@ type Config struct {
 	GithubToken    string
 	DatabaseURL    string
 	ValkeyURL      string
+	ValkeyUsername string
 	ValkeyPassword string
 	InternalAPIKey string
 	Port           string
@@ -26,6 +27,7 @@ func Load() (*Config, error) {
 	_ = godotenv.Load()
 
 	c := &Config{
+		ValkeyUsername: os.Getenv("VALKEY_USERNAME"), // optional — defaults to "default" if empty
 		ValkeyPassword: os.Getenv("VALKEY_PASSWORD"), // optional — empty OK for local dev
 		LogFile:        os.Getenv("LOG_FILE"),        // optional — defaults to opendoor.log if empty
 	}
