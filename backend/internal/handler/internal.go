@@ -89,3 +89,51 @@ func Seed(gh *github.Client) gin.HandlerFunc {
 		})
 	}
 }
+
+// DeleteRepo handles DELETE /internal/repos/:id
+// Deletes a repository and all of its associated daily_snapshots.
+//
+//	@Summary      Delete repository and snapshots
+//	@Description  Deletes a repository record and all of its daily snapshot history.
+//	@Tags         internal
+//	@Produce      json
+//	@Security     ApiKeyAuth
+//	@Param        id   path      string  true  "Repository ID"
+//	@Success      200  {object}  map[string]string
+//	@Failure      500  {object}  map[string]string
+//	@Router       /internal/repos/{id} [delete]
+func DeleteRepo() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := c.Param("id")
+		db := middleware.MustDB(c)
+		if db == nil {
+			return
+		}
+
+		slog.Info("delete repo requested", "id", id, "ip", c.ClientIP())
+
+		// Delete snapshots first
+		if _, err := db.Exec("DELETE FROM daily_snapshots WHERE repository_id = ?", id); err != nil {
+			slog.Error("delete snapshots failed", "id", id, "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete snapshots"})
+			return
+		}
+
+		// Delete repository
+		res, err := db.Exec("DELETE FROM repositories WHERE id = ?", id)
+		if err != nil {
+			slog.Error("delete repo failed", "id", id, "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete repository"})
+			return
+		}
+
+		affected, _ := res.RowsAffected()
+		if affected == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"error": "repository not found"})
+			return
+		}
+
+		slog.Info("delete repo success", "id", id)
+		c.JSON(http.StatusOK, gin.H{"status": "deleted", "id": id})
+	}
+}

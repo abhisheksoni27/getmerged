@@ -73,6 +73,7 @@ func main() {
 		internal.POST("/seed", handler.Seed(gh))
 		internal.POST("/score-repo", handler.ScoreRepo(gh))
 		internal.POST("/check-pat", handler.CheckPAT(gh))
+		internal.DELETE("/repos/:id", handler.DeleteRepo())
 	}
 
 	// Swagger docs

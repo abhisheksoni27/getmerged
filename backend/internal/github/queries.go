@@ -33,6 +33,9 @@ query SearchRepos($query: String!, $cursor: String) {
 const RepoPRsQuery = `
 query RepoPRs($owner: String!, $name: String!, $cursor: String) {
   repository(owner: $owner, name: $name) {
+    stargazerCount
+    description
+    primaryLanguage { name }
     pullRequests(
       first: 100
       after: $cursor

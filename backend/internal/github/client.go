@@ -62,6 +62,13 @@ type Repo struct {
 	URL         string
 }
 
+// RepoMeta holds metadata for a repository.
+type RepoMeta struct {
+	Stars       int
+	Language    string
+	Description string
+}
+
 // PR holds pull-request data needed for metric computation.
 type PR struct {
 	State             string
@@ -105,7 +112,7 @@ func (c *Client) CheckToken() (string, rateLimitInfo, error) {
 		} `json:"data"`
 	}
 
-	if err := c.do(query, nil, &resp); err != nil {
+	if _, err := c.do(query, nil, &resp); err != nil {
 		return "", rateLimitInfo{}, err
 	}
 
@@ -148,11 +155,14 @@ func (c *Client) SearchRepos(language string, minStars, maxRepos int) ([]Repo, e
 			} `json:"data"`
 		}
 
-		if err := c.do(SearchReposQuery, vars, &resp); err != nil {
-			return nil, fmt.Errorf("SearchRepos(%s): %w", language, err)
+		fromCache, err := c.do(SearchReposQuery, vars, &resp)
+		if err != nil {
+			return nil, fmt.Errorf("SearchRepos: %w", err)
 		}
 
-		c.handleRateLimit(resp.Data.RateLimit)
+		if !fromCache {
+			c.handleRateLimit(resp.Data.RateLimit)
+		}
 
 		for _, n := range resp.Data.Search.Nodes {
 			lang := ""
@@ -183,11 +193,12 @@ func (c *Client) SearchRepos(language string, minStars, maxRepos int) ([]Repo, e
 	return repos, nil
 }
 
-// FetchPRs returns all closed/merged PRs for a repo within the last windowDays days.
-func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, error) {
+// FetchPRs returns all closed/merged PRs for a repo within the last windowDays days and repo metadata.
+func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, error) {
 	cutoff := time.Now().UTC().Add(-time.Duration(windowDays) * 24 * time.Hour)
 	var (
 		prs    []PR
+		meta   RepoMeta
 		cursor *string
 		done   bool
 	)
@@ -201,7 +212,10 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, error) {
 		var resp struct {
 			Data struct {
 				Repository struct {
-					PullRequests struct {
+					StargazerCount  int                                   `json:"stargazerCount"`
+					Description     string                                `json:"description"`
+					PrimaryLanguage *struct{ Name string `json:"name"` } `json:"primaryLanguage"`
+					PullRequests    struct {
 						PageInfo struct {
 							HasNextPage bool   `json:"hasNextPage"`
 							EndCursor   string `json:"endCursor"`
@@ -227,11 +241,20 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, error) {
 			} `json:"data"`
 		}
 
-		if err := c.do(RepoPRsQuery, vars, &resp); err != nil {
-			return nil, fmt.Errorf("FetchPRs(%s/%s): %w", owner, name, err)
+		fromCache, err := c.do(RepoPRsQuery, vars, &resp)
+		if err != nil {
+			return nil, RepoMeta{}, fmt.Errorf("FetchPRs(%s/%s): %w", owner, name, err)
 		}
 
-		c.handleRateLimit(resp.Data.RateLimit)
+		if !fromCache {
+			c.handleRateLimit(resp.Data.RateLimit)
+		}
+
+		meta.Stars = resp.Data.Repository.StargazerCount
+		meta.Description = resp.Data.Repository.Description
+		if resp.Data.Repository.PrimaryLanguage != nil {
+			meta.Language = resp.Data.Repository.PrimaryLanguage.Name
+		}
 
 		nodes := resp.Data.Repository.PullRequests.Nodes
 		slog.Debug("github: PR page fetched",
@@ -300,7 +323,7 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, error) {
 	}
 
 	slog.Debug("fetched PRs", "repo", owner+"/"+name, "count", len(prs), "window_days", windowDays)
-	return prs, nil
+	return prs, meta, nil
 }
 
 // FetchIssues returns issues opened within the last windowDays days.
@@ -341,11 +364,14 @@ func (c *Client) FetchIssues(owner, name string, windowDays int) ([]Issue, error
 			} `json:"data"`
 		}
 
-		if err := c.do(RepoIssuesQuery, vars, &resp); err != nil {
+		fromCache, err := c.do(RepoIssuesQuery, vars, &resp)
+		if err != nil {
 			return nil, fmt.Errorf("FetchIssues(%s/%s): %w", owner, name, err)
 		}
 
-		c.handleRateLimit(resp.Data.RateLimit)
+		if !fromCache {
+			c.handleRateLimit(resp.Data.RateLimit)
+		}
 
 		nodeCount := len(resp.Data.Repository.Issues.Nodes)
 		slog.Debug("github: issues page fetched",
@@ -405,11 +431,14 @@ func (c *Client) IsStalenessFlag(owner, name string) (bool, error) {
 		} `json:"data"`
 	}
 
-	if err := c.do(RepoStalenessQuery, map[string]any{"owner": owner, "name": name}, &resp); err != nil {
+	fromCache, err := c.do(RepoStalenessQuery, map[string]any{"owner": owner, "name": name}, &resp)
+	if err != nil {
 		return false, err
 	}
 
-	c.handleRateLimit(resp.Data.RateLimit)
+	if !fromCache {
+		c.handleRateLimit(resp.Data.RateLimit)
+	}
 
 	externalAssoc := map[string]bool{"CONTRIBUTOR": true, "FIRST_TIME_CONTRIBUTOR": true, "NONE": true}
 	for _, pr := range resp.Data.Repository.PullRequests.Nodes {
@@ -429,10 +458,10 @@ func (c *Client) IsStalenessFlag(owner, name string) (bool, error) {
 
 // --- Internal helpers ---
 
-func (c *Client) do(query string, vars map[string]any, out any) error {
+func (c *Client) do(query string, vars map[string]any, out any) (fromCache bool, err error) {
 	reqBody, err := json.Marshal(graphqlRequest{Query: query, Variables: vars})
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	// Calculate cache key
@@ -445,13 +474,13 @@ func (c *Client) do(query string, vars map[string]any, out any) error {
 	if c.valkey != nil {
 		if cached, err := c.valkey.Do(ctx, c.valkey.B().Get().Key(cacheKey).Build()).ToString(); err == nil && cached != "" {
 			slog.Debug("github: cache HIT", "key", cacheKey)
-			return json.Unmarshal([]byte(cached), out)
+			return true, json.Unmarshal([]byte(cached), out)
 		}
 	}
 
 	req, err := http.NewRequest(http.MethodPost, graphqlEndpoint, bytes.NewReader(reqBody))
 	if err != nil {
-		return err
+		return false, err
 	}
 	req.Header.Set("Authorization", "Bearer "+c.token)
 	req.Header.Set("Content-Type", "application/json")
@@ -459,21 +488,21 @@ func (c *Client) do(query string, vars map[string]any, out any) error {
 	res, err := c.httpClient.Do(req)
 	if err != nil {
 		slog.Error("github: http request failed", "err", err)
-		return err
+		return false, err
 	}
 	defer res.Body.Close()
 
 	// Read the full body — we need it for both logging and decoding.
 	raw, err := io.ReadAll(res.Body)
 	if err != nil {
-		return fmt.Errorf("read response body: %w", err)
+		return false, fmt.Errorf("read response body: %w", err)
 	}
 
 	slog.Debug("github: raw response", "status", res.StatusCode, "body", string(raw))
 
 	if res.StatusCode != http.StatusOK {
 		slog.Error("github: non-200 response", "status", res.StatusCode, "body", string(raw))
-		return fmt.Errorf("GitHub API returned %d: %s", res.StatusCode, string(raw))
+		return false, fmt.Errorf("GitHub API returned %d: %s", res.StatusCode, string(raw))
 	}
 
 	// GitHub GraphQL ALWAYS returns HTTP 200 — errors are in the body `errors` field.
@@ -487,7 +516,7 @@ func (c *Client) do(query string, vars map[string]any, out any) error {
 		for _, e := range envelope.Errors {
 			slog.Error("github: graphql error", "message", e.Message, "type", e.Type)
 		}
-		return fmt.Errorf("graphql error: %s", envelope.Errors[0].Message)
+		return false, fmt.Errorf("graphql error: %s", envelope.Errors[0].Message)
 	}
 
 	// Store in Valkey cache if request succeeded
@@ -496,7 +525,7 @@ func (c *Client) do(query string, vars map[string]any, out any) error {
 		_ = c.valkey.Do(ctx, c.valkey.B().Set().Key(cacheKey).Value(string(raw)).Ex(cacheTTL).Build())
 	}
 
-	return json.Unmarshal(raw, out)
+	return false, json.Unmarshal(raw, out)
 }
 
 

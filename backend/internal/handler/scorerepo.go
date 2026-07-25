@@ -53,7 +53,7 @@ func ScoreRepo(gh *ghclient.Client) gin.HandlerFunc {
 		slog.Info("score-repo: starting", "repo", fullName)
 
 		// --- Fetch from GitHub (180 day window) ---
-		prs, err := gh.FetchPRs(body.Owner, body.Name, 180)
+		prs, meta, err := gh.FetchPRs(body.Owner, body.Name, 180)
 		if err != nil {
 			slog.Error("score-repo: FetchPRs failed", "repo", fullName, "err", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("FetchPRs: %v", err)})
@@ -109,7 +109,7 @@ func ScoreRepo(gh *ghclient.Client) gin.HandlerFunc {
 		score, tier := scoring.ComputeCRank(thisNormed, raw.StalenessFlag)
 
 		// --- Save to DB ---
-		repoID, err := upsertRepoRecord(db, body.Owner, body.Name)
+		repoID, err := upsertRepoRecord(db, body.Owner, body.Name, meta)
 		if err != nil {
 			slog.Error("score-repo: upsert repo failed", "repo", fullName, "err", err)
 		} else {
@@ -171,7 +171,7 @@ func ScoreRepo(gh *ghclient.Client) gin.HandlerFunc {
 	}
 }
 
-func upsertRepoRecord(db *sqlx.DB, owner, name string) (string, error) {
+func upsertRepoRecord(db *sqlx.DB, owner, name string, meta ghclient.RepoMeta) (string, error) {
 	fullName := owner + "/" + name
 	githubURL := fmt.Sprintf("https://github.com/%s/%s", owner, name)
 
@@ -182,13 +182,17 @@ func upsertRepoRecord(db *sqlx.DB, owner, name string) (string, error) {
 		_, err = db.Exec(`
 			INSERT INTO repositories (id, full_name, owner, name, language, stars, description, github_url, updated_at)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-		`, id, fullName, owner, name, "", 0, "", githubURL, time.Now().UTC())
+		`, id, fullName, owner, name, meta.Language, meta.Stars, meta.Description, githubURL, time.Now().UTC())
 		return id, err
 	} else if err != nil {
 		return "", err
 	}
 
-	_, err = db.Exec("UPDATE repositories SET updated_at = ? WHERE id = ?", time.Now().UTC(), id)
+	_, err = db.Exec(`
+		UPDATE repositories
+		SET updated_at = ?, language = ?, stars = ?, description = ?
+		WHERE id = ?
+	`, time.Now().UTC(), meta.Language, meta.Stars, meta.Description, id)
 	return id, err
 }
 
