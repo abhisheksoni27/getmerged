@@ -2,8 +2,10 @@ package middleware
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"log/slog"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/valkey-io/valkey-go"
@@ -12,9 +14,25 @@ import (
 const cacheKey = "cache"
 
 // Cache attaches a valkey.Client to the gin context under the key "cache".
-func Cache(url, username, password string) (gin.HandlerFunc, valkey.Client, error) {
+func Cache(rawURL, username, password string) (gin.HandlerFunc, valkey.Client, error) {
+	addr := rawURL
+	useTLS := false
+
+	if strings.HasPrefix(addr, "rediss://") {
+		useTLS = true
+		addr = strings.TrimPrefix(addr, "rediss://")
+	} else if strings.HasPrefix(addr, "redis://") {
+		addr = strings.TrimPrefix(addr, "redis://")
+	}
+
 	opts := valkey.ClientOption{
-		InitAddress: []string{url},
+		InitAddress: []string{addr},
+	}
+
+	if useTLS {
+		opts.TLSConfig = &tls.Config{
+			MinVersion: tls.VersionTLS12,
+		}
 	}
 	if username != "" {
 		opts.Username = username
@@ -32,7 +50,7 @@ func Cache(url, username, password string) (gin.HandlerFunc, valkey.Client, erro
 		return nil, nil, fmt.Errorf("valkey ping: %w", err)
 	}
 
-	slog.Info("cache connected", "url", url)
+	slog.Info("cache connected", "url", rawURL)
 
 	return func(c *gin.Context) {
 		c.Set(cacheKey, client)
