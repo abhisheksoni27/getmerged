@@ -1,5 +1,7 @@
 package scoring
 
+import "math"
+
 // Tier labels for C-Rank scores.
 const (
 	TierS = "S"
@@ -29,9 +31,9 @@ var weights = struct {
 }
 
 // ComputeCRank calculates the C-Rank score and tier from normalised metrics.
-// If staleness is true, the repo is force-assigned D regardless of score.
+// If staleness is true, the score is capped to <30 (max 29.9) and assigned D.
 func ComputeCRank(n NormalisedMetrics, staleness bool) (score float64, tier string) {
-	score = weights.MergeRate*n.MergeRate +
+	rawScore := weights.MergeRate*n.MergeRate +
 		weights.ResponseTime*n.ResponseTime +
 		weights.FirstTimer*n.FirstTimer +
 		weights.TimeToMerge*n.TimeToMerge +
@@ -40,9 +42,10 @@ func ComputeCRank(n NormalisedMetrics, staleness bool) (score float64, tier stri
 		weights.Responsiveness*n.Responsiveness
 
 	if staleness {
+		score = math.Min(rawScore, 29.9)
 		return score, TierD
 	}
-	return score, scoreTier(score)
+	return rawScore, scoreTier(rawScore)
 }
 
 // scoreTier maps a raw score to its tier label.

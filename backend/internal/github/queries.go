@@ -58,11 +58,11 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
         }
       }
     }
-    rateLimit {
-      remaining
-      resetAt
-      cost
-    }
+  }
+  rateLimit {
+    remaining
+    resetAt
+    cost
   }
 }
 `
@@ -90,11 +90,11 @@ query RepoIssues($owner: String!, $name: String!, $cursor: String) {
         }
       }
     }
-    rateLimit {
-      remaining
-      resetAt
-      cost
-    }
+  }
+  rateLimit {
+    remaining
+    resetAt
+    cost
   }
 }
 `
@@ -112,11 +112,11 @@ query RepoStaleness($owner: String!, $name: String!) {
         authorAssociation
       }
     }
-    rateLimit {
-      remaining
-      resetAt
-      cost
-    }
+  }
+  rateLimit {
+    remaining
+    resetAt
+    cost
   }
 }
 `
