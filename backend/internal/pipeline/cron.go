@@ -3,6 +3,7 @@ package pipeline
 import (
 	"fmt"
 	"log/slog"
+	"os"
 	"time"
 
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
@@ -129,6 +130,16 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 	}
 
 	slog.Info("cron complete", "scored", len(all), "attempted", len(repos))
+
+	// Regenerate static XML sitemaps for CDN/Nginx serving
+	publicDir := "../frontend/public"
+	if _, err := os.Stat(publicDir); os.IsNotExist(err) {
+		publicDir = "public"
+	}
+	if err := GenerateStaticSitemaps(db, publicDir); err != nil {
+		slog.Error("cron: sitemap generation failed", "err", err)
+	}
+
 	return nil
 }
 
