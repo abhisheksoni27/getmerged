@@ -69,24 +69,23 @@ build-frontend:
 	cd frontend && npm run build
 
 deploy-frontend: build-frontend
-	@echo "=== Sync standalone ==="
+	@echo "=== Sync standalone root ==="
 	rsync $(RSYNC_FLAGS) \
-		--exclude='.next' \
-		--exclude='public' \
 		frontend/.next/standalone/ \
 		deploy@oracle:/opt/opendoor/frontend/
 
-	@echo "=== Sync static ==="
+	@echo "=== Sync static assets ==="
+	ssh deploy@oracle 'mkdir -p /opt/opendoor/frontend/.next/static /opt/opendoor/frontend/public'
 	rsync $(RSYNC_FLAGS) \
 		frontend/.next/static/ \
 		deploy@oracle:/opt/opendoor/frontend/.next/static/
 
-	@echo "=== Sync public ==="
+	@echo "=== Sync public assets ==="
 	rsync $(RSYNC_FLAGS) \
 		frontend/public/ \
 		deploy@oracle:/opt/opendoor/frontend/public/
 
-	@echo "=== Restart ==="
+	@echo "=== Restart frontend service ==="
 	ssh deploy@oracle '\
 		sudo systemctl restart opendoor-frontend && \
 		sudo systemctl status opendoor-frontend --no-pager'
