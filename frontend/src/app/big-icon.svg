@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <rect width="256" height="256" rx="64" fill="#09090b"/>
+
+  <text
+    x="50%"
+    y="54%"
+    dominant-baseline="central"
+    text-anchor="middle"
+    font-family="monospace"
+    font-size="112"
+    font-weight="700"
+    fill="#ffffff">
+    OD
+  </text>
+
+  <circle
+    cx="200"
+    cy="56"
+    r="20"
+    fill="#10b981"/>
+</svg>
