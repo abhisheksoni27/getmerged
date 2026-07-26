@@ -47,7 +47,8 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         .then((data) => {
           if (data?.watchlist && Array.isArray(data.watchlist)) {
             const found = data.watchlist.some(
-              (item: { repo_id: number | string }) => String(item.repo_id) === String(repo.id)
+              (item: string | { repo_id: string }) =>
+                typeof item === "string" ? item === String(repo.id) : String(item.repo_id) === String(repo.id)
             );
             setIsWatching(found);
           }
