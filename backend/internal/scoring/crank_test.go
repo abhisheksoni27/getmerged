@@ -57,14 +57,15 @@ func TestComputeCRank_TierBoundaries(t *testing.T) {
 		score float64
 		want  string
 	}{
-		{80, scoring.TierS},
-		{79, scoring.TierA},
-		{65, scoring.TierA},
-		{64, scoring.TierB},
-		{50, scoring.TierB},
-		{49, scoring.TierC},
-		{30, scoring.TierC},
-		{29, scoring.TierD},
+		{85, scoring.TierS},
+		{71, scoring.TierS},
+		{69, scoring.TierA},
+		{56, scoring.TierA},
+		{54, scoring.TierB},
+		{41, scoring.TierB},
+		{39, scoring.TierC},
+		{26, scoring.TierC},
+		{24, scoring.TierD},
 		{0, scoring.TierD},
 	}
 

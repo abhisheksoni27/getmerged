@@ -60,13 +60,13 @@ func ComputeCRank(n NormalisedMetrics, staleness bool) (score float64, tier stri
 // scoreTier maps a raw score to its tier label.
 func scoreTier(score float64) string {
 	switch {
-	case score >= 80:
+	case score >= 70:
 		return TierS
-	case score >= 65:
+	case score >= 55:
 		return TierA
-	case score >= 50:
+	case score >= 40:
 		return TierB
-	case score >= 30:
+	case score >= 25:
 		return TierC
 	default:
 		return TierD

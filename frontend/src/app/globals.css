@@ -38,3 +38,16 @@ body {
   background-image: radial-gradient(#e4e4e7 1px, transparent 1px);
   background-size: 24px 24px;
 }
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2.5s infinite;
+}

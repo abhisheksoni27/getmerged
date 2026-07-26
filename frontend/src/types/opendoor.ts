@@ -1,24 +1,35 @@
 export interface Repo {
-  id: number;
+  id: number | string;
   full_name: string;
-  owner: string;
-  name: string;
+  owner?: string;
+  name?: string;
   language: string;
   stars: number;
   description: string;
-  url: string;
-  star_bucket: string;
+  url?: string;
+  github_url?: string;
+  star_bucket?: string;
   is_trending?: boolean;
   class_rank?: string;
+  c_rank_tier?: string;
   score?: number;
+  c_rank_score?: number;
+  time_to_first_response_hours?: number;
+  external_pr_merge_rate?: number;
+  first_timer_success_rate?: number;
+  distinct_maintainer_count?: number;
+  staleness_flag?: boolean;
 }
 
 export interface MacroStats {
   total_repos: number;
-  rank_counts: Record<string, number>;
-  bucket_counts: Record<string, number>;
-  top_language_counts: Record<string, number>;
-  updated_ms: number;
+  s_class_count?: number;
+  languages_count?: number;
+  avg_response_hours?: number;
+  rank_counts?: Record<string, number>;
+  bucket_counts?: Record<string, number>;
+  top_language_counts?: Record<string, number>;
+  updated_ms?: number;
 }
 
 export interface AIInsights {
