@@ -32,6 +32,10 @@ export default function Home() {
   const [trendingOnly, setTrendingOnly] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const [isLoggedIn] = useState<boolean>(() => {
+    return typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
+  });
+
   // Pagination state
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -341,7 +345,7 @@ export default function Home() {
           <>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-10">
               {repos.map((repo) => (
-                <RepoCard key={repo.id} repo={repo} />
+                <RepoCard key={repo.id} repo={repo} isLoggedIn={isLoggedIn} />
               ))}
             </div>
 

@@ -3,14 +3,13 @@ package handler
 import (
 	"log/slog"
 	"net/http"
-	"strconv"
 
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 type AddWatchlistRequest struct {
-	RepoID int64 `json:"repo_id" binding:"required"`
+	RepoID string `json:"repo_id" binding:"required"`
 }
 
 // AddToWatchlist handles POST /api/v1/user/watchlist
@@ -41,6 +40,7 @@ func AddToWatchlist() gin.HandlerFunc {
 		`, userID, req.RepoID)
 
 		if err != nil {
+			slog.Error("add watchlist failed", "user_id", userID, "repo_id", req.RepoID, "err", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to add repository to watchlist"})
 			return
 		}
@@ -59,20 +59,16 @@ func RemoveFromWatchlist() gin.HandlerFunc {
 		}
 		userID := userIDVal.(int64)
 
-		repoIDStr := c.Param("id")
-		repoID, err := strconv.ParseInt(repoIDStr, 10, 64)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid repository ID"})
-			return
-		}
+		repoID := c.Param("id")
 
 		db := middleware.MustDB(c)
 		if db == nil {
 			return
 		}
 
-		_, err = db.ExecContext(c.Request.Context(), "DELETE FROM user_watchlists WHERE user_id = ? AND repo_id = ?", userID, repoID)
+		_, err := db.ExecContext(c.Request.Context(), "DELETE FROM user_watchlists WHERE user_id = ? AND repo_id = ?", userID, repoID)
 		if err != nil {
+			slog.Error("remove watchlist failed", "user_id", userID, "repo_id", repoID, "err", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to remove repository from watchlist"})
 			return
 		}
@@ -97,7 +93,7 @@ func ListWatchlist() gin.HandlerFunc {
 		}
 
 		type WatchlistRepo struct {
-			RepoID    int64   `db:"repo_id" json:"repo_id"`
+			RepoID    string  `db:"repo_id" json:"repo_id"`
 			FullName  string  `db:"full_name" json:"full_name"`
 			Language  string  `db:"language" json:"language"`
 			Stars     int     `db:"stars" json:"stars"`

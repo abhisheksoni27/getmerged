@@ -42,7 +42,7 @@ func AutoMigrate(db *sqlx.DB) error {
 
 	CREATE TABLE IF NOT EXISTS user_watchlists (
 		user_id INTEGER NOT NULL,
-		repo_id INTEGER NOT NULL,
+		repo_id TEXT NOT NULL,
 		notify_rank_change BOOLEAN DEFAULT TRUE,
 		created_at DATETIME NOT NULL,
 		PRIMARY KEY(user_id, repo_id),
