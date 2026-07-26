@@ -139,3 +139,44 @@ func DeleteRepo() gin.HandlerFunc {
 		c.JSON(http.StatusOK, gin.H{"status": "deleted", "id": id})
 	}
 }
+// Clears all Valkey cached API responses (apicache:repos:*, apicache:repo:*, macro stats).
+//
+//	@Summary      Purge API Cache
+//	@Description  Flushes all Valkey cached API responses in one request.
+//	@Tags         internal
+//	@Produce      json
+//	@Security     ApiKeyAuth
+//	@Success      200  {object}  map[string]string
+//	@Router       /internal/purge-cache [post]
+func PurgeCache() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		vk := middleware.MustCache(c)
+		if vk == nil {
+			c.JSON(http.StatusOK, gin.H{"status": "skipped", "message": "no cache configured"})
+			return
+		}
+
+		slog.Info("purge-cache requested", "ip", c.ClientIP())
+
+		ctx := c.Request.Context()
+
+		// Scan and delete all apicache:* keys in Valkey
+		var keysToDelete []string
+		if keys, err := vk.Do(ctx, vk.B().Keys().Pattern("apicache:*").Build()).AsStrSlice(); err == nil {
+			keysToDelete = append(keysToDelete, keys...)
+		}
+
+		deletedCount := 0
+		for _, k := range keysToDelete {
+			if err := vk.Do(ctx, vk.B().Del().Key(k).Build()).Error(); err == nil {
+				deletedCount++
+			}
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"status":        "purged",
+			"deleted_keys":  deletedCount,
+			"total_matched": len(keysToDelete),
+		})
+	}
+}
