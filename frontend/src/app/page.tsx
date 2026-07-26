@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { RepoCard } from "@/components/RepoCard";
 import { Repo, MacroStats } from "@/types/opendoor";
 import { Search, Flame, Sparkles, Filter, Code2 } from "lucide-react";
+import { API_BASE_URL } from "@/lib/api";
 
 export default function Home() {
   const [repos, setRepos] = useState<Repo[]>([]);
@@ -108,7 +109,7 @@ export default function Home() {
     ];
 
     // Fetch from Go backend if available
-    fetch("http://localhost:8080/api/v1/repos")
+    fetch(`${API_BASE_URL}/api/v1/repos`)
       .then((res) => res.json())
       .then((data) => {
         if (data.repos && data.repos.length > 0) {
@@ -120,7 +121,7 @@ export default function Home() {
       .catch(() => setRepos(mockRepos))
       .finally(() => setLoading(false));
 
-    fetch("http://localhost:8080/api/v1/stats/macro")
+    fetch(`${API_BASE_URL}/api/v1/stats/macro`)
       .then((res) => res.json())
       .then((data) => {
         if (data.stats) setStats(data.stats);
