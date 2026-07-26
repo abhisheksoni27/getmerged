@@ -75,8 +75,32 @@ func AutoMigrate(db *sqlx.DB) error {
 		FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 	);
 	`
-	_, err := db.Exec(schema)
-	return err
+	if _, err := db.Exec(schema); err != nil {
+		return err
+	}
+
+	// Safe migration check for user_watchlists.repo_id column type
+	var colType string
+	err := db.Get(&colType, "SELECT type FROM pragma_table_info('user_watchlists') WHERE name = 'repo_id'")
+	if err == nil && strings.ToUpper(colType) == "INTEGER" {
+		migration := `
+			CREATE TABLE user_watchlists_dg_tmp (
+				user_id INTEGER NOT NULL,
+				repo_id TEXT NOT NULL,
+				notify_rank_change BOOLEAN DEFAULT TRUE,
+				created_at DATETIME NOT NULL,
+				PRIMARY KEY(user_id, repo_id),
+				FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+			);
+			INSERT INTO user_watchlists_dg_tmp (user_id, repo_id, notify_rank_change, created_at)
+				SELECT user_id, CAST(repo_id AS TEXT), notify_rank_change, created_at FROM user_watchlists;
+			DROP TABLE user_watchlists;
+			ALTER TABLE user_watchlists_dg_tmp RENAME TO user_watchlists;
+		`
+		_, _ = db.Exec(migration)
+	}
+
+	return nil
 }
 
 func resolveDriver(url string) (driver, dsn string) {
