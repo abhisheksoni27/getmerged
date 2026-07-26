@@ -372,6 +372,73 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </div>
         )}
       </div>
+
+      {/* Content-Heavy SEO Modules for Search Engines & Crawlers */}
+      <div className="space-y-8 font-sans border-t border-zinc-200 pt-8 text-zinc-800">
+        {/* Module 1: Contributor Compatibility Report */}
+        <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs">
+          <h2 className="text-base sm:text-lg font-bold font-mono text-zinc-900 mb-3 flex items-center gap-2">
+            <Activity className="h-4 w-4 text-emerald-600 shrink-0" />
+            Contributor Compatibility & Review Speed Analysis for {fullName}
+          </h2>
+          <div className="prose prose-sm text-zinc-600 leading-relaxed max-w-none space-y-3">
+            <p>
+              When evaluating whether to contribute to <strong className="text-zinc-900">{fullName}</strong>, response velocity and maintainer engagement are crucial. Opendoor continuously tracks pull request trajectories, first-comment latency, and code review rounds to help developers avoid submitting pull requests to backlogged repositories.
+            </p>
+            <p>
+              Currently, maintainers of {fullName} acknowledge new external contributions in approximately{" "}
+              <strong className="text-zinc-900">{responseTimeStr}</strong>. Out of all submitted pull requests from non-core authors in the last 180-day window,{" "}
+              <strong className="text-zinc-900">{mergeRateDisplay}</strong> were successfully merged into the primary branch.
+            </p>
+          </div>
+        </section>
+
+        {/* Module 2: Maintainer FAQ Accordion */}
+        <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs">
+          <h2 className="text-base sm:text-lg font-bold font-mono text-zinc-900 mb-4 flex items-center gap-2">
+            <FileCode2 className="h-4 w-4 text-blue-600 shrink-0" />
+            Frequently Asked Questions — Contributing to {fullName}
+          </h2>
+          <div className="space-y-4">
+            <div className="rounded-xl border border-zinc-100 bg-zinc-50/60 p-4">
+              <h3 className="text-xs sm:text-sm font-bold text-zinc-900 font-mono mb-1.5">
+                Is {fullName} welcoming to first-time open-source contributors?
+              </h3>
+              <p className="text-xs text-zinc-600 leading-relaxed">
+                {fullName} has a recorded first-timer success rate of <strong>{firstTimerRateDisplay}</strong>. Repositories ranked Tier S or Tier A typically have maintainers who provide constructive feedback on initial PRs and label beginner-friendly issues.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-zinc-100 bg-zinc-50/60 p-4">
+              <h3 className="text-xs sm:text-sm font-bold text-zinc-900 font-mono mb-1.5">
+                How fast can I expect code review feedback on my pull request?
+              </h3>
+              <p className="text-xs text-zinc-600 leading-relaxed">
+                The initial maintainer response time averages ~<strong>{responseTimeStr}</strong>. Keep your pull requests focused, write clear commit messages, and ensure all CI checks pass to accelerate review speed.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-zinc-100 bg-zinc-50/60 p-4">
+              <h3 className="text-xs sm:text-sm font-bold text-zinc-900 font-mono mb-1.5">
+                What does the {score.toFixed(1)} C-Rank™ score represent?
+              </h3>
+              <p className="text-xs text-zinc-600 leading-relaxed">
+                The C-Rank™ system evaluates repositories on a 0 to 100 scale using a weighted sum of external PR merge rate, initial response time, maintainer count, and first-timer success. A score of {score.toFixed(1)} places this project in the <strong>{getRankHumanLabel(rank)}</strong> tier.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Module 3: Methodology Explanation */}
+        <section className="rounded-2xl border border-zinc-200 bg-zinc-50/70 p-6">
+          <h2 className="text-xs font-mono font-bold text-zinc-500 uppercase tracking-wider mb-2">
+            Opendoor C-Rank™ Indexing Standard
+          </h2>
+          <p className="text-xs text-zinc-600 leading-relaxed">
+            All telemetry metrics displayed for {fullName} are automatically retrieved via the GitHub GraphQL API and recalculated daily. Insider pull requests submitted by repository owners or organization members are excluded from merge rate calculations to preserve objective external contributor statistics.
+          </p>
+        </section>
+      </div>
     </main>
   );
 }

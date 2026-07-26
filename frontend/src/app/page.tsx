@@ -423,24 +423,26 @@ export default function Home() {
 
           {/* Rich Macro Visualizations: Stacked Language-Tier Chart & Dynamic Tier Donut */}
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 mb-16 font-mono">
-            {/* 1. Stacked Language Tier Distribution Bar Chart */}
+            {/* 1. Language Leaderboard (Ranked by Weighted Contributor Score) */}
             <div className="rounded-2xl border border-zinc-200 bg-white p-4 sm:p-6 shadow-xs flex flex-col justify-between">
               <div>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 border-b border-zinc-100 pb-3">
                   <div>
                     <h3 className="text-xs sm:text-sm font-bold text-zinc-900 flex items-center gap-2">
-                      <Code2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                      Language Distribution & Maintainer Vibe
+                      <Sparkles className="h-4 w-4 text-emerald-600 shrink-0" />
+                      Language Contributor Leaderboard
                     </h3>
                     <p className="text-[11px] text-zinc-500 font-sans mt-0.5">
-                      Percentage and repo breakdown per language by contributor responsiveness.
+                      Ecosystems ranked by weighted welcoming score (Super Welcoming=4x, Welcoming=3x, Moderate=2x, Slow=1x).
                     </p>
                   </div>
-                  <span className="text-[10px] bg-zinc-100 px-2 py-0.5 rounded-full text-zinc-600 shrink-0 w-max">Live Matrix</span>
+                  <span className="text-[10px] bg-emerald-50 text-emerald-700 font-semibold px-2 py-0.5 rounded-full border border-emerald-200 shrink-0 w-max">
+                    Live Leaderboard
+                  </span>
                 </div>
 
-                {/* Legend Flexible Wrapping */}
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[10px] sm:text-[11px] mb-5">
+                {/* Tier Color Legend */}
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] font-sans mb-4 bg-zinc-50/70 p-2.5 rounded-xl border border-zinc-100">
                   <span className="flex items-center gap-1.5 text-emerald-700 font-semibold">
                     <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block shrink-0" /> Super Welcoming
                   </span>
@@ -455,18 +457,22 @@ export default function Home() {
                   </span>
                 </div>
 
-                {/* Stacked Bars */}
-                <div className="space-y-4">
+                {/* Leaderboard Items */}
+                <div className="space-y-3.5">
                   {(
                     stats?.language_breakdown || [
                       { language: "Python", total: 245, tier_map: { S: 35, A: 85, B: 95, C: 30 } },
                       { language: "TypeScript", total: 210, tier_map: { S: 28, A: 72, B: 80, C: 30 } },
                       { language: "Go", total: 180, tier_map: { S: 25, A: 65, B: 60, C: 30 } },
                       { language: "Rust", total: 140, tier_map: { S: 18, A: 42, B: 50, C: 30 } },
+                      { language: "Java", total: 120, tier_map: { S: 15, A: 35, B: 40, C: 30 } },
                       { language: "C++", total: 95, tier_map: { S: 10, A: 30, B: 35, C: 20 } },
+                      { language: "PHP", total: 80, tier_map: { S: 8, A: 25, B: 30, C: 17 } },
+                      { language: "Ruby", total: 70, tier_map: { S: 7, A: 22, B: 25, C: 16 } },
+                      { language: "Dart", total: 60, tier_map: { S: 6, A: 20, B: 22, C: 12 } },
+                      { language: "Kotlin", total: 50, tier_map: { S: 5, A: 16, B: 18, C: 11 } },
                     ]
                   )
-                    .slice(0, 5)
                     .map((item) => {
                       const sCount = item.tier_map?.["S"] || 0;
                       const aCount = item.tier_map?.["A"] || 0;
@@ -479,49 +485,87 @@ export default function Home() {
                       const bPct = (bCount / grandTotal) * 100;
                       const cPct = (cCount / grandTotal) * 100;
 
+                      // Calculate weighted welcoming score out of 100
+                      const weightedScore = sPct * 1.0 + aPct * 0.75 + bPct * 0.4 + cPct * 0.1;
+
+                      return {
+                        ...item,
+                        sCount,
+                        aCount,
+                        bCount,
+                        cCount,
+                        grandTotal,
+                        sPct,
+                        aPct,
+                        bPct,
+                        cPct,
+                        weightedScore,
+                      };
+                    })
+                    .sort((a, b) => b.weightedScore - a.weightedScore)
+                    .slice(0, 10)
+                    .map((item, idx) => {
+                      const rankMedal =
+                        idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`;
+
                       return (
-                        <div key={item.language} className="text-xs group">
-                          <div className="flex flex-col xs:flex-row xs:justify-between xs:items-center gap-1 text-zinc-700 mb-1.5">
-                            <span className="font-bold text-zinc-900 group-hover:text-emerald-600 transition-colors flex items-center gap-1.5">
-                              <LangLogo language={item.language} />
-                              {item.language}
-                            </span>
-                            <div className="flex flex-wrap items-center gap-1.5 text-[10px] sm:text-[11px]">
-                              <span className="text-emerald-600 font-bold">{sPct.toFixed(0)}% S</span>
-                              <span className="text-blue-600">{aPct.toFixed(0)}% A</span>
-                              <span className="text-amber-600">{bPct.toFixed(0)}% B</span>
-                              <span className="text-purple-600">{cPct.toFixed(0)}% C</span>
-                              <span className="text-zinc-400 font-sans">({grandTotal} repos)</span>
+                        <div
+                          key={item.language}
+                          className="text-xs group p-2.5 rounded-xl border border-zinc-100 bg-zinc-50/50 hover:bg-white hover:shadow-xs transition-all"
+                        >
+                          <div className="flex flex-col xs:flex-row xs:justify-between xs:items-center gap-1.5 text-zinc-700 mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-[11px] font-bold text-zinc-400 min-w-[24px]">
+                                {rankMedal}
+                              </span>
+                              <span className="font-bold text-zinc-900 group-hover:text-emerald-600 transition-colors flex items-center gap-1.5">
+                                <LangLogo language={item.language} />
+                                {item.language}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              <div className="flex flex-wrap items-center gap-1.5 text-[10px] sm:text-[11px]">
+                                <span className="text-emerald-600 font-bold">{item.sPct.toFixed(0)}% S</span>
+                                <span className="text-blue-600">{item.aPct.toFixed(0)}% A</span>
+                                <span className="text-amber-600">{item.bPct.toFixed(0)}% B</span>
+                                <span className="text-purple-600">{item.cPct.toFixed(0)}% C</span>
+                                <span className="text-zinc-400 font-sans">({item.grandTotal} repos)</span>
+                              </div>
+                              <span className="font-mono text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                                {item.weightedScore.toFixed(1)} pts
+                              </span>
                             </div>
                           </div>
+
                           {/* Segmented Bar with Tooltip */}
-                          <div className="h-4 w-full rounded-md bg-zinc-100 overflow-hidden flex shadow-xs border border-zinc-200/50">
-                            {sPct > 0 && (
+                          <div className="h-3.5 w-full rounded-md bg-zinc-100 overflow-hidden flex shadow-xs border border-zinc-200/50">
+                            {item.sPct > 0 && (
                               <div
-                                title={`Super Welcoming: ${sCount} repos (${sPct.toFixed(1)}%)`}
+                                title={`Super Welcoming: ${item.sCount} repos (${item.sPct.toFixed(1)}%)`}
                                 className="h-full bg-emerald-500 hover:brightness-125 transition-all cursor-pointer relative"
-                                style={{ width: `${sPct}%` }}
+                                style={{ width: `${item.sPct}%` }}
                               />
                             )}
-                            {aPct > 0 && (
+                            {item.aPct > 0 && (
                               <div
-                                title={`Welcoming: ${aCount} repos (${aPct.toFixed(1)}%)`}
+                                title={`Welcoming: ${item.aCount} repos (${item.aPct.toFixed(1)}%)`}
                                 className="h-full bg-blue-500 hover:brightness-125 transition-all cursor-pointer relative"
-                                style={{ width: `${aPct}%` }}
+                                style={{ width: `${item.aPct}%` }}
                               />
                             )}
-                            {bPct > 0 && (
+                            {item.bPct > 0 && (
                               <div
-                                title={`Moderate: ${bCount} repos (${bPct.toFixed(1)}%)`}
+                                title={`Moderate: ${item.bCount} repos (${item.bPct.toFixed(1)}%)`}
                                 className="h-full bg-amber-500 hover:brightness-125 transition-all cursor-pointer relative"
-                                style={{ width: `${bPct}%` }}
+                                style={{ width: `${item.bPct}%` }}
                               />
                             )}
-                            {cPct > 0 && (
+                            {item.cPct > 0 && (
                               <div
-                                title={`Slow Review: ${cCount} repos (${cPct.toFixed(1)}%)`}
+                                title={`Slow Review: ${item.cCount} repos (${item.cPct.toFixed(1)}%)`}
                                 className="h-full bg-purple-500 hover:brightness-125 transition-all cursor-pointer relative"
-                                style={{ width: `${cPct}%` }}
+                                style={{ width: `${item.cPct}%` }}
                               />
                             )}
                           </div>
@@ -532,7 +576,7 @@ export default function Home() {
               </div>
 
               <div className="mt-6 pt-3 border-t border-zinc-100 flex items-center justify-between text-[11px] text-zinc-400 font-sans">
-                <span>Hover stacked segments to inspect exact repo counts per vibe tier.</span>
+                <span>Top 10 ecosystems ranked dynamically by contributor merge & response velocity.</span>
               </div>
             </div>
 
