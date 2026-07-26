@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"log/slog"
 	"net/http"
 	"strings"
 
@@ -34,6 +35,7 @@ func UserAuth(jwtSecret string) gin.HandlerFunc {
 
 		claims, err := auth.ParseToken(tokenStr, jwtSecret)
 		if err != nil {
+			slog.Warn("user auth: token validation failed", "err", err, "path", c.Request.URL.Path)
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid or expired token"})
 			c.Abort()
 			return
