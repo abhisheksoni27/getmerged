@@ -6,6 +6,9 @@
 [![C-Rank Telemetry](https://img.shields.io/badge/C--Rank%E2%84%A2-Telemetry%20Engine-10b981?style=flat-square)](https://opendoor.abhishekco.de)
 [![License: MIT](https://img.shields.io/badge/License-MIT-zinc?style=flat-square)](LICENSE)
 
+<img width="1280" height="657" alt="image" src="https://github.com/user-attachments/assets/f11c824a-c940-40a5-bfb8-3e61390da119" />
+
+
 ---
 
 ## 🌟 Overview
@@ -15,6 +18,10 @@
 Using objective mathematical telemetry gathered via the **GitHub GraphQL API**, Opendoor scores public repositories on a **C-Rank™ scale (S to D)** based on maintainer responsiveness, external PR merge velocity, and first-time contributor success rates.
 
 Try now: [OpenDoor](https://opendoor.abhishekco.de?utm_campaign=try_now&utm_source=github&utm_medium=github)
+
+<img width="1240" height="220" alt="image" src="https://github.com/user-attachments/assets/0c01a45e-fab3-4e20-9701-63222a95076b" />
+
+<img width="405" height="323" alt="image" src="https://github.com/user-attachments/assets/70ee113d-697c-4bde-93f8-4cae4e712b0e" />
 
 ---
 
@@ -27,6 +34,8 @@ Try now: [OpenDoor](https://opendoor.abhishekco.de?utm_campaign=try_now&utm_sour
 - 📊 **Macro Telemetry Visualizations**: Real-time distribution charts showing winning languages and tier breakdowns across 1,200+ scored repositories.
 - ⚡ **Valkey & Cloudflare Edge Caching**: High-performance API responses cached with `Cache-Control` headers for sub-millisecond page loads.
 - 🔒 **GitHub OAuth Integration**: Custom 7-day signed JWT authentication for user sessions and watchlists.
+
+<img width="552" height="104" alt="image" src="https://github.com/user-attachments/assets/d2e825cb-6c18-4498-b2a1-7222ec5dcc83" />
 
 ---
 
