@@ -8,15 +8,23 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+type LanguageTierBreakdown struct {
+	Language  string         `json:"language"`
+	Total     int            `json:"total"`
+	TierMap   map[string]int `json:"tier_map"`
+	MergeRate float64        `json:"avg_merge_rate"`
+}
+
 type MacroStats struct {
-	TotalRepos        int            `json:"total_repos"`
-	SClassCount       int            `json:"s_class_count"`
-	LanguagesCount    int            `json:"languages_count"`
-	AvgResponseHours  float64        `json:"avg_response_hours"`
-	RankCounts        map[string]int `json:"rank_counts"`
-	BucketCounts      map[string]int `json:"bucket_counts"`
-	TopLanguageCounts map[string]int `json:"top_language_counts"`
-	UpdatedMs         int64          `json:"updated_ms"`
+	TotalRepos        int                     `json:"total_repos"`
+	SClassCount       int                     `json:"s_class_count"`
+	LanguagesCount    int                     `json:"languages_count"`
+	AvgResponseHours  float64                 `json:"avg_response_hours"`
+	RankCounts        map[string]int          `json:"rank_counts"`
+	BucketCounts      map[string]int          `json:"bucket_counts"`
+	TopLanguageCounts map[string]int          `json:"top_language_counts"`
+	LanguageBreakdown []LanguageTierBreakdown `json:"language_breakdown"`
+	UpdatedMs         int64                   `json:"updated_ms"`
 }
 
 // ComputeAndCacheMacroStats aggregates platform statistics across all repositories and updates macro_stats table.
@@ -25,6 +33,7 @@ func ComputeAndCacheMacroStats(ctx context.Context, db *sqlx.DB) (*MacroStats, e
 		RankCounts:        make(map[string]int),
 		BucketCounts:      make(map[string]int),
 		TopLanguageCounts: make(map[string]int),
+		LanguageBreakdown: make([]LanguageTierBreakdown, 0),
 		UpdatedMs:         time.Now().UnixMilli(),
 	}
 
@@ -47,31 +56,17 @@ func ComputeAndCacheMacroStats(ctx context.Context, db *sqlx.DB) (*MacroStats, e
 			SELECT repository_id, MAX(snapshot_date) as max_date
 			FROM daily_snapshots GROUP BY repository_id
 		) latest ON s.repository_id = latest.repository_id AND s.snapshot_date = latest.max_date
+		WHERE s.c_rank_tier IS NOT NULL AND s.c_rank_tier != 'D'
 		GROUP BY s.c_rank_tier
 	`); err == nil {
 		for _, r := range rankRows {
 			stats.RankCounts[r.ClassRank] = r.Cnt
-		}
-	} else {
-		// Fallback to legacy repo_scores table
-		type legacyRankRow struct {
-			ClassRank string `db:"class_rank"`
-			Cnt       int    `db:"cnt"`
-		}
-		var legacyRows []legacyRankRow
-		if err := db.SelectContext(ctx, &legacyRows, "SELECT class_rank, COUNT(*) as cnt FROM repo_scores GROUP BY class_rank"); err == nil {
-			for _, r := range legacyRows {
-				stats.RankCounts[r.ClassRank] = r.Cnt
-			}
 		}
 	}
 	stats.SClassCount = stats.RankCounts["S"]
 
 	// 3. Languages count
 	_ = db.GetContext(ctx, &stats.LanguagesCount, "SELECT COUNT(DISTINCT language) FROM repositories WHERE language IS NOT NULL AND language != ''")
-	if stats.LanguagesCount == 0 {
-		_ = db.GetContext(ctx, &stats.LanguagesCount, "SELECT COUNT(DISTINCT language) FROM repos WHERE language IS NOT NULL AND language != ''")
-	}
 
 	// 4. Avg First Review Response Time in Hours
 	var avgResp float64
@@ -88,6 +83,45 @@ func ComputeAndCacheMacroStats(ctx context.Context, db *sqlx.DB) (*MacroStats, e
 		stats.AvgResponseHours = avgResp
 	} else {
 		stats.AvgResponseHours = 4.2
+	}
+
+	// 5. Language x Tier Breakdown Matrix for Stacked Bar & Pie Visualizations
+	type langTierRow struct {
+		Language  string  `db:"language"`
+		Tier      string  `db:"c_rank_tier"`
+		Cnt       int     `db:"cnt"`
+		AvgMerge  float64 `db:"avg_merge"`
+	}
+	var langTierRows []langTierRow
+	_ = db.SelectContext(ctx, &langTierRows, `
+		SELECT r.language, s.c_rank_tier, COUNT(*) as cnt, AVG(s.external_pr_merge_rate) as avg_merge
+		FROM repositories r
+		INNER JOIN daily_snapshots s ON r.id = s.repository_id
+		INNER JOIN (
+			SELECT repository_id, MAX(snapshot_date) as max_date
+			FROM daily_snapshots GROUP BY repository_id
+		) latest ON s.repository_id = latest.repository_id AND s.snapshot_date = latest.max_date
+		WHERE r.language IS NOT NULL AND r.language != '' AND s.c_rank_tier != 'D' AND s.c_rank_score > 0
+		GROUP BY r.language, s.c_rank_tier
+		ORDER BY cnt DESC
+	`)
+
+	langMap := make(map[string]*LanguageTierBreakdown)
+	for _, r := range langTierRows {
+		if _, exists := langMap[r.Language]; !exists {
+			langMap[r.Language] = &LanguageTierBreakdown{
+				Language:  r.Language,
+				TierMap:   make(map[string]int),
+				MergeRate: r.AvgMerge,
+			}
+		}
+		langMap[r.Language].TierMap[r.Tier] += r.Cnt
+		langMap[r.Language].Total += r.Cnt
+		stats.TopLanguageCounts[r.Language] += r.Cnt
+	}
+
+	for _, item := range langMap {
+		stats.LanguageBreakdown = append(stats.LanguageBreakdown, *item)
 	}
 
 	jsonBytes, err := json.Marshal(stats)

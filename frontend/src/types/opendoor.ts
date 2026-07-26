@@ -21,6 +21,13 @@ export interface Repo {
   staleness_flag?: boolean;
 }
 
+export interface LanguageTierBreakdown {
+  language: string;
+  total: number;
+  tier_map: Record<string, number>;
+  avg_merge_rate?: number;
+}
+
 export interface MacroStats {
   total_repos: number;
   s_class_count?: number;
@@ -29,6 +36,7 @@ export interface MacroStats {
   rank_counts?: Record<string, number>;
   bucket_counts?: Record<string, number>;
   top_language_counts?: Record<string, number>;
+  language_breakdown?: LanguageTierBreakdown[];
   updated_ms?: number;
 }
 
