@@ -56,6 +56,10 @@ check-pat:
 	@curl -X POST 'http://localhost:10000/internal/check-pat' \
 		-H 'x-api-key: $(INTERNAL_API_KEY)'
 
+purge-cache:
+	@curl -X POST 'http://localhost:10000/internal/purge-cache' \
+		-H 'x-api-key: $(INTERNAL_API_KEY)'
+
 RSYNC_FLAGS = -az \
 	--delete \
 	--exclude='.DS_Store' \

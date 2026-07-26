@@ -180,6 +180,23 @@ paths:
       summary: Health Check
       tags:
       - system
+  /internal/purge-cache:
+    post:
+      description: Flushes all Valkey cached API responses in one request.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Purge API Cache
+      tags:
+      - internal
   /internal/repos/{id}:
     delete:
       description: Deletes a repository record and all of its daily snapshot history.
