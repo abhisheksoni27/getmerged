@@ -27,6 +27,7 @@ func TestConfigLoad_ValidEnv(t *testing.T) {
 	os.Setenv("GITHUB_CLIENT_ID", "client-id")
 	os.Setenv("GITHUB_CLIENT_SECRET", "client-secret")
 	os.Setenv("JWT_SECRET", "this-is-a-very-long-jwt-secret-key-32chars")
+	os.Setenv("ENCRYPTION_KEY", "12345678901234567890123456789012")
 	os.Setenv("PORT", "10000")
 	os.Setenv("GIN_MODE", "test")
 

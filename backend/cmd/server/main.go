@@ -86,7 +86,7 @@ func main() {
 	userApi := r.Group("/api/v1")
 	userApi.Use(middleware.UserAuth(cfg.JWTSecret))
 	{
-		userApi.GET("/auth/me", handler.GetCurrentUser())
+		userApi.GET("/auth/me", handler.GetCurrentUser(cfg))
 		userApi.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient))
 		userApi.POST("/user/watchlist", handler.AddToWatchlist())
 		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist())
