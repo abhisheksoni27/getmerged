@@ -6,9 +6,10 @@ import { LangLogo } from "@/components/LangLogo";
 
 interface RepoCardProps {
   repo: Repo;
+  isLoggedIn?: boolean;
 }
 
-export function RepoCard({ repo }: RepoCardProps) {
+export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
   const rank = repo.class_rank || repo.c_rank_tier || "A";
   const [ownerPart, namePart] = repo.full_name ? repo.full_name.split("/") : [repo.owner || "", repo.name || ""];
 
@@ -139,14 +140,14 @@ export function RepoCard({ repo }: RepoCardProps) {
         <div className="relative overflow-hidden rounded-lg bg-zinc-50/80 p-2.5 border border-zinc-100">
           <div className="flex items-center justify-between text-[11px] text-zinc-500 mb-1">
             <span className="font-mono text-zinc-400">MAINTAINER VIBE</span>
-            <Lock className="h-3 w-3 text-zinc-400" />
+            {!isLoggedIn && <Lock className="h-3 w-3 text-zinc-400" />}
           </div>
           <p className="text-xs text-zinc-700 blur-[3px] select-none">
             Active and welcoming maintainer team with very fast turnaround on PR reviews.
           </p>
           <div className="absolute inset-0 flex items-center justify-center bg-white/40 backdrop-blur-[1px]">
             <span className="text-[11px] font-medium text-zinc-900 underline underline-offset-2 group-hover:text-emerald-600">
-              Sign in to view AI Insights
+              {isLoggedIn ? "View Repo Insights" : "Sign in to view AI Insights"}
             </span>
           </div>
         </div>
