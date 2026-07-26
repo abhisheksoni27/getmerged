@@ -11,6 +11,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/db"
 	"github.com/abhisheksoni27/opendoor/internal/handler"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
+	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	_ "modernc.org/sqlite"
@@ -71,6 +72,8 @@ func setupTestDB(t *testing.T) *sqlx.DB {
 }
 
 func setupTestEngine(database *sqlx.DB, userID int64) *gin.Engine {
+	watchlistRepo := repository.NewWatchlistRepository(database)
+
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
 	r.Use(middleware.DB(database))
@@ -81,9 +84,9 @@ func setupTestEngine(database *sqlx.DB, userID int64) *gin.Engine {
 		c.Next()
 	})
 
-	r.POST("/api/v1/user/watchlist", handler.AddToWatchlist())
-	r.GET("/api/v1/user/watchlist", handler.ListWatchlist())
-	r.DELETE("/api/v1/user/watchlist/:id", handler.RemoveFromWatchlist())
+	r.POST("/api/v1/user/watchlist", handler.AddToWatchlist(watchlistRepo))
+	r.GET("/api/v1/user/watchlist", handler.ListWatchlist(watchlistRepo))
+	r.DELETE("/api/v1/user/watchlist/:id", handler.RemoveFromWatchlist(watchlistRepo))
 
 	return r
 }

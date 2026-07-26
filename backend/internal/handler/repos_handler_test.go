@@ -10,6 +10,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/db"
 	"github.com/abhisheksoni27/opendoor/internal/handler"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
+	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	_ "modernc.org/sqlite"
@@ -73,10 +74,12 @@ func TestGetRepo_UUID(t *testing.T) {
 	database := setupRepoTestDB(t)
 	defer database.Close()
 
+	repoStore := repository.NewRepoRepository(database)
+
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
 	r.Use(middleware.DB(database))
-	r.GET("/api/v1/repos/:id", handler.GetRepo)
+	r.GET("/api/v1/repos/:id", handler.GetRepo(repoStore))
 
 	repoUUID := "c30791ab-4160-40c6-b232-bb71c61d3249"
 

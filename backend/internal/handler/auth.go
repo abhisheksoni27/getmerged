@@ -11,8 +11,8 @@ import (
 
 	"github.com/abhisheksoni27/opendoor/internal/auth"
 	"github.com/abhisheksoni27/opendoor/internal/config"
-	"github.com/abhisheksoni27/opendoor/internal/crypto"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
+	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,7 +27,7 @@ func GitHubOAuthRedirect(cfg *config.Config) gin.HandlerFunc {
 var httpClient = &http.Client{Timeout: 10 * time.Second}
 
 // GitHubOAuthCallback handles GET /api/v1/auth/github/callback
-func GitHubOAuthCallback(cfg *config.Config) gin.HandlerFunc {
+func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		code := c.Query("code")
 		if code == "" {
@@ -87,39 +87,11 @@ func GitHubOAuthCallback(cfg *config.Config) gin.HandlerFunc {
 		bodyBytes, _ := io.ReadAll(userResp.Body)
 		_ = json.Unmarshal(bodyBytes, &ghUser)
 
-		db := middleware.MustDB(c)
-		if db == nil {
-			return
-		}
-
-		// Encrypt sensitive PII (email, username, & avatar_url) at rest using AES-256-GCM
-		encKey := []byte(cfg.EncryptionKey)
-		if len(encKey) > 32 {
-			encKey = encKey[:32]
-		}
-
-		encEmail, _ := crypto.EncryptAESGCM([]byte(ghUser.Email), encKey)
-		encUsername, _ := crypto.EncryptAESGCM([]byte(ghUser.Login), encKey)
-		encAvatarURL, _ := crypto.EncryptAESGCM([]byte(ghUser.AvatarURL), encKey)
-
-		// Insert or update user in SQLite / Turso DB with encrypted fields
-		var userID int64
-		err = db.GetContext(c.Request.Context(), &userID, "SELECT id FROM users WHERE github_id = ?", ghUser.ID)
+		userID, err := userRepo.UpsertUser(c.Request.Context(), ghUser.ID, ghUser.Login, ghUser.Email, ghUser.AvatarURL)
 		if err != nil {
-			res, err := db.ExecContext(c.Request.Context(), `
-				INSERT INTO users (github_id, username, email, avatar_url, created_at, updated_at)
-				VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-			`, ghUser.ID, encUsername, encEmail, encAvatarURL)
-			if err != nil {
-				slog.Error("failed to save user", "github_id", ghUser.ID, "err", err)
-				c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save user", "details": err.Error()})
-				return
-			}
-			userID, _ = res.LastInsertId()
-		} else {
-			_, _ = db.ExecContext(c.Request.Context(), `
-				UPDATE users SET username = ?, email = ?, avatar_url = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?
-			`, encUsername, encEmail, encAvatarURL, userID)
+			slog.Error("failed to save user", "github_id", ghUser.ID, "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save user", "details": err.Error()})
+			return
 		}
 
 		// Issue Custom Signed Opendoor JWT Token
@@ -147,7 +119,7 @@ func GitHubOAuthCallback(cfg *config.Config) gin.HandlerFunc {
 }
 
 // GetCurrentUser handles GET /api/v1/auth/me
-func GetCurrentUser(cfg *config.Config) gin.HandlerFunc {
+func GetCurrentUser(userRepo repository.UserRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userIDVal, exists := c.Get(middleware.UserIDKey)
 		if !exists {
@@ -156,42 +128,18 @@ func GetCurrentUser(cfg *config.Config) gin.HandlerFunc {
 		}
 
 		userID := userIDVal.(int64)
-		db := middleware.MustDB(c)
-		if db == nil {
-			return
-		}
-
-		var user struct {
-			ID        int64   `db:"id" json:"id"`
-			GithubID  int64   `db:"github_id" json:"github_id"`
-			Username  string  `db:"username" json:"username"`
-			AvatarURL *string `db:"avatar_url" json:"avatar_url"`
-		}
-
-		if err := db.GetContext(c.Request.Context(), &user, "SELECT id, github_id, username, avatar_url FROM users WHERE id = ?", userID); err != nil {
+		user, err := userRepo.FindByID(c.Request.Context(), userID)
+		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
 			return
 		}
 
-		// Decrypt sensitive PII fields (username & avatar_url) before sending to client
-		encKey := []byte(cfg.EncryptionKey)
-		if len(encKey) > 32 {
-			encKey = encKey[:32]
-		}
-
-		decUsername, err := crypto.DecryptAESGCM(user.Username, encKey)
-		if err == nil && decUsername != "" {
-			user.Username = decUsername
-		}
-
-		if user.AvatarURL != nil && *user.AvatarURL != "" {
-			decAvatar, err := crypto.DecryptAESGCM(*user.AvatarURL, encKey)
-			if err == nil && decAvatar != "" {
-				user.AvatarURL = &decAvatar
-			}
-		}
-
-		c.JSON(http.StatusOK, gin.H{"user": user})
+		c.JSON(http.StatusOK, gin.H{"user": gin.H{
+			"id":         user.ID,
+			"github_id":  user.GithubID,
+			"username":   user.Username,
+			"avatar_url": user.AvatarURL,
+		}})
 	}
 }
 
