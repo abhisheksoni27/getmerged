@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"log/slog"
 	"net/http"
 	"net/url"
 
@@ -87,7 +88,7 @@ func GitHubOAuthCallback(cfg *config.Config) gin.HandlerFunc {
 			return
 		}
 
-		// Insert or update user in SQLite DB
+		// Insert or update user in SQLite / Turso DB
 		var userID int64
 		err = db.GetContext(c.Request.Context(), &userID, "SELECT id FROM users WHERE github_id = ?", ghUser.ID)
 		if err != nil {
@@ -96,7 +97,8 @@ func GitHubOAuthCallback(cfg *config.Config) gin.HandlerFunc {
 				VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 			`, ghUser.ID, ghUser.Login, ghUser.Email, ghUser.AvatarURL)
 			if err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save user"})
+				slog.Error("failed to save user", "github_id", ghUser.ID, "username", ghUser.Login, "err", err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save user", "details": err.Error()})
 				return
 			}
 			userID, _ = res.LastInsertId()
@@ -113,17 +115,11 @@ func GitHubOAuthCallback(cfg *config.Config) gin.HandlerFunc {
 			return
 		}
 
+		// Set HttpOnly 7-day authentication cookie
 		c.SetCookie("opendoor_token", signedToken, 7*24*3600, "/", "", false, true)
-		c.JSON(http.StatusOK, gin.H{
-			"token": signedToken,
-			"user": gin.H{
-				"id":         userID,
-				"github_id":  ghUser.ID,
-				"username":   ghUser.Login,
-				"email":      ghUser.Email,
-				"avatar_url": ghUser.AvatarURL,
-			},
-		})
+
+		// Redirect user back to the web UI
+		c.Redirect(http.StatusTemporaryRedirect, "/")
 	}
 }
 

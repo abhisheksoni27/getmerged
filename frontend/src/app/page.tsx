@@ -361,82 +361,225 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Macro Visualizations: Winning Languages & Tier Distribution */}
+          {/* Rich Macro Visualizations: Stacked Language-Tier Chart & Dynamic Tier Donut */}
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 mb-16 font-mono">
-            {/* Top Winning Languages Breakdown */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs">
-              <div className="flex items-center justify-between mb-4 border-b border-zinc-100 pb-3">
-                <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                  <Code2 className="h-4 w-4 text-emerald-600" />
-                  Top Winning Languages by Open Doors
-                </h3>
-                <span className="text-[11px] text-zinc-600">Live Telemetry</span>
-              </div>
-              <div className="space-y-3">
-                {[
-                  { lang: "Python", count: 245, pct: 85 },
-                  { lang: "TypeScript", count: 210, pct: 75 },
-                  { lang: "Go", count: 180, pct: 65 },
-                  { lang: "Rust", count: 140, pct: 50 },
-                  { lang: "C++", count: 95, pct: 35 },
-                ].map((item) => (
-                  <div key={item.lang} className="text-xs">
-                    <div className="flex justify-between text-zinc-700 mb-1">
-                      <span className="font-semibold">{item.lang}</span>
-                      <span className="text-zinc-600">{item.count} open repos</span>
-                    </div>
-                    <div className="h-2 w-full rounded-full bg-zinc-100 overflow-hidden">
-                      <div
-                        className="h-full rounded-full bg-zinc-900 transition-all duration-500"
-                        style={{ width: `${item.pct}%` }}
-                      />
-                    </div>
+            {/* 1. Stacked Language Tier Distribution Bar Chart */}
+            <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4 border-b border-zinc-100 pb-3">
+                  <div>
+                    <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+                      <Code2 className="h-4 w-4 text-emerald-600" />
+                      Language x C-Rank™ Tier Distribution
+                    </h3>
+                    <p className="text-[11px] text-zinc-500 font-sans mt-0.5">
+                      Proportional breakdown of open-door repositories per language by rating tier.
+                    </p>
                   </div>
-                ))}
+                  <span className="text-[10px] bg-zinc-100 px-2 py-0.5 rounded-full text-zinc-600 shrink-0">Live Matrix</span>
+                </div>
+
+                {/* Legend */}
+                <div className="flex items-center gap-4 text-[11px] mb-5">
+                  <span className="flex items-center gap-1.5 text-emerald-700 font-semibold">
+                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 inline-block" /> S Tier (Score 70+)
+                  </span>
+                  <span className="flex items-center gap-1.5 text-emerald-600">
+                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-300 inline-block" /> A Tier (55–69)
+                  </span>
+                  <span className="flex items-center gap-1.5 text-amber-700">
+                    <span className="h-2.5 w-2.5 rounded-full bg-amber-400 inline-block" /> B Tier (40–54)
+                  </span>
+                  <span className="flex items-center gap-1.5 text-zinc-500">
+                    <span className="h-2.5 w-2.5 rounded-full bg-zinc-300 inline-block" /> C Tier (25–39)
+                  </span>
+                </div>
+
+                {/* Stacked Bars */}
+                <div className="space-y-4">
+                  {(
+                    stats?.language_breakdown || [
+                      { language: "Python", total: 245, tier_map: { S: 35, A: 85, B: 95, C: 30 } },
+                      { language: "TypeScript", total: 210, tier_map: { S: 28, A: 72, B: 80, C: 30 } },
+                      { language: "Go", total: 180, tier_map: { S: 25, A: 65, B: 60, C: 30 } },
+                      { language: "Rust", total: 140, tier_map: { S: 18, A: 42, B: 50, C: 30 } },
+                      { language: "C++", total: 95, tier_map: { S: 10, A: 30, B: 35, C: 20 } },
+                    ]
+                  )
+                    .slice(0, 5)
+                    .map((item) => {
+                      const sCount = item.tier_map?.["S"] || 0;
+                      const aCount = item.tier_map?.["A"] || 0;
+                      const bCount = item.tier_map?.["B"] || 0;
+                      const cCount = item.tier_map?.["C"] || 0;
+                      const grandTotal = item.total || sCount + aCount + bCount + cCount || 1;
+
+                      const sPct = (sCount / grandTotal) * 100;
+                      const aPct = (aCount / grandTotal) * 100;
+                      const bPct = (bCount / grandTotal) * 100;
+                      const cPct = (cCount / grandTotal) * 100;
+
+                      return (
+                        <div key={item.language} className="text-xs group">
+                          <div className="flex justify-between items-center text-zinc-700 mb-1.5">
+                            <span className="font-bold text-zinc-900 group-hover:text-emerald-600 transition-colors flex items-center gap-2">
+                              {item.language}
+                              <span className="text-[10px] text-emerald-600 font-mono">
+                                ({sCount} S-Class)
+                              </span>
+                            </span>
+                            <span className="text-[11px] text-zinc-500 font-sans">{grandTotal} repos</span>
+                          </div>
+                          {/* Segmented Bar */}
+                          <div className="h-3.5 w-full rounded-md bg-zinc-100 overflow-hidden flex shadow-xs border border-zinc-200/50">
+                            {sPct > 0 && (
+                              <div
+                                title={`S Tier: ${sCount} repos (${sPct.toFixed(1)}%)`}
+                                className="h-full bg-emerald-500 hover:brightness-110 transition-all"
+                                style={{ width: `${sPct}%` }}
+                              />
+                            )}
+                            {aPct > 0 && (
+                              <div
+                                title={`A Tier: ${aCount} repos (${aPct.toFixed(1)}%)`}
+                                className="h-full bg-emerald-300 hover:brightness-110 transition-all"
+                                style={{ width: `${aPct}%` }}
+                              />
+                            )}
+                            {bPct > 0 && (
+                              <div
+                                title={`B Tier: ${bCount} repos (${bPct.toFixed(1)}%)`}
+                                className="h-full bg-amber-400 hover:brightness-110 transition-all"
+                                style={{ width: `${bPct}%` }}
+                              />
+                            )}
+                            {cPct > 0 && (
+                              <div
+                                title={`C Tier: ${cCount} repos (${cPct.toFixed(1)}%)`}
+                                className="h-full bg-zinc-300 hover:brightness-110 transition-all"
+                                style={{ width: `${cPct}%` }}
+                              />
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+
+              <div className="mt-6 pt-3 border-t border-zinc-100 flex items-center justify-between text-[11px] text-zinc-400 font-sans">
+                <span>Hover stacked segments to inspect exact repo counts per tier.</span>
               </div>
             </div>
 
-            {/* Global C-Rank Tier Distribution */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs">
-              <div className="flex items-center justify-between mb-4 border-b border-zinc-100 pb-3">
-                <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                  Global C-Rank™ Rating Tiers
-                </h3>
-                <span className="text-[11px] text-zinc-600">1,200 Scored Repos</span>
+            {/* 2. Global C-Rank Donut Visualization & Tier Cards */}
+            <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4 border-b border-zinc-100 pb-3">
+                  <div>
+                    <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+                      <ShieldCheck className="h-4 w-4 text-emerald-600" />
+                      Global Rating Tier Composition
+                    </h3>
+                    <p className="text-[11px] text-zinc-500 font-sans mt-0.5">
+                      Platform-wide ratio of S, A, B, and C Class Open Doors.
+                    </p>
+                  </div>
+                  <span className="text-[10px] bg-zinc-100 px-2 py-0.5 rounded-full text-zinc-600 shrink-0">1,200 Repos</span>
+                </div>
+
+                {/* SVG Donut Ring */}
+                <div className="my-6 flex flex-col sm:flex-row items-center justify-center gap-8">
+                  <div className="relative flex items-center justify-center">
+                    <svg className="h-36 w-36 -rotate-90 transform" viewBox="0 0 36 36">
+                      {/* Background Track */}
+                      <path
+                        className="text-zinc-100"
+                        strokeWidth="3.8"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      {/* S Tier Stroke */}
+                      <path
+                        className="text-emerald-500 transition-all duration-1000"
+                        strokeDasharray="18, 100"
+                        strokeWidth="3.8"
+                        strokeLinecap="round"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      {/* A Tier Stroke */}
+                      <path
+                        className="text-emerald-300 transition-all duration-1000"
+                        strokeDasharray="32, 100"
+                        strokeDashoffset="-18"
+                        strokeWidth="3.8"
+                        strokeLinecap="round"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      {/* B Tier Stroke */}
+                      <path
+                        className="text-amber-400 transition-all duration-1000"
+                        strokeDasharray="35, 100"
+                        strokeDashoffset="-50"
+                        strokeWidth="3.8"
+                        strokeLinecap="round"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                    </svg>
+                    <div className="absolute text-center">
+                      <div className="text-xl font-bold font-mono text-zinc-900">
+                        {stats?.s_class_count !== undefined ? stats.s_class_count : 65}
+                      </div>
+                      <div className="text-[10px] font-mono text-emerald-600 font-semibold uppercase">S-Class</div>
+                    </div>
+                  </div>
+
+                  {/* Tier Cards Grid */}
+                  <div className="grid grid-cols-2 gap-3 text-xs w-full max-w-xs">
+                    <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-2.5">
+                      <div className="text-[10px] text-emerald-800 font-bold">S CLASS DOOR</div>
+                      <div className="text-lg font-bold text-emerald-950 mt-0.5">
+                        {stats?.s_class_count !== undefined ? stats.s_class_count : stats?.rank_counts?.["S"] || 65}
+                      </div>
+                      <div className="text-[9px] text-emerald-700 font-sans">Score 70–100</div>
+                    </div>
+
+                    <div className="rounded-xl border border-emerald-200/60 bg-emerald-50/20 p-2.5">
+                      <div className="text-[10px] text-emerald-600 font-bold">A CLASS DOOR</div>
+                      <div className="text-lg font-bold text-zinc-900 mt-0.5">
+                        {stats?.rank_counts?.["A"] || 185}
+                      </div>
+                      <div className="text-[9px] text-zinc-500 font-sans">Score 55–69</div>
+                    </div>
+
+                    <div className="rounded-xl border border-amber-200/80 bg-amber-50/30 p-2.5">
+                      <div className="text-[10px] text-amber-700 font-bold">B CLASS DOOR</div>
+                      <div className="text-lg font-bold text-zinc-900 mt-0.5">
+                        {stats?.rank_counts?.["B"] || 354}
+                      </div>
+                      <div className="text-[9px] text-zinc-500 font-sans">Score 40–54</div>
+                    </div>
+
+                    <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-2.5">
+                      <div className="text-[10px] text-zinc-500 font-bold">C CLASS DOOR</div>
+                      <div className="text-lg font-bold text-zinc-900 mt-0.5">
+                        {stats?.rank_counts?.["C"] || 246}
+                      </div>
+                      <div className="text-[9px] text-zinc-500 font-sans">Score 25–39</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="grid grid-cols-2 gap-3 text-xs">
-                <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-3">
-                  <div className="text-[11px] text-emerald-700 font-bold">S CLASS DOOR</div>
-                  <div className="text-2xl font-bold text-emerald-900 mt-1">
-                    {stats?.s_class_count !== undefined ? stats.s_class_count : stats?.rank_counts?.["S"] || 65}
-                  </div>
-                  <div className="text-[10px] text-emerald-700 mt-0.5">Score 70–100 (Top 5%)</div>
-                </div>
 
-                <div className="rounded-xl border border-emerald-200/60 bg-emerald-50/20 p-3">
-                  <div className="text-[11px] text-emerald-600 font-bold">A CLASS DOOR</div>
-                  <div className="text-2xl font-bold text-zinc-900 mt-1">
-                    {stats?.rank_counts?.["A"] || 185}
-                  </div>
-                  <div className="text-[10px] text-zinc-600 mt-0.5">Score 55–69</div>
-                </div>
-
-                <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3">
-                  <div className="text-[11px] text-zinc-600 font-bold">B CLASS DOOR</div>
-                  <div className="text-2xl font-bold text-zinc-900 mt-1">
-                    {stats?.rank_counts?.["B"] || 354}
-                  </div>
-                  <div className="text-[10px] text-zinc-600 mt-0.5">Score 40–54</div>
-                </div>
-
-                <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3">
-                  <div className="text-[11px] text-zinc-600 font-bold">C CLASS DOOR</div>
-                  <div className="text-2xl font-bold text-zinc-900 mt-1">
-                    {stats?.rank_counts?.["C"] || 246}
-                  </div>
-                  <div className="text-[10px] text-zinc-600 mt-0.5">Score 25–39</div>
-                </div>
+              <div className="pt-3 border-t border-zinc-100 flex items-center justify-between text-[11px] text-zinc-400 font-sans">
+                <span>D-Class (score &lt; 25 or unmaintained) are automatically filtered out.</span>
               </div>
             </div>
           </div>
