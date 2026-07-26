@@ -126,6 +126,15 @@ export default async function RepoDetailPage({ params }: PageProps) {
       ? "Welcomes new community PRs"
       : "Unverified first-timer success rate";
 
+  const humanVibe =
+    rank === "S"
+      ? "Super Welcoming"
+      : rank === "A"
+      ? "Welcoming"
+      : rank === "B"
+      ? "Moderate"
+      : "Slow Review";
+
   return (
     <div className="min-h-screen dot-pattern flex flex-col bg-white">
       <Header />
@@ -149,20 +158,22 @@ export default async function RepoDetailPage({ params }: PageProps) {
                   rank === "S"
                     ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                     : rank === "A"
-                    ? "bg-emerald-50/60 text-emerald-600 border-emerald-200/60"
-                    : "bg-amber-50 text-amber-700 border-amber-200"
+                    ? "bg-blue-50 text-blue-700 border-blue-200"
+                    : rank === "B"
+                    ? "bg-amber-50 text-amber-700 border-amber-200"
+                    : "bg-purple-50 text-purple-700 border-purple-200"
                 }`}
               >
-                {rank} Class Door
+                {humanVibe}
               </span>
               <span className="font-mono text-xs text-zinc-500">
-                Score: {score.toFixed(1)} / 100
+                Responsiveness Score: {score.toFixed(1)} / 100
               </span>
             </div>
             <h1 className="text-3xl font-bold font-mono text-zinc-900">{fullName}</h1>
             <p className="mt-2 text-sm text-zinc-600 max-w-2xl leading-relaxed">
               {repo?.description ||
-                "Public GitHub repository indexed and scored by C-Rank™ metrics for contributor accessibility."}
+                "Public GitHub repository indexed and scored by maintainer responsiveness for contributor accessibility."}
             </p>
           </div>
 

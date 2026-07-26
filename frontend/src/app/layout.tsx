@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "opendoor — Find repositories that welcome contributors",
-  description: "Score public GitHub repositories using C-Rank™ system based on merge rates, response times, and first-timer success.",
+  description: "Find public GitHub repositories based on merge rates, response times, and first-timer maintainer vibes.",
 };
 
 export default function RootLayout({
