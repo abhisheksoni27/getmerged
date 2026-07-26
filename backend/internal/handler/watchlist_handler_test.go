@@ -122,16 +122,13 @@ func TestWatchlistEndpoints_UUIDRepoID(t *testing.T) {
 	}
 
 	var listResp struct {
-		Watchlist []struct {
-			RepoID   string `json:"repo_id"`
-			FullName string `json:"full_name"`
-		} `json:"watchlist"`
+		Watchlist []string `json:"watchlist"`
 	}
 	if err := json.Unmarshal(wGet.Body.Bytes(), &listResp); err != nil {
 		t.Fatalf("failed to unmarshal watchlist response: %v", err)
 	}
 
-	if len(listResp.Watchlist) != 1 || listResp.Watchlist[0].RepoID != repoUUID {
+	if len(listResp.Watchlist) != 1 || listResp.Watchlist[0] != repoUUID {
 		t.Fatalf("expected 1 item with repo_id %s, got %+v", repoUUID, listResp.Watchlist)
 	}
 

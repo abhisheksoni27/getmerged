@@ -23,7 +23,7 @@ type WatchlistRepoItem struct {
 type WatchlistRepository interface {
 	Add(ctx context.Context, userID int64, repoID string) error
 	Remove(ctx context.Context, userID int64, repoID string) error
-	ListByUserID(ctx context.Context, userID int64) ([]WatchlistRepoItem, error)
+	ListByUserID(ctx context.Context, userID int64) ([]string, error)
 }
 
 type sqlxWatchlistRepository struct {
@@ -50,34 +50,14 @@ func (r *sqlxWatchlistRepository) Remove(ctx context.Context, userID int64, repo
 	return err
 }
 
-func (r *sqlxWatchlistRepository) ListByUserID(ctx context.Context, userID int64) ([]WatchlistRepoItem, error) {
-	query := `
-		SELECT
-			w.repo_id,
-			r.full_name,
-			COALESCE(r.language, '') as language,
-			r.stars,
-			COALESCE(r.description, '') as description,
-			r.github_url,
-			COALESCE(s.c_rank_tier, 'D') as c_rank_tier,
-			COALESCE(s.c_rank_score, 0) as c_rank_score,
-			COALESCE(s.time_to_first_response_hours, 0) as time_to_first_response_hours,
-			COALESCE(s.external_pr_merge_rate, 0) as external_pr_merge_rate,
-			w.created_at as added_at
-		FROM user_watchlists w
-		INNER JOIN repositories r ON r.id = w.repo_id
-		LEFT JOIN daily_snapshots s ON s.repository_id = r.id
-		  AND s.snapshot_date = (
-		    SELECT MAX(s2.snapshot_date) FROM daily_snapshots s2 WHERE s2.repository_id = r.id
-		  )
-		WHERE w.user_id = ?
-		ORDER BY w.created_at DESC
-	`
-
-	var items []WatchlistRepoItem
-	if err := r.db.SelectContext(ctx, &items, query, userID); err != nil {
+func (r *sqlxWatchlistRepository) ListByUserID(ctx context.Context, userID int64) ([]string, error) {
+	var repoIDs []string
+	query := `SELECT repo_id FROM user_watchlists WHERE user_id = ? ORDER BY created_at DESC`
+	if err := r.db.SelectContext(ctx, &repoIDs, query, userID); err != nil {
 		return nil, err
 	}
-
-	return items, nil
+	if repoIDs == nil {
+		repoIDs = []string{}
+	}
+	return repoIDs, nil
 }
