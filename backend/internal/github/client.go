@@ -119,9 +119,9 @@ func (c *Client) CheckToken() (string, rateLimitInfo, error) {
 	return resp.Data.Viewer.Login, resp.Data.RateLimit, nil
 }
 
-// SearchRepos queries GitHub for top repos matching the given language.
+// SearchRepos queries GitHub for active repos matching the given language sorted by recent activity.
 func (c *Client) SearchRepos(language string, minStars, maxRepos int) ([]Repo, error) {
-	query := fmt.Sprintf("language:%s stars:>%d sort:stars-desc", language, minStars)
+	query := fmt.Sprintf("language:%s stars:>=%d sort:updated-desc", language, minStars)
 	var (
 		repos  []Repo
 		cursor *string
