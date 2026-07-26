@@ -265,6 +265,7 @@ func fetchAllRawMetrics(db *sqlx.DB) ([]scoring.RawMetrics, error) {
 			GROUP BY repository_id
 		) latest ON s.repository_id = latest.repository_id
 		         AND s.snapshot_date = latest.latest
+		LIMIT 500
 	`)
 	if err != nil {
 		return nil, err

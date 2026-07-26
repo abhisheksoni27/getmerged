@@ -19,6 +19,7 @@ type Config struct {
 	GithubClientID     string
 	GithubClientSecret string
 	JWTSecret          string
+	EncryptionKey      string
 	OpencodeAPIKey     string
 	Port               string
 	GinMode            string
@@ -48,6 +49,7 @@ func Load() (*Config, error) {
 		"GITHUB_CLIENT_ID":     &c.GithubClientID,
 		"GITHUB_CLIENT_SECRET": &c.GithubClientSecret,
 		"JWT_SECRET":          &c.JWTSecret,
+		"ENCRYPTION_KEY":      &c.EncryptionKey,
 		"PORT":                 &c.Port,
 		"GIN_MODE":             &c.GinMode,
 	}
