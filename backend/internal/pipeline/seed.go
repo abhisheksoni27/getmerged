@@ -17,8 +17,8 @@ import (
 var SeedLanguages = []string{"Go", "Python", "JavaScript", "TypeScript", "Java", "PHP", "Rust", "Kotlin", "Shell", "C++", "Dart", "Swift"}
 
 const (
-	seedMinStars = 500
-	seedMaxRepos = 100
+	seedMinStars = 100
+	seedMaxRepos = 300
 )
 
 // Seed fetches top repos per language, upserts them, and scores them.
