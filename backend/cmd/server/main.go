@@ -118,20 +118,26 @@ func main() {
 	}
 }
 
-// setupLogger configures the global slog default to write to stdout AND a persistent log file.
-// Forces LevelDebug so all detailed GraphQL/cache logs are preserved even in release mode.
+// setupLogger configures global slog AND Gin writers to write to stdout and log file.
+// Ensures systemd/journalctl and persistent log files capture both HTTP requests and application logs.
 func setupLogger(ginMode, logFilePath string) {
 	level := slog.LevelDebug
-
 	opts := &slog.HandlerOptions{Level: level}
 
-	logFile, err := os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	var writer io.Writer = os.Stdout
-	if err != nil {
-		slog.Error("failed to open log file, logging to stdout only", "file", logFilePath, "err", err)
-	} else {
-		writer = io.MultiWriter(os.Stdout, logFile)
+
+	if logFilePath != "" {
+		logFile, err := os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+		if err != nil {
+			slog.Error("failed to open log file, logging to stdout only", "file", logFilePath, "err", err)
+		} else {
+			writer = io.MultiWriter(os.Stdout, logFile)
+		}
 	}
+
+	// Bind Gin HTTP logger output to the writer so journalctl captures access logs
+	gin.DefaultWriter = writer
+	gin.DefaultErrorWriter = writer
 
 	var handler slog.Handler
 	if ginMode == "release" {

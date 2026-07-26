@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"log/slog"
 	"net/http"
 
 	"github.com/abhisheksoni27/opendoor/internal/ai"
@@ -49,7 +50,8 @@ func GetRepoInsights(aiClient *ai.AIClient) gin.HandlerFunc {
 			ID       int64  `db:"id"`
 			FullName string `db:"full_name"`
 		}
-		if err := db.GetContext(c.Request.Context(), &repo, "SELECT id, full_name FROM repos WHERE id = ?", repoID); err != nil {
+		if err := db.GetContext(c.Request.Context(), &repo, "SELECT id, full_name FROM repositories WHERE id = ?", repoID); err != nil {
+			slog.Warn("get repo insights: repo not found", "repo_id", repoID, "err", err)
 			c.JSON(http.StatusNotFound, gin.H{"error": "repository not found"})
 			return
 		}
@@ -57,6 +59,7 @@ func GetRepoInsights(aiClient *ai.AIClient) gin.HandlerFunc {
 		// 3. Generate insights via AI client
 		insights, err := aiClient.GenerateRepoInsights(c.Request.Context(), repo.FullName, nil)
 		if err != nil {
+			slog.Error("get repo insights: generation failed", "repo_id", repoID, "err", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate insights"})
 			return
 		}

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log/slog"
 	"net/http"
 	"strconv"
 
@@ -106,15 +107,19 @@ func ListWatchlist() gin.HandlerFunc {
 
 		var items []WatchlistRepo
 		query := `
-			SELECT r.id as repo_id, r.full_name, r.language, r.stars, COALESCE(s.class_rank, 'N/A') as class_rank, COALESCE(s.score, 0.0) as score
+			SELECT r.id as repo_id, r.full_name, COALESCE(r.language,'') as language, r.stars, COALESCE(s.c_rank_tier, 'N/A') as class_rank, COALESCE(s.c_rank_score, 0.0) as score
 			FROM user_watchlists w
-			JOIN repos r ON w.repo_id = r.id
-			LEFT JOIN repo_scores s ON r.id = s.repo_id
+			JOIN repositories r ON w.repo_id = r.id
+			LEFT JOIN daily_snapshots s ON s.repository_id = r.id
+			  AND s.snapshot_date = (
+			    SELECT MAX(s2.snapshot_date) FROM daily_snapshots s2 WHERE s2.repository_id = r.id
+			  )
 			WHERE w.user_id = ?
 			ORDER BY w.created_at DESC
 		`
 
 		if err := db.SelectContext(c.Request.Context(), &items, query, userID); err != nil {
+			slog.Error("list watchlist failed", "user_id", userID, "err", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to list watchlist"})
 			return
 		}
