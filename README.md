@@ -14,6 +14,8 @@
 
 Using objective mathematical telemetry gathered via the **GitHub GraphQL API**, Opendoor scores public repositories on a **C-Rank™ scale (S to D)** based on maintainer responsiveness, external PR merge velocity, and first-time contributor success rates.
 
+Try now: [OpenDoor](https://opendoor.abhishekco.de?utm_campaign=try_now&utm_source=github&utm_medium=github)
+
 ---
 
 ## 🚀 Key Features
