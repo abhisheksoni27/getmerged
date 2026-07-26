@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { LogOut, GitPullRequest } from "lucide-react";
+import { API_BASE_URL } from "@/lib/api";
 
 export function Header() {
   const [user, setUser] = useState<{ username: string; avatar_url?: string } | null>(null);
@@ -11,7 +12,7 @@ export function Header() {
     // Check local authentication state
     const token = typeof window !== "undefined" ? localStorage.getItem("opendoor_token") : null;
     if (token) {
-      fetch("/api/v1/auth/me", {
+      fetch(`${API_BASE_URL}/api/v1/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())
@@ -56,7 +57,7 @@ export function Header() {
             </div>
           ) : (
             <a
-              href="http://localhost:8080/api/v1/auth/github"
+              href={`${API_BASE_URL}/api/v1/auth/github`}
               className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-4 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-zinc-800 active:scale-95 transition-all"
             >
               <GitPullRequest className="h-3.5 w-3.5" />

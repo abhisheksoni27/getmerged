@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { AIInsights } from "@/types/opendoor";
 import { ArrowLeft, GitMerge, Clock, Sparkles, CheckCircle2, ShieldCheck, Lock, GitPullRequest, Bookmark } from "lucide-react";
 import Link from "next/link";
+import { API_BASE_URL } from "@/lib/api";
 
 interface PageProps {
   params: Promise<{ owner: string; name: string }>;
@@ -23,7 +24,7 @@ export default function RepoDetailPage({ params }: PageProps) {
     const token = typeof window !== "undefined" ? localStorage.getItem("opendoor_token") : null;
     if (token) {
       setTimeout(() => setUserToken(token), 0);
-      fetch(`http://localhost:8080/api/v1/repos/1/insights`, {
+      fetch(`${API_BASE_URL}/api/v1/repos/1/insights`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())
@@ -181,7 +182,7 @@ export default function RepoDetailPage({ params }: PageProps) {
                   Sign in with GitHub to view full PR guidelines, maintainer review vibe check, and receive repo rank shift notifications.
                 </p>
                 <a
-                  href="http://localhost:8080/api/v1/auth/github"
+                  href={`${API_BASE_URL}/api/v1/auth/github`}
                   className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-5 py-2 text-xs font-medium text-white shadow-xs hover:bg-zinc-800 transition-all"
                 >
                   <GitPullRequest className="h-3.5 w-3.5" />
