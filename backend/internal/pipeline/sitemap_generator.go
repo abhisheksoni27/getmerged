@@ -69,16 +69,33 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 
 	var indexSitemaps []Sitemap
 
+	// 1. Generate main.xml for homepage & core platform landing pages
+	mainUrlset := URLSet{
+		URLs: []URL{
+			{
+				Loc:        baseUrl,
+				LastMod:    today,
+				ChangeFreq: "daily",
+				Priority:   "1.0",
+			},
+		},
+	}
+	mainOutput, err := xml.MarshalIndent(mainUrlset, "", "  ")
+	if err == nil {
+		mainFilePath := filepath.Join(sitemapDir, "main.xml")
+		xmlHeader := []byte(xml.Header)
+		if err := os.WriteFile(mainFilePath, append(xmlHeader, mainOutput...), 0644); err == nil {
+			indexSitemaps = append(indexSitemaps, Sitemap{
+				Loc:     fmt.Sprintf("%s/sitemap/main.xml", baseUrl),
+				LastMod: today,
+			})
+		}
+	}
+
+	// 2. Generate language partition sitemaps
 	for lang, langRepos := range langMap {
 		urlset := URLSet{
-			URLs: []URL{
-				{
-					Loc:        baseUrl,
-					LastMod:    today,
-					ChangeFreq: "daily",
-					Priority:   "1.0",
-				},
-			},
+			URLs: []URL{},
 		}
 
 		for _, r := range langRepos {
