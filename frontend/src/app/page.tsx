@@ -34,7 +34,7 @@ export default function Home() {
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalReposCount, setTotalReposCount] = useState<number>(0);
-  const perPage = 18; // 6 rows of 3 columns
+  const perPage = 9; // 3 rows of 3 columns (3x3 grid)
 
   const languages = ["All", "Go", "TypeScript", "Python", "Rust", "C++", "Java", "PHP", "Ruby", "Dart", "Kotlin"];
   const buckets = ["All", "500-1k", "1k-5k", "5k-20k", "20k-50k", "50k+"];
