@@ -51,12 +51,6 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "Sort order (asc, desc)",
-                        "name": "order",
-                        "in": "query"
-                    },
-                    {
                         "type": "integer",
                         "description": "Page number (default 1)",
                         "name": "page",
@@ -75,53 +69,6 @@ const docTemplate = `{
                         "schema": {
                             "type": "object",
                             "additionalProperties": true
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/repos/{id}": {
-            "get": {
-                "description": "Returns details and latest C-Rank score for a single repository.",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "repos"
-                ],
-                "summary": "Get repository details",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Repository ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handler.repoResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
                         }
                     },
                     "500": {
@@ -418,71 +365,6 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
-                }
-            }
-        },
-        "handler.repoResponse": {
-            "type": "object",
-            "properties": {
-                "c_rank_score": {
-                    "type": "number"
-                },
-                "c_rank_tier": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "distinct_maintainer_count": {
-                    "type": "number"
-                },
-                "external_pr_merge_rate": {
-                    "type": "number"
-                },
-                "first_timer_success_rate": {
-                    "type": "number"
-                },
-                "full_name": {
-                    "type": "string"
-                },
-                "github_url": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "issue_triage_speed_hours": {
-                    "type": "number"
-                },
-                "language": {
-                    "type": "string"
-                },
-                "last_activity_days": {
-                    "type": "number"
-                },
-                "maintainer_responsiveness": {
-                    "type": "number"
-                },
-                "repeat_contributor_rate": {
-                    "type": "number"
-                },
-                "review_rounds": {
-                    "type": "number"
-                },
-                "snapshot_date": {
-                    "type": "string"
-                },
-                "staleness_flag": {
-                    "type": "boolean"
-                },
-                "stars": {
-                    "type": "integer"
-                },
-                "time_to_first_response_hours": {
-                    "type": "number"
-                },
-                "time_to_merge_hours": {
-                    "type": "number"
                 }
             }
         }

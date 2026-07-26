@@ -34,49 +34,6 @@ definitions:
           type: string
         type: array
     type: object
-  handler.repoResponse:
-    properties:
-      c_rank_score:
-        type: number
-      c_rank_tier:
-        type: string
-      description:
-        type: string
-      distinct_maintainer_count:
-        type: number
-      external_pr_merge_rate:
-        type: number
-      first_timer_success_rate:
-        type: number
-      full_name:
-        type: string
-      github_url:
-        type: string
-      id:
-        type: string
-      issue_triage_speed_hours:
-        type: number
-      language:
-        type: string
-      last_activity_days:
-        type: number
-      maintainer_responsiveness:
-        type: number
-      repeat_contributor_rate:
-        type: number
-      review_rounds:
-        type: number
-      snapshot_date:
-        type: string
-      staleness_flag:
-        type: boolean
-      stars:
-        type: integer
-      time_to_first_response_hours:
-        type: number
-      time_to_merge_hours:
-        type: number
-    type: object
 host: opendoor.abhishekco.de
 info:
   contact: {}
@@ -106,10 +63,6 @@ paths:
         in: query
         name: sort
         type: string
-      - description: Sort order (asc, desc)
-        in: query
-        name: order
-        type: string
       - description: Page number (default 1)
         in: query
         name: page
@@ -133,37 +86,6 @@ paths:
               type: string
             type: object
       summary: List repositories
-      tags:
-      - repos
-  /api/v1/repos/{id}:
-    get:
-      description: Returns details and latest C-Rank score for a single repository.
-      parameters:
-      - description: Repository ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handler.repoResponse'
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Get repository details
       tags:
       - repos
   /health:
