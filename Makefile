@@ -1,0 +1,88 @@
+.PHONY: build swagger test lint run dev build-linux build-linux-arm deploy score-repo check-pat
+
+COMMIT_HASH ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+LDFLAGS := -s -w -X github.com/abhisheksoni27/opendoor/internal/handler.CommitHash=$(COMMIT_HASH)
+
+swagger:
+	@which swag > /dev/null 2>&1 || (echo "Installing swag..." && go install github.com/swaggo/swag/cmd/swag@latest)
+	cd backend && swag init -g cmd/server/main.go
+
+build: swagger
+	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/server ./cmd/server
+
+# Live-reloading development server using air
+dev: swagger
+	@which air > /dev/null 2>&1 || (echo "Installing air for live reload..." && go install github.com/air-verse/air@latest)
+	cd backend && air -c .air.toml
+
+# Cross-compile Linux x86_64 binary locally (fast, low memory)
+build-linux: swagger
+	cd backend && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o bin/server-linux ./cmd/server
+
+# Cross-compile Linux ARM64 binary locally (Oracle Ampere ARM)
+build-linux-arm: swagger
+	cd backend && CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="$(LDFLAGS)" -o bin/server-linux-arm ./cmd/server
+
+# Cross-compile recalculate_history tool for Linux ARM64 (Oracle Ampere ARM)
+build-recalculate-linux-arm:
+	cd backend && CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="$(LDFLAGS)" -o bin/recalculate-history-linux-arm ./cmd/recalculate_history
+
+recalculate-history: build-recalculate-linux-arm
+	scp backend/bin/recalculate-history-linux-arm deploy@oracle:/tmp/recalculate-history
+	ssh deploy@oracle '\
+		mv -f /tmp/recalculate-history /opt/opendoor/backend/recalculate-history && \
+		chmod +x /opt/opendoor/backend/recalculate-history && \
+		export $$(cat /opt/opendoor/.env | grep -v "^#" | xargs) 2>/dev/null || true && \
+		export $$(cat /opt/opendoor/backend/.env | grep -v "^#" | xargs) 2>/dev/null || true && \
+		/opt/opendoor/backend/recalculate-history && \
+		sudo systemctl restart opendoor.service'
+
+deploy: build-linux-arm
+	scp backend/bin/server-linux-arm deploy@oracle:/tmp/server
+	ssh deploy@oracle '\
+		mv -f /tmp/server /opt/opendoor/backend/server && \
+		chmod +x /opt/opendoor/backend/server && \
+		sudo restorecon -v /opt/opendoor/backend/server && \
+		sudo systemctl restart opendoor.service && \
+		sudo systemctl status opendoor.service --no-pager'
+
+score-repo:
+	@curl -X POST 'http://localhost:10000/internal/score-repo' \
+		-H 'x-api-key: $(INTERNAL_API_KEY)' \
+		-H 'Content-Type: application/json' \
+		-d '{"owner": "$(OWNER)", "name": "$(NAME)"}'
+
+check-pat:
+	@curl -X POST 'http://localhost:10000/internal/check-pat' \
+		-H 'x-api-key: $(INTERNAL_API_KEY)'
+
+RSYNC_FLAGS = -az \
+	--delete \
+	--exclude='.DS_Store' \
+	--exclude='._*'
+
+build-frontend:
+	cd frontend && npm run build
+
+deploy-frontend: build-frontend
+	@echo "=== Sync standalone ==="
+	rsync $(RSYNC_FLAGS) \
+		--exclude='.next' \
+		--exclude='public' \
+		frontend/.next/standalone/ \
+		deploy@oracle:/opt/opendoor/frontend/
+
+	@echo "=== Sync static ==="
+	rsync $(RSYNC_FLAGS) \
+		frontend/.next/static/ \
+		deploy@oracle:/opt/opendoor/frontend/.next/static/
+
+	@echo "=== Sync public ==="
+	rsync $(RSYNC_FLAGS) \
+		frontend/public/ \
+		deploy@oracle:/opt/opendoor/frontend/public/
+
+	@echo "=== Restart ==="
+	ssh deploy@oracle '\
+		sudo systemctl restart opendoor-frontend && \
+		sudo systemctl status opendoor-frontend --no-pager'

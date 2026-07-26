@@ -97,12 +97,15 @@ func ListRepos(c *gin.Context) {
 		}
 	}
 
+	// Cloudflare edge & browser cache headers (15 min cache)
+	c.Header("Cache-Control", "public, max-age=900, s-maxage=3600, stale-while-revalidate=300")
 	c.Header("X-Cache", "MISS")
 
 	// Parse query params
 	lang := strings.TrimSpace(c.Query("language"))
 	name := strings.TrimSpace(c.Query("name"))
 	minStarsStr := strings.TrimSpace(c.Query("min_stars"))
+	maxStarsStr := strings.TrimSpace(c.Query("max_stars"))
 	sortParam := strings.TrimSpace(c.Query("sort"))
 	orderParam := strings.TrimSpace(strings.ToLower(c.Query("order")))
 	pageStr := strings.TrimSpace(c.Query("page"))
@@ -121,8 +124,8 @@ func ListRepos(c *gin.Context) {
 	}
 	offset := (page - 1) * perPage
 
-	// Build dynamic WHERE clause
-	whereParts := []string{"1=1"}
+	// Build dynamic WHERE clause - filter out D tier / 0 score repos that don't welcome contributors
+	whereParts := []string{"s.c_rank_score > 0", "s.c_rank_tier != 'D'"}
 	args := []any{}
 
 	if lang != "" {
@@ -137,6 +140,12 @@ func ListRepos(c *gin.Context) {
 		if ms, err := strconv.Atoi(minStarsStr); err == nil {
 			whereParts = append(whereParts, "r.stars >= ?")
 			args = append(args, ms)
+		}
+	}
+	if maxStarsStr != "" {
+		if maxs, err := strconv.Atoi(maxStarsStr); err == nil {
+			whereParts = append(whereParts, "r.stars <= ?")
+			args = append(args, maxs)
 		}
 	}
 

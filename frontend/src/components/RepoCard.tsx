@@ -8,8 +8,11 @@ interface RepoCardProps {
 }
 
 export function RepoCard({ repo }: RepoCardProps) {
-  const getRankBadgeClass = (rank?: string) => {
-    switch (rank) {
+  const rank = repo.class_rank || repo.c_rank_tier || "A";
+  const [ownerPart, namePart] = repo.full_name ? repo.full_name.split("/") : [repo.owner || "", repo.name || ""];
+
+  const getRankBadgeClass = (r?: string) => {
+    switch (r) {
       case "S":
         return "bg-emerald-50 text-emerald-700 border-emerald-200/80 shadow-emerald-500/10";
       case "A":
@@ -24,18 +27,42 @@ export function RepoCard({ repo }: RepoCardProps) {
     }
   };
 
+  // Helper for star bucket calculation if missing from legacy response
+  const getStarBucket = (stars: number, bucket?: string) => {
+    if (bucket) return bucket;
+    if (stars >= 50000) return "50k+";
+    if (stars >= 20000) return "20k-50k";
+    if (stars >= 5000) return "5k-20k";
+    if (stars >= 1000) return "1k-5k";
+    if (stars >= 500) return "500-1k";
+    return "<500";
+  };
+
+  // Helper for response time formatting
+  const responseTimeDisplay =
+    repo.time_to_first_response_hours !== undefined && repo.time_to_first_response_hours > 0
+      ? repo.time_to_first_response_hours < 1
+        ? `~${Math.round(repo.time_to_first_response_hours * 60)}m response`
+        : `~${repo.time_to_first_response_hours.toFixed(1)}h response`
+      : "—";
+
+  const mergeRateDisplay =
+    repo.external_pr_merge_rate !== undefined && repo.external_pr_merge_rate > 0
+      ? `${repo.external_pr_merge_rate.toFixed(1)}% merged`
+      : "—";
+
   return (
-    <div className="group relative flex flex-col justify-between rounded-xl border border-zinc-200/90 bg-white p-5 shadow-xs hover:border-zinc-300 hover:shadow-md transition-all duration-200">
+    <Link
+      href={`/repo/${ownerPart}/${namePart}`}
+      className="group relative flex flex-col justify-between rounded-xl border border-zinc-200/90 bg-white p-5 shadow-xs hover:border-zinc-300 hover:shadow-md transition-all duration-200 block text-current no-underline"
+    >
       {/* Top Meta Bar */}
       <div>
         <div className="flex items-start justify-between gap-3 mb-2">
-          <Link
-            href={`/repo/${repo.owner}/${repo.name}`}
-            className="font-mono text-base font-semibold text-zinc-900 group-hover:text-zinc-700 transition-colors flex items-center gap-1.5"
-          >
+          <div className="font-mono text-base font-semibold text-zinc-900 group-hover:text-zinc-700 transition-colors flex items-center gap-1.5">
             {repo.full_name}
             <ArrowUpRight className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-zinc-400" />
-          </Link>
+          </div>
           <div className="flex items-center gap-2">
             {repo.is_trending && (
               <span className="inline-flex items-center gap-1 rounded-full bg-orange-50 px-2 py-0.5 text-[10px] font-medium text-orange-600 border border-orange-200/60">
@@ -45,10 +72,10 @@ export function RepoCard({ repo }: RepoCardProps) {
             )}
             <span
               className={`inline-flex items-center justify-center rounded-md border px-2 py-0.5 font-mono text-xs font-bold ${getRankBadgeClass(
-                repo.class_rank || "A"
+                rank
               )}`}
             >
-              {repo.class_rank || "A"} Rank
+              {rank} Rank
             </span>
           </div>
         </div>
@@ -61,18 +88,21 @@ export function RepoCard({ repo }: RepoCardProps) {
 
       {/* Metrics Row */}
       <div>
-        <div className="grid grid-cols-3 gap-2 border-t border-b border-zinc-100 py-2.5 mb-4 text-xs font-mono">
-          <div className="flex items-center gap-1.5 text-zinc-600">
-            <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500/20" />
-            <span>{repo.stars.toLocaleString()}</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-zinc-600">
+        <div className="flex items-center gap-1.5 text-zinc-600 mb-4 font-mono">
+          <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500/20" />
+          <span>{repo.stars.toLocaleString()}</span>
+        </div>
+
+        {/* Secondary Metrics Bar */}
+        <div className="flex items-center gap-3 font-mono text-[11px] text-zinc-500 mb-4">
+          <div className="flex items-center gap-1">
             <Clock className="h-3.5 w-3.5 text-zinc-400" />
-            <span>~4h response</span>
+            <span>{responseTimeDisplay}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-zinc-600">
-            <GitMerge className="h-3.5 w-3.5 text-emerald-500" />
-            <span>88% merged</span>
+          <span>•</span>
+          <div className="flex items-center gap-1">
+            <GitMerge className="h-3.5 w-3.5 text-zinc-400" />
+            <span>{mergeRateDisplay}</span>
           </div>
         </div>
 
@@ -86,12 +116,9 @@ export function RepoCard({ repo }: RepoCardProps) {
             Active and welcoming maintainer team with very fast turnaround on PR reviews.
           </p>
           <div className="absolute inset-0 flex items-center justify-center bg-white/40 backdrop-blur-[1px]">
-            <Link
-              href={`/repo/${repo.owner}/${repo.name}`}
-              className="text-[11px] font-medium text-zinc-900 underline underline-offset-2 hover:text-emerald-600"
-            >
+            <span className="text-[11px] font-medium text-zinc-900 underline underline-offset-2 group-hover:text-emerald-600">
               Sign in to view AI Insights
-            </Link>
+            </span>
           </div>
         </div>
 
@@ -99,10 +126,10 @@ export function RepoCard({ repo }: RepoCardProps) {
         <div className="mt-3 flex items-center justify-between text-[11px] text-zinc-400 font-mono">
           <span>{repo.language || "Other"}</span>
           <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-zinc-600 font-sans">
-            {repo.star_bucket || "1k-5k"} stars
+            {getStarBucket(repo.stars, repo.star_bucket)} stars
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
