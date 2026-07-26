@@ -114,7 +114,7 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 	dataQuery := fmt.Sprintf(`
 		SELECT
 			r.id, r.full_name, COALESCE(r.language,'') as language, r.stars,
-			COALESCE(r.description,'') as description, r.github_url,
+			COALESCE(r.description,'') as description, COALESCE(r.github_url,'') as github_url,
 			COALESCE(s.c_rank_tier,'D') as c_rank_tier,
 			COALESCE(s.c_rank_score,0) as c_rank_score,
 			COALESCE(s.external_pr_merge_rate,0) as external_pr_merge_rate,
@@ -153,7 +153,7 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 	query := `
 		SELECT
 			r.id, r.full_name, COALESCE(r.language,'') as language, r.stars,
-			COALESCE(r.description,'') as description, r.github_url,
+			COALESCE(r.description,'') as description, COALESCE(r.github_url,'') as github_url,
 			COALESCE(s.c_rank_tier,'D') as c_rank_tier,
 			COALESCE(s.c_rank_score,0) as c_rank_score,
 			COALESCE(s.external_pr_merge_rate,0) as external_pr_merge_rate,
