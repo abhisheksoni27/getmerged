@@ -14,6 +14,7 @@ import (
 	"os"
 
 	_ "github.com/abhisheksoni27/opendoor/docs"
+	"github.com/abhisheksoni27/opendoor/internal/ai"
 	"github.com/abhisheksoni27/opendoor/internal/config"
 	"github.com/abhisheksoni27/opendoor/internal/db"
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
@@ -51,6 +52,9 @@ func main() {
 
 	gh := ghclient.NewClient(cfg.GithubToken, vkClient)
 
+	// Initialize AI and Notification clients
+	aiClient := ai.NewAIClient(cfg.OpencodeAPIKey)
+
 	gin.SetMode(cfg.GinMode)
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
@@ -67,6 +71,25 @@ func main() {
 		api.GET("/health", handler.Health())
 		api.GET("/repos", handler.ListRepos)
 		api.GET("/repos/:id", handler.GetRepo)
+		api.GET("/stats/macro", handler.GetMacroStats())
+
+		// Auth Routes
+		authGroup := api.Group("/auth")
+		{
+			authGroup.GET("/github", handler.GitHubOAuthRedirect(cfg))
+			authGroup.GET("/github/callback", handler.GitHubOAuthCallback(cfg))
+		}
+	}
+
+	// Authenticated User Routes (Custom Opendoor JWT)
+	userApi := r.Group("/api/v1")
+	userApi.Use(middleware.UserAuth(cfg.JWTSecret))
+	{
+		userApi.GET("/auth/me", handler.GetCurrentUser())
+		userApi.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient))
+		userApi.POST("/user/watchlist", handler.AddToWatchlist())
+		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist())
+		userApi.GET("/user/watchlist", handler.ListWatchlist())
 	}
 
 	// Internal routes — nginx blocks these externally
