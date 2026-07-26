@@ -20,6 +20,7 @@ import (
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/handler"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
+	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -55,6 +56,12 @@ func main() {
 	// Initialize AI and Notification clients
 	aiClient := ai.NewAIClient(cfg.OpencodeAPIKey)
 
+	// Initialize Repository Layer
+	userRepo := repository.NewUserRepository(database, cfg)
+	repoStore := repository.NewRepoRepository(database)
+	watchlistRepo := repository.NewWatchlistRepository(database)
+	aiRepo := repository.NewAIRepository(database)
+
 	gin.SetMode(cfg.GinMode)
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
@@ -70,15 +77,15 @@ func main() {
 	api := r.Group("/api/v1")
 	{
 		api.GET("/health", handler.Health())
-		api.GET("/repos", handler.ListRepos)
-		api.GET("/repos/:id", handler.GetRepo)
+		api.GET("/repos", handler.ListRepos(repoStore))
+		api.GET("/repos/:id", handler.GetRepo(repoStore))
 		api.GET("/stats/macro", handler.GetMacroStats())
 
 		// Auth Routes
 		authGroup := api.Group("/auth")
 		{
 			authGroup.GET("/github", handler.GitHubOAuthRedirect(cfg))
-			authGroup.GET("/github/callback", handler.GitHubOAuthCallback(cfg))
+			authGroup.GET("/github/callback", handler.GitHubOAuthCallback(cfg, userRepo))
 		}
 	}
 
@@ -86,11 +93,11 @@ func main() {
 	userApi := r.Group("/api/v1")
 	userApi.Use(middleware.UserAuth(cfg.JWTSecret))
 	{
-		userApi.GET("/auth/me", handler.GetCurrentUser(cfg))
-		userApi.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient))
-		userApi.POST("/user/watchlist", handler.AddToWatchlist())
-		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist())
-		userApi.GET("/user/watchlist", handler.ListWatchlist())
+		userApi.GET("/auth/me", handler.GetCurrentUser(userRepo))
+		userApi.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
+		userApi.POST("/user/watchlist", handler.AddToWatchlist(watchlistRepo))
+		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist(watchlistRepo))
+		userApi.GET("/user/watchlist", handler.ListWatchlist(watchlistRepo))
 	}
 
 	// Internal routes — nginx blocks these externally
@@ -99,10 +106,10 @@ func main() {
 	{
 		internal.POST("/update-scores", handler.UpdateScores(gh))
 		internal.POST("/seed", handler.Seed(gh))
-		internal.POST("/score-repo", handler.ScoreRepo(gh))
+		internal.POST("/score-repo", handler.ScoreRepo(gh, repoStore))
 		internal.POST("/check-pat", handler.CheckPAT(gh))
 		internal.POST("/purge-cache", handler.PurgeCache())
-		internal.DELETE("/repos/:id", handler.DeleteRepo())
+		internal.DELETE("/repos/:id", handler.DeleteRepo(repoStore))
 	}
 
 	// Swagger docs (only registered in debug mode to prevent API documentation leaks in production)

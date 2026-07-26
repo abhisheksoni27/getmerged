@@ -6,30 +6,18 @@ import (
 	"net/http"
 
 	"github.com/abhisheksoni27/opendoor/internal/ai"
-	"github.com/abhisheksoni27/opendoor/internal/middleware"
+	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
 )
 
 // GetRepoInsights handles GET /api/v1/repos/:id/insights (Gated endpoint)
-func GetRepoInsights(aiClient *ai.AIClient) gin.HandlerFunc {
+func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repoStore repository.RepoRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		repoID := c.Param("id")
-		db := middleware.MustDB(c)
-		if db == nil {
-			return
-		}
 
 		// 1. Check existing cached AI insights in SQLite DB
-		var cached struct {
-			RepoID            int64   `db:"repo_id" json:"repo_id"`
-			MaintainerVibe    string  `db:"maintainer_vibe" json:"maintainer_vibe"`
-			PRGuidelines      string  `db:"pr_guidelines" json:"pr_guidelines"`
-			IssueQualityScore float64 `db:"issue_quality_score" json:"issue_quality_score"`
-			RawSummary        string  `db:"raw_summary" json:"raw_summary"`
-		}
-
-		err := db.GetContext(c.Request.Context(), &cached, "SELECT repo_id, maintainer_vibe, pr_guidelines, issue_quality_score, raw_summary FROM repo_ai_insights WHERE repo_id = ?", repoID)
-		if err == nil {
+		cached, err := aiRepo.GetInsights(c.Request.Context(), repoID)
+		if err == nil && cached != nil {
 			var guidelines []string
 			_ = json.Unmarshal([]byte(cached.PRGuidelines), &guidelines)
 
@@ -46,11 +34,8 @@ func GetRepoInsights(aiClient *ai.AIClient) gin.HandlerFunc {
 		}
 
 		// 2. Fetch repo metadata
-		var repo struct {
-			ID       int64  `db:"id"`
-			FullName string `db:"full_name"`
-		}
-		if err := db.GetContext(c.Request.Context(), &repo, "SELECT id, full_name FROM repositories WHERE id = ?", repoID); err != nil {
+		repo, err := repoStore.FindByIDOrName(c.Request.Context(), repoID)
+		if err != nil || repo == nil {
 			slog.Warn("get repo insights: repo not found", "repo_id", repoID, "err", err)
 			c.JSON(http.StatusNotFound, gin.H{"error": "repository not found"})
 			return
@@ -59,25 +44,32 @@ func GetRepoInsights(aiClient *ai.AIClient) gin.HandlerFunc {
 		// 3. Generate insights via AI client
 		insights, err := aiClient.GenerateRepoInsights(c.Request.Context(), repo.FullName, nil)
 		if err != nil {
-			slog.Error("get repo insights: generation failed", "repo_id", repoID, "err", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate insights"})
+			slog.Error("get repo insights: ai generation failed", "repo", repo.FullName, "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate AI insights"})
 			return
 		}
 
-		guidelinesJSON, _ := json.Marshal(insights.PRGuidelines)
+		guidelinesBytes, _ := json.Marshal(insights.PRGuidelines)
+		newInsights := &repository.AIInsights{
+			RepoID:            repo.ID,
+			MaintainerVibe:    insights.MaintainerVibe,
+			PRGuidelines:      string(guidelinesBytes),
+			IssueQualityScore: insights.IssueQualityScore,
+			RawSummary:        insights.RawSummary,
+		}
 
-		// 4. Cache generated insights in database
-		_, _ = db.ExecContext(c.Request.Context(), `
-			INSERT INTO repo_ai_insights (repo_id, maintainer_vibe, pr_guidelines, issue_quality_score, raw_summary, updated_at)
-			VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-			ON CONFLICT(repo_id) DO UPDATE SET
-				maintainer_vibe = excluded.maintainer_vibe,
-				pr_guidelines = excluded.pr_guidelines,
-				issue_quality_score = excluded.issue_quality_score,
-				raw_summary = excluded.raw_summary,
-				updated_at = CURRENT_TIMESTAMP
-		`, repo.ID, insights.MaintainerVibe, string(guidelinesJSON), insights.IssueQualityScore, insights.RawSummary)
+		if err := aiRepo.SaveInsights(c.Request.Context(), newInsights); err != nil {
+			slog.Warn("get repo insights: failed to cache insights to DB", "repo_id", repo.ID, "err", err)
+		}
 
-		c.JSON(http.StatusOK, gin.H{"insights": insights})
+		c.JSON(http.StatusOK, gin.H{
+			"insights": gin.H{
+				"repo_id":             repo.ID,
+				"maintainer_vibe":     insights.MaintainerVibe,
+				"pr_guidelines":       insights.PRGuidelines,
+				"issue_quality_score": insights.IssueQualityScore,
+				"raw_summary":         insights.RawSummary,
+			},
+		})
 	}
 }
