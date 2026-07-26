@@ -4,6 +4,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Header } from "@/components/Header";
 import { RepoCard } from "@/components/RepoCard";
 import { RelativityCanvas } from "@/components/RelativityCanvas";
+import { LangLogo } from "@/components/LangLogo";
 import { Repo, MacroStats } from "@/types/opendoor";
 import {
   Search,
@@ -26,6 +27,7 @@ export default function Home() {
   const [stats, setStats] = useState<MacroStats | null>(null);
   const [selectedLang, setSelectedLang] = useState<string>("All");
   const [selectedBucket, setSelectedBucket] = useState<string>("All");
+  const [selectedTier, setSelectedTier] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [trendingOnly, setTrendingOnly] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -38,6 +40,13 @@ export default function Home() {
 
   const languages = ["All", "Go", "TypeScript", "Python", "Rust", "C++", "Java", "PHP", "Ruby", "Dart", "Kotlin"];
   const buckets = ["All", "500-1k", "1k-5k", "5k-20k", "20k-50k", "50k+"];
+  const tiers = [
+    { label: "All", value: "All" },
+    { label: "Super Welcoming", value: "S" },
+    { label: "Welcoming", value: "A" },
+    { label: "Moderate", value: "B" },
+    { label: "Slow Review", value: "C" },
+  ];
 
   // Helper for star bucket minimum & maximum stars
   const getStarBoundsFromBucket = (bucket: string): { min?: string; max?: string } => {
@@ -69,6 +78,12 @@ export default function Home() {
     if (selectedLang !== "All") {
       params.set("language", selectedLang);
     }
+    if (selectedTier !== "All") {
+      params.set("tier", selectedTier);
+    }
+    if (trendingOnly) {
+      params.set("trending", "true");
+    }
     if (searchQuery.trim()) {
       params.set("name", searchQuery.trim());
     }
@@ -97,7 +112,7 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
-  }, [selectedLang, selectedBucket, searchQuery, page]);
+  }, [selectedLang, selectedBucket, selectedTier, trendingOnly, searchQuery, page]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -118,19 +133,31 @@ export default function Home() {
   const handleLangChange = (lang: string) => {
     setLoading(true);
     setSelectedLang(lang);
-    setPage(1); // Reset to page 1 on filter change
+    setPage(1); // Revert to page 1 on filter change
   };
 
   const handleBucketChange = (bucket: string) => {
     setLoading(true);
     setSelectedBucket(bucket);
-    setPage(1); // Reset to page 1 on filter change
+    setPage(1); // Revert to page 1 on filter change
+  };
+
+  const handleTierChange = (tierVal: string) => {
+    setLoading(true);
+    setSelectedTier(tierVal);
+    setPage(1); // Revert to page 1 on filter change
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
     setSearchQuery(e.target.value);
-    setPage(1); // Reset to page 1 on search
+    setPage(1); // Revert to page 1 on search change
+  };
+
+  const handleTrendingToggle = () => {
+    setLoading(true);
+    setTrendingOnly(!trendingOnly);
+    setPage(1); // Revert to page 1 on trending toggle
   };
 
   const handlePageChange = (newPage: number) => {
@@ -154,39 +181,39 @@ export default function Home() {
         </p>
 
         {/* Macro Metrics Bar */}
-        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4 max-w-3xl mx-auto rounded-xl border border-zinc-200 bg-white/90 p-4 shadow-xs">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4 max-w-3xl mx-auto rounded-xl border border-zinc-200 bg-white/90 p-3 sm:p-4 shadow-xs">
           <div>
-            <div className="text-2xl font-bold font-mono text-zinc-900">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-zinc-900">
               {stats?.total_repos ? stats.total_repos.toLocaleString() : totalReposCount > 0 ? totalReposCount.toLocaleString() : "1,189"}
             </div>
-            <div className="text-xs text-zinc-500 font-mono">Repos Scored</div>
+            <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Repos Scored</div>
           </div>
           <div>
-            <div className="text-2xl font-bold font-mono text-emerald-600">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-emerald-600">
               {stats?.s_class_count !== undefined ? stats.s_class_count : stats?.rank_counts?.["S"] !== undefined ? stats.rank_counts["S"] : "420"}
             </div>
-            <div className="text-xs text-zinc-500 font-mono">S-Class Open Doors</div>
+            <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Super Welcoming</div>
           </div>
           <div>
-            <div className="text-2xl font-bold font-mono text-zinc-900">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-zinc-900">
               {stats?.languages_count ? `${stats.languages_count}+` : "10+"}
             </div>
-            <div className="text-xs text-zinc-500 font-mono">Languages Covered</div>
+            <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Languages Covered</div>
           </div>
           <div>
-            <div className="text-2xl font-bold font-mono text-zinc-900">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-zinc-900">
               {stats?.avg_response_hours ? `${stats.avg_response_hours.toFixed(1)}h` : "4.2h"}
             </div>
-            <div className="text-xs text-zinc-500 font-mono">Avg First Review</div>
+            <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Avg First Review</div>
           </div>
         </div>
       </section>
 
       {/* Main Filter & Leaderboard Grid */}
-      <main className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8 flex-1 w-full">
+      <main className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 flex-1 w-full">
         {/* Controls Bar */}
-        <div className="sticky top-20 z-40 mb-8 rounded-xl border border-zinc-200 bg-white/95 p-4 shadow-sm backdrop-blur-md">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="sticky top-16 sm:top-20 z-40 mb-6 sm:mb-8 rounded-xl border border-zinc-200 bg-white/95 p-3 sm:p-4 shadow-sm backdrop-blur-md space-y-3">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             {/* Search Input */}
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
@@ -195,14 +222,14 @@ export default function Home() {
                 placeholder="Search repo by name, owner, or technology..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full rounded-lg border border-zinc-200 bg-zinc-50/50 pl-9 pr-4 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900 font-mono transition-all"
+                className="w-full rounded-lg border border-zinc-200 bg-zinc-50/50 pl-9 pr-4 py-2 text-xs sm:text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900 font-mono transition-all"
               />
             </div>
 
             {/* Trending Toggle */}
             <button
-              onClick={() => setTrendingOnly(!trendingOnly)}
-              className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all ${
+              onClick={handleTrendingToggle}
+              className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all shrink-0 ${
                 trendingOnly
                   ? "border-orange-300 bg-orange-50 text-orange-700 shadow-xs"
                   : "border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50"
@@ -213,38 +240,67 @@ export default function Home() {
             </button>
           </div>
 
+          {/* Vibe Tier Pills */}
+          <div className="flex flex-wrap items-center gap-1.5 border-t border-zinc-100 pt-3 text-xs">
+            <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
+              <Sparkles className="h-3 w-3 text-emerald-600" /> Vibe:
+            </span>
+            {tiers.map((t) => (
+              <button
+                key={t.value}
+                onClick={() => handleTierChange(t.value)}
+                className={`rounded-md px-2.5 py-1 font-mono text-[11px] sm:text-xs active:scale-95 transition-all ${
+                  selectedTier === t.value
+                    ? t.value === "S"
+                      ? "bg-emerald-600 text-white shadow-xs"
+                      : t.value === "A"
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : t.value === "B"
+                      ? "bg-amber-600 text-white shadow-xs"
+                      : t.value === "C"
+                      ? "bg-purple-600 text-white shadow-xs"
+                      : "bg-zinc-900 text-white shadow-xs"
+                    : "bg-zinc-100/80 text-zinc-600 hover:bg-zinc-200/80"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
           {/* Language & Bucket Filter Pills */}
-          <div className="mt-4 flex flex-col gap-3 border-t border-zinc-100 pt-3 sm:flex-row sm:items-center sm:justify-between text-xs">
+          <div className="flex flex-col gap-3 border-t border-zinc-100 pt-3 sm:flex-row sm:items-center sm:justify-between text-xs">
             {/* Language Pills */}
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1">
+              <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
                 <Code2 className="h-3 w-3" /> Lang:
               </span>
               {languages.map((lang) => (
                 <button
                   key={lang}
                   onClick={() => handleLangChange(lang)}
-                  className={`rounded-md px-2.5 py-1 font-mono active:scale-95 transition-all ${
+                  className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 font-mono text-[11px] sm:text-xs active:scale-95 transition-all ${
                     selectedLang === lang
                       ? "bg-zinc-900 text-white shadow-xs"
                       : "bg-zinc-100/80 text-zinc-600 hover:bg-zinc-200/80"
                   }`}
                 >
-                  {lang}
+                  {lang !== "All" && <LangLogo language={lang} />}
+                  <span>{lang}</span>
                 </button>
               ))}
             </div>
 
             {/* Bucket Pills */}
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1">
+              <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
                 <Filter className="h-3 w-3" /> Stars:
               </span>
               {buckets.map((b) => (
                 <button
                   key={b}
                   onClick={() => handleBucketChange(b)}
-                  className={`rounded-md px-2.5 py-1 font-mono active:scale-95 transition-all ${
+                  className={`rounded-md px-2.5 py-1 font-mono text-[11px] sm:text-xs active:scale-95 transition-all ${
                     selectedBucket === b
                       ? "bg-zinc-900 text-white shadow-xs"
                       : "bg-zinc-100/80 text-zinc-600 hover:bg-zinc-200/80"
@@ -289,24 +345,24 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Pagination Controls */}
-            <div className="flex items-center justify-between border-t border-zinc-200 pt-6 font-mono text-xs text-zinc-600">
-              <div>
+            {/* Pagination Controls Mobile Optimized */}
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-zinc-200 pt-6 font-mono text-xs text-zinc-600">
+              <div className="text-center sm:text-left">
                 Showing page <span className="font-bold text-zinc-900">{page}</span> of{" "}
                 <span className="font-bold text-zinc-900">{totalPages || 1}</span> ({totalReposCount.toLocaleString()} total)
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center gap-1.5 sm:gap-2">
                 <button
                   disabled={page <= 1}
                   onClick={() => handlePageChange(Math.max(page - 1, 1))}
-                  className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 sm:px-3 text-xs font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                 >
-                  <ChevronLeft className="h-4 w-4" />
-                  Previous
+                  <ChevronLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <span className="hidden xs:inline sm:inline">Previous</span>
                 </button>
 
-                <div className="flex items-center gap-1 px-2">
+                <div className="flex items-center gap-1 px-1">
                   {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
                     const pageNum = i + 1;
                     return (
@@ -328,10 +384,10 @@ export default function Home() {
                 <button
                   disabled={page >= totalPages}
                   onClick={() => handlePageChange(Math.min(page + 1, totalPages))}
-                  className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 sm:px-3 text-xs font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                 >
-                  Next
-                  <ChevronRight className="h-4 w-4" />
+                  <span className="hidden xs:inline sm:inline">Next</span>
+                  <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </button>
               </div>
             </div>
@@ -345,53 +401,53 @@ export default function Home() {
       </main>
 
       {/* SEO & Platform Intelligence Explanation Section */}
-      <section className="border-t border-zinc-200 bg-zinc-50/50 py-20">
+      <section className="border-t border-zinc-200 bg-zinc-50/50 py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center mb-16">
+          <div className="mx-auto max-w-3xl text-center mb-12 sm:mb-16">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1 text-xs font-mono text-emerald-700 mb-4">
               <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
               <span>Glassdoor for Open Source Repositories</span>
             </div>
-            <h2 className="text-3xl font-bold font-mono text-zinc-900 sm:text-4xl">
+            <h2 className="text-2xl sm:text-3xl font-bold font-mono text-zinc-900 lg:text-4xl">
               Stop submitting PRs to ghost towns<span className="text-emerald-600">.</span>
             </h2>
-            <p className="mt-4 text-sm sm:text-base text-zinc-600 leading-relaxed font-sans">
+            <p className="mt-4 text-xs sm:text-sm lg:text-base text-zinc-600 leading-relaxed font-sans">
               Thousands of open-source contributors waste hours writing clean pull requests only to have them sit unreviewed for months. 
-              <strong> Opendoor C-Rank™</strong> uses objective mathematical telemetry to grade repository maintainer responsiveness, merge velocity, and first-time contributor success.
+              <strong> Opendoor</strong> uses objective mathematical telemetry to grade repository maintainer responsiveness, merge velocity, and first-time contributor success.
             </p>
           </div>
 
           {/* Rich Macro Visualizations: Stacked Language-Tier Chart & Dynamic Tier Donut */}
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 mb-16 font-mono">
             {/* 1. Stacked Language Tier Distribution Bar Chart */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs flex flex-col justify-between">
+            <div className="rounded-2xl border border-zinc-200 bg-white p-4 sm:p-6 shadow-xs flex flex-col justify-between">
               <div>
-                <div className="flex items-center justify-between mb-4 border-b border-zinc-100 pb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 border-b border-zinc-100 pb-3">
                   <div>
-                    <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                      <Code2 className="h-4 w-4 text-emerald-600" />
-                      Language x C-Rank™ Tier Distribution
+                    <h3 className="text-xs sm:text-sm font-bold text-zinc-900 flex items-center gap-2">
+                      <Code2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                      Language Distribution & Maintainer Vibe
                     </h3>
                     <p className="text-[11px] text-zinc-500 font-sans mt-0.5">
-                      Proportional breakdown of open-door repositories per language by rating tier.
+                      Percentage and repo breakdown per language by contributor responsiveness.
                     </p>
                   </div>
-                  <span className="text-[10px] bg-zinc-100 px-2 py-0.5 rounded-full text-zinc-600 shrink-0">Live Matrix</span>
+                  <span className="text-[10px] bg-zinc-100 px-2 py-0.5 rounded-full text-zinc-600 shrink-0 w-max">Live Matrix</span>
                 </div>
 
-                {/* Legend */}
-                <div className="flex items-center gap-4 text-[11px] mb-5">
+                {/* Legend Flexible Wrapping */}
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[10px] sm:text-[11px] mb-5">
                   <span className="flex items-center gap-1.5 text-emerald-700 font-semibold">
-                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 inline-block" /> S Tier (Score 70+)
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block shrink-0" /> Super Welcoming
                   </span>
-                  <span className="flex items-center gap-1.5 text-emerald-600">
-                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-300 inline-block" /> A Tier (55–69)
+                  <span className="flex items-center gap-1.5 text-blue-700 font-semibold">
+                    <span className="h-2 w-2 rounded-full bg-blue-500 inline-block shrink-0" /> Welcoming
                   </span>
-                  <span className="flex items-center gap-1.5 text-amber-700">
-                    <span className="h-2.5 w-2.5 rounded-full bg-amber-400 inline-block" /> B Tier (40–54)
+                  <span className="flex items-center gap-1.5 text-amber-700 font-semibold">
+                    <span className="h-2 w-2 rounded-full bg-amber-500 inline-block shrink-0" /> Moderate
                   </span>
-                  <span className="flex items-center gap-1.5 text-zinc-500">
-                    <span className="h-2.5 w-2.5 rounded-full bg-zinc-300 inline-block" /> C Tier (25–39)
+                  <span className="flex items-center gap-1.5 text-purple-700 font-semibold">
+                    <span className="h-2 w-2 rounded-full bg-purple-500 inline-block shrink-0" /> Slow Review
                   </span>
                 </div>
 
@@ -421,42 +477,46 @@ export default function Home() {
 
                       return (
                         <div key={item.language} className="text-xs group">
-                          <div className="flex justify-between items-center text-zinc-700 mb-1.5">
-                            <span className="font-bold text-zinc-900 group-hover:text-emerald-600 transition-colors flex items-center gap-2">
+                          <div className="flex flex-col xs:flex-row xs:justify-between xs:items-center gap-1 text-zinc-700 mb-1.5">
+                            <span className="font-bold text-zinc-900 group-hover:text-emerald-600 transition-colors flex items-center gap-1.5">
+                              <LangLogo language={item.language} />
                               {item.language}
-                              <span className="text-[10px] text-emerald-600 font-mono">
-                                ({sCount} S-Class)
-                              </span>
                             </span>
-                            <span className="text-[11px] text-zinc-500 font-sans">{grandTotal} repos</span>
+                            <div className="flex flex-wrap items-center gap-1.5 text-[10px] sm:text-[11px]">
+                              <span className="text-emerald-600 font-bold">{sPct.toFixed(0)}% S</span>
+                              <span className="text-blue-600">{aPct.toFixed(0)}% A</span>
+                              <span className="text-amber-600">{bPct.toFixed(0)}% B</span>
+                              <span className="text-purple-600">{cPct.toFixed(0)}% C</span>
+                              <span className="text-zinc-400 font-sans">({grandTotal} repos)</span>
+                            </div>
                           </div>
-                          {/* Segmented Bar */}
-                          <div className="h-3.5 w-full rounded-md bg-zinc-100 overflow-hidden flex shadow-xs border border-zinc-200/50">
+                          {/* Segmented Bar with Tooltip */}
+                          <div className="h-4 w-full rounded-md bg-zinc-100 overflow-hidden flex shadow-xs border border-zinc-200/50">
                             {sPct > 0 && (
                               <div
-                                title={`S Tier: ${sCount} repos (${sPct.toFixed(1)}%)`}
-                                className="h-full bg-emerald-500 hover:brightness-110 transition-all"
+                                title={`Super Welcoming: ${sCount} repos (${sPct.toFixed(1)}%)`}
+                                className="h-full bg-emerald-500 hover:brightness-125 transition-all cursor-pointer relative"
                                 style={{ width: `${sPct}%` }}
                               />
                             )}
                             {aPct > 0 && (
                               <div
-                                title={`A Tier: ${aCount} repos (${aPct.toFixed(1)}%)`}
-                                className="h-full bg-emerald-300 hover:brightness-110 transition-all"
+                                title={`Welcoming: ${aCount} repos (${aPct.toFixed(1)}%)`}
+                                className="h-full bg-blue-500 hover:brightness-125 transition-all cursor-pointer relative"
                                 style={{ width: `${aPct}%` }}
                               />
                             )}
                             {bPct > 0 && (
                               <div
-                                title={`B Tier: ${bCount} repos (${bPct.toFixed(1)}%)`}
-                                className="h-full bg-amber-400 hover:brightness-110 transition-all"
+                                title={`Moderate: ${bCount} repos (${bPct.toFixed(1)}%)`}
+                                className="h-full bg-amber-500 hover:brightness-125 transition-all cursor-pointer relative"
                                 style={{ width: `${bPct}%` }}
                               />
                             )}
                             {cPct > 0 && (
                               <div
-                                title={`C Tier: ${cCount} repos (${cPct.toFixed(1)}%)`}
-                                className="h-full bg-zinc-300 hover:brightness-110 transition-all"
+                                title={`Slow Review: ${cCount} repos (${cPct.toFixed(1)}%)`}
+                                className="h-full bg-purple-500 hover:brightness-125 transition-all cursor-pointer relative"
                                 style={{ width: `${cPct}%` }}
                               />
                             )}
@@ -468,31 +528,30 @@ export default function Home() {
               </div>
 
               <div className="mt-6 pt-3 border-t border-zinc-100 flex items-center justify-between text-[11px] text-zinc-400 font-sans">
-                <span>Hover stacked segments to inspect exact repo counts per tier.</span>
+                <span>Hover stacked segments to inspect exact repo counts per vibe tier.</span>
               </div>
             </div>
 
-            {/* 2. Global C-Rank Donut Visualization & Tier Cards */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs flex flex-col justify-between">
+            {/* 2. Global Rating Composition Donut Visualization & Tier Cards */}
+            <div className="rounded-2xl border border-zinc-200 bg-white p-4 sm:p-6 shadow-xs flex flex-col justify-between">
               <div>
-                <div className="flex items-center justify-between mb-4 border-b border-zinc-100 pb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 border-b border-zinc-100 pb-3">
                   <div>
-                    <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                      <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                      Global Rating Tier Composition
+                    <h3 className="text-xs sm:text-sm font-bold text-zinc-900 flex items-center gap-2">
+                      <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+                      Global Contributor Vibe Composition
                     </h3>
                     <p className="text-[11px] text-zinc-500 font-sans mt-0.5">
-                      Platform-wide ratio of S, A, B, and C Class Open Doors.
+                      Platform-wide ratio of open-source repository responsiveness tiers.
                     </p>
                   </div>
-                  <span className="text-[10px] bg-zinc-100 px-2 py-0.5 rounded-full text-zinc-600 shrink-0">1,200 Repos</span>
+                  <span className="text-[10px] bg-zinc-100 px-2 py-0.5 rounded-full text-zinc-600 shrink-0 w-max">1,200 Repos</span>
                 </div>
 
-                {/* SVG Donut Ring */}
-                <div className="my-6 flex flex-col sm:flex-row items-center justify-center gap-8">
-                  <div className="relative flex items-center justify-center">
-                    <svg className="h-36 w-36 -rotate-90 transform" viewBox="0 0 36 36">
-                      {/* Background Track */}
+                {/* SVG Donut Ring with Synchronized Colors */}
+                <div className="my-6 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8">
+                  <div className="relative flex items-center justify-center shrink-0">
+                    <svg className="h-32 w-32 sm:h-36 sm:w-36 -rotate-90 transform" viewBox="0 0 36 36">
                       <path
                         className="text-zinc-100"
                         strokeWidth="3.8"
@@ -500,7 +559,7 @@ export default function Home() {
                         fill="none"
                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                       />
-                      {/* S Tier Stroke */}
+                      {/* Super Welcoming (Emerald) */}
                       <path
                         className="text-emerald-500 transition-all duration-1000"
                         strokeDasharray="18, 100"
@@ -510,9 +569,9 @@ export default function Home() {
                         fill="none"
                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                       />
-                      {/* A Tier Stroke */}
+                      {/* Welcoming (Blue) */}
                       <path
-                        className="text-emerald-300 transition-all duration-1000"
+                        className="text-blue-500 transition-all duration-1000"
                         strokeDasharray="32, 100"
                         strokeDashoffset="-18"
                         strokeWidth="3.8"
@@ -521,9 +580,9 @@ export default function Home() {
                         fill="none"
                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                       />
-                      {/* B Tier Stroke */}
+                      {/* Moderate (Amber) */}
                       <path
-                        className="text-amber-400 transition-all duration-1000"
+                        className="text-amber-500 transition-all duration-1000"
                         strokeDasharray="35, 100"
                         strokeDashoffset="-50"
                         strokeWidth="3.8"
@@ -534,52 +593,52 @@ export default function Home() {
                       />
                     </svg>
                     <div className="absolute text-center">
-                      <div className="text-xl font-bold font-mono text-zinc-900">
+                      <div className="text-lg sm:text-xl font-bold font-mono text-zinc-900">
                         {stats?.s_class_count !== undefined ? stats.s_class_count : 65}
                       </div>
-                      <div className="text-[10px] font-mono text-emerald-600 font-semibold uppercase">S-Class</div>
+                      <div className="text-[9px] sm:text-[10px] font-mono text-emerald-600 font-semibold uppercase">Super Welcoming</div>
                     </div>
                   </div>
 
-                  {/* Tier Cards Grid */}
-                  <div className="grid grid-cols-2 gap-3 text-xs w-full max-w-xs">
-                    <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-2.5">
-                      <div className="text-[10px] text-emerald-800 font-bold">S CLASS DOOR</div>
-                      <div className="text-lg font-bold text-emerald-950 mt-0.5">
+                  {/* Tier Cards Grid with Human-Friendly Lingo */}
+                  <div className="grid grid-cols-2 gap-2.5 sm:gap-3 text-xs w-full max-w-xs">
+                    <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-2 sm:p-2.5">
+                      <div className="text-[9px] sm:text-[10px] text-emerald-800 font-bold uppercase truncate">Super Welcoming</div>
+                      <div className="text-base sm:text-lg font-bold text-emerald-950 mt-0.5">
                         {stats?.s_class_count !== undefined ? stats.s_class_count : stats?.rank_counts?.["S"] || 65}
                       </div>
                       <div className="text-[9px] text-emerald-700 font-sans">Score 70–100</div>
                     </div>
 
-                    <div className="rounded-xl border border-emerald-200/60 bg-emerald-50/20 p-2.5">
-                      <div className="text-[10px] text-emerald-600 font-bold">A CLASS DOOR</div>
-                      <div className="text-lg font-bold text-zinc-900 mt-0.5">
+                    <div className="rounded-xl border border-blue-200 bg-blue-50/60 p-2 sm:p-2.5">
+                      <div className="text-[9px] sm:text-[10px] text-blue-800 font-bold uppercase truncate">Welcoming</div>
+                      <div className="text-base sm:text-lg font-bold text-blue-950 mt-0.5">
                         {stats?.rank_counts?.["A"] || 185}
                       </div>
-                      <div className="text-[9px] text-zinc-500 font-sans">Score 55–69</div>
+                      <div className="text-[9px] text-blue-700 font-sans">Score 55–69</div>
                     </div>
 
-                    <div className="rounded-xl border border-amber-200/80 bg-amber-50/30 p-2.5">
-                      <div className="text-[10px] text-amber-700 font-bold">B CLASS DOOR</div>
-                      <div className="text-lg font-bold text-zinc-900 mt-0.5">
+                    <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-2 sm:p-2.5">
+                      <div className="text-[9px] sm:text-[10px] text-amber-800 font-bold uppercase truncate">Moderate</div>
+                      <div className="text-base sm:text-lg font-bold text-amber-950 mt-0.5">
                         {stats?.rank_counts?.["B"] || 354}
                       </div>
-                      <div className="text-[9px] text-zinc-500 font-sans">Score 40–54</div>
+                      <div className="text-[9px] text-amber-700 font-sans">Score 40–54</div>
                     </div>
 
-                    <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-2.5">
-                      <div className="text-[10px] text-zinc-500 font-bold">C CLASS DOOR</div>
-                      <div className="text-lg font-bold text-zinc-900 mt-0.5">
+                    <div className="rounded-xl border border-purple-200 bg-purple-50/60 p-2 sm:p-2.5">
+                      <div className="text-[9px] sm:text-[10px] text-purple-800 font-bold uppercase truncate">Slow Review</div>
+                      <div className="text-base sm:text-lg font-bold text-purple-950 mt-0.5">
                         {stats?.rank_counts?.["C"] || 246}
                       </div>
-                      <div className="text-[9px] text-zinc-500 font-sans">Score 25–39</div>
+                      <div className="text-[9px] text-purple-700 font-sans">Score 25–39</div>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="pt-3 border-t border-zinc-100 flex items-center justify-between text-[11px] text-zinc-400 font-sans">
-                <span>D-Class (score &lt; 25 or unmaintained) are automatically filtered out.</span>
+                <span>Unmaintained repositories (score &lt; 25) are automatically filtered out.</span>
               </div>
             </div>
           </div>

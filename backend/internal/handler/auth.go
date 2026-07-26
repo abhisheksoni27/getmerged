@@ -115,14 +115,14 @@ func GitHubOAuthCallback(cfg *config.Config) gin.HandlerFunc {
 			return
 		}
 
-		// Set Production-grade Secure, HttpOnly, SameSite=Lax authentication cookie
+		// Set authentication cookie
 		isSecure := cfg.GinMode == "release"
 		http.SetCookie(c.Writer, &http.Cookie{
 			Name:     "opendoor_token",
 			Value:    signedToken,
 			Path:     "/",
 			MaxAge:   7 * 24 * 3600,
-			HttpOnly: true,
+			HttpOnly: false,
 			Secure:   isSecure,
 			SameSite: http.SameSiteLaxMode,
 		})

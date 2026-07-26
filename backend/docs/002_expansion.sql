@@ -1,9 +1,9 @@
 -- 002_expansion.sql: Database schema expansion for Opendoor
 
--- 1. Star buckets & trending indicators on repos
-ALTER TABLE repos ADD COLUMN star_bucket TEXT DEFAULT '1k-5k';
-ALTER TABLE repos ADD COLUMN is_trending BOOLEAN DEFAULT FALSE;
-ALTER TABLE repos ADD COLUMN last_trending_at DATETIME;
+-- 1. Star buckets & trending indicators on repositories
+ALTER TABLE repositories ADD COLUMN star_bucket TEXT DEFAULT '1k-5k';
+ALTER TABLE repositories ADD COLUMN is_trending BOOLEAN DEFAULT FALSE;
+ALTER TABLE repositories ADD COLUMN last_trending_at DATETIME;
 
 -- 2. AI Insights Cache Table
 CREATE TABLE IF NOT EXISTS repo_ai_insights (
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS repo_ai_insights (
     issue_quality_score REAL DEFAULT 0.0,
     raw_summary TEXT,
     updated_at DATETIME NOT NULL,
-    FOREIGN KEY(repo_id) REFERENCES repos(id) ON DELETE CASCADE
+    FOREIGN KEY(repo_id) REFERENCES repositories(id) ON DELETE CASCADE
 );
 
 -- 3. Macro Statistics Cache Table
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS user_watchlists (
     created_at DATETIME NOT NULL,
     PRIMARY KEY(user_id, repo_id),
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY(repo_id) REFERENCES repos(id) ON DELETE CASCADE
+    FOREIGN KEY(repo_id) REFERENCES repositories(id) ON DELETE CASCADE
 );
 
 -- 6. Notification Queue Table

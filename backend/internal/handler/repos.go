@@ -149,6 +149,17 @@ func ListRepos(c *gin.Context) {
 		}
 	}
 
+	tierParam := strings.ToUpper(strings.TrimSpace(c.Query("tier")))
+	if tierParam != "" {
+		whereParts = append(whereParts, "UPPER(s.c_rank_tier) = ?")
+		args = append(args, tierParam)
+	}
+
+	trendingParam := strings.TrimSpace(c.Query("trending"))
+	if trendingParam == "true" || trendingParam == "1" {
+		whereParts = append(whereParts, "r.is_trending = TRUE")
+	}
+
 	where := strings.Join(whereParts, " AND ")
 
 	// Validate sort column

@@ -59,6 +59,7 @@ func main() {
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
 
+	r.Use(middleware.CORS())
 	r.Use(middleware.DB(database))
 	r.Use(cacheMiddleware)
 
