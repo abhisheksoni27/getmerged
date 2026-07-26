@@ -388,7 +388,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <p>
               Currently, maintainers of {fullName} acknowledge new external contributions in approximately{" "}
               <strong className="text-zinc-900">{responseTimeStr}</strong>. Out of all submitted pull requests from non-core authors in the last 180-day window,{" "}
-              <strong className="text-zinc-900">{mergeRateDisplay}</strong> were successfully merged into the primary branch.
+              <strong className="text-zinc-900">{mergeRateStr}</strong> were successfully merged into the primary branch.
             </p>
           </div>
         </section>
@@ -405,7 +405,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 Is {fullName} welcoming to first-time open-source contributors?
               </h3>
               <p className="text-xs text-zinc-600 leading-relaxed">
-                {fullName} has a recorded first-timer success rate of <strong>{firstTimerRateDisplay}</strong>. Repositories ranked Tier S or Tier A typically have maintainers who provide constructive feedback on initial PRs and label beginner-friendly issues.
+                {fullName} has a recorded first-timer success rate of <strong>{firstTimerSuccessStr}</strong>. Repositories ranked Tier S or Tier A typically have maintainers who provide constructive feedback on initial PRs and label beginner-friendly issues.
               </p>
             </div>
 
