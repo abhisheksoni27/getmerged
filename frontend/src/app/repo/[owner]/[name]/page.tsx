@@ -72,9 +72,58 @@ export default async function RepoDetailPage({ params }: PageProps) {
   // Server-Side Data Fetching -> Pure SSR
   const repo = await getRepoData(fullName);
 
+  // Schema.org JSON-LD Structured Data
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    name: fullName,
+    description: repo?.description || "Public open-source repository",
+    programmingLanguage: repo?.language || "Multi-Language",
+    codeRepository: repo?.github_url || `https://github.com/${fullName}`,
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: (repo?.c_rank_score || 75.0) / 20, // 1 to 5 scale
+      bestRating: "5",
+      worstRating: "1",
+      ratingCount: repo?.stars || 100,
+    },
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `How fast do maintainers respond in ${fullName}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `Maintainers in ${fullName} have an average response time of ~${(repo?.time_to_first_response_hours || 0).toFixed(1)} hours for pull requests.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `What is the PR merge rate for ${fullName}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `The external pull request merge rate for ${fullName} is ${((repo?.external_pr_merge_rate || 0) * 100).toFixed(1)}%.`,
+        },
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen dot-pattern flex flex-col bg-white overflow-x-hidden">
       <Header />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <link rel="alternate" type="text/markdown" href={`/repo/${owner}/${name}/raw`} />
       <ClientRepoDetail repo={repo} fullName={fullName} />
     </div>
   );
