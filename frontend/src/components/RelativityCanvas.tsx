@@ -99,12 +99,33 @@ export function RelativityCanvas() {
         p.x += p.vx;
         p.y += p.vy;
 
-        // Draw distorted spacetime particle star dot
+        // Draw distorted spacetime particle star dot with emerald gravitational glow near cursor
+        const isNear = distance < mouse.radius;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(161, 161, 170, ${p.opacity})`;
+        ctx.arc(p.x, p.y, isNear ? p.size * 1.8 : p.size, 0, Math.PI * 2);
+        ctx.fillStyle = isNear ? `rgba(16, 185, 129, ${p.opacity + 0.4})` : `rgba(161, 161, 170, ${p.opacity})`;
         ctx.fill();
       });
+
+      // Draw constellation connecting lines between distorted particles near cursor
+      for (let i = 0; i < particles.length; i += 3) {
+        const p1 = particles[i];
+        const distToMouse = Math.hypot(mouse.x - p1.x, mouse.y - p1.y);
+        if (distToMouse < 140) {
+          for (let j = i + 1; j < particles.length; j += 3) {
+            const p2 = particles[j];
+            const distBetween = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+            if (distBetween < 45) {
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(16, 185, 129, ${(1 - distBetween / 45) * 0.25})`;
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+        }
+      }
 
       animationFrameId = requestAnimationFrame(render);
     };

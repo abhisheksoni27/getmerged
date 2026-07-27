@@ -1,12 +1,14 @@
 package pipeline
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log/slog"
 	"strings"
 	"time"
 
+	"github.com/abhisheksoni27/opendoor/internal/analytics"
 	"github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/google/uuid"
@@ -14,11 +16,15 @@ import (
 )
 
 // SeedLanguages is the default set of languages to seed.
-var SeedLanguages = []string{"Go", "Python", "JavaScript", "TypeScript", "Java", "PHP", "Rust", "Kotlin", "Shell", "C++", "Dart", "Swift"}
+var SeedLanguages = []string{
+	"Go", "Python", "JavaScript", "TypeScript", "Java", "PHP", "Rust",
+	"Kotlin", "Shell", "C++", "Dart", "Swift", "Elixir", "Zig", "Scala",
+	"Haskell", "C#", "Lua", "OCaml", "Julia",
+}
 
 const (
 	seedMinStars = 100
-	seedMaxRepos = 300
+	seedMaxRepos = 1000
 )
 
 // Seed fetches top repos per language, upserts them, and scores them.
@@ -74,6 +80,25 @@ func Seed(db *sqlx.DB, gh *github.Client, languages []string, force bool) error 
 		}
 
 		slog.Info("seed: language complete", "language", lang, "scored", scored, "skipped", skipped, "failed", failed)
+	}
+
+	// Issue #11 Fix: Recalculate macro stats after seed data completes
+	ctx := context.Background()
+	if _, err := analytics.ComputeAndCacheMacroStats(ctx, db); err != nil {
+		slog.Error("seed: failed to recalculate macro stats after seed", "err", err)
+	} else {
+		slog.Info("seed: macro stats updated successfully")
+	}
+
+	// Issue #10 Fix: Purge Valkey cache after seed finishes
+	if vk := gh.Valkey(); vk != nil {
+		if keys, err := vk.Do(ctx, vk.B().Smembers().Key("apicache:tag:get_repos").Build()).AsStrSlice(); err == nil {
+			for _, k := range keys {
+				_ = vk.Do(ctx, vk.B().Del().Key(k).Build())
+			}
+			_ = vk.Do(ctx, vk.B().Del().Key("apicache:tag:get_repos").Build())
+			slog.Info("seed: purged cache by tag 'get_repos' successfully", "count", len(keys))
+		}
 	}
 
 	slog.Info("seed completed successfully")

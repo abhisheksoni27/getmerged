@@ -61,6 +61,7 @@ type RawMetrics struct {
 	LastActivityDays          float64 // days since last merged PR (lower = better)
 	ReviewRounds              float64 // median review comments per merged PR (lower = better)
 	DistinctMaintainerCount   float64 // number of distinct maintainers commenting on PRs (higher = better)
+	TotalContributors         float64 // number of distinct external authors submitting PRs (higher = better)
 	StalenessFlag             bool
 }
 
@@ -171,6 +172,7 @@ func ComputeMetrics(prs []PR, issues []Issue, staleness bool) RawMetrics {
 		LastActivityDays:        lastActivityDays,
 		ReviewRounds:            median(reviewCounts),
 		DistinctMaintainerCount: float64(len(maintainerSet)),
+		TotalContributors:       float64(len(allContributors)),
 	}
 
 	if externalClosed > 0 {
@@ -179,6 +181,9 @@ func ComputeMetrics(prs []PR, issues []Issue, staleness bool) RawMetrics {
 
 	if len(firstTimersSeen) > 0 {
 		m.FirstTimerSuccessRate = float64(len(firstTimers)) / float64(len(firstTimersSeen)) * 100
+	} else if externalClosed > 0 {
+		// Fallback for repositories where GitHub AuthorAssociation tag is unpopulated or missing
+		m.FirstTimerSuccessRate = m.ExternalPRMergeRate
 	}
 
 	repeats := 0

@@ -21,6 +21,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
+import posthog from "posthog-js";
 
 export default function Home() {
   const [repos, setRepos] = useState<Repo[]>([]);
@@ -28,6 +29,7 @@ export default function Home() {
   const [selectedLang, setSelectedLang] = useState<string>("All");
   const [selectedBucket, setSelectedBucket] = useState<string>("All");
   const [selectedTier, setSelectedTier] = useState<string>("All");
+  const [selectedMinMergeRate, setSelectedMinMergeRate] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [trendingOnly, setTrendingOnly] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,10 +42,11 @@ export default function Home() {
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalReposCount, setTotalReposCount] = useState<number>(0);
-  const perPage = 9; // 3 rows of 3 columns (3x3 grid)
+  const perPage = 15; // Limit to maximum 15 rows of repos on home page
 
-  const languages = ["All", "Go", "TypeScript", "Python", "Rust", "C++", "Java", "PHP", "Ruby", "Dart", "Kotlin"];
+  const languages = ["All", "Go", "TypeScript", "Python", "Rust", "C++", "Java", "PHP", "Ruby", "Dart", "Kotlin", "Elixir", "Zig", "Scala"];
   const buckets = ["All", "500-1k", "1k-5k", "5k-20k", "20k-50k", "50k+"];
+  const mergeRateOptions = ["All", ">75% Merged", ">50% Merged", ">25% Merged"];
   const tiers = [
     { label: "All", value: "All" },
     { label: "Super Welcoming", value: "S" },
@@ -85,6 +88,10 @@ export default function Home() {
     if (selectedTier !== "All") {
       params.set("tier", selectedTier);
     }
+    if (selectedMinMergeRate !== "All") {
+      const val = selectedMinMergeRate.replace(/[^0-9]/g, "");
+      if (val) params.set("min_merge_rate", val);
+    }
     if (trendingOnly) {
       params.set("trending", "true");
     }
@@ -120,12 +127,29 @@ export default function Home() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      fetchRepos();
+      fetchRepos().then(() => {
+        // Issue #27 Fix: Restore scroll position when returning from repo details
+        const savedY = sessionStorage.getItem("opendoor_scroll_pos");
+        if (savedY) {
+          window.scrollTo({ top: parseInt(savedY, 10), behavior: "instant" });
+          sessionStorage.removeItem("opendoor_scroll_pos");
+        }
+      });
     }, 0);
     return () => clearTimeout(timer);
   }, [fetchRepos]);
 
   useEffect(() => {
+    // Save scroll position on window scroll
+    const handleScroll = () => {
+      sessionStorage.setItem("opendoor_scroll_pos", window.scrollY.toString());
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    // Issue #28 Fix: Pre-fetch macro stats to prevent layout flicker
     fetch(`${API_BASE_URL}/api/v1/stats/macro`)
       .then((res) => res.json())
       .then((data) => {
@@ -138,36 +162,46 @@ export default function Home() {
     setLoading(true);
     setSelectedLang(lang);
     setPage(1); // Revert to page 1 on filter change
+    posthog.capture('repo_filter_applied', { filter_type: 'language', value: lang });
   };
 
   const handleBucketChange = (bucket: string) => {
     setLoading(true);
     setSelectedBucket(bucket);
     setPage(1); // Revert to page 1 on filter change
+    posthog.capture('repo_filter_applied', { filter_type: 'star_bucket', value: bucket });
   };
 
   const handleTierChange = (tierVal: string) => {
     setLoading(true);
     setSelectedTier(tierVal);
     setPage(1); // Revert to page 1 on filter change
+    posthog.capture('repo_filter_applied', { filter_type: 'tier', value: tierVal });
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
-    setSearchQuery(e.target.value);
+    const query = e.target.value;
+    setSearchQuery(query);
     setPage(1); // Revert to page 1 on search change
+    if (query.trim()) {
+      posthog.capture('repo_searched', { query: query.trim() });
+    }
   };
 
   const handleTrendingToggle = () => {
     setLoading(true);
-    setTrendingOnly(!trendingOnly);
+    const next = !trendingOnly;
+    setTrendingOnly(next);
     setPage(1); // Revert to page 1 on trending toggle
+    posthog.capture('trending_toggled', { enabled: next });
   };
 
   const handlePageChange = (newPage: number) => {
     setLoading(true);
     setPage(newPage);
     window.scrollTo({ top: 400, behavior: "smooth" });
+    posthog.capture('pagination_changed', { page: newPage, total_pages: totalPages });
   };
 
   return (
@@ -178,10 +212,10 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative mx-auto max-w-5xl px-4 pt-16 pb-12 text-center sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-6xl font-mono">
-          Don&apos;t guess which door is open<span className="text-emerald-600">.</span>
+          Find open-source repos that <span className="text-emerald-600">actually merge</span> your PRs.
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-base text-zinc-600 sm:text-lg leading-relaxed">
-          Opendoor shows you public GitHub repositories where your pull requests are actually welcomed, reviewed fast, and merged.
+        <p className="mx-auto mt-4 max-w-3xl text-base text-zinc-600 sm:text-lg leading-relaxed font-sans">
+          Think of it as <strong>Glassdoor for open-source</strong>: opendoor scores public GitHub repositories using proprietary <strong>C-Rank™</strong> metrics based on objective PR merge rates, response speeds, and first-timer maintainer vibes.
         </p>
 
         {/* Macro Metrics Bar */}
@@ -518,10 +552,13 @@ export default function Home() {
                               <span className="font-mono text-[11px] font-bold text-zinc-400 min-w-[24px]">
                                 {rankMedal}
                               </span>
-                              <span className="font-bold text-zinc-900 group-hover:text-emerald-600 transition-colors flex items-center gap-1.5">
+                              <Link
+                                href={`/rankings/${item.language.toLowerCase()}`}
+                                className="font-bold text-zinc-900 hover:text-emerald-600 transition-colors flex items-center gap-1.5"
+                              >
                                 <LangLogo language={item.language} />
                                 {item.language}
-                              </span>
+                              </Link>
                             </div>
 
                             <div className="flex items-center gap-2">
@@ -741,6 +778,7 @@ export default function Home() {
             </div>
             <a
               href={`${API_BASE_URL}/api/v1/auth/github`}
+              onClick={() => posthog.capture('github_sign_in_clicked', { source: 'homepage_cta_banner' })}
               className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-mono text-xs font-bold text-zinc-900 hover:bg-zinc-100 active:scale-95 transition-all shadow-md shrink-0"
             >
               <span>Sign in with GitHub</span>
