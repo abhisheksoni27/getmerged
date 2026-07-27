@@ -2,13 +2,10 @@
 
 import React, { useEffect, useRef } from "react";
 
-interface Particle {
+interface Ball {
   x: number;
   y: number;
-  originX: number;
-  originY: number;
-  size: number;
-  opacity: number;
+  r: number;
   vx: number;
   vy: number;
 }
@@ -27,84 +24,44 @@ export function RelativityCanvas() {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    const particles: Particle[] = [];
-    const spacing = 24; // Less gap between dots
-    const mouse = { x: -1000, y: -1000, radius: 140 };
+    // Lots of tiny gray balls — density scales with viewport area
+    const count = Math.min(400, Math.floor((width * height) / 5000));
+    const balls: Ball[] = [];
 
-    // Populate relativity grid particles
-    for (let x = 0; x < width; x += spacing) {
-      for (let y = 0; y < height; y += spacing) {
-        particles.push({
-          x,
-          y,
-          originX: x,
-          originY: y,
-          size: 1.0,
-          opacity: 0.18,
-          vx: 0,
-          vy: 0,
-        });
-      }
+    for (let i = 0; i < count; i++) {
+      balls.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 1.8 + 0.4,          // 0.4–2.2 px radius
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+      });
     }
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-    };
-
-    const handleMouseLeave = () => {
-      mouse.x = -1000;
-      mouse.y = -1000;
-    };
 
     const handleResize = () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseleave", handleMouseLeave);
     window.addEventListener("resize", handleResize);
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      particles.forEach((p) => {
-        const dx = mouse.x - p.x;
-        const dy = mouse.y - p.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+      for (const b of balls) {
+        b.x += b.vx;
+        b.y += b.vy;
 
-        // General relativity spacetime distortion force
-        if (distance < mouse.radius) {
-          const force = (mouse.radius - distance) / mouse.radius;
-          const angle = Math.atan2(dy, dx);
-          const pushX = Math.cos(angle) * force * 20;
-          const pushY = Math.sin(angle) * force * 20;
+        // Wrap around edges
+        if (b.x < 0) b.x = width;
+        if (b.x > width) b.x = 0;
+        if (b.y < 0) b.y = height;
+        if (b.y > height) b.y = 0;
 
-          p.vx -= pushX * 0.08;
-          p.vy -= pushY * 0.08;
-        }
-
-        // Gravitational elastic return force back to grid origin
-        const returnDx = p.originX - p.x;
-        const returnDy = p.originY - p.y;
-        p.vx += returnDx * 0.05;
-        p.vy += returnDy * 0.05;
-
-        // Friction damping
-        p.vx *= 0.85;
-        p.vy *= 0.85;
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        // Subtle background gray dots behind scenes
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(161, 161, 170, ${p.opacity})`;
+        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(160, 160, 160, 0.45)";
         ctx.fill();
-      });
+      }
 
       animationFrameId = requestAnimationFrame(render);
     };
@@ -112,8 +69,6 @@ export function RelativityCanvas() {
     render();
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseleave", handleMouseLeave);
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
     };
@@ -122,7 +77,7 @@ export function RelativityCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-0 h-full w-full opacity-40"
+      className="pointer-events-none fixed inset-0 z-0 h-full w-full"
     />
   );
 }

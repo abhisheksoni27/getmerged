@@ -19,7 +19,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="border-t border-zinc-200 bg-zinc-950 text-zinc-400 font-sans pt-12 pb-8">
+    <footer className="border-t border-zinc-800 bg-zinc-950 text-zinc-400 font-sans pt-12 pb-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 pb-12 border-b border-zinc-800 font-mono text-xs">
           {/* Column 1: Brand & Tagline */}

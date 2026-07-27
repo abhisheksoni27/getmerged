@@ -181,9 +181,6 @@ func ComputeMetrics(prs []PR, issues []Issue, staleness bool) RawMetrics {
 
 	if len(firstTimersSeen) > 0 {
 		m.FirstTimerSuccessRate = float64(len(firstTimers)) / float64(len(firstTimersSeen)) * 100
-	} else if externalClosed > 0 {
-		// Fallback for repositories where GitHub AuthorAssociation tag is unpopulated or missing
-		m.FirstTimerSuccessRate = m.ExternalPRMergeRate
 	}
 
 	repeats := 0

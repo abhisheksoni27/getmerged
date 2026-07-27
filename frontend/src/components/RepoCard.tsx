@@ -61,20 +61,12 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
     return "<500";
   };
 
-  // Humanize response time into clean buckets: <1h, ~18h, ~2d, ~1w, ~3w, ~2mo
   const formatResponseBucket = (hours?: number): string => {
-    if (hours === undefined || hours === null || hours <= 0) return "No review data";
-    if (hours < 1) return "< 1h response";
-    if (hours < 24) return `~${Math.round(hours)}h response`;
-
-    const days = Math.round(hours / 24);
-    if (days < 7) return `~${days}d response`;
-
-    const weeks = Math.round(days / 7);
-    if (weeks < 4) return `~${weeks}w response`;
-
-    const months = Math.round(days / 30);
-    return `~${months}mo response`;
+    if (!hours) return "Unknown response time";
+    if (hours < 1) return "<1h response";
+    if (hours < 24) return `~${Math.floor(hours)}h response`;
+    const days = Math.floor(hours / 24);
+    return `~${days}d+ response`;
   };
 
   const responseTimeDisplay = formatResponseBucket(repo.time_to_first_response_hours);
@@ -97,7 +89,7 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
     <Link
       href={`/repo/${ownerPart}/${namePart}`}
       onClick={handleClick}
-      className="group relative flex flex-col justify-between rounded-xl border border-zinc-200/90 bg-white p-5 shadow-xs hover:border-zinc-300 hover:shadow-md transition-all duration-200 block text-current no-underline"
+      className="group relative flex flex-col justify-between rounded-xl border border-zinc-200 bg-white p-5 shadow-xs hover:border-zinc-300 hover:shadow-md transition-all duration-200 block text-current no-underline"
     >
       {/* Top Meta Bar */}
       <div>
@@ -124,7 +116,7 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
         </div>
 
         {/* Description */}
-        <p className="text-xs text-zinc-600 line-clamp-2 leading-relaxed mb-4">
+        <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed mb-4">
           {repo.description || "No description provided."}
         </p>
       </div>
@@ -163,11 +155,11 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
 
         {/* Footer Tags */}
         <div className="mt-3 flex items-center justify-between text-[11px] text-zinc-400 font-mono">
-          <span className="flex items-center gap-1.5 text-zinc-700 font-medium">
+          <span className="flex items-center gap-1.5 text-zinc-400 font-medium">
             <LangLogo language={repo.language} />
             {repo.language || "Other"}
           </span>
-          <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-zinc-600 font-sans">
+          <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-zinc-500 font-sans">
             {getStarBucket(repo.stars, repo.star_bucket)} stars
           </span>
         </div>

@@ -35,6 +35,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [isWatching, setIsWatching] = useState(false);
   const [watchLoading, setWatchLoading] = useState(false);
   const [insights, setInsights] = useState<AIInsights | null>(null);
+  const [hoveredMetric, setHoveredMetric] = useState<string | null>(null);
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+  const [feedbackError, setFeedbackError] = useState<string | null>(null);
+  const [isVerifiedContributor, setIsVerifiedContributor] = useState(false);
 
   const rank = repo?.class_rank || repo?.c_rank_tier || "A";
   const score = repo?.c_rank_score || repo?.score || 78.5;
@@ -115,12 +119,13 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
     }
   };
 
-  // Humanize metric values
   const responseTimeStr =
     repo?.time_to_first_response_hours !== undefined && repo.time_to_first_response_hours > 0
       ? repo.time_to_first_response_hours < 1
-        ? `${Math.round(repo.time_to_first_response_hours * 60)} min`
-        : `${repo.time_to_first_response_hours.toFixed(1)} hours`
+        ? "<1 hour"
+        : repo.time_to_first_response_hours < 24
+        ? `${Math.floor(repo.time_to_first_response_hours)} hours`
+        : `${Math.floor(repo.time_to_first_response_hours / 24)} days+`
       : "—";
 
   const responseCommentary =
@@ -320,91 +325,148 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center gap-8 justify-between">
-          <div className="relative flex items-center justify-center h-44 w-44 shrink-0">
-            <svg viewBox="0 0 100 100" className="h-full w-full transform -rotate-90">
-              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#f4f4f5" strokeWidth="16" />
-              <circle
-                cx="50"
-                cy="50"
-                r="40"
-                fill="transparent"
-                stroke="#10b981"
-                strokeWidth="16"
-                strokeDasharray="100.5 150.8"
-                strokeDashoffset="0"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="40"
-                fill="transparent"
-                stroke="#2563eb"
-                strokeWidth="16"
-                strokeDasharray="75.4 175.9"
-                strokeDashoffset="-100.5"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="40"
-                fill="transparent"
-                stroke="#d97706"
-                strokeWidth="16"
-                strokeDasharray="45.2 206.1"
-                strokeDashoffset="-175.9"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="40"
-                fill="transparent"
-                stroke="#9333ea"
-                strokeWidth="16"
-                strokeDasharray="30.1 221.2"
-                strokeDashoffset="-221.1"
-              />
-            </svg>
-            <div className="absolute flex flex-col items-center justify-center text-center">
-              <span className="text-2xl font-bold text-zinc-900">{score.toFixed(0)}</span>
-              <span className="text-[10px] text-zinc-400 uppercase tracking-wider">C-Rank</span>
-            </div>
-          </div>
+        {(() => {
+          const circumference = 2 * Math.PI * 40; // ~251.3
+          const mergeArc = circumference * 0.40;
+          const responseArc = circumference * 0.30;
+          const firstTimerArc = circumference * 0.18;
+          const slowReviewArc = circumference * 0.12;
+          const gap = circumference - mergeArc - responseArc - firstTimerArc - slowReviewArc;
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 w-full text-xs">
-            <div className="flex items-center justify-between p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/60">
-              <div className="flex items-center gap-2.5">
-                <span className="h-3 w-3 rounded-full bg-emerald-500 shrink-0" />
-                <span className="font-semibold text-zinc-800">External Merge Weight</span>
-              </div>
-              <span className="font-mono font-bold text-zinc-600">40% Weight</span>
-            </div>
+          const responseContrib = repo?.time_to_first_response_hours
+            ? Math.max(0, (1 - Math.min(repo.time_to_first_response_hours, 168) / 168) * 30)
+            : 0;
+          const mergeContrib = ((repo?.external_pr_merge_rate || 0) / 100) * 40;
+          const firstTimerContrib = ((repo?.first_timer_success_rate || 0) / 100) * 18;
+          const slowReviewContrib = (() => {
+            const r = rank;
+            if (r === "S") return 12;
+            if (r === "A") return 9.6;
+            if (r === "B") return 7.2;
+            if (r === "C") return 4.8;
+            return 2.4;
+          })();
 
-            <div className="flex items-center justify-between p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/60">
-              <div className="flex items-center gap-2.5">
-                <span className="h-3 w-3 rounded-full bg-blue-600 shrink-0" />
-                <span className="font-semibold text-zinc-800">Response Speed Weight</span>
+          return (
+            <div className="flex flex-col md:flex-row items-center gap-8 justify-between">
+              <div className="relative flex items-center justify-center h-44 w-44 shrink-0">
+                <svg viewBox="0 0 100 100" className="h-full w-full transform -rotate-90">
+                  <circle cx="50" cy="50" r="40" fill="transparent" stroke="#f4f4f5" strokeWidth="16" />
+                  <circle
+                    cx="50" cy="50" r="40" fill="transparent"
+                    stroke="#10b981" strokeWidth="16"
+                    strokeDasharray={`${mergeArc} ${circumference - mergeArc}`}
+                    strokeDashoffset="0"
+                  />
+                  <circle
+                    cx="50" cy="50" r="40" fill="transparent"
+                    stroke="#2563eb" strokeWidth="16"
+                    strokeDasharray={`${responseArc} ${circumference - responseArc}`}
+                    strokeDashoffset={`${-mergeArc}`}
+                  />
+                  <circle
+                    cx="50" cy="50" r="40" fill="transparent"
+                    stroke="#d97706" strokeWidth="16"
+                    strokeDasharray={`${firstTimerArc} ${circumference - firstTimerArc}`}
+                    strokeDashoffset={`${-(mergeArc + responseArc)}`}
+                  />
+                  <circle
+                    cx="50" cy="50" r="40" fill="transparent"
+                    stroke="#9333ea" strokeWidth="16"
+                    strokeDasharray={`${slowReviewArc - gap} ${circumference - (slowReviewArc - gap)}`}
+                    strokeDashoffset={`${-(mergeArc + responseArc + firstTimerArc)}`}
+                  />
+                </svg>
+                <div className="absolute flex flex-col items-center justify-center text-center">
+                  <span className="text-2xl font-bold text-zinc-900">{score.toFixed(0)}</span>
+                  <span className="text-[10px] text-zinc-400 uppercase tracking-wider">C-Rank</span>
+                </div>
               </div>
-              <span className="font-mono font-bold text-zinc-600">30% Weight</span>
-            </div>
 
-            <div className="flex items-center justify-between p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/60">
-              <div className="flex items-center gap-2.5">
-                <span className="h-3 w-3 rounded-full bg-amber-600 shrink-0" />
-                <span className="font-semibold text-zinc-800">First-Timer Weight</span>
-              </div>
-              <span className="font-mono font-bold text-zinc-600">18% Weight</span>
-            </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 w-full text-xs">
+                {/* Merge Rate */}
+                <div
+                  className="flex flex-col p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/60 cursor-default transition-colors hover:bg-zinc-100/70"
+                  onMouseEnter={() => setHoveredMetric('merge')}
+                  onMouseLeave={() => setHoveredMetric(null)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <span className="h-3 w-3 rounded-full bg-emerald-500 shrink-0" />
+                      <span className="font-semibold text-zinc-800">External Merge Weight</span>
+                    </div>
+                    <span className="font-mono font-bold text-zinc-600">40%</span>
+                  </div>
+                  {hoveredMetric === 'merge' && (
+                    <p className="text-[10px] text-zinc-500 font-sans mt-1.5">
+                      Your contribution: ~{mergeContrib.toFixed(1)} pts ({(repo?.external_pr_merge_rate || 0).toFixed(1)}% merge rate)
+                    </p>
+                  )}
+                </div>
 
-            <div className="flex items-center justify-between p-3.5 rounded-xl border border-purple-100 bg-purple-50/40">
-              <div className="flex items-center gap-2.5">
-                <span className="h-3 w-3 rounded-full bg-purple-600 shrink-0" />
-                <span className="font-semibold text-purple-900">Slow Review Penalty</span>
+                {/* Response Speed */}
+                <div
+                  className="flex flex-col p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/60 cursor-default transition-colors hover:bg-zinc-100/70"
+                  onMouseEnter={() => setHoveredMetric('response')}
+                  onMouseLeave={() => setHoveredMetric(null)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <span className="h-3 w-3 rounded-full bg-blue-600 shrink-0" />
+                      <span className="font-semibold text-zinc-800">Response Speed Weight</span>
+                    </div>
+                    <span className="font-mono font-bold text-zinc-600">30%</span>
+                  </div>
+                  {hoveredMetric === 'response' && (
+                    <p className="text-[10px] text-zinc-500 font-sans mt-1.5">
+                      Your contribution: ~{responseContrib.toFixed(1)} pts (response: {responseTimeStr})
+                    </p>
+                  )}
+                </div>
+
+                {/* First-Timer */}
+                <div
+                  className="flex flex-col p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/60 cursor-default transition-colors hover:bg-zinc-100/70"
+                  onMouseEnter={() => setHoveredMetric('firstTimer')}
+                  onMouseLeave={() => setHoveredMetric(null)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <span className="h-3 w-3 rounded-full bg-amber-600 shrink-0" />
+                      <span className="font-semibold text-zinc-800">First-Timer Weight</span>
+                    </div>
+                    <span className="font-mono font-bold text-zinc-600">18%</span>
+                  </div>
+                  {hoveredMetric === 'firstTimer' && (
+                    <p className="text-[10px] text-zinc-500 font-sans mt-1.5">
+                      Your contribution: ~{firstTimerContrib.toFixed(1)} pts ({(repo?.first_timer_success_rate || 0).toFixed(1)}% first-timer rate)
+                    </p>
+                  )}
+                </div>
+
+                {/* Slow Review Penalty */}
+                <div
+                  className="flex flex-col p-3.5 rounded-xl border border-purple-100 bg-purple-50/40 cursor-default transition-colors hover:bg-purple-100/50"
+                  onMouseEnter={() => setHoveredMetric('slowReview')}
+                  onMouseLeave={() => setHoveredMetric(null)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <span className="h-3 w-3 rounded-full bg-purple-600 shrink-0" />
+                      <span className="font-semibold text-purple-900">Slow Review Penalty</span>
+                    </div>
+                    <span className="font-mono font-bold text-purple-700">12%</span>
+                  </div>
+                  {hoveredMetric === 'slowReview' && (
+                    <p className="text-[10px] text-purple-600 font-sans mt-1.5">
+                      Tier {rank} — contribution: ~{slowReviewContrib.toFixed(1)} pts
+                    </p>
+                  )}
+                </div>
               </div>
-              <span className="font-mono font-bold text-purple-700">12% Weight</span>
             </div>
-          </div>
-        </div>
+          );
+        })()}
       </div>
 
       {/* AI Insights & Maintainer Vibe Check Section */}
@@ -436,9 +498,9 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             )}
           </div>
         ) : (
-          <div className="relative pb-6">
+          <div className="relative pb-10">
             {/* Blurred Content */}
-            <div className="space-y-4 blur-xs select-none opacity-30 pointer-events-none pb-12">
+            <div className="space-y-4 blur-xs select-none opacity-30 pointer-events-none pb-24">
               <p className="text-sm text-zinc-700">
                 Active maintainer team with fast turnaround time on pull requests. Guidance provided for first-time contributors.
               </p>
@@ -560,39 +622,61 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               />
             </div>
 
-            <button
-              type="button"
-              onClick={async () => {
-                const commentEl = document.getElementById("feedback-comment") as HTMLTextAreaElement;
-                const sentimentEl = document.getElementById("sentiment-val") as HTMLInputElement;
-                if (!commentEl?.value.trim()) return alert("Please enter your feedback comment.");
-
-                try {
-                  const res = await fetch(`${API_BASE_URL}/api/v1/user/feedback`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      repo_id: repo?.id || "",
-                      full_name: fullName,
-                      sentiment: sentimentEl.value || "welcoming",
-                      comment: commentEl.value.trim(),
-                    }),
-                  });
-                  if (res.ok) {
-                    alert("Feedback submitted successfully!");
-                    commentEl.value = "";
-                  } else {
-                    alert("Please sign in with GitHub to submit feedback.");
+            <div className="space-y-2">
+              <button
+                type="button"
+                onClick={async () => {
+                  const commentEl = document.getElementById("feedback-comment") as HTMLTextAreaElement;
+                  const sentimentEl = document.getElementById("sentiment-val") as HTMLInputElement;
+                  if (!commentEl?.value.trim()) {
+                    setFeedbackError("Please enter your feedback comment.");
+                    return;
                   }
-                } catch {
-                  alert("Failed to submit feedback. Ensure you are signed in.");
-                }
-              }}
-              className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-6 py-3 text-xs sm:text-sm font-mono font-bold text-white shadow-sm hover:bg-zinc-800 active:scale-98 transition-all cursor-pointer"
-            >
-              <span>Submit Contributor Review</span>
-              <ArrowRight className="h-4 w-4" />
-            </button>
+                  setFeedbackError(null);
+
+                  try {
+                    const res = await fetch(`${API_BASE_URL}/api/v1/user/feedback`, {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        repo_id: repo?.id || "",
+                        full_name: fullName,
+                        sentiment: sentimentEl.value || "welcoming",
+                        comment: commentEl.value.trim(),
+                      }),
+                    });
+                    if (res.ok) {
+                      const result = await res.json();
+                      setFeedbackSubmitted(true);
+                      if (result.verified_contributor) {
+                        setIsVerifiedContributor(true);
+                      }
+                      commentEl.value = "";
+                    } else {
+                      setFeedbackError("Please sign in with GitHub to submit feedback.");
+                    }
+                  } catch {
+                    setFeedbackError("Failed to submit feedback. Ensure you are signed in.");
+                  }
+                }}
+                className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-6 py-3 text-xs sm:text-sm font-mono font-bold text-white shadow-sm hover:bg-zinc-800 active:scale-98 transition-all cursor-pointer"
+              >
+                <span>Submit Contributor Review</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+
+              {feedbackError && (
+                <p className="text-xs font-mono text-rose-600 mt-1">{feedbackError}</p>
+              )}
+              {feedbackSubmitted && (
+                <p className="text-xs font-mono text-emerald-700 flex items-center gap-1.5 mt-2">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  {isVerifiedContributor
+                    ? "Thanks! Your review has been verified as a contributor."
+                    : "Feedback submitted! Sign in to get your Verified Contributor badge."}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>

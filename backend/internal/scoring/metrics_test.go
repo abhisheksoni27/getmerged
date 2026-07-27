@@ -78,6 +78,31 @@ func TestComputeMetrics_FirstTimerSuccessRate(t *testing.T) {
 	}
 }
 
+func TestComputeMetrics_FirstTimerSuccessRate_AllClosed(t *testing.T) {
+	prs := []scoring.PR{
+		{State: "CLOSED", CreatedAt: prAt(5), AuthorAssociation: "FIRST_TIME_CONTRIBUTOR", AuthorLogin: "ft1"},
+		{State: "CLOSED", CreatedAt: prAt(10), AuthorAssociation: "FIRST_TIME_CONTRIBUTOR", AuthorLogin: "ft2"},
+	}
+
+	m := scoring.ComputeMetrics(prs, nil, false)
+
+	if m.FirstTimerSuccessRate != 0 {
+		t.Errorf("FirstTimerSuccessRate = %.2f, want 0", m.FirstTimerSuccessRate)
+	}
+}
+
+func TestComputeMetrics_FirstTimerSuccessRate_NoFirstTimers(t *testing.T) {
+	prs := []scoring.PR{
+		{State: "MERGED", CreatedAt: prAt(5), MergedAt: ptr(prAt(4)), AuthorAssociation: "CONTRIBUTOR", AuthorLogin: "alice"},
+	}
+
+	m := scoring.ComputeMetrics(prs, nil, false)
+
+	if m.FirstTimerSuccessRate != 0 {
+		t.Errorf("expected 0 when no first-timers present, got %.2f", m.FirstTimerSuccessRate)
+	}
+}
+
 func TestComputeMetrics_RepeatContributorRate(t *testing.T) {
 	prs := []scoring.PR{
 		{State: "MERGED", CreatedAt: prAt(5), AuthorAssociation: "CONTRIBUTOR", AuthorLogin: "alice"},
