@@ -368,7 +368,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 <span className="h-3 w-3 rounded-full bg-emerald-500 shrink-0" />
                 <span className="font-semibold text-zinc-800">External PR Merge Rate</span>
               </div>
-              <span className="font-bold text-zinc-600 group-hover:text-emerald-700">{mergeRateStr} (Weight: 40%)</span>
+              <span className="font-bold text-zinc-600 group-hover:text-emerald-700">{mergeRateStr}</span>
             </div>
 
             <div className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-100 bg-zinc-50 hover:bg-blue-50/50 transition-colors group">
@@ -376,7 +376,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 <span className="h-3 w-3 rounded-full bg-blue-600 shrink-0" />
                 <span className="font-semibold text-zinc-800">First Response Speed</span>
               </div>
-              <span className="font-bold text-zinc-600 group-hover:text-blue-700">{responseTimeStr} (Weight: 30%)</span>
+              <span className="font-bold text-zinc-600 group-hover:text-blue-700">{responseTimeStr}</span>
             </div>
 
             <div className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-100 bg-zinc-50 hover:bg-amber-50/50 transition-colors group">
@@ -384,15 +384,21 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 <span className="h-3 w-3 rounded-full bg-amber-600 shrink-0" />
                 <span className="font-semibold text-zinc-800">First-Timer Success</span>
               </div>
-              <span className="font-bold text-zinc-600 group-hover:text-amber-700">{firstTimerSuccessStr} (Weight: 18%)</span>
+              <span className="font-bold text-zinc-600 group-hover:text-amber-700">{firstTimerSuccessStr}</span>
             </div>
 
             <div className="flex items-center justify-between p-2.5 rounded-lg border border-purple-100 bg-purple-50/40 hover:bg-purple-50 transition-colors group">
               <div className="flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full bg-purple-600 shrink-0" />
-                <span className="font-semibold text-purple-900">Slow Review Factor Weight</span>
+                <span className="font-semibold text-purple-900">Average PR Merge Time</span>
               </div>
-              <span className="font-bold text-purple-700">12%</span>
+              <span className="font-bold text-purple-700">
+                {repo?.time_to_merge_hours !== undefined && repo.time_to_merge_hours > 0
+                  ? repo.time_to_merge_hours < 1
+                    ? `${Math.round(repo.time_to_merge_hours * 60)} min`
+                    : `${repo.time_to_merge_hours.toFixed(1)} hours`
+                  : "—"}
+              </span>
             </div>
           </div>
         </div>
