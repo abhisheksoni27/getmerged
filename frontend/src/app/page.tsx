@@ -455,255 +455,194 @@ export default function Home() {
               Thousands of open-source contributors waste hours writing clean pull requests only to have them sit unreviewed for months. 
               <strong> Opendoor</strong> uses objective mathematical telemetry to grade repository maintainer responsiveness, merge velocity, and first-time contributor success.
             </p>
-          </div>          {/* Rich Macro Visualizations: Stacked Language-Tier Chart & Dynamic Platform Telemetry Insights */}
-          <div className="space-y-12 mb-16 font-mono">
-            {/* 1. Language Leaderboard (Ranked by Weighted Contributor Score) */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-zinc-100 pb-4">
-                <div>
-                  <h3 className="text-base sm:text-lg font-bold text-zinc-900 flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-emerald-600 shrink-0" />
-                    Language Contributor Responsiveness Leaderboard
+          </di          {/* 3-Column Compact Macro Visual Insights Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 font-mono">
+            {/* Column 1: Compact Top 5 Ecosystem Leaderboard */}
+            <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between border-b border-zinc-100 pb-3 mb-4">
+                  <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-emerald-600 shrink-0" />
+                    Top 5 Leaderboard
                   </h3>
-                  <p className="text-xs text-zinc-500 font-sans mt-0.5">
-                    Ecosystems ranked by weighted contributor welcoming score across 4,500+ repositories.
-                  </p>
+                  <span className="text-[10px] bg-emerald-50 text-emerald-700 font-semibold px-2 py-0.5 rounded-full border border-emerald-200">
+                    Live
+                  </span>
                 </div>
-                <span className="text-xs bg-emerald-50 text-emerald-700 font-semibold px-3 py-1 rounded-full border border-emerald-200 shrink-0 self-start sm:self-auto">
-                  Live Global Telemetry
-                </span>
-              </div>
 
-              {/* Tier Color Legend */}
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-sans mb-6 bg-zinc-50/70 p-3 rounded-xl border border-zinc-100">
-                <span className="flex items-center gap-2 text-emerald-700 font-semibold">
-                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 inline-block shrink-0" /> Super Welcoming
-                </span>
-                <span className="flex items-center gap-2 text-blue-700 font-semibold">
-                  <span className="h-2.5 w-2.5 rounded-full bg-blue-500 inline-block shrink-0" /> Welcoming
-                </span>
-                <span className="flex items-center gap-2 text-amber-700 font-semibold">
-                  <span className="h-2.5 w-2.5 rounded-full bg-amber-500 inline-block shrink-0" /> Moderate
-                </span>
-                <span className="flex items-center gap-2 text-purple-700 font-semibold">
-                  <span className="h-2.5 w-2.5 rounded-full bg-purple-500 inline-block shrink-0" /> Slow Review
-                </span>
-              </div>
+                <div className="space-y-3">
+                  {(
+                    stats?.language_breakdown || [
+                      { language: "Python", total: 245, tier_map: { S: 35, A: 85, B: 95, C: 30 } },
+                      { language: "TypeScript", total: 210, tier_map: { S: 28, A: 72, B: 80, C: 30 } },
+                      { language: "Go", total: 180, tier_map: { S: 25, A: 65, B: 60, C: 30 } },
+                      { language: "Rust", total: 140, tier_map: { S: 18, A: 42, B: 50, C: 30 } },
+                      { language: "Java", total: 120, tier_map: { S: 15, A: 35, B: 40, C: 30 } },
+                    ]
+                  )
+                    .map((item) => {
+                      const sCount = item.tier_map?.["S"] || 0;
+                      const aCount = item.tier_map?.["A"] || 0;
+                      const bCount = item.tier_map?.["B"] || 0;
+                      const cCount = item.tier_map?.["C"] || 0;
+                      const grandTotal = item.total || sCount + aCount + bCount + cCount || 1;
 
-              {/* Leaderboard Items */}
-              <div className="space-y-4">
-                {(
-                  stats?.language_breakdown || [
-                    { language: "Python", total: 245, tier_map: { S: 35, A: 85, B: 95, C: 30 } },
-                    { language: "TypeScript", total: 210, tier_map: { S: 28, A: 72, B: 80, C: 30 } },
-                    { language: "Go", total: 180, tier_map: { S: 25, A: 65, B: 60, C: 30 } },
-                    { language: "Rust", total: 140, tier_map: { S: 18, A: 42, B: 50, C: 30 } },
-                    { language: "Java", total: 120, tier_map: { S: 15, A: 35, B: 40, C: 30 } },
-                    { language: "C++", total: 95, tier_map: { S: 10, A: 30, B: 35, C: 20 } },
-                    { language: "PHP", total: 80, tier_map: { S: 8, A: 25, B: 30, C: 17 } },
-                    { language: "Ruby", total: 70, tier_map: { S: 7, A: 22, B: 25, C: 16 } },
-                    { language: "Dart", total: 60, tier_map: { S: 6, A: 20, B: 22, C: 12 } },
-                    { language: "Kotlin", total: 50, tier_map: { S: 5, A: 16, B: 18, C: 11 } },
-                  ]
-                )
-                  .map((item) => {
-                    const sCount = item.tier_map?.["S"] || 0;
-                    const aCount = item.tier_map?.["A"] || 0;
-                    const bCount = item.tier_map?.["B"] || 0;
-                    const cCount = item.tier_map?.["C"] || 0;
-                    const grandTotal = item.total || sCount + aCount + bCount + cCount || 1;
+                      const sPct = (sCount / grandTotal) * 100;
+                      const aPct = (aCount / grandTotal) * 100;
+                      const bPct = (bCount / grandTotal) * 100;
+                      const cPct = (cPct / grandTotal) * 100;
 
-                    const sPct = (sCount / grandTotal) * 100;
-                    const aPct = (aCount / grandTotal) * 100;
-                    const bPct = (bCount / grandTotal) * 100;
-                    const cPct = (cCount / grandTotal) * 100;
+                      const weightedScore = sPct * 1.0 + aPct * 0.75 + bPct * 0.4 + cPct * 0.1;
 
-                    const weightedScore = sPct * 1.0 + aPct * 0.75 + bPct * 0.4 + cPct * 0.1;
-
-                    return {
-                      ...item,
-                      sCount,
-                      aCount,
-                      bCount,
-                      cCount,
-                      grandTotal,
-                      sPct,
-                      aPct,
-                      bPct,
-                      cPct,
-                      weightedScore,
-                    };
-                  })
-                  .sort((a, b) => b.weightedScore - a.weightedScore)
-                  .slice(0, 10)
-                  .map((item, idx) => {
-                    const rankMedal =
-                      idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`;
-
-                    return (
-                      <div
-                        key={item.language}
-                        className="text-xs group p-3 rounded-xl border border-zinc-100 bg-zinc-50/50 hover:bg-white hover:shadow-xs transition-all"
-                      >
-                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-zinc-700 mb-2.5">
-                          <div className="flex items-center gap-2.5">
-                            <span className="font-mono text-xs font-bold text-zinc-400 min-w-[28px]">
-                              {rankMedal}
-                            </span>
-                            <Link
-                              href={`/rankings/${item.language.toLowerCase()}`}
-                              className="font-bold text-zinc-900 text-sm hover:text-emerald-600 transition-colors flex items-center gap-2"
-                            >
-                              <LangLogo language={item.language} />
-                              {item.language}
-                            </Link>
-                          </div>
-
-                          <div className="flex items-center gap-3">
-                            <span className="text-xs text-zinc-500 font-sans">({item.grandTotal} repos scored)</span>
-                            <span className="font-mono text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                      return {
+                        ...item,
+                        sCount,
+                        aCount,
+                        bCount,
+                        cPct,
+                        grandTotal,
+                        sPct,
+                        aPct,
+                        bPct,
+                        weightedScore,
+                      };
+                    })
+                    .sort((a, b) => b.weightedScore - a.weightedScore)
+                    .slice(0, 5)
+                    .map((item, idx) => {
+                      const rankMedal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`;
+                      return (
+                        <div key={item.language} className="p-2.5 rounded-xl border border-zinc-100 bg-zinc-50/50">
+                          <div className="flex items-center justify-between text-xs mb-1.5">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-zinc-400 w-5">{rankMedal}</span>
+                              <Link
+                                href={`/rankings/${item.language.toLowerCase()}`}
+                                className="font-bold text-zinc-900 hover:text-emerald-600 transition-colors flex items-center gap-1.5"
+                              >
+                                <LangLogo language={item.language} />
+                                {item.language}
+                              </Link>
+                            </div>
+                            <span className="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 text-[11px]">
                               {item.weightedScore.toFixed(1)} pts
                             </span>
                           </div>
+                          <div className="h-2 w-full rounded-full bg-zinc-100 overflow-hidden flex">
+                            <div className="h-full bg-emerald-500" style={{ width: `${item.sPct}%` }} />
+                            <div className="h-full bg-blue-500" style={{ width: `${item.aPct}%` }} />
+                            <div className="h-full bg-amber-500" style={{ width: `${item.bPct}%` }} />
+                            <div className="h-full bg-purple-500" style={{ width: `${item.cPct}%` }} />
+                          </div>
                         </div>
+                      );
+                    })}
+                </div>
+              </div>
+            </div>
 
-                        {/* Segmented Bar with Tooltip */}
-                        <div className="h-4 w-full rounded-lg bg-zinc-100 overflow-hidden flex shadow-xs border border-zinc-200/50">
-                          {item.sPct > 0 && (
-                            <div
-                              title={`Super Welcoming: ${item.sCount} repos (${item.sPct.toFixed(1)}%)`}
-                              className="h-full bg-emerald-500 hover:brightness-125 transition-all cursor-pointer relative"
-                              style={{ width: `${item.sPct}%` }}
-                            />
-                          )}
-                          {item.aPct > 0 && (
-                            <div
-                              title={`Welcoming: ${item.aCount} repos (${item.aPct.toFixed(1)}%)`}
-                              className="h-full bg-blue-500 hover:brightness-125 transition-all cursor-pointer relative"
-                              style={{ width: `${item.aPct}%` }}
-                            />
-                          )}
-                          {item.bPct > 0 && (
-                            <div
-                              title={`Moderate: ${item.bCount} repos (${item.bPct.toFixed(1)}%)`}
-                              className="h-full bg-amber-500 hover:brightness-125 transition-all cursor-pointer relative"
-                              style={{ width: `${item.bPct}%` }}
-                            />
-                          )}
-                          {item.cPct > 0 && (
-                            <div
-                              title={`Slow Review: ${item.cCount} repos (${item.cPct.toFixed(1)}%)`}
-                              className="h-full bg-purple-500 hover:brightness-125 transition-all cursor-pointer relative"
-                              style={{ width: `${item.cPct}%` }}
-                            />
-                          )}
+            {/* Column 2: Most Welcoming Ecosystems (Most S & A Class Repos) */}
+            <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between border-b border-zinc-100 pb-3 mb-4">
+                  <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+                    <ShieldCheck className="h-4 w-4 text-blue-600 shrink-0" />
+                    Most Welcoming Tech Stacks
+                  </h3>
+                  <span className="text-[10px] bg-blue-50 text-blue-700 font-semibold px-2 py-0.5 rounded-full border border-blue-200">
+                    S & A Tier Focus
+                  </span>
+                </div>
+
+                <div className="space-y-3">
+                  {(
+                    stats?.language_breakdown || [
+                      { language: "Python", total: 245, tier_map: { S: 35, A: 85, B: 95, C: 30 } },
+                      { language: "TypeScript", total: 210, tier_map: { S: 28, A: 72, B: 80, C: 30 } },
+                      { language: "Go", total: 180, tier_map: { S: 25, A: 65, B: 60, C: 30 } },
+                      { language: "Rust", total: 140, tier_map: { S: 18, A: 42, B: 50, C: 30 } },
+                      { language: "Java", total: 120, tier_map: { S: 15, A: 35, B: 40, C: 30 } },
+                    ]
+                  )
+                    .map((item) => {
+                      const sCount = item.tier_map?.["S"] || 0;
+                      const aCount = item.tier_map?.["A"] || 0;
+                      const welcomingTotal = sCount + aCount;
+                      return { ...item, sCount, aCount, welcomingTotal };
+                    })
+                    .sort((a, b) => b.welcomingTotal - a.welcomingTotal)
+                    .slice(0, 5)
+                    .map((item) => (
+                      <div key={item.language} className="p-2.5 rounded-xl border border-zinc-100 bg-zinc-50/50 flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2">
+                          <LangLogo language={item.language} />
+                          <Link href={`/rankings/${item.language.toLowerCase()}`} className="font-bold text-zinc-900 hover:text-blue-600 transition-colors">
+                            {item.language}
+                          </Link>
+                        </div>
+                        <div className="flex items-center gap-1.5 font-mono text-[11px]">
+                          <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                            {item.sCount} S-Tier
+                          </span>
+                          <span className="text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
+                            {item.aCount} A-Tier
+                          </span>
                         </div>
                       </div>
-                    );
-                  })}
+                    ))}
+                </div>
               </div>
             </div>
 
-            {/* 2. Full-Width Global Platform Vibe Composition & Insights Grid */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-zinc-100 pb-4">
-                <div>
-                  <h3 className="text-base sm:text-lg font-bold text-zinc-900 flex items-center gap-2">
-                    <ShieldCheck className="h-5 w-5 text-emerald-600 shrink-0" />
-                    Global Contributor Vibe Composition & Insights
+            {/* Column 3: Live Telemetry Scan Summary */}
+            <div className="rounded-2xl border border-zinc-900 bg-zinc-900 text-white p-5 shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2 font-mono">
+                    <Zap className="h-4 w-4 text-emerald-400 shrink-0" />
+                    Live Repos Scanned
                   </h3>
-                  <p className="text-xs text-zinc-500 font-sans mt-0.5">
-                    Platform-wide ratio of open-source repository responsiveness tiers across 4,500+ repos.
-                  </p>
-                </div>
-                <span className="text-xs font-mono font-bold bg-zinc-100 px-3 py-1 rounded-full text-zinc-700 shrink-0 self-start sm:self-auto">
-                  {stats?.total_repos ? stats.total_repos.toLocaleString() : "4,556"} Indexed Repos
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
-                {/* SVG Donut Ring */}
-                <div className="relative flex flex-col items-center justify-center p-4 rounded-xl bg-zinc-50/50 border border-zinc-100">
-                  <svg className="h-36 w-36 -rotate-90 transform" viewBox="0 0 36 36">
-                    <path
-                      className="text-zinc-100"
-                      strokeWidth="3.8"
-                      stroke="currentColor"
-                      fill="none"
-                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                    />
-                    <path
-                      className="text-emerald-500 transition-all duration-1000"
-                      strokeDasharray="18, 100"
-                      strokeWidth="3.8"
-                      strokeLinecap="round"
-                      stroke="currentColor"
-                      fill="none"
-                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                    />
-                    <path
-                      className="text-blue-500 transition-all duration-1000"
-                      strokeDasharray="32, 100"
-                      strokeDashoffset="-18"
-                      strokeWidth="3.8"
-                      strokeLinecap="round"
-                      stroke="currentColor"
-                      fill="none"
-                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                    />
-                    <path
-                      className="text-amber-500 transition-all duration-1000"
-                      strokeDasharray="35, 100"
-                      strokeDashoffset="-50"
-                      strokeWidth="3.8"
-                      strokeLinecap="round"
-                      stroke="currentColor"
-                      fill="none"
-                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                    />
-                  </svg>
-                  <div className="absolute text-center">
-                    <div className="text-xl font-bold font-mono text-zinc-900">
-                      {stats?.s_class_count !== undefined ? stats.s_class_count : 420}
-                    </div>
-                    <div className="text-[10px] font-mono text-emerald-600 font-bold uppercase">Super Welcoming</div>
-                  </div>
+                  <span className="text-[10px] bg-emerald-400/20 text-emerald-300 font-mono font-semibold px-2 py-0.5 rounded-full border border-emerald-400/30">
+                    Realtime API
+                  </span>
                 </div>
 
-                {/* 3 Value Proposition Metric Highlight Columns */}
-                <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 space-y-1">
-                    <div className="text-xs text-emerald-800 font-bold uppercase tracking-wider">Super Welcoming</div>
-                    <div className="text-2xl font-bold text-emerald-950">
-                      {stats?.s_class_count !== undefined ? stats.s_class_count : stats?.rank_counts?.["S"] || 420}
+                <div className="space-y-4">
+                  <div>
+                    <div className="text-3xl font-bold font-mono text-white">
+                      {stats?.total_repos ? stats.total_repos.toLocaleString() : totalReposCount > 0 ? totalReposCount.toLocaleString() : "4,556"}
                     </div>
-                    <p className="text-xs text-emerald-700 font-sans leading-relaxed">
-                      Score 70–100. Average PR review in under 4 hours with high first-timer merge rates.
-                    </p>
+                    <div className="text-xs text-zinc-400 font-sans mt-0.5">
+                      Total public GitHub repositories indexed & continuously scored.
+                    </div>
                   </div>
 
-                  <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-4 space-y-1">
-                    <div className="text-xs text-blue-800 font-bold uppercase tracking-wider">Welcoming</div>
-                    <div className="text-2xl font-bold text-blue-950">
-                      {stats?.rank_counts?.["A"] || 1420}
+                  <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2 border-t border-zinc-800">
+                    <div className="bg-zinc-800/80 p-2.5 rounded-xl border border-zinc-700">
+                      <div className="text-[10px] text-emerald-400 font-bold">SUPER WELCOMING</div>
+                      <div className="text-lg font-bold text-white mt-0.5">
+                        {stats?.s_class_count !== undefined ? stats.s_class_count : 420}
+                      </div>
                     </div>
-                    <p className="text-xs text-blue-700 font-sans leading-relaxed">
-                      Score 55–69. Responsive maintainer teams with predictable review turnaround.
-                    </p>
-                  </div>
-
-                  <div className="rounded-xl border border-amber-200 bg-amber-50/50 p-4 space-y-1">
-                    <div className="text-xs text-amber-800 font-bold uppercase tracking-wider">Moderate / Slow</div>
-                    <div className="text-2xl font-bold text-amber-950">
-                      {(stats?.rank_counts?.["B"] || 1800) + (stats?.rank_counts?.["C"] || 800)}
+                    <div className="bg-zinc-800/80 p-2.5 rounded-xl border border-zinc-700">
+                      <div className="text-[10px] text-blue-400 font-bold">AVG RESPONSE</div>
+                      <div className="text-lg font-bold text-white mt-0.5">
+                        {stats?.avg_response_hours ? `${stats.avg_response_hours.toFixed(1)}h` : "4.2h"}
+                      </div>
                     </div>
-                    <p className="text-xs text-amber-700 font-sans leading-relaxed">
-                      Score 25–54. Selective PR reviews requiring comprehensive test coverage.
-                    </p>
                   </div>
                 </div>
               </div>
+
+              <Link
+                href="/status"
+                className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-zinc-800 px-4 py-2 text-xs font-mono font-bold text-zinc-200 hover:bg-zinc-700 hover:text-white transition-all border border-zinc-700"
+              >
+                <span>View Full System Status</span>
+                <ArrowRight className="h-3.5 w-3.5 text-emerald-400" />
+              </Link>
             </div>
+          </div>
           </div>
 
           {/* 3 Pillar Feature Cards */}
