@@ -530,8 +530,81 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <Sparkles className="h-4 w-4 text-blue-600" /> Contributed to {fullName} previously?
           </p>
           <p className="mt-1 text-blue-800">
-            Share your experience! Submit feedback below. If you have merged commits in this repo, your review will automatically feature a <strong>Verified GitHub Contributor</strong> badge.
+            Share your experience! Submit your maintainer vibe feedback below. If you have merged commits in this repo, your review will automatically feature a <strong>Verified GitHub Contributor</strong> badge.
           </p>
+        </div>
+
+        {/* Interactive Contributor Feedback Form */}
+        <div className="bg-zinc-50/70 border border-zinc-200/80 rounded-xl p-4 font-sans mb-6">
+          <h3 className="font-mono text-xs font-bold text-zinc-900 mb-3 uppercase tracking-wider">
+            Submit Maintainer Vibe Review
+          </h3>
+          <div className="space-y-3">
+            <div>
+              <label className="block text-xs font-medium text-zinc-700 mb-1">Maintainer Sentiment</label>
+              <div className="flex flex-wrap gap-2">
+                {["welcoming", "selective", "unresponsive"].map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => {
+                      const el = document.getElementById("sentiment-val") as HTMLInputElement;
+                      if (el) el.value = s;
+                    }}
+                    className="capitalize text-xs font-mono px-3 py-1.5 rounded-lg border border-zinc-300 bg-white hover:bg-zinc-100 active:bg-emerald-50 active:border-emerald-500 transition-all cursor-pointer"
+                  >
+                    {s === "welcoming" && "🟢 Welcoming"}
+                    {s === "selective" && "🟡 Selective"}
+                    {s === "unresponsive" && "🔴 Unresponsive"}
+                  </button>
+                ))}
+              </div>
+              <input type="hidden" id="sentiment-val" defaultValue="welcoming" />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-zinc-700 mb-1">Your Contributor Experience</label>
+              <textarea
+                id="feedback-comment"
+                rows={3}
+                placeholder={`How was submitting a PR to ${fullName}? Were maintainers responsive?`}
+                className="w-full text-xs rounded-lg border border-zinc-300 p-2.5 bg-white text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={async () => {
+                const commentEl = document.getElementById("feedback-comment") as HTMLTextAreaElement;
+                const sentimentEl = document.getElementById("sentiment-val") as HTMLInputElement;
+                if (!commentEl?.value.trim()) return alert("Please enter your feedback comment.");
+                
+                try {
+                  const res = await fetch(`${API_BASE_URL}/api/v1/user/feedback`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      repo_id: repo?.id || "",
+                      full_name: fullName,
+                      sentiment: sentimentEl.value || "welcoming",
+                      comment: commentEl.value.trim(),
+                    }),
+                  });
+                  if (res.ok) {
+                    alert("Feedback submitted successfully!");
+                    commentEl.value = "";
+                  } else {
+                    alert("Please sign in with GitHub to submit feedback.");
+                  }
+                } catch {
+                  alert("Failed to submit feedback. Ensure you are signed in.");
+                }
+              }}
+              className="inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-xs font-mono font-medium text-white hover:bg-zinc-800 transition-all cursor-pointer"
+            >
+              Submit Feedback
+            </button>
+          </div>
         </div>
       </div>
 
