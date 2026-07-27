@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Sparkles, ShieldCheck, Heart, Github, Terminal, Activity, FileText } from "lucide-react";
+import { Sparkles, ShieldCheck, Heart, Code2, Terminal, Activity, FileText } from "lucide-react";
 
 export function Footer() {
   const topLanguages = [
@@ -82,7 +82,7 @@ export function Footer() {
                   rel="noreferrer"
                   className="hover:text-emerald-400 transition-colors flex items-center gap-1.5"
                 >
-                  <Github className="h-3 w-3" /> GitHub Repository
+                  <Code2 className="h-3 w-3" /> GitHub Repository
                 </a>
               </li>
               <li>
