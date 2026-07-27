@@ -517,53 +517,69 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       </div>
 
       {/* Issues #6, #7, #8: Contributor Community Feedback & Verification Module */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs mb-10 font-mono">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-zinc-100 pb-4">
+      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm mb-10 font-sans">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-zinc-100 pb-5">
           <div>
-            <h2 className="text-base font-bold text-zinc-900 flex items-center gap-2">
-              <Users className="h-4 w-4 text-blue-600" /> Contributor Community Vibe Feedback
+            <h2 className="text-xl sm:text-2xl font-bold font-mono text-zinc-900 flex items-center gap-2.5">
+              <Users className="h-6 w-6 text-blue-600 shrink-0" />
+              Contributor Community Vibe Feedback
             </h2>
-            <p className="text-xs text-zinc-500 font-sans mt-0.5">
-              Real contributor sentiment vs algorithmic C-Rank™ data.
+            <p className="text-sm text-zinc-600 mt-1 leading-relaxed">
+              Real contributor sentiment vs algorithmic C-Rank™ telemetry. Have you sent a pull request here?
             </p>
           </div>
-          <span className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-semibold self-start sm:self-auto">
-            ✓ Verified GitHub Contributor Check Enabled
+          <span className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full shrink-0">
+            <ShieldCheck className="h-4 w-4 text-emerald-600" />
+            GitHub Verification Active
           </span>
         </div>
 
-        {/* Issue #8: Contributor Callout Prompt */}
-        <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-4 mb-6 text-xs text-blue-900 font-sans">
-          <p className="font-semibold flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-blue-600" /> Contributed to {fullName} previously?
-          </p>
-          <p className="mt-1 text-blue-800">
-            Share your experience! Submit your maintainer vibe feedback below. If you have merged commits in this repo, your review will automatically feature a <strong>Verified GitHub Contributor</strong> badge.
-          </p>
+        {/* High-Impact Contributor Callout */}
+        <div className="relative overflow-hidden rounded-xl border border-blue-200/70 bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-white p-5 mb-8 text-zinc-900 shadow-xs">
+          <div className="flex items-start gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white shrink-0 shadow-xs">
+              <Sparkles className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold font-mono text-zinc-900">
+                Contributed to <span className="text-blue-600">{fullName}</span> previously?
+              </h3>
+              <p className="mt-1 text-xs sm:text-sm text-zinc-700 leading-relaxed">
+                Save fellow developers hours of waiting. If your commits are merged in this repository, your review will instantly receive an official <strong className="text-blue-900">Verified Contributor</strong> badge.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Interactive Contributor Feedback Form */}
-        <div className="bg-zinc-50/70 border border-zinc-200/80 rounded-xl p-4 font-sans mb-6">
-          <h3 className="font-mono text-xs font-bold text-zinc-900 mb-3 uppercase tracking-wider">
-            Submit Maintainer Vibe Review
+        <div className="rounded-xl border border-zinc-200 bg-zinc-50/50 p-5 sm:p-6">
+          <h3 className="font-mono text-sm font-bold text-zinc-900 mb-4 uppercase tracking-wider">
+            Share Your Experience
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-5">
             <div>
-              <label className="block text-xs font-medium text-zinc-700 mb-1">Maintainer Sentiment</label>
-              <div className="flex flex-wrap gap-2">
-                {["welcoming", "selective", "unresponsive"].map((s) => (
+              <label className="block text-xs font-mono font-bold text-zinc-700 uppercase tracking-wider mb-2.5">
+                Maintainer Sentiment Vibe
+              </label>
+              <div className="flex flex-wrap gap-3">
+                {[
+                  { id: "welcoming", label: "🟢 Welcoming & Fast", style: "hover:border-emerald-500 hover:bg-emerald-50 text-emerald-900" },
+                  { id: "selective", label: "🟡 Selective / strict PRs", style: "hover:border-amber-500 hover:bg-amber-50 text-amber-900" },
+                  { id: "unresponsive", label: "🔴 Unresponsive / Stale", style: "hover:border-rose-500 hover:bg-rose-50 text-rose-900" },
+                ].map((s) => (
                   <button
-                    key={s}
+                    key={s.id}
                     type="button"
-                    onClick={() => {
-                      const el = document.getElementById("sentiment-val") as HTMLInputElement;
-                      if (el) el.value = s;
+                    onClick={(e) => {
+                      const input = document.getElementById("sentiment-val") as HTMLInputElement;
+                      if (input) input.value = s.id;
+                      // Visual selection feedback
+                      document.querySelectorAll(".sentiment-btn").forEach((b) => b.classList.remove("ring-2", "ring-zinc-900", "bg-white", "shadow-sm"));
+                      e.currentTarget.classList.add("ring-2", "ring-zinc-900", "bg-white", "shadow-sm");
                     }}
-                    className="capitalize text-xs font-mono px-3 py-1.5 rounded-lg border border-zinc-300 bg-white hover:bg-zinc-100 active:bg-emerald-50 active:border-emerald-500 transition-all cursor-pointer"
+                    className={`sentiment-btn text-xs sm:text-sm font-mono font-semibold px-4 py-2.5 rounded-xl border border-zinc-200 bg-white/80 transition-all cursor-pointer ${s.style}`}
                   >
-                    {s === "welcoming" && "🟢 Welcoming"}
-                    {s === "selective" && "🟡 Selective"}
-                    {s === "unresponsive" && "🔴 Unresponsive"}
+                    {s.label}
                   </button>
                 ))}
               </div>
@@ -571,12 +587,14 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-zinc-700 mb-1">Your Contributor Experience</label>
+              <label className="block text-xs font-mono font-bold text-zinc-700 uppercase tracking-wider mb-2">
+                Your Contributor Review
+              </label>
               <textarea
                 id="feedback-comment"
                 rows={3}
-                placeholder={`How was submitting a PR to ${fullName}? Were maintainers responsive?`}
-                className="w-full text-xs rounded-lg border border-zinc-300 p-2.5 bg-white text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                placeholder={`How was submitting a PR to ${fullName}? Did maintainers provide constructive review comments?`}
+                className="w-full text-xs sm:text-sm font-sans rounded-xl border border-zinc-300 p-3.5 bg-white text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 shadow-xs"
               />
             </div>
 
@@ -586,7 +604,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 const commentEl = document.getElementById("feedback-comment") as HTMLTextAreaElement;
                 const sentimentEl = document.getElementById("sentiment-val") as HTMLInputElement;
                 if (!commentEl?.value.trim()) return alert("Please enter your feedback comment.");
-                
+
                 try {
                   const res = await fetch(`${API_BASE_URL}/api/v1/user/feedback`, {
                     method: "POST",
@@ -608,9 +626,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                   alert("Failed to submit feedback. Ensure you are signed in.");
                 }
               }}
-              className="inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-xs font-mono font-medium text-white hover:bg-zinc-800 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-6 py-3 text-xs sm:text-sm font-mono font-bold text-white shadow-sm hover:bg-zinc-800 active:scale-98 transition-all cursor-pointer"
             >
-              Submit Feedback
+              <span>Submit Contributor Review</span>
+              <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </div>
