@@ -1,5 +1,6 @@
 import React from "react";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { Repo } from "@/types/opendoor";
 import { Metadata } from "next";
 import { ClientRepoDetail } from "@/components/ClientRepoDetail";
@@ -125,6 +126,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
       />
       <link rel="alternate" type="text/markdown" href={`/repo/${owner}/${name}/raw`} />
       <ClientRepoDetail repo={repo} fullName={fullName} />
+      <Footer />
     </div>
   );
 }

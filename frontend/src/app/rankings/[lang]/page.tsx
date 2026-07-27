@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { RepoCard } from "@/components/RepoCard";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
@@ -127,6 +128,7 @@ export default function LanguageRankingsPage() {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }
