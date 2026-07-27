@@ -151,7 +151,7 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
 			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(repository_id, snapshot_date) DO UPDATE SET
 			external_pr_merge_rate        = excluded.external_pr_merge_rate,
 			time_to_first_response_hours  = excluded.time_to_first_response_hours,
