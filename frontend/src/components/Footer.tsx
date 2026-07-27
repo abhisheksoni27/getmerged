@@ -100,6 +100,16 @@ export function Footer() {
                   API Health
                 </a>
               </li>
+              <li>
+                <Link href="/privacy" className="hover:text-emerald-400 transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-emerald-400 transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -112,6 +122,8 @@ export function Footer() {
           <div className="flex items-center gap-6">
             <Link href="/" className="hover:text-zinc-300">Home</Link>
             <Link href="/status" className="hover:text-zinc-300">Status</Link>
+            <Link href="/privacy" className="hover:text-zinc-300">Privacy</Link>
+            <Link href="/terms" className="hover:text-zinc-300">Terms</Link>
             <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" className="hover:text-zinc-300">GitHub</a>
           </div>
         </div>
