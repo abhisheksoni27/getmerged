@@ -256,51 +256,74 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         </div>
       </div>
 
-      {/* Primary Metric Breakdown Cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-6 font-mono">
-        <div className="rounded-xl border border-zinc-200 bg-white p-4.5 shadow-xs">
-          <div className="flex items-center gap-2 text-xs text-zinc-500 mb-1.5">
-            <Clock className="h-4 w-4 text-emerald-600" />
-            <span>Time to First Response</span>
+      {/* Integrated Unified Metrics Grid (Combines Primary & Secondary Stats seamlessly) */}
+      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm mb-10 font-mono">
+        <h2 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-5 flex items-center gap-2">
+          <Activity className="h-4 w-4 text-emerald-600" /> Objective PR Telemetry & Maintainer Metrics
+        </h2>
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+              <Clock className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>First Response Speed</span>
+            </div>
+            <div className="text-2xl sm:text-3xl font-bold text-zinc-900">{responseTimeStr}</div>
+            <div className="text-xs text-zinc-500 font-sans">{responseCommentary}</div>
           </div>
-          <div className="text-2xl font-bold text-zinc-900">{responseTimeStr}</div>
-          <div className="mt-1 text-[11px] text-zinc-500">{responseCommentary}</div>
-        </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-4.5 shadow-xs">
-          <div className="flex items-center gap-2 text-xs text-zinc-500 mb-1.5">
-            <GitMerge className="h-4 w-4 text-blue-600" />
-            <span>External PR Merge Rate</span>
+          <div className="space-y-1">
+            <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+              <GitMerge className="h-4 w-4 text-blue-600 shrink-0" />
+              <span>External PR Merge Rate</span>
+            </div>
+            <div className="text-2xl sm:text-3xl font-bold text-zinc-900">{mergeRateStr}</div>
+            <div className="text-xs text-zinc-500 font-sans">{mergeCommentary}</div>
           </div>
-          <div className="text-2xl font-bold text-zinc-900">{mergeRateStr}</div>
-          <div className="mt-1 text-[11px] text-zinc-500">{mergeCommentary}</div>
-        </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-4.5 shadow-xs">
-          <div className="flex items-center gap-2 text-xs text-zinc-500 mb-1.5">
-            <ShieldCheck className="h-4 w-4 text-emerald-600" />
-            <span>First-Time Contributor Success</span>
+          <div className="space-y-1">
+            <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+              <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>First-Timer Success</span>
+            </div>
+            <div className="text-2xl sm:text-3xl font-bold text-zinc-900">{firstTimerSuccessStr}</div>
+            <div className="text-xs text-zinc-500 font-sans">{firstTimerCommentary}</div>
           </div>
-          <div className="text-2xl font-bold text-zinc-900">{firstTimerSuccessStr}</div>
-          <div className="mt-1 text-[11px] text-zinc-500">{firstTimerCommentary}</div>
+
+          <div className="space-y-1">
+            <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+              <Star className="h-4 w-4 text-amber-500 shrink-0" />
+              <span>Stars & Activity</span>
+            </div>
+            <div className="text-2xl sm:text-3xl font-bold text-zinc-900">
+              {repo?.stars ? repo.stars.toLocaleString("en-US") : "—"}
+            </div>
+            <div className="text-xs text-zinc-500 font-sans">
+              {repo?.language || "Other"} • {repo?.staleness_flag ? "Stale" : "Active"}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* C-Rank Weight & Tier Breakdown Interactive Pie Visualizer */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs mb-6 font-mono">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-          <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-emerald-600" /> C-Rank™ Scoring Algorithm Formula Weights
-          </h3>
-          <span className="text-[11px] text-zinc-400 font-sans">Formula weights used to compute overall score out of 100</span>
+      {/* C-Rank Weight Formula Visualizer (Cleaned & Deduplicated) */}
+      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm mb-10 font-mono">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6 border-b border-zinc-100 pb-4">
+          <div>
+            <h3 className="text-lg font-bold text-zinc-900 flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-emerald-600" /> C-Rank™ Algorithm Weight Distribution
+            </h3>
+            <p className="text-xs text-zinc-500 font-sans mt-0.5">
+              Proprietary weighting formula applied to raw GitHub GraphQL telemetry.
+            </p>
+          </div>
+          <div className="text-xs font-mono font-bold text-zinc-700 bg-zinc-100 px-3 py-1.5 rounded-lg shrink-0">
+            Overall Score: <span className="text-emerald-600">{score.toFixed(1)}</span> / 100
+          </div>
         </div>
-        <div className="flex flex-col md:flex-row items-center gap-6 justify-between">
-          <div className="relative flex items-center justify-center h-44 w-44 group">
-            {/* SVG Pie Chart representing key weighted components */}
+
+        <div className="flex flex-col md:flex-row items-center gap-8 justify-between">
+          <div className="relative flex items-center justify-center h-44 w-44 shrink-0">
             <svg viewBox="0 0 100 100" className="h-full w-full transform -rotate-90">
-              {/* Outer background ring */}
               <circle cx="50" cy="50" r="40" fill="transparent" stroke="#f4f4f5" strokeWidth="16" />
-              {/* S-Tier / Merge Rate segment (40%) - Emerald */}
               <circle
                 cx="50"
                 cy="50"
@@ -310,11 +333,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 strokeWidth="16"
                 strokeDasharray="100.5 150.8"
                 strokeDashoffset="0"
-                className="hover:opacity-80 transition-opacity cursor-pointer"
-              >
-                <title>PR Merge Rate Weight in Formula: 40%</title>
-              </circle>
-              {/* A-Tier / Response Speed segment (30%) - Blue */}
+              />
               <circle
                 cx="50"
                 cy="50"
@@ -324,11 +343,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 strokeWidth="16"
                 strokeDasharray="75.4 175.9"
                 strokeDashoffset="-100.5"
-                className="hover:opacity-80 transition-opacity cursor-pointer"
-              >
-                <title>First Response Speed Weight in Formula: 30%</title>
-              </circle>
-              {/* B-Tier / First Timer Success segment (18%) - Amber */}
+              />
               <circle
                 cx="50"
                 cy="50"
@@ -338,11 +353,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 strokeWidth="16"
                 strokeDasharray="45.2 206.1"
                 strokeDashoffset="-175.9"
-                className="hover:opacity-80 transition-opacity cursor-pointer"
-              >
-                <title>First-Timer Success Weight in Formula: 18%</title>
-              </circle>
-              {/* C-Tier / Slow Review segment (12%) - Purple */}
+              />
               <circle
                 cx="50"
                 cy="50"
@@ -352,96 +363,46 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 strokeWidth="16"
                 strokeDasharray="30.1 221.2"
                 strokeDashoffset="-221.1"
-                className="hover:opacity-80 transition-opacity cursor-pointer"
-              >
-                <title>Slow Review Latency Weight in Formula: 12%</title>
-              </circle>
+              />
             </svg>
             <div className="absolute flex flex-col items-center justify-center text-center">
-              <span className="text-xl font-bold text-zinc-900">{score.toFixed(0)}</span>
-              <span className="text-[10px] text-zinc-500 uppercase tracking-wider">Score</span>
+              <span className="text-2xl font-bold text-zinc-900">{score.toFixed(0)}</span>
+              <span className="text-[10px] text-zinc-400 uppercase tracking-wider">C-Rank</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1 w-full text-xs">
-            <div className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-100 bg-zinc-50 hover:bg-emerald-50/50 transition-colors group">
-              <div className="flex items-center gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 w-full text-xs">
+            <div className="flex items-center justify-between p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/60">
+              <div className="flex items-center gap-2.5">
                 <span className="h-3 w-3 rounded-full bg-emerald-500 shrink-0" />
-                <span className="font-semibold text-zinc-800">External PR Merge Rate</span>
+                <span className="font-semibold text-zinc-800">External Merge Weight</span>
               </div>
-              <span className="font-bold text-zinc-600 group-hover:text-emerald-700">{mergeRateStr}</span>
+              <span className="font-mono font-bold text-zinc-600">40% Weight</span>
             </div>
 
-            <div className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-100 bg-zinc-50 hover:bg-blue-50/50 transition-colors group">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/60">
+              <div className="flex items-center gap-2.5">
                 <span className="h-3 w-3 rounded-full bg-blue-600 shrink-0" />
-                <span className="font-semibold text-zinc-800">First Response Speed</span>
+                <span className="font-semibold text-zinc-800">Response Speed Weight</span>
               </div>
-              <span className="font-bold text-zinc-600 group-hover:text-blue-700">{responseTimeStr}</span>
+              <span className="font-mono font-bold text-zinc-600">30% Weight</span>
             </div>
 
-            <div className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-100 bg-zinc-50 hover:bg-amber-50/50 transition-colors group">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/60">
+              <div className="flex items-center gap-2.5">
                 <span className="h-3 w-3 rounded-full bg-amber-600 shrink-0" />
-                <span className="font-semibold text-zinc-800">First-Timer Success</span>
+                <span className="font-semibold text-zinc-800">First-Timer Weight</span>
               </div>
-              <span className="font-bold text-zinc-600 group-hover:text-amber-700">{firstTimerSuccessStr}</span>
+              <span className="font-mono font-bold text-zinc-600">18% Weight</span>
             </div>
 
-            <div className="flex items-center justify-between p-2.5 rounded-lg border border-purple-100 bg-purple-50/40 hover:bg-purple-50 transition-colors group">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between p-3.5 rounded-xl border border-purple-100 bg-purple-50/40">
+              <div className="flex items-center gap-2.5">
                 <span className="h-3 w-3 rounded-full bg-purple-600 shrink-0" />
-                <span className="font-semibold text-purple-900">Average PR Merge Time</span>
+                <span className="font-semibold text-purple-900">Slow Review Penalty</span>
               </div>
-              <span className="font-bold text-purple-700">
-                {repo?.time_to_merge_hours !== undefined && repo.time_to_merge_hours > 0
-                  ? repo.time_to_merge_hours < 1
-                    ? `${Math.round(repo.time_to_merge_hours * 60)} min`
-                    : `${repo.time_to_merge_hours.toFixed(1)} hours`
-                  : "—"}
-              </span>
+              <span className="font-mono font-bold text-purple-700">12% Weight</span>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Secondary Detailed Metrics Grid */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4 mb-10 font-mono">
-        <div className="rounded-xl border border-zinc-100 bg-zinc-50/70 p-3.5">
-          <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 mb-1">
-            <Star className="h-3.5 w-3.5 text-amber-500" />
-            <span>Stars</span>
-          </div>
-          <div className="text-base font-bold text-zinc-900">
-            {repo?.stars ? repo.stars.toLocaleString("en-US") : "—"}
-          </div>
-        </div>
-
-        <div className="rounded-xl border border-zinc-100 bg-zinc-50/70 p-3.5">
-          <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 mb-1">
-            <FileCode2 className="h-3.5 w-3.5 text-zinc-600" />
-            <span>Primary Language</span>
-          </div>
-          <div className="text-base font-bold text-zinc-900">{repo?.language || "Other"}</div>
-        </div>
-
-        <div className="rounded-xl border border-zinc-100 bg-zinc-50/70 p-3.5">
-          <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 mb-1">
-            <Users className="h-3.5 w-3.5 text-indigo-500" />
-            <span>Active Maintainers</span>
-          </div>
-          <div className="text-base font-bold text-zinc-900">
-            {repo?.distinct_maintainer_count !== undefined ? repo.distinct_maintainer_count : "3+"}
-          </div>
-        </div>
-
-        <div className="rounded-xl border border-zinc-100 bg-zinc-50/70 p-3.5">
-          <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 mb-1">
-            <Activity className="h-3.5 w-3.5 text-emerald-500" />
-            <span>Repo Activity</span>
-          </div>
-          <div className="text-base font-bold text-zinc-900">
-            {repo?.staleness_flag ? "Stale" : "Active"}
           </div>
         </div>
       </div>
