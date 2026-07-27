@@ -35,13 +35,14 @@ type RepoRecord struct {
 }
 
 type RepoFilter struct {
-	Language string
-	Tier     string
-	Search   string
-	SortBy   string
-	Order    string
-	Limit    int
-	Offset   int
+	Language     string
+	Tier         string
+	MinMergeRate float64
+	Search       string
+	SortBy       string
+	Order        string
+	Limit        int
+	Offset       int
 }
 
 type RepoRepository interface {
@@ -78,6 +79,11 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 	if filter.Tier != "" {
 		where += " AND s.c_rank_tier = ?"
 		args = append(args, filter.Tier)
+	}
+
+	if filter.MinMergeRate > 0 {
+		where += " AND s.external_pr_merge_rate >= ?"
+		args = append(args, filter.MinMergeRate)
 	}
 
 	if filter.Search != "" {

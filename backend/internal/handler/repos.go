@@ -105,6 +105,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		orderParam := strings.TrimSpace(strings.ToLower(c.Query("order")))
 		pageStr := strings.TrimSpace(c.Query("page"))
 		perPageStr := strings.TrimSpace(c.Query("per_page"))
+		minMergeRateStr := strings.TrimSpace(c.Query("min_merge_rate"))
 
 		page := 1
 		if p, err := strconv.Atoi(pageStr); err == nil && p > 0 {
@@ -119,14 +120,20 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		}
 		offset := (page - 1) * perPage
 
+		var minMergeRate float64
+		if mr, err := strconv.ParseFloat(minMergeRateStr, 64); err == nil && mr > 0 {
+			minMergeRate = mr
+		}
+
 		filter := repository.RepoFilter{
-			Language: lang,
-			Tier:     tierParam,
-			Search:   name,
-			SortBy:   sortParam,
-			Order:    orderParam,
-			Limit:    perPage,
-			Offset:   offset,
+			Language:     lang,
+			Tier:         tierParam,
+			MinMergeRate: minMergeRate,
+			Search:       name,
+			SortBy:       sortParam,
+			Order:        orderParam,
+			Limit:        perPage,
+			Offset:       offset,
 		}
 
 		repos, total, err := repoStore.List(c.Request.Context(), filter)

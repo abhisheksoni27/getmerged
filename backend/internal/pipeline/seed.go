@@ -16,11 +16,15 @@ import (
 )
 
 // SeedLanguages is the default set of languages to seed.
-var SeedLanguages = []string{"Go", "Python", "JavaScript", "TypeScript", "Java", "PHP", "Rust", "Kotlin", "Shell", "C++", "Dart", "Swift"}
+var SeedLanguages = []string{
+	"Go", "Python", "JavaScript", "TypeScript", "Java", "PHP", "Rust",
+	"Kotlin", "Shell", "C++", "Dart", "Swift", "Elixir", "Zig", "Scala",
+	"Haskell", "C#", "Lua", "OCaml", "Julia",
+}
 
 const (
 	seedMinStars = 100
-	seedMaxRepos = 300
+	seedMaxRepos = 1000
 )
 
 // Seed fetches top repos per language, upserts them, and scores them.

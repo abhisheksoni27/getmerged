@@ -29,6 +29,7 @@ export default function Home() {
   const [selectedLang, setSelectedLang] = useState<string>("All");
   const [selectedBucket, setSelectedBucket] = useState<string>("All");
   const [selectedTier, setSelectedTier] = useState<string>("All");
+  const [selectedMinMergeRate, setSelectedMinMergeRate] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [trendingOnly, setTrendingOnly] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -43,8 +44,9 @@ export default function Home() {
   const [totalReposCount, setTotalReposCount] = useState<number>(0);
   const perPage = 15; // Limit to maximum 15 rows of repos on home page
 
-  const languages = ["All", "Go", "TypeScript", "Python", "Rust", "C++", "Java", "PHP", "Ruby", "Dart", "Kotlin"];
+  const languages = ["All", "Go", "TypeScript", "Python", "Rust", "C++", "Java", "PHP", "Ruby", "Dart", "Kotlin", "Elixir", "Zig", "Scala"];
   const buckets = ["All", "500-1k", "1k-5k", "5k-20k", "20k-50k", "50k+"];
+  const mergeRateOptions = ["All", ">75% Merged", ">50% Merged", ">25% Merged"];
   const tiers = [
     { label: "All", value: "All" },
     { label: "Super Welcoming", value: "S" },
@@ -85,6 +87,10 @@ export default function Home() {
     }
     if (selectedTier !== "All") {
       params.set("tier", selectedTier);
+    }
+    if (selectedMinMergeRate !== "All") {
+      const val = selectedMinMergeRate.replace(/[^0-9]/g, "");
+      if (val) params.set("min_merge_rate", val);
     }
     if (trendingOnly) {
       params.set("trending", "true");
