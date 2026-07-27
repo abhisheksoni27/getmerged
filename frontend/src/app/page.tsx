@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 import posthog from "posthog-js";
+import Link from "next/link";
 
 export default function Home() {
   const [repos, setRepos] = useState<Repo[]>([]);
