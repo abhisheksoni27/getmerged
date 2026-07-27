@@ -121,12 +121,29 @@ export default function Home() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      fetchRepos();
+      fetchRepos().then(() => {
+        // Issue #27 Fix: Restore scroll position when returning from repo details
+        const savedY = sessionStorage.getItem("opendoor_scroll_pos");
+        if (savedY) {
+          window.scrollTo({ top: parseInt(savedY, 10), behavior: "instant" });
+          sessionStorage.removeItem("opendoor_scroll_pos");
+        }
+      });
     }, 0);
     return () => clearTimeout(timer);
   }, [fetchRepos]);
 
   useEffect(() => {
+    // Save scroll position on window scroll
+    const handleScroll = () => {
+      sessionStorage.setItem("opendoor_scroll_pos", window.scrollY.toString());
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    // Issue #28 Fix: Pre-fetch macro stats to prevent layout flicker
     fetch(`${API_BASE_URL}/api/v1/stats/macro`)
       .then((res) => res.json())
       .then((data) => {

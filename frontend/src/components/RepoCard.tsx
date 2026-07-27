@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Repo } from "@/types/opendoor";
-import { Star, GitMerge, Clock, Lock, ArrowUpRight, Flame } from "lucide-react";
+import { Star, GitMerge, Clock, Lock, ArrowUpRight, Flame, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { LangLogo } from "@/components/LangLogo";
 import posthog from "posthog-js";
@@ -149,18 +149,14 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
           </div>
         </div>
 
-        {/* Gated AI Vibe Teaser */}
-        <div className="relative overflow-hidden rounded-lg bg-zinc-50/80 p-2.5 border border-zinc-100">
-          <div className="flex items-center justify-between text-[11px] text-zinc-500 mb-1">
-            <span className="font-mono text-zinc-400">MAINTAINER VIBE</span>
-            {!isLoggedIn && <Lock className="h-3 w-3 text-zinc-400" />}
-          </div>
-          <p className="text-xs text-zinc-700 blur-[3px] select-none">
-            Active and welcoming maintainer team with very fast turnaround on PR reviews.
-          </p>
-          <div className="absolute inset-0 flex items-center justify-center bg-white/40 backdrop-blur-[1px]">
-            <span className="text-[11px] font-medium text-zinc-900 underline underline-offset-2 group-hover:text-emerald-600">
-              {isLoggedIn ? "View Repo Insights" : "Sign in to view AI Insights"}
+        {/* Issue #25 & #30 Fix: Clean AI Sparkly Button trigger instead of cluttered blurred box */}
+        <div className="relative overflow-hidden rounded-xl bg-zinc-900 p-3 text-white shadow-xs group-hover:border-emerald-500/50 transition-colors">
+          <div className="flex items-center justify-between font-mono text-xs">
+            <span className="flex items-center gap-1.5 font-bold text-emerald-400">
+              <Sparkles className="h-3.5 w-3.5 animate-pulse text-emerald-400" /> AI Maintainer Vibe
+            </span>
+            <span className="text-[10px] text-zinc-400 group-hover:text-white transition-colors">
+              {isLoggedIn ? "View Insights →" : "Sign in to unlock →"}
             </span>
           </div>
         </div>
