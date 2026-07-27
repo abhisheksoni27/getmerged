@@ -455,7 +455,9 @@ export default function Home() {
               Thousands of open-source contributors waste hours writing clean pull requests only to have them sit unreviewed for months. 
               <strong> Opendoor</strong> uses objective mathematical telemetry to grade repository maintainer responsiveness, merge velocity, and first-time contributor success.
             </p>
-          </di          {/* 3-Column Compact Macro Visual Insights Layout */}
+          </div>
+
+          {/* 3-Column Compact Macro Visual Insights Layout */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 font-mono">
             {/* Column 1: Compact Top 5 Ecosystem Leaderboard */}
             <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm flex flex-col justify-between">
@@ -490,7 +492,7 @@ export default function Home() {
                       const sPct = (sCount / grandTotal) * 100;
                       const aPct = (aCount / grandTotal) * 100;
                       const bPct = (bCount / grandTotal) * 100;
-                      const cPct = (cPct / grandTotal) * 100;
+                      const cPct = (cCount / grandTotal) * 100;
 
                       const weightedScore = sPct * 1.0 + aPct * 0.75 + bPct * 0.4 + cPct * 0.1;
 
@@ -642,7 +644,6 @@ export default function Home() {
                 <ArrowRight className="h-3.5 w-3.5 text-emerald-400" />
               </Link>
             </div>
-          </div>
           </div>
 
           {/* 3 Pillar Feature Cards */}
