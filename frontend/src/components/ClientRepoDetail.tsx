@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
+import posthog from "posthog-js";
 
 interface ClientRepoDetailProps {
   repo: Repo | null;
@@ -82,7 +83,14 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           method: "DELETE",
           credentials: "include",
         });
-        if (res.ok) setIsWatching(false);
+        if (res.ok) {
+          setIsWatching(false);
+          posthog.capture('repo_watch_toggled', {
+            action: 'unwatched',
+            repo_full_name: fullName,
+            repo_tier: rank,
+          });
+        }
       } else {
         const res = await fetch(`${API_BASE_URL}/api/v1/user/watchlist`, {
           method: "POST",
@@ -90,7 +98,14 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           credentials: "include",
           body: JSON.stringify({ repo_id: repo.id }),
         });
-        if (res.ok) setIsWatching(true);
+        if (res.ok) {
+          setIsWatching(true);
+          posthog.capture('repo_watch_toggled', {
+            action: 'watched',
+            repo_full_name: fullName,
+            repo_tier: rank,
+          });
+        }
       }
     } catch (e) {
       console.error("Failed to toggle watchlist", e);
@@ -208,28 +223,35 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 shrink-0">
-          <button
-            onClick={handleWatchToggle}
-            disabled={watchLoading}
-            className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-medium font-mono transition-all shadow-xs ${
-              isWatching
-                ? "border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"
-            }`}
-          >
-            {isWatching ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Bookmark className="h-3.5 w-3.5" />}
-            {isWatching ? "Watching" : "Watch Repo"}
-          </button>
-          <a
-            href={repo?.github_url || `https://github.com/${fullName}`}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full bg-zinc-900 px-4 py-2 text-xs font-medium text-white hover:bg-zinc-800 transition-all shadow-xs"
-          >
-            <GitPullRequest className="h-3.5 w-3.5" />
-            GitHub
-          </a>
+        <div className="flex flex-col items-end gap-1.5 shrink-0">
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={handleWatchToggle}
+              disabled={watchLoading}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-medium font-mono transition-all shadow-xs ${
+                isWatching
+                  ? "border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                  : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"
+              }`}
+            >
+              {isWatching ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Bookmark className="h-3.5 w-3.5" />}
+              {isWatching ? "Watching" : "Watch Repo"}
+            </button>
+            <a
+              href={repo?.github_url || `https://github.com/${fullName}`}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => posthog.capture('repo_github_link_clicked', { repo_full_name: fullName, repo_tier: rank })}
+              className="inline-flex items-center gap-1.5 rounded-full bg-zinc-900 px-4 py-2 text-xs font-medium text-white hover:bg-zinc-800 transition-all shadow-xs"
+            >
+              <GitPullRequest className="h-3.5 w-3.5" />
+              GitHub
+            </a>
+          </div>
+          {/* Issue #5: Explainer banner for Watch Repo value prop */}
+          <p className="text-[11px] font-mono text-zinc-500 max-w-xs text-right leading-tight">
+            💡 <strong className="text-zinc-700">Why Watch?</strong> Receive instant notifications if this repo&apos;s review velocity or C-Rank™ tier changes.
+          </p>
         </div>
       </div>
 
@@ -260,6 +282,117 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </div>
           <div className="text-2xl font-bold text-zinc-900">{firstTimerSuccessStr}</div>
           <div className="mt-1 text-[11px] text-zinc-500">{firstTimerCommentary}</div>
+        </div>
+      </div>
+
+      {/* C-Rank Weight & Tier Breakdown Interactive Pie Visualizer (Issues #14 & #15) */}
+      <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs mb-6 font-mono">
+        <h3 className="text-sm font-bold text-zinc-900 mb-4 flex items-center gap-2">
+          <Sparkles className="h-4 w-4 text-emerald-600" /> C-Rank™ Metric Weight Breakdown
+        </h3>
+        <div className="flex flex-col md:flex-row items-center gap-6 justify-between">
+          <div className="relative flex items-center justify-center h-44 w-44 group">
+            {/* SVG Pie Chart representing key weighted components */}
+            <svg viewBox="0 0 100 100" className="h-full w-full transform -rotate-90">
+              {/* Outer background ring */}
+              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#f4f4f5" strokeWidth="16" />
+              {/* S-Tier / Merge Rate segment (40%) - Emerald */}
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="transparent"
+                stroke="#10b981"
+                strokeWidth="16"
+                strokeDasharray="100.5 150.8"
+                strokeDashoffset="0"
+                className="hover:opacity-80 transition-opacity cursor-pointer"
+              >
+                <title>PR Merge Rate Weight: 40%</title>
+              </circle>
+              {/* A-Tier / Response Speed segment (30%) - Blue */}
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="transparent"
+                stroke="#2563eb"
+                strokeWidth="16"
+                strokeDasharray="75.4 175.9"
+                strokeDashoffset="-100.5"
+                className="hover:opacity-80 transition-opacity cursor-pointer"
+              >
+                <title>First Response Speed Weight: 30%</title>
+              </circle>
+              {/* B-Tier / First Timer Success segment (18%) - Amber */}
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="transparent"
+                stroke="#d97706"
+                strokeWidth="16"
+                strokeDasharray="45.2 206.1"
+                strokeDashoffset="-175.9"
+                className="hover:opacity-80 transition-opacity cursor-pointer"
+              >
+                <title>First-Timer Success Weight: 18%</title>
+              </circle>
+              {/* C-Tier / Slow Review segment (12%) - Purple (Issue #15 Fixed: Properly colored) */}
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="transparent"
+                stroke="#9333ea"
+                strokeWidth="16"
+                strokeDasharray="30.1 221.2"
+                strokeDashoffset="-221.1"
+                className="hover:opacity-80 transition-opacity cursor-pointer"
+              >
+                <title>Slow Review Factor / Latency: 12%</title>
+              </circle>
+            </svg>
+            <div className="absolute flex flex-col items-center justify-center text-center">
+              <span className="text-xl font-bold text-zinc-900">{score.toFixed(0)}</span>
+              <span className="text-[10px] text-zinc-500 uppercase tracking-wider">Score</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1 w-full text-xs">
+            <div className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-100 bg-zinc-50 hover:bg-emerald-50/50 transition-colors group">
+              <div className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-emerald-500 shrink-0" />
+                <span className="font-semibold text-zinc-800">External PR Merge Rate</span>
+              </div>
+              <span className="font-bold text-zinc-600 group-hover:text-emerald-700">40%</span>
+            </div>
+
+            <div className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-100 bg-zinc-50 hover:bg-blue-50/50 transition-colors group">
+              <div className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-blue-600 shrink-0" />
+                <span className="font-semibold text-zinc-800">Response Speed</span>
+              </div>
+              <span className="font-bold text-zinc-600 group-hover:text-blue-700">30%</span>
+            </div>
+
+            <div className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-100 bg-zinc-50 hover:bg-amber-50/50 transition-colors group">
+              <div className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-amber-600 shrink-0" />
+                <span className="font-semibold text-zinc-800">First-Timer Success</span>
+              </div>
+              <span className="font-bold text-zinc-600 group-hover:text-amber-700">18%</span>
+            </div>
+
+            {/* Issue #15 Fix: Slow review slice clearly labeled and colored in purple */}
+            <div className="flex items-center justify-between p-2.5 rounded-lg border border-purple-100 bg-purple-50/40 hover:bg-purple-50 transition-colors group">
+              <div className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-purple-600 shrink-0" />
+                <span className="font-semibold text-purple-900">Slow Review Factor</span>
+              </div>
+              <span className="font-bold text-purple-700">12%</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -362,6 +495,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               </p>
               <a
                 href={`${API_BASE_URL}/api/v1/auth/github`}
+                onClick={() => posthog.capture('github_sign_in_clicked', { source: 'ai_insights_wall', repo_full_name: fullName })}
                 className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-5 py-2 sm:px-6 sm:py-2.5 text-xs font-medium font-mono text-white shadow-xs hover:bg-zinc-800 active:scale-95 transition-all"
               >
                 <svg className="h-4 w-4 fill-current shrink-0" viewBox="0 0 24 24">
@@ -372,6 +506,33 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Issues #6, #7, #8: Contributor Community Feedback & Verification Module */}
+      <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs mb-10 font-mono">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-zinc-100 pb-4">
+          <div>
+            <h2 className="text-base font-bold text-zinc-900 flex items-center gap-2">
+              <Users className="h-4 w-4 text-blue-600" /> Contributor Community Vibe Feedback
+            </h2>
+            <p className="text-xs text-zinc-500 font-sans mt-0.5">
+              Real contributor sentiment vs algorithmic C-Rank™ data.
+            </p>
+          </div>
+          <span className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-semibold self-start sm:self-auto">
+            ✓ Verified GitHub Contributor Check Enabled
+          </span>
+        </div>
+
+        {/* Issue #8: Contributor Callout Prompt */}
+        <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-4 mb-6 text-xs text-blue-900 font-sans">
+          <p className="font-semibold flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-blue-600" /> Contributed to {fullName} previously?
+          </p>
+          <p className="mt-1 text-blue-800">
+            Share your experience! Submit feedback below. If you have merged commits in this repo, your review will automatically feature a <strong>Verified GitHub Contributor</strong> badge.
+          </p>
+        </div>
       </div>
 
       {/* Content-Heavy SEO Modules for Search Engines & Crawlers */}
