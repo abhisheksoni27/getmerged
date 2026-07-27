@@ -563,13 +563,7 @@ export default function Home() {
                             </div>
 
                             <div className="flex items-center gap-2">
-                              <div className="flex flex-wrap items-center gap-1.5 text-[10px] sm:text-[11px]">
-                                <span className="text-emerald-600 font-bold">{item.sPct.toFixed(0)}% S</span>
-                                <span className="text-blue-600">{item.aPct.toFixed(0)}% A</span>
-                                <span className="text-amber-600">{item.bPct.toFixed(0)}% B</span>
-                                <span className="text-purple-600">{item.cPct.toFixed(0)}% C</span>
-                                <span className="text-zinc-400 font-sans">({item.grandTotal} repos)</span>
-                              </div>
+                              <span className="text-[11px] text-zinc-400 font-sans">({item.grandTotal} repos)</span>
                               <span className="font-mono text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
                                 {item.weightedScore.toFixed(1)} pts
                               </span>
