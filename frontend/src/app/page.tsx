@@ -455,271 +455,253 @@ export default function Home() {
               Thousands of open-source contributors waste hours writing clean pull requests only to have them sit unreviewed for months. 
               <strong> Opendoor</strong> uses objective mathematical telemetry to grade repository maintainer responsiveness, merge velocity, and first-time contributor success.
             </p>
-          </div>
-
-          {/* Rich Macro Visualizations: Stacked Language-Tier Chart & Dynamic Tier Donut */}
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 mb-16 font-mono">
+          </div>          {/* Rich Macro Visualizations: Stacked Language-Tier Chart & Dynamic Platform Telemetry Insights */}
+          <div className="space-y-12 mb-16 font-mono">
             {/* 1. Language Leaderboard (Ranked by Weighted Contributor Score) */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-4 sm:p-6 shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 border-b border-zinc-100 pb-3">
-                  <div>
-                    <h3 className="text-xs sm:text-sm font-bold text-zinc-900 flex items-center gap-2">
-                      <Sparkles className="h-4 w-4 text-emerald-600 shrink-0" />
-                      Language Contributor Leaderboard
-                    </h3>
-                    <p className="text-[11px] text-zinc-500 font-sans mt-0.5">
-                      Ecosystems ranked by weighted welcoming score (Super Welcoming=4x, Welcoming=3x, Moderate=2x, Slow=1x).
-                    </p>
-                  </div>
-                  <span className="text-[10px] bg-emerald-50 text-emerald-700 font-semibold px-2 py-0.5 rounded-full border border-emerald-200 shrink-0 w-max">
-                    Live Leaderboard
-                  </span>
+            <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-zinc-100 pb-4">
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-zinc-900 flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-emerald-600 shrink-0" />
+                    Language Contributor Responsiveness Leaderboard
+                  </h3>
+                  <p className="text-xs text-zinc-500 font-sans mt-0.5">
+                    Ecosystems ranked by weighted contributor welcoming score across 4,500+ repositories.
+                  </p>
                 </div>
-
-                {/* Tier Color Legend */}
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] font-sans mb-4 bg-zinc-50/70 p-2.5 rounded-xl border border-zinc-100">
-                  <span className="flex items-center gap-1.5 text-emerald-700 font-semibold">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block shrink-0" /> Super Welcoming
-                  </span>
-                  <span className="flex items-center gap-1.5 text-blue-700 font-semibold">
-                    <span className="h-2 w-2 rounded-full bg-blue-500 inline-block shrink-0" /> Welcoming
-                  </span>
-                  <span className="flex items-center gap-1.5 text-amber-700 font-semibold">
-                    <span className="h-2 w-2 rounded-full bg-amber-500 inline-block shrink-0" /> Moderate
-                  </span>
-                  <span className="flex items-center gap-1.5 text-purple-700 font-semibold">
-                    <span className="h-2 w-2 rounded-full bg-purple-500 inline-block shrink-0" /> Slow Review
-                  </span>
-                </div>
-
-                {/* Leaderboard Items */}
-                <div className="space-y-3.5">
-                  {(
-                    stats?.language_breakdown || [
-                      { language: "Python", total: 245, tier_map: { S: 35, A: 85, B: 95, C: 30 } },
-                      { language: "TypeScript", total: 210, tier_map: { S: 28, A: 72, B: 80, C: 30 } },
-                      { language: "Go", total: 180, tier_map: { S: 25, A: 65, B: 60, C: 30 } },
-                      { language: "Rust", total: 140, tier_map: { S: 18, A: 42, B: 50, C: 30 } },
-                      { language: "Java", total: 120, tier_map: { S: 15, A: 35, B: 40, C: 30 } },
-                      { language: "C++", total: 95, tier_map: { S: 10, A: 30, B: 35, C: 20 } },
-                      { language: "PHP", total: 80, tier_map: { S: 8, A: 25, B: 30, C: 17 } },
-                      { language: "Ruby", total: 70, tier_map: { S: 7, A: 22, B: 25, C: 16 } },
-                      { language: "Dart", total: 60, tier_map: { S: 6, A: 20, B: 22, C: 12 } },
-                      { language: "Kotlin", total: 50, tier_map: { S: 5, A: 16, B: 18, C: 11 } },
-                    ]
-                  )
-                    .map((item) => {
-                      const sCount = item.tier_map?.["S"] || 0;
-                      const aCount = item.tier_map?.["A"] || 0;
-                      const bCount = item.tier_map?.["B"] || 0;
-                      const cCount = item.tier_map?.["C"] || 0;
-                      const grandTotal = item.total || sCount + aCount + bCount + cCount || 1;
-
-                      const sPct = (sCount / grandTotal) * 100;
-                      const aPct = (aCount / grandTotal) * 100;
-                      const bPct = (bCount / grandTotal) * 100;
-                      const cPct = (cCount / grandTotal) * 100;
-
-                      // Calculate weighted welcoming score out of 100
-                      const weightedScore = sPct * 1.0 + aPct * 0.75 + bPct * 0.4 + cPct * 0.1;
-
-                      return {
-                        ...item,
-                        sCount,
-                        aCount,
-                        bCount,
-                        cCount,
-                        grandTotal,
-                        sPct,
-                        aPct,
-                        bPct,
-                        cPct,
-                        weightedScore,
-                      };
-                    })
-                    .sort((a, b) => b.weightedScore - a.weightedScore)
-                    .slice(0, 10)
-                    .map((item, idx) => {
-                      const rankMedal =
-                        idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`;
-
-                      return (
-                        <div
-                          key={item.language}
-                          className="text-xs group p-2.5 rounded-xl border border-zinc-100 bg-zinc-50/50 hover:bg-white hover:shadow-xs transition-all"
-                        >
-                          <div className="flex flex-col xs:flex-row xs:justify-between xs:items-center gap-1.5 text-zinc-700 mb-2">
-                            <div className="flex items-center gap-2">
-                              <span className="font-mono text-[11px] font-bold text-zinc-400 min-w-[24px]">
-                                {rankMedal}
-                              </span>
-                              <Link
-                                href={`/rankings/${item.language.toLowerCase()}`}
-                                className="font-bold text-zinc-900 hover:text-emerald-600 transition-colors flex items-center gap-1.5"
-                              >
-                                <LangLogo language={item.language} />
-                                {item.language}
-                              </Link>
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                              <span className="text-[11px] text-zinc-400 font-sans">({item.grandTotal} repos)</span>
-                              <span className="font-mono text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                                {item.weightedScore.toFixed(1)} pts
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* Segmented Bar with Tooltip */}
-                          <div className="h-3.5 w-full rounded-md bg-zinc-100 overflow-hidden flex shadow-xs border border-zinc-200/50">
-                            {item.sPct > 0 && (
-                              <div
-                                title={`Super Welcoming: ${item.sCount} repos (${item.sPct.toFixed(1)}%)`}
-                                className="h-full bg-emerald-500 hover:brightness-125 transition-all cursor-pointer relative"
-                                style={{ width: `${item.sPct}%` }}
-                              />
-                            )}
-                            {item.aPct > 0 && (
-                              <div
-                                title={`Welcoming: ${item.aCount} repos (${item.aPct.toFixed(1)}%)`}
-                                className="h-full bg-blue-500 hover:brightness-125 transition-all cursor-pointer relative"
-                                style={{ width: `${item.aPct}%` }}
-                              />
-                            )}
-                            {item.bPct > 0 && (
-                              <div
-                                title={`Moderate: ${item.bCount} repos (${item.bPct.toFixed(1)}%)`}
-                                className="h-full bg-amber-500 hover:brightness-125 transition-all cursor-pointer relative"
-                                style={{ width: `${item.bPct}%` }}
-                              />
-                            )}
-                            {item.cPct > 0 && (
-                              <div
-                                title={`Slow Review: ${item.cCount} repos (${item.cPct.toFixed(1)}%)`}
-                                className="h-full bg-purple-500 hover:brightness-125 transition-all cursor-pointer relative"
-                                style={{ width: `${item.cPct}%` }}
-                              />
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-                </div>
+                <span className="text-xs bg-emerald-50 text-emerald-700 font-semibold px-3 py-1 rounded-full border border-emerald-200 shrink-0 self-start sm:self-auto">
+                  Live Global Telemetry
+                </span>
               </div>
 
-              <div className="mt-6 pt-3 border-t border-zinc-100 flex items-center justify-between text-[11px] text-zinc-400 font-sans">
-                <span>Top 10 ecosystems ranked dynamically by contributor merge & response velocity.</span>
+              {/* Tier Color Legend */}
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-sans mb-6 bg-zinc-50/70 p-3 rounded-xl border border-zinc-100">
+                <span className="flex items-center gap-2 text-emerald-700 font-semibold">
+                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 inline-block shrink-0" /> Super Welcoming
+                </span>
+                <span className="flex items-center gap-2 text-blue-700 font-semibold">
+                  <span className="h-2.5 w-2.5 rounded-full bg-blue-500 inline-block shrink-0" /> Welcoming
+                </span>
+                <span className="flex items-center gap-2 text-amber-700 font-semibold">
+                  <span className="h-2.5 w-2.5 rounded-full bg-amber-500 inline-block shrink-0" /> Moderate
+                </span>
+                <span className="flex items-center gap-2 text-purple-700 font-semibold">
+                  <span className="h-2.5 w-2.5 rounded-full bg-purple-500 inline-block shrink-0" /> Slow Review
+                </span>
+              </div>
+
+              {/* Leaderboard Items */}
+              <div className="space-y-4">
+                {(
+                  stats?.language_breakdown || [
+                    { language: "Python", total: 245, tier_map: { S: 35, A: 85, B: 95, C: 30 } },
+                    { language: "TypeScript", total: 210, tier_map: { S: 28, A: 72, B: 80, C: 30 } },
+                    { language: "Go", total: 180, tier_map: { S: 25, A: 65, B: 60, C: 30 } },
+                    { language: "Rust", total: 140, tier_map: { S: 18, A: 42, B: 50, C: 30 } },
+                    { language: "Java", total: 120, tier_map: { S: 15, A: 35, B: 40, C: 30 } },
+                    { language: "C++", total: 95, tier_map: { S: 10, A: 30, B: 35, C: 20 } },
+                    { language: "PHP", total: 80, tier_map: { S: 8, A: 25, B: 30, C: 17 } },
+                    { language: "Ruby", total: 70, tier_map: { S: 7, A: 22, B: 25, C: 16 } },
+                    { language: "Dart", total: 60, tier_map: { S: 6, A: 20, B: 22, C: 12 } },
+                    { language: "Kotlin", total: 50, tier_map: { S: 5, A: 16, B: 18, C: 11 } },
+                  ]
+                )
+                  .map((item) => {
+                    const sCount = item.tier_map?.["S"] || 0;
+                    const aCount = item.tier_map?.["A"] || 0;
+                    const bCount = item.tier_map?.["B"] || 0;
+                    const cCount = item.tier_map?.["C"] || 0;
+                    const grandTotal = item.total || sCount + aCount + bCount + cCount || 1;
+
+                    const sPct = (sCount / grandTotal) * 100;
+                    const aPct = (aCount / grandTotal) * 100;
+                    const bPct = (bCount / grandTotal) * 100;
+                    const cPct = (cCount / grandTotal) * 100;
+
+                    const weightedScore = sPct * 1.0 + aPct * 0.75 + bPct * 0.4 + cPct * 0.1;
+
+                    return {
+                      ...item,
+                      sCount,
+                      aCount,
+                      bCount,
+                      cCount,
+                      grandTotal,
+                      sPct,
+                      aPct,
+                      bPct,
+                      cPct,
+                      weightedScore,
+                    };
+                  })
+                  .sort((a, b) => b.weightedScore - a.weightedScore)
+                  .slice(0, 10)
+                  .map((item, idx) => {
+                    const rankMedal =
+                      idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`;
+
+                    return (
+                      <div
+                        key={item.language}
+                        className="text-xs group p-3 rounded-xl border border-zinc-100 bg-zinc-50/50 hover:bg-white hover:shadow-xs transition-all"
+                      >
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-zinc-700 mb-2.5">
+                          <div className="flex items-center gap-2.5">
+                            <span className="font-mono text-xs font-bold text-zinc-400 min-w-[28px]">
+                              {rankMedal}
+                            </span>
+                            <Link
+                              href={`/rankings/${item.language.toLowerCase()}`}
+                              className="font-bold text-zinc-900 text-sm hover:text-emerald-600 transition-colors flex items-center gap-2"
+                            >
+                              <LangLogo language={item.language} />
+                              {item.language}
+                            </Link>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <span className="text-xs text-zinc-500 font-sans">({item.grandTotal} repos scored)</span>
+                            <span className="font-mono text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                              {item.weightedScore.toFixed(1)} pts
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Segmented Bar with Tooltip */}
+                        <div className="h-4 w-full rounded-lg bg-zinc-100 overflow-hidden flex shadow-xs border border-zinc-200/50">
+                          {item.sPct > 0 && (
+                            <div
+                              title={`Super Welcoming: ${item.sCount} repos (${item.sPct.toFixed(1)}%)`}
+                              className="h-full bg-emerald-500 hover:brightness-125 transition-all cursor-pointer relative"
+                              style={{ width: `${item.sPct}%` }}
+                            />
+                          )}
+                          {item.aPct > 0 && (
+                            <div
+                              title={`Welcoming: ${item.aCount} repos (${item.aPct.toFixed(1)}%)`}
+                              className="h-full bg-blue-500 hover:brightness-125 transition-all cursor-pointer relative"
+                              style={{ width: `${item.aPct}%` }}
+                            />
+                          )}
+                          {item.bPct > 0 && (
+                            <div
+                              title={`Moderate: ${item.bCount} repos (${item.bPct.toFixed(1)}%)`}
+                              className="h-full bg-amber-500 hover:brightness-125 transition-all cursor-pointer relative"
+                              style={{ width: `${item.bPct}%` }}
+                            />
+                          )}
+                          {item.cPct > 0 && (
+                            <div
+                              title={`Slow Review: ${item.cCount} repos (${item.cPct.toFixed(1)}%)`}
+                              className="h-full bg-purple-500 hover:brightness-125 transition-all cursor-pointer relative"
+                              style={{ width: `${item.cPct}%` }}
+                            />
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
 
-            {/* 2. Global Rating Composition Donut Visualization & Tier Cards */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-4 sm:p-6 shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 border-b border-zinc-100 pb-3">
-                  <div>
-                    <h3 className="text-xs sm:text-sm font-bold text-zinc-900 flex items-center gap-2">
-                      <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
-                      Global Contributor Vibe Composition
-                    </h3>
-                    <p className="text-[11px] text-zinc-500 font-sans mt-0.5">
-                      Platform-wide ratio of open-source repository responsiveness tiers.
-                    </p>
-                  </div>
-                  <span className="text-[10px] bg-zinc-100 px-2 py-0.5 rounded-full text-zinc-600 shrink-0 w-max">1,200 Repos</span>
+            {/* 2. Full-Width Global Platform Vibe Composition & Insights Grid */}
+            <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-zinc-100 pb-4">
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-zinc-900 flex items-center gap-2">
+                    <ShieldCheck className="h-5 w-5 text-emerald-600 shrink-0" />
+                    Global Contributor Vibe Composition & Insights
+                  </h3>
+                  <p className="text-xs text-zinc-500 font-sans mt-0.5">
+                    Platform-wide ratio of open-source repository responsiveness tiers across 4,500+ repos.
+                  </p>
                 </div>
-
-                {/* SVG Donut Ring with Synchronized Colors */}
-                <div className="my-6 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8">
-                  <div className="relative flex items-center justify-center shrink-0">
-                    <svg className="h-32 w-32 sm:h-36 sm:w-36 -rotate-90 transform" viewBox="0 0 36 36">
-                      <path
-                        className="text-zinc-100"
-                        strokeWidth="3.8"
-                        stroke="currentColor"
-                        fill="none"
-                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                      />
-                      {/* Super Welcoming (Emerald) */}
-                      <path
-                        className="text-emerald-500 transition-all duration-1000"
-                        strokeDasharray="18, 100"
-                        strokeWidth="3.8"
-                        strokeLinecap="round"
-                        stroke="currentColor"
-                        fill="none"
-                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                      />
-                      {/* Welcoming (Blue) */}
-                      <path
-                        className="text-blue-500 transition-all duration-1000"
-                        strokeDasharray="32, 100"
-                        strokeDashoffset="-18"
-                        strokeWidth="3.8"
-                        strokeLinecap="round"
-                        stroke="currentColor"
-                        fill="none"
-                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                      />
-                      {/* Moderate (Amber) */}
-                      <path
-                        className="text-amber-500 transition-all duration-1000"
-                        strokeDasharray="35, 100"
-                        strokeDashoffset="-50"
-                        strokeWidth="3.8"
-                        strokeLinecap="round"
-                        stroke="currentColor"
-                        fill="none"
-                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                      />
-                    </svg>
-                    <div className="absolute text-center">
-                      <div className="text-lg sm:text-xl font-bold font-mono text-zinc-900">
-                        {stats?.s_class_count !== undefined ? stats.s_class_count : 65}
-                      </div>
-                      <div className="text-[9px] sm:text-[10px] font-mono text-emerald-600 font-semibold uppercase">Super Welcoming</div>
-                    </div>
-                  </div>
-
-                  {/* Tier Cards Grid with Human-Friendly Lingo */}
-                  <div className="grid grid-cols-2 gap-2.5 sm:gap-3 text-xs w-full max-w-xs">
-                    <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-2 sm:p-2.5">
-                      <div className="text-[9px] sm:text-[10px] text-emerald-800 font-bold uppercase truncate">Super Welcoming</div>
-                      <div className="text-base sm:text-lg font-bold text-emerald-950 mt-0.5">
-                        {stats?.s_class_count !== undefined ? stats.s_class_count : stats?.rank_counts?.["S"] || 65}
-                      </div>
-                      <div className="text-[9px] text-emerald-700 font-sans">Score 70–100</div>
-                    </div>
-
-                    <div className="rounded-xl border border-blue-200 bg-blue-50/60 p-2 sm:p-2.5">
-                      <div className="text-[9px] sm:text-[10px] text-blue-800 font-bold uppercase truncate">Welcoming</div>
-                      <div className="text-base sm:text-lg font-bold text-blue-950 mt-0.5">
-                        {stats?.rank_counts?.["A"] || 185}
-                      </div>
-                      <div className="text-[9px] text-blue-700 font-sans">Score 55–69</div>
-                    </div>
-
-                    <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-2 sm:p-2.5">
-                      <div className="text-[9px] sm:text-[10px] text-amber-800 font-bold uppercase truncate">Moderate</div>
-                      <div className="text-base sm:text-lg font-bold text-amber-950 mt-0.5">
-                        {stats?.rank_counts?.["B"] || 354}
-                      </div>
-                      <div className="text-[9px] text-amber-700 font-sans">Score 40–54</div>
-                    </div>
-
-                    <div className="rounded-xl border border-purple-200 bg-purple-50/60 p-2 sm:p-2.5">
-                      <div className="text-[9px] sm:text-[10px] text-purple-800 font-bold uppercase truncate">Slow Review</div>
-                      <div className="text-base sm:text-lg font-bold text-purple-950 mt-0.5">
-                        {stats?.rank_counts?.["C"] || 246}
-                      </div>
-                      <div className="text-[9px] text-purple-700 font-sans">Score 25–39</div>
-                    </div>
-                  </div>
-                </div>
+                <span className="text-xs font-mono font-bold bg-zinc-100 px-3 py-1 rounded-full text-zinc-700 shrink-0 self-start sm:self-auto">
+                  {stats?.total_repos ? stats.total_repos.toLocaleString() : "4,556"} Indexed Repos
+                </span>
               </div>
 
-              <div className="pt-3 border-t border-zinc-100 flex items-center justify-between text-[11px] text-zinc-400 font-sans">
-                <span>Unmaintained repositories (score &lt; 25) are automatically filtered out.</span>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+                {/* SVG Donut Ring */}
+                <div className="relative flex flex-col items-center justify-center p-4 rounded-xl bg-zinc-50/50 border border-zinc-100">
+                  <svg className="h-36 w-36 -rotate-90 transform" viewBox="0 0 36 36">
+                    <path
+                      className="text-zinc-100"
+                      strokeWidth="3.8"
+                      stroke="currentColor"
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path
+                      className="text-emerald-500 transition-all duration-1000"
+                      strokeDasharray="18, 100"
+                      strokeWidth="3.8"
+                      strokeLinecap="round"
+                      stroke="currentColor"
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path
+                      className="text-blue-500 transition-all duration-1000"
+                      strokeDasharray="32, 100"
+                      strokeDashoffset="-18"
+                      strokeWidth="3.8"
+                      strokeLinecap="round"
+                      stroke="currentColor"
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path
+                      className="text-amber-500 transition-all duration-1000"
+                      strokeDasharray="35, 100"
+                      strokeDashoffset="-50"
+                      strokeWidth="3.8"
+                      strokeLinecap="round"
+                      stroke="currentColor"
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                  </svg>
+                  <div className="absolute text-center">
+                    <div className="text-xl font-bold font-mono text-zinc-900">
+                      {stats?.s_class_count !== undefined ? stats.s_class_count : 420}
+                    </div>
+                    <div className="text-[10px] font-mono text-emerald-600 font-bold uppercase">Super Welcoming</div>
+                  </div>
+                </div>
+
+                {/* 3 Value Proposition Metric Highlight Columns */}
+                <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 space-y-1">
+                    <div className="text-xs text-emerald-800 font-bold uppercase tracking-wider">Super Welcoming</div>
+                    <div className="text-2xl font-bold text-emerald-950">
+                      {stats?.s_class_count !== undefined ? stats.s_class_count : stats?.rank_counts?.["S"] || 420}
+                    </div>
+                    <p className="text-xs text-emerald-700 font-sans leading-relaxed">
+                      Score 70–100. Average PR review in under 4 hours with high first-timer merge rates.
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-4 space-y-1">
+                    <div className="text-xs text-blue-800 font-bold uppercase tracking-wider">Welcoming</div>
+                    <div className="text-2xl font-bold text-blue-950">
+                      {stats?.rank_counts?.["A"] || 1420}
+                    </div>
+                    <p className="text-xs text-blue-700 font-sans leading-relaxed">
+                      Score 55–69. Responsive maintainer teams with predictable review turnaround.
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-amber-200 bg-amber-50/50 p-4 space-y-1">
+                    <div className="text-xs text-amber-800 font-bold uppercase tracking-wider">Moderate / Slow</div>
+                    <div className="text-2xl font-bold text-amber-950">
+                      {(stats?.rank_counts?.["B"] || 1800) + (stats?.rank_counts?.["C"] || 800)}
+                    </div>
+                    <p className="text-xs text-amber-700 font-sans leading-relaxed">
+                      Score 25–54. Selective PR reviews requiring comprehensive test coverage.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
