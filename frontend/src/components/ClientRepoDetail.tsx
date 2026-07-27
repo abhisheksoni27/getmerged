@@ -285,11 +285,14 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         </div>
       </div>
 
-      {/* C-Rank Weight & Tier Breakdown Interactive Pie Visualizer (Issues #14 & #15) */}
+      {/* C-Rank Weight & Tier Breakdown Interactive Pie Visualizer */}
       <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs mb-6 font-mono">
-        <h3 className="text-sm font-bold text-zinc-900 mb-4 flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-emerald-600" /> C-Rank™ Metric Weight Breakdown
-        </h3>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-emerald-600" /> C-Rank™ Scoring Algorithm Formula Weights
+          </h3>
+          <span className="text-[11px] text-zinc-400 font-sans">Formula weights used to compute overall score out of 100</span>
+        </div>
         <div className="flex flex-col md:flex-row items-center gap-6 justify-between">
           <div className="relative flex items-center justify-center h-44 w-44 group">
             {/* SVG Pie Chart representing key weighted components */}
@@ -308,7 +311,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 strokeDashoffset="0"
                 className="hover:opacity-80 transition-opacity cursor-pointer"
               >
-                <title>PR Merge Rate Weight: 40%</title>
+                <title>PR Merge Rate Weight in Formula: 40%</title>
               </circle>
               {/* A-Tier / Response Speed segment (30%) - Blue */}
               <circle
@@ -322,7 +325,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 strokeDashoffset="-100.5"
                 className="hover:opacity-80 transition-opacity cursor-pointer"
               >
-                <title>First Response Speed Weight: 30%</title>
+                <title>First Response Speed Weight in Formula: 30%</title>
               </circle>
               {/* B-Tier / First Timer Success segment (18%) - Amber */}
               <circle
@@ -336,9 +339,9 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 strokeDashoffset="-175.9"
                 className="hover:opacity-80 transition-opacity cursor-pointer"
               >
-                <title>First-Timer Success Weight: 18%</title>
+                <title>First-Timer Success Weight in Formula: 18%</title>
               </circle>
-              {/* C-Tier / Slow Review segment (12%) - Purple (Issue #15 Fixed: Properly colored) */}
+              {/* C-Tier / Slow Review segment (12%) - Purple */}
               <circle
                 cx="50"
                 cy="50"
@@ -350,7 +353,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 strokeDashoffset="-221.1"
                 className="hover:opacity-80 transition-opacity cursor-pointer"
               >
-                <title>Slow Review Factor / Latency: 12%</title>
+                <title>Slow Review Latency Weight in Formula: 12%</title>
               </circle>
             </svg>
             <div className="absolute flex flex-col items-center justify-center text-center">
@@ -363,7 +366,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <div className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-100 bg-zinc-50 hover:bg-emerald-50/50 transition-colors group">
               <div className="flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full bg-emerald-500 shrink-0" />
-                <span className="font-semibold text-zinc-800">External PR Merge Rate</span>
+                <span className="font-semibold text-zinc-800">External PR Merge Weight</span>
               </div>
               <span className="font-bold text-zinc-600 group-hover:text-emerald-700">40%</span>
             </div>
@@ -371,7 +374,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <div className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-100 bg-zinc-50 hover:bg-blue-50/50 transition-colors group">
               <div className="flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full bg-blue-600 shrink-0" />
-                <span className="font-semibold text-zinc-800">Response Speed</span>
+                <span className="font-semibold text-zinc-800">Response Speed Weight</span>
               </div>
               <span className="font-bold text-zinc-600 group-hover:text-blue-700">30%</span>
             </div>
@@ -379,16 +382,15 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <div className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-100 bg-zinc-50 hover:bg-amber-50/50 transition-colors group">
               <div className="flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full bg-amber-600 shrink-0" />
-                <span className="font-semibold text-zinc-800">First-Timer Success</span>
+                <span className="font-semibold text-zinc-800">First-Timer Success Weight</span>
               </div>
               <span className="font-bold text-zinc-600 group-hover:text-amber-700">18%</span>
             </div>
 
-            {/* Issue #15 Fix: Slow review slice clearly labeled and colored in purple */}
             <div className="flex items-center justify-between p-2.5 rounded-lg border border-purple-100 bg-purple-50/40 hover:bg-purple-50 transition-colors group">
               <div className="flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full bg-purple-600 shrink-0" />
-                <span className="font-semibold text-purple-900">Slow Review Factor</span>
+                <span className="font-semibold text-purple-900">Slow Review Factor Weight</span>
               </div>
               <span className="font-bold text-purple-700">12%</span>
             </div>
