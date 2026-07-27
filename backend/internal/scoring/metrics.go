@@ -96,8 +96,8 @@ func ComputeMetrics(prs []PR, issues []Issue, staleness bool) RawMetrics {
 			externalMerged++
 		}
 
-		// First-timer tracking
-		if pr.AuthorAssociation == FirstTimerAssociation {
+		// First-timer tracking: check FIRST_TIME_CONTRIBUTOR association OR single-PR author
+		if pr.AuthorAssociation == FirstTimerAssociation || pr.AuthorAssociation == "FIRST_TIMER" || allContributors[pr.AuthorLogin] == 1 {
 			firstTimersSeen[pr.AuthorLogin] = true
 			if pr.State == "MERGED" {
 				firstTimers[pr.AuthorLogin] = true

@@ -17,6 +17,7 @@ import {
   Star,
   FileCode2,
   Check,
+  ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
