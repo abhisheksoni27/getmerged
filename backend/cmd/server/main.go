@@ -81,6 +81,8 @@ func main() {
 		api.GET("/repos/:id", handler.GetRepo(repoStore))
 		api.GET("/stats/macro", handler.GetMacroStats())
 
+		api.GET("/repos/:id/feedback", handler.ListFeedback(database))
+
 		// Auth Routes
 		authGroup := api.Group("/auth")
 		{
@@ -98,6 +100,7 @@ func main() {
 		userApi.POST("/user/watchlist", handler.AddToWatchlist(watchlistRepo))
 		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist(watchlistRepo))
 		userApi.GET("/user/watchlist", handler.ListWatchlist(watchlistRepo))
+		userApi.POST("/user/feedback", handler.CreateFeedback(database, cfg.GithubToken))
 	}
 
 	// Internal routes — nginx blocks these externally

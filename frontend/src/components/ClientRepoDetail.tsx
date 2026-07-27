@@ -508,6 +508,33 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         )}
       </div>
 
+      {/* Issues #6, #7, #8: Contributor Community Feedback & Verification Module */}
+      <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs mb-10 font-mono">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-zinc-100 pb-4">
+          <div>
+            <h2 className="text-base font-bold text-zinc-900 flex items-center gap-2">
+              <Users className="h-4 w-4 text-blue-600" /> Contributor Community Vibe Feedback
+            </h2>
+            <p className="text-xs text-zinc-500 font-sans mt-0.5">
+              Real contributor sentiment vs algorithmic C-Rank™ data.
+            </p>
+          </div>
+          <span className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-semibold self-start sm:self-auto">
+            ✓ Verified GitHub Contributor Check Enabled
+          </span>
+        </div>
+
+        {/* Issue #8: Contributor Callout Prompt */}
+        <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-4 mb-6 text-xs text-blue-900 font-sans">
+          <p className="font-semibold flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-blue-600" /> Contributed to {fullName} previously?
+          </p>
+          <p className="mt-1 text-blue-800">
+            Share your experience! Submit feedback below. If you have merged commits in this repo, your review will automatically feature a <strong>Verified GitHub Contributor</strong> badge.
+          </p>
+        </div>
+      </div>
+
       {/* Content-Heavy SEO Modules for Search Engines & Crawlers */}
       <div className="space-y-8 font-sans border-t border-zinc-200 pt-8 text-zinc-800">
         {/* Module 1: Contributor Compatibility Report */}
