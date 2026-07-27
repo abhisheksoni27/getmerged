@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { CheckCircle2, AlertCircle, RefreshCw, Server, ArrowLeft, ShieldCheck, Zap } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
@@ -135,6 +136,7 @@ export default function StatusPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
