@@ -552,10 +552,13 @@ export default function Home() {
                               <span className="font-mono text-[11px] font-bold text-zinc-400 min-w-[24px]">
                                 {rankMedal}
                               </span>
-                              <span className="font-bold text-zinc-900 group-hover:text-emerald-600 transition-colors flex items-center gap-1.5">
+                              <Link
+                                href={`/rankings/${item.language.toLowerCase()}`}
+                                className="font-bold text-zinc-900 hover:text-emerald-600 transition-colors flex items-center gap-1.5"
+                              >
                                 <LangLogo language={item.language} />
                                 {item.language}
-                              </span>
+                              </Link>
                             </div>
 
                             <div className="flex items-center gap-2">
