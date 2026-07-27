@@ -35,6 +35,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [trendingOnly, setTrendingOnly] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [statsLoading, setStatsLoading] = useState(true);
 
   const [isLoggedIn] = useState<boolean>(() => {
     return typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
@@ -157,7 +158,8 @@ export default function Home() {
       .then((data) => {
         if (data.stats) setStats(data.stats);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setStatsLoading(false));
   }, []);
 
   const handleLangChange = (lang: string) => {
@@ -221,28 +223,50 @@ export default function Home() {
         </p>
 
         {/* Macro Metrics Bar */}
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4 max-w-3xl mx-auto rounded-xl border border-zinc-200 bg-white/90 p-3 sm:p-4 shadow-xs">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4 max-w-3xl mx-auto rounded-xl border border-zinc-200 bg-white p-3 sm:p-4 shadow-xs">
           <div>
             <div className="text-xl sm:text-2xl font-bold font-mono text-zinc-900">
-              {stats?.total_repos ? stats.total_repos.toLocaleString() : totalReposCount > 0 ? totalReposCount.toLocaleString() : "1,189"}
+              {statsLoading ? (
+                <div className="h-7 w-16 rounded-md bg-zinc-200 animate-pulse" />
+              ) : (
+                stats?.total_repos ? stats.total_repos.toLocaleString() : totalReposCount > 0 ? totalReposCount.toLocaleString() : "—"
+              )}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Repos Scored</div>
           </div>
           <div>
             <div className="text-xl sm:text-2xl font-bold font-mono text-emerald-600">
-              {stats?.s_class_count !== undefined ? stats.s_class_count : stats?.rank_counts?.["S"] !== undefined ? stats.rank_counts["S"] : "420"}
+              {statsLoading ? (
+                <div className="h-7 w-16 rounded-md bg-zinc-200 animate-pulse" />
+              ) : (
+                stats?.s_class_count !== undefined ? stats.s_class_count : stats?.rank_counts?.["S"] !== undefined ? stats.rank_counts["S"] : "—"
+              )}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Super Welcoming</div>
           </div>
           <div>
             <div className="text-xl sm:text-2xl font-bold font-mono text-zinc-900">
-              {stats?.languages_count ? `${stats.languages_count}+` : "10+"}
+              {statsLoading ? (
+                <div className="h-7 w-16 rounded-md bg-zinc-200 animate-pulse" />
+              ) : (
+                stats?.languages_count ? `${stats.languages_count}+` : "—"
+              )}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Languages Covered</div>
           </div>
           <div>
             <div className="text-xl sm:text-2xl font-bold font-mono text-zinc-900">
-              {stats?.avg_response_hours ? `${stats.avg_response_hours.toFixed(1)}h` : "4.2h"}
+              {statsLoading ? (
+                <div className="h-7 w-16 rounded-md bg-zinc-200 animate-pulse" />
+              ) : stats?.avg_response_hours ? (
+                stats.avg_response_hours < 1
+                  ? "<1h"
+                  : stats.avg_response_hours < 24
+                  ? `${Math.floor(stats.avg_response_hours)}h`
+                  : `${Math.floor(stats.avg_response_hours / 24)}d+`
+              ) : (
+                "—"
+              )}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Avg First Review</div>
           </div>
@@ -322,7 +346,7 @@ export default function Home() {
                   className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 font-mono text-[11px] sm:text-xs active:scale-95 transition-all ${
                     selectedLang === lang
                       ? "bg-zinc-900 text-white shadow-xs"
-                      : "bg-zinc-100/80 text-zinc-600 hover:bg-zinc-200/80"
+                      : "bg-white/5 text-zinc-400 hover:bg-white/10"
                   }`}
                 >
                   {lang !== "All" && <LangLogo language={lang} />}
@@ -343,7 +367,7 @@ export default function Home() {
                   className={`rounded-md px-2.5 py-1 font-mono text-[11px] sm:text-xs active:scale-95 transition-all ${
                     selectedBucket === b
                       ? "bg-zinc-900 text-white shadow-xs"
-                      : "bg-zinc-100/80 text-zinc-600 hover:bg-zinc-200/80"
+                      : "bg-white/5 text-zinc-400 hover:bg-white/10"
                   }`}
                 >
                   {b}
@@ -386,7 +410,7 @@ export default function Home() {
             </div>
 
             {/* Pagination Controls Mobile Optimized */}
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-zinc-200 pt-6 font-mono text-xs text-zinc-600">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-zinc-200 pt-8 pb-10 font-mono text-xs text-zinc-500">
               <div className="text-center sm:text-left">
                 Showing page <span className="font-bold text-zinc-900">{page}</span> of{" "}
                 <span className="font-bold text-zinc-900">{totalPages || 1}</span> ({totalReposCount.toLocaleString()} total)
@@ -396,7 +420,7 @@ export default function Home() {
                 <button
                   disabled={page <= 1}
                   onClick={() => handlePageChange(Math.max(page - 1, 1))}
-                  className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 sm:px-3 text-xs font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 sm:px-3 text-xs font-medium text-zinc-600 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                 >
                   <ChevronLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   <span className="hidden xs:inline sm:inline">Previous</span>
@@ -424,7 +448,7 @@ export default function Home() {
                 <button
                   disabled={page >= totalPages}
                   onClick={() => handlePageChange(Math.min(page + 1, totalPages))}
-                  className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 sm:px-3 text-xs font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 sm:px-3 text-xs font-medium text-zinc-600 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                 >
                   <span className="hidden xs:inline sm:inline">Next</span>
                   <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
@@ -433,7 +457,7 @@ export default function Home() {
             </div>
           </>
         ) : (
-          <div className="rounded-2xl border border-dashed border-zinc-300 p-12 text-center bg-white">
+          <div className="rounded-2xl border border-dashed border-zinc-300 p-12 text-center bg-zinc-50">
             <h3 className="text-sm font-mono font-semibold text-zinc-900">No open doors found</h3>
             <p className="mt-1 text-xs text-zinc-500">Try adjusting your language or star bucket filters.</p>
           </div>
@@ -441,7 +465,7 @@ export default function Home() {
       </main>
 
       {/* SEO & Platform Intelligence Explanation Section */}
-      <section className="border-t border-zinc-200 bg-zinc-50/50 py-16 sm:py-20">
+      <section className="border-t border-zinc-200 bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center mb-12 sm:mb-16">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1 text-xs font-mono text-emerald-700 mb-4">
@@ -449,7 +473,7 @@ export default function Home() {
               <span>Glassdoor for Open Source Repositories</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold font-mono text-zinc-900 lg:text-4xl">
-              Stop submitting PRs to ghost towns<span className="text-emerald-600">.</span>
+              Stop submitting PRs to ghost towns<span className="text-emerald-500">.</span>
             </h2>
             <p className="mt-4 text-xs sm:text-sm lg:text-base text-zinc-600 leading-relaxed font-sans">
               Thousands of open-source contributors waste hours writing clean pull requests only to have them sit unreviewed for months. 
@@ -514,10 +538,10 @@ export default function Home() {
                     .map((item, idx) => {
                       const rankMedal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`;
                       return (
-                        <div key={item.language} className="p-2.5 rounded-xl border border-zinc-100 bg-zinc-50/50">
+                        <div key={item.language} className="p-2.5 rounded-xl border border-zinc-200 bg-zinc-50">
                           <div className="flex items-center justify-between text-xs mb-1.5">
                             <div className="flex items-center gap-2">
-                              <span className="font-bold text-zinc-400 w-5">{rankMedal}</span>
+                              <span className="font-bold text-zinc-500 w-5">{rankMedal}</span>
                               <Link
                                 href={`/rankings/${item.language.toLowerCase()}`}
                                 className="font-bold text-zinc-900 hover:text-emerald-600 transition-colors flex items-center gap-1.5"
@@ -530,7 +554,7 @@ export default function Home() {
                               {item.weightedScore.toFixed(1)} pts
                             </span>
                           </div>
-                          <div className="h-2 w-full rounded-full bg-zinc-100 overflow-hidden flex">
+                          <div className="h-2 w-full rounded-full bg-zinc-200 overflow-hidden flex">
                             <div className="h-full bg-emerald-500" style={{ width: `${item.sPct}%` }} />
                             <div className="h-full bg-blue-500" style={{ width: `${item.aPct}%` }} />
                             <div className="h-full bg-amber-500" style={{ width: `${item.bPct}%` }} />
@@ -575,7 +599,7 @@ export default function Home() {
                     .sort((a, b) => b.welcomingTotal - a.welcomingTotal)
                     .slice(0, 5)
                     .map((item) => (
-                      <div key={item.language} className="p-2.5 rounded-xl border border-zinc-100 bg-zinc-50/50 flex items-center justify-between text-xs">
+                      <div key={item.language} className="p-2.5 rounded-xl border border-zinc-200 bg-zinc-50 flex items-center justify-between text-xs">
                         <div className="flex items-center gap-2">
                           <LangLogo language={item.language} />
                           <Link href={`/rankings/${item.language.toLowerCase()}`} className="font-bold text-zinc-900 hover:text-blue-600 transition-colors">
@@ -629,7 +653,13 @@ export default function Home() {
                     <div className="bg-zinc-800/80 p-2.5 rounded-xl border border-zinc-700">
                       <div className="text-[10px] text-blue-400 font-bold">AVG RESPONSE</div>
                       <div className="text-lg font-bold text-white mt-0.5">
-                        {stats?.avg_response_hours ? `${stats.avg_response_hours.toFixed(1)}h` : "4.2h"}
+                        {stats?.avg_response_hours
+                          ? stats.avg_response_hours < 1
+                            ? "<1h"
+                            : stats.avg_response_hours < 24
+                            ? `${Math.floor(stats.avg_response_hours)}h`
+                            : `${Math.floor(stats.avg_response_hours / 24)}d+`
+                          : "—"}
                       </div>
                     </div>
                   </div>
@@ -649,9 +679,9 @@ export default function Home() {
           {/* 3 Pillar Feature Cards */}
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3 mb-16 font-mono">
             {/* Card 1 */}
-            <div className="rounded-2xl border border-zinc-200/90 bg-white p-6 shadow-xs hover:border-zinc-300 transition-all">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 text-white mb-4">
-                <Zap className="h-5 w-5 text-emerald-400" />
+            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-xs hover:border-zinc-300 transition-all">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 mb-4">
+                <Zap className="h-5 w-5 text-emerald-600" />
               </div>
               <h3 className="text-base font-bold text-zinc-900 mb-2">Objective C-Rank™ Telemetry</h3>
               <p className="text-xs text-zinc-600 font-sans leading-relaxed">
@@ -660,9 +690,9 @@ export default function Home() {
             </div>
 
             {/* Card 2 */}
-            <div className="rounded-2xl border border-zinc-200/90 bg-white p-6 shadow-xs hover:border-zinc-300 transition-all">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 text-white mb-4">
-                <ShieldCheck className="h-5 w-5 text-emerald-400" />
+            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-xs hover:border-zinc-300 transition-all">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 mb-4">
+                <ShieldCheck className="h-5 w-5 text-emerald-600" />
               </div>
               <h3 className="text-base font-bold text-zinc-900 mb-2">First-Timer Vibe Check</h3>
               <p className="text-xs text-zinc-600 font-sans leading-relaxed">
@@ -671,9 +701,9 @@ export default function Home() {
             </div>
 
             {/* Card 3 */}
-            <div className="rounded-2xl border border-zinc-200/90 bg-white p-6 shadow-xs hover:border-zinc-300 transition-all">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 text-white mb-4">
-                <Bell className="h-5 w-5 text-emerald-400" />
+            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-xs hover:border-zinc-300 transition-all">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 mb-4">
+                <Bell className="h-5 w-5 text-emerald-600" />
               </div>
               <h3 className="text-base font-bold text-zinc-900 mb-2">Watch & Watchlist Repos</h3>
               <p className="text-xs text-zinc-600 font-sans leading-relaxed">
@@ -683,21 +713,21 @@ export default function Home() {
           </div>
 
           {/* Informational Callout & GitHub Sign In Banner */}
-          <div className="rounded-2xl border border-zinc-900 bg-zinc-900 p-8 sm:p-10 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-8 sm:p-10 text-zinc-900 shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="max-w-xl">
-              <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 mb-2">
+              <div className="flex items-center gap-2 text-xs font-mono text-emerald-600 mb-2">
                 <CheckCircle2 className="h-4 w-4" />
                 <span>Track Maintainer Responsiveness</span>
               </div>
               <h3 className="text-2xl font-bold font-mono tracking-tight">Ready to find your next open-source contribution?</h3>
-              <p className="mt-2 text-xs text-zinc-400 font-sans leading-relaxed">
+              <p className="mt-2 text-xs text-zinc-600 font-sans leading-relaxed">
                 Sign in with your GitHub account to watch repositories, unlock AI Maintainer Vibe Check guidelines, and receive automated PR review alerts.
               </p>
             </div>
             <a
               href={`${API_BASE_URL}/api/v1/auth/github`}
               onClick={() => posthog.capture('github_sign_in_clicked', { source: 'homepage_cta_banner' })}
-              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-mono text-xs font-bold text-zinc-900 hover:bg-zinc-100 active:scale-95 transition-all shadow-md shrink-0"
+              className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 font-mono text-xs font-bold text-white hover:bg-zinc-800 active:scale-95 transition-all shadow-md shrink-0"
             >
               <span>Sign in with GitHub</span>
               <ArrowRight className="h-4 w-4" />

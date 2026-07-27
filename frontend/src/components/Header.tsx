@@ -9,6 +9,7 @@ import posthog from "posthog-js";
 
 export function Header() {
   const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const [starCount, setStarCount] = useState<number | null>(null);
 
   useEffect(() => {
@@ -31,7 +32,8 @@ export function Header() {
             });
           }
         })
-        .catch(() => {});
+        .catch(() => {})
+        .finally(() => setAuthLoading(false));
     } else {
       // Also try fetching /auth/me directly with credentials in case cookie is HttpOnly
       fetch(`${API_BASE_URL}/api/v1/auth/me`, { credentials: "include" })
@@ -44,7 +46,8 @@ export function Header() {
             });
           }
         })
-        .catch(() => {});
+        .catch(() => {})
+        .finally(() => setAuthLoading(false));
     }
 
     // Fetch live stars for opendoor repository
@@ -98,7 +101,9 @@ export function Header() {
             )}
           </a>
 
-          {user ? (
+          {authLoading ? (
+            <div className="h-8 w-24 rounded-full bg-zinc-100 animate-pulse" />
+          ) : user ? (
             <div className="flex items-center gap-2">
               {user.avatar_url ? (
                 // eslint-disable-next-next/no-img-element
@@ -108,7 +113,7 @@ export function Header() {
                   className="h-6 w-6 sm:h-7 sm:w-7 rounded-full border border-zinc-200 shrink-0"
                 />
               ) : null}
-              <span className="font-mono text-[11px] sm:text-xs font-semibold text-zinc-900 max-w-[80px] sm:max-w-none truncate">
+              <span className="font-mono text-[11px] sm:text-xs font-semibold text-white max-w-[80px] sm:max-w-none truncate">
                 {user.username}
               </span>
               <button

@@ -100,6 +100,15 @@ func AutoMigrate(db *sqlx.DB) error {
 		_, _ = db.Exec(migration)
 	}
 
+	// Safe migration: add trending columns if missing.
+	var hasTrending int
+	_ = db.Get(&hasTrending, "SELECT COUNT(1) FROM pragma_table_info('repositories') WHERE name = 'is_trending'")
+	if hasTrending == 0 {
+		_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN is_trending INTEGER NOT NULL DEFAULT 0`)
+		_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN last_trending_at DATETIME`)
+		_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_repositories_is_trending ON repositories(is_trending)`)
+	}
+
 	return nil
 }
 

@@ -43,6 +43,7 @@ type RepoFilter struct {
 	Order        string
 	Limit        int
 	Offset       int
+	Trending     bool
 }
 
 type RepoRepository interface {
@@ -90,6 +91,10 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 		where += " AND (LOWER(r.full_name) LIKE ? OR LOWER(r.description) LIKE ?)"
 		pattern := "%" + strings.ToLower(filter.Search) + "%"
 		args = append(args, pattern, pattern)
+	}
+
+	if filter.Trending {
+		where += " AND r.is_trending = 1"
 	}
 
 	sortCol, ok := allowedSortFields[filter.SortBy]

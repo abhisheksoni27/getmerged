@@ -2,42 +2,78 @@ package pipeline
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"log/slog"
+	"net/http"
+	"strings"
+	"time"
 
-	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/jmoiron/sqlx"
 )
 
-// SyncTrendingRepos fetches trending/high-growth repos and updates their status in the database.
-func SyncTrendingRepos(ctx context.Context, db *sqlx.DB, gh *ghclient.Client, languages []string) (int, error) {
-	var totalAdded int
+const ossInsightTrendingURL = "https://api.ossinsight.io/v1/trends/repos/?period=past_24_hours&language=All"
 
-	for _, lang := range languages {
-		// Search repos created or updated recently with significant star growth (>500 stars)
-		repos, err := gh.SearchRepos(lang, 500, 20)
-		if err != nil {
+type ossInsightRepo struct {
+	RepoName    string `json:"repo_name"`
+	Stars       int    `json:"stars"`
+	Language    string `json:"language"`
+	Description string `json:"description"`
+}
+
+type ossInsightResponse struct {
+	Data []ossInsightRepo `json:"data"`
+}
+
+// SyncTrendingRepos fetches repos trending in the last 24h from OSSInsight
+// and marks matching indexed repos as trending in the database.
+func SyncTrendingRepos(ctx context.Context, db *sqlx.DB) (int, error) {
+	client := &http.Client{Timeout: 15 * time.Second}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ossInsightTrendingURL, nil)
+	if err != nil {
+		return 0, fmt.Errorf("trending: build request: %w", err)
+	}
+	req.Header.Set("User-Agent", "opendoor-trending/1.0")
+
+	res, err := client.Do(req)
+	if err != nil {
+		return 0, fmt.Errorf("trending: fetch failed: %w", err)
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		return 0, fmt.Errorf("trending: unexpected status %d", res.StatusCode)
+	}
+
+	var payload ossInsightResponse
+	if err := json.NewDecoder(res.Body).Decode(&payload); err != nil {
+		return 0, fmt.Errorf("trending: decode: %w", err)
+	}
+
+	// Reset all trending flags before marking new ones.
+	_, _ = db.ExecContext(ctx, `UPDATE repositories SET is_trending = 0, last_trending_at = NULL WHERE is_trending = 1`)
+
+	marked := 0
+	for _, r := range payload.Data {
+		if r.RepoName == "" || !strings.Contains(r.RepoName, "/") {
 			continue
 		}
 
-		for _, r := range repos {
-			bucket := CategorizeStarBucket(r.Stars)
-			res, err := db.ExecContext(ctx, `
-				INSERT INTO repos (node_id, full_name, owner, name, language, stars, description, url, star_bucket, is_trending, last_trending_at, created_at, updated_at)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-				ON CONFLICT(full_name) DO UPDATE SET
-					stars = excluded.stars,
-					star_bucket = excluded.star_bucket,
-					is_trending = TRUE,
-					last_trending_at = CURRENT_TIMESTAMP,
-					updated_at = CURRENT_TIMESTAMP
-			`, r.NodeID, r.FullName, r.Owner, r.Name, r.Language, r.Stars, r.Description, r.URL, bucket)
+		result, err := db.ExecContext(ctx,
+			`UPDATE repositories SET is_trending = 1, last_trending_at = ? WHERE full_name = ?`,
+			time.Now().UTC(), r.RepoName,
+		)
+		if err != nil {
+			slog.Warn("trending: failed to mark repo", "repo", r.RepoName, "err", err)
+			continue
+		}
 
-			if err == nil {
-				if rows, _ := res.RowsAffected(); rows > 0 {
-					totalAdded++
-				}
-			}
+		if rows, _ := result.RowsAffected(); rows > 0 {
+			marked++
 		}
 	}
 
-	return totalAdded, nil
+	slog.Info("trending: sync complete", "marked", marked, "total_from_api", len(payload.Data))
+	return marked, nil
 }
