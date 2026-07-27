@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { LogOut, Star } from "lucide-react";
+import { LogOut, Star, Coffee } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { User } from "@/types/opendoor";
@@ -80,6 +80,19 @@ export function Header() {
 
         {/* Header Right Actions */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Issue #24: Buy Me a Coffee Button */}
+          <a
+            href="https://buymeacoffee.com"
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => posthog.capture('buy_me_a_coffee_clicked')}
+            className="inline-flex items-center gap-1 sm:gap-1.5 rounded-full border border-amber-200 bg-amber-50/80 px-2.5 py-1 sm:px-3 sm:py-1.5 text-[11px] sm:text-xs font-mono font-medium text-amber-800 hover:bg-amber-100 transition-all shadow-xs shrink-0 whitespace-nowrap"
+          >
+            <Coffee className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-amber-600 shrink-0" />
+            <span className="hidden md:inline">Buy me a coffee</span>
+            <span className="md:hidden">Coffee</span>
+          </a>
+
           {/* GitHub Star Nudge Button */}
           <a
             href="https://github.com/abhisheksoni27/opendoor"

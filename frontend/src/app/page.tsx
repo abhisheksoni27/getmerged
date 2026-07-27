@@ -189,10 +189,10 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative mx-auto max-w-5xl px-4 pt-16 pb-12 text-center sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-6xl font-mono">
-          Don&apos;t guess which door is open<span className="text-emerald-600">.</span>
+          Find open-source repos that <span className="text-emerald-600">actually merge</span> your PRs.
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-base text-zinc-600 sm:text-lg leading-relaxed">
-          Opendoor shows you public GitHub repositories where your pull requests are actually welcomed, reviewed fast, and merged.
+        <p className="mx-auto mt-4 max-w-3xl text-base text-zinc-600 sm:text-lg leading-relaxed font-sans">
+          Think of it as <strong>Glassdoor for open-source</strong>: opendoor scores public GitHub repositories using proprietary <strong>C-Rank™</strong> metrics based on objective PR merge rates, response speeds, and first-timer maintainer vibes.
         </p>
 
         {/* Macro Metrics Bar */}
