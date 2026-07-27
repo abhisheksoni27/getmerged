@@ -28,8 +28,8 @@ export function RelativityCanvas() {
     let height = (canvas.height = window.innerHeight);
 
     const particles: Particle[] = [];
-    const spacing = 32;
-    const mouse = { x: -1000, y: -1000, radius: 180 };
+    const spacing = 24; // Less gap between dots
+    const mouse = { x: -1000, y: -1000, radius: 140 };
 
     // Populate relativity grid particles
     for (let x = 0; x < width; x += spacing) {
@@ -39,8 +39,8 @@ export function RelativityCanvas() {
           y,
           originX: x,
           originY: y,
-          size: Math.random() * 1.5 + 0.8,
-          opacity: Math.random() * 0.4 + 0.2,
+          size: 1.0,
+          opacity: 0.18,
           vx: 0,
           vy: 0,
         });
@@ -79,11 +79,11 @@ export function RelativityCanvas() {
         if (distance < mouse.radius) {
           const force = (mouse.radius - distance) / mouse.radius;
           const angle = Math.atan2(dy, dx);
-          const pushX = Math.cos(angle) * force * 45;
-          const pushY = Math.sin(angle) * force * 45;
+          const pushX = Math.cos(angle) * force * 20;
+          const pushY = Math.sin(angle) * force * 20;
 
-          p.vx -= pushX * 0.1;
-          p.vy -= pushY * 0.1;
+          p.vx -= pushX * 0.08;
+          p.vy -= pushY * 0.08;
         }
 
         // Gravitational elastic return force back to grid origin
@@ -99,33 +99,12 @@ export function RelativityCanvas() {
         p.x += p.vx;
         p.y += p.vy;
 
-        // Draw distorted spacetime particle star dot with emerald gravitational glow near cursor
-        const isNear = distance < mouse.radius;
+        // Subtle background gray dots behind scenes
         ctx.beginPath();
-        ctx.arc(p.x, p.y, isNear ? p.size * 1.8 : p.size, 0, Math.PI * 2);
-        ctx.fillStyle = isNear ? `rgba(16, 185, 129, ${p.opacity + 0.4})` : `rgba(161, 161, 170, ${p.opacity})`;
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(161, 161, 170, ${p.opacity})`;
         ctx.fill();
       });
-
-      // Draw constellation connecting lines between distorted particles near cursor
-      for (let i = 0; i < particles.length; i += 3) {
-        const p1 = particles[i];
-        const distToMouse = Math.hypot(mouse.x - p1.x, mouse.y - p1.y);
-        if (distToMouse < 140) {
-          for (let j = i + 1; j < particles.length; j += 3) {
-            const p2 = particles[j];
-            const distBetween = Math.hypot(p2.x - p1.x, p2.y - p1.y);
-            if (distBetween < 45) {
-              ctx.beginPath();
-              ctx.moveTo(p1.x, p1.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = `rgba(16, 185, 129, ${(1 - distBetween / 45) * 0.25})`;
-              ctx.lineWidth = 0.8;
-              ctx.stroke();
-            }
-          }
-        }
-      }
 
       animationFrameId = requestAnimationFrame(render);
     };
@@ -143,7 +122,7 @@ export function RelativityCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-0 h-full w-full opacity-60"
+      className="pointer-events-none fixed inset-0 z-0 h-full w-full opacity-40"
     />
   );
 }
