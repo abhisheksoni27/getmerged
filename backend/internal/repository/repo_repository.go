@@ -38,6 +38,8 @@ type RepoFilter struct {
 	Language     string
 	Tier         string
 	MinMergeRate float64
+	MinStars     int
+	MaxStars     int
 	Search       string
 	SortBy       string
 	Order        string
@@ -95,6 +97,16 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 
 	if filter.Trending {
 		where += " AND r.is_trending = 1"
+	}
+
+	if filter.MinStars > 0 {
+		where += " AND r.stars >= ?"
+		args = append(args, filter.MinStars)
+	}
+
+	if filter.MaxStars > 0 {
+		where += " AND r.stars <= ?"
+		args = append(args, filter.MaxStars)
 	}
 
 	sortCol, ok := allowedSortFields[filter.SortBy]
