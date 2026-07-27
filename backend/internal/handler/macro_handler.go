@@ -19,7 +19,17 @@ func GetMacroStats() gin.HandlerFunc {
 		// Cloudflare edge & browser cache headers (1 hour cache)
 		c.Header("Cache-Control", "public, max-age=3600, s-maxage=86400, stale-while-revalidate=600")
 
-		stats, err := analytics.GetCachedMacroStats(c.Request.Context(), db)
+		useCache := c.GetHeader("X-Use-Cache") != "false"
+
+		var stats *analytics.MacroStats
+		var err error
+
+		if !useCache {
+			stats, err = analytics.ComputeAndCacheMacroStats(c.Request.Context(), db)
+		} else {
+			stats, err = analytics.GetCachedMacroStats(c.Request.Context(), db)
+		}
+
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to retrieve macro statistics"})
 			return

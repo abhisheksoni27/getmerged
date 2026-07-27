@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/abhisheksoni27/opendoor/internal/analytics"
 	"github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/pipeline"
@@ -155,10 +156,16 @@ func PurgeCache() gin.HandlerFunc {
 			}
 		}
 
+		db := middleware.MustDB(c)
+		if db != nil {
+			_, _ = analytics.ComputeAndCacheMacroStats(ctx, db)
+		}
+
 		c.JSON(http.StatusOK, gin.H{
 			"status":        "purged",
 			"deleted_keys":  deletedCount,
 			"total_matched": len(keysToDelete),
+			"macro_updated": db != nil,
 		})
 	}
 }
