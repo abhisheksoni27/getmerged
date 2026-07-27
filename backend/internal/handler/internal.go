@@ -94,6 +94,43 @@ func Seed(gh *github.Client) gin.HandlerFunc {
 	}
 }
 
+// SyncTrending handles POST /internal/sync-trending
+// Fetches trending repos from OSSInsight and marks matching DB repos as trending.
+//
+//	@Summary      Sync trending repos
+//	@Description  Fetches repos trending in the last 24h from OSSInsight and marks them in the database.
+//	@Tags         internal
+//	@Produce      json
+//	@Security     ApiKeyAuth
+//	@Success      202  {object}  map[string]any
+//	@Router       /internal/sync-trending [post]
+func SyncTrending() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		db := middleware.MustDB(c)
+		if db == nil {
+			return
+		}
+
+		jobID := uuid.New().String()
+
+		slog.Info("sync-trending triggered", "job_id", jobID, "ip", c.ClientIP())
+
+		go func() {
+			marked, err := pipeline.SyncTrendingRepos(c.Request.Context(), db)
+			if err != nil {
+				slog.Error("sync-trending: pipeline error", "job_id", jobID, "err", err)
+				return
+			}
+			slog.Info("sync-trending: complete", "job_id", jobID, "marked", marked)
+		}()
+
+		c.JSON(http.StatusAccepted, gin.H{
+			"status": "started",
+			"job_id": jobID,
+		})
+	}
+}
+
 // DeleteRepo handles DELETE /internal/repos/:id
 // Deletes a repository and all of its associated daily_snapshots.
 //

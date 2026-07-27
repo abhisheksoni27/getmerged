@@ -113,7 +113,7 @@ export function Header() {
                   className="h-6 w-6 sm:h-7 sm:w-7 rounded-full border border-zinc-200 shrink-0"
                 />
               ) : null}
-              <span className="font-mono text-[11px] sm:text-xs font-semibold text-white max-w-[80px] sm:max-w-none truncate">
+              <span className="font-mono text-[11px] sm:text-xs font-semibold text-zinc-900 max-w-[80px] sm:max-w-none truncate">
                 {user.username}
               </span>
               <button
