@@ -89,12 +89,6 @@ type PR struct {
 	CommentAuthors    []string
 }
 
-// Issue holds issue data needed for triage speed.
-type Issue struct {
-	CreatedAt      time.Time
-	FirstCommentAt *time.Time
-}
-
 // --- Public API ---
 
 // CheckToken tests if the token is valid by querying the viewer.
@@ -389,93 +383,6 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 
 	slog.Debug("fetched PRs", "repo", owner+"/"+name, "count", len(prs), "window_days", windowDays)
 	return prs, meta, nil
-}
-
-// FetchIssues returns issues opened within the last windowDays days.
-func (c *Client) FetchIssues(owner, name string, windowDays int) ([]Issue, error) {
-	cutoff := time.Now().UTC().Add(-time.Duration(windowDays) * 24 * time.Hour)
-	var (
-		issues []Issue
-		cursor *string
-		done   bool
-	)
-
-	for !done {
-		vars := map[string]any{"owner": owner, "name": name}
-		if cursor != nil {
-			vars["cursor"] = *cursor
-		}
-
-		var resp struct {
-			Data struct {
-				Repository struct {
-					Issues struct {
-						PageInfo struct {
-							HasNextPage bool   `json:"hasNextPage"`
-							EndCursor   string `json:"endCursor"`
-						} `json:"pageInfo"`
-						Nodes []struct {
-							CreatedAt string `json:"createdAt"`
-							Comments  struct {
-								Nodes []struct {
-									CreatedAt string `json:"createdAt"`
-									Author    *struct{ Login string `json:"login"` } `json:"author"`
-								} `json:"nodes"`
-							} `json:"comments"`
-						} `json:"nodes"`
-					} `json:"issues"`
-				} `json:"repository"`
-				RateLimit rateLimitInfo `json:"rateLimit"`
-			} `json:"data"`
-		}
-
-		fromCache, err := c.do(RepoIssuesQuery, vars, &resp)
-		if err != nil {
-			return nil, fmt.Errorf("FetchIssues(%s/%s): %w", owner, name, err)
-		}
-
-		if !fromCache {
-			c.handleRateLimit(resp.Data.RateLimit)
-		}
-
-		nodeCount := len(resp.Data.Repository.Issues.Nodes)
-		slog.Debug("github: issues page fetched",
-			"repo", owner+"/"+name,
-			"nodes_in_page", nodeCount,
-			"has_next_page", resp.Data.Repository.Issues.PageInfo.HasNextPage,
-		)
-
-		for _, n := range resp.Data.Repository.Issues.Nodes {
-			createdAt, err := time.Parse(time.RFC3339, n.CreatedAt)
-			if err != nil {
-				continue
-			}
-			if createdAt.Before(cutoff) {
-				done = true
-				break
-			}
-			issue := Issue{CreatedAt: createdAt}
-			if len(n.Comments.Nodes) > 0 {
-				for _, c := range n.Comments.Nodes {
-					if c.CreatedAt != "" && c.Author != nil && c.Author.Login != "" && !isBotLogin(c.Author.Login) {
-						if t, err := time.Parse(time.RFC3339, c.CreatedAt); err == nil {
-							issue.FirstCommentAt = &t
-							break
-						}
-					}
-				}
-			}
-			issues = append(issues, issue)
-		}
-
-		if !resp.Data.Repository.Issues.PageInfo.HasNextPage {
-			break
-		}
-		c.cursor(&cursor, resp.Data.Repository.Issues.PageInfo.EndCursor)
-	}
-
-	slog.Debug("fetched issues", "repo", owner+"/"+name, "count", len(issues), "window_days", windowDays)
-	return issues, nil
 }
 
 // IsStalenessFlag returns true if no external PR was merged in the last 6 months.

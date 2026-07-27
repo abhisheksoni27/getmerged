@@ -22,7 +22,7 @@ func TestComputeMetrics_MergeRate(t *testing.T) {
 		{State: "CLOSED", CreatedAt: prAt(15), AuthorAssociation: "CONTRIBUTOR", AuthorLogin: "carol"},
 	}
 
-	m := scoring.ComputeMetrics(prs, nil, false)
+	m := scoring.ComputeMetrics(prs, false)
 
 	want := float64(2) / float64(3) * 100
 	if m.ExternalPRMergeRate != want {
@@ -37,7 +37,7 @@ func TestComputeMetrics_ExcludesInsiders(t *testing.T) {
 		{State: "MERGED", CreatedAt: prAt(5), MergedAt: ptr(prAt(4)), AuthorAssociation: "COLLABORATOR", AuthorLogin: "collab"},
 	}
 
-	m := scoring.ComputeMetrics(prs, nil, false)
+	m := scoring.ComputeMetrics(prs, false)
 
 	if m.ExternalPRMergeRate != 0 {
 		t.Errorf("expected 0 for insider-only PRs, got %.2f", m.ExternalPRMergeRate)
@@ -45,7 +45,7 @@ func TestComputeMetrics_ExcludesInsiders(t *testing.T) {
 }
 
 func TestComputeMetrics_NoExternalPRs_NoPanic(t *testing.T) {
-	m := scoring.ComputeMetrics(nil, nil, false)
+	m := scoring.ComputeMetrics(nil, false)
 	if m.ExternalPRMergeRate != 0 {
 		t.Errorf("expected 0, got %.2f", m.ExternalPRMergeRate)
 	}
@@ -56,7 +56,7 @@ func TestComputeMetrics_SkipsBeyond180Days(t *testing.T) {
 		{State: "MERGED", CreatedAt: prAt(181), MergedAt: ptr(prAt(180)), AuthorAssociation: "CONTRIBUTOR", AuthorLogin: "old"},
 	}
 
-	m := scoring.ComputeMetrics(prs, nil, false)
+	m := scoring.ComputeMetrics(prs, false)
 
 	if m.ExternalPRMergeRate != 0 {
 		t.Errorf("expected 0 for PRs older than 180 days, got %.2f", m.ExternalPRMergeRate)
@@ -70,7 +70,7 @@ func TestComputeMetrics_FirstTimerSuccessRate(t *testing.T) {
 		{State: "CLOSED", CreatedAt: prAt(15), AuthorAssociation: "FIRST_TIME_CONTRIBUTOR", AuthorLogin: "ft3"},
 	}
 
-	m := scoring.ComputeMetrics(prs, nil, false)
+	m := scoring.ComputeMetrics(prs, false)
 
 	want := float64(1) / float64(3) * 100
 	if m.FirstTimerSuccessRate != want {
@@ -84,7 +84,7 @@ func TestComputeMetrics_FirstTimerSuccessRate_AllClosed(t *testing.T) {
 		{State: "CLOSED", CreatedAt: prAt(10), AuthorAssociation: "FIRST_TIME_CONTRIBUTOR", AuthorLogin: "ft2"},
 	}
 
-	m := scoring.ComputeMetrics(prs, nil, false)
+	m := scoring.ComputeMetrics(prs, false)
 
 	if m.FirstTimerSuccessRate != 0 {
 		t.Errorf("FirstTimerSuccessRate = %.2f, want 0", m.FirstTimerSuccessRate)
@@ -96,7 +96,7 @@ func TestComputeMetrics_FirstTimerSuccessRate_NoFirstTimers(t *testing.T) {
 		{State: "MERGED", CreatedAt: prAt(5), MergedAt: ptr(prAt(4)), AuthorAssociation: "CONTRIBUTOR", AuthorLogin: "alice"},
 	}
 
-	m := scoring.ComputeMetrics(prs, nil, false)
+	m := scoring.ComputeMetrics(prs, false)
 
 	if m.FirstTimerSuccessRate != 0 {
 		t.Errorf("expected 0 when no first-timers present, got %.2f", m.FirstTimerSuccessRate)
@@ -110,7 +110,7 @@ func TestComputeMetrics_RepeatContributorRate(t *testing.T) {
 		{State: "MERGED", CreatedAt: prAt(15), AuthorAssociation: "CONTRIBUTOR", AuthorLogin: "bob"},
 	}
 
-	m := scoring.ComputeMetrics(prs, nil, false)
+	m := scoring.ComputeMetrics(prs, false)
 
 	// alice is a repeat, bob is not → 1/2 = 50%
 	want := 50.0
@@ -120,7 +120,7 @@ func TestComputeMetrics_RepeatContributorRate(t *testing.T) {
 }
 
 func TestComputeMetrics_StalenessFlag(t *testing.T) {
-	m := scoring.ComputeMetrics(nil, nil, true)
+	m := scoring.ComputeMetrics(nil, true)
 	if !m.StalenessFlag {
 		t.Error("expected StalenessFlag=true")
 	}
@@ -135,7 +135,7 @@ func TestComputeMetrics_TimeToFirstResponse(t *testing.T) {
 		{State: "MERGED", CreatedAt: prAt(10), AuthorAssociation: "CONTRIBUTOR", AuthorLogin: "b", FirstCommentAt: &comment8h},
 	}
 
-	m := scoring.ComputeMetrics(prs, nil, false)
+	m := scoring.ComputeMetrics(prs, false)
 
 	want := 6.0 // median of [4, 8]
 	if m.TimeToFirstResponseHours != want {

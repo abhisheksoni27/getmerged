@@ -9,7 +9,6 @@ type NormalisedMetrics struct {
 	FirstTimer        float64
 	TimeToMerge       float64 // lower hours → higher score; 0 if no data
 	RepeatContributor float64
-	IssueTriageSpeed  float64 // lower hours → higher score; 0 if no data
 	Responsiveness    float64 // lower hours → higher score; 0 if no data
 	ActivityRecency   float64 // lower days → higher score (decay)
 	ReviewRounds      float64 // moderate/low rounds → higher score
@@ -45,7 +44,6 @@ func NormaliseAll(all []RawMetrics) []NormalisedMetrics {
 	firstTimers    := extractField(all, func(m RawMetrics) float64 { return m.FirstTimerSuccessRate })
 	mergeTimes     := extractField(all, func(m RawMetrics) float64 { return m.TimeToMergeHours })
 	repeatRates    := extractField(all, func(m RawMetrics) float64 { return m.RepeatContributorRate })
-	triageSpeeds   := extractField(all, func(m RawMetrics) float64 { return m.IssueTriageSpeedHours })
 	responsiveness := extractField(all, func(m RawMetrics) float64 { return m.MaintainerResponsiveness })
 	reviewRounds   := extractField(all, func(m RawMetrics) float64 { return m.ReviewRounds })
 
@@ -57,7 +55,6 @@ func NormaliseAll(all []RawMetrics) []NormalisedMetrics {
 			FirstTimer:        PercentileRank(m.FirstTimerSuccessRate, firstTimers),
 			TimeToMerge:       scoreTimeMetric(m.TimeToMergeHours, mergeTimes),
 			RepeatContributor: PercentileRank(m.RepeatContributorRate, repeatRates),
-			IssueTriageSpeed:  scoreTimeMetric(m.IssueTriageSpeedHours, triageSpeeds),
 			Responsiveness:    scoreTimeMetric(m.MaintainerResponsiveness, responsiveness),
 			ActivityRecency:   scoreDaysMetric(m.LastActivityDays),
 			ReviewRounds:      scoreRoundsMetric(m.ReviewRounds, reviewRounds),

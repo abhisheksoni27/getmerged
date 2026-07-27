@@ -54,11 +54,6 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 
 		_ = meta
 
-		issues, err := gh.FetchIssues(body.Owner, body.Name, 180)
-		if err != nil {
-			slog.Warn("score-repo: FetchIssues failed — proceeding with zero issue metrics", "repo", fullName, "err", err)
-		}
-
 		stale, err := gh.IsStalenessFlag(body.Owner, body.Name)
 		if err != nil {
 			slog.Warn("score-repo: IsStalenessFlag failed — assuming not stale", "repo", fullName, "err", err)
@@ -79,16 +74,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 			}
 		}
 
-		// Convert github.Issue → scoring.Issue
-		scoringIssues := make([]scoring.Issue, len(issues))
-		for i, iss := range issues {
-			scoringIssues[i] = scoring.Issue{
-				CreatedAt:      iss.CreatedAt,
-				FirstCommentAt: iss.FirstCommentAt,
-			}
-		}
-
-		raw := scoring.ComputeMetrics(scoringPRs, scoringIssues, stale)
+		raw := scoring.ComputeMetrics(scoringPRs, stale)
 
 		// --- Normalise against existing DB population ---
 		allRaw, err := repoStore.FetchLatestSnapshotsSample(c.Request.Context(), 500)
@@ -122,7 +108,6 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 			"score", score,
 			"tier", tier,
 			"prs_fetched", len(prs),
-			"issues_fetched", len(issues),
 			"stale", stale,
 			"db_peers", len(allRaw)-1,
 		)
@@ -136,7 +121,6 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 				"time_to_merge_hours":          raw.TimeToMergeHours,
 				"first_timer_success_rate":     raw.FirstTimerSuccessRate,
 				"repeat_contributor_rate":      raw.RepeatContributorRate,
-				"issue_triage_speed_hours":     raw.IssueTriageSpeedHours,
 				"maintainer_responsiveness":    raw.MaintainerResponsiveness,
 				"last_activity_days":           raw.LastActivityDays,
 				"review_rounds":                raw.ReviewRounds,
@@ -149,7 +133,6 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 				"first_timer":        thisNormed.FirstTimer,
 				"time_to_merge":      thisNormed.TimeToMerge,
 				"repeat_contributor": thisNormed.RepeatContributor,
-				"issue_triage_speed": thisNormed.IssueTriageSpeed,
 				"responsiveness":     thisNormed.Responsiveness,
 				"activity_recency":   thisNormed.ActivityRecency,
 				"review_rounds":      thisNormed.ReviewRounds,
@@ -160,9 +143,8 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 				"tier":  tier,
 			},
 			"data_points": gin.H{
-				"prs_fetched":    len(prs),
-				"issues_fetched": len(issues),
-				"db_peers_used":  len(allRaw) - 1,
+				"prs_fetched":   len(prs),
+				"db_peers_used": len(allRaw) - 1,
 			},
 		})
 	}

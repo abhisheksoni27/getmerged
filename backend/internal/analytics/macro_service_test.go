@@ -44,7 +44,6 @@ func TestComputeAndCacheMacroStats(t *testing.T) {
 		time_to_merge_hours REAL,
 		first_timer_success_rate REAL,
 		repeat_contributor_rate REAL,
-		issue_triage_speed_hours REAL,
 		maintainer_responsiveness REAL,
 		last_activity_days REAL,
 		review_rounds REAL,

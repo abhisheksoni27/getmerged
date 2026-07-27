@@ -71,40 +71,6 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
   }
 }
 `
-
-// RepoIssuesQuery fetches issues with first-comment timestamps, paginated.
-const RepoIssuesQuery = `
-query RepoIssues($owner: String!, $name: String!, $cursor: String) {
-  repository(owner: $owner, name: $name) {
-    issues(
-      first: 100
-      after: $cursor
-      states: [OPEN, CLOSED]
-      orderBy: { field: CREATED_AT, direction: DESC }
-    ) {
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-      nodes {
-        createdAt
-        comments(first: 10, orderBy: { field: UPDATED_AT, direction: ASC }) {
-          nodes {
-            createdAt
-            author { login }
-          }
-        }
-      }
-    }
-  }
-  rateLimit {
-    remaining
-    resetAt
-    cost
-  }
-}
-`
-
 // RepoStalenessQuery checks if any external PR was merged in the last 6 months.
 const RepoStalenessQuery = `
 query RepoStaleness($owner: String!, $name: String!) {

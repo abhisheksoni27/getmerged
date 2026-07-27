@@ -34,7 +34,6 @@ type repoResponse struct {
 	TimeToMergeHours            float64 `json:"time_to_merge_hours"`
 	FirstTimerSuccessRate       float64 `json:"first_timer_success_rate"`
 	RepeatContributorRate       float64 `json:"repeat_contributor_rate"`
-	IssueTriageSpeedHours       float64 `json:"issue_triage_speed_hours"`
 	MaintainerResponsiveness    float64 `json:"maintainer_responsiveness"`
 	LastActivityDays            float64 `json:"last_activity_days"`
 	ReviewRounds                float64 `json:"review_rounds"`

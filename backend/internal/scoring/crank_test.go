@@ -16,7 +16,6 @@ func TestComputeCRank_WeightedSum(t *testing.T) {
 		RepeatContributor: 100,
 		ReviewRounds:      100,
 		MaintainerBreadth: 100,
-		IssueTriageSpeed:  100,
 		Responsiveness:    100,
 	}
 
@@ -41,7 +40,6 @@ func TestComputeCRank_StalenessForceD(t *testing.T) {
 		RepeatContributor: 100,
 		ReviewRounds:      100,
 		MaintainerBreadth: 100,
-		IssueTriageSpeed:  100,
 		Responsiveness:    100,
 	}
 
@@ -83,7 +81,6 @@ func TestComputeCRank_TierBoundaries(t *testing.T) {
 			RepeatContributor: tc.score,
 			ReviewRounds:      tc.score,
 			MaintainerBreadth: tc.score,
-			IssueTriageSpeed:  tc.score,
 			Responsiveness:    tc.score,
 		}
 

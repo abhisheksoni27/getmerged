@@ -43,12 +43,6 @@ type PR struct {
 	CommentAuthors    []string
 }
 
-// Issue represents a single issue for triage speed computation.
-type Issue struct {
-	CreatedAt      time.Time
-	FirstCommentAt *time.Time
-}
-
 // RawMetrics holds the unscaled metric values for a repository snapshot.
 type RawMetrics struct {
 	ExternalPRMergeRate       float64 // percentage 0–100
@@ -56,7 +50,6 @@ type RawMetrics struct {
 	TimeToMergeHours          float64 // median hours; 0 = no data
 	FirstTimerSuccessRate     float64 // percentage 0–100
 	RepeatContributorRate     float64 // percentage 0–100
-	IssueTriageSpeedHours     float64 // median hours; 0 = no data
 	MaintainerResponsiveness  float64 // derived: same as TimeToFirstResponseHours (lower = better)
 	LastActivityDays          float64 // days since last merged PR (lower = better)
 	ReviewRounds              float64 // median review comments per merged PR (lower = better)
@@ -65,10 +58,10 @@ type RawMetrics struct {
 	StalenessFlag             bool
 }
 
-// ComputeMetrics derives all raw metrics from a slice of PRs and Issues.
+// ComputeMetrics derives all raw metrics from a slice of PRs.
 // Only PRs within the last 180 days are considered.
 // staleness is true if no external PR was merged in the last 6 months.
-func ComputeMetrics(prs []PR, issues []Issue, staleness bool) RawMetrics {
+func ComputeMetrics(prs []PR, staleness bool) RawMetrics {
 	window180 := time.Now().UTC().Add(-180 * 24 * time.Hour)
 
 	var (
@@ -79,7 +72,6 @@ func ComputeMetrics(prs []PR, issues []Issue, staleness bool) RawMetrics {
 		allContributors   = map[string]int{}   // login → PR count
 		responseTimes     []float64
 		mergeTimes        []float64
-		issueTriageTimes  []float64
 	)
 
 	for _, pr := range prs {
@@ -155,18 +147,6 @@ func ComputeMetrics(prs []PR, issues []Issue, staleness bool) RawMetrics {
 	if lastActivityDays == 999 {
 		lastActivityDays = 180 // Default to 180 days if no merged PRs in window
 	}
-	for _, issue := range issues {
-		if issue.CreatedAt.Before(window180) {
-			continue
-		}
-		if issue.FirstCommentAt != nil {
-			hours := issue.FirstCommentAt.Sub(issue.CreatedAt).Hours()
-			if hours >= 0 {
-				issueTriageTimes = append(issueTriageTimes, hours)
-			}
-		}
-	}
-
 	m := RawMetrics{
 		StalenessFlag:           staleness,
 		LastActivityDays:        lastActivityDays,
@@ -195,7 +175,6 @@ func ComputeMetrics(prs []PR, issues []Issue, staleness bool) RawMetrics {
 
 	m.TimeToFirstResponseHours = median(responseTimes)
 	m.TimeToMergeHours = median(mergeTimes)
-	m.IssueTriageSpeedHours = median(issueTriageTimes)
 	// Maintainer responsiveness mirrors response time (lower hours = more responsive)
 	m.MaintainerResponsiveness = m.TimeToFirstResponseHours
 
