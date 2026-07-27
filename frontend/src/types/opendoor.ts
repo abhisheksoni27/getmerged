@@ -17,6 +17,7 @@ export interface Repo {
   time_to_first_response_hours?: number;
   external_pr_merge_rate?: number;
   first_timer_success_rate?: number;
+  time_to_merge_hours?: number;
   distinct_maintainer_count?: number;
   staleness_flag?: boolean;
 }
