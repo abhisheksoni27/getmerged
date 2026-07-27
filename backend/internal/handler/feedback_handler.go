@@ -24,7 +24,6 @@ type feedbackRecord struct {
 	ID                  string    `db:"id" json:"id"`
 	RepositoryID        string    `db:"repository_id" json:"repository_id"`
 	UserID              string    `db:"user_id" json:"user_id"`
-	Username            string    `db:"username" json:"username"`
 	Sentiment           string    `db:"sentiment" json:"sentiment"`
 	Comment             string    `db:"comment" json:"comment"`
 	VerifiedContributor bool      `db:"verified_contributor" json:"verified_contributor"`
@@ -37,7 +36,7 @@ func CreateFeedback(db *sqlx.DB, ghToken string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userID := c.GetString(middleware.UserIDKey)
 		username := c.GetString(middleware.UsernameKey)
-		if userID == "" || username == "" {
+		if userID == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "authentication required"})
 			return
 		}
@@ -54,7 +53,6 @@ func CreateFeedback(db *sqlx.DB, ghToken string) gin.HandlerFunc {
 				id VARCHAR(36) PRIMARY KEY,
 				repository_id VARCHAR(36) NOT NULL,
 				user_id VARCHAR(36) NOT NULL,
-				username VARCHAR(255) NOT NULL,
 				sentiment VARCHAR(50) NOT NULL,
 				comment TEXT NOT NULL,
 				verified_contributor BOOLEAN NOT NULL DEFAULT 0,
@@ -67,9 +65,9 @@ func CreateFeedback(db *sqlx.DB, ghToken string) gin.HandlerFunc {
 
 		feedbackID := uuid.New().String()
 		_, err := db.Exec(`
-			INSERT INTO contributor_feedbacks (id, repository_id, user_id, username, sentiment, comment, verified_contributor, created_at)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-		`, feedbackID, req.RepoID, userID, username, req.Sentiment, strings.TrimSpace(req.Comment), isVerified, time.Now().UTC())
+			INSERT INTO contributor_feedbacks (id, repository_id, user_id, sentiment, comment, verified_contributor, created_at)
+			VALUES (?, ?, ?, ?, ?, ?, ?)
+		`, feedbackID, req.RepoID, userID, req.Sentiment, strings.TrimSpace(req.Comment), isVerified, time.Now().UTC())
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save feedback"})
@@ -91,7 +89,7 @@ func ListFeedback(db *sqlx.DB) gin.HandlerFunc {
 
 		var items []feedbackRecord = make([]feedbackRecord, 0)
 		_ = db.Select(&items, `
-			SELECT id, repository_id, user_id, username, sentiment, comment, verified_contributor, created_at
+			SELECT id, repository_id, user_id, sentiment, comment, verified_contributor, created_at
 			FROM contributor_feedbacks
 			WHERE repository_id = ?
 			ORDER BY created_at DESC

@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS contributor_feedbacks (
     id VARCHAR(36) PRIMARY KEY,
     repository_id VARCHAR(36) NOT NULL,
     user_id VARCHAR(36) NOT NULL,
-    username VARCHAR(255) NOT NULL,
     sentiment VARCHAR(50) NOT NULL, -- 'welcoming', 'selective', 'unresponsive'
     comment TEXT NOT NULL,
     verified_contributor BOOLEAN NOT NULL DEFAULT 0,
