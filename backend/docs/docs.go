@@ -286,6 +286,32 @@ const docTemplate = `{
                 }
             }
         },
+        "/internal/sync-trending": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Fetches repos trending in the last 24h from OSSInsight and marks them in the database.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "internal"
+                ],
+                "summary": "Sync trending repos",
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/internal/update-scores": {
             "post": {
                 "security": [

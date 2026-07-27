@@ -219,6 +219,23 @@ paths:
       summary: Trigger database seed job
       tags:
       - internal
+  /internal/sync-trending:
+    post:
+      description: Fetches repos trending in the last 24h from OSSInsight and marks
+        them in the database.
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Sync trending repos
+      tags:
+      - internal
   /internal/update-scores:
     post:
       description: Fetches GitHub data for stale repos and recomputes C-Rank scores.
