@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { RepoCard } from "@/components/RepoCard";
 import { RelativityCanvas } from "@/components/RelativityCanvas";
 import { LangLogo } from "@/components/LangLogo";
@@ -783,20 +784,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Silicon Valley Minimal Footer */}
-      <footer className="border-t border-zinc-200 bg-white py-8 text-center text-xs font-mono text-zinc-500">
-        <div className="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>© {new Date().getFullYear()} opendoor — Glassdoor for Open Source Repositories</div>
-          <div className="flex items-center gap-4">
-            <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" className="hover:text-zinc-900">
-              GitHub
-            </a>
-            <a href="/api/v1/health" className="hover:text-zinc-900">
-              API Status
-            </a>
-          </div>
-        </div>
-      </footer>
+      {/* Bruno-inspired Rich Footer */}
+      <Footer />
     </div>
   );
 }
