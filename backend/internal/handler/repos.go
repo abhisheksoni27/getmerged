@@ -145,10 +145,11 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			},
 		}
 
-		// Cache payload in Valkey for 6 hours
+		// Cache payload in Valkey for 6 hours & register under tag "get_repos"
 		if vk != nil {
 			if rawJSON, err := json.Marshal(respPayload); err == nil {
 				_ = vk.Do(ctx, vk.B().Set().Key(cacheKey).Value(string(rawJSON)).Ex(apiCacheTTL).Build())
+				_ = vk.Do(ctx, vk.B().Sadd().Key("apicache:tag:get_repos").Member(cacheKey).Build())
 			}
 		}
 

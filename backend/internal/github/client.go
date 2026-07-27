@@ -35,6 +35,14 @@ func NewClient(token string, vk valkey.Client) *Client {
 	}
 }
 
+// Valkey returns the underlying valkey.Client instance.
+func (c *Client) Valkey() valkey.Client {
+	if c == nil {
+		return nil
+	}
+	return c.valkey
+}
+
 // --- Request / Response types ---
 
 type graphqlRequest struct {

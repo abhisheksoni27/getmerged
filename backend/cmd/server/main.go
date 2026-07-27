@@ -109,6 +109,7 @@ func main() {
 		internal.POST("/score-repo", handler.ScoreRepo(gh, repoStore))
 		internal.POST("/check-pat", handler.CheckPAT(gh))
 		internal.POST("/purge-cache", handler.PurgeCache())
+		internal.POST("/cache/purge-tag", handler.PurgeTagCache())
 		internal.DELETE("/repos/:id", handler.DeleteRepo(repoStore))
 	}
 
