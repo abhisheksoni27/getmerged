@@ -21,19 +21,17 @@ var weights = struct {
 	RepeatContributor float64
 	ReviewRounds      float64
 	MaintainerBreadth float64
-	IssueTriageSpeed  float64
 	Responsiveness    float64
 }{
 	MergeRate:         0.25,
-	ResponseTime:      0.15,
+	ResponseTime:      0.20,
 	ActivityRecency:   0.15,
 	FirstTimer:        0.10,
 	TimeToMerge:       0.10,
 	RepeatContributor: 0.10,
 	ReviewRounds:      0.05,
 	MaintainerBreadth: 0.05,
-	IssueTriageSpeed:  0.025,
-	Responsiveness:    0.025,
+	Responsiveness:    0.05,
 }
 
 // ComputeCRank calculates the C-Rank score and tier from normalised metrics.
@@ -47,7 +45,6 @@ func ComputeCRank(n NormalisedMetrics, staleness bool) (score float64, tier stri
 		weights.RepeatContributor*n.RepeatContributor +
 		weights.ReviewRounds*n.ReviewRounds +
 		weights.MaintainerBreadth*n.MaintainerBreadth +
-		weights.IssueTriageSpeed*n.IssueTriageSpeed +
 		weights.Responsiveness*n.Responsiveness
 
 	if staleness {

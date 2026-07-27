@@ -13,9 +13,8 @@ import (
 )
 
 const (
-	prWindowDays    = 180
-	issueWindowDays = 180
-	staleHours      = 24
+	prWindowDays = 180
+	staleHours   = 24
 )
 
 // repoRow mirrors the repositories table for scanning.
@@ -58,18 +57,12 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 			continue
 		}
 
-		issues, err := gh.FetchIssues(r.Owner, r.Name, issueWindowDays)
-		if err != nil {
-			slog.Error("cron: FetchIssues failed — skipping", "repo", r.FullName, "err", err)
-			continue
-		}
-
 		stale, err := gh.IsStalenessFlag(r.Owner, r.Name)
 		if err != nil {
 			slog.Warn("cron: IsStalenessFlag failed — assuming not stale", "repo", r.FullName, "err", err)
 		}
 
-		slog.Debug("cron: fetched data", "repo", r.FullName, "prs", len(prs), "issues", len(issues), "stale", stale)
+		slog.Debug("cron: fetched data", "repo", r.FullName, "prs", len(prs), "stale", stale)
 
 		// Convert github.PR → scoring.PR
 		scoringPRs := make([]scoring.PR, len(prs))
@@ -86,16 +79,7 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 			}
 		}
 
-		// Convert github.Issue → scoring.Issue
-		scoringIssues := make([]scoring.Issue, len(issues))
-		for i, iss := range issues {
-			scoringIssues[i] = scoring.Issue{
-				CreatedAt:      iss.CreatedAt,
-				FirstCommentAt: iss.FirstCommentAt,
-			}
-		}
-
-		raw := scoring.ComputeMetrics(scoringPRs, scoringIssues, stale)
+		raw := scoring.ComputeMetrics(scoringPRs, stale)
 		all = append(all, repoMetrics{repo: r, raw: raw, meta: meta})
 	}
 
@@ -164,7 +148,7 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 		INSERT INTO daily_snapshots (
 			id, repository_id, snapshot_date,
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
-			first_timer_success_rate, repeat_contributor_rate, issue_triage_speed_hours,
+			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
 			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier
 		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -174,7 +158,6 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			time_to_merge_hours           = excluded.time_to_merge_hours,
 			first_timer_success_rate      = excluded.first_timer_success_rate,
 			repeat_contributor_rate       = excluded.repeat_contributor_rate,
-			issue_triage_speed_hours      = excluded.issue_triage_speed_hours,
 			maintainer_responsiveness     = excluded.maintainer_responsiveness,
 			last_activity_days            = excluded.last_activity_days,
 			review_rounds                 = excluded.review_rounds,
@@ -191,7 +174,6 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 		m.TimeToMergeHours,
 		m.FirstTimerSuccessRate,
 		m.RepeatContributorRate,
-		m.IssueTriageSpeedHours,
 		m.MaintainerResponsiveness,
 		m.LastActivityDays,
 		m.ReviewRounds,

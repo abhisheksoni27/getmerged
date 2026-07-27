@@ -25,7 +25,6 @@ type RepoRecord struct {
 	TimeToMergeHours            float64 `db:"time_to_merge_hours" json:"time_to_merge_hours"`
 	FirstTimerSuccessRate       float64 `db:"first_timer_success_rate" json:"first_timer_success_rate"`
 	RepeatContributorRate       float64 `db:"repeat_contributor_rate" json:"repeat_contributor_rate"`
-	IssueTriageSpeedHours       float64 `db:"issue_triage_speed_hours" json:"issue_triage_speed_hours"`
 	MaintainerResponsiveness    float64 `db:"maintainer_responsiveness" json:"maintainer_responsiveness"`
 	LastActivityDays            float64 `db:"last_activity_days" json:"last_activity_days"`
 	ReviewRounds                float64 `db:"review_rounds" json:"review_rounds"`
@@ -145,7 +144,6 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 			COALESCE(s.time_to_merge_hours,0) as time_to_merge_hours,
 			COALESCE(s.first_timer_success_rate,0) as first_timer_success_rate,
 			COALESCE(s.repeat_contributor_rate,0) as repeat_contributor_rate,
-			COALESCE(s.issue_triage_speed_hours,0) as issue_triage_speed_hours,
 			COALESCE(s.maintainer_responsiveness,0) as maintainer_responsiveness,
 			COALESCE(s.last_activity_days,180) as last_activity_days,
 			COALESCE(s.review_rounds,0) as review_rounds,
@@ -184,7 +182,6 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 			COALESCE(s.time_to_merge_hours,0) as time_to_merge_hours,
 			COALESCE(s.first_timer_success_rate,0) as first_timer_success_rate,
 			COALESCE(s.repeat_contributor_rate,0) as repeat_contributor_rate,
-			COALESCE(s.issue_triage_speed_hours,0) as issue_triage_speed_hours,
 			COALESCE(s.maintainer_responsiveness,0) as maintainer_responsiveness,
 			COALESCE(s.last_activity_days,180) as last_activity_days,
 			COALESCE(s.review_rounds,0) as review_rounds,
@@ -222,7 +219,7 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 		INSERT INTO daily_snapshots (
 			id, repository_id, snapshot_date,
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
-			first_timer_success_rate, repeat_contributor_rate, issue_triage_speed_hours,
+			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
 			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier
 		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -232,7 +229,6 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 			time_to_merge_hours           = excluded.time_to_merge_hours,
 			first_timer_success_rate      = excluded.first_timer_success_rate,
 			repeat_contributor_rate       = excluded.repeat_contributor_rate,
-			issue_triage_speed_hours      = excluded.issue_triage_speed_hours,
 			maintainer_responsiveness     = excluded.maintainer_responsiveness,
 			last_activity_days            = excluded.last_activity_days,
 			review_rounds                 = excluded.review_rounds,
@@ -249,7 +245,6 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 		raw.TimeToMergeHours,
 		raw.FirstTimerSuccessRate,
 		raw.RepeatContributorRate,
-		raw.IssueTriageSpeedHours,
 		raw.MaintainerResponsiveness,
 		raw.LastActivityDays,
 		raw.ReviewRounds,
@@ -273,7 +268,6 @@ func (r *sqlxRepoRepository) FetchLatestSnapshotsSample(ctx context.Context, lim
 			COALESCE(s.time_to_merge_hours, 0),
 			COALESCE(s.first_timer_success_rate, 0),
 			COALESCE(s.repeat_contributor_rate, 0),
-			COALESCE(s.issue_triage_speed_hours, 0),
 			COALESCE(s.maintainer_responsiveness, 0),
 			COALESCE(s.last_activity_days, 180),
 			COALESCE(s.review_rounds, 0),
@@ -303,7 +297,6 @@ func (r *sqlxRepoRepository) FetchLatestSnapshotsSample(ctx context.Context, lim
 			&m.TimeToMergeHours,
 			&m.FirstTimerSuccessRate,
 			&m.RepeatContributorRate,
-			&m.IssueTriageSpeedHours,
 			&m.MaintainerResponsiveness,
 			&m.LastActivityDays,
 			&m.ReviewRounds,

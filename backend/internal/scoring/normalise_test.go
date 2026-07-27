@@ -86,16 +86,13 @@ func TestNormaliseAll_Empty(t *testing.T) {
 func TestNormaliseAll_ZeroMeansNoData(t *testing.T) {
 	// A repo with zero time metrics (no PRs, no comments) must score 0, not 100.
 	all := []scoring.RawMetrics{
-		{TimeToFirstResponseHours: 0, IssueTriageSpeedHours: 0, MaintainerResponsiveness: 0},
+		{TimeToFirstResponseHours: 0, MaintainerResponsiveness: 0},
 	}
 
 	normed := scoring.NormaliseAll(all)
 
 	if normed[0].ResponseTime != 0 {
 		t.Errorf("ResponseTime: zero raw value should score 0, got %.2f", normed[0].ResponseTime)
-	}
-	if normed[0].IssueTriageSpeed != 0 {
-		t.Errorf("IssueTriageSpeed: zero raw value should score 0, got %.2f", normed[0].IssueTriageSpeed)
 	}
 	if normed[0].Responsiveness != 0 {
 		t.Errorf("Responsiveness: zero raw value should score 0, got %.2f", normed[0].Responsiveness)

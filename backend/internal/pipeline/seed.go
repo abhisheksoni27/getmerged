@@ -133,11 +133,6 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 		return fmt.Errorf("FetchPRs: %w", err)
 	}
 
-	issues, err := gh.FetchIssues(owner, name, 180)
-	if err != nil {
-		return fmt.Errorf("FetchIssues: %w", err)
-	}
-
 	stale, _ := gh.IsStalenessFlag(owner, name)
 
 	scoringPRs := make([]scoring.PR, len(prs))
@@ -153,15 +148,7 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 			CommentAuthors:    p.CommentAuthors,
 		}
 	}
-	scoringIssues := make([]scoring.Issue, len(issues))
-	for i, iss := range issues {
-		scoringIssues[i] = scoring.Issue{
-			CreatedAt:      iss.CreatedAt,
-			FirstCommentAt: iss.FirstCommentAt,
-		}
-	}
-
-	raw := scoring.ComputeMetrics(scoringPRs, scoringIssues, stale)
+	raw := scoring.ComputeMetrics(scoringPRs, stale)
 
 	// Fetch existing DB metrics for normalisation
 	allRaw, err := fetchDBMetrics(db)
@@ -187,7 +174,7 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 		INSERT INTO daily_snapshots (
 			id, repository_id, snapshot_date,
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
-			first_timer_success_rate, repeat_contributor_rate, issue_triage_speed_hours,
+			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
 			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier
 		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -197,7 +184,6 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			time_to_merge_hours           = excluded.time_to_merge_hours,
 			first_timer_success_rate      = excluded.first_timer_success_rate,
 			repeat_contributor_rate       = excluded.repeat_contributor_rate,
-			issue_triage_speed_hours      = excluded.issue_triage_speed_hours,
 			maintainer_responsiveness     = excluded.maintainer_responsiveness,
 			last_activity_days            = excluded.last_activity_days,
 			review_rounds                 = excluded.review_rounds,
@@ -214,7 +200,6 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 		m.TimeToMergeHours,
 		m.FirstTimerSuccessRate,
 		m.RepeatContributorRate,
-		m.IssueTriageSpeedHours,
 		m.MaintainerResponsiveness,
 		m.LastActivityDays,
 		m.ReviewRounds,
@@ -234,7 +219,6 @@ func fetchDBMetrics(db *sqlx.DB) ([]scoring.RawMetrics, error) {
 			COALESCE(s.time_to_merge_hours, 0),
 			COALESCE(s.first_timer_success_rate, 0),
 			COALESCE(s.repeat_contributor_rate, 0),
-			COALESCE(s.issue_triage_speed_hours, 0),
 			COALESCE(s.maintainer_responsiveness, 0),
 			COALESCE(s.last_activity_days, 180),
 			COALESCE(s.review_rounds, 0),
@@ -263,7 +247,6 @@ func fetchDBMetrics(db *sqlx.DB) ([]scoring.RawMetrics, error) {
 			&m.TimeToMergeHours,
 			&m.FirstTimerSuccessRate,
 			&m.RepeatContributorRate,
-			&m.IssueTriageSpeedHours,
 			&m.MaintainerResponsiveness,
 			&m.LastActivityDays,
 			&m.ReviewRounds,
