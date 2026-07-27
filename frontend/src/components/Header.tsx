@@ -5,6 +5,7 @@ import { LogOut, Star } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { User } from "@/types/opendoor";
+import posthog from "posthog-js";
 
 export function Header() {
   const [user, setUser] = useState<User | null>(null);
@@ -12,7 +13,10 @@ export function Header() {
 
   useEffect(() => {
     // Only check authenticated user profile if token cookie exists
-    const hasToken = typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
+    const hasToken = typeof document !== "undefined" && (
+      document.cookie.includes("opendoor_token=") ||
+      document.cookie.includes("token=")
+    );
     if (hasToken) {
       fetch(`${API_BASE_URL}/api/v1/auth/me`, { credentials: "include" })
         .then((res) => {
@@ -22,6 +26,22 @@ export function Header() {
         .then((data) => {
           if (data?.user) {
             setUser(data.user);
+            posthog.identify(String(data.user.github_id), {
+              username: data.user.username,
+            });
+          }
+        })
+        .catch(() => {});
+    } else {
+      // Also try fetching /auth/me directly with credentials in case cookie is HttpOnly
+      fetch(`${API_BASE_URL}/api/v1/auth/me`, { credentials: "include" })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.user) {
+            setUser(data.user);
+            posthog.identify(String(data.user.github_id), {
+              username: data.user.username,
+            });
           }
         })
         .catch(() => {});
@@ -39,6 +59,8 @@ export function Header() {
   }, []);
 
   const handleLogout = () => {
+    posthog.capture('user_signed_out');
+    posthog.reset();
     document.cookie = "opendoor_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     setUser(null);
     window.location.reload();
@@ -63,6 +85,7 @@ export function Header() {
             href="https://github.com/abhisheksoni27/opendoor"
             target="_blank"
             rel="noreferrer"
+            onClick={() => posthog.capture('github_star_clicked')}
             className="inline-flex items-center gap-1 sm:gap-1.5 rounded-full border border-zinc-200 bg-zinc-50/80 px-2.5 py-1 sm:px-3.5 sm:py-1.5 text-[11px] sm:text-xs font-mono font-medium text-zinc-700 hover:bg-zinc-100 hover:border-zinc-300 transition-all shadow-xs group whitespace-nowrap"
           >
             <Star className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-amber-500 fill-amber-500 group-hover:scale-110 transition-transform shrink-0" />
@@ -99,6 +122,7 @@ export function Header() {
           ) : (
             <a
               href={`${API_BASE_URL}/api/v1/auth/github`}
+              onClick={() => posthog.capture('github_sign_in_clicked', { source: 'header' })}
               className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full bg-zinc-900 px-3 py-1.5 sm:px-4 sm:py-2 text-[11px] sm:text-xs font-medium font-mono text-white shadow-xs hover:bg-zinc-800 active:scale-95 transition-all whitespace-nowrap"
             >
               <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4 fill-current shrink-0" viewBox="0 0 24 24">

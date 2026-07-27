@@ -1,8 +1,11 @@
+"use client";
+
 import React from "react";
 import { Repo } from "@/types/opendoor";
 import { Star, GitMerge, Clock, Lock, ArrowUpRight, Flame } from "lucide-react";
 import Link from "next/link";
 import { LangLogo } from "@/components/LangLogo";
+import posthog from "posthog-js";
 
 interface RepoCardProps {
   repo: Repo;
@@ -81,9 +84,19 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
       ? `${repo.external_pr_merge_rate.toFixed(1)}% merged`
       : "—";
 
+  const handleClick = () => {
+    posthog.capture('repo_card_clicked', {
+      repo_full_name: repo.full_name,
+      repo_language: repo.language,
+      repo_tier: rank,
+      repo_stars: repo.stars,
+    });
+  };
+
   return (
     <Link
       href={`/repo/${ownerPart}/${namePart}`}
+      onClick={handleClick}
       className="group relative flex flex-col justify-between rounded-xl border border-zinc-200/90 bg-white p-5 shadow-xs hover:border-zinc-300 hover:shadow-md transition-all duration-200 block text-current no-underline"
     >
       {/* Top Meta Bar */}

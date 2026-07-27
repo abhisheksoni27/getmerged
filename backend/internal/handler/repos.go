@@ -98,6 +98,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		c.Header("X-Cache", "MISS")
 
 		// Parse query params
+		tierParam := strings.TrimSpace(c.Query("tier"))
 		lang := strings.TrimSpace(c.Query("language"))
 		name := strings.TrimSpace(c.Query("name"))
 		sortParam := strings.TrimSpace(c.Query("sort"))
@@ -120,6 +121,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 
 		filter := repository.RepoFilter{
 			Language: lang,
+			Tier:     tierParam,
 			Search:   name,
 			SortBy:   sortParam,
 			Order:    orderParam,

@@ -21,6 +21,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
+import posthog from "posthog-js";
 
 export default function Home() {
   const [repos, setRepos] = useState<Repo[]>([]);
@@ -40,7 +41,7 @@ export default function Home() {
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalReposCount, setTotalReposCount] = useState<number>(0);
-  const perPage = 9; // 3 rows of 3 columns (3x3 grid)
+  const perPage = 15; // Limit to maximum 15 rows of repos on home page
 
   const languages = ["All", "Go", "TypeScript", "Python", "Rust", "C++", "Java", "PHP", "Ruby", "Dart", "Kotlin"];
   const buckets = ["All", "500-1k", "1k-5k", "5k-20k", "20k-50k", "50k+"];
@@ -138,36 +139,46 @@ export default function Home() {
     setLoading(true);
     setSelectedLang(lang);
     setPage(1); // Revert to page 1 on filter change
+    posthog.capture('repo_filter_applied', { filter_type: 'language', value: lang });
   };
 
   const handleBucketChange = (bucket: string) => {
     setLoading(true);
     setSelectedBucket(bucket);
     setPage(1); // Revert to page 1 on filter change
+    posthog.capture('repo_filter_applied', { filter_type: 'star_bucket', value: bucket });
   };
 
   const handleTierChange = (tierVal: string) => {
     setLoading(true);
     setSelectedTier(tierVal);
     setPage(1); // Revert to page 1 on filter change
+    posthog.capture('repo_filter_applied', { filter_type: 'tier', value: tierVal });
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
-    setSearchQuery(e.target.value);
+    const query = e.target.value;
+    setSearchQuery(query);
     setPage(1); // Revert to page 1 on search change
+    if (query.trim()) {
+      posthog.capture('repo_searched', { query: query.trim() });
+    }
   };
 
   const handleTrendingToggle = () => {
     setLoading(true);
-    setTrendingOnly(!trendingOnly);
+    const next = !trendingOnly;
+    setTrendingOnly(next);
     setPage(1); // Revert to page 1 on trending toggle
+    posthog.capture('trending_toggled', { enabled: next });
   };
 
   const handlePageChange = (newPage: number) => {
     setLoading(true);
     setPage(newPage);
     window.scrollTo({ top: 400, behavior: "smooth" });
+    posthog.capture('pagination_changed', { page: newPage, total_pages: totalPages });
   };
 
   return (
@@ -741,6 +752,7 @@ export default function Home() {
             </div>
             <a
               href={`${API_BASE_URL}/api/v1/auth/github`}
+              onClick={() => posthog.capture('github_sign_in_clicked', { source: 'homepage_cta_banner' })}
               className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-mono text-xs font-bold text-zinc-900 hover:bg-zinc-100 active:scale-95 transition-all shadow-md shrink-0"
             >
               <span>Sign in with GitHub</span>
