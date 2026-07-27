@@ -125,7 +125,7 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
       <div>
         <div className="flex items-center gap-1.5 text-zinc-600 mb-4 font-mono">
           <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500/20" />
-          <span>{repo.stars.toLocaleString()}</span>
+          <span>{repo.stars >= 1_000_000 ? `${(repo.stars / 1_000_000).toFixed(1).replace(/\.0$/, "")}m+` : repo.stars >= 1_000 ? `${Math.floor(repo.stars / 1_000)}k+` : repo.stars.toLocaleString()}</span>
         </div>
 
         {/* Secondary Metrics Bar */}

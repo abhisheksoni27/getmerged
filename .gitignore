@@ -35,3 +35,5 @@ go.work.sum
 tmp/
 *.log
 bin/
+# Added by code-review-graph
+.code-review-graph/

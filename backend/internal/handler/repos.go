@@ -107,6 +107,8 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		perPageStr := strings.TrimSpace(c.Query("per_page"))
 		minMergeRateStr := strings.TrimSpace(c.Query("min_merge_rate"))
 		trendingParam := strings.ToLower(strings.TrimSpace(c.Query("trending")))
+		minStarsStr := strings.TrimSpace(c.Query("min_stars"))
+		maxStarsStr := strings.TrimSpace(c.Query("max_stars"))
 
 		page := 1
 		if p, err := strconv.Atoi(pageStr); err == nil && p > 0 {
@@ -126,10 +128,20 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			minMergeRate = mr
 		}
 
+		var minStars, maxStars int
+		if ms, err := strconv.Atoi(minStarsStr); err == nil && ms > 0 {
+			minStars = ms
+		}
+		if ms, err := strconv.Atoi(maxStarsStr); err == nil && ms > 0 {
+			maxStars = ms
+		}
+
 		filter := repository.RepoFilter{
 			Language:     lang,
 			Tier:         tierParam,
 			MinMergeRate: minMergeRate,
+			MinStars:     minStars,
+			MaxStars:     maxStars,
 			Search:       name,
 			SortBy:       sortParam,
 			Order:        orderParam,
