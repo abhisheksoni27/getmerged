@@ -20,6 +20,7 @@ import {
   Bell,
   CheckCircle2,
   ArrowRight,
+  Users,
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 import posthog from "posthog-js";
@@ -36,6 +37,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const [selectedBucket, setSelectedBucket] = useState<string>("All");
   const [selectedTier, setSelectedTier] = useState<string>("All");
   const [selectedMinMergeRate, setSelectedMinMergeRate] = useState<string>("All");
+  const [selectedFirstTimerBucket, setSelectedFirstTimerBucket] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [trendingOnly, setTrendingOnly] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -53,6 +55,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const languages = ["All", "Go", "TypeScript", "Python", "Rust", "C++", "Java", "PHP", "Ruby", "Dart", "Kotlin", "Elixir", "Zig", "Scala"];
   const buckets = ["All", "500-1k", "1k-5k", "5k-20k", "20k-50k", "50k+"];
   const mergeRateOptions = ["All", ">75% Merged", ">50% Merged", ">25% Merged"];
+  const firstTimerBuckets = ["All", "0-20%", "20-40%", "40-60%", "60-80%", "80-100%"];
   const tiers = [
     { label: "All", value: "All" },
     { label: "Super Welcoming", value: "S" },
@@ -74,6 +77,23 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
         return { min: "20000", max: "50000" };
       case "50k+":
         return { min: "50000" };
+      default:
+        return {};
+    }
+  };
+
+  const getFirstTimerBoundsFromBucket = (bucket: string): { min?: string; max?: string } => {
+    switch (bucket) {
+      case "0-20%":
+        return { min: "0", max: "0.2" };
+      case "20-40%":
+        return { min: "0.2", max: "0.4" };
+      case "40-60%":
+        return { min: "0.4", max: "0.6" };
+      case "60-80%":
+        return { min: "0.6", max: "0.8" };
+      case "80-100%":
+        return { min: "0.8", max: "1.0" };
       default:
         return {};
     }
@@ -112,6 +132,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
       params.set("max_stars", bounds.max);
     }
 
+    const firstTimerBounds = getFirstTimerBoundsFromBucket(selectedFirstTimerBucket);
+    if (firstTimerBounds.min) {
+      params.set("min_first_timer_success_rate", firstTimerBounds.min);
+    }
+    if (firstTimerBounds.max) {
+      params.set("max_first_timer_success_rate", firstTimerBounds.max);
+    }
+
     try {
       const res = await fetch(`${API_BASE_URL}/api/v1/repos?${params.toString()}`);
       const data = await res.json();
@@ -129,7 +157,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
     } finally {
       setLoading(false);
     }
-  }, [selectedLang, selectedBucket, selectedTier, trendingOnly, searchQuery, page]);
+  }, [selectedLang, selectedBucket, selectedTier, selectedFirstTimerBucket, trendingOnly, searchQuery, page]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -202,6 +230,13 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
     setTrendingOnly(next);
     setPage(1); // Revert to page 1 on trending toggle
     posthog.capture('trending_toggled', { enabled: next });
+  };
+
+  const handleFirstTimerBucketChange = (bucket: string) => {
+    setLoading(true);
+    setSelectedFirstTimerBucket(bucket);
+    setPage(1);
+    posthog.capture('repo_filter_applied', { filter_type: 'first_timer_bucket', value: bucket });
   };
 
   const handlePageChange = (newPage: number) => {
@@ -363,6 +398,26 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* First Timer Success Rate Pills */}
+          <div className="flex flex-wrap items-center gap-1.5 border-t border-zinc-100 pt-3 text-xs">
+            <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
+              <Users className="h-3 w-3" /> First Timer:
+            </span>
+            {firstTimerBuckets.map((b) => (
+              <button
+                key={b}
+                onClick={() => handleFirstTimerBucketChange(b)}
+                className={`rounded-md px-2.5 py-1 font-mono text-[11px] sm:text-xs active:scale-95 transition-all ${
+                  selectedFirstTimerBucket === b
+                    ? "bg-zinc-900 text-white shadow-xs"
+                    : "border border-zinc-200 bg-zinc-50 text-zinc-500 hover:bg-zinc-100"
+                }`}
+              >
+                {b}
+              </button>
+            ))}
           </div>
         </div>
 

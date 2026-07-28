@@ -108,6 +108,8 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		trendingParam := strings.ToLower(strings.TrimSpace(c.Query("trending")))
 		minStarsStr := strings.TrimSpace(c.Query("min_stars"))
 		maxStarsStr := strings.TrimSpace(c.Query("max_stars"))
+		minFirstTimerStr := strings.TrimSpace(c.Query("min_first_timer_success_rate"))
+		maxFirstTimerStr := strings.TrimSpace(c.Query("max_first_timer_success_rate"))
 
 		page := 1
 		if p, err := strconv.Atoi(pageStr); err == nil && p > 0 {
@@ -135,18 +137,28 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			maxStars = ms
 		}
 
+		var minFirstTimer, maxFirstTimer float64
+		if v, err := strconv.ParseFloat(minFirstTimerStr, 64); err == nil && v > 0 {
+			minFirstTimer = v
+		}
+		if v, err := strconv.ParseFloat(maxFirstTimerStr, 64); err == nil && v > 0 {
+			maxFirstTimer = v
+		}
+
 		filter := repository.RepoFilter{
-			Language:     lang,
-			Tier:         tierParam,
-			MinMergeRate: minMergeRate,
-			MinStars:     minStars,
-			MaxStars:     maxStars,
-			Search:       name,
-			SortBy:       sortParam,
-			Order:        orderParam,
-			Limit:        perPage,
-			Offset:       offset,
-			Trending:     trendingParam == "true",
+			Language:                 lang,
+			Tier:                     tierParam,
+			MinMergeRate:             minMergeRate,
+			MinStars:                 minStars,
+			MaxStars:                 maxStars,
+			Search:                   name,
+			SortBy:                   sortParam,
+			Order:                    orderParam,
+			Limit:                    perPage,
+			Offset:                   offset,
+			Trending:                 trendingParam == "true",
+			MinFirstTimerSuccessRate: minFirstTimer,
+			MaxFirstTimerSuccessRate: maxFirstTimer,
 		}
 
 		repos, total, err := repoStore.List(c.Request.Context(), filter)

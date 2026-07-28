@@ -34,17 +34,19 @@ type RepoRecord struct {
 }
 
 type RepoFilter struct {
-	Language     string
-	Tier         string
-	MinMergeRate float64
-	MinStars     int
-	MaxStars     int
-	Search       string
-	SortBy       string
-	Order        string
-	Limit        int
-	Offset       int
-	Trending     bool
+	Language                  string
+	Tier                      string
+	MinMergeRate              float64
+	MinStars                  int
+	MaxStars                  int
+	Search                    string
+	SortBy                    string
+	Order                     string
+	Limit                     int
+	Offset                    int
+	Trending                  bool
+	MinFirstTimerSuccessRate  float64
+	MaxFirstTimerSuccessRate  float64
 }
 
 type RepoRepository interface {
@@ -106,6 +108,16 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 	if filter.MaxStars > 0 {
 		where += " AND r.stars <= ?"
 		args = append(args, filter.MaxStars)
+	}
+
+	if filter.MinFirstTimerSuccessRate > 0 {
+		where += " AND s.first_timer_success_rate >= ?"
+		args = append(args, filter.MinFirstTimerSuccessRate)
+	}
+
+	if filter.MaxFirstTimerSuccessRate > 0 {
+		where += " AND s.first_timer_success_rate <= ?"
+		args = append(args, filter.MaxFirstTimerSuccessRate)
 	}
 
 	sortCol, ok := allowedSortFields[filter.SortBy]
