@@ -74,6 +74,17 @@ func AutoMigrate(db *sqlx.DB) error {
 		created_at DATETIME NOT NULL,
 		FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 	);
+
+	CREATE TABLE IF NOT EXISTS indexing_queue (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		full_name TEXT UNIQUE NOT NULL,
+		owner TEXT NOT NULL,
+		name TEXT NOT NULL,
+		requested_by_user_id INTEGER,
+		status TEXT NOT NULL DEFAULT 'pending',
+		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		processed_at DATETIME
+	);
 	`
 	if _, err := db.Exec(schema); err != nil {
 		return err
