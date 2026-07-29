@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Repo } from "@/types/opendoor";
-import { Star, GitMerge, Clock, Lock, ArrowUpRight, Flame, Sparkles } from "lucide-react";
+import { Star, GitMerge, Clock, Lock, ArrowUpRight, Flame, Sparkles, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { LangLogo } from "@/components/LangLogo";
 import posthog from "posthog-js";
@@ -76,6 +76,11 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
       ? `${repo.external_pr_merge_rate.toFixed(1)}% merged`
       : "—";
 
+  const firstTimerDisplay =
+    repo.first_timer_success_rate !== undefined && repo.first_timer_success_rate >= 0
+      ? `${repo.first_timer_success_rate.toFixed(1)}% 1st-timer`
+      : null;
+
   const handleClick = () => {
     posthog.capture('repo_card_clicked', {
       repo_full_name: repo.full_name,
@@ -129,7 +134,7 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
         </div>
 
         {/* Secondary Metrics Bar */}
-        <div className="flex items-center gap-3 font-mono text-[11px] text-zinc-500 mb-4">
+        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11px] text-zinc-500 mb-4">
           <div className="flex items-center gap-1">
             <Clock className="h-3.5 w-3.5 text-zinc-400" />
             <span>{responseTimeDisplay}</span>
@@ -139,6 +144,15 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
             <GitMerge className="h-3.5 w-3.5 text-zinc-400" />
             <span>{mergeRateDisplay}</span>
           </div>
+          {firstTimerDisplay && (
+            <>
+              <span>•</span>
+              <div className="flex items-center gap-1 font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-1.5 py-0.5 rounded">
+                <ShieldCheck className="h-3 w-3 text-emerald-600 shrink-0" />
+                <span>{firstTimerDisplay}</span>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Issue #25 & #30 Fix: Clean AI Sparkly Button trigger instead of cluttered blurred box */}
