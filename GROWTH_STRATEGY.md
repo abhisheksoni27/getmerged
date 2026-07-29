@@ -376,3 +376,336 @@ Phase 4 — Platform (8 weeks)
 | Weekly digest subscribers | 1,000 |
 | Repos scored | 10,000 |
 | D30 retention | >25% |
+
+---
+
+## 9. Crawling Cost Analysis — New Metrics Impact
+
+> Based on exact reading of `github/queries.go` and `github/client.go`.
+
+### 9.1 Current Cost Per Repo Snapshot
+
+GitHub GraphQL pricing formula: `ceil(sum of all first: N values across connections / 100)`, minimum 1 point.
+
+**Current `RepoPRsQuery`** (100 PRs × 100 comments each):
+```
+pullRequests(first: 100)  → 100 nodes
+  comments(first: 100)   → 100 × 100 = 10,000 nested nodes
+Total connection nodes:   10,100
+Cost per page:            ceil(10,100 / 100) = 102 points
+```
+
+**Current `RepoStalenessQuery`** (10 PRs, no nesting):
+```
+pullRequests(last: 10)    → 10 nodes
+Cost:                     ceil(10 / 100) = 1 point
+```
+
+A typical active repo with 180-day window = ~1–3 PR pages:
+- **Best case** (1 page): 102 + 1 = **103 points/repo**
+- **Avg case** (2 pages): 204 + 1 = **205 points/repo**
+- **Worst case** (3 pages): 306 + 1 = **307 points/repo**
+
+With 5,000 points/hour budget:
+- Best case throughput: **~48 repos/hour**
+- Avg case throughput: **~24 repos/hour**
+
+> Note: The current `comments(first: 100)` per PR is very expensive. If the median PR has 3 comments, you're paying for 97 ghost nodes per PR. **Dropping to `comments(first: 10)` cuts the query cost by 90% with no real data loss for most repos** — this is the single biggest quick win available.
+
+### 9.2 New Metrics — Additional Cost
+
+| Metric | New Query Needed | Node Cost | Points Added |
+|---|---|---|---|
+| Issue Triage Speed + Close Rate | `issues(first: 100)` with 1 comment each | 100 + 100 = 200 | +2 |
+| Issue-to-PR Conversion | Extend issue query with `labels(first: 5)` | +500 | +5 |
+| Docs & Onboarding Quality | REST: 3 GET requests for file existence | 0 GraphQL | 3 REST |
+| Release Cadence | `releases(first: 50)` | 50 | +1 |
+| Review Coverage | 0 — derive from existing `comments.totalCount` | 0 | 0 |
+| Bot Activity Ratio | 0 — `isBot()` already runs in client.go | 0 | 0 |
+| Bus Factor | 0 — derive from existing `CommentAuthors` per PR | 0 | 0 |
+| Fork-to-PR Ratio | ❌ Skip — requires paginating all forks, impractical | — | — |
+| PR Sentiment Score | 0 GitHub API — LLM inference on existing comment text | 0 | 0 |
+
+**Total additional GraphQL points per repo**: ~8 points (one new issues page + releases)
+**Total additional REST calls per repo**: 3
+
+### 9.3 Net Impact
+
+| Scenario | Current | With New Metrics | Delta |
+|---|---|---|---|
+| Points per repo (avg) | 205 | ~215 | **+5%** |
+| Repos/hour @ 5k budget | ~24 | ~23 | negligible |
+
+**The new metrics add ~5% overhead.** This is not the bottleneck.
+
+### 9.4 The Real Bottleneck — And How to Fix It
+
+The `comments(first: 100)` per PR costs **10,000 nodes per page** when most PRs have <5 comments. This is 90%+ wasted capacity.
+
+**Fix**: Change `comments(first: 100)` → `comments(first: 10)` in `RepoPRsQuery`.
+
+```
+Before: 100 PRs × 100 comments = 10,100 nodes → 102 points/page
+After:  100 PRs × 10 comments  = 1,100 nodes  → 11 points/page
+```
+
+This single change yields **~9× throughput improvement**:
+- Avg case: 22 points/repo instead of 205
+- Repos/hour: **~227 repos/hour** vs current ~24
+
+With this fix + new metrics: ~230 points/repo → still **~217 repos/hour**, a massive net win.
+
+---
+
+## 10. GitHub Rate Limit Scaling
+
+### 10.1 Token Crowdsourcing — Verdict: ❌ ToS Violation
+
+Direct quote from GitHub's Acceptable Use Policy:
+> **"You may not share API tokens to exceed GitHub's rate limitations."**
+
+Using logged-in user OAuth tokens to pool rate limits is explicitly prohibited and risks:
+- OAuth app revocation
+- Account suspensions for participating users
+- Platform-wide block
+
+This is not debatable. Don't do it.
+
+### 10.2 What Others Have Done
+
+| Project | Approach | Result |
+|---|---|---|
+| Renovate / Mend | GitHub App, one installation per org | Scales linearly with installations |
+| Dependabot | GitHub-owned, elevated internal limits | Not replicable |
+| Libraries.io | Their own service accounts (multiple PATs) | Gray area, manageable at small scale |
+| CodeClimate | Per-user token for user-scoped calls only | Compliant |
+| Mergify | GitHub App per org installation | Clean, scalable |
+
+### 10.3 The Right Approach: GitHub App + Installation Tokens
+
+GitHub Apps have a fundamentally different rate limit model:
+
+```
+Base rate:    5,000 req/hour per installation
+Scaling rule: +50 req/hour per repository in the org (after 20 repos)
+              +50 req/hour per user in the org (after 20 users)
+Enterprise:   15,000 req/hour per installation
+Cap:          12,500 req/hour for non-Enterprise installations
+```
+
+**How this solves the problem naturally:**
+
+When a user installs the Opendoor GitHub App on their profile/org, you get a fresh 5,000 req/hour installation token *for that installation*. Each installation is independent.
+
+The flywheel:
+1. User logs in → prompted to install the GitHub App on their org
+2. You gain 5,000+ req/hour for their namespace
+3. With 100 installations → 500,000 req/hour theoretical capacity
+4. Rate limits for each installation are scoped to that installation's context
+
+**This is exactly what the user proposed, but done legally through GitHub's intended mechanism.**
+
+### 10.4 Migration Plan: PAT → GitHub App
+
+**Step 1**: Register Opendoor as a GitHub App (not just OAuth App)
+- Request scopes: `pull_requests: read`, `issues: read`, `contents: read`, `metadata: read`
+- All read-only. No write access needed.
+
+**Step 2**: Update `github/client.go` to support installation token auth
+```go
+// Instead of:
+// Bearer {PAT}
+
+// Use:
+// Bearer {installation_access_token}  // rotated hourly via JWT
+```
+
+**Step 3**: Token rotation middleware
+- Cache installation tokens in Valkey (they expire in 1 hour)
+- Key: `github:token:install:{installation_id}`
+- On expiry: re-fetch via `POST /app/installations/{id}/access_tokens` using app JWT
+
+**Step 4**: Partition the crawl queue by installation
+- Repos owned by org A → use org A's installation token
+- Repos owned by org B → use org B's installation token
+- Falls back to the service account PAT for repos with no installation
+
+**Step 5**: Prompt installation at login
+- After GitHub OAuth, show: "Install Opendoor on your org to contribute rate limits to faster repo scoring"
+- Framing: community benefit, fully transparent, entirely legal
+
+### 10.5 Supplemental Strategies
+
+**Webhooks (eliminate polling for active repos)**
+
+GitHub webhooks for `pull_request` and `issues` events cost **zero rate limit points**.
+
+For repos that have installed the GitHub App, subscribe to webhooks:
+- `pull_request.closed` / `pull_request.merged` → trigger re-score immediately
+- `issues.labeled` with `good-first-issue` → refresh the `/good-first-issue/[lang]` page
+
+This means **S-tier and A-tier repos never need to be polled** — they push updates to you.
+
+**Conditional Requests (ETags)**
+
+GitHub REST API supports `If-None-Match` / `If-Modified-Since` headers. A `304 Not Modified` response **costs 0 rate limit points**. For slow-moving repos (D/C tier), most requests will 304.
+
+**Tiered Crawl Frequency**
+
+| Tier | Crawl Frequency | Rationale |
+|---|---|---|
+| S | Via webhook (real-time) | Active, changes frequently |
+| A | Every 12 hours | Active |
+| B | Every 24 hours | Current default for all repos |
+| C | Every 48 hours | Slow movers |
+| D | Every 7 days | Stale, rarely changes |
+
+This cuts total API load by ~60% vs. crawling everything every 24 hours.
+
+**GH Archive (for bootstrapping history)**
+
+[gharchive.org](https://www.gharchive.org/) archives all public GitHub events (PRs, issues, comments) since 2011, available as public BigQuery datasets or hourly JSON.gz files.
+
+For repos already in the database, you can **backfill the 180-day PR window from GH Archive** without touching the GitHub API at all. This is how many analytics tools bootstrap historical data. Zero API cost, freely available.
+
+### 10.6 Combined Capacity Projection
+
+| Source | Req/Hour | Notes |
+|---|---|---|
+| Service PAT (current) | 5,000 | Always available |
+| GitHub App — 10 installs | 50,000 | 10 orgs install the app |
+| GitHub App — 100 installs | 500,000 | 100 orgs (realistic at 1k users) |
+| Webhooks (top-tier repos) | ∞ effective | No polling needed |
+| Tiered frequency (60% reduction) | ×1.67 multiplier | B/C/D repos crawled less |
+
+At 100 installations + query optimisation (`comments(first: 10)`) + tiered crawl:
+- Effective throughput: **~50,000+ repos scored per hour**
+- Current corpus (5k repos): fully rescored in **< 6 minutes**
+
+---
+
+## 11. Automated SEO System
+
+This is fully implementable with the existing Next.js 15 App Router architecture. No new infrastructure needed.
+
+### 11.1 Dynamic Metadata (`generateMetadata`)
+
+Every dynamic route already renders via SSR. Adding `generateMetadata` makes each page fully SEO-autonomous:
+
+```typescript
+// app/repo/[owner]/[name]/page.tsx
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const repo = await fetchRepo(params.owner, params.name);
+  const tier = repo.c_rank_tier;
+  const mergeRate = Math.round(repo.external_pr_merge_rate);
+  
+  return {
+    title: `${repo.full_name} — ${tierLabel(tier)} on Opendoor`,
+    description: `${repo.full_name} is ${tierLabel(tier)} for contributors. ${mergeRate}% external PR merge rate, ${repo.time_to_first_response_hours.toFixed(0)}h avg first review. Scored by C-Rank™.`,
+    openGraph: {
+      images: [`/api/og/repo/${params.owner}/${params.name}`],
+    },
+    alternates: { canonical: `https://opendoor.abhishekco.de/repo/${params.owner}/${params.name}` },
+  };
+}
+```
+
+All new pages (topics, org, compare, leaderboard) get the same treatment — data-driven titles and descriptions generated entirely from the database. **Zero manual effort as the corpus grows.**
+
+### 11.2 Dynamic Sitemap (`sitemap.ts`)
+
+Replace the static binary generator with a Next.js native sitemap:
+
+```typescript
+// app/sitemap.ts
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const repos = await db.query(`SELECT full_name, updated_at FROM repositories`);
+  const langs = await db.query(`SELECT DISTINCT language FROM repositories`);
+  
+  return [
+    { url: 'https://opendoor.abhishekco.de', changeFrequency: 'daily', priority: 1.0 },
+    { url: 'https://opendoor.abhishekco.de/leaderboard', changeFrequency: 'daily', priority: 0.9 },
+    ...repos.map(r => ({
+      url: `https://opendoor.abhishekco.de/repo/${r.full_name}`,
+      lastModified: r.updated_at,
+      changeFrequency: 'daily',
+      priority: 0.8,
+    })),
+    ...langs.map(l => ({
+      url: `https://opendoor.abhishekco.de/rankings/${l.language.toLowerCase()}`,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    })),
+  ];
+}
+```
+
+For 10,000 repos the sitemap will exceed the 50MB / 50,000 URL limit — split into `sitemap/[id]/route.ts` shards indexed by `sitemap-index.xml`.
+
+### 11.3 Dynamic OG Images (`/api/og/...`)
+
+Next.js `ImageResponse` generates Open Graph images at request time with no external service:
+
+```typescript
+// app/api/og/repo/[owner]/[name]/route.tsx
+export async function GET(req, { params }) {
+  const repo = await fetchRepo(params.owner, params.name);
+  return new ImageResponse(
+    <div style={{ display: 'flex', background: '#09090b', ... }}>
+      <span style={{ color: tierColor(repo.c_rank_tier) }}>{repo.c_rank_tier}</span>
+      <h1>{repo.full_name}</h1>
+      <p>{Math.round(repo.external_pr_merge_rate)}% merge rate</p>
+    </div>,
+    { width: 1200, height: 630 }
+  );
+}
+```
+
+Every repo page, language ranking page, topic page, and compare page gets a unique, data-accurate social preview. When shared on Twitter/Discord/Slack, the card shows live C-Rank data.
+
+### 11.4 Structured Data (JSON-LD)
+
+Inject schema.org JSON-LD as a `<script>` in each page's Server Component:
+
+| Page Type | Schema | Benefit |
+|---|---|---|
+| Repo detail | `SoftwareSourceCode` + `Review` | Rich snippet in Google |
+| Language ranking | `Dataset` | Dataset rich result |
+| Blog posts | `Article` | Article rich snippet |
+| `/contribute` wizard | `HowTo` | Step-by-step SERP feature |
+| Annual report | `Report` + `Dataset` | Backlink authority |
+
+### 11.5 Automated Internal Linking
+
+A simple rule engine in each Server Component:
+
+- **Repo detail page** → link to: same language ranking, same tier repos, `/compare` with most-similar repo, `/good-first-issue/[lang]`
+- **Language ranking page** → link to: top 5 repos in that language, `/topics` that overlap, `/contribute?lang=X`
+- **Topic page** → link to: language pages for languages present, relevant repos
+
+This creates a dense, contextually relevant internal link graph — the single most impactful on-page SEO signal — with zero manual work as the corpus grows.
+
+### 11.6 Freshness Signals (Automated Content Updates)
+
+Google rewards pages that update frequently. The pipeline already runs daily snapshots — surface that:
+
+- Each repo detail page shows `lastModified` HTTP header matching `snapshot_date` from DB
+- Language ranking pages show "Updated X hours ago"
+- The `/digest` page regenerates every Monday via ISR `revalidate: 604800` (7 days)
+
+This tells Google these are live, maintained pages — not stale data dumps.
+
+### 11.7 Automated Blog via Pipeline Data
+
+Once per month, the scoring pipeline can emit a structured JSON report:
+```json
+{
+  "period": "2026-07",
+  "top_improvers": [...],
+  "biggest_drops": [...],
+  "new_s_tier_repos": [...],
+  "language_trends": {...}
+}
+```
+
+A Next.js route reads this JSON and renders it as a blog post with auto-generated title, description, and structured data. **The pipeline writes the blog.** Zero human authorship required for the data-heavy posts.
