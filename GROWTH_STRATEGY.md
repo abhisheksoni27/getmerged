@@ -321,16 +321,182 @@ GET /badge/[owner]/[repo].svg  →  SVG image (Shields.io style)
 
 ---
 
-## 6. Monetisation Paths (Non-Intrusive)
+## 6. Monetisation — The $5/Month Problem
 
-| Tier | Features | Price Signal |
-|---|---|---|
-| Free | Everything current + all new public pages | $0 |
-| Pro (individual) | Score history graph, email digest, PR readiness PDF export | ~$5/mo |
-| Pro (maintainer) | Maintainer dashboard, response time alerts, contributor funnel analytics | ~$19/mo |
-| API (team) | Higher rate limits, webhook on tier change | ~$49/mo |
+> **Core question**: What is so valuable to a contributor that paying $5/month is a non-decision?
 
----
+### 6.1 The Real Problem We’re Solving
+
+The contributor’s fear hierarchy (ranked by frequency):
+
+1. **“Will my PR get ignored?”** — Hours of work, zero response. Most common churn reason.
+2. **“Am I even good enough for this repo?”** — Imposter syndrome. Hits newbies hardest.
+3. **“I don’t know where to start.”** — Decision paralysis. GitHub has 300M repos.
+4. **“I wasted a weekend on a PR that got closed without feedback.”** — The worst experience.
+
+The product solves #1 and #3 today. Money flows when we solve #2 and #4.
+
+**Key insight**: a developer at $80/hour who wastes 3 hours finding a contribution opportunity has already paid $240 in opportunity cost. A $5/month subscription that cuts that to 10 minutes is an obvious trade. **The habit is the hard part.** We need a trigger that brings them back every week.
+
+### 6.2 Feature Gate Architecture
+
+**Principle**: gate on personalisation and time-saving, not on data. The C-Rank data is the trust signal — locking it destroys the product.
+
+```
+Anonymous
+├── See all repos (page 1 only — 15 results)
+├── C-Rank tier badge visible
+├── Language filter only
+└── Repo detail (public metrics, no AI vibe)
+
+Logged In — Free  (triggered by "See trending" or page 2 click)
+├── Unlimited pages + all filters
+├── Trending repos (daily)
+├── Watchlist (up to 10 repos)
+├── AI Maintainer Vibe Check
+└── Good First Issues widget on repo detail
+
+Pro — $5/month
+├── Contributor DNA profile (AI-powered, see 6.3)
+├── Weekly personalised digest: 5 repos + 5 issues matched to you
+├── PR Likelihood Score per repo (see 6.5)
+├── Score history chart per repo (12-month trend)
+├── First-Merge Guarantee track for 0-PR users (see 6.6)
+├── Unlimited watchlist + tier-change push notifications
+└── Unlimited /compare (free = 3/month)
+```
+
+**What triggers login**: "See trending" or page 2 — high-intent moments with low friction.
+**What triggers upgrade**: a blurred personalised digest preview card visible to free users (repos + PR likelihood scores locked). One click to unlock.
+
+### 6.3 Contributor DNA Profile — The AI Profiling System
+
+On login, with explicit consent, we query their **public GitHub data** via scopes already granted:
+
+```
+Data analyzed (all public, zero private repo access):
+├── Repos contributed to: languages, topics, star tier
+├── Merged vs. closed PR ratio (historical success rate)
+├── PR size patterns (LOC changed)
+├── Issue comment style (signals depth of knowledge)
+├── Starred repos (reveals interests)
+└── Account age + contribution streak
+```
+
+We compute and persist a **Contributor DNA** object per user:
+
+```json
+{
+  "skill_level": { "Go": "intermediate", "Python": "expert", "TypeScript": "beginner" },
+  "contribution_style": "bug-fixer",
+  "pr_size_preference": "small",
+  "feedback_tolerance": "high",
+  "goals_inferred": ["portfolio-building", "skill-expansion"],
+  "merged_pr_count": 12,
+  "is_newbie": false
+}
+```
+
+Built once on login, refreshed weekly, cached in DB. Cost: 1 AI inference per user per week.
+All downstream features (digest, PR likelihood score, recommendations) consume this cached profile.
+
+### 6.4 Weekly Personalised Digest — The Core Retention Hook
+
+Every Monday, each Pro user gets an email + in-app notification:
+
+```
+Subject: 5 repos that want your PRs this week
+
+Based on your Go expertise and interest in CLI tools:
+
+1. urfave/cli [A-tier, 82% merge rate]
+   Issue: "Add zsh completion support"
+   Your PR likelihood: 87%   ->  [View Issue]
+
+2. spf13/cobra [S-tier, 91% merge rate]
+   Issue: "Better error messages for invalid flags"
+   Your PR likelihood: 79%   ->  [View Issue]
+
+[+ 3 more matched to your profile]
+```
+
+One click to the GitHub issue. Zero research. Zero wasted time.
+
+**Why it is worth $5**: replaces 2-3 hours of repo hunting with 30 seconds of reading. The Monday digest is also the **weekly habit trigger** that prevents churn — users open it like a newsletter.
+
+### 6.5 PR Likelihood Score — The Differentiator
+
+Before submitting a PR to any repo, a Pro user sees:
+
+```
+PR Likelihood: 84% (high)
+
+Why high:
+- Your Python level matches this repo's contributor average
+- This repo merges 89% of external Python PRs
+- Maintainer responds within 4h on average
+
+Watch out for:
+- This repo requires tests -- you haven't written them before
+  -> Here's the test style they use (from AI checklist)
+```
+
+The score is a formula, no LLM needed:
+
+```
+score = (
+  repo_merge_rate        * 0.40 +
+  skill_match_score      * 0.30 +   // user skill vs repo avg contributor level
+  first_timer_success    * 0.20 +
+  recency_bonus          * 0.10     // returning contributor gets a bonus
+)
+```
+
+All inputs already exist in the DB. The LLM only writes the "Why / Watch out" text, cached per repo+skill_level pair. Cost per user: cents per month.
+
+Directly addresses fear #1 (ignored PR) and fear #2 (imposter syndrome). No other tool does this.
+
+### 6.6 First-Merge Guarantee (Newbie Track)
+
+**Target**: users with 0 merged PRs in their entire GitHub history.
+
+Highest-anxiety segment. Highest-loyalty-if-converted. A user who gets their first merged PR through Opendoor recommends it to everyone they know.
+
+**The flow**:
+1. Profile shows `is_newbie: true` -> dedicated card: **"Your First Merge Track"**
+2. User picks language + available time (1h / half-day / weekend)
+3. We surface 5 repos meeting: S/A tier + first-timer success > 60% + open good-first-issues + response < 48h + bus factor >= 2
+4. Show the exact issue + full AI-generated PR checklist
+5. On merge detected via GitHub events: confetti + shareable card:
+   **"I got my first PR merged -- found via Opendoor"** + auto-tweet template
+
+**Why it converts**: the first merge is deeply emotional. The shareable card turns every newbie success into a free acquisition event on Twitter/LinkedIn. Their followers sign up.
+
+**Why it retains**: first merge -> wants 5 -> wants 20. Profile improves, digest gets sharper, they stay subscribed.
+
+### 6.7 What We Explicitly Do Not Gate
+
+- C-Rank scores and all raw metrics (the data is the trust signal)
+- Repo detail pages (SEO value too high; locking kills discovery)
+- The leaderboard and language rankings
+- First-timer success rate (our core differentiator, visible to all)
+
+**Rule**: gate personalisation and time-saving. Never gate the data.
+
+### 6.8 The $5/Month Math
+
+| Milestone | Registered Users | Conversion | MRR | ARR |
+|---|---|---|---|---|
+| Launch | 1,000 | 3% | $150 | $1.8k |
+| Early traction | 10,000 | 3% | $1,500 | $18k |
+| Growing | 50,000 | 5% | $12,500 | $150k |
+| Scale | 100,000 | 7% | $35,000 | $420k |
+| **Goal** | **200,000** | **5%** | **$50,000** | **$600k** |
+
+**The conversion flywheel**:
+Free user sees blurred digest -> upgrades -> gets first merge via Guarantee -> shares on Twitter
+-> 5 new signups -> each gets their first merge -> shares -> flywheel compounds.
+
 
 ## 7. Priority Execution Order
 
