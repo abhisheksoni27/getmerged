@@ -80,6 +80,7 @@ func main() {
 		api.GET("/repos", handler.ListRepos(repoStore))
 		api.GET("/repos/:id", handler.GetRepo(repoStore))
 		api.POST("/repos/queue", handler.RequestRepoIndexing(database))
+		api.GET("/languages", handler.ListLanguages(database))
 		api.GET("/stats/macro", handler.GetMacroStats())
 
 		api.GET("/repos/:id/feedback", handler.ListFeedback(database))
