@@ -52,7 +52,20 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const [totalReposCount, setTotalReposCount] = useState<number>(0);
   const perPage = 15; // Limit to maximum 15 rows of repos on home page
 
-  const languages = ["All", "Go", "TypeScript", "Python", "Rust", "C++", "Java", "PHP", "Ruby", "Dart", "Kotlin", "Elixir", "Zig", "Scala"];
+  const [languages, setLanguages] = useState<string[]>([
+    "All", "Go", "TypeScript", "Python", "Rust", "C++", "Java", "PHP", "Ruby", "Dart", "Kotlin", "Elixir", "Zig", "Scala"
+  ]);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/v1/languages`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.languages && Array.isArray(data.languages) && data.languages.length > 0) {
+          setLanguages(["All", ...data.languages]);
+        }
+      })
+      .catch(() => {});
+  }, []);
   const buckets = ["All", "500-1k", "1k-5k", "5k-20k", "20k-50k", "50k+"];
   const mergeRateOptions = ["All", ">75% Merged", ">50% Merged", ">25% Merged"];
   const firstTimerBuckets = ["All", "0-20%", "20-40%", "40-60%", "60-80%", "80-100%"];
