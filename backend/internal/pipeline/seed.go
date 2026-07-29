@@ -38,6 +38,13 @@ func Seed(db *sqlx.DB, gh *github.Client, languages []string, force bool) error 
 
 	today := time.Now().UTC().Format("2006-01-02")
 
+	// Fetch existing DB metrics once at start for normalisation instead of N+1 queries
+	cachedMetrics, err := fetchDBMetrics(db)
+	if err != nil {
+		slog.Warn("seed: could not fetch initial DB metrics for normalisation", "err", err)
+		cachedMetrics = nil
+	}
+
 	for _, lang := range languages {
 		slog.Info("seed: searching repos", "language", lang)
 
@@ -70,11 +77,13 @@ func Seed(db *sqlx.DB, gh *github.Client, languages []string, force bool) error 
 			}
 
 			// Score repository
-			if err := scoreAndSaveRepo(db, gh, repoID, r.Owner, r.Name, r.FullName); err != nil {
+			updatedMetrics, err := scoreAndSaveRepo(db, gh, repoID, r.Owner, r.Name, r.FullName, cachedMetrics)
+			if err != nil {
 				slog.Error("seed: score repo failed", "repo", r.FullName, "err", err)
 				failed++
 				continue
 			}
+			cachedMetrics = updatedMetrics
 
 			scored++
 		}
@@ -127,10 +136,10 @@ func upsertRepo(db *sqlx.DB, r github.Repo) (string, error) {
 	return id, err
 }
 
-func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullName string) error {
+func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullName string, existingMetrics []scoring.RawMetrics) ([]scoring.RawMetrics, error) {
 	prs, _, err := gh.FetchPRs(owner, name, 180)
 	if err != nil {
-		return fmt.Errorf("FetchPRs: %w", err)
+		return existingMetrics, fmt.Errorf("FetchPRs: %w", err)
 	}
 
 	stale, _ := gh.IsStalenessFlag(owner, name)
@@ -150,19 +159,17 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	}
 	raw := scoring.ComputeMetrics(scoringPRs, stale)
 
-	// Fetch existing DB metrics for normalisation
-	allRaw, err := fetchDBMetrics(db)
-	if err != nil {
-		slog.Warn("seed: could not fetch DB metrics for normalisation", "err", err)
-	}
-	allRaw = append(allRaw, raw)
+	allRaw := append(existingMetrics, raw)
 
 	normed := scoring.NormaliseAll(allRaw)
 	thisNormed := normed[len(normed)-1]
 
 	score, tier := scoring.ComputeCRank(thisNormed, raw.StalenessFlag)
 
-	return saveSnapshot(db, repoID, raw, score, tier)
+	if err := saveSnapshot(db, repoID, raw, score, tier); err != nil {
+		return existingMetrics, err
+	}
+	return allRaw, nil
 }
 
 func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float64, tier string) error {

@@ -109,6 +109,15 @@ func AutoMigrate(db *sqlx.DB) error {
 		_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_repositories_is_trending ON repositories(is_trending)`)
 	}
 
+	// Performance indexes
+	indexes := `
+		CREATE INDEX IF NOT EXISTS idx_daily_snapshots_repo_date ON daily_snapshots(repository_id, snapshot_date DESC);
+		CREATE INDEX IF NOT EXISTS idx_daily_snapshots_tier ON daily_snapshots(c_rank_tier);
+		CREATE INDEX IF NOT EXISTS idx_repositories_language ON repositories(language);
+		CREATE INDEX IF NOT EXISTS idx_repositories_stars ON repositories(stars);
+	`
+	_, _ = db.Exec(indexes)
+
 	return nil
 }
 
