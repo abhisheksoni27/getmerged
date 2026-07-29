@@ -39,9 +39,31 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [feedbackError, setFeedbackError] = useState<string | null>(null);
   const [isVerifiedContributor, setIsVerifiedContributor] = useState(false);
+  const [isQueued, setIsQueued] = useState(false);
 
   const rank = repo?.class_rank || repo?.c_rank_tier || "A";
   const score = repo?.c_rank_score || repo?.score || 78.5;
+
+  useEffect(() => {
+    if (!repo && fullName) {
+      const parts = fullName.split("/");
+      if (parts.length === 2) {
+        fetch(`${API_BASE_URL}/api/v1/repos/queue`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ owner: parts[0], name: parts[1] }),
+        })
+          .then((res) => (res.ok ? res.json() : null))
+          .then((data) => {
+            if (data?.status === "queued" || data?.status === "already_indexed") {
+              setIsQueued(true);
+            }
+          })
+          .catch(() => {});
+      }
+    }
+  }, [repo, fullName]);
 
   useEffect(() => {
     const hasToken = typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
@@ -190,6 +212,69 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         return "Scored";
     }
   };
+
+  if (!repo) {
+    return (
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-zinc-900 transition-colors mb-8"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Back to Explorer
+        </Link>
+
+        <div className="rounded-2xl border border-zinc-200 bg-white p-8 sm:p-10 shadow-sm text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 mb-5">
+            <Activity className="h-7 w-7" />
+          </div>
+
+          <span className="inline-block rounded-full bg-amber-100 px-3 py-1 font-mono text-xs font-bold text-amber-800 mb-3">
+            Indexing in Progress
+          </span>
+
+          <h1 className="text-2xl sm:text-3xl font-bold font-mono text-zinc-900 mb-3">
+            {fullName}
+          </h1>
+
+          <p className="text-sm text-zinc-600 max-w-lg mx-auto leading-relaxed mb-8">
+            This repository is currently in our indexing queue. Our telemetry engine will analyze maintainer response speeds and PR merge rates in our next processing run.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            {isLoggedIn ? (
+              <button
+                onClick={handleWatchToggle}
+                disabled={watchLoading}
+                className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
+              >
+                <Bookmark className="h-4 w-4 text-amber-400" />
+                {isWatching ? "Watching Repo" : "Watch Repo for Updates"}
+              </button>
+            ) : (
+              <a
+                href={`${API_BASE_URL}/api/v1/auth/github`}
+                className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
+              >
+                <Lock className="h-4 w-4 text-amber-400" />
+                Sign in with GitHub to Get Notified
+              </a>
+            )}
+
+            <a
+              href={`https://github.com/${fullName}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-white px-6 py-3 text-xs font-mono font-medium text-zinc-700 hover:bg-zinc-50 transition-all"
+            >
+              <GitPullRequest className="h-4 w-4" />
+              View on GitHub
+            </a>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto max-w-5xl px-3 sm:px-6 lg:px-8 py-8 sm:py-10 flex-1 w-full overflow-hidden">
@@ -638,6 +723,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     const res = await fetch(`${API_BASE_URL}/api/v1/user/feedback`, {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
+                      credentials: "include",
                       body: JSON.stringify({
                         repo_id: repo?.id || "",
                         full_name: fullName,

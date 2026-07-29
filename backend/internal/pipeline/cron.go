@@ -115,6 +115,11 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 
 	slog.Info("cron complete", "scored", len(all), "attempted", len(repos))
 
+	// Process up to 10 queued repo indexing requests (FIFO)
+	if err := ProcessIndexingQueue(db, gh, 10); err != nil {
+		slog.Error("cron: ProcessIndexingQueue failed", "err", err)
+	}
+
 	// Regenerate static XML sitemaps for CDN/Nginx serving
 	publicDir := "../frontend/public"
 	if _, err := os.Stat(publicDir); os.IsNotExist(err) {
@@ -125,6 +130,88 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 	}
 
 	return nil
+}
+
+type queueItem struct {
+	ID                int64  `db:"id"`
+	FullName          string `db:"full_name"`
+	Owner             string `db:"owner"`
+	Name              string `db:"name"`
+	RequestedByUserID *int64 `db:"requested_by_user_id"`
+}
+
+// ProcessIndexingQueue picks up to batchSize pending repositories from indexing_queue in FIFO order,
+// scores them via GitHub API, inserts snapshots into DB, and marks status as completed.
+func ProcessIndexingQueue(db *sqlx.DB, gh *ghclient.Client, batchSize int) error {
+	if batchSize <= 0 {
+		batchSize = 10
+	}
+
+	var items []queueItem
+	err := db.Select(&items, `
+		SELECT id, full_name, owner, name, requested_by_user_id
+		FROM indexing_queue
+		WHERE status = 'pending'
+		ORDER BY created_at ASC
+		LIMIT ?
+	`, batchSize)
+	if err != nil || len(items) == 0 {
+		return nil
+	}
+
+	slog.Info("cron: processing indexing_queue batch", "count", len(items))
+
+	existingMetrics, _ := fetchDBMetrics(db)
+
+	for _, item := range items {
+		slog.Info("cron queue: processing item", "repo", item.FullName)
+		_, _ = db.Exec("UPDATE indexing_queue SET status = 'processing' WHERE id = ?", item.ID)
+
+		// Fetch & score repo
+		repoID, err := upsertRepoRow(db, item.Owner, item.Name, item.FullName)
+		if err != nil {
+			slog.Error("cron queue: upsertRepo failed", "repo", item.FullName, "err", err)
+			_, _ = db.Exec("UPDATE indexing_queue SET status = 'failed' WHERE id = ?", item.ID)
+			continue
+		}
+
+		updatedMetrics, scoreErr := scoreAndSaveRepo(db, gh, repoID, item.Owner, item.Name, item.FullName, existingMetrics)
+		if scoreErr != nil {
+			slog.Error("cron queue: scoreAndSaveRepo failed", "repo", item.FullName, "err", scoreErr)
+			_, _ = db.Exec("UPDATE indexing_queue SET status = 'failed' WHERE id = ?", item.ID)
+			continue
+		}
+		existingMetrics = updatedMetrics
+
+		// Mark as completed
+		_, _ = db.Exec("UPDATE indexing_queue SET status = 'completed', processed_at = ? WHERE id = ?", time.Now().UTC(), item.ID)
+		slog.Info("cron queue: item completed successfully", "repo", item.FullName)
+
+		// Queue user notification if requested_by_user_id is present
+		if item.RequestedByUserID != nil && *item.RequestedByUserID > 0 {
+			payload := fmt.Sprintf(`{"repo_full_name":"%s","message":"Your requested repository %s has been scored!"}`, item.FullName, item.FullName)
+			_, _ = db.Exec(`
+				INSERT INTO notification_queue (user_id, type, payload, status, created_at)
+				VALUES (?, 'repo_indexed', ?, 'pending', ?)
+			`, *item.RequestedByUserID, payload, time.Now().UTC())
+		}
+	}
+
+	return nil
+}
+
+func upsertRepoRow(db *sqlx.DB, owner, name, fullName string) (string, error) {
+	var id string
+	err := db.QueryRow("SELECT id FROM repositories WHERE full_name = ?", fullName).Scan(&id)
+	if err == nil && id != "" {
+		return id, nil
+	}
+	id = uuid.New().String()
+	_, err = db.Exec(`
+		INSERT INTO repositories (id, full_name, owner, name, language, stars, description, github_url, updated_at)
+		VALUES (?, ?, ?, ?, 'Other', 0, '', ?, ?)
+	`, id, fullName, owner, name, "https://github.com/"+fullName, time.Now().UTC())
+	return id, err
 }
 
 func reposNeedingUpdate(db *sqlx.DB) ([]repoRow, error) {
