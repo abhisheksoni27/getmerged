@@ -18,6 +18,7 @@ import {
   FileCode2,
   Check,
   ArrowRight,
+  AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
@@ -40,6 +41,8 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [feedbackError, setFeedbackError] = useState<string | null>(null);
   const [isVerifiedContributor, setIsVerifiedContributor] = useState(false);
   const [isQueued, setIsQueued] = useState(false);
+  const [githubNotFound, setGithubNotFound] = useState(false);
+  const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
 
   const rank = repo?.class_rank || repo?.c_rank_tier || "A";
   const score = repo?.c_rank_score || repo?.score || 78.5;
@@ -48,19 +51,32 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
     if (!repo && fullName) {
       const parts = fullName.split("/");
       if (parts.length === 2) {
-        fetch(`${API_BASE_URL}/api/v1/repos/queue`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ owner: parts[0], name: parts[1] }),
-        })
-          .then((res) => (res.ok ? res.json() : null))
+        setIsCheckingGithub(true);
+        // Client-side fetch to GitHub API to check repository existence before queueing
+        fetch(`https://api.github.com/repos/${parts[0]}/${parts[1]}`)
+          .then((res) => {
+            if (res.status === 404) {
+              setGithubNotFound(true);
+              setIsCheckingGithub(false);
+              return null;
+            }
+            setIsCheckingGithub(false);
+            return fetch(`${API_BASE_URL}/api/v1/repos/queue`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({ owner: parts[0], name: parts[1] }),
+            });
+          })
+          .then((res) => (res && res.ok ? res.json() : null))
           .then((data) => {
             if (data?.status === "queued" || data?.status === "already_indexed") {
               setIsQueued(true);
             }
           })
-          .catch(() => {});
+          .catch(() => {
+            setIsCheckingGithub(false);
+          });
       }
     }
   }, [repo, fullName]);
@@ -213,7 +229,53 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
     }
   };
 
+  if (isCheckingGithub) {
+    return <RepoDetailSkeleton />;
+  }
+
   if (!repo) {
+    if (githubNotFound) {
+      return (
+        <main className="mx-auto max-w-4xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-zinc-900 transition-colors mb-8"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Back to Explorer
+          </Link>
+
+          <div className="rounded-2xl border border-rose-200 bg-rose-50/40 p-8 sm:p-10 shadow-sm text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-100 border border-rose-200 text-rose-600 mb-5">
+              <AlertCircle className="h-7 w-7" />
+            </div>
+
+            <span className="inline-block rounded-full bg-rose-100 px-3 py-1 font-mono text-xs font-bold text-rose-800 mb-3">
+              Repository Not Found
+            </span>
+
+            <h1 className="text-2xl sm:text-3xl font-bold font-mono text-zinc-900 mb-3">
+              {fullName}
+            </h1>
+
+            <p className="text-sm text-zinc-600 max-w-lg mx-auto leading-relaxed mb-8">
+              This repository does not exist on GitHub or is private. Please verify the owner and repository name.
+            </p>
+
+            <div className="flex items-center justify-center gap-3">
+              <Link
+                href="/"
+                className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to Explorer
+              </Link>
+            </div>
+          </div>
+        </main>
+      );
+    }
+
     return (
       <main className="mx-auto max-w-4xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
         <Link
@@ -832,6 +894,44 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             All telemetry metrics displayed for {fullName} are automatically retrieved via the GitHub GraphQL API and recalculated daily. Insider pull requests submitted by repository owners or organization members are excluded from merge rate calculations to preserve objective external contributor statistics.
           </p>
         </section>
+      </div>
+    </main>
+  );
+}
+
+function RepoDetailSkeleton() {
+  return (
+    <main className="mx-auto max-w-5xl px-3 sm:px-6 lg:px-8 py-8 sm:py-10 flex-1 w-full overflow-hidden font-sans">
+      <div className="h-4 w-28 bg-zinc-200 animate-pulse rounded mb-6" />
+
+      <div className="flex flex-col gap-4 border-b border-zinc-200 pb-6 mb-8">
+        <div className="flex gap-2">
+          <div className="h-6 w-24 bg-zinc-200 animate-pulse rounded-lg" />
+          <div className="h-6 w-32 bg-zinc-200 animate-pulse rounded-lg" />
+        </div>
+        <div className="h-8 w-64 bg-zinc-200 animate-pulse rounded-xl" />
+        <div className="h-4 w-96 max-w-full bg-zinc-200 animate-pulse rounded" />
+      </div>
+
+      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm mb-10">
+        <div className="h-4 w-48 bg-zinc-200 animate-pulse rounded mb-6" />
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="space-y-2">
+              <div className="h-3 w-20 bg-zinc-200 animate-pulse rounded" />
+              <div className="h-8 w-24 bg-zinc-200 animate-pulse rounded-lg" />
+              <div className="h-3 w-28 bg-zinc-200 animate-pulse rounded" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+        <div className="h-5 w-56 bg-zinc-200 animate-pulse rounded mb-4" />
+        <div className="space-y-2">
+          <div className="h-4 w-full bg-zinc-200 animate-pulse rounded" />
+          <div className="h-4 w-3/4 bg-zinc-200 animate-pulse rounded" />
+        </div>
       </div>
     </main>
   );
