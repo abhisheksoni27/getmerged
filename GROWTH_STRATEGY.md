@@ -2,6 +2,10 @@
 
 > **Goal**: Make Opendoor the canonical, trusted destination for open-source contributors and OSS enthusiasts worldwide.
 
+> **Note on sources**: This document synthesises analysis from two independent AI reviews of the codebase.
+> Items marked **[+]** were added from the second review after deduplication.
+> Items from the second review that were rejected: `/rankings/[lang]/[region]` (requires geo data we don't have), `README quality score` (overlaps with docs quality score 2.5, marginal signal), `issue_to_pr_ratio` as defined is noisy (high ratio could mean "lots of demand" OR "maintainers ignore issues" — directionally ambiguous without normalisation).
+
 ---
 
 ## 1. Current State Audit
@@ -65,7 +69,7 @@ These extend the scoring model with signals that matter deeply to contributors.
 ### 2.2 PR Comment Sentiment Score
 > Are maintainer comments constructive or toxic?
 
-- **Signal**: Run lightweight sentiment classification (positive/neutral/negative) on maintainer-authored comments using the existing AI pipeline.
+- **Signal**: Lightweight sentiment classification (positive/neutral/negative) on maintainer-authored comments via the existing AI pipeline.
 - **Display**: "Maintainer Tone: Constructive / Neutral / Harsh" badge on repo detail.
 - **Why**: The biggest unspoken fear for first-timers is hostile review culture. Making this visible is a massive trust differentiator.
 
@@ -99,6 +103,37 @@ These extend the scoring model with signals that matter deeply to contributors.
 - **Signal**: 4-week rolling comparison of `merge_rate` and `response_time`. Compute week-over-week delta.
 - **Display**: ↑↓ trend arrows on repo cards and detail pages.
 - **Why**: A B-tier repo trending toward A is more valuable than a stagnant A-tier.
+
+### 2.8 Bus Factor (Active Maintainer Count)
+> How many distinct maintainers merged or reviewed PRs in the last 90 days?
+
+- **Signal**: `count(distinct reviewer logins with merge/approve actions in last 90d)`
+- **Why**: A repo with 1 active maintainer is fragile — that person going quiet kills the project. Surface as "Bus Factor: 1" warning on repo detail.
+- **Scoring impact**: Factor into `distinct_maintainer_count` weight or add as a hard penalty gate (bus factor = 1 → max tier B).
+
+### 2.9 Review Coverage
+> What % of external PRs received at least one review comment before merge/close?
+
+- **Signal**: `(PRs with ≥1 non-author comment) / (total external PRs)`
+- **Why**: Blind merges (no review) and silent closes (no feedback) are both red flags. Low review coverage = maintainers not engaging.
+
+### 2.10 Bot Activity Ratio
+> What fraction of PR comments are from bots vs. humans?
+
+- **Signal**: `(bot-authored comments) / (total PR comments)` — bots already detected via `isBot()` in `scoring/metrics.go`.
+- **Why**: >40% bot comments signals a heavy CI/CD gatekeeping culture that intimidates newcomers (flaky CI, automated rejections). Already have the bot detection logic — cheap to expose.
+
+### 2.11 Fork-to-PR Ratio
+> Of all repo forks, what fraction resulted in at least one PR back to the parent?
+
+- **Signal**: `(forks with at least 1 PR to parent) / (total forks)`
+- **Why**: Novel signal — distinguishes "copy for personal use" forks from "contributing" forks. A repo with 10k forks and 2% fork-to-PR ratio is very different from one with 200 forks and 30%.
+
+### 2.12 Release Cadence
+> How regularly does the repo ship releases?
+
+- **Signal**: Median days between GitHub releases over last 12 months.
+- **Why**: Active shipping culture correlates with active maintainership. Repos that haven't released in 6 months are often stagnating even if PRs are being merged.
 
 ---
 
@@ -177,6 +212,28 @@ MDX posts with `schema.org/Article` JSON-LD markup.
 - Surface existing Swagger UI at a user-facing URL.
 - Enables 3rd-party integrations: VS Code extensions, GitHub Actions, CLI tools.
 - **Moat**: Becomes infrastructure for the OSS ecosystem.
+
+### 3.11 `/good-first-issue/[lang]` — Good First Issue Finder
+> "Show me beginner-friendly issues in Rust right now."
+
+- Dedicated SSR page per language surfacing open `good-first-issue` labelled issues across all scored repos.
+- **Target keyword**: `"good first issue [language]"` — extremely high-intent, near-zero competition on non-GitHub domains.
+- Refresh via cron every 6 hours. Deeplinks directly to GitHub issue.
+- **Why this is different from the `/contribute` wizard**: That page curates repos. This page curates *specific open issues* — much lower friction, one click to start.
+
+### 3.12 `/similar/[owner]/[name]` — Similar Repos
+> "Projects like vercel/next.js that are more welcoming."
+
+- Given a repo, find the 5 most similar repos (same language + topic overlap) sorted by C-Rank.
+- Similarity engine: cosine similarity on GitHub topic vectors (cheap, no ML needed).
+- **SEO**: "projects like [repo]" is a real search pattern. Also surfaces naturally when a repo has a D-tier and we suggest alternatives.
+
+### 3.13 `/reports/[year]/[topic]` — State of OSS Annual Report
+> "State of Open Source Contribution 2026"
+
+- Annual static page: aggregate stats, tier distribution shifts YoY, most-improved repos, community milestones.
+- **Why**: Durable backlink magnet — tech media, newsletters, and universities link to annual reports. HackerNews-friendly format.
+- Seed topics: `state-of-open-source-2026`, `most-welcoming-languages-2026`, `beginner-friendly-oss-2026`.
 
 ---
 
