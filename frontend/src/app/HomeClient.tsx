@@ -98,15 +98,15 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const getFirstTimerBoundsFromBucket = (bucket: string): { min?: string; max?: string } => {
     switch (bucket) {
       case "0-20%":
-        return { min: "0", max: "0.2" };
+        return { min: "0", max: "20" };
       case "20-40%":
-        return { min: "0.2", max: "0.4" };
+        return { min: "20", max: "40" };
       case "40-60%":
-        return { min: "0.4", max: "0.6" };
+        return { min: "40", max: "60" };
       case "60-80%":
-        return { min: "0.6", max: "0.8" };
+        return { min: "60", max: "80" };
       case "80-100%":
-        return { min: "0.8", max: "1.0" };
+        return { min: "80", max: "100" };
       default:
         return {};
     }
