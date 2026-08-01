@@ -9,6 +9,7 @@ import (
 
 	"github.com/abhisheksoni27/opendoor/internal/analytics"
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
+	"github.com/abhisheksoni27/opendoor/internal/notification"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -16,17 +17,20 @@ import (
 type BackgroundCrawler struct {
 	db        *sqlx.DB
 	gh        *ghclient.Client
+	telegram  *notification.TelegramNotifier
 	running   atomic.Bool
 	stopChan  chan struct{}
 	lastLang  int
 	lastBucket int
+	lastPulse  time.Time
 }
 
 // NewBackgroundCrawler initializes a BackgroundCrawler instance.
-func NewBackgroundCrawler(db *sqlx.DB, gh *ghclient.Client) *BackgroundCrawler {
+func NewBackgroundCrawler(db *sqlx.DB, gh *ghclient.Client, telegram *notification.TelegramNotifier) *BackgroundCrawler {
 	return &BackgroundCrawler{
 		db:       db,
 		gh:       gh,
+		telegram: telegram,
 		stopChan: make(chan struct{}),
 	}
 }
@@ -39,6 +43,11 @@ func (c *BackgroundCrawler) Start() {
 	}
 
 	slog.Info("background crawler: starting continuous queue engine")
+	if c.telegram.IsConfigured() {
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		_ = c.telegram.SendTextMessage(ctx, "🚀 *Opendoor Background Crawler Worker Started*\n\nContinuous priority-queue engine is active and scanning repositories.")
+		cancel()
+	}
 	go c.runLoop()
 }
 
@@ -61,6 +70,7 @@ func (c *BackgroundCrawler) runLoop() {
 			return
 		case <-ticker.C:
 			c.processNextWorkItem()
+			c.checkAndSendPulseDigest()
 		}
 	}
 }
@@ -222,3 +232,45 @@ func (c *BackgroundCrawler) processDiscoveryBatch() error {
 
 	return nil
 }
+
+func (c *BackgroundCrawler) checkAndSendPulseDigest() {
+	if !c.telegram.IsConfigured() {
+		return
+	}
+
+	// Send Telegram pulse every 3 hours
+	if time.Since(c.lastPulse) < 3*time.Hour && !c.lastPulse.IsZero() {
+		return
+	}
+	c.lastPulse = time.Now().UTC()
+
+	var totalScored int
+	_ = c.db.Get(&totalScored, "SELECT COUNT(1) FROM repositories")
+
+	var sTierCount int
+	_ = c.db.Get(&sTierCount, `
+		SELECT COUNT(DISTINCT repository_id) FROM daily_snapshots WHERE c_rank_tier = 'S'
+	`)
+
+	var pendingUserQueue int
+	_ = c.db.Get(&pendingUserQueue, "SELECT COUNT(1) FROM indexing_queue WHERE status = 'pending'")
+
+	_, rl, _ := c.gh.CheckToken()
+
+	msg := fmt.Sprintf(
+		"📊 *Opendoor Crawler Pulse Digest*\n\n"+
+			"• *Total Repos Scored:* %d\n"+
+			"• *S-Tier Super Welcoming:* %d\n"+
+			"• *User Queue Pending:* %d\n"+
+			"• *GitHub API Budget:* %d / 5,000 remaining\n\n"+
+			"🤖 Background crawler engine is active 24/7.",
+		totalScored, sTierCount, pendingUserQueue, rl.Remaining,
+	)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := c.telegram.SendTextMessage(ctx, msg); err != nil {
+		slog.Error("background crawler: failed to send telegram pulse digest", "err", err)
+	}
+}
+

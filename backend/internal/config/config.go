@@ -24,6 +24,8 @@ type Config struct {
 	Port               string
 	GinMode            string
 	LogFile            string
+	TelegramBotToken   string
+	TelegramChatID     string
 }
 
 // Load reads .env (if present) then validates all required variables are set.
@@ -36,6 +38,8 @@ func Load() (*Config, error) {
 		ValkeyPassword: os.Getenv("VALKEY_PASSWORD"), // optional — empty OK for local dev
 		LogFile:        os.Getenv("LOG_FILE"),        // optional — defaults to opendoor.log if empty
 		OpencodeAPIKey: os.Getenv("OPENCODE_API_KEY"), // optional in dev if AI insights disabled
+		TelegramBotToken: os.Getenv("TELEGRAM_BOT_TOKEN"),
+		TelegramChatID:   os.Getenv("TELEGRAM_CHAT_ID"),
 	}
 	if c.LogFile == "" {
 		c.LogFile = "opendoor.log"
