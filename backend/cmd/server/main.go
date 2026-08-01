@@ -20,6 +20,7 @@ import (
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/handler"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
+	"github.com/abhisheksoni27/opendoor/internal/notification"
 	"github.com/abhisheksoni27/opendoor/internal/pipeline"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
@@ -56,6 +57,7 @@ func main() {
 
 	// Initialize AI and Notification clients
 	aiClient := ai.NewAIClient(cfg.OpencodeAPIKey)
+	telegramNotifier := notification.NewTelegramNotifier(cfg.TelegramBotToken, cfg.TelegramChatID)
 
 	// Initialize Repository Layer
 	userRepo := repository.NewUserRepository(database, cfg)
@@ -64,7 +66,7 @@ func main() {
 	aiRepo := repository.NewAIRepository(database)
 
 	// Start continuous background crawler worker loop
-	crawler := pipeline.NewBackgroundCrawler(database, gh)
+	crawler := pipeline.NewBackgroundCrawler(database, gh, telegramNotifier)
 	crawler.Start()
 	defer crawler.Stop()
 
