@@ -19,11 +19,12 @@ const (
 
 // repoRow mirrors the repositories table for scanning.
 type repoRow struct {
-	ID        string    `db:"id"`
-	FullName  string    `db:"full_name"`
-	Owner     string    `db:"owner"`
-	Name      string    `db:"name"`
-	UpdatedAt time.Time `db:"updated_at"`
+	ID                      string    `db:"id"`
+	FullName                string    `db:"full_name"`
+	Owner                   string    `db:"owner"`
+	Name                    string    `db:"name"`
+	UpdatedAt               time.Time `db:"updated_at"`
+	ConsecutiveStagnantScans int       `db:"consecutive_stagnant_scans"`
 }
 
 // UpdateScores fetches metrics for all repos not updated in the last staleHours,
@@ -108,8 +109,8 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 		if err := insertSnapshot(db, rm.repo.ID, rm.raw, score, tier); err != nil {
 			slog.Error("cron: insertSnapshot failed", "repo", rm.repo.FullName, "err", err)
 		}
-		if err := touchRepo(db, rm.repo.ID, rm.meta.Language, rm.meta.Stars, rm.meta.Description); err != nil {
-			slog.Error("cron: touchRepo failed", "repo", rm.repo.FullName, "err", err)
+		if err := touchRepoAdaptive(db, rm.repo.ID, rm.meta.Language, rm.meta.Stars, rm.meta.Description, tier, rm.raw, rm.repo.ConsecutiveStagnantScans); err != nil {
+			slog.Error("cron: touchRepoAdaptive failed", "repo", rm.repo.FullName, "err", err)
 		}
 	}
 
@@ -214,15 +215,16 @@ func upsertRepoRow(db *sqlx.DB, owner, name, fullName string) (string, error) {
 	return id, err
 }
 
+
+
 func reposNeedingUpdate(db *sqlx.DB) ([]repoRow, error) {
-	cutoff := time.Now().UTC().Add(-staleHours * time.Hour)
 	var rows []repoRow
 	err := db.Select(&rows, `
-		SELECT id, full_name, owner, name, updated_at
+		SELECT id, full_name, owner, name, updated_at, consecutive_stagnant_scans
 		FROM repositories
-		WHERE updated_at < ?
-		ORDER BY updated_at ASC
-	`, cutoff)
+		WHERE next_rescan_at <= CURRENT_TIMESTAMP OR updated_at < ?
+		ORDER BY next_rescan_at ASC, updated_at ASC
+	`, time.Now().UTC().Add(-24*time.Hour))
 	return rows, err
 }
 
@@ -272,6 +274,28 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 	return err
 }
 
+func touchRepoAdaptive(db *sqlx.DB, id, language string, stars int, description string, tier string, raw scoring.RawMetrics, prevStagnantCount int) error {
+	sched := scoring.CalculateAdaptiveRescan(tier, raw, prevStagnantCount)
+	now := time.Now().UTC()
+	nextRescan := now.AddDate(0, 0, sched.IntervalDays)
+
+	slog.Info("cron: adaptive schedule updated",
+		"repo_id", id,
+		"tier", tier,
+		"interval_days", sched.IntervalDays,
+		"stagnant_scans", sched.ConsecutiveStagnant,
+		"next_rescan", nextRescan.Format("2006-01-02 15:04:05"),
+	)
+
+	_, err := db.Exec(`
+		UPDATE repositories
+		SET updated_at = ?, language = ?, stars = ?, description = ?,
+		    refresh_interval_days = ?, consecutive_stagnant_scans = ?, next_rescan_at = ?
+		WHERE id = ?
+	`, now, language, stars, description, sched.IntervalDays, sched.ConsecutiveStagnant, nextRescan, id)
+	return err
+}
+
 func touchRepo(db *sqlx.DB, id, language string, stars int, description string) error {
 	_, err := db.Exec(`
 		UPDATE repositories
@@ -280,3 +304,4 @@ func touchRepo(db *sqlx.DB, id, language string, stars int, description string) 
 	`, time.Now().UTC(), language, stars, description, id)
 	return err
 }
+

@@ -102,3 +102,66 @@ func TestComputeCRank_ZeroMetrics(t *testing.T) {
 		t.Errorf("score=0 should be D tier, got %s", tier)
 	}
 }
+
+func TestCalculateAdaptiveRescan(t *testing.T) {
+	cases := []struct {
+		name              string
+		tier              string
+		raw               scoring.RawMetrics
+		prevStagnantCount int
+		wantInterval      int
+		wantStagnantCount int
+	}{
+		{
+			name:              "S tier active",
+			tier:              scoring.TierS,
+			raw:               scoring.RawMetrics{ExternalPRMergeRate: 80, LastActivityDays: 5},
+			prevStagnantCount: 0,
+			wantInterval:      1,
+			wantStagnantCount: 0,
+		},
+		{
+			name:              "B tier moderate",
+			tier:              scoring.TierB,
+			raw:               scoring.RawMetrics{ExternalPRMergeRate: 50, LastActivityDays: 10},
+			prevStagnantCount: 0,
+			wantInterval:      7,
+			wantStagnantCount: 0,
+		},
+		{
+			name:              "D tier initial stale",
+			tier:              scoring.TierD,
+			raw:               scoring.RawMetrics{StalenessFlag: true},
+			prevStagnantCount: 0,
+			wantInterval:      15,
+			wantStagnantCount: 1,
+		},
+		{
+			name:              "D tier 2nd stagnant decay to 30d",
+			tier:              scoring.TierD,
+			raw:               scoring.RawMetrics{StalenessFlag: true},
+			prevStagnantCount: 1,
+			wantInterval:      30,
+			wantStagnantCount: 2,
+		},
+		{
+			name:              "Active again resets stagnant counter",
+			tier:              scoring.TierA,
+			raw:               scoring.RawMetrics{ExternalPRMergeRate: 70, LastActivityDays: 2},
+			prevStagnantCount: 3,
+			wantInterval:      1,
+			wantStagnantCount: 0,
+		},
+	}
+
+	for _, tc := range cases {
+		res := scoring.CalculateAdaptiveRescan(tc.tier, tc.raw, tc.prevStagnantCount)
+		if res.IntervalDays != tc.wantInterval {
+			t.Errorf("[%s] IntervalDays = %d, want %d", tc.name, res.IntervalDays, tc.wantInterval)
+		}
+		if res.ConsecutiveStagnant != tc.wantStagnantCount {
+			t.Errorf("[%s] ConsecutiveStagnant = %d, want %d", tc.name, res.ConsecutiveStagnant, tc.wantStagnantCount)
+		}
+	}
+}
+

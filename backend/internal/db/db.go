@@ -129,6 +129,16 @@ func AutoMigrate(db *sqlx.DB) error {
 	`
 	_, _ = db.Exec(indexes)
 
+	// Safe migration: add adaptive rescan columns if missing.
+	var hasRescan int
+	_ = db.Get(&hasRescan, "SELECT COUNT(1) FROM pragma_table_info('repositories') WHERE name = 'refresh_interval_days'")
+	if hasRescan == 0 {
+		_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN refresh_interval_days INTEGER DEFAULT 1 NOT NULL`)
+		_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN consecutive_stagnant_scans INTEGER DEFAULT 0 NOT NULL`)
+		_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN next_rescan_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL`)
+		_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_repos_next_rescan ON repositories(next_rescan_at ASC)`)
+	}
+
 	return nil
 }
 
