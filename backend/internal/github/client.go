@@ -252,6 +252,62 @@ func (c *Client) FetchTrendingRepos(limit int) ([]Repo, error) {
 	return repos, nil
 }
 
+// FetchCustomQueryRepos executes an arbitrary search query string against GitHub GraphQL API.
+func (c *Client) FetchCustomQueryRepos(queryStr string, limit int) ([]Repo, error) {
+	vars := map[string]any{"query": queryStr}
+
+	var resp struct {
+		Data struct {
+			Search struct {
+				Nodes []struct {
+					ID              string `json:"id"`
+					NameWithOwner   string `json:"nameWithOwner"`
+					Owner           struct{ Login string `json:"login"` } `json:"owner"`
+					Name            string `json:"name"`
+					PrimaryLanguage *struct{ Name string `json:"name"` } `json:"primaryLanguage"`
+					StargazerCount  int    `json:"stargazerCount"`
+					Description     string `json:"description"`
+					URL             string `json:"url"`
+				} `json:"nodes"`
+			} `json:"search"`
+			RateLimit rateLimitInfo `json:"rateLimit"`
+		} `json:"data"`
+	}
+
+	fromCache, err := c.do(SearchReposQuery, vars, &resp)
+	if err != nil {
+		return nil, fmt.Errorf("FetchCustomQueryRepos: %w", err)
+	}
+
+	if !fromCache {
+		c.handleRateLimit(resp.Data.RateLimit)
+	}
+
+	var repos []Repo
+	for _, n := range resp.Data.Search.Nodes {
+		lang := ""
+		if n.PrimaryLanguage != nil {
+			lang = n.PrimaryLanguage.Name
+		}
+		repos = append(repos, Repo{
+			NodeID:      n.ID,
+			FullName:    n.NameWithOwner,
+			Owner:       n.Owner.Login,
+			Name:        n.Name,
+			Language:    lang,
+			Stars:       n.StargazerCount,
+			Description: n.Description,
+			URL:         n.URL,
+		})
+	}
+
+	if len(repos) > limit {
+		repos = repos[:limit]
+	}
+	return repos, nil
+}
+
+
 // FetchPRs returns all closed/merged PRs for a repo within the last windowDays days and repo metadata.
 func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, error) {
 	cutoff := time.Now().UTC().Add(-time.Duration(windowDays) * 24 * time.Hour)

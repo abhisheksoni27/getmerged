@@ -20,6 +20,7 @@ import (
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/handler"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
+	"github.com/abhisheksoni27/opendoor/internal/pipeline"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -61,6 +62,11 @@ func main() {
 	repoStore := repository.NewRepoRepository(database)
 	watchlistRepo := repository.NewWatchlistRepository(database)
 	aiRepo := repository.NewAIRepository(database)
+
+	// Start continuous background crawler worker loop
+	crawler := pipeline.NewBackgroundCrawler(database, gh)
+	crawler.Start()
+	defer crawler.Stop()
 
 	gin.SetMode(cfg.GinMode)
 	r := gin.New()

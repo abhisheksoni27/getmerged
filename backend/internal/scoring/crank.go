@@ -69,3 +69,47 @@ func scoreTier(score float64) string {
 		return TierD
 	}
 }
+
+// RescanSchedule holds the adaptive rescan result.
+type RescanSchedule struct {
+	IntervalDays           int
+	ConsecutiveStagnant    int
+}
+
+// CalculateAdaptiveRescan computes the next rescan interval and stagnant count.
+// Base Intervals:
+// - S / A Tier: 1 day (active, high priority)
+// - B / C Tier: 7 days (moderate priority)
+// - D Tier / Stale: 15 days (low priority)
+// Stagnant Decay:
+// - 2+ consecutive stagnant scans (no activity in 180-day window or 0 merge rate) → 30 days (1 month)
+func CalculateAdaptiveRescan(tier string, raw RawMetrics, prevStagnantCount int) RescanSchedule {
+	var intervalDays int
+
+	switch tier {
+	case TierS, TierA:
+		intervalDays = 1
+	case TierB, TierC:
+		intervalDays = 7
+	default:
+		intervalDays = 15
+	}
+
+	isStagnant := raw.StalenessFlag || raw.LastActivityDays >= 180 || raw.ExternalPRMergeRate == 0
+
+	stagnantCount := prevStagnantCount
+	if isStagnant {
+		stagnantCount++
+		if stagnantCount >= 2 {
+			intervalDays = 30 // Decay to monthly scan if stagnant twice in a row
+		}
+	} else {
+		stagnantCount = 0 // Reset on fresh activity
+	}
+
+	return RescanSchedule{
+		IntervalDays:        intervalDays,
+		ConsecutiveStagnant: stagnantCount,
+	}
+}
+
