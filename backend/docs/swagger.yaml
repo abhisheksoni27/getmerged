@@ -102,6 +102,22 @@ paths:
       summary: Health Check
       tags:
       - system
+  /internal/migrate-latest-snapshots:
+    post:
+      description: Backfills latest_snapshots table with latest record for each repo.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Migrate latest snapshots
+      tags:
+      - internal
   /internal/purge-cache:
     post:
       description: Flushes all Valkey cached API responses in one request.
