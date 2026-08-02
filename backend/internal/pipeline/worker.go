@@ -44,9 +44,16 @@ func (c *BackgroundCrawler) Start() {
 
 	slog.Info("background crawler: starting continuous queue engine")
 	if c.telegram.IsConfigured() {
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		_ = c.telegram.SendTextMessage(ctx, "🚀 *Opendoor Background Crawler Worker Started*\n\nContinuous priority-queue engine is active and scanning repositories.")
-		cancel()
+		go func() {
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+			err := c.telegram.SendTextMessage(ctx, "🚀 *Opendoor Background Crawler Worker Started*\n\nContinuous priority-queue engine is active and scanning repositories.")
+			if err != nil {
+				slog.Error("background crawler: startup telegram send failed", "err", err)
+			} else {
+				slog.Info("background crawler: startup telegram notification sent successfully")
+			}
+		}()
 	}
 	go c.runLoop()
 }
