@@ -732,6 +732,15 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         <p className="text-xs text-zinc-600 font-sans mb-4">
           Show potential contributors your maintainer responsiveness with a dynamic live badge:
         </p>
+        <div className="flex items-center bg-white rounded-xl border border-zinc-100 px-4 py-3.5 mb-4 min-h-14 overflow-hidden">
+          <img
+            src={`${API_BASE_URL}/badge/${fullName}.svg`}
+            alt={`C-Rank badge for ${fullName}`}
+            width={200}
+            height={24}
+            className="h-6 w-auto"
+          />
+        </div>
         <div className="flex items-center gap-4 bg-zinc-900 text-zinc-200 p-3.5 rounded-xl text-xs overflow-x-auto justify-between">
           <code>
             [![Opendoor C-Rank](https://opendoor.abhishekco.de/badge/{fullName}.svg)](https://opendoor.abhishekco.de/repo/{fullName})

@@ -276,19 +276,22 @@ func GetBadgeSVG(repoStore repository.RepoRepository) gin.HandlerFunc {
 			color = "#dc2626"
 		}
 
-		svg := fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="165" height="20" role="img" aria-label="C-Rank: %s (%s)">
-  <linearGradient id="s" x2="0" y2="100%%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient>
-  <clipPath id="r"><rect width="165" height="20" rx="3" fill="#fff"/></clipPath>
+		svg := fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="200" height="24" role="img" aria-label="C-Rank: %s Tier (%s)">
+  <title>C-Rank: %s Tier (%s)</title>
+  <defs>
+    <linearGradient id="s" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity=".14"/></linearGradient>
+  </defs>
+  <clipPath id="r"><rect width="200" height="24" rx="6" fill="#fff"/></clipPath>
   <g clip-path="url(#r)">
-    <rect width="65" height="20" fill="#18181b"/>
-    <rect x="65" width="100" height="20" fill="%s"/>
-    <rect width="165" height="20" fill="url(#s)"/>
+    <rect width="80" height="24" fill="#18181b"/>
+    <rect x="80" width="120" height="24" fill="%s"/>
+    <rect width="200" height="24" fill="url(#s)"/>
   </g>
-  <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110">
-    <text x="335" y="140" transform="scale(.1)" fill="#fff" textLength="550">C-Rank</text>
-    <text x="1145" y="140" transform="scale(.1)" fill="#fff" font-weight="bold" textLength="900">%s Tier (%s)</text>
+  <g font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="13" fill="#fff" text-anchor="middle">
+    <text x="40" y="16.5">C-Rank</text>
+    <text x="140" y="16.5" font-weight="600">%s Tier (%s)</text>
   </g>
-</svg>`, tier, score, color, tier, score)
+</svg>`, tier, score, tier, score, color, tier, score)
 
 		c.Header("Content-Type", "image/svg+xml")
 		c.Header("Cache-Control", "public, max-age=3600, s-maxage=86400")
