@@ -81,6 +81,34 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
     }
   }, [repo, fullName]);
 
+  const [history, setHistory] = useState<Array<{ snapshot_date: string; c_rank_score: number; c_rank_tier: string }>>([]);
+  const [issues, setIssues] = useState<Array<{ title: string; url: string; number: number; labels: string[] }>>([]);
+
+  useEffect(() => {
+    if (repo?.id) {
+      fetch(`${API_BASE_URL}/api/v1/repos/${repo.id}/history`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.history && Array.isArray(data.history)) {
+            setHistory(data.history);
+          }
+        })
+        .catch(() => {});
+    }
+
+    if (fullName && fullName.includes("/")) {
+      const [o, n] = fullName.split("/");
+      fetch(`${API_BASE_URL}/api/v1/repos/${o}/${n}/good-first-issues`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.issues && Array.isArray(data.issues)) {
+            setIssues(data.issues);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [repo?.id, fullName]);
+
   useEffect(() => {
     const hasToken = typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
 
@@ -614,6 +642,109 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             </div>
           );
         })()}
+      </div>
+
+      {/* Score History Chart (F2) */}
+      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm mb-10 font-mono">
+        <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2 mb-4">
+          <Activity className="h-4 w-4 text-blue-600" /> C-Rank™ Score History (Last 12 Months)
+        </h3>
+        {history.length > 0 ? (
+          <div className="flex items-end gap-1.5 h-32 pt-4 border-b border-zinc-200">
+            {history.slice(-12).map((item, idx) => {
+              const heightPercent = Math.max(10, Math.min(100, item.c_rank_score));
+              return (
+                <div key={idx} className="flex-1 flex flex-col items-center gap-1 group relative">
+                  <div
+                    className="w-full bg-blue-500 rounded-t-md group-hover:bg-blue-600 transition-all"
+                    style={{ height: `${heightPercent}%` }}
+                  />
+                  <span className="text-[9px] text-zinc-400 font-sans truncate w-full text-center">
+                    {item.snapshot_date.slice(5)}
+                  </span>
+                  <div className="absolute -top-8 bg-zinc-900 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                    {item.snapshot_date}: {item.c_rank_score.toFixed(1)} ({item.c_rank_tier})
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-xs text-zinc-500 font-sans bg-zinc-50 p-4 rounded-xl border border-dashed border-zinc-200 text-center">
+            Tracking initial snapshot. Daily history will accumulate automatically over time.
+          </div>
+        )}
+      </div>
+
+      {/* Good First Issues Widget (F3) */}
+      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm mb-10 font-mono">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-emerald-600" /> Open Good First Issues ({issues.length})
+          </h3>
+          <a
+            href={`https://github.com/${fullName}/issues?q=is%3Aissue+is%3Aopen+label%3A"good+first+issue"`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1"
+          >
+            View on GitHub <ArrowRight className="h-3 w-3" />
+          </a>
+        </div>
+        {issues.length > 0 ? (
+          <div className="space-y-3 font-sans">
+            {issues.slice(0, 5).map((issue, idx) => (
+              <a
+                key={idx}
+                href={issue.url}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-start justify-between p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/70 hover:bg-emerald-50/50 hover:border-emerald-200 transition-all group"
+              >
+                <div>
+                  <div className="text-xs font-bold text-zinc-900 group-hover:text-emerald-700 transition-colors">
+                    #{issue.number} {issue.title}
+                  </div>
+                  <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                    {issue.labels.map((lbl, lIdx) => (
+                      <span key={lIdx} className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-zinc-200/60 text-zinc-700">
+                        {lbl}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <ArrowRight className="h-4 w-4 text-zinc-400 group-hover:text-emerald-600 shrink-0 mt-1 transition-colors" />
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div className="text-xs text-zinc-500 font-sans bg-zinc-50 p-4 rounded-xl border border-dashed border-zinc-200 text-center">
+            No open `good first issue` labels currently found on GitHub for this repo.
+          </div>
+        )}
+      </div>
+
+      {/* Dynamic README Badge Embed (F1) */}
+      <div className="rounded-2xl border border-zinc-200 bg-gradient-to-b from-zinc-50/80 to-white p-6 sm:p-8 shadow-sm mb-10 font-mono">
+        <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2 mb-2">
+          <ShieldCheck className="h-4 w-4 text-emerald-600" /> Embed C-Rank™ Badge on README
+        </h3>
+        <p className="text-xs text-zinc-600 font-sans mb-4">
+          Show potential contributors your maintainer responsiveness with a dynamic live badge:
+        </p>
+        <div className="flex items-center gap-4 bg-zinc-900 text-zinc-200 p-3.5 rounded-xl text-xs overflow-x-auto justify-between">
+          <code>
+            [![Opendoor C-Rank](https://opendoor.abhishekco.de/badge/{fullName}.svg)](https://opendoor.abhishekco.de/repo/{fullName})
+          </code>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(`[![Opendoor C-Rank](https://opendoor.abhishekco.de/badge/${fullName}.svg)](https://opendoor.abhishekco.de/repo/${fullName})`);
+            }}
+            className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] shrink-0 transition-colors"
+          >
+            Copy Markdown
+          </button>
+        </div>
       </div>
 
       {/* AI Insights & Maintainer Vibe Check Section */}

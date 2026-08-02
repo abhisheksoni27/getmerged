@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
@@ -140,4 +141,33 @@ func TestListRepos_BackendGating(t *testing.T) {
 		t.Fatalf("expected 200 OK for page 1 without auth, got %d", wPage1.Code)
 	}
 }
+
+func TestGetBadgeSVG(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	database := setupTestDB(t)
+	defer database.Close()
+
+	repoStore := repository.NewRepoRepository(database)
+
+	r := gin.New()
+	r.GET("/badge/:owner/:repo", handler.GetBadgeSVG(repoStore))
+
+	req := httptest.NewRequest("GET", "/badge/gin-gonic/gin.svg", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200 OK for badge SVG, got %d", w.Code)
+	}
+
+	if contentType := w.Header().Get("Content-Type"); contentType != "image/svg+xml" {
+		t.Fatalf("expected Content-Type image/svg+xml, got %s", contentType)
+	}
+
+	body := w.Body.String()
+	if !strings.Contains(body, "<svg") || !strings.Contains(body, "C-Rank") {
+		t.Fatalf("unexpected badge SVG content: %s", body)
+	}
+}
+
 
