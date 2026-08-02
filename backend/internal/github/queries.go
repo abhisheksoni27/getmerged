@@ -92,3 +92,17 @@ query RepoStaleness($owner: String!, $name: String!) {
   }
 }
 `
+// RepoGfiCountQuery returns the count of open issues labeled 'good first issue' or 'good-first-issue'.
+// Cost is ~2 points: 1 for the query plus 1 returned node (first: 1).
+const RepoGfiCountQuery = `
+query RepoGfiCount($query: String!) {
+  search(query: $query, type: ISSUE, first: 1) {
+    issueCount
+  }
+  rateLimit {
+    remaining
+    resetAt
+    cost
+  }
+}
+`

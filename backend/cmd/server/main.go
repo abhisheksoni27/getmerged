@@ -95,7 +95,6 @@ func main() {
 		api.GET("/repos", handler.ListRepos(repoStore))
 		api.GET("/repos/:id", handler.GetRepo(repoStore))
 		api.GET("/history/:id", handler.GetRepoHistory(repoStore))
-		api.GET("/good-first-issues/:owner/:name", handler.GetGoodFirstIssues(gh))
 		api.POST("/repos/queue", handler.RequestRepoIndexing(database))
 		api.GET("/languages", handler.ListLanguages(database))
 		api.GET("/stats/macro", handler.GetMacroStats())

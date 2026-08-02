@@ -31,6 +31,7 @@ type RepoRecord struct {
 	DistinctMaintainerCount     float64 `db:"distinct_maintainer_count" json:"distinct_maintainer_count"`
 	StalenessFlag               bool    `db:"staleness_flag" json:"staleness_flag"`
 	SnapshotDate                string  `db:"snapshot_date" json:"snapshot_date"`
+	GoodFirstIssueCount         int     `db:"good_first_issue_count" json:"good_first_issue_count"`
 }
 
 type RepoFilter struct {
@@ -165,7 +166,8 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 			COALESCE(s.review_rounds,0) as review_rounds,
 			COALESCE(s.distinct_maintainer_count,0) as distinct_maintainer_count,
 			COALESCE(s.staleness_flag,0) as staleness_flag,
-			COALESCE(s.snapshot_date,'') as snapshot_date
+			COALESCE(s.snapshot_date,'') as snapshot_date,
+			COALESCE(s.good_first_issue_count,0) as good_first_issue_count
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
 		WHERE %s
@@ -200,7 +202,8 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 			COALESCE(s.review_rounds,0) as review_rounds,
 			COALESCE(s.distinct_maintainer_count,0) as distinct_maintainer_count,
 			COALESCE(s.staleness_flag,0) as staleness_flag,
-			COALESCE(s.snapshot_date,'') as snapshot_date
+			COALESCE(s.snapshot_date,'') as snapshot_date,
+			COALESCE(s.good_first_issue_count,0) as good_first_issue_count
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
 		WHERE r.id = ? OR LOWER(r.full_name) = LOWER(?)
@@ -258,8 +261,8 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(repository_id, snapshot_date) DO UPDATE SET
 			external_pr_merge_rate        = excluded.external_pr_merge_rate,
 			time_to_first_response_hours  = excluded.time_to_first_response_hours,
@@ -272,7 +275,8 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 			distinct_maintainer_count     = excluded.distinct_maintainer_count,
 			staleness_flag                = excluded.staleness_flag,
 			c_rank_score                  = excluded.c_rank_score,
-			c_rank_tier                   = excluded.c_rank_tier
+			c_rank_tier                   = excluded.c_rank_tier,
+			good_first_issue_count        = excluded.good_first_issue_count
 	`,
 		uuid.New().String(),
 		repoID,
@@ -289,6 +293,7 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 		staleness,
 		score,
 		tier,
+		raw.GoodFirstIssueCount,
 	)
 	if err != nil {
 		return err
@@ -300,8 +305,8 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, updated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, updated_at
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		ON CONFLICT(repository_id) DO UPDATE SET
 			snapshot_date                 = excluded.snapshot_date,
 			external_pr_merge_rate        = excluded.external_pr_merge_rate,
@@ -316,6 +321,7 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 			staleness_flag                = excluded.staleness_flag,
 			c_rank_score                  = excluded.c_rank_score,
 			c_rank_tier                   = excluded.c_rank_tier,
+			good_first_issue_count        = excluded.good_first_issue_count,
 			updated_at                    = CURRENT_TIMESTAMP
 	`,
 		repoID,
@@ -332,6 +338,7 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 		staleness,
 		score,
 		tier,
+		raw.GoodFirstIssueCount,
 	)
 	if err != nil {
 		return err
@@ -356,7 +363,8 @@ func (r *sqlxRepoRepository) FetchLatestSnapshotsSample(ctx context.Context, lim
 			COALESCE(s.last_activity_days, 180),
 			COALESCE(s.review_rounds, 0),
 			COALESCE(s.distinct_maintainer_count, 0),
-			COALESCE(s.staleness_flag, 0)
+			COALESCE(s.staleness_flag, 0),
+			COALESCE(s.good_first_issue_count, 0)
 		FROM latest_snapshots s
 		LIMIT ?
 	`, limit)
@@ -380,6 +388,7 @@ func (r *sqlxRepoRepository) FetchLatestSnapshotsSample(ctx context.Context, lim
 			&m.ReviewRounds,
 			&m.DistinctMaintainerCount,
 			&staleInt,
+			&m.GoodFirstIssueCount,
 		); err != nil {
 			return nil, err
 		}

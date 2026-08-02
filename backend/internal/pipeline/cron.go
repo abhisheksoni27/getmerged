@@ -63,6 +63,11 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 			slog.Warn("cron: IsStalenessFlag failed — assuming not stale", "repo", r.FullName, "err", err)
 		}
 
+		gfiCount, err := gh.FetchGoodFirstIssueCount(r.Owner, r.Name)
+		if err != nil {
+			slog.Warn("cron: FetchGoodFirstIssueCount failed — assuming none", "repo", r.FullName, "err", err)
+		}
+
 		slog.Debug("cron: fetched data", "repo", r.FullName, "prs", len(prs), "stale", stale)
 
 		// Convert github.PR → scoring.PR
@@ -81,6 +86,7 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 		}
 
 		raw := scoring.ComputeMetrics(scoringPRs, stale)
+		raw.GoodFirstIssueCount = gfiCount
 		all = append(all, repoMetrics{repo: r, raw: raw, meta: meta})
 	}
 
@@ -97,7 +103,7 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 	normed := scoring.NormaliseAll(rawSlice)
 
 	for i, rm := range all {
-		score, tier := scoring.ComputeCRank(normed[i], rm.raw.StalenessFlag)
+		score, tier := scoring.ComputeCRank(normed[i], rm.raw.StalenessFlag, rm.raw.GoodFirstIssueCount)
 
 		slog.Info("cron: scored repo",
 			"repo", rm.repo.FullName,
@@ -247,8 +253,8 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(repository_id, snapshot_date) DO UPDATE SET
 			external_pr_merge_rate        = excluded.external_pr_merge_rate,
 			time_to_first_response_hours  = excluded.time_to_first_response_hours,
@@ -261,7 +267,8 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			distinct_maintainer_count     = excluded.distinct_maintainer_count,
 			staleness_flag                = excluded.staleness_flag,
 			c_rank_score                  = excluded.c_rank_score,
-			c_rank_tier                   = excluded.c_rank_tier
+			c_rank_tier                   = excluded.c_rank_tier,
+			good_first_issue_count        = excluded.good_first_issue_count
 	`,
 		uuid.New().String(),
 		repoID,
@@ -278,6 +285,7 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 		staleness,
 		score,
 		tier,
+		m.GoodFirstIssueCount,
 	)
 	if err != nil {
 		return err
@@ -289,8 +297,8 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, updated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, updated_at
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		ON CONFLICT(repository_id) DO UPDATE SET
 			snapshot_date                 = excluded.snapshot_date,
 			external_pr_merge_rate        = excluded.external_pr_merge_rate,
@@ -305,6 +313,7 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			staleness_flag                = excluded.staleness_flag,
 			c_rank_score                  = excluded.c_rank_score,
 			c_rank_tier                   = excluded.c_rank_tier,
+			good_first_issue_count        = excluded.good_first_issue_count,
 			updated_at                    = CURRENT_TIMESTAMP
 	`,
 		repoID,
@@ -321,6 +330,7 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 		staleness,
 		score,
 		tier,
+		m.GoodFirstIssueCount,
 	)
 	if err != nil {
 		return err

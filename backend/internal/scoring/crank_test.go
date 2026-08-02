@@ -19,7 +19,7 @@ func TestComputeCRank_WeightedSum(t *testing.T) {
 		Responsiveness:    100,
 	}
 
-	score, tier := scoring.ComputeCRank(n, false)
+	score, tier := scoring.ComputeCRank(n, false, 5)
 
 	if score != 100 {
 		t.Errorf("all-100 metrics should yield score=100, got %.2f", score)
@@ -43,7 +43,7 @@ func TestComputeCRank_StalenessForceD(t *testing.T) {
 		Responsiveness:    100,
 	}
 
-	_, tier := scoring.ComputeCRank(n, true)
+	_, tier := scoring.ComputeCRank(n, true, 5)
 
 	if tier != scoring.TierD {
 		t.Errorf("staleness=true must force D tier, got %s", tier)
@@ -84,7 +84,7 @@ func TestComputeCRank_TierBoundaries(t *testing.T) {
 			Responsiveness:    tc.score,
 		}
 
-		_, tier := scoring.ComputeCRank(n, false)
+		_, tier := scoring.ComputeCRank(n, false, 1)
 
 		if tier != tc.want {
 			t.Errorf("score=%.0f: expected tier %s, got %s", tc.score, tc.want, tier)
@@ -94,12 +94,58 @@ func TestComputeCRank_TierBoundaries(t *testing.T) {
 
 func TestComputeCRank_ZeroMetrics(t *testing.T) {
 	n := scoring.NormalisedMetrics{}
-	score, tier := scoring.ComputeCRank(n, false)
+	score, tier := scoring.ComputeCRank(n, false, 0)
 	if score != 0 {
 		t.Errorf("zero metrics should yield score=0, got %.2f", score)
 	}
 	if tier != scoring.TierD {
 		t.Errorf("score=0 should be D tier, got %s", tier)
+	}
+}
+
+func TestComputeCRank_NoPenaltyWhenFirstTimerSuccessHigh(t *testing.T) {
+	// Missing label must NOT penalise repos with strong actual first-timer success.
+	base := scoring.NormalisedMetrics{
+		MergeRate:         90,
+		ResponseTime:      80,
+		ActivityRecency:   100,
+		FirstTimer:        90,
+		TimeToMerge:       80,
+		RepeatContributor: 70,
+		ReviewRounds:      70,
+		MaintainerBreadth: 60,
+		Responsiveness:    80,
+	}
+
+	withLabel, _ := scoring.ComputeCRank(base, false, 3)
+	withoutLabel, _ := scoring.ComputeCRank(base, false, 0)
+
+	if withLabel != withoutLabel {
+		t.Errorf("high first-timer success must not be penalised for missing label: with=%v without=%v", withLabel, withoutLabel)
+	}
+}
+
+func TestComputeCRank_PenalisesMissingLabelWithLowFirstTimerSuccess(t *testing.T) {
+	base := scoring.NormalisedMetrics{
+		MergeRate:         90,
+		ResponseTime:      80,
+		ActivityRecency:   100,
+		FirstTimer:        20,
+		TimeToMerge:       80,
+		RepeatContributor: 70,
+		ReviewRounds:      70,
+		MaintainerBreadth: 60,
+		Responsiveness:    80,
+	}
+
+	withLabel, _ := scoring.ComputeCRank(base, false, 3)
+	withoutLabel, _ := scoring.ComputeCRank(base, false, 0)
+
+	if withoutLabel >= withLabel {
+		t.Errorf("missing label with low first-timer success must reduce score: with=%v without=%v", withLabel, withoutLabel)
+	}
+	if got, want := withoutLabel, withLabel*0.9; got != want {
+		t.Errorf("expected 10%% haircut: got=%v want=%v", got, want)
 	}
 }
 

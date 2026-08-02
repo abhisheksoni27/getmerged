@@ -59,6 +59,7 @@ type RawMetrics struct {
 	BotActivityRatio          float64 // percentage 0–100 of comments made by bot accounts
 	BusFactor                 int     // count of distinct maintainers commenting across PRs
 	StalenessFlag             bool
+	GoodFirstIssueCount       int // open issues labeled "good first issue" at snapshot time
 }
 
 // ComputeMetrics derives all raw metrics from a slice of PRs.

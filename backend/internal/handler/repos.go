@@ -13,7 +13,6 @@ import (
 	"strings"
 	"time"
 
-	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
@@ -360,25 +359,6 @@ func GetRepoHistory(repoStore repository.RepoRepository) gin.HandlerFunc {
 			"full_name":     repo.FullName,
 			"history":       history,
 		})
-	}
-}
-
-// GetGoodFirstIssues handles GET /api/v1/repos/:owner/:name/good-first-issues (F3)
-func GetGoodFirstIssues(ghClient interface {
-	FetchGoodFirstIssues(owner, name string, limit int) ([]ghclient.IssueItem, error)
-}) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		owner := c.Param("owner")
-		name := c.Param("name")
-
-		issues, err := ghClient.FetchGoodFirstIssues(owner, name, 10)
-		if err != nil {
-			slog.Error("fetch good first issues failed", "owner", owner, "name", name, "err", err)
-			c.JSON(http.StatusOK, gin.H{"issues": []any{}})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"issues": issues})
 	}
 }
 

@@ -59,6 +59,11 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 			slog.Warn("score-repo: IsStalenessFlag failed — assuming not stale", "repo", fullName, "err", err)
 		}
 
+		gfiCount, err := gh.FetchGoodFirstIssueCount(body.Owner, body.Name)
+		if err != nil {
+			slog.Warn("score-repo: FetchGoodFirstIssueCount failed — assuming none", "repo", fullName, "err", err)
+		}
+
 		// Convert github.PR → scoring.PR
 		scoringPRs := make([]scoring.PR, len(prs))
 		for i, p := range prs {
@@ -75,6 +80,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 		}
 
 		raw := scoring.ComputeMetrics(scoringPRs, stale)
+		raw.GoodFirstIssueCount = gfiCount
 
 		// --- Normalise against existing DB population ---
 		allRaw, err := repoStore.FetchLatestSnapshotsSample(c.Request.Context(), 500)
@@ -86,7 +92,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 		normed := scoring.NormaliseAll(allRaw)
 		thisNormed := normed[len(normed)-1]
 
-		score, tier := scoring.ComputeCRank(thisNormed, raw.StalenessFlag)
+		score, tier := scoring.ComputeCRank(thisNormed, raw.StalenessFlag, raw.GoodFirstIssueCount)
 
 		// --- Save to DB ---
 		var repoID string
@@ -126,6 +132,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 				"review_rounds":                raw.ReviewRounds,
 				"distinct_maintainer_count":     raw.DistinctMaintainerCount,
 				"staleness_flag":               raw.StalenessFlag,
+				"good_first_issue_count":       raw.GoodFirstIssueCount,
 			},
 			"normalised_metrics": gin.H{
 				"merge_rate":         thisNormed.MergeRate,

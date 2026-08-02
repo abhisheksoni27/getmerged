@@ -36,7 +36,9 @@ var weights = struct {
 
 // ComputeCRank calculates the C-Rank score and tier from normalised metrics.
 // If staleness is true, the score is capped to <30 (max 29.9) and assigned D.
-func ComputeCRank(n NormalisedMetrics, staleness bool) (score float64, tier string) {
+// If no "good first issue" label exists AND first-timer success is below 50,
+// the raw score receives a 10% haircut (maintainer shows no first-timer intent).
+func ComputeCRank(n NormalisedMetrics, staleness bool, gfiCount int) (score float64, tier string) {
 	rawScore := weights.MergeRate*n.MergeRate +
 		weights.ResponseTime*n.ResponseTime +
 		weights.ActivityRecency*n.ActivityRecency +
@@ -50,6 +52,10 @@ func ComputeCRank(n NormalisedMetrics, staleness bool) (score float64, tier stri
 	if staleness {
 		score = math.Min(rawScore, 29.9)
 		return score, TierD
+	}
+
+	if gfiCount == 0 && n.FirstTimer < 50 {
+		rawScore *= 0.9
 	}
 	return rawScore, scoreTier(rawScore)
 }

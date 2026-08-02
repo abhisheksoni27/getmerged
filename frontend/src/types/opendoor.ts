@@ -20,6 +20,7 @@ export interface Repo {
   time_to_merge_hours?: number;
   distinct_maintainer_count?: number;
   staleness_flag?: boolean;
+  good_first_issue_count?: number;
 }
 
 export interface LanguageTierBreakdown {
