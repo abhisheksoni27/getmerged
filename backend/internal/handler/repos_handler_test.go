@@ -100,3 +100,44 @@ func TestGetRepo_UUID(t *testing.T) {
 		t.Fatalf("expected repo id %s, got %v", repoUUID, res["id"])
 	}
 }
+
+func TestListRepos_BackendGating(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	database := setupTestDB(t)
+	defer database.Close()
+
+	repoStore := repository.NewRepoRepository(database)
+
+	r := gin.New()
+	r.Use(middleware.DB(database))
+	r.Use(middleware.OptionalUserAuth("test_secret"))
+	r.GET("/api/v1/repos", handler.ListRepos(repoStore))
+
+	// Test page > 1 without auth -> 401 Unauthorized
+	reqPage2 := httptest.NewRequest("GET", "/api/v1/repos?page=2", nil)
+	wPage2 := httptest.NewRecorder()
+	r.ServeHTTP(wPage2, reqPage2)
+
+	if wPage2.Code != http.StatusUnauthorized {
+		t.Fatalf("expected 401 Unauthorized for page 2 without auth, got %d", wPage2.Code)
+	}
+
+	// Test trending=true without auth -> 401 Unauthorized
+	reqTrending := httptest.NewRequest("GET", "/api/v1/repos?trending=true", nil)
+	wTrending := httptest.NewRecorder()
+	r.ServeHTTP(wTrending, reqTrending)
+
+	if wTrending.Code != http.StatusUnauthorized {
+		t.Fatalf("expected 401 Unauthorized for trending without auth, got %d", wTrending.Code)
+	}
+
+	// Test page=1 without auth -> 200 OK
+	reqPage1 := httptest.NewRequest("GET", "/api/v1/repos?page=1", nil)
+	wPage1 := httptest.NewRecorder()
+	r.ServeHTTP(wPage1, reqPage1)
+
+	if wPage1.Code != http.StatusOK {
+		t.Fatalf("expected 200 OK for page 1 without auth, got %d", wPage1.Code)
+	}
+}
+
