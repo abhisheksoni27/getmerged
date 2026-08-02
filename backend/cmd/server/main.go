@@ -69,9 +69,11 @@ func main() {
 	aiRepo := repository.NewAIRepository(database)
 
 	// Start continuous background crawler worker loop
-	crawler := pipeline.NewBackgroundCrawler(database, gh, telegramNotifier)
-	crawler.Start()
-	defer crawler.Stop()
+	if cfg.GinMode == "release" {
+		crawler := pipeline.NewBackgroundCrawler(database, gh, telegramNotifier)
+		crawler.Start()
+		defer crawler.Stop()
+	}
 
 	gin.SetMode(cfg.GinMode)
 	r := gin.New()
