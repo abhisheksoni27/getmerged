@@ -5,7 +5,7 @@ import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import { Metadata } from "next";
 import Link from "next/link";
-import { Trophy, ArrowLeft, Star, GitPullRequest, Clock, ShieldCheck } from "lucide-react";
+import { Trophy, ArrowLeft, Star, GitPullRequest, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Open Source Welcoming Leaderboard (C-Rank™) — Opendoor",

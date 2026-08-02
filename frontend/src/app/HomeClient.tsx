@@ -36,7 +36,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const [selectedLang, setSelectedLang] = useState<string>("All");
   const [selectedBucket, setSelectedBucket] = useState<string>("All");
   const [selectedTier, setSelectedTier] = useState<string>("All");
-  const [selectedMinMergeRate, setSelectedMinMergeRate] = useState<string>("All");
+  const [selectedMinMergeRate] = useState<string>("All");
   const [selectedFirstTimerBucket, setSelectedFirstTimerBucket] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [trendingOnly, setTrendingOnly] = useState<boolean>(false);
@@ -67,7 +67,6 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
       .catch(() => {});
   }, []);
   const buckets = ["All", "500-1k", "1k-5k", "5k-20k", "20k-50k", "50k+"];
-  const mergeRateOptions = ["All", ">75% Merged", ">50% Merged", ">25% Merged"];
   const firstTimerBuckets = ["All", "0-20%", "20-40%", "40-60%", "60-80%", "80-100%"];
   const tiers = [
     { label: "All", value: "All" },
@@ -170,7 +169,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
     } finally {
       setLoading(false);
     }
-  }, [selectedLang, selectedBucket, selectedTier, selectedFirstTimerBucket, trendingOnly, searchQuery, page]);
+  }, [selectedLang, selectedBucket, selectedTier, selectedMinMergeRate, selectedFirstTimerBucket, trendingOnly, searchQuery, page]);
 
   useEffect(() => {
     const timer = setTimeout(() => {

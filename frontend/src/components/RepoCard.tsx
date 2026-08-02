@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Repo } from "@/types/opendoor";
-import { Star, GitMerge, Clock, Lock, ArrowUpRight, Flame, Sparkles, ShieldCheck } from "lucide-react";
+import { Star, GitMerge, Clock, ArrowUpRight, Flame, Sparkles, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { LangLogo } from "@/components/LangLogo";
 import posthog from "posthog-js";

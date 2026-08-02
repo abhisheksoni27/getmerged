@@ -30,7 +30,7 @@ export function LangLogo({ language, className = "h-4 w-4" }: { language?: strin
   }
 
   return (
-    // eslint-disable-next-next/no-img-element
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={`https://skillicons.dev/icons?i=${iconSlug}`}
       alt={language}

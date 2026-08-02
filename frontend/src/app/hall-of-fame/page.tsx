@@ -5,7 +5,7 @@ import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import { Metadata } from "next";
 import Link from "next/link";
-import { Sparkles, ArrowLeft, ShieldCheck, Trophy, ExternalLink } from "lucide-react";
+import { ArrowLeft, ShieldCheck, Trophy } from "lucide-react";
 import { RepoCard } from "@/components/RepoCard";
 
 export const metadata: Metadata = {

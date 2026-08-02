@@ -30,7 +30,7 @@ interface ClientRepoDetailProps {
 }
 
 export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+  const [isLoggedIn] = useState(() => {
     return typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
   });
   const [isWatching, setIsWatching] = useState(false);
@@ -40,7 +40,6 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [feedbackError, setFeedbackError] = useState<string | null>(null);
   const [isVerifiedContributor, setIsVerifiedContributor] = useState(false);
-  const [isQueued, setIsQueued] = useState(false);
   const [githubNotFound, setGithubNotFound] = useState(false);
   const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
 
@@ -69,11 +68,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             });
           })
           .then((res) => (res && res.ok ? res.json() : null))
-          .then((data) => {
-            if (data?.status === "queued" || data?.status === "already_indexed") {
-              setIsQueued(true);
-            }
-          })
+          .then(() => {})
           .catch(() => {
             setIsCheckingGithub(false);
           });
@@ -733,6 +728,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           Show potential contributors your maintainer responsiveness with a dynamic live badge:
         </p>
         <div className="flex items-center bg-white rounded-xl border border-zinc-100 px-4 py-3.5 mb-4 min-h-14 overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`${API_BASE_URL}/badge/${fullName}.svg`}
             alt={`C-Rank badge for ${fullName}`}

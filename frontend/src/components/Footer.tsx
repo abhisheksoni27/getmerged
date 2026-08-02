@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Sparkles, ShieldCheck, Heart, Code2, Terminal, Activity, FileText } from "lucide-react";
+import { ShieldCheck, Code2, Activity } from "lucide-react";
 
 export function Footer() {
   const topLanguages = [

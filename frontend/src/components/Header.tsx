@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { LogOut, Star, Coffee } from "lucide-react";
+import { LogOut, Star } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { User } from "@/types/opendoor";
@@ -106,7 +106,7 @@ export function Header() {
           ) : user ? (
             <div className="flex items-center gap-2">
               {user.avatar_url ? (
-                // eslint-disable-next-next/no-img-element
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={user.avatar_url}
                   alt={user.username}

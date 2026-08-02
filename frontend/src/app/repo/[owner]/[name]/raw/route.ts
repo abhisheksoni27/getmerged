@@ -65,7 +65,7 @@ Source: Opendoor Open Source Explorer (https://opendoor.abhishekco.de/repo/${own
         "Cache-Control": "public, max-age=3600, s-maxage=3600",
       },
     });
-  } catch (e) {
+  } catch {
     return new NextResponse(`Error generating report for ${fullName}`, { status: 500 });
   }
 }
