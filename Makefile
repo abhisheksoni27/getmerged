@@ -44,6 +44,15 @@ recalculate-history: build-recalculate-linux-arm
 		/opt/opendoor/backend/recalculate-history && \
 		sudo systemctl restart opendoor.service'
 
+# Deploy from a checkout of this repo already on the server - no ssh/rsync, plain copy.
+recalculate-history-server: build-recalculate-linux-arm
+	cp backend/bin/recalculate-history-linux-arm /opt/opendoor/backend/recalculate-history
+	chmod +x /opt/opendoor/backend/recalculate-history
+	export $$(cat /opt/opendoor/.env | grep -v "^#" | xargs) 2>/dev/null || true
+	export $$(cat /opt/opendoor/backend/.env | grep -v "^#" | xargs) 2>/dev/null || true
+	/opt/opendoor/backend/recalculate-history
+	sudo systemctl restart opendoor.service
+
 deploy: build-linux-arm
 	scp backend/bin/server-linux-arm deploy@oracle:/tmp/server
 	ssh deploy@oracle '\
@@ -52,6 +61,16 @@ deploy: build-linux-arm
 		sudo restorecon -v /opt/opendoor/backend/server && \
 		sudo systemctl restart opendoor.service && \
 		sudo systemctl status opendoor.service --no-pager'
+
+# Deploy from a checkout of this repo already on the server - no ssh/rsync, plain copy.
+deploy-server: build
+	@echo "=== Copy backend binary ==="
+	cp backend/bin/server /opt/opendoor/backend/server.new
+	mv -f /opt/opendoor/backend/server.new /opt/opendoor/backend/server
+	chmod +x /opt/opendoor/backend/server
+	sudo restorecon -v /opt/opendoor/backend/server
+	sudo systemctl restart opendoor.service
+	sudo systemctl status opendoor.service --no-pager
 
 score-repo:
 	@curl -X POST 'http://localhost:10000/internal/score-repo' \
@@ -96,3 +115,25 @@ deploy-frontend: build-frontend
 	ssh deploy@oracle '\
 		sudo systemctl restart opendoor-frontend && \
 		sudo systemctl status opendoor-frontend --no-pager'
+
+# Deploy from a checkout of this repo already on the server - no ssh, local rsync.
+deploy-frontend-server: build-frontend
+	@echo "=== Sync standalone root ==="
+	rsync $(RSYNC_FLAGS) \
+		frontend/.next/standalone/ \
+		/opt/opendoor/frontend/
+
+	@echo "=== Sync static assets ==="
+	mkdir -p /opt/opendoor/frontend/.next/static /opt/opendoor/frontend/public
+	rsync $(RSYNC_FLAGS) \
+		frontend/.next/static/ \
+		/opt/opendoor/frontend/.next/static/
+
+	@echo "=== Sync public assets ==="
+	rsync $(RSYNC_FLAGS) \
+		frontend/public/ \
+		/opt/opendoor/frontend/public/
+
+	@echo "=== Restart frontend service ==="
+	sudo systemctl restart opendoor-frontend
+	sudo systemctl status opendoor-frontend --no-pager
