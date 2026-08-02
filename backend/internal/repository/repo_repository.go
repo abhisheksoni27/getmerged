@@ -140,7 +140,7 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 	countQuery := fmt.Sprintf(`
 		SELECT COUNT(1)
 		FROM repositories r
-		INNER JOIN latest_snapshots s ON s.repository_id = r.id
+		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
 		WHERE %s
 	`, where)
 
@@ -167,7 +167,7 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 			COALESCE(s.staleness_flag,0) as staleness_flag,
 			COALESCE(s.snapshot_date,'') as snapshot_date
 		FROM repositories r
-		INNER JOIN latest_snapshots s ON s.repository_id = r.id
+		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
 		WHERE %s
 		ORDER BY %s %s
 		LIMIT ? OFFSET ?
