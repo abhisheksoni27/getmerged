@@ -1,0 +1,4 @@
+#!/bin/sh
+# Automatically rebuild the code intelligence graph after a git pull
+echo "🔄 git pull detected: Rebuilding code-review-graph..."
+code-review-graph update --force
