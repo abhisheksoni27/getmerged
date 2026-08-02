@@ -86,7 +86,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
   useEffect(() => {
     if (repo?.id) {
-      fetch(`${API_BASE_URL}/api/v1/repos/${repo.id}/history`)
+      fetch(`${API_BASE_URL}/api/v1/history/${repo.id}`)
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
           if (data?.history && Array.isArray(data.history)) {
@@ -98,7 +98,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
     if (fullName && fullName.includes("/")) {
       const [o, n] = fullName.split("/");
-      fetch(`${API_BASE_URL}/api/v1/repos/${o}/${n}/good-first-issues`)
+      fetch(`${API_BASE_URL}/api/v1/good-first-issues/${o}/${n}`)
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
           if (data?.issues && Array.isArray(data.issues)) {
