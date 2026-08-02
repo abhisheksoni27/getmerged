@@ -27,7 +27,7 @@ export default async function Image({
       const data = await res.json();
       const rawList = data.data || data.repos;
       if (Array.isArray(rawList) && rawList.length > 0) {
-        const repo = rawList.find((r: any) => r.full_name.toLowerCase() === fullName.toLowerCase()) || rawList[0];
+        const repo = rawList.find((r: { full_name: string }) => r.full_name.toLowerCase() === fullName.toLowerCase()) || rawList[0];
         if (repo) {
           description = repo.description || description;
           tier = repo.c_rank_tier || tier;
