@@ -103,6 +103,32 @@ const docTemplate = `{
                 }
             }
         },
+        "/internal/migrate-latest-snapshots": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Backfills latest_snapshots table with latest record for each repo.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "internal"
+                ],
+                "summary": "Migrate latest snapshots",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/internal/purge-cache": {
             "post": {
                 "security": [
