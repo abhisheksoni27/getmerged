@@ -6,12 +6,14 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
+	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
@@ -241,3 +243,100 @@ func GetRepo(repoStore repository.RepoRepository) gin.HandlerFunc {
 		c.JSON(http.StatusOK, repo)
 	}
 }
+
+// GetBadgeSVG handles GET /badge/:owner/:repo.svg (F1)
+func GetBadgeSVG(repoStore repository.RepoRepository) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		owner := c.Param("owner")
+		name := c.Param("repo")
+		if strings.HasSuffix(name, ".svg") {
+			name = strings.TrimSuffix(name, ".svg")
+		}
+		fullName := owner + "/" + name
+
+		repo, err := repoStore.FindByIDOrName(c.Request.Context(), fullName)
+		tier := "D"
+		score := "0.0"
+		if err == nil && repo != nil {
+			tier = repo.CRankTier
+			if repo.CRankScore > 0 {
+				score = strconv.FormatFloat(repo.CRankScore, 'f', 1, 64)
+			}
+		}
+
+		color := "#52525b"
+		switch tier {
+		case "S":
+			color = "#059669"
+		case "A":
+			color = "#2563eb"
+		case "B":
+			color = "#d97706"
+		case "C":
+			color = "#dc2626"
+		}
+
+		svg := fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="165" height="20" role="img" aria-label="C-Rank: %s (%s)">
+  <linearGradient id="s" x2="0" y2="100%%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient>
+  <clipPath id="r"><rect width="165" height="20" rx="3" fill="#fff"/></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="65" height="20" fill="#18181b"/>
+    <rect x="65" width="100" height="20" fill="%s"/>
+    <rect width="165" height="20" fill="url(#s)"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110">
+    <text x="335" y="140" transform="scale(.1)" fill="#fff" textLength="550">C-Rank</text>
+    <text x="1145" y="140" transform="scale(.1)" fill="#fff" font-weight="bold" textLength="900">%s Tier (%s)</text>
+  </g>
+</svg>`, tier, score, color, tier, score)
+
+		c.Header("Content-Type", "image/svg+xml")
+		c.Header("Cache-Control", "public, max-age=3600, s-maxage=86400")
+		c.String(http.StatusOK, svg)
+	}
+}
+
+// GetRepoHistory handles GET /api/v1/repos/:id/history (F2)
+func GetRepoHistory(repoStore repository.RepoRepository) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := c.Param("id")
+		repo, err := repoStore.FindByIDOrName(c.Request.Context(), id)
+		if err == sql.ErrNoRows || repo == nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "repository not found"})
+			return
+		}
+
+		history, err := repoStore.GetScoreHistory(c.Request.Context(), repo.ID, 365)
+		if err != nil {
+			slog.Error("get score history failed", "id", id, "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch score history"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"repository_id": repo.ID,
+			"full_name":     repo.FullName,
+			"history":       history,
+		})
+	}
+}
+
+// GetGoodFirstIssues handles GET /api/v1/repos/:owner/:name/good-first-issues (F3)
+func GetGoodFirstIssues(ghClient interface {
+	FetchGoodFirstIssues(owner, name string, limit int) ([]ghclient.IssueItem, error)
+}) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		owner := c.Param("owner")
+		name := c.Param("name")
+
+		issues, err := ghClient.FetchGoodFirstIssues(owner, name, 10)
+		if err != nil {
+			slog.Error("fetch good first issues failed", "owner", owner, "name", name, "err", err)
+			c.JSON(http.StatusOK, gin.H{"issues": []any{}})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"issues": issues})
+	}
+}
+

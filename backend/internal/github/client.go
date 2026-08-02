@@ -597,3 +597,72 @@ func isBotLogin(login string) bool {
 		l == "stale" ||
 		l == "sentry-io"
 }
+
+type IssueItem struct {
+	Title     string    `json:"title"`
+	URL       string    `json:"url"`
+	Number    int       `json:"number"`
+	CreatedAt time.Time `json:"created_at"`
+	Labels    []string  `json:"labels"`
+}
+
+// FetchGoodFirstIssues queries open issues labeled 'good first issue' or 'good-first-issue' for a repo.
+func (c *Client) FetchGoodFirstIssues(owner, name string, limit int) ([]IssueItem, error) {
+	if limit <= 0 {
+		limit = 10
+	}
+
+	queryStr := fmt.Sprintf("repo:%s/%s is:issue is:open label:\"good first issue\", \"good-first-issue\" sort:created-desc", owner, name)
+	vars := map[string]any{"query": queryStr}
+
+	var resp struct {
+		Data struct {
+			Search struct {
+				Nodes []struct {
+					Title     string `json:"title"`
+					URL       string `json:"url"`
+					Number    int    `json:"number"`
+					CreatedAt string `json:"createdAt"`
+					Labels    struct {
+						Nodes []struct {
+							Name string `json:"name"`
+						} `json:"nodes"`
+					} `json:"labels"`
+				} `json:"nodes"`
+			} `json:"search"`
+			RateLimit rateLimitInfo `json:"rateLimit"`
+		} `json:"data"`
+	}
+
+	fromCache, err := c.do(SearchReposQuery, vars, &resp)
+	if err != nil {
+		return nil, fmt.Errorf("FetchGoodFirstIssues: %w", err)
+	}
+
+	if !fromCache {
+		c.handleRateLimit(resp.Data.RateLimit)
+	}
+
+	var issues []IssueItem
+	for _, n := range resp.Data.Search.Nodes {
+		createdAt, _ := time.Parse(time.RFC3339, n.CreatedAt)
+		var labels []string
+		for _, l := range n.Labels.Nodes {
+			labels = append(labels, l.Name)
+		}
+		issues = append(issues, IssueItem{
+			Title:     n.Title,
+			URL:       n.URL,
+			Number:    n.Number,
+			CreatedAt: createdAt,
+			Labels:    labels,
+		})
+	}
+
+	if len(issues) > limit {
+		issues = issues[:limit]
+	}
+
+	return issues, nil
+}
+

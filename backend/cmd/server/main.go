@@ -81,6 +81,9 @@ func main() {
 	// Health Check
 	r.GET("/health", handler.Health())
 
+	// Public SVG Badge Route (F1)
+	r.GET("/badge/:owner/:repo", handler.GetBadgeSVG(repoStore))
+
 	// Public API
 	api := r.Group("/api/v1")
 	api.Use(middleware.OptionalUserAuth(cfg.JWTSecret))
@@ -88,6 +91,8 @@ func main() {
 		api.GET("/health", handler.Health())
 		api.GET("/repos", handler.ListRepos(repoStore))
 		api.GET("/repos/:id", handler.GetRepo(repoStore))
+		api.GET("/repos/:id/history", handler.GetRepoHistory(repoStore))
+		api.GET("/repos/:owner/:name/good-first-issues", handler.GetGoodFirstIssues(gh))
 		api.POST("/repos/queue", handler.RequestRepoIndexing(database))
 		api.GET("/languages", handler.ListLanguages(database))
 		api.GET("/stats/macro", handler.GetMacroStats())

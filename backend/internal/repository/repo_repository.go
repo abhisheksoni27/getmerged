@@ -49,9 +49,16 @@ type RepoFilter struct {
 	MaxFirstTimerSuccessRate  float64
 }
 
+type SnapshotRecord struct {
+	SnapshotDate string  `db:"snapshot_date" json:"snapshot_date"`
+	CRankScore   float64 `db:"c_rank_score" json:"c_rank_score"`
+	CRankTier    string  `db:"c_rank_tier" json:"c_rank_tier"`
+}
+
 type RepoRepository interface {
 	List(ctx context.Context, filter RepoFilter) ([]RepoRecord, int, error)
 	FindByIDOrName(ctx context.Context, identifier string) (*RepoRecord, error)
+	GetScoreHistory(ctx context.Context, repoID string, days int) ([]SnapshotRecord, error)
 	Delete(ctx context.Context, id string) error
 	InsertSnapshot(ctx context.Context, repoID string, raw scoring.RawMetrics, score float64, tier string) error
 	FetchLatestSnapshotsSample(ctx context.Context, limit int) ([]scoring.RawMetrics, error)
@@ -205,6 +212,25 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 	}
 
 	return &repo, nil
+}
+
+func (r *sqlxRepoRepository) GetScoreHistory(ctx context.Context, repoID string, days int) ([]SnapshotRecord, error) {
+	if days <= 0 {
+		days = 365
+	}
+
+	query := `
+		SELECT snapshot_date, c_rank_score, c_rank_tier
+		FROM daily_snapshots
+		WHERE repository_id = ?
+		ORDER BY snapshot_date ASC
+		LIMIT ?
+	`
+	var history []SnapshotRecord
+	if err := r.db.SelectContext(ctx, &history, query, repoID, days); err != nil {
+		return nil, err
+	}
+	return history, nil
 }
 
 func (r *sqlxRepoRepository) Delete(ctx context.Context, id string) error {
