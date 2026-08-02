@@ -147,6 +147,9 @@ func TestGetBadgeSVG(t *testing.T) {
 	database := setupTestDB(t)
 	defer database.Close()
 
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, description, github_url, updated_at) VALUES ('badge-repo', 'gin-gonic/gin', 'gin-gonic', 'gin', 'Go', 0, '', '', ?)`, time.Now())
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, updated_at) VALUES ('badge-repo', '2026-01-01', 'S', 99.0, ?)`, time.Now())
+
 	repoStore := repository.NewRepoRepository(database)
 
 	r := gin.New()
@@ -165,8 +168,73 @@ func TestGetBadgeSVG(t *testing.T) {
 	}
 
 	body := w.Body.String()
-	if !strings.Contains(body, "<svg") || !strings.Contains(body, "C-Rank") {
+	if !strings.Contains(body, "<svg") || !strings.Contains(body, "Opendoor") {
 		t.Fatalf("unexpected badge SVG content: %s", body)
+	}
+}
+
+func TestGetBadgeSVGQueryParams(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	database := setupTestDB(t)
+	defer database.Close()
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, description, github_url, updated_at) VALUES ('badge-repo', 'gin-gonic/gin', 'gin-gonic', 'gin', 'Go', 0, '', '', ?)`, time.Now())
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, updated_at) VALUES ('badge-repo', '2026-01-01', 'S', 99.0, ?)`, time.Now())
+
+	repoStore := repository.NewRepoRepository(database)
+
+	r := gin.New()
+	r.GET("/badge/:owner/:repo", handler.GetBadgeSVG(repoStore))
+
+	cases := []struct {
+		name       string
+		path       string
+		wantText   string
+		wantAbsent string
+	}{
+		{
+			name:       "points shown when requested",
+			path:       "/badge/gin-gonic/gin.svg?points=1",
+			wantText:   "Super Welcoming · 99.0",
+			wantAbsent: "A Tier",
+		},
+		{
+			name:       "points omitted by default",
+			path:       "/badge/gin-gonic/gin.svg",
+			wantText:   "Super Welcoming",
+			wantAbsent: "·",
+		},
+		{
+			name:     "custom color applied",
+			path:     "/badge/gin-gonic/gin.svg?color=purple",
+			wantText: "#7c3aed",
+		},
+		{
+			name:       "unknown color falls back to tier color",
+			path:       "/badge/gin-gonic/gin.svg?color=nope",
+			wantText:   "#059669",
+			wantAbsent: "#nope",
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			req := httptest.NewRequest("GET", tc.path, nil)
+			w := httptest.NewRecorder()
+			r.ServeHTTP(w, req)
+
+			if w.Code != http.StatusOK {
+				t.Fatalf("expected 200 OK, got %d", w.Code)
+			}
+
+			body := w.Body.String()
+			if tc.wantText != "" && !strings.Contains(body, tc.wantText) {
+				t.Fatalf("expected body to contain %q, got: %s", tc.wantText, body)
+			}
+			if tc.wantAbsent != "" && strings.Contains(body, tc.wantAbsent) {
+				t.Fatalf("expected body NOT to contain %q, got: %s", tc.wantAbsent, body)
+			}
+		})
 	}
 }
 

@@ -244,6 +244,30 @@ func GetRepo(repoStore repository.RepoRepository) gin.HandlerFunc {
 	}
 }
 
+// badgeTierNames maps C-Rank tiers to the human-readable labels shown on the badge.
+var badgeTierNames = map[string]string{
+	"S": "Super Welcoming",
+	"A": "Welcoming",
+	"B": "Moderate",
+	"C": "Slow Review",
+	"D": "Scored",
+}
+
+// badgeColors is the hardcoded palette selectable via the ?color= query param.
+var badgeColors = map[string]string{
+	"emerald": "#059669",
+	"green":   "#16a34a",
+	"blue":    "#2563eb",
+	"purple":  "#7c3aed",
+	"pink":    "#db2777",
+	"amber":   "#d97706",
+	"orange":  "#ea580c",
+	"red":     "#dc2626",
+	"cyan":    "#0891b2",
+	"slate":   "#334155",
+	"zinc":    "#52525b",
+}
+
 // GetBadgeSVG handles GET /badge/:owner/:repo.svg (F1)
 func GetBadgeSVG(repoStore repository.RepoRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -264,6 +288,11 @@ func GetBadgeSVG(repoStore repository.RepoRepository) gin.HandlerFunc {
 			}
 		}
 
+		tierName := badgeTierNames[tier]
+		if tierName == "" {
+			tierName = badgeTierNames["D"]
+		}
+
 		color := "#52525b"
 		switch tier {
 		case "S":
@@ -275,23 +304,33 @@ func GetBadgeSVG(repoStore repository.RepoRepository) gin.HandlerFunc {
 		case "C":
 			color = "#dc2626"
 		}
+		if chosen, ok := badgeColors[c.Query("color")]; ok {
+			color = chosen
+		}
 
-		svg := fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="200" height="24" role="img" aria-label="C-Rank: %s Tier (%s)">
-  <title>C-Rank: %s Tier (%s)</title>
+		// Points (score) are optional and controlled via ?points=1|true.
+		showPoints := c.Query("points") == "1" || c.Query("points") == "true"
+		rightText := tierName
+		if showPoints {
+			rightText = fmt.Sprintf("%s · %s", tierName, score)
+		}
+
+		svg := fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="280" height="28" role="img" aria-label="Opendoor %s">
+  <title>Opendoor %s</title>
   <defs>
     <linearGradient id="s" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity=".14"/></linearGradient>
   </defs>
-  <clipPath id="r"><rect width="200" height="24" rx="6" fill="#fff"/></clipPath>
+  <clipPath id="r"><rect width="280" height="28" rx="7" fill="#fff"/></clipPath>
   <g clip-path="url(#r)">
-    <rect width="80" height="24" fill="#18181b"/>
-    <rect x="80" width="120" height="24" fill="%s"/>
-    <rect width="200" height="24" fill="url(#s)"/>
+    <rect width="100" height="28" fill="#18181b"/>
+    <rect x="100" width="180" height="28" fill="%s"/>
+    <rect width="280" height="28" fill="url(#s)"/>
   </g>
   <g font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="13" fill="#fff" text-anchor="middle">
-    <text x="40" y="16.5">C-Rank</text>
-    <text x="140" y="16.5" font-weight="600">%s Tier (%s)</text>
+    <text x="50" y="19" font-weight="600">Opendoor</text>
+    <text x="190" y="19">%s</text>
   </g>
-</svg>`, tier, score, tier, score, color, tier, score)
+</svg>`, rightText, rightText, color, rightText)
 
 		c.Header("Content-Type", "image/svg+xml")
 		c.Header("Cache-Control", "public, max-age=3600, s-maxage=86400")
