@@ -48,10 +48,8 @@ func main() {
 
 	cacheMiddleware, vkClient, err := middleware.Cache(cfg.ValkeyURL, cfg.ValkeyUsername, cfg.ValkeyPassword)
 	if err != nil {
-		slog.Error("cache connection failed", "url", cfg.ValkeyURL, "err", err)
-		os.Exit(1)
+		slog.Warn("cache connection failed, proceeding without cache", "url", cfg.ValkeyURL, "err", err)
 	}
-	slog.Info("cache connected", "url", cfg.ValkeyURL)
 
 	gh := ghclient.NewClient(cfg.GithubToken, vkClient)
 
@@ -91,8 +89,8 @@ func main() {
 		api.GET("/health", handler.Health())
 		api.GET("/repos", handler.ListRepos(repoStore))
 		api.GET("/repos/:id", handler.GetRepo(repoStore))
-		api.GET("/repos/:id/history", handler.GetRepoHistory(repoStore))
-		api.GET("/repos/:owner/:name/good-first-issues", handler.GetGoodFirstIssues(gh))
+		api.GET("/history/:id", handler.GetRepoHistory(repoStore))
+		api.GET("/good-first-issues/:owner/:name", handler.GetGoodFirstIssues(gh))
 		api.POST("/repos/queue", handler.RequestRepoIndexing(database))
 		api.GET("/languages", handler.ListLanguages(database))
 		api.GET("/stats/macro", handler.GetMacroStats())
