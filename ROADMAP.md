@@ -1,232 +1,362 @@
 # Opendoor — Actionable Roadmap
 
-> Derived from `GROWTH_STRATEGY.md`. That doc is the **why and what**. This is the **when and how**.
->
-> Items are grouped by type, not by time. Pick your sprint from each bucket.
-> Effort estimates assume a single full-stack engineer who knows the codebase.
+> Weeks 1–3 are **done**. Everything below is from Week 4 onward.
+> Principle: launch fast, ship in pieces, baby steps compound.
 
 ---
 
-## How to read this
+## Legend
 
 | Symbol | Meaning |
 |---|---|
-| `[BE]` | Backend only (Go / gin / pipeline) |
-| `[FE]` | Frontend only (Next.js / React) |
-| `[BE+FE]` | Full-stack change |
-| `[AI]` | Requires LLM inference call |
-| `[INFRA]` | Infrastructure / config change |
-| ✅ | No dependencies, can start today |
-| 🔒 | Blocked on another item (noted inline) |
-| 💰 | Direct revenue impact |
-| 🌱 | Flywheel / compounding growth |
-| 🔬 | Experiment — measure before committing more |
+| `[BE]` | Backend (Go / gin) |
+| `[FE]` | Frontend (Next.js / Tailwind) |
+| `[BE+FE]` | Full-stack |
+| `[AI]` | Local inference (Python / HuggingFace) |
+| `[INFRA]` | Infrastructure / config |
+| ✅ | No dependencies, start today |
+| 🔒 | Blocked (noted inline) |
+| 💰 | Direct revenue |
+| 🌱 | Flywheel / compounding |
+| 🔬 | Experiment — measure before investing more |
 
 ---
 
-## Bucket 1 — Quick Wins (< 1 day each, do these first)
+## Weeks 1–3 — DONE ✅
 
-These are already-understood changes with near-zero risk. Ship them in a single sprint.
-
-| # | Item | Type | Effort | Impact | Notes |
-|---|---|---|---|---|---|
-| Q1 | `comments(first: 100)` → `comments(first: 10)` in `RepoPRsQuery` | `[BE]` ✅ | 30 min | 🔥 9× crawl throughput | Biggest infra win in the whole doc. One line change in `queries.go`. |
-| Q2 | `generateMetadata` on `/repo/[owner]/[name]` page | `[FE]` ✅ | 2 hrs | SEO | Data-driven title + description from repo C-Rank. Already SSR. |
-| Q3 | `generateMetadata` on `/rankings/[lang]` | `[FE]` ✅ | 1 hr | SEO | Same pattern as Q2. |
-| Q4 | Audit + add `canonical` tags on filter variant URLs | `[FE]` ✅ | 2 hrs | SEO | Prevents duplicate content penalty on `?lang=Go&tier=S` variants. |
-| Q5 | `robots.ts` audit — ensure all new future routes are crawlable | `[FE]` ✅ | 30 min | SEO | Currently may block routes added since initial setup. |
-| Q6 | Review Coverage metric (derive from existing `comments.totalCount`) | `[BE]` ✅ | 2 hrs | Data | Zero new API calls. Pure computation on data already in DB. |
-| Q7 | Bot Activity Ratio (derive from existing `CommentAuthors` + `isBot()`) | `[BE]` ✅ | 2 hrs | Data | `isBot()` already in `client.go`. Just expose the ratio. |
-| Q8 | Bus Factor (derive from existing `CommentAuthors` per PR) | `[BE]` ✅ | 2 hrs | Data | Already tracking distinct maintainers. Expose as `bus_factor` int. |
-| Q9 | Page 1 limit for anonymous users (gate page 2+ behind login) | `[FE]` ✅ | 2 hrs | 💰 | Biggest login conversion driver. Show "Sign in to see more" on page 2. |
-| Q10 | Lock trending toggle behind login | `[FE]` ✅ | 1 hr | 💰 | Second biggest login trigger. Simple auth check before fetch. |
+- Q1–Q10 quick wins (comments fix, anon gates, metadata)
+- S1–S4 SEO surface (sitemap, OG images, JSON-LD, leaderboard, hall-of-fame)
+- F1–F3 flywheels (badge SVG, score history chart, good first issues widget)
 
 ---
 
-## Bucket 2 — SEO Surface (2–5 days each)
+## Week 4 — Monetisation Foundation
 
-Ship these in one focused SEO sprint. Together they 10× the crawlable surface area.
+Ship revenue before anything else. RevenueCat handles all subscription state; the backend just trusts its webhook.
 
-| # | Item | Type | Effort | Impact | Notes |
-|---|---|---|---|---|---|
-| S1 | Replace `generate-sitemap` binary with Next.js `sitemap.ts` | `[FE]` ✅ | 1 day | SEO | Dynamic, always current. For >10k repos: shard into `sitemap/[id]`. |
-| S2 | Dynamic OG images via `ImageResponse` for `/repo/[owner]/[name]` | `[FE]` ✅ | 1 day | 🌱 Social sharing | Every repo share on Twitter/Discord gets a unique data-accurate card. |
-| S3 | Dynamic OG images for `/rankings/[lang]` and `/topics/[topic]` | `[FE]` ✅ | 0.5 day | 🌱 | Extend S2. Same `ImageResponse` route, different data shape. |
-| S4 | `schema.org/SoftwareSourceCode` JSON-LD on repo detail pages | `[FE]` ✅ | 1 day | SEO | Rich snippets in Google. Inject as `<script type="application/ld+json">`. |
-| S5 | `schema.org/Dataset` JSON-LD on language ranking pages | `[FE]` ✅ | 0.5 day | SEO | Dataset rich result. Drives "data" keyword cluster. |
-| S6 | `/leaderboard` — full sortable all-language table | `[FE]` ✅ | 2 days | SEO + UX | Uses existing `/api/v1/repos` with sort params. No new backend. |
-| S7 | `/hall-of-fame` — static S-tier showcase | `[FE]` ✅ | 1 day | 🌱 Backlinks | Repo maintainers will embed the badge. Seed backlink distribution. |
-| S8 | Internal linking rule engine in Server Components | `[FE]` ✅ | 1 day | SEO | Repo detail → same-language ranking → topics → contribute page. |
-| S9 | `lastModified` HTTP header on repo/ranking pages matching `snapshot_date` | `[FE+BE]` ✅ | 0.5 day | SEO | Signals freshness to Google. Use existing `updated_at` from DB. |
+### MON1 — RevenueCat Integration `[BE+FE]` · 3 days · 💰
 
----
+RevenueCat works cross-platform (web via REST API) and is India-friendly (supports Razorpay, UPI via payment gateway layer or direct IAP on mobile).
 
-## Bucket 3 — New Metrics (1–3 days each)
+**Backend (Go)**
+```
+POST /api/v1/webhooks/revenuecat   ← RevenueCat sends SUBSCRIBER_ALIAS events
+```
+- Parse `INITIAL_PURCHASE`, `RENEWAL`, `CANCELLATION`, `EXPIRATION` event types.
+- Set `is_pro = true/false` on the `users` table from webhook payload.
+- Store `rc_customer_id`, `subscription_expires_at` on user row.
+- No payment logic in our code. RevenueCat owns the state machine.
 
-Extend the C-Rank model. Each one is an independent backend task with a DB migration.
+**Frontend (Next.js)**
+- Integrate `@revenuecat/purchases-js` SDK (RevenueCat Web SDK).
+- `/pricing` page: two tiers (Free / Pro), "Subscribe" button triggers RC checkout.
+- RC handles payment page, receipts, renewals — we just read entitlements.
 
-| # | Item | Type | Effort | Dependency | Notes |
-|---|---|---|---|---|---|
-| M1 | Issue Triage Speed (`median hours to first maintainer response on issues`) | `[BE]` ✅ | 2 days | New `issues` GraphQL query. One new query per repo, ~2 GraphQL points. |
-| M2 | Issue Close Rate (`% of issues eventually closed`) | `[BE]` ✅ | 0.5 day | 🔒 M1 | Free — derive from same issues query. Add close count to result. |
-| M3 | Docs & Onboarding Quality Score (CONTRIBUTING.md, CODE_OF_CONDUCT.md, issue templates) | `[BE]` ✅ | 1 day | 3 REST API calls per repo. Already have REST client. Boolean → 0–100 score. |
-| M4 | Release Cadence (median days between GitHub releases) | `[BE]` ✅ | 1 day | New `releases(first: 50)` GraphQL query. ~1 point per repo. |
-| M5 | PR Rejection Reason Classification (`abandoned`, `maintainer_closed`, `superseded`) | `[BE+AI]` ✅ | 2 days | Classify existing closed-not-merged PRs. Use `ai_client.go`, cached per PR. |
-| M6 | Trending Velocity (week-over-week delta on merge rate + response time) | `[BE]` ✅ | 2 days | Requires `daily_snapshots` table to have 2+ weeks of data. Already storing. |
-| M7 | Weekly Activity Score (surfaced as ↑↓ arrows on repo cards) | `[FE]` | 1 day | 🔒 M6 | Frontend only — consume `trend_direction` field from API. |
-| M8 | Issue-to-PR Conversion Rate | `[BE]` | 2 days | 🔒 M1 | Extend issues query with label filter. More complex join. |
-
-**Note**: Q1 (comments fix) should ship before any new metric work — it gives you budget to run the new queries without net cost increase.
+**Why not Stripe**: Stripe requires Indian entity registration + RBI compliance for recurring billing. RevenueCat abstracts this entirely.
 
 ---
 
-## Bucket 4 — New Pages (1–5 days each)
+### MON2 — Pro Gate Middleware `[BE]` · 1 day · 🔒 MON1
 
-Each page is independently deployable. No inter-dependencies except where noted.
-
-| # | Page | Type | Effort | SEO Target | Notes |
-|---|---|---|---|---|---|
-| P1 | `/good-first-issue/[lang]` | `[BE+FE]` ✅ | 2 days | "good first issue [language]" | Backend: new query filtering open issues by label + language. Frontend: ISR, refresh every 6h. |
-| P2 | `/topics/[topic]` | `[BE+FE]` ✅ | 3 days | "[topic] open source projects" | Backend: index `repositoryTopics` from GraphQL (add field to seed). Frontend: SSR topic page. |
-| P3 | `/compare/[repo-a]/[repo-b]` | `[FE]` ✅ | 3 days | "[repo] vs [repo] beginner friendly" | Frontend only. Fetch both repos from existing API. Radar chart + metric diff table. |
-| P4 | `/contribute` wizard | `[FE]` ✅ | 3 days | "best [language] repos for beginners" | SSR wizard: pick language + experience → filtered API call → 5 curated repos. |
-| P5 | `/org/[org]` | `[BE+FE]` | 3 days | "[org] open source contribution" | Backend: group repos by owner. Frontend: org aggregate C-Rank card. |
-| P6 | `/similar/[owner]/[name]` | `[BE+FE]` | 2 days | "projects like [repo]" | Backend: find repos with matching language + highest topic overlap. No ML. |
-| P7 | `/digest` | `[BE+FE]` | 3 days | Weekly fresh content | Backend: weekly job emitting top tier-changes JSON. Frontend: ISR page + subscribe form. |
-| P8 | `/maintainers` dashboard | `[BE+FE]` 🔒 | 5 days | 🔒 Auth gate + GitHub App | Show repo owners their C-Rank over time + actionable nudges. Auth required. |
-| P9 | `/blog` seed posts | `[FE]` ✅ | 2 days | "how to contribute to open source" | 3 MDX posts + Article schema. The pipeline auto-blog (§11.7) feeds this later. |
-| P10 | `/reports/2026` — State of OSS | `[BE+FE]` 🔬 | 3 days | "state of open source 2026" | One-time: generate from current DB stats. Measure if it gets backlinks before doing another. |
-| P11 | `/api/public` — Swagger UI page | `[FE]` ✅ | 1 day | Developer API SEO | Surface existing Swagger JSON at a user-facing route. Already generated. |
+Gin middleware: read `is_pro` + `subscription_expires_at` from DB (cached in Valkey).
+Return `402` with `{ "upgrade_url": "/pricing" }` for non-pro requests to gated endpoints.
 
 ---
 
-## Bucket 5 — Monetisation Core (1–2 weeks each, sequential)
+### MON3 — Contributor DNA Profile `[BE+AI]` · 4 days · 🔒 MON2
 
-These are the revenue-generating features. Build in this order — each one unlocks the next.
+Query user's public GitHub PRs + repos via their OAuth token.
+Run local classifier (see **AI Sidecar** section below) to extract:
+- Primary languages
+- Contribution style (docs vs. code vs. reviews)
+- Comfort zone (issue size, project maturity)
 
-| # | Item | Type | Effort | Dependency | Notes |
-|---|---|---|---|---|---|
-| MON1 | **Payment integration** (Stripe Checkout + webhook) | `[BE]` | 3 days | — | `POST /api/v1/user/subscribe` → Stripe. Store `is_pro` on user row. Required before anything else in this bucket. |
-| MON2 | **Pro gate middleware** on protected endpoints | `[BE]` | 1 day | 🔒 MON1 | `isPro` check in gin middleware. Return `402` with upgrade URL for non-pro users. |
-| MON3 | **Contributor DNA profile** — build on login | `[BE+AI]` | 4 days | 🔒 MON1 | Query user's public GitHub PRs/repos via their OAuth token. AI inference → `contributor_profiles` table. Refresh weekly via cron. |
-| MON4 | **Weekly personalised digest** — email generation | `[BE+AI]` | 4 days | 🔒 MON3 | Cron: every Sunday night, for each Pro user, run recommendation query → format email → send via Resend/Mailgun. |
-| MON5 | **Digest in-app card** (blurred preview for free users) | `[FE]` | 1 day | 🔒 MON3 | Show a blurred/locked card on home page for free users: "5 repos matched to your Go skills — unlock with Pro". |
-| MON6 | **PR Likelihood Score** on repo detail | `[BE+FE]` | 3 days | 🔒 MON3 | Backend: formula-based score from user profile + repo metrics. Frontend: show on repo detail page for Pro users, teaser for free. |
-| MON7 | **First-Merge Guarantee track** — newbie onboarding UI | `[FE]` | 3 days | 🔒 MON3 | Frontend: dedicated flow for `is_newbie: true` users. 5 curated repos + checklist. |
-| MON8 | **First merge detection + celebration** | `[BE+FE]` | 2 days | 🔒 MON7 | Backend: poll/webhook for PR merge on watched newbie repos. Frontend: confetti + shareable card component. |
-
-**Ship order**: MON1 → MON2 → MON3 → (MON4 + MON6 in parallel) → MON5 → MON7 → MON8
+Store in `contributor_profiles` table. Refresh weekly via cron.
+This is the data layer that powers MON4, MON5, MON6, MON7.
 
 ---
 
-## Bucket 6 — Engagement Flywheels (independent, ship anytime)
+## Week 5 — Monetisation Delivery
 
-These drive retention and organic growth. No hard dependencies between them.
+### MON4 — Weekly Personalised Digest Email `[BE+AI]` · 3 days · 🔒 MON3
 
-| # | Item | Type | Effort | Flywheel | Notes |
-|---|---|---|---|---|---|
-| F1 | **Badge SVG endpoint** `/badge/[owner]/[repo].svg` | `[BE]` ✅ | 1 day | 🌱 README embeds = backlinks | Shields.io style. Cached at CDN. Pulls live tier from DB. Every embed is a backlink + discovery vector. |
-| F2 | **Score history chart** on repo detail | `[BE+FE]` ✅ | 2 days | Retention | Backend: query `daily_snapshots` for 12-month window. Frontend: line chart (use `recharts` or `chart.js`). |
-| F3 | **Good First Issues widget** on repo detail | `[BE+FE]` ✅ | 2 days | 🌱 Discovery→action | Backend: new GitHub query for `good-first-issue` labelled open issues. Frontend: card on repo detail. Closes the discovery loop. |
-| F4 | **Tier-change push notifications** (Web Push) | `[BE+FE]` | 3 days | Retention | Backend: detect tier changes in daily snapshot cron. Frontend: service worker + Push API subscription. |
-| F5 | **Tier-change email notifications** for watchlist repos | `[BE]` | 1 day | Retention | Simpler than F4. Send email when watched repo changes tier. Use same email infra as digest. |
-| F6 | **"Open Doors" activity feed** (24h tier upgrades) | `[FE]` ✅ | 1 day | Discovery | Frontend: API call to `daily_snapshots` for repos where tier improved in last 24h. Real-time feel, zero new backend. |
-| F7 | **Shareable "first merge" confetti card** | `[FE]` | 1 day | 🌱 Viral acquisition | Frontend: full-screen celebration modal + copy-to-clipboard shareable text. Triggered by MON8. |
-| F8 | **`/u/[github-username]` contributor profile** | `[BE+FE]` | 4 days | 🌱 Identity | Public page showing contribution history, language skills, repos contributed to. Shareable. "I contribute to S-tier repos" social proof. |
-| F9 | **Community vibe reports** (emoji reactions per repo) | `[BE+FE]` 🔬 | 3 days | Engagement | Backend: `vibe_reports` table, 1 per user per repo. Frontend: emoji picker on repo detail. **Run as experiment** — measure if it drives return visits. |
-| F10 | **Discord / Slack bot** | `[BE]` 🔬 | 4 days | Distribution | `/opendoor [repo]` → C-Rank card. Target: dev Discord servers. **Experiment** — measure install rate before investing more. |
+Sunday night cron: for each Pro user → run recommendation query against `contributor_profiles` → format email → send via Resend.
+
+### MON5 — Blurred Digest Card `[FE]` · 1 day · 🔒 MON3
+
+Home page: blurred locked card for free users. Copy: *"5 repos matched to your Go profile — unlock with Pro"*.
+
+### MON6 — PR Likelihood Score `[BE+FE]` · 3 days · 🔒 MON3
+
+Formula-based score: user profile vector × repo metrics. Show on repo detail for Pro users; teaser (range only) for free.
 
 ---
 
-## Bucket 7 — Infrastructure (do these to unblock scale)
+## Week 6 — Contributor Badges (Viral + Identity)
 
-| # | Item | Type | Effort | Dependency | Unlocks |
-|---|---|---|---|---|---|
-| I1 | **`comments(first:10)` fix** in `RepoPRsQuery` | `[BE]` ✅ | 30 min | — | 9× crawl throughput. Do this today. (Also listed as Q1 in Quick Wins.) |
-| I2 | **Tiered crawl frequency** by tier (S=webhook, A=12h, B=24h, C=48h, D=7d) | `[BE]` | 2 days | — | ~60% API budget reduction. Frees capacity for new metric queries. |
-| I3 | **GitHub App registration** (read-only scopes) | `[INFRA]` | 1 day | — | Prerequisite for I4 and the entire App installation flywheel. |
-| I4 | **Installation token auth in `github/client.go`** | `[BE]` | 3 days | 🔒 I3 | Token rotation via Valkey. Partitioned crawl queue by installation. |
-| I5 | **Webhook receiver** for `pull_request` and `issues` events | `[BE]` | 2 days | 🔒 I3 | S/A tier repos push events → trigger immediate rescore. Zero polling cost. |
-| I6 | **"Install Opendoor App on your org" prompt at login** | `[FE]` | 1 day | 🔒 I3 | The user-growth flywheel for rate limits. Each install = +5k req/hour. |
-| I7 | **GH Archive backfill** for historical snapshot data | `[BE]` 🔬 | 3 days | — | Use public BigQuery dataset to backfill 180-day PR windows. Zero API cost. Run as one-off experiment. |
-| I8 | **Automated pipeline blog JSON export** (monthly) | `[BE]` | 1 day | — | Emits structured data for automated blog posts. Feeds P9 `/blog` with data-driven content. |
+High-leverage flywheel: every badge embedded in a README = a backlink + discovery.
+
+### BADGE1 — OSS Contributor Rank Badge `[BE+FE]` · 2 days · 🌱
+
+A public, shareable badge scoring a GitHub user's OSS contribution *quality* — not quantity.
+
+**Score inputs** (derived from public data, no OAuth needed to view):
+- % of PRs merged across all contributed repos
+- Median C-Rank of repos they contributed to (S-tier repos = higher score)
+- Response quality: did maintainers acknowledge their PRs quickly?
+- Diversity: languages, orgs, repo sizes
+
+**Grades**: `OSS Contributor: S / A / B / C / D` (mirrors C-Rank vocabulary)
+
+**Endpoints**:
+```
+GET /badge/contributor/[github-username].svg   ← shields.io-style, CDN-cached 24h
+GET /u/[github-username]                       ← full public profile page
+```
+
+**Embed in README**:
+```markdown
+![OSS Contributor Rank](https://opendoor.dev/badge/contributor/yourusername.svg)
+```
+
+Every contributor pastes this in their README → organic distribution + backlinks.
 
 ---
 
-## Bucket 8 — Experiments (run for 2 weeks, measure before committing)
+### BADGE2 — Contributor Profile Page `/u/[github-username]` `[BE+FE]` · 2 days · 🔒 BADGE1
 
-These have uncertain ROI. Ship minimal version, measure, then decide.
+Public page, no login required to view anyone's profile.
 
-| # | Experiment | Hypothesis | Metric to measure | Min viable version |
-|---|---|---|---|---|
-| E1 | **Natural language search** ("find me a welcoming Rust CLI tool") | Reduces filter confusion for casual users, increases conversion to watchlist | Search-to-click-through rate vs. filter UI | LLM interprets query → translate to existing API params. No new backend. |
-| E2 | **Community vibe reports** (emoji reactions) | Subjective data layer increases trust and return visits | D7 return rate for users who left a report vs. those who didn't | Simple `POST /api/v1/repos/:id/vibe` + emoji display on repo card. |
-| E3 | **`/reports/2026` annual report** | Data-driven annual reports attract backlinks from tech media | Inbound links 30 days after publish | Static page generated from current DB aggregate. 3 days to build. |
-| E4 | **PR Comment Sentiment Score** (maintainer tone badge) | Surfacing "Constructive / Neutral / Harsh" tone increases trust in the rating | CTR on repo detail pages with sentiment badge vs. without | AI classifies existing comment text. Badge on repo detail. A/B test badge vs. no badge. |
-| E5 | **Discord bot** | Bot installs in dev servers drive new user signups | Signups attributable to bot referral in first 30 days | Slash command `/opendoor [repo]` → embed card. OAuth app install link in response. |
+Shows:
+- Contributor grade + sub-scores
+- Languages they excel in
+- Top repos they've contributed to (with C-Rank)
+- "Share your profile" button → copy embed code
+- **"Add to your README"** CTA with one-click copy
+
+Social proof layer: *"I contribute to S-tier repos"* is a flex people will share.
 
 ---
 
-## Suggested Sprint Order (for one engineer)
+### BADGE3 — Contributor Grade on Dashboard `[FE]` · 0.5 day · 🔒 BADGE1
+
+Surface contributor's own grade on their logged-in dashboard. Gamification hook.
+
+---
+
+## Week 7 — Compare & Discovery Pages
+
+High SEO value. Zero new backend required for most.
+
+### P3 — `/compare/[repo-a]/[repo-b]` `[FE]` · 2 days · ✅
+
+Frontend only. Fetch both repos from existing API.
+
+- Radar chart: merge rate, response time, bus factor, release cadence, docs score
+- Metric diff table: green/red delta for each C-Rank input
+- SEO title: *"[repo-a] vs [repo-b] — beginner friendliness comparison"*
+- Shareable URL + copy link button
+- Compare CTA on repo detail pages: *"Compare with another repo →"*
+
+---
+
+### P1 — `/good-first-issue/[lang]` `[BE+FE]` · 2 days · ✅
+
+Backend: new query filtering open issues by `good-first-issue` label + language.
+Frontend: ISR, refresh every 6h. Targets *"good first issue [language]"* keyword cluster.
+
+---
+
+### P4 — `/contribute` wizard `[FE]` · 2 days · ✅
+
+SSR wizard: pick language + experience level → filtered API call → 5 curated repos.
+No new backend. Targets *"best [language] repos for beginners"*.
+
+---
+
+### P9 — `/blog` seed posts `[FE]` · 2 days · ✅
+
+3 MDX posts + Article schema:
+- *"How to get your first open source PR merged"*
+- *"Best repos for first-time contributors in 2026"*
+- *"What is a good merge rate for open source projects?"*
+
+---
+
+## Week 8 — Newbie Track + Retention
+
+### MON7 — First-Merge Guarantee UI `[FE]` · 2 days · 🔒 MON3
+
+Dedicated flow for `is_newbie: true` users. 5 curated repos + contribution checklist.
+
+### MON8 — First Merge Detection + Celebration `[BE+FE]` · 2 days · 🔒 MON7
+
+Backend: poll GitHub for PR merge status on repos the newbie is watching.
+Frontend: confetti modal + shareable card. Copy: *"I got my first open source PR merged!"*
+
+### F7 — Shareable First-Merge Card `[FE]` · 1 day · 🔒 MON8
+
+Full-screen celebration + copy-to-clipboard. Virality hook.
+
+---
+
+## Week 9 — AI Sidecar (Local Classifier)
+
+Python microservice running alongside Go backend. No external LLM costs. No OpenAI latency dependency.
+
+### AI1 — Python Classifier Sidecar `[AI+INFRA]` · 3 days · ✅
+
+**Stack**: FastAPI + HuggingFace `transformers` + `sentence-transformers`
+
+**Models** (all CPU-only, run on a $10/mo VPS):
+
+| Model | Task | HF identifier |
+|---|---|---|
+| `all-MiniLM-L6-v2` | Semantic similarity (find similar repos by description) | `sentence-transformers/all-MiniLM-L6-v2` |
+| `distilbert-sst-2` | Sentiment (maintainer tone: positive/negative) | `distilbert-base-uncased-finetuned-sst-2-english` |
+| `twitter-roberta-emotion` | Emotion classification (welcoming / harsh / neutral) | `cardiffnlp/twitter-roberta-base-emotion` |
+
+**Internal endpoints** (Go calls these over localhost):
+```
+POST /classify/sentiment   { "text": "..." }  → { "label": "POSITIVE", "score": 0.94 }
+POST /classify/emotion     { "text": "..." }  → { "label": "joy", "score": 0.87 }
+POST /embed                { "text": "..." }  → { "vector": [...384 floats...] }
+```
+
+Deployed as Docker sidecar. No network exposure.
+
+---
+
+### AI2 — PR Comment Sentiment Score `[BE+AI]` · 2 days · 🔒 AI1
+
+Classify existing PR comment text from `CommentAuthors` data.
+Produce `maintainer_tone`: `welcoming / neutral / harsh`.
+Show as badge on repo detail pages. A/B test CTR impact.
+Replaces the external LLM call in `ai_client.go` for sentiment tasks.
+
+---
+
+### AI3 — Semantic Similar Repos `/similar/[owner]/[name]` `[BE+AI]` · 2 days · 🔒 AI1
+
+Use `embed` endpoint to get repo description vectors.
+Store in `repo_embeddings` table (JSON column).
+Cosine similarity at query time → top 5 matches.
+No pgvector needed for <50k repos — in-process sort is fine.
+
+---
+
+### AI4 — Contributor DNA Enrichment `[BE+AI]` · 1 day · 🔒 AI1, MON3
+
+Run PR titles + descriptions through emotion classifier.
+Classify contributor style: *"Does this person write clear, welcoming PRs?"*
+Feed into BADGE1 contributor grade scoring.
+
+---
+
+## Week 10 — Infrastructure (Scale Unblocking)
+
+### I2 — Tiered Crawl Frequency `[BE]` · 2 days · ✅
+
+S-tier: 12h, A: 24h, B: 48h, C/D: 7 days.
+~60% API budget reduction. Frees capacity for new metric queries.
+
+### I7 — GH Archive Backfill `[BE]` 🔬 · 2 days · ✅
+
+Use public BigQuery GH Archive data to backfill 180-day PR windows.
+Zero GitHub API cost. Run as one-off. Validates historical scoring.
+
+### I8 — Automated Blog JSON Export `[BE]` · 1 day · ✅
+
+Monthly cron emitting structured data for automated blog posts. Feeds `/blog`.
+
+---
+
+## Week 11 — New Metrics
+
+### M1 — Issue Triage Speed `[BE]` · 2 days · ✅
+
+`median hours to first maintainer response on issues`. New `issues` GraphQL query. ~2 points/repo.
+
+### M2 — Issue Close Rate `[BE]` · 0.5 day · 🔒 M1
+
+Derive from same M1 query. Add close count. Free.
+
+### M3 — Docs & Onboarding Quality Score `[BE]` · 1 day · ✅
+
+Check `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue templates. 3 REST calls/repo. Boolean → 0–100.
+
+### M4 — Release Cadence `[BE]` · 1 day · ✅
+
+Median days between releases. New `releases(first:50)` GraphQL query.
+
+### M5 — PR Rejection Reason Classification `[BE+AI]` · 1 day · 🔒 AI1
+
+Classify closed-not-merged PRs: `abandoned`, `maintainer_closed`, `superseded`.
+Use local classifier. Cached per PR.
+
+---
+
+## Week 12 — Experiments (run 2 weeks, measure)
+
+| # | Experiment | Hypothesis | Measure |
+|---|---|---|---|
+| E1 | **Natural language search** ("find a welcoming Rust CLI tool") | Reduces filter confusion, increases watchlist conversion | Search-to-click rate vs. filter UI |
+| E2 | **Community vibe reports** (emoji reactions per repo) | Subjective layer increases trust + return visits | D7 return rate: reporters vs. non-reporters |
+| E3 | `/reports/2026` annual OSS state | Data reports attract backlinks from tech media | Inbound links 30 days post-publish |
+
+---
+
+## Sprint Order Summary (Week 4 onward)
 
 ```
-Week 1 — Foundation
-  Q1  comments(first:10) fix       [30 min, do Monday morning]
-  Q2  generateMetadata on /repo    [2 hrs]
-  Q3  generateMetadata on /rankings[1 hr]
-  Q4  canonical tag audit          [2 hrs]
-  Q6  Review Coverage metric       [2 hrs]
-  Q7  Bot Activity Ratio           [2 hrs]
-  Q8  Bus Factor                   [2 hrs]
-  Q9  Page 1 anon gate             [2 hrs]
-  Q10 Trending gate                [1 hr]
-  S1  Dynamic sitemap.ts           [1 day]
+Week 4  — Monetisation Foundation
+  MON1  RevenueCat integration          [3 days]
+  MON2  Pro gate middleware             [1 day]
+  MON3  Contributor DNA profile         [4 days, bleeds into week 5]
 
-Week 2 — SEO Surface
-  S2  OG images /repo              [1 day]
-  S6  /leaderboard                 [2 days]
-  S7  /hall-of-fame                [1 day]
-  S4  JSON-LD on repo pages        [1 day]
+Week 5  — Monetisation Delivery
+  MON3  (finish)
+  MON4  Weekly digest email             [3 days]
+  MON5  Blurred digest card             [1 day]
+  MON6  PR Likelihood Score             [3 days]
 
-Week 3 — Flywheels
-  F1  Badge SVG endpoint           [1 day]
-  F2  Score history chart          [2 days]
-  F3  Good First Issues widget     [2 days]
+Week 6  — Contributor Badges
+  BADGE1  Contributor rank badge SVG    [2 days]
+  BADGE2  /u/[username] profile page    [2 days]
+  BADGE3  Grade on dashboard            [0.5 day]
 
-Week 4 — Monetisation Setup
-  MON1 Stripe integration          [3 days]
-  MON2 Pro gate middleware         [1 day]
-  MON3 Contributor DNA profile     [4 days, bleeds into week 5]
+Week 7  — Compare & Discovery Pages
+  P3    /compare/[a]/[b]               [2 days]
+  P1    /good-first-issue/[lang]       [2 days]
+  P4    /contribute wizard             [2 days]
+  P9    /blog seed posts               [2 days]
 
-Week 5-6 — Monetisation Delivery
-  MON3 (finish)
-  MON4 Weekly digest email         [4 days]
-  MON6 PR Likelihood Score         [3 days]
-  MON5 Blurred digest card         [1 day]
+Week 8  — Newbie Track
+  MON7  First-Merge Guarantee UI       [2 days]
+  MON8  First merge detection          [2 days]
+  F7    Shareable merge card           [1 day]
 
-Week 7 — Newbie Track
-  MON7 First-Merge Guarantee UI    [3 days]
-  MON8 First merge detection       [2 days]
-  F7  Shareable merge card         [1 day]
+Week 9  — AI Sidecar
+  AI1   Python classifier sidecar      [3 days]
+  AI2   PR comment sentiment score     [2 days]
+  AI3   Semantic similar repos         [2 days]
+  AI4   Contributor DNA enrichment     [1 day]
 
-Week 8 — New Pages
-  P1  /good-first-issue/[lang]     [2 days]
-  P4  /contribute wizard           [3 days]
+Week 10 — Infrastructure
+  I2    Tiered crawl frequency         [2 days]
+  I7    GH Archive backfill            [2 days]
+  I8    Blog JSON export               [1 day]
 
-Week 9 — Infrastructure
-  I2  Tiered crawl frequency       [2 days]
-  I3  GitHub App registration      [1 day]
-  I5  Webhook receiver             [2 days]
+Week 11 — New Metrics
+  M1    Issue triage speed             [2 days]
+  M2    Issue close rate               [0.5 day]
+  M3    Docs quality score             [1 day]
+  M4    Release cadence                [1 day]
+  M5    PR rejection classifier        [1 day]
 
-Week 10 — Experiments (pick 2, run for 2 weeks)
-  E1  Natural language search      [3 days]
-  E3  /reports/2026 annual report  [3 days]
-
-Week 11-12 — Measure + Iterate
-  Review experiment results
-  Ship P2 /topics or P3 /compare based on SEO data
-  M1  Issue triage speed metric    [2 days]
-  M3  Docs quality score           [1 day]
+Week 12 — Experiments (pick 2, run 2 weeks)
+  E1    Natural language search        [3 days]
+  E3    /reports/2026 annual report    [3 days]
 ```
 
 ---
@@ -234,15 +364,7 @@ Week 11-12 — Measure + Iterate
 ## Dependency Graph
 
 ```
-Q1 (comments fix)
-  └─> unblocks M1, M4, I2 (all need budget headroom)
-
-I3 (GitHub App)
-  ├─> I4 (installation token auth)
-  ├─> I5 (webhook receiver)
-  └─> I6 (install prompt at login)
-
-MON1 (Stripe)
+MON1 (RevenueCat)
   └─> MON2 (Pro gate)
         └─> MON3 (Contributor DNA)
               ├─> MON4 (weekly digest)
@@ -252,30 +374,38 @@ MON1 (Stripe)
                     └─> MON8 (merge detection)
                           └─> F7 (shareable card)
 
-F3 (good first issues widget)
-  └─> feeds P1 (/good-first-issue/[lang] page)
+BADGE1 (contributor rank badge)
+  ├─> BADGE2 (/u/profile page)
+  ├─> BADGE3 (grade on dashboard)
+  └─> AI4 (enriched by local classifier)
 
-S2 (OG images)
-  └─> extend to S3 (rankings + topics OG)
+AI1 (Python sidecar)
+  ├─> AI2 (PR sentiment)
+  ├─> AI3 (similar repos)
+  ├─> AI4 (contributor DNA enrichment)
+  └─> M5 (PR rejection classifier)
 
-M1 (issue triage query)
-  └─> unlocks M2 (issue close rate — same query)
-      └─> unlocks M8 (issue-to-PR conversion)
+F3 (good first issues widget) [done week 3]
+  └─> feeds P1 (/good-first-issue/[lang])
+
+M1 (issue triage)
+  └─> M2 (issue close rate — same query)
 ```
 
 ---
 
-## Items Parked / Not Prioritised
+## Parked / Not Doing
 
-These are valid ideas but either too early, too expensive, or need more data before commitment:
-
-| Item | Reason parked |
+| Item | Reason |
 |---|---|
-| Fork-to-PR ratio | Requires paginating all forks. Too expensive relative to signal quality. |
-| `/org/[org]` page | Needs topics indexing (P2) first to be meaningful. Revisit in Q2. |
-| `/similar/[owner]/[name]` | Needs topics data. Depends on P2. Revisit after P2 ships. |
-| PR sentiment in C-Rank weighting | Score accuracy unclear. Run E4 first to validate. |
-| `/reports/[year]` recurring | Only worth doing if E3 (first one) gets backlinks. |
-| Regional pages | No geo data. Indefinitely parked. |
-| README quality score | Overlaps with M3 (docs quality). Dropped. |
-| Monetising maintainer dashboard | Needs >500 maintainer users first. Revisit at 5k total users. |
+| GitHub App registration | Removed. Complexity not justified at current scale. Revisit at 10k+ repos if webhook push is needed. |
+| Stripe | India-unfriendly for recurring billing. Replaced by RevenueCat. |
+| External LLM for sentiment | Replaced by local HuggingFace sidecar. Cheaper, faster, offline. |
+| Installation token auth | Removed with GitHub App. |
+| Webhook receiver (GitHub App) | Removed with GitHub App. |
+| Fork-to-PR ratio | Too expensive to paginate all forks vs. signal quality gained. |
+| `/org/[org]` page | Needs topics indexing (P2) first. Revisit after P2. |
+| PR sentiment in C-Rank weighting | Accuracy unclear. Run AI2 experiment first. |
+| `/reports/[year]` recurring | Only if E3 gets backlinks. |
+| Regional pages | No geo data. Parked indefinitely. |
+| Monetising maintainer dashboard | Needs >500 maintainer users. Revisit at 5k total users. |
