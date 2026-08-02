@@ -142,3 +142,49 @@ func TestComputeMetrics_TimeToFirstResponse(t *testing.T) {
 		t.Errorf("TimeToFirstResponseHours = %.2f, want %.2f", m.TimeToFirstResponseHours, want)
 	}
 }
+
+func TestComputeMetrics_ReviewCoverage_BotActivity_BusFactor(t *testing.T) {
+	commentTime := prAt(4).Add(2 * time.Hour)
+	prs := []scoring.PR{
+		{
+			State:             "CLOSED",
+			CreatedAt:         prAt(5),
+			AuthorAssociation: "CONTRIBUTOR",
+			AuthorLogin:       "user1",
+			FirstCommentAt:    &commentTime,
+			CommentAuthors:    []string{"maintainer1", "dependabot[bot]"},
+		},
+		{
+			State:             "MERGED",
+			CreatedAt:         prAt(10),
+			AuthorAssociation: "CONTRIBUTOR",
+			AuthorLogin:       "user2",
+			CommentAuthors:    []string{"maintainer2", "maintainer1"},
+		},
+		{
+			State:             "CLOSED",
+			CreatedAt:         prAt(15),
+			AuthorAssociation: "CONTRIBUTOR",
+			AuthorLogin:       "user3",
+			CommentAuthors:    []string{"user3"},
+		},
+	}
+
+	m := scoring.ComputeMetrics(prs, false)
+
+	// PR 1 (reviewed by maintainer1), PR 2 (reviewed by maintainer2) -> 2 / 3 = 66.67%
+	if m.ReviewCoverage < 66.0 || m.ReviewCoverage > 67.0 {
+		t.Errorf("ReviewCoverage = %.2f, want ~66.67", m.ReviewCoverage)
+	}
+
+	// Total comments = maintainer1, dependabot[bot], maintainer2, maintainer1, user3 (5 comments). 1 bot comment -> 1/5 = 20%
+	if m.BotActivityRatio != 20.0 {
+		t.Errorf("BotActivityRatio = %.2f, want 20.0", m.BotActivityRatio)
+	}
+
+	// Distinct maintainers = maintainer1, maintainer2 -> BusFactor = 2
+	if m.BusFactor != 2 {
+		t.Errorf("BusFactor = %d, want 2", m.BusFactor)
+	}
+}
+
