@@ -6,7 +6,9 @@
     "dev": "NEXT_PUBLIC_API_URL=http://localhost:10000 next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run lint && npm run typecheck"
   },
   "dependencies": {
     "@types/canvas-confetti": "^1.9.0",
@@ -27,8 +29,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^10.8.0",
-    "eslint-config-next": "^0.2.4",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^15.5.22",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
