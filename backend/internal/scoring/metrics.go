@@ -55,6 +55,9 @@ type RawMetrics struct {
 	ReviewRounds              float64 // median review comments per merged PR (lower = better)
 	DistinctMaintainerCount   float64 // number of distinct maintainers commenting on PRs (higher = better)
 	TotalContributors         float64 // number of distinct external authors submitting PRs (higher = better)
+	ReviewCoverage            float64 // percentage 0–100 of external PRs that received maintainer/human review/comment
+	BotActivityRatio          float64 // percentage 0–100 of comments made by bot accounts
+	BusFactor                 int     // count of distinct maintainers commenting across PRs
 	StalenessFlag             bool
 }
 
@@ -147,12 +150,59 @@ func ComputeMetrics(prs []PR, staleness bool) RawMetrics {
 	if lastActivityDays == 999 {
 		lastActivityDays = 180 // Default to 180 days if no merged PRs in window
 	}
+	// Calculate ReviewCoverage, BotActivityRatio, BusFactor
+	var externalPRCount int
+	var reviewedPRCount int
+	var totalCommentCount int
+	var botCommentCount int
+
+	for _, pr := range prs {
+		if pr.CreatedAt.Before(window180) || !ExternalAssociations[pr.AuthorAssociation] {
+			continue
+		}
+		externalPRCount++
+		hasHumanComment := false
+
+		if pr.FirstCommentAt != nil {
+			hasHumanComment = true
+		}
+
+		for _, author := range pr.CommentAuthors {
+			if author == "" {
+				continue
+			}
+			totalCommentCount++
+			if isBot(author) {
+				botCommentCount++
+			} else if author != pr.AuthorLogin {
+				hasHumanComment = true
+			}
+		}
+
+		if hasHumanComment {
+			reviewedPRCount++
+		}
+	}
+
+	var reviewCoverage float64
+	if externalPRCount > 0 {
+		reviewCoverage = (float64(reviewedPRCount) / float64(externalPRCount)) * 100.0
+	}
+
+	var botActivityRatio float64
+	if totalCommentCount > 0 {
+		botActivityRatio = (float64(botCommentCount) / float64(totalCommentCount)) * 100.0
+	}
+
 	m := RawMetrics{
 		StalenessFlag:           staleness,
 		LastActivityDays:        lastActivityDays,
 		ReviewRounds:            median(reviewCounts),
 		DistinctMaintainerCount: float64(len(maintainerSet)),
 		TotalContributors:       float64(len(allContributors)),
+		ReviewCoverage:          reviewCoverage,
+		BotActivityRatio:        botActivityRatio,
+		BusFactor:               len(maintainerSet),
 	}
 
 	if externalClosed > 0 {
