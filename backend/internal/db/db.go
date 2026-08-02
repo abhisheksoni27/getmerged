@@ -88,6 +88,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			staleness_flag INTEGER DEFAULT 0,
 			c_rank_score REAL DEFAULT 0,
 			c_rank_tier TEXT DEFAULT 'D',
+			good_first_issue_count INTEGER DEFAULT 0,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			UNIQUE(repository_id, snapshot_date),
 			FOREIGN KEY(repository_id) REFERENCES repositories(id) ON DELETE CASCADE
@@ -134,6 +135,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			staleness_flag INTEGER DEFAULT 0,
 			c_rank_score REAL DEFAULT 0,
 			c_rank_tier TEXT DEFAULT 'D',
+			good_first_issue_count INTEGER DEFAULT 0,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY(repository_id) REFERENCES repositories(id) ON DELETE CASCADE
 		);`,
@@ -193,6 +195,15 @@ func AutoMigrate(db *sqlx.DB) error {
 		_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN consecutive_stagnant_scans INTEGER DEFAULT 0 NOT NULL`)
 		_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN next_rescan_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL`)
 		_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_repos_next_rescan ON repositories(next_rescan_at ASC)`)
+	}
+
+	// Safe migration: add good-first-issue count columns if missing.
+	for _, tbl := range []string{"daily_snapshots", "latest_snapshots"} {
+		var hasGFI int
+		_ = db.Get(&hasGFI, "SELECT COUNT(1) FROM pragma_table_info('"+tbl+"') WHERE name = 'good_first_issue_count'")
+		if hasGFI == 0 {
+			_, _ = db.Exec(`ALTER TABLE ` + tbl + ` ADD COLUMN good_first_issue_count INTEGER DEFAULT 0`)
+		}
 	}
 
 	return nil

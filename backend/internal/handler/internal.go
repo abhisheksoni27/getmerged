@@ -233,14 +233,14 @@ func MigrateLatestSnapshots() gin.HandlerFunc {
 				external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 				first_timer_success_rate, repeat_contributor_rate,
 				maintainer_responsiveness, last_activity_days, review_rounds,
-				distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, updated_at
+				distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, updated_at
 			)
 			SELECT
 				s.repository_id, s.snapshot_date,
 				s.external_pr_merge_rate, s.time_to_first_response_hours, s.time_to_merge_hours,
 				s.first_timer_success_rate, s.repeat_contributor_rate,
 				s.maintainer_responsiveness, s.last_activity_days, s.review_rounds,
-				s.distinct_maintainer_count, s.staleness_flag, s.c_rank_score, s.c_rank_tier, CURRENT_TIMESTAMP
+				s.distinct_maintainer_count, s.staleness_flag, s.c_rank_score, s.c_rank_tier, s.good_first_issue_count, CURRENT_TIMESTAMP
 			FROM daily_snapshots s
 			INNER JOIN (
 				SELECT repository_id, MAX(snapshot_date) as max_date
@@ -261,6 +261,7 @@ func MigrateLatestSnapshots() gin.HandlerFunc {
 				staleness_flag                = excluded.staleness_flag,
 				c_rank_score                  = excluded.c_rank_score,
 				c_rank_tier                   = excluded.c_rank_tier,
+				good_first_issue_count        = excluded.good_first_issue_count,
 				updated_at                    = CURRENT_TIMESTAMP;
 		`
 

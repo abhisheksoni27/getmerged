@@ -89,7 +89,6 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   }, [repo, fullName]);
 
   const [history, setHistory] = useState<Array<{ snapshot_date: string; c_rank_score: number; c_rank_tier: string }>>([]);
-  const [issues, setIssues] = useState<Array<{ title: string; url: string; number: number; labels: string[] }>>([]);
 
   useEffect(() => {
     if (repo?.id) {
@@ -98,18 +97,6 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         .then((data) => {
           if (data?.history && Array.isArray(data.history)) {
             setHistory(data.history);
-          }
-        })
-        .catch(() => {});
-    }
-
-    if (fullName && fullName.includes("/")) {
-      const [o, n] = fullName.split("/");
-      fetch(`${API_BASE_URL}/api/v1/good-first-issues/${o}/${n}`)
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data) => {
-          if (data?.issues && Array.isArray(data.issues)) {
-            setIssues(data.issues);
           }
         })
         .catch(() => {});
@@ -683,14 +670,14 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         )}
       </div>
 
-      {/* Good First Issues Widget (F3) */}
+      {/* Good First Issues Count (F3) */}
       <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm mb-10 font-mono">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-emerald-600" /> Open Good First Issues ({issues.length})
+            <Sparkles className="h-4 w-4 text-emerald-600" /> Open Good First Issues ({repo?.good_first_issue_count ?? 0})
           </h3>
           <a
-            href={`https://github.com/${fullName}/issues?q=is%3Aissue%20is%3Aopen%20label%3A"good%20first%20issue"`}
+            href={`https://github.com/${fullName}/issues?q=is%3Aissue%20is%3Aopen%20(label%3A%22first%20timers%20only%22%20OR%20label%3A%22good%20first%20issue%22)`}
             target="_blank"
             rel="noreferrer"
             className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1"
@@ -698,36 +685,16 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             View on GitHub <ArrowRight className="h-3 w-3" />
           </a>
         </div>
-        {issues.length > 0 ? (
-          <div className="space-y-3 font-sans">
-            {issues.slice(0, 5).map((issue, idx) => (
-              <a
-                key={idx}
-                href={issue.url}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-start justify-between p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/70 hover:bg-emerald-50/50 hover:border-emerald-200 transition-all group"
-              >
-                <div>
-                  <div className="text-xs font-bold text-zinc-900 group-hover:text-emerald-700 transition-colors">
-                    #{issue.number} {issue.title}
-                  </div>
-                  <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
-                    {issue.labels.map((lbl, lIdx) => (
-                      <span key={lIdx} className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-zinc-200/60 text-zinc-700">
-                        {lbl}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <ArrowRight className="h-4 w-4 text-zinc-400 group-hover:text-emerald-600 shrink-0 mt-1 transition-colors" />
-              </a>
-            ))}
-          </div>
+        {(repo?.good_first_issue_count ?? 0) > 0 ? (
+          <p className="text-xs text-zinc-600 font-sans">
+            This repo currently has <strong>{repo?.good_first_issue_count}</strong> open{" "}
+            <code className="bg-zinc-100 px-1.5 py-0.5 rounded text-emerald-700">good first issue</code> issues —
+            a great entry point for your first contribution.
+          </p>
         ) : (
-          <div className="text-xs text-zinc-500 font-sans bg-zinc-50 p-4 rounded-xl border border-dashed border-zinc-200 text-center">
+          <p className="text-xs text-zinc-500 font-sans bg-zinc-50 p-4 rounded-xl border border-dashed border-zinc-200">
             No open `good first issue` labels currently found on GitHub for this repo.
-          </div>
+          </p>
         )}
       </div>
 
