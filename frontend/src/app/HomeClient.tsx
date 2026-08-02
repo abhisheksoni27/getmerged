@@ -238,6 +238,10 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   };
 
   const handleTrendingToggle = () => {
+    if (!isLoggedIn) {
+      window.location.href = `${API_BASE_URL}/api/v1/auth/github`;
+      return;
+    }
     setLoading(true);
     const next = !trendingOnly;
     setTrendingOnly(next);
@@ -253,6 +257,10 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   };
 
   const handlePageChange = (newPage: number) => {
+    if (newPage > 1 && !isLoggedIn) {
+      window.location.href = `${API_BASE_URL}/api/v1/auth/github`;
+      return;
+    }
     setLoading(true);
     setPage(newPage);
     window.scrollTo({ top: 400, behavior: "smooth" });
