@@ -690,7 +690,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <Sparkles className="h-4 w-4 text-emerald-600" /> Open Good First Issues ({issues.length})
           </h3>
           <a
-            href={`https://github.com/${fullName}/issues?q=is%3Aissue+is%3Aopen+label%3A"good+first+issue"`}
+            href={`https://github.com/${fullName}/issues?q=is%3Aissue%20is%3Aopen%20label%3A"good%20first%20issue"`}
             target="_blank"
             rel="noreferrer"
             className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1"
