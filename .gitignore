@@ -37,3 +37,7 @@ tmp/
 bin/
 
 .code-review-graph
+
+.playwright-cli
+.claude
+backend/server

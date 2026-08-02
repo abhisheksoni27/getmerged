@@ -46,6 +46,11 @@ func main() {
 	defer database.Close()
 	slog.Info("db connected", "url", cfg.DatabaseURL)
 
+	if err := db.AutoMigrate(database); err != nil {
+		slog.Error("auto-migrate failed", "err", err)
+		os.Exit(1)
+	}
+
 	cacheMiddleware, vkClient, err := middleware.Cache(cfg.ValkeyURL, cfg.ValkeyUsername, cfg.ValkeyPassword)
 	if err != nil {
 		slog.Warn("cache connection failed, proceeding without cache", "url", cfg.ValkeyURL, "err", err)

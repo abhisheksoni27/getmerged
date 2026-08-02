@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/jmoiron/sqlx"
@@ -34,84 +35,114 @@ func Connect(url string) (*sqlx.DB, error) {
 
 // AutoMigrate creates all required tables if they do not exist.
 func AutoMigrate(db *sqlx.DB) error {
-	schema := `
-	CREATE TABLE IF NOT EXISTS users (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		github_id INTEGER UNIQUE NOT NULL,
-		username TEXT NOT NULL,
-		email TEXT,
-		avatar_url TEXT,
-		created_at DATETIME NOT NULL,
-		updated_at DATETIME NOT NULL
-	);
+	statements := []string{
+		`CREATE TABLE IF NOT EXISTS users (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			github_id INTEGER UNIQUE NOT NULL,
+			username TEXT NOT NULL,
+			email TEXT,
+			avatar_url TEXT,
+			created_at DATETIME NOT NULL,
+			updated_at DATETIME NOT NULL
+		);`,
+		`CREATE TABLE IF NOT EXISTS user_watchlists (
+			user_id INTEGER NOT NULL,
+			repo_id TEXT NOT NULL,
+			notify_rank_change BOOLEAN DEFAULT TRUE,
+			created_at DATETIME NOT NULL,
+			PRIMARY KEY(user_id, repo_id),
+			FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+		);`,
+		`CREATE TABLE IF NOT EXISTS macro_stats (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			metric_key TEXT UNIQUE NOT NULL,
+			metric_value TEXT NOT NULL,
+			updated_at DATETIME NOT NULL
+		);`,
+		`CREATE TABLE IF NOT EXISTS repositories (
+			id TEXT PRIMARY KEY,
+			full_name TEXT UNIQUE NOT NULL,
+			owner TEXT NOT NULL,
+			name TEXT NOT NULL,
+			language TEXT,
+			stars INTEGER DEFAULT 0,
+			description TEXT,
+			github_url TEXT,
+			is_trending BOOLEAN DEFAULT FALSE,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
+		`CREATE TABLE IF NOT EXISTS daily_snapshots (
+			id TEXT PRIMARY KEY,
+			repository_id TEXT NOT NULL,
+			snapshot_date TEXT NOT NULL,
+			external_pr_merge_rate REAL DEFAULT 0,
+			time_to_first_response_hours REAL DEFAULT 0,
+			time_to_merge_hours REAL DEFAULT 0,
+			first_timer_success_rate REAL DEFAULT 0,
+			repeat_contributor_rate REAL DEFAULT 0,
+			maintainer_responsiveness REAL DEFAULT 0,
+			last_activity_days REAL DEFAULT 180,
+			review_rounds REAL DEFAULT 0,
+			distinct_maintainer_count REAL DEFAULT 0,
+			staleness_flag INTEGER DEFAULT 0,
+			c_rank_score REAL DEFAULT 0,
+			c_rank_tier TEXT DEFAULT 'D',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(repository_id, snapshot_date),
+			FOREIGN KEY(repository_id) REFERENCES repositories(id) ON DELETE CASCADE
+		);`,
+		`CREATE TABLE IF NOT EXISTS repo_ai_insights (
+			repo_id INTEGER PRIMARY KEY,
+			maintainer_vibe TEXT NOT NULL,
+			pr_guidelines TEXT NOT NULL,
+			issue_quality_score REAL DEFAULT 0.0,
+			raw_summary TEXT,
+			updated_at DATETIME NOT NULL
+		);`,
+		`CREATE TABLE IF NOT EXISTS notification_queue (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			user_id INTEGER NOT NULL,
+			type TEXT NOT NULL,
+			payload TEXT NOT NULL,
+			status TEXT NOT NULL DEFAULT 'pending',
+			created_at DATETIME NOT NULL,
+			FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+		);`,
+		`CREATE TABLE IF NOT EXISTS indexing_queue (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			full_name TEXT UNIQUE NOT NULL,
+			owner TEXT NOT NULL,
+			name TEXT NOT NULL,
+			requested_by_user_id INTEGER,
+			status TEXT NOT NULL DEFAULT 'pending',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			processed_at DATETIME
+		);`,
+		`CREATE TABLE IF NOT EXISTS latest_snapshots (
+			repository_id TEXT PRIMARY KEY,
+			snapshot_date TEXT NOT NULL,
+			external_pr_merge_rate REAL DEFAULT 0,
+			time_to_first_response_hours REAL DEFAULT 0,
+			time_to_merge_hours REAL DEFAULT 0,
+			first_timer_success_rate REAL DEFAULT 0,
+			repeat_contributor_rate REAL DEFAULT 0,
+			maintainer_responsiveness REAL DEFAULT 0,
+			last_activity_days REAL DEFAULT 180,
+			review_rounds REAL DEFAULT 0,
+			distinct_maintainer_count REAL DEFAULT 0,
+			staleness_flag INTEGER DEFAULT 0,
+			c_rank_score REAL DEFAULT 0,
+			c_rank_tier TEXT DEFAULT 'D',
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY(repository_id) REFERENCES repositories(id) ON DELETE CASCADE
+		);`,
+	}
 
-	CREATE TABLE IF NOT EXISTS user_watchlists (
-		user_id INTEGER NOT NULL,
-		repo_id TEXT NOT NULL,
-		notify_rank_change BOOLEAN DEFAULT TRUE,
-		created_at DATETIME NOT NULL,
-		PRIMARY KEY(user_id, repo_id),
-		FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-	);
-
-	CREATE TABLE IF NOT EXISTS macro_stats (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		metric_key TEXT UNIQUE NOT NULL,
-		metric_value TEXT NOT NULL,
-		updated_at DATETIME NOT NULL
-	);
-
-	CREATE TABLE IF NOT EXISTS repo_ai_insights (
-		repo_id INTEGER PRIMARY KEY,
-		maintainer_vibe TEXT NOT NULL,
-		pr_guidelines TEXT NOT NULL,
-		issue_quality_score REAL DEFAULT 0.0,
-		raw_summary TEXT,
-		updated_at DATETIME NOT NULL
-	);
-
-	CREATE TABLE IF NOT EXISTS notification_queue (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		user_id INTEGER NOT NULL,
-		type TEXT NOT NULL,
-		payload TEXT NOT NULL,
-		status TEXT NOT NULL DEFAULT 'pending',
-		created_at DATETIME NOT NULL,
-		FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-	);
-
-	CREATE TABLE IF NOT EXISTS indexing_queue (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		full_name TEXT UNIQUE NOT NULL,
-		owner TEXT NOT NULL,
-		name TEXT NOT NULL,
-		requested_by_user_id INTEGER,
-		status TEXT NOT NULL DEFAULT 'pending',
-		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		processed_at DATETIME
-	);
-
-	CREATE TABLE IF NOT EXISTS latest_snapshots (
-		repository_id TEXT PRIMARY KEY,
-		snapshot_date TEXT NOT NULL,
-		external_pr_merge_rate REAL DEFAULT 0,
-		time_to_first_response_hours REAL DEFAULT 0,
-		time_to_merge_hours REAL DEFAULT 0,
-		first_timer_success_rate REAL DEFAULT 0,
-		repeat_contributor_rate REAL DEFAULT 0,
-		maintainer_responsiveness REAL DEFAULT 0,
-		last_activity_days REAL DEFAULT 180,
-		review_rounds REAL DEFAULT 0,
-		distinct_maintainer_count REAL DEFAULT 0,
-		staleness_flag INTEGER DEFAULT 0,
-		c_rank_score REAL DEFAULT 0,
-		c_rank_tier TEXT DEFAULT 'D',
-		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		FOREIGN KEY(repository_id) REFERENCES repositories(id) ON DELETE CASCADE
-	);
-	`
-	if _, err := db.Exec(schema); err != nil {
-		return err
+	for i, stmt := range statements {
+		if _, err := db.Exec(stmt); err != nil {
+			return fmt.Errorf("auto-migrate statement %d failed: %w", i, err)
+		}
 	}
 
 	// Safe migration check for user_watchlists.repo_id column type
