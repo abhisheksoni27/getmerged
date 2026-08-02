@@ -43,21 +43,17 @@ func ComputeAndCacheMacroStats(ctx context.Context, db *sqlx.DB) (*MacroStats, e
 		_ = db.GetContext(ctx, &stats.TotalRepos, "SELECT COUNT(*) FROM repos")
 	}
 
-	// 2. Rank counts & S-Class count from `daily_snapshots` or `repo_scores`
+	// 2. Rank counts & S-Class count from `latest_snapshots` or `repo_scores`
 	type rankRow struct {
 		ClassRank string `db:"c_rank_tier"`
 		Cnt       int    `db:"cnt"`
 	}
 	var rankRows []rankRow
 	if err := db.SelectContext(ctx, &rankRows, `
-		SELECT s.c_rank_tier, COUNT(*) as cnt
-		FROM daily_snapshots s
-		INNER JOIN (
-			SELECT repository_id, MAX(snapshot_date) as max_date
-			FROM daily_snapshots GROUP BY repository_id
-		) latest ON s.repository_id = latest.repository_id AND s.snapshot_date = latest.max_date
-		WHERE s.c_rank_tier IS NOT NULL AND s.c_rank_tier != 'D'
-		GROUP BY s.c_rank_tier
+		SELECT c_rank_tier, COUNT(*) as cnt
+		FROM latest_snapshots
+		WHERE c_rank_tier IS NOT NULL AND c_rank_tier != 'D'
+		GROUP BY c_rank_tier
 	`); err == nil {
 		for _, r := range rankRows {
 			stats.RankCounts[r.ClassRank] = r.Cnt
@@ -72,11 +68,7 @@ func ComputeAndCacheMacroStats(ctx context.Context, db *sqlx.DB) (*MacroStats, e
 	var avgResp float64
 	_ = db.GetContext(ctx, &avgResp, `
 		SELECT AVG(time_to_first_response_hours)
-		FROM daily_snapshots s
-		INNER JOIN (
-			SELECT repository_id, MAX(snapshot_date) as max_date
-			FROM daily_snapshots GROUP BY repository_id
-		) latest ON s.repository_id = latest.repository_id AND s.snapshot_date = latest.max_date
+		FROM latest_snapshots
 		WHERE time_to_first_response_hours > 0
 	`)
 	if avgResp > 0 {
@@ -96,11 +88,7 @@ func ComputeAndCacheMacroStats(ctx context.Context, db *sqlx.DB) (*MacroStats, e
 	_ = db.SelectContext(ctx, &langTierRows, `
 		SELECT r.language, s.c_rank_tier, COUNT(*) as cnt, AVG(s.external_pr_merge_rate) as avg_merge
 		FROM repositories r
-		INNER JOIN daily_snapshots s ON r.id = s.repository_id
-		INNER JOIN (
-			SELECT repository_id, MAX(snapshot_date) as max_date
-			FROM daily_snapshots GROUP BY repository_id
-		) latest ON s.repository_id = latest.repository_id AND s.snapshot_date = latest.max_date
+		INNER JOIN latest_snapshots s ON r.id = s.repository_id
 		WHERE r.language IS NOT NULL AND r.language != '' AND s.c_rank_tier != 'D' AND s.c_rank_score > 0
 		GROUP BY r.language, s.c_rank_tier
 		ORDER BY cnt DESC

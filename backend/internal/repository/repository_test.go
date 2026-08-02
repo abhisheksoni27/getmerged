@@ -96,6 +96,7 @@ func TestRepoRepository_ListAndFind(t *testing.T) {
 	now := time.Now()
 	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('1', 'golang/go', 'golang', 'go', 'Go', 120000, ?)`, now)
 	database.MustExec(`INSERT INTO daily_snapshots (id, repository_id, snapshot_date, c_rank_tier, c_rank_score) VALUES ('s1', '1', '2026-07-26', 'S', 95.0)`)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score) VALUES ('1', '2026-07-26', 'S', 95.0)`)
 
 	repos, total, err := repo.List(ctx, repository.RepoFilter{Limit: 10, Offset: 0})
 	if err != nil {
