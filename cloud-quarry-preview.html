@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>opendoor — Cloud Quarry Preview</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cloud-white: #f8f7f5;
+    --cloud-gray: #e8e6e3;
+    --cloud-dark: #1a1a1a;
+    --void-blue: #2563eb;
+    --void-light: #60a5fa;
+    --silver: #94a3b8;
+    --silver-bright: #cbd5e1;
+    --thunder: #334155;
+    --accent: #3b82f6;
+    --accent-glow: rgba(59, 130, 246, 0.15);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--cloud-white);
+    color: var(--cloud-dark);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* Silver saw accent line at top */
+  .saw-line {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 0%, var(--silver) 20%, var(--silver-bright) 50%, var(--silver) 80%, transparent 100%);
+    z-index: 100;
+    animation: saw-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes saw-pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  /* Hero — Cloud Mass */
+  .hero {
+    position: relative;
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 2rem 4rem;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 40%, rgba(255,255,255,1) 0%, rgba(248,247,245,1) 60%, rgba(232,230,227,1) 100%);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    right: -10%;
+    bottom: -20%;
+    background:
+      radial-gradient(ellipse 60% 40% at 30% 60%, rgba(59,130,246,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 30% at 70% 30%, rgba(96,165,250,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero h1 .highlight {
+    background: linear-gradient(135deg, var(--void-blue) 0%, var(--void-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero .tagline {
+    margin-top: 1.5rem;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: var(--thunder);
+    text-align: center;
+    max-width: 520px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero .cta {
+    margin-top: 2.5rem;
+    padding: 0.9rem 2.5rem;
+    background: var(--cloud-dark);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: -0.01em;
+  }
+
+  .hero .cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
+
+  /* Silver saw line under hero */
+  .hero-saw {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--silver-bright), transparent);
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    padding: 2.5rem 2rem;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--cloud-dark);
+  }
+
+  .stat-value.blue { color: var(--void-blue); }
+
+  .stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--silver);
+    margin-top: 0.25rem;
+    font-weight: 600;
+  }
+
+  /* Repo Grid — Cloud Blocks */
+  .section {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-header h2 {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  .section-header p {
+    color: var(--thunder);
+    margin-top: 0.5rem;
+    font-size: 1.05rem;
+  }
+
+  .repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* Cloud Block Card */
+  .cloud-card {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,247,245,0.95) 100%);
+    border: 1px solid var(--cloud-gray);
+    border-radius: 16px;
+    padding: 1.75rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .cloud-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--accent-glow) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .cloud-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08), 0 0 0 1px rgba(59,130,246,0.1);
+    border-color: transparent;
+  }
+
+  .cloud-card:hover::before {
+    opacity: 1;
+  }
+
+  /* The "void" — blue glow that appears on hover */
+  .cloud-card .void {
+    position: absolute;
+    top: -30%;
+    right: -20%;
+    width: 60%;
+    height: 80%;
+    background: radial-gradient(ellipse, rgba(59,130,246,0.12) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+  }
+
+  .cloud-card:hover .void {
+    opacity: 1;
+  }
+
+  .cloud-card .card-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-repo {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--cloud-dark);
+  }
+
+  .card-tier {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tier-s { background: #d1fae5; color: #065f46; }
+  .tier-a { background: #dbeafe; color: #1e40af; }
+  .tier-b { background: #fef3c7; color: #92400e; }
+
+  .card-desc {
+    font-size: 0.88rem;
+    color: #6b7280;
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+  }
+
+  .card-metrics {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .metric {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.78rem;
+    color: #6b7280;
+  }
+
+  .metric .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .metric .dot.blue { background: var(--void-blue); }
+  .metric .dot.green { background: #10b981; }
+  .metric .dot.amber { background: #f59e0b; }
+
+  /* Cut animation on hover */
+  .cloud-card .cut-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--silver), var(--silver-bright), var(--silver), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
+  }
+
+  .cloud-card:hover .cut-line {
+    transform: scaleX(1);
+  }
+
+  /* Filter pills */
+  .filter-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .filter-pill {
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid var(--cloud-gray);
+    background: white;
+    color: var(--thunder);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .filter-pill:hover {
+    border-color: var(--silver-bright);
+  }
+
+  .filter-pill.active {
+    background: var(--cloud-dark);
+    color: white;
+    border-color: var(--cloud-dark);
+  }
+
+  /* Footer */
+  .footer {
+    border-top: 1px solid var(--cloud-gray);
+    padding: 3rem 2rem;
+    text-align: center;
+    color: var(--silver);
+    font-size: 0.8rem;
+  }
+
+  /* Floating animation for cloud cards */
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .cloud-card {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .cloud-card:nth-child(2) { animation-delay: -1s; }
+  .cloud-card:nth-child(3) { animation-delay: -2s; }
+  .cloud-card:nth-child(4) { animation-delay: -3s; }
+  .cloud-card:nth-child(5) { animation-delay: -4s; }
+  .cloud-card:nth-child(6) { animation-delay: -5s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cloud-card { animation: none; }
+    .saw-line { animation: none; }
+  }
+
+  @media (max-width: 640px) {
+    .repo-grid { grid-template-columns: 1fr; }
+    .stats-bar { gap: 1.5rem; }
+    .hero { min-height: 70vh; padding-top: 4rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="saw-line"></div>
+
+<!-- Hero -->
+<section class="hero">
+  <h1>Find repos that<br><span class="highlight">actually merge</span> your PRs.</h1>
+  <p class="tagline">The C-Rank™ index scores 1,200+ open-source repositories on merge rates, response times, and first-timer success. Stop guessing which door is open.</p>
+  <button class="cta">Explore the Index →</button>
+  <div class="hero-saw"></div>
+</section>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-value">1,247</div>
+    <div class="stat-label">Repos Scored</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value blue">89</div>
+    <div class="stat-label">Super Welcoming</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">14</div>
+    <div class="stat-label">Languages</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">2.4h</div>
+    <div class="stat-label">Avg First Review</div>
+  </div>
+</div>
+
+<!-- Repo Grid -->
+<div class="section">
+  <div class="section-header">
+    <h2>Curated Open Doors</h2>
+    <p>Repositories where your pull requests land. Filtered by community signal.</p>
+  </div>
+
+  <div class="filter-row">
+    <button class="filter-pill active">All</button>
+    <button class="filter-pill">Go</button>
+    <button class="filter-pill">TypeScript</button>
+    <button class="filter-pill">Rust</button>
+    <button class="filter-pill">Python</button>
+    <button class="filter-pill">S Tier</button>
+    <button class="filter-pill">A Tier</button>
+  </div>
+
+  <div class="repo-grid">
+    <div class="cloud-card">
+      <div class="cut-line"></div>
+      <div class="void"></div>
+      <div class="card-content">
+        <div class="card-top">
+          <span class="card-repo">vercel/next.js</span>
+          <span class="card-tier tier-s">S</span>
+        </div>
+        <p class="card-desc">The React framework for production. Blazing fast, developer-first, and endlessly extensible.</p>
+        <div class="card-metrics">
+          <span class="metric"><span class="dot blue"></span> 98.2% merged</span>
+          <span class="metric"><span class="dot green"></span> &lt;1h response</span>
+          <span class="metric"><span class="dot amber"></span> 87% 1st-timer</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cloud-card">
+      <div class="cut-line"></div>
+      <div class="void"></div>
+      <div class="card-content">
+        <div class="card-top">
+          <span class="card-repo">rust-lang/rust</span>
+          <span class="card-tier tier-s">S</span>
+        </div>
+        <p class="card-desc">Empowering everyone to build reliable and efficient software. The Rust compiler and tools.</p>
+        <div class="card-metrics">
+          <span class="metric"><span class="dot blue"></span> 95.7% merged</span>
+          <span class="metric"><span class="dot green"></span> &lt;2h response</span>
+          <span class="metric"><span class="dot amber"></span> 72% 1st-timer</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cloud-card">
+      <div class="cut-line"></div>
+      <div class="void"></div>
+      <div class="card-content">
+        <div class="card-top">
+          <span class="card-repo">tailwindlabs/tailwindcss</span>
+          <span class="card-tier tier-a">A</span>
+        </div>
+        <p class="card-desc">A utility-first CSS framework for rapid UI development. Purge unused styles, ship small.</p>
+        <div class="card-metrics">
+          <span class="metric"><span class="dot blue"></span> 91.3% merged</span>
+          <span class="metric"><span class="dot green"></span> &lt;4h response</span>
+          <span class="metric"><span class="dot amber"></span> 65% 1st-timer</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cloud-card">
+      <div class="cut-line"></div>
+      <div class="void"></div>
+      <div class="card-content">
+        <div class="card-top">
+          <span class="card-repo">anthropics/claude-code</span>
+          <span class="card-tier tier-a">A</span>
+        </div>
+        <p class="card-desc">AI-powered coding assistant that integrates directly into your terminal and editor workflow.</p>
+        <div class="card-metrics">
+          <span class="metric"><span class="dot blue"></span> 88.9% merged</span>
+          <span class="metric"><span class="dot green"></span> &lt;3h response</span>
+          <span class="metric"><span class="dot amber"></span> 58% 1st-timer</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cloud-card">
+      <div class="cut-line"></div>
+      <div class="void"></div>
+      <div class="card-content">
+        <div class="card-top">
+          <span class="card-repo">biomejs/biome</span>
+          <span class="card-tier tier-b">B</span>
+        </div>
+        <p class="card-desc">A fast, modern linter and formatter for JavaScript, TypeScript, and related languages.</p>
+        <div class="card-metrics">
+          <span class="metric"><span class="dot blue"></span> 78.4% merged</span>
+          <span class="metric"><span class="dot green"></span> &lt;8h response</span>
+          <span class="metric"><span class="dot amber"></span> 41% 1st-timer</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cloud-card">
+      <div class="cut-line"></div>
+      <div class="void"></div>
+      <div class="card-content">
+        <div class="card-top">
+          <span class="card-repo">solana-labs/solana-web3.js</span>
+          <span class="card-tier tier-b">B</span>
+        </div>
+        <p class="card-desc">The official JavaScript client library for the Solana blockchain. Build on-chain apps.</p>
+        <div class="card-metrics">
+          <span class="metric"><span class="dot blue"></span> 72.1% merged</span>
+          <span class="metric"><span class="dot green"></span> &lt;12h response</span>
+          <span class="metric"><span class="dot amber"></span> 33% 1st-timer</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  opendoor — Glassdoor for Open Source Repositories. C-Rank™ is a trademark. Built for contributors, by contributors.
+</div>
+
+</body>
+</html>
