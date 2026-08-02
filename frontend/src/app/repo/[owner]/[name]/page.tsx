@@ -51,6 +51,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    alternates: {
+      canonical: `https://opendoor.abhishekco.de/repo/${owner}/${name}`,
+    },
     openGraph: {
       title,
       description,
