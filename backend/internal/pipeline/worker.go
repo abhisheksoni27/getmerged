@@ -245,8 +245,8 @@ func (c *BackgroundCrawler) checkAndSendPulseDigest() {
 		return
 	}
 
-	// Send Telegram pulse every 3 hours
-	if time.Since(c.lastPulse) < 3*time.Hour && !c.lastPulse.IsZero() {
+	// Send Telegram pulse every 30 minutes
+	if time.Since(c.lastPulse) < 30*time.Minute && !c.lastPulse.IsZero() {
 		return
 	}
 	c.lastPulse = time.Now().UTC()
