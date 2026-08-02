@@ -39,12 +39,24 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [hoveredMetric, setHoveredMetric] = useState<string | null>(null);
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [feedbackError, setFeedbackError] = useState<string | null>(null);
+  const [badgeShowPoints, setBadgeShowPoints] = useState(false);
+  const [badgeColor, setBadgeColor] = useState("auto");
   const [isVerifiedContributor, setIsVerifiedContributor] = useState(false);
   const [githubNotFound, setGithubNotFound] = useState(false);
   const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
 
   const rank = repo?.class_rank || repo?.c_rank_tier || "A";
   const score = repo?.c_rank_score || repo?.score || 78.5;
+
+  const badgeQuery =
+    badgeShowPoints || badgeColor !== "auto"
+      ? `?${[
+          badgeShowPoints ? "points=1" : "",
+          badgeColor !== "auto" ? `color=${badgeColor}` : "",
+        ].filter(Boolean).join("&")}`
+      : "";
+  const badgePreviewUrl = `${API_BASE_URL}/badge/${fullName}.svg${badgeQuery}`;
+  const badgeMarkdownUrl = `https://opendoor.abhishekco.de/badge/${fullName}.svg${badgeQuery}`;
 
   useEffect(() => {
     if (!repo && fullName) {
@@ -727,23 +739,55 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         <p className="text-xs text-zinc-600 font-sans mb-4">
           Show potential contributors your maintainer responsiveness with a dynamic live badge:
         </p>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-4 font-sans">
+          <label className="flex items-center gap-2 text-xs text-zinc-600 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={badgeShowPoints}
+              onChange={(e) => setBadgeShowPoints(e.target.checked)}
+              className="accent-emerald-600 h-3.5 w-3.5"
+            />
+            Show score
+          </label>
+          <label className="flex items-center gap-2 text-xs text-zinc-600">
+            Color
+            <select
+              value={badgeColor}
+              onChange={(e) => setBadgeColor(e.target.value)}
+              className="rounded-lg border border-zinc-200 bg-white px-2 py-1 text-xs text-zinc-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            >
+              <option value="auto">Auto (tier)</option>
+              <option value="emerald">Emerald</option>
+              <option value="green">Green</option>
+              <option value="blue">Blue</option>
+              <option value="purple">Purple</option>
+              <option value="pink">Pink</option>
+              <option value="amber">Amber</option>
+              <option value="orange">Orange</option>
+              <option value="red">Red</option>
+              <option value="cyan">Cyan</option>
+              <option value="slate">Slate</option>
+              <option value="zinc">Zinc</option>
+            </select>
+          </label>
+        </div>
         <div className="flex items-center bg-white rounded-xl border border-zinc-100 px-4 py-3.5 mb-4 min-h-14 overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={`${API_BASE_URL}/badge/${fullName}.svg`}
-            alt={`C-Rank badge for ${fullName}`}
-            width={200}
-            height={24}
-            className="h-6 w-auto"
+            src={badgePreviewUrl}
+            alt={`Opendoor C-Rank badge for ${fullName}`}
+            width={280}
+            height={28}
+            className="h-7 w-auto"
           />
         </div>
         <div className="flex items-center gap-4 bg-zinc-900 text-zinc-200 p-3.5 rounded-xl text-xs overflow-x-auto justify-between">
           <code>
-            [![Opendoor C-Rank](https://opendoor.abhishekco.de/badge/{fullName}.svg)](https://opendoor.abhishekco.de/repo/{fullName})
+            {`[![Opendoor C-Rank](${badgeMarkdownUrl})](https://opendoor.abhishekco.de/repo/${fullName})`}
           </code>
           <button
             onClick={() => {
-              navigator.clipboard.writeText(`[![Opendoor C-Rank](https://opendoor.abhishekco.de/badge/${fullName}.svg)](https://opendoor.abhishekco.de/repo/${fullName})`);
+              navigator.clipboard.writeText(`[![Opendoor C-Rank](${badgeMarkdownUrl})](https://opendoor.abhishekco.de/repo/${fullName})`);
             }}
             className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] shrink-0 transition-colors"
           >
