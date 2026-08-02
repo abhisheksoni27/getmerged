@@ -133,10 +133,7 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 	countQuery := fmt.Sprintf(`
 		SELECT COUNT(1)
 		FROM repositories r
-		INNER JOIN daily_snapshots s ON s.repository_id = r.id
-		  AND s.snapshot_date = (
-		    SELECT MAX(s2.snapshot_date) FROM daily_snapshots s2 WHERE s2.repository_id = r.id
-		  )
+		INNER JOIN latest_snapshots s ON s.repository_id = r.id
 		WHERE %s
 	`, where)
 
@@ -163,10 +160,7 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 			COALESCE(s.staleness_flag,0) as staleness_flag,
 			COALESCE(s.snapshot_date,'') as snapshot_date
 		FROM repositories r
-		INNER JOIN daily_snapshots s ON s.repository_id = r.id
-		  AND s.snapshot_date = (
-		    SELECT MAX(s2.snapshot_date) FROM daily_snapshots s2 WHERE s2.repository_id = r.id
-		  )
+		INNER JOIN latest_snapshots s ON s.repository_id = r.id
 		WHERE %s
 		ORDER BY %s %s
 		LIMIT ? OFFSET ?
@@ -201,10 +195,7 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 			COALESCE(s.staleness_flag,0) as staleness_flag,
 			COALESCE(s.snapshot_date,'') as snapshot_date
 		FROM repositories r
-		LEFT JOIN daily_snapshots s ON s.repository_id = r.id
-		  AND s.snapshot_date = (
-		    SELECT MAX(s2.snapshot_date) FROM daily_snapshots s2 WHERE s2.repository_id = r.id
-		  )
+		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
 		WHERE r.id = ? OR LOWER(r.full_name) = LOWER(?)
 		LIMIT 1
 	`
@@ -227,7 +218,15 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 		staleness = 1
 	}
 
-	_, err := r.db.ExecContext(ctx, `
+	today := time.Now().UTC().Format("2006-01-02")
+
+	tx, err := r.db.BeginTxx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	_, err = tx.ExecContext(ctx, `
 		INSERT INTO daily_snapshots (
 			id, repository_id, snapshot_date,
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
@@ -251,7 +250,7 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 	`,
 		uuid.New().String(),
 		repoID,
-		time.Now().UTC().Format("2006-01-02"),
+		today,
 		raw.ExternalPRMergeRate,
 		raw.TimeToFirstResponseHours,
 		raw.TimeToMergeHours,
@@ -265,7 +264,54 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 		score,
 		tier,
 	)
-	return err
+	if err != nil {
+		return err
+	}
+
+	_, err = tx.ExecContext(ctx, `
+		INSERT INTO latest_snapshots (
+			repository_id, snapshot_date,
+			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
+			first_timer_success_rate, repeat_contributor_rate,
+			maintainer_responsiveness, last_activity_days, review_rounds,
+			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, updated_at
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+		ON CONFLICT(repository_id) DO UPDATE SET
+			snapshot_date                 = excluded.snapshot_date,
+			external_pr_merge_rate        = excluded.external_pr_merge_rate,
+			time_to_first_response_hours  = excluded.time_to_first_response_hours,
+			time_to_merge_hours           = excluded.time_to_merge_hours,
+			first_timer_success_rate      = excluded.first_timer_success_rate,
+			repeat_contributor_rate       = excluded.repeat_contributor_rate,
+			maintainer_responsiveness     = excluded.maintainer_responsiveness,
+			last_activity_days            = excluded.last_activity_days,
+			review_rounds                 = excluded.review_rounds,
+			distinct_maintainer_count     = excluded.distinct_maintainer_count,
+			staleness_flag                = excluded.staleness_flag,
+			c_rank_score                  = excluded.c_rank_score,
+			c_rank_tier                   = excluded.c_rank_tier,
+			updated_at                    = CURRENT_TIMESTAMP
+	`,
+		repoID,
+		today,
+		raw.ExternalPRMergeRate,
+		raw.TimeToFirstResponseHours,
+		raw.TimeToMergeHours,
+		raw.FirstTimerSuccessRate,
+		raw.RepeatContributorRate,
+		raw.MaintainerResponsiveness,
+		raw.LastActivityDays,
+		raw.ReviewRounds,
+		raw.DistinctMaintainerCount,
+		staleness,
+		score,
+		tier,
+	)
+	if err != nil {
+		return err
+	}
+
+	return tx.Commit()
 }
 
 func (r *sqlxRepoRepository) FetchLatestSnapshotsSample(ctx context.Context, limit int) ([]scoring.RawMetrics, error) {
@@ -285,13 +331,7 @@ func (r *sqlxRepoRepository) FetchLatestSnapshotsSample(ctx context.Context, lim
 			COALESCE(s.review_rounds, 0),
 			COALESCE(s.distinct_maintainer_count, 0),
 			COALESCE(s.staleness_flag, 0)
-		FROM daily_snapshots s
-		INNER JOIN (
-			SELECT repository_id, MAX(snapshot_date) as latest
-			FROM daily_snapshots
-			GROUP BY repository_id
-		) latest ON s.repository_id = latest.repository_id
-		         AND s.snapshot_date = latest.latest
+		FROM latest_snapshots s
 		LIMIT ?
 	`, limit)
 	if err != nil {

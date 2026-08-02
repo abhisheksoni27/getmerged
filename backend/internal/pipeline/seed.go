@@ -177,7 +177,15 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 	if m.StalenessFlag {
 		staleness = 1
 	}
-	_, err := db.Exec(`
+	today := time.Now().UTC().Format("2006-01-02")
+
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	_, err = tx.Exec(`
 		INSERT INTO daily_snapshots (
 			id, repository_id, snapshot_date,
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
@@ -201,7 +209,7 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 	`,
 		uuid.New().String(),
 		repoID,
-		time.Now().UTC().Format("2006-01-02"),
+		today,
 		m.ExternalPRMergeRate,
 		m.TimeToFirstResponseHours,
 		m.TimeToMergeHours,
@@ -215,7 +223,54 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 		score,
 		tier,
 	)
-	return err
+	if err != nil {
+		return err
+	}
+
+	_, err = tx.Exec(`
+		INSERT INTO latest_snapshots (
+			repository_id, snapshot_date,
+			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
+			first_timer_success_rate, repeat_contributor_rate,
+			maintainer_responsiveness, last_activity_days, review_rounds,
+			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, updated_at
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+		ON CONFLICT(repository_id) DO UPDATE SET
+			snapshot_date                 = excluded.snapshot_date,
+			external_pr_merge_rate        = excluded.external_pr_merge_rate,
+			time_to_first_response_hours  = excluded.time_to_first_response_hours,
+			time_to_merge_hours           = excluded.time_to_merge_hours,
+			first_timer_success_rate      = excluded.first_timer_success_rate,
+			repeat_contributor_rate       = excluded.repeat_contributor_rate,
+			maintainer_responsiveness     = excluded.maintainer_responsiveness,
+			last_activity_days            = excluded.last_activity_days,
+			review_rounds                 = excluded.review_rounds,
+			distinct_maintainer_count     = excluded.distinct_maintainer_count,
+			staleness_flag                = excluded.staleness_flag,
+			c_rank_score                  = excluded.c_rank_score,
+			c_rank_tier                   = excluded.c_rank_tier,
+			updated_at                    = CURRENT_TIMESTAMP
+	`,
+		repoID,
+		today,
+		m.ExternalPRMergeRate,
+		m.TimeToFirstResponseHours,
+		m.TimeToMergeHours,
+		m.FirstTimerSuccessRate,
+		m.RepeatContributorRate,
+		m.MaintainerResponsiveness,
+		m.LastActivityDays,
+		m.ReviewRounds,
+		m.DistinctMaintainerCount,
+		staleness,
+		score,
+		tier,
+	)
+	if err != nil {
+		return err
+	}
+
+	return tx.Commit()
 }
 
 func fetchDBMetrics(db *sqlx.DB) ([]scoring.RawMetrics, error) {
@@ -231,13 +286,7 @@ func fetchDBMetrics(db *sqlx.DB) ([]scoring.RawMetrics, error) {
 			COALESCE(s.review_rounds, 0),
 			COALESCE(s.distinct_maintainer_count, 0),
 			COALESCE(s.staleness_flag, 0)
-		FROM daily_snapshots s
-		INNER JOIN (
-			SELECT repository_id, MAX(snapshot_date) as latest
-			FROM daily_snapshots
-			GROUP BY repository_id
-		) latest ON s.repository_id = latest.repository_id
-		         AND s.snapshot_date = latest.latest
+		FROM latest_snapshots s
 	`)
 	if err != nil {
 		return nil, err

@@ -124,6 +124,7 @@ func main() {
 		internal.POST("/check-pat", handler.CheckPAT(gh))
 		internal.POST("/purge-cache", handler.PurgeCache())
 		internal.POST("/cache/purge-tag", handler.PurgeTagCache())
+		internal.POST("/migrate-latest-snapshots", handler.MigrateLatestSnapshots())
 		internal.DELETE("/repos/:id", handler.DeleteRepo(repoStore))
 	}
 

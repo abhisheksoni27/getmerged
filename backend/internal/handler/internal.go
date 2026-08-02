@@ -206,3 +206,77 @@ func PurgeCache() gin.HandlerFunc {
 		})
 	}
 }
+
+// MigrateLatestSnapshots handles POST /internal/migrate-latest-snapshots
+// Populates/backfills latest_snapshots from existing daily_snapshots table.
+//
+//	@Summary      Migrate latest snapshots
+//	@Description  Backfills latest_snapshots table with latest record for each repo.
+//	@Tags         internal
+//	@Produce      json
+//	@Security     ApiKeyAuth
+//	@Success      200  {object}  map[string]any
+//	@Router       /internal/migrate-latest-snapshots [post]
+func MigrateLatestSnapshots() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		db := middleware.MustDB(c)
+		if db == nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "database context missing"})
+			return
+		}
+
+		slog.Info("migrate-latest-snapshots requested", "ip", c.ClientIP())
+
+		query := `
+			INSERT INTO latest_snapshots (
+				repository_id, snapshot_date,
+				external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
+				first_timer_success_rate, repeat_contributor_rate,
+				maintainer_responsiveness, last_activity_days, review_rounds,
+				distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, updated_at
+			)
+			SELECT
+				s.repository_id, s.snapshot_date,
+				s.external_pr_merge_rate, s.time_to_first_response_hours, s.time_to_merge_hours,
+				s.first_timer_success_rate, s.repeat_contributor_rate,
+				s.maintainer_responsiveness, s.last_activity_days, s.review_rounds,
+				s.distinct_maintainer_count, s.staleness_flag, s.c_rank_score, s.c_rank_tier, CURRENT_TIMESTAMP
+			FROM daily_snapshots s
+			INNER JOIN (
+				SELECT repository_id, MAX(snapshot_date) as max_date
+				FROM daily_snapshots
+				GROUP BY repository_id
+			) latest ON s.repository_id = latest.repository_id AND s.snapshot_date = latest.max_date
+			ON CONFLICT(repository_id) DO UPDATE SET
+				snapshot_date                 = excluded.snapshot_date,
+				external_pr_merge_rate        = excluded.external_pr_merge_rate,
+				time_to_first_response_hours  = excluded.time_to_first_response_hours,
+				time_to_merge_hours           = excluded.time_to_merge_hours,
+				first_timer_success_rate      = excluded.first_timer_success_rate,
+				repeat_contributor_rate       = excluded.repeat_contributor_rate,
+				maintainer_responsiveness     = excluded.maintainer_responsiveness,
+				last_activity_days            = excluded.last_activity_days,
+				review_rounds                 = excluded.review_rounds,
+				distinct_maintainer_count     = excluded.distinct_maintainer_count,
+				staleness_flag                = excluded.staleness_flag,
+				c_rank_score                  = excluded.c_rank_score,
+				c_rank_tier                   = excluded.c_rank_tier,
+				updated_at                    = CURRENT_TIMESTAMP;
+		`
+
+		res, err := db.ExecContext(c.Request.Context(), query)
+		if err != nil {
+			slog.Error("migrate-latest-snapshots failed", "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		rowsAffected, _ := res.RowsAffected()
+		slog.Info("migrate-latest-snapshots completed", "rows_migrated", rowsAffected)
+
+		c.JSON(http.StatusOK, gin.H{
+			"status":        "success",
+			"rows_migrated": rowsAffected,
+		})
+	}
+}

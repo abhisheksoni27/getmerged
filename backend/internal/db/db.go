@@ -4,21 +4,26 @@ import (
 	"strings"
 
 	"github.com/jmoiron/sqlx"
-	_ "github.com/tursodatabase/libsql-client-go/libsql"
 	_ "modernc.org/sqlite"
 )
 
-// Connect opens a database connection and auto-migrates missing tables.
-// DATABASE_URL starting with "libsql://" or "https://" → uses Turso (prod).
-// Anything else → treated as a local SQLite file path (dev).
+// Connect opens a local SQLite database connection, enables PRAGMAs, and auto-migrates tables.
 func Connect(url string) (*sqlx.DB, error) {
-	driver, dsn := resolveDriver(url)
-	db, err := sqlx.Connect(driver, dsn)
+	db, err := sqlx.Connect("sqlite", url)
 	if err != nil {
 		return nil, err
 	}
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(5)
+
+	// Enable WAL mode and foreign keys for high-performance concurrent local SQLite access
+	if _, err := db.Exec(`
+		PRAGMA journal_mode = WAL;
+		PRAGMA synchronous = NORMAL;
+		PRAGMA foreign_keys = ON;
+	`); err != nil {
+		return nil, err
+	}
 
 	if err := AutoMigrate(db); err != nil {
 		return nil, err
@@ -85,6 +90,25 @@ func AutoMigrate(db *sqlx.DB) error {
 		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		processed_at DATETIME
 	);
+
+	CREATE TABLE IF NOT EXISTS latest_snapshots (
+		repository_id TEXT PRIMARY KEY,
+		snapshot_date TEXT NOT NULL,
+		external_pr_merge_rate REAL DEFAULT 0,
+		time_to_first_response_hours REAL DEFAULT 0,
+		time_to_merge_hours REAL DEFAULT 0,
+		first_timer_success_rate REAL DEFAULT 0,
+		repeat_contributor_rate REAL DEFAULT 0,
+		maintainer_responsiveness REAL DEFAULT 0,
+		last_activity_days REAL DEFAULT 180,
+		review_rounds REAL DEFAULT 0,
+		distinct_maintainer_count REAL DEFAULT 0,
+		staleness_flag INTEGER DEFAULT 0,
+		c_rank_score REAL DEFAULT 0,
+		c_rank_tier TEXT DEFAULT 'D',
+		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		FOREIGN KEY(repository_id) REFERENCES repositories(id) ON DELETE CASCADE
+	);
 	`
 	if _, err := db.Exec(schema); err != nil {
 		return err
@@ -124,6 +148,7 @@ func AutoMigrate(db *sqlx.DB) error {
 	indexes := `
 		CREATE INDEX IF NOT EXISTS idx_daily_snapshots_repo_date ON daily_snapshots(repository_id, snapshot_date DESC);
 		CREATE INDEX IF NOT EXISTS idx_daily_snapshots_tier ON daily_snapshots(c_rank_tier);
+		CREATE INDEX IF NOT EXISTS idx_latest_snapshots_tier ON latest_snapshots(c_rank_tier);
 		CREATE INDEX IF NOT EXISTS idx_repositories_language ON repositories(language);
 		CREATE INDEX IF NOT EXISTS idx_repositories_stars ON repositories(stars);
 	`
@@ -140,12 +165,4 @@ func AutoMigrate(db *sqlx.DB) error {
 	}
 
 	return nil
-}
-
-func resolveDriver(url string) (driver, dsn string) {
-	if strings.HasPrefix(url, "libsql://") || strings.HasPrefix(url, "https://") {
-		return "libsql", url
-	}
-	// Local SQLite file — modernc sqlite driver expects a plain path
-	return "sqlite", url
 }

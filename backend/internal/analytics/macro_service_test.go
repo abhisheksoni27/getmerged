@@ -56,6 +56,7 @@ func TestComputeAndCacheMacroStats(t *testing.T) {
 	now := time.Now()
 	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('1', 'go/go', 'go', 'go', 'Go', 100000, ?)`, now)
 	database.MustExec(`INSERT INTO daily_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, time_to_first_response_hours, created_at) VALUES ('1', '2026-07-26', 'S', 98.0, 2.0, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, time_to_first_response_hours) VALUES ('1', '2026-07-26', 'S', 98.0, 2.0)`)
 
 	stats, err := analytics.ComputeAndCacheMacroStats(context.Background(), database)
 	if err != nil {
