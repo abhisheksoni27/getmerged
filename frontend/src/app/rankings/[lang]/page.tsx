@@ -1,57 +1,75 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RepoCard } from "@/components/RepoCard";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
-import { Sparkles, Code2, ArrowLeft, ShieldCheck, Trophy, Flame } from "lucide-react";
+import { Sparkles, Code2, ArrowLeft, ShieldCheck, Trophy } from "lucide-react";
 import Link from "next/link";
+import { Metadata } from "next";
 
-export default function LanguageRankingsPage() {
-  const params = useParams();
-  const rawLang = (params?.lang as string) || "go";
-  
-  // Format slug to title case (e.g. go -> Go, typescript -> TypeScript)
-  const formatLangName = (slug: string) => {
-    const s = slug.toLowerCase();
-    if (s === "typescript") return "TypeScript";
-    if (s === "javascript") return "JavaScript";
-    if (s === "cpp" || s === "cplusplus") return "C++";
-    if (s === "csharp") return "C#";
-    return slug.charAt(0).toUpperCase() + slug.slice(1);
+interface PageProps {
+  params: Promise<{ lang: string }>;
+}
+
+const formatLangName = (slug: string) => {
+  const s = slug.toLowerCase();
+  if (s === "typescript") return "TypeScript";
+  if (s === "javascript") return "JavaScript";
+  if (s === "cpp" || s === "cplusplus") return "C++";
+  if (s === "csharp") return "C#";
+  return slug.charAt(0).toUpperCase() + slug.slice(1);
+};
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { lang } = await params;
+  const languageName = formatLangName(lang);
+
+  const title = `Top Welcoming Open-Source ${languageName} Projects (C-Rank™) — Opendoor`;
+  const description = `Discover high-ranking open-source ${languageName} repositories with fast maintainer response times and high PR merge rates on Opendoor.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `https://opendoor.abhishekco.de/rankings/${lang}`,
+      siteName: "Opendoor",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
+}
 
-  const languageName = formatLangName(rawLang);
-  const [repos, setRepos] = useState<Repo[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+async function getRankingRepos(languageName: string): Promise<Repo[]> {
+  try {
+    const queryParams = new URLSearchParams({
+      language: languageName,
+      sort: "c_rank_score",
+      order: "desc",
+      per_page: "15",
+    });
+    const res = await fetch(`${API_BASE_URL}/api/v1/repos?${queryParams.toString()}`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.data || data.repos || [];
+  } catch (e) {
+    console.error("Failed to fetch ranking repos during SSR", e);
+    return [];
+  }
+}
 
-  useEffect(() => {
-    // Issue #9 Requirement: Consume existing API /api/v1/repos with language & tier filtering
-    const fetchRankingRepos = async () => {
-      setLoading(true);
-      try {
-        const queryParams = new URLSearchParams({
-          language: languageName,
-          sort: "c_rank_score",
-          order: "desc",
-          per_page: "15",
-        });
-        const res = await fetch(`${API_BASE_URL}/api/v1/repos?${queryParams.toString()}`);
-        const data = await res.json();
-        const list = data.data || data.repos || [];
-        setRepos(list);
-      } catch (e) {
-        console.error("Failed to fetch ranking repos", e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRankingRepos();
-  }, [languageName]);
+export default async function LanguageRankingsPage({ params }: PageProps) {
+  const { lang } = await params;
+  const languageName = formatLangName(lang);
+  const repos = await getRankingRepos(languageName);
 
   return (
     <div className="relative min-h-screen flex flex-col bg-white">
@@ -85,7 +103,7 @@ export default function LanguageRankingsPage() {
           </p>
         </div>
 
-        {/* Repositories Grid (Powered by existing /api/v1/repos) */}
+        {/* Repositories Grid */}
         <div className="mb-6 flex items-center justify-between border-b border-zinc-200 pb-4">
           <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
@@ -94,13 +112,7 @@ export default function LanguageRankingsPage() {
           <span className="text-xs text-zinc-500 font-sans">Updated Daily via GitHub GraphQL</span>
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-10">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-48 rounded-xl border border-zinc-200 bg-zinc-50 animate-pulse p-5" />
-            ))}
-          </div>
-        ) : repos.length > 0 ? (
+        {repos.length > 0 ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-12">
             {repos.map((repo) => (
               <RepoCard key={repo.id} repo={repo} />
