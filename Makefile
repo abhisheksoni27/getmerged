@@ -1,4 +1,11 @@
-.PHONY: build swagger test lint run dev build-linux build-linux-arm deploy score-repo check-pat
+# Save this text inside a file named 'Makefile' in your project root
+.PHONY: setup
+
+setup:
+	@echo "🔧 Configuring local Git hook paths..."
+	git config core.hooksPath .githooks
+	chmod +x .githooks/*
+	@echo "✅ Setup complete! Code review graphs will auto-update on git pull."
 
 COMMIT_HASH ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
 LDFLAGS := -s -w -X github.com/abhisheksoni27/opendoor/internal/handler.CommitHash=$(COMMIT_HASH)
