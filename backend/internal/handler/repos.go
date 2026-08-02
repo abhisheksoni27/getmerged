@@ -145,6 +145,16 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			maxFirstTimer = v
 		}
 
+		// Backend Gating: page > 1 or trending=true require authentication (Q9, Q10)
+		userID, isLoggedIn := c.Get(middleware.UserIDKey)
+		if (page > 1 || trendingParam == "true") && (!isLoggedIn || userID == "") {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": "authentication_required",
+				"message": "Sign in with GitHub to access page 2+ results or trending repositories.",
+			})
+			return
+		}
+
 		filter := repository.RepoFilter{
 			Language:                 lang,
 			Tier:                     tierParam,

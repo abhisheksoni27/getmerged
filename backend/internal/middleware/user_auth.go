@@ -46,3 +46,29 @@ func UserAuth(jwtSecret string) gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+// OptionalUserAuth parses JWT token if present and sets user identity context, but does not abort if missing.
+func OptionalUserAuth(jwtSecret string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		authHeader := c.GetHeader("Authorization")
+		var tokenStr string
+
+		if strings.HasPrefix(authHeader, "Bearer ") {
+			tokenStr = strings.TrimPrefix(authHeader, "Bearer ")
+		} else {
+			cookieStr, err := c.Cookie("opendoor_token")
+			if err == nil && cookieStr != "" {
+				tokenStr = cookieStr
+			}
+		}
+
+		if tokenStr != "" {
+			if claims, err := auth.ParseToken(tokenStr, jwtSecret); err == nil {
+				c.Set(UserIDKey, claims.UserID)
+				c.Set(UsernameKey, claims.Username)
+			}
+		}
+
+		c.Next()
+	}
+}

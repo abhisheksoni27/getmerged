@@ -83,6 +83,7 @@ func main() {
 
 	// Public API
 	api := r.Group("/api/v1")
+	api.Use(middleware.OptionalUserAuth(cfg.JWTSecret))
 	{
 		api.GET("/health", handler.Health())
 		api.GET("/repos", handler.ListRepos(repoStore))
