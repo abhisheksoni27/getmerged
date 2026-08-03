@@ -70,15 +70,75 @@ func (c *BackgroundCrawler) runLoop() {
 	ticker := time.NewTicker(3 * time.Second)
 	defer ticker.Stop()
 
+	// Run scheduler every 10 minutes to populate queue
+	scheduleTicker := time.NewTicker(10 * time.Minute)
+	defer scheduleTicker.Stop()
+
+	// Initial seed of due repos on startup
+	c.EnqueueDueRepos()
+
 	for {
 		select {
 		case <-c.stopChan:
 			slog.Info("background crawler: worker loop terminated")
 			return
+		case <-scheduleTicker.C:
+			c.EnqueueDueRepos()
 		case <-ticker.C:
 			c.processNextWorkItem()
 			c.checkAndSendPulseDigest()
 		}
+	}
+}
+
+// EnqueueDueRepos acts as a decoupled producer: checks repositories due for rescanning based on adaptive schedules
+// and enqueues them into indexing_queue with priority.
+func (c *BackgroundCrawler) EnqueueDueRepos() {
+	slog.Info("background crawler producer: checking due repos to enqueue")
+	rows, err := c.db.Query(`
+		SELECT r.full_name, r.owner, r.name,
+		       COALESCE(ls.c_rank_tier, 'D') AS tier
+		FROM repositories r
+		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
+		WHERE r.next_rescan_at <= CURRENT_TIMESTAMP OR r.updated_at < ?
+		ORDER BY r.next_rescan_at ASC
+		LIMIT 100
+	`, time.Now().UTC().Add(-24*time.Hour))
+	if err != nil {
+		slog.Error("background crawler producer: query due repos failed", "err", err)
+		return
+	}
+	defer rows.Close()
+
+	enqueuedCount := 0
+	for rows.Next() {
+		var fullName, owner, name, tier string
+		if err := rows.Scan(&fullName, &owner, &name, &tier); err != nil {
+			continue
+		}
+
+		// Set priority based on tier: User requests = 1, S/A tier = 2, B/C tier = 3, D tier = 4
+		priority := 3
+		switch tier {
+		case "S", "A":
+			priority = 2
+		case "D":
+			priority = 4
+		}
+
+		_, err := c.db.Exec(`
+			INSERT INTO indexing_queue (full_name, owner, name, priority, status, created_at)
+			VALUES (?, ?, ?, ?, 'pending', CURRENT_TIMESTAMP)
+			ON CONFLICT(full_name) DO UPDATE SET
+				priority = MIN(indexing_queue.priority, excluded.priority)
+				WHERE status = 'pending'
+		`, fullName, owner, name, priority)
+		if err == nil {
+			enqueuedCount++
+		}
+	}
+	if enqueuedCount > 0 {
+		slog.Info("background crawler producer: enqueued due repos", "count", enqueuedCount)
 	}
 }
 
@@ -105,7 +165,7 @@ func (c *BackgroundCrawler) processNextWorkItem() {
 		}
 	}
 
-	// Priority 1: User-requested indexing queue (from indexing_queue table)
+	// Process queue items by priority (P1 User Queue -> P2 S/A Rescan -> P3 B/C Rescan -> P4 D Rescan)
 	processedQueue, err := c.processIndexingQueueItem()
 	if err != nil {
 		slog.Error("background crawler: error processing indexing_queue", "err", err)
@@ -114,35 +174,35 @@ func (c *BackgroundCrawler) processNextWorkItem() {
 		return
 	}
 
-	// Priority 2: Adaptive Rescan (repos due for rescan according to next_rescan_at)
-	processedRescan, err := c.processAdaptiveRescanItem()
-	if err != nil {
-		slog.Error("background crawler: error processing adaptive rescan", "err", err)
-	}
-	if processedRescan {
-		return
-	}
-
-	// Priority 3: Novel Repo Discovery (slide date windows & star buckets for unindexed repos)
+	// Priority 4: Novel Repo Discovery (slide date windows & star buckets when queue is empty)
 	if err := c.processDiscoveryBatch(); err != nil {
 		slog.Error("background crawler: error processing discovery batch", "err", err)
 	}
 }
 
+type queueItemExt struct {
+	ID                int64  `db:"id"`
+	FullName          string `db:"full_name"`
+	Owner             string `db:"owner"`
+	Name              string `db:"name"`
+	RequestedByUserID *int64 `db:"requested_by_user_id"`
+	Priority          int    `db:"priority"`
+}
+
 func (c *BackgroundCrawler) processIndexingQueueItem() (bool, error) {
-	var item queueItem
+	var item queueItemExt
 	err := c.db.Get(&item, `
-		SELECT id, full_name, owner, name, requested_by_user_id
+		SELECT id, full_name, owner, name, requested_by_user_id, priority
 		FROM indexing_queue
 		WHERE status = 'pending'
-		ORDER BY created_at ASC
+		ORDER BY priority ASC, created_at ASC
 		LIMIT 1
 	`)
 	if err != nil {
-		return false, nil // No pending user items
+		return false, nil // No pending items
 	}
 
-	slog.Info("background crawler [P1 User Queue]: processing", "repo", item.FullName)
+	slog.Info("background crawler [Queue Worker]: processing", "repo", item.FullName, "priority", item.Priority)
 	_, _ = c.db.Exec("UPDATE indexing_queue SET status = 'processing' WHERE id = ?", item.ID)
 
 	repoID, err := upsertRepoRow(c.db, item.Owner, item.Name, item.FullName)
@@ -159,7 +219,7 @@ func (c *BackgroundCrawler) processIndexingQueueItem() (bool, error) {
 	}
 
 	_, _ = c.db.Exec("UPDATE indexing_queue SET status = 'completed', processed_at = ? WHERE id = ?", time.Now().UTC(), item.ID)
-	slog.Info("background crawler [P1 User Queue]: completed", "repo", item.FullName)
+	slog.Info("background crawler [Queue Worker]: completed", "repo", item.FullName, "priority", item.Priority)
 
 	if item.RequestedByUserID != nil && *item.RequestedByUserID > 0 {
 		payload := fmt.Sprintf(`{"repo_full_name":"%s","message":"Your requested repository %s has been scored!"}`, item.FullName, item.FullName)
@@ -169,38 +229,6 @@ func (c *BackgroundCrawler) processIndexingQueueItem() (bool, error) {
 		`, *item.RequestedByUserID, payload, time.Now().UTC())
 	}
 
-	return true, nil
-}
-
-func (c *BackgroundCrawler) processAdaptiveRescanItem() (bool, error) {
-	var r repoRow
-	err := c.db.Get(&r, `
-		SELECT id, full_name, owner, name, updated_at, consecutive_stagnant_scans
-		FROM repositories
-		WHERE next_rescan_at <= CURRENT_TIMESTAMP OR updated_at < ?
-		ORDER BY next_rescan_at ASC, updated_at ASC
-		LIMIT 1
-	`, time.Now().UTC().Add(-24*time.Hour))
-	if err != nil {
-		return false, nil // No repos due for rescan
-	}
-
-	slog.Info("background crawler [P2 Adaptive Rescan]: processing", "repo", r.FullName)
-
-	existingMetrics, err := fetchDBMetrics(c.db)
-	if err != nil {
-		slog.Warn("background crawler: fetchDBMetrics failed", "err", err)
-	}
-
-	_, err = scoreAndSaveRepo(c.db, c.gh, r.ID, r.Owner, r.Name, r.FullName, existingMetrics)
-	if err != nil {
-		slog.Error("background crawler [P2 Adaptive Rescan]: failed — touching repo to defer retry", "repo", r.FullName, "err", err)
-		// Defer retry by 1 hour on error
-		_, _ = c.db.Exec("UPDATE repositories SET next_rescan_at = ? WHERE id = ?", time.Now().UTC().Add(1*time.Hour), r.ID)
-		return true, err
-	}
-
-	slog.Info("background crawler [P2 Adaptive Rescan]: completed", "repo", r.FullName)
 	return true, nil
 }
 
