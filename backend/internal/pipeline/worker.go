@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -15,23 +16,27 @@ import (
 
 // BackgroundCrawler manages rate-budget-aware continuous repository scoring.
 type BackgroundCrawler struct {
-	db        *sqlx.DB
-	gh        *ghclient.Client
-	telegram  *notification.TelegramNotifier
-	running   atomic.Bool
-	stopChan  chan struct{}
-	lastLang  int
-	lastBucket int
-	lastPulse  time.Time
+	db                 *sqlx.DB
+	gh                 *ghclient.Client
+	telegram           *notification.TelegramNotifier
+	running            atomic.Bool
+	stopChan           chan struct{}
+	lastLang           int
+	lastBucket         int
+	lastPulse          time.Time
+	scannedCounter     atomic.Int64
+	totalDurationMs    atomic.Int64
+	lastMetricWindow   time.Time
 }
 
 // NewBackgroundCrawler initializes a BackgroundCrawler instance.
 func NewBackgroundCrawler(db *sqlx.DB, gh *ghclient.Client, telegram *notification.TelegramNotifier) *BackgroundCrawler {
 	return &BackgroundCrawler{
-		db:       db,
-		gh:       gh,
-		telegram: telegram,
-		stopChan: make(chan struct{}),
+		db:               db,
+		gh:               gh,
+		telegram:         telegram,
+		stopChan:         make(chan struct{}),
+		lastMetricWindow: time.Now().UTC(),
 	}
 }
 
@@ -42,12 +47,12 @@ func (c *BackgroundCrawler) Start() {
 		return
 	}
 
-	slog.Info("background crawler: starting continuous queue engine")
+	slog.Info("background crawler: starting continuous queue engine (8-worker parallel pool)")
 	if c.telegram.IsConfigured() {
 		go func() {
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
-			err := c.telegram.SendTextMessage(ctx, "🚀 *Opendoor Background Crawler Worker Started*\n\nContinuous priority-queue engine is active and scanning repositories.")
+			err := c.telegram.SendTextMessage(ctx, "🚀 *Opendoor Background Crawler Worker Started*\n\nContinuous 8-worker parallel queue engine is active with real-time latency telemetry.")
 			if err != nil {
 				slog.Error("background crawler: startup telegram send failed", "err", err)
 			} else {
@@ -67,7 +72,7 @@ func (c *BackgroundCrawler) Stop() {
 }
 
 func (c *BackgroundCrawler) runLoop() {
-	ticker := time.NewTicker(3 * time.Second)
+	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
 
 	// Run scheduler every 10 minutes to populate queue
@@ -102,7 +107,7 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
 		WHERE r.updated_at < ? AND COALESCE(ls.c_rank_tier, 'D') != 'D'
 		ORDER BY r.updated_at ASC
-		LIMIT 100
+		LIMIT 200
 	`, time.Now().UTC().Add(-24*time.Hour))
 	if err != nil {
 		slog.Error("background crawler producer: query due repos failed", "err", err)
@@ -166,12 +171,12 @@ func (c *BackgroundCrawler) processNextWorkItem() {
 		}
 	}
 
-	// Process queue items by priority (P1 User Queue -> P2 S/A Rescan -> P3 B/C Rescan -> P4 D Rescan)
-	processedQueue, err := c.processIndexingQueueItem()
+	// Process queue items concurrently (up to 8 worker routines)
+	processedCount, err := c.processIndexingQueueBatch(8)
 	if err != nil {
-		slog.Error("background crawler: error processing indexing_queue", "err", err)
+		slog.Error("background crawler: error processing indexing_queue batch", "err", err)
 	}
-	if processedQueue {
+	if processedCount > 0 {
 		return
 	}
 
@@ -190,47 +195,80 @@ type queueItemExt struct {
 	Priority          int    `db:"priority"`
 }
 
-func (c *BackgroundCrawler) processIndexingQueueItem() (bool, error) {
-	var item queueItemExt
-	err := c.db.Get(&item, `
+func (c *BackgroundCrawler) processIndexingQueueBatch(batchSize int) (int, error) {
+	var items []queueItemExt
+	err := c.db.Select(&items, `
 		SELECT id, full_name, owner, name, requested_by_user_id, priority
 		FROM indexing_queue
 		WHERE status = 'pending'
 		ORDER BY priority ASC, created_at ASC
-		LIMIT 1
-	`)
-	if err != nil {
-		return false, nil // No pending items
+		LIMIT ?
+	`, batchSize)
+	if err != nil || len(items) == 0 {
+		return 0, nil // No pending items
 	}
 
-	slog.Info("background crawler [Queue Worker]: processing", "repo", item.FullName, "priority", item.Priority)
-	_, _ = c.db.Exec("UPDATE indexing_queue SET status = 'processing' WHERE id = ?", item.ID)
-
-	repoID, err := upsertRepoRow(c.db, item.Owner, item.Name, item.FullName)
-	if err != nil {
-		_, _ = c.db.Exec("UPDATE indexing_queue SET status = 'failed' WHERE id = ?", item.ID)
-		return true, err
+	// Mark batch as processing
+	ids := make([]int64, len(items))
+	for i, item := range items {
+		ids[i] = item.ID
+	}
+	query, args, inErr := sqlx.In("UPDATE indexing_queue SET status = 'processing' WHERE id IN (?)", ids)
+	if inErr == nil {
+		_, _ = c.db.Exec(c.db.Rebind(query), args...)
 	}
 
+	var wg sync.WaitGroup
 	existingMetrics, _ := fetchDBMetrics(c.db)
-	_, scoreErr := scoreAndSaveRepo(c.db, c.gh, repoID, item.Owner, item.Name, item.FullName, existingMetrics)
-	if scoreErr != nil {
-		_, _ = c.db.Exec("UPDATE indexing_queue SET status = 'failed' WHERE id = ?", item.ID)
-		return true, scoreErr
+
+	batchStart := time.Now()
+	slog.Info("background crawler batch started", "batch_size", len(items))
+
+	for _, item := range items {
+		wg.Add(1)
+		go func(itm queueItemExt) {
+			defer wg.Done()
+			itemStart := time.Now()
+
+			repoID, err := upsertRepoRow(c.db, itm.Owner, itm.Name, itm.FullName)
+			if err != nil {
+				_, _ = c.db.Exec("UPDATE indexing_queue SET status = 'failed' WHERE id = ?", itm.ID)
+				return
+			}
+
+			_, scoreErr := scoreAndSaveRepo(c.db, c.gh, repoID, itm.Owner, itm.Name, itm.FullName, existingMetrics)
+			duration := time.Since(itemStart)
+
+			if scoreErr != nil {
+				slog.Error("background crawler item failed", "repo", itm.FullName, "priority", itm.Priority, "duration_ms", duration.Milliseconds(), "err", scoreErr)
+				_, _ = c.db.Exec("UPDATE indexing_queue SET status = 'failed' WHERE id = ?", itm.ID)
+				return
+			}
+
+			_, _ = c.db.Exec("UPDATE indexing_queue SET status = 'completed', processed_at = ? WHERE id = ?", time.Now().UTC(), itm.ID)
+			slog.Info("background crawler item completed", "repo", itm.FullName, "priority", itm.Priority, "duration_ms", duration.Milliseconds())
+
+			// Update rolling telemetry stats
+			c.scannedCounter.Add(1)
+			c.totalDurationMs.Add(duration.Milliseconds())
+
+			if itm.RequestedByUserID != nil && *itm.RequestedByUserID > 0 {
+				payload := fmt.Sprintf(`{"repo_full_name":"%s","message":"Your requested repository %s has been scored!"}`, itm.FullName, itm.FullName)
+				_, _ = c.db.Exec(`
+					INSERT INTO notification_queue (user_id, type, payload, status, created_at)
+					VALUES (?, 'repo_indexed', ?, 'pending', ?)
+				`, *itm.RequestedByUserID, payload, time.Now().UTC())
+			}
+		}(item)
 	}
 
-	_, _ = c.db.Exec("UPDATE indexing_queue SET status = 'completed', processed_at = ? WHERE id = ?", time.Now().UTC(), item.ID)
-	slog.Info("background crawler [Queue Worker]: completed", "repo", item.FullName, "priority", item.Priority)
+	wg.Wait()
 
-	if item.RequestedByUserID != nil && *item.RequestedByUserID > 0 {
-		payload := fmt.Sprintf(`{"repo_full_name":"%s","message":"Your requested repository %s has been scored!"}`, item.FullName, item.FullName)
-		_, _ = c.db.Exec(`
-			INSERT INTO notification_queue (user_id, type, payload, status, created_at)
-			VALUES (?, 'repo_indexed', ?, 'pending', ?)
-		`, *item.RequestedByUserID, payload, time.Now().UTC())
-	}
+	totalBatchDur := time.Since(batchStart)
+	avgMsPerRepo := totalBatchDur.Milliseconds() / int64(len(items))
+	slog.Info("background crawler batch finished", "batch_size", len(items), "total_duration_ms", totalBatchDur.Milliseconds(), "avg_ms_per_repo", avgMsPerRepo)
 
-	return true, nil
+	return len(items), nil
 }
 
 func (c *BackgroundCrawler) processDiscoveryBatch() error {
@@ -293,14 +331,29 @@ func (c *BackgroundCrawler) checkAndSendPulseDigest() {
 
 	_, rl, _ := c.gh.CheckToken()
 
+	scanned := c.scannedCounter.Swap(0)
+	totDur := c.totalDurationMs.Swap(0)
+	windowMinutes := time.Since(c.lastMetricWindow).Minutes()
+	c.lastMetricWindow = time.Now().UTC()
+
+	reposPerMin := 0.0
+	avgMsPerRepo := int64(0)
+	if windowMinutes > 0 {
+		reposPerMin = float64(scanned) / windowMinutes
+	}
+	if scanned > 0 {
+		avgMsPerRepo = totDur / scanned
+	}
+
 	msg := fmt.Sprintf(
 		"📊 *Opendoor Crawler Pulse Digest*\n\n"+
 			"• *Total Repos Scored:* %d\n"+
 			"• *S-Tier Super Welcoming:* %d\n"+
-			"• *User Queue Pending:* %d\n"+
+			"• *Queue Pending:* %d\n"+
+			"• *Scanning Speed:* %.1f repos/min (avg %d ms/repo)\n"+
 			"• *GitHub API Budget:* %d / 5,000 remaining\n\n"+
-			"🤖 Background crawler engine is active 24/7.",
-		totalScored, sTierCount, pendingUserQueue, rl.Remaining,
+			"🤖 8-worker parallel engine active 24/7.",
+		totalScored, sTierCount, pendingUserQueue, reposPerMin, avgMsPerRepo, rl.Remaining,
 	)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
