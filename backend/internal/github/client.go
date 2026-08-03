@@ -600,6 +600,12 @@ func (c *Client) handleRateLimit(rl rateLimitInfo) {
 	time.Sleep(wait)
 }
 
+func (c *Client) GetRateLimitInfo() rateLimitInfo {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.rlInfo
+}
+
 func (c *Client) cursor(ptr **string, val string) {
 	*ptr = &val
 }

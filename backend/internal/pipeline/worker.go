@@ -329,7 +329,10 @@ func (c *BackgroundCrawler) checkAndSendPulseDigest() {
 	var pendingUserQueue int
 	_ = c.db.Get(&pendingUserQueue, "SELECT COUNT(1) FROM indexing_queue WHERE status = 'pending'")
 
-	_, rl, _ := c.gh.CheckToken()
+	rl := c.gh.GetRateLimitInfo()
+	if rl.Remaining == 0 {
+		_, rl, _ = c.gh.CheckToken()
+	}
 
 	scanned := c.scannedCounter.Swap(0)
 	totDur := c.totalDurationMs.Swap(0)
