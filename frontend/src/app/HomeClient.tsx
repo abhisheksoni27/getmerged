@@ -10,7 +10,7 @@ import { Repo, MacroStats } from "@/types/opendoor";
 import {
   Search,
   Flame,
-  Filter,
+  Star,
   Code2,
   ChevronLeft,
   ChevronRight,
@@ -20,7 +20,6 @@ import {
   Bell,
   CheckCircle2,
   ArrowRight,
-  Users,
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 import posthog from "posthog-js";
@@ -267,21 +266,21 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-white overflow-hidden">
+    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] overflow-hidden">
       <RelativityCanvas />
       <Header />
 
       {/* Hero Section */}
-      <section className="relative mx-auto max-w-5xl px-4 pt-16 pb-12 text-center sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-6xl font-mono">
+      <section className="relative mx-auto max-w-5xl px-4 pt-20 pb-16 text-center sm:px-6 lg:px-8">
+        <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-6xl font-space">
           Find open-source repos that <span className="text-emerald-600">actually merge</span> your PRs.
         </h1>
-        <p className="mx-auto mt-4 max-w-3xl text-base text-zinc-600 sm:text-lg leading-relaxed font-sans">
+        <p className="mx-auto mt-6 max-w-3xl text-base text-zinc-600 sm:text-lg leading-relaxed font-sans">
           Think of it as <strong>Glassdoor for open-source</strong>: opendoor scores public GitHub repositories using proprietary <strong>C-Rank™</strong> metrics based on objective PR merge rates, response speeds, and first-timer maintainer vibes.
         </p>
 
         {/* Macro Metrics Bar */}
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4 max-w-3xl mx-auto rounded-xl border border-zinc-200 bg-white p-3 sm:p-4 shadow-xs">
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4 max-w-3xl mx-auto rounded-2xl bg-white p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
           <div>
             <div className="text-xl sm:text-2xl font-bold font-mono text-zinc-900">
               {stats?.total_repos ? stats.total_repos.toLocaleString() : totalReposCount > 0 ? totalReposCount.toLocaleString() : "—"}
@@ -320,7 +319,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
       {/* Main Filter & Leaderboard Grid */}
       <main className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 flex-1 w-full">
         {/* Controls Bar */}
-        <div className="sticky top-16 sm:top-20 z-40 mb-6 sm:mb-8 rounded-xl border border-zinc-200 bg-white/95 p-3 sm:p-4 shadow-sm backdrop-blur-md space-y-3">
+        <div className="sticky top-16 sm:top-20 z-40 mb-8 rounded-2xl bg-white/80 p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.02)] backdrop-blur-md space-y-4">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             {/* Search Input */}
             <div className="relative flex-1">
@@ -330,26 +329,25 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 placeholder="Search repo by name, owner, or technology..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full rounded-lg border border-zinc-200 bg-zinc-50/50 pl-9 pr-4 py-2 text-xs sm:text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900 font-mono transition-all"
+                className="w-full rounded-xl border border-transparent bg-zinc-100/50 pl-9 pr-4 py-2.5 text-xs sm:text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-300 focus:bg-white focus:outline-none focus:ring-0 font-sans transition-all"
               />
             </div>
 
             {/* Trending Toggle */}
             <button
               onClick={handleTrendingToggle}
-              className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all shrink-0 ${
+              className={`inline-flex items-center gap-1.5 rounded-xl border px-4 py-2.5 text-xs font-medium transition-all shrink-0 cursor-pointer ${
                 trendingOnly
-                  ? "border-orange-300 bg-orange-50 text-orange-700 shadow-xs"
-                  : "border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50"
+                  ? "border-orange-200 bg-orange-50 text-orange-700 shadow-xs"
+                  : "border-zinc-100 bg-zinc-50 text-zinc-600 hover:bg-zinc-100/80"
               }`}
             >
               <Flame className={`h-3.5 w-3.5 ${trendingOnly ? "fill-orange-500 text-orange-500" : ""}`} />
               Daily Trending Repos
             </button>
           </div>
-
-          {/* Vibe Tier Pills */}
-          <div className="flex flex-wrap items-center gap-1.5 border-t border-zinc-100 pt-3 text-xs">
+                  {/* Vibe Tier Pills */}
+          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
             <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
               <Sparkles className="h-3 w-3 text-emerald-600" /> Vibe:
             </span>
@@ -357,7 +355,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               <button
                 key={t.value}
                 onClick={() => handleTierChange(t.value)}
-                className={`rounded-md px-2.5 py-1 font-mono text-[11px] sm:text-xs active:scale-95 transition-all ${
+                className={`rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs active:scale-95 transition-all cursor-pointer ${
                   selectedTier === t.value
                     ? t.value === "S"
                       ? "bg-emerald-600 text-white shadow-xs"
@@ -368,7 +366,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                       : t.value === "C"
                       ? "bg-purple-600 text-white shadow-xs"
                       : "bg-zinc-900 text-white shadow-xs"
-                    : "border border-zinc-200 bg-zinc-100/80 text-zinc-600 hover:bg-zinc-200/80"
+                    : "bg-zinc-100/60 hover:bg-zinc-100 text-zinc-600"
                 }`}
               >
                 {t.label}
@@ -377,9 +375,9 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           </div>
 
           {/* Language & Bucket Filter Pills */}
-          <div className="flex flex-col gap-3 border-t border-zinc-100 pt-3 sm:flex-row sm:items-center sm:justify-between text-xs">
+          <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between text-xs">
             {/* Language Pills */}
-            <div className="flex flex-wrap items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
                 <Code2 className="h-3 w-3" /> Lang:
               </span>
@@ -387,10 +385,10 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 <button
                   key={lang}
                   onClick={() => handleLangChange(lang)}
-                  className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 font-mono text-[11px] sm:text-xs active:scale-95 transition-all ${
+                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs active:scale-95 transition-all cursor-pointer ${
                     selectedLang === lang
                       ? "bg-zinc-900 text-white shadow-xs"
-                      : "border border-zinc-200 bg-zinc-50 text-zinc-500 hover:bg-zinc-100"
+                      : "bg-zinc-100/60 text-zinc-500 hover:bg-zinc-100"
                   }`}
                 >
                   {lang !== "All" && <LangLogo language={lang} />}
@@ -399,19 +397,19 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               ))}
             </div>
 
-            {/* Bucket Pills */}
-            <div className="flex flex-wrap items-center gap-1.5">
+            {/* Stars Bucket Filter */}
+            <div className="flex flex-wrap items-center gap-2">
               <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
-                <Filter className="h-3 w-3" /> Stars:
+                <Star className="h-3 w-3" /> Stars:
               </span>
               {buckets.map((b) => (
                 <button
                   key={b}
                   onClick={() => handleBucketChange(b)}
-                  className={`rounded-md px-2.5 py-1 font-mono text-[11px] sm:text-xs active:scale-95 transition-all ${
+                  className={`rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs active:scale-95 transition-all cursor-pointer ${
                     selectedBucket === b
                       ? "bg-zinc-900 text-white shadow-xs"
-                      : "border border-zinc-200 bg-zinc-50 text-zinc-500 hover:bg-zinc-100"
+                      : "bg-zinc-100/60 text-zinc-500 hover:bg-zinc-100"
                   }`}
                 >
                   {b}
@@ -420,19 +418,19 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             </div>
           </div>
 
-          {/* First Timer Success Rate Pills */}
-          <div className="flex flex-wrap items-center gap-1.5 border-t border-zinc-100 pt-3 text-xs">
+          {/* First Timer Support Filter */}
+          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
             <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
-              <Users className="h-3 w-3" /> First Timer:
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> First-Timer friendly:
             </span>
             {firstTimerBuckets.map((b) => (
               <button
                 key={b}
                 onClick={() => handleFirstTimerBucketChange(b)}
-                className={`rounded-md px-2.5 py-1 font-mono text-[11px] sm:text-xs active:scale-95 transition-all ${
+                className={`rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs active:scale-95 transition-all cursor-pointer ${
                   selectedFirstTimerBucket === b
                     ? "bg-zinc-900 text-white shadow-xs"
-                    : "border border-zinc-200 bg-zinc-50 text-zinc-500 hover:bg-zinc-100"
+                    : "bg-zinc-100/60 text-zinc-500 hover:bg-zinc-100"
                 }`}
               >
                 {b}
