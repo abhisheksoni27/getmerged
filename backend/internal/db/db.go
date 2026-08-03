@@ -206,5 +206,13 @@ func AutoMigrate(db *sqlx.DB) error {
 		}
 	}
 
+	// Safe migration: add priority column to indexing_queue if missing
+	var hasPriority int
+	_ = db.Get(&hasPriority, "SELECT COUNT(1) FROM pragma_table_info('indexing_queue') WHERE name = 'priority'")
+	if hasPriority == 0 {
+		_, _ = db.Exec(`ALTER TABLE indexing_queue ADD COLUMN priority INTEGER DEFAULT 1 NOT NULL`)
+		_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_indexing_queue_status_priority ON indexing_queue(status, priority, created_at)`)
+	}
+
 	return nil
 }
