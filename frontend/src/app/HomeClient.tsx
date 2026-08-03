@@ -466,8 +466,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
         ) : repos.length > 0 ? (
           <>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-10">
-              {repos.map((repo) => (
-                <RepoCard key={repo.id} repo={repo} isLoggedIn={isLoggedIn} />
+              {repos.map((repo, index) => (
+                <div
+                  key={repo.id}
+                  className="opacity-0 animate-fade-slide-up"
+                  style={{ animationDelay: `${index * 40}ms` }}
+                >
+                  <RepoCard repo={repo} isLoggedIn={isLoggedIn} />
+                </div>
               ))}
             </div>
 
