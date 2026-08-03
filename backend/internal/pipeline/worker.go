@@ -100,7 +100,7 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		       COALESCE(ls.c_rank_tier, 'D') AS tier
 		FROM repositories r
 		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
-		WHERE r.updated_at < ?
+		WHERE r.updated_at < ? AND COALESCE(ls.c_rank_tier, 'D') != 'D'
 		ORDER BY r.updated_at ASC
 		LIMIT 100
 	`, time.Now().UTC().Add(-24*time.Hour))
@@ -117,13 +117,14 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 			continue
 		}
 
-		// Set priority based on tier: User requests = 1, S/A tier = 2, B/C tier = 3, D tier = 4
+		if tier == "D" {
+			continue // Skip D-tier rescans
+		}
+
+		// Set priority based on tier: User requests = 1, S/A tier = 2, B/C tier = 3
 		priority := 3
-		switch tier {
-		case "S", "A":
+		if tier == "S" || tier == "A" {
 			priority = 2
-		case "D":
-			priority = 4
 		}
 
 		_, err := c.db.Exec(`
