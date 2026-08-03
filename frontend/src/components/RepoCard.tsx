@@ -19,17 +19,17 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
   const getRankBadgeClass = (r?: string) => {
     switch (r) {
       case "S":
-        return "bg-brand-cream text-brand-dark border-brand-dark shadow-[2px_2px_0px_#222831] rotate-1";
+        return "bg-brand-cream text-brand-dark border-brand-dark shadow-[2px_2px_0px_#222831] rotate-1 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#222831]";
       case "A":
-        return "bg-blue-100 text-blue-900 border-blue-900 shadow-[2px_2px_0px_#1e3a8a] -rotate-1";
+        return "bg-blue-100 text-blue-900 border-blue-900 shadow-[2px_2px_0px_#1e3a8a] -rotate-1 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#1e3a8a]";
       case "B":
-        return "bg-amber-100 text-amber-900 border-amber-900 shadow-[2px_2px_0px_#78350f] rotate-1";
+        return "bg-amber-100 text-amber-900 border-amber-900 shadow-[2px_2px_0px_#78350f] rotate-1 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#78350f]";
       case "C":
-        return "bg-purple-100 text-purple-900 border-purple-900 shadow-[2px_2px_0px_#581c87] -rotate-1";
+        return "bg-purple-100 text-purple-900 border-purple-900 shadow-[2px_2px_0px_#581c87] -rotate-1 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#581c87]";
       case "D":
-        return "bg-rose-100 text-rose-900 border-rose-900 shadow-[2px_2px_0px_#9f123b] rotate-1";
+        return "bg-rose-100 text-rose-900 border-rose-900 shadow-[2px_2px_0px_#9f123b] rotate-1 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#9f123b]";
       default:
-        return "bg-zinc-100 text-zinc-800 border-zinc-700 shadow-[2px_2px_0px_#27272a]";
+        return "bg-zinc-100 text-zinc-800 border-zinc-700 shadow-[2px_2px_0px_#27272a] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#27272a]";
     }
   };
 
@@ -145,7 +145,7 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
           {firstTimerDisplay && (
             <>
               <span>•</span>
-              <div className="flex items-center gap-1 font-bold text-brand-dark bg-brand-cream border border-brand-dark/20 px-2 py-0.5 rounded-lg shadow-[1px_1px_0px_#222831]">
+              <div className="flex items-center gap-1 font-bold text-brand-dark bg-brand-cream border border-brand-dark/20 px-2 py-0.5 rounded-lg shadow-[1px_1px_0px_#222831] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all">
                 <ShieldCheck className="h-3.5 w-3.5 text-brand-dark shrink-0" />
                 <span>{firstTimerDisplay}</span>
               </div>

@@ -74,9 +74,9 @@ export function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-3 py-3 sm:px-6 lg:px-8">
         {/* Brand Logo matching favicon.svg */}
         <Link href="/" className="flex items-center gap-2 group shrink-0">
-          <div className="relative flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg bg-zinc-900 text-white font-space font-bold text-[11px] sm:text-xs shadow-xs group-hover:scale-105 transition-transform">
+          <div className="relative flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg bg-zinc-900 text-white font-space font-bold text-[11px] sm:text-xs shadow-xs group-hover:scale-105 group-hover:rotate-12 transition-transform duration-300">
             <span>OD</span>
-            <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-brand-cream" />
           </div>
           <span className="font-space text-sm sm:text-base font-bold tracking-tight text-zinc-900">opendoor</span>
         </Link>
