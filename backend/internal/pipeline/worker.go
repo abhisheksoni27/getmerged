@@ -107,7 +107,7 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
 		WHERE r.updated_at < ? AND COALESCE(ls.c_rank_tier, 'D') != 'D'
 		ORDER BY r.updated_at ASC
-		LIMIT 200
+		LIMIT 1000
 	`, time.Now().UTC().Add(-24*time.Hour))
 	if err != nil {
 		slog.Error("background crawler producer: query due repos failed", "err", err)
