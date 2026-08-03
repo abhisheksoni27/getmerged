@@ -94,12 +94,12 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
     <Link
       href={`/repo/${ownerPart}/${namePart}`}
       onClick={handleClick}
-      className="group relative flex flex-col justify-between rounded-xl border border-zinc-200 bg-white p-5 shadow-xs hover:border-zinc-300 hover:shadow-md transition-all duration-200 block text-current no-underline"
+      className="group relative flex flex-col justify-between rounded-xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:-translate-y-0.5 transition-all duration-300 block text-current no-underline"
     >
       {/* Top Meta Bar */}
       <div>
         <div className="flex items-start justify-between gap-2 mb-2">
-          <div className="font-mono text-base font-semibold text-zinc-900 group-hover:text-zinc-700 transition-colors flex items-center gap-1.5 min-w-0 break-all">
+          <div className="font-space text-base font-bold text-zinc-900 group-hover:text-zinc-700 transition-colors flex items-center gap-1.5 min-w-0 break-all">
             <span className="truncate">{repo.full_name}</span>
             <ArrowUpRight className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-zinc-400 shrink-0" />
           </div>

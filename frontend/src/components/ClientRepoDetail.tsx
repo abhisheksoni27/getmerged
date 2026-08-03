@@ -361,35 +361,35 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-3 sm:px-6 lg:px-8 py-8 sm:py-10 flex-1 w-full overflow-hidden">
+    <main className="mx-auto max-w-5xl px-3 sm:px-6 lg:px-8 py-10 sm:py-12 flex-1 w-full overflow-hidden">
       {/* Navigation Breadcrumb */}
       <Link
         href="/"
-        className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-zinc-900 transition-colors mb-6"
+        className="inline-flex items-center gap-1.5 text-xs font-sans text-zinc-500 hover:text-zinc-900 transition-colors mb-6"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         Back to Explorer
       </Link>
 
       {/* Header Title & Watch Actions */}
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between border-b border-zinc-200 pb-6 mb-8">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between border-b border-zinc-200/40 pb-6 mb-8">
         <div className="min-w-0 flex-1">
           {/* Prominent High-Visibility Vibe Badge & Score */}
           <div className="flex flex-wrap items-center gap-2.5 mb-3">
             <span
-              className={`rounded-lg px-3 py-1 font-mono text-xs font-bold border shadow-xs ${getRankBadgeStyle(
+              className={`rounded-xl px-3 py-1.5 font-sans text-xs font-bold border shadow-xs ${getRankBadgeStyle(
                 rank
               )}`}
             >
               {getRankHumanLabel(rank)}
             </span>
-            <div className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1 font-mono text-xs font-bold text-zinc-800">
+            <div className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-100 px-3 py-1.5 font-sans text-xs font-bold text-zinc-800">
               <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
               <span>Score: {score.toFixed(1)} / 100</span>
             </div>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold font-mono text-zinc-900 break-words tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold font-space text-zinc-900 break-words tracking-tight">
             {fullName}
           </h1>
           <p className="mt-2.5 text-xs sm:text-sm text-zinc-600 max-w-2xl leading-relaxed">
@@ -403,10 +403,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <button
               onClick={handleWatchToggle}
               disabled={watchLoading}
-              className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-medium font-mono transition-all shadow-xs ${
+              className={`inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-medium font-sans transition-all cursor-pointer shadow-xs ${
                 isWatching
-                  ? "border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                  : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"
+                  ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                  : "bg-zinc-100/70 text-zinc-700 hover:bg-zinc-200/60"
               }`}
             >
               {isWatching ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Bookmark className="h-3.5 w-3.5" />}
@@ -417,21 +417,21 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               target="_blank"
               rel="noreferrer"
               onClick={() => posthog.capture('repo_github_link_clicked', { repo_full_name: fullName, repo_tier: rank })}
-              className="inline-flex items-center gap-1.5 rounded-full bg-zinc-900 px-4 py-2 text-xs font-medium text-white hover:bg-zinc-800 transition-all shadow-xs"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-medium font-sans text-white hover:bg-zinc-800 transition-all shadow-xs cursor-pointer"
             >
               <GitPullRequest className="h-3.5 w-3.5" />
               GitHub
             </a>
           </div>
           {/* Issue #5: Explainer banner for Watch Repo value prop */}
-          <p className="text-[11px] font-mono text-zinc-500 max-w-xs text-right leading-tight">
+          <p className="text-[11px] font-sans text-zinc-500 max-w-xs text-right leading-tight">
             💡 <strong className="text-zinc-700">Why Watch?</strong> Receive instant notifications if this repo&apos;s review velocity or C-Rank™ tier changes.
           </p>
         </div>
       </div>
 
       {/* Integrated Unified Metrics Grid (Combines Primary & Secondary Stats seamlessly) */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm mb-10 font-mono">
+      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 font-mono">
         <h2 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-5 flex items-center gap-2">
           <Activity className="h-4 w-4 text-emerald-600" /> Objective PR Telemetry & Maintainer Metrics
         </h2>
@@ -479,17 +479,17 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       </div>
 
       {/* C-Rank Weight Formula Visualizer (Cleaned & Deduplicated) */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm mb-10 font-mono">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6 border-b border-zinc-100 pb-4">
+      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 font-mono">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6 border-b border-zinc-100/40 pb-4">
           <div>
-            <h3 className="text-lg font-bold text-zinc-900 flex items-center gap-2">
+            <h3 className="text-lg font-bold text-zinc-900 font-space flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-emerald-600" /> C-Rank™ Algorithm Weight Distribution
             </h3>
             <p className="text-xs text-zinc-500 font-sans mt-0.5">
               Proprietary weighting formula applied to raw GitHub GraphQL telemetry.
             </p>
           </div>
-          <div className="text-xs font-mono font-bold text-zinc-700 bg-zinc-100 px-3 py-1.5 rounded-lg shrink-0">
+          <div className="text-xs font-mono font-bold text-zinc-700 bg-zinc-100/70 px-3 py-1.5 rounded-xl shrink-0">
             Overall Score: <span className="text-emerald-600">{score.toFixed(1)}</span> / 100
           </div>
         </div>
@@ -555,7 +555,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 w-full text-xs">
                 {/* Merge Rate */}
                 <div
-                  className="flex flex-col p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/60 cursor-default transition-colors hover:bg-zinc-100/70"
+                  className="flex flex-col p-3.5 rounded-xl bg-zinc-100/50 cursor-default transition-colors hover:bg-zinc-100/80"
                   onMouseEnter={() => setHoveredMetric('merge')}
                   onMouseLeave={() => setHoveredMetric(null)}
                 >
@@ -575,7 +575,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
                 {/* Response Speed */}
                 <div
-                  className="flex flex-col p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/60 cursor-default transition-colors hover:bg-zinc-100/70"
+                  className="flex flex-col p-3.5 rounded-xl bg-zinc-100/50 cursor-default transition-colors hover:bg-zinc-100/80"
                   onMouseEnter={() => setHoveredMetric('response')}
                   onMouseLeave={() => setHoveredMetric(null)}
                 >
@@ -595,7 +595,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
                 {/* First-Timer */}
                 <div
-                  className="flex flex-col p-3.5 rounded-xl border border-zinc-100 bg-zinc-50/60 cursor-default transition-colors hover:bg-zinc-100/70"
+                  className="flex flex-col p-3.5 rounded-xl bg-zinc-100/50 cursor-default transition-colors hover:bg-zinc-100/80"
                   onMouseEnter={() => setHoveredMetric('firstTimer')}
                   onMouseLeave={() => setHoveredMetric(null)}
                 >
@@ -615,7 +615,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
                 {/* Slow Review Penalty */}
                 <div
-                  className="flex flex-col p-3.5 rounded-xl border border-purple-100 bg-purple-50/40 cursor-default transition-colors hover:bg-purple-100/50"
+                  className="flex flex-col p-3.5 rounded-xl bg-purple-50/50 cursor-default transition-colors hover:bg-purple-100/40"
                   onMouseEnter={() => setHoveredMetric('slowReview')}
                   onMouseLeave={() => setHoveredMetric(null)}
                 >
@@ -639,12 +639,12 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       </div>
 
       {/* Score History Chart (F2) */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm mb-10 font-mono">
+      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 font-mono">
         <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2 mb-4">
           <Activity className="h-4 w-4 text-blue-600" /> C-Rank™ Score History (Last 12 Months)
         </h3>
         {history.length > 0 ? (
-          <div className="flex items-end gap-1.5 h-32 pt-4 border-b border-zinc-200">
+          <div className="flex items-end gap-1.5 h-32 pt-4 border-b border-zinc-200/40">
             {history.slice(-12).map((item, idx) => {
               const heightPercent = Math.max(10, Math.min(100, item.c_rank_score));
               return (
@@ -664,14 +664,14 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             })}
           </div>
         ) : (
-          <div className="text-xs text-zinc-500 font-sans bg-zinc-50 p-4 rounded-xl border border-dashed border-zinc-200 text-center">
+          <div className="text-xs text-zinc-500 font-sans bg-zinc-100/50 p-4 rounded-xl text-center">
             Tracking initial snapshot. Daily history will accumulate automatically over time.
           </div>
         )}
       </div>
 
       {/* Good First Issues Count (F3) */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm mb-10 font-mono">
+      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 font-mono">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-emerald-600" /> Open Good First Issues ({repo?.good_first_issue_count ?? 0})
@@ -688,19 +688,19 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         {(repo?.good_first_issue_count ?? 0) > 0 ? (
           <p className="text-xs text-zinc-600 font-sans">
             This repo currently has <strong>{repo?.good_first_issue_count}</strong> open{" "}
-            <code className="bg-zinc-100 px-1.5 py-0.5 rounded text-emerald-700">good first issue</code> issues —
+            <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700 font-mono">good first issue</code> issues —
             a great entry point for your first contribution.
           </p>
         ) : (
-          <p className="text-xs text-zinc-500 font-sans bg-zinc-50 p-4 rounded-xl border border-dashed border-zinc-200">
+          <p className="text-xs text-zinc-500 font-sans bg-zinc-100/50 p-4 rounded-xl text-center">
             No open `good first issue` labels currently found on GitHub for this repo.
           </p>
         )}
       </div>
 
       {/* Dynamic README Badge Embed (F1) */}
-      <div className="rounded-2xl border border-zinc-200 bg-gradient-to-b from-zinc-50/80 to-white p-6 sm:p-8 shadow-sm mb-10 font-mono">
-        <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2 mb-2">
+      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 font-mono">
+        <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2 mb-2 font-space">
           <ShieldCheck className="h-4 w-4 text-emerald-600" /> Embed C-Rank™ Badge on README
         </h3>
         <p className="text-xs text-zinc-600 font-sans mb-4">
@@ -721,7 +721,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <select
               value={badgeColor}
               onChange={(e) => setBadgeColor(e.target.value)}
-              className="rounded-lg border border-zinc-200 bg-white px-2 py-1 text-xs text-zinc-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="rounded-xl border border-transparent bg-zinc-100/50 px-2 py-1 text-xs text-zinc-700 focus:outline-none focus:ring-0 cursor-pointer"
             >
               <option value="auto">Auto (tier)</option>
               <option value="emerald">Emerald</option>
@@ -738,7 +738,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             </select>
           </label>
         </div>
-        <div className="flex items-center bg-white rounded-xl border border-zinc-100 px-4 py-3.5 mb-4 min-h-14 overflow-hidden">
+        <div className="flex items-center bg-zinc-50/50 rounded-xl px-4 py-3.5 mb-4 min-h-14 overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={badgePreviewUrl}
@@ -748,7 +748,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             className="h-7 w-auto"
           />
         </div>
-        <div className="flex items-center gap-4 bg-zinc-900 text-zinc-200 p-3.5 rounded-xl text-xs overflow-x-auto justify-between">
+        <div className="flex items-center gap-4 bg-[#161618] text-zinc-200 p-3.5 rounded-xl text-xs overflow-x-auto justify-between">
           <code>
             {`[![Opendoor C-Rank](${badgeMarkdownUrl})](https://opendoor.abhishekco.de/repo/${fullName})`}
           </code>
@@ -756,7 +756,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             onClick={() => {
               navigator.clipboard.writeText(`[![Opendoor C-Rank](${badgeMarkdownUrl})](https://opendoor.abhishekco.de/repo/${fullName})`);
             }}
-            className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] shrink-0 transition-colors"
+            className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] shrink-0 transition-colors cursor-pointer"
           >
             Copy Markdown
           </button>
@@ -764,12 +764,12 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       </div>
 
       {/* AI Insights & Maintainer Vibe Check Section */}
-      <div className="relative rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm overflow-hidden mb-10">
+      <div className="relative rounded-2xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)] overflow-hidden mb-10">
         <div className="flex items-center gap-2 mb-4">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-900 text-white">
+          <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-zinc-900 text-white">
             <Sparkles className="h-4 w-4" />
           </div>
-          <h2 className="font-mono text-base font-bold text-zinc-900">
+          <h2 className="font-space text-base font-bold text-zinc-900">
             AI Maintainer Vibe Check & PR Guidelines
           </h2>
         </div>
@@ -781,7 +781,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 "Active maintainer team with regular turnaround times on pull requests. Community guidelines recommend concise PR scopes."}
             </p>
             {insights?.pr_guidelines && insights.pr_guidelines.length > 0 && (
-              <ul className="space-y-2 text-xs font-mono text-zinc-800 border-t border-zinc-100 pt-3">
+              <ul className="space-y-2 text-xs font-mono text-zinc-800 border-t border-zinc-100/40 pt-3">
                 {insights.pr_guidelines.map((guide, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
@@ -809,11 +809,11 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             </div>
 
             {/* Auth Wall Overlay */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/85 backdrop-blur-xs text-center px-4 py-8 rounded-xl">
-              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-zinc-100 mb-3 border border-zinc-200 shadow-xs shrink-0">
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 backdrop-blur-xs text-center px-4 py-8 rounded-2xl">
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-zinc-100 mb-3 shadow-xs shrink-0">
                 <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-zinc-700" />
               </div>
-              <h3 className="text-sm sm:text-base font-mono font-bold text-zinc-900 mb-1.5">
+              <h3 className="text-sm sm:text-base font-space font-bold text-zinc-900 mb-1.5">
                 Unlock Full AI Insights & PR Guidelines
               </h3>
               <p className="text-xs text-zinc-600 max-w-md mb-5 leading-relaxed font-sans">
@@ -822,7 +822,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               <a
                 href={`${API_BASE_URL}/api/v1/auth/github`}
                 onClick={() => posthog.capture('github_sign_in_clicked', { source: 'ai_insights_wall', repo_full_name: fullName })}
-                className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-5 py-2 sm:px-6 sm:py-2.5 text-xs font-medium font-mono text-white shadow-xs hover:bg-zinc-800 active:scale-95 transition-all"
+                className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-5 py-2 sm:px-6 sm:py-2.5 text-xs font-medium font-sans text-white shadow-xs hover:bg-zinc-800 active:scale-95 transition-all cursor-pointer"
               >
                 <svg className="h-4 w-4 fill-current shrink-0" viewBox="0 0 24 24">
                   <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -835,10 +835,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       </div>
 
       {/* Issues #6, #7, #8: Contributor Community Feedback & Verification Module */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm mb-10 font-sans">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-zinc-100 pb-5">
+      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 font-sans">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-zinc-200/40 pb-5">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold font-mono text-zinc-900 flex items-center gap-2.5">
+            <h2 className="text-xl sm:text-2xl font-bold font-space text-zinc-900 flex items-center gap-2.5">
               <Users className="h-6 w-6 text-blue-600 shrink-0" />
               Contributor Community Vibe Feedback
             </h2>
@@ -846,23 +846,23 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               Real contributor sentiment vs algorithmic C-Rank™ telemetry. Have you sent a pull request here?
             </p>
           </div>
-          <span className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full shrink-0">
+          <span className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold text-emerald-700 bg-emerald-50 px-3.5 py-1.5 rounded-full shrink-0">
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
             GitHub Verification Active
           </span>
         </div>
 
         {/* High-Impact Contributor Callout */}
-        <div className="relative overflow-hidden rounded-xl border border-blue-200/70 bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-white p-5 mb-8 text-zinc-900 shadow-xs">
+        <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-white p-5 mb-8 text-zinc-900">
           <div className="flex items-start gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white shrink-0 shadow-xs">
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold font-mono text-zinc-900">
+              <h3 className="text-base font-bold font-space text-zinc-900">
                 Contributed to <span className="text-blue-600">{fullName}</span> previously?
               </h3>
-              <p className="mt-1 text-xs sm:text-sm text-zinc-700 leading-relaxed">
+              <p className="mt-1 text-xs sm:text-sm text-zinc-700 leading-relaxed font-sans">
                 Save fellow developers hours of waiting. If your commits are merged in this repository, your review will instantly receive an official <strong className="text-blue-900">Verified Contributor</strong> badge.
               </p>
             </div>
@@ -870,8 +870,8 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         </div>
 
         {/* Interactive Contributor Feedback Form */}
-        <div className="rounded-xl border border-zinc-200 bg-zinc-50/50 p-5 sm:p-6">
-          <h3 className="font-mono text-sm font-bold text-zinc-900 mb-4 uppercase tracking-wider">
+        <div className="rounded-2xl bg-zinc-100/50 p-5 sm:p-6">
+          <h3 className="font-space text-sm font-bold text-zinc-900 mb-4 uppercase tracking-wider">
             Share Your Experience
           </h3>
           <div className="space-y-5">
@@ -881,9 +881,9 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               </label>
               <div className="flex flex-wrap gap-3">
                 {[
-                  { id: "welcoming", label: "🟢 Welcoming & Fast", style: "hover:border-emerald-500 hover:bg-emerald-50 text-emerald-900" },
-                  { id: "selective", label: "🟡 Selective / strict PRs", style: "hover:border-amber-500 hover:bg-amber-50 text-amber-900" },
-                  { id: "unresponsive", label: "🔴 Unresponsive / Stale", style: "hover:border-rose-500 hover:bg-rose-50 text-rose-900" },
+                  { id: "welcoming", label: "🟢 Welcoming & Fast", style: "hover:bg-emerald-50 text-emerald-900" },
+                  { id: "selective", label: "🟡 Selective / strict PRs", style: "hover:bg-amber-50 text-amber-900" },
+                  { id: "unresponsive", label: "🔴 Unresponsive / Stale", style: "hover:bg-rose-50 text-rose-900" },
                 ].map((s) => (
                   <button
                     key={s.id}
@@ -891,11 +891,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     onClick={(e) => {
                       const input = document.getElementById("sentiment-val") as HTMLInputElement;
                       if (input) input.value = s.id;
-                      // Visual selection feedback
                       document.querySelectorAll(".sentiment-btn").forEach((b) => b.classList.remove("ring-2", "ring-zinc-900", "bg-white", "shadow-sm"));
                       e.currentTarget.classList.add("ring-2", "ring-zinc-900", "bg-white", "shadow-sm");
                     }}
-                    className={`sentiment-btn text-xs sm:text-sm font-mono font-semibold px-4 py-2.5 rounded-xl border border-zinc-200 bg-white/80 transition-all cursor-pointer ${s.style}`}
+                    className={`sentiment-btn text-xs sm:text-sm font-sans font-semibold px-4 py-2.5 rounded-xl bg-white transition-all cursor-pointer ${s.style}`}
                   >
                     {s.label}
                   </button>
@@ -912,7 +911,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 id="feedback-comment"
                 rows={3}
                 placeholder={`How was submitting a PR to ${fullName}? Did maintainers provide constructive review comments?`}
-                className="w-full text-xs sm:text-sm font-sans rounded-xl border border-zinc-300 p-3.5 bg-white text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 shadow-xs"
+                className="w-full text-xs sm:text-sm font-sans rounded-xl border border-zinc-200 p-3.5 bg-white text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-0 shadow-xs"
               />
             </div>
 
@@ -954,7 +953,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     setFeedbackError("Failed to submit feedback. Ensure you are signed in.");
                   }
                 }}
-                className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-6 py-3 text-xs sm:text-sm font-mono font-bold text-white shadow-sm hover:bg-zinc-800 active:scale-98 transition-all cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-6 py-3 text-xs sm:text-sm font-sans font-bold text-white shadow-sm hover:bg-zinc-800 active:scale-98 transition-all cursor-pointer"
               >
                 <span>Submit Contributor Review</span>
                 <ArrowRight className="h-4 w-4" />
@@ -977,14 +976,13 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       </div>
 
       {/* Content-Heavy SEO Modules for Search Engines & Crawlers */}
-      <div className="space-y-8 font-sans border-t border-zinc-200 pt-8 text-zinc-800">
-        {/* Module 1: Contributor Compatibility Report */}
-        <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs">
-          <h2 className="text-base sm:text-lg font-bold font-mono text-zinc-900 mb-3 flex items-center gap-2">
+      <div className="space-y-8 font-sans border-t border-zinc-200/40 pt-8 text-zinc-800">
+        <section className="rounded-2xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
+          <h2 className="text-base sm:text-lg font-bold font-space text-zinc-900 mb-3 flex items-center gap-2">
             <Activity className="h-4 w-4 text-emerald-600 shrink-0" />
             Contributor Compatibility & Review Speed Analysis for {fullName}
           </h2>
-          <div className="prose prose-sm text-zinc-600 leading-relaxed max-w-none space-y-3">
+          <div className="prose prose-sm text-zinc-600 leading-relaxed max-w-none space-y-3 font-sans">
             <p>
               When evaluating whether to contribute to <strong className="text-zinc-900">{fullName}</strong>, response velocity and maintainer engagement are crucial. Opendoor continuously tracks pull request trajectories, first-comment latency, and code review rounds to help developers avoid submitting pull requests to backlogged repositories.
             </p>
@@ -996,48 +994,46 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </div>
         </section>
 
-        {/* Module 2: Maintainer FAQ Accordion */}
-        <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs">
-          <h2 className="text-base sm:text-lg font-bold font-mono text-zinc-900 mb-4 flex items-center gap-2">
+        <section className="rounded-2xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
+          <h2 className="text-base sm:text-lg font-bold font-space text-zinc-900 mb-4 flex items-center gap-2">
             <FileCode2 className="h-4 w-4 text-blue-600 shrink-0" />
             Frequently Asked Questions — Contributing to {fullName}
           </h2>
           <div className="space-y-4">
-            <div className="rounded-xl border border-zinc-100 bg-zinc-50/60 p-4">
-              <h3 className="text-xs sm:text-sm font-bold text-zinc-900 font-mono mb-1.5">
+            <div className="rounded-xl bg-zinc-100/50 p-4">
+              <h3 className="text-xs sm:text-sm font-bold text-zinc-900 font-space mb-1.5">
                 Is {fullName} welcoming to first-time open-source contributors?
               </h3>
-              <p className="text-xs text-zinc-600 leading-relaxed">
+              <p className="text-xs text-zinc-600 leading-relaxed font-sans">
                 {fullName} has a recorded first-timer success rate of <strong>{firstTimerSuccessStr}</strong>. Repositories ranked Tier S or Tier A typically have maintainers who provide constructive feedback on initial PRs and label beginner-friendly issues.
               </p>
             </div>
 
-            <div className="rounded-xl border border-zinc-100 bg-zinc-50/60 p-4">
-              <h3 className="text-xs sm:text-sm font-bold text-zinc-900 font-mono mb-1.5">
+            <div className="rounded-xl bg-zinc-100/50 p-4">
+              <h3 className="text-xs sm:text-sm font-bold text-zinc-900 font-space mb-1.5">
                 How fast can I expect code review feedback on my pull request?
               </h3>
-              <p className="text-xs text-zinc-600 leading-relaxed">
+              <p className="text-xs text-zinc-600 leading-relaxed font-sans">
                 The initial maintainer response time averages ~<strong>{responseTimeStr}</strong>. Keep your pull requests focused, write clear commit messages, and ensure all CI checks pass to accelerate review speed.
               </p>
             </div>
 
-            <div className="rounded-xl border border-zinc-100 bg-zinc-50/60 p-4">
-              <h3 className="text-xs sm:text-sm font-bold text-zinc-900 font-mono mb-1.5">
+            <div className="rounded-xl bg-zinc-100/50 p-4">
+              <h3 className="text-xs sm:text-sm font-bold text-zinc-900 font-space mb-1.5">
                 What does the {score.toFixed(1)} C-Rank™ score represent?
               </h3>
-              <p className="text-xs text-zinc-600 leading-relaxed">
+              <p className="text-xs text-zinc-600 leading-relaxed font-sans">
                 The C-Rank™ system evaluates repositories on a 0 to 100 scale using a weighted sum of external PR merge rate, initial response time, maintainer count, and first-timer success. A score of {score.toFixed(1)} places this project in the <strong>{getRankHumanLabel(rank)}</strong> tier.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Module 3: Methodology Explanation */}
-        <section className="rounded-2xl border border-zinc-200 bg-zinc-50/70 p-6">
-          <h2 className="text-xs font-mono font-bold text-zinc-500 uppercase tracking-wider mb-2">
+        <section className="rounded-2xl bg-zinc-100/50 p-6">
+          <h2 className="text-xs font-space font-bold text-zinc-500 uppercase tracking-wider mb-2">
             Opendoor C-Rank™ Indexing Standard
           </h2>
-          <p className="text-xs text-zinc-600 leading-relaxed">
+          <p className="text-xs text-zinc-600 leading-relaxed font-sans">
             All telemetry metrics displayed for {fullName} are automatically retrieved via the GitHub GraphQL API and recalculated daily. Insider pull requests submitted by repository owners or organization members are excluded from merge rate calculations to preserve objective external contributor statistics.
           </p>
         </section>
@@ -1048,10 +1044,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
 function RepoDetailSkeleton() {
   return (
-    <main className="mx-auto max-w-5xl px-3 sm:px-6 lg:px-8 py-8 sm:py-10 flex-1 w-full overflow-hidden font-sans">
+    <main className="mx-auto max-w-5xl px-3 sm:px-6 lg:px-8 py-10 sm:py-12 flex-1 w-full overflow-hidden font-sans">
       <div className="h-4 w-28 bg-zinc-200 animate-pulse rounded mb-6" />
 
-      <div className="flex flex-col gap-4 border-b border-zinc-200 pb-6 mb-8">
+      <div className="flex flex-col gap-4 border-b border-zinc-200/40 pb-6 mb-8">
         <div className="flex gap-2">
           <div className="h-6 w-24 bg-zinc-200 animate-pulse rounded-lg" />
           <div className="h-6 w-32 bg-zinc-200 animate-pulse rounded-lg" />
@@ -1060,7 +1056,7 @@ function RepoDetailSkeleton() {
         <div className="h-4 w-96 max-w-full bg-zinc-200 animate-pulse rounded" />
       </div>
 
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm mb-10">
+      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10">
         <div className="h-4 w-48 bg-zinc-200 animate-pulse rounded mb-6" />
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {[1, 2, 3, 4].map((i) => (
@@ -1073,7 +1069,7 @@ function RepoDetailSkeleton() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
         <div className="h-5 w-56 bg-zinc-200 animate-pulse rounded mb-4" />
         <div className="space-y-2">
           <div className="h-4 w-full bg-zinc-200 animate-pulse rounded" />

@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-dm-mono), monospace;
+  --font-space: var(--font-space-grotesk), sans-serif;
+}
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 40 12% 98%; /* Warm cream bg equivalent to hsl(40, 12%, 98%) */
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -12,7 +18,7 @@
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
+    --muted: 240 3.8% 46.1%;
     --muted-foreground: 240 3.8% 46.1%;
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
@@ -26,9 +32,9 @@
 }
 
 body {
-  background-color: #ffffff;
-  color: #09090b;
-  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #faf9f6; /* Warm sand/cream background */
+  color: #1a1a1c; /* Soft charcoal instead of harsh black */
+  font-family: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }

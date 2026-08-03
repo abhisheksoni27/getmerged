@@ -117,7 +117,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen dot-pattern flex flex-col bg-white overflow-x-hidden">
+    <div className="min-h-screen dot-pattern flex flex-col bg-[#faf9f6] overflow-x-hidden">
       <Header />
       <script
         type="application/ld+json"
