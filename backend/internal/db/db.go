@@ -17,13 +17,16 @@ func Connect(url string) (*sqlx.DB, error) {
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(5)
 
-	// Enable WAL mode and foreign keys for high-performance concurrent local SQLite access
-	if _, err := db.Exec(`
-		PRAGMA journal_mode = WAL;
-		PRAGMA synchronous = NORMAL;
-		PRAGMA foreign_keys = ON;
-	`); err != nil {
-		return nil, err
+	if !strings.Contains(url, ":memory:") {
+		if _, err := db.Exec(`
+			PRAGMA journal_mode = WAL;
+			PRAGMA synchronous = NORMAL;
+			PRAGMA foreign_keys = ON;
+		`); err != nil {
+			return nil, err
+		}
+	} else {
+		_, _ = db.Exec("PRAGMA foreign_keys = ON;")
 	}
 
 	if err := AutoMigrate(db); err != nil {
