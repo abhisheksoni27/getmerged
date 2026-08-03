@@ -105,7 +105,10 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		       COALESCE(ls.c_rank_tier, 'D') AS tier
 		FROM repositories r
 		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
-		WHERE r.updated_at < ? AND COALESCE(ls.c_rank_tier, 'D') != 'D'
+		LEFT JOIN indexing_queue q ON r.full_name = q.full_name
+		WHERE r.updated_at < ? 
+		  AND COALESCE(ls.c_rank_tier, 'D') != 'D'
+		  AND (q.status IS NULL OR q.status NOT IN ('pending', 'processing'))
 		ORDER BY r.updated_at ASC
 		LIMIT 1000
 	`, time.Now().UTC().Add(-24*time.Hour))
@@ -136,8 +139,9 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 			INSERT INTO indexing_queue (full_name, owner, name, priority, status, created_at)
 			VALUES (?, ?, ?, ?, 'pending', CURRENT_TIMESTAMP)
 			ON CONFLICT(full_name) DO UPDATE SET
-				priority = MIN(indexing_queue.priority, excluded.priority)
-				WHERE status = 'pending'
+				priority = excluded.priority,
+				status = 'pending',
+				created_at = CURRENT_TIMESTAMP
 		`, fullName, owner, name, priority)
 		if err == nil {
 			enqueuedCount++
