@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"sync"
 	"time"
 
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
@@ -47,47 +48,71 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 		raw  scoring.RawMetrics
 		meta ghclient.RepoMeta
 	}
-	all := make([]repoMetrics, 0, len(repos))
+
+	const concurrency = 8
+	jobs := make(chan repoRow, len(repos))
+	results := make(chan repoMetrics, len(repos))
+
+	var wg sync.WaitGroup
+
+	for i := 0; i < concurrency; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for r := range jobs {
+				slog.Info("cron: processing repo", "repo", r.FullName)
+
+				prs, meta, err := gh.FetchPRs(r.Owner, r.Name, prWindowDays)
+				if err != nil {
+					slog.Error("cron: FetchPRs failed — skipping", "repo", r.FullName, "err", err)
+					continue
+				}
+
+				stale, err := gh.IsStalenessFlag(r.Owner, r.Name)
+				if err != nil {
+					slog.Warn("cron: IsStalenessFlag failed — assuming not stale", "repo", r.FullName, "err", err)
+				}
+
+				gfiCount, err := gh.FetchGoodFirstIssueCount(r.Owner, r.Name)
+				if err != nil {
+					slog.Warn("cron: FetchGoodFirstIssueCount failed — assuming none", "repo", r.FullName, "err", err)
+				}
+
+				slog.Debug("cron: fetched data", "repo", r.FullName, "prs", len(prs), "stale", stale)
+
+				// Convert github.PR → scoring.PR
+				scoringPRs := make([]scoring.PR, len(prs))
+				for i, p := range prs {
+					scoringPRs[i] = scoring.PR{
+						State:             p.State,
+						CreatedAt:         p.CreatedAt,
+						MergedAt:          p.MergedAt,
+						AuthorAssociation: p.AuthorAssociation,
+						AuthorLogin:       p.AuthorLogin,
+						FirstCommentAt:    p.FirstCommentAt,
+						TotalComments:     p.TotalComments,
+						CommentAuthors:    p.CommentAuthors,
+					}
+				}
+
+				raw := scoring.ComputeMetrics(scoringPRs, stale)
+				raw.GoodFirstIssueCount = gfiCount
+				results <- repoMetrics{repo: r, raw: raw, meta: meta}
+			}
+		}()
+	}
 
 	for _, r := range repos {
-		slog.Info("cron: processing repo", "repo", r.FullName)
+		jobs <- r
+	}
+	close(jobs)
 
-		prs, meta, err := gh.FetchPRs(r.Owner, r.Name, prWindowDays)
-		if err != nil {
-			slog.Error("cron: FetchPRs failed — skipping", "repo", r.FullName, "err", err)
-			continue
-		}
+	wg.Wait()
+	close(results)
 
-		stale, err := gh.IsStalenessFlag(r.Owner, r.Name)
-		if err != nil {
-			slog.Warn("cron: IsStalenessFlag failed — assuming not stale", "repo", r.FullName, "err", err)
-		}
-
-		gfiCount, err := gh.FetchGoodFirstIssueCount(r.Owner, r.Name)
-		if err != nil {
-			slog.Warn("cron: FetchGoodFirstIssueCount failed — assuming none", "repo", r.FullName, "err", err)
-		}
-
-		slog.Debug("cron: fetched data", "repo", r.FullName, "prs", len(prs), "stale", stale)
-
-		// Convert github.PR → scoring.PR
-		scoringPRs := make([]scoring.PR, len(prs))
-		for i, p := range prs {
-			scoringPRs[i] = scoring.PR{
-				State:             p.State,
-				CreatedAt:         p.CreatedAt,
-				MergedAt:          p.MergedAt,
-				AuthorAssociation: p.AuthorAssociation,
-				AuthorLogin:       p.AuthorLogin,
-				FirstCommentAt:    p.FirstCommentAt,
-				TotalComments:     p.TotalComments,
-				CommentAuthors:    p.CommentAuthors,
-			}
-		}
-
-		raw := scoring.ComputeMetrics(scoringPRs, stale)
-		raw.GoodFirstIssueCount = gfiCount
-		all = append(all, repoMetrics{repo: r, raw: raw, meta: meta})
+	all := make([]repoMetrics, 0, len(results))
+	for res := range results {
+		all = append(all, res)
 	}
 
 	if len(all) == 0 {

@@ -11,9 +11,11 @@ import (
 	"log/slog"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/valkey-io/valkey-go"
+	"golang.org/x/time/rate"
 )
 
 const graphqlEndpoint = "https://api.github.com/graphql"
@@ -24,6 +26,9 @@ type Client struct {
 	token      string
 	httpClient *http.Client
 	valkey     valkey.Client
+	limiter    *rate.Limiter
+	mu         sync.Mutex
+	rlInfo     rateLimitInfo
 }
 
 // NewClient creates a Client using the given personal access token and optional Valkey client.
@@ -32,6 +37,7 @@ func NewClient(token string, vk valkey.Client) *Client {
 		token:      token,
 		httpClient: &http.Client{Timeout: 30 * time.Second},
 		valkey:     vk,
+		limiter:    rate.NewLimiter(rate.Every(300*time.Millisecond), 5), // Default max ~3.3 req/sec
 	}
 }
 
@@ -506,6 +512,12 @@ func (c *Client) do(query string, vars map[string]any, out any) (fromCache bool,
 		}
 	}
 
+	if c.limiter != nil {
+		if err := c.limiter.Wait(ctx); err != nil {
+			return false, err
+		}
+	}
+
 	req, err := http.NewRequest(http.MethodPost, graphqlEndpoint, bytes.NewReader(reqBody))
 	if err != nil {
 		return false, err
@@ -558,6 +570,11 @@ func (c *Client) do(query string, vars map[string]any, out any) (fromCache bool,
 
 
 func (c *Client) handleRateLimit(rl rateLimitInfo) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	c.rlInfo = rl
+
 	if rl.Remaining == 0 && rl.Cost == 0 {
 		slog.Warn("github: rate limit info is all-zero — GitHub may have returned empty/null rateLimit (check repo name, token scope, or query errors)")
 		return
