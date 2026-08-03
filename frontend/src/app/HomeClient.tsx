@@ -336,10 +336,10 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             {/* Trending Toggle */}
             <button
               onClick={handleTrendingToggle}
-              className={`inline-flex items-center gap-1.5 rounded-xl border px-4 py-2.5 text-xs font-medium transition-all shrink-0 cursor-pointer ${
+              className={`inline-flex items-center gap-1.5 rounded-xl border-2 px-4 py-2.5 text-xs font-extrabold transition-all shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5 ${
                 trendingOnly
-                  ? "border-orange-200 bg-orange-50 text-orange-700 shadow-xs"
-                  : "border-zinc-100 bg-zinc-50 text-zinc-600 hover:bg-zinc-100/80"
+                  ? "border-orange-500 bg-orange-50 text-orange-850 shadow-[2px_2px_0px_#ea580c] active:shadow-none"
+                  : "border-brand-dark bg-white text-brand-dark shadow-[2px_2px_0px_#222831] active:shadow-none hover:bg-[#faf9f6]"
               }`}
             >
               <Flame className={`h-3.5 w-3.5 ${trendingOnly ? "fill-orange-500 text-orange-500" : ""}`} />

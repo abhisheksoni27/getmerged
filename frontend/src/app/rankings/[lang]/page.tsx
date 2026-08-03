@@ -82,19 +82,19 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
         {/* Navigation Breadcrumb */}
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors mb-6 font-sans"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100/70 text-xs text-zinc-600 hover:bg-zinc-200/60 hover:text-zinc-900 transition-colors mb-6 font-sans border border-zinc-200/20"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Section for Language Rankings */}
         <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10">
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 px-3.5 py-1.5 text-xs font-semibold text-emerald-800 font-sans">
-              <Trophy className="h-3.5 w-3.5 text-emerald-600" /> Top Welcoming Repositories Index
+          <div className="flex flex-wrap items-center gap-2 mb-3.5">
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-brand-cream border-2 border-brand-dark px-3.5 py-1.5 text-xs font-extrabold text-brand-dark font-space shadow-[2px_2px_0px_#222831] rotate-1">
+              <Trophy className="h-3.5 w-3.5 text-brand-dark" /> Top Welcoming Repositories Index
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-blue-50 px-3.5 py-1.5 text-xs font-semibold text-blue-700 font-sans">
-              <Code2 className="h-3.5 w-3.5" /> {languageName} Ecosystem
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-blue-50 border-2 border-blue-900 px-3.5 py-1.5 text-xs font-extrabold text-blue-950 font-space shadow-[2px_2px_0px_#1e3a8a] -rotate-1">
+              <Code2 className="h-3.5 w-3.5 text-blue-900" /> {languageName} Ecosystem
             </span>
           </div>
 
