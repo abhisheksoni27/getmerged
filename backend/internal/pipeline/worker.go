@@ -100,8 +100,8 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		       COALESCE(ls.c_rank_tier, 'D') AS tier
 		FROM repositories r
 		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
-		WHERE r.next_rescan_at <= CURRENT_TIMESTAMP OR r.updated_at < ?
-		ORDER BY r.next_rescan_at ASC
+		WHERE r.updated_at < ?
+		ORDER BY r.updated_at ASC
 		LIMIT 100
 	`, time.Now().UTC().Add(-24*time.Hour))
 	if err != nil {
