@@ -4,36 +4,38 @@
   --font-sans: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-dm-mono), monospace;
   --font-space: var(--font-space-grotesk), sans-serif;
+  --color-brand-cream: #dfd0b8;
+  --color-brand-dark: #222831;
 }
 
 @layer base {
   :root {
     --background: 40 12% 98%; /* Warm cream bg equivalent to hsl(40, 12%, 98%) */
-    --foreground: 240 10% 3.9%;
+    --foreground: 220 13% 18%; /* Match #222831 brand dark slate */
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 220 13% 18%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
+    --popover-foreground: 220 13% 18%;
+    --primary: 220 13% 18%; /* Match #222831 */
+    --primary-foreground: 40 12% 98%; /* Match brand-cream */
+    --secondary: 40 12% 92%; /* Warm sand secondary */
+    --secondary-foreground: 220 13% 18%;
     --muted: 240 3.8% 46.1%;
     --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --accent: 40 12% 92%;
+    --accent-foreground: 220 13% 18%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
+    --ring: 220 13% 18%;
+    --radius: 0.75rem;
   }
 }
 
 body {
   background-color: #faf9f6; /* Warm sand/cream background */
-  color: #1a1a1c; /* Soft charcoal instead of harsh black */
+  color: #222831; /* Soft charcoal/slate */
   font-family: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
@@ -43,6 +45,32 @@ body {
 .dot-pattern {
   background-image: radial-gradient(#e4e4e7 1px, transparent 1px);
   background-size: 24px 24px;
+}
+
+/* Hand-drawn paint brush highlight effect */
+.brush-highlight {
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+}
+
+.brush-highlight::before {
+  content: "";
+  position: absolute;
+  left: -0.15em;
+  right: -0.15em;
+  bottom: 0.08em;
+  height: 0.45em;
+  background-color: #dfd0b8;
+  z-index: -1;
+  transform: rotate(-1.2deg) scaleX(1.02);
+  border-radius: 3px 5px 2px 4px;
+  opacity: 0.9;
+  transition: transform 0.2s ease-out;
+}
+
+.brush-highlight:hover::before {
+  transform: rotate(-2deg) scaleX(1.05) scaleY(1.15);
 }
 
 @keyframes shimmer {

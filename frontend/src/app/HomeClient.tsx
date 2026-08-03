@@ -272,8 +272,8 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
       {/* Hero Section */}
       <section className="relative mx-auto max-w-5xl px-4 pt-20 pb-16 text-center sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-6xl font-space">
-          Find open-source repos that <span className="text-emerald-600">actually merge</span> your PRs.
+        <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-6xl font-space leading-tight sm:leading-none">
+          Find open-source repos that <span className="brush-highlight text-brand-dark px-1.5">actually merge</span> your PRs.
         </h1>
         <p className="mx-auto mt-6 max-w-3xl text-base text-zinc-600 sm:text-lg leading-relaxed font-sans">
           Think of it as <strong>Glassdoor for open-source</strong>: opendoor scores public GitHub repositories using proprietary <strong>C-Rank™</strong> metrics based on objective PR merge rates, response speeds, and first-timer maintainer vibes.
@@ -288,7 +288,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Repos Scored</div>
           </div>
           <div>
-            <div className="text-xl sm:text-2xl font-bold font-mono text-emerald-600">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-brand-dark">
               {stats?.s_class_count !== undefined ? stats.s_class_count : stats?.rank_counts?.["S"] !== undefined ? stats.rank_counts["S"] : "—"}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Super Welcoming</div>
@@ -349,7 +349,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   {/* Vibe Tier Pills */}
           <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
             <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
-              <Sparkles className="h-3 w-3 text-emerald-600" /> Vibe:
+              <Sparkles className="h-3 w-3 text-brand-dark" /> Vibe:
             </span>
             {tiers.map((t) => (
               <button
@@ -358,7 +358,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 className={`rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs active:scale-95 transition-all cursor-pointer ${
                   selectedTier === t.value
                     ? t.value === "S"
-                      ? "bg-emerald-600 text-white shadow-xs"
+                      ? "bg-brand-cream text-brand-dark font-bold shadow-xs border border-brand-dark/20"
                       : t.value === "A"
                       ? "bg-blue-600 text-white shadow-xs"
                       : t.value === "B"
@@ -421,7 +421,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           {/* First Timer Support Filter */}
           <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
             <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> First-Timer friendly:
+              <ShieldCheck className="h-3.5 w-3.5 text-brand-dark" /> First-Timer friendly:
             </span>
             {firstTimerBuckets.map((b) => (
               <button
@@ -527,15 +527,15 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
       </main>
 
       {/* SEO & Platform Intelligence Explanation Section */}
-      <section className="border-t border-zinc-200 bg-white py-16 sm:py-20">
+      <section className="border-t border-zinc-200/40 bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center mb-12 sm:mb-16">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1 text-xs font-mono text-emerald-700 mb-4">
-              <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
+            <div className="inline-flex items-center gap-2 rounded-xl bg-brand-cream px-3.5 py-1.5 text-xs font-sans font-bold text-brand-dark mb-4 border border-brand-dark/10">
+              <Sparkles className="h-3.5 w-3.5 text-brand-dark" />
               <span>Glassdoor for Open Source Repositories</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold font-mono text-zinc-900 lg:text-4xl">
-              Stop submitting PRs to ghost towns<span className="text-emerald-500">.</span>
+            <h2 className="text-2xl sm:text-3xl font-bold font-space text-zinc-900 lg:text-4xl">
+              Stop submitting PRs to <span className="brush-highlight text-brand-dark px-1.5">ghost towns</span>.
             </h2>
             <p className="mt-4 text-xs sm:text-sm lg:text-base text-zinc-600 leading-relaxed font-sans">
               Thousands of open-source contributors waste hours writing clean pull requests only to have them sit unreviewed for months. 
@@ -546,14 +546,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           {/* 3-Column Compact Macro Visual Insights Layout */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 font-mono">
             {/* Column 1: Compact Top 5 Ecosystem Leaderboard */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm flex flex-col justify-between">
+            <div className="rounded-2xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] border border-zinc-100 flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between border-b border-zinc-100 pb-3 mb-4">
-                  <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-emerald-600 shrink-0" />
+                  <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2 font-space">
+                    <Sparkles className="h-4 w-4 text-brand-dark shrink-0" />
                     Top 5 Leaderboard
                   </h3>
-                  <span className="text-[10px] bg-emerald-50 text-emerald-700 font-semibold px-2 py-0.5 rounded-full border border-emerald-200">
+                  <span className="text-[10px] bg-brand-cream text-brand-dark font-bold px-2 py-0.5 rounded-lg border border-brand-dark/10">
                     Live
                   </span>
                 </div>
@@ -600,27 +600,27 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                     .map((item, idx) => {
                       const rankMedal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`;
                       return (
-                        <div key={item.language} className="p-2.5 rounded-xl border border-zinc-200 bg-zinc-50">
-                          <div className="flex items-center justify-between text-xs mb-1.5">
+                        <div key={item.language} className="p-2.5 rounded-xl border border-zinc-100 bg-[#faf9f6]/30">
+                          <div className="flex items-center justify-between text-xs mb-1.5 font-sans">
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-zinc-500 w-5">{rankMedal}</span>
                               <Link
                                 href={`/rankings/${item.language.toLowerCase()}`}
-                                className="font-bold text-zinc-900 hover:text-emerald-600 transition-colors flex items-center gap-1.5"
+                                className="font-bold text-zinc-900 hover:text-brand-dark hover:underline transition-colors flex items-center gap-1.5"
                               >
                                 <LangLogo language={item.language} />
                                 {item.language}
                               </Link>
                             </div>
-                            <span className="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 text-[11px]">
+                            <span className="font-bold text-brand-dark bg-brand-cream px-2 py-0.5 rounded-lg border border-brand-dark/15 text-[11px] shadow-[1px_1px_0px_#222831]">
                               {item.weightedScore.toFixed(1)} pts
                             </span>
                           </div>
                           <div className="h-2 w-full rounded-full bg-zinc-200 overflow-hidden flex">
-                            <div className="h-full bg-emerald-500" style={{ width: `${item.sPct}%` }} />
-                            <div className="h-full bg-blue-500" style={{ width: `${item.aPct}%` }} />
-                            <div className="h-full bg-amber-500" style={{ width: `${item.bPct}%` }} />
-                            <div className="h-full bg-purple-500" style={{ width: `${item.cPct}%` }} />
+                            <div className="h-full bg-brand-cream border-r border-brand-dark/10" style={{ width: `${item.sPct}%` }} />
+                            <div className="h-full bg-blue-400" style={{ width: `${item.aPct}%` }} />
+                            <div className="h-full bg-amber-400" style={{ width: `${item.bPct}%` }} />
+                            <div className="h-full bg-purple-400" style={{ width: `${item.cPct}%` }} />
                           </div>
                         </div>
                       );
@@ -661,18 +661,18 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                     .sort((a, b) => b.welcomingTotal - a.welcomingTotal)
                     .slice(0, 5)
                     .map((item) => (
-                      <div key={item.language} className="p-2.5 rounded-xl border border-zinc-200 bg-zinc-50 flex items-center justify-between text-xs">
-                        <div className="flex items-center gap-2">
+                      <div key={item.language} className="p-2.5 rounded-xl border border-zinc-100 bg-[#faf9f6]/30 flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2 font-sans">
                           <LangLogo language={item.language} />
-                          <Link href={`/rankings/${item.language.toLowerCase()}`} className="font-bold text-zinc-900 hover:text-blue-600 transition-colors">
+                          <Link href={`/rankings/${item.language.toLowerCase()}`} className="font-bold text-zinc-900 hover:text-brand-dark hover:underline transition-colors">
                             {item.language}
                           </Link>
                         </div>
-                        <div className="flex items-center gap-1.5 font-mono text-[11px]">
-                          <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                        <div className="flex items-center gap-1.5 font-mono text-[10px]">
+                          <span className="text-brand-dark font-bold bg-brand-cream px-2 py-0.5 rounded-lg border border-brand-dark/15 shadow-[1px_1px_0px_#222831]">
                             {item.sCount} S-Tier
                           </span>
-                          <span className="text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
+                          <span className="text-blue-800 font-bold bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200">
                             {item.aCount} A-Tier
                           </span>
                         </div>
@@ -683,14 +683,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             </div>
 
             {/* Column 3: Live Telemetry Scan Summary */}
-            <div className="rounded-2xl border border-zinc-900 bg-zinc-900 text-white p-5 shadow-sm flex flex-col justify-between">
+            <div className="rounded-2xl border border-brand-dark bg-brand-dark text-white p-5 shadow-sm flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2 font-mono">
-                    <Zap className="h-4 w-4 text-emerald-400 shrink-0" />
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2 font-space">
+                    <Zap className="h-4 w-4 text-brand-cream shrink-0" />
                     Live Repos Scanned
                   </h3>
-                  <span className="text-[10px] bg-emerald-400/20 text-emerald-300 font-mono font-semibold px-2 py-0.5 rounded-full border border-emerald-400/30">
+                  <span className="text-[10px] bg-brand-cream/25 text-brand-cream font-mono font-bold px-2.5 py-0.5 rounded-lg border border-brand-cream/20">
                     Realtime API
                   </span>
                 </div>
@@ -706,14 +706,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2 border-t border-zinc-800">
-                    <div className="bg-zinc-800/80 p-2.5 rounded-xl border border-zinc-700">
-                      <div className="text-[10px] text-emerald-400 font-bold">SUPER WELCOMING</div>
+                    <div className="bg-zinc-850 p-2.5 rounded-xl border border-zinc-800">
+                      <div className="text-[10px] text-brand-cream font-bold">SUPER WELCOMING</div>
                       <div className="text-lg font-bold text-white mt-0.5">
                         {stats?.s_class_count !== undefined ? stats.s_class_count : 420}
                       </div>
                     </div>
-                    <div className="bg-zinc-800/80 p-2.5 rounded-xl border border-zinc-700">
-                      <div className="text-[10px] text-blue-400 font-bold">AVG RESPONSE</div>
+                    <div className="bg-zinc-850 p-2.5 rounded-xl border border-zinc-800">
+                      <div className="text-[10px] text-blue-300 font-bold">AVG RESPONSE</div>
                       <div className="text-lg font-bold text-white mt-0.5">
                         {stats?.avg_response_hours
                           ? stats.avg_response_hours < 1
@@ -730,59 +730,59 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
               <Link
                 href="/status"
-                className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-zinc-800 px-4 py-2 text-xs font-mono font-bold text-zinc-200 hover:bg-zinc-700 hover:text-white transition-all border border-zinc-700"
+                className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-zinc-850 px-4 py-2.5 text-xs font-mono font-bold text-zinc-200 hover:bg-zinc-800 hover:text-white transition-all border border-zinc-800"
               >
                 <span>View Full System Status</span>
-                <ArrowRight className="h-3.5 w-3.5 text-emerald-400" />
+                <ArrowRight className="h-3.5 w-3.5 text-brand-cream" />
               </Link>
             </div>
           </div>
 
           {/* 3 Pillar Feature Cards */}
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 mb-16 font-mono">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 mb-16 font-sans">
             {/* Card 1 */}
-            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-xs hover:border-zinc-300 transition-all">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 mb-4">
-                <Zap className="h-5 w-5 text-emerald-600" />
+            <div className="rounded-2xl border border-zinc-200 bg-[#faf9f6]/40 p-6 shadow-sm hover:border-zinc-300 transition-all">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-cream text-brand-dark border border-brand-dark/15 shadow-[1px_1px_0px_#222831] mb-4">
+                <Zap className="h-5 w-5 text-brand-dark" />
               </div>
-              <h3 className="text-base font-bold text-zinc-900 mb-2">Objective C-Rank™ Telemetry</h3>
-              <p className="text-xs text-zinc-600 font-sans leading-relaxed">
+              <h3 className="text-base font-bold text-zinc-900 font-space mb-2">Objective C-Rank™ Telemetry</h3>
+              <p className="text-xs text-zinc-600 leading-relaxed">
                 We calculate S to D tiers by analyzing average review response times, external PR acceptance rates, and repeat contributor retention using the GitHub GraphQL API.
               </p>
             </div>
 
             {/* Card 2 */}
-            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-xs hover:border-zinc-300 transition-all">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 mb-4">
-                <ShieldCheck className="h-5 w-5 text-emerald-600" />
+            <div className="rounded-2xl border border-zinc-200 bg-[#faf9f6]/40 p-6 shadow-sm hover:border-zinc-300 transition-all">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-cream text-brand-dark border border-brand-dark/15 shadow-[1px_1px_0px_#222831] mb-4">
+                <ShieldCheck className="h-5 w-5 text-brand-dark" />
               </div>
-              <h3 className="text-base font-bold text-zinc-900 mb-2">First-Timer Vibe Check</h3>
-              <p className="text-xs text-zinc-600 font-sans leading-relaxed">
+              <h3 className="text-base font-bold text-zinc-900 font-space mb-2">First-Timer Vibe Check</h3>
+              <p className="text-xs text-zinc-600 leading-relaxed">
                 Filter by languages like Go, Rust, and TypeScript to find open doors that actively welcome first-time contributors with friendly maintainers.
               </p>
             </div>
 
             {/* Card 3 */}
-            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-xs hover:border-zinc-300 transition-all">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 mb-4">
-                <Bell className="h-5 w-5 text-emerald-600" />
+            <div className="rounded-2xl border border-zinc-200 bg-[#faf9f6]/40 p-6 shadow-sm hover:border-zinc-300 transition-all">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-cream text-brand-dark border border-brand-dark/15 shadow-[1px_1px_0px_#222831] mb-4">
+                <Bell className="h-5 w-5 text-brand-dark" />
               </div>
-              <h3 className="text-base font-bold text-zinc-900 mb-2">Watch & Watchlist Repos</h3>
-              <p className="text-xs text-zinc-600 font-sans leading-relaxed">
+              <h3 className="text-base font-bold text-zinc-900 font-space mb-2">Watch & Watchlist Repos</h3>
+              <p className="text-xs text-zinc-600 leading-relaxed">
                 Subscribe to your favorite repositories to receive real-time notifications when maintainer review responsiveness shifts or new issue triage speeds improve.
               </p>
             </div>
           </div>
 
           {/* Informational Callout & GitHub Sign In Banner */}
-          <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-8 sm:p-10 text-zinc-900 shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="rounded-2xl border border-zinc-200 bg-[#faf9f6]/50 p-8 sm:p-10 text-zinc-900 shadow-xs flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="max-w-xl">
-              <div className="flex items-center gap-2 text-xs font-mono text-emerald-600 mb-2">
+              <div className="flex items-center gap-2 text-xs font-mono text-brand-dark mb-2">
                 <CheckCircle2 className="h-4 w-4" />
                 <span>Track Maintainer Responsiveness</span>
               </div>
-              <h3 className="text-2xl font-bold font-mono tracking-tight">Ready to find your next open-source contribution?</h3>
-              <p className="mt-2 text-xs text-zinc-600 font-sans leading-relaxed">
+              <h3 className="text-2xl font-bold font-space tracking-tight">Ready to find your next open-source contribution?</h3>
+              <p className="mt-2 text-xs text-zinc-600 leading-relaxed">
                 Sign in with your GitHub account to watch repositories, unlock AI Maintainer Vibe Check guidelines, and receive automated PR review alerts.
               </p>
             </div>
