@@ -46,15 +46,15 @@ export default async function HallOfFamePage() {
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 flex-1 w-full text-zinc-800">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors mb-6 font-sans"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100/70 text-xs text-zinc-600 hover:bg-zinc-200/60 hover:text-zinc-900 transition-colors mb-6 font-sans border border-zinc-200/20"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 px-3.5 py-1.5 text-xs font-semibold text-emerald-800 font-sans">
-              <Trophy className="h-3.5 w-3.5 text-emerald-600" /> S-Tier Showcase
+          <div className="flex items-center gap-2 mb-3.5">
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-brand-cream border-2 border-brand-dark px-3.5 py-1.5 text-xs font-extrabold text-brand-dark font-space shadow-[2px_2px_0px_#222831] rotate-1">
+              <Trophy className="h-3.5 w-3.5 text-brand-dark" /> S-Tier Showcase
             </span>
           </div>
 

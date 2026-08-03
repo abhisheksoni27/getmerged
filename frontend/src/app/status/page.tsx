@@ -41,7 +41,7 @@ export default function StatusPage() {
       <main className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 flex-1 w-full font-sans text-zinc-800">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors mb-6 font-sans"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100/70 text-xs text-zinc-600 hover:bg-zinc-200/60 hover:text-zinc-900 transition-colors mb-6 font-sans border border-zinc-200/20"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to opendoor
         </Link>
@@ -49,7 +49,7 @@ export default function StatusPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200/40 pb-6 mb-8">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 flex items-center gap-3 font-space">
-              <Server className="h-7 w-7 text-emerald-600" />
+              <Server className="h-7 w-7 text-brand-dark animate-pulse" />
               Opendoor System Status
             </h1>
             <p className="mt-1.5 text-xs text-zinc-500 font-sans">
@@ -61,7 +61,7 @@ export default function StatusPage() {
             onClick={checkHealth}
             className="inline-flex items-center gap-2 rounded-xl bg-zinc-100/70 px-4 py-2.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-200/60 transition-all self-start sm:self-auto shadow-xs cursor-pointer"
           >
-            <RefreshCw className={`h-3.5 w-3.5 ${healthStatus === "checking" ? "animate-spin text-emerald-600" : ""}`} />
+            <RefreshCw className={`h-3.5 w-3.5 ${healthStatus === "checking" ? "animate-spin text-brand-dark" : ""}`} />
             Refresh Status
           </button>
         </div>
@@ -107,12 +107,16 @@ export default function StatusPage() {
 
         {/* Service Health Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 font-sans">
-          <div className="rounded-2xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
+          <div className="rounded-2xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] border border-zinc-100">
             <div className="flex items-center justify-between text-xs mb-3">
               <span className="font-bold text-zinc-800 flex items-center gap-2">
-                <Zap className="h-4 w-4 text-emerald-600" /> API Gateway Health
+                <Zap className="h-4 w-4 text-brand-dark animate-bounce" /> API Gateway Health
               </span>
-              <span className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-700">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-700">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                </span>
                 ACTIVE
               </span>
             </div>
@@ -121,12 +125,16 @@ export default function StatusPage() {
             </p>
           </div>
 
-          <div className="rounded-2xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
+          <div className="rounded-2xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] border border-zinc-100">
             <div className="flex items-center justify-between text-xs mb-3">
               <span className="font-bold text-zinc-800 flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-blue-600" /> Valkey Tag Cache Engine
               </span>
-              <span className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-blue-50 text-blue-700">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-blue-50 text-blue-700">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500"></span>
+                </span>
                 OPERATIONAL
               </span>
             </div>
