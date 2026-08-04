@@ -79,28 +79,16 @@ export function Header() {
             <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-brand-cream" />
           </div>
           <span className="font-space text-sm sm:text-base font-bold tracking-tight text-zinc-900">opendoor</span>
+          {starCount !== null && (
+            <span className="ml-1 hidden sm:inline-flex items-center gap-1 rounded-md border border-amber-200 bg-amber-50 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-900">
+              <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
+              {starCount}
+            </span>
+          )}
         </Link>
 
         {/* Header Right Actions */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          {/* GitHub Star Nudge Button */}
-          <a
-            href="https://github.com/abhisheksoni27/opendoor"
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => posthog.capture('github_star_clicked')}
-            className="inline-flex items-center gap-1 sm:gap-1.5 rounded-xl bg-zinc-100/70 px-3 py-1.5 sm:px-4 sm:py-2 text-[11px] sm:text-xs font-sans font-medium text-zinc-700 hover:bg-zinc-200/60 transition-all group whitespace-nowrap cursor-pointer"
-          >
-            <Star className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-amber-500 fill-amber-500 group-hover:scale-110 transition-transform shrink-0" />
-            <span className="hidden xs:inline sm:inline">Star on GitHub</span>
-            <span className="xs:hidden sm:hidden">Star</span>
-            {starCount !== null && (
-              <span className="rounded-full bg-zinc-200/50 px-1.5 py-0.2 text-[10px] sm:text-[11px] font-bold text-zinc-800 ml-0.5 font-mono">
-                {starCount.toLocaleString()}
-              </span>
-            )}
-          </a>
-
           {authLoading ? (
             <div className="h-8 w-24 rounded-xl bg-zinc-100 animate-pulse" />
           ) : user ? (
