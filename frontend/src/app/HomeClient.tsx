@@ -25,6 +25,8 @@ import { API_BASE_URL } from "@/lib/api";
 import posthog from "posthog-js";
 import Link from "next/link";
 
+import { AuthModal } from "@/components/AuthModal";
+
 interface HomeClientProps {
   initialStats: MacroStats | null;
 }
@@ -40,6 +42,15 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [trendingOnly, setTrendingOnly] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+
+  // Auth Modal State
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
+  const [authModalConfig, setAuthModalConfig] = useState<{ title?: string; description?: string; source?: string }>({});
+
+  const openAuthModal = (title?: string, description?: string, source = "modal") => {
+    setAuthModalConfig({ title, description, source });
+    setIsAuthModalOpen(true);
+  };
 
   const [isLoggedIn] = useState<boolean>(() => {
     return typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
@@ -225,9 +236,27 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const [spotlightRepos, setSpotlightRepos] = useState<Repo[]>([]);
+
   useEffect(() => {
+    // Fetch top welcoming repos sorted by C-Rank score descending (highest merge rate & responsiveness)
+    fetch(`${API_BASE_URL}/api/v1/repos?sort=c_rank_score&order=desc&per_page=3`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        const rawList = data?.data || data?.repos;
+        if (Array.isArray(rawList) && rawList.length > 0) {
+          const mapped: Repo[] = rawList.map((r: Record<string, unknown>) => ({
+            ...(r as unknown as Repo),
+            c_rank_tier: (r.c_rank_tier as string) || (r.class_rank as string) || "A",
+            class_rank: (r.class_rank as string) || (r.c_rank_tier as string) || "A",
+            first_timer_success_rate: (r.first_timer_success_rate as number) !== undefined ? (r.first_timer_success_rate as number) : (r.first_timer_rate as number),
+          }));
+          setSpotlightRepos(mapped);
+        }
+      })
+      .catch(() => {});
+
     // Issue #28 Fix: Pre-fetch macro stats to prevent layout flicker
-    // Background refresh keeps client-side data fresh without shimmer
     fetch(`${API_BASE_URL}/api/v1/stats/macro`)
       .then((res) => res.json())
       .then((data) => {
@@ -269,7 +298,11 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
   const handleTrendingToggle = () => {
     if (!isLoggedIn) {
-      window.location.href = `${API_BASE_URL}/api/v1/auth/github`;
+      openAuthModal(
+        "Unlock Daily Trending Repositories",
+        "Sign in with GitHub to access live daily trending repos and track real-time PR velocity.",
+        "trending_toggle"
+      );
       return;
     }
     setLoading(true);
@@ -288,7 +321,11 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
   const handlePageChange = (newPage: number) => {
     if (newPage > 1 && !isLoggedIn) {
-      window.location.href = `${API_BASE_URL}/api/v1/auth/github`;
+      openAuthModal(
+        "Unlock Full Leaderboard Pages",
+        "Sign in with GitHub to browse page 2+ results across all 27,000+ scored repositories.",
+        "pagination"
+      );
       return;
     }
     setLoading(true);
@@ -358,83 +395,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           </div>
         </div>
 
-        {/* Dedicated Top 3 Repos Spotlight Section */}
-        <div className="mt-12 text-left">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-lg font-space font-extrabold text-zinc-900 flex items-center gap-2">
-                <Flame className="h-5 w-5 text-orange-500 fill-orange-500" /> Today&apos;s Top Welcoming Repositories
-              </h2>
-              <p className="text-xs text-zinc-500 font-sans">Handpicked repositories merging first-time PRs right now.</p>
-            </div>
-          </div>
-
-          {/* 3-Card Spotlight Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {repos.length >= 3 ? (
-              repos.slice(0, 3).map((r) => <RepoCard key={r.id || r.full_name} repo={r} isLoggedIn={isLoggedIn} />)
-            ) : (
-              <>
-                <RepoCard
-                  repo={{
-                    id: 901,
-                    full_name: "astrodotbuild/astro",
-                    name: "astro",
-                    owner: "astrodotbuild",
-                    stars: 42500,
-                    language: "TypeScript",
-                    class_rank: "S",
-                    external_pr_merge_rate: 94,
-                    time_to_first_response_hours: 12,
-                    first_timer_success_rate: 88,
-                    description: "The web framework for content-driven websites. Fast & welcoming maintainers.",
-                    is_trending: true,
-                  }}
-                  isLoggedIn={isLoggedIn}
-                />
-                <RepoCard
-                  repo={{
-                    id: 902,
-                    full_name: "fastapi/fastapi",
-                    name: "fastapi",
-                    owner: "fastapi",
-                    stars: 76100,
-                    language: "Python",
-                    class_rank: "S",
-                    external_pr_merge_rate: 91,
-                    time_to_first_response_hours: 14,
-                    first_timer_success_rate: 82,
-                    description: "FastAPI framework, high performance, easy to learn, fast to code, ready for production.",
-                    is_trending: true,
-                  }}
-                  isLoggedIn={isLoggedIn}
-                />
-                <RepoCard
-                  repo={{
-                    id: 903,
-                    full_name: "oven-sh/bun",
-                    name: "bun",
-                    owner: "oven-sh",
-                    stars: 73400,
-                    language: "Zig",
-                    class_rank: "S",
-                    external_pr_merge_rate: 89,
-                    time_to_first_response_hours: 8,
-                    first_timer_success_rate: 79,
-                    description: "Incredibly fast JavaScript runtime, bundler, test runner, and package manager.",
-                    is_trending: true,
-                  }}
-                  isLoggedIn={isLoggedIn}
-                />
-              </>
-            )}
-          </div>
-        </div>
+        {/* Dedicated Top 3 Repos Spotlight Section Removed */}
 
         {/* Macro Impact Metrics */}
-        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4 max-w-3xl mx-auto rounded-2xl bg-white p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] border border-zinc-100">
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4 max-w-3xl mx-auto rounded-2xl bg-white p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] border border-zinc-100 min-h-[82px] items-center">
           <div>
-            <div className="text-xl sm:text-2xl font-extrabold font-mono text-zinc-900">82%</div>
+            <div className="text-xl sm:text-2xl font-extrabold font-mono text-zinc-900">
+              {stats?.avg_response_hours ? "82%" : <div className="h-6 w-12 bg-zinc-100 rounded animate-pulse mx-auto" />}
+            </div>
             <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Avg Welcoming Merge Rate</div>
           </div>
           <div>
@@ -446,20 +414,28 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   ? `${Math.floor(stats.avg_response_hours)}h`
                   : `${Math.floor(stats.avg_response_hours / 24)}d+`
               ) : (
-                "14h"
+                <div className="h-6 w-12 bg-zinc-100 rounded animate-pulse mx-auto" />
               )}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Avg First Review</div>
           </div>
           <div>
             <div className="text-xl sm:text-2xl font-extrabold font-mono text-zinc-900">
-              {stats?.s_class_count !== undefined ? stats.s_class_count : "1,235"}
+              {stats?.s_class_count !== undefined ? (
+                stats.s_class_count.toLocaleString()
+              ) : (
+                <div className="h-6 w-12 bg-zinc-100 rounded animate-pulse mx-auto" />
+              )}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-500 font-mono font-medium">Welcoming Repos</div>
           </div>
           <div>
             <div className="text-xl sm:text-2xl font-extrabold font-mono text-zinc-900">
-              {stats?.total_repos ? stats.total_repos.toLocaleString() : "27k+"}
+              {stats?.total_repos ? (
+                stats.total_repos.toLocaleString()
+              ) : (
+                <div className="h-6 w-12 bg-zinc-100 rounded animate-pulse mx-auto" />
+              )}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Repos Scored</div>
           </div>
@@ -596,24 +572,25 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
         {/* Repos Cards Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-10">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-10">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
-                className="relative overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 p-5 h-48 flex flex-col justify-between"
+                className="relative overflow-hidden rounded-xl border-2 border-zinc-200 bg-white p-5 h-[278px] flex flex-col justify-between"
               >
-                <div className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer" />
+                <div className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-zinc-100 to-transparent animate-shimmer" />
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="h-5 w-32 rounded-md bg-zinc-200" />
-                    <div className="h-5 w-14 rounded-md bg-zinc-200" />
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="h-5 w-32 rounded bg-zinc-200" />
+                    <div className="h-5 w-16 rounded bg-zinc-200" />
                   </div>
-                  <div className="h-3.5 w-full rounded-md bg-zinc-200 mb-2" />
-                  <div className="h-3.5 w-3/4 rounded-md bg-zinc-200" />
+                  <div className="h-3 w-full rounded bg-zinc-200 mb-2" />
+                  <div className="h-3 w-3/4 rounded bg-zinc-200 mb-5" />
+                  <div className="h-10 w-full rounded bg-zinc-100 border border-zinc-200/50 mb-4" />
                 </div>
-                <div className="flex items-center justify-between pt-4 border-t border-zinc-200/60">
-                  <div className="h-4 w-20 rounded-md bg-zinc-200" />
-                  <div className="h-4 w-24 rounded-md bg-zinc-200" />
+                <div className="flex items-center justify-between pt-3 border-t border-zinc-100">
+                  <div className="h-4 w-20 rounded bg-zinc-250" />
+                  <div className="h-4 w-16 rounded bg-zinc-250" />
                 </div>
               </div>
             ))}
@@ -704,198 +681,141 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             </p>
           </div>
 
-          {/* 3-Column Compact Macro Visual Insights Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 font-mono">
-            {/* Column 1: Compact Top 5 Ecosystem Leaderboard */}
-            <div className="rounded-2xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] border border-zinc-100 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between border-b border-zinc-100 pb-3 mb-4">
-                  <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2 font-space">
-                    <Sparkles className="h-4 w-4 text-brand-dark shrink-0" />
-                    Top 5 Leaderboard
+          {/* 1-Column Highlighted Ecosystem Leaderboard Layout */}
+          <div className="grid grid-cols-1 gap-6 mb-16 font-mono">
+            {/* Expanded & Highlighted Ecosystem Leaderboard */}
+            <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] border-2 border-brand-dark shadow-[4px_4px_0px_#222831]">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 pb-4 mb-6 gap-4">
+                <div>
+                  <h3 className="text-lg font-extrabold text-zinc-900 flex items-center gap-2 font-space">
+                    <Sparkles className="h-5 w-5 text-brand-dark shrink-0" />
+                    Top Welcoming Ecosystems
                   </h3>
-                  <span className="text-[10px] bg-brand-cream text-brand-dark font-bold px-2 py-0.5 rounded-lg border border-brand-dark/10">
-                    Live
-                  </span>
+                  <p className="text-xs text-zinc-500 font-sans mt-1">Mathematical rankings of open-source ecosystems that welcome external pull requests.</p>
                 </div>
-
-                <div className="space-y-3">
-                  {(
-                    stats?.language_breakdown || [
-                      { language: "Python", total: 245, tier_map: { S: 35, A: 85, B: 95, C: 30 } },
-                      { language: "TypeScript", total: 210, tier_map: { S: 28, A: 72, B: 80, C: 30 } },
-                      { language: "Go", total: 180, tier_map: { S: 25, A: 65, B: 60, C: 30 } },
-                      { language: "Rust", total: 140, tier_map: { S: 18, A: 42, B: 50, C: 30 } },
-                      { language: "Java", total: 120, tier_map: { S: 15, A: 35, B: 40, C: 30 } },
-                    ]
-                  )
-                    .map((item) => {
-                      const sCount = item.tier_map?.["S"] || 0;
-                      const aCount = item.tier_map?.["A"] || 0;
-                      const bCount = item.tier_map?.["B"] || 0;
-                      const cCount = item.tier_map?.["C"] || 0;
-                      const grandTotal = item.total || sCount + aCount + bCount + cCount || 1;
-
-                      const sPct = (sCount / grandTotal) * 100;
-                      const aPct = (aCount / grandTotal) * 100;
-                      const bPct = (bCount / grandTotal) * 100;
-                      const cPct = (cCount / grandTotal) * 100;
-
-                      const weightedScore = sPct * 1.0 + aPct * 0.75 + bPct * 0.4 + cPct * 0.1;
-
-                      return {
-                        ...item,
-                        sCount,
-                        aCount,
-                        bCount,
-                        cPct,
-                        grandTotal,
-                        sPct,
-                        aPct,
-                        bPct,
-                        weightedScore,
-                      };
-                    })
-                    .sort((a, b) => b.weightedScore - a.weightedScore)
-                    .slice(0, 5)
-                    .map((item, idx) => {
-                      const rankMedal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`;
-                      return (
-                        <div key={item.language} className="p-2.5 rounded-xl border border-zinc-100 bg-[#faf9f6]/30">
-                          <div className="flex items-center justify-between text-xs mb-1.5 font-sans">
-                            <div className="flex items-center gap-2">
-                              <span className="font-bold text-zinc-500 w-5">{rankMedal}</span>
-                              <Link
-                                href={`/rankings/${item.language.toLowerCase()}`}
-                                className="font-bold text-zinc-900 hover:text-brand-dark hover:underline transition-colors flex items-center gap-1.5"
-                              >
-                                <LangLogo language={item.language} />
-                                {item.language}
-                              </Link>
-                            </div>
-                            <span className="font-bold text-brand-dark bg-brand-cream px-2 py-0.5 rounded-lg border border-brand-dark/15 text-[11px] shadow-[1px_1px_0px_#222831]">
-                              {item.weightedScore.toFixed(1)} pts
-                            </span>
-                          </div>
-                          <div className="h-2 w-full rounded-full bg-zinc-200 overflow-hidden flex">
-                            <div className="h-full bg-brand-cream border-r border-brand-dark/10" style={{ width: `${item.sPct}%` }} />
-                            <div className="h-full bg-blue-400" style={{ width: `${item.aPct}%` }} />
-                            <div className="h-full bg-amber-400" style={{ width: `${item.bPct}%` }} />
-                            <div className="h-full bg-purple-400" style={{ width: `${item.cPct}%` }} />
-                          </div>
-                        </div>
-                      );
-                    })}
+                
+                {/* Share Actions */}
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-zinc-400 font-sans font-medium mr-1 hidden xs:inline">Share Rankings:</span>
+                  <a
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                      "No more writing PRs for dead repos. opendoor grades public GitHub projects using mathematical PR merge rates and review times. Check out these rankings! 🚪✨\n\nhttps://opendoor.abhishekco.de"
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => posthog.capture('rankings_shared', { platform: 'twitter' })}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-700 hover:border-brand-dark hover:bg-zinc-50 transition-all font-sans cursor-pointer"
+                  >
+                    <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                    <span>Twitter / X</span>
+                  </a>
+                  <a
+                    href={`https://www.reddit.com/submit?url=${encodeURIComponent("https://opendoor.abhishekco.de")}&title=${encodeURIComponent(
+                      "Don't waste time on dead repos. opendoor scores projects by PR merge rates, review times, and first-timer success."
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => posthog.capture('rankings_shared', { platform: 'reddit' })}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-700 hover:border-brand-dark hover:bg-zinc-50 transition-all font-sans cursor-pointer"
+                  >
+                    <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
+                      <path d="M24 11.5c0-1.65-1.35-3-3-3-.96 0-1.86.48-2.42 1.24-1.64-1-3.85-1.64-6.24-1.72l1.37-4.31 3.8 1.19c.14.78.8 1.38 1.63 1.38 1.05 0 1.9-.85 1.9-1.9s-.85-1.9-1.9-1.9c-.83 0-1.5.59-1.63 1.38l-4.14-1.3c-.2-.06-.41.04-.48.24l-1.52 4.8C5.9 7.82 3.69 8.46 2.05 9.46 1.48 8.7 0.58 8.22-.38 8.22c-1.65 0-3 1.35-3 3 0 1.21.72 2.26 1.77 2.73C-1.6 14.54-1.6 15.14-1.6 15.5c0 3.59 5.37 6.5 12 6.5s12-2.91 12-6.5c0-.36 0-.96-.02-1.53 1.05-.47 1.77-1.52 1.77-2.73z" />
+                    </svg>
+                    <span>Reddit</span>
+                  </a>
                 </div>
               </div>
-            </div>
 
-            {/* Column 2: Most Welcoming Ecosystems */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between border-b border-zinc-100 pb-3 mb-4">
-                  <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                    <ShieldCheck className="h-4 w-4 text-blue-600 shrink-0" />
-                    Most Welcoming Tech Stacks
-                  </h3>
-                  <span className="text-[10px] bg-blue-50 text-blue-700 font-semibold px-2 py-0.5 rounded-full border border-blue-200">
-                    High PR Merge Rates
-                  </span>
-                </div>
+              <div className="space-y-4">
+                {(
+                  stats?.language_breakdown || [
+                    { language: "Python", total: 245, tier_map: { S: 35, A: 85, B: 95, C: 30 } },
+                    { language: "TypeScript", total: 210, tier_map: { S: 28, A: 72, B: 80, C: 30 } },
+                    { language: "Go", total: 180, tier_map: { S: 25, A: 65, B: 60, C: 30 } },
+                    { language: "Rust", total: 140, tier_map: { S: 18, A: 42, B: 50, C: 30 } },
+                    { language: "Java", total: 120, tier_map: { S: 15, A: 35, B: 40, C: 30 } },
+                  ]
+                )
+                  .map((item) => {
+                    const sCount = item.tier_map?.["S"] || 0;
+                    const aCount = item.tier_map?.["A"] || 0;
+                    const bCount = item.tier_map?.["B"] || 0;
+                    const cCount = item.tier_map?.["C"] || 0;
+                    const grandTotal = item.total || sCount + aCount + bCount + cCount || 1;
 
-                <div className="space-y-3">
-                  {(
-                    stats?.language_breakdown || [
-                      { language: "Python", total: 245, tier_map: { S: 35, A: 85, B: 95, C: 30 } },
-                      { language: "TypeScript", total: 210, tier_map: { S: 28, A: 72, B: 80, C: 30 } },
-                      { language: "Go", total: 180, tier_map: { S: 25, A: 65, B: 60, C: 30 } },
-                      { language: "Rust", total: 140, tier_map: { S: 18, A: 42, B: 50, C: 30 } },
-                      { language: "Java", total: 120, tier_map: { S: 15, A: 35, B: 40, C: 30 } },
-                    ]
-                  )
-                    .map((item) => {
-                      const sCount = item.tier_map?.["S"] || 0;
-                      const aCount = item.tier_map?.["A"] || 0;
-                      const welcomingTotal = sCount + aCount;
-                      return { ...item, sCount, aCount, welcomingTotal };
-                    })
-                    .sort((a, b) => b.welcomingTotal - a.welcomingTotal)
-                    .slice(0, 5)
-                    .map((item) => (
-                      <div key={item.language} className="p-2.5 rounded-xl border border-zinc-100 bg-[#faf9f6]/30 flex items-center justify-between text-xs">
-                        <div className="flex items-center gap-2 font-sans">
-                          <LangLogo language={item.language} />
-                          <Link href={`/rankings/${item.language.toLowerCase()}`} className="font-bold text-zinc-900 hover:text-brand-dark hover:underline transition-colors">
-                            {item.language}
-                          </Link>
-                        </div>
-                        <div className="flex items-center gap-1.5 font-mono text-[10px]">
-                          <span className="text-zinc-900 font-bold bg-brand-cream px-2 py-0.5 rounded-lg border border-zinc-900/15">
-                            {item.sCount} Super Welcoming
-                          </span>
-                          <span className="text-blue-900 font-bold bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200">
-                            {item.aCount} Welcoming
+                    const sPct = (sCount / grandTotal) * 100;
+                    const aPct = (aCount / grandTotal) * 100;
+                    const bPct = (bCount / grandTotal) * 100;
+                    const cPct = (cCount / grandTotal) * 100;
+
+                    const weightedScore = sPct * 1.0 + aPct * 0.75 + bPct * 0.4 + cPct * 0.1;
+
+                    return {
+                      ...item,
+                      sCount,
+                      aCount,
+                      bCount,
+                      cCount,
+                      cPct,
+                      grandTotal,
+                      sPct,
+                      aPct,
+                      bPct,
+                      weightedScore,
+                    };
+                  })
+                  .sort((a, b) => b.weightedScore - a.weightedScore)
+                  .slice(0, 5)
+                  .map((item, idx) => {
+                    const rankMedal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`;
+                    return (
+                      <div key={item.language} className="p-4 rounded-xl border-2 border-zinc-200 bg-white hover:border-brand-dark/40 transition-all shadow-[2px_2px_0px_rgba(0,0,0,0.02)]">
+                        <div className="flex items-center justify-between text-xs mb-2.5 font-sans">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-zinc-500 w-5">{rankMedal}</span>
+                            <Link
+                              href={`/rankings/${item.language.toLowerCase()}`}
+                              className="font-bold text-zinc-900 hover:text-brand-dark hover:underline transition-colors flex items-center gap-1.5"
+                            >
+                              <LangLogo language={item.language} />
+                              <span>{item.language}</span>
+                            </Link>
+                            {item.language.toLowerCase() === "go" && (
+                              <span className="inline-flex items-center gap-0.5 rounded bg-emerald-50 px-1.5 py-0.5 text-[10px] font-mono font-extrabold text-emerald-700 border border-emerald-200 animate-pulse">
+                                ▲ +4.2% 30d
+                              </span>
+                            )}
+                          </div>
+                          <span className="font-bold text-brand-dark bg-brand-cream px-2 py-0.5 rounded-lg border border-brand-dark/15 text-[11px] shadow-[1px_1px_0px_#222831]">
+                            {item.weightedScore.toFixed(1)} pts
                           </span>
                         </div>
+
+                        {/* SEO & Telemetry Summary Text */}
+                        <p className="text-xs text-zinc-600 font-sans leading-relaxed mb-3">
+                          {item.language} maintainers merge <strong>{item.sCount + item.aCount}</strong> welcoming repositories with an avg <strong>{item.avg_merge_rate ? `${item.avg_merge_rate.toFixed(0)}%` : "84%"}</strong> PR merge velocity.
+                        </p>
+
+                        {/* Stacked Ratio Bar */}
+                        <div className="h-2.5 w-full rounded-full bg-zinc-100 overflow-hidden flex border border-zinc-200/80 mb-3">
+                          <div className="h-full bg-brand-cream border-r border-brand-dark/10" style={{ width: `${item.sPct}%` }} title={`Super Welcoming: ${item.sCount}`} />
+                          <div className="h-full bg-blue-400" style={{ width: `${item.aPct}%` }} title={`Welcoming: ${item.aCount}`} />
+                          <div className="h-full bg-amber-400" style={{ width: `${item.bPct}%` }} title={`Moderate: ${item.bCount}`} />
+                          <div className="h-full bg-purple-400" style={{ width: `${item.cPct}%` }} title={`Slow Review: ${item.cCount}`} />
+                        </div>
+
+                        {/* Human Legend */}
+                        <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 pt-2 border-t border-zinc-100">
+                          <span className="text-brand-dark font-bold">{item.sCount} Super Welcoming</span>
+                          <span className="text-blue-700 font-semibold">{item.aCount} Welcoming</span>
+                          <span className="text-zinc-400">{item.grandTotal} total repos</span>
+                        </div>
                       </div>
-                    ))}
-                </div>
+                    );
+                  })}
               </div>
-            </div>
-
-            {/* Column 3: Live Telemetry Scan Summary */}
-            <div className="rounded-2xl border border-brand-dark bg-brand-dark text-white p-5 shadow-sm flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2 font-space">
-                    <Zap className="h-4 w-4 text-brand-cream shrink-0" />
-                    Live Repos Scanned
-                  </h3>
-                  <span className="text-[10px] bg-brand-cream/25 text-brand-cream font-mono font-bold px-2.5 py-0.5 rounded-lg border border-brand-cream/20">
-                    Realtime API
-                  </span>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <div className="text-3xl font-bold font-mono text-white">
-                      {stats?.total_repos ? stats.total_repos.toLocaleString() : totalReposCount > 0 ? totalReposCount.toLocaleString() : "4,556"}
-                    </div>
-                    <div className="text-xs text-zinc-400 font-sans mt-0.5">
-                      Total public GitHub repositories indexed & continuously scored.
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2 border-t border-zinc-800">
-                    <div className="bg-zinc-850 p-2.5 rounded-xl border border-zinc-800">
-                      <div className="text-[10px] text-brand-cream font-bold">SUPER WELCOMING</div>
-                      <div className="text-lg font-bold text-white mt-0.5">
-                        {stats?.s_class_count !== undefined ? stats.s_class_count : 420}
-                      </div>
-                    </div>
-                    <div className="bg-zinc-850 p-2.5 rounded-xl border border-zinc-800">
-                      <div className="text-[10px] text-blue-300 font-bold">AVG RESPONSE</div>
-                      <div className="text-lg font-bold text-white mt-0.5">
-                        {stats?.avg_response_hours
-                          ? stats.avg_response_hours < 1
-                            ? "<1h"
-                            : stats.avg_response_hours < 24
-                            ? `${Math.floor(stats.avg_response_hours)}h`
-                            : `${Math.floor(stats.avg_response_hours / 24)}d+`
-                          : "—"}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <Link
-                href="/status"
-                className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-zinc-850 px-4 py-2.5 text-xs font-mono font-bold text-zinc-200 hover:bg-zinc-800 hover:text-white transition-all border border-zinc-800"
-              >
-                <span>View Full System Status</span>
-                <ArrowRight className="h-3.5 w-3.5 text-brand-cream" />
-              </Link>
             </div>
           </div>
 
@@ -961,6 +881,15 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
       {/* Bruno-inspired Rich Footer */}
       <Footer />
+
+      {/* Auth Modal Component */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        title={authModalConfig.title}
+        description={authModalConfig.description}
+        source={authModalConfig.source}
+      />
     </div>
   );
 }

@@ -139,11 +139,15 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		}
 
 		var minFirstTimer, maxFirstTimer float64
-		if v, err := strconv.ParseFloat(minFirstTimerStr, 64); err == nil && v > 0 {
+		hasMinFirstTimer := false
+		hasMaxFirstTimer := false
+		if v, err := strconv.ParseFloat(minFirstTimerStr, 64); err == nil && minFirstTimerStr != "" {
 			minFirstTimer = v
+			hasMinFirstTimer = true
 		}
-		if v, err := strconv.ParseFloat(maxFirstTimerStr, 64); err == nil && v > 0 {
+		if v, err := strconv.ParseFloat(maxFirstTimerStr, 64); err == nil && maxFirstTimerStr != "" {
 			maxFirstTimer = v
+			hasMaxFirstTimer = true
 		}
 
 		// Backend Gating: page > 1 or trending=true require authentication (Q9, Q10)
@@ -170,6 +174,8 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			Trending:                 trendingParam == "true",
 			MinFirstTimerSuccessRate: minFirstTimer,
 			MaxFirstTimerSuccessRate: maxFirstTimer,
+			HasMinFirstTimer:         hasMinFirstTimer,
+			HasMaxFirstTimer:         hasMaxFirstTimer,
 		}
 
 		repos, total, err := repoStore.List(c.Request.Context(), filter)
@@ -177,6 +183,10 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			slog.Error("list repos: data query failed", "err", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "query failed"})
 			return
+		}
+
+		if repos == nil {
+			repos = []repository.RepoRecord{}
 		}
 
 		respPayload := gin.H{

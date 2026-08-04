@@ -615,200 +615,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       </div>
 
 
-      {/* C-Rank Weight Formula Visualizer (Cleaned & Deduplicated) */}
-      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 font-mono">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6 border-b border-zinc-100/40 pb-4">
-          <div>
-            <h3 className="text-lg font-bold text-zinc-900 font-space flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-emerald-600" /> C-Rank™ Algorithm Weight Distribution
-            </h3>
-            <p className="text-xs text-zinc-500 font-sans mt-0.5">
-              Proprietary weighting formula applied to raw GitHub GraphQL telemetry.
-            </p>
-          </div>
-          <div className="text-xs font-mono font-bold text-zinc-700 bg-zinc-100/70 px-3 py-1.5 rounded-xl shrink-0">
-            Overall Score: <span className="text-emerald-600">{score.toFixed(1)}</span> / 100
-          </div>
-        </div>
-
-        {(() => {
-          const circumference = 2 * Math.PI * 40; // ~251.3
-          const mergeArc = circumference * 0.40;
-          const responseArc = circumference * 0.30;
-          const firstTimerArc = circumference * 0.18;
-          const slowReviewArc = circumference * 0.12;
-          const gap = circumference - mergeArc - responseArc - firstTimerArc - slowReviewArc;
-
-          const responseContrib = repo?.time_to_first_response_hours
-            ? Math.max(0, (1 - Math.min(repo.time_to_first_response_hours, 168) / 168) * 30)
-            : 0;
-          const mergeContrib = ((repo?.external_pr_merge_rate || 0) / 100) * 40;
-          const firstTimerContrib = ((repo?.first_timer_success_rate || 0) / 100) * 18;
-          const slowReviewContrib = (() => {
-            const r = rank;
-            if (r === "S") return 12;
-            if (r === "A") return 9.6;
-            if (r === "B") return 7.2;
-            if (r === "C") return 4.8;
-            return 2.4;
-          })();
-
-          return (
-            <div className="flex flex-col md:flex-row items-center gap-8 justify-between">
-              <div className="relative flex items-center justify-center h-44 w-44 shrink-0">
-                <svg viewBox="0 0 100 100" className="h-full w-full transform -rotate-90">
-                  <circle cx="50" cy="50" r="40" fill="transparent" stroke="#f4f4f5" strokeWidth="16" />
-                  <circle
-                    cx="50" cy="50" r="40" fill="transparent"
-                    stroke="#10b981" strokeWidth="16"
-                    strokeDasharray={`${mergeArc} ${circumference - mergeArc}`}
-                    strokeDashoffset="0"
-                  />
-                  <circle
-                    cx="50" cy="50" r="40" fill="transparent"
-                    stroke="#2563eb" strokeWidth="16"
-                    strokeDasharray={`${responseArc} ${circumference - responseArc}`}
-                    strokeDashoffset={`${-mergeArc}`}
-                  />
-                  <circle
-                    cx="50" cy="50" r="40" fill="transparent"
-                    stroke="#d97706" strokeWidth="16"
-                    strokeDasharray={`${firstTimerArc} ${circumference - firstTimerArc}`}
-                    strokeDashoffset={`${-(mergeArc + responseArc)}`}
-                  />
-                  <circle
-                    cx="50" cy="50" r="40" fill="transparent"
-                    stroke="#9333ea" strokeWidth="16"
-                    strokeDasharray={`${slowReviewArc - gap} ${circumference - (slowReviewArc - gap)}`}
-                    strokeDashoffset={`${-(mergeArc + responseArc + firstTimerArc)}`}
-                  />
-                </svg>
-                <div className="absolute flex flex-col items-center justify-center text-center">
-                  <span className="text-2xl font-bold text-zinc-900">{score.toFixed(0)}</span>
-                  <span className="text-[10px] text-zinc-400 uppercase tracking-wider">C-Rank</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 w-full text-xs">
-                {/* Merge Rate */}
-                <div
-                  className="flex flex-col p-3.5 rounded-xl bg-zinc-100/50 cursor-default transition-colors hover:bg-zinc-100/80"
-                  onMouseEnter={() => setHoveredMetric('merge')}
-                  onMouseLeave={() => setHoveredMetric(null)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <span className="h-3 w-3 rounded-full bg-emerald-500 shrink-0" />
-                      <span className="font-semibold text-zinc-800">External Merge Weight</span>
-                    </div>
-                    <span className="font-mono font-bold text-zinc-600">40%</span>
-                  </div>
-                  {hoveredMetric === 'merge' && (
-                    <p className="text-[10px] text-zinc-500 font-sans mt-1.5">
-                      Your contribution: ~{mergeContrib.toFixed(1)} pts ({(repo?.external_pr_merge_rate || 0).toFixed(1)}% merge rate)
-                    </p>
-                  )}
-                </div>
-
-                {/* Response Speed */}
-                <div
-                  className="flex flex-col p-3.5 rounded-xl bg-zinc-100/50 cursor-default transition-colors hover:bg-zinc-100/80"
-                  onMouseEnter={() => setHoveredMetric('response')}
-                  onMouseLeave={() => setHoveredMetric(null)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <span className="h-3 w-3 rounded-full bg-blue-600 shrink-0" />
-                      <span className="font-semibold text-zinc-800">Response Speed Weight</span>
-                    </div>
-                    <span className="font-mono font-bold text-zinc-600">30%</span>
-                  </div>
-                  {hoveredMetric === 'response' && (
-                    <p className="text-[10px] text-zinc-500 font-sans mt-1.5">
-                      Your contribution: ~{responseContrib.toFixed(1)} pts (response: {responseTimeStr})
-                    </p>
-                  )}
-                </div>
-
-                {/* First-Timer */}
-                <div
-                  className="flex flex-col p-3.5 rounded-xl bg-zinc-100/50 cursor-default transition-colors hover:bg-zinc-100/80"
-                  onMouseEnter={() => setHoveredMetric('firstTimer')}
-                  onMouseLeave={() => setHoveredMetric(null)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <span className="h-3 w-3 rounded-full bg-amber-600 shrink-0" />
-                      <span className="font-semibold text-zinc-800">First-Timer Weight</span>
-                    </div>
-                    <span className="font-mono font-bold text-zinc-600">18%</span>
-                  </div>
-                  {hoveredMetric === 'firstTimer' && (
-                    <p className="text-[10px] text-zinc-500 font-sans mt-1.5">
-                      Your contribution: ~{firstTimerContrib.toFixed(1)} pts ({(repo?.first_timer_success_rate || 0).toFixed(1)}% first-timer rate)
-                    </p>
-                  )}
-                </div>
-
-                {/* Slow Review Penalty */}
-                <div
-                  className="flex flex-col p-3.5 rounded-xl bg-purple-50/50 cursor-default transition-colors hover:bg-purple-100/40"
-                  onMouseEnter={() => setHoveredMetric('slowReview')}
-                  onMouseLeave={() => setHoveredMetric(null)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <span className="h-3 w-3 rounded-full bg-purple-600 shrink-0" />
-                      <span className="font-semibold text-purple-900">Slow Review Penalty</span>
-                    </div>
-                    <span className="font-mono font-bold text-purple-700">12%</span>
-                  </div>
-                  {hoveredMetric === 'slowReview' && (
-                    <p className="text-[10px] text-purple-600 font-sans mt-1.5">
-                      Tier {rank} — contribution: ~{slowReviewContrib.toFixed(1)} pts
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })()}
-      </div>
-
-      {/* Score History Chart (F2) */}
-      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 font-mono">
-        <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2 mb-4">
-          <Activity className="h-4 w-4 text-blue-600" /> C-Rank™ Score History (Last 12 Months)
-        </h3>
-        {history.length > 0 ? (
-          <div className="flex items-end gap-1.5 h-32 pt-4 border-b border-zinc-200/40">
-            {history.slice(-12).map((item, idx) => {
-              const heightPercent = Math.max(10, Math.min(100, item.c_rank_score));
-              return (
-                <div key={idx} className="flex-1 flex flex-col items-center gap-1 group relative">
-                  <div
-                    className="w-full bg-blue-500 rounded-t-md group-hover:bg-blue-600 transition-all"
-                    style={{ height: `${heightPercent}%` }}
-                  />
-                  <span className="text-[9px] text-zinc-400 font-sans truncate w-full text-center">
-                    {item.snapshot_date.slice(5)}
-                  </span>
-                  <div className="absolute -top-8 bg-zinc-900 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
-                    {item.snapshot_date}: {item.c_rank_score.toFixed(1)} ({item.c_rank_tier})
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="text-xs text-zinc-500 font-sans bg-zinc-100/50 p-4 rounded-xl text-center">
-            Tracking initial snapshot. Daily history will accumulate automatically over time.
-          </div>
-        )}
-      </div>
+      {/* C-Rank Weight Formula Visualizer & History Timeline Removed */}
 
       {/* Good First Issues Count (F3) */}
-      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 font-mono">
+      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] font-mono">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-emerald-600" /> Open Good First Issues ({repo?.good_first_issue_count ?? 0})
@@ -836,7 +646,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       </div>
 
       {/* Dynamic README Badge Embed (F1) */}
-      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 font-mono">
+      <div className="rounded-2xl bg-white p-6 sm:p-8 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-10 font-mono">
         <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2 mb-2 font-space">
           <ShieldCheck className="h-4 w-4 text-emerald-600" /> Embed C-Rank™ Badge on README
         </h3>
@@ -875,25 +685,24 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             </select>
           </label>
         </div>
-        <div className="flex items-center bg-zinc-50/50 rounded-xl px-4 py-3.5 mb-4 min-h-14 overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={badgePreviewUrl}
-            alt={`Opendoor C-Rank badge for ${fullName}`}
-            width={280}
-            height={28}
-            className="h-7 w-auto"
-          />
-        </div>
-        <div className="flex items-center gap-4 bg-[#161618] text-zinc-200 p-3.5 rounded-xl text-xs overflow-x-auto justify-between">
-          <code>
-            {`[![Opendoor C-Rank](${badgeMarkdownUrl})](https://opendoor.abhishekco.de/repo/${fullName})`}
-          </code>
+        
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-zinc-50 border-2 border-brand-dark rounded-xl shadow-[2px_2px_0px_rgba(0,0,0,0.02)]">
+          <div className="flex items-center min-h-10 overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={badgePreviewUrl}
+              alt={`Opendoor C-Rank badge for ${fullName}`}
+              width={280}
+              height={28}
+              className="h-7 w-auto"
+            />
+          </div>
           <button
             onClick={() => {
               navigator.clipboard.writeText(`[![Opendoor C-Rank](${badgeMarkdownUrl})](https://opendoor.abhishekco.de/repo/${fullName})`);
+              posthog.capture('badge_copied', { repo_full_name: fullName });
             }}
-            className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] shrink-0 transition-colors cursor-pointer"
+            className="w-full sm:w-auto px-5 py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs shrink-0 transition-colors cursor-pointer border-2 border-brand-dark shadow-[2px_2px_0px_#222831]"
           >
             Copy Markdown
           </button>
