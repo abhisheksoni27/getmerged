@@ -160,6 +160,7 @@ export function RepoCard({ repo, isLoggedIn = false, isSpotlight = false }: Repo
                 )}
               </div>
             </div>
+          </div>
 
           {/* Neo-Brutalism Sticker Badge */}
           <div className={`px-2.5 py-1 rounded-lg text-[11px] font-extrabold shrink-0 transition-transform ${badgeStyle.badgeClass}`}>
