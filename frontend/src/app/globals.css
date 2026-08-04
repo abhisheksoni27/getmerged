@@ -61,11 +61,11 @@ body {
   right: -0.15em;
   bottom: 0.08em;
   height: 0.75em;
-  background-color: #dfd0b8;
+  background-color: var(--color-brand-cream, #dfd0b8);
   z-index: -1;
   transform: rotate(-1.2deg) scaleX(1.02);
   border-radius: 3px 5px 2px 4px;
-  opacity: 0.9;
+  opacity: 0.8;
   transition: transform 0.2s ease-out;
 }
 

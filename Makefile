@@ -22,6 +22,9 @@ dev: swagger
 	@which air > /dev/null 2>&1 || (echo "Installing air for live reload..." && go install github.com/air-verse/air@latest)
 	cd backend && air -c .air.toml
 
+fdev:
+	cd frontend && npm run dev
+
 # Cross-compile Linux x86_64 binary locally (fast, low memory)
 build-linux: swagger
 	cd backend && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o bin/server-linux ./cmd/server

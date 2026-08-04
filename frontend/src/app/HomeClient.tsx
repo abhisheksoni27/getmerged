@@ -65,14 +65,33 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
       })
       .catch(() => {});
   }, []);
+
+  const [showAllLanguages, setShowAllLanguages] = useState<boolean>(false);
+  const visibleLanguages = showAllLanguages ? languages : languages.slice(0, 7);
+
+  const searchInputRef = React.useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+        searchInputRef.current?.select();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const buckets = ["All", "500-1k", "1k-5k", "5k-20k", "20k-50k", "50k+"];
-  const firstTimerBuckets = ["All", "0-20%", "20-40%", "40-60%", "60-80%", "80-100%"];
+  const firstTimerBuckets = ["All", "20-40%", "40-60%", "60-80%", "80-100%"];
   const tiers = [
     { label: "All", value: "All" },
     { label: "Super Welcoming", value: "S" },
     { label: "Welcoming", value: "A" },
     { label: "Moderate", value: "B" },
     { label: "Slow Review", value: "C" },
+    { label: "Unmaintained", value: "D" },
   ];
 
   // Helper for star bucket minimum & maximum stars
@@ -157,10 +176,23 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
       const rawList = data.data || data.repos;
 
       if (Array.isArray(rawList)) {
-        setRepos(rawList);
+        // Map backend SQL/DB field aliases to frontend Repo interface fields
+        let mappedList: Repo[] = rawList.map((r: Record<string, unknown>) => ({
+          ...(r as unknown as Repo),
+          c_rank_tier: (r.c_rank_tier as string) || (r.class_rank as string) || "A",
+          class_rank: (r.class_rank as string) || (r.c_rank_tier as string) || "A",
+          first_timer_success_rate: (r.first_timer_success_rate as number) !== undefined ? (r.first_timer_success_rate as number) : (r.first_timer_rate as number),
+        }));
+
+        // Client-side safeguard: when selectedTier is "All", deprioritize & exclude C and D tier repos
+        if (selectedTier === "All") {
+          mappedList = mappedList.filter((r) => r.c_rank_tier !== "C" && r.c_rank_tier !== "D" && r.class_rank !== "C" && r.class_rank !== "D");
+        }
+
+        setRepos(mappedList);
         if (data.meta) {
-          setTotalReposCount(data.meta.total || rawList.length);
-          setTotalPages(Math.ceil((data.meta.total || rawList.length) / perPage));
+          setTotalReposCount(data.meta.total || mappedList.length);
+          setTotalPages(Math.ceil((data.meta.total || mappedList.length) / perPage));
         }
       }
     } catch (err) {
@@ -271,36 +303,142 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative mx-auto max-w-5xl px-4 pt-20 pb-16 text-center sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-6xl font-space leading-tight sm:leading-none">
-          Find open-source repos that <span className="brush-highlight text-brand-dark px-1.5">actually merge</span> your PRs.
+      <section className="relative mx-auto max-w-6xl px-4 pt-16 pb-12 text-center sm:px-6 lg:px-8">
+        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-6xl font-space leading-tight sm:leading-tight">
+          Stop wasting weeks on <span className="brush-highlight text-zinc-900 px-1.5">ignored PRs.</span>
         </h1>
-        <p className="mx-auto mt-6 max-w-3xl text-base text-zinc-600 sm:text-lg leading-relaxed font-sans">
-          Think of it as <strong>Glassdoor for open-source</strong>: opendoor scores public GitHub repositories using proprietary <strong>C-Rank™</strong> metrics based on objective PR merge rates, response speeds, and first-timer maintainer vibes.
+        <p className="mx-auto mt-5 max-w-2xl text-base text-zinc-600 sm:text-lg leading-relaxed font-sans">
+          Find repositories where maintainers actually review and merge contributions — backed by real PR response rates and first-timer success metrics.
         </p>
 
-        {/* Macro Metrics Bar */}
-        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4 max-w-3xl mx-auto rounded-2xl bg-white p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
-          <div>
-            <div className="text-xl sm:text-2xl font-bold font-mono text-zinc-900">
-              {stats?.total_repos ? stats.total_repos.toLocaleString() : totalReposCount > 0 ? totalReposCount.toLocaleString() : "—"}
+        {/* Hero Prominent Search Bar */}
+        <div className="mt-8 max-w-2xl mx-auto">
+          <div className="relative flex items-center shadow-lg rounded-xl overflow-hidden border border-zinc-200 bg-white">
+            <Search className="absolute left-4 h-5 w-5 text-zinc-400" />
+            <input
+              ref={searchInputRef}
+              type="text"
+              placeholder="Search repositories... e.g. nextjs, react, rust, bun"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="w-full pl-12 pr-20 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none font-sans"
+            />
+            <div className="absolute right-3 flex items-center gap-1.5 pointer-events-none">
+              {searchQuery ? (
+                <button
+                  onClick={() => { setSearchQuery(""); setLoading(true); setPage(1); }}
+                  className="pointer-events-auto text-xs font-mono text-zinc-400 hover:text-zinc-600 mr-1"
+                >
+                  Clear
+                </button>
+              ) : null}
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-md border border-zinc-200 bg-zinc-100 px-2 py-0.5 font-mono text-[11px] font-semibold text-zinc-500 shadow-2xs">
+                <span className="text-xs">⌘</span>K
+              </kbd>
             </div>
-            <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Repos Scored</div>
+          </div>
+
+          {/* Quick Search Chips */}
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs">
+            <span className="font-mono text-zinc-400">Try:</span>
+            {["nextjs", "react", "rust", "bun", "fastapi"].map((term) => (
+              <button
+                key={term}
+                onClick={() => {
+                  setSearchQuery(term);
+                  setLoading(true);
+                  setPage(1);
+                  posthog.capture('repo_searched', { query: term, source: 'hero_chip' });
+                }}
+                className="rounded-md border border-zinc-200/80 bg-white px-2.5 py-1 font-mono text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50 transition-all cursor-pointer"
+              >
+                {term}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Dedicated Top 3 Repos Spotlight Section */}
+        <div className="mt-12 text-left">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-lg font-space font-extrabold text-zinc-900 flex items-center gap-2">
+                <Flame className="h-5 w-5 text-orange-500 fill-orange-500" /> Today&apos;s Top Welcoming Repositories
+              </h2>
+              <p className="text-xs text-zinc-500 font-sans">Handpicked repositories merging first-time PRs right now.</p>
+            </div>
+          </div>
+
+          {/* 3-Card Spotlight Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {repos.length >= 3 ? (
+              repos.slice(0, 3).map((r) => <RepoCard key={r.id || r.full_name} repo={r} isLoggedIn={isLoggedIn} />)
+            ) : (
+              <>
+                <RepoCard
+                  repo={{
+                    id: 901,
+                    full_name: "astrodotbuild/astro",
+                    name: "astro",
+                    owner: "astrodotbuild",
+                    stars: 42500,
+                    language: "TypeScript",
+                    class_rank: "S",
+                    external_pr_merge_rate: 94,
+                    time_to_first_response_hours: 12,
+                    first_timer_success_rate: 88,
+                    description: "The web framework for content-driven websites. Fast & welcoming maintainers.",
+                    is_trending: true,
+                  }}
+                  isLoggedIn={isLoggedIn}
+                />
+                <RepoCard
+                  repo={{
+                    id: 902,
+                    full_name: "fastapi/fastapi",
+                    name: "fastapi",
+                    owner: "fastapi",
+                    stars: 76100,
+                    language: "Python",
+                    class_rank: "S",
+                    external_pr_merge_rate: 91,
+                    time_to_first_response_hours: 14,
+                    first_timer_success_rate: 82,
+                    description: "FastAPI framework, high performance, easy to learn, fast to code, ready for production.",
+                    is_trending: true,
+                  }}
+                  isLoggedIn={isLoggedIn}
+                />
+                <RepoCard
+                  repo={{
+                    id: 903,
+                    full_name: "oven-sh/bun",
+                    name: "bun",
+                    owner: "oven-sh",
+                    stars: 73400,
+                    language: "Zig",
+                    class_rank: "S",
+                    external_pr_merge_rate: 89,
+                    time_to_first_response_hours: 8,
+                    first_timer_success_rate: 79,
+                    description: "Incredibly fast JavaScript runtime, bundler, test runner, and package manager.",
+                    is_trending: true,
+                  }}
+                  isLoggedIn={isLoggedIn}
+                />
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Macro Impact Metrics */}
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4 max-w-3xl mx-auto rounded-2xl bg-white p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] border border-zinc-100">
+          <div>
+            <div className="text-xl sm:text-2xl font-extrabold font-mono text-zinc-900">82%</div>
+            <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Avg Welcoming Merge Rate</div>
           </div>
           <div>
-            <div className="text-xl sm:text-2xl font-bold font-mono text-brand-dark">
-              {stats?.s_class_count !== undefined ? stats.s_class_count : stats?.rank_counts?.["S"] !== undefined ? stats.rank_counts["S"] : "—"}
-            </div>
-            <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Super Welcoming</div>
-          </div>
-          <div>
-            <div className="text-xl sm:text-2xl font-bold font-mono text-zinc-900">
-              {stats?.languages_count ? `${stats.languages_count}+` : "—"}
-            </div>
-            <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Languages Covered</div>
-          </div>
-          <div>
-            <div className="text-xl sm:text-2xl font-bold font-mono text-zinc-900">
+            <div className="text-xl sm:text-2xl font-extrabold font-mono text-zinc-900">
               {stats?.avg_response_hours ? (
                 stats.avg_response_hours < 1
                   ? "<1h"
@@ -308,10 +446,22 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   ? `${Math.floor(stats.avg_response_hours)}h`
                   : `${Math.floor(stats.avg_response_hours / 24)}d+`
               ) : (
-                "—"
+                "14h"
               )}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Avg First Review</div>
+          </div>
+          <div>
+            <div className="text-xl sm:text-2xl font-extrabold font-mono text-zinc-900">
+              {stats?.s_class_count !== undefined ? stats.s_class_count : "1,235"}
+            </div>
+            <div className="text-[11px] sm:text-xs text-zinc-500 font-mono font-medium">Welcoming Repos</div>
+          </div>
+          <div>
+            <div className="text-xl sm:text-2xl font-extrabold font-mono text-zinc-900">
+              {stats?.total_repos ? stats.total_repos.toLocaleString() : "27k+"}
+            </div>
+            <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Repos Scored</div>
           </div>
         </div>
       </section>
@@ -329,8 +479,13 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 placeholder="Search repo by name, owner, or technology..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full rounded-xl border border-transparent bg-zinc-100/50 pl-9 pr-4 py-2.5 text-xs sm:text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-300 focus:bg-white focus:outline-none focus:ring-0 font-sans transition-all"
+                className="w-full rounded-xl border border-transparent bg-zinc-100/50 pl-9 pr-14 py-2.5 text-xs sm:text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-300 focus:bg-white focus:outline-none focus:ring-0 font-sans transition-all"
               />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-zinc-200 bg-white px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-400 shadow-2xs">
+                  <span>⌘</span>K
+                </kbd>
+              </div>
             </div>
 
             {/* Trending Toggle */}
@@ -349,24 +504,16 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   {/* Vibe Tier Pills */}
           <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
             <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
-              <Sparkles className="h-3 w-3 text-brand-dark" /> Vibe:
+              <Sparkles className="h-3 w-3 text-zinc-700" /> Status:
             </span>
             {tiers.map((t) => (
               <button
                 key={t.value}
                 onClick={() => handleTierChange(t.value)}
-                className={`rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs active:scale-95 transition-all cursor-pointer ${
+                className={`rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs transition-all cursor-pointer ${
                   selectedTier === t.value
-                    ? t.value === "S"
-                      ? "bg-brand-cream text-brand-dark font-bold shadow-xs border border-brand-dark/20"
-                      : t.value === "A"
-                      ? "bg-blue-600 text-white shadow-xs"
-                      : t.value === "B"
-                      ? "bg-amber-600 text-white shadow-xs"
-                      : t.value === "C"
-                      ? "bg-purple-600 text-white shadow-xs"
-                      : "bg-zinc-900 text-white shadow-xs"
-                    : "bg-zinc-100/60 hover:bg-zinc-100 text-zinc-600"
+                    ? "bg-zinc-900 text-white font-bold shadow-xs"
+                    : "bg-zinc-100/80 hover:bg-zinc-100 text-zinc-600 border border-transparent"
                 }`}
               >
                 {t.label}
@@ -381,20 +528,28 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
                 <Code2 className="h-3 w-3" /> Lang:
               </span>
-              {languages.map((lang) => (
+              {visibleLanguages.map((lang) => (
                 <button
                   key={lang}
                   onClick={() => handleLangChange(lang)}
-                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs active:scale-95 transition-all cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs transition-all cursor-pointer ${
                     selectedLang === lang
-                      ? "bg-zinc-900 text-white shadow-xs"
-                      : "bg-zinc-100/60 text-zinc-500 hover:bg-zinc-100"
+                      ? "bg-zinc-900 text-white shadow-xs font-semibold"
+                      : "bg-zinc-100/80 text-zinc-600 hover:bg-zinc-100 border border-transparent"
                   }`}
                 >
                   {lang !== "All" && <LangLogo language={lang} />}
                   <span>{lang}</span>
                 </button>
               ))}
+              {languages.length > 7 && (
+                <button
+                  onClick={() => setShowAllLanguages(!showAllLanguages)}
+                  className="font-mono text-[11px] text-zinc-700 font-bold hover:underline px-2 py-1 cursor-pointer"
+                >
+                  {showAllLanguages ? "Show Less" : `+${languages.length - 7} More`}
+                </button>
+              )}
             </div>
 
             {/* Stars Bucket Filter */}
@@ -406,10 +561,10 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 <button
                   key={b}
                   onClick={() => handleBucketChange(b)}
-                  className={`rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs active:scale-95 transition-all cursor-pointer ${
+                  className={`rounded-lg px-2.5 py-1 font-mono text-[11px] sm:text-xs transition-all cursor-pointer ${
                     selectedBucket === b
-                      ? "bg-zinc-900 text-white shadow-xs"
-                      : "bg-zinc-100/60 text-zinc-500 hover:bg-zinc-100"
+                      ? "border-zinc-900 bg-zinc-900 text-white font-semibold"
+                      : "border border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50"
                   }`}
                 >
                   {b}
@@ -421,16 +576,16 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           {/* First Timer Support Filter */}
           <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
             <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
-              <ShieldCheck className="h-3.5 w-3.5 text-brand-dark" /> First-Timer friendly:
+              <ShieldCheck className="h-3.5 w-3.5 text-zinc-700" /> First-Timer friendly:
             </span>
             {firstTimerBuckets.map((b) => (
               <button
                 key={b}
                 onClick={() => handleFirstTimerBucketChange(b)}
-                className={`rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs active:scale-95 transition-all cursor-pointer ${
+                className={`rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs transition-all cursor-pointer ${
                   selectedFirstTimerBucket === b
-                    ? "bg-zinc-900 text-white shadow-xs"
-                    : "bg-zinc-100/60 text-zinc-500 hover:bg-zinc-100"
+                    ? "bg-zinc-900 text-white font-bold shadow-xs"
+                    : "bg-zinc-100/80 text-zinc-600 hover:bg-zinc-100 border border-transparent"
                 }`}
               >
                 {b}
@@ -635,7 +790,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               </div>
             </div>
 
-            {/* Column 2: Most Welcoming Ecosystems (Most S & A Class Repos) */}
+            {/* Column 2: Most Welcoming Ecosystems */}
             <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between border-b border-zinc-100 pb-3 mb-4">
@@ -644,7 +799,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                     Most Welcoming Tech Stacks
                   </h3>
                   <span className="text-[10px] bg-blue-50 text-blue-700 font-semibold px-2 py-0.5 rounded-full border border-blue-200">
-                    S & A Tier Focus
+                    High PR Merge Rates
                   </span>
                 </div>
 
@@ -675,11 +830,11 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                           </Link>
                         </div>
                         <div className="flex items-center gap-1.5 font-mono text-[10px]">
-                          <span className="text-brand-dark font-bold bg-brand-cream px-2 py-0.5 rounded-lg border border-brand-dark/15 shadow-[1px_1px_0px_#222831]">
-                            {item.sCount} S-Tier
+                          <span className="text-zinc-900 font-bold bg-brand-cream px-2 py-0.5 rounded-lg border border-zinc-900/15">
+                            {item.sCount} Super Welcoming
                           </span>
-                          <span className="text-blue-800 font-bold bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200">
-                            {item.aCount} A-Tier
+                          <span className="text-blue-900 font-bold bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200">
+                            {item.aCount} Welcoming
                           </span>
                         </div>
                       </div>

@@ -59,7 +59,7 @@ export function RelativityCanvas() {
 
         ctx.beginPath();
         ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(160, 160, 160, 0.45)";
+        ctx.fillStyle = "rgba(160, 160, 160, 0.12)";
         ctx.fill();
       }
 

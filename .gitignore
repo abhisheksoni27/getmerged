@@ -41,3 +41,4 @@ bin/
 .playwright-cli
 .claude
 backend/server
+.agents

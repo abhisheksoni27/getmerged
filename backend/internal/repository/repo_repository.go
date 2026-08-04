@@ -91,6 +91,9 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 	if filter.Tier != "" {
 		where += " AND s.c_rank_tier = ?"
 		args = append(args, filter.Tier)
+	} else {
+		// Deprioritize unmaintained & slow review repos: unless user explicitly picks C or D tier, exclude them.
+		where += " AND s.c_rank_tier IN ('S', 'A', 'B')"
 	}
 
 	if filter.MinMergeRate > 0 {
