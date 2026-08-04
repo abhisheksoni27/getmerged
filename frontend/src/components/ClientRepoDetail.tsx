@@ -14,7 +14,6 @@ import {
   Bookmark,
   Users,
   Activity,
-  Star,
   FileCode2,
   Check,
   ArrowRight,
@@ -44,6 +43,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [isVerifiedContributor, setIsVerifiedContributor] = useState(false);
   const [githubNotFound, setGithubNotFound] = useState(false);
   const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
+  const [isGuidelinesOpen, setIsGuidelinesOpen] = useState(false);
 
   const rank = repo?.class_rank || repo?.c_rank_tier || "A";
   const score = repo?.c_rank_score || repo?.score || 78.5;
@@ -221,21 +221,6 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       ? "Accepts new contributor PRs"
       : "No first-timer merges recorded in window";
 
-  const getRankBadgeStyle = (r?: string) => {
-    switch (r) {
-      case "S":
-        return "bg-emerald-500 text-white border-emerald-600 shadow-emerald-500/20";
-      case "A":
-        return "bg-blue-600 text-white border-blue-700 shadow-blue-500/20";
-      case "B":
-        return "bg-amber-500 text-white border-amber-600 shadow-amber-500/20";
-      case "C":
-        return "bg-purple-600 text-white border-purple-700 shadow-purple-500/20";
-      default:
-        return "bg-zinc-800 text-white border-zinc-900";
-    }
-  };
-
   const getRankHumanLabel = (r?: string) => {
     switch (r) {
       case "S":
@@ -360,6 +345,40 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
     );
   }
 
+  const owner = repo?.owner || fullName.split("/")[0];
+  const ownerAvatarUrl = `https://github.com/${owner}.png`;
+
+  const getRankBadgeStyleNeobrutalist = (r?: string) => {
+    switch (r) {
+      case "S":
+        return "bg-emerald-400 text-[#222831]";
+      case "A":
+        return "bg-blue-400 text-white";
+      case "B":
+        return "bg-amber-400 text-[#222831]";
+      case "C":
+        return "bg-purple-400 text-white";
+      default:
+        return "bg-rose-400 text-[#222831]";
+    }
+  };
+
+  const responseTimeVal = repo?.time_to_first_response_hours || 0;
+  const responseScore = responseTimeVal > 0 ? Math.max(0, 100 - (responseTimeVal * 2.5)) : 0;
+  const mergeScore = repo?.external_pr_merge_rate || 0;
+  const firstTimerScore = repo?.first_timer_success_rate || 0;
+  const compositeScore = (mergeScore * 0.4) + (responseScore * 0.3) + (firstTimerScore * 0.3);
+  const cNPS = Math.round((compositeScore * 2) - 100);
+
+  const distinctMaintainers = repo?.distinct_maintainer_count !== undefined ? repo.distinct_maintainer_count : 0;
+  const maintainersCommentary = distinctMaintainers > 5
+    ? "Highly collaborative maintainer core"
+    : distinctMaintainers > 1
+    ? "Small core review team"
+    : distinctMaintainers === 1
+    ? "Single maintainer review bottleneck"
+    : "No active maintainers detected";
+
   return (
     <main className="mx-auto max-w-5xl px-3 sm:px-6 lg:px-8 py-10 sm:py-12 flex-1 w-full overflow-hidden">
       {/* Navigation Breadcrumb */}
@@ -371,45 +390,52 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         Back to Explorer
       </Link>
 
-      {/* Header Title & Watch Actions */}
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between border-b border-zinc-200/40 pb-6 mb-8">
-        <div className="min-w-0 flex-1">
-          {/* Prominent High-Visibility Vibe Badge & Score */}
-          <div className="flex flex-wrap items-center gap-2.5 mb-3">
-            <span
-              className={`rounded-xl px-3 py-1.5 font-sans text-xs font-bold border shadow-xs ${getRankBadgeStyle(
-                rank
-              )}`}
-            >
-              {getRankHumanLabel(rank)}
-            </span>
-            <div className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-100 px-3 py-1.5 font-sans text-xs font-bold text-zinc-800">
-              <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
-              <span>Score: {score.toFixed(1)} / 100</span>
+      {/* Hero Header (Neobrutalist Sticker Layout) */}
+      <div className="border-3 border-[#222831] bg-[#dfd0b8] p-6 sm:p-8 shadow-[6px_6px_0px_0px_#222831] rounded-2xl mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 transition-all duration-300 ease-out hover:-translate-y-0.5">
+        <div className="flex items-start gap-4 flex-1">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={ownerAvatarUrl}
+            alt={owner}
+            className="w-16 h-16 rounded-xl border-2 border-[#222831] shadow-[3px_3px_0px_0px_#222831] bg-white shrink-0"
+          />
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <span
+                className={`inline-block border-2 border-[#222831] shadow-[2px_2px_0px_0px_#222831] px-2.5 py-0.5 font-space text-xs font-black rounded-lg uppercase tracking-wider ${getRankBadgeStyleNeobrutalist(
+                  rank
+                )}`}
+              >
+                {getRankHumanLabel(rank)} ({rank})
+              </span>
+              {repo?.language && (
+                <span className="inline-block border-2 border-[#222831] bg-white text-[#222831] px-2.5 py-0.5 text-xs font-black font-mono rounded-lg shadow-[2px_2px_0px_0px_#222831]">
+                  {repo.language}
+                </span>
+              )}
             </div>
+            <h1 className="text-2xl sm:text-3xl font-black font-space text-[#222831] break-all tracking-tight leading-none">
+              {fullName}
+            </h1>
+            <p className="mt-2.5 text-xs sm:text-sm text-[#222831]/80 max-w-2xl leading-relaxed font-sans">
+              {repo?.description ||
+                "Public GitHub repository indexed and scored by maintainer responsiveness for contributor accessibility."}
+            </p>
           </div>
-
-          <h1 className="text-2xl sm:text-3xl font-bold font-space text-zinc-900 break-words tracking-tight">
-            {fullName}
-          </h1>
-          <p className="mt-2.5 text-xs sm:text-sm text-zinc-600 max-w-2xl leading-relaxed">
-            {repo?.description ||
-              "Public GitHub repository indexed and scored by maintainer responsiveness for contributor accessibility."}
-          </p>
         </div>
 
-        <div className="flex flex-col items-end gap-1.5 shrink-0">
-          <div className="flex items-center gap-2.5">
+        <div className="flex flex-col items-start md:items-end gap-2.5 shrink-0">
+          <div className="flex flex-wrap items-center gap-2.5">
             <button
               onClick={handleWatchToggle}
               disabled={watchLoading}
-              className={`inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-medium font-sans transition-all cursor-pointer shadow-xs ${
+              className={`inline-flex items-center gap-1.5 border-2 border-[#222831] rounded-xl px-4 py-2 text-xs font-bold font-sans transition-all cursor-pointer shadow-[3px_3px_0px_0px_#222831] hover:-translate-y-0.5 active:translate-y-0 ${
                 isWatching
-                  ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                  : "bg-zinc-100/70 text-zinc-700 hover:bg-zinc-200/60"
+                  ? "bg-emerald-300 text-[#222831]"
+                  : "bg-white text-[#222831] hover:bg-zinc-50"
               }`}
             >
-              {isWatching ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Bookmark className="h-3.5 w-3.5" />}
+              {isWatching ? <Check className="h-3.5 w-3.5 stroke-[3px]" /> : <Bookmark className="h-3.5 w-3.5 stroke-[3px]" />}
               {isWatching ? "Watching" : "Watch Repo"}
             </button>
             <a
@@ -417,66 +443,177 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               target="_blank"
               rel="noreferrer"
               onClick={() => posthog.capture('repo_github_link_clicked', { repo_full_name: fullName, repo_tier: rank })}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-medium font-sans text-white hover:bg-zinc-800 transition-all shadow-xs cursor-pointer"
+              className="inline-flex items-center gap-1.5 border-2 border-[#222831] rounded-xl bg-[#222831] px-4 py-2 text-xs font-bold font-sans text-white hover:bg-zinc-800 transition-all shadow-[3px_3px_0px_0px_#222831] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
             >
               <GitPullRequest className="h-3.5 w-3.5" />
               GitHub
             </a>
           </div>
-          {/* Issue #5: Explainer banner for Watch Repo value prop */}
-          <p className="text-[11px] font-sans text-zinc-500 max-w-xs text-right leading-tight">
-            💡 <strong className="text-zinc-700">Why Watch?</strong> Receive instant notifications if this repo&apos;s review velocity or C-Rank™ tier changes.
+          <p className="text-[10px] font-sans text-[#222831]/75 max-w-xs text-left md:text-right leading-tight">
+            💡 <strong className="text-[#222831]">Why Watch?</strong> Receive instant notifications if this repo&apos;s review velocity or C-Rank™ tier changes.
           </p>
         </div>
       </div>
 
-      {/* Integrated Unified Metrics Grid (Combines Primary & Secondary Stats seamlessly) */}
-      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 font-mono">
-        <h2 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-5 flex items-center gap-2">
-          <Activity className="h-4 w-4 text-emerald-600" /> Objective PR Telemetry & Maintainer Metrics
-        </h2>
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+      {/* Macro Metrics Grid & cNPS Gauge Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+        {/* Metric Cards Grid */}
+        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {/* Response Velocity */}
+          <div className="group relative border-3 border-[#222831] bg-white p-5 shadow-[4px_4px_0px_0px_#222831] rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
+            <div className="flex items-center gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
               <Clock className="h-4 w-4 text-emerald-600 shrink-0" />
-              <span>First Response Speed</span>
+              <span>Response Velocity</span>
             </div>
-            <div className="text-2xl sm:text-3xl font-bold text-zinc-900">{responseTimeStr}</div>
-            <div className="text-xs text-zinc-500 font-sans">{responseCommentary}</div>
+            <div className="text-3xl font-black text-[#222831] font-mono">{responseTimeStr}</div>
+            <div className="text-xs text-zinc-600 mt-1 font-sans font-medium">{responseCommentary}</div>
+            {/* Tooltip */}
+            <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 p-3 bg-[#222831] text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none ease-out">
+              <p className="font-bold mb-1">Average Response Latency</p>
+              <p className="text-zinc-300">Tracks hours until a maintainer leaves a review, comment, or PR response.</p>
+            </div>
           </div>
 
-          <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+          {/* Merge Efficiency */}
+          <div className="group relative border-3 border-[#222831] bg-white p-5 shadow-[4px_4px_0px_0px_#222831] rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
+            <div className="flex items-center gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
               <GitMerge className="h-4 w-4 text-blue-600 shrink-0" />
-              <span>External PR Merge Rate</span>
+              <span>Merge Efficiency</span>
             </div>
-            <div className="text-2xl sm:text-3xl font-bold text-zinc-900">{mergeRateStr}</div>
-            <div className="text-xs text-zinc-500 font-sans">{mergeCommentary}</div>
+            <div className="text-3xl font-black text-[#222831] font-mono">{mergeRateStr}</div>
+            <div className="text-xs text-zinc-600 mt-1 font-sans font-medium">{mergeCommentary}</div>
+            {/* Tooltip */}
+            <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 p-3 bg-[#222831] text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none ease-out">
+              <p className="font-bold mb-1">External Acceptance Rate</p>
+              <p className="text-zinc-300">Percentage of community pull requests successfully merged into main.</p>
+            </div>
           </div>
 
-          <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+          {/* First-Timer Success */}
+          <div className="group relative border-3 border-[#222831] bg-white p-5 shadow-[4px_4px_0px_0px_#222831] rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
+            <div className="flex items-center gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
               <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
               <span>First-Timer Success</span>
             </div>
-            <div className="text-2xl sm:text-3xl font-bold text-zinc-900">{firstTimerSuccessStr}</div>
-            <div className="text-xs text-zinc-500 font-sans">{firstTimerCommentary}</div>
+            <div className="text-3xl font-black text-[#222831] font-mono">{firstTimerSuccessStr}</div>
+            <div className="text-xs text-zinc-600 mt-1 font-sans font-medium">{firstTimerCommentary}</div>
+            {/* Tooltip */}
+            <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 p-3 bg-[#222831] text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none ease-out">
+              <p className="font-bold mb-1">First PR Conversion</p>
+              <p className="text-zinc-300">Rate at which developers submitting their first repository PR succeed.</p>
+            </div>
           </div>
 
-          <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-xs text-zinc-500">
-              <Star className="h-4 w-4 text-amber-500 shrink-0" />
-              <span>Stars & Activity</span>
+          {/* Active Maintainers */}
+          <div className="group relative border-3 border-[#222831] bg-white p-5 shadow-[4px_4px_0px_0px_#222831] rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
+            <div className="flex items-center gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
+              <Users className="h-4 w-4 text-amber-500 shrink-0" />
+              <span>Active Maintainers</span>
             </div>
-            <div className="text-2xl sm:text-3xl font-bold text-zinc-900">
-              {repo?.stars ? repo.stars.toLocaleString("en-US") : "—"}
+            <div className="text-3xl font-black text-[#222831] font-mono">
+              {distinctMaintainers > 0 ? distinctMaintainers : "—"}
             </div>
-            <div className="text-xs text-zinc-500 font-sans">
-              {repo?.language || "Other"} • {repo?.staleness_flag ? "Stale" : "Active"}
+            <div className="text-xs text-zinc-600 mt-1 font-sans font-medium">{maintainersCommentary}</div>
+            {/* Tooltip */}
+            <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 p-3 bg-[#222831] text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none ease-out">
+              <p className="font-bold mb-1">Distinct Reviewers</p>
+              <p className="text-zinc-300">Number of unique maintainers actively reviewing community code submissions.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* cNPS Circular Gauge Card */}
+        <div className="border-3 border-[#222831] bg-white p-6 shadow-[4px_4px_0px_0px_#222831] rounded-2xl flex flex-col items-center justify-between text-center transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
+          <div className="w-full flex justify-between items-center border-b border-zinc-100 pb-2 mb-3">
+            <span className="text-xs font-black text-zinc-400 uppercase tracking-wider font-mono">Contributor NPS</span>
+            <span className={`px-2 py-0.5 text-[10px] font-black font-mono border-2 border-[#222831] rounded-md ${
+              cNPS >= 30 ? "bg-emerald-100 text-emerald-800" : cNPS >= 0 ? "bg-blue-100 text-blue-800" : "bg-rose-100 text-rose-800"
+            }`}>
+              {cNPS >= 30 ? "PROMOTER" : cNPS >= 0 ? "NEUTRAL" : "DETRACTOR"}
+            </span>
+          </div>
+
+          <div className="relative flex items-center justify-center w-36 h-36">
+            {(() => {
+              const radius = 50;
+              const strokeWidth = 10;
+              const circumference = 2 * Math.PI * radius; // ~314.16
+              const cNPSPercentage = ((cNPS + 100) / 200) * 100;
+              const strokeDashoffset = circumference - (cNPSPercentage / 100) * circumference;
+
+              return (
+                <>
+                  <svg viewBox="0 0 120 120" className="w-full h-full transform -rotate-90">
+                    <circle cx="60" cy="60" r={radius} fill="transparent" stroke="#f4f4f5" strokeWidth={strokeWidth} />
+                    <circle
+                      cx="60" cy="60" r={radius} fill="transparent"
+                      stroke={cNPS >= 30 ? "#10b981" : cNPS >= 0 ? "#3b82f6" : "#f43f5e"}
+                      strokeWidth={strokeWidth}
+                      strokeDasharray={circumference}
+                      strokeDashoffset={strokeDashoffset}
+                      strokeLinecap="round"
+                      className="transition-all duration-1000 ease-out"
+                    />
+                  </svg>
+                  <div className="absolute flex flex-col items-center justify-center">
+                    <span className="text-3xl font-black text-[#222831] font-mono">
+                      {cNPS > 0 ? `+${cNPS}` : cNPS}
+                    </span>
+                    <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider font-mono">cNPS Score</span>
+                  </div>
+                </>
+              );
+            })()}
+          </div>
+
+          <p className="text-[11px] text-zinc-500 max-w-xs font-sans mt-3 leading-tight">
+            Derived Net Promoter Score rating based on accept rates, review speed, and first-timer compatibility.
+          </p>
+        </div>
+      </div>
+
+      {/* Collapsible Guideline Drawer */}
+      <div className="rounded-2xl border-3 border-[#222831] bg-white p-5 sm:p-6 shadow-[6px_6px_0px_0px_#222831] mb-10 transition-all duration-300">
+        <button
+          onClick={() => setIsGuidelinesOpen(!isGuidelinesOpen)}
+          className="w-full flex items-center justify-between font-space text-base sm:text-lg font-black text-[#222831] cursor-pointer"
+        >
+          <div className="flex items-center gap-2.5">
+            <Sparkles className="h-5 w-5 text-indigo-600 animate-pulse" />
+            <span>Interactive Onboarding & Contribution Guidelines</span>
+          </div>
+          <span className="text-xl font-bold font-mono transition-transform duration-300" style={{ transform: isGuidelinesOpen ? "rotate(90deg)" : "rotate(0deg)" }}>
+            ▶
+          </span>
+        </button>
+
+        <div className={`grid transition-all duration-500 ease-in-out ${isGuidelinesOpen ? "grid-rows-[1fr] opacity-100 mt-5" : "grid-rows-[0fr] opacity-0"}`}>
+          <div className="overflow-hidden">
+            <div className="border-t border-zinc-150 pt-4 space-y-4">
+              <p className="text-sm font-sans text-zinc-700">
+                Follow these instructions to increase the success rate of your pull requests in <strong>{fullName}</strong>:
+              </p>
+              {insights?.pr_guidelines && insights.pr_guidelines.length > 0 ? (
+                <ul className="space-y-3 font-sans text-sm text-[#222831]">
+                  {insights.pr_guidelines.map((guide, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5 p-3 rounded-xl bg-zinc-50 border border-zinc-200/60">
+                      <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
+                      <span>{guide}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="p-4 rounded-xl bg-indigo-50/50 border border-indigo-100 text-indigo-900 text-xs font-sans">
+                  ✨ {isLoggedIn 
+                    ? "Maintainer onboarding check: No specific rules fetched. Generally ensure tests pass and pull request scope is focused."
+                    : "Unlock full maintainer vibes & onboarding instructions: Please sign in with GitHub below to view detailed checklist guidelines."}
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
+
 
       {/* C-Rank Weight Formula Visualizer (Cleaned & Deduplicated) */}
       <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 font-mono">
