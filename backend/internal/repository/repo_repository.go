@@ -48,6 +48,8 @@ type RepoFilter struct {
 	Trending                  bool
 	MinFirstTimerSuccessRate  float64
 	MaxFirstTimerSuccessRate  float64
+	HasMinFirstTimer          bool
+	HasMaxFirstTimer          bool
 }
 
 type SnapshotRecord struct {
@@ -121,12 +123,12 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 		args = append(args, filter.MaxStars)
 	}
 
-	if filter.MinFirstTimerSuccessRate > 0 {
+	if filter.HasMinFirstTimer {
 		where += " AND s.first_timer_success_rate >= ?"
 		args = append(args, filter.MinFirstTimerSuccessRate)
 	}
 
-	if filter.MaxFirstTimerSuccessRate > 0 {
+	if filter.HasMaxFirstTimer {
 		where += " AND s.first_timer_success_rate <= ?"
 		args = append(args, filter.MaxFirstTimerSuccessRate)
 	}

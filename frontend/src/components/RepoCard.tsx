@@ -10,9 +10,10 @@ import posthog from "posthog-js";
 interface RepoCardProps {
   repo: Repo;
   isLoggedIn?: boolean;
+  isSpotlight?: boolean;
 }
 
-export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
+export function RepoCard({ repo, isLoggedIn = false, isSpotlight = false }: RepoCardProps) {
   const rank = repo.class_rank || repo.c_rank_tier || "A";
   const [ownerPart, namePart] = repo.full_name ? repo.full_name.split("/") : [repo.owner || "", repo.name || ""];
 
@@ -110,37 +111,55 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
     <Link
       href={`/repo/${ownerPart}/${namePart}`}
       onClick={handleClick}
-      className="group relative flex h-full flex-col justify-between rounded-xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-200 border border-zinc-200/90 block text-current no-underline cursor-pointer"
+      className={`group relative flex h-full flex-col justify-between rounded-xl p-5 border-2 transition-all duration-150 block text-current no-underline cursor-pointer ${
+        isSpotlight
+          ? "border-amber-500 bg-[#dfd0b8]/10 shadow-[3px_3px_0px_#ea580c] hover:shadow-[6px_6px_0px_#ea580c] hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#ea580c]"
+          : "border-brand-dark bg-white shadow-[3px_3px_0px_#222831] hover:shadow-[6px_6px_0px_#222831] hover:-translate-y-0.5 hover:bg-[#faf9f6]/30 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#222831]"
+      }`}
     >
       <div className="flex flex-col flex-1">
         {/* Header: Name + Neo-Brutalism Sticker Badge */}
         <div className="flex items-start justify-between gap-3 mb-3">
-          <div className="min-w-0 flex-1">
-            <div className="font-space text-base font-extrabold text-zinc-900 group-hover:text-zinc-700 transition-colors flex items-center gap-1 min-w-0">
-              <span className="truncate">{repo.full_name}</span>
-              <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all text-zinc-400 shrink-0" />
+          <div className="flex gap-2.5 min-w-0 flex-1">
+            {/* Org/User Avatar sticker container */}
+            <div className="h-8 w-8 rounded-lg border-2 border-brand-dark bg-white overflow-hidden shrink-0 shadow-[1px_1px_0px_#222831] group-hover:rotate-3 transition-transform">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`https://github.com/${ownerPart}.png`}
+                alt={ownerPart}
+                className="h-full w-full object-cover"
+                loading="lazy"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png";
+                }}
+              />
             </div>
-            <div className="flex items-center gap-2 mt-1 font-mono text-xs text-zinc-500">
-              <span className="flex items-center gap-1 text-amber-700 font-bold">
-                <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
-                {repo.stars >= 1_000 ? `${(repo.stars / 1_000).toFixed(1)}k` : repo.stars}
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1 text-zinc-700 font-medium">
-                <LangLogo language={repo.language} />
-                {repo.language || "Code"}
-              </span>
-              {repo.is_trending && (
-                <>
-                  <span>•</span>
-                  <span className="inline-flex items-center gap-0.5 text-orange-600 font-bold">
-                    <Flame className="h-3 w-3 fill-orange-500" />
-                    Trending
-                  </span>
-                </>
-              )}
+            <div className="min-w-0 flex-1">
+              <div className="font-space text-base font-extrabold text-brand-dark group-hover:text-zinc-700 transition-colors flex items-start gap-1 min-w-0" title={repo.full_name}>
+                <span className="line-clamp-2 break-all leading-snug">{repo.full_name}</span>
+                <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all text-zinc-500 shrink-0 mt-0.5" />
+              </div>
+              <div className="flex items-center gap-2 mt-1 font-mono text-xs text-zinc-600">
+                <span className="flex items-center gap-1 text-amber-900 font-bold">
+                  <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-600" />
+                  {repo.stars >= 1_000 ? `${(repo.stars / 1_000).toFixed(1)}k` : repo.stars}
+                </span>
+                <span>•</span>
+                <span className="flex items-center gap-1 text-zinc-900 font-semibold">
+                  <LangLogo language={repo.language} />
+                  {repo.language || "Code"}
+                </span>
+                {repo.is_trending && (
+                  <>
+                    <span>•</span>
+                    <span className="inline-flex items-center gap-0.5 text-orange-700 font-bold">
+                      <Flame className="h-3 w-3 fill-orange-500" />
+                      Trending
+                    </span>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
 
           {/* Neo-Brutalism Sticker Badge */}
           <div className={`px-2.5 py-1 rounded-lg text-[11px] font-extrabold shrink-0 transition-transform ${badgeStyle.badgeClass}`}>
@@ -150,31 +169,31 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
 
         {/* Fixed Height Clamped Description */}
         <div className="min-h-[2.5rem] mb-3">
-          <p className="text-xs text-zinc-600 line-clamp-2 leading-relaxed font-sans">
+          <p className="text-xs text-zinc-700 line-clamp-2 leading-relaxed font-sans font-normal">
             {repo.description || "No repository description available."}
           </p>
         </div>
 
         {/* Structured Metrics Scorecard */}
-        <div className="grid grid-cols-3 gap-2 py-1.5 text-center bg-zinc-50/80 rounded-lg border border-zinc-100 p-2 my-2">
+        <div className="grid grid-cols-3 gap-2 py-2 text-center bg-[#faf9f6] rounded-lg border-2 border-brand-dark/20 p-2 my-2 shadow-[1px_1px_0px_#222831]">
           <div>
-            <div className="font-mono text-xs font-bold text-zinc-900">{mergeRate || "—"}</div>
-            <div className="font-mono text-[10px] text-zinc-400">Merge Rate</div>
+            <div className="font-mono text-xs font-extrabold text-brand-dark">{mergeRate || "—"}</div>
+            <div className="font-mono text-[10px] font-semibold text-zinc-600">Merge Rate</div>
           </div>
           <div>
-            <div className="font-mono text-xs font-bold text-zinc-900">{firstResponse || "—"}</div>
-            <div className="font-mono text-[10px] text-zinc-400">First Review</div>
+            <div className="font-mono text-xs font-extrabold text-brand-dark">{firstResponse || "—"}</div>
+            <div className="font-mono text-[10px] font-semibold text-zinc-600">First Review</div>
           </div>
           <div>
-            <div className="font-mono text-xs font-bold text-zinc-900">{firstTimerRate || "—"}</div>
-            <div className="font-mono text-[10px] text-zinc-400">1st-Timers</div>
+            <div className="font-mono text-xs font-extrabold text-brand-dark">{firstTimerRate || "—"}</div>
+            <div className="font-mono text-[10px] font-semibold text-zinc-600">1st-Timers</div>
           </div>
         </div>
 
         {/* "Why Contribute?" Highlights */}
         <div className="space-y-1.5 my-2 flex-1">
           {insights.slice(0, 2).map((item, i) => (
-            <div key={i} className="flex items-center gap-1.5 text-xs text-zinc-800 font-sans">
+            <div key={i} className="flex items-center gap-1.5 text-xs text-zinc-900 font-sans font-medium">
               <CheckCircle2 className={`h-3.5 w-3.5 shrink-0 ${badgeStyle.iconColor}`} />
               <span className="truncate">{item}</span>
             </div>
@@ -183,11 +202,11 @@ export function RepoCard({ repo, isLoggedIn = false }: RepoCardProps) {
       </div>
 
       {/* Footer Tag & Insights trigger */}
-      <div className="pt-3 mt-auto border-t border-zinc-100 flex items-center justify-between text-xs">
-        <span className="inline-flex items-center gap-1 font-mono text-[11px] text-zinc-500">
-          <Sparkles className="h-3 w-3 text-zinc-400" /> Contributor Telemetry
+      <div className="pt-3 mt-auto border-t-2 border-brand-dark/10 flex items-center justify-between text-xs">
+        <span className="inline-flex items-center gap-1 font-mono text-[11px] text-zinc-600 font-medium">
+          <Sparkles className="h-3 w-3 text-zinc-500" /> Telemetry
         </span>
-        <span className="font-mono text-[11px] text-zinc-900 font-bold group-hover:translate-x-0.5 transition-transform">
+        <span className="font-mono text-[11px] text-brand-dark font-extrabold group-hover:translate-x-0.5 transition-transform">
           {isLoggedIn ? "View Details →" : "Explore →"}
         </span>
       </div>
