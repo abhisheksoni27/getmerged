@@ -236,26 +236,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const [spotlightRepos, setSpotlightRepos] = useState<Repo[]>([]);
-
   useEffect(() => {
-    // Fetch top welcoming repos sorted by C-Rank score descending (highest merge rate & responsiveness)
-    fetch(`${API_BASE_URL}/api/v1/repos?sort=c_rank_score&order=desc&per_page=3`)
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        const rawList = data?.data || data?.repos;
-        if (Array.isArray(rawList) && rawList.length > 0) {
-          const mapped: Repo[] = rawList.map((r: Record<string, unknown>) => ({
-            ...(r as unknown as Repo),
-            c_rank_tier: (r.c_rank_tier as string) || (r.class_rank as string) || "A",
-            class_rank: (r.class_rank as string) || (r.c_rank_tier as string) || "A",
-            first_timer_success_rate: (r.first_timer_success_rate as number) !== undefined ? (r.first_timer_success_rate as number) : (r.first_timer_rate as number),
-          }));
-          setSpotlightRepos(mapped);
-        }
-      })
-      .catch(() => {});
-
     // Issue #28 Fix: Pre-fetch macro stats to prevent layout flicker
     fetch(`${API_BASE_URL}/api/v1/stats/macro`)
       .then((res) => res.json())

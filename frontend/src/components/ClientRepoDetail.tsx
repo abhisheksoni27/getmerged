@@ -22,6 +22,7 @@ import {
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import posthog from "posthog-js";
+import { AuthModal } from "@/components/AuthModal";
 
 interface ClientRepoDetailProps {
   repo: Repo | null;
@@ -35,7 +36,6 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [isWatching, setIsWatching] = useState(false);
   const [watchLoading, setWatchLoading] = useState(false);
   const [insights, setInsights] = useState<AIInsights | null>(null);
-  const [hoveredMetric, setHoveredMetric] = useState<string | null>(null);
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [feedbackError, setFeedbackError] = useState<string | null>(null);
   const [badgeShowPoints, setBadgeShowPoints] = useState(false);
@@ -44,6 +44,15 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [githubNotFound, setGithubNotFound] = useState(false);
   const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
   const [isGuidelinesOpen, setIsGuidelinesOpen] = useState(false);
+
+  // Auth Modal State
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalConfig, setAuthModalConfig] = useState<{ title?: string; description?: string; source?: string }>({});
+
+  const openAuthModal = (title?: string, description?: string, source = "modal") => {
+    setAuthModalConfig({ title, description, source });
+    setIsAuthModalOpen(true);
+  };
 
   const rank = repo?.class_rank || repo?.c_rank_tier || "A";
   const score = repo?.c_rank_score || repo?.score || 78.5;
@@ -88,20 +97,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
     }
   }, [repo, fullName]);
 
-  const [history, setHistory] = useState<Array<{ snapshot_date: string; c_rank_score: number; c_rank_tier: string }>>([]);
-
-  useEffect(() => {
-    if (repo?.id) {
-      fetch(`${API_BASE_URL}/api/v1/history/${repo.id}`)
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data) => {
-          if (data?.history && Array.isArray(data.history)) {
-            setHistory(data.history);
-          }
-        })
-        .catch(() => {});
-    }
-  }, [repo?.id, fullName]);
+  // History Timeline Refactored Away
 
   useEffect(() => {
     const hasToken = typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
@@ -135,7 +131,11 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
   const handleWatchToggle = async () => {
     if (!isLoggedIn) {
-      window.location.href = `${API_BASE_URL}/api/v1/auth/github`;
+      openAuthModal(
+        "Watch Repository for Live Alerts",
+        "Sign in with GitHub to add this repository to your watchlists and track maintainer response trends.",
+        "watchlist"
+      );
       return;
     }
 
@@ -321,13 +321,17 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 {isWatching ? "Watching Repo" : "Watch Repo for Updates"}
               </button>
             ) : (
-              <a
-                href={`${API_BASE_URL}/api/v1/auth/github`}
-                className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
+              <button
+                onClick={() => openAuthModal(
+                  "Get Notification Updates",
+                  `Sign in with GitHub to get notified as soon as ${fullName} indexing completes and statistics are ready.`,
+                  "indexing_watch"
+                )}
+                className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs cursor-pointer"
               >
                 <Lock className="h-4 w-4 text-amber-400" />
                 Sign in with GitHub to Get Notified
-              </a>
+              </button>
             )}
 
             <a
@@ -871,6 +875,14 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     setFeedbackError("Please enter your feedback comment.");
                     return;
                   }
+                  if (!isLoggedIn) {
+                    openAuthModal(
+                      "Submit Contributor Experience Review",
+                      "Sign in with GitHub to verify your contribution history and unlock your Verified Contributor profile badge.",
+                      "feedback_submit"
+                    );
+                    return;
+                  }
                   setFeedbackError(null);
 
                   try {
@@ -895,18 +907,21 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     } else {
                       setFeedbackError("Please sign in with GitHub to submit feedback.");
                     }
-                  } catch {
-                    setFeedbackError("Failed to submit feedback. Ensure you are signed in.");
+                  } catch (e) {
+                    console.error("Failed to submit feedback", e);
+                    setFeedbackError("Feedback submission failed. Check network status.");
                   }
                 }}
-                className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-6 py-3 text-xs sm:text-sm font-sans font-bold text-white shadow-sm hover:bg-zinc-800 active:scale-98 transition-all cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-zinc-900 px-6 py-3 font-mono text-xs font-bold text-white hover:bg-zinc-800 transition-all shadow-md cursor-pointer"
               >
-                <span>Submit Contributor Review</span>
-                <ArrowRight className="h-4 w-4" />
+                Submit Contributor Review
               </button>
 
               {feedbackError && (
-                <p className="text-xs font-mono text-rose-600 mt-1">{feedbackError}</p>
+                <p className="text-xs font-mono text-rose-700 mt-2 flex items-center gap-1.5">
+                  <AlertCircle className="h-3.5 w-3.5" />
+                  {feedbackError}
+                </p>
               )}
               {feedbackSubmitted && (
                 <p className="text-xs font-mono text-emerald-700 flex items-center gap-1.5 mt-2">
@@ -984,6 +999,15 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </p>
         </section>
       </div>
+
+      {/* Auth Modal Component */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        title={authModalConfig.title}
+        description={authModalConfig.description}
+        source={authModalConfig.source}
+      />
     </main>
   );
 }

@@ -19,18 +19,18 @@ export function Footer() {
   ];
 
   return (
-    <footer className="border-t border-zinc-200/50 bg-[#161618] text-zinc-400 font-sans pt-16 pb-12">
+    <footer className="border-t-2 border-brand-dark bg-zinc-950 text-zinc-400 font-sans pt-16 pb-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 pb-12 border-b border-zinc-800/40 font-mono text-xs">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 pb-12 border-b border-zinc-800/80 font-mono text-xs">
           {/* Column 1: Brand & Tagline */}
           <div className="col-span-2 space-y-4 font-sans pr-4">
             <Link href="/" className="flex items-center gap-2.5">
-              <div className="relative flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500 font-space font-bold text-zinc-950 text-xs">
+              <div className="relative flex h-7 w-7 items-center justify-center rounded-lg bg-brand-cream border-2 border-brand-dark font-space font-extrabold text-zinc-950 text-xs shadow-[1px_1px_0px_#222831]">
                 OD
               </div>
-              <span className="font-space text-base font-bold text-white tracking-tight">opendoor</span>
+              <span className="font-space text-base font-extrabold text-white tracking-tight">opendoor</span>
             </Link>
-            <p className="text-xs text-zinc-400 leading-relaxed max-w-sm">
+            <p className="text-xs text-zinc-300 leading-relaxed max-w-sm">
               Glassdoor for open-source repositories. Opendoor scores public GitHub repositories using a proprietary <strong>C-Rank™</strong> system (S to D) based on merge rates, response times, and first-timer success metrics.
             </p>
             <div className="flex items-center gap-2 pt-1 text-[11px] text-emerald-400 font-mono">
@@ -40,7 +40,7 @@ export function Footer() {
 
           {/* Column 2: Ecosystem Rankings */}
           <div className="space-y-3">
-            <h4 className="font-bold text-white text-xs uppercase tracking-wider font-space">Ecosystem Rankings</h4>
+            <h4 className="font-extrabold text-white text-xs uppercase tracking-wider font-space">Ecosystem Rankings</h4>
             <ul className="space-y-2 text-zinc-400 font-mono text-[11px]">
               {topLanguages.slice(0, 5).map((lang) => (
                 <li key={lang.slug}>
@@ -54,7 +54,7 @@ export function Footer() {
 
           {/* Column 3: More Languages */}
           <div className="space-y-3">
-            <h4 className="font-bold text-white text-xs uppercase tracking-wider font-space">More Ecosystems</h4>
+            <h4 className="font-extrabold text-white text-xs uppercase tracking-wider font-space">More Ecosystems</h4>
             <ul className="space-y-2 text-zinc-400 font-mono text-[11px]">
               {topLanguages.slice(5).map((lang) => (
                 <li key={lang.slug}>
@@ -68,7 +68,7 @@ export function Footer() {
 
           {/* Column 4: Platform & Developers */}
           <div className="space-y-3">
-            <h4 className="font-bold text-white text-xs uppercase tracking-wider font-space">Platform</h4>
+            <h4 className="font-extrabold text-white text-xs uppercase tracking-wider font-space">Platform</h4>
             <ul className="space-y-2 text-zinc-400 font-mono text-[11px]">
               <li>
                 <Link href="/status" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
