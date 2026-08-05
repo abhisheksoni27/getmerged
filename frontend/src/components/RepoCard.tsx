@@ -11,11 +11,30 @@ interface RepoCardProps {
   repo: Repo;
   isLoggedIn?: boolean;
   isSpotlight?: boolean;
+  spotlightIndex?: number;
 }
 
-export function RepoCard({ repo, isLoggedIn = false, isSpotlight = false }: RepoCardProps) {
+export function RepoCard({ repo, isLoggedIn = false, isSpotlight = false, spotlightIndex = 0 }: RepoCardProps) {
   const rank = repo.class_rank || repo.c_rank_tier || "A";
   const [ownerPart, namePart] = repo.full_name ? repo.full_name.split("/") : [repo.owner || "", repo.name || ""];
+
+  // Funky vibrant Neo-Brutalism themes for Top Trending / Spotlight cards
+  const spotlightThemes = [
+    {
+      // Card 1: Electric Lime / Emerald Glow
+      container: "border-brand-dark bg-gradient-to-br from-emerald-100/80 via-teal-50 to-emerald-200/50 shadow-[4px_4px_0px_#065f46] hover:shadow-[7px_7px_0px_#065f46] hover:-translate-y-1 hover:rotate-[-0.5deg]",
+    },
+    {
+      // Card 2: Cyber Purple / Magenta Sparkle
+      container: "border-brand-dark bg-gradient-to-br from-purple-100/80 via-fuchsia-50 to-pink-200/50 shadow-[4px_4px_0px_#581c87] hover:shadow-[7px_7px_0px_#581c87] hover:-translate-y-1 hover:rotate-[0.5deg]",
+    },
+    {
+      // Card 3: Neon Amber / Sunshine Gold
+      container: "border-brand-dark bg-gradient-to-br from-amber-100/80 via-yellow-50 to-orange-200/50 shadow-[4px_4px_0px_#78350f] hover:shadow-[7px_7px_0px_#78350f] hover:-translate-y-1 hover:rotate-[-0.5deg]",
+    },
+  ];
+
+  const currentSpotlightTheme = spotlightThemes[spotlightIndex % spotlightThemes.length];
 
   // Neo-brutalism sticker badge styling with high visual rhythm & clear layman labels
   const getBadgeStyle = (r?: string) => {
@@ -113,7 +132,7 @@ export function RepoCard({ repo, isLoggedIn = false, isSpotlight = false }: Repo
       onClick={handleClick}
       className={`group relative flex h-full flex-col justify-between rounded-xl p-5 border-2 transition-all duration-150 block text-current no-underline cursor-pointer ${
         isSpotlight
-          ? "border-amber-500 bg-[#dfd0b8]/10 shadow-[3px_3px_0px_#ea580c] hover:shadow-[6px_6px_0px_#ea580c] hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#ea580c]"
+          ? currentSpotlightTheme.container
           : "border-brand-dark bg-white shadow-[3px_3px_0px_#222831] hover:shadow-[6px_6px_0px_#222831] hover:-translate-y-0.5 hover:bg-[#faf9f6]/30 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#222831]"
       }`}
     >
