@@ -3,6 +3,7 @@ package pipeline_test
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -64,5 +65,10 @@ func TestGenerateStaticSitemaps(t *testing.T) {
 	goFile := filepath.Join(tempDir, "sitemap", "go.xml")
 	if _, err := os.Stat(goFile); os.IsNotExist(err) {
 		t.Fatalf("go.xml sitemap partition not generated")
+	}
+
+	content, err := os.ReadFile(goFile)
+	if err != nil || !strings.Contains(string(content), "https://opendoor.abhishekco.de/golang/go") {
+		t.Fatalf("expected go.xml to contain 'https://opendoor.abhishekco.de/golang/go', got: %s", string(content))
 	}
 }
