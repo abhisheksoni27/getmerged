@@ -52,14 +52,14 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: More Languages */}
+          {/* Column 3: Good First Issues */}
           <div className="space-y-3">
-            <h4 className="font-extrabold text-white text-xs uppercase tracking-wider font-space">More Ecosystems</h4>
+            <h4 className="font-extrabold text-white text-xs uppercase tracking-wider font-space">Good First Issues</h4>
             <ul className="space-y-2 text-zinc-400 font-mono text-[11px]">
-              {topLanguages.slice(5).map((lang) => (
+              {topLanguages.slice(0, 5).map((lang) => (
                 <li key={lang.slug}>
-                  <Link href={`/rankings/${lang.slug}`} className="hover:text-emerald-400 transition-colors">
-                    Top {lang.name} Repos
+                  <Link href={`/good-first-issue/${lang.slug}`} className="hover:text-emerald-400 transition-colors">
+                    {lang.name} Good First Issues
                   </Link>
                 </li>
               ))}

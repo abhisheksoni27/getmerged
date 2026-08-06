@@ -23,6 +23,7 @@ import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import posthog from "posthog-js";
 import { AuthModal } from "@/components/AuthModal";
+import { RepoCard } from "@/components/RepoCard";
 
 interface ClientRepoDetailProps {
   repo: Repo | null;
@@ -44,6 +45,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [githubNotFound, setGithubNotFound] = useState(false);
   const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
   const [isGuidelinesOpen, setIsGuidelinesOpen] = useState(false);
+  const [relatedRepos, setRelatedRepos] = useState<Repo[]>([]);
 
   // Auth Modal State
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -127,7 +129,19 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         })
         .catch(() => {});
     }
-  }, [repo?.id]);
+
+    if (fullName) {
+      // 3. Fetch Similar/Related Repositories for Interlinking (Issue #55)
+      fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/related?limit=3`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.related && Array.isArray(data.related)) {
+            setRelatedRepos(data.related);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [repo?.id, fullName]);
 
   const handleWatchToggle = async () => {
     if (!isLoggedIn) {
@@ -337,7 +351,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <a
               href={`https://github.com/${fullName}`}
               target="_blank"
-              rel="noreferrer"
+              rel="nofollow noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-white px-6 py-3 text-xs font-mono font-medium text-zinc-700 hover:bg-zinc-50 transition-all"
             >
               <GitPullRequest className="h-4 w-4" />
@@ -413,9 +427,12 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 {getRankHumanLabel(rank)}
               </span>
               {repo?.language && (
-                <span className="inline-block border-2 border-[#222831] bg-white text-[#222831] px-2.5 py-0.5 text-xs font-black font-mono rounded-lg shadow-[2px_2px_0px_0px_#222831]">
+                <Link
+                  href={`/rankings/${encodeURIComponent(repo.language.toLowerCase())}`}
+                  className="inline-block border-2 border-[#222831] bg-white text-[#222831] px-2.5 py-0.5 text-xs font-black font-mono rounded-lg shadow-[2px_2px_0px_0px_#222831] hover:bg-zinc-100 transition-colors"
+                >
                   {repo.language}
-                </span>
+                </Link>
               )}
             </div>
             <h1 className="text-2xl sm:text-3xl font-black font-space text-[#222831] break-all tracking-tight leading-none">
@@ -445,7 +462,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <a
               href={repo?.github_url || `https://github.com/${fullName}`}
               target="_blank"
-              rel="noreferrer"
+              rel="nofollow noopener noreferrer"
               onClick={() => posthog.capture('repo_github_link_clicked', { repo_full_name: fullName, repo_tier: rank })}
               className="inline-flex items-center gap-1.5 border-2 border-[#222831] rounded-xl bg-[#222831] px-4 py-2 text-xs font-bold font-sans text-white hover:bg-zinc-800 transition-all shadow-[3px_3px_0px_0px_#222831] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
             >
@@ -576,6 +593,28 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         </div>
       </div>
 
+      {/* Fast Review Peers Interlinking Bar (Issue #55 Axis 3) */}
+      {relatedRepos.length > 0 && (
+        <div className="rounded-2xl border-2 border-[#222831] bg-zinc-900 p-4 shadow-[4px_4px_0px_0px_#222831] mb-10 text-white flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
+            <span className="font-bold text-zinc-300">Fast Review Peers in {repo?.language || "Ecosystem"}:</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {relatedRepos.slice(0, 3).map((rel) => (
+              <a
+                key={rel.id || rel.full_name}
+                href={`/${rel.full_name}`}
+                className="px-3 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-emerald-300 hover:text-emerald-200 border border-zinc-700 transition-colors font-bold no-underline inline-flex items-center gap-1 text-[11px]"
+              >
+                <span>{rel.full_name}</span>
+                <span className="text-[10px] text-zinc-400">({rel.c_rank_tier || "A"})</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Collapsible Guideline Drawer */}
       <div className="rounded-2xl border-3 border-[#222831] bg-white p-5 sm:p-6 shadow-[6px_6px_0px_0px_#222831] mb-10 transition-all duration-300">
         <button
@@ -630,22 +669,47 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           <a
             href={`https://github.com/${fullName}/issues?q=is%3Aissue%20is%3Aopen%20(label%3A%22first%20timers%20only%22%20OR%20label%3A%22good%20first%20issue%22)`}
             target="_blank"
-            rel="noreferrer"
+            rel="nofollow noopener noreferrer"
             className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1"
           >
             View on GitHub <ArrowRight className="h-3 w-3" />
           </a>
         </div>
         {(repo?.good_first_issue_count ?? 0) > 0 ? (
-          <p className="text-xs text-zinc-600 font-sans">
-            This repo currently has <strong>{repo?.good_first_issue_count}</strong> open{" "}
-            <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700 font-mono">good first issue</code> issues -
-            a great entry point for your first contribution.
-          </p>
+          <div className="space-y-3">
+            <p className="text-xs text-zinc-600 font-sans">
+              This repo currently has <strong>{repo?.good_first_issue_count}</strong> open{" "}
+              <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700 font-mono">good first issue</code> issues -
+              a great entry point for your first contribution.
+            </p>
+            {repo?.language && (
+              <div className="pt-2 border-t border-zinc-100 flex items-center justify-between">
+                <span className="text-[11px] font-sans text-zinc-500">Looking for more {repo.language} beginner tasks?</span>
+                <Link
+                  href={`/good-first-issue/${encodeURIComponent(repo.language.toLowerCase())}`}
+                  className="text-xs font-bold text-emerald-700 hover:text-emerald-800 font-sans inline-flex items-center gap-1 hover:underline"
+                >
+                  Explore all {repo.language} Good First Issues <ArrowRight className="h-3 w-3" />
+                </Link>
+              </div>
+            )}
+          </div>
         ) : (
-          <p className="text-xs text-zinc-500 font-sans bg-zinc-100/50 p-4 rounded-xl text-center">
-            No open `good first issue` labels currently found on GitHub for this repo.
-          </p>
+          <div className="space-y-2">
+            <p className="text-xs text-zinc-500 font-sans bg-zinc-100/50 p-4 rounded-xl text-center">
+              No open `good first issue` labels currently found on GitHub for this repo.
+            </p>
+            {repo?.language && (
+              <div className="text-center pt-2">
+                <Link
+                  href={`/good-first-issue/${encodeURIComponent(repo.language.toLowerCase())}`}
+                  className="text-xs font-bold text-emerald-700 hover:text-emerald-800 font-sans inline-flex items-center gap-1 hover:underline"
+                >
+                  Browse open {repo.language} Good First Issues across other repos <ArrowRight className="h-3 w-3" />
+                </Link>
+              </div>
+            )}
+          </div>
         )}
       </div>
 
@@ -712,6 +776,37 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </button>
         </div>
       </div>
+
+      {/* Similar Repositories & Alternatives Interlinking (Issue #55) */}
+      {relatedRepos.length > 0 && (
+        <div className="rounded-2xl bg-white p-6 sm:p-8 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-10">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-zinc-200">
+            <div>
+              <h3 className="text-lg font-black text-zinc-900 flex items-center gap-2 font-space">
+                <Sparkles className="h-5 w-5 text-emerald-600" /> Similar Welcoming Repositories
+              </h3>
+              <p className="text-xs text-zinc-600 font-sans mt-0.5">
+                Explore alternative open-source projects with high merge rates and active maintainers in{" "}
+                <strong className="text-zinc-900">{repo?.language || "this language"}</strong>.
+              </p>
+            </div>
+            {repo?.language && (
+              <Link
+                href={`/rankings/${encodeURIComponent(repo.language.toLowerCase())}`}
+                className="text-xs font-bold text-emerald-700 hover:text-emerald-800 font-sans flex items-center gap-1 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200"
+              >
+                View all {repo.language} rankings <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {relatedRepos.map((relRepo) => (
+              <RepoCard key={relRepo.id || relRepo.full_name} repo={relRepo} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* AI Insights & Maintainer Vibe Check Section */}
       <div className="relative rounded-2xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)] overflow-hidden mb-10">

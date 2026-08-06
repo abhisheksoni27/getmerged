@@ -114,3 +114,40 @@ func TestRepoRepository_ListAndFind(t *testing.T) {
 		t.Fatalf("expected full_name 'golang/go', got %s", found.FullName)
 	}
 }
+
+func TestRepoRepository_GetRelatedRepos(t *testing.T) {
+	database, _ := setupTestDB(t)
+	defer database.Close()
+
+	repo := repository.NewRepoRepository(database)
+	ctx := context.Background()
+
+	now := time.Now()
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('1', 'gin-gonic/gin', 'gin-gonic', 'gin', 'Go', 75000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, external_pr_merge_rate) VALUES ('1', '2026-07-26', 'S', 95.0, 85.0)`)
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('2', 'gofiber/fiber', 'gofiber', 'fiber', 'Go', 35000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, external_pr_merge_rate) VALUES ('2', '2026-07-26', 'S', 92.0, 80.0)`)
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('3', 'facebook/react', 'facebook', 'react', 'JavaScript', 220000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, external_pr_merge_rate) VALUES ('3', '2026-07-26', 'S', 90.0, 75.0)`)
+
+	target, err := repo.FindByIDOrName(ctx, "gin-gonic/gin")
+	if err != nil {
+		t.Fatalf("failed to find target repo: %v", err)
+	}
+
+	related, err := repo.GetRelatedRepos(ctx, target, 3)
+	if err != nil {
+		t.Fatalf("GetRelatedRepos failed: %v", err)
+	}
+
+	if len(related) == 0 {
+		t.Fatalf("expected non-empty related repos list, got 0")
+	}
+
+	// First match should be gofiber/fiber (same language Go)
+	if related[0].FullName != "gofiber/fiber" {
+		t.Fatalf("expected first related repo to be 'gofiber/fiber', got %s", related[0].FullName)
+	}
+}

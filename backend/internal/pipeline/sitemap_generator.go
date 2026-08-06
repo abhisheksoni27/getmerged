@@ -70,16 +70,34 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 	var indexSitemaps []Sitemap
 
 	// 1. Generate main.xml for homepage & core platform landing pages
-	mainUrlset := URLSet{
-		URLs: []URL{
-			{
-				Loc:        baseUrl,
+	mainUrls := []URL{
+		{Loc: baseUrl, LastMod: today, ChangeFreq: "daily", Priority: "1.0"},
+		{Loc: fmt.Sprintf("%s/leaderboard", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "0.9"},
+		{Loc: fmt.Sprintf("%s/hall-of-fame", baseUrl), LastMod: today, ChangeFreq: "weekly", Priority: "0.8"},
+		{Loc: fmt.Sprintf("%s/status", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "0.6"},
+		{Loc: fmt.Sprintf("%s/privacy", baseUrl), LastMod: today, ChangeFreq: "monthly", Priority: "0.3"},
+		{Loc: fmt.Sprintf("%s/terms", baseUrl), LastMod: today, ChangeFreq: "monthly", Priority: "0.3"},
+	}
+
+	// Add language rankings and GFI hubs to main sitemap
+	for lang := range langMap {
+		if lang != "" && lang != "other" {
+			mainUrls = append(mainUrls, URL{
+				Loc:        fmt.Sprintf("%s/rankings/%s", baseUrl, lang),
 				LastMod:    today,
 				ChangeFreq: "daily",
-				Priority:   "1.0",
-			},
-		},
+				Priority:   "0.9",
+			})
+			mainUrls = append(mainUrls, URL{
+				Loc:        fmt.Sprintf("%s/good-first-issue/%s", baseUrl, lang),
+				LastMod:    today,
+				ChangeFreq: "daily",
+				Priority:   "0.9",
+			})
+		}
 	}
+
+	mainUrlset := URLSet{URLs: mainUrls}
 	mainOutput, err := xml.MarshalIndent(mainUrlset, "", "  ")
 	if err == nil {
 		mainFilePath := filepath.Join(sitemapDir, "main.xml")
@@ -102,7 +120,7 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 			parts := strings.Split(r.FullName, "/")
 			if len(parts) == 2 {
 				urlset.URLs = append(urlset.URLs, URL{
-					Loc:        fmt.Sprintf("%s/repo/%s/%s", baseUrl, parts[0], parts[1]),
+					Loc:        fmt.Sprintf("%s/%s/%s", baseUrl, parts[0], parts[1]),
 					LastMod:    today,
 					ChangeFreq: "daily",
 					Priority:   "0.8",

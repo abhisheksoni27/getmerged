@@ -54,7 +54,10 @@ func ComputeCRank(n NormalisedMetrics, staleness bool, gfiCount int) (score floa
 		return score, TierD
 	}
 
-	if gfiCount == 0 && n.FirstTimer < 50 {
+	if gfiCount > 0 {
+		// Repos with active beginner-friendly issues get a 15% score boost (capped at 100)
+		rawScore = math.Min(100.0, rawScore*1.15)
+	} else if gfiCount == 0 && n.FirstTimer < 50 {
 		rawScore *= 0.9
 	}
 	return rawScore, scoreTier(rawScore)
