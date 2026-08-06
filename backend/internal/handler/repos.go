@@ -324,22 +324,30 @@ func GetBadgeSVG(repoStore repository.RepoRepository) gin.HandlerFunc {
 			rightText = fmt.Sprintf("%s · %s", tierName, score)
 		}
 
-		svg := fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="280" height="28" role="img" aria-label="Opendoor %s">
-  <title>Opendoor %s</title>
+		// Modern high-fidelity badge design (Issue #57)
+		svg := fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="220" height="28" role="img" aria-label="Opendoor C-Rank: %s">
+  <title>Opendoor C-Rank: %s</title>
   <defs>
-    <linearGradient id="s" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity=".14"/></linearGradient>
+    <linearGradient id="b" x2="0" y2="100%%">
+      <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+      <stop offset="1" stop-opacity=".1"/>
+    </linearGradient>
+    <clipPath id="r">
+      <rect width="220" height="28" rx="6" fill="#fff"/>
+    </clipPath>
   </defs>
-  <clipPath id="r"><rect width="280" height="28" rx="7" fill="#fff"/></clipPath>
   <g clip-path="url(#r)">
-    <rect width="100" height="28" fill="#18181b"/>
-    <rect x="100" width="180" height="28" fill="%s"/>
-    <rect width="280" height="28" fill="url(#s)"/>
+    <rect width="85" height="28" fill="#18181b"/>
+    <rect x="85" width="135" height="28" fill="%s"/>
+    <rect width="220" height="28" fill="url(#b)"/>
   </g>
-  <g font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="13" fill="#fff" text-anchor="middle">
-    <text x="50" y="19" font-weight="600">Opendoor</text>
-    <text x="190" y="19">%s</text>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="11">
+    <text x="42.5" y="18 font-weight="700" fill="#000" opacity="0.3">opendoor</text>
+    <text x="42.5" y="17" font-weight="700" fill="#fff">opendoor</text>
+    <text x="152.5" y="18" font-weight="700" fill="#000" opacity="0.3">%s</text>
+    <text x="152.5" y="17" font-weight="700" fill="#fff">%s</text>
   </g>
-</svg>`, rightText, rightText, color, rightText)
+</svg>`, rightText, rightText, color, rightText, rightText)
 
 		c.Header("Content-Type", "image/svg+xml")
 		c.Header("Cache-Control", "public, max-age=3600, s-maxage=86400")
@@ -368,6 +376,39 @@ func GetRepoHistory(repoStore repository.RepoRepository) gin.HandlerFunc {
 			"repository_id": repo.ID,
 			"full_name":     repo.FullName,
 			"history":       history,
+		})
+	}
+}
+
+// GetRelatedReposHandler handles GET /api/v1/repos/:id/related (Issue #55)
+func GetRelatedReposHandler(repoStore repository.RepoRepository) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := c.Param("id")
+		repo, err := repoStore.FindByIDOrName(c.Request.Context(), id)
+		if err == sql.ErrNoRows || repo == nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "repository not found"})
+			return
+		}
+
+		limit := 3
+		if lStr := c.Query("limit"); lStr != "" {
+			if l, err := strconv.Atoi(lStr); err == nil && l > 0 && l <= 10 {
+				limit = l
+			}
+		}
+
+		related, err := repoStore.GetRelatedRepos(c.Request.Context(), repo, limit)
+		if err != nil {
+			slog.Error("get related repos failed", "id", id, "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch related repositories"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"repository_id": repo.ID,
+			"full_name":     repo.FullName,
+			"language":      repo.Language,
+			"related":       related,
 		})
 	}
 }

@@ -65,6 +65,7 @@ type RepoRepository interface {
 	Delete(ctx context.Context, id string) error
 	InsertSnapshot(ctx context.Context, repoID string, raw scoring.RawMetrics, score float64, tier string) error
 	FetchLatestSnapshotsSample(ctx context.Context, limit int) ([]scoring.RawMetrics, error)
+	GetRelatedRepos(ctx context.Context, repo *RepoRecord, limit int) ([]*RepoRecord, error)
 }
 
 type sqlxRepoRepository struct {
@@ -402,4 +403,116 @@ func (r *sqlxRepoRepository) FetchLatestSnapshotsSample(ctx context.Context, lim
 	}
 
 	return result, nil
+}
+
+// GetRelatedRepos fetches repositories related by language and nearby metrics (merge rate & score)
+// with fallbacks if insufficient matches exist.
+func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoRecord, limit int) ([]*RepoRecord, error) {
+	if repo == nil || limit <= 0 {
+		return []*RepoRecord{}, nil
+	}
+
+	query := `
+		SELECT
+			r.id, r.full_name, COALESCE(r.language, '') as language, r.stars, COALESCE(r.description, '') as description, COALESCE(r.github_url, '') as github_url,
+			COALESCE(s.c_rank_tier, 'A') as c_rank_tier,
+			COALESCE(s.c_rank_score, 75.0) as c_rank_score,
+			COALESCE(s.external_pr_merge_rate, 0) as external_pr_merge_rate,
+			COALESCE(s.time_to_first_response_hours, 0) as time_to_first_response_hours,
+			COALESCE(s.time_to_merge_hours, 0) as time_to_merge_hours,
+			COALESCE(s.first_timer_success_rate, 0) as first_timer_success_rate,
+			COALESCE(s.repeat_contributor_rate, 0) as repeat_contributor_rate,
+			COALESCE(s.maintainer_responsiveness, 0) as maintainer_responsiveness,
+			COALESCE(s.last_activity_days, 0) as last_activity_days,
+			COALESCE(s.review_rounds, 0) as review_rounds,
+			COALESCE(s.distinct_maintainer_count, 0) as distinct_maintainer_count,
+			COALESCE(s.staleness_flag, 0) as staleness_flag,
+			COALESCE(s.snapshot_date, '') as snapshot_date,
+			COALESCE(s.good_first_issue_count, 0) as good_first_issue_count
+		FROM repositories r
+		LEFT JOIN latest_snapshots s ON r.id = s.repository_id
+		WHERE r.id != ? AND LOWER(r.language) = LOWER(?)
+		ORDER BY ABS(COALESCE(s.external_pr_merge_rate, 0) - ?) ASC,
+		         ABS(COALESCE(s.c_rank_score, 0) - ?) ASC,
+		         r.stars DESC
+		LIMIT ?
+	`
+
+	rows, err := r.db.QueryContext(ctx, query, repo.ID, repo.Language, repo.ExternalPRMergeRate, repo.CRankScore, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var repos []*RepoRecord
+	for rows.Next() {
+		var rec RepoRecord
+		var staleInt int
+		if err := rows.Scan(
+			&rec.ID, &rec.FullName, &rec.Language, &rec.Stars, &rec.Description, &rec.GithubURL,
+			&rec.CRankTier, &rec.CRankScore, &rec.ExternalPRMergeRate, &rec.TimeToFirstResponseHours,
+			&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
+			&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
+			&rec.DistinctMaintainerCount, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
+		); err != nil {
+			return nil, err
+		}
+		rec.StalenessFlag = staleInt == 1
+		repos = append(repos, &rec)
+	}
+
+	// Fallback to top-scoring repos across all languages if language matches < limit
+	if len(repos) < limit {
+		fallbackLimit := limit - len(repos)
+		excludeIDs := []string{repo.ID}
+		for _, existing := range repos {
+			excludeIDs = append(excludeIDs, existing.ID)
+		}
+
+		inClause := fmt.Sprintf("('%s')", strings.Join(excludeIDs, "', '"))
+		fallbackQuery := fmt.Sprintf(`
+			SELECT
+				r.id, r.full_name, COALESCE(r.language, '') as language, r.stars, COALESCE(r.description, '') as description, COALESCE(r.github_url, '') as github_url,
+				COALESCE(s.c_rank_tier, 'A') as c_rank_tier,
+				COALESCE(s.c_rank_score, 75.0) as c_rank_score,
+				COALESCE(s.external_pr_merge_rate, 0) as external_pr_merge_rate,
+				COALESCE(s.time_to_first_response_hours, 0) as time_to_first_response_hours,
+				COALESCE(s.time_to_merge_hours, 0) as time_to_merge_hours,
+				COALESCE(s.first_timer_success_rate, 0) as first_timer_success_rate,
+				COALESCE(s.repeat_contributor_rate, 0) as repeat_contributor_rate,
+				COALESCE(s.maintainer_responsiveness, 0) as maintainer_responsiveness,
+				COALESCE(s.last_activity_days, 0) as last_activity_days,
+				COALESCE(s.review_rounds, 0) as review_rounds,
+				COALESCE(s.distinct_maintainer_count, 0) as distinct_maintainer_count,
+				COALESCE(s.staleness_flag, 0) as staleness_flag,
+				COALESCE(s.snapshot_date, '') as snapshot_date,
+				COALESCE(s.good_first_issue_count, 0) as good_first_issue_count
+			FROM repositories r
+			LEFT JOIN latest_snapshots s ON r.id = s.repository_id
+			WHERE r.id NOT IN %s
+			ORDER BY s.c_rank_score DESC, r.stars DESC
+			LIMIT ?
+		`, inClause)
+
+		fRows, err := r.db.QueryContext(ctx, fallbackQuery, fallbackLimit)
+		if err == nil {
+			defer fRows.Close()
+			for fRows.Next() {
+				var rec RepoRecord
+				var staleInt int
+				if err := fRows.Scan(
+					&rec.ID, &rec.FullName, &rec.Language, &rec.Stars, &rec.Description, &rec.GithubURL,
+					&rec.CRankTier, &rec.CRankScore, &rec.ExternalPRMergeRate, &rec.TimeToFirstResponseHours,
+					&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
+					&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
+					&rec.DistinctMaintainerCount, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
+				); err == nil {
+					rec.StalenessFlag = staleInt == 1
+					repos = append(repos, &rec)
+				}
+			}
+		}
+	}
+
+	return repos, nil
 }

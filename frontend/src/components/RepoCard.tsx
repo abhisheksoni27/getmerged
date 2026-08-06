@@ -167,6 +167,14 @@ export function RepoCard({ repo, isLoggedIn = false, isSpotlight = false, spotli
                   <LangLogo language={repo.language} />
                   {repo.language || "Code"}
                 </span>
+                {repo.good_first_issue_count !== undefined && repo.good_first_issue_count > 0 && (
+                  <>
+                    <span>•</span>
+                    <span className="inline-flex items-center gap-1 text-emerald-800 font-extrabold bg-emerald-100 px-1.5 py-0.5 rounded border border-emerald-300">
+                      🌱 {repo.good_first_issue_count} Beginner Issues
+                    </span>
+                  </>
+                )}
                 {repo.is_trending && (
                   <>
                     <span>•</span>

@@ -238,4 +238,40 @@ func TestGetBadgeSVGQueryParams(t *testing.T) {
 	}
 }
 
+func TestGetRelatedReposHandler(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	database := setupTestDB(t)
+	defer database.Close()
+
+	repoStore := repository.NewRepoRepository(database)
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('rel-1', 'gin-gonic/gin', 'gin-gonic', 'gin', 'Go', 75000, ?)`, time.Now())
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score) VALUES ('rel-1', '2026-01-01', 'S', 95.0)`)
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('rel-2', 'gofiber/fiber', 'gofiber', 'fiber', 'Go', 35000, ?)`, time.Now())
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score) VALUES ('rel-2', '2026-01-01', 'S', 92.0)`)
+
+	r := gin.New()
+	r.GET("/api/v1/repos/*id", func(c *gin.Context) {
+		if strings.HasSuffix(c.Param("id"), "/related") {
+			c.Params = gin.Params{gin.Param{Key: "id", Value: strings.TrimSuffix(strings.TrimPrefix(c.Param("id"), "/"), "/related")}}
+			handler.GetRelatedReposHandler(repoStore)(c)
+			return
+		}
+	})
+
+	req := httptest.NewRequest("GET", "/api/v1/repos/gin-gonic/gin/related", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200 OK for related repos endpoint, got %d", w.Code)
+	}
+
+	body := w.Body.String()
+	if !strings.Contains(body, "gofiber/fiber") {
+		t.Fatalf("expected related repos body to contain 'gofiber/fiber', got: %s", body)
+	}
+}
+
 
