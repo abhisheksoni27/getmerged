@@ -59,6 +59,13 @@ func main() {
 	gh := ghclient.NewClient(cfg.GithubToken, vkClient)
 
 	// Initialize AI and Notification clients
+	sidecarManager, sidecarErr := ai.StartNLPSidecar(".", 8095)
+	if sidecarErr != nil {
+		slog.Warn("could not launch nlp sidecar sub-process", "err", sidecarErr)
+	} else {
+		defer sidecarManager.Stop()
+	}
+
 	aiClient := ai.NewAIClient(cfg.OpencodeAPIKey)
 	telegramNotifier := notification.NewTelegramNotifier(cfg.TelegramBotToken, cfg.TelegramChatID)
 

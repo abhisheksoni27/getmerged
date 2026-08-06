@@ -59,6 +59,7 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
             createdAt
             authorAssociation
             author { login }
+            body
           }
         }
       }

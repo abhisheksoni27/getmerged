@@ -149,6 +149,8 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setIsSearchModalOpen((prev) => !prev);
+      } else if (e.key === "Escape") {
+        setIsSearchModalOpen(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);

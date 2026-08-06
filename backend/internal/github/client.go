@@ -93,6 +93,7 @@ type PR struct {
 	FirstCommentAt    *time.Time
 	TotalComments     int
 	CommentAuthors    []string
+	CommentTexts      []string
 }
 
 // --- Public API ---
@@ -353,6 +354,7 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 									CreatedAt         string `json:"createdAt"`
 									AuthorAssociation string `json:"authorAssociation"`
 									Author            *struct{ Login string `json:"login"` } `json:"author"`
+									Body              string `json:"body"`
 								} `json:"nodes"`
 							} `json:"comments"`
 						} `json:"nodes"`
@@ -431,6 +433,9 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 							}
 						}
 						pr.CommentAuthors = append(pr.CommentAuthors, c.Author.Login)
+						if strings.TrimSpace(c.Body) != "" {
+							pr.CommentTexts = append(pr.CommentTexts, c.Body)
+						}
 					}
 				}
 			}
@@ -621,9 +626,13 @@ func isBotLogin(login string) bool {
 		l == "sentry-io"
 }
 
+func formatGoodFirstIssueQuery(owner, name string) string {
+	return fmt.Sprintf(`repo:%s/%s is:issue is:open label:"good first issue",good-first-issue,good_first_issue,first-timers-only,first-timer,beginner,beginner-friendly,"beginner friendly",easy,easy-fix,"easy fix",low-hanging-fruit,"low hanging fruit","help wanted",help-wanted,starter,starter-issue,bitesize,new-contributor,up-for-grabs,e-easy,E-mentor`, owner, name)
+}
+
 // FetchGoodFirstIssueCount returns the number of open beginner-friendly issues for a repo.
 func (c *Client) FetchGoodFirstIssueCount(owner, name string) (int, error) {
-	queryStr := fmt.Sprintf(`repo:%s/%s is:issue is:open label:"good first issue", "good-first-issue", "good_first_issue", "first-timers-only", "first-timer", "beginner", "beginner-friendly", "beginner friendly", "easy", "easy-fix", "easy fix", "low-hanging-fruit", "low hanging fruit", "help wanted", "help-wanted", "starter", "starter-issue", "bitesize", "new-contributor", "up-for-grabs", "e-easy", "E-mentor"`, owner, name)
+	queryStr := formatGoodFirstIssueQuery(owner, name)
 	vars := map[string]any{"query": queryStr}
 
 	var resp struct {
