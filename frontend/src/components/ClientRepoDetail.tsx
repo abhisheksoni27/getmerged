@@ -628,14 +628,14 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {relatedRepos.slice(0, 3).map((rel) => (
-              <a
+              <Link
                 key={rel.id || rel.full_name}
                 href={`/${rel.full_name}`}
                 className="px-3 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-emerald-300 hover:text-emerald-200 border border-zinc-700 transition-colors font-bold no-underline inline-flex items-center gap-1 text-[11px]"
               >
                 <span>{rel.full_name}</span>
                 <span className="text-[10px] text-zinc-400">({rel.c_rank_tier || "A"})</span>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
