@@ -343,7 +343,7 @@ func GetBadgeSVG(repoStore repository.RepoRepository) gin.HandlerFunc {
     <rect width="220" height="28" fill="url(#b)"/>
   </g>
   <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="11">
-    <text x="42.5" y="18 font-weight="700" fill="#000" opacity="0.3">opendoor</text>
+    <text x="42.5" y="18" font-weight="700" fill="#000" opacity="0.3">opendoor</text>
     <text x="42.5" y="17" font-weight="700" fill="#fff">opendoor</text>
     <text x="152.5" y="18" font-weight="700" fill="#000" opacity="0.3">%s</text>
     <text x="152.5" y="17" font-weight="700" fill="#fff">%s</text>
