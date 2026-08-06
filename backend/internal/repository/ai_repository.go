@@ -19,6 +19,8 @@ type AIInsights struct {
 type AIRepository interface {
 	GetInsights(ctx context.Context, repoID string) (*AIInsights, error)
 	SaveInsights(ctx context.Context, insights *AIInsights) error
+	SaveRawComments(ctx context.Context, repoID string, comments []string) error
+	GetRawComments(ctx context.Context, repoID string, limit int) ([]string, error)
 }
 
 type sqlxAIRepository struct {
@@ -53,4 +55,31 @@ func (r *sqlxAIRepository) SaveInsights(ctx context.Context, insights *AIInsight
 			updated_at = CURRENT_TIMESTAMP
 	`, insights.RepoID, insights.MaintainerVibe, insights.PRGuidelines, insights.IssueQualityScore, insights.RawSummary)
 	return err
+}
+
+func (r *sqlxAIRepository) SaveRawComments(ctx context.Context, repoID string, comments []string) error {
+	for _, comment := range comments {
+		if comment == "" {
+			continue
+		}
+		_, _ = r.db.ExecContext(ctx, `
+			INSERT INTO repo_raw_comments (repository_id, author_login, comment_text, created_at)
+			VALUES (?, 'maintainer', ?, CURRENT_TIMESTAMP)
+		`, repoID, comment)
+	}
+	return nil
+}
+
+func (r *sqlxAIRepository) GetRawComments(ctx context.Context, repoID string, limit int) ([]string, error) {
+	var comments []string
+	err := r.db.SelectContext(ctx, &comments, `
+		SELECT comment_text FROM repo_raw_comments
+		WHERE repository_id = ?
+		ORDER BY id DESC
+		LIMIT ?
+	`, repoID, limit)
+	if err != nil {
+		return nil, err
+	}
+	return comments, nil
 }

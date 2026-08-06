@@ -19,4 +19,26 @@ func TestAIClient_FallbackMock(t *testing.T) {
 	}
 }
 
+func TestAIClient_LocalZeroCostInsights(t *testing.T) {
+	client := ai.NewAIClient("")
+	comments := []string{
+		"Thanks for this PR! LGTM, merged.",
+		"Great fix, please make sure unit tests pass.",
+		"Welcome to the repo! Please follow conventional commit guidelines.",
+	}
+
+	res, err := client.GenerateRepoInsights(context.Background(), "gin-gonic/gin", comments)
+	if err != nil {
+		t.Fatalf("expected local zero cost insights to succeed, got: %v", err)
+	}
+
+	if res.IssueQualityScore <= 0 {
+		t.Fatalf("expected positive quality score, got %f", res.IssueQualityScore)
+	}
+
+	if len(res.PRGuidelines) == 0 {
+		t.Fatalf("expected extracted guidelines, got empty slice")
+	}
+}
+
 

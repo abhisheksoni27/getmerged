@@ -142,6 +142,14 @@ func AutoMigrate(db *sqlx.DB) error {
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY(repository_id) REFERENCES repositories(id) ON DELETE CASCADE
 		);`,
+		`CREATE TABLE IF NOT EXISTS repo_raw_comments (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			repository_id TEXT NOT NULL,
+			author_login TEXT,
+			comment_text TEXT NOT NULL,
+			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY(repository_id) REFERENCES repositories(id) ON DELETE CASCADE
+		);`,
 	}
 
 	for i, stmt := range statements {
