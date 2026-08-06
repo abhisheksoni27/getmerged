@@ -116,6 +116,31 @@ export default async function RepoDetailPage({ params }: PageProps) {
     ],
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://opendoor.abhishekco.de",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: `${repo?.language || "Multi-Language"} Good First Issues`,
+        item: `https://opendoor.abhishekco.de/good-first-issue/${(repo?.language || "other").toLowerCase()}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: fullName,
+        item: `https://opendoor.abhishekco.de/${fullName}`,
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen dot-pattern flex flex-col bg-[#faf9f6] overflow-x-hidden">
       <Header />
@@ -126,6 +151,10 @@ export default async function RepoDetailPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <link rel="alternate" type="text/markdown" href={`/${owner}/${name}/raw`} />
       <ClientRepoDetail repo={repo} fullName={fullName} />
