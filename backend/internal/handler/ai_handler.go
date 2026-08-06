@@ -41,8 +41,11 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 			return
 		}
 
-		// 3. Generate insights via AI client
-		insights, err := aiClient.GenerateRepoInsights(c.Request.Context(), repo.FullName, nil)
+		// 3. Retrieve stored raw comments from repo_raw_comments table
+		rawComments, _ := aiRepo.GetRawComments(c.Request.Context(), repo.ID, 30)
+
+		// 4. Generate insights via AI client / Python sidecar / local classifier
+		insights, err := aiClient.GenerateRepoInsights(c.Request.Context(), repo.FullName, rawComments)
 		if err != nil {
 			slog.Error("get repo insights: ai generation failed", "repo", repo.FullName, "err", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate AI insights"})

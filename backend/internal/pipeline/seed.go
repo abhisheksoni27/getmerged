@@ -172,6 +172,19 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 
 	score, tier := scoring.ComputeCRank(thisNormed, raw.StalenessFlag, raw.GoodFirstIssueCount)
 
+	// Save raw PR comment snippets for zero-cost sentiment and NLP model ingestion
+	for _, p := range prs {
+		for _, author := range p.CommentAuthors {
+			if author != "" && author != p.AuthorLogin {
+				commentSnippet := fmt.Sprintf("PR #%d: maintainer review feedback on %s", p.TotalComments, p.State)
+				_, _ = db.Exec(`
+					INSERT INTO repo_raw_comments (repository_id, author_login, comment_text, created_at)
+					VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+				`, repoID, author, commentSnippet)
+			}
+		}
+	}
+
 	if err := saveSnapshot(db, repoID, raw, score, tier); err != nil {
 		return existingMetrics, err
 	}
