@@ -2,28 +2,28 @@
 
 ## Visual World: Schiphol Concourse
 
-**Direction:** Schiphol Concourse — saturated yellow panels hung as overhead bands, black humanist sans, white pictograms, gate numbers at monumental scale. The wayfinding metaphor maps to "finding open doors" in open source.
+**Direction:** Schiphol Concourse - saturated yellow panels hung as overhead bands, black humanist sans, white pictograms, gate numbers at monumental scale. The wayfinding metaphor maps to "finding open doors" in open source.
 
-**Seed key:** `f4669acc` — Assigned index 7 of 7 (direction roll)
+**Seed key:** `f4669acc` - Assigned index 7 of 7 (direction roll)
 
 ---
 
 ## THESE
 
-The opendoor homepage is a terminal concourse. Visitors are travelers navigating a departure board of open-source repos. Yellow panels mark the gates where doors are open. The concourse is calm, authoritative, and unmistakable — no other dev tool looks like this.
+The opendoor homepage is a terminal concourse. Visitors are travelers navigating a departure board of open-source repos. Yellow panels mark the gates where doors are open. The concourse is calm, authoritative, and unmistakable - no other dev tool looks like this.
 
 ## OWN-WORLD
 
-- **Palette:** Saturated yellow `#f5c518` on near-black `#0a0a0a` and near-white `#fafafa`. Yellow is the only accent — everything else is black, white, and gray. The yellow carries 30-60% of the surface on key panels.
+- **Palette:** Saturated yellow `#f5c518` on near-black `#0a0a0a` and near-white `#fafafa`. Yellow is the only accent - everything else is black, white, and gray. The yellow carries 30-60% of the surface on key panels.
 - **Type:** Frutiger-cut humanist sans for display (headings, gate IDs). System sans-serif for body text. Monospace (`SF Mono`, `Fira Code`) exclusively for data: metrics, counts, gate codes.
 - **Material:** Flat panels with hard edges. No blur, no glass, no gradient fills. Shadows carry offset and soft blur only. Yellow panels are solid color fields.
 - **Composition:** Wide, spacious, editorial. Body measure 65-75ch. Generous whitespace between sections. Headings are bold and large (display max 6rem). No kicker or eyebrow above headings.
-- **Topology:** Wayfinding chain — hero panel → filter junction → gate grid → departure board. Each section is a concourse zone. Navigation advances like walking through a terminal.
+- **Topology:** Wayfinding chain - hero panel → filter junction → gate grid → departure board. Each section is a concourse zone. Navigation advances like walking through a terminal.
 - **Controls:** Filter pills styled as gate selectors. Active state is yellow fill. Hover states are subtle lift with shadow offset.
 
 ## STORY
 
-A visitor arrives at the concourse and immediately sees the yellow hero panel: opendoor name in monumental type, the tagline, and a clear CTA. They scan the gate grid of repos, each gate showing its merge rate, response time, and first-timer success. They use the wayfinding junction to filter by language or tier, and the concourse repaints — matching gates highlight in yellow, others dim. They click a gate to see the departure board with detailed C-Rank telemetry. The visitor leaves knowing exactly which doors are open and which to walk toward.
+A visitor arrives at the concourse and immediately sees the yellow hero panel: opendoor name in monumental type, the tagline, and a clear CTA. They scan the gate grid of repos, each gate showing its merge rate, response time, and first-timer success. They use the wayfinding junction to filter by language or tier, and the concourse repaints - matching gates highlight in yellow, others dim. They click a gate to see the departure board with detailed C-Rank telemetry. The visitor leaves knowing exactly which doors are open and which to walk toward.
 
 ## FIRST VIEWPORT
 

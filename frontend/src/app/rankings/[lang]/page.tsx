@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { lang } = await params;
   const languageName = formatLangName(lang);
 
-  const title = `Top Welcoming Open-Source ${languageName} Projects (C-Rank™) — Opendoor`;
+  const title = `Top Welcoming Open-Source ${languageName} Projects (C-Rank™) - Opendoor`;
   const description = `Discover high-ranking open-source ${languageName} repositories with fast maintainer response times and high PR merge rates on Opendoor.`;
 
   return {

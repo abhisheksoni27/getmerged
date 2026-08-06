@@ -14,14 +14,14 @@ Next.js 15 (App Router) · React 19 · Tailwind CSS v4 · Go 1.22+ (gin-gonic) �
 
 **Primary (equal weight):**
 
-- **First-time contributors** — developers new to open source, reaching for Opendoor when they want to land their first merged PR but don't know which repos will actually accept them.
-- **Experienced contributors** — developers who have contributed before but are tired of submitting PRs to unresponsive or hostile repos and want to route their time toward high-yield targets.
+- **First-time contributors** - developers new to open source, reaching for Opendoor when they want to land their first merged PR but don't know which repos will actually accept them.
+- **Experienced contributors** - developers who have contributed before but are tired of submitting PRs to unresponsive or hostile repos and want to route their time toward high-yield targets.
 
 **Secondary (confirmed from codebase):**
 
 - Maintainers checking their own repo's C-Rank and contributor-friendliness signals.
 
-**Operating situation:** The user arrives from a place of past frustration — a PR ignored, a repo that never responded, wasted hours. They are about to decide where to invest next and want a signal they can trust fast.
+**Operating situation:** The user arrives from a place of past frustration - a PR ignored, a repo that never responded, wasted hours. They are about to decide where to invest next and want a signal they can trust fast.
 
 ## Product Purpose
 
@@ -31,7 +31,7 @@ Success = a contributor finds and submits to a repo that merges their PR. Long-t
 
 ## Positioning
 
-**"Glassdoor for open-source repositories."** The differentiating mechanism is the **C-Rank™ system** (S–D grades) — a proprietary composite score built from nine weighted signals including external PR merge rate, first-timer success rate, time-to-first-response, and repeat contributor rate. A neighboring product could offer a star count or activity graph; it could not truthfully offer C-Rank™ without replicating the exact methodology.
+**"Glassdoor for open-source repositories."** The differentiating mechanism is the **C-Rank™ system** (S–D grades) - a proprietary composite score built from nine weighted signals including external PR merge rate, first-timer success rate, time-to-first-response, and repeat contributor rate. A neighboring product could offer a star count or activity graph; it could not truthfully offer C-Rank™ without replicating the exact methodology.
 
 The staleness gate (any repo with no merged external PR in 180 days is capped at D) is a deliberate quality signal, not a limitation.
 
@@ -67,8 +67,8 @@ The staleness gate (any repo with no merged external PR in 180 days is capped at
 - New metrics: issue triage speed, docs quality, release cadence, PR rejection classifier
 
 **Constraints:**
-- No ORMs — native SQL queries only
-- Config-driven via `.env` — no hardcoded values
+- No ORMs - native SQL queries only
+- Config-driven via `.env` - no hardcoded values
 - Indian payment stack required (RevenueCat chosen over Stripe for India/UPI compatibility)
 - No pgvector required at current scale (<50k repos)
 
@@ -77,7 +77,7 @@ The staleness gate (any repo with no merged external PR in 180 days is capped at
 - Product name: **Opendoor** (one word, no camel case in prose)
 - Proprietary system name: **C-Rank™** (trademark symbol preserved)
 - Tagline: *"Don't guess which door is open. Opendoor shows you."*
-- No other hard visual or brand constraints confirmed — visual direction is open for future design work.
+- No other hard visual or brand constraints confirmed - visual direction is open for future design work.
 
 ## Evidence on Hand
 
@@ -85,14 +85,14 @@ The staleness gate (any repo with no merged external PR in 180 days is capped at
 - 1,200+ repos scored (visible in macro stats)
 - Icon assets: `icon.svg.png`, `big-icon.svg.png` at repo root
 - README screenshots (hosted on GitHub user-content CDN)
-- MIT licensed — open source itself
+- MIT licensed - open source itself
 
 No testimonials, press mentions, or case-study data confirmed. Future design work must not fabricate these.
 
 ## Product Principles
 
 1. **Trust through objectivity.** C-Rank™ is math, not opinion. Every score is reproducible from public GitHub data; the methodology is visible and improvable.
-2. **Respect contributor time.** Bad signals are made visible fast — staleness gates, harsh-tone labels, low merge rates — so contributors don't waste hours on dead ends.
+2. **Respect contributor time.** Bad signals are made visible fast - staleness gates, harsh-tone labels, low merge rates - so contributors don't waste hours on dead ends.
 3. **Compounding discoverability.** Every badge embedded in a README, every shareable card, every SEO landing page is a new entry point that compounds without ongoing ad spend.
 4. **Earn the first merge.** The product succeeds when a contributor gets merged, not just when they search. Success metrics eventually follow merge outcomes, not just page views.
 5. **Ship in pieces, measure before investing.** The roadmap is explicit: each feature is time-boxed, experiments are gated behind measurement, and complexity is parked until scale justifies it.

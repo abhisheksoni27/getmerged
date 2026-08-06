@@ -19,7 +19,12 @@ import (
 // GitHubOAuthRedirect handles GET /api/v1/auth/github
 func GitHubOAuthRedirect(cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		redirectURL := "https://github.com/login/oauth/authorize?client_id=" + cfg.GithubClientID + "&scope=user:email"
+		scheme := "https"
+		if c.Request.TLS == nil && c.GetHeader("X-Forwarded-Proto") != "https" {
+			scheme = "http"
+		}
+		redirectURI := scheme + "://" + c.Request.Host + "/api/v1/auth/github/callback"
+		redirectURL := "https://github.com/login/oauth/authorize?client_id=" + cfg.GithubClientID + "&redirect_uri=" + url.QueryEscape(redirectURI) + "&scope=user:email"
 		c.Redirect(http.StatusTemporaryRedirect, redirectURL)
 	}
 }
@@ -35,11 +40,18 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository)
 			return
 		}
 
+		scheme := "https"
+		if c.Request.TLS == nil && c.GetHeader("X-Forwarded-Proto") != "https" {
+			scheme = "http"
+		}
+		redirectURI := scheme + "://" + c.Request.Host + "/api/v1/auth/github/callback"
+
 		// Exchange code for access token
 		tokenReqBody, _ := json.Marshal(map[string]string{
 			"client_id":     cfg.GithubClientID,
 			"client_secret": cfg.GithubClientSecret,
 			"code":          code,
+			"redirect_uri":  redirectURI,
 		})
 
 		req, err := http.NewRequestWithContext(c.Request.Context(), "POST", "https://github.com/login/oauth/access_token", bytes.NewReader(tokenReqBody))

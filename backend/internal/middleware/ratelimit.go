@@ -22,7 +22,7 @@ func RateLimit() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		client := MustCache(c)
 		if client == nil {
-			// Cache unavailable — fail open.
+			// Cache unavailable - fail open.
 			c.Next()
 			return
 		}
@@ -34,7 +34,7 @@ func RateLimit() gin.HandlerFunc {
 		count, err := incrWithExpiry(client, ctx, key)
 		if err != nil {
 			// On error, fail open.
-			slog.Error("rate limit: valkey error — failing open", "ip", ip, "err", err)
+			slog.Error("rate limit: valkey error - failing open", "ip", ip, "err", err)
 			c.Next()
 			return
 		}

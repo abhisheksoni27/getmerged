@@ -1,10 +1,10 @@
-# Opendoor — Growth, Metrics & Engagement Strategy
+# Opendoor - Growth, Metrics & Engagement Strategy
 
 > **Goal**: Make Opendoor the canonical, trusted destination for open-source contributors and OSS enthusiasts worldwide.
 
 > **Note on sources**: This document synthesises analysis from two independent AI reviews of the codebase.
 > Items marked **[+]** were added from the second review after deduplication.
-> Items from the second review that were rejected: `/rankings/[lang]/[region]` (requires geo data we don't have), `README quality score` (overlaps with docs quality score 2.5, marginal signal), `issue_to_pr_ratio` as defined is noisy (high ratio could mean "lots of demand" OR "maintainers ignore issues" — directionally ambiguous without normalisation).
+> Items from the second review that were rejected: `/rankings/[lang]/[region]` (requires geo data we don't have), `README quality score` (overlaps with docs quality score 2.5, marginal signal), `issue_to_pr_ratio` as defined is noisy (high ratio could mean "lots of demand" OR "maintainers ignore issues" - directionally ambiguous without normalisation).
 
 ---
 
@@ -14,8 +14,8 @@
 
 | Route | Type | Purpose |
 |---|---|---|
-| `/` | SSR + Client | Home — hero, macro stats, filter grid, repo cards, leaderboard |
-| `/repo/[owner]/[name]` | SSR + Client | Repo detail — C-Rank breakdown, AI vibe check, watchlist |
+| `/` | SSR + Client | Home - hero, macro stats, filter grid, repo cards, leaderboard |
+| `/repo/[owner]/[name]` | SSR + Client | Repo detail - C-Rank breakdown, AI vibe check, watchlist |
 | `/rankings/[lang]` | SSR | Language-specific ranked list |
 | `/status` | Static | System health / pipeline status |
 | `/privacy` | Static | Privacy policy |
@@ -82,7 +82,7 @@ These extend the scoring model with signals that matter deeply to contributors.
 ### 2.4 Contributor Graduation Rate
 > Do one-time contributors become repeat contributors?
 
-- **Signal**: `(contributors with 2+ PRs) / (total contributors)` — already partially tracked as `repeat_contributor_rate`, but framed as "graduation" for UI storytelling.
+- **Signal**: `(contributors with 2+ PRs) / (total contributors)` - already partially tracked as `repeat_contributor_rate`, but framed as "graduation" for UI storytelling.
 - **New twist**: Track cohort graduation over 30 / 90 / 180 days to show trend direction (improving / declining).
 
 ### 2.5 Docs & Onboarding Quality Score
@@ -108,7 +108,7 @@ These extend the scoring model with signals that matter deeply to contributors.
 > How many distinct maintainers merged or reviewed PRs in the last 90 days?
 
 - **Signal**: `count(distinct reviewer logins with merge/approve actions in last 90d)`
-- **Why**: A repo with 1 active maintainer is fragile — that person going quiet kills the project. Surface as "Bus Factor: 1" warning on repo detail.
+- **Why**: A repo with 1 active maintainer is fragile - that person going quiet kills the project. Surface as "Bus Factor: 1" warning on repo detail.
 - **Scoring impact**: Factor into `distinct_maintainer_count` weight or add as a hard penalty gate (bus factor = 1 → max tier B).
 
 ### 2.9 Review Coverage
@@ -120,14 +120,14 @@ These extend the scoring model with signals that matter deeply to contributors.
 ### 2.10 Bot Activity Ratio
 > What fraction of PR comments are from bots vs. humans?
 
-- **Signal**: `(bot-authored comments) / (total PR comments)` — bots already detected via `isBot()` in `scoring/metrics.go`.
-- **Why**: >40% bot comments signals a heavy CI/CD gatekeeping culture that intimidates newcomers (flaky CI, automated rejections). Already have the bot detection logic — cheap to expose.
+- **Signal**: `(bot-authored comments) / (total PR comments)` - bots already detected via `isBot()` in `scoring/metrics.go`.
+- **Why**: >40% bot comments signals a heavy CI/CD gatekeeping culture that intimidates newcomers (flaky CI, automated rejections). Already have the bot detection logic - cheap to expose.
 
 ### 2.11 Fork-to-PR Ratio
 > Of all repo forks, what fraction resulted in at least one PR back to the parent?
 
 - **Signal**: `(forks with at least 1 PR to parent) / (total forks)`
-- **Why**: Novel signal — distinguishes "copy for personal use" forks from "contributing" forks. A repo with 10k forks and 2% fork-to-PR ratio is very different from one with 200 forks and 30%.
+- **Why**: Novel signal - distinguishes "copy for personal use" forks from "contributing" forks. A repo with 10k forks and 2% fork-to-PR ratio is very different from one with 200 forks and 30%.
 
 ### 2.12 Release Cadence
 > How regularly does the repo ship releases?
@@ -141,62 +141,62 @@ These extend the scoring model with signals that matter deeply to contributors.
 
 These are high-intent, long-tail SEO pages with durable organic value.
 
-### 3.1 `/contribute` — Contributor Start Page
+### 3.1 `/contribute` - Contributor Start Page
 > "Your first open-source contribution, guaranteed."
 
 - Wizard: Pick language → experience level (beginner / intermediate / advanced) → available time → get 5 curated repos.
 - SSR-rendered with language+level combos for SEO: "best Python repos for beginners 2026".
 - **Target keyword cluster**: "best repos to contribute to", "good first issue [language]".
 
-### 3.2 `/leaderboard` — Global All-Language Leaderboard
+### 3.2 `/leaderboard` - Global All-Language Leaderboard
 > Full ranked table of all repos, sortable by any metric.
 
 - Columns: Rank, Repo, Tier, Merge Rate, Response Time, Stars, First-Timer %, Trend.
 - Shareable deep links: `/leaderboard?sort=merge_rate&lang=rust`.
 - **Target keyword**: "best open source repos to contribute to", "top GitHub repos for contributors".
 
-### 3.3 `/compare/[repo-a]/[repo-b]` — Side-by-Side Repo Comparison
+### 3.3 `/compare/[repo-a]/[repo-b]` - Side-by-Side Repo Comparison
 > "Should I contribute to vercel/next.js or facebook/react?"
 
 - All C-Rank metrics compared visually via radar chart + winner callout per metric.
 - Shareable URL. Virality vector: Twitter, Discord, Reddit.
 - **SEO**: long-tail brand+brand comparison queries.
 
-### 3.4 `/digest` — Weekly OSS Contributor Digest
+### 3.4 `/digest` - Weekly OSS Contributor Digest
 > "This week in open-source: repos that opened up, repos that went cold."
 
 - Static-generated every Monday: 5 biggest tier changes (up or down), trending new repos, community stats.
 - Email subscription (Resend / Mailgun).
 - **SEO**: Fresh weekly content Google crawls. Backlink magnet.
 
-### 3.5 `/topics/[topic]` — Topic / Domain Pages
+### 3.5 `/topics/[topic]` - Topic / Domain Pages
 > `/topics/ai-tools`, `/topics/cli-tools`, `/topics/databases`, `/topics/devtools`
 
 - Group repos by GitHub topics/tags, not just language.
-- "Best AI tool repos to contribute to in 2026" — massive SEO surface area.
+- "Best AI tool repos to contribute to in 2026" - massive SEO surface area.
 - Backend: index GitHub `repositoryTopics` from GraphQL response (already in the API schema).
 
-### 3.6 `/hall-of-fame` — S-Tier Hall of Fame
+### 3.6 `/hall-of-fame` - S-Tier Hall of Fame
 > "The repositories that have earned the highest trust from the open-source community."
 
 - Static showcase of all S-tier repos. Monthly "Hall of Famer" spotlight rotation.
-- **Badge embeds**: `[![Opendoor S-Tier](https://opendoor.abhishekco.de/badge/vercel/next.js.svg)](...)` — repo maintainers embed in README → backlinks.
+- **Badge embeds**: `[![Opendoor S-Tier](https://opendoor.abhishekco.de/badge/vercel/next.js.svg)](...)` - repo maintainers embed in README → backlinks.
 
-### 3.7 `/maintainers` — Maintainer Dashboard (Auth Gate)
+### 3.7 `/maintainers` - Maintainer Dashboard (Auth Gate)
 > "You maintain an OSS repo. Here's how contributors see you."
 
 - Login with GitHub → see your repos' C-Rank scores, response time trends, contributor sentiment.
 - Actionable nudges: "You haven't responded to 3 open PRs in >14 days."
 - Monetisation path: Pro tier for detailed analytics + alerts.
 
-### 3.8 `/org/[org]` — Organisation Page
+### 3.8 `/org/[org]` - Organisation Page
 > `/org/vercel`, `/org/facebook`, `/org/hashicorp`
 
 - All repos from an org, aggregated C-Rank, top contributors, total PRs processed.
-- "Is this company's OSS program welcoming?" — B2B recruiting angle.
+- "Is this company's OSS program welcoming?" - B2B recruiting angle.
 - **SEO**: `"[org] open source contribution"` high-intent queries.
 
-### 3.9 `/blog` — Technical Blog
+### 3.9 `/blog` - Technical Blog
 > Content marketing to own the "how to contribute to open source" keyword cluster.
 
 Recommended seed posts:
@@ -206,33 +206,33 @@ Recommended seed posts:
 
 MDX posts with `schema.org/Article` JSON-LD markup.
 
-### 3.10 `/api/public` — Public API Docs Page
+### 3.10 `/api/public` - Public API Docs Page
 > Expose C-Rank scores as a public API (rate-limited, free tier).
 
 - Surface existing Swagger UI at a user-facing URL.
 - Enables 3rd-party integrations: VS Code extensions, GitHub Actions, CLI tools.
 - **Moat**: Becomes infrastructure for the OSS ecosystem.
 
-### 3.11 `/good-first-issue/[lang]` — Good First Issue Finder
+### 3.11 `/good-first-issue/[lang]` - Good First Issue Finder
 > "Show me beginner-friendly issues in Rust right now."
 
 - Dedicated SSR page per language surfacing open `good-first-issue` labelled issues across all scored repos.
-- **Target keyword**: `"good first issue [language]"` — extremely high-intent, near-zero competition on non-GitHub domains.
+- **Target keyword**: `"good first issue [language]"` - extremely high-intent, near-zero competition on non-GitHub domains.
 - Refresh via cron every 6 hours. Deeplinks directly to GitHub issue.
-- **Why this is different from the `/contribute` wizard**: That page curates repos. This page curates *specific open issues* — much lower friction, one click to start.
+- **Why this is different from the `/contribute` wizard**: That page curates repos. This page curates *specific open issues* - much lower friction, one click to start.
 
-### 3.12 `/similar/[owner]/[name]` — Similar Repos
+### 3.12 `/similar/[owner]/[name]` - Similar Repos
 > "Projects like vercel/next.js that are more welcoming."
 
 - Given a repo, find the 5 most similar repos (same language + topic overlap) sorted by C-Rank.
 - Similarity engine: cosine similarity on GitHub topic vectors (cheap, no ML needed).
 - **SEO**: "projects like [repo]" is a real search pattern. Also surfaces naturally when a repo has a D-tier and we suggest alternatives.
 
-### 3.13 `/reports/[year]/[topic]` — State of OSS Annual Report
+### 3.13 `/reports/[year]/[topic]` - State of OSS Annual Report
 > "State of Open Source Contribution 2026"
 
 - Annual static page: aggregate stats, tier distribution shifts YoY, most-improved repos, community milestones.
-- **Why**: Durable backlink magnet — tech media, newsletters, and universities link to annual reports. HackerNews-friendly format.
+- **Why**: Durable backlink magnet - tech media, newsletters, and universities link to annual reports. HackerNews-friendly format.
 - Seed topics: `state-of-open-source-2026`, `most-welcoming-languages-2026`, `beginner-friendly-oss-2026`.
 
 ---
@@ -272,7 +272,7 @@ GET /badge/[owner]/[repo].svg  →  SVG image (Shields.io style)
 > Real-time feed of repos that just became more welcoming.
 
 - Show last 24h tier upgrades (D→C, C→B, B→A, A→S).
-- "Repos that just opened their doors" — discovery + urgency framing.
+- "Repos that just opened their doors" - discovery + urgency framing.
 - Twitter/X auto-post bot: tweet when a notable repo hits S-tier.
 
 ### 4.6 Community Vibe Reports
@@ -317,11 +317,11 @@ GET /badge/[owner]/[repo].svg  →  SVG image (Shields.io style)
 | OpenGraph images | Static | Dynamic OG images via Next.js `ImageResponse` per repo/language page |
 | Canonical URLs | Need audit | Ensure filter-variant pages have canonical pointing to clean URL |
 | Internal linking | Weak | Rankings → Repo → Compare → Topics → Blog cross-linking |
-| Core Web Vitals | SSR + Valkey cache | Already strong — maintain for new pages |
+| Core Web Vitals | SSR + Valkey cache | Already strong - maintain for new pages |
 
 ---
 
-## 6. Monetisation — The $5/Month Problem
+## 6. Monetisation - The $5/Month Problem
 
 > **Core question**: What is so valuable to a contributor that paying $5/month is a non-decision?
 
@@ -329,10 +329,10 @@ GET /badge/[owner]/[repo].svg  →  SVG image (Shields.io style)
 
 The contributor’s fear hierarchy (ranked by frequency):
 
-1. **“Will my PR get ignored?”** — Hours of work, zero response. Most common churn reason.
-2. **“Am I even good enough for this repo?”** — Imposter syndrome. Hits newbies hardest.
-3. **“I don’t know where to start.”** — Decision paralysis. GitHub has 300M repos.
-4. **“I wasted a weekend on a PR that got closed without feedback.”** — The worst experience.
+1. **“Will my PR get ignored?”** - Hours of work, zero response. Most common churn reason.
+2. **“Am I even good enough for this repo?”** - Imposter syndrome. Hits newbies hardest.
+3. **“I don’t know where to start.”** - Decision paralysis. GitHub has 300M repos.
+4. **“I wasted a weekend on a PR that got closed without feedback.”** - The worst experience.
 
 The product solves #1 and #3 today. Money flows when we solve #2 and #4.
 
@@ -340,23 +340,23 @@ The product solves #1 and #3 today. Money flows when we solve #2 and #4.
 
 ### 6.2 Feature Gate Architecture
 
-**Principle**: gate on personalisation and time-saving, not on data. The C-Rank data is the trust signal — locking it destroys the product.
+**Principle**: gate on personalisation and time-saving, not on data. The C-Rank data is the trust signal - locking it destroys the product.
 
 ```
 Anonymous
-├── See all repos (page 1 only — 15 results)
+├── See all repos (page 1 only - 15 results)
 ├── C-Rank tier badge visible
 ├── Language filter only
 └── Repo detail (public metrics, no AI vibe)
 
-Logged In — Free  (triggered by "See trending" or page 2 click)
+Logged In - Free  (triggered by "See trending" or page 2 click)
 ├── Unlimited pages + all filters
 ├── Trending repos (daily)
 ├── Watchlist (up to 10 repos)
 ├── AI Maintainer Vibe Check
 └── Good First Issues widget on repo detail
 
-Pro — $5/month
+Pro - $5/month
 ├── Contributor DNA profile (AI-powered, see 6.3)
 ├── Weekly personalised digest: 5 repos + 5 issues matched to you
 ├── PR Likelihood Score per repo (see 6.5)
@@ -366,10 +366,10 @@ Pro — $5/month
 └── Unlimited /compare (free = 3/month)
 ```
 
-**What triggers login**: "See trending" or page 2 — high-intent moments with low friction.
+**What triggers login**: "See trending" or page 2 - high-intent moments with low friction.
 **What triggers upgrade**: a blurred personalised digest preview card visible to free users (repos + PR likelihood scores locked). One click to unlock.
 
-### 6.3 Contributor DNA Profile — The AI Profiling System
+### 6.3 Contributor DNA Profile - The AI Profiling System
 
 On login, with explicit consent, we query their **public GitHub data** via scopes already granted:
 
@@ -400,7 +400,7 @@ We compute and persist a **Contributor DNA** object per user:
 Built once on login, refreshed weekly, cached in DB. Cost: 1 AI inference per user per week.
 All downstream features (digest, PR likelihood score, recommendations) consume this cached profile.
 
-### 6.4 Weekly Personalised Digest — The Core Retention Hook
+### 6.4 Weekly Personalised Digest - The Core Retention Hook
 
 Every Monday, each Pro user gets an email + in-app notification:
 
@@ -422,9 +422,9 @@ Based on your Go expertise and interest in CLI tools:
 
 One click to the GitHub issue. Zero research. Zero wasted time.
 
-**Why it is worth $5**: replaces 2-3 hours of repo hunting with 30 seconds of reading. The Monday digest is also the **weekly habit trigger** that prevents churn — users open it like a newsletter.
+**Why it is worth $5**: replaces 2-3 hours of repo hunting with 30 seconds of reading. The Monday digest is also the **weekly habit trigger** that prevents churn - users open it like a newsletter.
 
-### 6.5 PR Likelihood Score — The Differentiator
+### 6.5 PR Likelihood Score - The Differentiator
 
 Before submitting a PR to any repo, a Pro user sees:
 
@@ -501,28 +501,28 @@ Free user sees blurred digest -> upgrades -> gets first merge via Guarantee -> s
 ## 7. Priority Execution Order
 
 ```
-Phase 1 — Quick Wins (2 weeks)
+Phase 1 - Quick Wins (2 weeks)
 ├── Badge SVG endpoint (/badge/[owner]/[repo].svg)
 ├── Score history graph on repo detail page
 ├── Good First Issues widget on repo detail
 ├── /leaderboard full sortable page
 └── Dynamic OG images via ImageResponse
 
-Phase 2 — SEO Content (4 weeks)
+Phase 2 - SEO Content (4 weeks)
 ├── /contribute contributor wizard
 ├── /topics/[topic] pages (index GitHub topics)
 ├── /hall-of-fame S-tier showcase
 ├── /compare/[repo-a]/[repo-b]
 └── schema.org JSON-LD on all pages
 
-Phase 3 — Engagement Loop (6 weeks)
+Phase 3 - Engagement Loop (6 weeks)
 ├── Tier change push notifications (Web Push)
 ├── Community vibe reports
 ├── /digest weekly email page + subscription
 ├── Natural language search
 └── /org/[org] organisation pages
 
-Phase 4 — Platform (8 weeks)
+Phase 4 - Platform (8 weeks)
 ├── /u/[username] contributor profile
 ├── /maintainers dashboard (auth gated)
 ├── /api/public docs page
@@ -545,7 +545,7 @@ Phase 4 — Platform (8 weeks)
 
 ---
 
-## 9. Crawling Cost Analysis — New Metrics Impact
+## 9. Crawling Cost Analysis - New Metrics Impact
 
 > Based on exact reading of `github/queries.go` and `github/client.go`.
 
@@ -576,9 +576,9 @@ With 5,000 points/hour budget:
 - Best case throughput: **~48 repos/hour**
 - Avg case throughput: **~24 repos/hour**
 
-> Note: The current `comments(first: 100)` per PR is very expensive. If the median PR has 3 comments, you're paying for 97 ghost nodes per PR. **Dropping to `comments(first: 10)` cuts the query cost by 90% with no real data loss for most repos** — this is the single biggest quick win available.
+> Note: The current `comments(first: 100)` per PR is very expensive. If the median PR has 3 comments, you're paying for 97 ghost nodes per PR. **Dropping to `comments(first: 10)` cuts the query cost by 90% with no real data loss for most repos** - this is the single biggest quick win available.
 
-### 9.2 New Metrics — Additional Cost
+### 9.2 New Metrics - Additional Cost
 
 | Metric | New Query Needed | Node Cost | Points Added |
 |---|---|---|---|
@@ -586,11 +586,11 @@ With 5,000 points/hour budget:
 | Issue-to-PR Conversion | Extend issue query with `labels(first: 5)` | +500 | +5 |
 | Docs & Onboarding Quality | REST: 3 GET requests for file existence | 0 GraphQL | 3 REST |
 | Release Cadence | `releases(first: 50)` | 50 | +1 |
-| Review Coverage | 0 — derive from existing `comments.totalCount` | 0 | 0 |
-| Bot Activity Ratio | 0 — `isBot()` already runs in client.go | 0 | 0 |
-| Bus Factor | 0 — derive from existing `CommentAuthors` per PR | 0 | 0 |
-| Fork-to-PR Ratio | ❌ Skip — requires paginating all forks, impractical | — | — |
-| PR Sentiment Score | 0 GitHub API — LLM inference on existing comment text | 0 | 0 |
+| Review Coverage | 0 - derive from existing `comments.totalCount` | 0 | 0 |
+| Bot Activity Ratio | 0 - `isBot()` already runs in client.go | 0 | 0 |
+| Bus Factor | 0 - derive from existing `CommentAuthors` per PR | 0 | 0 |
+| Fork-to-PR Ratio | ❌ Skip - requires paginating all forks, impractical | - | - |
+| PR Sentiment Score | 0 GitHub API - LLM inference on existing comment text | 0 | 0 |
 
 **Total additional GraphQL points per repo**: ~8 points (one new issues page + releases)
 **Total additional REST calls per repo**: 3
@@ -604,7 +604,7 @@ With 5,000 points/hour budget:
 
 **The new metrics add ~5% overhead.** This is not the bottleneck.
 
-### 9.4 The Real Bottleneck — And How to Fix It
+### 9.4 The Real Bottleneck - And How to Fix It
 
 The `comments(first: 100)` per PR costs **10,000 nodes per page** when most PRs have <5 comments. This is 90%+ wasted capacity.
 
@@ -625,7 +625,7 @@ With this fix + new metrics: ~230 points/repo → still **~217 repos/hour**, a m
 
 ## 10. GitHub Rate Limit Scaling
 
-### 10.1 Token Crowdsourcing — Verdict: ❌ ToS Violation
+### 10.1 Token Crowdsourcing - Verdict: ❌ ToS Violation
 
 Direct quote from GitHub's Acceptable Use Policy:
 > **"You may not share API tokens to exceed GitHub's rate limitations."**
@@ -710,7 +710,7 @@ For repos that have installed the GitHub App, subscribe to webhooks:
 - `pull_request.closed` / `pull_request.merged` → trigger re-score immediately
 - `issues.labeled` with `good-first-issue` → refresh the `/good-first-issue/[lang]` page
 
-This means **S-tier and A-tier repos never need to be polled** — they push updates to you.
+This means **S-tier and A-tier repos never need to be polled** - they push updates to you.
 
 **Conditional Requests (ETags)**
 
@@ -739,8 +739,8 @@ For repos already in the database, you can **backfill the 180-day PR window from
 | Source | Req/Hour | Notes |
 |---|---|---|
 | Service PAT (current) | 5,000 | Always available |
-| GitHub App — 10 installs | 50,000 | 10 orgs install the app |
-| GitHub App — 100 installs | 500,000 | 100 orgs (realistic at 1k users) |
+| GitHub App - 10 installs | 50,000 | 10 orgs install the app |
+| GitHub App - 100 installs | 500,000 | 100 orgs (realistic at 1k users) |
 | Webhooks (top-tier repos) | ∞ effective | No polling needed |
 | Tiered frequency (60% reduction) | ×1.67 multiplier | B/C/D repos crawled less |
 
@@ -766,7 +766,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   const mergeRate = Math.round(repo.external_pr_merge_rate);
   
   return {
-    title: `${repo.full_name} — ${tierLabel(tier)} on Opendoor`,
+    title: `${repo.full_name} - ${tierLabel(tier)} on Opendoor`,
     description: `${repo.full_name} is ${tierLabel(tier)} for contributors. ${mergeRate}% external PR merge rate, ${repo.time_to_first_response_hours.toFixed(0)}h avg first review. Scored by C-Rank™.`,
     openGraph: {
       images: [`/api/og/repo/${params.owner}/${params.name}`],
@@ -776,7 +776,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 }
 ```
 
-All new pages (topics, org, compare, leaderboard) get the same treatment — data-driven titles and descriptions generated entirely from the database. **Zero manual effort as the corpus grows.**
+All new pages (topics, org, compare, leaderboard) get the same treatment - data-driven titles and descriptions generated entirely from the database. **Zero manual effort as the corpus grows.**
 
 ### 11.2 Dynamic Sitemap (`sitemap.ts`)
 
@@ -806,7 +806,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 }
 ```
 
-For 10,000 repos the sitemap will exceed the 50MB / 50,000 URL limit — split into `sitemap/[id]/route.ts` shards indexed by `sitemap-index.xml`.
+For 10,000 repos the sitemap will exceed the 50MB / 50,000 URL limit - split into `sitemap/[id]/route.ts` shards indexed by `sitemap-index.xml`.
 
 ### 11.3 Dynamic OG Images (`/api/og/...`)
 
@@ -849,17 +849,17 @@ A simple rule engine in each Server Component:
 - **Language ranking page** → link to: top 5 repos in that language, `/topics` that overlap, `/contribute?lang=X`
 - **Topic page** → link to: language pages for languages present, relevant repos
 
-This creates a dense, contextually relevant internal link graph — the single most impactful on-page SEO signal — with zero manual work as the corpus grows.
+This creates a dense, contextually relevant internal link graph - the single most impactful on-page SEO signal - with zero manual work as the corpus grows.
 
 ### 11.6 Freshness Signals (Automated Content Updates)
 
-Google rewards pages that update frequently. The pipeline already runs daily snapshots — surface that:
+Google rewards pages that update frequently. The pipeline already runs daily snapshots - surface that:
 
 - Each repo detail page shows `lastModified` HTTP header matching `snapshot_date` from DB
 - Language ranking pages show "Updated X hours ago"
 - The `/digest` page regenerates every Monday via ISR `revalidate: 604800` (7 days)
 
-This tells Google these are live, maintained pages — not stale data dumps.
+This tells Google these are live, maintained pages - not stale data dumps.
 
 ### 11.7 Automated Blog via Pipeline Data
 

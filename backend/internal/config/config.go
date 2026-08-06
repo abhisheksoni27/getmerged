@@ -8,7 +8,7 @@ import (
 )
 
 // Config holds all required runtime configuration.
-// Every field must be set in .env — the app will not start otherwise.
+// Every field must be set in .env - the app will not start otherwise.
 type Config struct {
 	GithubToken        string
 	DatabaseURL        string
@@ -29,14 +29,14 @@ type Config struct {
 }
 
 // Load reads .env (if present) then validates all required variables are set.
-// Fails fast — no defaults, no guessing.
+// Fails fast - no defaults, no guessing.
 func Load() (*Config, error) {
 	_ = godotenv.Load()
 
 	c := &Config{
-		ValkeyUsername: os.Getenv("VALKEY_USERNAME"), // optional — defaults to "default" if empty
-		ValkeyPassword: os.Getenv("VALKEY_PASSWORD"), // optional — empty OK for local dev
-		LogFile:        os.Getenv("LOG_FILE"),        // optional — defaults to opendoor.log if empty
+		ValkeyUsername: os.Getenv("VALKEY_USERNAME"), // optional - defaults to "default" if empty
+		ValkeyPassword: os.Getenv("VALKEY_PASSWORD"), // optional - empty OK for local dev
+		LogFile:        os.Getenv("LOG_FILE"),        // optional - defaults to opendoor.log if empty
 		OpencodeAPIKey: os.Getenv("OPENCODE_API_KEY"), // optional in dev if AI insights disabled
 		TelegramBotToken: os.Getenv("TELEGRAM_BOT_TOKEN"),
 		TelegramChatID:   os.Getenv("TELEGRAM_CHAT_ID"),

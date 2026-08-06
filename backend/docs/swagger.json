@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Find open-source repositories that welcome contributors — ranked by C-Rank™.",
+        "description": "Find open-source repositories that welcome contributors - ranked by C-Rank™.",
         "title": "OpenDoor API",
         "contact": {},
         "version": "1.0"

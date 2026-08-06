@@ -117,7 +117,7 @@ export function Footer() {
         {/* Bottom Copyright Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
           <div>
-            © {new Date().getFullYear()} opendoor — Glassdoor for Open Source Repositories. Built with ❤️ for open-source contributors.
+            © {new Date().getFullYear()} opendoor - Glassdoor for Open Source Repositories. Built with ❤️ for open-source contributors.
           </div>
           <div className="flex items-center gap-6">
             <Link href="/" className="hover:text-zinc-300">Home</Link>

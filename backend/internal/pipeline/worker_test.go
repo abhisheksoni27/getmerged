@@ -58,7 +58,7 @@ func TestEnqueueDueRepos_ExcludesD_And_ReEnqueuesCompleted(t *testing.T) {
 		INSERT INTO repositories (id, full_name, owner, name, github_url, created_at, updated_at) VALUES
 		('repo-1', 'owner/repo-s-overdue', 'owner', 'repo-s-overdue', 'https://github.com/owner/repo-s-overdue', '2026-08-01 00:00:00', '2026-08-01 00:00:00'),
 		('repo-2', 'owner/repo-d-overdue', 'owner', 'repo-d-overdue', 'https://github.com/owner/repo-d-overdue', '2026-08-01 00:00:00', '2026-08-01 00:00:00'),
-		('repo-3', 'owner/repo-s-recent', 'owner', 'repo-s-recent', 'https://github.com/owner/repo-s-recent', '2026-08-03 08:00:00', '2026-08-03 08:00:00')
+		('repo-3', 'owner/repo-s-recent', 'owner', 'repo-s-recent', 'https://github.com/owner/repo-s-recent', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 	`)
 	if err != nil {
 		t.Fatalf("insert repos failed: %v", err)

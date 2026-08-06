@@ -22,7 +22,7 @@ const dmMono = DM_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://opendoor.abhishekco.de"),
-  title: "opendoor — Glassdoor for Open Source Repositories | C-Rank™ Index",
+  title: "opendoor - Glassdoor for Open Source Repositories | C-Rank™ Index",
   description: "Stop guessing which door is open. Discover public GitHub repositories where your pull requests are welcomed, reviewed fast, and merged.",
   keywords: [
     "open source",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     canonical: "https://opendoor.abhishekco.de",
   },
   openGraph: {
-    title: "opendoor — Glassdoor for Open Source Repositories",
+    title: "opendoor - Glassdoor for Open Source Repositories",
     description: "Discover public GitHub repositories where your pull requests are welcomed, reviewed fast, and merged.",
     url: "https://opendoor.abhishekco.de",
     siteName: "opendoor",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "opendoor — Glassdoor for Open Source Repositories",
+    title: "opendoor - Glassdoor for Open Source Repositories",
     description: "Discover public GitHub repositories where your pull requests are welcomed, reviewed fast, and merged.",
   },
 };

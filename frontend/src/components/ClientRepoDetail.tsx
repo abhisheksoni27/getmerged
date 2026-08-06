@@ -186,7 +186,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         : repo.time_to_first_response_hours < 24
         ? `${Math.floor(repo.time_to_first_response_hours)} hours`
         : `${Math.floor(repo.time_to_first_response_hours / 24)} days+`
-      : "—";
+      : "-";
 
   const responseCommentary =
     repo?.time_to_first_response_hours !== undefined && repo.time_to_first_response_hours > 0
@@ -198,7 +198,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const mergeRateStr =
     repo?.external_pr_merge_rate !== undefined && repo.external_pr_merge_rate >= 0
       ? `${repo.external_pr_merge_rate.toFixed(1)}%`
-      : "—";
+      : "-";
 
   const mergeCommentary =
     repo?.external_pr_merge_rate !== undefined
@@ -212,7 +212,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const firstTimerSuccessStr =
     repo?.first_timer_success_rate !== undefined && repo.first_timer_success_rate >= 0
       ? `${repo.first_timer_success_rate.toFixed(1)}%`
-      : "—";
+      : "-";
 
   const firstTimerCommentary =
     repo?.first_timer_success_rate !== undefined && repo.first_timer_success_rate > 50
@@ -381,7 +381,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
     ? "Small core review team"
     : distinctMaintainers === 1
     ? "Single maintainer review bottleneck"
-    : "No active maintainers detected";
+    : "No active GitHub maintainers found (may review internally on Gerrit or internal tools)";
 
   return (
     <main className="mx-auto max-w-5xl px-3 sm:px-6 lg:px-8 py-10 sm:py-12 flex-1 w-full overflow-hidden">
@@ -410,7 +410,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                   rank
                 )}`}
               >
-                {getRankHumanLabel(rank)} ({rank})
+                {getRankHumanLabel(rank)}
               </span>
               {repo?.language && (
                 <span className="inline-block border-2 border-[#222831] bg-white text-[#222831] px-2.5 py-0.5 text-xs font-black font-mono rounded-lg shadow-[2px_2px_0px_0px_#222831]">
@@ -454,7 +454,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             </a>
           </div>
           <p className="text-[10px] font-sans text-[#222831]/75 max-w-xs text-left md:text-right leading-tight">
-            💡 <strong className="text-[#222831]">Why Watch?</strong> Receive instant notifications if this repo&apos;s review velocity or C-Rank™ tier changes.
+            💡 <strong className="text-[#222831]">Why Watch?</strong> Get alerts when this repo&apos;s review speed or rank updates.
           </p>
         </div>
       </div>
@@ -515,7 +515,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               <span>Active Maintainers</span>
             </div>
             <div className="text-3xl font-black text-[#222831] font-mono">
-              {distinctMaintainers > 0 ? distinctMaintainers : "—"}
+              {distinctMaintainers > 0 ? distinctMaintainers : "-"}
             </div>
             <div className="text-xs text-zinc-600 mt-1 font-sans font-medium">{maintainersCommentary}</div>
             {/* Tooltip */}
@@ -639,7 +639,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         {(repo?.good_first_issue_count ?? 0) > 0 ? (
           <p className="text-xs text-zinc-600 font-sans">
             This repo currently has <strong>{repo?.good_first_issue_count}</strong> open{" "}
-            <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700 font-mono">good first issue</code> issues —
+            <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700 font-mono">good first issue</code> issues -
             a great entry point for your first contribution.
           </p>
         ) : (
@@ -703,7 +703,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </div>
           <button
             onClick={() => {
-              navigator.clipboard.writeText(`[![Opendoor C-Rank](${badgeMarkdownUrl})](https://opendoor.abhishekco.de/repo/${fullName})`);
+              navigator.clipboard.writeText(`[![Opendoor C-Rank](${badgeMarkdownUrl})](https://opendoor.abhishekco.de/${fullName})`);
               posthog.capture('badge_copied', { repo_full_name: fullName });
             }}
             className="w-full sm:w-auto px-5 py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs shrink-0 transition-colors cursor-pointer border-2 border-brand-dark shadow-[2px_2px_0px_#222831]"
@@ -958,7 +958,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         <section className="rounded-2xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
           <h2 className="text-base sm:text-lg font-bold font-space text-zinc-900 mb-4 flex items-center gap-2">
             <FileCode2 className="h-4 w-4 text-blue-600 shrink-0" />
-            Frequently Asked Questions — Contributing to {fullName}
+            Frequently Asked Questions - Contributing to {fullName}
           </h2>
           <div className="space-y-4">
             <div className="rounded-xl bg-zinc-100/50 p-4">
