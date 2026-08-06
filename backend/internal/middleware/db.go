@@ -20,11 +20,11 @@ func DB(database *sqlx.DB) gin.HandlerFunc {
 }
 
 // MustDB retrieves the *sqlx.DB from the gin context.
-// Aborts with 500 if not found — indicates misconfigured middleware.
+// Aborts with 500 if not found - indicates misconfigured middleware.
 func MustDB(c *gin.Context) *sqlx.DB {
 	v, ok := c.Get(dbKey)
 	if !ok {
-		slog.Error("db not found in context — is DB middleware registered?")
+		slog.Error("db not found in context - is DB middleware registered?")
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return nil
 	}

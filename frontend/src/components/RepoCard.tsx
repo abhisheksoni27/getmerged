@@ -3,7 +3,6 @@
 import React from "react";
 import { Repo } from "@/types/opendoor";
 import { Star, ArrowUpRight, Flame, Sparkles, CheckCircle2 } from "lucide-react";
-import Link from "next/link";
 import { LangLogo } from "@/components/LangLogo";
 import posthog from "posthog-js";
 
@@ -127,8 +126,8 @@ export function RepoCard({ repo, isLoggedIn = false, isSpotlight = false, spotli
   };
 
   return (
-    <Link
-      href={`/repo/${ownerPart}/${namePart}`}
+    <a
+      href={`/${ownerPart}/${namePart}`}
       onClick={handleClick}
       className={`group relative flex h-full flex-col justify-between rounded-xl p-5 border-2 transition-all duration-150 block text-current no-underline cursor-pointer ${
         isSpotlight
@@ -197,15 +196,15 @@ export function RepoCard({ repo, isLoggedIn = false, isSpotlight = false, spotli
         {/* Structured Metrics Scorecard */}
         <div className="grid grid-cols-3 gap-2 py-2 text-center bg-[#faf9f6] rounded-lg border-2 border-brand-dark/20 p-2 my-2 shadow-[1px_1px_0px_#222831]">
           <div>
-            <div className="font-mono text-xs font-extrabold text-brand-dark">{mergeRate || "—"}</div>
+            <div className="font-mono text-xs font-extrabold text-brand-dark">{mergeRate || "-"}</div>
             <div className="font-mono text-[10px] font-semibold text-zinc-600">Merge Rate</div>
           </div>
           <div>
-            <div className="font-mono text-xs font-extrabold text-brand-dark">{firstResponse || "—"}</div>
+            <div className="font-mono text-xs font-extrabold text-brand-dark">{firstResponse || "-"}</div>
             <div className="font-mono text-[10px] font-semibold text-zinc-600">First Review</div>
           </div>
           <div>
-            <div className="font-mono text-xs font-extrabold text-brand-dark">{firstTimerRate || "—"}</div>
+            <div className="font-mono text-xs font-extrabold text-brand-dark">{firstTimerRate || "-"}</div>
             <div className="font-mono text-[10px] font-semibold text-zinc-600">1st-Timers</div>
           </div>
         </div>
@@ -230,6 +229,6 @@ export function RepoCard({ repo, isLoggedIn = false, isSpotlight = false, spotli
           {isLoggedIn ? "View Details →" : "Explore →"}
         </span>
       </div>
-    </Link>
+    </a>
   );
 }

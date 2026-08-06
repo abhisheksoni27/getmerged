@@ -41,8 +41,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const repo = await getRepoData(fullName);
 
   const title = repo
-    ? `${fullName} C-Rank™ (${repo.c_rank_tier || "A"} Tier) — Opendoor`
-    : `${fullName} — Opendoor Open Source Explorer`;
+    ? `${fullName} C-Rank™ (${repo.c_rank_tier || "A"} Tier) - Opendoor`
+    : `${fullName} - Opendoor Open Source Explorer`;
 
   const description = repo?.description
     ? `${repo.description} Scored ${repo.c_rank_score?.toFixed(1) || 75.0}/100 on Opendoor C-Rank™. View maintainer response times, PR merge rates, and first-timer success metrics.`

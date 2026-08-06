@@ -74,7 +74,7 @@ func Seed(gh *github.Client) gin.HandlerFunc {
 		}
 
 		var body SeedBody
-		// Body is optional — ignore parse errors.
+		// Body is optional - ignore parse errors.
 		_ = c.ShouldBindJSON(&body)
 
 		jobID := uuid.New().String()

@@ -76,13 +76,73 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   }, []);
 
   const [showAllLanguages, setShowAllLanguages] = useState<boolean>(false);
-  const visibleLanguages = showAllLanguages ? languages : languages.slice(0, 7);
+  const visibleLanguages = showAllLanguages ? languages : languages.slice(0, 10);
 
   // Floating Search Modal State
   const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
   const searchModalInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const searchInputRef = React.useRef<HTMLInputElement | null>(null);
+  const heroSearchRef = React.useRef<HTMLDivElement | null>(null);
+
+  // Rotating search placeholder text for 100k+ star famous repos
+  const famousRepos = React.useMemo(
+    () => [
+      "freeCodeCamp/freeCodeCamp",
+      "facebook/react",
+      "vuejs/vue",
+      "twbs/bootstrap",
+      "sindresorhus/awesome",
+      "tensorflow/tensorflow",
+      "torvalds/linux",
+      "goldbergyoni/nodebestpractices",
+      "ohmyzsh/ohmyzsh",
+      "flutter/flutter",
+      "microsoft/vscode",
+      "vibe/nextjs",
+    ],
+    []
+  );
+  const [placeholderIndex, setPlaceholderIndex] = useState<number>(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prev) => (prev + 1) % famousRepos.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [famousRepos.length]);
+
+  // Sticky header search bar on scroll up
+  const [isHeroSearchVisible, setIsHeroSearchVisible] = useState<boolean>(true);
+  const [isScrollingUp, setIsScrollingUp] = useState<boolean>(false);
+  const lastScrollY = React.useRef<number>(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY < lastScrollY.current && currentScrollY > 200) {
+        setIsScrollingUp(true);
+      } else {
+        setIsScrollingUp(false);
+      }
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!heroSearchRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeroSearchVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(heroSearchRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -250,7 +310,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
   useEffect(() => {
     // Fetch top welcoming repos sorted by C-Rank score descending (highest merge rate & responsiveness)
-    fetch(`${API_BASE_URL}/api/v1/repos?sort=c_rank_score&order=desc&per_page=3`)
+    fetch(`${API_BASE_URL}/api/v1/repos?sort=c_rank_score&order=desc&per_page=30`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         const rawList = data?.data || data?.repos;
@@ -261,7 +321,22 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             class_rank: (r.class_rank as string) || (r.c_rank_tier as string) || "A",
             first_timer_success_rate: (r.first_timer_success_rate as number) !== undefined ? (r.first_timer_success_rate as number) : (r.first_timer_rate as number),
           }));
-          setSpotlightRepos(mapped);
+
+          // Issue #38 Fix: Guarantee 3 distinct languages, 1 from each
+          const distinctLangRepos: Repo[] = [];
+          const seenLangs = new Set<string>();
+
+          for (const repo of mapped) {
+            const lang = repo.language || "Other";
+            if (!seenLangs.has(lang)) {
+              seenLangs.add(lang);
+              distinctLangRepos.push(repo);
+            }
+            if (distinctLangRepos.length === 3) break;
+          }
+
+          // Fallback to top 3 if fewer than 3 unique languages exist in pool
+          setSpotlightRepos(distinctLangRepos.length === 3 ? distinctLangRepos : mapped.slice(0, 3));
         }
       })
       .catch(() => {});
@@ -347,7 +422,12 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   return (
     <div className="relative min-h-screen flex flex-col bg-[#faf9f6] overflow-hidden">
       <RelativityCanvas />
-      <Header />
+      <Header
+        showSearchBar={isScrollingUp && !isHeroSearchVisible}
+        onOpenSearch={() => setIsSearchModalOpen(true)}
+        searchQuery={searchQuery}
+        placeholderText={`Search repositories... e.g. ${famousRepos[placeholderIndex]}`}
+      />
 
       {/* Hero Section */}
       <section className="relative mx-auto max-w-6xl px-4 pt-16 pb-12 text-center sm:px-6 lg:px-8">
@@ -355,11 +435,11 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           Stop wasting weeks on <span className="brush-highlight text-zinc-900 px-1.5">ignored PRs.</span>
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-base text-zinc-600 sm:text-lg leading-relaxed font-sans">
-          Find repositories where maintainers actually review and merge contributions — backed by real PR response rates and first-timer success metrics.
+          Find repositories where maintainers actually review and merge contributions - backed by real PR response rates and first-timer success metrics.
         </p>
 
         {/* Hero Prominent Search Bar */}
-        <div className="mt-8 max-w-2xl mx-auto">
+        <div ref={heroSearchRef} className="mt-8 max-w-2xl mx-auto">
           <div
             onClick={() => setIsSearchModalOpen(true)}
             className="relative flex items-center shadow-lg rounded-xl overflow-hidden border border-zinc-200 bg-white cursor-pointer group hover:border-zinc-300 transition-all"
@@ -369,9 +449,9 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               ref={searchInputRef}
               type="text"
               readOnly
-              placeholder="Search repositories... e.g. nextjs, react, rust, bun"
+              placeholder={`Search repositories... e.g. ${famousRepos[placeholderIndex]}`}
               value={searchQuery}
-              className="w-full pl-12 pr-20 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none font-sans cursor-pointer"
+              className="w-full pl-12 pr-20 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none font-sans cursor-pointer transition-all duration-300"
             />
             <div className="absolute right-3 flex items-center gap-1.5 pointer-events-none">
               {searchQuery ? (
@@ -398,9 +478,15 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   setSearchQuery(term);
                   setLoading(true);
                   setPage(1);
+                  setIsSearchModalOpen(false);
                   posthog.capture('repo_searched', { query: term, source: 'hero_chip' });
+                  // Auto scroll to leaderboard results section
+                  const gridEl = document.getElementById("leaderboard-grid");
+                  if (gridEl) {
+                    gridEl.scrollIntoView({ behavior: "smooth" });
+                  }
                 }}
-                className="rounded-md border border-zinc-200/80 bg-white px-2.5 py-1 font-mono text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50 transition-all cursor-pointer"
+                className="rounded-md border border-zinc-200/80 bg-white px-2.5 py-1 font-mono text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50 transition-all cursor-pointer active:scale-95"
               >
                 {term}
               </button>
@@ -501,7 +587,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
       </section>
 
       {/* Main Filter & Leaderboard Grid */}
-      <main className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 flex-1 w-full">
+      <main id="leaderboard-grid" className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 flex-1 w-full">
         {/* Controls Bar */}
         <div className="sticky top-16 sm:top-20 z-40 mb-8 rounded-2xl bg-white/80 p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.02)] backdrop-blur-md space-y-4">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -536,15 +622,15 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             </button>
           </div>
                   {/* Vibe Tier Pills */}
-          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+          <div className="flex items-center gap-2 pt-1 text-xs overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth pb-0.5">
             <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
-              <Sparkles className="h-3 w-3 text-zinc-700" /> Status:
+              <Sparkles className="h-3 w-3 text-zinc-700" /> Vibe:
             </span>
             {tiers.map((t) => (
               <button
                 key={t.value}
                 onClick={() => handleTierChange(t.value)}
-                className={`rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs transition-all cursor-pointer ${
+                className={`rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs transition-all cursor-pointer shrink-0 ${
                   selectedTier === t.value
                     ? "bg-zinc-900 text-white font-bold shadow-xs"
                     : "bg-zinc-100/80 hover:bg-zinc-100 text-zinc-600 border border-transparent"
@@ -556,9 +642,9 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           </div>
 
           {/* Language & Bucket Filter Pills */}
-          <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between text-xs">
+          <div className="flex flex-col gap-3 pt-1 text-xs">
             {/* Language Pills */}
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth pb-0.5">
               <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
                 <Code2 className="h-3 w-3" /> Lang:
               </span>
@@ -566,7 +652,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 <button
                   key={lang}
                   onClick={() => handleLangChange(lang)}
-                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs transition-all cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs transition-all cursor-pointer shrink-0 ${
                     selectedLang === lang
                       ? "bg-zinc-900 text-white shadow-xs font-semibold"
                       : "bg-zinc-100/80 text-zinc-600 hover:bg-zinc-100 border border-transparent"
@@ -576,18 +662,18 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   <span>{lang}</span>
                 </button>
               ))}
-              {languages.length > 7 && (
+              {languages.length > 10 && (
                 <button
                   onClick={() => setShowAllLanguages(!showAllLanguages)}
-                  className="font-mono text-[11px] text-zinc-700 font-bold hover:underline px-2 py-1 cursor-pointer"
+                  className="font-mono text-[11px] text-zinc-700 font-bold hover:underline px-2 py-1 cursor-pointer shrink-0"
                 >
-                  {showAllLanguages ? "Show Less" : `+${languages.length - 7} More`}
+                  {showAllLanguages ? "Show Less" : `+${languages.length - 10} More`}
                 </button>
               )}
             </div>
 
             {/* Stars Bucket Filter */}
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth pb-0.5">
               <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
                 <Star className="h-3 w-3" /> Stars:
               </span>
@@ -595,7 +681,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 <button
                   key={b}
                   onClick={() => handleBucketChange(b)}
-                  className={`rounded-lg px-2.5 py-1 font-mono text-[11px] sm:text-xs transition-all cursor-pointer ${
+                  className={`rounded-lg px-2.5 py-1 font-mono text-[11px] sm:text-xs transition-all cursor-pointer shrink-0 ${
                     selectedBucket === b
                       ? "border-zinc-900 bg-zinc-900 text-white font-semibold"
                       : "border border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50"
@@ -608,7 +694,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           </div>
 
           {/* First Timer Support Filter */}
-          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+          <div className="flex items-center gap-2 pt-1 text-xs overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth pb-0.5">
             <span className="font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
               <ShieldCheck className="h-3.5 w-3.5 text-zinc-700" /> First-Timer friendly:
             </span>
@@ -616,7 +702,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               <button
                 key={b}
                 onClick={() => handleFirstTimerBucketChange(b)}
-                className={`rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs transition-all cursor-pointer ${
+                className={`rounded-lg px-3 py-1.5 font-mono text-[11px] sm:text-xs transition-all cursor-pointer shrink-0 ${
                   selectedFirstTimerBucket === b
                     ? "bg-zinc-900 text-white font-bold shadow-xs"
                     : "bg-zinc-100/80 text-zinc-600 hover:bg-zinc-100 border border-transparent"
@@ -741,7 +827,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
           {/* 1-Column Highlighted Ecosystem Leaderboard Layout */}
           <div className="grid grid-cols-1 gap-6 mb-16 font-mono">
-            {/* Expanded & Highlighted Ecosystem Leaderboard — Grand Section Redesign */}
+            {/* Expanded & Highlighted Ecosystem Leaderboard - Grand Section Redesign */}
             <div className="rounded-3xl bg-white p-6 sm:p-10 border-2 border-brand-dark shadow-[6px_6px_0px_#222831]">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b-2 border-zinc-900 pb-6 mb-8 gap-4">
                 <div>
@@ -791,7 +877,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 </div>
               </div>
 
-              {/* Grand Table List — No Individual Boxes */}
+              {/* Grand Table List - No Individual Boxes */}
               <div className="divide-y divide-zinc-200/80">
                 {(
                   stats?.language_breakdown || [
@@ -892,7 +978,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             </div>
           </div>
 
-          {/* Authority & Telemetry Standard Section — Replaces Bland Feature Boxes */}
+          {/* Authority & Telemetry Standard Section - Replaces Bland Feature Boxes */}
           <div className="rounded-3xl border-2 border-brand-dark bg-[#faf9f6] p-8 sm:p-12 shadow-[6px_6px_0px_#222831] mb-16">
             <div className="max-w-3xl mb-10">
               <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3.5 py-1 text-xs font-mono font-extrabold text-emerald-950 border border-emerald-300 mb-3">
@@ -994,7 +1080,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               <input
                 ref={searchModalInputRef}
                 type="text"
-                placeholder="Search repositories by name, language, or ecosystem..."
+                placeholder={`Search repositories by name... e.g. ${famousRepos[placeholderIndex]}`}
                 value={searchQuery}
                 onChange={handleSearchChange}
                 className="w-full pl-12 pr-12 text-base text-zinc-900 placeholder-zinc-400 bg-transparent border-none focus:outline-none font-sans font-medium"
@@ -1018,9 +1104,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                       setSearchQuery(term);
                       setLoading(true);
                       setPage(1);
+                      setIsSearchModalOpen(false);
                       posthog.capture('repo_searched', { query: term, source: 'cmd_k_chip' });
+                      const gridEl = document.getElementById("leaderboard-grid");
+                      if (gridEl) {
+                        gridEl.scrollIntoView({ behavior: "smooth" });
+                      }
                     }}
-                    className="rounded bg-zinc-100 px-2 py-0.5 text-zinc-700 hover:bg-zinc-200 transition-colors cursor-pointer"
+                    className="rounded bg-zinc-100 px-2 py-0.5 text-zinc-700 hover:bg-zinc-200 transition-colors cursor-pointer active:scale-95"
                   >
                     {term}
                   </button>
@@ -1039,7 +1130,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   return (
                     <a
                       key={r.id || r.full_name}
-                      href={`/repo/${r.full_name}`}
+                      href={`/${r.full_name}`}
                       onClick={() => setIsSearchModalOpen(false)}
                       className="flex items-center justify-between p-3 rounded-xl hover:bg-zinc-50 transition-colors group cursor-pointer block no-underline text-current pt-3"
                     >

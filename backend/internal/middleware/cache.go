@@ -42,12 +42,12 @@ func Cache(rawURL, username, password string) (gin.HandlerFunc, valkey.Client, e
 
 	client, err := valkey.NewClient(opts)
 	if err != nil {
-		slog.Warn("valkey connect failed — running without cache", "err", err)
+		slog.Warn("valkey connect failed - running without cache", "err", err)
 		return func(c *gin.Context) { c.Next() }, nil, nil
 	}
 
 	if err := client.Do(context.Background(), client.B().Ping().Build()).Error(); err != nil {
-		slog.Warn("valkey ping failed — running without cache", "err", err)
+		slog.Warn("valkey ping failed - running without cache", "err", err)
 		return func(c *gin.Context) { c.Next() }, nil, nil
 	}
 

@@ -9,13 +9,13 @@ import { ArrowLeft, ShieldCheck, Trophy } from "lucide-react";
 import { RepoCard } from "@/components/RepoCard";
 
 export const metadata: Metadata = {
-  title: "Open Source Hall of Fame (S-Tier Repositories) — Opendoor",
+  title: "Open Source Hall of Fame (S-Tier Repositories) - Opendoor",
   description: "The Hall of Fame showcases S-Tier public GitHub repositories with elite PR merge rates and rapid maintainer responses.",
   alternates: {
     canonical: "https://opendoor.abhishekco.de/hall-of-fame",
   },
   openGraph: {
-    title: "Open Source Hall of Fame — Opendoor",
+    title: "Open Source Hall of Fame - Opendoor",
     description: "Featured showcase of top S-Tier open-source repositories welcoming contributors.",
     url: "https://opendoor.abhishekco.de/hall-of-fame",
     siteName: "Opendoor",

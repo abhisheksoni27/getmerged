@@ -43,7 +43,7 @@ Try now: [OpenDoor](https://opendoor.abhishekco.de?utm_campaign=try_now&utm_sour
 
 ### Backend (`/backend`)
 - **Language**: Go 1.22+ with `gin-gonic` framework
-- **Database**: Turso (LibSQL) in production, SQLite in local dev (Native SQL queries only — **No ORMs**)
+- **Database**: Turso (LibSQL) in production, SQLite in local dev (Native SQL queries only - **No ORMs**)
 - **Cache**: Valkey in-memory cache
 - **External API**: GitHub GraphQL API & OpenCode AI
 

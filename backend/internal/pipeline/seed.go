@@ -70,7 +70,7 @@ func Seed(db *sqlx.DB, gh *github.Client, languages []string, force bool) error 
 				var count int
 				_ = db.Get(&count, "SELECT COUNT(1) FROM daily_snapshots WHERE repository_id = ? AND snapshot_date = ?", repoID, today)
 				if count > 0 {
-					slog.Debug("seed: snapshot exists for today — skipping", "repo", r.FullName, "date", today)
+					slog.Debug("seed: snapshot exists for today - skipping", "repo", r.FullName, "date", today)
 					skipped++
 					continue
 				}
@@ -146,7 +146,7 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 
 	gfiCount, err := gh.FetchGoodFirstIssueCount(owner, name)
 	if err != nil {
-		slog.Warn("scoreAndSaveRepo: FetchGoodFirstIssueCount failed — assuming none", "repo", fullName, "err", err)
+		slog.Warn("scoreAndSaveRepo: FetchGoodFirstIssueCount failed - assuming none", "repo", fullName, "err", err)
 	}
 
 	scoringPRs := make([]scoring.PR, len(prs))

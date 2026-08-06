@@ -34,7 +34,7 @@ export async function GET(
     const mergeRate = ((repo.external_pr_merge_rate || 0) * 100).toFixed(1);
     const firstTimerRate = ((repo.first_timer_success_rate || 0) * 100).toFixed(1);
 
-    const markdown = `# ${repo.full_name} — Opendoor C-Rank™ Report
+    const markdown = `# ${repo.full_name} - Opendoor C-Rank™ Report
 
 - **C-Rank™ Score**: ${score.toFixed(1)} / 100
 - **Responsiveness Tier**: Tier ${rank}

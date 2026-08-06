@@ -1,13 +1,20 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { LogOut, Star } from "lucide-react";
+import { LogOut, Star, Search } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { User } from "@/types/opendoor";
 import posthog from "posthog-js";
 
-export function Header() {
+interface HeaderProps {
+  showSearchBar?: boolean;
+  onOpenSearch?: () => void;
+  searchQuery?: string;
+  placeholderText?: string;
+}
+
+export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderText }: HeaderProps = {}) {
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [starCount, setStarCount] = useState<number | null>(null);
@@ -73,19 +80,46 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full bg-[#faf9f6]/95 backdrop-blur-md shadow-[0_2px_15px_rgb(0,0,0,0.01)]">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-3 py-3 sm:px-6 lg:px-8">
         {/* Brand Logo matching favicon.svg */}
-        <Link href="/" className="flex items-center gap-2 group shrink-0">
-          <div className="relative flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg bg-zinc-900 text-white font-space font-bold text-[11px] sm:text-xs shadow-xs group-hover:scale-105 group-hover:rotate-12 transition-transform duration-300">
-            <span>OD</span>
-            <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-brand-cream" />
+        <div className="flex items-center gap-4 shrink-0">
+          <Link href="/" className="flex items-center gap-2 group shrink-0">
+            <div className="relative flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg bg-zinc-900 text-white font-space font-bold text-[11px] sm:text-xs shadow-xs group-hover:scale-105 group-hover:rotate-12 transition-transform duration-300">
+              <span>OD</span>
+              <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-brand-cream" />
+            </div>
+            <span className="font-space text-sm sm:text-base font-bold tracking-tight text-zinc-900">opendoor</span>
+            {starCount !== null && (
+              <span className="ml-1 hidden sm:inline-flex items-center gap-1 rounded-md border border-amber-200 bg-amber-50 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-900">
+                <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
+                {starCount}
+              </span>
+            )}
+          </Link>
+        </div>
+
+        {/* Snapped Sticky Search Bar on Scroll Up */}
+        {showSearchBar && (
+          <div className="flex-1 max-w-lg mx-3 sm:mx-6 transition-all duration-300 animate-in fade-in slide-in-from-top-2">
+            <div
+              onClick={onOpenSearch}
+              className="relative flex items-center justify-between rounded-xl border border-zinc-200 bg-white/90 px-3 py-1.5 shadow-xs hover:border-zinc-300 cursor-pointer group transition-all"
+            >
+              <div className="flex items-center gap-2 overflow-hidden flex-1 mr-2">
+                <Search className="h-4 w-4 text-zinc-400 group-hover:text-zinc-600 shrink-0 transition-colors" />
+                <span className="text-xs text-zinc-700 truncate font-sans">
+                  {searchQuery || placeholderText || "Search 100k+ star repos..."}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="hidden md:inline-flex items-center px-1.5 py-0.5 rounded bg-orange-50 border border-orange-200 text-[10px] font-mono font-medium text-orange-600">
+                  ✨ Quick Search
+                </span>
+                <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-zinc-200 bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-500">
+                  <span>⌘</span>K
+                </kbd>
+              </div>
+            </div>
           </div>
-          <span className="font-space text-sm sm:text-base font-bold tracking-tight text-zinc-900">opendoor</span>
-          {starCount !== null && (
-            <span className="ml-1 hidden sm:inline-flex items-center gap-1 rounded-md border border-amber-200 bg-amber-50 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-900">
-              <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
-              {starCount}
-            </span>
-          )}
-        </Link>
+        )}
 
         {/* Header Right Actions */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">

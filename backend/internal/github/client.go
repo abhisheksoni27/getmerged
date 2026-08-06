@@ -532,7 +532,7 @@ func (c *Client) do(query string, vars map[string]any, out any) (fromCache bool,
 	}
 	defer res.Body.Close()
 
-	// Read the full body — we need it for both logging and decoding.
+	// Read the full body - we need it for both logging and decoding.
 	raw, err := io.ReadAll(res.Body)
 	if err != nil {
 		return false, fmt.Errorf("read response body: %w", err)
@@ -545,7 +545,7 @@ func (c *Client) do(query string, vars map[string]any, out any) (fromCache bool,
 		return false, fmt.Errorf("GitHub API returned %d: %s", res.StatusCode, string(raw))
 	}
 
-	// GitHub GraphQL ALWAYS returns HTTP 200 — errors are in the body `errors` field.
+	// GitHub GraphQL ALWAYS returns HTTP 200 - errors are in the body `errors` field.
 	var envelope struct {
 		Errors []struct {
 			Message string `json:"message"`
@@ -576,7 +576,7 @@ func (c *Client) handleRateLimit(rl rateLimitInfo) {
 	c.rlInfo = rl
 
 	if rl.Remaining == 0 && rl.Cost == 0 {
-		slog.Warn("github: rate limit info is all-zero — GitHub may have returned empty/null rateLimit (check repo name, token scope, or query errors)")
+		slog.Warn("github: rate limit info is all-zero - GitHub may have returned empty/null rateLimit (check repo name, token scope, or query errors)")
 		return
 	}
 
@@ -592,7 +592,7 @@ func (c *Client) handleRateLimit(rl rateLimitInfo) {
 	}
 
 	wait := time.Until(resetAt) + 5*time.Second
-	slog.Warn("github rate limit low — sleeping",
+	slog.Warn("github rate limit low - sleeping",
 		"remaining", rl.Remaining,
 		"reset_at", rl.ResetAt,
 		"sleep", wait.String(),
@@ -621,10 +621,9 @@ func isBotLogin(login string) bool {
 		l == "sentry-io"
 }
 
-// FetchGoodFirstIssueCount returns the number of open issues labeled
-// 'good first issue' or 'good-first-issue' for a repo.
+// FetchGoodFirstIssueCount returns the number of open beginner-friendly issues for a repo.
 func (c *Client) FetchGoodFirstIssueCount(owner, name string) (int, error) {
-	queryStr := fmt.Sprintf(`repo:%s/%s is:issue is:open label:"good first issue", "good-first-issue"`, owner, name)
+	queryStr := fmt.Sprintf(`repo:%s/%s is:issue is:open label:"good first issue", "good-first-issue", "good_first_issue", "first-timers-only", "first-timer", "beginner", "beginner-friendly", "beginner friendly", "easy", "easy-fix", "easy fix", "low-hanging-fruit", "low hanging fruit", "help wanted", "help-wanted", "starter", "starter-issue", "bitesize", "new-contributor", "up-for-grabs", "e-easy", "E-mentor"`, owner, name)
 	vars := map[string]any{"query": queryStr}
 
 	var resp struct {

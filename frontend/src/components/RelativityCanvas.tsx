@@ -24,7 +24,7 @@ export function RelativityCanvas() {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // Lots of tiny gray balls — density scales with viewport area
+    // Lots of tiny gray balls - density scales with viewport area
     const count = Math.min(400, Math.floor((width * height) / 5000));
     const balls: Ball[] = [];
 

@@ -64,18 +64,18 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 
 				prs, meta, err := gh.FetchPRs(r.Owner, r.Name, prWindowDays)
 				if err != nil {
-					slog.Error("cron: FetchPRs failed — skipping", "repo", r.FullName, "err", err)
+					slog.Error("cron: FetchPRs failed - skipping", "repo", r.FullName, "err", err)
 					continue
 				}
 
 				stale, err := gh.IsStalenessFlag(r.Owner, r.Name)
 				if err != nil {
-					slog.Warn("cron: IsStalenessFlag failed — assuming not stale", "repo", r.FullName, "err", err)
+					slog.Warn("cron: IsStalenessFlag failed - assuming not stale", "repo", r.FullName, "err", err)
 				}
 
 				gfiCount, err := gh.FetchGoodFirstIssueCount(r.Owner, r.Name)
 				if err != nil {
-					slog.Warn("cron: FetchGoodFirstIssueCount failed — assuming none", "repo", r.FullName, "err", err)
+					slog.Warn("cron: FetchGoodFirstIssueCount failed - assuming none", "repo", r.FullName, "err", err)
 				}
 
 				slog.Debug("cron: fetched data", "repo", r.FullName, "prs", len(prs), "stale", stale)

@@ -156,7 +156,7 @@ func (c *BackgroundCrawler) processNextWorkItem() {
 	// Guard: check rate limit remaining
 	_, rl, err := c.gh.CheckToken()
 	if err != nil {
-		slog.Warn("background crawler: failed token check — backing off", "err", err)
+		slog.Warn("background crawler: failed token check - backing off", "err", err)
 		time.Sleep(30 * time.Second)
 		return
 	}
@@ -165,7 +165,7 @@ func (c *BackgroundCrawler) processNextWorkItem() {
 		resetTime, parseErr := time.Parse(time.RFC3339, rl.ResetAt)
 		if parseErr == nil && time.Now().UTC().Before(resetTime) {
 			sleepDur := time.Until(resetTime) + 5*time.Second
-			slog.Warn("background crawler: rate limit budget low — sleeping until reset",
+			slog.Warn("background crawler: rate limit budget low - sleeping until reset",
 				"remaining", rl.Remaining,
 				"reset_at", rl.ResetAt,
 				"sleep_duration", sleepDur.String(),
@@ -327,7 +327,7 @@ func (c *BackgroundCrawler) checkAndSendPulseDigest() {
 
 	var sTierCount int
 	_ = c.db.Get(&sTierCount, `
-		SELECT COUNT(DISTINCT repository_id) FROM daily_snapshots WHERE c_rank_tier = 'S'
+		SELECT COUNT(*) FROM latest_snapshots WHERE c_rank_tier = 'S' AND c_rank_score > 0
 	`)
 
 	var pendingUserQueue int

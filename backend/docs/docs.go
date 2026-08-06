@@ -437,7 +437,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "OpenDoor API",
-	Description:      "Find open-source repositories that welcome contributors — ranked by C-Rank™.",
+	Description:      "Find open-source repositories that welcome contributors - ranked by C-Rank™.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

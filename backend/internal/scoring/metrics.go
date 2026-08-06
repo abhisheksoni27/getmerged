@@ -1,5 +1,5 @@
 // Package scoring provides pure functions for computing C-Rank scores.
-// No I/O, no side effects — all functions are deterministic and testable in isolation.
+// No I/O, no side effects - all functions are deterministic and testable in isolation.
 package scoring
 
 import (
@@ -9,7 +9,7 @@ import (
 )
 
 // ExternalAssociations are author associations considered external contributors.
-// COLLABORATOR, MEMBER, and OWNER are repo insiders — excluded.
+// COLLABORATOR, MEMBER, and OWNER are repo insiders - excluded.
 var ExternalAssociations = map[string]bool{
 	"CONTRIBUTOR":           true,
 	"FIRST_TIME_CONTRIBUTOR": true,

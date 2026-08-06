@@ -60,7 +60,7 @@ func DiscoverNewRepos(db *sqlx.DB, gh *github.Client, language string, bucket St
 
 	existingMap, err := checkExistingRepos(db, fullNames)
 	if err != nil {
-		slog.Warn("discovery: could not check existing repos — proceeding carefully", "err", err)
+		slog.Warn("discovery: could not check existing repos - proceeding carefully", "err", err)
 		existingMap = map[string]bool{}
 	}
 

@@ -56,12 +56,12 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 
 		stale, err := gh.IsStalenessFlag(body.Owner, body.Name)
 		if err != nil {
-			slog.Warn("score-repo: IsStalenessFlag failed — assuming not stale", "repo", fullName, "err", err)
+			slog.Warn("score-repo: IsStalenessFlag failed - assuming not stale", "repo", fullName, "err", err)
 		}
 
 		gfiCount, err := gh.FetchGoodFirstIssueCount(body.Owner, body.Name)
 		if err != nil {
-			slog.Warn("score-repo: FetchGoodFirstIssueCount failed — assuming none", "repo", fullName, "err", err)
+			slog.Warn("score-repo: FetchGoodFirstIssueCount failed - assuming none", "repo", fullName, "err", err)
 		}
 
 		// Convert github.PR → scoring.PR
@@ -85,7 +85,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 		// --- Normalise against existing DB population ---
 		allRaw, err := repoStore.FetchLatestSnapshotsSample(c.Request.Context(), 500)
 		if err != nil {
-			slog.Warn("score-repo: could not fetch DB metrics for normalisation — using single-repo percentile", "err", err)
+			slog.Warn("score-repo: could not fetch DB metrics for normalisation - using single-repo percentile", "err", err)
 		}
 		allRaw = append(allRaw, raw)
 

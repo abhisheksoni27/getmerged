@@ -8,13 +8,13 @@ import Link from "next/link";
 import { Trophy, ArrowLeft, Star, GitPullRequest, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Open Source Welcoming Leaderboard (C-Rank™) — Opendoor",
+  title: "Open Source Welcoming Leaderboard (C-Rank™) - Opendoor",
   description: "Comprehensive leaderboard of top open-source GitHub repositories ranked by contributor-friendliness, PR merge speed, and maintainer responsiveness.",
   alternates: {
     canonical: "https://opendoor.abhishekco.de/leaderboard",
   },
   openGraph: {
-    title: "Open Source Welcoming Leaderboard — Opendoor",
+    title: "Open Source Welcoming Leaderboard - Opendoor",
     description: "Ranked list of all open-source repositories based on C-Rank™ metrics.",
     url: "https://opendoor.abhishekco.de/leaderboard",
     siteName: "Opendoor",
@@ -97,7 +97,7 @@ export default async function LeaderboardPage() {
                       #{idx + 1}
                     </td>
                     <td className="py-4 px-4 font-bold text-zinc-900">
-                      <Link href={`/repo/${owner}/${name}`} className="hover:text-emerald-600 transition-colors font-space text-sm">
+                      <Link href={`/${owner}/${name}`} className="hover:text-emerald-600 transition-colors font-space text-sm">
                         {repo.full_name}
                       </Link>
                       <div className="text-[11px] font-normal text-zinc-400 font-sans truncate max-w-md mt-0.5">

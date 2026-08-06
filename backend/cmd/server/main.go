@@ -1,6 +1,6 @@
 // @title           OpenDoor API
 // @version         1.0
-// @description     Find open-source repositories that welcome contributors — ranked by C-Rank™.
+// @description     Find open-source repositories that welcome contributors - ranked by C-Rank™.
 // @host            opendoor.abhishekco.de
 // @BasePath        /
 // @securityDefinitions.apikey ApiKeyAuth
@@ -31,7 +31,7 @@ import (
 func main() {
 	cfg, err := config.Load()
 	if err != nil {
-		// slog not set up yet — use stderr directly.
+		// slog not set up yet - use stderr directly.
 		slog.Error("config load failed", "err", err)
 		os.Exit(1)
 	}
@@ -123,7 +123,7 @@ func main() {
 		userApi.POST("/user/feedback", handler.CreateFeedback(database, cfg.GithubToken))
 	}
 
-	// Internal routes — nginx blocks these externally
+	// Internal routes - nginx blocks these externally
 	internal := r.Group("/internal")
 	internal.Use(middleware.Auth(cfg.InternalAPIKey))
 	{
