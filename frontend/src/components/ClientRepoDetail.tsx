@@ -18,6 +18,7 @@ import {
   Check,
   ArrowRight,
   AlertCircle,
+  Info,
 } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
@@ -130,9 +131,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         .catch(() => {});
     }
 
-    if (fullName) {
+    const targetId = repo?.id ? repo.id : (fullName ? encodeURIComponent(fullName) : "");
+    if (targetId) {
       // 3. Fetch Similar/Related Repositories for Interlinking (Issue #55)
-      fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/related?limit=3`)
+      fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/related?limit=3`)
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
           if (data?.related && Array.isArray(data.related)) {
@@ -482,12 +484,18 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* Response Velocity */}
           <div className="group relative border-3 border-[#222831] bg-white p-5 shadow-[4px_4px_0px_0px_#222831] rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
-            <div className="flex items-center gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
-              <Clock className="h-4 w-4 text-emerald-600 shrink-0" />
-              <span>Response Velocity</span>
+            <div className="flex items-center justify-between gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-emerald-600 shrink-0" />
+                <span>Response Velocity</span>
+              </div>
+              <Info className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-700 transition-colors" />
             </div>
             <div className="text-3xl font-black text-[#222831] font-mono">{responseTimeStr}</div>
             <div className="text-xs text-zinc-600 mt-1 font-sans font-medium">{responseCommentary}</div>
+            <p className="text-[11px] text-zinc-500 mt-2 pt-2 border-t border-zinc-100 font-sans sm:hidden">
+              Average latency until maintainers review or reply to PRs.
+            </p>
             {/* Tooltip */}
             <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 p-3 bg-[#222831] text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none ease-out">
               <p className="font-bold mb-1">Average Response Latency</p>
@@ -497,12 +505,18 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
           {/* Merge Efficiency */}
           <div className="group relative border-3 border-[#222831] bg-white p-5 shadow-[4px_4px_0px_0px_#222831] rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
-            <div className="flex items-center gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
-              <GitMerge className="h-4 w-4 text-blue-600 shrink-0" />
-              <span>Merge Efficiency</span>
+            <div className="flex items-center justify-between gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
+              <div className="flex items-center gap-2">
+                <GitMerge className="h-4 w-4 text-blue-600 shrink-0" />
+                <span>Merge Efficiency</span>
+              </div>
+              <Info className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-700 transition-colors" />
             </div>
             <div className="text-3xl font-black text-[#222831] font-mono">{mergeRateStr}</div>
             <div className="text-xs text-zinc-600 mt-1 font-sans font-medium">{mergeCommentary}</div>
+            <p className="text-[11px] text-zinc-500 mt-2 pt-2 border-t border-zinc-100 font-sans sm:hidden">
+              Percentage of external community PRs successfully merged.
+            </p>
             {/* Tooltip */}
             <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 p-3 bg-[#222831] text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none ease-out">
               <p className="font-bold mb-1">External Acceptance Rate</p>
@@ -512,12 +526,18 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
           {/* First-Timer Success */}
           <div className="group relative border-3 border-[#222831] bg-white p-5 shadow-[4px_4px_0px_0px_#222831] rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
-            <div className="flex items-center gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
-              <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
-              <span>First-Timer Success</span>
+            <div className="flex items-center justify-between gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+                <span>First-Timer Success</span>
+              </div>
+              <Info className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-700 transition-colors" />
             </div>
             <div className="text-3xl font-black text-[#222831] font-mono">{firstTimerSuccessStr}</div>
             <div className="text-xs text-zinc-600 mt-1 font-sans font-medium">{firstTimerCommentary}</div>
+            <p className="text-[11px] text-zinc-500 mt-2 pt-2 border-t border-zinc-100 font-sans sm:hidden">
+              Success rate for developers opening their first PR here.
+            </p>
             {/* Tooltip */}
             <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 p-3 bg-[#222831] text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none ease-out">
               <p className="font-bold mb-1">First PR Conversion</p>
@@ -527,14 +547,20 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
           {/* Active Maintainers */}
           <div className="group relative border-3 border-[#222831] bg-white p-5 shadow-[4px_4px_0px_0px_#222831] rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
-            <div className="flex items-center gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
-              <Users className="h-4 w-4 text-amber-500 shrink-0" />
-              <span>Active Maintainers</span>
+            <div className="flex items-center justify-between gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4 text-amber-500 shrink-0" />
+                <span>Active Maintainers</span>
+              </div>
+              <Info className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-700 transition-colors" />
             </div>
             <div className="text-3xl font-black text-[#222831] font-mono">
               {distinctMaintainers > 0 ? distinctMaintainers : "-"}
             </div>
             <div className="text-xs text-zinc-600 mt-1 font-sans font-medium">{maintainersCommentary}</div>
+            <p className="text-[11px] text-zinc-500 mt-2 pt-2 border-t border-zinc-100 font-sans sm:hidden">
+              Unique maintainers actively reviewing community submissions.
+            </p>
             {/* Tooltip */}
             <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 p-3 bg-[#222831] text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none ease-out">
               <p className="font-bold mb-1">Distinct Reviewers</p>

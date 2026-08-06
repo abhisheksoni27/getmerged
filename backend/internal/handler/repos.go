@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -384,6 +385,9 @@ func GetRepoHistory(repoStore repository.RepoRepository) gin.HandlerFunc {
 func GetRelatedReposHandler(repoStore repository.RepoRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
+		if unescaped, err := url.QueryUnescape(id); err == nil {
+			id = unescaped
+		}
 		repo, err := repoStore.FindByIDOrName(c.Request.Context(), id)
 		if err == sql.ErrNoRows || repo == nil {
 			c.JSON(http.StatusNotFound, gin.H{"error": "repository not found"})
