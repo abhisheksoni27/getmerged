@@ -1,10 +1,13 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"net/http"
+	"strings"
 
+	"github.com/abhisheksoni27/opendoor/internal/ai"
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
@@ -33,7 +36,7 @@ type ScoreRepoBody struct {
 //	@Failure      400   {object}  map[string]string
 //	@Failure      500   {object}  map[string]string
 //	@Router       /internal/score-repo [post]
-func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.HandlerFunc {
+func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClient *ai.AIClient, aiRepo repository.AIRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var body ScoreRepoBody
 		if err := c.ShouldBindJSON(&body); err != nil {
@@ -66,7 +69,13 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 
 		// Convert github.PR → scoring.PR
 		scoringPRs := make([]scoring.PR, len(prs))
+		var rawCommentTexts []string
 		for i, p := range prs {
+			for _, commentText := range p.CommentTexts {
+				if strings.TrimSpace(commentText) != "" {
+					rawCommentTexts = append(rawCommentTexts, commentText)
+				}
+			}
 			scoringPRs[i] = scoring.PR{
 				State:             p.State,
 				CreatedAt:         p.CreatedAt,
@@ -107,6 +116,28 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository) gin.Han
 			slog.Error("score-repo: insert snapshot failed", "repo", fullName, "err", err)
 		} else {
 			slog.Info("score-repo: successfully saved to DB", "repo", fullName, "repo_id", repoID)
+		}
+
+		// Save raw comments & trigger AI insights generation
+		_ = aiRepo.SaveRawComments(c.Request.Context(), repoID, rawCommentTexts)
+		if insightsResp, aiErr := aiClient.GenerateRepoInsights(c.Request.Context(), fullName, rawCommentTexts); aiErr == nil && insightsResp != nil {
+			guidelinesBytes, _ := json.Marshal(insightsResp.PRGuidelines)
+			dosBytes, _ := json.Marshal(insightsResp.TopDos)
+			dontsBytes, _ := json.Marshal(insightsResp.TopDonts)
+
+			_ = aiRepo.SaveInsights(c.Request.Context(), &repository.AIInsights{
+				RepoID:            repoID,
+				MaintainerVibe:    insightsResp.MaintainerVibe,
+				PRGuidelines:      string(guidelinesBytes),
+				IssueQualityScore: insightsResp.IssueQualityScore,
+				RawSummary:        insightsResp.RawSummary,
+				WarmthScore:       insightsResp.WarmthScore,
+				PatienceScore:     insightsResp.PatienceScore,
+				NitpickRatio:      insightsResp.NitpickRatio,
+				MaintainerPersona: insightsResp.MaintainerPersona,
+				DosJSON:           string(dosBytes),
+				DontsJSON:         string(dontsBytes),
+			})
 		}
 
 		slog.Info("score-repo: done",

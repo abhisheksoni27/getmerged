@@ -8,12 +8,18 @@ import (
 )
 
 type AIInsights struct {
-	RepoID             string    `db:"repo_id" json:"repo_id"`
-	MaintainerVibe     string    `db:"maintainer_vibe" json:"maintainer_vibe"`
-	PRGuidelines       string    `db:"pr_guidelines" json:"pr_guidelines"`
-	IssueQualityScore  float64   `db:"issue_quality_score" json:"issue_quality_score"`
-	RawSummary         string    `db:"raw_summary" json:"raw_summary"`
-	UpdatedAt          time.Time `db:"updated_at" json:"updated_at"`
+	RepoID            string    `db:"repo_id" json:"repo_id"`
+	MaintainerVibe    string    `db:"maintainer_vibe" json:"maintainer_vibe"`
+	PRGuidelines      string    `db:"pr_guidelines" json:"pr_guidelines"`
+	IssueQualityScore float64   `db:"issue_quality_score" json:"issue_quality_score"`
+	RawSummary        string    `db:"raw_summary" json:"raw_summary"`
+	WarmthScore       float64   `db:"warmth_score" json:"warmth_score"`
+	PatienceScore     float64   `db:"patience_score" json:"patience_score"`
+	NitpickRatio      float64   `db:"nitpick_ratio" json:"nitpick_ratio"`
+	MaintainerPersona string    `db:"maintainer_persona" json:"maintainer_persona"`
+	DosJSON           string    `db:"dos_json" json:"dos_json"`
+	DontsJSON         string    `db:"donts_json" json:"donts_json"`
+	UpdatedAt         time.Time `db:"updated_at" json:"updated_at"`
 }
 
 type AIRepository interface {
@@ -34,7 +40,14 @@ func NewAIRepository(db *sqlx.DB) AIRepository {
 func (r *sqlxAIRepository) GetInsights(ctx context.Context, repoID string) (*AIInsights, error) {
 	var item AIInsights
 	err := r.db.GetContext(ctx, &item, `
-		SELECT repo_id, maintainer_vibe, pr_guidelines, issue_quality_score, raw_summary, updated_at
+		SELECT repo_id, maintainer_vibe, pr_guidelines, issue_quality_score, raw_summary,
+		       COALESCE(warmth_score, 7.5) as warmth_score,
+		       COALESCE(patience_score, 8.0) as patience_score,
+		       COALESCE(nitpick_ratio, 0.25) as nitpick_ratio,
+		       COALESCE(maintainer_persona, 'Encouraging Technical Mentor') as maintainer_persona,
+		       COALESCE(dos_json, '[]') as dos_json,
+		       COALESCE(donts_json, '[]') as donts_json,
+		       updated_at
 		FROM repo_ai_insights WHERE repo_id = ?
 	`, repoID)
 	if err != nil {
@@ -45,15 +58,25 @@ func (r *sqlxAIRepository) GetInsights(ctx context.Context, repoID string) (*AII
 
 func (r *sqlxAIRepository) SaveInsights(ctx context.Context, insights *AIInsights) error {
 	_, err := r.db.ExecContext(ctx, `
-		INSERT INTO repo_ai_insights (repo_id, maintainer_vibe, pr_guidelines, issue_quality_score, raw_summary, updated_at)
-		VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+		INSERT INTO repo_ai_insights (
+			repo_id, maintainer_vibe, pr_guidelines, issue_quality_score, raw_summary,
+			warmth_score, patience_score, nitpick_ratio, maintainer_persona, dos_json, donts_json, updated_at
+		)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		ON CONFLICT(repo_id) DO UPDATE SET
 			maintainer_vibe = excluded.maintainer_vibe,
 			pr_guidelines = excluded.pr_guidelines,
 			issue_quality_score = excluded.issue_quality_score,
 			raw_summary = excluded.raw_summary,
+			warmth_score = excluded.warmth_score,
+			patience_score = excluded.patience_score,
+			nitpick_ratio = excluded.nitpick_ratio,
+			maintainer_persona = excluded.maintainer_persona,
+			dos_json = excluded.dos_json,
+			donts_json = excluded.donts_json,
 			updated_at = CURRENT_TIMESTAMP
-	`, insights.RepoID, insights.MaintainerVibe, insights.PRGuidelines, insights.IssueQualityScore, insights.RawSummary)
+	`, insights.RepoID, insights.MaintainerVibe, insights.PRGuidelines, insights.IssueQualityScore, insights.RawSummary,
+		insights.WarmthScore, insights.PatienceScore, insights.NitpickRatio, insights.MaintainerPersona, insights.DosJSON, insights.DontsJSON)
 	return err
 }
 
