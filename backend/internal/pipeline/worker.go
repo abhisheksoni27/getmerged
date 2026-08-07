@@ -47,12 +47,12 @@ func (c *BackgroundCrawler) Start() {
 		return
 	}
 
-	slog.Info("background crawler: starting continuous queue engine (8-worker parallel pool)")
+	slog.Info("background crawler: starting continuous queue engine (14-worker parallel pool)")
 	if c.telegram.IsConfigured() {
 		go func() {
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
-			err := c.telegram.SendTextMessage(ctx, "🚀 *Opendoor Background Crawler Worker Started*\n\nContinuous 8-worker parallel queue engine is active with real-time latency telemetry.")
+			err := c.telegram.SendTextMessage(ctx, "🚀 *Opendoor Background Crawler Worker Started*\n\nContinuous 14-worker parallel queue engine is active with real-time latency telemetry.")
 			if err != nil {
 				slog.Error("background crawler: startup telegram send failed", "err", err)
 			} else {
@@ -330,8 +330,35 @@ func (c *BackgroundCrawler) checkAndSendPulseDigest() {
 		SELECT COUNT(*) FROM latest_snapshots WHERE c_rank_tier = 'S' AND c_rank_score > 0
 	`)
 
+	var totalComments int
+	_ = c.db.Get(&totalComments, "SELECT COUNT(1) FROM repo_raw_comments")
+
+	var aiInsightsCount int
+	_ = c.db.Get(&aiInsightsCount, "SELECT COUNT(1) FROM repo_ai_insights")
+
 	var pendingUserQueue int
 	_ = c.db.Get(&pendingUserQueue, "SELECT COUNT(1) FROM indexing_queue WHERE status = 'pending'")
+
+	type recentRepo struct {
+		FullName  string `db:"full_name"`
+		CRankTier string `db:"c_rank_tier"`
+	}
+	var recentRepos []recentRepo
+	_ = c.db.Select(&recentRepos, `
+		SELECT r.full_name, COALESCE(ls.c_rank_tier, 'D') as c_rank_tier
+		FROM repositories r
+		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
+		ORDER BY r.updated_at DESC
+		LIMIT 5
+	`)
+
+	latestReposStr := ""
+	if len(recentRepos) > 0 {
+		latestReposStr = "\n\n📌 *Latest 5 Repos Scored:*\n"
+		for _, rr := range recentRepos {
+			latestReposStr += fmt.Sprintf("• `%s` (Tier: *%s*)\n", rr.FullName, rr.CRankTier)
+		}
+	}
 
 	rl := c.gh.GetRateLimitInfo()
 	if rl.Remaining == 0 {
@@ -356,11 +383,13 @@ func (c *BackgroundCrawler) checkAndSendPulseDigest() {
 		"📊 *Opendoor Crawler Pulse Digest*\n\n"+
 			"• *Total Repos Scored:* %d\n"+
 			"• *S-Tier Super Welcoming:* %d\n"+
+			"• *PR Comments Saved:* %d\n"+
+			"• *Repos with AI Insights:* %d\n"+
 			"• *Queue Pending:* %d\n"+
 			"• *Scanning Speed:* %.1f repos/min (avg %d ms/repo)\n"+
-			"• *GitHub API Budget:* %d / 5,000 remaining\n\n"+
-			"🤖 8-worker parallel engine active 24/7.",
-		totalScored, sTierCount, pendingUserQueue, reposPerMin, avgMsPerRepo, rl.Remaining,
+			"• *GitHub API Budget:* %d / 5,000 remaining%s\n"+
+			"🤖 14-worker parallel engine active 24/7.",
+		totalScored, sTierCount, totalComments, aiInsightsCount, pendingUserQueue, reposPerMin, avgMsPerRepo, rl.Remaining, latestReposStr,
 	)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
