@@ -49,7 +49,7 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 		meta ghclient.RepoMeta
 	}
 
-	const concurrency = 8
+	const concurrency = 14
 	jobs := make(chan repoRow, len(repos))
 	results := make(chan repoMetrics, len(repos))
 
