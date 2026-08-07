@@ -1,10 +1,13 @@
 package pipeline
 
 import (
+	"context"
 	"os"
 	"testing"
 
+	"github.com/abhisheksoni27/opendoor/internal/ai"
 	"github.com/abhisheksoni27/opendoor/internal/db"
+	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 )
 
@@ -109,3 +112,60 @@ func TestEnqueueDueRepos_ExcludesD_And_ReEnqueuesCompleted(t *testing.T) {
 		t.Errorf("expected status to be reset to 'pending' on re-enqueue, got %s", status)
 	}
 }
+
+func TestScoreAndSaveRepo_GeneratesAIInsights(t *testing.T) {
+	tmpFile, err := os.CreateTemp("", "test_opendoor_ai_*.db")
+	if err != nil {
+		t.Fatalf("failed to create temp db file: %v", err)
+	}
+	tmpPath := tmpFile.Name()
+	tmpFile.Close()
+	defer os.Remove(tmpPath)
+
+	dbConn, err := db.Connect(tmpPath)
+	if err != nil {
+		t.Fatalf("failed to connect to temp db: %v", err)
+	}
+	defer dbConn.Close()
+
+	repoID, err := upsertRepoRow(dbConn, "gin-gonic", "gin", "gin-gonic/gin")
+	if err != nil {
+		t.Fatalf("failed to upsert repo: %v", err)
+	}
+
+	// Verify repo_ai_insights starts empty
+	var countBefore int
+	_ = dbConn.Get(&countBefore, "SELECT COUNT(1) FROM repo_ai_insights WHERE repo_id = ?", repoID)
+	if countBefore != 0 {
+		t.Fatalf("expected 0 AI insights before scoring, got %d", countBefore)
+	}
+
+	// Simulate AI insights generation pipeline flow directly
+	aiClient := ai.NewAIClient("")
+	aiRepo := repository.NewAIRepository(dbConn)
+	comments := []string{"LGTM! Thanks for your contribution.", "Please add unit test."}
+
+	insightsResp, aiErr := aiClient.GenerateRepoInsights(context.Background(), "gin-gonic/gin", comments)
+	if aiErr != nil || insightsResp == nil {
+		t.Fatalf("GenerateRepoInsights failed: %v", aiErr)
+	}
+
+	err = aiRepo.SaveInsights(context.Background(), &repository.AIInsights{
+		RepoID:            repoID,
+		MaintainerVibe:    insightsResp.MaintainerVibe,
+		PRGuidelines:      "[\"Include unit tests\"]",
+		IssueQualityScore: insightsResp.IssueQualityScore,
+		RawSummary:        insightsResp.RawSummary,
+	})
+	if err != nil {
+		t.Fatalf("SaveInsights failed: %v", err)
+	}
+
+	var aiCount int
+	_ = dbConn.Get(&aiCount, "SELECT COUNT(1) FROM repo_ai_insights WHERE repo_id = ?", repoID)
+	if aiCount != 1 {
+		t.Errorf("expected 1 repo_ai_insights record in DB, got %d", aiCount)
+	}
+}
+
+

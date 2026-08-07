@@ -97,11 +97,17 @@ func AutoMigrate(db *sqlx.DB) error {
 			FOREIGN KEY(repository_id) REFERENCES repositories(id) ON DELETE CASCADE
 		);`,
 		`CREATE TABLE IF NOT EXISTS repo_ai_insights (
-			repo_id INTEGER PRIMARY KEY,
+			repo_id TEXT PRIMARY KEY,
 			maintainer_vibe TEXT NOT NULL,
 			pr_guidelines TEXT NOT NULL,
 			issue_quality_score REAL DEFAULT 0.0,
 			raw_summary TEXT,
+			warmth_score REAL DEFAULT 7.5,
+			patience_score REAL DEFAULT 8.0,
+			nitpick_ratio REAL DEFAULT 0.25,
+			maintainer_persona TEXT DEFAULT 'Encouraging Technical Mentor',
+			dos_json TEXT DEFAULT '[]',
+			donts_json TEXT DEFAULT '[]',
 			updated_at DATETIME NOT NULL
 		);`,
 		`CREATE TABLE IF NOT EXISTS notification_queue (

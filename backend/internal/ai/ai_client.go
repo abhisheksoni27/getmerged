@@ -21,6 +21,12 @@ type AIInsightsResponse struct {
 	PRGuidelines      []string `json:"pr_guidelines"`
 	IssueQualityScore float64  `json:"issue_quality_score"`
 	RawSummary        string   `json:"raw_summary"`
+	WarmthScore       float64  `json:"warmth_score"`
+	PatienceScore     float64  `json:"patience_score"`
+	NitpickRatio      float64  `json:"nitpick_ratio"`
+	MaintainerPersona string   `json:"maintainer_persona"`
+	TopDos            []string `json:"top_dos"`
+	TopDonts          []string `json:"top_donts"`
 }
 
 func NewAIClient(apiKey string) *AIClient {
@@ -156,11 +162,57 @@ func (c *AIClient) GenerateLocalZeroCostInsights(repoFullName string, prComments
 		score = 5.0
 	}
 
+	warmth := 7.5 + float64(positiveHits)*0.4 - float64(negativeHits)*0.3
+	if warmth > 9.5 {
+		warmth = 9.5
+	}
+	if warmth < 4.0 {
+		warmth = 4.0
+	}
+
+	patience := 8.2 + float64(positiveHits)*0.2 - float64(negativeHits)*0.2
+	if patience > 9.8 {
+		patience = 9.8
+	}
+	if patience < 5.0 {
+		patience = 5.0
+	}
+
+	nitpick := 0.20 + float64(negativeHits)*0.05
+	if nitpick > 0.65 {
+		nitpick = 0.65
+	}
+
+	persona := "Empathetic Technical Mentor"
+	if negativeHits > positiveHits {
+		persona = "Strict Architecture Gatekeeper"
+	} else if positiveHits > 3 {
+		persona = "Welcoming Community Builder"
+	}
+
+	topDos := []string{
+		"Write clear descriptive PR titles linking the issue number",
+		"Ensure 100% unit test coverage for new functions",
+		"Respond constructively to maintainer code review notes",
+	}
+
+	topDonts := []string{
+		"Do not open unlinked PRs without referencing an issue",
+		"Do not include unrelated refactoring commits in a single PR",
+		"Do not ping maintainers repeatedly within 24 hours of opening",
+	}
+
 	return &AIInsightsResponse{
 		MaintainerVibe:    vibe,
 		PRGuidelines:      guidelines,
 		IssueQualityScore: score,
 		RawSummary:        fmt.Sprintf("Analyzed %d PR review signals for %s.", len(prComments), repoFullName),
+		WarmthScore:       warmth,
+		PatienceScore:     patience,
+		NitpickRatio:      nitpick,
+		MaintainerPersona: persona,
+		TopDos:            topDos,
+		TopDonts:          topDonts,
 	}
 }
 

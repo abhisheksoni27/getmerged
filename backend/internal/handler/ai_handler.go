@@ -20,6 +20,10 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 		if err == nil && cached != nil {
 			var guidelines []string
 			_ = json.Unmarshal([]byte(cached.PRGuidelines), &guidelines)
+			var dos []string
+			_ = json.Unmarshal([]byte(cached.DosJSON), &dos)
+			var donts []string
+			_ = json.Unmarshal([]byte(cached.DontsJSON), &donts)
 
 			c.JSON(http.StatusOK, gin.H{
 				"insights": gin.H{
@@ -28,6 +32,12 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 					"pr_guidelines":       guidelines,
 					"issue_quality_score": cached.IssueQualityScore,
 					"raw_summary":         cached.RawSummary,
+					"warmth_score":        cached.WarmthScore,
+					"patience_score":      cached.PatienceScore,
+					"nitpick_ratio":       cached.NitpickRatio,
+					"maintainer_persona":  cached.MaintainerPersona,
+					"top_dos":             dos,
+					"top_donts":           donts,
 				},
 			})
 			return
@@ -42,7 +52,7 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 		}
 
 		// 3. Retrieve stored raw comments from repo_raw_comments table
-		rawComments, _ := aiRepo.GetRawComments(c.Request.Context(), repo.ID, 30)
+		rawComments, _ := aiRepo.GetRawComments(c.Request.Context(), repo.ID, 100)
 
 		// 4. Generate insights via AI client / Python sidecar / local classifier
 		insights, err := aiClient.GenerateRepoInsights(c.Request.Context(), repo.FullName, rawComments)
@@ -53,12 +63,21 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 		}
 
 		guidelinesBytes, _ := json.Marshal(insights.PRGuidelines)
+		dosBytes, _ := json.Marshal(insights.TopDos)
+		dontsBytes, _ := json.Marshal(insights.TopDonts)
+
 		newInsights := &repository.AIInsights{
 			RepoID:            repo.ID,
 			MaintainerVibe:    insights.MaintainerVibe,
 			PRGuidelines:      string(guidelinesBytes),
 			IssueQualityScore: insights.IssueQualityScore,
 			RawSummary:        insights.RawSummary,
+			WarmthScore:       insights.WarmthScore,
+			PatienceScore:     insights.PatienceScore,
+			NitpickRatio:      insights.NitpickRatio,
+			MaintainerPersona: insights.MaintainerPersona,
+			DosJSON:           string(dosBytes),
+			DontsJSON:         string(dontsBytes),
 		}
 
 		if err := aiRepo.SaveInsights(c.Request.Context(), newInsights); err != nil {
@@ -72,6 +91,12 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 				"pr_guidelines":       insights.PRGuidelines,
 				"issue_quality_score": insights.IssueQualityScore,
 				"raw_summary":         insights.RawSummary,
+				"warmth_score":        insights.WarmthScore,
+				"patience_score":      insights.PatienceScore,
+				"nitpick_ratio":       insights.NitpickRatio,
+				"maintainer_persona":  insights.MaintainerPersona,
+				"top_dos":             insights.TopDos,
+				"top_donts":           insights.TopDonts,
 			},
 		})
 	}

@@ -137,7 +137,7 @@ func main() {
 	{
 		internal.POST("/update-scores", handler.UpdateScores(gh))
 		internal.POST("/seed", handler.Seed(gh))
-		internal.POST("/score-repo", handler.ScoreRepo(gh, repoStore))
+		internal.POST("/score-repo", handler.ScoreRepo(gh, repoStore, aiClient, aiRepo))
 		internal.POST("/sync-trending", handler.SyncTrending())
 		internal.POST("/check-pat", handler.CheckPAT(gh))
 		internal.POST("/purge-cache", handler.PurgeCache())

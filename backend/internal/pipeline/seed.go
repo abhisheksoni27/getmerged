@@ -3,13 +3,16 @@ package pipeline
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"strings"
 	"time"
 
+	"github.com/abhisheksoni27/opendoor/internal/ai"
 	"github.com/abhisheksoni27/opendoor/internal/analytics"
 	"github.com/abhisheksoni27/opendoor/internal/github"
+	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
@@ -137,6 +140,9 @@ func upsertRepo(db *sqlx.DB, r github.Repo) (string, error) {
 }
 
 func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullName string, existingMetrics []scoring.RawMetrics) ([]scoring.RawMetrics, error) {
+	if gh == nil {
+		return existingMetrics, fmt.Errorf("gh client is nil")
+	}
 	prs, _, err := gh.FetchPRs(owner, name, 180)
 	if err != nil {
 		return existingMetrics, fmt.Errorf("FetchPRs: %w", err)
@@ -173,15 +179,41 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	score, tier := scoring.ComputeCRank(thisNormed, raw.StalenessFlag, raw.GoodFirstIssueCount)
 
 	// Save real raw PR comment texts for zero-cost sentiment and NLP model ingestion
+	var rawCommentTexts []string
 	for _, p := range prs {
 		for _, commentText := range p.CommentTexts {
 			if strings.TrimSpace(commentText) != "" {
+				rawCommentTexts = append(rawCommentTexts, commentText)
 				_, _ = db.Exec(`
 					INSERT INTO repo_raw_comments (repository_id, author_login, comment_text, created_at)
 					VALUES (?, 'maintainer', ?, CURRENT_TIMESTAMP)
 				`, repoID, commentText)
 			}
 		}
+	}
+
+	// Automatically generate and persist HuggingFace / AI Insights during background crawling
+	aiClient := ai.NewAIClient("")
+	aiRepo := repository.NewAIRepository(db)
+	insightsResp, aiErr := aiClient.GenerateRepoInsights(context.Background(), fullName, rawCommentTexts)
+	if aiErr == nil && insightsResp != nil {
+		guidelinesBytes, _ := json.Marshal(insightsResp.PRGuidelines)
+		dosBytes, _ := json.Marshal(insightsResp.TopDos)
+		dontsBytes, _ := json.Marshal(insightsResp.TopDonts)
+
+		_ = aiRepo.SaveInsights(context.Background(), &repository.AIInsights{
+			RepoID:            repoID,
+			MaintainerVibe:    insightsResp.MaintainerVibe,
+			PRGuidelines:      string(guidelinesBytes),
+			IssueQualityScore: insightsResp.IssueQualityScore,
+			RawSummary:        insightsResp.RawSummary,
+			WarmthScore:       insightsResp.WarmthScore,
+			PatienceScore:     insightsResp.PatienceScore,
+			NitpickRatio:      insightsResp.NitpickRatio,
+			MaintainerPersona: insightsResp.MaintainerPersona,
+			DosJSON:           string(dosBytes),
+			DontsJSON:         string(dontsBytes),
+		})
 	}
 
 	if err := saveSnapshot(db, repoID, raw, score, tier); err != nil {

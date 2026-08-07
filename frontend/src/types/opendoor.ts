@@ -43,11 +43,17 @@ export interface MacroStats {
 }
 
 export interface AIInsights {
-  repo_id: number;
+  repo_id: number | string;
   maintainer_vibe: string;
   pr_guidelines: string[];
   issue_quality_score: number;
   raw_summary: string;
+  warmth_score?: number;
+  patience_score?: number;
+  nitpick_ratio?: number;
+  maintainer_persona?: string;
+  top_dos?: string[];
+  top_donts?: string[];
 }
 
 export interface User {

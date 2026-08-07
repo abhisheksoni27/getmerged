@@ -846,20 +846,99 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         </div>
 
         {isLoggedIn ? (
-          <div className="space-y-4 pt-2">
-            <p className="text-xs sm:text-sm text-zinc-700 leading-relaxed font-sans">
-              {insights?.maintainer_vibe ||
-                "Active maintainer team with regular turnaround times on pull requests. Community guidelines recommend concise PR scopes."}
-            </p>
+          <div className="space-y-6 pt-2 font-sans">
+            {/* Persona & Vibe Overview Banner */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-800 text-white shadow-sm">
+              <div>
+                <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
+                  HuggingFace Maintainer Persona
+                </span>
+                <h3 className="text-base font-space font-bold mt-0.5">
+                  {insights?.maintainer_persona || "Constructive Code Reviewer"}
+                </h3>
+              </div>
+              <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t sm:border-t-0 sm:border-l border-zinc-700 pt-2 sm:pt-0 sm:pl-4">
+                <div>
+                  <div className="text-zinc-400 text-[10px]">Warmth Score</div>
+                  <div className="text-emerald-400 font-bold text-sm">{insights?.warmth_score ?? 7.8}/10</div>
+                </div>
+                <div>
+                  <div className="text-zinc-400 text-[10px]">Patience Score</div>
+                  <div className="text-blue-400 font-bold text-sm">{insights?.patience_score ?? 8.0}/10</div>
+                </div>
+                <div>
+                  <div className="text-zinc-400 text-[10px]">Nitpick Rate</div>
+                  <div className="text-amber-400 font-bold text-sm">{((insights?.nitpick_ratio ?? 0.25) * 100).toFixed(0)}%</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Vibe Check Description */}
+            <div className="p-4 rounded-xl bg-zinc-50 border border-zinc-200/60">
+              <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed">
+                {insights?.maintainer_vibe ||
+                  "Active maintainer team with regular turnaround times on pull requests. Community guidelines recommend concise PR scopes."}
+              </p>
+            </div>
+
+            {/* Top Do's & Don'ts Checklist */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+              {/* Do's */}
+              <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-4">
+                <h4 className="text-xs font-mono font-bold text-emerald-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                  Top PR Submission Do&apos;s
+                </h4>
+                <ul className="space-y-2 text-xs text-emerald-950 font-sans">
+                  {(insights?.top_dos && insights.top_dos.length > 0 ? insights.top_dos : [
+                    "Add unit tests covering modified code paths",
+                    "Run package linters before submitting",
+                    "Reference open GitHub issue number in description"
+                  ]).map((doItem, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <span className="text-emerald-600 font-bold">•</span>
+                      <span>{doItem}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Don'ts */}
+              <div className="rounded-xl border border-rose-200/80 bg-rose-50/40 p-4">
+                <h4 className="text-xs font-mono font-bold text-rose-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <AlertCircle className="h-4 w-4 text-rose-600" />
+                  Top PR Friction Pitfalls (Don&apos;ts)
+                </h4>
+                <ul className="space-y-2 text-xs text-rose-950 font-sans">
+                  {(insights?.top_donts && insights.top_donts.length > 0 ? insights.top_donts : [
+                    "Do not submit unlinked PRs without referencing an issue",
+                    "Do not mix refactoring with new feature commits",
+                    "Do not ping maintainers repeatedly within 24 hours"
+                  ]).map((dontItem, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <span className="text-rose-600 font-bold">•</span>
+                      <span>{dontItem}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* General Guidelines */}
             {insights?.pr_guidelines && insights.pr_guidelines.length > 0 && (
-              <ul className="space-y-2 text-xs font-mono text-zinc-800 border-t border-zinc-100/40 pt-3">
-                {insights.pr_guidelines.map((guide, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>{guide}</span>
-                  </li>
-                ))}
-              </ul>
+              <div className="pt-2 border-t border-zinc-100">
+                <h4 className="text-xs font-mono font-bold text-zinc-700 uppercase tracking-wider mb-2">
+                  Maintainer Checklist
+                </h4>
+                <ul className="space-y-2 text-xs font-mono text-zinc-800">
+                  {insights.pr_guidelines.map((guide, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <span>{guide}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
           </div>
         ) : (

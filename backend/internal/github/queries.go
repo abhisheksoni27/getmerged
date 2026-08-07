@@ -53,7 +53,7 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
         closedAt
         authorAssociation
         author { login }
-        comments(first: 10) {
+        comments(first: 100) {
           totalCount
           nodes {
             createdAt
