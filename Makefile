@@ -67,10 +67,11 @@ deploy: build-linux-arm
 
 # Deploy from a checkout of this repo already on the server - no ssh/rsync, plain copy.
 deploy-server: build
-	@echo "=== Copy backend binary ==="
+	@echo "=== Copy backend binary & nlp_sidecar ==="
 	cp backend/bin/server /opt/opendoor/backend/server.new
 	mv -f /opt/opendoor/backend/server.new /opt/opendoor/backend/server
 	chmod +x /opt/opendoor/backend/server
+	cp -r backend/nlp_sidecar /opt/opendoor/backend/
 	sudo restorecon -v /opt/opendoor/backend/server
 	sudo systemctl restart opendoor.service
 	sudo systemctl status opendoor.service --no-pager
