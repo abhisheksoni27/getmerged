@@ -314,6 +314,81 @@ func (c *Client) FetchCustomQueryRepos(queryStr string, limit int) ([]Repo, erro
 	return repos, nil
 }
 
+// SearchReposPageResult holds one page of search results plus cursor info.
+type SearchReposPageResult struct {
+	Repos       []Repo
+	HasNextPage bool
+	EndCursor   string
+}
+
+// FetchCustomQueryReposPage executes an arbitrary search query with an explicit
+// page size and cursor, returning one page of results at a time. The cache
+// key is derived from the query+page+cursor, so deep scans of the same query
+// only hit GitHub once per unique cursor.
+func (c *Client) FetchCustomQueryReposPage(queryStr string, first int, after string) (SearchReposPageResult, error) {
+	if first <= 0 {
+		first = 100
+	}
+	vars := map[string]any{"query": queryStr, "first": first}
+	if after != "" {
+		vars["cursor"] = after
+	}
+
+	var resp struct {
+		Data struct {
+			Search struct {
+				PageInfo struct {
+					HasNextPage bool   `json:"hasNextPage"`
+					EndCursor   string `json:"endCursor"`
+				} `json:"pageInfo"`
+				Nodes []struct {
+					ID              string `json:"id"`
+					NameWithOwner   string `json:"nameWithOwner"`
+					Owner           struct{ Login string `json:"login"` } `json:"owner"`
+					Name            string `json:"name"`
+					PrimaryLanguage *struct{ Name string `json:"name"` } `json:"primaryLanguage"`
+					StargazerCount  int    `json:"stargazerCount"`
+					Description     string `json:"description"`
+					URL             string `json:"url"`
+				} `json:"nodes"`
+			} `json:"search"`
+			RateLimit rateLimitInfo `json:"rateLimit"`
+		} `json:"data"`
+	}
+
+	fromCache, err := c.do(SearchReposPageQuery, vars, &resp)
+	if err != nil {
+		return SearchReposPageResult{}, fmt.Errorf("FetchCustomQueryReposPage: %w", err)
+	}
+
+	if !fromCache {
+		c.handleRateLimit(resp.Data.RateLimit)
+	}
+
+	result := SearchReposPageResult{
+		HasNextPage: resp.Data.Search.PageInfo.HasNextPage,
+		EndCursor:   resp.Data.Search.PageInfo.EndCursor,
+	}
+
+	for _, n := range resp.Data.Search.Nodes {
+		lang := ""
+		if n.PrimaryLanguage != nil {
+			lang = n.PrimaryLanguage.Name
+		}
+		result.Repos = append(result.Repos, Repo{
+			NodeID:      n.ID,
+			FullName:    n.NameWithOwner,
+			Owner:       n.Owner.Login,
+			Name:        n.Name,
+			Language:    lang,
+			Stars:       n.StargazerCount,
+			Description: n.Description,
+			URL:         n.URL,
+		})
+	}
+
+	return result, nil
+}
 
 // FetchPRs returns all closed/merged PRs for a repo within the last windowDays days and repo metadata.
 func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, error) {
@@ -582,7 +657,13 @@ func (c *Client) do(query string, vars map[string]any, out any) (fromCache bool,
 		return false, fmt.Errorf("read response body: %w", err)
 	}
 
-	slog.Debug("github: raw response", "status", res.StatusCode, "body", string(raw))
+	// Preview bound: do not dump gigabytes of response bodies into production logs.
+	const bodyPreviewLimit = 512
+	preview := string(raw)
+	if len(preview) > bodyPreviewLimit {
+		preview = preview[:bodyPreviewLimit] + "...(truncated)"
+	}
+	slog.Debug("github: raw response", "status", res.StatusCode, "bytes", len(raw), "body", preview)
 
 	if res.StatusCode != http.StatusOK {
 		slog.Error("github: non-200 response", "status", res.StatusCode, "body", string(raw))

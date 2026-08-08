@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
@@ -24,8 +25,12 @@ type Config struct {
 	Port               string
 	GinMode            string
 	LogFile            string
+	LogLevel           string
 	TelegramBotToken   string
 	TelegramChatID     string
+	DiscoveryIntervalMinutes int
+	DiscoveryMaxNewPerRun    int
+	SnapshotRetentionDays    int
 }
 
 // Load reads .env (if present) then validates all required variables are set.
@@ -43,6 +48,28 @@ func Load() (*Config, error) {
 	}
 	if c.LogFile == "" {
 		c.LogFile = "opendoor.log"
+	}
+
+	// Optional crawler tuning knobs. Falls back to conservative defaults
+	// so the app still boots when the vars are not present.
+	c.LogLevel = os.Getenv("LOG_LEVEL")
+	if c.LogLevel == "" {
+		c.LogLevel = "info"
+	}
+
+	c.DiscoveryIntervalMinutes, _ = strconv.Atoi(os.Getenv("DISCOVERY_INTERVAL_MINUTES"))
+	if c.DiscoveryIntervalMinutes <= 0 {
+		c.DiscoveryIntervalMinutes = 15
+	}
+
+	c.DiscoveryMaxNewPerRun, _ = strconv.Atoi(os.Getenv("DISCOVERY_MAX_NEW_PER_RUN"))
+	if c.DiscoveryMaxNewPerRun <= 0 {
+		c.DiscoveryMaxNewPerRun = 10
+	}
+
+	c.SnapshotRetentionDays, _ = strconv.Atoi(os.Getenv("SNAPSHOT_RETENTION_DAYS"))
+	if c.SnapshotRetentionDays <= 0 {
+		c.SnapshotRetentionDays = 90
 	}
 
 	required := map[string]*string{

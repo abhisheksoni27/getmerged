@@ -8,7 +8,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/abhisheksoni27/opendoor/internal/analytics"
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/notification"
 	"github.com/jmoiron/sqlx"
@@ -16,28 +15,49 @@ import (
 
 // BackgroundCrawler manages rate-budget-aware continuous repository scoring.
 type BackgroundCrawler struct {
-	db                 *sqlx.DB
-	gh                 *ghclient.Client
-	telegram           *notification.TelegramNotifier
-	running            atomic.Bool
-	stopChan           chan struct{}
-	lastLang           int
-	lastBucket         int
-	lastPulse          time.Time
-	scannedCounter     atomic.Int64
-	totalDurationMs    atomic.Int64
-	lastMetricWindow   time.Time
+	db                *sqlx.DB
+	gh                *ghclient.Client
+	telegram          *notification.TelegramNotifier
+	running           atomic.Bool
+	stopChan          chan struct{}
+	lastLang          int
+	lastBucket        int
+	lastPulse         time.Time
+	scannedCounter    atomic.Int64
+	totalDurationMs   atomic.Int64
+	lastMetricWindow  time.Time
+	discoveryInterval time.Duration
+	discoveryMaxNew   int
+	snapshotRetention time.Duration
+	lastSnapshotPurge time.Time
 }
 
 // NewBackgroundCrawler initializes a BackgroundCrawler instance.
 func NewBackgroundCrawler(db *sqlx.DB, gh *ghclient.Client, telegram *notification.TelegramNotifier) *BackgroundCrawler {
 	return &BackgroundCrawler{
-		db:               db,
-		gh:               gh,
-		telegram:         telegram,
-		stopChan:         make(chan struct{}),
-		lastMetricWindow: time.Now().UTC(),
+		db:                db,
+		gh:                gh,
+		telegram:          telegram,
+		stopChan:          make(chan struct{}),
+		lastMetricWindow:  time.Now().UTC(),
+		discoveryInterval: 15 * time.Minute,
+		discoveryMaxNew:   10,
+		snapshotRetention: 90 * 24 * time.Hour,
 	}
+}
+
+// ConfigureDiscovery applies crawler tuning knobs (from .env) before Start().
+func (c *BackgroundCrawler) ConfigureDiscovery(interval time.Duration, maxNewPerRun int, retentionDays int) {
+	if interval > 0 {
+		c.discoveryInterval = interval
+	}
+	if maxNewPerRun > 0 {
+		c.discoveryMaxNew = maxNewPerRun
+	}
+	if retentionDays > 0 {
+		c.snapshotRetention = time.Duration(retentionDays) * 24 * time.Hour
+	}
+	c.lastSnapshotPurge = time.Now().UTC()
 }
 
 // Start launches the continuous crawler loop in a background goroutine.
@@ -79,6 +99,10 @@ func (c *BackgroundCrawler) runLoop() {
 	scheduleTicker := time.NewTicker(10 * time.Minute)
 	defer scheduleTicker.Stop()
 
+	// Novel-repo discovery runs on its own cadence, NOT on the 1s queue tick.
+	discoveryTicker := time.NewTicker(c.discoveryInterval)
+	defer discoveryTicker.Stop()
+
 	// Initial seed of due repos on startup
 	c.EnqueueDueRepos()
 
@@ -89,10 +113,38 @@ func (c *BackgroundCrawler) runLoop() {
 			return
 		case <-scheduleTicker.C:
 			c.EnqueueDueRepos()
+			c.pruneOldSnapshots()
+		case <-discoveryTicker.C:
+			if err := c.processDiscoveryBatch(); err != nil {
+				slog.Error("background crawler: error processing discovery batch", "err", err)
+			}
 		case <-ticker.C:
 			c.processNextWorkItem()
 			c.checkAndSendPulseDigest()
 		}
+	}
+}
+
+// pruneOldSnapshots deletes daily_snapshots older than the retention window.
+// Run at most once per hour to keep the prune itself cheap.
+func (c *BackgroundCrawler) pruneOldSnapshots() {
+	if !c.lastSnapshotPurge.IsZero() && time.Since(c.lastSnapshotPurge) < time.Hour {
+		return
+	}
+	c.lastSnapshotPurge = time.Now().UTC()
+
+	cutoff := time.Now().UTC().Add(-c.snapshotRetention).Format("2006-01-02")
+	res, err := c.db.Exec(`
+		DELETE FROM daily_snapshots
+		WHERE snapshot_date < ?
+	`, cutoff)
+	if err != nil {
+		slog.Error("background crawler: snapshot prune failed", "err", err)
+		return
+	}
+	deleted, _ := res.RowsAffected()
+	if deleted > 0 {
+		slog.Info("background crawler: pruned old snapshots", "before_date", cutoff, "deleted", deleted)
 	}
 }
 
@@ -138,11 +190,16 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		_, err := c.db.Exec(`
 			INSERT INTO indexing_queue (full_name, owner, name, priority, status, created_at)
 			VALUES (?, ?, ?, ?, 'pending', CURRENT_TIMESTAMP)
-			ON DUPLICATE KEY UPDATE
-				priority = VALUES(priority),
-				status = 'pending',
-				created_at = CURRENT_TIMESTAMP
 		`, fullName, owner, name, priority)
+		if err != nil {
+			// Duplicate row: flip an existing entry back to pending (upsert that
+			// works across both MySQL and the sqlite test harness).
+			_, err = c.db.Exec(`
+				UPDATE indexing_queue
+				SET priority = ?, status = 'pending', created_at = CURRENT_TIMESTAMP
+				WHERE full_name = ?
+			`, priority, fullName)
+		}
 		if err == nil {
 			enqueuedCount++
 		}
@@ -182,11 +239,6 @@ func (c *BackgroundCrawler) processNextWorkItem() {
 	}
 	if processedCount > 0 {
 		return
-	}
-
-	// Priority 4: Novel Repo Discovery (slide date windows & star buckets when queue is empty)
-	if err := c.processDiscoveryBatch(); err != nil {
-		slog.Error("background crawler: error processing discovery batch", "err", err)
 	}
 }
 
@@ -276,6 +328,11 @@ func (c *BackgroundCrawler) processIndexingQueueBatch(batchSize int) (int, error
 }
 
 func (c *BackgroundCrawler) processDiscoveryBatch() error {
+	if c.gh == nil {
+		slog.Warn("background crawler: discovery skipped - no github client")
+		return nil
+	}
+
 	lang := SeedLanguages[c.lastLang%len(SeedLanguages)]
 	bucket := DiscoveryStarBuckets[c.lastBucket%len(DiscoveryStarBuckets)]
 	c.lastBucket++
@@ -285,12 +342,15 @@ func (c *BackgroundCrawler) processDiscoveryBatch() error {
 
 	slog.Info("background crawler [P3 Discovery]: sweeping", "language", lang, "stars", fmt.Sprintf("%d..%d", bucket.MinStars, bucket.MaxStars))
 
-	newRepos, err := DiscoverNewRepos(c.db, c.gh, lang, bucket, 3, 3)
-	if err != nil || len(newRepos) == 0 {
+	newRepos, pages, err := DiscoverNewRepos(c.db, c.gh, lang, bucket, 3, c.discoveryMaxNew, 2, 100)
+	if err != nil {
 		return err
 	}
+	if len(newRepos) == 0 {
+		return nil
+	}
 
-	slog.Info("background crawler [P3 Discovery]: indexing newly discovered repos", "count", len(newRepos))
+	slog.Info("background crawler [P3 Discovery]: indexing newly discovered repos", "count", len(newRepos), "pages", pages)
 
 	existingMetrics, _ := fetchDBMetrics(c.db)
 	for _, r := range newRepos {
@@ -303,10 +363,6 @@ func (c *BackgroundCrawler) processDiscoveryBatch() error {
 			existingMetrics = updatedMetrics
 		}
 	}
-
-	// Update macro stats after discovery run
-	ctx := context.Background()
-	_, _ = analytics.ComputeAndCacheMacroStats(ctx, c.db)
 
 	return nil
 }

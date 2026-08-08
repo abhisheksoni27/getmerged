@@ -12,6 +12,7 @@ import (
 	"io"
 	"log/slog"
 	"os"
+	"time"
 
 	_ "github.com/abhisheksoni27/opendoor/docs"
 	"github.com/abhisheksoni27/opendoor/internal/ai"
@@ -36,7 +37,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	setupLogger(cfg.GinMode, cfg.LogFile)
+	setupLogger(cfg.GinMode, cfg.LogFile, cfg.LogLevel)
 
 	database, err := db.Connect(cfg.DatabaseURL)
 	if err != nil {
@@ -78,6 +79,11 @@ func main() {
 	// Start continuous background crawler worker loop
 	if cfg.GinMode == "release" {
 		crawler := pipeline.NewBackgroundCrawler(database, gh, telegramNotifier)
+		crawler.ConfigureDiscovery(
+			time.Duration(cfg.DiscoveryIntervalMinutes)*time.Minute,
+			cfg.DiscoveryMaxNewPerRun,
+			cfg.SnapshotRetentionDays,
+		)
 		crawler.Start()
 		pipeline.StartAIInsightsCron(database, aiClient, aiRepo)
 		defer crawler.Stop()
@@ -162,8 +168,18 @@ func main() {
 
 // setupLogger configures global slog AND Gin writers to write to stdout and log file.
 // Ensures systemd/journalctl and persistent log files capture both HTTP requests and application logs.
-func setupLogger(ginMode, logFilePath string) {
-	level := slog.LevelDebug
+func setupLogger(ginMode, logFilePath, logLevel string) {
+	var level slog.Level
+	switch logLevel {
+	case "debug":
+		level = slog.LevelDebug
+	case "warn":
+		level = slog.LevelWarn
+	case "error":
+		level = slog.LevelError
+	default:
+		level = slog.LevelInfo
+	}
 	opts := &slog.HandlerOptions{Level: level}
 
 	var writer io.Writer = os.Stdout
