@@ -55,7 +55,7 @@ func testDB(t *testing.T) *sqlx.DB {
 			bucket_min INT NOT NULL,
 			bucket_max INT NOT NULL,
 			push_start VARCHAR(10) NOT NULL DEFAULT '',
-			search_cursor TEXT NOT NULL DEFAULT '',
+			search_cursor TEXT NOT NULL,
 			last_swept DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			PRIMARY KEY(lang, bucket_min, bucket_max)
 		)`,
