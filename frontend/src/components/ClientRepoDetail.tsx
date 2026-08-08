@@ -687,13 +687,13 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       {/* C-Rank Weight Formula Visualizer & History Timeline Removed */}
 
       {/* Good First Issues Count (F3) */}
-      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] font-mono">
+      <div className="rounded-2xl bg-white p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] font-mono">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-emerald-600" /> Open Good First Issues ({repo?.good_first_issue_count ?? 0})
           </h3>
           <a
-            href={`https://github.com/${fullName}/issues?q=is%3Aissue%20is%3Aopen%20(label%3A%22first%20timers%20only%22%20OR%20label%3A%22good%20first%20issue%22)`}
+            href={`https://github.com/${fullName}/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22good%20first%20issue%22%2Cgood-first-issue%2Cgood_first_issue%2C%22first%20timers%20only%22%2Cfirst-timer%2Cbeginner%2Cbeginner-friendly%2C%22beginner%20friendly%22%2Ceasy%2Ceasy-fix%2C%22easy%20fix%22%2Clow-hanging-fruit%2C%22low%20hanging%20fruit%22%2C%22help%20wanted%22%2Chelp-wanted%2Cstarter%2Cstarter-issue%2Cbitesize%2Cnew-contributor%2Cup-for-grabs%2Ce-easy%2CE-mentor`}
             target="_blank"
             rel="nofollow noopener noreferrer"
             className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1"
@@ -740,7 +740,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       </div>
 
       {/* Dynamic README Badge Embed (F1) */}
-      <div className="rounded-2xl bg-white p-6 sm:p-8 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-10 font-mono">
+      <div className="rounded-2xl bg-white p-4 sm:p-5 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-6 font-mono">
         <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2 mb-2 font-space">
           <ShieldCheck className="h-4 w-4 text-emerald-600" /> Embed C-Rank™ Badge on README
         </h3>
@@ -805,7 +805,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
       {/* Similar Repositories & Alternatives Interlinking (Issue #55) */}
       {relatedRepos.length > 0 && (
-        <div className="rounded-2xl bg-white p-6 sm:p-8 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-10">
+        <div className="rounded-2xl bg-white p-4 sm:p-5 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-6">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-zinc-200">
             <div>
               <h3 className="text-lg font-black text-zinc-900 flex items-center gap-2 font-space">
@@ -944,18 +944,66 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         ) : (
           <div className="relative pb-10">
             {/* Blurred Content */}
-            <div className="space-y-4 blur-xs select-none opacity-30 pointer-events-none pb-24">
-              <p className="text-sm text-zinc-700">
-                Active maintainer team with fast turnaround time on pull requests. Guidance provided for first-time contributors.
-              </p>
-              <ul className="space-y-2 text-xs text-zinc-700">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4" /> Ensure test coverage passes 80%
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4" /> Use descriptive PR body templates
-                </li>
-              </ul>
+            <div className="space-y-6 blur-[6px] select-none opacity-40 pointer-events-none pb-24">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-800 text-white shadow-sm">
+                <div>
+                  <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
+                    HuggingFace Maintainer Persona
+                  </span>
+                  <h3 className="text-base font-space font-bold mt-0.5">
+                    Constructive Code Reviewer
+                  </h3>
+                </div>
+                <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t sm:border-t-0 sm:border-l border-zinc-700 pt-2 sm:pt-0 sm:pl-4">
+                  <div>
+                    <div className="text-zinc-400 text-[10px]">Warmth Score</div>
+                    <div className="text-emerald-400 font-bold text-sm">X.X/10</div>
+                  </div>
+                  <div>
+                    <div className="text-zinc-400 text-[10px]">Patience Score</div>
+                    <div className="text-blue-400 font-bold text-sm">X.X/10</div>
+                  </div>
+                  <div>
+                    <div className="text-zinc-400 text-[10px]">Nitpick Rate</div>
+                    <div className="text-amber-400 font-bold text-sm">XX%</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-4">
+                  <h4 className="text-xs font-mono font-bold text-emerald-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                    Top PR Submission Do&apos;s
+                  </h4>
+                  <ul className="space-y-2 text-xs text-emerald-950 font-sans">
+                    <li className="flex items-start gap-2">
+                      <span className="text-emerald-600 font-bold">•</span>
+                      <span>Lorem ipsum dolor sit amet</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-emerald-600 font-bold">•</span>
+                      <span>Consectetur adipiscing elit</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="rounded-xl border border-rose-200/80 bg-rose-50/40 p-4">
+                  <h4 className="text-xs font-mono font-bold text-rose-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                    <AlertCircle className="h-4 w-4 text-rose-600" />
+                    Top PR Friction Pitfalls (Don&apos;ts)
+                  </h4>
+                  <ul className="space-y-2 text-xs text-rose-950 font-sans">
+                    <li className="flex items-start gap-2">
+                      <span className="text-rose-600 font-bold">•</span>
+                      <span>Lorem ipsum dolor sit amet</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-rose-600 font-bold">•</span>
+                      <span>Consectetur adipiscing elit</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
 
             {/* Auth Wall Overlay */}
