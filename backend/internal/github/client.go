@@ -357,6 +357,22 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 									Body              string `json:"body"`
 								} `json:"nodes"`
 							} `json:"comments"`
+							Reviews struct {
+								Nodes []struct {
+									CreatedAt         string `json:"createdAt"`
+									AuthorAssociation string `json:"authorAssociation"`
+									Author            *struct{ Login string `json:"login"` } `json:"author"`
+									Body              string `json:"body"`
+									Comments          struct {
+										Nodes []struct {
+											CreatedAt         string `json:"createdAt"`
+											AuthorAssociation string `json:"authorAssociation"`
+											Author            *struct{ Login string `json:"login"` } `json:"author"`
+											Body              string `json:"body"`
+										} `json:"nodes"`
+									} `json:"comments"`
+								} `json:"nodes"`
+							} `json:"reviews"`
 						} `json:"nodes"`
 					} `json:"pullRequests"`
 				} `json:"repository"`
@@ -427,7 +443,7 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 			if len(n.Comments.Nodes) > 0 {
 				for _, c := range n.Comments.Nodes {
 					if c.Author != nil && c.Author.Login != "" {
-						if !isBotLogin(c.Author.Login) && pr.FirstCommentAt == nil && c.CreatedAt != "" {
+						if !IsBotLogin(c.Author.Login) && pr.FirstCommentAt == nil && c.CreatedAt != "" {
 							if t, err := time.Parse(time.RFC3339, c.CreatedAt); err == nil {
 								pr.FirstCommentAt = &t
 							}
@@ -435,6 +451,29 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 						pr.CommentAuthors = append(pr.CommentAuthors, c.Author.Login)
 						if strings.TrimSpace(c.Body) != "" {
 							pr.CommentTexts = append(pr.CommentTexts, c.Body)
+						}
+					}
+				}
+			}
+			if len(n.Reviews.Nodes) > 0 {
+				for _, r := range n.Reviews.Nodes {
+					if r.Author != nil && r.Author.Login != "" {
+						if !IsBotLogin(r.Author.Login) && pr.FirstCommentAt == nil && r.CreatedAt != "" {
+							if t, err := time.Parse(time.RFC3339, r.CreatedAt); err == nil {
+								pr.FirstCommentAt = &t
+							}
+						}
+						pr.CommentAuthors = append(pr.CommentAuthors, r.Author.Login)
+						if strings.TrimSpace(r.Body) != "" {
+							pr.CommentTexts = append(pr.CommentTexts, r.Body)
+						}
+						for _, rc := range r.Comments.Nodes {
+							if rc.Author != nil && rc.Author.Login != "" {
+								pr.CommentAuthors = append(pr.CommentAuthors, rc.Author.Login)
+								if strings.TrimSpace(rc.Body) != "" {
+									pr.CommentTexts = append(pr.CommentTexts, rc.Body)
+								}
+							}
 						}
 					}
 				}
@@ -560,6 +599,10 @@ func (c *Client) do(query string, vars map[string]any, out any) (fromCache bool,
 	if jsonErr := json.Unmarshal(raw, &envelope); jsonErr == nil && len(envelope.Errors) > 0 {
 		for _, e := range envelope.Errors {
 			slog.Error("github: graphql error", "message", e.Message, "type", e.Type)
+			if e.Type == "RATE_LIMIT" || strings.Contains(strings.ToLower(e.Message), "rate limit") {
+				slog.Warn("github: graphql rate limit hit - sleeping for 1 minute safety window")
+				time.Sleep(1 * time.Minute)
+			}
 		}
 		return false, fmt.Errorf("graphql error: %s", envelope.Errors[0].Message)
 	}
@@ -615,15 +658,23 @@ func (c *Client) cursor(ptr **string, val string) {
 	*ptr = &val
 }
 
-func isBotLogin(login string) bool {
+// IsBotLogin returns true if a GitHub username belongs to an automated bot or service account.
+func IsBotLogin(login string) bool {
 	l := strings.ToLower(login)
-	return strings.HasSuffix(l, "[bot]") ||
-		l == "vercel" ||
-		l == "github-actions" ||
-		l == "codecov" ||
-		l == "dependabot" ||
-		l == "stale" ||
-		l == "sentry-io"
+	if strings.HasSuffix(l, "[bot]") || strings.HasSuffix(l, "-bot") || strings.HasSuffix(l, "-robot") {
+		return true
+	}
+	botAccounts := map[string]bool{
+		"vercel": true, "github-actions": true, "codecov": true, "codecov-commenter": true,
+		"dependabot": true, "stale": true, "sentry-io": true, "coderabbitai": true,
+		"codspeed-hq": true, "copilot-swe-agent": true, "copilot-pull-request-reviewer": true,
+		"dosubot": true, "knative-prow": true, "knative-prow-robot": true, "kodiakhq": true,
+		"kubernetes-prow": true, "linux-foundation-easycla": true, "netlify": true,
+		"openedx-webhooks": true, "openshift-ci": true, "openshift-ci-robot": true,
+		"openshift-merge-bot": true, "openshift-merge-robot": true, "socket-security": true,
+		"sonarqubecloud": true, "cla-assistant": true, "claude": true, "gemini-code-assist": true,
+	}
+	return botAccounts[l]
 }
 
 func formatGoodFirstIssueQuery(owner, name string) string {
