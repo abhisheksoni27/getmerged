@@ -40,7 +40,7 @@ func processAIInsightsBatch(db *sqlx.DB, aiClient *ai.AIClient, aiRepo repositor
 		SELECT r.id, r.full_name
 		FROM repositories r
 		LEFT JOIN repo_ai_insights a ON r.id = a.repo_id
-		WHERE (a.repo_id IS NULL OR a.updated_at < DATETIME('now', '-7 days'))
+		WHERE (a.repo_id IS NULL OR a.updated_at < NOW() - INTERVAL 7 DAY)
 		  AND r.stars > 0
 		ORDER BY r.updated_at DESC
 		LIMIT 20
