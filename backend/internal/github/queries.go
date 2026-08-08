@@ -29,6 +29,35 @@ query SearchRepos($query: String!, $cursor: String) {
 }
 `
 
+// SearchReposPageQuery is like SearchReposQuery but with an explicit page size.
+const SearchReposPageQuery = `
+query SearchReposPage($query: String!, $first: Int!, $cursor: String) {
+  search(query: $query, type: REPOSITORY, first: $first, after: $cursor) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    nodes {
+      ... on Repository {
+        id
+        nameWithOwner
+        owner { login }
+        name
+        primaryLanguage { name }
+        stargazerCount
+        description
+        url
+      }
+    }
+  }
+  rateLimit {
+    remaining
+    resetAt
+    cost
+  }
+}
+`
+
 // RepoPRsQuery fetches closed/merged PRs with first-comment info, total comment counts, and reviewer info.
 const RepoPRsQuery = `
 query RepoPRs($owner: String!, $name: String!, $cursor: String) {

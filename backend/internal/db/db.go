@@ -151,6 +151,15 @@ func AutoMigrate(db *sqlx.DB) error {
 			event_at DATETIME NOT NULL,
 			UNIQUE(repository_id, pr_number, action)
 		);`,
+		`CREATE TABLE IF NOT EXISTS discovery_cursors (
+			lang VARCHAR(50) NOT NULL,
+			bucket_min INT NOT NULL,
+			bucket_max INT NOT NULL,
+			push_start VARCHAR(10) NOT NULL DEFAULT '',
+			search_cursor TEXT NOT NULL DEFAULT '',
+			last_swept DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY(lang, bucket_min, bucket_max)
+		);`,
 	}
 
 	for i, stmt := range statements {
