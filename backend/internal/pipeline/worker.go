@@ -168,29 +168,40 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		slog.Error("background crawler producer: query due repos failed", "err", err)
 		return
 	}
-	defer rows.Close()
 
-	enqueuedCount := 0
+	type dueRepo struct {
+		fullName string
+		owner    string
+		name     string
+		tier     string
+	}
+	var due []dueRepo
 	for rows.Next() {
-		var fullName, owner, name, tier string
-		if err := rows.Scan(&fullName, &owner, &name, &tier); err != nil {
+		var r dueRepo
+		if err := rows.Scan(&r.fullName, &r.owner, &r.name, &r.tier); err != nil {
+			slog.Warn("background crawler producer: scan due repo failed", "err", err)
 			continue
 		}
+		due = append(due, r)
+	}
+	rows.Close()
 
-		if tier == "D" {
+	enqueuedCount := 0
+	for _, r := range due {
+		if r.tier == "D" {
 			continue // Skip D-tier rescans
 		}
 
 		// Set priority based on tier: User requests = 1, S/A tier = 2, B/C tier = 3
 		priority := 3
-		if tier == "S" || tier == "A" {
+		if r.tier == "S" || r.tier == "A" {
 			priority = 2
 		}
 
 		_, err := c.db.Exec(`
 			INSERT INTO indexing_queue (full_name, owner, name, priority, status, created_at)
 			VALUES (?, ?, ?, ?, 'pending', CURRENT_TIMESTAMP)
-		`, fullName, owner, name, priority)
+		`, r.fullName, r.owner, r.name, priority)
 		if err != nil {
 			// Duplicate row: flip an existing entry back to pending (upsert that
 			// works across both MySQL and the sqlite test harness).
@@ -198,7 +209,7 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 				UPDATE indexing_queue
 				SET priority = ?, status = 'pending', created_at = CURRENT_TIMESTAMP
 				WHERE full_name = ?
-			`, priority, fullName)
+			`, priority, r.fullName)
 		}
 		if err == nil {
 			enqueuedCount++
@@ -459,4 +470,3 @@ func (c *BackgroundCrawler) checkAndSendPulseDigest() {
 		slog.Error("background crawler: failed to send telegram pulse digest", "err", err)
 	}
 }
-
