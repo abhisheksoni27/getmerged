@@ -175,8 +175,8 @@ func (c *BackgroundCrawler) processNextWorkItem() {
 		}
 	}
 
-	// Process queue items concurrently (up to 8 worker routines)
-	processedCount, err := c.processIndexingQueueBatch(8)
+	// Process queue items concurrently (up to 14 worker routines)
+	processedCount, err := c.processIndexingQueueBatch(14)
 	if err != nil {
 		slog.Error("background crawler: error processing indexing_queue batch", "err", err)
 	}
@@ -379,6 +379,11 @@ func (c *BackgroundCrawler) checkAndSendPulseDigest() {
 		avgMsPerRepo = totDur / scanned
 	}
 
+	rateLimitWarning := ""
+	if rl.Remaining > 3500 && windowMinutes > 15 {
+		rateLimitWarning = "\n⚠️ *Alert:* High API budget remaining (>3500) - workers may be stalled or rate limit reset recently."
+	}
+
 	msg := fmt.Sprintf(
 		"📊 *Opendoor Crawler Pulse Digest*\n\n"+
 			"• *Total Repos Scored:* %d\n"+
@@ -387,9 +392,9 @@ func (c *BackgroundCrawler) checkAndSendPulseDigest() {
 			"• *Repos with AI Insights:* %d\n"+
 			"• *Queue Pending:* %d\n"+
 			"• *Scanning Speed:* %.1f repos/min (avg %d ms/repo)\n"+
-			"• *GitHub API Budget:* %d / 5,000 remaining%s\n"+
+			"• *GitHub API Budget:* %d / 5,000 remaining%s%s\n"+
 			"🤖 14-worker parallel engine active 24/7.",
-		totalScored, sTierCount, totalComments, aiInsightsCount, pendingUserQueue, reposPerMin, avgMsPerRepo, rl.Remaining, latestReposStr,
+		totalScored, sTierCount, totalComments, aiInsightsCount, pendingUserQueue, reposPerMin, avgMsPerRepo, rl.Remaining, rateLimitWarning, latestReposStr,
 	)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
