@@ -3,16 +3,13 @@ package pipeline
 import (
 	"context"
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"log/slog"
 	"strings"
 	"time"
 
-	"github.com/abhisheksoni27/opendoor/internal/ai"
 	"github.com/abhisheksoni27/opendoor/internal/analytics"
 	"github.com/abhisheksoni27/opendoor/internal/github"
-	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
@@ -143,9 +140,9 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	if gh == nil {
 		return existingMetrics, fmt.Errorf("gh client is nil")
 	}
-	prs, _, err := gh.FetchPRs(owner, name, 180)
+	prs, err := fetchPRsFromDB(db, repoID, 180)
 	if err != nil {
-		return existingMetrics, fmt.Errorf("FetchPRs: %w", err)
+		return existingMetrics, fmt.Errorf("fetchPRsFromDB: %w", err)
 	}
 
 	stale, _ := gh.IsStalenessFlag(owner, name)
@@ -157,16 +154,7 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 
 	scoringPRs := make([]scoring.PR, len(prs))
 	for i, p := range prs {
-		scoringPRs[i] = scoring.PR{
-			State:             p.State,
-			CreatedAt:         p.CreatedAt,
-			MergedAt:          p.MergedAt,
-			AuthorAssociation: p.AuthorAssociation,
-			AuthorLogin:       p.AuthorLogin,
-			FirstCommentAt:    p.FirstCommentAt,
-			TotalComments:     p.TotalComments,
-			CommentAuthors:    p.CommentAuthors,
-		}
+		scoringPRs[i] = p
 	}
 	raw := scoring.ComputeMetrics(scoringPRs, stale)
 	raw.GoodFirstIssueCount = gfiCount
@@ -178,50 +166,9 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 
 	score, tier := scoring.ComputeCRank(thisNormed, raw.StalenessFlag, raw.GoodFirstIssueCount)
 
-	// Save real raw PR comment texts for zero-cost sentiment and NLP model ingestion
-	var rawCommentTexts []string
-	for _, p := range prs {
-		for idx, commentText := range p.CommentTexts {
-			cleanText := strings.TrimSpace(commentText)
-			if cleanText != "" {
-				author := "maintainer"
-				if idx < len(p.CommentAuthors) && p.CommentAuthors[idx] != "" {
-					author = p.CommentAuthors[idx]
-				}
-				if !github.IsBotLogin(author) {
-					rawCommentTexts = append(rawCommentTexts, cleanText)
-					_, _ = db.Exec(`
-						INSERT INTO repo_raw_comments (repository_id, author_login, comment_text, created_at)
-						VALUES (?, ?, ?, CURRENT_TIMESTAMP)
-					`, repoID, author, cleanText)
-				}
-			}
-		}
-	}
+	// PR comment text insertion is now entirely handled by the GHArchive stream worker
 
-	// Automatically generate and persist HuggingFace / AI Insights during background crawling
-	aiClient := ai.NewAIClient("")
-	aiRepo := repository.NewAIRepository(db)
-	insightsResp, aiErr := aiClient.GenerateRepoInsights(context.Background(), fullName, rawCommentTexts)
-	if aiErr == nil && insightsResp != nil {
-		guidelinesBytes, _ := json.Marshal(insightsResp.PRGuidelines)
-		dosBytes, _ := json.Marshal(insightsResp.TopDos)
-		dontsBytes, _ := json.Marshal(insightsResp.TopDonts)
-
-		_ = aiRepo.SaveInsights(context.Background(), &repository.AIInsights{
-			RepoID:            repoID,
-			MaintainerVibe:    insightsResp.MaintainerVibe,
-			PRGuidelines:      string(guidelinesBytes),
-			IssueQualityScore: insightsResp.IssueQualityScore,
-			RawSummary:        insightsResp.RawSummary,
-			WarmthScore:       insightsResp.WarmthScore,
-			PatienceScore:     insightsResp.PatienceScore,
-			NitpickRatio:      insightsResp.NitpickRatio,
-			MaintainerPersona: insightsResp.MaintainerPersona,
-			DosJSON:           string(dosBytes),
-			DontsJSON:         string(dontsBytes),
-		})
-	}
+	// AI Insights are now generated asynchronously via cron.
 
 	if err := saveSnapshot(db, repoID, raw, score, tier); err != nil {
 		return existingMetrics, err
@@ -250,20 +197,20 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			maintainer_responsiveness, last_activity_days, review_rounds,
 			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count
 		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-		ON CONFLICT(repository_id, snapshot_date) DO UPDATE SET
-			external_pr_merge_rate        = excluded.external_pr_merge_rate,
-			time_to_first_response_hours  = excluded.time_to_first_response_hours,
-			time_to_merge_hours           = excluded.time_to_merge_hours,
-			first_timer_success_rate      = excluded.first_timer_success_rate,
-			repeat_contributor_rate       = excluded.repeat_contributor_rate,
-			maintainer_responsiveness     = excluded.maintainer_responsiveness,
-			last_activity_days            = excluded.last_activity_days,
-			review_rounds                 = excluded.review_rounds,
-			distinct_maintainer_count     = excluded.distinct_maintainer_count,
-			staleness_flag                = excluded.staleness_flag,
-			c_rank_score                  = excluded.c_rank_score,
-			c_rank_tier                   = excluded.c_rank_tier,
-			good_first_issue_count        = excluded.good_first_issue_count
+		ON DUPLICATE KEY UPDATE
+			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
+			time_to_first_response_hours  = VALUES(time_to_first_response_hours),
+			time_to_merge_hours           = VALUES(time_to_merge_hours),
+			first_timer_success_rate      = VALUES(first_timer_success_rate),
+			repeat_contributor_rate       = VALUES(repeat_contributor_rate),
+			maintainer_responsiveness     = VALUES(maintainer_responsiveness),
+			last_activity_days            = VALUES(last_activity_days),
+			review_rounds                 = VALUES(review_rounds),
+			distinct_maintainer_count     = VALUES(distinct_maintainer_count),
+			staleness_flag                = VALUES(staleness_flag),
+			c_rank_score                  = VALUES(c_rank_score),
+			c_rank_tier                   = VALUES(c_rank_tier),
+			good_first_issue_count        = VALUES(good_first_issue_count)
 	`,
 		uuid.New().String(),
 		repoID,
@@ -294,21 +241,21 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			maintainer_responsiveness, last_activity_days, review_rounds,
 			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, updated_at
 		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-		ON CONFLICT(repository_id) DO UPDATE SET
-			snapshot_date                 = excluded.snapshot_date,
-			external_pr_merge_rate        = excluded.external_pr_merge_rate,
-			time_to_first_response_hours  = excluded.time_to_first_response_hours,
-			time_to_merge_hours           = excluded.time_to_merge_hours,
-			first_timer_success_rate      = excluded.first_timer_success_rate,
-			repeat_contributor_rate       = excluded.repeat_contributor_rate,
-			maintainer_responsiveness     = excluded.maintainer_responsiveness,
-			last_activity_days            = excluded.last_activity_days,
-			review_rounds                 = excluded.review_rounds,
-			distinct_maintainer_count     = excluded.distinct_maintainer_count,
-			staleness_flag                = excluded.staleness_flag,
-			c_rank_score                  = excluded.c_rank_score,
-			c_rank_tier                   = excluded.c_rank_tier,
-			good_first_issue_count        = excluded.good_first_issue_count,
+		ON DUPLICATE KEY UPDATE
+			snapshot_date                 = VALUES(snapshot_date),
+			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
+			time_to_first_response_hours  = VALUES(time_to_first_response_hours),
+			time_to_merge_hours           = VALUES(time_to_merge_hours),
+			first_timer_success_rate      = VALUES(first_timer_success_rate),
+			repeat_contributor_rate       = VALUES(repeat_contributor_rate),
+			maintainer_responsiveness     = VALUES(maintainer_responsiveness),
+			last_activity_days            = VALUES(last_activity_days),
+			review_rounds                 = VALUES(review_rounds),
+			distinct_maintainer_count     = VALUES(distinct_maintainer_count),
+			staleness_flag                = VALUES(staleness_flag),
+			c_rank_score                  = VALUES(c_rank_score),
+			c_rank_tier                   = VALUES(c_rank_tier),
+			good_first_issue_count        = VALUES(good_first_issue_count),
 			updated_at                    = CURRENT_TIMESTAMP
 	`,
 		repoID,
@@ -333,6 +280,77 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 
 	return tx.Commit()
 }
+
+func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) {
+	// Aggregate events per PR: opened event_at = CreatedAt, any 'closed'/'merged' = MergedAt,
+	// first comment from repo_raw_comments joined by repo+time proximity.
+	cutoff := fmt.Sprintf("DATE_SUB(NOW(), INTERVAL %d DAY)", days)
+	rows, err := db.Query(fmt.Sprintf(`
+		SELECT
+			e.pr_number,
+			MIN(CASE WHEN e.action = 'opened' THEN e.event_at END) AS opened_at,
+			MIN(CASE WHEN e.action IN ('closed','merged') THEN e.event_at END) AS closed_at,
+			MAX(CASE WHEN e.action = 'merged' THEN 1 ELSE 0 END) AS was_merged,
+			MIN(e.actor_login) AS actor_login,
+			(
+				SELECT MIN(c.created_at)
+				FROM repo_raw_comments c
+				WHERE c.repository_id = e.repository_id
+				  AND c.created_at > MIN(CASE WHEN e.action = 'opened' THEN e.event_at END)
+				  AND c.created_at < DATE_ADD(MIN(CASE WHEN e.action = 'opened' THEN e.event_at END), INTERVAL 30 DAY)
+				LIMIT 1
+			) AS first_comment_at
+		FROM repo_pr_events e
+		WHERE e.repository_id = ?
+		  AND e.event_at >= %s
+		GROUP BY e.repository_id, e.pr_number
+		HAVING opened_at IS NOT NULL
+	`, cutoff), repoID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var prs []scoring.PR
+	for rows.Next() {
+		var prNumber int
+		var openedAt, closedAt, firstCommentAt sql.NullString
+		var wasMerged int
+		var actorLogin string
+		if err := rows.Scan(&prNumber, &openedAt, &closedAt, &wasMerged, &actorLogin, &firstCommentAt); err != nil {
+			return nil, err
+		}
+
+		created, _ := time.Parse("2006-01-02 15:04:05", openedAt.String)
+
+		pr := scoring.PR{
+			AuthorLogin:       actorLogin,
+			AuthorAssociation: "CONTRIBUTOR", // treat all GHArchive actors as external contributors
+			CreatedAt:         created,
+		}
+
+		if wasMerged == 1 {
+			pr.State = "MERGED"
+			if closedAt.Valid {
+				t, _ := time.Parse("2006-01-02 15:04:05", closedAt.String)
+				pr.MergedAt = &t
+			}
+		} else if closedAt.Valid {
+			pr.State = "CLOSED"
+		} else {
+			pr.State = "OPEN"
+		}
+
+		if firstCommentAt.Valid {
+			t, _ := time.Parse("2006-01-02 15:04:05", firstCommentAt.String)
+			pr.FirstCommentAt = &t
+		}
+
+		prs = append(prs, pr)
+	}
+	return prs, nil
+}
+
 
 func fetchDBMetrics(db *sqlx.DB) ([]scoring.RawMetrics, error) {
 	rows, err := db.Query(`

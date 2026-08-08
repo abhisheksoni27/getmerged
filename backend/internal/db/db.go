@@ -2,32 +2,19 @@ package db
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/jmoiron/sqlx"
-	_ "modernc.org/sqlite"
+	_ "github.com/go-sql-driver/mysql"
 )
 
-// Connect opens a local SQLite database connection, enables PRAGMAs, and auto-migrates tables.
+// Connect opens a MySQL database connection and auto-migrates tables.
 func Connect(url string) (*sqlx.DB, error) {
-	db, err := sqlx.Connect("sqlite", url)
+	db, err := sqlx.Connect("mysql", url)
 	if err != nil {
 		return nil, err
 	}
-	db.SetMaxOpenConns(10)
-	db.SetMaxIdleConns(5)
-
-	if !strings.Contains(url, ":memory:") {
-		if _, err := db.Exec(`
-			PRAGMA journal_mode = WAL;
-			PRAGMA synchronous = NORMAL;
-			PRAGMA foreign_keys = ON;
-		`); err != nil {
-			return nil, err
-		}
-	} else {
-		_, _ = db.Exec("PRAGMA foreign_keys = ON;")
-	}
+	db.SetMaxOpenConns(100)
+	db.SetMaxIdleConns(20)
 
 	if err := AutoMigrate(db); err != nil {
 		return nil, err
@@ -40,7 +27,7 @@ func Connect(url string) (*sqlx.DB, error) {
 func AutoMigrate(db *sqlx.DB) error {
 	statements := []string{
 		`CREATE TABLE IF NOT EXISTS users (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			id INTEGER PRIMARY KEY AUTO_INCREMENT,
 			github_id INTEGER UNIQUE NOT NULL,
 			username TEXT NOT NULL,
 			email TEXT,
@@ -50,21 +37,20 @@ func AutoMigrate(db *sqlx.DB) error {
 		);`,
 		`CREATE TABLE IF NOT EXISTS user_watchlists (
 			user_id INTEGER NOT NULL,
-			repo_id TEXT NOT NULL,
+			repo_id VARCHAR(255) NOT NULL,
 			notify_rank_change BOOLEAN DEFAULT TRUE,
 			created_at DATETIME NOT NULL,
-			PRIMARY KEY(user_id, repo_id),
-			FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+			PRIMARY KEY(user_id, repo_id)
 		);`,
 		`CREATE TABLE IF NOT EXISTS macro_stats (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			metric_key TEXT UNIQUE NOT NULL,
+			id INTEGER PRIMARY KEY AUTO_INCREMENT,
+			metric_key VARCHAR(255) UNIQUE NOT NULL,
 			metric_value TEXT NOT NULL,
 			updated_at DATETIME NOT NULL
 		);`,
 		`CREATE TABLE IF NOT EXISTS repositories (
-			id TEXT PRIMARY KEY,
-			full_name TEXT UNIQUE NOT NULL,
+			id VARCHAR(255) PRIMARY KEY,
+			full_name VARCHAR(255) UNIQUE NOT NULL,
 			owner TEXT NOT NULL,
 			name TEXT NOT NULL,
 			language TEXT,
@@ -72,13 +58,16 @@ func AutoMigrate(db *sqlx.DB) error {
 			description TEXT,
 			github_url TEXT,
 			is_trending BOOLEAN DEFAULT FALSE,
+			refresh_interval_days INTEGER DEFAULT 1 NOT NULL,
+			consecutive_stagnant_scans INTEGER DEFAULT 0 NOT NULL,
+			next_rescan_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
 		`CREATE TABLE IF NOT EXISTS daily_snapshots (
-			id TEXT PRIMARY KEY,
-			repository_id TEXT NOT NULL,
-			snapshot_date TEXT NOT NULL,
+			id VARCHAR(255) PRIMARY KEY,
+			repository_id VARCHAR(255) NOT NULL,
+			snapshot_date VARCHAR(255) NOT NULL,
 			external_pr_merge_rate REAL DEFAULT 0,
 			time_to_first_response_hours REAL DEFAULT 0,
 			time_to_merge_hours REAL DEFAULT 0,
@@ -90,14 +79,13 @@ func AutoMigrate(db *sqlx.DB) error {
 			distinct_maintainer_count REAL DEFAULT 0,
 			staleness_flag INTEGER DEFAULT 0,
 			c_rank_score REAL DEFAULT 0,
-			c_rank_tier TEXT DEFAULT 'D',
+			c_rank_tier VARCHAR(10) DEFAULT 'D',
 			good_first_issue_count INTEGER DEFAULT 0,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			UNIQUE(repository_id, snapshot_date),
-			FOREIGN KEY(repository_id) REFERENCES repositories(id) ON DELETE CASCADE
+			UNIQUE(repository_id, snapshot_date)
 		);`,
 		`CREATE TABLE IF NOT EXISTS repo_ai_insights (
-			repo_id TEXT PRIMARY KEY,
+			repo_id VARCHAR(255) PRIMARY KEY,
 			maintainer_vibe TEXT NOT NULL,
 			pr_guidelines TEXT NOT NULL,
 			issue_quality_score REAL DEFAULT 0.0,
@@ -105,33 +93,33 @@ func AutoMigrate(db *sqlx.DB) error {
 			warmth_score REAL DEFAULT 7.5,
 			patience_score REAL DEFAULT 8.0,
 			nitpick_ratio REAL DEFAULT 0.25,
-			maintainer_persona TEXT DEFAULT 'Encouraging Technical Mentor',
-			dos_json TEXT DEFAULT '[]',
-			donts_json TEXT DEFAULT '[]',
+			maintainer_persona VARCHAR(255) DEFAULT 'Encouraging Technical Mentor',
+			dos_json TEXT,
+			donts_json TEXT,
 			updated_at DATETIME NOT NULL
 		);`,
 		`CREATE TABLE IF NOT EXISTS notification_queue (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			id INTEGER PRIMARY KEY AUTO_INCREMENT,
 			user_id INTEGER NOT NULL,
 			type TEXT NOT NULL,
 			payload TEXT NOT NULL,
-			status TEXT NOT NULL DEFAULT 'pending',
-			created_at DATETIME NOT NULL,
-			FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+			status VARCHAR(50) NOT NULL DEFAULT 'pending',
+			created_at DATETIME NOT NULL
 		);`,
 		`CREATE TABLE IF NOT EXISTS indexing_queue (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			full_name TEXT UNIQUE NOT NULL,
+			id INTEGER PRIMARY KEY AUTO_INCREMENT,
+			full_name VARCHAR(255) UNIQUE NOT NULL,
 			owner TEXT NOT NULL,
 			name TEXT NOT NULL,
 			requested_by_user_id INTEGER,
-			status TEXT NOT NULL DEFAULT 'pending',
+			status VARCHAR(50) NOT NULL DEFAULT 'pending',
+			priority INTEGER DEFAULT 1 NOT NULL,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			processed_at DATETIME
 		);`,
 		`CREATE TABLE IF NOT EXISTS latest_snapshots (
-			repository_id TEXT PRIMARY KEY,
-			snapshot_date TEXT NOT NULL,
+			repository_id VARCHAR(255) PRIMARY KEY,
+			snapshot_date VARCHAR(255) NOT NULL,
 			external_pr_merge_rate REAL DEFAULT 0,
 			time_to_first_response_hours REAL DEFAULT 0,
 			time_to_merge_hours REAL DEFAULT 0,
@@ -143,18 +131,25 @@ func AutoMigrate(db *sqlx.DB) error {
 			distinct_maintainer_count REAL DEFAULT 0,
 			staleness_flag INTEGER DEFAULT 0,
 			c_rank_score REAL DEFAULT 0,
-			c_rank_tier TEXT DEFAULT 'D',
+			c_rank_tier VARCHAR(10) DEFAULT 'D',
 			good_first_issue_count INTEGER DEFAULT 0,
-			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			FOREIGN KEY(repository_id) REFERENCES repositories(id) ON DELETE CASCADE
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
 		`CREATE TABLE IF NOT EXISTS repo_raw_comments (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			repository_id TEXT NOT NULL,
+			id INTEGER PRIMARY KEY AUTO_INCREMENT,
+			repository_id VARCHAR(255) NOT NULL,
 			author_login TEXT,
 			comment_text TEXT NOT NULL,
-			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-			FOREIGN KEY(repository_id) REFERENCES repositories(id) ON DELETE CASCADE
+			created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+		);`,
+		`CREATE TABLE IF NOT EXISTS repo_pr_events (
+			id INTEGER PRIMARY KEY AUTO_INCREMENT,
+			repository_id VARCHAR(255) NOT NULL,
+			pr_number INTEGER NOT NULL,
+			actor_login VARCHAR(255) NOT NULL,
+			action VARCHAR(50) NOT NULL,
+			event_at DATETIME NOT NULL,
+			UNIQUE(repository_id, pr_number, action)
 		);`,
 	}
 
@@ -164,71 +159,20 @@ func AutoMigrate(db *sqlx.DB) error {
 		}
 	}
 
-	// Safe migration check for user_watchlists.repo_id column type
-	var colType string
-	err := db.Get(&colType, "SELECT type FROM pragma_table_info('user_watchlists') WHERE name = 'repo_id'")
-	if err == nil && strings.ToUpper(colType) == "INTEGER" {
-		migration := `
-			CREATE TABLE user_watchlists_dg_tmp (
-				user_id INTEGER NOT NULL,
-				repo_id TEXT NOT NULL,
-				notify_rank_change BOOLEAN DEFAULT TRUE,
-				created_at DATETIME NOT NULL,
-				PRIMARY KEY(user_id, repo_id),
-				FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-			);
-			INSERT INTO user_watchlists_dg_tmp (user_id, repo_id, notify_rank_change, created_at)
-				SELECT user_id, CAST(repo_id AS TEXT), notify_rank_change, created_at FROM user_watchlists;
-			DROP TABLE user_watchlists;
-			ALTER TABLE user_watchlists_dg_tmp RENAME TO user_watchlists;
-		`
-		_, _ = db.Exec(migration)
+	// Indexes
+	indexes := []string{
+		`CREATE INDEX IF NOT EXISTS idx_daily_snapshots_repo_date ON daily_snapshots(repository_id, snapshot_date DESC)`,
+		`CREATE INDEX IF NOT EXISTS idx_daily_snapshots_tier ON daily_snapshots(c_rank_tier)`,
+		`CREATE INDEX IF NOT EXISTS idx_latest_snapshots_tier ON latest_snapshots(c_rank_tier)`,
+		`CREATE INDEX IF NOT EXISTS idx_repositories_language ON repositories(language)`,
+		`CREATE INDEX IF NOT EXISTS idx_repositories_stars ON repositories(stars)`,
+		`CREATE INDEX IF NOT EXISTS idx_repos_next_rescan ON repositories(next_rescan_at ASC)`,
+		`CREATE INDEX IF NOT EXISTS idx_indexing_queue_status_priority ON indexing_queue(status, priority, created_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_pr_events_repo_at ON repo_pr_events(repository_id, event_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_pr_events_repo_pr ON repo_pr_events(repository_id, pr_number)`,
 	}
-
-	// Safe migration: add trending columns if missing.
-	var hasTrending int
-	_ = db.Get(&hasTrending, "SELECT COUNT(1) FROM pragma_table_info('repositories') WHERE name = 'is_trending'")
-	if hasTrending == 0 {
-		_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN is_trending INTEGER NOT NULL DEFAULT 0`)
-		_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN last_trending_at DATETIME`)
-		_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_repositories_is_trending ON repositories(is_trending)`)
-	}
-
-	// Performance indexes
-	indexes := `
-		CREATE INDEX IF NOT EXISTS idx_daily_snapshots_repo_date ON daily_snapshots(repository_id, snapshot_date DESC);
-		CREATE INDEX IF NOT EXISTS idx_daily_snapshots_tier ON daily_snapshots(c_rank_tier);
-		CREATE INDEX IF NOT EXISTS idx_latest_snapshots_tier ON latest_snapshots(c_rank_tier);
-		CREATE INDEX IF NOT EXISTS idx_repositories_language ON repositories(language);
-		CREATE INDEX IF NOT EXISTS idx_repositories_stars ON repositories(stars);
-	`
-	_, _ = db.Exec(indexes)
-
-	// Safe migration: add adaptive rescan columns if missing.
-	var hasRescan int
-	_ = db.Get(&hasRescan, "SELECT COUNT(1) FROM pragma_table_info('repositories') WHERE name = 'refresh_interval_days'")
-	if hasRescan == 0 {
-		_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN refresh_interval_days INTEGER DEFAULT 1 NOT NULL`)
-		_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN consecutive_stagnant_scans INTEGER DEFAULT 0 NOT NULL`)
-		_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN next_rescan_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL`)
-		_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_repos_next_rescan ON repositories(next_rescan_at ASC)`)
-	}
-
-	// Safe migration: add good-first-issue count columns if missing.
-	for _, tbl := range []string{"daily_snapshots", "latest_snapshots"} {
-		var hasGFI int
-		_ = db.Get(&hasGFI, "SELECT COUNT(1) FROM pragma_table_info('"+tbl+"') WHERE name = 'good_first_issue_count'")
-		if hasGFI == 0 {
-			_, _ = db.Exec(`ALTER TABLE ` + tbl + ` ADD COLUMN good_first_issue_count INTEGER DEFAULT 0`)
-		}
-	}
-
-	// Safe migration: add priority column to indexing_queue if missing
-	var hasPriority int
-	_ = db.Get(&hasPriority, "SELECT COUNT(1) FROM pragma_table_info('indexing_queue') WHERE name = 'priority'")
-	if hasPriority == 0 {
-		_, _ = db.Exec(`ALTER TABLE indexing_queue ADD COLUMN priority INTEGER DEFAULT 1 NOT NULL`)
-		_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_indexing_queue_status_priority ON indexing_queue(status, priority, created_at)`)
+	for _, idx := range indexes {
+		_, _ = db.Exec(idx)
 	}
 
 	return nil

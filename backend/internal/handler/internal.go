@@ -247,21 +247,21 @@ func MigrateLatestSnapshots() gin.HandlerFunc {
 				FROM daily_snapshots
 				GROUP BY repository_id
 			) latest ON s.repository_id = latest.repository_id AND s.snapshot_date = latest.max_date
-			ON CONFLICT(repository_id) DO UPDATE SET
-				snapshot_date                 = excluded.snapshot_date,
-				external_pr_merge_rate        = excluded.external_pr_merge_rate,
-				time_to_first_response_hours  = excluded.time_to_first_response_hours,
-				time_to_merge_hours           = excluded.time_to_merge_hours,
-				first_timer_success_rate      = excluded.first_timer_success_rate,
-				repeat_contributor_rate       = excluded.repeat_contributor_rate,
-				maintainer_responsiveness     = excluded.maintainer_responsiveness,
-				last_activity_days            = excluded.last_activity_days,
-				review_rounds                 = excluded.review_rounds,
-				distinct_maintainer_count     = excluded.distinct_maintainer_count,
-				staleness_flag                = excluded.staleness_flag,
-				c_rank_score                  = excluded.c_rank_score,
-				c_rank_tier                   = excluded.c_rank_tier,
-				good_first_issue_count        = excluded.good_first_issue_count,
+			ON DUPLICATE KEY UPDATE
+				snapshot_date                 = VALUES(snapshot_date),
+				external_pr_merge_rate        = VALUES(external_pr_merge_rate),
+				time_to_first_response_hours  = VALUES(time_to_first_response_hours),
+				time_to_merge_hours           = VALUES(time_to_merge_hours),
+				first_timer_success_rate      = VALUES(first_timer_success_rate),
+				repeat_contributor_rate       = VALUES(repeat_contributor_rate),
+				maintainer_responsiveness     = VALUES(maintainer_responsiveness),
+				last_activity_days            = VALUES(last_activity_days),
+				review_rounds                 = VALUES(review_rounds),
+				distinct_maintainer_count     = VALUES(distinct_maintainer_count),
+				staleness_flag                = VALUES(staleness_flag),
+				c_rank_score                  = VALUES(c_rank_score),
+				c_rank_tier                   = VALUES(c_rank_tier),
+				good_first_issue_count        = VALUES(good_first_issue_count),
 				updated_at                    = CURRENT_TIMESTAMP;
 		`
 

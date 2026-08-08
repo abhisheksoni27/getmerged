@@ -47,12 +47,12 @@ func (c *BackgroundCrawler) Start() {
 		return
 	}
 
-	slog.Info("background crawler: starting continuous queue engine (14-worker parallel pool)")
+	slog.Info("background crawler: starting continuous queue engine (3-worker parallel pool)")
 	if c.telegram.IsConfigured() {
 		go func() {
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
-			err := c.telegram.SendTextMessage(ctx, "🚀 *Opendoor Background Crawler Worker Started*\n\nContinuous 14-worker parallel queue engine is active with real-time latency telemetry.")
+			err := c.telegram.SendTextMessage(ctx, "🚀 *Opendoor Background Crawler Worker Started*\n\nContinuous 3-worker parallel queue engine is active with real-time latency telemetry.")
 			if err != nil {
 				slog.Error("background crawler: startup telegram send failed", "err", err)
 			} else {
@@ -138,8 +138,8 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		_, err := c.db.Exec(`
 			INSERT INTO indexing_queue (full_name, owner, name, priority, status, created_at)
 			VALUES (?, ?, ?, ?, 'pending', CURRENT_TIMESTAMP)
-			ON CONFLICT(full_name) DO UPDATE SET
-				priority = excluded.priority,
+			ON DUPLICATE KEY UPDATE
+				priority = VALUES(priority),
 				status = 'pending',
 				created_at = CURRENT_TIMESTAMP
 		`, fullName, owner, name, priority)
@@ -175,8 +175,8 @@ func (c *BackgroundCrawler) processNextWorkItem() {
 		}
 	}
 
-	// Process queue items concurrently (up to 14 worker routines)
-	processedCount, err := c.processIndexingQueueBatch(14)
+	// Process queue items concurrently (up to 3 worker routines)
+	processedCount, err := c.processIndexingQueueBatch(3)
 	if err != nil {
 		slog.Error("background crawler: error processing indexing_queue batch", "err", err)
 	}
@@ -285,7 +285,7 @@ func (c *BackgroundCrawler) processDiscoveryBatch() error {
 
 	slog.Info("background crawler [P3 Discovery]: sweeping", "language", lang, "stars", fmt.Sprintf("%d..%d", bucket.MinStars, bucket.MaxStars))
 
-	newRepos, err := DiscoverNewRepos(c.db, c.gh, lang, bucket, 14, 20)
+	newRepos, err := DiscoverNewRepos(c.db, c.gh, lang, bucket, 3, 3)
 	if err != nil || len(newRepos) == 0 {
 		return err
 	}
@@ -393,7 +393,7 @@ func (c *BackgroundCrawler) checkAndSendPulseDigest() {
 			"• *Queue Pending:* %d\n"+
 			"• *Scanning Speed:* %.1f repos/min (avg %d ms/repo)\n"+
 			"• *GitHub API Budget:* %d / 5,000 remaining%s%s\n"+
-			"🤖 14-worker parallel engine active 24/7.",
+			"🤖 3-worker parallel engine active 24/7.",
 		totalScored, sTierCount, totalComments, aiInsightsCount, pendingUserQueue, reposPerMin, avgMsPerRepo, rl.Remaining, rateLimitWarning, latestReposStr,
 	)
 
