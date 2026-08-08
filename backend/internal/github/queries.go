@@ -37,7 +37,7 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
     description
     primaryLanguage { name }
     pullRequests(
-      first: 100
+      first: 5
       after: $cursor
       states: [CLOSED, MERGED]
       orderBy: { field: UPDATED_AT, direction: DESC }
@@ -53,7 +53,7 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
         closedAt
         authorAssociation
         author { login }
-        comments(first: 100) {
+        comments(first: 5) {
           totalCount
           nodes {
             createdAt
@@ -62,14 +62,14 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
             body
           }
         }
-        reviews(first: 50) {
+        reviews(first: 5) {
           nodes {
             createdAt
             state
             authorAssociation
             author { login }
             body
-            comments(first: 50) {
+            comments(first: 5) {
               nodes {
                 createdAt
                 authorAssociation

@@ -38,7 +38,7 @@ func (r *sqlxWatchlistRepository) Add(ctx context.Context, userID int64, repoID 
 	_, err := r.db.ExecContext(ctx, `
 		INSERT INTO user_watchlists (user_id, repo_id, notify_rank_change, created_at)
 		VALUES (?, ?, TRUE, CURRENT_TIMESTAMP)
-		ON CONFLICT(user_id, repo_id) DO NOTHING
+		ON DUPLICATE KEY UPDATE id=id
 	`, userID, repoID)
 	return err
 }

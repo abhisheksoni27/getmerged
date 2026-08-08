@@ -79,6 +79,7 @@ func main() {
 	if cfg.GinMode == "release" {
 		crawler := pipeline.NewBackgroundCrawler(database, gh, telegramNotifier)
 		crawler.Start()
+		pipeline.StartAIInsightsCron(database, aiClient, aiRepo)
 		defer crawler.Stop()
 	}
 

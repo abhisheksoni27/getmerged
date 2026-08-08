@@ -67,8 +67,8 @@ func RequestRepoIndexing(database *sqlx.DB) gin.HandlerFunc {
 		query := `
 			INSERT INTO indexing_queue (full_name, owner, name, requested_by_user_id, status, created_at)
 			VALUES (?, ?, ?, ?, 'pending', CURRENT_TIMESTAMP)
-			ON CONFLICT(full_name) DO UPDATE SET
-				created_at = excluded.created_at
+			ON DUPLICATE KEY UPDATE
+				created_at = VALUES(created_at)
 		`
 		_, err := db.ExecContext(c.Request.Context(), query, fullName, owner, name, userID)
 		if err != nil {

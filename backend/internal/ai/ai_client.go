@@ -232,6 +232,7 @@ func (c *AIClient) callPythonNLPSidecar(ctx context.Context, repoFullName string
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 	rawResp, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, fmt.Errorf("reading sidecar body: %w", err)

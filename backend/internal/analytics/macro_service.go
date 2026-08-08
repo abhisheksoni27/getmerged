@@ -120,8 +120,8 @@ func ComputeAndCacheMacroStats(ctx context.Context, db *sqlx.DB) (*MacroStats, e
 	_, err = db.ExecContext(ctx, `
 		INSERT INTO macro_stats (metric_key, metric_value, updated_at)
 		VALUES ('global_summary', ?, CURRENT_TIMESTAMP)
-		ON CONFLICT(metric_key) DO UPDATE SET
-			metric_value = excluded.metric_value,
+		ON DUPLICATE KEY UPDATE
+			metric_value = VALUES(metric_value),
 			updated_at = CURRENT_TIMESTAMP
 	`, string(jsonBytes))
 

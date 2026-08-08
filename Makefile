@@ -15,7 +15,7 @@ swagger:
 	cd backend && swag init -g cmd/server/main.go
 
 build: swagger
-	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/server ./cmd/server
+	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/server ./cmd/server && go build -ldflags="$(LDFLAGS)" -o bin/gharchive ./cmd/gharchive
 
 # Live-reloading development server using air
 dev: swagger
@@ -69,8 +69,11 @@ deploy: build-linux-arm
 deploy-server: build
 	@echo "=== Copy backend binary & nlp_sidecar ==="
 	cp backend/bin/server /opt/opendoor/backend/server.new
+	cp backend/bin/gharchive /opt/opendoor/backend/gharchive.new
 	mv -f /opt/opendoor/backend/server.new /opt/opendoor/backend/server
+	mv -f /opt/opendoor/backend/gharchive.new /opt/opendoor/backend/gharchive
 	chmod +x /opt/opendoor/backend/server
+	chmod +x /opt/opendoor/backend/gharchive
 	cp -r backend/nlp_sidecar /opt/opendoor/backend/
 	sudo restorecon -v /opt/opendoor/backend/server
 	sudo systemctl restart opendoor.service

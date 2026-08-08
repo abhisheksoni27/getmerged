@@ -63,17 +63,17 @@ func (r *sqlxAIRepository) SaveInsights(ctx context.Context, insights *AIInsight
 			warmth_score, patience_score, nitpick_ratio, maintainer_persona, dos_json, donts_json, updated_at
 		)
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-		ON CONFLICT(repo_id) DO UPDATE SET
-			maintainer_vibe = excluded.maintainer_vibe,
-			pr_guidelines = excluded.pr_guidelines,
-			issue_quality_score = excluded.issue_quality_score,
-			raw_summary = excluded.raw_summary,
-			warmth_score = excluded.warmth_score,
-			patience_score = excluded.patience_score,
-			nitpick_ratio = excluded.nitpick_ratio,
-			maintainer_persona = excluded.maintainer_persona,
-			dos_json = excluded.dos_json,
-			donts_json = excluded.donts_json,
+		ON DUPLICATE KEY UPDATE
+			maintainer_vibe = VALUES(maintainer_vibe),
+			pr_guidelines = VALUES(pr_guidelines),
+			issue_quality_score = VALUES(issue_quality_score),
+			raw_summary = VALUES(raw_summary),
+			warmth_score = VALUES(warmth_score),
+			patience_score = VALUES(patience_score),
+			nitpick_ratio = VALUES(nitpick_ratio),
+			maintainer_persona = VALUES(maintainer_persona),
+			dos_json = VALUES(dos_json),
+			donts_json = VALUES(donts_json),
 			updated_at = CURRENT_TIMESTAMP
 	`, insights.RepoID, insights.MaintainerVibe, insights.PRGuidelines, insights.IssueQualityScore, insights.RawSummary,
 		insights.WarmthScore, insights.PatienceScore, insights.NitpickRatio, insights.MaintainerPersona, insights.DosJSON, insights.DontsJSON)
