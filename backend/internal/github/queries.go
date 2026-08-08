@@ -62,6 +62,23 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
             body
           }
         }
+        reviews(first: 50) {
+          nodes {
+            createdAt
+            state
+            authorAssociation
+            author { login }
+            body
+            comments(first: 50) {
+              nodes {
+                createdAt
+                authorAssociation
+                author { login }
+                body
+              }
+            }
+          }
+        }
       }
     }
   }

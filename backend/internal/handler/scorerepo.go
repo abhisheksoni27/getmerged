@@ -71,9 +71,16 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 		scoringPRs := make([]scoring.PR, len(prs))
 		var rawCommentTexts []string
 		for i, p := range prs {
-			for _, commentText := range p.CommentTexts {
-				if strings.TrimSpace(commentText) != "" {
-					rawCommentTexts = append(rawCommentTexts, commentText)
+			for idx, commentText := range p.CommentTexts {
+				cleanText := strings.TrimSpace(commentText)
+				if cleanText != "" {
+					author := "maintainer"
+					if idx < len(p.CommentAuthors) && p.CommentAuthors[idx] != "" {
+						author = p.CommentAuthors[idx]
+					}
+					if !ghclient.IsBotLogin(author) {
+						rawCommentTexts = append(rawCommentTexts, cleanText)
+					}
 				}
 			}
 			scoringPRs[i] = scoring.PR{
@@ -120,12 +127,15 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 
 		// Save raw comments & trigger AI insights generation
 		_ = aiRepo.SaveRawComments(c.Request.Context(), repoID, rawCommentTexts)
-		if insightsResp, aiErr := aiClient.GenerateRepoInsights(c.Request.Context(), fullName, rawCommentTexts); aiErr == nil && insightsResp != nil {
+		insightsResp, aiErr := aiClient.GenerateRepoInsights(c.Request.Context(), fullName, rawCommentTexts)
+		if aiErr != nil {
+			slog.Error("score-repo: GenerateRepoInsights failed", "repo", fullName, "err", aiErr)
+		} else if insightsResp != nil {
 			guidelinesBytes, _ := json.Marshal(insightsResp.PRGuidelines)
 			dosBytes, _ := json.Marshal(insightsResp.TopDos)
 			dontsBytes, _ := json.Marshal(insightsResp.TopDonts)
 
-			_ = aiRepo.SaveInsights(c.Request.Context(), &repository.AIInsights{
+			saveErr := aiRepo.SaveInsights(c.Request.Context(), &repository.AIInsights{
 				RepoID:            repoID,
 				MaintainerVibe:    insightsResp.MaintainerVibe,
 				PRGuidelines:      string(guidelinesBytes),
@@ -138,6 +148,11 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 				DosJSON:           string(dosBytes),
 				DontsJSON:         string(dontsBytes),
 			})
+			if saveErr != nil {
+				slog.Error("score-repo: SaveInsights failed", "repo", fullName, "err", saveErr)
+			} else {
+				slog.Info("score-repo: successfully saved AI insights", "repo", fullName, "repo_id", repoID)
+			}
 		}
 
 		slog.Info("score-repo: done",

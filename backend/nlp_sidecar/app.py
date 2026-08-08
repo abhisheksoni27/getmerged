@@ -49,14 +49,14 @@ class NLPHandler(BaseHTTPRequestHandler):
                     pos_ratio = pos_count / total_analyzed
                     score = round(min(9.8, max(5.0, 6.0 + (pos_ratio * 3.8))), 1)
                     if pos_ratio >= 0.7:
-                        vibe = f"HuggingFace Sentiment Transformer: High positive maintainer vibe ({int(pos_ratio*100)}% positive sentiment). Welcoming code reviews and supportive feedback in {repo}."
+                        vibe = f"Highly encouraging & supportive maintainers ({int(pos_ratio*100)}% positive review sentiment). Active code reviews with constructive guidance for new contributors in {repo}."
                     elif pos_ratio >= 0.4:
-                        vibe = f"HuggingFace Sentiment Transformer: Balanced & professional review vibe in {repo}. Focuses strictly on technical standards."
+                        vibe = f"Balanced & professional review environment in {repo}. Maintains strict focus on technical quality and test standards."
                     else:
-                        vibe = f"HuggingFace Sentiment Transformer: Rigorous review standards ({int((1-pos_ratio)*100)}% critical signals). Ensure PRs strictly follow guidelines before submitting in {repo}."
+                        vibe = f"Rigorous architecture standards ({int((1-pos_ratio)*100)}% critical review signals). Ensure PRs strictly follow guidelines before requesting review in {repo}."
                 else:
                     score = 8.0
-                    vibe = f"HuggingFace Sentiment Transformer: Active maintainer team in {repo} with consistent code review turnarounds."
+                    vibe = f"Active maintainer team in {repo} with consistent code review turnarounds."
                 
                 # Guidelines extraction based on comment contents
                 text_blob = " ".join(comments).lower()
@@ -120,7 +120,7 @@ class NLPHandler(BaseHTTPRequestHandler):
                     "maintainer_vibe": vibe,
                     "pr_guidelines": guidelines,
                     "issue_quality_score": score,
-                    "raw_summary": f"HuggingFace DistilBERT model analyzed {total_analyzed if total_analyzed > 0 else len(comments)} PR review signals for {repo}.",
+                    "raw_summary": f"Analyzed {total_analyzed if total_analyzed > 0 else len(comments)} PR review signals for {repo}.",
                     "warmth_score": warmth_score,
                     "patience_score": patience_score,
                     "nitpick_ratio": nitpick_ratio,

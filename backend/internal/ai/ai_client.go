@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -72,14 +73,10 @@ func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string
 	req.Header.Set("Content-Type", "application/json")
 
 	res, err := c.httpClient.Do(req)
-	if err != nil {
-		return nil, err
+	if err != nil || res.StatusCode != http.StatusOK {
+		return c.GenerateLocalZeroCostInsights(repoFullName, prComments), nil
 	}
 	defer res.Body.Close()
-
-	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("AI API returned status %d", res.StatusCode)
-	}
 
 	var apiResp struct {
 		Choices []struct {
@@ -89,17 +86,13 @@ func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string
 		} `json:"choices"`
 	}
 
-	if err := json.NewDecoder(res.Body).Decode(&apiResp); err != nil {
-		return nil, err
-	}
-
-	if len(apiResp.Choices) == 0 {
-		return nil, fmt.Errorf("empty AI response")
+	if err := json.NewDecoder(res.Body).Decode(&apiResp); err != nil || len(apiResp.Choices) == 0 {
+		return c.GenerateLocalZeroCostInsights(repoFullName, prComments), nil
 	}
 
 	var insights AIInsightsResponse
 	if err := json.Unmarshal([]byte(apiResp.Choices[0].Message.Content), &insights); err != nil {
-		return nil, fmt.Errorf("failed to parse AI JSON response: %w", err)
+		return c.GenerateLocalZeroCostInsights(repoFullName, prComments), nil
 	}
 
 	return &insights, nil
@@ -217,7 +210,7 @@ func (c *AIClient) GenerateLocalZeroCostInsights(repoFullName string, prComments
 }
 
 func (c *AIClient) callPythonNLPSidecar(ctx context.Context, repoFullName string, prComments []string) (*AIInsightsResponse, error) {
-	sidecarCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	sidecarCtx, cancel := context.WithTimeout(ctx, 15*time.Second)
 	defer cancel()
 
 	payload := map[string]any{
@@ -239,15 +232,18 @@ func (c *AIClient) callPythonNLPSidecar(ctx context.Context, repoFullName string
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
+	rawResp, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, fmt.Errorf("reading sidecar body: %w", err)
+	}
 
 	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("sidecar returned %d", res.StatusCode)
+		return nil, fmt.Errorf("sidecar returned %d: %s", res.StatusCode, string(rawResp))
 	}
 
 	var insights AIInsightsResponse
-	if err := json.NewDecoder(res.Body).Decode(&insights); err != nil {
-		return nil, err
+	if err := json.Unmarshal(rawResp, &insights); err != nil {
+		return nil, fmt.Errorf("failed to decode sidecar JSON (raw: %s): %w", string(rawResp[:min(len(rawResp), 200)]), err)
 	}
 	return &insights, nil
 }

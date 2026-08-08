@@ -181,13 +181,20 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	// Save real raw PR comment texts for zero-cost sentiment and NLP model ingestion
 	var rawCommentTexts []string
 	for _, p := range prs {
-		for _, commentText := range p.CommentTexts {
-			if strings.TrimSpace(commentText) != "" {
-				rawCommentTexts = append(rawCommentTexts, commentText)
-				_, _ = db.Exec(`
-					INSERT INTO repo_raw_comments (repository_id, author_login, comment_text, created_at)
-					VALUES (?, 'maintainer', ?, CURRENT_TIMESTAMP)
-				`, repoID, commentText)
+		for idx, commentText := range p.CommentTexts {
+			cleanText := strings.TrimSpace(commentText)
+			if cleanText != "" {
+				author := "maintainer"
+				if idx < len(p.CommentAuthors) && p.CommentAuthors[idx] != "" {
+					author = p.CommentAuthors[idx]
+				}
+				if !github.IsBotLogin(author) {
+					rawCommentTexts = append(rawCommentTexts, cleanText)
+					_, _ = db.Exec(`
+						INSERT INTO repo_raw_comments (repository_id, author_login, comment_text, created_at)
+						VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+					`, repoID, author, cleanText)
+				}
 			}
 		}
 	}
