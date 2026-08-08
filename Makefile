@@ -37,6 +37,10 @@ build-linux-arm: swagger
 build-recalculate-linux-arm:
 	cd backend && CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="$(LDFLAGS)" -o bin/recalculate-history-linux-arm ./cmd/recalculate_history
 
+build-backfill:
+	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/backfill ./cmd/backfill
+
+
 recalculate-history: build-recalculate-linux-arm
 	scp backend/bin/recalculate-history-linux-arm deploy@oracle:/tmp/recalculate-history
 	ssh deploy@oracle '\
