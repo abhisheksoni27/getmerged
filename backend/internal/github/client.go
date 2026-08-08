@@ -600,8 +600,35 @@ func (c *Client) do(query string, vars map[string]any, out any) (fromCache bool,
 		for _, e := range envelope.Errors {
 			slog.Error("github: graphql error", "message", e.Message, "type", e.Type)
 			if e.Type == "RATE_LIMIT" || strings.Contains(strings.ToLower(e.Message), "rate limit") {
-				slog.Warn("github: graphql rate limit hit - sleeping for 1 minute safety window")
-				time.Sleep(1 * time.Minute)
+				// Fetch exact rate limit resetAt timestamp from REST endpoint
+				resetSleep := 1 * time.Minute
+				if reqRest, errRest := http.NewRequestWithContext(ctx, http.MethodGet, "https://api.github.com/rate_limit", nil); errRest == nil {
+					reqRest.Header.Set("Authorization", "Bearer "+c.token)
+					if resRest, errDo := c.httpClient.Do(reqRest); errDo == nil {
+						var restInfo struct {
+							Resources struct {
+								GraphQL struct {
+									Reset int64 `json:"reset"`
+								} `json:"graphql"`
+							} `json:"resources"`
+						}
+						if errDec := json.NewDecoder(resRest.Body).Decode(&restInfo); errDec == nil && restInfo.Resources.GraphQL.Reset > 0 {
+							resetTime := time.Unix(restInfo.Resources.GraphQL.Reset, 0).UTC()
+							c.mu.Lock()
+							c.rlInfo = rateLimitInfo{
+								Remaining: 0,
+								ResetAt:   resetTime.Format(time.RFC3339),
+							}
+							c.mu.Unlock()
+							if time.Now().UTC().Before(resetTime) {
+								resetSleep = time.Until(resetTime) + 5*time.Second
+							}
+						}
+						resRest.Body.Close()
+					}
+				}
+				slog.Warn("github: graphql rate limit hit - sleeping dynamically until resetAt", "sleep_duration", resetSleep.String())
+				time.Sleep(resetSleep)
 			}
 		}
 		return false, fmt.Errorf("graphql error: %s", envelope.Errors[0].Message)
