@@ -158,7 +158,7 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		FROM repositories r
 		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
 		LEFT JOIN indexing_queue q ON r.full_name = q.full_name
-		WHERE DATETIME(r.updated_at) <= DATETIME('now', '-24 hours')
+		WHERE r.updated_at <= NOW() - INTERVAL 24 HOUR
 		  AND COALESCE(ls.c_rank_tier, 'D') != 'D'
 		  AND (q.status IS NULL OR q.status NOT IN ('pending', 'processing'))
 		ORDER BY r.updated_at ASC
