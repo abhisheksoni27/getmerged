@@ -23,25 +23,25 @@ const apiCacheTTL = 6 * time.Hour
 
 // repoResponse is the shape returned to API consumers.
 type repoResponse struct {
-	ID                          string  `json:"id"`
-	FullName                    string  `json:"full_name"`
-	Language                    string  `json:"language"`
-	Stars                       int     `json:"stars"`
-	Description                 string  `json:"description"`
-	GithubURL                   string  `json:"github_url"`
-	CRankTier                   string  `json:"c_rank_tier"`
-	CRankScore                  float64 `json:"c_rank_score"`
-	ExternalPRMergeRate         float64 `json:"external_pr_merge_rate"`
-	TimeToFirstResponseHours    float64 `json:"time_to_first_response_hours"`
-	TimeToMergeHours            float64 `json:"time_to_merge_hours"`
-	FirstTimerSuccessRate       float64 `json:"first_timer_success_rate"`
-	RepeatContributorRate       float64 `json:"repeat_contributor_rate"`
-	MaintainerResponsiveness    float64 `json:"maintainer_responsiveness"`
-	LastActivityDays            float64 `json:"last_activity_days"`
-	ReviewRounds                float64 `json:"review_rounds"`
-	DistinctMaintainerCount     float64 `json:"distinct_maintainer_count"`
-	StalenessFlag               bool    `json:"staleness_flag"`
-	SnapshotDate                string  `json:"snapshot_date"`
+	ID                       string  `json:"id"`
+	FullName                 string  `json:"full_name"`
+	Language                 string  `json:"language"`
+	Stars                    int     `json:"stars"`
+	Description              string  `json:"description"`
+	GithubURL                string  `json:"github_url"`
+	CRankTier                string  `json:"c_rank_tier"`
+	CRankScore               float64 `json:"c_rank_score"`
+	ExternalPRMergeRate      float64 `json:"external_pr_merge_rate"`
+	TimeToFirstResponseHours float64 `json:"time_to_first_response_hours"`
+	TimeToMergeHours         float64 `json:"time_to_merge_hours"`
+	FirstTimerSuccessRate    float64 `json:"first_timer_success_rate"`
+	RepeatContributorRate    float64 `json:"repeat_contributor_rate"`
+	MaintainerResponsiveness float64 `json:"maintainer_responsiveness"`
+	LastActivityDays         float64 `json:"last_activity_days"`
+	ReviewRounds             float64 `json:"review_rounds"`
+	DistinctMaintainerCount  float64 `json:"distinct_maintainer_count"`
+	StalenessFlag            bool    `json:"staleness_flag"`
+	SnapshotDate             string  `json:"snapshot_date"`
 }
 
 type metaResponse struct {
@@ -72,6 +72,7 @@ var allowedSortFields = map[string]string{
 //	@Success      200       {object}  map[string]any
 //	@Failure      500       {object}  map[string]string
 //	@Router       /api/v1/repos [get]
+//
 // ListRepos handles GET /api/v1/repos
 func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -108,6 +109,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		perPageStr := strings.TrimSpace(c.Query("per_page"))
 		minMergeRateStr := strings.TrimSpace(c.Query("min_merge_rate"))
 		trendingParam := strings.ToLower(strings.TrimSpace(c.Query("trending")))
+		scoredTodayParam := strings.ToLower(strings.TrimSpace(c.Query("scored_today")))
 		minStarsStr := strings.TrimSpace(c.Query("min_stars"))
 		maxStarsStr := strings.TrimSpace(c.Query("max_stars"))
 		minFirstTimerStr := strings.TrimSpace(c.Query("min_first_timer_success_rate"))
@@ -155,7 +157,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		userID, isLoggedIn := c.Get(middleware.UserIDKey)
 		if (page > 1 || trendingParam == "true") && (!isLoggedIn || userID == "") {
 			c.JSON(http.StatusUnauthorized, gin.H{
-				"error": "authentication_required",
+				"error":   "authentication_required",
 				"message": "Sign in with GitHub to access page 2+ results or trending repositories.",
 			})
 			return
@@ -173,6 +175,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			Limit:                    perPage,
 			Offset:                   offset,
 			Trending:                 trendingParam == "true",
+			SnapshotDate:             snapshotDateFor(scoredTodayParam == "true"),
 			MinFirstTimerSuccessRate: minFirstTimer,
 			MaxFirstTimerSuccessRate: maxFirstTimer,
 			HasMinFirstTimer:         hasMinFirstTimer,
@@ -211,6 +214,13 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 	}
 }
 
+func snapshotDateFor(scoredToday bool) string {
+	if !scoredToday {
+		return ""
+	}
+
+	return time.Now().UTC().Format("2006-01-02")
+}
 
 // GetRepo handles GET /api/v1/repos/:id
 func GetRepo(repoStore repository.RepoRepository) gin.HandlerFunc {
@@ -284,8 +294,8 @@ func GetBadgeSVG(repoStore repository.RepoRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		owner := c.Param("owner")
 		name := c.Param("repo")
-		if strings.HasSuffix(name, ".svg") {
-			name = strings.TrimSuffix(name, ".svg")
+		if before, ok := strings.CutSuffix(name, ".svg"); ok {
+			name = before
 		}
 		fullName := owner + "/" + name
 
@@ -326,8 +336,17 @@ func GetBadgeSVG(repoStore repository.RepoRepository) gin.HandlerFunc {
 			rightText = fmt.Sprintf("%s (%s)", tierName, score)
 		}
 
+		badgeWidth := 220
+		rightWidth := 135
+		rightTextX := 152.5
+		if showPoints {
+			badgeWidth = 260
+			rightWidth = 175
+			rightTextX = 85 + float64(rightWidth)/2
+		}
+
 		// Modern high-fidelity badge design (Issue #57)
-		svg := fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="220" height="28" role="img" aria-label="Opendoor C-Rank: %s">
+		svg := fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="28" role="img" aria-label="Opendoor C-Rank: %s">
   <title>Opendoor C-Rank: %s</title>
   <defs>
     <linearGradient id="b" x2="0" y2="100%%">
@@ -335,21 +354,21 @@ func GetBadgeSVG(repoStore repository.RepoRepository) gin.HandlerFunc {
       <stop offset="1" stop-opacity=".1"/>
     </linearGradient>
     <clipPath id="r">
-      <rect width="220" height="28" rx="6" fill="#fff"/>
+      <rect width="%d" height="28" rx="6" fill="#fff"/>
     </clipPath>
   </defs>
   <g clip-path="url(#r)">
     <rect width="85" height="28" fill="#18181b"/>
-    <rect x="85" width="135" height="28" fill="%s"/>
-    <rect width="220" height="28" fill="url(#b)"/>
+    <rect x="85" width="%d" height="28" fill="%s"/>
+    <rect width="%d" height="28" fill="url(#b)"/>
   </g>
   <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="11">
     <text x="42.5" y="18" font-weight="700" fill="#000" opacity="0.3">opendoor</text>
     <text x="42.5" y="17" font-weight="700" fill="#fff">opendoor</text>
-    <text x="152.5" y="18" font-weight="700" fill="#000" opacity="0.3">%s</text>
-    <text x="152.5" y="17" font-weight="700" fill="#fff">%s</text>
+    <text x="%.1f" y="18" font-weight="700" fill="#000" opacity="0.3">%s</text>
+    <text x="%.1f" y="17" font-weight="700" fill="#fff">%s</text>
   </g>
-</svg>`, rightText, rightText, color, rightText, rightText)
+</svg>`, badgeWidth, rightText, rightText, badgeWidth, rightWidth, color, badgeWidth, rightTextX, rightText, rightTextX, rightText)
 
 		c.Header("Content-Type", "image/svg+xml")
 		c.Header("Cache-Control", "public, max-age=3600, s-maxage=86400")

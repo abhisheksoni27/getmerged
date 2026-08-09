@@ -12,44 +12,45 @@ import (
 )
 
 type RepoRecord struct {
-	ID                          string  `db:"id" json:"id"`
-	FullName                    string  `db:"full_name" json:"full_name"`
-	Language                    string  `db:"language" json:"language"`
-	Stars                       int     `db:"stars" json:"stars"`
-	Description                 string  `db:"description" json:"description"`
-	GithubURL                   string  `db:"github_url" json:"github_url"`
-	CRankTier                   string  `db:"c_rank_tier" json:"c_rank_tier"`
-	CRankScore                  float64 `db:"c_rank_score" json:"c_rank_score"`
-	ExternalPRMergeRate         float64 `db:"external_pr_merge_rate" json:"external_pr_merge_rate"`
-	TimeToFirstResponseHours    float64 `db:"time_to_first_response_hours" json:"time_to_first_response_hours"`
-	TimeToMergeHours            float64 `db:"time_to_merge_hours" json:"time_to_merge_hours"`
-	FirstTimerSuccessRate       float64 `db:"first_timer_success_rate" json:"first_timer_success_rate"`
-	RepeatContributorRate       float64 `db:"repeat_contributor_rate" json:"repeat_contributor_rate"`
-	MaintainerResponsiveness    float64 `db:"maintainer_responsiveness" json:"maintainer_responsiveness"`
-	LastActivityDays            float64 `db:"last_activity_days" json:"last_activity_days"`
-	ReviewRounds                float64 `db:"review_rounds" json:"review_rounds"`
-	DistinctMaintainerCount     float64 `db:"distinct_maintainer_count" json:"distinct_maintainer_count"`
-	StalenessFlag               bool    `db:"staleness_flag" json:"staleness_flag"`
-	SnapshotDate                string  `db:"snapshot_date" json:"snapshot_date"`
-	GoodFirstIssueCount         int     `db:"good_first_issue_count" json:"good_first_issue_count"`
+	ID                       string  `db:"id" json:"id"`
+	FullName                 string  `db:"full_name" json:"full_name"`
+	Language                 string  `db:"language" json:"language"`
+	Stars                    int     `db:"stars" json:"stars"`
+	Description              string  `db:"description" json:"description"`
+	GithubURL                string  `db:"github_url" json:"github_url"`
+	CRankTier                string  `db:"c_rank_tier" json:"c_rank_tier"`
+	CRankScore               float64 `db:"c_rank_score" json:"c_rank_score"`
+	ExternalPRMergeRate      float64 `db:"external_pr_merge_rate" json:"external_pr_merge_rate"`
+	TimeToFirstResponseHours float64 `db:"time_to_first_response_hours" json:"time_to_first_response_hours"`
+	TimeToMergeHours         float64 `db:"time_to_merge_hours" json:"time_to_merge_hours"`
+	FirstTimerSuccessRate    float64 `db:"first_timer_success_rate" json:"first_timer_success_rate"`
+	RepeatContributorRate    float64 `db:"repeat_contributor_rate" json:"repeat_contributor_rate"`
+	MaintainerResponsiveness float64 `db:"maintainer_responsiveness" json:"maintainer_responsiveness"`
+	LastActivityDays         float64 `db:"last_activity_days" json:"last_activity_days"`
+	ReviewRounds             float64 `db:"review_rounds" json:"review_rounds"`
+	DistinctMaintainerCount  float64 `db:"distinct_maintainer_count" json:"distinct_maintainer_count"`
+	StalenessFlag            bool    `db:"staleness_flag" json:"staleness_flag"`
+	SnapshotDate             string  `db:"snapshot_date" json:"snapshot_date"`
+	GoodFirstIssueCount      int     `db:"good_first_issue_count" json:"good_first_issue_count"`
 }
 
 type RepoFilter struct {
-	Language                  string
-	Tier                      string
-	MinMergeRate              float64
-	MinStars                  int
-	MaxStars                  int
-	Search                    string
-	SortBy                    string
-	Order                     string
-	Limit                     int
-	Offset                    int
-	Trending                  bool
-	MinFirstTimerSuccessRate  float64
-	MaxFirstTimerSuccessRate  float64
-	HasMinFirstTimer          bool
-	HasMaxFirstTimer          bool
+	Language                 string
+	Tier                     string
+	MinMergeRate             float64
+	MinStars                 int
+	MaxStars                 int
+	Search                   string
+	SortBy                   string
+	Order                    string
+	Limit                    int
+	Offset                   int
+	Trending                 bool
+	SnapshotDate             string
+	MinFirstTimerSuccessRate float64
+	MaxFirstTimerSuccessRate float64
+	HasMinFirstTimer         bool
+	HasMaxFirstTimer         bool
 }
 
 type SnapshotRecord struct {
@@ -112,6 +113,11 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 
 	if filter.Trending {
 		where += " AND r.is_trending = 1"
+	}
+
+	if filter.SnapshotDate != "" {
+		where += " AND s.snapshot_date = ?"
+		args = append(args, filter.SnapshotDate)
 	}
 
 	if filter.MinStars > 0 {
