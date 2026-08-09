@@ -144,7 +144,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 		// Save raw comments & trigger AI insights generation
 		_ = aiRepo.SaveRawComments(c.Request.Context(), repoID, rawCommentTexts)
 		_ = aiRepo.SavePRComments(c.Request.Context(), repoID, prComments)
-		insightsResp, aiErr := aiClient.GenerateRepoInsights(c.Request.Context(), fullName, rawCommentTexts)
+		insightsResp, aiErr := aiClient.GenerateRepoInsights(c.Request.Context(), fullName, rawCommentTexts, nil)
 		if aiErr != nil {
 			slog.Error("score-repo: GenerateRepoInsights failed", "repo", fullName, "err", aiErr)
 		} else if insightsResp != nil {
