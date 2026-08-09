@@ -38,6 +38,8 @@ type AIRepository interface {
 	GetRawComments(ctx context.Context, repoID string, limit int) ([]string, error)
 	SavePRComments(ctx context.Context, repoID string, comments []PRComment) error
 	GetPRComments(ctx context.Context, repoID string, limit int) ([]string, error)
+	SaveIssueComments(ctx context.Context, repoID string, comments []string) error
+	GetIssueComments(ctx context.Context, repoID string, limit int) ([]string, error)
 }
 
 type sqlxAIRepository struct {
@@ -145,4 +147,28 @@ func (r *sqlxAIRepository) GetPRComments(ctx context.Context, repoID string, lim
 		return nil, err
 	}
 	return comments, nil
+}
+
+func (r *sqlxAIRepository) SaveIssueComments(ctx context.Context, repoID string, comments []string) error {
+	for _, comment := range comments {
+		if comment == "" {
+			continue
+		}
+		_, _ = r.db.ExecContext(ctx, `
+			INSERT IGNORE INTO repo_issue_comments (repository_id, comment_text, created_at)
+			VALUES (?, ?, CURRENT_TIMESTAMP)
+		`, repoID, comment)
+	}
+	return nil
+}
+
+func (r *sqlxAIRepository) GetIssueComments(ctx context.Context, repoID string, limit int) ([]string, error) {
+	var comments []string
+	err := r.db.SelectContext(ctx, &comments, `
+		SELECT comment_text FROM repo_issue_comments
+		WHERE repository_id = ?
+		ORDER BY id DESC
+		LIMIT ?
+	`, repoID, limit)
+	return comments, err
 }

@@ -311,14 +311,18 @@ func processComments(ctx context.Context, db *sqlx.DB, client *RESTClient, r Tar
 	commentsInserted := 0
 	sinceStr := fromDate.Format("2006-01-02T15:04:05Z")
 
-	endpoints := []string{
-		fmt.Sprintf("https://api.github.com/repos/%s/%s/pulls/comments?since=%s&per_page=100", r.Owner, r.Name, sinceStr),
+	endpoints := []struct {
+		url  string
+		isPR bool
+	}{
+		{fmt.Sprintf("https://api.github.com/repos/%s/%s/pulls/comments?since=%s&per_page=100", r.Owner, r.Name, sinceStr), true},
+		{fmt.Sprintf("https://api.github.com/repos/%s/%s/issues/comments?since=%s&per_page=100", r.Owner, r.Name, sinceStr), false},
 	}
 
 	for _, ep := range endpoints {
-		body, _, err := client.Get(ctx, ep)
+		body, _, err := client.Get(ctx, ep.url)
 		if err != nil {
-			slog.Debug("Fetch comments endpoint failed", "endpoint", ep, "err", err)
+			slog.Debug("Fetch comments endpoint failed", "endpoint", ep.url, "err", err)
 			continue
 		}
 
@@ -346,18 +350,24 @@ func processComments(ctx context.Context, db *sqlx.DB, client *RESTClient, r Tar
 			if len(cleanText) > 2000 {
 				cleanText = cleanText[:2000]
 			}
-			prNumber := prNumberFromURL(c.PullRequestURL)
-			if prNumber == 0 {
-				continue
-			}
-
 			if !dryRun {
-				_, _ = db.ExecContext(ctx, `
-					INSERT IGNORE INTO repo_pr_comments (
-						repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at
-					)
-					VALUES (?, ?, 'review_thread_comment', ?, '', ?, ?)
-				`, r.ID, prNumber, author, cleanText, createdAt.UTC().Format("2006-01-02 15:04:05"))
+				if ep.isPR {
+					prNumber := prNumberFromURL(c.PullRequestURL)
+					if prNumber == 0 {
+						continue
+					}
+					_, _ = db.ExecContext(ctx, `
+						INSERT IGNORE INTO repo_pr_comments (
+							repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at
+						)
+						VALUES (?, ?, 'review_thread_comment', ?, '', ?, ?)
+					`, r.ID, prNumber, author, cleanText, createdAt.UTC().Format("2006-01-02 15:04:05"))
+				} else {
+					_, _ = db.ExecContext(ctx, `
+						INSERT IGNORE INTO repo_issue_comments (repository_id, comment_text, created_at)
+						VALUES (?, ?, ?)
+					`, r.ID, cleanText, createdAt.UTC().Format("2006-01-02 15:04:05"))
+				}
 			}
 			commentsInserted++
 		}

@@ -93,16 +93,18 @@ func main() {
 			slog.Info("AI Insights progress", "processed", i+1, "total", len(repos), "saved", saved, "low_comments", skipped, "elapsed", time.Since(startTime).Round(time.Second).String())
 		}
 
-		comments, err := aiRepo.GetPRComments(ctx, r.ID, 100)
-		if err == nil && len(comments) < 3 {
-			comments, err = aiRepo.GetRawComments(ctx, r.ID, 100)
-		}
+		prComments, err := aiRepo.GetPRComments(ctx, r.ID, 100)
 		if err != nil {
-			slog.Error("Failed to fetch raw comments", "repo", r.FullName, "err", err)
+			slog.Error("Failed to fetch PR comments", "repo", r.FullName, "err", err)
+			continue
+		}
+		issueComments, err := aiRepo.GetIssueComments(ctx, r.ID, 100)
+		if err != nil {
+			slog.Error("Failed to fetch issue comments", "repo", r.FullName, "err", err)
 			continue
 		}
 
-		if len(comments) < 3 {
+		if len(prComments)+len(issueComments) < 3 {
 			// Generate dynamic repo-specific fallback insight based on language, stars, and tier
 			lang := r.Language
 			if lang == "" {
@@ -139,7 +141,7 @@ func main() {
 			continue
 		}
 
-		insightsResp, err := aiClient.GenerateRepoInsights(ctx, r.FullName, comments)
+		insightsResp, err := aiClient.GenerateRepoInsights(ctx, r.FullName, prComments, issueComments)
 		if err != nil || insightsResp == nil {
 			slog.Warn("GenerateRepoInsights returned nil/error", "repo", r.FullName, "err", err)
 			continue
