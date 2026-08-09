@@ -119,6 +119,7 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
   }
 }
 `
+
 // RepoStalenessQuery checks if any external PR was merged in the last 6 months.
 const RepoStalenessQuery = `
 query RepoStaleness($owner: String!, $name: String!) {
@@ -140,6 +141,7 @@ query RepoStaleness($owner: String!, $name: String!) {
   }
 }
 `
+
 // RepoGfiCountQuery returns the count of open issues labeled 'good first issue' or 'good-first-issue'.
 // Cost is ~2 points: 1 for the query plus 1 returned node (first: 1).
 const RepoGfiCountQuery = `

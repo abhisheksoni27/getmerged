@@ -193,7 +193,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 				"maintainer_responsiveness":    raw.MaintainerResponsiveness,
 				"last_activity_days":           raw.LastActivityDays,
 				"review_rounds":                raw.ReviewRounds,
-				"distinct_maintainer_count":     raw.DistinctMaintainerCount,
+				"distinct_maintainer_count":    raw.DistinctMaintainerCount,
 				"staleness_flag":               raw.StalenessFlag,
 				"good_first_issue_count":       raw.GoodFirstIssueCount,
 			},

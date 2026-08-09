@@ -857,7 +857,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border-2 border-brand-dark bg-zinc-950 text-white shadow-[3px_3px_0px_#222831]">
               <div>
                 <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
-                  HuggingFace Maintainer Persona
+                  Maintainer Persona
                 </span>
                 <h3 className="text-base font-space font-bold mt-0.5">
                   {insights?.maintainer_persona || "Constructive Code Reviewer"}
@@ -954,7 +954,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border-2 border-brand-dark bg-zinc-950 text-white shadow-[3px_3px_0px_#222831]">
                 <div>
                   <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
-                    HuggingFace Maintainer Persona
+                    Maintainer Persona
                   </span>
                   <h3 className="text-base font-space font-bold mt-0.5">
                     Constructive Code Reviewer

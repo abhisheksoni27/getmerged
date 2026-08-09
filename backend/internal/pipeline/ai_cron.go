@@ -36,7 +36,7 @@ func processAIInsightsBatch(db *sqlx.DB, aiClient *ai.AIClient, aiRepo repositor
 		RepoID   string `db:"id"`
 		FullName string `db:"full_name"`
 	}
-	
+
 	err := db.Select(&repos, `
 		SELECT r.id, r.full_name
 		FROM repositories r
@@ -46,7 +46,7 @@ func processAIInsightsBatch(db *sqlx.DB, aiClient *ai.AIClient, aiRepo repositor
 		ORDER BY r.updated_at DESC
 		LIMIT 20
 	`)
-	
+
 	if err != nil {
 		slog.Error("ai insights cron: failed to fetch repos", "err", err)
 		return
@@ -59,7 +59,7 @@ func processAIInsightsBatch(db *sqlx.DB, aiClient *ai.AIClient, aiRepo repositor
 
 	for _, r := range repos {
 		ctx := context.Background()
-		
+
 		// 2. Prefer PR-scoped comments; legacy raw comments may include issue comments.
 		comments, err := aiRepo.GetPRComments(ctx, r.RepoID, 100)
 		if err == nil && len(comments) < 3 {
@@ -69,7 +69,7 @@ func processAIInsightsBatch(db *sqlx.DB, aiClient *ai.AIClient, aiRepo repositor
 			slog.Error("ai insights cron: failed to fetch raw comments", "repo", r.FullName, "err", err)
 			continue
 		}
-		
+
 		if len(comments) < 3 {
 			slog.Debug("ai insights cron: low comment count, generating metadata-based insight", "repo", r.FullName)
 			dynamicVibe := fmt.Sprintf("Active maintainer team in %s welcoming community pull requests and bug fixes.", r.FullName)
@@ -91,16 +91,16 @@ func processAIInsightsBatch(db *sqlx.DB, aiClient *ai.AIClient, aiRepo repositor
 			`, r.RepoID, dynamicVibe, guidelines, fmt.Sprintf("General repository metadata insight for %s.", r.FullName), dos, donts)
 			continue
 		}
-		
+
 		slog.Info("ai insights cron: generating insights", "repo", r.FullName, "comments", len(comments))
-		
+
 		// 3. Call AI Client
 		insightsResp, aiErr := aiClient.GenerateRepoInsights(ctx, r.FullName, comments)
 		if aiErr != nil || insightsResp == nil {
 			slog.Error("ai insights cron: GenerateRepoInsights failed", "repo", r.FullName, "err", aiErr)
 			continue
 		}
-		
+
 		guidelinesBytes, _ := json.Marshal(insightsResp.PRGuidelines)
 		dosBytes, _ := json.Marshal(insightsResp.TopDos)
 		dontsBytes, _ := json.Marshal(insightsResp.TopDonts)
@@ -119,13 +119,13 @@ func processAIInsightsBatch(db *sqlx.DB, aiClient *ai.AIClient, aiRepo repositor
 			DosJSON:           string(dosBytes),
 			DontsJSON:         string(dontsBytes),
 		})
-		
+
 		if err != nil {
 			slog.Error("ai insights cron: failed to save insights", "repo", r.FullName, "err", err)
 		} else {
 			slog.Info("ai insights cron: saved insights successfully", "repo", r.FullName)
 		}
-		
+
 		// 5. Sleep lightly to avoid overwhelming the sidecar/API
 		time.Sleep(5 * time.Second)
 	}

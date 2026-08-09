@@ -38,24 +38,24 @@ type User struct {
 }
 
 type CommentREST struct {
-	CreatedAt string `json:"created_at"`
-	Body      string `json:"body"`
-	User      User   `json:"user"`
-	PullRequestReviewID int `json:"pull_request_review_id"`
-	PullRequestURL string `json:"pull_request_url"`
+	CreatedAt           string `json:"created_at"`
+	Body                string `json:"body"`
+	User                User   `json:"user"`
+	PullRequestReviewID int    `json:"pull_request_review_id"`
+	PullRequestURL      string `json:"pull_request_url"`
 }
 
 func main() {
 	var (
-		repoFlag   = flag.String("repo", "", "Single repo to backfill (e.g. PostHog/posthog) for verification")
-		fromFlag   = flag.String("from", "2026-05-23", "Start date YYYY-MM-DD")
-		toFlag     = flag.String("to", "2026-08-07", "End date YYYY-MM-DD")
-		tiersFlag  = flag.String("tiers", "S,A", "Comma-separated tiers to backfill (default S,A)")
+		repoFlag          = flag.String("repo", "", "Single repo to backfill (e.g. PostHog/posthog) for verification")
+		fromFlag          = flag.String("from", "2026-05-23", "Start date YYYY-MM-DD")
+		toFlag            = flag.String("to", "2026-08-07", "End date YYYY-MM-DD")
+		tiersFlag         = flag.String("tiers", "S,A", "Comma-separated tiers to backfill (default S,A)")
 		commentsTiersFlag = flag.String("comments-tiers", "S,A", "Comma-separated tiers to backfill comments for (default S,A)")
-		rphFlag    = flag.Int("rph", 4800, "Requests per hour budget")
-		ckptFlag   = flag.String("checkpoint", "backfill_checkpoint.json", "Path to checkpoint file")
-		tokenFlag  = flag.String("token", "", "GitHub PAT token (defaults to GITHUB_TOKEN env)")
-		dryRunFlag = flag.Bool("dry-run", false, "Dry run without writing to DB")
+		rphFlag           = flag.Int("rph", 4800, "Requests per hour budget")
+		ckptFlag          = flag.String("checkpoint", "backfill_checkpoint.json", "Path to checkpoint file")
+		tokenFlag         = flag.String("token", "", "GitHub PAT token (defaults to GITHUB_TOKEN env)")
+		dryRunFlag        = flag.Bool("dry-run", false, "Dry run without writing to DB")
 	)
 	flag.Parse()
 
@@ -131,9 +131,9 @@ func main() {
 		repos = append(repos, r)
 	} else {
 		tierList := strings.Split(*tiersFlag, ",")
-	for i := range tierList {
-		tierList[i] = strings.TrimSpace(tierList[i])
-	}
+		for i := range tierList {
+			tierList[i] = strings.TrimSpace(tierList[i])
+		}
 		query, args, err := sqlx.In(`
 			SELECT r.id, r.full_name, r.owner, r.name, COALESCE(s.c_rank_tier, 'A') as c_rank_tier
 			FROM repositories r

@@ -184,8 +184,8 @@ func (c *AIClient) GenerateLocalZeroCostInsights(repoFullName string, prComments
 
 type insightRule struct {
 	keywords []string
-	do      string
-	dont    string
+	do       string
+	dont     string
 }
 
 var insightRules = []insightRule{
