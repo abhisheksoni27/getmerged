@@ -161,14 +161,18 @@ func (c *Client) SearchRepos(language string, minStars, maxRepos int) ([]Repo, e
 						EndCursor   string `json:"endCursor"`
 					} `json:"pageInfo"`
 					Nodes []struct {
-						ID              string `json:"id"`
-						NameWithOwner   string `json:"nameWithOwner"`
-						Owner           struct{ Login string `json:"login"` } `json:"owner"`
+						ID            string `json:"id"`
+						NameWithOwner string `json:"nameWithOwner"`
+						Owner         struct {
+							Login string `json:"login"`
+						} `json:"owner"`
 						Name            string `json:"name"`
-						PrimaryLanguage *struct{ Name string `json:"name"` } `json:"primaryLanguage"`
-						StargazerCount  int    `json:"stargazerCount"`
-						Description     string `json:"description"`
-						URL             string `json:"url"`
+						PrimaryLanguage *struct {
+							Name string `json:"name"`
+						} `json:"primaryLanguage"`
+						StargazerCount int    `json:"stargazerCount"`
+						Description    string `json:"description"`
+						URL            string `json:"url"`
 					} `json:"nodes"`
 				} `json:"search"`
 				RateLimit rateLimitInfo `json:"rateLimit"`
@@ -223,14 +227,18 @@ func (c *Client) FetchTrendingRepos(limit int) ([]Repo, error) {
 		Data struct {
 			Search struct {
 				Nodes []struct {
-					ID              string `json:"id"`
-					NameWithOwner   string `json:"nameWithOwner"`
-					Owner           struct{ Login string `json:"login"` } `json:"owner"`
+					ID            string `json:"id"`
+					NameWithOwner string `json:"nameWithOwner"`
+					Owner         struct {
+						Login string `json:"login"`
+					} `json:"owner"`
 					Name            string `json:"name"`
-					PrimaryLanguage *struct{ Name string `json:"name"` } `json:"primaryLanguage"`
-					StargazerCount  int    `json:"stargazerCount"`
-					Description     string `json:"description"`
-					URL             string `json:"url"`
+					PrimaryLanguage *struct {
+						Name string `json:"name"`
+					} `json:"primaryLanguage"`
+					StargazerCount int    `json:"stargazerCount"`
+					Description    string `json:"description"`
+					URL            string `json:"url"`
 				} `json:"nodes"`
 			} `json:"search"`
 			RateLimit rateLimitInfo `json:"rateLimit"`
@@ -278,14 +286,18 @@ func (c *Client) FetchCustomQueryRepos(queryStr string, limit int) ([]Repo, erro
 		Data struct {
 			Search struct {
 				Nodes []struct {
-					ID              string `json:"id"`
-					NameWithOwner   string `json:"nameWithOwner"`
-					Owner           struct{ Login string `json:"login"` } `json:"owner"`
+					ID            string `json:"id"`
+					NameWithOwner string `json:"nameWithOwner"`
+					Owner         struct {
+						Login string `json:"login"`
+					} `json:"owner"`
 					Name            string `json:"name"`
-					PrimaryLanguage *struct{ Name string `json:"name"` } `json:"primaryLanguage"`
-					StargazerCount  int    `json:"stargazerCount"`
-					Description     string `json:"description"`
-					URL             string `json:"url"`
+					PrimaryLanguage *struct {
+						Name string `json:"name"`
+					} `json:"primaryLanguage"`
+					StargazerCount int    `json:"stargazerCount"`
+					Description    string `json:"description"`
+					URL            string `json:"url"`
 				} `json:"nodes"`
 			} `json:"search"`
 			RateLimit rateLimitInfo `json:"rateLimit"`
@@ -353,14 +365,18 @@ func (c *Client) FetchCustomQueryReposPage(queryStr string, first int, after str
 					EndCursor   string `json:"endCursor"`
 				} `json:"pageInfo"`
 				Nodes []struct {
-					ID              string `json:"id"`
-					NameWithOwner   string `json:"nameWithOwner"`
-					Owner           struct{ Login string `json:"login"` } `json:"owner"`
+					ID            string `json:"id"`
+					NameWithOwner string `json:"nameWithOwner"`
+					Owner         struct {
+						Login string `json:"login"`
+					} `json:"owner"`
 					Name            string `json:"name"`
-					PrimaryLanguage *struct{ Name string `json:"name"` } `json:"primaryLanguage"`
-					StargazerCount  int    `json:"stargazerCount"`
-					Description     string `json:"description"`
-					URL             string `json:"url"`
+					PrimaryLanguage *struct {
+						Name string `json:"name"`
+					} `json:"primaryLanguage"`
+					StargazerCount int    `json:"stargazerCount"`
+					Description    string `json:"description"`
+					URL            string `json:"url"`
 				} `json:"nodes"`
 			} `json:"search"`
 			RateLimit rateLimitInfo `json:"rateLimit"`
@@ -420,10 +436,12 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 		var resp struct {
 			Data struct {
 				Repository struct {
-					StargazerCount  int                                   `json:"stargazerCount"`
-					Description     string                                `json:"description"`
-					PrimaryLanguage *struct{ Name string `json:"name"` } `json:"primaryLanguage"`
-					PullRequests    struct {
+					StargazerCount  int    `json:"stargazerCount"`
+					Description     string `json:"description"`
+					PrimaryLanguage *struct {
+						Name string `json:"name"`
+					} `json:"primaryLanguage"`
+					PullRequests struct {
 						PageInfo struct {
 							HasNextPage bool   `json:"hasNextPage"`
 							EndCursor   string `json:"endCursor"`
@@ -434,28 +452,36 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 							CreatedAt         string `json:"createdAt"`
 							MergedAt          string `json:"mergedAt"`
 							AuthorAssociation string `json:"authorAssociation"`
-							Author            *struct{ Login string `json:"login"` } `json:"author"`
-							Comments          struct {
+							Author            *struct {
+								Login string `json:"login"`
+							} `json:"author"`
+							Comments struct {
 								TotalCount int `json:"totalCount"`
 								Nodes      []struct {
 									CreatedAt         string `json:"createdAt"`
 									AuthorAssociation string `json:"authorAssociation"`
-									Author            *struct{ Login string `json:"login"` } `json:"author"`
-									Body              string `json:"body"`
+									Author            *struct {
+										Login string `json:"login"`
+									} `json:"author"`
+									Body string `json:"body"`
 								} `json:"nodes"`
 							} `json:"comments"`
 							Reviews struct {
 								Nodes []struct {
 									CreatedAt         string `json:"createdAt"`
 									AuthorAssociation string `json:"authorAssociation"`
-									Author            *struct{ Login string `json:"login"` } `json:"author"`
-									Body              string `json:"body"`
-									Comments          struct {
+									Author            *struct {
+										Login string `json:"login"`
+									} `json:"author"`
+									Body     string `json:"body"`
+									Comments struct {
 										Nodes []struct {
 											CreatedAt         string `json:"createdAt"`
 											AuthorAssociation string `json:"authorAssociation"`
-											Author            *struct{ Login string `json:"login"` } `json:"author"`
-											Body              string `json:"body"`
+											Author            *struct {
+												Login string `json:"login"`
+											} `json:"author"`
+											Body string `json:"body"`
 										} `json:"nodes"`
 									} `json:"comments"`
 								} `json:"nodes"`
@@ -766,7 +792,6 @@ func (c *Client) do(query string, vars map[string]any, out any) (fromCache bool,
 
 	return false, json.Unmarshal(raw, out)
 }
-
 
 func (c *Client) handleRateLimit(rl rateLimitInfo) {
 	c.mu.Lock()

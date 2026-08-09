@@ -68,4 +68,3 @@ func assertContains(t *testing.T, values []string, want string) {
 	}
 	t.Fatalf("expected %q in %+v", want, values)
 }
-

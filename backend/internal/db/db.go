@@ -3,8 +3,8 @@ package db
 import (
 	"fmt"
 
-	"github.com/jmoiron/sqlx"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 )
 
 // Connect opens a MySQL database connection and auto-migrates tables.
