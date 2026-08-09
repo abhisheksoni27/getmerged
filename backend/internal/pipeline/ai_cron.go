@@ -60,17 +60,19 @@ func processAIInsightsBatch(db *sqlx.DB, aiClient *ai.AIClient, aiRepo repositor
 	for _, r := range repos {
 		ctx := context.Background()
 
-		// 2. Prefer PR-scoped comments; legacy raw comments may include issue comments.
-		comments, err := aiRepo.GetPRComments(ctx, r.RepoID, 100)
-		if err == nil && len(comments) < 3 {
-			comments, err = aiRepo.GetRawComments(ctx, r.RepoID, 100)
-		}
+		// 2. Keep PR guidance and issue discussion as separate evidence sources.
+		prComments, err := aiRepo.GetPRComments(ctx, r.RepoID, 100)
 		if err != nil {
-			slog.Error("ai insights cron: failed to fetch raw comments", "repo", r.FullName, "err", err)
+			slog.Error("ai insights cron: failed to fetch PR comments", "repo", r.FullName, "err", err)
+			continue
+		}
+		issueComments, err := aiRepo.GetIssueComments(ctx, r.RepoID, 100)
+		if err != nil {
+			slog.Error("ai insights cron: failed to fetch issue comments", "repo", r.FullName, "err", err)
 			continue
 		}
 
-		if len(comments) < 3 {
+		if len(prComments)+len(issueComments) < 3 {
 			slog.Debug("ai insights cron: low comment count, generating metadata-based insight", "repo", r.FullName)
 			dynamicVibe := fmt.Sprintf("Active maintainer team in %s welcoming community pull requests and bug fixes.", r.FullName)
 			guidelines := `["Include unit tests for new feature logic", "Keep commit messages concise", "Reference related issue number in PR description"]`
@@ -92,10 +94,10 @@ func processAIInsightsBatch(db *sqlx.DB, aiClient *ai.AIClient, aiRepo repositor
 			continue
 		}
 
-		slog.Info("ai insights cron: generating insights", "repo", r.FullName, "comments", len(comments))
+		slog.Info("ai insights cron: generating insights", "repo", r.FullName, "pr_comments", len(prComments), "issue_comments", len(issueComments))
 
 		// 3. Call AI Client
-		insightsResp, aiErr := aiClient.GenerateRepoInsights(ctx, r.FullName, comments)
+		insightsResp, aiErr := aiClient.GenerateRepoInsights(ctx, r.FullName, prComments, issueComments)
 		if aiErr != nil || insightsResp == nil {
 			slog.Error("ai insights cron: GenerateRepoInsights failed", "repo", r.FullName, "err", aiErr)
 			continue

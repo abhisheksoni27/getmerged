@@ -1066,7 +1066,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 Score this repo
               </h3>
               <p className="text-xs text-zinc-600 mt-1">
-                Three taps. Comment is optional after ratings.
+                Three taps.
               </p>
             </div>
             <span className="inline-flex w-fit rounded-lg border-2 border-brand-dark bg-brand-cream px-3 py-1 text-[10px] font-mono font-extrabold text-brand-dark shadow-[2px_2px_0px_#222831]">
@@ -1186,7 +1186,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                   }
                 }}
                 disabled={!allFeedbackRatingsSelected}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl border-2 border-brand-dark bg-zinc-950 px-6 py-3 font-mono text-xs font-extrabold text-white shadow-[3px_3px_0px_#222831] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#222831] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#222831] transition-all cursor-pointer"
+                className="flex ml-auto items-center justify-center gap-2 rounded-xl border-2 border-brand-dark bg-zinc-950 px-6 py-3 font-mono text-xs font-extrabold text-white shadow-[3px_3px_0px_#222831] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#222831] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#222831] transition-all cursor-pointer"
               >
                 Submit Ratings
               </button>

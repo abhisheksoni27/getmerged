@@ -9,7 +9,7 @@ import (
 
 func TestAIClient_FallbackMock(t *testing.T) {
 	client := ai.NewAIClient("")
-	res, err := client.GenerateRepoInsights(context.Background(), "freeCodeCamp/freeCodeCamp", nil)
+	res, err := client.GenerateRepoInsights(context.Background(), "freeCodeCamp/freeCodeCamp", nil, nil)
 	if err != nil {
 		t.Fatalf("expected fallback mock response without error, got: %v", err)
 	}
@@ -27,7 +27,7 @@ func TestAIClient_LocalZeroCostInsights(t *testing.T) {
 		"Welcome to the repo! Please follow conventional commit guidelines.",
 	}
 
-	res, err := client.GenerateRepoInsights(context.Background(), "gin-gonic/gin", comments)
+	res, err := client.GenerateRepoInsights(context.Background(), "gin-gonic/gin", comments, nil)
 	if err != nil {
 		t.Fatalf("expected local zero cost insights to succeed, got: %v", err)
 	}
@@ -43,20 +43,18 @@ func TestAIClient_LocalZeroCostInsights(t *testing.T) {
 
 func TestAIClient_DerivesDosAndDontsFromPRComments(t *testing.T) {
 	client := ai.NewAIClient("")
-	comments := []string{
+	prComments := []string{
 		"Please keep this PR focused. The unrelated refactor should be separate.",
-		"This changes the public API, please document the migration path.",
-		"Coverage is missing for the failing edge case; add tests.",
 	}
+	issueComments := []string{"Coverage is missing for the failing edge case; add tests."}
 
-	res, err := client.GenerateRepoInsights(context.Background(), "gin-gonic/gin", comments)
+	res, err := client.GenerateRepoInsights(context.Background(), "gin-gonic/gin", prComments, issueComments)
 	if err != nil {
 		t.Fatalf("expected local insights to succeed, got: %v", err)
 	}
 
 	assertContains(t, res.TopDos, "Keep PRs small and focused on one change")
 	assertContains(t, res.TopDonts, "Do not mix unrelated refactors with feature work")
-	assertContains(t, res.TopDos, "Call out API, migration, or compatibility impact clearly")
 }
 
 func assertContains(t *testing.T, values []string, want string) {

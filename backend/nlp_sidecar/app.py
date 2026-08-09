@@ -24,7 +24,9 @@ class NLPHandler(BaseHTTPRequestHandler):
             try:
                 data = json.loads(body) if body else {}
                 repo = data.get('repo', 'open-source-repo')
-                comments = data.get('comments', [])
+                pr_comments = data.get('pr_comments', [])
+                issue_comments = data.get('issue_comments', [])
+                comments = pr_comments + issue_comments
                 
                 pipe = get_sentiment_pipeline()
                 
@@ -72,7 +74,7 @@ class NLPHandler(BaseHTTPRequestHandler):
                     vibe = f"Responsive & active maintainer team in {repo}. Reviews pull requests with focus on project architectural goals."
 
                 
-                text_blob = " ".join(comments).lower()
+                text_blob = " ".join(pr_comments).lower()
                 rules = [
                     (("test", "tests", "spec", "coverage", "failing"), "Add or update tests for changed behavior before requesting review", "Do not leave requested test coverage unresolved"),
                     (("lint", "format", "style", "prettier", "gofmt", "eslint"), "Run the repository formatter and linter locally", "Do not submit formatting-only noise with feature changes"),
@@ -119,7 +121,7 @@ class NLPHandler(BaseHTTPRequestHandler):
                     "maintainer_vibe": vibe,
                     "pr_guidelines": guidelines,
                     "issue_quality_score": score,
-                    "raw_summary": f"Analyzed {total_analyzed if total_analyzed > 0 else len(comments)} PR review signals for {repo}.",
+                    "raw_summary": f"Analyzed {len(pr_comments)} PR review and {len(issue_comments)} issue discussion signals for {repo}.",
                     "warmth_score": warmth_score,
                     "patience_score": patience_score,
                     "nitpick_ratio": nitpick_ratio,

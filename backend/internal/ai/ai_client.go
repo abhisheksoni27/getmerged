@@ -41,17 +41,17 @@ func NewAIClient(apiKey string) *AIClient {
 
 // GenerateRepoInsights prompts AI model to extract maintainer vibe check & PR guidelines,
 // trying Python NLP sidecar first, then Opencode API, and falling back to zero-cost local classifier.
-func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string, prComments []string) (*AIInsightsResponse, error) {
+func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string, prComments, issueComments []string) (*AIInsightsResponse, error) {
 	// 1. Try Python NLP Micro-Sidecar (http://127.0.0.1:8095/analyze)
-	if sidecarResp, err := c.callPythonNLPSidecar(ctx, repoFullName, prComments); err == nil && sidecarResp != nil {
+	if sidecarResp, err := c.callPythonNLPSidecar(ctx, repoFullName, prComments, issueComments); err == nil && sidecarResp != nil {
 		return sidecarResp, nil
 	}
 
 	if c.apiKey == "" {
-		return c.GenerateLocalZeroCostInsights(repoFullName, prComments), nil
+		return c.GenerateLocalZeroCostInsights(repoFullName, prComments, issueComments), nil
 	}
 
-	prompt := fmt.Sprintf("Analyze the following PR comments and reviews for open-source repo '%s'. Provide a brief Maintainer Vibe summary, a bullet list of PR submission guidelines, and an issue quality score (1-10):\n\n%v", repoFullName, prComments)
+	prompt := fmt.Sprintf("Analyze PR reviews and issue discussion for '%s'. Derive pr_guidelines, top_dos, and top_donts only from PR reviews. Use both sources only for maintainer_vibe and issue_quality_score.\n\nPR reviews: %v\n\nIssue comments: %v", repoFullName, prComments, issueComments)
 
 	reqBody, err := json.Marshal(map[string]any{
 		"model": "opencode-default",
@@ -75,7 +75,7 @@ func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string
 
 	res, err := c.httpClient.Do(req)
 	if err != nil || res.StatusCode != http.StatusOK {
-		return c.GenerateLocalZeroCostInsights(repoFullName, prComments), nil
+		return c.GenerateLocalZeroCostInsights(repoFullName, prComments, issueComments), nil
 	}
 	defer res.Body.Close()
 
@@ -88,20 +88,20 @@ func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string
 	}
 
 	if err := json.NewDecoder(res.Body).Decode(&apiResp); err != nil || len(apiResp.Choices) == 0 {
-		return c.GenerateLocalZeroCostInsights(repoFullName, prComments), nil
+		return c.GenerateLocalZeroCostInsights(repoFullName, prComments, issueComments), nil
 	}
 
 	var insights AIInsightsResponse
 	if err := json.Unmarshal([]byte(apiResp.Choices[0].Message.Content), &insights); err != nil {
-		return c.GenerateLocalZeroCostInsights(repoFullName, prComments), nil
+		return c.GenerateLocalZeroCostInsights(repoFullName, prComments, issueComments), nil
 	}
 
 	return &insights, nil
 }
 
 // GenerateLocalZeroCostInsights performs pure local sentiment & rule extraction with zero API cost.
-func (c *AIClient) GenerateLocalZeroCostInsights(repoFullName string, prComments []string) *AIInsightsResponse {
-	textBlob := strings.ToLower(strings.Join(prComments, " "))
+func (c *AIClient) GenerateLocalZeroCostInsights(repoFullName string, prComments, issueComments []string) *AIInsightsResponse {
+	textBlob := strings.ToLower(strings.Join(append(append([]string{}, prComments...), issueComments...), " "))
 
 	// Sentiment & Vibe classification
 	positiveHits := 0
@@ -128,7 +128,8 @@ func (c *AIClient) GenerateLocalZeroCostInsights(repoFullName string, prComments
 		vibe = fmt.Sprintf("Strict review standards in %s. Ensure PR scope matches issue requirements closely before requesting review.", repoFullName)
 	}
 
-	guidelines := deriveGuidelines(textBlob)
+	prTextBlob := strings.ToLower(strings.Join(prComments, " "))
+	guidelines := deriveGuidelines(prTextBlob)
 
 	score := 8.0 + float64(positiveHits)*0.5 - float64(negativeHits)*0.5
 	if score > 9.8 {
@@ -166,13 +167,13 @@ func (c *AIClient) GenerateLocalZeroCostInsights(repoFullName string, prComments
 		persona = "Welcoming Community Builder"
 	}
 
-	topDos, topDonts := deriveDosAndDonts(textBlob)
+	topDos, topDonts := deriveDosAndDonts(prTextBlob)
 
 	return &AIInsightsResponse{
 		MaintainerVibe:    vibe,
 		PRGuidelines:      guidelines,
 		IssueQualityScore: score,
-		RawSummary:        fmt.Sprintf("Analyzed %d PR review signals for %s.", len(prComments), repoFullName),
+		RawSummary:        fmt.Sprintf("Analyzed %d PR review and %d issue discussion signals for %s.", len(prComments), len(issueComments), repoFullName),
 		WarmthScore:       warmth,
 		PatienceScore:     patience,
 		NitpickRatio:      nitpick,
@@ -243,13 +244,14 @@ func deriveDosAndDonts(text string) ([]string, []string) {
 	return dos, donts
 }
 
-func (c *AIClient) callPythonNLPSidecar(ctx context.Context, repoFullName string, prComments []string) (*AIInsightsResponse, error) {
+func (c *AIClient) callPythonNLPSidecar(ctx context.Context, repoFullName string, prComments, issueComments []string) (*AIInsightsResponse, error) {
 	sidecarCtx, cancel := context.WithTimeout(ctx, 15*time.Second)
 	defer cancel()
 
 	payload := map[string]any{
-		"repo":     repoFullName,
-		"comments": prComments,
+		"repo":           repoFullName,
+		"pr_comments":    prComments,
+		"issue_comments": issueComments,
 	}
 	bodyBytes, err := json.Marshal(payload)
 	if err != nil {

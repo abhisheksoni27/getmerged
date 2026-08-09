@@ -51,14 +51,12 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 			return
 		}
 
-		// 3. Prefer PR-scoped comments; legacy raw comments may include issue comments.
-		rawComments, _ := aiRepo.GetPRComments(c.Request.Context(), repo.ID, 100)
-		if len(rawComments) < 3 {
-			rawComments, _ = aiRepo.GetRawComments(c.Request.Context(), repo.ID, 100)
-		}
+		// 3. Keep PR guidance and issue discussion as separate evidence sources.
+		prComments, _ := aiRepo.GetPRComments(c.Request.Context(), repo.ID, 100)
+		issueComments, _ := aiRepo.GetIssueComments(c.Request.Context(), repo.ID, 100)
 
 		// 4. Generate insights via AI client / Python sidecar / local classifier
-		insights, err := aiClient.GenerateRepoInsights(c.Request.Context(), repo.FullName, rawComments)
+		insights, err := aiClient.GenerateRepoInsights(c.Request.Context(), repo.FullName, prComments, issueComments)
 		if err != nil {
 			slog.Error("get repo insights: ai generation failed", "repo", repo.FullName, "err", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate AI insights"})
