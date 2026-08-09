@@ -211,6 +211,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 	}
 }
 
+
 // GetRepo handles GET /api/v1/repos/:id
 func GetRepo(repoStore repository.RepoRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -322,7 +323,7 @@ func GetBadgeSVG(repoStore repository.RepoRepository) gin.HandlerFunc {
 		showPoints := c.Query("points") == "1" || c.Query("points") == "true"
 		rightText := tierName
 		if showPoints {
-			rightText = fmt.Sprintf("%s · %s", tierName, score)
+			rightText = fmt.Sprintf("%s (%s)", tierName, score)
 		}
 
 		// Modern high-fidelity badge design (Issue #57)
@@ -416,4 +417,3 @@ func GetRelatedReposHandler(repoStore repository.RepoRepository) gin.HandlerFunc
 		})
 	}
 }
-

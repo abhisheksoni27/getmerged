@@ -70,8 +70,52 @@ func setupRepoTestDB(t *testing.T) *sqlx.DB {
 	return database
 }
 
+func setupBadgeTestDB(t *testing.T) *sqlx.DB {
+	t.Helper()
+	database, err := sqlx.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("failed to open memory db: %v", err)
+	}
+
+	schema := `
+	CREATE TABLE repositories (
+		id TEXT PRIMARY KEY,
+		full_name TEXT NOT NULL,
+		owner TEXT NOT NULL,
+		name TEXT NOT NULL,
+		language TEXT,
+		stars INTEGER DEFAULT 0,
+		description TEXT,
+		github_url TEXT,
+		updated_at DATETIME NOT NULL
+	);
+
+	CREATE TABLE latest_snapshots (
+		repository_id TEXT NOT NULL,
+		snapshot_date TEXT NOT NULL,
+		c_rank_tier TEXT,
+		c_rank_score REAL,
+		external_pr_merge_rate REAL DEFAULT 0,
+		time_to_first_response_hours REAL DEFAULT 0,
+		time_to_merge_hours REAL DEFAULT 0,
+		first_timer_success_rate REAL DEFAULT 0,
+		repeat_contributor_rate REAL DEFAULT 0,
+		maintainer_responsiveness REAL DEFAULT 0,
+		last_activity_days REAL DEFAULT 0,
+		review_rounds REAL DEFAULT 0,
+		distinct_maintainer_count REAL DEFAULT 0,
+		staleness_flag INTEGER DEFAULT 0,
+		good_first_issue_count INTEGER DEFAULT 0,
+		updated_at DATETIME NOT NULL
+	);
+	`
+	database.MustExec(schema)
+
+	return database
+}
+
 func TestGetRepo_UUID(t *testing.T) {
-	database := setupRepoTestDB(t)
+	database := setupTestDB(t)
 	defer database.Close()
 
 	repoStore := repository.NewRepoRepository(database)
@@ -104,7 +148,7 @@ func TestGetRepo_UUID(t *testing.T) {
 
 func TestListRepos_BackendGating(t *testing.T) {
 	gin.SetMode(gin.TestMode)
-	database := setupTestDB(t)
+	database := setupRepoTestDB(t)
 	defer database.Close()
 
 	repoStore := repository.NewRepoRepository(database)
@@ -144,7 +188,7 @@ func TestListRepos_BackendGating(t *testing.T) {
 
 func TestGetBadgeSVG(t *testing.T) {
 	gin.SetMode(gin.TestMode)
-	database := setupTestDB(t)
+	database := setupBadgeTestDB(t)
 	defer database.Close()
 
 	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, description, github_url, updated_at) VALUES ('badge-repo', 'gin-gonic/gin', 'gin-gonic', 'gin', 'Go', 0, '', '', ?)`, time.Now())
@@ -175,7 +219,7 @@ func TestGetBadgeSVG(t *testing.T) {
 
 func TestGetBadgeSVGQueryParams(t *testing.T) {
 	gin.SetMode(gin.TestMode)
-	database := setupTestDB(t)
+	database := setupBadgeTestDB(t)
 	defer database.Close()
 
 	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, description, github_url, updated_at) VALUES ('badge-repo', 'gin-gonic/gin', 'gin-gonic', 'gin', 'Go', 0, '', '', ?)`, time.Now())
@@ -195,7 +239,7 @@ func TestGetBadgeSVGQueryParams(t *testing.T) {
 		{
 			name:       "points shown when requested",
 			path:       "/badge/gin-gonic/gin.svg?points=1",
-			wantText:   "Super Welcoming · 99.0",
+			wantText:   "Super Welcoming (99.0)",
 			wantAbsent: "A Tier",
 		},
 		{
@@ -273,5 +317,3 @@ func TestGetRelatedReposHandler(t *testing.T) {
 		t.Fatalf("expected related repos body to contain 'gofiber/fiber', got: %s", body)
 	}
 }
-
-

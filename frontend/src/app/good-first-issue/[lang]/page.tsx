@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { RepoCard } from "@/components/RepoCard";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
+import { getLanguageSlug } from "@/lib/languageSlug";
 import { Sparkles, Code2, ArrowLeft, ShieldCheck, Sprout } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -25,6 +26,7 @@ const formatLangName = (slug: string) => {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang } = await params;
   const languageName = formatLangName(lang);
+  const canonicalLang = getLanguageSlug(languageName);
 
   const title = `Good First Issues in ${languageName} (Beginner Friendly) - Opendoor`;
   const description = `Find open-source ${languageName} repositories with active Good First Issues, beginner-friendly labels, fast review response times, and high first-timer merge rates on Opendoor.`;
@@ -33,13 +35,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: {
-      canonical: `https://opendoor.abhishekco.de/good-first-issue/${lang.toLowerCase()}`,
+      canonical: `https://opendoor.abhishekco.de/good-first-issue/${canonicalLang}`,
     },
     openGraph: {
       title,
       description,
       type: "website",
-      url: `https://opendoor.abhishekco.de/good-first-issue/${lang.toLowerCase()}`,
+      url: `https://opendoor.abhishekco.de/good-first-issue/${canonicalLang}`,
       siteName: "Opendoor",
     },
     twitter: {
@@ -75,6 +77,7 @@ async function getGFIRepos(languageName: string): Promise<Repo[]> {
 export default async function GoodFirstIssuePage({ params }: PageProps) {
   const { lang } = await params;
   const languageName = formatLangName(lang);
+  const canonicalLang = getLanguageSlug(languageName);
   const repos = await getGFIRepos(languageName);
 
   const jsonLd = {
@@ -82,7 +85,7 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
     "@type": "CollectionPage",
     name: `Good First Issues in ${languageName}`,
     description: `Browse beginner-friendly open-source ${languageName} repositories with open good first issues on Opendoor.`,
-    url: `https://opendoor.abhishekco.de/good-first-issue/${lang.toLowerCase()}`,
+    url: `https://opendoor.abhishekco.de/good-first-issue/${canonicalLang}`,
   };
 
   return (

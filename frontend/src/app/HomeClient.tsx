@@ -20,6 +20,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
+import { getLanguageSlug } from "@/lib/languageSlug";
 import posthog from "posthog-js";
 import Link from "next/link";
 
@@ -934,7 +935,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                             <div>
                               <div className="flex items-center gap-2">
                                 <Link
-                                  href={`/rankings/${item.language.toLowerCase()}`}
+                                  href={`/rankings/${getLanguageSlug(item.language)}`}
                                   className="font-space text-2xl font-black text-zinc-900 group-hover:text-blue-600 transition-colors tracking-tight hover:underline"
                                 >
                                   {item.language}
