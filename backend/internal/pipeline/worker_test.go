@@ -185,7 +185,7 @@ func TestScoreAndSaveRepo_GeneratesAIInsights(t *testing.T) {
 	aiClient := ai.NewAIClient("")
 	comments := []string{"LGTM! Thanks for your contribution.", "Please add unit test."}
 
-	insightsResp, aiErr := aiClient.GenerateRepoInsights(context.Background(), "gin-gonic/gin", comments)
+	insightsResp, aiErr := aiClient.GenerateRepoInsights(context.Background(), "gin-gonic/gin", comments, nil)
 	if aiErr != nil || insightsResp == nil {
 		t.Fatalf("GenerateRepoInsights failed: %v", aiErr)
 	}
