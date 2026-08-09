@@ -44,7 +44,20 @@ class NLPHandler(BaseHTTPRequestHandler):
                             else:
                                 neg_count += 1
 
-                # Dynamic Vibe calculation based on Transformer model outputs
+                # Dynamic Vibe calculation based on Transformer model outputs or keyword fallback
+                if total_analyzed == 0 and comments:
+                    pos_words = ["thanks", "lgtm", "great", "welcome", "awesome", "nice", "merged", "good job", "helpful", "approve", "clean"]
+                    neg_words = ["invalid", "stale", "reject", "close", "unnecessary", "broken", "duplicate", "wontfix", "fail", "fix"]
+                    blob = " ".join(comments).lower()
+                    for w in pos_words:
+                        if w in blob:
+                            pos_count += 1
+                            total_analyzed += 1
+                    for w in neg_words:
+                        if w in blob:
+                            neg_count += 1
+                            total_analyzed += 1
+
                 if total_analyzed > 0:
                     pos_ratio = pos_count / total_analyzed
                     score = round(min(9.8, max(5.0, 6.0 + (pos_ratio * 3.8))), 1)
@@ -56,7 +69,8 @@ class NLPHandler(BaseHTTPRequestHandler):
                         vibe = f"Rigorous architecture standards ({int((1-pos_ratio)*100)}% critical review signals). Ensure PRs strictly follow guidelines before requesting review in {repo}."
                 else:
                     score = 8.0
-                    vibe = f"Active maintainer team in {repo} with consistent code review turnarounds."
+                    vibe = f"Responsive & active maintainer team in {repo}. Reviews pull requests with focus on project architectural goals."
+
                 
                 # Guidelines extraction based on comment contents
                 text_blob = " ".join(comments).lower()

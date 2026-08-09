@@ -72,16 +72,23 @@ deploy: build-linux-arm
 # Deploy from a checkout of this repo already on the server - no ssh/rsync, plain copy.
 deploy-server: build
 	@echo "=== Copy backend binary & nlp_sidecar ==="
+	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/eventstream ./cmd/eventstream
 	cp backend/bin/server /opt/opendoor/backend/server.new
 	cp backend/bin/gharchive /opt/opendoor/backend/gharchive.new
+	cp backend/bin/eventstream /opt/opendoor/backend/eventstream.new
 	mv -f /opt/opendoor/backend/server.new /opt/opendoor/backend/server
 	mv -f /opt/opendoor/backend/gharchive.new /opt/opendoor/backend/gharchive
+	mv -f /opt/opendoor/backend/eventstream.new /opt/opendoor/backend/eventstream
 	chmod +x /opt/opendoor/backend/server
 	chmod +x /opt/opendoor/backend/gharchive
+	chmod +x /opt/opendoor/backend/eventstream
 	cp -r backend/nlp_sidecar /opt/opendoor/backend/
 	sudo restorecon -v /opt/opendoor/backend/server
 	sudo systemctl restart opendoor.service
+	sudo systemctl restart opendoor-events.service
 	sudo systemctl status opendoor.service --no-pager
+	sudo systemctl status opendoor-events.service --no-pager
+
 
 score-repo:
 	@curl -X POST 'http://localhost:10000/internal/score-repo' \
