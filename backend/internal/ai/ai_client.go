@@ -120,7 +120,7 @@ func (c *AIClient) GenerateLocalZeroCostInsights(repoFullName string, prComments
 		}
 	}
 
-	vibe := fmt.Sprintf("Active maintainer team in %s. Reviews pull requests regularly with constructive feedback.", repoFullName)
+	vibe := fmt.Sprintf("Collaborative maintainer environment in %s. Reviews community pull requests with focus on project quality.", repoFullName)
 	if positiveHits > negativeHits {
 		vibe = fmt.Sprintf("Highly welcoming maintainers in %s. Prompt code reviews with positive guidance for new contributors.", repoFullName)
 	} else if negativeHits > positiveHits {
