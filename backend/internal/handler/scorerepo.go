@@ -70,7 +70,23 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 		// Convert github.PR → scoring.PR
 		scoringPRs := make([]scoring.PR, len(prs))
 		var rawCommentTexts []string
+		var prComments []repository.PRComment
 		for i, p := range prs {
+			for _, comment := range p.ReviewComments {
+				cleanText := strings.TrimSpace(comment.Body)
+				if cleanText == "" || ghclient.IsBotLogin(comment.AuthorLogin) {
+					continue
+				}
+				prComments = append(prComments, repository.PRComment{
+					PRNumber:          comment.PRNumber,
+					SourceType:        comment.SourceType,
+					AuthorLogin:       comment.AuthorLogin,
+					AuthorAssociation: comment.AuthorAssociation,
+					Body:              cleanText,
+					CreatedAt:         comment.CreatedAt,
+				})
+				rawCommentTexts = append(rawCommentTexts, cleanText)
+			}
 			for idx, commentText := range p.CommentTexts {
 				cleanText := strings.TrimSpace(commentText)
 				if cleanText != "" {
@@ -78,7 +94,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 					if idx < len(p.CommentAuthors) && p.CommentAuthors[idx] != "" {
 						author = p.CommentAuthors[idx]
 					}
-					if !ghclient.IsBotLogin(author) {
+					if !ghclient.IsBotLogin(author) && len(p.ReviewComments) == 0 {
 						rawCommentTexts = append(rawCommentTexts, cleanText)
 					}
 				}
@@ -127,6 +143,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 
 		// Save raw comments & trigger AI insights generation
 		_ = aiRepo.SaveRawComments(c.Request.Context(), repoID, rawCommentTexts)
+		_ = aiRepo.SavePRComments(c.Request.Context(), repoID, prComments)
 		insightsResp, aiErr := aiClient.GenerateRepoInsights(c.Request.Context(), fullName, rawCommentTexts)
 		if aiErr != nil {
 			slog.Error("score-repo: GenerateRepoInsights failed", "repo", fullName, "err", aiErr)

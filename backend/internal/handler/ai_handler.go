@@ -51,8 +51,11 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 			return
 		}
 
-		// 3. Retrieve stored raw comments from repo_raw_comments table
-		rawComments, _ := aiRepo.GetRawComments(c.Request.Context(), repo.ID, 100)
+		// 3. Prefer PR-scoped comments; legacy raw comments may include issue comments.
+		rawComments, _ := aiRepo.GetPRComments(c.Request.Context(), repo.ID, 100)
+		if len(rawComments) < 3 {
+			rawComments, _ = aiRepo.GetRawComments(c.Request.Context(), repo.ID, 100)
+		}
 
 		// 4. Generate insights via AI client / Python sidecar / local classifier
 		insights, err := aiClient.GenerateRepoInsights(c.Request.Context(), repo.FullName, rawComments)

@@ -93,7 +93,10 @@ func main() {
 			slog.Info("AI Insights progress", "processed", i+1, "total", len(repos), "saved", saved, "low_comments", skipped, "elapsed", time.Since(startTime).Round(time.Second).String())
 		}
 
-		comments, err := aiRepo.GetRawComments(ctx, r.ID, 100)
+		comments, err := aiRepo.GetPRComments(ctx, r.ID, 100)
+		if err == nil && len(comments) < 3 {
+			comments, err = aiRepo.GetRawComments(ctx, r.ID, 100)
+		}
 		if err != nil {
 			slog.Error("Failed to fetch raw comments", "repo", r.FullName, "err", err)
 			continue

@@ -22,11 +22,22 @@ type AIInsights struct {
 	UpdatedAt         time.Time `db:"updated_at" json:"updated_at"`
 }
 
+type PRComment struct {
+	PRNumber          int
+	SourceType        string
+	AuthorLogin       string
+	AuthorAssociation string
+	Body              string
+	CreatedAt         time.Time
+}
+
 type AIRepository interface {
 	GetInsights(ctx context.Context, repoID string) (*AIInsights, error)
 	SaveInsights(ctx context.Context, insights *AIInsights) error
 	SaveRawComments(ctx context.Context, repoID string, comments []string) error
 	GetRawComments(ctx context.Context, repoID string, limit int) ([]string, error)
+	SavePRComments(ctx context.Context, repoID string, comments []PRComment) error
+	GetPRComments(ctx context.Context, repoID string, limit int) ([]string, error)
 }
 
 type sqlxAIRepository struct {
@@ -99,6 +110,35 @@ func (r *sqlxAIRepository) GetRawComments(ctx context.Context, repoID string, li
 		SELECT comment_text FROM repo_raw_comments
 		WHERE repository_id = ?
 		ORDER BY id DESC
+		LIMIT ?
+	`, repoID, limit)
+	if err != nil {
+		return nil, err
+	}
+	return comments, nil
+}
+
+func (r *sqlxAIRepository) SavePRComments(ctx context.Context, repoID string, comments []PRComment) error {
+	for _, comment := range comments {
+		if comment.Body == "" || comment.AuthorLogin == "" || comment.PRNumber == 0 || comment.CreatedAt.IsZero() {
+			continue
+		}
+		_, _ = r.db.ExecContext(ctx, `
+			INSERT IGNORE INTO repo_pr_comments (
+				repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at
+			)
+			VALUES (?, ?, ?, ?, ?, ?, ?)
+		`, repoID, comment.PRNumber, comment.SourceType, comment.AuthorLogin, comment.AuthorAssociation, comment.Body, comment.CreatedAt.UTC())
+	}
+	return nil
+}
+
+func (r *sqlxAIRepository) GetPRComments(ctx context.Context, repoID string, limit int) ([]string, error) {
+	var comments []string
+	err := r.db.SelectContext(ctx, &comments, `
+		SELECT comment_text FROM repo_pr_comments
+		WHERE repository_id = ?
+		ORDER BY created_at DESC
 		LIMIT ?
 	`, repoID, limit)
 	if err != nil {

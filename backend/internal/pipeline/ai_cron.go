@@ -60,8 +60,11 @@ func processAIInsightsBatch(db *sqlx.DB, aiClient *ai.AIClient, aiRepo repositor
 	for _, r := range repos {
 		ctx := context.Background()
 		
-		// 2. Fetch up to 100 recent raw comments for this repo
-		comments, err := aiRepo.GetRawComments(ctx, r.RepoID, 100)
+		// 2. Prefer PR-scoped comments; legacy raw comments may include issue comments.
+		comments, err := aiRepo.GetPRComments(ctx, r.RepoID, 100)
+		if err == nil && len(comments) < 3 {
+			comments, err = aiRepo.GetRawComments(ctx, r.RepoID, 100)
+		}
 		if err != nil {
 			slog.Error("ai insights cron: failed to fetch raw comments", "repo", r.FullName, "err", err)
 			continue

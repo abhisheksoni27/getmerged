@@ -76,6 +76,7 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
         endCursor
       }
       nodes {
+        number
         state
         createdAt
         mergedAt

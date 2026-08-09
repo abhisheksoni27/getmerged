@@ -72,23 +72,27 @@ class NLPHandler(BaseHTTPRequestHandler):
                     vibe = f"Responsive & active maintainer team in {repo}. Reviews pull requests with focus on project architectural goals."
 
                 
-                # Guidelines extraction based on comment contents
                 text_blob = " ".join(comments).lower()
-                guidelines = []
-                if "test" in text_blob or "coverage" in text_blob:
-                    guidelines.append("Include unit/integration tests for any code changes")
-                else:
-                    guidelines.append("Ensure existing test suites pass cleanly")
-
-                if "lint" in text_blob or "format" in text_blob or "style" in text_blob:
-                    guidelines.append("Follow repository linter formatting and styling standards")
-                else:
-                    guidelines.append("Keep commit messages concise and well-formatted")
-
-                if "issue" in text_blob or "fix" in text_blob or "link" in text_blob:
-                    guidelines.append("Link the relevant GitHub issue number in the PR description")
-                else:
-                    guidelines.append("Provide a clear description of changes in the PR template")
+                rules = [
+                    (("test", "tests", "spec", "coverage", "failing"), "Add or update tests for changed behavior before requesting review", "Do not leave requested test coverage unresolved"),
+                    (("lint", "format", "style", "prettier", "gofmt", "eslint"), "Run the repository formatter and linter locally", "Do not submit formatting-only noise with feature changes"),
+                    (("doc", "docs", "readme", "documentation"), "Update docs or README when behavior changes", "Do not ship user-facing changes without matching docs"),
+                    (("issue", "ticket", "context", "reproduce", "reproduction"), "Link the issue and include reproduction context in the PR", "Do not open context-free PRs"),
+                    (("scope", "small", "focused", "unrelated", "separate"), "Keep PRs small and focused on one change", "Do not mix unrelated refactors with feature work"),
+                    (("breaking", "compat", "api", "migration"), "Call out API, migration, or compatibility impact clearly", "Do not hide breaking changes in implementation details"),
+                ]
+                scored_rules = []
+                for keywords, do_text, dont_text in rules:
+                    score_hits = sum(text_blob.count(keyword) for keyword in keywords)
+                    if score_hits > 0:
+                        scored_rules.append((score_hits, do_text, dont_text))
+                scored_rules.sort(reverse=True, key=lambda item: item[0])
+                top_dos = [item[1] for item in scored_rules[:3]]
+                top_donts = [item[2] for item in scored_rules[:3]]
+                if not top_dos:
+                    top_dos = ["Follow maintainer feedback from recent PR reviews"]
+                    top_donts = ["Do not ignore unresolved maintainer review comments"]
+                guidelines = top_dos[:3]
                 
                 # Multi-dimensional Human Scale Metrics
                 if total_analyzed > 0:
@@ -110,25 +114,6 @@ class NLPHandler(BaseHTTPRequestHandler):
                     patience_score = 8.2
                     nitpick_ratio = 0.25
                     persona = "Active Open-Source Mentor"
-
-                top_dos = []
-                if "test" in text_blob or "coverage" in text_blob:
-                    top_dos.append("Add unit tests with >80% coverage for modified code paths")
-                else:
-                    top_dos.append("Verify all existing package test suites run cleanly")
-
-                if "lint" in text_blob or "format" in text_blob:
-                    top_dos.append("Run repository linter and code formatters locally before pushing")
-                else:
-                    top_dos.append("Use conventional commit messages and clean branch names")
-
-                top_dos.append("Link relevant GitHub issue ID in PR description pre-flight checklist")
-
-                top_donts = [
-                    "Do not submit unlinked PRs without referencing an existing issue",
-                    "Do not mix refactoring and feature logic into a single commit",
-                    "Do not ping maintainers repeatedly within 24 hours of opening"
-                ]
 
                 response_payload = {
                     "maintainer_vibe": vibe,
@@ -163,4 +148,3 @@ def run(port=8095):
 
 if __name__ == '__main__':
     run()
-
