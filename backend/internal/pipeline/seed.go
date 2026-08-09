@@ -320,26 +320,24 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 	var prs []scoring.PR
 	for rows.Next() {
 		var prNumber int
-		var openedAt, closedAt, firstCommentAt sql.NullString
+		var openedAt, closedAt, firstCommentAt sql.NullTime
 		var wasMerged int
 		var actorLogin string
 		if err := rows.Scan(&prNumber, &openedAt, &closedAt, &wasMerged, &actorLogin, &firstCommentAt); err != nil {
 			return nil, err
 		}
 
-		created, _ := time.Parse("2006-01-02 15:04:05", openedAt.String)
-
 		pr := scoring.PR{
 			AuthorLogin:       actorLogin,
 			AuthorAssociation: "CONTRIBUTOR", // treat all GHArchive actors as external contributors
-			CreatedAt:         created,
+			CreatedAt:         openedAt.Time,
 		}
 
 		if wasMerged == 1 {
 			pr.State = "MERGED"
 			if closedAt.Valid {
-				t, _ := time.Parse("2006-01-02 15:04:05", closedAt.String)
-				pr.MergedAt = &t
+				mergedAt := closedAt.Time
+				pr.MergedAt = &mergedAt
 			}
 		} else if closedAt.Valid {
 			pr.State = "CLOSED"
@@ -348,8 +346,8 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 		}
 
 		if firstCommentAt.Valid {
-			t, _ := time.Parse("2006-01-02 15:04:05", firstCommentAt.String)
-			pr.FirstCommentAt = &t
+			firstCommentAtTime := firstCommentAt.Time
+			pr.FirstCommentAt = &firstCommentAtTime
 		}
 
 		prs = append(prs, pr)
