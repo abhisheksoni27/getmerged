@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { RepoCard } from "@/components/RepoCard";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
+import { getLanguageSlug } from "@/lib/languageSlug";
 import { Sparkles, Code2, ArrowLeft, ShieldCheck, Trophy } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -24,6 +25,7 @@ const formatLangName = (slug: string) => {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang } = await params;
   const languageName = formatLangName(lang);
+  const canonicalLang = getLanguageSlug(languageName);
 
   const title = `Top Welcoming Open-Source ${languageName} Projects (C-Rank™) - Opendoor`;
   const description = `Discover high-ranking open-source ${languageName} repositories with fast maintainer response times and high PR merge rates on Opendoor.`;
@@ -32,13 +34,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: {
-      canonical: `https://opendoor.abhishekco.de/rankings/${lang.toLowerCase()}`,
+      canonical: `https://opendoor.abhishekco.de/rankings/${canonicalLang}`,
     },
     openGraph: {
       title,
       description,
       type: "website",
-      url: `https://opendoor.abhishekco.de/rankings/${lang}`,
+      url: `https://opendoor.abhishekco.de/rankings/${canonicalLang}`,
       siteName: "Opendoor",
     },
     twitter: {

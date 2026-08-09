@@ -19,9 +19,11 @@ import {
   ArrowRight,
   AlertCircle,
   Info,
+  Star,
 } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
+import { getLanguageSlug } from "@/lib/languageSlug";
 import posthog from "posthog-js";
 import { AuthModal } from "@/components/AuthModal";
 import { RepoCard } from "@/components/RepoCard";
@@ -47,6 +49,9 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
   const [isGuidelinesOpen, setIsGuidelinesOpen] = useState(false);
   const [relatedRepos, setRelatedRepos] = useState<Repo[]>([]);
+  const [maintainerRating, setMaintainerRating] = useState(0);
+  const [reviewSpeedRating, setReviewSpeedRating] = useState(0);
+  const [beginnerRating, setBeginnerRating] = useState(0);
 
   // Auth Modal State
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -58,7 +63,8 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   };
 
   const rank = repo?.class_rank || repo?.c_rank_tier || "A";
-  const score = repo?.c_rank_score || repo?.score || 78.5;
+  const score = repo?.c_rank_score ?? repo?.score ?? 0;
+  const allFeedbackRatingsSelected = maintainerRating > 0 && reviewSpeedRating > 0 && beginnerRating > 0;
 
   const badgeQuery =
     badgeShowPoints || badgeColor !== "auto"
@@ -430,7 +436,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               </span>
               {repo?.language && (
                 <Link
-                  href={`/rankings/${encodeURIComponent(repo.language.toLowerCase())}`}
+                  href={`/rankings/${getLanguageSlug(repo.language)}`}
                   className="inline-block border-2 border-[#222831] bg-white text-[#222831] px-2.5 py-0.5 text-xs font-black font-mono rounded-lg shadow-[2px_2px_0px_0px_#222831] hover:bg-zinc-100 transition-colors"
                 >
                   {repo.language}
@@ -712,7 +718,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               <div className="pt-2 border-t border-zinc-100 flex items-center justify-between">
                 <span className="text-[11px] font-sans text-zinc-500">Looking for more {repo.language} beginner tasks?</span>
                 <Link
-                  href={`/good-first-issue/${encodeURIComponent(repo.language.toLowerCase())}`}
+                  href={`/good-first-issue/${getLanguageSlug(repo.language)}`}
                   className="text-xs font-bold text-emerald-700 hover:text-emerald-800 font-sans inline-flex items-center gap-1 hover:underline"
                 >
                   Explore all {repo.language} Good First Issues <ArrowRight className="h-3 w-3" />
@@ -728,7 +734,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             {repo?.language && (
               <div className="text-center pt-2">
                 <Link
-                  href={`/good-first-issue/${encodeURIComponent(repo.language.toLowerCase())}`}
+                  href={`/good-first-issue/${getLanguageSlug(repo.language)}`}
                   className="text-xs font-bold text-emerald-700 hover:text-emerald-800 font-sans inline-flex items-center gap-1 hover:underline"
                 >
                   Browse open {repo.language} Good First Issues across other repos <ArrowRight className="h-3 w-3" />
@@ -818,7 +824,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             </div>
             {repo?.language && (
               <Link
-                href={`/rankings/${encodeURIComponent(repo.language.toLowerCase())}`}
+                href={`/rankings/${getLanguageSlug(repo.language)}`}
                 className="text-xs font-bold text-emerald-700 hover:text-emerald-800 font-sans flex items-center gap-1 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200"
               >
                 View all {repo.language} rankings <ArrowRight className="h-3.5 w-3.5" />
@@ -835,12 +841,12 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       )}
 
       {/* AI Insights & Maintainer Vibe Check Section */}
-      <div className="relative rounded-2xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)] overflow-hidden mb-10">
+      <div className="relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-5 sm:p-6 shadow-[5px_5px_0px_#222831] overflow-hidden mb-10">
         <div className="flex items-center gap-2 mb-4">
-          <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-zinc-900 text-white">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-zinc-950 shadow-[2px_2px_0px_#222831] -rotate-2">
             <Sparkles className="h-4 w-4" />
           </div>
-          <h2 className="font-space text-base font-bold text-zinc-900">
+          <h2 className="font-space text-base font-extrabold text-zinc-950">
             AI Maintainer Vibe Check & PR Guidelines
           </h2>
         </div>
@@ -848,7 +854,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         {isLoggedIn ? (
           <div className="space-y-6 pt-2 font-sans">
             {/* Persona & Vibe Overview Banner */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-800 text-white shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border-2 border-brand-dark bg-zinc-950 text-white shadow-[3px_3px_0px_#222831]">
               <div>
                 <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
                   HuggingFace Maintainer Persona
@@ -857,7 +863,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                   {insights?.maintainer_persona || "Constructive Code Reviewer"}
                 </h3>
               </div>
-              <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t sm:border-t-0 sm:border-l border-zinc-700 pt-2 sm:pt-0 sm:pl-4">
+              <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t-2 sm:border-t-0 sm:border-l-2 border-white/30 pt-2 sm:pt-0 sm:pl-4">
                 <div>
                   <div className="text-zinc-400 text-[10px]">Warmth Score</div>
                   <div className="text-emerald-400 font-bold text-sm">{insights?.warmth_score ?? 7.8}/10</div>
@@ -874,7 +880,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             </div>
 
             {/* Vibe Check Description */}
-            <div className="p-4 rounded-xl bg-zinc-50 border border-zinc-200/60">
+            <div className="p-4 rounded-xl border-2 border-brand-dark bg-white shadow-[2px_2px_0px_#222831]">
               <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed">
                 {insights?.maintainer_vibe ||
                   "Active maintainer team with regular turnaround times on pull requests. Community guidelines recommend concise PR scopes."}
@@ -884,7 +890,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             {/* Top Do's & Don'ts Checklist */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
               {/* Do's */}
-              <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-4">
+              <div className="rounded-xl border-2 border-brand-dark bg-emerald-100 p-4 shadow-[3px_3px_0px_#222831]">
                 <h4 className="text-xs font-mono font-bold text-emerald-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                   <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                   Top PR Submission Do&apos;s
@@ -904,7 +910,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               </div>
 
               {/* Don'ts */}
-              <div className="rounded-xl border border-rose-200/80 bg-rose-50/40 p-4">
+              <div className="rounded-xl border-2 border-brand-dark bg-rose-100 p-4 shadow-[3px_3px_0px_#222831]">
                 <h4 className="text-xs font-mono font-bold text-rose-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                   <AlertCircle className="h-4 w-4 text-rose-600" />
                   Top PR Friction Pitfalls (Don&apos;ts)
@@ -926,7 +932,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
             {/* General Guidelines */}
             {insights?.pr_guidelines && insights.pr_guidelines.length > 0 && (
-              <div className="pt-2 border-t border-zinc-100">
+              <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
                 <h4 className="text-xs font-mono font-bold text-zinc-700 uppercase tracking-wider mb-2">
                   Maintainer Checklist
                 </h4>
@@ -945,7 +951,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           <div className="relative pb-10">
             {/* Blurred Content */}
             <div className="space-y-6 blur-[6px] select-none opacity-40 pointer-events-none pb-24">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-800 text-white shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border-2 border-brand-dark bg-zinc-950 text-white shadow-[3px_3px_0px_#222831]">
                 <div>
                   <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
                     HuggingFace Maintainer Persona
@@ -954,7 +960,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     Constructive Code Reviewer
                   </h3>
                 </div>
-                <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t sm:border-t-0 sm:border-l border-zinc-700 pt-2 sm:pt-0 sm:pl-4">
+                <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t-2 sm:border-t-0 sm:border-l-2 border-white/30 pt-2 sm:pt-0 sm:pl-4">
                   <div>
                     <div className="text-zinc-400 text-[10px]">Warmth Score</div>
                     <div className="text-emerald-400 font-bold text-sm">X.X/10</div>
@@ -971,7 +977,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-                <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-4">
+                <div className="rounded-xl border-2 border-brand-dark bg-emerald-100 p-4 shadow-[3px_3px_0px_#222831]">
                   <h4 className="text-xs font-mono font-bold text-emerald-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                     Top PR Submission Do&apos;s
@@ -987,7 +993,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     </li>
                   </ul>
                 </div>
-                <div className="rounded-xl border border-rose-200/80 bg-rose-50/40 p-4">
+                <div className="rounded-xl border-2 border-brand-dark bg-rose-100 p-4 shadow-[3px_3px_0px_#222831]">
                   <h4 className="text-xs font-mono font-bold text-rose-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                     <AlertCircle className="h-4 w-4 text-rose-600" />
                     Top PR Friction Pitfalls (Don&apos;ts)
@@ -1007,11 +1013,11 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             </div>
 
             {/* Auth Wall Overlay */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 backdrop-blur-xs text-center px-4 py-8 rounded-2xl">
-              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-zinc-100 mb-3 shadow-xs shrink-0">
+            <div className="absolute inset-0 flex flex-col items-center justify-center border-2 border-brand-dark bg-[#fff8db]/95 backdrop-blur-xs text-center px-4 py-8 rounded-2xl">
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl border-2 border-brand-dark bg-white mb-3 shadow-[2px_2px_0px_#222831] shrink-0 rotate-2">
                 <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-zinc-700" />
               </div>
-              <h3 className="text-sm sm:text-base font-space font-bold text-zinc-900 mb-1.5">
+              <h3 className="text-sm sm:text-base font-space font-extrabold text-zinc-950 mb-1.5">
                 Unlock Full AI Insights & PR Guidelines
               </h3>
               <p className="text-xs text-zinc-600 max-w-md mb-5 leading-relaxed font-sans">
@@ -1020,7 +1026,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               <a
                 href={`${API_BASE_URL}/api/v1/auth/github`}
                 onClick={() => posthog.capture('github_sign_in_clicked', { source: 'ai_insights_wall', repo_full_name: fullName })}
-                className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-5 py-2 sm:px-6 sm:py-2.5 text-xs font-medium font-sans text-white shadow-xs hover:bg-zinc-800 active:scale-95 transition-all cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-dark bg-zinc-950 px-5 py-2 sm:px-6 sm:py-2.5 text-xs font-extrabold font-sans text-white shadow-[3px_3px_0px_#222831] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#222831] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#222831] transition-all cursor-pointer"
               >
                 <svg className="h-4 w-4 fill-current shrink-0" viewBox="0 0 24 24">
                   <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -1033,105 +1039,121 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       </div>
 
       {/* Issues #6, #7, #8: Contributor Community Feedback & Verification Module */}
-      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10 font-sans">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-zinc-200/40 pb-5">
+      <div className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-orange-100 via-white to-yellow-100 p-5 sm:p-8 shadow-[5px_5px_0px_#222831] mb-10 font-sans">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b-2 border-brand-dark pb-5">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold font-space text-zinc-900 flex items-center gap-2.5">
-              <Users className="h-6 w-6 text-blue-600 shrink-0" />
+            <h2 className="text-xl sm:text-2xl font-extrabold font-space text-zinc-950 flex items-center gap-2.5">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-blue-200 shadow-[2px_2px_0px_#222831] -rotate-2">
+                <Users className="h-5 w-5 text-blue-950 shrink-0" />
+              </span>
               Contributor Community Vibe Feedback
             </h2>
             <p className="text-sm text-zinc-600 mt-1 leading-relaxed">
-              Real contributor sentiment vs algorithmic C-Rank™ telemetry. Have you sent a pull request here?
+              Rate what actually matters after opening a pull request here.
             </p>
           </div>
-          <span className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold text-emerald-700 bg-emerald-50 px-3.5 py-1.5 rounded-full shrink-0">
+          <span className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-emerald-950 bg-emerald-200 px-3.5 py-1.5 rounded-lg border-2 border-brand-dark shadow-[2px_2px_0px_#222831] shrink-0">
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
             GitHub Verification Active
           </span>
         </div>
 
-        {/* High-Impact Contributor Callout */}
-        <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-white p-5 mb-8 text-zinc-900">
-          <div className="flex items-start gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white shrink-0 shadow-xs">
-              <Sparkles className="h-5 w-5" />
-            </div>
+        {/* Interactive Contributor Feedback Form */}
+        <div className="rounded-2xl border-2 border-brand-dark bg-white p-5 sm:p-6 shadow-[3px_3px_0px_#222831]">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between mb-5">
             <div>
-              <h3 className="text-base font-bold font-space text-zinc-900">
-                Contributed to <span className="text-blue-600">{fullName}</span> previously?
+              <h3 className="font-space text-sm font-extrabold text-zinc-950 uppercase tracking-wider">
+                Score this repo
               </h3>
-              <p className="mt-1 text-xs sm:text-sm text-zinc-700 leading-relaxed font-sans">
-                Save fellow developers hours of waiting. If your commits are merged in this repository, your review will instantly receive an official <strong className="text-blue-900">Verified Contributor</strong> badge.
+              <p className="text-xs text-zinc-600 mt-1">
+                Three taps. Comment is optional after ratings.
               </p>
             </div>
+            <span className="inline-flex w-fit rounded-lg border-2 border-brand-dark bg-brand-cream px-3 py-1 text-[10px] font-mono font-extrabold text-brand-dark shadow-[2px_2px_0px_#222831]">
+              {allFeedbackRatingsSelected ? "Ready to submit" : "3 ratings required"}
+            </span>
           </div>
-        </div>
 
-        {/* Interactive Contributor Feedback Form */}
-        <div className="rounded-2xl bg-zinc-100/50 p-5 sm:p-6">
-          <h3 className="font-space text-sm font-bold text-zinc-900 mb-4 uppercase tracking-wider">
-            Share Your Experience
-          </h3>
-          <div className="space-y-5">
-            <div>
-              <label className="block text-xs font-mono font-bold text-zinc-700 uppercase tracking-wider mb-2.5">
-                Maintainer Sentiment Vibe
-              </label>
-              <div className="flex flex-wrap gap-3">
-                {[
-                  { id: "welcoming", label: "🟢 Welcoming & Fast", style: "hover:bg-emerald-50 text-emerald-900" },
-                  { id: "selective", label: "🟡 Selective / strict PRs", style: "hover:bg-amber-50 text-amber-900" },
-                  { id: "unresponsive", label: "🔴 Unresponsive / Stale", style: "hover:bg-rose-50 text-rose-900" },
-                ].map((s) => (
-                  <button
-                    key={s.id}
-                    type="button"
-                    onClick={(e) => {
-                      const input = document.getElementById("sentiment-val") as HTMLInputElement;
-                      if (input) input.value = s.id;
-                      document.querySelectorAll(".sentiment-btn").forEach((b) => b.classList.remove("ring-2", "ring-zinc-900", "bg-white", "shadow-sm"));
-                      e.currentTarget.classList.add("ring-2", "ring-zinc-900", "bg-white", "shadow-sm");
-                    }}
-                    className={`sentiment-btn text-xs sm:text-sm font-sans font-semibold px-4 py-2.5 rounded-xl bg-white transition-all cursor-pointer ${s.style}`}
-                  >
-                    {s.label}
-                  </button>
-                ))}
+          <div className="space-y-4">
+            {[
+              {
+                label: "Maintainer helpfulness",
+                value: maintainerRating,
+                setValue: setMaintainerRating,
+              },
+              {
+                label: "Review speed",
+                value: reviewSpeedRating,
+                setValue: setReviewSpeedRating,
+              },
+              {
+                label: "Beginner friendliness",
+                value: beginnerRating,
+                setValue: setBeginnerRating,
+              },
+            ].map((rating) => (
+              <div key={rating.label} className="rounded-xl border-2 border-brand-dark bg-[#faf9f6] p-3 shadow-[2px_2px_0px_#222831]">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <label className="text-xs font-mono font-extrabold text-zinc-800 uppercase tracking-wider">
+                    {rating.label}
+                  </label>
+                  <div className="flex items-center gap-1.5">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => rating.setValue(star)}
+                        aria-label={`${rating.label}: ${star} star${star === 1 ? "" : "s"}`}
+                        className={`rounded-lg border-2 border-brand-dark p-1.5 shadow-[1px_1px_0px_#222831] transition-all cursor-pointer ${
+                          rating.value >= star
+                            ? "bg-yellow-300 text-zinc-950"
+                            : "bg-white text-zinc-300 hover:bg-yellow-100"
+                        }`}
+                      >
+                        <Star className={`h-4 w-4 ${rating.value >= star ? "fill-current" : ""}`} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <input type="hidden" id="sentiment-val" defaultValue="welcoming" />
-            </div>
+            ))}
 
-            <div>
+            {allFeedbackRatingsSelected && (
+              <div>
               <label className="block text-xs font-mono font-bold text-zinc-700 uppercase tracking-wider mb-2">
-                Your Contributor Review
+                Optional context
               </label>
               <textarea
                 id="feedback-comment"
                 rows={3}
-                placeholder={`How was submitting a PR to ${fullName}? Did maintainers provide constructive review comments?`}
-                className="w-full text-xs sm:text-sm font-sans rounded-xl border border-zinc-200 p-3.5 bg-white text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-0 shadow-xs"
+                placeholder={`Anything future contributors should know before opening a PR to ${fullName}?`}
+                className="w-full text-xs sm:text-sm font-sans rounded-xl border-2 border-brand-dark p-3.5 bg-[#faf9f6] text-zinc-950 placeholder:text-zinc-500 focus:outline-none focus:ring-0 shadow-[2px_2px_0px_#222831]"
               />
-            </div>
+              </div>
+            )}
 
             <div className="space-y-2">
               <button
                 type="button"
                 onClick={async () => {
                   const commentEl = document.getElementById("feedback-comment") as HTMLTextAreaElement;
-                  const sentimentEl = document.getElementById("sentiment-val") as HTMLInputElement;
-                  if (!commentEl?.value.trim()) {
-                    setFeedbackError("Please enter your feedback comment.");
+                  if (!allFeedbackRatingsSelected) {
+                    setFeedbackError("Please select all 3 ratings.");
                     return;
                   }
                   if (!isLoggedIn) {
                     openAuthModal(
-                      "Submit Contributor Experience Review",
-                      "Sign in with GitHub to verify your contribution history and unlock your Verified Contributor profile badge.",
+                      "Submit Repository Ratings",
+                      "Sign in with GitHub to verify your contributor signal and submit ratings.",
                       "feedback_submit"
                     );
                     return;
                   }
                   setFeedbackError(null);
+                  const avgRating = (maintainerRating + reviewSpeedRating + beginnerRating) / 3;
+                  const sentiment = avgRating >= 4 ? "welcoming" : avgRating >= 3 ? "selective" : "unresponsive";
+                  const ratingSummary = `Ratings - maintainer helpfulness: ${maintainerRating}/5, review speed: ${reviewSpeedRating}/5, beginner friendliness: ${beginnerRating}/5.`;
+                  const optionalComment = commentEl?.value.trim();
 
                   try {
                     const res = await fetch(`${API_BASE_URL}/api/v1/user/feedback`, {
@@ -1141,8 +1163,8 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                       body: JSON.stringify({
                         repo_id: repo?.id || "",
                         full_name: fullName,
-                        sentiment: sentimentEl.value || "welcoming",
-                        comment: commentEl.value.trim(),
+                        sentiment,
+                        comment: optionalComment ? `${ratingSummary}\n\n${optionalComment}` : ratingSummary,
                       }),
                     });
                     if (res.ok) {
@@ -1151,7 +1173,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                       if (result.verified_contributor) {
                         setIsVerifiedContributor(true);
                       }
-                      commentEl.value = "";
+                      if (commentEl) commentEl.value = "";
+                      setMaintainerRating(0);
+                      setReviewSpeedRating(0);
+                      setBeginnerRating(0);
                     } else {
                       setFeedbackError("Please sign in with GitHub to submit feedback.");
                     }
@@ -1160,9 +1185,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     setFeedbackError("Feedback submission failed. Check network status.");
                   }
                 }}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-zinc-900 px-6 py-3 font-mono text-xs font-bold text-white hover:bg-zinc-800 transition-all shadow-md cursor-pointer"
+                disabled={!allFeedbackRatingsSelected}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl border-2 border-brand-dark bg-zinc-950 px-6 py-3 font-mono text-xs font-extrabold text-white shadow-[3px_3px_0px_#222831] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#222831] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#222831] transition-all cursor-pointer"
               >
-                Submit Contributor Review
+                Submit Ratings
               </button>
 
               {feedbackError && (
@@ -1176,7 +1202,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                   <CheckCircle2 className="h-3.5 w-3.5" />
                   {isVerifiedContributor
                     ? "Thanks! Your review has been verified as a contributor."
-                    : "Feedback submitted! Sign in to get your Verified Contributor badge."}
+                    : "Ratings submitted."}
                 </p>
               )}
             </div>
@@ -1185,64 +1211,89 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       </div>
 
       {/* Content-Heavy SEO Modules for Search Engines & Crawlers */}
-      <div className="space-y-8 font-sans border-t border-zinc-200/40 pt-8 text-zinc-800">
-        <section className="rounded-2xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
-          <h2 className="text-base sm:text-lg font-bold font-space text-zinc-900 mb-3 flex items-center gap-2">
-            <Activity className="h-4 w-4 text-emerald-600 shrink-0" />
+      <div className="space-y-8 font-sans border-t-2 border-brand-dark pt-8 text-zinc-800">
+        <section className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-emerald-100 via-white to-cyan-100 p-5 sm:p-6 shadow-[5px_5px_0px_#222831]">
+          <h2 className="text-base sm:text-lg font-extrabold font-space text-zinc-950 mb-3 flex items-center gap-2">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border-2 border-brand-dark bg-emerald-200 shadow-[2px_2px_0px_#222831] rotate-2">
+              <Activity className="h-4 w-4 text-emerald-950 shrink-0" />
+            </span>
             Contributor Compatibility & Review Speed Analysis for {fullName}
           </h2>
-          <div className="prose prose-sm text-zinc-600 leading-relaxed max-w-none space-y-3 font-sans">
+          <div className="rounded-xl border-2 border-brand-dark bg-white p-4 text-zinc-700 leading-relaxed max-w-none space-y-3 font-sans shadow-[3px_3px_0px_#222831]">
             <p>
-              When evaluating whether to contribute to <strong className="text-zinc-900">{fullName}</strong>, response velocity and maintainer engagement are crucial. Opendoor continuously tracks pull request trajectories, first-comment latency, and code review rounds to help developers avoid submitting pull requests to backlogged repositories.
+              When evaluating whether to contribute to <strong className="text-zinc-950">{fullName}</strong>, response velocity and maintainer engagement are crucial. Opendoor continuously tracks pull request trajectories, first-comment latency, and code review rounds to help developers avoid submitting pull requests to backlogged repositories.
             </p>
             <p>
               Currently, maintainers of {fullName} acknowledge new external contributions in approximately{" "}
-              <strong className="text-zinc-900">{responseTimeStr}</strong>. Out of all submitted pull requests from non-core authors in the last 180-day window,{" "}
-              <strong className="text-zinc-900">{mergeRateStr}</strong> were successfully merged into the primary branch.
+              <strong className="text-zinc-950">{responseTimeStr}</strong>. Out of all submitted pull requests from non-core authors in the last 180-day window,{" "}
+              <strong className="text-zinc-950">{mergeRateStr}</strong> were successfully merged into the primary branch.
             </p>
           </div>
         </section>
 
-        <section className="rounded-2xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
-          <h2 className="text-base sm:text-lg font-bold font-space text-zinc-900 mb-4 flex items-center gap-2">
-            <FileCode2 className="h-4 w-4 text-blue-600 shrink-0" />
+        <section className="rounded-2xl border-2 border-brand-dark bg-[#fff8db] p-5 sm:p-6 shadow-[5px_5px_0px_#222831]">
+          <h2 className="text-base sm:text-lg font-extrabold font-space text-zinc-950 mb-4 flex items-center gap-2">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border-2 border-brand-dark bg-blue-200 shadow-[2px_2px_0px_#222831] -rotate-2">
+              <FileCode2 className="h-4 w-4 text-blue-950 shrink-0" />
+            </span>
             Frequently Asked Questions - Contributing to {fullName}
           </h2>
           <div className="space-y-4">
-            <div className="rounded-xl bg-zinc-100/50 p-4">
-              <h3 className="text-xs sm:text-sm font-bold text-zinc-900 font-space mb-1.5">
-                Is {fullName} welcoming to first-time open-source contributors?
-              </h3>
-              <p className="text-xs text-zinc-600 leading-relaxed font-sans">
-                {fullName} has a recorded first-timer success rate of <strong>{firstTimerSuccessStr}</strong>. Repositories ranked Tier S or Tier A typically have maintainers who provide constructive feedback on initial PRs and label beginner-friendly issues.
-              </p>
+            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+              <div className="flex gap-3">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-emerald-200 font-mono text-xs font-extrabold text-emerald-950 shadow-[1px_1px_0px_#222831]">
+                  01
+                </span>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                    Is {fullName} welcoming to first-time open-source contributors?
+                  </h3>
+                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
+                    {fullName} has a recorded first-timer success rate of <strong className="text-zinc-950">{firstTimerSuccessStr}</strong>. Repositories ranked Tier S or Tier A typically have maintainers who provide constructive feedback on initial PRs and label beginner-friendly issues.
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div className="rounded-xl bg-zinc-100/50 p-4">
-              <h3 className="text-xs sm:text-sm font-bold text-zinc-900 font-space mb-1.5">
-                How fast can I expect code review feedback on my pull request?
-              </h3>
-              <p className="text-xs text-zinc-600 leading-relaxed font-sans">
-                The initial maintainer response time averages ~<strong>{responseTimeStr}</strong>. Keep your pull requests focused, write clear commit messages, and ensure all CI checks pass to accelerate review speed.
-              </p>
+            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+              <div className="flex gap-3">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-orange-200 font-mono text-xs font-extrabold text-orange-950 shadow-[1px_1px_0px_#222831]">
+                  02
+                </span>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                    How fast can I expect code review feedback on my pull request?
+                  </h3>
+                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
+                    The initial maintainer response time averages ~<strong className="text-zinc-950">{responseTimeStr}</strong>. Keep your pull requests focused, write clear commit messages, and ensure all CI checks pass to accelerate review speed.
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div className="rounded-xl bg-zinc-100/50 p-4">
-              <h3 className="text-xs sm:text-sm font-bold text-zinc-900 font-space mb-1.5">
-                What does the {score.toFixed(1)} C-Rank™ score represent?
-              </h3>
-              <p className="text-xs text-zinc-600 leading-relaxed font-sans">
-                The C-Rank™ system evaluates repositories on a 0 to 100 scale using a weighted sum of external PR merge rate, initial response time, maintainer count, and first-timer success. A score of {score.toFixed(1)} places this project in the <strong>{getRankHumanLabel(rank)}</strong> tier.
-              </p>
+            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+              <div className="flex gap-3">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-pink-200 font-mono text-xs font-extrabold text-pink-950 shadow-[1px_1px_0px_#222831]">
+                  03
+                </span>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                    What does the {score.toFixed(1)} C-Rank™ score represent?
+                  </h3>
+                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
+                    The C-Rank™ system evaluates repositories on a 0 to 100 scale using a weighted sum of external PR merge rate, initial response time, maintainer count, and first-timer success. A score of {score.toFixed(1)} places this project in the <strong className="text-zinc-950">{getRankHumanLabel(rank)}</strong> tier.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="rounded-2xl bg-zinc-100/50 p-6">
-          <h2 className="text-xs font-space font-bold text-zinc-500 uppercase tracking-wider mb-2">
+        <section className="rounded-2xl border-2 border-brand-dark bg-zinc-950 p-5 sm:p-6 text-white shadow-[5px_5px_0px_#222831]">
+          <h2 className="text-xs font-space font-extrabold text-yellow-200 uppercase tracking-wider mb-2">
             Opendoor C-Rank™ Indexing Standard
           </h2>
-          <p className="text-xs text-zinc-600 leading-relaxed font-sans">
+          <p className="text-xs text-zinc-200 leading-relaxed font-sans">
             All telemetry metrics displayed for {fullName} are automatically retrieved via the GitHub GraphQL API and recalculated daily. Insider pull requests submitted by repository owners or organization members are excluded from merge rate calculations to preserve objective external contributor statistics.
           </p>
         </section>

@@ -157,33 +157,33 @@ export function RepoCard({ repo, isLoggedIn = false, isSpotlight = false, spotli
                 <span className="line-clamp-2 break-all leading-snug">{repo.full_name}</span>
                 <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all text-zinc-500 shrink-0 mt-0.5" />
               </div>
-              <div className="flex items-center gap-2 mt-1 font-mono text-xs text-zinc-600">
-                <span className="flex items-center gap-1 text-amber-900 font-bold">
-                  <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-600" />
-                  {repo.stars >= 1_000 ? `${(repo.stars / 1_000).toFixed(1)}k` : repo.stars}
-                </span>
-                <span>•</span>
-                <span className="flex items-center gap-1 text-zinc-900 font-semibold">
-                  <LangLogo language={repo.language} />
-                  {repo.language || "Code"}
-                </span>
-                {repo.good_first_issue_count !== undefined && repo.good_first_issue_count > 0 && (
-                  <>
-                    <span>•</span>
-                    <span className="inline-flex items-center gap-1 text-emerald-800 font-extrabold bg-emerald-100 px-1.5 py-0.5 rounded border border-emerald-300 whitespace-nowrap">
-                      🌱 {repo.good_first_issue_count} Beginner Issues
-                    </span>
-                  </>
-                )}
-                {repo.is_trending && (
-                  <>
-                    <span>•</span>
-                    <span className="inline-flex items-center gap-0.5 text-orange-700 font-bold">
-                      <Flame className="h-3 w-3 fill-orange-500" />
-                      Trending
-                    </span>
-                  </>
-                )}
+              <div className="mt-1 space-y-1 font-mono text-xs text-zinc-600">
+                <div className="flex min-w-0 flex-wrap items-center gap-2">
+                  <span className="flex items-center gap-1 text-amber-900 font-bold">
+                    <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-600" />
+                    {repo.stars >= 1_000 ? `${(repo.stars / 1_000).toFixed(1)}k` : repo.stars}
+                  </span>
+                  <span>•</span>
+                  <span className="flex min-w-0 items-center gap-1 text-zinc-900 font-semibold">
+                    <LangLogo language={repo.language} />
+                    <span className="truncate">{repo.language || "Code"}</span>
+                  </span>
+                </div>
+                {(repo.good_first_issue_count !== undefined && repo.good_first_issue_count > 0) || repo.is_trending ? (
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {repo.good_first_issue_count !== undefined && repo.good_first_issue_count > 0 && (
+                      <span className="inline-flex max-w-full items-center gap-1 text-emerald-800 font-extrabold bg-emerald-100 px-1.5 py-0.5 rounded border border-emerald-300 leading-tight">
+                        🌱 {repo.good_first_issue_count} Beginner Issues
+                      </span>
+                    )}
+                    {repo.is_trending && (
+                      <span className="inline-flex items-center gap-0.5 text-orange-700 font-bold">
+                        <Flame className="h-3 w-3 fill-orange-500" />
+                        Trending
+                      </span>
+                    )}
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
