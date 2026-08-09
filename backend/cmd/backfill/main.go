@@ -49,6 +49,7 @@ func main() {
 		fromFlag   = flag.String("from", "2026-05-23", "Start date YYYY-MM-DD")
 		toFlag     = flag.String("to", "2026-08-07", "End date YYYY-MM-DD")
 		tiersFlag  = flag.String("tiers", "S,A", "Comma-separated tiers to backfill (default S,A)")
+		commentsTiersFlag = flag.String("comments-tiers", "S,A", "Comma-separated tiers to backfill comments for (default S,A)")
 		rphFlag    = flag.Int("rph", 4800, "Requests per hour budget")
 		ckptFlag   = flag.String("checkpoint", "backfill_checkpoint.json", "Path to checkpoint file")
 		tokenFlag  = flag.String("token", "", "GitHub PAT token (defaults to GITHUB_TOKEN env)")
@@ -128,6 +129,9 @@ func main() {
 		repos = append(repos, r)
 	} else {
 		tierList := strings.Split(*tiersFlag, ",")
+	for i := range tierList {
+		tierList[i] = strings.TrimSpace(tierList[i])
+	}
 		query, args, err := sqlx.In(`
 			SELECT r.id, r.full_name, r.owner, r.name, COALESCE(s.c_rank_tier, 'A') as c_rank_tier
 			FROM repositories r
@@ -162,6 +166,11 @@ func main() {
 
 	reCodeBlock := regexp.MustCompile("(?s)```.*?```")
 
+	commentsTierSet := map[string]bool{}
+	for _, t := range strings.Split(*commentsTiersFlag, ",") {
+		commentsTierSet[strings.TrimSpace(t)] = true
+	}
+
 	for i, r := range repos {
 		if skipUntilFound {
 			if r.ID == checkpoint.LastRepoID {
@@ -180,8 +189,8 @@ func main() {
 		}
 
 		commentsInserted := 0
-		// Backfill comments for S and A tiers only
-		if r.Tier == "S" || r.Tier == "A" {
+		// Backfill comments only for tiers in -comments-tiers (default S,A)
+		if commentsTierSet[r.Tier] {
 			ci, err := processComments(ctx, db, client, r, fromDate, toDate, reCodeBlock, *dryRunFlag)
 			if err != nil {
 				slog.Warn("Comments backfill returned error/warning", "repo", r.FullName, "err", err)
