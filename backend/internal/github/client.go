@@ -85,6 +85,7 @@ type RepoMeta struct {
 
 // PR holds pull-request data needed for metric computation.
 type PR struct {
+	Number            int
 	State             string
 	CreatedAt         time.Time
 	MergedAt          *time.Time
@@ -94,6 +95,16 @@ type PR struct {
 	TotalComments     int
 	CommentAuthors    []string
 	CommentTexts      []string
+	ReviewComments    []PRComment
+}
+
+type PRComment struct {
+	PRNumber          int
+	SourceType        string
+	AuthorLogin       string
+	AuthorAssociation string
+	Body              string
+	CreatedAt         time.Time
 }
 
 // --- Public API ---
@@ -418,6 +429,7 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 							EndCursor   string `json:"endCursor"`
 						} `json:"pageInfo"`
 						Nodes []struct {
+							Number            int    `json:"number"`
 							State             string `json:"state"`
 							CreatedAt         string `json:"createdAt"`
 							MergedAt          string `json:"mergedAt"`
@@ -502,6 +514,7 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 			}
 
 			pr := PR{
+				Number:            n.Number,
 				State:             n.State,
 				CreatedAt:         createdAt,
 				AuthorAssociation: n.AuthorAssociation,
@@ -526,6 +539,16 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 						pr.CommentAuthors = append(pr.CommentAuthors, c.Author.Login)
 						if strings.TrimSpace(c.Body) != "" {
 							pr.CommentTexts = append(pr.CommentTexts, c.Body)
+							if t, err := time.Parse(time.RFC3339, c.CreatedAt); err == nil {
+								pr.ReviewComments = append(pr.ReviewComments, PRComment{
+									PRNumber:          n.Number,
+									SourceType:        "pr_comment",
+									AuthorLogin:       c.Author.Login,
+									AuthorAssociation: c.AuthorAssociation,
+									Body:              c.Body,
+									CreatedAt:         t,
+								})
+							}
 						}
 					}
 				}
@@ -541,12 +564,32 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 						pr.CommentAuthors = append(pr.CommentAuthors, r.Author.Login)
 						if strings.TrimSpace(r.Body) != "" {
 							pr.CommentTexts = append(pr.CommentTexts, r.Body)
+							if t, err := time.Parse(time.RFC3339, r.CreatedAt); err == nil {
+								pr.ReviewComments = append(pr.ReviewComments, PRComment{
+									PRNumber:          n.Number,
+									SourceType:        "review_body",
+									AuthorLogin:       r.Author.Login,
+									AuthorAssociation: r.AuthorAssociation,
+									Body:              r.Body,
+									CreatedAt:         t,
+								})
+							}
 						}
 						for _, rc := range r.Comments.Nodes {
 							if rc.Author != nil && rc.Author.Login != "" {
 								pr.CommentAuthors = append(pr.CommentAuthors, rc.Author.Login)
 								if strings.TrimSpace(rc.Body) != "" {
 									pr.CommentTexts = append(pr.CommentTexts, rc.Body)
+									if t, err := time.Parse(time.RFC3339, rc.CreatedAt); err == nil {
+										pr.ReviewComments = append(pr.ReviewComments, PRComment{
+											PRNumber:          n.Number,
+											SourceType:        "review_thread_comment",
+											AuthorLogin:       rc.Author.Login,
+											AuthorAssociation: rc.AuthorAssociation,
+											Body:              rc.Body,
+											CreatedAt:         t,
+										})
+									}
 								}
 							}
 						}
@@ -814,4 +857,3 @@ func (c *Client) FetchGoodFirstIssueCount(owner, name string) (int, error) {
 
 	return resp.Data.Search.IssueCount, nil
 }
-

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"sort"
 	"strings"
 	"time"
 )
@@ -127,25 +128,7 @@ func (c *AIClient) GenerateLocalZeroCostInsights(repoFullName string, prComments
 		vibe = fmt.Sprintf("Strict review standards in %s. Ensure PR scope matches issue requirements closely before requesting review.", repoFullName)
 	}
 
-	// Guideline Rule Extraction
-	guidelines := []string{}
-	if strings.Contains(textBlob, "test") || strings.Contains(textBlob, "spec") || strings.Contains(textBlob, "coverage") {
-		guidelines = append(guidelines, "Include unit tests covering new logic or bug fixes")
-	} else {
-		guidelines = append(guidelines, "Ensure all automated test suites pass cleanly")
-	}
-
-	if strings.Contains(textBlob, "commit") || strings.Contains(textBlob, "format") || strings.Contains(textBlob, "lint") {
-		guidelines = append(guidelines, "Follow conventional commit format and repo linter rules")
-	} else {
-		guidelines = append(guidelines, "Keep commit history clean with descriptive messages")
-	}
-
-	if strings.Contains(textBlob, "doc") || strings.Contains(textBlob, "readme") {
-		guidelines = append(guidelines, "Update relevant documentation or README snippets")
-	} else {
-		guidelines = append(guidelines, "Reference related issue number in the PR description")
-	}
+	guidelines := deriveGuidelines(textBlob)
 
 	score := 8.0 + float64(positiveHits)*0.5 - float64(negativeHits)*0.5
 	if score > 9.8 {
@@ -183,17 +166,7 @@ func (c *AIClient) GenerateLocalZeroCostInsights(repoFullName string, prComments
 		persona = "Welcoming Community Builder"
 	}
 
-	topDos := []string{
-		"Write clear descriptive PR titles linking the issue number",
-		"Ensure 100% unit test coverage for new functions",
-		"Respond constructively to maintainer code review notes",
-	}
-
-	topDonts := []string{
-		"Do not open unlinked PRs without referencing an issue",
-		"Do not include unrelated refactoring commits in a single PR",
-		"Do not ping maintainers repeatedly within 24 hours of opening",
-	}
+	topDos, topDonts := deriveDosAndDonts(textBlob)
 
 	return &AIInsightsResponse{
 		MaintainerVibe:    vibe,
@@ -207,6 +180,67 @@ func (c *AIClient) GenerateLocalZeroCostInsights(repoFullName string, prComments
 		TopDos:            topDos,
 		TopDonts:          topDonts,
 	}
+}
+
+type insightRule struct {
+	keywords []string
+	do      string
+	dont    string
+}
+
+var insightRules = []insightRule{
+	{[]string{"test", "tests", "spec", "coverage", "failing"}, "Add or update tests for changed behavior before requesting review", "Do not leave requested test coverage unresolved"},
+	{[]string{"lint", "format", "style", "prettier", "gofmt", "eslint"}, "Run the repository formatter and linter locally", "Do not submit formatting-only noise with feature changes"},
+	{[]string{"doc", "docs", "readme", "documentation"}, "Update docs or README when behavior changes", "Do not ship user-facing changes without matching docs"},
+	{[]string{"issue", "ticket", "context", "reproduce", "reproduction"}, "Link the issue and include reproduction context in the PR", "Do not open context-free PRs"},
+	{[]string{"scope", "small", "focused", "unrelated", "separate"}, "Keep PRs small and focused on one change", "Do not mix unrelated refactors with feature work"},
+	{[]string{"breaking", "compat", "api", "migration"}, "Call out API, migration, or compatibility impact clearly", "Do not hide breaking changes in implementation details"},
+}
+
+func deriveGuidelines(text string) []string {
+	dos, _ := deriveDosAndDonts(text)
+	if len(dos) > 3 {
+		return dos[:3]
+	}
+	return dos
+}
+
+func deriveDosAndDonts(text string) ([]string, []string) {
+	type scoredRule struct {
+		score int
+		rule  insightRule
+	}
+
+	var scored []scoredRule
+	for _, rule := range insightRules {
+		score := 0
+		for _, keyword := range rule.keywords {
+			score += strings.Count(text, keyword)
+		}
+		if score > 0 {
+			scored = append(scored, scoredRule{score: score, rule: rule})
+		}
+	}
+
+	sort.SliceStable(scored, func(i, j int) bool {
+		return scored[i].score > scored[j].score
+	})
+
+	dos := make([]string, 0, 3)
+	donts := make([]string, 0, 3)
+	for _, item := range scored {
+		dos = append(dos, item.rule.do)
+		donts = append(donts, item.rule.dont)
+		if len(dos) == 3 {
+			break
+		}
+	}
+
+	if len(dos) == 0 {
+		return []string{"Follow maintainer feedback from recent PR reviews"}, []string{"Do not ignore unresolved maintainer review comments"}
+	}
+
+	return dos, donts
 }
 
 func (c *AIClient) callPythonNLPSidecar(ctx context.Context, repoFullName string, prComments []string) (*AIInsightsResponse, error) {

@@ -41,6 +41,8 @@ type CommentREST struct {
 	CreatedAt string `json:"created_at"`
 	Body      string `json:"body"`
 	User      User   `json:"user"`
+	PullRequestReviewID int `json:"pull_request_review_id"`
+	PullRequestURL string `json:"pull_request_url"`
 }
 
 func main() {
@@ -310,7 +312,6 @@ func processComments(ctx context.Context, db *sqlx.DB, client *RESTClient, r Tar
 	sinceStr := fromDate.Format("2006-01-02T15:04:05Z")
 
 	endpoints := []string{
-		fmt.Sprintf("https://api.github.com/repos/%s/%s/issues/comments?since=%s&per_page=100", r.Owner, r.Name, sinceStr),
 		fmt.Sprintf("https://api.github.com/repos/%s/%s/pulls/comments?since=%s&per_page=100", r.Owner, r.Name, sinceStr),
 	}
 
@@ -345,16 +346,32 @@ func processComments(ctx context.Context, db *sqlx.DB, client *RESTClient, r Tar
 			if len(cleanText) > 2000 {
 				cleanText = cleanText[:2000]
 			}
+			prNumber := prNumberFromURL(c.PullRequestURL)
+			if prNumber == 0 {
+				continue
+			}
 
 			if !dryRun {
 				_, _ = db.ExecContext(ctx, `
-					INSERT IGNORE INTO repo_raw_comments (repository_id, author_login, comment_text, created_at)
-					VALUES (?, ?, ?, ?)
-				`, r.ID, author, cleanText, createdAt.UTC().Format("2006-01-02 15:04:05"))
+					INSERT IGNORE INTO repo_pr_comments (
+						repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at
+					)
+					VALUES (?, ?, 'review_thread_comment', ?, '', ?, ?)
+				`, r.ID, prNumber, author, cleanText, createdAt.UTC().Format("2006-01-02 15:04:05"))
 			}
 			commentsInserted++
 		}
 	}
 
 	return commentsInserted, nil
+}
+
+func prNumberFromURL(rawURL string) int {
+	parts := strings.Split(strings.TrimRight(rawURL, "/"), "/")
+	if len(parts) == 0 {
+		return 0
+	}
+	var number int
+	_, _ = fmt.Sscanf(parts[len(parts)-1], "%d", &number)
+	return number
 }

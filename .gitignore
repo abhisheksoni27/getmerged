@@ -43,3 +43,4 @@ bin/
 backend/server
 .agents
 *.db*
+bkp.env

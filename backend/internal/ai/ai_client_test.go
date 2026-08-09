@@ -41,4 +41,31 @@ func TestAIClient_LocalZeroCostInsights(t *testing.T) {
 	}
 }
 
+func TestAIClient_DerivesDosAndDontsFromPRComments(t *testing.T) {
+	client := ai.NewAIClient("")
+	comments := []string{
+		"Please keep this PR focused. The unrelated refactor should be separate.",
+		"This changes the public API, please document the migration path.",
+		"Coverage is missing for the failing edge case; add tests.",
+	}
+
+	res, err := client.GenerateRepoInsights(context.Background(), "gin-gonic/gin", comments)
+	if err != nil {
+		t.Fatalf("expected local insights to succeed, got: %v", err)
+	}
+
+	assertContains(t, res.TopDos, "Keep PRs small and focused on one change")
+	assertContains(t, res.TopDonts, "Do not mix unrelated refactors with feature work")
+	assertContains(t, res.TopDos, "Call out API, migration, or compatibility impact clearly")
+}
+
+func assertContains(t *testing.T, values []string, want string) {
+	t.Helper()
+	for _, value := range values {
+		if value == want {
+			return
+		}
+	}
+	t.Fatalf("expected %q in %+v", want, values)
+}
 
