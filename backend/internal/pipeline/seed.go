@@ -159,9 +159,15 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	raw := scoring.ComputeMetrics(scoringPRs, stale)
 	raw.GoodFirstIssueCount = gfiCount
 
-	allRaw := append(existingMetrics, raw)
+	// Fetch existing DB population metrics for global percentile normalisation
+	dbMetrics, err := fetchDBMetrics(db)
+	if err != nil || len(dbMetrics) == 0 {
+		dbMetrics = append(existingMetrics, raw)
+	} else {
+		dbMetrics = append(dbMetrics, raw)
+	}
 
-	normed := scoring.NormaliseAll(allRaw)
+	normed := scoring.NormaliseAll(dbMetrics)
 	thisNormed := normed[len(normed)-1]
 
 	score, tier := scoring.ComputeCRank(thisNormed, raw.StalenessFlag, raw.GoodFirstIssueCount)
@@ -173,7 +179,7 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	if err := saveSnapshot(db, repoID, raw, score, tier); err != nil {
 		return existingMetrics, err
 	}
-	return allRaw, nil
+	return append(existingMetrics, raw), nil
 }
 
 func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float64, tier string) error {

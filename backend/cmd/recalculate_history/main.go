@@ -65,6 +65,11 @@ func main() {
 			continue
 		}
 
+		// Skip repos with no PR event data — don't corrupt their existing scores
+		if len(prs) == 0 {
+			continue
+		}
+
 		raw := scoring.ComputeMetrics(prs, false)
 		raw.GoodFirstIssueCount = r.GoodFirstIssueCount
 
@@ -128,7 +133,6 @@ func main() {
 		)
 		if err != nil {
 			log.Printf("Failed daily_snapshot update for %s: %v", r.ID, err)
-			continue
 		}
 
 		_, err = database.Exec(`
