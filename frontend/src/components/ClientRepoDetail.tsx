@@ -265,7 +265,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   if (!repo) {
     if (githubNotFound) {
       return (
-        <main className="mx-auto max-w-4xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
+        <main className="mx-auto max-w-5xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-zinc-900 transition-colors mb-8"
@@ -306,7 +306,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
     }
 
     return (
-      <main className="mx-auto max-w-4xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
+      <main className="mx-auto max-w-6xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
         <Link
           href="/"
           className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-zinc-900 transition-colors mb-8"
@@ -406,7 +406,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
     : "No active GitHub maintainers found (may review internally on Gerrit or internal tools)";
 
   return (
-    <main className="mx-auto max-w-5xl px-3 sm:px-6 lg:px-8 py-10 sm:py-12 flex-1 w-full overflow-hidden">
+    <main className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 py-10 sm:py-12 flex-1 w-full overflow-hidden">
       {/* Navigation Breadcrumb */}
       <Link
         href="/"
@@ -748,7 +748,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       {/* Dynamic README Badge Embed (F1) */}
       <div className="rounded-2xl bg-white p-4 sm:p-5 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-6 font-mono">
         <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2 mb-2 font-space">
-          <ShieldCheck className="h-4 w-4 text-emerald-600" /> Embed C-Rank™ Badge on README
+          <ShieldCheck className="h-4 w-4 text-emerald-600" /> Embed OpenDoor Badge on your Repo/Profile
         </h3>
         <p className="text-xs text-zinc-600 font-sans mb-4">
           Show potential contributors your maintainer responsiveness with a dynamic live badge:
@@ -770,7 +770,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               onChange={(e) => setBadgeColor(e.target.value)}
               className="rounded-xl border border-transparent bg-zinc-100/50 px-2 py-1 text-xs text-zinc-700 focus:outline-none focus:ring-0 cursor-pointer"
             >
-              <option value="auto">Auto (tier)</option>
+              <option value="auto">Default</option>
               <option value="emerald">Emerald</option>
               <option value="green">Green</option>
               <option value="blue">Blue</option>

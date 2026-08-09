@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/auth"
@@ -124,6 +125,14 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository)
 			Secure:   isSecure,
 			SameSite: http.SameSiteLaxMode,
 		})
+
+		slog.Info("jwt cookie has been set", "token", signedToken)
+
+		// if this is localhost, then Frontend is runnning on a different port, so redirect to the frontend URL
+		if strings.Contains(c.Request.Host, "localhost") {
+			c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000")
+			return
+		}
 
 		// Redirect user back to the web UI
 		c.Redirect(http.StatusTemporaryRedirect, "/")

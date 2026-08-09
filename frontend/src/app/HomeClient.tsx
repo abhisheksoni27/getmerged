@@ -312,8 +312,8 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const [spotlightRepos, setSpotlightRepos] = useState<Repo[]>([]);
 
   useEffect(() => {
-    // Fetch top welcoming repos sorted by C-Rank score descending (highest merge rate & responsiveness)
-    fetch(`${API_BASE_URL}/api/v1/repos?sort=c_rank_score&order=desc&per_page=30`)
+    // Fetch repos scored today, sorted by C-Rank score descending.
+    fetch(`${API_BASE_URL}/api/v1/repos?scored_today=true&sort=c_rank_score&order=desc&per_page=30`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         const rawList = data?.data || data?.repos;
@@ -534,10 +534,6 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               ))
             ) : spotlightRepos.length > 0 ? (
               spotlightRepos.slice(0, 3).map((r, idx) => (
-                <RepoCard key={r.id || r.full_name} repo={r} isLoggedIn={isLoggedIn} isSpotlight={true} spotlightIndex={idx} />
-              ))
-            ) : repos.length > 0 ? (
-              repos.slice(0, 3).map((r, idx) => (
                 <RepoCard key={r.id || r.full_name} repo={r} isLoggedIn={isLoggedIn} isSpotlight={true} spotlightIndex={idx} />
               ))
             ) : null}

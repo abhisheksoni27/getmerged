@@ -52,6 +52,23 @@ func setupTestDB(t *testing.T) (*sqlx.DB, *config.Config) {
 		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		UNIQUE(repository_id, snapshot_date)
 	);
+	CREATE TABLE IF NOT EXISTS latest_snapshots (
+		repository_id TEXT NOT NULL,
+		snapshot_date TEXT NOT NULL,
+		c_rank_tier TEXT,
+		c_rank_score REAL,
+		external_pr_merge_rate REAL DEFAULT 0,
+		time_to_first_response_hours REAL DEFAULT 0,
+		time_to_merge_hours REAL DEFAULT 0,
+		first_timer_success_rate REAL DEFAULT 0,
+		repeat_contributor_rate REAL DEFAULT 0,
+		maintainer_responsiveness REAL DEFAULT 0,
+		last_activity_days REAL DEFAULT 0,
+		review_rounds REAL DEFAULT 0,
+		distinct_maintainer_count REAL DEFAULT 0,
+		staleness_flag INTEGER DEFAULT 0,
+		good_first_issue_count INTEGER DEFAULT 0
+	);
 	`)
 
 	cfg := &config.Config{
@@ -112,6 +129,32 @@ func TestRepoRepository_ListAndFind(t *testing.T) {
 	}
 	if found.FullName != "golang/go" {
 		t.Fatalf("expected full_name 'golang/go', got %s", found.FullName)
+	}
+}
+
+func TestRepoRepository_ListFiltersSnapshotDate(t *testing.T) {
+	database, _ := setupTestDB(t)
+	defer database.Close()
+
+	repo := repository.NewRepoRepository(database)
+	ctx := context.Background()
+	now := time.Now()
+	today := time.Now().UTC().Format("2006-01-02")
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('1', 'today/repo', 'today', 'repo', 'Go', 1000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score) VALUES ('1', ?, 'S', 95.0)`, today)
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('2', 'old/repo', 'old', 'repo', 'Go', 1000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score) VALUES ('2', '2026-01-01', 'S', 99.0)`)
+
+	repos, total, err := repo.List(ctx, repository.RepoFilter{Limit: 10, SnapshotDate: today})
+	if err != nil {
+		t.Fatalf("List failed: %v", err)
+	}
+	if total != 1 || len(repos) != 1 {
+		t.Fatalf("expected 1 repo, got total %d, len %d", total, len(repos))
+	}
+	if repos[0].FullName != "today/repo" {
+		t.Fatalf("expected today/repo, got %s", repos[0].FullName)
 	}
 }
 
