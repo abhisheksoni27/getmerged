@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { LogOut, Star, Search } from "lucide-react";
+import { LogOut, Search } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { User } from "@/types/opendoor";
@@ -17,55 +17,28 @@ interface HeaderProps {
 export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderText }: HeaderProps = {}) {
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [starCount, setStarCount] = useState<number | null>(null);
 
   useEffect(() => {
-    // Only check authenticated user profile if token cookie exists
-    const hasToken = typeof document !== "undefined" && (
-      document.cookie.includes("opendoor_token=") ||
-      document.cookie.includes("token=")
-    );
-    if (hasToken) {
-      fetch(`${API_BASE_URL}/api/v1/auth/me`, { credentials: "include" })
-        .then((res) => {
-          if (res.ok) return res.json();
-          return null;
-        })
-        .then((data) => {
-          if (data?.user) {
-            setUser(data.user);
-            posthog.identify(String(data.user.github_id), {
-              username: data.user.username,
-            });
-          }
-        })
-        .catch(() => {})
-        .finally(() => setAuthLoading(false));
-    } else {
-      // Also try fetching /auth/me directly with credentials in case cookie is HttpOnly
-      fetch(`${API_BASE_URL}/api/v1/auth/me`, { credentials: "include" })
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data) => {
-          if (data?.user) {
-            setUser(data.user);
-            posthog.identify(String(data.user.github_id), {
-              username: data.user.username,
-            });
-          }
-        })
-        .catch(() => {})
-        .finally(() => setAuthLoading(false));
+    // Only ask the API for the authenticated user if the session cookie exists.
+    // The cookie is set server-side on OAuth; without it we're anonymous and
+    // /auth/me would 401 wastefully.
+    const hasToken = typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
+    if (!hasToken) {
+      setAuthLoading(false);
+      return;
     }
-
-    // Fetch live stars for opendoor repository
-    fetch("https://api.github.com/repos/abhisheksoni27/opendoor")
-      .then((res) => res.json())
+    fetch(`${API_BASE_URL}/api/v1/auth/me`, { credentials: "include" })
+      .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (data.stargazers_count !== undefined) {
-          setStarCount(data.stargazers_count);
+        if (data?.user) {
+          setUser(data.user);
+          posthog.identify(String(data.user.github_id), {
+            username: data.user.username,
+          });
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setAuthLoading(false));
   }, []);
 
   const handleLogout = () => {
@@ -87,12 +60,6 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-brand-cream" />
             </div>
             <span className="font-space text-sm sm:text-base font-bold tracking-tight text-zinc-900">opendoor</span>
-            {starCount !== null && (
-              <span className="ml-1 hidden sm:inline-flex items-center gap-1 rounded-md border border-amber-200 bg-amber-50 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-900">
-                <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
-                {starCount}
-              </span>
-            )}
           </Link>
         </div>
 
