@@ -44,3 +44,11 @@ backend/server
 .agents
 *.db*
 bkp.env
+# Local build artifacts / scratch (backend)
+backend/backfill
+backend/generate_ai_insights
+backend/insights_comments_v2.json
+backend/recalculate-history
+backend/eventstream
+backend/gharchive
+backend/generate_sitemap
