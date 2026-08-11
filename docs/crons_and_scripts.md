@@ -50,6 +50,8 @@ If the checkout is not at `~/src/opendoor`, install with
 | `cron-recalculate.sh` | run `recalculate-history` with env + flock + timestamped logging |
 | `cron-backfill-rolling.sh` | run `backfill` for last N days (resumable checkpoint) |
 | `install-crontab.sh` | append/refresh the managed cron block |
+| `run-smoketest.sh` | smoke test: recompute N random repos from DB events vs stored snapshots (exit 1 on mismatch) |
+| `run-smoketest.sh` | recompute a sample of repos from DB events and compare vs crawler snapshots |
 
 Common env overrides (defaults shown):
 
@@ -102,6 +104,19 @@ cd /opt/opendoor/backend && export $(cat /opt/opendoor/.env | grep -v '^#' | xar
 ```bash
 ~/src/opendoor/scripts/install-crontab.sh && crontab -l
 ```
+
+**Smoke test (crawler vs DB-event agreement, N random repos):**
+
+```bash
+~/src/opendoor/scripts/run-smoketest.sh        # 10 repos
+~/src/opendoor/scripts/run-smoketest.sh 25     # 25 repos
+```
+
+Recomputes raw metrics from `repo_pr_events` + `repo_raw_comments` exactly as
+`recalculate-history` does, compares against the stored `latest_snapshots`
+columns with small tolerances, prints PASS/MISMATCH per repo, exits 1 if any
+fail. Run after a nightly recalc for the most meaningful signal (both paths
+settled). Optional in a weekly cron.
 
 ---
 
