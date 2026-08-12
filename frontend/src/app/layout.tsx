@@ -57,6 +57,9 @@ export const metadata: Metadata = {
     description: "Discover public GitHub repositories where your pull requests are welcomed, reviewed fast, and merged.",
     images: ["/opengraph-image"],
   },
+  verification: {
+    google: "42ybYiZ5j48J-hBO7WpyqVPHY7TWMeC1nbiakdAbiuY",
+  },
 };
 
 export default function RootLayout({
