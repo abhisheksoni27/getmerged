@@ -29,6 +29,7 @@ type BackgroundCrawler struct {
 	discoveryInterval time.Duration
 	discoveryMaxNew   int
 	snapshotRetention time.Duration
+	workers           int
 	lastSnapshotPurge time.Time
 }
 
@@ -43,6 +44,14 @@ func NewBackgroundCrawler(db *sqlx.DB, gh *ghclient.Client, telegram *notificati
 		discoveryInterval: 15 * time.Minute,
 		discoveryMaxNew:   10,
 		snapshotRetention: 90 * 24 * time.Hour,
+		workers:           10,
+	}
+}
+
+// SetWorkers overrides the default parallel worker pool size (from .env).
+func (c *BackgroundCrawler) SetWorkers(n int) {
+	if n > 0 {
+		c.workers = n
 	}
 }
 
@@ -158,12 +167,13 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		FROM repositories r
 		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
 		LEFT JOIN indexing_queue q ON r.full_name = q.full_name
-		WHERE r.updated_at <= NOW() - INTERVAL 24 HOUR
-		  AND COALESCE(ls.c_rank_tier, 'D') != 'D'
+		WHERE r.updated_at <= ?
+		  AND r.stars >= 500
+		  AND EXISTS (SELECT 1 FROM repo_pr_events e WHERE e.repository_id = r.id)
 		  AND (q.status IS NULL OR q.status NOT IN ('pending', 'processing'))
 		ORDER BY r.updated_at ASC
 		LIMIT 1000
-	`)
+	`, time.Now().UTC().Add(-24*time.Hour))
 	if err != nil {
 		slog.Error("background crawler producer: query due repos failed", "err", err)
 		return
@@ -188,11 +198,10 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 
 	enqueuedCount := 0
 	for _, r := range due {
-		if r.tier == "D" {
-			continue // Skip D-tier rescans
-		}
-
-		// Set priority based on tier: User requests = 1, S/A tier = 2, B/C tier = 3
+		// Priority: user requests = 1, S/A tier = 2, B/C/D tier = 3.
+		// D-tier repos WITH PR activity are still worth rescoring - the
+		// EXISTS(repo_pr_events) guard above already filters out activity-less
+		// repos that would otherwise be stamped D on an empty dataset.
 		priority := 3
 		if r.tier == "S" || r.tier == "A" {
 			priority = 2
@@ -243,8 +252,8 @@ func (c *BackgroundCrawler) processNextWorkItem() {
 		}
 	}
 
-	// Process queue items concurrently (up to 3 worker routines)
-	processedCount, err := c.processIndexingQueueBatch(3)
+	// Process queue items concurrently (up to c.workers worker routines)
+	processedCount, err := c.processIndexingQueueBatch(c.workers)
 	if err != nil {
 		slog.Error("background crawler: error processing indexing_queue batch", "err", err)
 	}
@@ -414,8 +423,8 @@ func (c *BackgroundCrawler) checkAndSendPulseDigest() {
 	_ = c.db.Select(&recentRepos, `
 		SELECT r.full_name, COALESCE(ls.c_rank_tier, 'D') as c_rank_tier
 		FROM repositories r
-		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
-		ORDER BY r.updated_at DESC
+		JOIN latest_snapshots ls ON r.id = ls.repository_id
+		ORDER BY ls.updated_at DESC
 		LIMIT 5
 	`)
 

@@ -31,6 +31,7 @@ type Config struct {
 	DiscoveryIntervalMinutes int
 	DiscoveryMaxNewPerRun    int
 	SnapshotRetentionDays    int
+	CrawlerWorkers           int
 }
 
 // Load reads .env (if present) then validates all required variables are set.
@@ -70,6 +71,11 @@ func Load() (*Config, error) {
 	c.SnapshotRetentionDays, _ = strconv.Atoi(os.Getenv("SNAPSHOT_RETENTION_DAYS"))
 	if c.SnapshotRetentionDays <= 0 {
 		c.SnapshotRetentionDays = 90
+	}
+
+	c.CrawlerWorkers, _ = strconv.Atoi(os.Getenv("CRAWLER_WORKERS"))
+	if c.CrawlerWorkers <= 0 {
+		c.CrawlerWorkers = 10
 	}
 
 	required := map[string]*string{

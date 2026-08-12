@@ -37,7 +37,7 @@ func NewClient(token string, vk valkey.Client) *Client {
 		token:      token,
 		httpClient: &http.Client{Timeout: 30 * time.Second},
 		valkey:     vk,
-		limiter:    rate.NewLimiter(rate.Every(300*time.Millisecond), 5), // Default max ~3.3 req/sec
+		limiter:    rate.NewLimiter(rate.Every(100*time.Millisecond), 20), // max ~10 req/sec, burst 20
 	}
 }
 
