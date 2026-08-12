@@ -50,6 +50,11 @@ func testDB(t *testing.T) *sqlx.DB {
 			priority INTEGER DEFAULT 1,
 			created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 		)`,
+		`CREATE TABLE IF NOT EXISTS repo_pr_events (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			repository_id VARCHAR(255) NOT NULL,
+			pr_number INTEGER DEFAULT 0
+		)`,
 		`CREATE TABLE IF NOT EXISTS discovery_cursors (
 			lang VARCHAR(50) NOT NULL,
 			bucket_min INT NOT NULL,
@@ -104,17 +109,24 @@ func TestStarBuckets_Ranges(t *testing.T) {
 	}
 }
 
-func TestEnqueueDueRepos_ExcludesD_And_ReEnqueuesCompleted(t *testing.T) {
+func TestEnqueueDueRepos_OnlyScansActiveStarRepos(t *testing.T) {
 	dbConn := testDB(t)
 
 	crawler := NewBackgroundCrawler(dbConn, nil, nil)
 
-	// Seed repositories: 1 overdue S-tier, 1 overdue D-tier, 1 recent S-tier
+	// Seed repositories:
+	// repo-1: overdue S-tier, 500+ stars, HAS PR activity  -> should enqueue
+	// repo-2: overdue D-tier, 500+ stars, HAS PR activity  -> should enqueue (D+activity rescores)
+	// repo-3: recent S-tier, 500+ stars, HAS activity      -> skip (not overdue)
+	// repo-4: overdue S-tier, 100 stars, HAS activity      -> skip (<500 stars)
+	// repo-5: overdue S-tier, 500+ stars, NO PR activity   -> skip (activity-first)
 	_, err := dbConn.Exec(`
-		INSERT INTO repositories (id, full_name, owner, name, github_url, created_at, updated_at) VALUES
-		('repo-1', 'owner/repo-s-overdue', 'owner', 'repo-s-overdue', 'https://github.com/owner/repo-s-overdue', '2026-08-01 00:00:00', '2026-08-01 00:00:00'),
-		('repo-2', 'owner/repo-d-overdue', 'owner', 'repo-d-overdue', 'https://github.com/owner/repo-d-overdue', '2026-08-01 00:00:00', '2026-08-01 00:00:00'),
-		('repo-3', 'owner/repo-s-recent', 'owner', 'repo-s-recent', 'https://github.com/owner/repo-s-recent', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+		INSERT INTO repositories (id, full_name, owner, name, stars, github_url, created_at, updated_at) VALUES
+		('repo-1', 'owner/repo-s-active', 'owner', 'repo-s-active', 1200, 'https://github.com/owner/repo-s-active', '2026-08-01 00:00:00', '2026-08-01 00:00:00'),
+		('repo-2', 'owner/repo-d-active', 'owner', 'repo-d-active', 800, 'https://github.com/owner/repo-d-active', '2026-08-01 00:00:00', '2026-08-01 00:00:00'),
+		('repo-3', 'owner/repo-s-recent', 'owner', 'repo-s-recent', 900, 'https://github.com/owner/repo-s-recent', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+		('repo-4', 'owner/repo-small', 'owner', 'repo-small', 100, 'https://github.com/owner/repo-small', '2026-08-01 00:00:00', '2026-08-01 00:00:00'),
+		('repo-5', 'owner/repo-inactive', 'owner', 'repo-inactive', 1500, 'https://github.com/owner/repo-inactive', '2026-08-01 00:00:00', '2026-08-01 00:00:00')
 	`)
 	if err != nil {
 		t.Fatalf("insert repos failed: %v", err)
@@ -124,37 +136,81 @@ func TestEnqueueDueRepos_ExcludesD_And_ReEnqueuesCompleted(t *testing.T) {
 		INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier) VALUES
 		('repo-1', '2026-08-01', 'S'),
 		('repo-2', '2026-08-01', 'D'),
-		('repo-3', '2026-08-03', 'S')
+		('repo-3', '2026-08-03', 'S'),
+		('repo-4', '2026-08-01', 'S'),
+		('repo-5', '2026-08-01', 'S')
 	`)
 	if err != nil {
 		t.Fatalf("insert snapshots failed: %v", err)
 	}
 
-	// First Enqueue run: only repo-1 (overdue S-tier) should be enqueued. repo-2 (D-tier) and repo-3 (recent) should be skipped.
+	// PR activity for all repos EXCEPT repo-5
+	_, err = dbConn.Exec(`
+		INSERT INTO repo_pr_events (repository_id, pr_number) VALUES
+		('repo-1', 1),
+		('repo-2', 1),
+		('repo-3', 1),
+		('repo-4', 1)
+	`)
+	if err != nil {
+		t.Fatalf("insert pr events failed: %v", err)
+	}
+
 	crawler.EnqueueDueRepos()
 
-	var pendingCount int
-	if err := dbConn.Get(&pendingCount, "SELECT COUNT(1) FROM indexing_queue WHERE status = 'pending'"); err != nil {
-		t.Fatalf("query pending count failed: %v", err)
-	}
-	if pendingCount != 1 {
-		t.Errorf("expected 1 pending item in queue, got %d", pendingCount)
+	var pending []string
+	if err := dbConn.Select(&pending, "SELECT full_name FROM indexing_queue WHERE status = 'pending' ORDER BY full_name"); err != nil {
+		t.Fatalf("query pending failed: %v", err)
 	}
 
-	var fullName string
-	if err := dbConn.Get(&fullName, "SELECT full_name FROM indexing_queue WHERE status = 'pending'"); err != nil {
-		t.Fatalf("query full_name failed: %v", err)
+	expected := []string{"owner/repo-d-active", "owner/repo-s-active"}
+	if len(pending) != len(expected) {
+		t.Fatalf("expected %d pending items %v, got %d: %v", len(expected), expected, len(pending), pending)
 	}
-	if fullName != "owner/repo-s-overdue" {
-		t.Errorf("expected owner/repo-s-overdue in queue, got %s", fullName)
+	for i, name := range expected {
+		if pending[i] != name {
+			t.Errorf("expected queue[%d]=%s, got %s", i, name, pending[i])
+		}
+	}
+
+	// repo-1 (S) must be higher priority than repo-2 (D)
+	var sPriority, dPriority int
+	_ = dbConn.Get(&sPriority, "SELECT priority FROM indexing_queue WHERE full_name = 'owner/repo-s-active'")
+	_ = dbConn.Get(&dPriority, "SELECT priority FROM indexing_queue WHERE full_name = 'owner/repo-d-active'")
+	if !(sPriority < dPriority) {
+		t.Errorf("expected S tier priority %d < D tier priority %d", sPriority, dPriority)
+	}
+}
+
+func TestEnqueueDueRepos_ReEnqueuesCompleted(t *testing.T) {
+	dbConn := testDB(t)
+
+	crawler := NewBackgroundCrawler(dbConn, nil, nil)
+
+	_, err := dbConn.Exec(`
+		INSERT INTO repositories (id, full_name, owner, name, stars, github_url, created_at, updated_at) VALUES
+		('repo-1', 'owner/repo-s-overdue', 'owner', 'repo-s-overdue', 700, 'https://github.com/owner/repo-s-overdue', '2026-08-01 00:00:00', '2026-08-01 00:00:00')
+	`)
+	if err != nil {
+		t.Fatalf("insert repos failed: %v", err)
+	}
+
+	_, err = dbConn.Exec("INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier) VALUES ('repo-1', '2026-08-01', 'S')")
+	if err != nil {
+		t.Fatalf("insert snapshots failed: %v", err)
+	}
+
+	_, err = dbConn.Exec("INSERT INTO repo_pr_events (repository_id, pr_number) VALUES ('repo-1', 1)")
+	if err != nil {
+		t.Fatalf("insert pr events failed: %v", err)
 	}
 
 	// Simulate completed processing of repo-1
-	if _, err := dbConn.Exec("UPDATE indexing_queue SET status = 'completed' WHERE full_name = 'owner/repo-s-overdue'"); err != nil {
-		t.Fatalf("update completed failed: %v", err)
+	if _, err := dbConn.Exec("INSERT INTO indexing_queue (full_name, owner, name, priority, status) VALUES ('owner/repo-s-overdue', 'owner', 'repo-s-overdue', 2, 'completed')"); err != nil {
+		t.Fatalf("insert completed queue row failed: %v", err)
 	}
 
-	// Second Enqueue run: repo-1 is still overdue (>24h), so ON CONFLICT must reset its status to 'pending'
+	// repo-1 is still overdue (>24h), so ON CONFLICT must reset its status to 'pending'
 	crawler.EnqueueDueRepos()
 
 	var status string

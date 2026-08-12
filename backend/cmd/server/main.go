@@ -79,6 +79,7 @@ func main() {
 	// Start continuous background crawler worker loop
 	if cfg.GinMode == "release" {
 		crawler := pipeline.NewBackgroundCrawler(database, gh, telegramNotifier)
+		crawler.SetWorkers(cfg.CrawlerWorkers)
 		crawler.ConfigureDiscovery(
 			time.Duration(cfg.DiscoveryIntervalMinutes)*time.Minute,
 			cfg.DiscoveryMaxNewPerRun,

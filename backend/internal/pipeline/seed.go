@@ -23,7 +23,7 @@ var SeedLanguages = []string{
 }
 
 const (
-	seedMinStars = 100
+	seedMinStars = 500
 	seedMaxRepos = 1000
 )
 
@@ -145,6 +145,16 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 		return existingMetrics, fmt.Errorf("fetchPRsFromDB: %w", err)
 	}
 
+	if len(prs) == 0 {
+		// PR-activity-first rule: a repo with no PR events in our dataset is
+		// NOT "D-tier" - it is simply unscored. Persisting all-zero metrics and
+		// a D snapshot here would stamp fresh repos as D before the event
+		// stream has collected their history. Leave it unscored and let a later
+		// crawl score it once real PR data exists.
+		slog.Debug("scoreAndSaveRepo: skipping snapshot - no PR events for repo", "repo", fullName)
+		return existingMetrics, nil
+	}
+
 	stale, _ := gh.IsStalenessFlag(owner, name)
 
 	gfiCount, err := gh.FetchGoodFirstIssueCount(owner, name)
@@ -159,13 +169,16 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	raw := scoring.ComputeMetrics(scoringPRs, stale)
 	raw.GoodFirstIssueCount = gfiCount
 
-	// Fetch existing DB population metrics for global percentile normalisation
-	dbMetrics, err := fetchDBMetrics(db)
-	if err != nil || len(dbMetrics) == 0 {
-		dbMetrics = append(existingMetrics, raw)
-	} else {
-		dbMetrics = append(dbMetrics, raw)
+	// Normalise against the caller-provided population snapshot when available
+	// (avoids re-fetching the entire latest_snapshots table per repo - the old
+	// N+1 behaviour that throttled the crawler to ~620 repos/hr).
+	dbMetrics := existingMetrics
+	if len(dbMetrics) == 0 {
+		if m, err := fetchDBMetrics(db); err == nil && len(m) > 0 {
+			dbMetrics = m
+		}
 	}
+	dbMetrics = append(dbMetrics, raw)
 
 	normed := scoring.NormaliseAll(dbMetrics)
 	thisNormed := normed[len(normed)-1]

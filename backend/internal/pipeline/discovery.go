@@ -18,8 +18,6 @@ type StarBucket struct {
 }
 
 var DiscoveryStarBuckets = []StarBucket{
-	{MinStars: 50, MaxStars: 200},
-	{MinStars: 200, MaxStars: 500},
 	{MinStars: 500, MaxStars: 1000},
 	{MinStars: 1000, MaxStars: 5000},
 	{MinStars: 5000, MaxStars: 20000},
@@ -92,7 +90,7 @@ func DiscoverNewRepos(db *sqlx.DB, gh *github.Client, language string, bucket St
 		after = state.SearchCursor
 	}
 
-	queryStr := fmt.Sprintf("language:%s stars:%d..%d pushed:>=%s sort:updated-desc",
+	queryStr := fmt.Sprintf("language:%s stars:%d..%d pushed:>=%s archived:false sort:updated-desc",
 		language, bucket.MinStars, bucket.MaxStars, pushStart)
 
 	slog.Info("discovery: searching github", "query", queryStr, "resume_cursor", after != "", "target_new", maxNew)
