@@ -109,17 +109,17 @@ func TestStarBuckets_Ranges(t *testing.T) {
 	}
 }
 
-func TestEnqueueDueRepos_OnlyScansActiveStarRepos(t *testing.T) {
+func TestEnqueueDueRepos_OnlyScansActiveRepos(t *testing.T) {
 	dbConn := testDB(t)
 
 	crawler := NewBackgroundCrawler(dbConn, nil, nil)
 
 	// Seed repositories:
-	// repo-1: overdue S-tier, 500+ stars, HAS PR activity  -> should enqueue
-	// repo-2: overdue D-tier, 500+ stars, HAS PR activity  -> should enqueue (D+activity rescores)
-	// repo-3: recent S-tier, 500+ stars, HAS activity      -> skip (not overdue)
-	// repo-4: overdue S-tier, 100 stars, HAS activity      -> skip (<500 stars)
-	// repo-5: overdue S-tier, 500+ stars, NO PR activity   -> skip (activity-first)
+	// repo-1: overdue S-tier, HAS PR activity       -> should enqueue
+	// repo-2: overdue D-tier, HAS PR activity       -> should enqueue (D+activity rescores)
+	// repo-3: recent S-tier, HAS activity           -> skip (not overdue)
+	// repo-4: overdue S-tier, low stars, HAS activity -> should enqueue (no star floor)
+	// repo-5: overdue S-tier, NO PR activity        -> skip (activity-first)
 	_, err := dbConn.Exec(`
 		INSERT INTO repositories (id, full_name, owner, name, stars, github_url, created_at, updated_at) VALUES
 		('repo-1', 'owner/repo-s-active', 'owner', 'repo-s-active', 1200, 'https://github.com/owner/repo-s-active', '2026-08-01 00:00:00', '2026-08-01 00:00:00'),
@@ -163,7 +163,7 @@ func TestEnqueueDueRepos_OnlyScansActiveStarRepos(t *testing.T) {
 		t.Fatalf("query pending failed: %v", err)
 	}
 
-	expected := []string{"owner/repo-d-active", "owner/repo-s-active"}
+	expected := []string{"owner/repo-d-active", "owner/repo-s-active", "owner/repo-small"}
 	if len(pending) != len(expected) {
 		t.Fatalf("expected %d pending items %v, got %d: %v", len(expected), expected, len(pending), pending)
 	}

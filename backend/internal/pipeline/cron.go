@@ -253,8 +253,7 @@ func reposNeedingUpdate(db *sqlx.DB) ([]repoRow, error) {
 	err := db.Select(&rows, `
 		SELECT id, full_name, owner, name, updated_at, consecutive_stagnant_scans
 		FROM repositories
-		WHERE (next_rescan_at <= CURRENT_TIMESTAMP OR updated_at < ?)
-		  AND stars >= 500
+		WHERE next_rescan_at <= CURRENT_TIMESTAMP OR updated_at < ?
 		ORDER BY next_rescan_at ASC, updated_at ASC
 	`, time.Now().UTC().Add(-24*time.Hour))
 	return rows, err

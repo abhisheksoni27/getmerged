@@ -23,7 +23,7 @@ var SeedLanguages = []string{
 }
 
 const (
-	seedMinStars = 500
+	seedMinStars = 100
 	seedMaxRepos = 1000
 )
 
