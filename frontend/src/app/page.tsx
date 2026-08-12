@@ -1,3 +1,4 @@
+import React from "react";
 import HomeClient from "./HomeClient";
 import type { MacroStats } from "@/types/opendoor";
 
@@ -17,5 +18,54 @@ async function getMacroStats(): Promise<MacroStats | null> {
 
 export default async function HomePage() {
   const initialStats = await getMacroStats();
-  return <HomeClient initialStats={initialStats} />;
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "opendoor",
+    url: "https://opendoor.abhishekco.de",
+    description: "Glassdoor for open-source repositories. Objective metrics on PR merge rates and maintainer response times.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://opendoor.abhishekco.de/?search={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  const orgJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "opendoor",
+    url: "https://opendoor.abhishekco.de",
+    logo: "https://opendoor.abhishekco.de/icon.svg",
+    sameAs: ["https://github.com/abhisheksoni27/opendoor"],
+  };
+
+  const webAppJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "opendoor",
+    url: "https://opendoor.abhishekco.de",
+    description: "Glassdoor for open-source repositories. Objective C-Rank™ metrics on PR merge rates and response times.",
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "All",
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
+      />
+      <HomeClient initialStats={initialStats} />
+    </>
+  );
 }

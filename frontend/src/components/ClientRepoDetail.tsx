@@ -985,11 +985,11 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                   <ul className="space-y-2 text-xs text-emerald-950 font-sans">
                     <li className="flex items-start gap-2">
                       <span className="text-emerald-600 font-bold">•</span>
-                      <span>Lorem ipsum dolor sit amet</span>
+                      <span>Link an active open issue before opening a pull request</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-emerald-600 font-bold">•</span>
-                      <span>Consectetur adipiscing elit</span>
+                      <span>Keep commits atomic and verify all local tests pass</span>
                     </li>
                   </ul>
                 </div>
@@ -1001,11 +1001,11 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                   <ul className="space-y-2 text-xs text-rose-950 font-sans">
                     <li className="flex items-start gap-2">
                       <span className="text-rose-600 font-bold">•</span>
-                      <span>Lorem ipsum dolor sit amet</span>
+                      <span>Submitting unannounced massive refactors or style overhauls</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-rose-600 font-bold">•</span>
-                      <span>Consectetur adipiscing elit</span>
+                      <span>Opening PRs without running local linters or build checks</span>
                     </li>
                   </ul>
                 </div>

@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { Repo } from "@/types/opendoor";
 import { Metadata } from "next";
 import { ClientRepoDetail } from "@/components/ClientRepoDetail";
+import { getLanguageSlug } from "@/lib/languageSlug";
 
 const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://opendoor.abhishekco.de";
 
@@ -76,7 +77,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
   // Server-Side Data Fetching -> Pure SSR
   const repo = await getRepoData(fullName);
 
-  // Schema.org JSON-LD Structured Data
+  // Schema.org JSON-LD Structured Data (removed fake aggregateRating)
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
@@ -84,13 +85,6 @@ export default async function RepoDetailPage({ params }: PageProps) {
     description: repo?.description || "Public open-source repository",
     programmingLanguage: repo?.language || "Multi-Language",
     codeRepository: repo?.github_url || `https://github.com/${fullName}`,
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: (repo?.c_rank_score || 75.0) / 20, // 1 to 5 scale
-      bestRating: "5",
-      worstRating: "1",
-      ratingCount: repo?.stars || 100,
-    },
   };
 
   const faqJsonLd = {
@@ -110,11 +104,13 @@ export default async function RepoDetailPage({ params }: PageProps) {
         name: `What is the PR merge rate for ${fullName}?`,
         acceptedAnswer: {
           "@type": "Answer",
-          text: `The external pull request merge rate for ${fullName} is ${((repo?.external_pr_merge_rate || 0) * 100).toFixed(1)}%.`,
+          text: `The external pull request merge rate for ${fullName} is ${(repo?.external_pr_merge_rate || 0).toFixed(1)}%.`,
         },
       },
     ],
   };
+
+  const langSlug = getLanguageSlug(repo?.language || "other");
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -130,7 +126,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
         "@type": "ListItem",
         position: 2,
         name: `${repo?.language || "Multi-Language"} Good First Issues`,
-        item: `https://opendoor.abhishekco.de/good-first-issue/${(repo?.language || "other").toLowerCase()}`,
+        item: `https://opendoor.abhishekco.de/good-first-issue/${langSlug}`,
       },
       {
         "@type": "ListItem",

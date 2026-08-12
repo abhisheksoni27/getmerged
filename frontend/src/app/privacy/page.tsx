@@ -1,9 +1,22 @@
-"use client";
-
 import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ShieldCheck } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy - Opendoor",
+  description: "Opendoor privacy policy details on GitHub OAuth telemetry, data protection, and cookie usage.",
+  alternates: {
+    canonical: "https://opendoor.abhishekco.de/privacy",
+  },
+  openGraph: {
+    title: "Privacy Policy - Opendoor",
+    description: "Opendoor privacy policy details on GitHub OAuth telemetry, data protection, and cookie usage.",
+    url: "https://opendoor.abhishekco.de/privacy",
+    siteName: "Opendoor",
+  },
+};
 
 export default function PrivacyPolicyPage() {
   return (

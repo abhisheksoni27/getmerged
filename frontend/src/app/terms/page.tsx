@@ -1,9 +1,22 @@
-"use client";
-
 import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FileText } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Service - Opendoor",
+  description: "Opendoor platform terms of service, C-Rank™ telemetry usage, and license agreement.",
+  alternates: {
+    canonical: "https://opendoor.abhishekco.de/terms",
+  },
+  openGraph: {
+    title: "Terms of Service - Opendoor",
+    description: "Opendoor platform terms of service, C-Rank™ telemetry usage, and license agreement.",
+    url: "https://opendoor.abhishekco.de/terms",
+    siteName: "Opendoor",
+  },
+};
 
 export default function TermsPage() {
   return (
