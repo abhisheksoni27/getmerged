@@ -168,7 +168,6 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
 		LEFT JOIN indexing_queue q ON r.full_name = q.full_name
 		WHERE r.updated_at <= ?
-		  AND r.stars >= 500
 		  AND EXISTS (SELECT 1 FROM repo_pr_events e WHERE e.repository_id = r.id)
 		  AND (q.status IS NULL OR q.status NOT IN ('pending', 'processing'))
 		ORDER BY r.updated_at ASC
