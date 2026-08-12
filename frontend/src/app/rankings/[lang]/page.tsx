@@ -4,29 +4,24 @@ import { Footer } from "@/components/Footer";
 import { RepoCard } from "@/components/RepoCard";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
-import { getLanguageSlug } from "@/lib/languageSlug";
+import { canonicalizeSlug, displayNameFromSlug } from "@/lib/languageSlug";
 import { Sparkles, Code2, ArrowLeft, ShieldCheck, Trophy } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 interface PageProps {
   params: Promise<{ lang: string }>;
 }
 
-const formatLangName = (slug: string) => {
-  const s = slug.toLowerCase();
-  if (s === "typescript") return "TypeScript";
-  if (s === "javascript") return "JavaScript";
-  if (s === "cpp" || s === "cplusplus") return "C++";
-  if (s === "csharp") return "C#";
-  return slug.charAt(0).toUpperCase() + slug.slice(1);
-};
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang } = await params;
-  const languageName = formatLangName(lang);
-  const canonicalLang = getLanguageSlug(languageName);
+  const canonicalLang = canonicalizeSlug(lang);
+  if (lang !== canonicalLang) {
+    redirect(`/rankings/${canonicalLang}`);
+  }
 
+  const languageName = displayNameFromSlug(lang);
   const title = `Top Welcoming Open-Source ${languageName} Projects (C-Rank™) - Opendoor`;
   const description = `Discover high-ranking open-source ${languageName} repositories with fast maintainer response times and high PR merge rates on Opendoor.`;
 
@@ -73,7 +68,12 @@ async function getRankingRepos(languageName: string): Promise<Repo[]> {
 
 export default async function LanguageRankingsPage({ params }: PageProps) {
   const { lang } = await params;
-  const languageName = formatLangName(lang);
+  const canonicalLang = canonicalizeSlug(lang);
+  if (lang !== canonicalLang) {
+    redirect(`/rankings/${canonicalLang}`);
+  }
+
+  const languageName = displayNameFromSlug(canonicalLang);
   const repos = await getRankingRepos(languageName);
 
   return (

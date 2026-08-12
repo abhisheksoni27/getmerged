@@ -4,30 +4,24 @@ import { Footer } from "@/components/Footer";
 import { RepoCard } from "@/components/RepoCard";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
-import { getLanguageSlug } from "@/lib/languageSlug";
+import { canonicalizeSlug, displayNameFromSlug } from "@/lib/languageSlug";
 import { Sparkles, Code2, ArrowLeft, ShieldCheck, Sprout } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 interface PageProps {
   params: Promise<{ lang: string }>;
 }
 
-const formatLangName = (slug: string) => {
-  const s = slug.toLowerCase();
-  if (s === "typescript") return "TypeScript";
-  if (s === "javascript") return "JavaScript";
-  if (s === "cpp" || s === "cplusplus") return "C++";
-  if (s === "csharp") return "C#";
-  if (s === "golang" || s === "go") return "Go";
-  return slug.charAt(0).toUpperCase() + slug.slice(1);
-};
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang } = await params;
-  const languageName = formatLangName(lang);
-  const canonicalLang = getLanguageSlug(languageName);
+  const canonicalLang = canonicalizeSlug(lang);
+  if (lang !== canonicalLang) {
+    redirect(`/good-first-issue/${canonicalLang}`);
+  }
 
+  const languageName = displayNameFromSlug(lang);
   const title = `Good First Issues in ${languageName} (Beginner Friendly) - Opendoor`;
   const description = `Find open-source ${languageName} repositories with active Good First Issues, beginner-friendly labels, fast review response times, and high first-timer merge rates on Opendoor.`;
 
@@ -76,8 +70,12 @@ async function getGFIRepos(languageName: string): Promise<Repo[]> {
 
 export default async function GoodFirstIssuePage({ params }: PageProps) {
   const { lang } = await params;
-  const languageName = formatLangName(lang);
-  const canonicalLang = getLanguageSlug(languageName);
+  const canonicalLang = canonicalizeSlug(lang);
+  if (lang !== canonicalLang) {
+    redirect(`/good-first-issue/${canonicalLang}`);
+  }
+
+  const languageName = displayNameFromSlug(canonicalLang);
   const repos = await getGFIRepos(languageName);
 
   const jsonLd = {

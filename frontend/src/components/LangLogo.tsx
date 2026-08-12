@@ -34,6 +34,8 @@ export function LangLogo({ language, className = "h-4 w-4" }: { language?: strin
     <img
       src={`https://skillicons.dev/icons?i=${iconSlug}`}
       alt={language}
+      width={20}
+      height={20}
       className={`${className} object-contain shrink-0 rounded-xs`}
     />
   );

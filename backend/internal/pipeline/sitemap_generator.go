@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log/slog"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -11,6 +12,29 @@ import (
 
 	"github.com/jmoiron/sqlx"
 )
+
+// languageSlug mirrors the frontend getLanguageSlug() so sitemap URLs always
+// match the canonical routes (/rankings/csharp, /rankings/cpp). Sitemap files
+// and URLs must never contain raw '#' or '+' characters: '#' starts a URL
+// fragment (crawlers strip it) and '+' collides with path decoding.
+func languageSlug(lang string) string {
+	normalized := strings.ToLower(strings.TrimSpace(lang))
+	switch normalized {
+	case "c#":
+		return "csharp"
+	case "c++", "cplusplus":
+		return "cpp"
+	case "golang":
+		return "go"
+	}
+	normalized = strings.ReplaceAll(normalized, " ", "-")
+	return strings.Map(func(r rune) rune {
+		if (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9') || r == '-' {
+			return r
+		}
+		return -1
+	}, normalized)
+}
 
 type URL struct {
 	Loc        string `xml:"loc"`
@@ -52,10 +76,11 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 	baseUrl := "https://opendoor.abhishekco.de"
 	today := time.Now().UTC().Format(time.RFC3339)
 
-	// Group repos by normalized language
+	// Group repos by canonical slug (mirrors frontend getLanguageSlug so the
+	// sitemap never emits raw '#'/'+' language segments).
 	langMap := make(map[string][]repoInfo)
 	for _, r := range repos {
-		lang := strings.ToLower(strings.TrimSpace(r.Language))
+		lang := languageSlug(r.Language)
 		if lang == "" {
 			lang = "other"
 		}
@@ -144,7 +169,7 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		}
 
 		indexSitemaps = append(indexSitemaps, Sitemap{
-			Loc:     fmt.Sprintf("%s/sitemap/%s", baseUrl, fileName),
+			Loc:     fmt.Sprintf("%s/sitemap/%s", baseUrl, url.PathEscape(fileName)),
 			LastMod: today,
 		})
 	}
