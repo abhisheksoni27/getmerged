@@ -16,6 +16,9 @@ type NormalisedMetrics struct {
 }
 
 // PercentileRank returns the percentile rank (0–100) of value within all.
+// all must be sorted ascending (callers pass extractField output). Uses
+// binary search: O(log n) instead of the O(n) linear scan that made
+// NormaliseAll quadratic over the whole repo population.
 func PercentileRank(value float64, all []float64) float64 {
 	if len(all) == 0 {
 		return 0
@@ -23,12 +26,9 @@ func PercentileRank(value float64, all []float64) float64 {
 	if len(all) == 1 {
 		return 50.0 // Default to 50th percentile when no peers exist
 	}
-	below := 0
-	for _, v := range all {
-		if v < value {
-			below++
-		}
-	}
+	// sort.SearchFloat64s returns the first index where all[i] >= value,
+	// which equals the count of elements strictly below value.
+	below := sort.SearchFloat64s(all, value)
 	return float64(below) / float64(len(all)) * 100
 }
 

@@ -1,6 +1,8 @@
 package scoring_test
 
 import (
+	"math/rand"
+	"sort"
 	"testing"
 
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
@@ -96,5 +98,39 @@ func TestNormaliseAll_ZeroMeansNoData(t *testing.T) {
 	}
 	if normed[0].Responsiveness != 0 {
 		t.Errorf("Responsiveness: zero raw value should score 0, got %.2f", normed[0].Responsiveness)
+	}
+}
+
+func TestPercentileRank_MatchesLinearScan(t *testing.T) {
+	// Regression: binary-search PercentileRank must equal the old O(n) linear
+	// scan for every value in a representative population.
+	rng := rand.New(rand.NewSource(42))
+	all := make([]float64, 1000)
+	for i := range all {
+		all[i] = float64(rng.Intn(1000))
+	}
+	sort.Float64s(all)
+
+	linear := func(value float64, a []float64) float64 {
+		if len(a) == 0 {
+			return 0
+		}
+		if len(a) == 1 {
+			return 50.0
+		}
+		below := 0
+		for _, v := range a {
+			if v < value {
+				below++
+			}
+		}
+		return float64(below) / float64(len(a)) * 100
+	}
+
+	for i := 0; i < 200; i++ {
+		v := float64(rng.Intn(1000))
+		if got, want := scoring.PercentileRank(v, all), linear(v, all); got != want {
+			t.Errorf("PercentileRank(%v) = %.4f, want %.4f", v, got, want)
+		}
 	}
 }
