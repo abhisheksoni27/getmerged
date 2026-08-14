@@ -41,9 +41,10 @@ export function StatusClient() {
       <main className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 flex-1 w-full font-sans text-zinc-800">
         <Link
           href="/"
+          title="Return to Opendoor Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100/70 text-xs text-zinc-600 hover:bg-zinc-200/60 hover:text-zinc-900 transition-colors mb-6 font-sans border border-zinc-200/20"
         >
-          <ArrowLeft className="h-3.5 w-3.5" /> Back to opendoor
+          <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200/40 pb-6 mb-8">

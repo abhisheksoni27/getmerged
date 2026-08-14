@@ -932,6 +932,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                               <div className="flex items-center gap-2">
                                 <Link
                                   href={`/rankings/${getLanguageSlug(item.language)}`}
+                                  title={`View Top Welcoming Open-Source ${item.language} Repositories`}
                                   className="font-space text-2xl font-black text-zinc-900 group-hover:text-blue-600 transition-colors tracking-tight hover:underline"
                                 >
                                   {item.language}

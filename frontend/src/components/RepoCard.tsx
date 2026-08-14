@@ -129,6 +129,7 @@ export function RepoCard({ repo, isLoggedIn = false, isSpotlight = false, spotli
     <a
       href={`/${ownerPart}/${namePart}`}
       onClick={handleClick}
+      title={`View ${repo.full_name} C-Rank scorecard, PR response time & merge metrics`}
       className={`group relative flex h-full flex-col justify-between rounded-xl p-5 border-2 transition-all duration-150 block text-current no-underline cursor-pointer ${
         isSpotlight
           ? currentSpotlightTheme.container
