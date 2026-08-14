@@ -32,6 +32,7 @@ import { getLanguageSlug } from "@/lib/languageSlug";
 import posthog from "posthog-js";
 import { AuthModal } from "@/components/AuthModal";
 import { RepoCard } from "@/components/RepoCard";
+import { LangLogo } from "@/components/LangLogo";
 
 interface ClientRepoDetailProps {
   repo: Repo | null;
@@ -280,6 +281,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         <main className="mx-auto max-w-5xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
           <Link
             href="/"
+            title="Return to Opendoor Explorer Home"
             className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-zinc-900 transition-colors mb-8"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
@@ -306,6 +308,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <div className="flex items-center justify-center gap-3">
               <Link
                 href="/"
+                title="Return to Opendoor Explorer Home"
                 className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -321,6 +324,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       <main className="mx-auto max-w-6xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
         <Link
           href="/"
+          title="Return to Opendoor Explorer Home"
           className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-zinc-900 transition-colors mb-8"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
@@ -422,6 +426,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       {/* Navigation Breadcrumb */}
       <Link
         href="/"
+        title="Return to Opendoor Explorer Home"
         className="inline-flex items-center gap-1.5 text-xs font-sans text-zinc-500 hover:text-zinc-900 transition-colors mb-6"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
@@ -449,9 +454,11 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               {repo?.language && (
                 <Link
                   href={`/rankings/${getLanguageSlug(repo.language)}`}
-                  className="inline-block border-2 border-[#222831] bg-white text-[#222831] px-2.5 py-0.5 text-xs font-black font-mono rounded-lg shadow-[2px_2px_0px_0px_#222831] hover:bg-zinc-100 transition-colors"
+                  title={`View Top Welcoming Open-Source ${repo.language} Projects`}
+                  className="inline-flex items-center gap-1 border-2 border-[#222831] shadow-[2px_2px_0px_0px_#222831] bg-white px-2.5 py-0.5 font-space text-xs font-black rounded-lg text-[#222831] hover:bg-zinc-50 transition-colors"
                 >
-                  {repo.language}
+                  <LangLogo language={repo.language} />
+                  <span>{repo.language}</span>
                 </Link>
               )}
             </div>
@@ -649,6 +656,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               <Link
                 key={rel.id || rel.full_name}
                 href={`/${rel.full_name}`}
+                title={`View ${rel.full_name} PR merge statistics and C-Rank scorecard`}
                 className="px-3 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-emerald-300 hover:text-emerald-200 border border-zinc-700 transition-colors font-bold no-underline inline-flex items-center gap-1 text-[11px]"
               >
                 <span>{rel.full_name}</span>
@@ -731,9 +739,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 <span className="text-[11px] font-sans text-zinc-500">Looking for more {repo.language} beginner tasks?</span>
                 <Link
                   href={`/good-first-issue/${getLanguageSlug(repo.language)}`}
+                  title={`Explore all ${repo.language} Good First Issues on Opendoor`}
                   className="text-xs font-bold text-emerald-700 hover:text-emerald-800 font-sans inline-flex items-center gap-1 hover:underline"
                 >
-                  Explore all {repo.language} Good First Issues <ArrowRight className="h-3 w-3" />
+                  Explore all {repo.language} Good First Issues <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
             )}
@@ -747,9 +756,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               <div className="text-center pt-2">
                 <Link
                   href={`/good-first-issue/${getLanguageSlug(repo.language)}`}
+                  title={`Browse open ${repo.language} beginner tasks across other projects`}
                   className="text-xs font-bold text-emerald-700 hover:text-emerald-800 font-sans inline-flex items-center gap-1 hover:underline"
                 >
-                  Browse open {repo.language} Good First Issues across other repos <ArrowRight className="h-3 w-3" />
+                  Browse open {repo.language} Good First Issues across other repos <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
             )}
@@ -837,6 +847,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             {repo?.language && (
               <Link
                 href={`/rankings/${getLanguageSlug(repo.language)}`}
+                title={`View all ${repo.language} rankings on Opendoor`}
                 className="text-xs font-bold text-emerald-700 hover:text-emerald-800 font-sans flex items-center gap-1 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200"
               >
                 View all {repo.language} rankings <ArrowRight className="h-3.5 w-3.5" />

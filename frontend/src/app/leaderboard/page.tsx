@@ -55,6 +55,7 @@ export default async function LeaderboardPage() {
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 flex-1 w-full text-zinc-800">
         <Link
           href="/"
+          title="Return to Opendoor Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100/70 text-xs text-zinc-600 hover:bg-zinc-200/60 hover:text-zinc-900 transition-colors mb-6 font-sans border border-zinc-200/20"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
@@ -97,7 +98,11 @@ export default async function LeaderboardPage() {
                       #{idx + 1}
                     </td>
                     <td className="py-4 px-4 font-bold text-zinc-900">
-                      <Link href={`/${owner}/${name}`} className="hover:text-emerald-600 transition-colors font-space text-sm">
+                      <Link
+                        href={`/${owner}/${name}`}
+                        title={`View ${repo.full_name} C-Rank details & merge telemetry`}
+                        className="hover:text-emerald-600 transition-colors font-space text-sm"
+                      >
                         {repo.full_name}
                       </Link>
                       <div className="text-[11px] font-normal text-zinc-400 font-sans truncate max-w-md mt-0.5">

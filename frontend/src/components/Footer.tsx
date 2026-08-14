@@ -24,7 +24,7 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 pb-12 border-b border-zinc-800/80 font-mono text-xs">
           {/* Column 1: Brand & Tagline */}
           <div className="col-span-2 space-y-4 font-sans pr-4">
-            <Link href="/" className="flex items-center gap-2.5">
+            <Link href="/" title="opendoor - Glassdoor for Open Source Repositories" className="flex items-center gap-2.5">
               <div className="relative flex h-7 w-7 items-center justify-center rounded-lg bg-brand-cream border-2 border-brand-dark font-space font-extrabold text-zinc-950 text-xs shadow-[1px_1px_0px_#222831]">
                 OD
               </div>
@@ -44,7 +44,11 @@ export function Footer() {
             <ul className="space-y-2 text-zinc-400 font-mono text-[11px]">
               {topLanguages.slice(0, 5).map((lang) => (
                 <li key={lang.slug}>
-                  <Link href={`/rankings/${lang.slug}`} className="hover:text-emerald-400 transition-colors">
+                  <Link
+                    href={`/rankings/${lang.slug}`}
+                    title={`Top Welcoming ${lang.name} Open Source Repositories`}
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     Top {lang.name} Repos
                   </Link>
                 </li>
@@ -58,7 +62,11 @@ export function Footer() {
             <ul className="space-y-2 text-zinc-400 font-mono text-[11px]">
               {topLanguages.slice(0, 5).map((lang) => (
                 <li key={lang.slug}>
-                  <Link href={`/good-first-issue/${lang.slug}`} className="hover:text-emerald-400 transition-colors">
+                  <Link
+                    href={`/good-first-issue/${lang.slug}`}
+                    title={`Beginner Friendly Good First Issues in ${lang.name}`}
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     {lang.name} Good First Issues
                   </Link>
                 </li>
@@ -71,7 +79,7 @@ export function Footer() {
             <h4 className="font-extrabold text-white text-xs uppercase tracking-wider font-space">Platform</h4>
             <ul className="space-y-2 text-zinc-400 font-mono text-[11px]">
               <li>
-                <Link href="/status" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
+                <Link href="/status" title="Opendoor Service & Pipeline Uptime Status" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
                   <Activity className="h-3 w-3 text-emerald-500" /> System Status
                 </Link>
               </li>
@@ -103,12 +111,12 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <Link href="/privacy" className="hover:text-emerald-400 transition-colors">
+                <Link href="/privacy" title="Opendoor Privacy Policy" className="hover:text-emerald-400 transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-emerald-400 transition-colors">
+                <Link href="/terms" title="Opendoor Terms of Service" className="hover:text-emerald-400 transition-colors">
                   Terms of Service
                 </Link>
               </li>
@@ -122,10 +130,10 @@ export function Footer() {
             © {new Date().getFullYear()} opendoor - Glassdoor for Open Source Repositories. Built with ❤️ for open-source contributors.
           </div>
           <div className="flex items-center gap-6">
-            <Link href="/" className="hover:text-zinc-300">Home</Link>
-            <Link href="/status" className="hover:text-zinc-300">Status</Link>
-            <Link href="/privacy" className="hover:text-zinc-300">Privacy</Link>
-            <Link href="/terms" className="hover:text-zinc-300">Terms</Link>
+            <Link href="/" title="Opendoor Open Source Explorer Home" className="hover:text-zinc-300">Home</Link>
+            <Link href="/status" title="System Status" className="hover:text-zinc-300">Status</Link>
+            <Link href="/privacy" title="Privacy Policy" className="hover:text-zinc-300">Privacy</Link>
+            <Link href="/terms" title="Terms of Service" className="hover:text-zinc-300">Terms</Link>
             <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" title="opendoor on GitHub" className="hover:text-zinc-300">GitHub</a>
           </div>
         </div>
