@@ -406,7 +406,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const mergeScore = repo?.external_pr_merge_rate || 0;
   const firstTimerScore = repo?.first_timer_success_rate || 0;
   const compositeScore = (mergeScore * 0.4) + (responseScore * 0.3) + (firstTimerScore * 0.3);
-  const cNPS = Math.round((compositeScore * 2) - 100);
+  const vibeScore = Math.round(compositeScore);
 
   const distinctMaintainers = repo?.distinct_maintainer_count !== undefined ? repo.distinct_maintainer_count : 0;
   const maintainersCommentary = distinctMaintainers > 5
@@ -587,14 +587,14 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </div>
         </div>
 
-        {/* cNPS Circular Gauge Card */}
+        {/* Contributor Vibe Score Circular Gauge Card */}
         <div className="border-3 border-[#222831] bg-white p-6 shadow-[4px_4px_0px_0px_#222831] rounded-2xl flex flex-col items-center justify-between text-center transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
           <div className="w-full flex justify-between items-center border-b border-zinc-100 pb-2 mb-3">
-            <span className="text-xs font-black text-zinc-400 uppercase tracking-wider font-mono">Contributor NPS</span>
+            <span className="text-xs font-black text-zinc-400 uppercase tracking-wider font-mono">Contributor Vibe</span>
             <span className={`px-2 py-0.5 text-[10px] font-black font-mono border-2 border-[#222831] rounded-md ${
-              cNPS >= 30 ? "bg-emerald-100 text-emerald-800" : cNPS >= 0 ? "bg-blue-100 text-blue-800" : "bg-rose-100 text-rose-800"
+              vibeScore >= 75 ? "bg-emerald-100 text-emerald-800" : vibeScore >= 50 ? "bg-blue-100 text-blue-800" : "bg-rose-100 text-rose-800"
             }`}>
-              {cNPS >= 30 ? "PROMOTER" : cNPS >= 0 ? "NEUTRAL" : "DETRACTOR"}
+              {vibeScore >= 75 ? "HIGH MERGE VIBES" : vibeScore >= 50 ? "SELECTIVE" : "STEEP CURVE"}
             </span>
           </div>
 
@@ -603,8 +603,8 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               const radius = 50;
               const strokeWidth = 10;
               const circumference = 2 * Math.PI * radius; // ~314.16
-              const cNPSPercentage = ((cNPS + 100) / 200) * 100;
-              const strokeDashoffset = circumference - (cNPSPercentage / 100) * circumference;
+              const vibePercentage = Math.min(100, Math.max(0, vibeScore));
+              const strokeDashoffset = circumference - (vibePercentage / 100) * circumference;
 
               return (
                 <>
@@ -612,7 +612,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     <circle cx="60" cy="60" r={radius} fill="transparent" stroke="#f4f4f5" strokeWidth={strokeWidth} />
                     <circle
                       cx="60" cy="60" r={radius} fill="transparent"
-                      stroke={cNPS >= 30 ? "#10b981" : cNPS >= 0 ? "#3b82f6" : "#f43f5e"}
+                      stroke={vibeScore >= 75 ? "#10b981" : vibeScore >= 50 ? "#3b82f6" : "#f43f5e"}
                       strokeWidth={strokeWidth}
                       strokeDasharray={circumference}
                       strokeDashoffset={strokeDashoffset}
@@ -622,9 +622,9 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                   </svg>
                   <div className="absolute flex flex-col items-center justify-center">
                     <span className="text-3xl font-black text-[#222831] font-mono">
-                      {cNPS > 0 ? `+${cNPS}` : cNPS}
+                      {vibeScore}<span className="text-sm font-normal text-zinc-400">/100</span>
                     </span>
-                    <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider font-mono">cNPS Score</span>
+                    <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider font-mono">PR Merge Index</span>
                   </div>
                 </>
               );
@@ -632,7 +632,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </div>
 
           <p className="text-[11px] text-zinc-500 max-w-xs font-sans mt-3 leading-tight">
-            Derived Net Promoter Score rating based on accept rates, review speed, and first-timer compatibility.
+            How likely your PR gets merged based on review turnaround, first-timer acceptance, and maintainer activity.
           </p>
         </div>
       </div>
