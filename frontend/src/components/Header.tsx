@@ -117,6 +117,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             <a
               href={`${API_BASE_URL}/api/v1/auth/github`}
               onClick={() => posthog.capture('github_sign_in_clicked', { source: 'header' })}
+              title="Sign in with GitHub to track and save open source repositories"
               className="inline-flex items-center gap-1.5 sm:gap-2 rounded-xl bg-zinc-900 px-3.5 py-1.5 sm:px-4.5 sm:py-2 text-[11px] sm:text-xs font-medium font-sans text-white shadow-xs hover:bg-zinc-800 active:scale-95 transition-all whitespace-nowrap cursor-pointer"
             >
               <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4 fill-current shrink-0" viewBox="0 0 24 24">

@@ -14,10 +14,12 @@ import (
 )
 
 type createFeedbackReq struct {
-	RepoID    string `json:"repo_id" binding:"required"`
-	FullName  string `json:"full_name" binding:"required"`
-	Sentiment string `json:"sentiment" binding:"required"`
-	Comment   string `json:"comment" binding:"required"`
+	RepoID             string `json:"repo_id" binding:"required"`
+	FullName           string `json:"full_name" binding:"required"`
+	MaintainerRating   int    `json:"maintainer_rating" binding:"required,min=1,max=5"`
+	ReviewSpeedRating  int    `json:"review_speed_rating" binding:"required,min=1,max=5"`
+	BeginnerRating     int    `json:"beginner_rating" binding:"required,min=1,max=5"`
+	Comment            string `json:"comment"`
 }
 
 type feedbackRecord struct {
@@ -34,17 +36,31 @@ type feedbackRecord struct {
 // Issues #6 & #7: Validates GitHub contributor commits before setting verified_contributor flag.
 func CreateFeedback(db *sqlx.DB, ghToken string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userID := c.GetString(middleware.UserIDKey)
-		username := c.GetString(middleware.UsernameKey)
-		if userID == "" {
+		userIDVal, exists := c.Get(middleware.UserIDKey)
+		if !exists {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "authentication required"})
 			return
 		}
+		userID, ok := userIDVal.(int64)
+		if !ok || userID == 0 {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "authentication required"})
+			return
+		}
+		username := c.GetString(middleware.UsernameKey)
 
 		var req createFeedbackReq
 		if err := c.ShouldBindJSON(&req); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid payload"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid payload: " + err.Error()})
 			return
+		}
+
+		// Derive sentiment server-side from average rating
+		avg := float64(req.MaintainerRating+req.ReviewSpeedRating+req.BeginnerRating) / 3.0
+		sentiment := "unresponsive"
+		if avg >= 4.0 {
+			sentiment = "welcoming"
+		} else if avg >= 3.0 {
+			sentiment = "selective"
 		}
 
 		// Ensure feedback table exists
@@ -55,8 +71,12 @@ func CreateFeedback(db *sqlx.DB, ghToken string) gin.HandlerFunc {
 				user_id VARCHAR(36) NOT NULL,
 				sentiment VARCHAR(50) NOT NULL,
 				comment TEXT NOT NULL,
+				maintainer_rating TINYINT UNSIGNED NOT NULL DEFAULT 0,
+				review_speed_rating TINYINT UNSIGNED NOT NULL DEFAULT 0,
+				beginner_rating TINYINT UNSIGNED NOT NULL DEFAULT 0,
 				verified_contributor BOOLEAN NOT NULL DEFAULT 0,
-				created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+				created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				UNIQUE KEY uq_user_repo (user_id, repository_id)
 			)
 		`)
 
@@ -65,9 +85,20 @@ func CreateFeedback(db *sqlx.DB, ghToken string) gin.HandlerFunc {
 
 		feedbackID := uuid.New().String()
 		_, err := db.Exec(`
-			INSERT INTO contributor_feedbacks (id, repository_id, user_id, sentiment, comment, verified_contributor, created_at)
-			VALUES (?, ?, ?, ?, ?, ?, ?)
-		`, feedbackID, req.RepoID, userID, req.Sentiment, strings.TrimSpace(req.Comment), isVerified, time.Now().UTC())
+			INSERT INTO contributor_feedbacks
+				(id, repository_id, user_id, sentiment, comment, maintainer_rating, review_speed_rating, beginner_rating, verified_contributor, created_at)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			ON DUPLICATE KEY UPDATE
+				sentiment = VALUES(sentiment),
+				comment = VALUES(comment),
+				maintainer_rating = VALUES(maintainer_rating),
+				review_speed_rating = VALUES(review_speed_rating),
+				beginner_rating = VALUES(beginner_rating),
+				verified_contributor = VALUES(verified_contributor),
+				created_at = VALUES(created_at)
+		`, feedbackID, req.RepoID, userID, sentiment, strings.TrimSpace(req.Comment),
+			req.MaintainerRating, req.ReviewSpeedRating, req.BeginnerRating,
+			isVerified, time.Now().UTC())
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save feedback"})

@@ -28,6 +28,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    keywords: [
+      `best open source ${languageName} projects`,
+      `top ${languageName} repositories`,
+      "github repositories",
+      "developer portfolio",
+      "open source contribution",
+      "c-rank",
+      "pull request merge rate",
+      "maintainer response time",
+    ],
     alternates: {
       canonical: `https://opendoor.abhishekco.de/rankings/${canonicalLang}`,
     },

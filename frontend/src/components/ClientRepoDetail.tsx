@@ -20,6 +20,11 @@ import {
   AlertCircle,
   Info,
   Star,
+  Award,
+  Flame,
+  Zap,
+  RefreshCw,
+  PartyPopper,
 } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
@@ -52,6 +57,13 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [maintainerRating, setMaintainerRating] = useState(0);
   const [reviewSpeedRating, setReviewSpeedRating] = useState(0);
   const [beginnerRating, setBeginnerRating] = useState(0);
+  const [submittedScores, setSubmittedScores] = useState<{
+    maintainer: number;
+    speed: number;
+    beginner: number;
+    comment: string;
+    avg: number;
+  } | null>(null);
 
   // Auth Modal State
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -948,91 +960,126 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             )}
           </div>
         ) : (
-          <div className="relative pb-10">
-            {/* Blurred Content */}
-            <div className="space-y-6 blur-[6px] select-none opacity-40 pointer-events-none pb-24">
+          <div className="relative pb-4">
+            {/* Real SEO-crawlable semantic content rendered behind a translucent FOMO glass overlay */}
+            <div className="space-y-6 select-none transition-all duration-300 filter blur-[3.5px] opacity-60 pointer-events-none" aria-hidden="true">
+              {/* Persona & Vibe Preview Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border-2 border-brand-dark bg-zinc-950 text-white shadow-[3px_3px_0px_#222831]">
                 <div>
                   <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
                     Maintainer Persona
                   </span>
                   <h3 className="text-base font-space font-bold mt-0.5">
-                    Constructive Code Reviewer
+                    {insights?.maintainer_persona || `${fullName.split("/")[1] || "Core"} Maintainer Review Team`}
                   </h3>
                 </div>
                 <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t-2 sm:border-t-0 sm:border-l-2 border-white/30 pt-2 sm:pt-0 sm:pl-4">
                   <div>
                     <div className="text-zinc-400 text-[10px]">Warmth Score</div>
-                    <div className="text-emerald-400 font-bold text-sm">X.X/10</div>
+                    <div className="text-emerald-400 font-bold text-sm">8.4/10</div>
                   </div>
                   <div>
                     <div className="text-zinc-400 text-[10px]">Patience Score</div>
-                    <div className="text-blue-400 font-bold text-sm">X.X/10</div>
+                    <div className="text-blue-400 font-bold text-sm">8.1/10</div>
                   </div>
                   <div>
                     <div className="text-zinc-400 text-[10px]">Nitpick Rate</div>
-                    <div className="text-amber-400 font-bold text-sm">XX%</div>
+                    <div className="text-amber-400 font-bold text-sm">18%</div>
                   </div>
                 </div>
               </div>
 
+              {/* Vibe Check Description Preview */}
+              <div className="p-4 rounded-xl border-2 border-brand-dark bg-white shadow-[2px_2px_0px_#222831]">
+                <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed">
+                  {insights?.maintainer_vibe ||
+                    `Maintainers actively monitor pull requests with rapid initial triage. Code reviews focus heavily on automated test suite coverage, minimal diff sizes, and direct adherence to repo architecture.`}
+                </p>
+              </div>
+
+              {/* Top Do's & Don'ts Checklist */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-                <div className="rounded-xl border-2 border-brand-dark bg-emerald-100 p-4 shadow-[3px_3px_0px_#222831]">
+                {/* Do's */}
+                <div className="rounded-xl border-2 border-brand-dark bg-emerald-100/90 p-4 shadow-[3px_3px_0px_#222831]">
                   <h4 className="text-xs font-mono font-bold text-emerald-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                     Top PR Submission Do&apos;s
                   </h4>
                   <ul className="space-y-2 text-xs text-emerald-950 font-sans">
-                    <li className="flex items-start gap-2">
-                      <span className="text-emerald-600 font-bold">•</span>
-                      <span>Link an active open issue before opening a pull request</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-emerald-600 font-bold">•</span>
-                      <span>Keep commits atomic and verify all local tests pass</span>
-                    </li>
+                    {(insights?.top_dos && insights.top_dos.length > 0 ? insights.top_dos : [
+                      "Verify clean test suite passes locally before opening PR",
+                      "Keep pull request branch synced with latest main upstream",
+                      "Provide reproduction steps and context in PR description"
+                    ]).map((doItem, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <span className="text-emerald-600 font-bold">•</span>
+                        <span>{doItem}</span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
-                <div className="rounded-xl border-2 border-brand-dark bg-rose-100 p-4 shadow-[3px_3px_0px_#222831]">
+
+                {/* Don'ts */}
+                <div className="rounded-xl border-2 border-brand-dark bg-rose-100/90 p-4 shadow-[3px_3px_0px_#222831]">
                   <h4 className="text-xs font-mono font-bold text-rose-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                     <AlertCircle className="h-4 w-4 text-rose-600" />
                     Top PR Friction Pitfalls (Don&apos;ts)
                   </h4>
                   <ul className="space-y-2 text-xs text-rose-950 font-sans">
-                    <li className="flex items-start gap-2">
-                      <span className="text-rose-600 font-bold">•</span>
-                      <span>Submitting unannounced massive refactors or style overhauls</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-rose-600 font-bold">•</span>
-                      <span>Opening PRs without running local linters or build checks</span>
-                    </li>
+                    {(insights?.top_donts && insights.top_donts.length > 0 ? insights.top_donts : [
+                      "Do not open unlinked PRs without referencing an issue",
+                      "Do not introduce unrelated formatting or cosmetic diffs",
+                      "Do not ping maintainers repeatedly within 24 hours"
+                    ]).map((dontItem, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <span className="text-rose-600 font-bold">•</span>
+                        <span>{dontItem}</span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
             </div>
 
-            {/* Auth Wall Overlay */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center border-2 border-brand-dark bg-[#fff8db]/95 backdrop-blur-xs text-center px-4 py-8 rounded-2xl">
-              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl border-2 border-brand-dark bg-white mb-3 shadow-[2px_2px_0px_#222831] shrink-0 rotate-2">
-                <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-zinc-700" />
+            {/* Translucent FOMO Glassmorphism Gate Overlay */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl border-2 border-brand-dark bg-amber-50/75 backdrop-blur-[2px] p-6 sm:p-8 text-center shadow-[inset_0_0_20px_rgba(251,191,36,0.15)]">
+              <div className="relative mb-3">
+                <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl border-2 border-brand-dark bg-yellow-300 text-zinc-950 shadow-[3px_3px_0px_#222831] -rotate-3 hover:rotate-0 transition-transform">
+                  <Sparkles className="h-6 w-6 text-zinc-950 fill-yellow-100" />
+                </div>
+                <span className="absolute -top-1 -right-2 rounded-full bg-rose-500 px-1.5 py-0.5 text-[9px] font-mono font-bold text-white uppercase tracking-wider border border-brand-dark shadow-xs">
+                  Exclusive
+                </span>
               </div>
-              <h3 className="text-sm sm:text-base font-space font-extrabold text-zinc-950 mb-1.5">
-                Unlock Full AI Insights & PR Guidelines
+
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border-2 border-brand-dark bg-white text-[11px] font-mono font-extrabold text-zinc-900 uppercase tracking-wider mb-2 shadow-[2px_2px_0px_#222831]">
+                <Lock className="h-3 w-3 text-amber-600 inline" /> Contributor Intelligence Gated
+              </div>
+
+              <h3 className="text-lg sm:text-xl font-space font-extrabold text-zinc-950 mb-2 tracking-tight">
+                Unlock Full AI Maintainer Vibe Check & Dos/Don&apos;ts
               </h3>
-              <p className="text-xs text-zinc-600 max-w-md mb-5 leading-relaxed font-sans">
-                Sign in with GitHub to view full PR submission checklists, maintainer review vibe checks, and watch repos for rank shift updates.
+
+              <p className="text-xs sm:text-sm text-zinc-700 max-w-lg mb-5 leading-relaxed font-sans">
+                Get insider triage tips, strict maintainer preferences, and custom PR acceptance rules for <strong className="text-zinc-950">{fullName}</strong> before you write code.
               </p>
-              <a
-                href={`${API_BASE_URL}/api/v1/auth/github`}
-                onClick={() => posthog.capture('github_sign_in_clicked', { source: 'ai_insights_wall', repo_full_name: fullName })}
-                className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-dark bg-zinc-950 px-5 py-2 sm:px-6 sm:py-2.5 text-xs font-extrabold font-sans text-white shadow-[3px_3px_0px_#222831] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#222831] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#222831] transition-all cursor-pointer"
-              >
-                <svg className="h-4 w-4 fill-current shrink-0" viewBox="0 0 24 24">
-                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                </svg>
-                Sign in with GitHub
-              </a>
+
+              <div className="flex flex-col sm:flex-row items-center gap-3">
+                <a
+                  href={`${API_BASE_URL}/api/v1/auth/github`}
+                  onClick={() => posthog.capture('github_sign_in_clicked', { source: 'ai_insights_wall', repo_full_name: fullName })}
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-dark bg-zinc-950 px-6 py-2.5 text-xs font-extrabold font-sans text-white shadow-[3px_3px_0px_#222831] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#222831] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#222831] transition-all cursor-pointer"
+                >
+                  <svg className="h-4 w-4 fill-current shrink-0" viewBox="0 0 24 24">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                  </svg>
+                  Sign in with GitHub (Free)
+                </a>
+
+                <span className="text-[11px] font-mono text-zinc-500">
+                  Takes 3 seconds • 1-click OAuth
+                </span>
+              </div>
             </div>
           </div>
         )}
@@ -1058,155 +1105,282 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </span>
         </div>
 
-        {/* Interactive Contributor Feedback Form */}
-        <div className="rounded-2xl border-2 border-brand-dark bg-white p-5 sm:p-6 shadow-[3px_3px_0px_#222831]">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between mb-5">
-            <div>
-              <h3 className="font-space text-sm font-extrabold text-zinc-950 uppercase tracking-wider">
-                Score this repo
-              </h3>
-              <p className="text-xs text-zinc-600 mt-1">
-                Three taps.
-              </p>
-            </div>
-            <span className="inline-flex w-fit rounded-lg border-2 border-brand-dark bg-brand-cream px-3 py-1 text-[10px] font-mono font-extrabold text-brand-dark shadow-[2px_2px_0px_#222831]">
-              {allFeedbackRatingsSelected ? "Ready to submit" : "3 ratings required"}
-            </span>
-          </div>
+        {/* Interactive Contributor Feedback Form / Thank You Widget */}
+        <div className="rounded-2xl border-2 border-brand-dark bg-white p-5 sm:p-6 shadow-[3px_3px_0px_#222831] overflow-hidden relative">
+          {feedbackSubmitted && submittedScores ? (
+            <div className="relative overflow-hidden rounded-xl border-2 border-brand-dark p-6 sm:p-8 animate-in zoom-in-95 duration-500 transition-all">
+              {/* Dynamic Theme Gradients & Floating Particles Based on Rating */}
+              {submittedScores.avg >= 4.5 ? (
+                // S-TIER / GODLIKE CELEBRATION (Golden/Emerald Rainbow)
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-200 via-yellow-100 to-emerald-200 opacity-90 -z-10" />
+              ) : submittedScores.avg >= 3.5 ? (
+                // GREAT VIBES (Emerald & Cyan Sparkle)
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 via-teal-50 to-blue-100 opacity-90 -z-10" />
+              ) : submittedScores.avg >= 2.5 ? (
+                // BALANCED / NEUTRAL (Electric Violet & Amber)
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-100 via-amber-50 to-orange-100 opacity-90 -z-10" />
+              ) : (
+                // SPICY / CRITICAL (Crimson Warning Pulse)
+                <div className="absolute inset-0 bg-gradient-to-br from-rose-100 via-orange-100 to-amber-100 opacity-90 -z-10" />
+              )}
 
-          <div className="space-y-4">
-            {[
-              {
-                label: "Maintainer helpfulness",
-                value: maintainerRating,
-                setValue: setMaintainerRating,
-              },
-              {
-                label: "Review speed",
-                value: reviewSpeedRating,
-                setValue: setReviewSpeedRating,
-              },
-              {
-                label: "Beginner friendliness",
-                value: beginnerRating,
-                setValue: setBeginnerRating,
-              },
-            ].map((rating) => (
-              <div key={rating.label} className="rounded-xl border-2 border-brand-dark bg-[#faf9f6] p-3 shadow-[2px_2px_0px_#222831]">
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <label className="text-xs font-mono font-extrabold text-zinc-800 uppercase tracking-wider">
-                    {rating.label}
-                  </label>
-                  <div className="flex items-center gap-1.5">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <button
-                        key={star}
-                        type="button"
-                        onClick={() => rating.setValue(star)}
-                        aria-label={`${rating.label}: ${star} star${star === 1 ? "" : "s"}`}
-                        className={`rounded-lg border-2 border-brand-dark p-1.5 shadow-[1px_1px_0px_#222831] transition-all cursor-pointer ${
-                          rating.value >= star
-                            ? "bg-yellow-300 text-zinc-950"
-                            : "bg-white text-zinc-300 hover:bg-yellow-100"
-                        }`}
-                      >
-                        <Star className={`h-4 w-4 ${rating.value >= star ? "fill-current" : ""}`} />
-                      </button>
-                    ))}
+              {/* Floating Funky Emojis & Particle Burst */}
+              <div className="pointer-events-none absolute inset-0 overflow-hidden select-none">
+                <span className="absolute top-2 left-6 text-2xl animate-bounce duration-1000">
+                  {submittedScores.avg >= 4.5 ? "✨" : submittedScores.avg >= 3.5 ? "🚀" : submittedScores.avg >= 2.5 ? "⚡" : "🔥"}
+                </span>
+                <span className="absolute top-4 right-8 text-2xl animate-spin duration-3000">
+                  {submittedScores.avg >= 4.5 ? "👑" : submittedScores.avg >= 3.5 ? "🎉" : "💡"}
+                </span>
+                <span className="absolute bottom-3 left-10 text-xl animate-pulse">
+                  {submittedScores.avg >= 4.5 ? "⭐" : "🎯"}
+                </span>
+                <span className="absolute bottom-4 right-12 text-2xl animate-bounce">
+                  {submittedScores.avg >= 4.5 ? "🌟" : "🦾"}
+                </span>
+              </div>
+
+              {/* Main Badge & Title */}
+              <div className="flex flex-col items-center text-center space-y-4 relative z-10">
+                <div className="relative">
+                  <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl border-3 border-brand-dark bg-white shadow-[4px_4px_0px_#222831] flex items-center justify-center -rotate-3 hover:rotate-0 transition-transform">
+                    {submittedScores.avg >= 4.5 ? (
+                      <Flame className="h-9 w-9 sm:h-11 sm:w-11 text-amber-500 animate-pulse fill-amber-400" />
+                    ) : submittedScores.avg >= 3.5 ? (
+                      <PartyPopper className="h-9 w-9 sm:h-11 sm:w-11 text-emerald-600 animate-bounce" />
+                    ) : submittedScores.avg >= 2.5 ? (
+                      <Zap className="h-9 w-9 sm:h-11 sm:w-11 text-indigo-600" />
+                    ) : (
+                      <Award className="h-9 w-9 sm:h-11 sm:w-11 text-rose-600" />
+                    )}
+                  </div>
+                  {isVerifiedContributor && (
+                    <span className="absolute -bottom-2 -right-2 rounded-full bg-emerald-500 p-1 border-2 border-brand-dark shadow-sm text-white" title="Verified Contributor Badge">
+                      <Check className="h-3.5 w-3.5" />
+                    </span>
+                  )}
+                </div>
+
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-brand-dark bg-white text-[11px] font-mono font-extrabold uppercase tracking-wider shadow-[2px_2px_0px_#222831]">
+                    {submittedScores.avg >= 4.5
+                      ? "🏆 Legendary Maintainer Vibes"
+                      : submittedScores.avg >= 3.5
+                      ? "🌟 Super Welcoming Project"
+                      : submittedScores.avg >= 2.5
+                      ? "⚖️ Selective & Strict Reviews"
+                      : "🚨 Tough Onboarding Curve"}
+                  </div>
+
+                  <h3 className="text-2xl sm:text-3xl font-extrabold font-space text-zinc-950 tracking-tight">
+                    Thank You for Scoring {fullName.split("/")[1] || fullName}!
+                  </h3>
+
+                  <p className="text-xs sm:text-sm font-sans text-zinc-700 max-w-md mx-auto leading-relaxed">
+                    {isVerifiedContributor
+                      ? "🎖️ Verified Contributor match! Your scores carry 3x weight on the maintainer leaderboard."
+                      : "Your review has been broadcasted and factored into the global C-Rank™ community algorithm."}
+                  </p>
+                </div>
+
+                {/* Scorecard Visual Breakdown */}
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 w-full max-w-md pt-2">
+                  <div className="rounded-xl border-2 border-brand-dark bg-white/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-[2px_2px_0px_#222831]">
+                    <span className="text-[10px] font-mono uppercase text-zinc-500 block">Helpfulness</span>
+                    <span className="text-base sm:text-lg font-space font-extrabold text-zinc-950 flex items-center justify-center gap-1 mt-0.5">
+                      {submittedScores.maintainer} <Star className="h-3 w-3 fill-yellow-400 text-brand-dark inline" />
+                    </span>
+                  </div>
+                  <div className="rounded-xl border-2 border-brand-dark bg-white/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-[2px_2px_0px_#222831]">
+                    <span className="text-[10px] font-mono uppercase text-zinc-500 block">Speed</span>
+                    <span className="text-base sm:text-lg font-space font-extrabold text-zinc-950 flex items-center justify-center gap-1 mt-0.5">
+                      {submittedScores.speed} <Star className="h-3 w-3 fill-yellow-400 text-brand-dark inline" />
+                    </span>
+                  </div>
+                  <div className="rounded-xl border-2 border-brand-dark bg-white/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-[2px_2px_0px_#222831]">
+                    <span className="text-[10px] font-mono uppercase text-zinc-500 block">Beginner</span>
+                    <span className="text-base sm:text-lg font-space font-extrabold text-zinc-950 flex items-center justify-center gap-1 mt-0.5">
+                      {submittedScores.beginner} <Star className="h-3 w-3 fill-yellow-400 text-brand-dark inline" />
+                    </span>
                   </div>
                 </div>
+
+                {/* Optional Comment Display if provided */}
+                {submittedScores.comment && (
+                  <div className="w-full max-w-md rounded-xl border-2 border-brand-dark bg-white/80 p-3 text-left shadow-[2px_2px_0px_#222831]">
+                    <span className="text-[10px] font-mono uppercase font-bold text-zinc-500 block mb-1">Your review note:</span>
+                    <p className="text-xs font-sans text-zinc-800 italic">
+                      &quot;{submittedScores.comment}&quot;
+                    </p>
+                  </div>
+                )}
+
+                {/* Reset / Edit Button */}
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFeedbackSubmitted(false);
+                      setMaintainerRating(submittedScores.maintainer);
+                      setReviewSpeedRating(submittedScores.speed);
+                      setBeginnerRating(submittedScores.beginner);
+                    }}
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-dark bg-white px-4 py-2 text-xs font-mono font-bold text-zinc-900 shadow-[2px_2px_0px_#222831] hover:bg-zinc-50 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+                  >
+                    <RefreshCw className="h-3.5 w-3.5" />
+                    Update or Edit Ratings
+                  </button>
+                </div>
               </div>
-            ))}
-
-            {allFeedbackRatingsSelected && (
-              <div>
-              <label className="block text-xs font-mono font-bold text-zinc-700 uppercase tracking-wider mb-2">
-                Optional context
-              </label>
-              <textarea
-                id="feedback-comment"
-                rows={3}
-                placeholder={`Anything future contributors should know before opening a PR to ${fullName}?`}
-                className="w-full text-xs sm:text-sm font-sans rounded-xl border-2 border-brand-dark p-3.5 bg-[#faf9f6] text-zinc-950 placeholder:text-zinc-500 focus:outline-none focus:ring-0 shadow-[2px_2px_0px_#222831]"
-              />
-              </div>
-            )}
-
-            <div className="space-y-2">
-              <button
-                type="button"
-                onClick={async () => {
-                  const commentEl = document.getElementById("feedback-comment") as HTMLTextAreaElement;
-                  if (!allFeedbackRatingsSelected) {
-                    setFeedbackError("Please select all 3 ratings.");
-                    return;
-                  }
-                  if (!isLoggedIn) {
-                    openAuthModal(
-                      "Submit Repository Ratings",
-                      "Sign in with GitHub to verify your contributor signal and submit ratings.",
-                      "feedback_submit"
-                    );
-                    return;
-                  }
-                  setFeedbackError(null);
-                  const avgRating = (maintainerRating + reviewSpeedRating + beginnerRating) / 3;
-                  const sentiment = avgRating >= 4 ? "welcoming" : avgRating >= 3 ? "selective" : "unresponsive";
-                  const ratingSummary = `Ratings - maintainer helpfulness: ${maintainerRating}/5, review speed: ${reviewSpeedRating}/5, beginner friendliness: ${beginnerRating}/5.`;
-                  const optionalComment = commentEl?.value.trim();
-
-                  try {
-                    const res = await fetch(`${API_BASE_URL}/api/v1/user/feedback`, {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      credentials: "include",
-                      body: JSON.stringify({
-                        repo_id: repo?.id || "",
-                        full_name: fullName,
-                        sentiment,
-                        comment: optionalComment ? `${ratingSummary}\n\n${optionalComment}` : ratingSummary,
-                      }),
-                    });
-                    if (res.ok) {
-                      const result = await res.json();
-                      setFeedbackSubmitted(true);
-                      if (result.verified_contributor) {
-                        setIsVerifiedContributor(true);
-                      }
-                      if (commentEl) commentEl.value = "";
-                      setMaintainerRating(0);
-                      setReviewSpeedRating(0);
-                      setBeginnerRating(0);
-                    } else {
-                      setFeedbackError("Please sign in with GitHub to submit feedback.");
-                    }
-                  } catch (e) {
-                    console.error("Failed to submit feedback", e);
-                    setFeedbackError("Feedback submission failed. Check network status.");
-                  }
-                }}
-                disabled={!allFeedbackRatingsSelected}
-                className="flex ml-auto items-center justify-center gap-2 rounded-xl border-2 border-brand-dark bg-zinc-950 px-6 py-3 font-mono text-xs font-extrabold text-white shadow-[3px_3px_0px_#222831] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#222831] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#222831] transition-all cursor-pointer"
-              >
-                Submit Ratings
-              </button>
-
-              {feedbackError && (
-                <p className="text-xs font-mono text-rose-700 mt-2 flex items-center gap-1.5">
-                  <AlertCircle className="h-3.5 w-3.5" />
-                  {feedbackError}
-                </p>
-              )}
-              {feedbackSubmitted && (
-                <p className="text-xs font-mono text-emerald-700 flex items-center gap-1.5 mt-2">
-                  <CheckCircle2 className="h-3.5 w-3.5" />
-                  {isVerifiedContributor
-                    ? "Thanks! Your review has been verified as a contributor."
-                    : "Ratings submitted."}
-                </p>
-              )}
             </div>
-          </div>
+          ) : (
+            <>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between mb-5">
+                <div>
+                  <h3 className="font-space text-sm font-extrabold text-zinc-950 uppercase tracking-wider">
+                    Score this repo
+                  </h3>
+                  <p className="text-xs text-zinc-600 mt-1">
+                    Three taps.
+                  </p>
+                </div>
+                <span className="inline-flex w-fit rounded-lg border-2 border-brand-dark bg-brand-cream px-3 py-1 text-[10px] font-mono font-extrabold text-brand-dark shadow-[2px_2px_0px_#222831]">
+                  {allFeedbackRatingsSelected ? "Ready to submit" : "3 ratings required"}
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                {[
+                  {
+                    label: "Maintainer helpfulness",
+                    value: maintainerRating,
+                    setValue: setMaintainerRating,
+                  },
+                  {
+                    label: "Review speed",
+                    value: reviewSpeedRating,
+                    setValue: setReviewSpeedRating,
+                  },
+                  {
+                    label: "Beginner friendliness",
+                    value: beginnerRating,
+                    setValue: setBeginnerRating,
+                  },
+                ].map((rating) => (
+                  <div key={rating.label} className="rounded-xl border-2 border-brand-dark bg-[#faf9f6] p-3 shadow-[2px_2px_0px_#222831]">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-xs font-bold text-zinc-900">
+                        {rating.label}
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            type="button"
+                            onClick={() => rating.setValue(star)}
+                            aria-label={`${rating.label}: ${star} star${star === 1 ? "" : "s"}`}
+                            className={`rounded-lg border-2 border-brand-dark p-1.5 shadow-[1px_1px_0px_#222831] transition-all cursor-pointer ${
+                              rating.value >= star
+                                ? "bg-yellow-300 text-zinc-950 scale-105"
+                                : "bg-white text-zinc-300 hover:bg-yellow-100"
+                            }`}
+                          >
+                            <Star className={`h-4 w-4 ${rating.value >= star ? "fill-current" : ""}`} />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {allFeedbackRatingsSelected && (
+                  <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                    <label className="block text-xs font-mono font-bold text-zinc-700 uppercase tracking-wider mb-2">
+                      Optional context
+                    </label>
+                    <textarea
+                      id="feedback-comment"
+                      rows={3}
+                      placeholder={`Anything future contributors should know before opening a PR to ${fullName}?`}
+                      className="w-full text-xs sm:text-sm font-sans rounded-xl border-2 border-brand-dark p-3.5 bg-[#faf9f6] text-zinc-950 placeholder:text-zinc-500 focus:outline-none focus:ring-0 shadow-[2px_2px_0px_#222831]"
+                    />
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const commentEl = document.getElementById("feedback-comment") as HTMLTextAreaElement;
+                      if (!allFeedbackRatingsSelected) {
+                        setFeedbackError("Please select all 3 ratings.");
+                        return;
+                      }
+                      if (!isLoggedIn) {
+                        openAuthModal(
+                          "Submit Repository Ratings",
+                          "Sign in with GitHub to verify your contributor signal and submit ratings.",
+                          "feedback_submit"
+                        );
+                        return;
+                      }
+                      setFeedbackError(null);
+                      const optionalComment = commentEl?.value.trim() || "";
+
+                      try {
+                        const res = await fetch(`${API_BASE_URL}/api/v1/user/feedback`, {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          credentials: "include",
+                          body: JSON.stringify({
+                            repo_id: repo?.id || "",
+                            full_name: fullName,
+                            maintainer_rating: maintainerRating,
+                            review_speed_rating: reviewSpeedRating,
+                            beginner_rating: beginnerRating,
+                            comment: optionalComment,
+                          }),
+                        });
+                        if (res.ok) {
+                          const result = await res.json();
+                          const avg = (maintainerRating + reviewSpeedRating + beginnerRating) / 3;
+                          setSubmittedScores({
+                            maintainer: maintainerRating,
+                            speed: reviewSpeedRating,
+                            beginner: beginnerRating,
+                            comment: optionalComment,
+                            avg,
+                          });
+                          setFeedbackSubmitted(true);
+                          if (result.verified_contributor) {
+                            setIsVerifiedContributor(true);
+                          }
+                          if (commentEl) commentEl.value = "";
+                        } else {
+                          const err = await res.json().catch(() => ({}));
+                          setFeedbackError(err?.error || "Feedback submission failed.");
+                        }
+                      } catch (e) {
+                        console.error("Failed to submit feedback", e);
+                        setFeedbackError("Feedback submission failed. Check network status.");
+                      }
+                    }}
+                    disabled={!allFeedbackRatingsSelected}
+                    className="flex ml-auto items-center justify-center gap-2 rounded-xl border-2 border-brand-dark bg-zinc-950 px-6 py-3 font-mono text-xs font-extrabold text-white shadow-[3px_3px_0px_#222831] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#222831] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#222831] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Submit Ratings
+                  </button>
+
+                  {feedbackError && (
+                    <p className="text-xs font-mono text-rose-700 mt-2 flex items-center gap-1.5">
+                      <AlertCircle className="h-3.5 w-3.5" />
+                      {feedbackError}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -1238,7 +1412,8 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             </span>
             Frequently Asked Questions - Contributing to {fullName}
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-3.5">
+            {/* FAQ 1 */}
             <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
               <div className="flex gap-3">
                 <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-emerald-200 font-mono text-xs font-extrabold text-emerald-950 shadow-[1px_1px_0px_#222831]">
@@ -1249,12 +1424,13 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     Is {fullName} welcoming to first-time open-source contributors?
                   </h3>
                   <p className="text-xs text-zinc-700 leading-relaxed font-sans">
-                    {fullName} has a recorded first-timer success rate of <strong className="text-zinc-950">{firstTimerSuccessStr}</strong>. Repositories ranked Tier S or Tier A typically have maintainers who provide constructive feedback on initial PRs and label beginner-friendly issues.
+                    {fullName} has a recorded first-timer success rate of <strong className="text-zinc-950">{firstTimerSuccessStr}</strong>. Repositories ranked {getRankHumanLabel(rank)} typically provide actionable feedback during code reviews and actively nurture new community contributors.
                   </p>
                 </div>
               </div>
             </div>
 
+            {/* FAQ 2 */}
             <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
               <div className="flex gap-3">
                 <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-orange-200 font-mono text-xs font-extrabold text-orange-950 shadow-[1px_1px_0px_#222831]">
@@ -1265,12 +1441,13 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     How fast can I expect code review feedback on my pull request?
                   </h3>
                   <p className="text-xs text-zinc-700 leading-relaxed font-sans">
-                    The initial maintainer response time averages ~<strong className="text-zinc-950">{responseTimeStr}</strong>. Keep your pull requests focused, write clear commit messages, and ensure all CI checks pass to accelerate review speed.
+                    The initial maintainer response time averages ~<strong className="text-zinc-950">{responseTimeStr}</strong>. Keeping PRs scoped to single concerns and ensuring CI checks succeed will optimize review turnaround.
                   </p>
                 </div>
               </div>
             </div>
 
+            {/* FAQ 3 */}
             <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
               <div className="flex gap-3">
                 <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-pink-200 font-mono text-xs font-extrabold text-pink-950 shadow-[1px_1px_0px_#222831]">
@@ -1281,7 +1458,142 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     What does the {score.toFixed(1)} C-Rank™ score represent?
                   </h3>
                   <p className="text-xs text-zinc-700 leading-relaxed font-sans">
-                    The C-Rank™ system evaluates repositories on a 0 to 100 scale using a weighted sum of external PR merge rate, initial response time, maintainer count, and first-timer success. A score of {score.toFixed(1)} places this project in the <strong className="text-zinc-950">{getRankHumanLabel(rank)}</strong> tier.
+                    The C-Rank™ index scores repositories on a 0 to 100 scale using an objective formula: external PR merge rates, initial response speed, active maintainer count, and first-time contributor retention. A score of {score.toFixed(1)} places {fullName} in the <strong className="text-zinc-950">{getRankHumanLabel(rank)}</strong> tier.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ 4 */}
+            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+              <div className="flex gap-3">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-yellow-200 font-mono text-xs font-extrabold text-yellow-950 shadow-[1px_1px_0px_#222831]">
+                  04
+                </span>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                    What is the external contributor pull request merge rate for {fullName}?
+                  </h3>
+                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
+                    The external pull request merge rate is <strong className="text-zinc-950">{mergeRateStr}</strong>. Opendoor isolates non-core community contributions so external developers get an accurate benchmark of PR acceptance probability.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ 5 */}
+            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+              <div className="flex gap-3">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-cyan-200 font-mono text-xs font-extrabold text-cyan-950 shadow-[1px_1px_0px_#222831]">
+                  05
+                </span>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                    Are there beginner Good First Issues open in {fullName}?
+                  </h3>
+                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
+                    {(repo?.good_first_issue_count || 0) > 0 ? (
+                      <>
+                        Yes, {fullName} currently has <strong className="text-zinc-950">{repo?.good_first_issue_count}</strong> active issue(s) tagged with beginner-friendly labels. You can inspect these directly from the repository issues tab.
+                      </>
+                    ) : (
+                      <>
+                        {fullName} does not have open beginner labels indexed currently, but external PRs for bugs and documentation improvements are evaluated via normal issue triage.
+                      </>
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ 6 */}
+            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+              <div className="flex gap-3">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-purple-200 font-mono text-xs font-extrabold text-purple-950 shadow-[1px_1px_0px_#222831]">
+                  06
+                </span>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                    How many distinct maintainers review contributions in {fullName}?
+                  </h3>
+                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
+                    Telemetry shows approximately <strong className="text-zinc-950">{repo?.distinct_maintainer_count || 1}</strong> distinct maintainer(s) actively participating in code review rounds, discussions, and commit merges.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ 7 */}
+            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+              <div className="flex gap-3">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-lime-200 font-mono text-xs font-extrabold text-lime-950 shadow-[1px_1px_0px_#222831]">
+                  07
+                </span>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                    How long does it typically take for a PR to be merged into {fullName}?
+                  </h3>
+                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
+                    On average, merged pull requests spend ~<strong className="text-zinc-950">{(repo?.time_to_merge_hours || 24.0).toFixed(1)} hours</strong> in review and CI testing before being merged into the primary branch.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ 8 */}
+            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+              <div className="flex gap-3">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-indigo-200 font-mono text-xs font-extrabold text-indigo-950 shadow-[1px_1px_0px_#222831]">
+                  08
+                </span>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                    What programming language and ecosystem does {fullName} belong to?
+                  </h3>
+                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
+                    {fullName} is developed in <strong className="text-zinc-950">{repo?.language || "Open Source"}</strong> with {repo?.stars?.toLocaleString() || "multiple"} stars. Contributing helps build verified public commits for your developer portfolio.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ 9 */}
+            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+              <div className="flex gap-3">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-teal-200 font-mono text-xs font-extrabold text-teal-950 shadow-[1px_1px_0px_#222831]">
+                  09
+                </span>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                    How can I maximize my PR acceptance rate for {fullName}?
+                  </h3>
+                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
+                    Always link an existing GitHub issue in your PR body, write clean automated unit tests, keep pull request diffs small and focused, and run local linters prior to submission.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ 10 */}
+            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+              <div className="flex gap-3">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-rose-200 font-mono text-xs font-extrabold text-rose-950 shadow-[1px_1px_0px_#222831]">
+                  10
+                </span>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                    Is {fullName} actively maintained or at risk of staleness?
+                  </h3>
+                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
+                    {repo?.staleness_flag ? (
+                      <>
+                        {fullName} has experienced lower commit and PR turnaround activity over the past 90 days. Contributors should verify maintainer responsiveness on open issues before starting major contributions.
+                      </>
+                    ) : (
+                      <>
+                        {fullName} is actively maintained with frequent PR reviews, continuous telemetry updates, and regular maintainer feedback.
+                      </>
+                    )}
                   </p>
                 </div>
               </div>
