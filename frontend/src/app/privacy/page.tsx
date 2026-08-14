@@ -73,7 +73,7 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-lg font-bold font-space text-zinc-900 mb-3">5. Contact Us</h2>
             <p>
               If you have questions regarding this Privacy Policy, please open an issue or contact maintainers on our official{" "}
-              <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" className="text-zinc-900 underline font-semibold">
+              <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" title="View opendoor on GitHub" className="text-zinc-900 underline font-semibold">
                 GitHub Repository
               </a>.
             </p>

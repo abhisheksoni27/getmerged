@@ -28,6 +28,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    keywords: [
+      `good first issue ${languageName}`,
+      "good first issue",
+      "open source contribution",
+      `beginner friendly ${languageName} repositories`,
+      "first-timers-only",
+      "up-for-grabs",
+      "github repositories",
+      "developer portfolio",
+    ],
     alternates: {
       canonical: `https://opendoor.abhishekco.de/good-first-issue/${canonicalLang}`,
     },

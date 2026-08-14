@@ -80,6 +80,7 @@ export function Footer() {
                   href="https://github.com/abhisheksoni27/opendoor"
                   target="_blank"
                   rel="noreferrer"
+                  title="View opendoor on GitHub — open source contribution welcome"
                   className="hover:text-emerald-400 transition-colors flex items-center gap-1.5"
                 >
                   <Code2 className="h-3 w-3" /> GitHub Repository
@@ -90,13 +91,14 @@ export function Footer() {
                   href="https://github.com/abhisheksoni27/opendoor/pulls"
                   target="_blank"
                   rel="noreferrer"
+                  title="Open pull requests on the opendoor GitHub repository"
                   className="hover:text-emerald-400 transition-colors"
                 >
                   Open Pull Requests
                 </a>
               </li>
               <li>
-                <a href="/api/v1/health" target="_blank" className="hover:text-emerald-400 transition-colors">
+                <a href="/api/v1/health" target="_blank" title="Check Opendoor API health status" className="hover:text-emerald-400 transition-colors">
                   API Health
                 </a>
               </li>
@@ -124,7 +126,7 @@ export function Footer() {
             <Link href="/status" className="hover:text-zinc-300">Status</Link>
             <Link href="/privacy" className="hover:text-zinc-300">Privacy</Link>
             <Link href="/terms" className="hover:text-zinc-300">Terms</Link>
-            <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" className="hover:text-zinc-300">GitHub</a>
+            <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" title="opendoor on GitHub" className="hover:text-zinc-300">GitHub</a>
           </div>
         </div>
       </div>

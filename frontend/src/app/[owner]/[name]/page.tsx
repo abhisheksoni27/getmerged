@@ -87,27 +87,65 @@ export default async function RepoDetailPage({ params }: PageProps) {
     codeRepository: repo?.github_url || `https://github.com/${fullName}`,
   };
 
+  // Generate 8 to 10 rich context-driven FAQs based on real repository telemetry
+  const faqList = [
+    {
+      q: `How fast do maintainers respond to pull requests in ${fullName}?`,
+      a: `Maintainers in ${fullName} respond to incoming external pull requests in approximately ${(repo?.time_to_first_response_hours || 0).toFixed(1)} hours on average.`,
+    },
+    {
+      q: `What is the external PR merge rate for ${fullName}?`,
+      a: `The external contributor pull request merge rate for ${fullName} is ${(repo?.external_pr_merge_rate || 0).toFixed(1)}%, based on public PR telemetry from non-core contributors.`,
+    },
+    {
+      q: `Is ${fullName} friendly for first-time open-source contributors?`,
+      a: `${fullName} has a first-timer success rate of ${(repo?.first_timer_success_rate || 0).toFixed(1)}%. Repositories scoring high on C-Rank™ feature active maintainers who label beginner-friendly issues and provide constructive code review guidance.`,
+    },
+    {
+      q: `What does the ${fullName} C-Rank™ score (${repo?.c_rank_tier || "A"} Tier) mean?`,
+      a: `The C-Rank™ system evaluates GitHub projects on a 0–100 scale using objective telemetry: PR merge velocity, first-comment latency, active maintainer count, and first-time contributor acceptance rates. A tier of ${repo?.c_rank_tier || "A"} indicates ${(repo?.c_rank_score || 75.0) >= 80 ? "elite responsiveness and strong contributor receptiveness" : "steady maintainer engagement with active reviews"}.`,
+    },
+    {
+      q: `Are there Good First Issues available in ${fullName}?`,
+      a: (repo?.good_first_issue_count || 0) > 0
+        ? `${fullName} currently has ${repo?.good_first_issue_count} open issue(s) tagged with beginner-friendly labels like "good first issue", "beginner", or "up-for-grabs".`
+        : `${fullName} does not currently have active "good first issue" tags indexed, but accepts external contributions through standard GitHub issue tracking.`,
+    },
+    {
+      q: `What programming language and tech stack does ${fullName} use?`,
+      a: `${fullName} is primarily built with ${repo?.language || "Open Source technologies"}, with ${repo?.stars?.toLocaleString() || "multiple"} GitHub stars and active development across the ${repo?.language || "developer"} ecosystem.`,
+    },
+    {
+      q: `How long does it take for PRs to get merged in ${fullName}?`,
+      a: `Once code review begins, pull requests in ${fullName} average ~${(repo?.time_to_merge_hours || 24.0).toFixed(1)} hours from submission to final merge.`,
+    },
+    {
+      q: `How many active maintainers review code in ${fullName}?`,
+      a: `${fullName} has approximately ${repo?.distinct_maintainer_count || 1} distinct maintainer(s) actively triaging and merging pull requests over recent release cycles.`,
+    },
+    {
+      q: `How can I increase the chances of my PR getting merged into ${fullName}?`,
+      a: `To maximize your merge rate in ${fullName}: link an open issue in your PR description, write comprehensive unit tests, ensure all CI workflow checks pass, and keep diffs atomic without mixing refactoring with bug fixes.`,
+    },
+    {
+      q: `Is ${fullName} actively maintained or stale?`,
+      a: repo?.staleness_flag
+        ? `${fullName} shows signs of lower maintainer activity over the last 90 days. Contributors should review recent commit history before undertaking large feature PRs.`
+        : `${fullName} is actively maintained with regular commit activity, issue discussions, and pull request reviews.`,
+    },
+  ];
+
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: `How fast do maintainers respond in ${fullName}?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: `Maintainers in ${fullName} have an average response time of ~${(repo?.time_to_first_response_hours || 0).toFixed(1)} hours for pull requests.`,
-        },
+    mainEntity: faqList.map((faq) => ({
+      "@type": "Question",
+      name: faq.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.a,
       },
-      {
-        "@type": "Question",
-        name: `What is the PR merge rate for ${fullName}?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: `The external pull request merge rate for ${fullName} is ${(repo?.external_pr_merge_rate || 0).toFixed(1)}%.`,
-        },
-      },
-    ],
+    })),
   };
 
   const langSlug = getLanguageSlug(repo?.language || "other");

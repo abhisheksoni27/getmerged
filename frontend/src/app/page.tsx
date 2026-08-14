@@ -49,6 +49,7 @@ export default async function HomePage() {
     description: "Glassdoor for open-source repositories. Objective C-Rank™ metrics on PR merge rates and response times.",
     applicationCategory: "DeveloperApplication",
     operatingSystem: "All",
+    keywords: "open source contribution, good first issue, github repositories, github profile, developer portfolio, pull request merge rate, maintainer response time",
   };
 
   return (

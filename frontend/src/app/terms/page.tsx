@@ -74,7 +74,7 @@ export default function TermsPage() {
             <h2 className="text-lg font-bold font-space text-zinc-900 mb-3">5. Open Source License</h2>
             <p>
               Opendoor backend and frontend code bases are open source and licensed under the MIT License. Contributions are welcome on{" "}
-              <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" className="text-zinc-900 underline font-semibold">
+              <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" title="Contribute to opendoor on GitHub" className="text-zinc-900 underline font-semibold">
                 GitHub
               </a>.
             </p>
