@@ -162,21 +162,30 @@ func (r *sqlxUserRepository) UpsertUser(ctx context.Context, githubID int64, use
 	encUsername, _ := crypto.EncryptAESGCM([]byte(username), r.encKey)
 	encEmail, _ := crypto.EncryptAESGCM([]byte(email), r.encKey)
 	encAvatar, _ := crypto.EncryptAESGCM([]byte(avatarURL), r.encKey)
+	emailHash := crypto.HashSHA256(email, r.encKey)
 
 	var existing struct {
 		ID   int64   `db:"id"`
 		Slug *string `db:"slug"`
 	}
+
+	// 1. Try matching by github_id
 	err := r.db.GetContext(ctx, &existing, "SELECT id, slug FROM users WHERE github_id = ?", githubID)
+	
+	// 2. If not found by github_id, try linking via verified email hash
+	if (err == sql.ErrNoRows || err != nil) && emailHash != "" {
+		err = r.db.GetContext(ctx, &existing, "SELECT id, slug FROM users WHERE email_hash = ?", emailHash)
+	}
+
 	if err == sql.ErrNoRows || err != nil {
 		slug, err := r.generateUniqueSlug(ctx, username, 0)
 		if err != nil {
 			return 0, err
 		}
 		res, err := r.db.ExecContext(ctx, `
-			INSERT INTO users (github_id, slug, username, email, avatar_url, created_at, updated_at)
-			VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-		`, githubID, slug, encUsername, encEmail, encAvatar)
+			INSERT INTO users (github_id, slug, email_hash, username, email, avatar_url, created_at, updated_at)
+			VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+		`, githubID, slug, emailHash, encUsername, encEmail, encAvatar)
 		if err != nil {
 			return 0, err
 		}
@@ -195,8 +204,8 @@ func (r *sqlxUserRepository) UpsertUser(ctx context.Context, githubID int64, use
 	}
 
 	_, err = r.db.ExecContext(ctx, `
-		UPDATE users SET slug = ?, username = ?, email = ?, avatar_url = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?
-	`, slugToUse, encUsername, encEmail, encAvatar, existing.ID)
+		UPDATE users SET github_id = ?, slug = ?, email_hash = ?, username = ?, email = ?, avatar_url = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?
+	`, githubID, slugToUse, emailHash, encUsername, encEmail, encAvatar, existing.ID)
 	if err != nil {
 		return 0, err
 	}
@@ -208,21 +217,30 @@ func (r *sqlxUserRepository) UpsertGoogleUser(ctx context.Context, googleID stri
 	encUsername, _ := crypto.EncryptAESGCM([]byte(username), r.encKey)
 	encEmail, _ := crypto.EncryptAESGCM([]byte(email), r.encKey)
 	encAvatar, _ := crypto.EncryptAESGCM([]byte(avatarURL), r.encKey)
+	emailHash := crypto.HashSHA256(email, r.encKey)
 
 	var existing struct {
 		ID   int64   `db:"id"`
 		Slug *string `db:"slug"`
 	}
+
+	// 1. Try matching by google_id
 	err := r.db.GetContext(ctx, &existing, "SELECT id, slug FROM users WHERE google_id = ?", googleID)
+
+	// 2. If not found by google_id, try linking via verified email hash
+	if (err == sql.ErrNoRows || err != nil) && emailHash != "" {
+		err = r.db.GetContext(ctx, &existing, "SELECT id, slug FROM users WHERE email_hash = ?", emailHash)
+	}
+
 	if err == sql.ErrNoRows || err != nil {
 		slug, err := r.generateUniqueSlug(ctx, username, 0)
 		if err != nil {
 			return 0, err
 		}
 		res, err := r.db.ExecContext(ctx, `
-			INSERT INTO users (google_id, slug, username, email, avatar_url, created_at, updated_at)
-			VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-		`, googleID, slug, encUsername, encEmail, encAvatar)
+			INSERT INTO users (google_id, slug, email_hash, username, email, avatar_url, created_at, updated_at)
+			VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+		`, googleID, slug, emailHash, encUsername, encEmail, encAvatar)
 		if err != nil {
 			return 0, err
 		}
@@ -241,8 +259,8 @@ func (r *sqlxUserRepository) UpsertGoogleUser(ctx context.Context, googleID stri
 	}
 
 	_, err = r.db.ExecContext(ctx, `
-		UPDATE users SET slug = ?, username = ?, email = ?, avatar_url = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?
-	`, slugToUse, encUsername, encEmail, encAvatar, existing.ID)
+		UPDATE users SET google_id = ?, slug = ?, email_hash = ?, username = ?, email = ?, avatar_url = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?
+	`, googleID, slugToUse, emailHash, encUsername, encEmail, encAvatar, existing.ID)
 	if err != nil {
 		return 0, err
 	}

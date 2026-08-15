@@ -3,11 +3,15 @@ package crypto
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/hmac"
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/base64"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
+	"strings"
 )
 
 // EncryptAESGCM encrypts plaintext using AES-256-GCM authenticated encryption.
@@ -75,4 +79,14 @@ func DecryptAESGCM(cryptoText string, key []byte) (string, error) {
 	}
 
 	return string(plaintext), nil
+}
+
+// HashSHA256 computes deterministic HMAC-SHA256 hex string for blind indexing PII fields.
+func HashSHA256(data string, salt []byte) string {
+	if data == "" {
+		return ""
+	}
+	h := hmac.New(sha256.New, salt)
+	h.Write([]byte(strings.ToLower(strings.TrimSpace(data))))
+	return hex.EncodeToString(h.Sum(nil))
 }
