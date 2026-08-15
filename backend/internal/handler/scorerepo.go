@@ -13,6 +13,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/jmoiron/sqlx"
 )
 
 // ScoreRepoBody is the request body for the single-repo scoring endpoint.
@@ -62,9 +63,9 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 			slog.Warn("score-repo: IsStalenessFlag failed - assuming not stale", "repo", fullName, "err", err)
 		}
 
-		gfiCount, err := gh.FetchGoodFirstIssueCount(body.Owner, body.Name)
+		gfiIssues, gfiCount, err := gh.FetchGoodFirstIssuesList(body.Owner, body.Name, 5)
 		if err != nil {
-			slog.Warn("score-repo: FetchGoodFirstIssueCount failed - assuming none", "repo", fullName, "err", err)
+			slog.Warn("score-repo: FetchGoodFirstIssuesList failed - assuming none", "repo", fullName, "err", err)
 		}
 
 		// Convert github.PR → scoring.PR
@@ -133,6 +134,15 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 			repoID = existingRepo.ID
 		} else {
 			repoID = uuid.New().String()
+		}
+
+		if len(gfiIssues) > 0 {
+			if v, exists := c.Get("db"); exists && v != nil {
+				if database, ok := v.(*sqlx.DB); ok {
+					gfiRepo := repository.NewGFIRepository(database)
+					_ = gfiRepo.UpsertIssues(c.Request.Context(), repoID, gfiIssues)
+				}
+			}
 		}
 
 		if err := repoStore.InsertSnapshot(c.Request.Context(), repoID, raw, score, tier); err != nil {

@@ -637,242 +637,103 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         </div>
       </div>
 
-
-
-      {/* AI Insights & Maintainer Vibe Check Section */}
-      <div className="relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-5 sm:p-6 shadow-[5px_5px_0px_#222831] overflow-hidden mb-10">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-zinc-950 shadow-[2px_2px_0px_#222831] -rotate-2">
-            <Sparkles className="h-4 w-4" />
+      {/* AI Insights & Maintainer Guidelines Section - Data-Backed Only (Rule 12 compliant) */}
+      {insights && (
+        <div className="relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-5 sm:p-6 shadow-[5px_5px_0px_#222831] overflow-hidden mb-10">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-zinc-950 shadow-[2px_2px_0px_#222831] -rotate-2">
+              <Sparkles className="h-4 w-4" />
+            </div>
+            <h2 className="font-space text-base font-extrabold text-zinc-950">
+              AI Maintainer Review Guidelines
+            </h2>
           </div>
-          <h2 className="font-space text-base font-extrabold text-zinc-950">
-            AI Maintainer Vibe Check & PR Guidelines
-          </h2>
-        </div>
 
-        {isLoggedIn ? (
           <div className="space-y-6 pt-2 font-sans">
-            {/* Persona & Vibe Overview Banner */}
+            {/* Persona Overview Banner */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border-2 border-brand-dark bg-zinc-950 text-white shadow-[3px_3px_0px_#222831]">
               <div>
                 <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
-                  Maintainer Persona
+                  Review Persona
                 </span>
                 <h3 className="text-base font-space font-bold mt-0.5">
-                  {insights?.maintainer_persona || "Constructive Code Reviewer"}
+                  {insights.maintainer_persona || `${fullName.split("/")[1] || "Core"} Maintainer Team`}
                 </h3>
               </div>
               <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t-2 sm:border-t-0 sm:border-l-2 border-white/30 pt-2 sm:pt-0 sm:pl-4">
-                <div>
-                  <div className="text-zinc-400 text-[10px]">Warmth Score</div>
-                  <div className="text-emerald-400 font-bold text-sm">{insights?.warmth_score ?? 7.8}/10</div>
-                </div>
-                <div>
-                  <div className="text-zinc-400 text-[10px]">Patience Score</div>
-                  <div className="text-blue-400 font-bold text-sm">{insights?.patience_score ?? 8.0}/10</div>
-                </div>
-                <div>
-                  <div className="text-zinc-400 text-[10px]">Nitpick Rate</div>
-                  <div className="text-amber-400 font-bold text-sm">{((insights?.nitpick_ratio ?? 0.25) * 100).toFixed(0)}%</div>
-                </div>
+                {insights.warmth_score != null && insights.warmth_score > 0 && (
+                  <div>
+                    <div className="text-zinc-400 text-[10px]">Warmth Score</div>
+                    <div className="text-emerald-400 font-bold text-sm">{insights.warmth_score.toFixed(1)}/10</div>
+                  </div>
+                )}
+                {insights.patience_score != null && insights.patience_score > 0 && (
+                  <div>
+                    <div className="text-zinc-400 text-[10px]">Patience Score</div>
+                    <div className="text-blue-400 font-bold text-sm">{insights.patience_score.toFixed(1)}/10</div>
+                  </div>
+                )}
+                {insights.nitpick_ratio != null && insights.nitpick_ratio > 0 && (
+                  <div>
+                    <div className="text-zinc-400 text-[10px]">Nitpick Rate</div>
+                    <div className="text-amber-400 font-bold text-sm">{(insights.nitpick_ratio * 100).toFixed(0)}%</div>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Vibe Check Description */}
-            <div className="p-4 rounded-xl border-2 border-brand-dark bg-white shadow-[2px_2px_0px_#222831]">
-              <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed">
-                {insights?.maintainer_vibe ||
-                  "Active maintainer team with regular turnaround times on pull requests. Community guidelines recommend concise PR scopes."}
-              </p>
-            </div>
+            {/* Description */}
+            {insights.maintainer_vibe && (
+              <div className="p-4 rounded-xl border-2 border-brand-dark bg-white shadow-[2px_2px_0px_#222831]">
+                <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed">
+                  {insights.maintainer_vibe}
+                </p>
+              </div>
+            )}
 
             {/* Top Do's & Don'ts Checklist */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-              {/* Do's */}
-              <div className="rounded-xl border-2 border-brand-dark bg-emerald-100 p-4 shadow-[3px_3px_0px_#222831]">
-                <h4 className="text-xs font-mono font-bold text-emerald-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                  Top PR Submission Do&apos;s
-                </h4>
-                <ul className="space-y-2 text-xs text-emerald-950 font-sans">
-                  {(insights?.top_dos && insights.top_dos.length > 0 ? insights.top_dos : [
-                    "Add unit tests covering modified code paths",
-                    "Run package linters before submitting",
-                    "Reference open GitHub issue number in description"
-                  ]).map((doItem, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-emerald-600 font-bold">•</span>
-                      <span>{doItem}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            {((insights.top_dos && insights.top_dos.length > 0) || (insights.top_donts && insights.top_donts.length > 0)) && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                {/* Do's */}
+                {insights.top_dos && insights.top_dos.length > 0 && (
+                  <div className="rounded-xl border-2 border-brand-dark bg-emerald-100 p-4 shadow-[3px_3px_0px_#222831]">
+                    <h4 className="text-xs font-mono font-bold text-emerald-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                      Top PR Submission Do&apos;s
+                    </h4>
+                    <ul className="space-y-2 text-xs text-emerald-950 font-sans">
+                      {insights.top_dos.map((doItem, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-emerald-600 font-bold">•</span>
+                          <span>{doItem}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-              {/* Don'ts */}
-              <div className="rounded-xl border-2 border-brand-dark bg-rose-100 p-4 shadow-[3px_3px_0px_#222831]">
-                <h4 className="text-xs font-mono font-bold text-rose-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                  <AlertCircle className="h-4 w-4 text-rose-600" />
-                  Top PR Friction Pitfalls (Don&apos;ts)
-                </h4>
-                <ul className="space-y-2 text-xs text-rose-950 font-sans">
-                  {(insights?.top_donts && insights.top_donts.length > 0 ? insights.top_donts : [
-                    "Do not submit unlinked PRs without referencing an issue",
-                    "Do not mix refactoring with new feature commits",
-                    "Do not ping maintainers repeatedly within 24 hours"
-                  ]).map((dontItem, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-rose-600 font-bold">•</span>
-                      <span>{dontItem}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* General Guidelines */}
-            {insights?.pr_guidelines && insights.pr_guidelines.length > 0 && (
-              <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
-                <h4 className="text-xs font-mono font-bold text-zinc-700 uppercase tracking-wider mb-2">
-                  Maintainer Checklist
-                </h4>
-                <ul className="space-y-2 text-xs font-mono text-zinc-800">
-                  {insights.pr_guidelines.map((guide, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                      <span>{guide}</span>
-                    </li>
-                  ))}
-                </ul>
+                {/* Don'ts */}
+                {insights.top_donts && insights.top_donts.length > 0 && (
+                  <div className="rounded-xl border-2 border-brand-dark bg-rose-100 p-4 shadow-[3px_3px_0px_#222831]">
+                    <h4 className="text-xs font-mono font-bold text-rose-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                      <AlertCircle className="h-4 w-4 text-rose-600" />
+                      Top PR Friction Pitfalls (Don&apos;ts)
+                    </h4>
+                    <ul className="space-y-2 text-xs text-rose-950 font-sans">
+                      {insights.top_donts.map((dontItem, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-rose-600 font-bold">•</span>
+                          <span>{dontItem}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             )}
           </div>
-        ) : (
-          <div className="relative pb-4">
-            {/* Real SEO-crawlable semantic content rendered behind a translucent FOMO glass overlay */}
-            <div className="space-y-6 select-none transition-all duration-300 filter blur-[3.5px] opacity-60 pointer-events-none" aria-hidden="true">
-              {/* Persona & Vibe Preview Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border-2 border-brand-dark bg-zinc-950 text-white shadow-[3px_3px_0px_#222831]">
-                <div>
-                  <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
-                    Maintainer Persona
-                  </span>
-                  <h3 className="text-base font-space font-bold mt-0.5">
-                    {insights?.maintainer_persona || `${fullName.split("/")[1] || "Core"} Maintainer Review Team`}
-                  </h3>
-                </div>
-                <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t-2 sm:border-t-0 sm:border-l-2 border-white/30 pt-2 sm:pt-0 sm:pl-4">
-                  <div>
-                    <div className="text-zinc-400 text-[10px]">Warmth Score</div>
-                    <div className="text-emerald-400 font-bold text-sm">8.4/10</div>
-                  </div>
-                  <div>
-                    <div className="text-zinc-400 text-[10px]">Patience Score</div>
-                    <div className="text-blue-400 font-bold text-sm">8.1/10</div>
-                  </div>
-                  <div>
-                    <div className="text-zinc-400 text-[10px]">Nitpick Rate</div>
-                    <div className="text-amber-400 font-bold text-sm">18%</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Vibe Check Description Preview */}
-              <div className="p-4 rounded-xl border-2 border-brand-dark bg-white shadow-[2px_2px_0px_#222831]">
-                <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed">
-                  {insights?.maintainer_vibe ||
-                    `Maintainers actively monitor pull requests with rapid initial triage. Code reviews focus heavily on automated test suite coverage, minimal diff sizes, and direct adherence to repo architecture.`}
-                </p>
-              </div>
-
-              {/* Top Do's & Don'ts Checklist */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-                {/* Do's */}
-                <div className="rounded-xl border-2 border-brand-dark bg-emerald-100/90 p-4 shadow-[3px_3px_0px_#222831]">
-                  <h4 className="text-xs font-mono font-bold text-emerald-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                    Top PR Submission Do&apos;s
-                  </h4>
-                  <ul className="space-y-2 text-xs text-emerald-950 font-sans">
-                    {(insights?.top_dos && insights.top_dos.length > 0 ? insights.top_dos : [
-                      "Verify clean test suite passes locally before opening PR",
-                      "Keep pull request branch synced with latest main upstream",
-                      "Provide reproduction steps and context in PR description"
-                    ]).map((doItem, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="text-emerald-600 font-bold">•</span>
-                        <span>{doItem}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Don'ts */}
-                <div className="rounded-xl border-2 border-brand-dark bg-rose-100/90 p-4 shadow-[3px_3px_0px_#222831]">
-                  <h4 className="text-xs font-mono font-bold text-rose-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                    <AlertCircle className="h-4 w-4 text-rose-600" />
-                    Top PR Friction Pitfalls (Don&apos;ts)
-                  </h4>
-                  <ul className="space-y-2 text-xs text-rose-950 font-sans">
-                    {(insights?.top_donts && insights.top_donts.length > 0 ? insights.top_donts : [
-                      "Do not open unlinked PRs without referencing an issue",
-                      "Do not introduce unrelated formatting or cosmetic diffs",
-                      "Do not ping maintainers repeatedly within 24 hours"
-                    ]).map((dontItem, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="text-rose-600 font-bold">•</span>
-                        <span>{dontItem}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Translucent FOMO Glassmorphism Gate Overlay */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl border-2 border-brand-dark bg-amber-50/75 backdrop-blur-[2px] p-6 sm:p-8 text-center shadow-[inset_0_0_20px_rgba(251,191,36,0.15)]">
-              <div className="relative mb-3">
-                <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl border-2 border-brand-dark bg-yellow-300 text-zinc-950 shadow-[3px_3px_0px_#222831] -rotate-3 hover:rotate-0 transition-transform">
-                  <Sparkles className="h-6 w-6 text-zinc-950 fill-yellow-100" />
-                </div>
-                <span className="absolute -top-1 -right-2 rounded-full bg-rose-500 px-1.5 py-0.5 text-[9px] font-mono font-bold text-white uppercase tracking-wider border border-brand-dark shadow-xs">
-                  Exclusive
-                </span>
-              </div>
-
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border-2 border-brand-dark bg-white text-[11px] font-mono font-extrabold text-zinc-900 uppercase tracking-wider mb-2 shadow-[2px_2px_0px_#222831]">
-                <Lock className="h-3 w-3 text-amber-600 inline" /> Contributor Intelligence Gated
-              </div>
-
-              <h3 className="text-lg sm:text-xl font-space font-extrabold text-zinc-950 mb-2 tracking-tight">
-                Unlock Full AI Maintainer Vibe Check & Dos/Don&apos;ts
-              </h3>
-
-              <p className="text-xs sm:text-sm text-zinc-700 max-w-lg mb-5 leading-relaxed font-sans">
-                Get insider triage tips, strict maintainer preferences, and custom PR acceptance rules for <strong className="text-zinc-950">{fullName}</strong> before you write code.
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => openAuthModal(
-                    "Unlock AI Maintainer Insights",
-                    `Sign in to access maintainer vibe checks, review guidelines, and triage dos & don'ts for ${fullName}.`,
-                    "ai_insights_wall"
-                  )}
-                  title="Sign in to unlock maintainer insights"
-                  className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-dark bg-zinc-950 px-6 py-2.5 text-xs font-extrabold font-sans text-white shadow-[3px_3px_0px_#222831] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#222831] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#222831] transition-all cursor-pointer"
-                >
-                  <span>Sign in to Unlock (Free)</span>
-                </button>
-
-                <span className="text-[11px] font-mono text-zinc-500">
-                  Takes 3 seconds • 1-click OAuth
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Issues #6, #7, #8: Contributor Community Feedback & Verification Module */}
       <div className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-orange-100 via-white to-yellow-100 p-5 sm:p-8 shadow-[5px_5px_0px_#222831] mb-10 font-sans">

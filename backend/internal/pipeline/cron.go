@@ -1,6 +1,7 @@
 package pipeline
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"os"
@@ -8,6 +9,7 @@ import (
 	"time"
 
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
+	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
@@ -73,9 +75,12 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 					slog.Warn("cron: IsStalenessFlag failed - assuming not stale", "repo", r.FullName, "err", err)
 				}
 
-				gfiCount, err := gh.FetchGoodFirstIssueCount(r.Owner, r.Name)
+				gfiIssues, gfiCount, err := gh.FetchGoodFirstIssuesList(r.Owner, r.Name, 5)
 				if err != nil {
-					slog.Warn("cron: FetchGoodFirstIssueCount failed - assuming none", "repo", r.FullName, "err", err)
+					slog.Warn("cron: FetchGoodFirstIssuesList failed - assuming none", "repo", r.FullName, "err", err)
+				} else if len(gfiIssues) > 0 {
+					gfiRepo := repository.NewGFIRepository(db)
+					_ = gfiRepo.UpsertIssues(context.Background(), r.ID, gfiIssues)
 				}
 
 				slog.Debug("cron: fetched data", "repo", r.FullName, "prs", len(prs), "stale", stale)

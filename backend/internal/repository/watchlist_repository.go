@@ -35,11 +35,18 @@ func NewWatchlistRepository(db *sqlx.DB) WatchlistRepository {
 }
 
 func (r *sqlxWatchlistRepository) Add(ctx context.Context, userID int64, repoID string) error {
-	_, err := r.db.ExecContext(ctx, `
+	query := `
 		INSERT INTO user_watchlists (user_id, repo_id, notify_rank_change, created_at)
 		VALUES (?, ?, TRUE, CURRENT_TIMESTAMP)
 		ON DUPLICATE KEY UPDATE id=id
-	`, userID, repoID)
+	`
+	if r.db.DriverName() == "sqlite" {
+		query = `
+			INSERT OR IGNORE INTO user_watchlists (user_id, repo_id, notify_rank_change, created_at)
+			VALUES (?, ?, TRUE, CURRENT_TIMESTAMP)
+		`
+	}
+	_, err := r.db.ExecContext(ctx, query, userID, repoID)
 	return err
 }
 

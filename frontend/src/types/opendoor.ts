@@ -97,3 +97,22 @@ export interface UserProfile {
   watchlist: Repo[];
   feedback: UserFeedbackItem[];
 }
+
+export interface GoodFirstIssueItem {
+  id: number;
+  repository_id: string;
+  repo_full_name: string;
+  language: string;
+  stars: number;
+  c_rank_tier: string;
+  c_rank_score: number;
+  issue_number: number;
+  title: string;
+  body_text?: string;
+  url: string;
+  comments_count: number;
+  labels_json: string;
+  created_at: string;
+  synced_at: string;
+}
+

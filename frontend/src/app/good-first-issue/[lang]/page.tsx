@@ -2,10 +2,10 @@ import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RepoCard } from "@/components/RepoCard";
-import { Repo } from "@/types/opendoor";
+import { Repo, GoodFirstIssueItem } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import { canonicalizeSlug, displayNameFromSlug } from "@/lib/languageSlug";
-import { Sparkles, Code2, ArrowLeft, ShieldCheck, Sprout } from "lucide-react";
+import { Sparkles, Code2, ArrowLeft, ShieldCheck, Sprout, ExternalLink, MessageSquare, Star, Award } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
@@ -60,6 +60,7 @@ async function getGFIRepos(languageName: string): Promise<Repo[]> {
   try {
     const queryParams = new URLSearchParams({
       language: languageName,
+      has_good_first_issue: "true",
       sort: "c_rank_score",
       order: "desc",
       per_page: "20",
@@ -69,10 +70,27 @@ async function getGFIRepos(languageName: string): Promise<Repo[]> {
     });
     if (!res.ok) return [];
     const data = await res.json();
-    const list: Repo[] = data.data || data.repos || [];
-    return list.filter((r) => (r.good_first_issue_count || 0) > 0).concat(list.filter((r) => (r.good_first_issue_count || 0) === 0));
+    return data.data || data.repos || [];
   } catch (e) {
     console.error("Failed to fetch GFI repos during SSR", e);
+    return [];
+  }
+}
+
+async function getGFIIssues(languageName: string): Promise<GoodFirstIssueItem[]> {
+  try {
+    const queryParams = new URLSearchParams({
+      language: languageName,
+      limit: "30",
+    });
+    const res = await fetch(`${API_BASE_URL}/api/v1/issues/good-first?${queryParams.toString()}`, {
+      next: { revalidate: 1800 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.data || [];
+  } catch (e) {
+    console.error("Failed to fetch GFI issues list during SSR", e);
     return [];
   }
 }
@@ -85,14 +103,56 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
   }
 
   const languageName = displayNameFromSlug(canonicalLang);
-  const repos = await getGFIRepos(languageName);
+  const [repos, issues] = await Promise.all([
+    getGFIRepos(languageName),
+    getGFIIssues(languageName),
+  ]);
 
-  const jsonLd = {
+  // Schema.org Structured Data
+  const itemListJsonLd = {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
+    "@type": "ItemList",
     name: `Good First Issues in ${languageName}`,
-    description: `Browse beginner-friendly open-source ${languageName} repositories with open good first issues on GetMerged.`,
-    url: `https://getmerged.abhishekco.de/good-first-issue/${canonicalLang}`,
+    description: `Active beginner-friendly open-source ${languageName} repositories with high PR merge rates.`,
+    itemListElement: (issues.length > 0
+      ? issues.map((iss, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: `${iss.repo_full_name} #${iss.issue_number}: ${iss.title}`,
+          url: iss.url,
+        }))
+      : repos.map((r, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: r.full_name,
+          url: `https://getmerged.abhishekco.de/${r.full_name}`,
+        }))
+    ),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://getmerged.abhishekco.de",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Good First Issues",
+        item: "https://getmerged.abhishekco.de/good-first-issue",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: `${languageName} Starter Issues`,
+        item: `https://getmerged.abhishekco.de/good-first-issue/${canonicalLang}`,
+      },
+    ],
   };
 
   return (
@@ -100,7 +160,11 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
       <Header />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-800 font-sans">
@@ -128,9 +192,111 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
             Good First Issues in {languageName}
           </h1>
           <p className="mt-3 text-xs sm:text-sm text-zinc-600 max-w-3xl leading-relaxed font-sans">
-            Looking for your first open-source contribution in <strong>{languageName}</strong>? GetMerged indexes repositories with active beginner labels (<code>good first issue</code>, <code>beginner-friendly</code>, <code>first-timers-only</code>, <code>up-for-grabs</code>) combined with real maintainer review response telemetry.
+            Explore curated starter issues in high-scoring <strong>{languageName}</strong> repositories. Every listed issue belongs to a welcoming repository scored by C-Rank™ on PR merge rates, review responsiveness, and first-timer acceptance.
           </p>
         </div>
+
+        {/* Real Live Issues Feed (Audit H9 Target Shape) */}
+        {issues.length > 0 && (
+          <div className="mb-12">
+            <div className="mb-6 flex items-center justify-between border-b border-zinc-200 pb-4">
+              <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2 font-space">
+                <Sprout className="h-4 w-4 text-emerald-600" />
+                Live Good First Issues ({issues.length})
+              </h2>
+              <span className="text-xs text-zinc-500 font-mono">Real-Time Open GitHub Issues</span>
+            </div>
+
+            <div className="space-y-3 mb-8">
+              {issues.map((iss) => {
+                let parsedLabels: { name: string; color: string }[] = [];
+                try {
+                  parsedLabels = JSON.parse(iss.labels_json || "[]");
+                } catch {
+                  parsedLabels = [];
+                }
+
+                return (
+                  <div
+                    key={`${iss.repository_id}-${iss.issue_number}`}
+                    className="group rounded-2xl bg-white p-4 sm:p-5 border border-zinc-200 shadow-2xs hover:shadow-md hover:border-zinc-300 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                        <Link
+                          href={`/${iss.repo_full_name}`}
+                          title={`View ${iss.repo_full_name} contributor score breakdown`}
+                          className="font-mono text-xs font-bold text-zinc-900 hover:text-emerald-700 transition-colors"
+                        >
+                          {iss.repo_full_name}
+                        </Link>
+                        <span className="text-[11px] font-mono text-zinc-400">
+                          #{iss.issue_number}
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                          <Award className="h-3 w-3" /> Tier {iss.c_rank_tier} ({iss.c_rank_score.toFixed(0)} pts)
+                        </span>
+                        {iss.stars > 0 && (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-mono text-zinc-500">
+                            <Star className="h-3 w-3 text-amber-500 fill-amber-500" /> {iss.stars.toLocaleString()}
+                          </span>
+                        )}
+                      </div>
+
+                      <a
+                        href={iss.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={`Open issue #${iss.issue_number} on GitHub: ${iss.title}`}
+                        className="font-space text-sm sm:text-base font-bold text-zinc-900 hover:text-blue-700 transition-colors line-clamp-2"
+                      >
+                        {iss.title}
+                      </a>
+
+                      {iss.body_text && (
+                        <p className="mt-1 text-xs text-zinc-500 line-clamp-2 font-sans">
+                          {iss.body_text}
+                        </p>
+                      )}
+
+                      {parsedLabels.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-2.5">
+                          {parsedLabels.slice(0, 4).map((l, idx) => (
+                            <span
+                              key={idx}
+                              className="px-2 py-0.5 rounded-md text-[10px] font-mono font-medium border border-zinc-200 bg-zinc-50 text-zinc-700"
+                            >
+                              {l.name}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-3 shrink-0 self-end md:self-center border-t md:border-t-0 pt-3 md:pt-0 w-full md:w-auto justify-between md:justify-end">
+                      {iss.comments_count > 0 && (
+                        <span className="inline-flex items-center gap-1 text-xs font-mono text-zinc-500">
+                          <MessageSquare className="h-3.5 w-3.5" /> {iss.comments_count}
+                        </span>
+                      )}
+
+                      <a
+                        href={iss.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={`Claim issue #${iss.issue_number} on GitHub`}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 text-white text-xs font-mono font-semibold hover:bg-zinc-800 shadow-2xs transition-colors"
+                      >
+                        <span>Claim on GitHub</span>
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Repositories Grid Header */}
         <div className="mb-6 flex items-center justify-between border-b border-zinc-200 pb-4">
@@ -164,7 +330,7 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
               Finding approachable <strong>Good First Issues in {languageName}</strong> allows you to build real-world software engineering experience. Instead of submitting PRs to abandoned repositories, GetMerged verifies maintainer review speeds and first-timer acceptance rates before you write a single line of code.
             </p>
             <p>
-              Select any repository above to inspect maintainer response times, view active beginner issue tags, and click through to claim your issue on GitHub!
+              Select any issue above to claim it directly on GitHub, or click a repository to inspect full maintainer review turnaround metrics and triage guidance!
             </p>
           </div>
         </section>
@@ -173,3 +339,4 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
     </div>
   );
 }
+

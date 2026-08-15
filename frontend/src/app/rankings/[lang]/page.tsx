@@ -86,9 +86,74 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
   const languageName = displayNameFromSlug(canonicalLang);
   const repos = await getRankingRepos(languageName);
 
+  // Schema.org Structured Data
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `Top Welcoming Open-Source ${languageName} Repositories`,
+    description: `Ranked list of public GitHub ${languageName} repositories with high PR merge rates and fast maintainer response times.`,
+    itemListElement: repos.map((r, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: r.full_name,
+      url: `https://getmerged.abhishekco.de/${r.full_name}`,
+    })),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://getmerged.abhishekco.de",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Ecosystem Rankings",
+        item: "https://getmerged.abhishekco.de/rankings",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: `${languageName} Rankings`,
+        item: `https://getmerged.abhishekco.de/rankings/${canonicalLang}`,
+      },
+    ],
+  };
+
+  const datasetJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    name: `${languageName} Open-Source Repository Contributor Friendliness Dataset`,
+    description: `Empirical telemetry including PR merge rates, first-response hours, and C-Rank™ scores across ${languageName} repositories.`,
+    url: `https://getmerged.abhishekco.de/rankings/${canonicalLang}`,
+    license: "https://creativecommons.org/licenses/by/4.0/",
+    creator: {
+      "@type": "Organization",
+      name: "GetMerged",
+      url: "https://getmerged.abhishekco.de",
+    },
+  };
+
   return (
     <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(datasetJsonLd) }}
+      />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-800 font-sans">
         {/* Navigation Breadcrumb */}
