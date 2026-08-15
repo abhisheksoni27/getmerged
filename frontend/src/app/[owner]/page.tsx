@@ -14,11 +14,11 @@ import {
   ShieldCheck,
   Star,
   ExternalLink,
-  User,
+  User as UserIcon,
 } from "lucide-react";
 
 interface ProfilePageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ owner: string }>;
 }
 
 const INTERNAL_API_URL =
@@ -38,8 +38,8 @@ async function getUserProfile(slug: string): Promise<UserProfile | null> {
 }
 
 export async function generateMetadata({ params }: ProfilePageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const profile = await getUserProfile(slug);
+  const { owner } = await params;
+  const profile = await getUserProfile(owner);
 
   if (!profile) {
     return {
@@ -72,8 +72,8 @@ export async function generateMetadata({ params }: ProfilePageProps): Promise<Me
 }
 
 export default async function UserProfilePage({ params }: ProfilePageProps) {
-  const { slug } = await params;
-  const profile = await getUserProfile(slug);
+  const { owner } = await params;
+  const profile = await getUserProfile(owner);
 
   if (!profile) {
     notFound();
@@ -127,7 +127,7 @@ export default async function UserProfilePage({ params }: ProfilePageProps) {
                 />
               ) : (
                 <div className="w-18 h-18 sm:w-22 sm:h-22 rounded-2xl border border-zinc-200 bg-zinc-900 text-white flex items-center justify-center font-space font-extrabold text-2xl shrink-0 shadow-2xs">
-                  <User className="h-8 w-8 text-zinc-300" />
+                  <UserIcon className="h-8 w-8 text-zinc-300" />
                 </div>
               )}
 
@@ -136,16 +136,6 @@ export default async function UserProfilePage({ params }: ProfilePageProps) {
                   <span className="inline-flex items-center px-3 py-0.5 font-mono text-xs font-semibold rounded-xl bg-zinc-100 text-zinc-800 border border-zinc-200">
                     @{profile.slug}
                   </span>
-                  {profile.provider === "github" && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 font-mono text-[11px] font-medium rounded-xl bg-zinc-900 text-white shadow-2xs">
-                      GitHub Member
-                    </span>
-                  )}
-                  {profile.provider === "google" && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 font-mono text-[11px] font-medium rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-700">
-                      Google Sign-in
-                    </span>
-                  )}
                 </div>
 
                 <h1 className="text-2xl sm:text-4xl font-bold font-space text-zinc-900 break-all tracking-tight leading-tight">
