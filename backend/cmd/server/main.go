@@ -140,6 +140,7 @@ func main() {
 		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist(watchlistRepo))
 		userApi.GET("/user/watchlist", handler.ListWatchlist(watchlistRepo))
 		userApi.POST("/user/feedback", handler.CreateFeedback(database, cfg.GithubToken))
+		userApi.DELETE("/user/feedback/:id", handler.DeleteFeedback(database))
 	}
 
 	// Internal routes - nginx blocks these externally

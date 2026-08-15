@@ -70,19 +70,18 @@ func TestGetUserProfileHandler(t *testing.T) {
 		var resp struct {
 			Slug      string  `json:"slug"`
 			Username  string  `json:"username"`
-			Provider  string  `json:"provider"`
 			GithubURL *string `json:"github_url"`
 		}
 		if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
 			t.Fatalf("failed to parse response JSON: %v", err)
 		}
-		if resp.Slug != "alice-dev" || resp.Provider != "github" || resp.GithubURL == nil {
+		if resp.Slug != "alice-dev" || resp.GithubURL == nil {
 			t.Fatalf("unexpected profile payload: %+v", resp)
 		}
 	})
 
 	// 2. Success case: Google-only user
-	t.Run("found google profile with null github fields", func(t *testing.T) {
+	t.Run("found google profile with omitted github fields", func(t *testing.T) {
 		req, _ := http.NewRequest("GET", "/api/v1/users/bob", nil)
 		w := httptest.NewRecorder()
 		r.ServeHTTP(w, req)
@@ -94,7 +93,6 @@ func TestGetUserProfileHandler(t *testing.T) {
 		var resp struct {
 			Slug      string  `json:"slug"`
 			Username  string  `json:"username"`
-			Provider  string  `json:"provider"`
 			GithubURL *string `json:"github_url"`
 			Stats     struct {
 				VerifiedContributions *int `json:"verified_contributions"`
@@ -103,8 +101,8 @@ func TestGetUserProfileHandler(t *testing.T) {
 		if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
 			t.Fatalf("failed to parse response JSON: %v", err)
 		}
-		if resp.Provider != "google" || resp.GithubURL != nil || resp.Stats.VerifiedContributions != nil {
-			t.Fatalf("expected null github fields for google profile: %+v", resp)
+		if resp.GithubURL != nil || resp.Stats.VerifiedContributions != nil {
+			t.Fatalf("expected omitted github fields for google profile: %+v", resp)
 		}
 	})
 
