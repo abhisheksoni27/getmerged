@@ -17,7 +17,9 @@ import {
   Sparkles,
   ShieldCheck,
   ArrowRight,
+  X,
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { API_BASE_URL } from "@/lib/api";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import posthog from "posthog-js";
@@ -465,8 +467,11 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs">
             <span className="font-mono text-zinc-400">Quick explore:</span>
             {["nextjs", "react", "rust", "bun", "fastapi"].map((term) => (
-              <button
+              <motion.button
                 key={term}
+                whileHover={{ y: -1.5, scale: 1.02 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.16, ease: [0.2, 0, 0, 1] }}
                 onClick={() => {
                   setSearchQuery(term);
                   setLoading(true);
@@ -478,10 +483,10 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                     gridEl.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="rounded-lg border border-zinc-200 bg-white px-2.5 py-1 font-mono text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50 transition-all cursor-pointer active:scale-95"
+                className="rounded-lg border border-zinc-200 bg-white px-2.5 py-1 font-mono text-zinc-600 hover:border-zinc-300 hover:text-zinc-900 shadow-2xs cursor-pointer transition-colors"
               >
                 {term}
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>
@@ -789,10 +794,34 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             </div>
           </>
         ) : (
-          <div className="rounded-2xl border border-dashed border-zinc-300 p-12 text-center bg-zinc-50">
-            <h3 className="text-sm font-mono font-semibold text-zinc-900">No open doors found</h3>
-            <p className="mt-1 text-xs text-zinc-500">Try adjusting your language or star bucket filters.</p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="rounded-3xl border border-dashed border-zinc-300 p-12 text-center bg-white shadow-2xs my-4"
+          >
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-500 mb-3">
+              <Search className="h-5 w-5" />
+            </div>
+            <h3 className="text-base font-space font-bold text-zinc-900">No open doors found</h3>
+            <p className="mt-1 text-xs text-zinc-500 font-sans max-w-sm mx-auto leading-relaxed">
+              No repositories matched your selected language, star tier, or search query.
+            </p>
+            <button
+              onClick={() => {
+                setSelectedLang("All");
+                setSelectedTier("All");
+                setSelectedBucket("All");
+                setSearchQuery("");
+                setTrendingOnly(false);
+                setPage(1);
+                setLoading(true);
+              }}
+              className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-mono font-semibold text-white hover:bg-zinc-800 active:scale-95 transition-all shadow-xs cursor-pointer"
+            >
+              Reset all filters →
+            </button>
+          </motion.div>
         )}
       </main>
 
@@ -1045,130 +1074,116 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
         source={authModalConfig.source}
       />
 
-      {/* Command + K Search Modal Dialog */}
-      {isSearchModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-zinc-950/40 backdrop-blur-sm transition-opacity duration-200 animate-fade-slide-up"
-          onClick={() => setIsSearchModalOpen(false)}
-        >
-          <div
-            className="w-full max-w-2xl bg-white border border-zinc-200 rounded-2xl shadow-xl overflow-hidden flex flex-col"
-            onClick={(e) => e.stopPropagation()}
+      <AnimatePresence>
+        {isSearchModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-zinc-950/40 backdrop-blur-sm"
+            onClick={() => setIsSearchModalOpen(false)}
           >
-            {/* Modal Search Input Header */}
-            <div className="relative flex items-center border-b border-zinc-100 bg-zinc-50/50 p-4">
-              <Search className="absolute left-5 h-5 w-5 text-zinc-400" />
-              <input
-                ref={searchModalInputRef}
-                type="text"
-                placeholder={`Search repositories by name, e.g. ${famousRepos[placeholderIndex]}`}
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="w-full pl-12 pr-12 text-sm text-zinc-900 placeholder-zinc-400 bg-transparent border-none focus:outline-none font-sans"
-              />
-              <button
-                onClick={() => setIsSearchModalOpen(false)}
-                className="absolute right-4 p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 font-mono text-xs transition-colors cursor-pointer"
-              >
-                ESC
-              </button>
-            </div>
-
-            {/* Quick Filters / Tips Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-2 px-5 py-2.5 bg-white border-b border-zinc-100 text-xs font-mono text-zinc-500">
-              <div className="flex items-center gap-1.5">
-                <span>Quick try:</span>
-                {["nextjs", "react", "rust", "bun", "python"].map((term) => (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98, y: -10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.98, y: -10 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full max-w-2xl bg-white border border-zinc-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Search Input Header */}
+              <div className="relative flex items-center border-b border-zinc-100 bg-zinc-50/50 p-4">
+                <Search className="absolute left-5 h-5 w-5 text-zinc-400" />
+                <input
+                  ref={searchModalInputRef}
+                  type="text"
+                  placeholder={`Search repositories by name, e.g. ${famousRepos[placeholderIndex]}`}
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="w-full pl-10 pr-24 py-1.5 text-base font-sans text-zinc-900 placeholder-zinc-400 focus:outline-none bg-transparent"
+                  autoFocus
+                />
+                <div className="absolute right-4 flex items-center gap-2">
+                  <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-zinc-200 bg-white px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-400 shadow-2xs">
+                    ESC
+                  </kbd>
                   <button
-                    key={term}
-                    onClick={() => {
-                      setSearchQuery(term);
-                      setLoading(true);
-                      setPage(1);
-                      setIsSearchModalOpen(false);
-                      posthog.capture("repo_searched", { query: term, source: "cmd_k_chip" });
-                      const gridEl = document.getElementById("leaderboard-grid");
-                      if (gridEl) {
-                        gridEl.scrollIntoView({ behavior: "smooth" });
-                      }
-                    }}
-                    className="rounded bg-zinc-100 px-2 py-0.5 text-zinc-700 hover:bg-zinc-200 transition-colors cursor-pointer active:scale-95"
+                    onClick={() => setIsSearchModalOpen(false)}
+                    className="p-1 rounded-lg text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors"
                   >
-                    {term}
+                    <X className="h-4 w-4" />
                   </button>
-                ))}
+                </div>
               </div>
-              <div>
-                Showing <strong className="text-zinc-900">{repos.length}</strong> matching repos
-              </div>
-            </div>
 
-            {/* Live Search Results List Preview */}
-            <div className="max-h-96 overflow-y-auto p-3 space-y-1 font-sans divide-y divide-zinc-100">
-              {repos.length > 0 ? (
-                repos.slice(0, 5).map((r) => {
-                  const rankTier = r.class_rank || r.c_rank_tier || "A";
-                  return (
-                    <a
-                      key={r.id || r.full_name}
-                      href={`/${r.full_name}`}
-                      onClick={() => setIsSearchModalOpen(false)}
-                      className="flex items-center justify-between p-3 rounded-xl hover:bg-zinc-50 transition-colors group cursor-pointer block no-underline text-current pt-3"
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={`https://github.com/${r.full_name?.split('/')[0]}.png`}
-                          alt={r.full_name}
-                          className="h-8 w-8 rounded-lg border border-zinc-200 bg-white shrink-0 object-cover"
-                          onError={(e) => {
-                            (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png";
-                          }}
-                        />
-                        <div className="min-w-0">
-                          <div className="font-space text-sm font-bold text-zinc-900 group-hover:text-zinc-700 transition-colors truncate">
-                            {r.full_name}
-                          </div>
-                          <div className="text-xs text-zinc-500 truncate font-sans">
-                            {r.description || "No description provided."}
+              {/* Modal Body / Results Container */}
+              <div className="max-h-96 overflow-y-auto p-3 space-y-1 font-sans divide-y divide-zinc-100">
+                {repos.length > 0 ? (
+                  repos.slice(0, 6).map((r) => {
+                    const rankTier = r.class_rank || r.c_rank_tier || "A";
+                    return (
+                      <a
+                        key={r.id || r.full_name}
+                        href={`/${r.full_name}`}
+                        onClick={() => setIsSearchModalOpen(false)}
+                        className="flex items-center justify-between p-3 rounded-xl hover:bg-zinc-50 transition-colors group cursor-pointer block no-underline text-current pt-3"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={`https://github.com/${r.full_name?.split('/')[0]}.png`}
+                            alt={r.full_name}
+                            className="h-8 w-8 rounded-lg border border-zinc-200 bg-white shrink-0 object-cover"
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png";
+                            }}
+                          />
+                          <div className="min-w-0">
+                            <div className="font-space text-sm font-bold text-zinc-900 group-hover:text-zinc-700 transition-colors truncate">
+                              {r.full_name}
+                            </div>
+                            <div className="text-xs text-zinc-500 truncate font-sans">
+                              {r.description || "No description provided."}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className="flex items-center gap-3 shrink-0 ml-3">
-                        <span className="text-xs font-mono text-zinc-500 font-medium">
-                          {r.language}
-                        </span>
-                        <span className={`px-2 py-0.5 text-[10px] font-bold font-mono border rounded-lg ${
-                          rankTier === "S" ? "bg-emerald-50 text-emerald-900 border-emerald-300" :
-                          rankTier === "A" ? "bg-blue-50 text-blue-900 border-blue-200" : "bg-amber-50 text-amber-900 border-amber-200"
-                        }`}>
-                          {rankTier} Rank
-                        </span>
-                      </div>
-                    </a>
-                  );
-                })
-              ) : (
-                <div className="p-8 text-center text-xs text-zinc-500 font-mono">
-                  No repositories found matching &quot;{searchQuery}&quot;.
-                </div>
-              )}
-            </div>
+                        <div className="flex items-center gap-3 shrink-0 ml-3">
+                          <span className="text-xs font-mono text-zinc-500 font-medium">
+                            {r.language}
+                          </span>
+                          <span className={`px-2 py-0.5 text-[10px] font-bold font-mono border rounded-lg ${
+                            rankTier === "S" ? "bg-emerald-50 text-emerald-900 border-emerald-300" :
+                            rankTier === "A" ? "bg-blue-50 text-blue-900 border-blue-200" : "bg-amber-50 text-amber-900 border-amber-200"
+                          }`}>
+                            {rankTier} Rank
+                          </span>
+                        </div>
+                      </a>
+                    );
+                  })
+                ) : (
+                  <div className="p-8 text-center text-xs text-zinc-500 font-mono">
+                    No repositories found matching &quot;{searchQuery}&quot;.
+                  </div>
+                )}
+              </div>
 
-            {/* Modal Footer */}
-            <div className="px-5 py-3 bg-zinc-50 border-t border-zinc-100 flex items-center justify-between text-[11px] font-mono text-zinc-500">
-              <span>Press <kbd className="bg-zinc-200 px-1 py-0.5 rounded text-zinc-700">ESC</kbd> to close</span>
-              <button
-                onClick={() => setIsSearchModalOpen(false)}
-                className="text-zinc-900 font-semibold hover:underline cursor-pointer"
-              >
-                View all explorer results →
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+              {/* Modal Footer */}
+              <div className="px-5 py-3 bg-zinc-50 border-t border-zinc-100 flex items-center justify-between text-[11px] font-mono text-zinc-500">
+                <span>Press <kbd className="bg-zinc-200 px-1 py-0.5 rounded text-zinc-700">ESC</kbd> to close</span>
+                <button
+                  onClick={() => setIsSearchModalOpen(false)}
+                  className="text-zinc-900 font-semibold hover:underline cursor-pointer"
+                >
+                  View all explorer results →
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
