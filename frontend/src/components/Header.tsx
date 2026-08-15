@@ -69,6 +69,9 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
           </Link>
 
           <nav className="hidden md:flex items-center gap-6 text-xs font-sans font-medium text-zinc-600">
+            <Link href="/repos" title="Explore All Open Source Repositories" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
+              Repositories
+            </Link>
             <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm and Methodology" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               How C-Rank™ Works
             </Link>
