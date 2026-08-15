@@ -72,7 +72,28 @@ func TestSlugGenerationAndResolution(t *testing.T) {
 		t.Fatalf("expected nil verified_contributions for google user, got %v", gProfile.Stats.VerifiedContributions)
 	}
 
-	// 5. Unknown slug returns sql.ErrNoRows
+	// 5. Cross-provider Account Linking via verified email
+	linkID1, err := userRepo.UpsertUser(ctx, 9999, "DevUser", "dev@domain.com", "https://avatar/gh")
+	if err != nil {
+		t.Fatalf("failed to create initial user: %v", err)
+	}
+
+	// Login with Google using the same email
+	linkID2, err := userRepo.UpsertGoogleUser(ctx, "goog-9999", "DevUser Google", "dev@domain.com", "https://avatar/goog")
+	if err != nil {
+		t.Fatalf("failed to link google user: %v", err)
+	}
+
+	if linkID1 != linkID2 {
+		t.Fatalf("expected linked user ID %d, got %d", linkID1, linkID2)
+	}
+
+	linkedUser, _ := userRepo.FindByID(ctx, linkID1)
+	if linkedUser.GithubID == nil || *linkedUser.GithubID != 9999 || linkedUser.GoogleID == nil || *linkedUser.GoogleID != "goog-9999" {
+		t.Fatalf("expected both github_id and google_id populated on linked user: %+v", linkedUser)
+	}
+
+	// 6. Unknown slug returns sql.ErrNoRows
 	_, err = userRepo.GetUserProfileBySlug(ctx, "nonexistent-slug-404")
 	if err == nil {
 		t.Fatalf("expected error for nonexistent slug, got nil")

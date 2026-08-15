@@ -36,6 +36,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			github_id INTEGER UNIQUE,
 			google_id VARCHAR(255) UNIQUE,
 			slug VARCHAR(255) UNIQUE,
+			email_hash VARCHAR(64) UNIQUE,
 			username TEXT NOT NULL,
 			email TEXT,
 			avatar_url TEXT,
