@@ -49,7 +49,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
   return (
     <header className="sticky top-0 z-50 w-full border-b border-zinc-200/80 bg-[#faf9f6]/90 backdrop-blur-md transition-all">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Brand Logo */}
+        {/* Brand Logo & Main Nav */}
         <div className="flex items-center gap-6 shrink-0">
           <Link
             href="/"
@@ -64,6 +64,18 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <span className="font-space text-base font-bold tracking-tight text-zinc-900">opendoor</span>
             </div>
           </Link>
+
+          <nav className="hidden md:flex items-center gap-5 text-xs font-sans font-medium text-zinc-600">
+            <Link href="/how-c-rank-works" className="hover:text-zinc-900 transition-colors">
+              How C-Rank™ Works
+            </Link>
+            <Link href="/rankings" className="hover:text-zinc-900 transition-colors">
+              Ecosystems
+            </Link>
+            <Link href="/good-first-issue" className="hover:text-zinc-900 transition-colors">
+              Good First Issues
+            </Link>
+          </nav>
         </div>
 
         {/* Snapped Sticky Search Bar */}
