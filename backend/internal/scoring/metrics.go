@@ -195,8 +195,11 @@ func ComputeMetrics(prs []PR, staleness bool) RawMetrics {
 		botActivityRatio = (float64(botCommentCount) / float64(totalCommentCount)) * 100.0
 	}
 
+	// Staleness is true if explicitly flagged, or if no external PR was merged in the 180-day window
+	computedStaleness := staleness || (externalClosed > 0 && externalMerged == 0) || lastActivityDays >= 180
+
 	m := RawMetrics{
-		StalenessFlag:           staleness,
+		StalenessFlag:           computedStaleness,
 		LastActivityDays:        lastActivityDays,
 		ReviewRounds:            median(reviewCounts),
 		DistinctMaintainerCount: float64(len(maintainerSet)),

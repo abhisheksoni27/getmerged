@@ -28,6 +28,7 @@ Think of it as *Glassdoor for open‑source repos*: don't guess which door is op
 11. Linting rule: All new code must pass `eslint` or `npm run lint` before submission.
 12. Never hardcode fake/fallback mock data. Always fetch real data from APIs or handle loading/empty states cleanly.
 13. All anchor tags (`<a>` and `<Link>`) must have descriptive, accessible `title` attributes. Never omit title attributes on links.
+14. For deployments, NEVER run manual `go build` or ad-hoc binaries. ALWAYS use Makefile targets only (e.g. `make deploy-server`, `make deploy-frontend-server`).
 
 # Output style, and communication
 Do not output fluff. Be to the point, omit fluff words, or sentences that do not add any value. Never repeat yourself. Try returning at least 50% less tokens/words than usual based on these. Whenever you think of responding, think again. Can you make it half, without losing the information? If yes, do it. Rinse and repeat until you have reached an absolute point where no more reduction can happen. That is when you respond back. THIS IS A NO-BRAINER NO-TOLERANCE rule. NEVER SKIP THIS.  

@@ -156,8 +156,6 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 		return existingMetrics, nil
 	}
 
-	stale, _ := gh.IsStalenessFlag(owner, name)
-
 	gfiIssues, gfiCount, err := gh.FetchGoodFirstIssuesList(owner, name, 5)
 	if err != nil {
 		slog.Warn("scoreAndSaveRepo: FetchGoodFirstIssuesList failed - assuming none", "repo", fullName, "err", err)
@@ -170,7 +168,7 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	for i, p := range prs {
 		scoringPRs[i] = p
 	}
-	raw := scoring.ComputeMetrics(scoringPRs, stale)
+	raw := scoring.ComputeMetrics(scoringPRs, false)
 	raw.GoodFirstIssueCount = gfiCount
 
 	// Normalise against the caller-provided population snapshot when available
