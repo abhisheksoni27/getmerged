@@ -25,6 +25,7 @@ import {
   Zap,
   RefreshCw,
   PartyPopper,
+  Copy,
 } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
@@ -45,6 +46,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   });
   const [isWatching, setIsWatching] = useState(false);
   const [watchLoading, setWatchLoading] = useState(false);
+  const [badgeCopied, setBadgeCopied] = useState(false);
   const [insights, setInsights] = useState<AIInsights | null>(null);
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [feedbackError, setFeedbackError] = useState<string | null>(null);
@@ -781,7 +783,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </label>
         </div>
         
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-zinc-50 border-2 border-brand-dark rounded-xl shadow-[2px_2px_0px_rgba(0,0,0,0.02)]">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-zinc-50 border border-zinc-200/80 rounded-2xl shadow-2xs">
           <div className="flex items-center min-h-10 overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -796,10 +798,20 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             onClick={() => {
               navigator.clipboard.writeText(`[![Opendoor C-Rank](${badgeMarkdownUrl})](https://opendoor.abhishekco.de/${fullName})`);
               posthog.capture('badge_copied', { repo_full_name: fullName });
+              setBadgeCopied(true);
+              setTimeout(() => setBadgeCopied(false), 2000);
             }}
-            className="w-full sm:w-auto px-5 py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs shrink-0 transition-colors cursor-pointer border-2 border-brand-dark shadow-[2px_2px_0px_#222831]"
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 text-white font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-xs inline-flex items-center justify-center gap-2"
           >
-            Copy Markdown
+            {badgeCopied ? (
+              <span className="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
+                <Check className="h-3.5 w-3.5" /> Copied Markdown!
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5">
+                <Copy className="h-3.5 w-3.5" /> Copy Markdown
+              </span>
+            )}
           </button>
         </div>
       </div>
