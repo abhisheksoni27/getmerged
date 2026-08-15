@@ -124,6 +124,8 @@ func main() {
 		{
 			authGroup.GET("/github", handler.GitHubOAuthRedirect(cfg))
 			authGroup.GET("/github/callback", handler.GitHubOAuthCallback(cfg, userRepo))
+			authGroup.GET("/google", handler.GoogleOAuthRedirect(cfg))
+			authGroup.GET("/google/callback", handler.GoogleOAuthCallback(cfg, userRepo))
 		}
 	}
 

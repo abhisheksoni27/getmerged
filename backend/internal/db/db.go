@@ -25,16 +25,22 @@ func Connect(url string) (*sqlx.DB, error) {
 
 // AutoMigrate creates all required tables if they do not exist.
 func AutoMigrate(db *sqlx.DB) error {
+	autoInc := "AUTO_INCREMENT"
+	if db.DriverName() == "sqlite" {
+		autoInc = "AUTOINCREMENT"
+	}
+
 	statements := []string{
-		`CREATE TABLE IF NOT EXISTS users (
-			id INTEGER PRIMARY KEY AUTO_INCREMENT,
-			github_id INTEGER UNIQUE NOT NULL,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS users (
+			id INTEGER PRIMARY KEY %s,
+			github_id INTEGER UNIQUE,
+			google_id VARCHAR(255) UNIQUE,
 			username TEXT NOT NULL,
 			email TEXT,
 			avatar_url TEXT,
 			created_at DATETIME NOT NULL,
 			updated_at DATETIME NOT NULL
-		);`,
+		);`, autoInc),
 		`CREATE TABLE IF NOT EXISTS user_watchlists (
 			user_id INTEGER NOT NULL,
 			repo_id VARCHAR(255) NOT NULL,
@@ -42,12 +48,12 @@ func AutoMigrate(db *sqlx.DB) error {
 			created_at DATETIME NOT NULL,
 			PRIMARY KEY(user_id, repo_id)
 		);`,
-		`CREATE TABLE IF NOT EXISTS macro_stats (
-			id INTEGER PRIMARY KEY AUTO_INCREMENT,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS macro_stats (
+			id INTEGER PRIMARY KEY %s,
 			metric_key VARCHAR(255) UNIQUE NOT NULL,
 			metric_value TEXT NOT NULL,
 			updated_at DATETIME NOT NULL
-		);`,
+		);`, autoInc),
 		`CREATE TABLE IF NOT EXISTS repositories (
 			id VARCHAR(255) PRIMARY KEY,
 			full_name VARCHAR(255) UNIQUE NOT NULL,
@@ -58,11 +64,12 @@ func AutoMigrate(db *sqlx.DB) error {
 			description TEXT,
 			github_url TEXT,
 			is_trending BOOLEAN DEFAULT FALSE,
-			refresh_interval_days INTEGER DEFAULT 1 NOT NULL,
-			consecutive_stagnant_scans INTEGER DEFAULT 0 NOT NULL,
-			next_rescan_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+			trending_rank INTEGER DEFAULT 0,
+			first_timer_badge VARCHAR(50) DEFAULT '',
+			next_rescan_at DATETIME,
+			rescan_interval_days INTEGER DEFAULT 1,
+			consecutive_stagnant_count INTEGER DEFAULT 0,
+			updated_at DATETIME NOT NULL
 		);`,
 		`CREATE TABLE IF NOT EXISTS daily_snapshots (
 			id VARCHAR(255) PRIMARY KEY,
@@ -84,12 +91,22 @@ func AutoMigrate(db *sqlx.DB) error {
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			UNIQUE(repository_id, snapshot_date)
 		);`,
-		`CREATE TABLE IF NOT EXISTS repo_ai_insights (
-			repo_id VARCHAR(255) PRIMARY KEY,
-			maintainer_vibe TEXT NOT NULL,
-			pr_guidelines TEXT NOT NULL,
-			issue_quality_score REAL DEFAULT 0.0,
-			raw_summary TEXT,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS contributor_feedback (
+			id INTEGER PRIMARY KEY %s,
+			repository_id VARCHAR(255) NOT NULL,
+			user_id INTEGER NOT NULL,
+			maintainer_rating INTEGER NOT NULL,
+			review_speed_rating INTEGER NOT NULL,
+			beginner_friendly_rating INTEGER NOT NULL,
+			comment TEXT,
+			verified_pr_author BOOLEAN DEFAULT FALSE,
+			created_at DATETIME NOT NULL
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS ai_repo_insights (
+			id INTEGER PRIMARY KEY %s,
+			repository_id VARCHAR(255) UNIQUE NOT NULL,
+			maintainer_vibe TEXT,
+			pr_guidelines TEXT,
 			warmth_score REAL DEFAULT 7.5,
 			patience_score REAL DEFAULT 8.0,
 			nitpick_ratio REAL DEFAULT 0.25,
@@ -97,17 +114,17 @@ func AutoMigrate(db *sqlx.DB) error {
 			dos_json TEXT,
 			donts_json TEXT,
 			updated_at DATETIME NOT NULL
-		);`,
-		`CREATE TABLE IF NOT EXISTS notification_queue (
-			id INTEGER PRIMARY KEY AUTO_INCREMENT,
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS notification_queue (
+			id INTEGER PRIMARY KEY %s,
 			user_id INTEGER NOT NULL,
 			type TEXT NOT NULL,
 			payload TEXT NOT NULL,
 			status VARCHAR(50) NOT NULL DEFAULT 'pending',
 			created_at DATETIME NOT NULL
-		);`,
-		`CREATE TABLE IF NOT EXISTS indexing_queue (
-			id INTEGER PRIMARY KEY AUTO_INCREMENT,
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS indexing_queue (
+			id INTEGER PRIMARY KEY %s,
 			full_name VARCHAR(255) UNIQUE NOT NULL,
 			owner TEXT NOT NULL,
 			name TEXT NOT NULL,
@@ -116,7 +133,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			priority INTEGER DEFAULT 1 NOT NULL,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			processed_at DATETIME
-		);`,
+		);`, autoInc),
 		`CREATE TABLE IF NOT EXISTS latest_snapshots (
 			repository_id VARCHAR(255) PRIMARY KEY,
 			snapshot_date VARCHAR(255) NOT NULL,
@@ -135,15 +152,15 @@ func AutoMigrate(db *sqlx.DB) error {
 			good_first_issue_count INTEGER DEFAULT 0,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
-		`CREATE TABLE IF NOT EXISTS repo_raw_comments (
-			id INTEGER PRIMARY KEY AUTO_INCREMENT,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS repo_raw_comments (
+			id INTEGER PRIMARY KEY %s,
 			repository_id VARCHAR(255) NOT NULL,
 			author_login TEXT,
 			comment_text TEXT NOT NULL,
 			created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-		);`,
-		`CREATE TABLE IF NOT EXISTS repo_pr_comments (
-			id INTEGER PRIMARY KEY AUTO_INCREMENT,
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS repo_pr_comments (
+			id INTEGER PRIMARY KEY %s,
 			repository_id VARCHAR(255) NOT NULL,
 			pr_number INTEGER NOT NULL,
 			source_type VARCHAR(50) NOT NULL,
@@ -152,23 +169,23 @@ func AutoMigrate(db *sqlx.DB) error {
 			comment_text TEXT NOT NULL,
 			created_at DATETIME NOT NULL,
 			UNIQUE(repository_id, pr_number, source_type, author_login, created_at)
-		);`,
-		`CREATE TABLE IF NOT EXISTS repo_issue_comments (
-			id INTEGER PRIMARY KEY AUTO_INCREMENT,
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS repo_issue_comments (
+			id INTEGER PRIMARY KEY %s,
 			repository_id VARCHAR(255) NOT NULL,
 			comment_text TEXT NOT NULL,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			UNIQUE(repository_id, comment_text(255))
-		);`,
-		`CREATE TABLE IF NOT EXISTS repo_pr_events (
-			id INTEGER PRIMARY KEY AUTO_INCREMENT,
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS repo_pr_events (
+			id INTEGER PRIMARY KEY %s,
 			repository_id VARCHAR(255) NOT NULL,
 			pr_number INTEGER NOT NULL,
 			actor_login VARCHAR(255) NOT NULL,
 			action VARCHAR(50) NOT NULL,
 			event_at DATETIME NOT NULL,
 			UNIQUE(repository_id, pr_number, action)
-		);`,
+		);`, autoInc),
 		`CREATE TABLE IF NOT EXISTS discovery_cursors (
 			lang VARCHAR(50) NOT NULL,
 			bucket_min INT NOT NULL,
@@ -201,6 +218,10 @@ func AutoMigrate(db *sqlx.DB) error {
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)
 	}
+
+	// Schema alterations for existing databases
+	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN google_id VARCHAR(255) UNIQUE`)
+	_, _ = db.Exec(`ALTER TABLE users MODIFY github_id INTEGER NULL`)
 
 	return nil
 }
