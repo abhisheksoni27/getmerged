@@ -67,7 +67,11 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="text-lg font-bold font-space text-zinc-900 mb-3">3. Cookies & Analytics</h2>
             <p>
-              Opendoor uses essential session cookies for OAuth authentication and anonymized product analytics (via PostHog) to improve platform responsiveness and feature discoverability.
+              Opendoor uses an essential session cookie for OAuth authentication. We also use anonymized product analytics (via PostHog) to improve platform responsiveness and feature discoverability.
+            </p>
+            <p className="mt-3">
+              Analytics only run after you give consent via the cookie banner. You can accept or reject them at any time; rejecting does not affect sign-in or core functionality. See our{" "}
+              <Link href="/terms" className="underline font-semibold">Terms of Service</Link> for details on acceptable use.
             </p>
           </section>
 
