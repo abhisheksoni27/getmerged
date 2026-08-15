@@ -52,7 +52,7 @@ func ComputeAndCacheMacroStats(ctx context.Context, db *sqlx.DB) (*MacroStats, e
 	if err := db.SelectContext(ctx, &rankRows, `
 		SELECT c_rank_tier, COUNT(*) as cnt
 		FROM latest_snapshots
-		WHERE c_rank_tier IS NOT NULL AND c_rank_tier != 'D'
+		WHERE c_rank_tier IS NOT NULL AND c_rank_tier != ''
 		GROUP BY c_rank_tier
 	`); err == nil {
 		for _, r := range rankRows {
@@ -89,7 +89,7 @@ func ComputeAndCacheMacroStats(ctx context.Context, db *sqlx.DB) (*MacroStats, e
 		SELECT r.language, s.c_rank_tier, COUNT(*) as cnt, AVG(s.external_pr_merge_rate) as avg_merge
 		FROM repositories r
 		INNER JOIN latest_snapshots s ON r.id = s.repository_id
-		WHERE r.language IS NOT NULL AND r.language != '' AND s.c_rank_tier != 'D' AND s.c_rank_score > 0
+		WHERE r.language IS NOT NULL AND r.language != '' AND s.c_rank_tier IS NOT NULL AND s.c_rank_tier != ''
 		GROUP BY r.language, s.c_rank_tier
 		ORDER BY cnt DESC
 	`)
@@ -117,13 +117,21 @@ func ComputeAndCacheMacroStats(ctx context.Context, db *sqlx.DB) (*MacroStats, e
 		return nil, err
 	}
 
-	_, err = db.ExecContext(ctx, `
+	upsertQuery := `
 		INSERT INTO macro_stats (metric_key, metric_value, updated_at)
 		VALUES ('global_summary', ?, CURRENT_TIMESTAMP)
 		ON DUPLICATE KEY UPDATE
 			metric_value = VALUES(metric_value),
 			updated_at = CURRENT_TIMESTAMP
-	`, string(jsonBytes))
+	`
+	if db.DriverName() == "sqlite" {
+		upsertQuery = `
+			INSERT OR REPLACE INTO macro_stats (metric_key, metric_value, updated_at)
+			VALUES ('global_summary', ?, CURRENT_TIMESTAMP)
+		`
+	}
+
+	_, err = db.ExecContext(ctx, upsertQuery, string(jsonBytes))
 
 	if err != nil {
 		return stats, err

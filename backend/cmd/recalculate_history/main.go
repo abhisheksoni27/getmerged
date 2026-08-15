@@ -290,7 +290,8 @@ func main() {
 			raw := batchRaw[j]
 			normed := batchNormed[j]
 
-			score, tier := scoring.ComputeCRank(normed, raw.StalenessFlag, raw.GoodFirstIssueCount, r.CRankTier)
+			// For global recalculation re-anchor, evaluate clean baseline thresholds (S >= 70.0)
+			score, tier := scoring.ComputeCRank(normed, raw.StalenessFlag, raw.GoodFirstIssueCount)
 
 			staleness := 0
 			if raw.StalenessFlag {
