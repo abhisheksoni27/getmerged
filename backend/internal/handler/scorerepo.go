@@ -58,11 +58,6 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 
 		_ = meta
 
-		stale, err := gh.IsStalenessFlag(body.Owner, body.Name)
-		if err != nil {
-			slog.Warn("score-repo: IsStalenessFlag failed - assuming not stale", "repo", fullName, "err", err)
-		}
-
 		gfiIssues, gfiCount, err := gh.FetchGoodFirstIssuesList(body.Owner, body.Name, 5)
 		if err != nil {
 			slog.Warn("score-repo: FetchGoodFirstIssuesList failed - assuming none", "repo", fullName, "err", err)
@@ -112,7 +107,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 			}
 		}
 
-		raw := scoring.ComputeMetrics(scoringPRs, stale)
+		raw := scoring.ComputeMetrics(scoringPRs, false)
 		raw.GoodFirstIssueCount = gfiCount
 
 		// --- Normalise against existing DB population ---
@@ -187,7 +182,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 			"score", score,
 			"tier", tier,
 			"prs_fetched", len(prs),
-			"stale", stale,
+			"stale", raw.StalenessFlag,
 			"db_peers", len(allRaw)-1,
 		)
 

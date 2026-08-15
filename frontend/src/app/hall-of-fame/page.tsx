@@ -39,9 +39,49 @@ async function getSTierRepos(): Promise<Repo[]> {
 export default async function HallOfFamePage() {
   const repos = await getSTierRepos();
 
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Open Source Hall of Fame (S-Tier Repositories)",
+    description: "Featured showcase of top S-Tier open-source repositories welcoming contributors.",
+    itemListElement: repos.map((r, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: r.full_name,
+      url: `https://getmerged.abhishekco.de/${r.full_name}`,
+    })),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://getmerged.abhishekco.de",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Hall of Fame",
+        item: "https://getmerged.abhishekco.de/hall-of-fame",
+      },
+    ],
+  };
+
   return (
     <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-800">
         <Link

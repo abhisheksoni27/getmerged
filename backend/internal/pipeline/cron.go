@@ -70,11 +70,6 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 					continue
 				}
 
-				stale, err := gh.IsStalenessFlag(r.Owner, r.Name)
-				if err != nil {
-					slog.Warn("cron: IsStalenessFlag failed - assuming not stale", "repo", r.FullName, "err", err)
-				}
-
 				gfiIssues, gfiCount, err := gh.FetchGoodFirstIssuesList(r.Owner, r.Name, 5)
 				if err != nil {
 					slog.Warn("cron: FetchGoodFirstIssuesList failed - assuming none", "repo", r.FullName, "err", err)
@@ -83,7 +78,7 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 					_ = gfiRepo.UpsertIssues(context.Background(), r.ID, gfiIssues)
 				}
 
-				slog.Debug("cron: fetched data", "repo", r.FullName, "prs", len(prs), "stale", stale)
+				slog.Debug("cron: fetched data", "repo", r.FullName, "prs", len(prs))
 
 				// Convert github.PR → scoring.PR
 				scoringPRs := make([]scoring.PR, len(prs))
@@ -100,7 +95,7 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 					}
 				}
 
-				raw := scoring.ComputeMetrics(scoringPRs, stale)
+				raw := scoring.ComputeMetrics(scoringPRs, false)
 				raw.GoodFirstIssueCount = gfiCount
 				results <- repoMetrics{repo: r, raw: raw, meta: meta}
 			}
