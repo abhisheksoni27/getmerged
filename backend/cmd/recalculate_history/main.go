@@ -19,6 +19,7 @@ import (
 type RepoRecord struct {
 	ID                  string `db:"id"`
 	GoodFirstIssueCount int    `db:"good_first_issue_count"`
+	CRankTier           string `db:"c_rank_tier"`
 }
 
 func main() {
@@ -40,7 +41,7 @@ func main() {
 
 	var repos []RepoRecord
 	err = database.Select(&repos, `
-		SELECT r.id, COALESCE(s.good_first_issue_count, 0) as good_first_issue_count
+		SELECT r.id, COALESCE(s.good_first_issue_count, 0) as good_first_issue_count, COALESCE(s.c_rank_tier, '') as c_rank_tier
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
 	`)
@@ -95,7 +96,7 @@ func main() {
 		raw := rawMetricsList[i]
 		normed := normedMetrics[i]
 
-		score, tier := scoring.ComputeCRank(normed, raw.StalenessFlag, raw.GoodFirstIssueCount)
+		score, tier := scoring.ComputeCRank(normed, raw.StalenessFlag, raw.GoodFirstIssueCount, r.CRankTier)
 
 		staleness := 0
 		if raw.StalenessFlag {

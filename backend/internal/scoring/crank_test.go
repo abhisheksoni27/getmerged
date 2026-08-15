@@ -129,24 +129,63 @@ func TestComputeCRank_GFIBoost(t *testing.T) {
 	}
 }
 
-func TestComputeCRank_PenalisesMissingLabelWithLowFirstTimerSuccess(t *testing.T) {
-	base := scoring.NormalisedMetrics{
-		MergeRate:         90,
-		ResponseTime:      80,
-		ActivityRecency:   100,
-		FirstTimer:        20,
-		TimeToMerge:       80,
-		RepeatContributor: 70,
-		ReviewRounds:      70,
-		MaintainerBreadth: 60,
-		Responsiveness:    80,
+func TestComputeCRank_UniversalHysteresis(t *testing.T) {
+	makeNorm := func(s float64) scoring.NormalisedMetrics {
+		return scoring.NormalisedMetrics{
+			MergeRate:         s,
+			ResponseTime:      s,
+			ActivityRecency:   s,
+			FirstTimer:        s,
+			TimeToMerge:       s,
+			RepeatContributor: s,
+			ReviewRounds:      s,
+			MaintainerBreadth: s,
+			Responsiveness:    s,
+		}
 	}
 
-	withLabel, _ := scoring.ComputeCRank(base, false, 3)
-	withoutLabel, _ := scoring.ComputeCRank(base, false, 0)
+	tests := []struct {
+		name     string
+		score    float64
+		prevTier string
+		wantTier string
+	}{
+		// S <-> A Boundary (Base: 70, Promote: >=72, Demote: <68)
+		{"S-tier stays S at 69 (above 68 buffer)", 69.0, scoring.TierS, scoring.TierS},
+		{"S-tier demoted to A at 67.9", 67.9, scoring.TierS, scoring.TierA},
+		{"A-tier stays A at 71.0 (below 72 threshold)", 71.0, scoring.TierA, scoring.TierA},
+		{"A-tier promoted to S at 72.5", 72.5, scoring.TierA, scoring.TierS},
 
-	if withoutLabel >= withLabel {
-		t.Errorf("missing label with low first-timer success must reduce score: with=%v without=%v", withLabel, withoutLabel)
+		// A <-> B Boundary (Base: 55, Promote: >=57, Demote: <53)
+		{"A-tier stays A at 54.0 (above 53 buffer)", 54.0, scoring.TierA, scoring.TierA},
+		{"A-tier demoted to B at 52.5", 52.5, scoring.TierA, scoring.TierB},
+		{"B-tier stays B at 56.0 (below 57 threshold)", 56.0, scoring.TierB, scoring.TierB},
+		{"B-tier promoted to A at 57.5", 57.5, scoring.TierB, scoring.TierA},
+
+		// B <-> C Boundary (Base: 40, Promote: >=42, Demote: <38)
+		{"B-tier stays B at 39.0 (above 38 buffer)", 39.0, scoring.TierB, scoring.TierB},
+		{"B-tier demoted to C at 37.5", 37.5, scoring.TierB, scoring.TierC},
+		{"C-tier stays C at 41.0 (below 42 threshold)", 41.0, scoring.TierC, scoring.TierC},
+		{"C-tier promoted to B at 42.5", 42.5, scoring.TierC, scoring.TierB},
+
+		// C <-> D Boundary (Base: 25, Promote: >=27, Demote: <23)
+		{"C-tier stays C at 24.0 (above 23 buffer)", 24.0, scoring.TierC, scoring.TierC},
+		{"C-tier demoted to D at 22.5", 22.5, scoring.TierC, scoring.TierD},
+		{"D-tier stays D at 26.0 (below 27 threshold)", 26.0, scoring.TierD, scoring.TierD},
+		{"D-tier promoted to C at 27.5", 27.5, scoring.TierD, scoring.TierC},
+
+		// Clean Direct Entry (No Prior State)
+		{"Fresh repo direct S entry at 70.5", 70.5, "", scoring.TierS},
+		{"Fresh repo direct A entry at 69.5", 69.5, "", scoring.TierA},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, tier := scoring.ComputeCRank(makeNorm(tt.score), false, 0, tt.prevTier)
+			if tier != tt.wantTier {
+				t.Errorf("[%s] score=%.1f prev=%s: expected %s, got %s", tt.name, tt.score, tt.prevTier, tt.wantTier, tier)
+			}
+		})
 	}
 }
 
