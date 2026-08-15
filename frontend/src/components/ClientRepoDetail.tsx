@@ -279,7 +279,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   if (!repo) {
     if (githubNotFound) {
       return (
-        <main className="mx-auto max-w-5xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
+        <main className="mx-auto max-w-6xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
           <Link
             href="/"
             title="Return to Opendoor Explorer Home"
@@ -1410,7 +1410,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
 function RepoDetailSkeleton() {
   return (
-    <main className="mx-auto max-w-5xl px-3 sm:px-6 lg:px-8 py-10 sm:py-12 flex-1 w-full overflow-hidden font-sans">
+    <main className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 py-10 sm:py-12 flex-1 w-full overflow-hidden font-sans">
       <div className="h-4 w-28 bg-zinc-200 animate-pulse rounded mb-6" />
 
       <div className="flex flex-col gap-4 border-b border-zinc-200/40 pb-6 mb-8">
