@@ -25,7 +25,7 @@ type createFeedbackReq struct {
 type feedbackRecord struct {
 	ID                  string    `db:"id" json:"id"`
 	RepositoryID        string    `db:"repository_id" json:"repository_id"`
-	UserID              string    `db:"user_id" json:"user_id"`
+	UserID              string    `db:"user_id" json:"-"`
 	Sentiment           string    `db:"sentiment" json:"sentiment"`
 	Comment             string    `db:"comment" json:"comment"`
 	VerifiedContributor bool      `db:"verified_contributor" json:"verified_contributor"`
