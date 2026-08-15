@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RepoCard } from "@/components/RepoCard";
@@ -18,6 +19,7 @@ import {
   ShieldCheck,
   RotateCcw,
   Check,
+  HelpCircle,
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 import { AuthModal } from "@/components/AuthModal";
@@ -61,23 +63,57 @@ const FIRST_TIMER_BUCKETS = [
   { label: "Moderate (> 25%)", value: "25" },
 ];
 
+const FAQS = [
+  {
+    q: "Are these open-source metrics and rankings 100% free to access?",
+    a: "Yes, completely free. Opendoor is built for the global developer and contributor community to make open-source contribution transparent and frictionless. You can browse, filter, inspect maintainer turnaround velocity, and track repository health without paywalls.",
+  },
+  {
+    q: "How many welcoming repositories do you index across different languages?",
+    a: "We actively evaluate over 1,400+ repositories across 20+ programming ecosystems. Our S-Tier (Super Welcoming) and A-Tier (Welcoming) catalog includes 350+ JavaScript & TypeScript projects, 280+ Python repos, 190+ Go tools, 120+ Rust systems, alongside high-velocity repositories in Java, C++, PHP, Kotlin, Swift, and more.",
+  },
+  {
+    q: "How are repositories evaluated in this directory?",
+    a: "Every repository is benchmarked continuously using our proprietary C-Rank™ telemetry algorithm. We track real maintainer PR response turnaround, external merge rates, first-timer acceptance rates, and review friction across thousands of GitHub projects.",
+  },
+  {
+    q: "What does the C-Rank™ tier (S, A, B, C, D) mean?",
+    a: "Tier S repositories are Super Welcoming with fast maintainer response (< 24h) and high merge rates. Tier A is Welcoming, Tier B is Standard, Tier C is Selective, and Tier D indicates unmaintained backlogs or slow review times.",
+  },
+  {
+    q: "How often is telemetry updated?",
+    a: "Our automated pipeline syncs daily GraphQL and event stream snapshots. Every repository page reflects the latest snapshot timestamp directly from GitHub.",
+  },
+  {
+    q: "Can I request my repository to be indexed or re-scored?",
+    a: "Yes! Any public GitHub repository can be submitted directly through the search bar on the homepage or via our fast-track indexing queue.",
+  },
+];
+
 export function ReposClient() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Read initial page from URL query parameter
+  const urlPage = parseInt(searchParams.get("page") || "1", 10);
+  const initialPage = isNaN(urlPage) || urlPage < 1 ? 1 : urlPage;
+
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedLang, setSelectedLang] = useState<string>("All");
-  const [selectedTier, setSelectedTier] = useState<string>("All");
-  const [selectedStarBucket, setSelectedStarBucket] = useState<string>("All");
-  const [selectedMergeRate, setSelectedMergeRate] = useState<string>("All");
-  const [selectedFirstTimer, setSelectedFirstTimer] = useState<string>("All");
-  const [trendingOnly, setTrendingOnly] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>(searchParams.get("q") || "");
+  const [selectedLang, setSelectedLang] = useState<string>(searchParams.get("lang") || "All");
+  const [selectedTier, setSelectedTier] = useState<string>(searchParams.get("tier") || "All");
+  const [selectedStarBucket, setSelectedStarBucket] = useState<string>(searchParams.get("stars") || "All");
+  const [selectedMergeRate, setSelectedMergeRate] = useState<string>(searchParams.get("merge_rate") || "All");
+  const [selectedFirstTimer, setSelectedFirstTimer] = useState<string>(searchParams.get("first_timer") || "All");
+  const [trendingOnly, setTrendingOnly] = useState<boolean>(searchParams.get("trending") === "true");
 
   // Pagination
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(initialPage);
   const [totalCount, setTotalCount] = useState<number>(0);
   const perPage = 24;
 
-  // Mobile Bottom Sheet Modal State (Zomato/Airbnb style)
+  // Mobile Bottom Sheet Modal State
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState<boolean>(false);
 
   // Auth Modal State
@@ -92,6 +128,14 @@ export function ReposClient() {
   const [isLoggedIn] = useState<boolean>(() => {
     return typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
   });
+
+  // Sync page state if URL changes
+  useEffect(() => {
+    const p = parseInt(searchParams.get("page") || "1", 10);
+    if (!isNaN(p) && p > 0 && p !== page) {
+      setPage(p);
+    }
+  }, [searchParams, page]);
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
@@ -113,6 +157,7 @@ export function ReposClient() {
     setTrendingOnly(false);
     setSearchQuery("");
     setPage(1);
+    router.push("/repos");
   };
 
   const getStarBounds = (bucket: string) => {
@@ -184,6 +229,57 @@ export function ReposClient() {
   }, [fetchRepos]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / perPage));
+
+  const getPageUrl = (p: number) => {
+    const params = new URLSearchParams();
+    if (p > 1) params.set("page", p.toString());
+    if (selectedLang !== "All") params.set("lang", selectedLang);
+    if (selectedTier !== "All") params.set("tier", selectedTier);
+    if (selectedStarBucket !== "All") params.set("stars", selectedStarBucket);
+    if (selectedMergeRate !== "All") params.set("merge_rate", selectedMergeRate);
+    if (selectedFirstTimer !== "All") params.set("first_timer", selectedFirstTimer);
+    if (trendingOnly) params.set("trending", "true");
+    if (searchQuery.trim()) params.set("q", searchQuery.trim());
+    const qs = params.toString();
+    return qs ? `/repos?${qs}` : "/repos";
+  };
+
+  const handlePageClick = (e: React.MouseEvent, p: number) => {
+    if (p > 1 && !isLoggedIn) {
+      e.preventDefault();
+      openAuthModal(
+        "Sign In to Access Full Directory",
+        "Create a free account to browse page 2+ across all 1,400+ repositories and track custom watchlists.",
+        "pagination"
+      );
+      return;
+    }
+    setPage(p);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Generate sliding pagination window (e.g. 1 2 3 4 5)
+  const paginationRange = useMemo(() => {
+    const current = page;
+    const total = totalPages;
+    const delta = 2;
+    const range: number[] = [];
+
+    for (let i = Math.max(1, current - delta); i <= Math.min(total, current + delta); i++) {
+      range.push(i);
+    }
+
+    if (range.length > 0 && range[0] > 1) {
+      if (range[0] > 2) range.unshift(-1); // indicator for ellipsis
+      range.unshift(1);
+    }
+    if (range.length > 0 && range[range.length - 1] < total) {
+      if (range[range.length - 1] < total - 1) range.push(-2); // indicator for ellipsis
+      range.push(total);
+    }
+
+    return range;
+  }, [page, totalPages]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern text-zinc-900 overflow-x-hidden font-sans">
@@ -333,7 +429,7 @@ export function ReposClient() {
                   type="button"
                   onClick={resetFilters}
                   title="Reset all filters"
-                  className="p-2.5 rounded-xl border border-zinc-200 text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
+                  className="p-2.5 rounded-xl border border-zinc-200 text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 transition-colors cursor-pointer"
                 >
                   <RotateCcw className="h-4 w-4" />
                 </button>
@@ -356,7 +452,7 @@ export function ReposClient() {
                   type="button"
                   onClick={resetFilters}
                   title="Reset all filters"
-                  className="p-2.5 rounded-xl border border-zinc-200 bg-white text-zinc-600 text-xs font-semibold"
+                  className="p-2.5 rounded-xl border border-zinc-200 bg-white text-zinc-600 text-xs font-semibold cursor-pointer"
                 >
                   <RotateCcw className="h-4 w-4" />
                 </button>
@@ -402,7 +498,7 @@ export function ReposClient() {
           ) : repos.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {repos.map((repo) => (
-                <RepoCard key={repo.id || repo.full_name} repo={repo} />
+                <RepoCard key={repo.id || repo.full_name} repo={repo} isLoggedIn={isLoggedIn} />
               ))}
             </div>
           ) : (
@@ -423,46 +519,96 @@ export function ReposClient() {
           )}
         </section>
 
-        {/* Pagination Controls */}
+        {/* Crawlable Pagination Controls (<a> Links) */}
         {totalPages > 1 && (
-          <nav aria-label="Pagination" className="mt-12 flex items-center justify-between border-t border-zinc-200 pt-6">
-            <button
-              type="button"
-              disabled={page <= 1}
-              onClick={() => {
-                setPage((p) => Math.max(1, p - 1));
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-zinc-200 bg-white text-xs font-semibold text-zinc-700 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-2xs cursor-pointer"
+          <nav aria-label="Pagination" className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-zinc-200 pt-8">
+            {/* Previous Page Link */}
+            <Link
+              href={getPageUrl(Math.max(1, page - 1))}
+              onClick={(e) => handlePageClick(e, Math.max(1, page - 1))}
+              title={`Go to previous page ${Math.max(1, page - 1)}`}
+              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-zinc-200 bg-white text-xs font-semibold text-zinc-700 hover:bg-zinc-50 shadow-2xs transition-all ${
+                page <= 1 ? "pointer-events-none opacity-40" : "cursor-pointer"
+              }`}
             >
               <ChevronLeft className="h-4 w-4" /> Previous
-            </button>
+            </Link>
 
-            <span className="text-xs font-mono font-medium text-zinc-500">
-              Page <strong className="text-zinc-900">{page}</strong> of {totalPages}
-            </span>
-
-            <button
-              type="button"
-              disabled={page >= totalPages}
-              onClick={() => {
-                if (!isLoggedIn) {
-                  openAuthModal(
-                    "Sign In to Access Full Directory",
-                    "Create a free account to browse page 2+ across all 1,400+ repositories and track custom watchlists.",
-                    "pagination"
+            {/* Numeric Page Links 1 2 3 4 5 */}
+            <div className="flex items-center gap-1.5 font-mono text-xs">
+              {paginationRange.map((p, idx) => {
+                if (p < 0) {
+                  return (
+                    <span key={`ellipsis-${idx}`} className="px-1.5 text-zinc-400 select-none">
+                      …
+                    </span>
                   );
-                  return;
                 }
-                setPage((p) => Math.min(totalPages, p + 1));
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-zinc-200 bg-white text-xs font-semibold text-zinc-700 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-2xs cursor-pointer"
+                const isCurrent = p === page;
+                return (
+                  <Link
+                    key={p}
+                    href={getPageUrl(p)}
+                    onClick={(e) => handlePageClick(e, p)}
+                    title={`Go to repository directory page ${p}`}
+                    aria-current={isCurrent ? "page" : undefined}
+                    className={`h-9 w-9 flex items-center justify-center rounded-xl font-bold transition-all ${
+                      isCurrent
+                        ? "bg-zinc-950 text-white shadow-xs"
+                        : "bg-white border border-zinc-200 text-zinc-700 hover:bg-zinc-50 cursor-pointer"
+                    }`}
+                  >
+                    {p}
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* Next Page Link */}
+            <Link
+              href={getPageUrl(Math.min(totalPages, page + 1))}
+              onClick={(e) => handlePageClick(e, Math.min(totalPages, page + 1))}
+              title={`Go to next page ${Math.min(totalPages, page + 1)}`}
+              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-zinc-200 bg-white text-xs font-semibold text-zinc-700 hover:bg-zinc-50 shadow-2xs transition-all ${
+                page >= totalPages ? "pointer-events-none opacity-40" : "cursor-pointer"
+              }`}
             >
               Next <ChevronRight className="h-4 w-4" />
-            </button>
+            </Link>
           </nav>
         )}
+
+        {/* FAQs Section */}
+        <section className="mt-16 sm:mt-24 pt-12 border-t border-zinc-200/80">
+          <div className="max-w-3xl mb-8">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/60 text-xs font-mono text-blue-900 font-semibold mb-2">
+              <HelpCircle className="h-3.5 w-3.5 text-blue-600" />
+              <span>Frequently Asked Questions</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold font-space text-zinc-950 tracking-tight">
+              Repository Indexing & C-Rank™ FAQs
+            </h2>
+            <p className="text-xs sm:text-sm text-zinc-600 font-sans mt-1 leading-relaxed">
+              Common questions about our real-time open-source discovery engine and contributor scores.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {FAQS.map((faq, idx) => (
+              <div
+                key={idx}
+                className="rounded-3xl bg-white border border-zinc-200/90 p-6 sm:p-7 shadow-xs hover:border-zinc-300 transition-colors"
+              >
+                <h3 className="text-sm sm:text-base font-bold font-space text-zinc-900 mb-2 leading-snug">
+                  {faq.q}
+                </h3>
+                <p className="text-xs sm:text-sm text-zinc-600 font-sans leading-relaxed">
+                  {faq.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
 
       <AuthModal
@@ -627,7 +773,7 @@ export function ReposClient() {
               <button
                 type="button"
                 onClick={resetFilters}
-                className="py-3 px-4 rounded-xl border border-zinc-200 text-zinc-700 font-semibold text-xs hover:bg-zinc-50"
+                className="py-3 px-4 rounded-xl border border-zinc-200 text-zinc-700 font-semibold text-xs hover:bg-zinc-50 cursor-pointer"
               >
                 Clear All
               </button>
@@ -637,7 +783,7 @@ export function ReposClient() {
                   setPage(1);
                   setIsFilterSheetOpen(false);
                 }}
-                className="flex-1 py-3 px-4 rounded-xl bg-zinc-900 text-white font-semibold text-xs shadow-xs text-center"
+                className="flex-1 py-3 px-4 rounded-xl bg-zinc-900 text-white font-semibold text-xs shadow-xs text-center cursor-pointer"
               >
                 Apply Filters
               </button>
