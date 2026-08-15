@@ -261,7 +261,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const [spotlightRepos, setSpotlightRepos] = useState<Repo[]>([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/v1/repos?scored_today=true&sort=c_rank_score&order=desc&per_page=30`)
+    fetch(`${API_BASE_URL}/api/v1/repos?scored_today=true&max_last_activity_days=7&exclude_stale=true&sort=c_rank_score&order=desc&per_page=30`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         const rawList = data?.data || data?.repos;
