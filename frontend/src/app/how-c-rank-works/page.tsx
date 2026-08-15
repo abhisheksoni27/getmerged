@@ -148,9 +148,49 @@ export default function HowCRankWorksPage() {
     },
   ];
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "How C-Rank™ Works - The Science of Open Source Hospitality",
+    description: "Methodology and mathematical telemetry behind C-Rank scoring for open-source GitHub repositories.",
+    url: "https://getmerged.abhishekco.de/how-c-rank-works",
+    publisher: {
+      "@type": "Organization",
+      name: "GetMerged",
+      url: "https://getmerged.abhishekco.de",
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://getmerged.abhishekco.de",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "How C-Rank Works",
+        item: "https://getmerged.abhishekco.de/how-c-rank-works",
+      },
+    ],
+  };
+
   return (
     <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
 
       <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full font-sans text-zinc-800">
         <Link

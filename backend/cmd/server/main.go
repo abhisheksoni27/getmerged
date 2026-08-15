@@ -77,6 +77,8 @@ func main() {
 	aiRepo := repository.NewAIRepository(database)
 
 	// Start continuous background crawler worker loop
+	gfiRepo := repository.NewGFIRepository(database)
+
 	if cfg.GinMode == "release" {
 		crawler := pipeline.NewBackgroundCrawler(database, gh, telegramNotifier)
 		crawler.SetWorkers(cfg.CrawlerWorkers)
@@ -112,6 +114,8 @@ func main() {
 		api.GET("/repos", handler.ListRepos(repoStore))
 		api.GET("/repos/:id", handler.GetRepo(repoStore))
 		api.GET("/repos/:id/related", handler.GetRelatedReposHandler(repoStore))
+		api.GET("/repos/:id/good-first-issues", handler.GetRepoGoodFirstIssues(gfiRepo, repoStore))
+		api.GET("/issues/good-first", handler.ListGoodFirstIssues(gfiRepo))
 		api.GET("/history/:id", handler.GetRepoHistory(repoStore))
 		api.POST("/repos/queue", handler.RequestRepoIndexing(database))
 		api.GET("/languages", handler.ListLanguages(database))

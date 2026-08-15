@@ -118,6 +118,7 @@ export async function generateMetadata({ searchParams }: ReposPageProps): Promis
       "high merge rate github projects",
       "fast maintainer response time",
     ],
+    robots: isPaged ? { index: false, follow: true } : { index: true, follow: true },
     alternates: {
       canonical: canonicalUrl,
     },

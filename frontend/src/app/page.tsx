@@ -27,7 +27,7 @@ export default async function HomePage() {
     description: "Glassdoor for open-source repositories. Objective metrics on PR merge rates and maintainer response times.",
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://getmerged.abhishekco.de/?search={search_term_string}",
+      target: "https://getmerged.abhishekco.de/repos?q={search_term_string}",
       "query-input": "required name=search_term_string",
     },
   };
@@ -38,7 +38,7 @@ export default async function HomePage() {
     name: "GetMerged",
     url: "https://getmerged.abhishekco.de",
     logo: "https://getmerged.abhishekco.de/icon.svg",
-    sameAs: ["https://github.com/abhisheksoni27/opendoor"],
+    sameAs: ["https://github.com/abhisheksoni27/getmerged"],
   };
 
   const webAppJsonLd = {

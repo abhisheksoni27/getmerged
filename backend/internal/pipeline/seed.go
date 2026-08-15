@@ -10,6 +10,7 @@ import (
 
 	"github.com/abhisheksoni27/opendoor/internal/analytics"
 	"github.com/abhisheksoni27/opendoor/internal/github"
+	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
@@ -157,9 +158,12 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 
 	stale, _ := gh.IsStalenessFlag(owner, name)
 
-	gfiCount, err := gh.FetchGoodFirstIssueCount(owner, name)
+	gfiIssues, gfiCount, err := gh.FetchGoodFirstIssuesList(owner, name, 5)
 	if err != nil {
-		slog.Warn("scoreAndSaveRepo: FetchGoodFirstIssueCount failed - assuming none", "repo", fullName, "err", err)
+		slog.Warn("scoreAndSaveRepo: FetchGoodFirstIssuesList failed - assuming none", "repo", fullName, "err", err)
+	} else if len(gfiIssues) > 0 {
+		gfiRepo := repository.NewGFIRepository(db)
+		_ = gfiRepo.UpsertIssues(context.Background(), repoID, gfiIssues)
 	}
 
 	scoringPRs := make([]scoring.PR, len(prs))

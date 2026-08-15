@@ -196,6 +196,19 @@ func AutoMigrate(db *sqlx.DB) error {
 			last_swept DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			PRIMARY KEY(lang, bucket_min, bucket_max)
 		);`,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS repo_good_first_issues (
+			id INTEGER PRIMARY KEY %s,
+			repository_id VARCHAR(255) NOT NULL,
+			issue_number INTEGER NOT NULL,
+			title VARCHAR(500) NOT NULL,
+			body_text TEXT,
+			url VARCHAR(500) NOT NULL,
+			comments_count INTEGER DEFAULT 0,
+			labels_json TEXT NOT NULL,
+			created_at DATETIME NOT NULL,
+			synced_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(repository_id, issue_number)
+		);`, autoInc),
 	}
 
 	for i, stmt := range statements {
@@ -217,6 +230,7 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_pr_events_repo_pr ON repo_pr_events(repository_id, pr_number)`,
 		`CREATE INDEX IF NOT EXISTS idx_raw_comments_repo_at ON repo_raw_comments(repository_id, created_at)`,
 		`CREATE INDEX IF NOT EXISTS idx_pr_comments_repo_pr ON repo_pr_comments(repository_id, pr_number, created_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_gfi_repo_created ON repo_good_first_issues(repository_id, created_at DESC)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)

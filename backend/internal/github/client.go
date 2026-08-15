@@ -857,6 +857,17 @@ func formatGoodFirstIssueQuery(owner, name string) string {
 	return fmt.Sprintf(`repo:%s/%s is:issue is:open label:"good first issue",good-first-issue,good_first_issue,first-timers-only,first-timer,beginner,beginner-friendly,"beginner friendly",easy,easy-fix,"easy fix",low-hanging-fruit,"low hanging fruit","help wanted",help-wanted,starter,starter-issue,bitesize,new-contributor,up-for-grabs,e-easy,E-mentor`, owner, name)
 }
 
+// GoodFirstIssue represents a beginner-friendly issue fetched from GitHub GraphQL search.
+type GoodFirstIssue struct {
+	Number        int       `json:"number"`
+	Title         string    `json:"title"`
+	BodyText      string    `json:"body_text"`
+	URL           string    `json:"url"`
+	CreatedAt     time.Time `json:"created_at"`
+	CommentsCount int       `json:"comments_count"`
+	LabelsJSON    string    `json:"labels_json"`
+}
+
 // FetchGoodFirstIssueCount returns the number of open beginner-friendly issues for a repo.
 func (c *Client) FetchGoodFirstIssueCount(owner, name string) (int, error) {
 	queryStr := formatGoodFirstIssueQuery(owner, name)
@@ -881,4 +892,82 @@ func (c *Client) FetchGoodFirstIssueCount(owner, name string) (int, error) {
 	}
 
 	return resp.Data.Search.IssueCount, nil
+}
+
+// FetchGoodFirstIssuesList fetches up to limit active Good First Issues for a repo including titles, bodyText, numbers, and labels.
+func (c *Client) FetchGoodFirstIssuesList(owner, name string, limit int) ([]GoodFirstIssue, int, error) {
+	if limit <= 0 {
+		limit = 5
+	}
+	queryStr := formatGoodFirstIssueQuery(owner, name)
+	vars := map[string]any{
+		"query": queryStr,
+		"first": limit,
+	}
+
+	var resp struct {
+		Data struct {
+			Search struct {
+				IssueCount int `json:"issueCount"`
+				Nodes      []struct {
+					Number    int    `json:"number"`
+					Title     string `json:"title"`
+					BodyText  string `json:"bodyText"`
+					URL       string `json:"url"`
+					CreatedAt string `json:"createdAt"`
+					Comments  struct {
+						TotalCount int `json:"totalCount"`
+					} `json:"comments"`
+					Labels struct {
+						Nodes []struct {
+							Name  string `json:"name"`
+							Color string `json:"color"`
+						} `json:"nodes"`
+					} `json:"labels"`
+				} `json:"nodes"`
+			} `json:"search"`
+			RateLimit rateLimitInfo `json:"rateLimit"`
+		} `json:"data"`
+	}
+
+	fromCache, err := c.do(RepoGfiListQuery, vars, &resp)
+	if err != nil {
+		return nil, 0, fmt.Errorf("FetchGoodFirstIssuesList: %w", err)
+	}
+
+	if !fromCache {
+		c.handleRateLimit(resp.Data.RateLimit)
+	}
+
+	var issues []GoodFirstIssue
+	for _, n := range resp.Data.Search.Nodes {
+		var labels []map[string]string
+		for _, l := range n.Labels.Nodes {
+			labels = append(labels, map[string]string{"name": l.Name, "color": l.Color})
+		}
+		lblBytes, _ := json.Marshal(labels)
+
+		var createdAt time.Time
+		if t, parseErr := time.Parse(time.RFC3339, n.CreatedAt); parseErr == nil {
+			createdAt = t
+		}
+
+		// Keep body preview to reasonable length (e.g. up to 1000 chars) for storage efficiency
+		body := n.BodyText
+		if len(body) > 1000 {
+			body = body[:1000]
+		}
+
+		issues = append(issues, GoodFirstIssue{
+			Number:        n.Number,
+			Title:         n.Title,
+			BodyText:      body,
+			URL:           n.URL,
+			CreatedAt:     createdAt,
+			CommentsCount: n.Comments.TotalCount,
+			LabelsJSON:    string(lblBytes),
+		})
+	}
+
+	return issues, resp.Data.Search.IssueCount, nil
 }

@@ -1,0 +1,33 @@
+# GetMerged - Full Technical Documentation & LLM Citation Manual
+
+> Canonical URL: https://getmerged.abhishekco.de
+> Description: Open-source repository contributor-friendliness scoring platform based on mathematical telemetry.
+
+## Platform Purpose & Methodology
+GetMerged evaluates public open-source GitHub repositories to answer a fundamental contributor question: *Where are external pull requests actually reviewed, welcomed, and merged?*
+
+Instead of relying on vanity metrics like GitHub Stars, GetMerged calculates a proprietary **C-Rank™** score (0–100 scale, graded S to D) using 9 objective telemetry dimensions:
+1. **External PR Merge Rate (27.5% weight)**: Ratio of merged vs closed external pull requests over the trailing 180-day window.
+2. **Time to First Review Response (15.0% weight)**: Median latency (in hours) before maintainers provide initial human feedback.
+3. **Activity Recency (15.0% weight)**: Temporal freshness and commit/PR turnover.
+4. **First-Timer Contributor Success Rate (10.0% weight)**: Acceptance rate for newcomers opening their first PR to the repository.
+5. **Time to Final Merge (10.0% weight)**: Turnaround duration from submission to merged commit.
+6. **Repeat Contributor Rate (10.0% weight)**: Percentage of external authors who return to submit subsequent PRs.
+7. **Review Rounds & Depth (5.0% weight)**: Balance of thorough constructive code review without excessive blocking friction.
+8. **Maintainer Breadth & Bus Factor (5.0% weight)**: Active distinct core maintainers triaging contributions.
+9. **Maintainer Responsiveness (2.5% weight)**: Speed of response to issue discussions and follow-up reviews.
+
+## Tier Taxonomy
+- **S-Class (Score >= 70.0)**: Elite welcoming tier. Fast review turnaround (<4h), high merge rate (>65%), supportive first-timer environment.
+- **A-Class (Score >= 55.0)**: Welcoming repository. Regular active reviews (<24h), healthy contributor acceptance.
+- **B-Class (Score >= 40.0)**: Standard open-source pace. 1–3 day review turnaround.
+- **C-Class (Score >= 25.0)**: Selective review or high nitpick friction.
+- **D-Class (Score < 25.0)**: Stale or unmaintained repositories where PRs risk sitting indefinitely.
+
+## Primary Endpoints
+- **Web App**: https://getmerged.abhishekco.de
+- **Dedicated Multi-Filter Repository Index**: https://getmerged.abhishekco.de/repos
+- **Ecosystem Rankings by Language**: https://getmerged.abhishekco.de/rankings/{language}
+- **Beginner Friendly Good First Issues Hub**: https://getmerged.abhishekco.de/good-first-issue/{language}
+- **How C-Rank Works**: https://getmerged.abhishekco.de/how-c-rank-works
+- **REST API Endpoint**: https://getmerged.abhishekco.de/api/v1/repos

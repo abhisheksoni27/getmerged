@@ -156,3 +156,36 @@ query RepoGfiCount($query: String!) {
   }
 }
 `
+
+// RepoGfiListQuery returns up to $first open issues matching beginner friendly search query,
+// including issue bodyText (0 extra rate-limit cost since it's in the same single GraphQL node request).
+const RepoGfiListQuery = `
+query RepoGfiList($query: String!, $first: Int!) {
+  search(query: $query, type: ISSUE, first: $first) {
+    issueCount
+    nodes {
+      ... on Issue {
+        number
+        title
+        bodyText
+        url
+        createdAt
+        comments {
+          totalCount
+        }
+        labels(first: 5) {
+          nodes {
+            name
+            color
+          }
+        }
+      }
+    }
+  }
+  rateLimit {
+    remaining
+    resetAt
+    cost
+  }
+}
+`

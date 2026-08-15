@@ -70,6 +70,12 @@ func RequestRepoIndexing(database *sqlx.DB) gin.HandlerFunc {
 			ON DUPLICATE KEY UPDATE
 				created_at = VALUES(created_at)
 		`
+		if db.DriverName() == "sqlite" {
+			query = `
+				INSERT OR REPLACE INTO indexing_queue (full_name, owner, name, requested_by_user_id, status, created_at)
+				VALUES (?, ?, ?, ?, 'pending', CURRENT_TIMESTAMP)
+			`
+		}
 		_, err := db.ExecContext(c.Request.Context(), query, fullName, owner, name, userID)
 		if err != nil {
 			slog.Error("queue-repo: failed to enqueue", "repo", fullName, "err", err)

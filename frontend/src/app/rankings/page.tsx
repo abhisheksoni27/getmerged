@@ -38,9 +38,44 @@ export default function RankingsIndexPage() {
     { name: "Zig", slug: "zig", desc: "Next-generation systems software and lightweight tooling." },
   ];
 
+  const collectionJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Open Source Ecosystem Rankings (C-Rank™)",
+    description: "Directory of open-source repository rankings across major programming languages based on PR telemetry.",
+    url: "https://getmerged.abhishekco.de/rankings",
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://getmerged.abhishekco.de",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Ecosystem Rankings",
+        item: "https://getmerged.abhishekco.de/rankings",
+      },
+    ],
+  };
+
   return (
     <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-800 font-sans">
         <Link
