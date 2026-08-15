@@ -20,6 +20,7 @@ import {
   Check,
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
+import { AuthModal } from "@/components/AuthModal";
 
 const LANGUAGES = [
   "All",
@@ -78,6 +79,19 @@ export function ReposClient() {
 
   // Mobile Bottom Sheet Modal State (Zomato/Airbnb style)
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState<boolean>(false);
+
+  // Auth Modal State
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
+  const [authModalConfig, setAuthModalConfig] = useState<{ title?: string; description?: string; source?: string }>({});
+
+  const openAuthModal = (title?: string, description?: string, source = "modal") => {
+    setAuthModalConfig({ title, description, source });
+    setIsAuthModalOpen(true);
+  };
+
+  const [isLoggedIn] = useState<boolean>(() => {
+    return typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
+  });
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
@@ -140,7 +154,7 @@ export function ReposClient() {
       if (!res.ok) throw new Error("Fetch failed");
       const data = await res.json();
       const rawList = data.data || data.repos || [];
-      const total = data.total || data.count || (Array.isArray(rawList) ? rawList.length : 0);
+      const total = data.meta?.total ?? data.total ?? (Array.isArray(rawList) ? rawList.length : 0);
 
       if (Array.isArray(rawList)) {
         const mappedList: Repo[] = rawList.map((r: Record<string, unknown>) => ({
@@ -432,6 +446,14 @@ export function ReposClient() {
               type="button"
               disabled={page >= totalPages}
               onClick={() => {
+                if (!isLoggedIn) {
+                  openAuthModal(
+                    "Sign In to Access Full Directory",
+                    "Create a free account to browse page 2+ across all 1,400+ repositories and track custom watchlists.",
+                    "pagination"
+                  );
+                  return;
+                }
                 setPage((p) => Math.min(totalPages, p + 1));
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
@@ -442,6 +464,14 @@ export function ReposClient() {
           </nav>
         )}
       </main>
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        title={authModalConfig.title}
+        description={authModalConfig.description}
+        source={authModalConfig.source}
+      />
 
       {/* Mobile Zomato/Airbnb Style Slide-up Bottom Sheet Modal */}
       {isFilterSheetOpen && (
