@@ -879,12 +879,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                     const aCount = item.tier_map?.["A"] || 0;
                     const bCount = item.tier_map?.["B"] || 0;
                     const cCount = item.tier_map?.["C"] || 0;
-                    const grandTotal = item.total || sCount + aCount + bCount + cCount || 1;
+                    const dCount = item.tier_map?.["D"] || 0;
+                    const grandTotal = item.total || sCount + aCount + bCount + cCount + dCount || 1;
 
                     const sPct = (sCount / grandTotal) * 100;
                     const aPct = (aCount / grandTotal) * 100;
                     const bPct = (bCount / grandTotal) * 100;
                     const cPct = (cCount / grandTotal) * 100;
+                    const dPct = (dCount / grandTotal) * 100;
 
                     const weightedScore = sPct * 1.0 + aPct * 0.75 + bPct * 0.4 + cPct * 0.1;
 
@@ -894,15 +896,16 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                       aCount,
                       bCount,
                       cCount,
-                      cPct,
+                      dCount,
                       grandTotal,
                       sPct,
                       aPct,
                       bPct,
+                      cPct,
+                      dPct,
                       weightedScore,
                     };
                   })
-                  // Filter out low-sample ecosystems with fewer than 15 total repos or fewer than 3 welcoming repos to prevent 1-repo skewed rankings
                   .filter((item) => item.grandTotal >= 15 && (item.sCount + item.aCount) >= 3)
                   .sort((a, b) => b.weightedScore - a.weightedScore)
                   .slice(0, 5)
@@ -910,7 +913,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                     const rankMedal = idx === 0 ? "1" : idx === 1 ? "2" : idx === 2 ? "3" : `${idx + 1}`;
                     return (
                       <div key={item.language} className="py-5 first:pt-2 last:pb-2 group transition-colors">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                           <div className="flex items-center gap-3">
                             <span className="font-mono text-sm font-bold text-zinc-400 w-6">#{rankMedal}</span>
                             <div className="h-10 w-10 rounded-xl border border-zinc-200 bg-zinc-50 flex items-center justify-center shrink-0">
@@ -932,23 +935,64 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-6 sm:gap-10 shrink-0 font-mono text-right pl-9 md:pl-0">
-                            <div>
-                              <div className="text-[11px] text-zinc-400 font-sans">Welcoming Repos</div>
-                              <div className="text-sm font-bold text-zinc-900">
-                                {item.sCount + item.aCount} <span className="text-xs text-zinc-400 font-normal">/ {item.grandTotal}</span>
+                          {/* Multi-Segment Tier Pill & Metrics Group */}
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8 shrink-0 font-mono pl-9 lg:pl-0">
+                            {/* Visual Multi-Segment Pill Bar */}
+                            <div className="flex flex-col gap-1 w-full sm:w-56">
+                              <div className="flex items-center justify-between text-[11px] font-sans text-zinc-500">
+                                <span>Tier Spread</span>
+                                <span className="font-mono text-[10px] text-zinc-400">{item.grandTotal} repos</span>
+                              </div>
+                              <div
+                                className="h-2.5 w-full rounded-full bg-zinc-100 p-0.5 flex overflow-hidden border border-zinc-200 shadow-2xs"
+                                title={`S-Tier: ${item.sCount} (${item.sPct.toFixed(1)}%), A-Tier: ${item.aCount} (${item.aPct.toFixed(1)}%), B-Tier: ${item.bCount} (${item.bPct.toFixed(1)}%), C/D-Tier: ${item.cCount + item.dCount}`}
+                              >
+                                {item.sPct > 0 && (
+                                  <div
+                                    style={{ width: `${item.sPct}%` }}
+                                    className="h-full bg-amber-500 rounded-l-full first:rounded-l-full last:rounded-r-full transition-all"
+                                  />
+                                )}
+                                {item.aPct > 0 && (
+                                  <div
+                                    style={{ width: `${item.aPct}%` }}
+                                    className="h-full bg-emerald-600 first:rounded-l-full last:rounded-r-full transition-all"
+                                  />
+                                )}
+                                {item.bPct > 0 && (
+                                  <div
+                                    style={{ width: `${item.bPct}%` }}
+                                    className="h-full bg-blue-500 first:rounded-l-full last:rounded-r-full transition-all"
+                                  />
+                                )}
+                                {(item.cPct + item.dPct) > 0 && (
+                                  <div
+                                    style={{ width: `${item.cPct + item.dPct}%` }}
+                                    className="h-full bg-zinc-300 rounded-r-full first:rounded-l-full last:rounded-r-full transition-all"
+                                  />
+                                )}
+                              </div>
+                              <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400">
+                                <span className="text-amber-600 font-semibold">{item.sCount} S</span>
+                                <span className="text-emerald-600 font-semibold">{item.aCount} A</span>
+                                <span className="text-blue-600 font-semibold">{item.bCount} B</span>
+                                <span className="text-zinc-500">{item.cCount + item.dCount} C/D</span>
                               </div>
                             </div>
-                            <div>
-                              <div className="text-[11px] text-zinc-400 font-sans">Super Welcoming</div>
-                              <div className="text-sm font-bold text-emerald-700">
-                                {item.sCount}
+
+                            {/* Welcoming & Score Badges */}
+                            <div className="flex items-center gap-6 text-right shrink-0">
+                              <div>
+                                <div className="text-[11px] text-zinc-400 font-sans">Welcoming</div>
+                                <div className="text-sm font-bold text-zinc-900">
+                                  {item.sCount + item.aCount}
+                                </div>
                               </div>
-                            </div>
-                            <div>
-                              <div className="text-[11px] text-zinc-400 font-sans">Score</div>
-                              <div className="inline-block px-2.5 py-1 rounded-lg bg-zinc-100 border border-zinc-200 text-zinc-900 font-bold text-xs">
-                                {item.weightedScore.toFixed(1)} pts
+                              <div>
+                                <div className="text-[11px] text-zinc-400 font-sans">Score</div>
+                                <div className="inline-block px-2.5 py-1 rounded-lg bg-zinc-100 border border-zinc-200 text-zinc-900 font-bold text-xs">
+                                  {item.weightedScore.toFixed(1)} pts
+                                </div>
                               </div>
                             </div>
                           </div>
