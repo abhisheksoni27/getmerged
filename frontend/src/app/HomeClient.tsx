@@ -11,11 +11,7 @@ import {
   Search,
   Flame,
   Star,
-  Code2,
-  ChevronLeft,
-  ChevronRight,
   Sparkles,
-  ShieldCheck,
   ArrowRight,
   X,
 } from "lucide-react";
@@ -57,27 +53,17 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
   // Pagination state
   const [page, setPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const [totalReposCount, setTotalReposCount] = useState<number>(0);
   const perPage = 15;
 
-  const [languages, setLanguages] = useState<string[]>([
-    "All", "Go", "TypeScript", "Python", "Rust", "C++", "Java", "PHP", "Ruby", "Dart", "Kotlin", "Elixir", "Zig", "Scala"
-  ]);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/v1/languages`)
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.languages && Array.isArray(data.languages) && data.languages.length > 0) {
-          setLanguages(["All", ...data.languages]);
-        }
-      })
-      .catch(() => {});
-  }, []);
-
-  const [showAllLanguages, setShowAllLanguages] = useState<boolean>(false);
-  const visibleLanguages = showAllLanguages ? languages : languages.slice(0, 10);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
+    const query = e.target.value;
+    setSearchQuery(query);
+    setPage(1);
+    if (query.trim()) {
+      posthog.capture("repo_searched", { query: query.trim() });
+    }
+  };
 
   // Floating Search Modal State
   const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
@@ -147,17 +133,6 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
       }, 50);
     }
   }, [isSearchModalOpen]);
-
-  const buckets = ["All", "500-1k", "1k-5k", "5k-20k", "20k-50k", "50k+"];
-  const firstTimerBuckets = ["All", "20-40%", "40-60%", "60-80%", "80-100%"];
-  const tiers = [
-    { label: "All", value: "All" },
-    { label: "Super Welcoming", value: "S" },
-    { label: "Welcoming", value: "A" },
-    { label: "Moderate", value: "B" },
-    { label: "Slow Review", value: "C" },
-    { label: "Unmaintained", value: "D" },
-  ];
 
   const getStarBoundsFromBucket = (bucket: string): { min?: string; max?: string } => {
     switch (bucket) {
@@ -250,10 +225,6 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
         }
 
         setRepos(mappedList);
-        if (data.meta) {
-          setTotalReposCount(data.meta.total || mappedList.length);
-          setTotalPages(Math.ceil((data.meta.total || mappedList.length) / perPage));
-        }
       }
     } catch (err) {
       console.error("Failed to fetch repos", err);
@@ -322,75 +293,6 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
       })
       .catch(() => {});
   }, []);
-
-  const handleLangChange = (lang: string) => {
-    setLoading(true);
-    setSelectedLang(lang);
-    setPage(1);
-    posthog.capture("repo_filter_applied", { filter_type: "language", value: lang });
-  };
-
-  const handleBucketChange = (bucket: string) => {
-    setLoading(true);
-    setSelectedBucket(bucket);
-    setPage(1);
-    posthog.capture("repo_filter_applied", { filter_type: "star_bucket", value: bucket });
-  };
-
-  const handleTierChange = (tierVal: string) => {
-    setLoading(true);
-    setSelectedTier(tierVal);
-    setPage(1);
-    posthog.capture("repo_filter_applied", { filter_type: "tier", value: tierVal });
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLoading(true);
-    const query = e.target.value;
-    setSearchQuery(query);
-    setPage(1);
-    if (query.trim()) {
-      posthog.capture("repo_searched", { query: query.trim() });
-    }
-  };
-
-  const handleTrendingToggle = () => {
-    if (!isLoggedIn) {
-      openAuthModal(
-        "Unlock Daily Trending Repositories",
-        "Sign in with GitHub to access live daily trending repos and track real-time PR velocity.",
-        "trending_toggle"
-      );
-      return;
-    }
-    setLoading(true);
-    const next = !trendingOnly;
-    setTrendingOnly(next);
-    setPage(1);
-    posthog.capture("trending_toggled", { enabled: next });
-  };
-
-  const handleFirstTimerBucketChange = (bucket: string) => {
-    setLoading(true);
-    setSelectedFirstTimerBucket(bucket);
-    setPage(1);
-    posthog.capture("repo_filter_applied", { filter_type: "first_timer_bucket", value: bucket });
-  };
-
-  const handlePageChange = (newPage: number) => {
-    if (newPage > 1 && !isLoggedIn) {
-      openAuthModal(
-        "Unlock Full Leaderboard Pages",
-        "Sign in with GitHub to browse page 2+ results across all scored repositories.",
-        "pagination"
-      );
-      return;
-    }
-    setLoading(true);
-    setPage(newPage);
-    window.scrollTo({ top: 400, behavior: "smooth" });
-    posthog.capture("pagination_changed", { page: newPage, total_pages: totalPages });
-  };
 
   return (
     <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
@@ -673,132 +575,123 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
         </div>
       </section>
 
-      {/* Main Filter & Leaderboard Grid */}
+      {/* Main Curated Showroom Section */}
       <main id="leaderboard-grid" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex-1 w-full pt-4">
-        {/* Controls Bar */}
-        <div className="sticky top-16 z-40 mb-8 rounded-2xl bg-white/95 p-4 sm:p-5 border border-zinc-200/80 shadow-sm backdrop-blur-md space-y-3.5">
-          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            {/* Search Input */}
-            <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-              <input
-                type="text"
-                placeholder="Filter repositories by name, owner, or stack..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="w-full rounded-xl border border-zinc-200 bg-zinc-50/60 pl-10 pr-14 py-2 text-xs sm:text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-400 focus:bg-white focus:outline-none font-sans transition-all"
-              />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-zinc-200 bg-white px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-400">
-                  <span>⌘</span>K
-                </kbd>
+        {/* Streamlined Category Switcher Bar */}
+        <div className="mb-8 rounded-3xl bg-white p-5 sm:p-6 border border-zinc-200/90 shadow-xs space-y-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-zinc-500 mb-1">
+                <Sparkles className="h-3.5 w-3.5 text-orange-500" /> Curated Repository Showroom
               </div>
+              <h2 className="text-xl sm:text-2xl font-bold font-space text-zinc-950">
+                Explore Open Doors by Category
+              </h2>
             </div>
 
-            {/* Trending Toggle */}
+            {/* Direct Link to Full /repos Directory */}
+            <Link
+              href="/repos"
+              title="Open full multi-filter repository directory"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-zinc-950 hover:bg-zinc-800 text-white px-5 py-2.5 text-xs font-semibold shadow-xs transition-all self-start md:self-auto"
+            >
+              <span>Explore All 1,400+ Repos & Filters</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+
+          {/* 4 Clean Quick Category Chips */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-sans">
             <button
-              onClick={handleTrendingToggle}
-              className={`inline-flex items-center gap-1.5 rounded-xl border px-3.5 py-2 text-xs font-semibold transition-all shrink-0 cursor-pointer ${
-                trendingOnly
-                  ? "border-orange-300 bg-orange-50 text-orange-900 shadow-xs"
-                  : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50"
+              type="button"
+              onClick={() => {
+                setTrendingOnly(false);
+                setSelectedTier("All");
+                setSelectedFirstTimerBucket("All");
+                setSelectedBucket("All");
+                setPage(1);
+              }}
+              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+                !trendingOnly && selectedTier === "All" && selectedFirstTimerBucket === "All" && selectedBucket === "All"
+                  ? "bg-zinc-900 text-white font-semibold shadow-2xs"
+                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
               }`}
             >
-              <Flame className={`h-3.5 w-3.5 ${trendingOnly ? "fill-orange-500 text-orange-500" : "text-zinc-500"}`} />
-              Daily Trending Repos
+              🌟 All Featured
             </button>
-          </div>
 
-          {/* C-Rank Tier Selector */}
-          <div className="flex items-center gap-2 text-xs overflow-x-auto no-scrollbar whitespace-nowrap pb-0.5">
-            <span className="font-mono text-zinc-500 mr-1 flex items-center gap-1 shrink-0">
-              <Sparkles className="h-3 w-3 text-zinc-600" /> C-Rank:
-            </span>
-            {tiers.map((t) => (
-              <button
-                key={t.value}
-                onClick={() => handleTierChange(t.value)}
-                className={`rounded-lg px-3 py-1 font-mono text-[11px] sm:text-xs transition-all cursor-pointer shrink-0 ${
-                  selectedTier === t.value
-                    ? "bg-zinc-900 text-white font-semibold shadow-xs"
-                    : "bg-zinc-100 hover:bg-zinc-200/70 text-zinc-600 border border-transparent"
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
+            <button
+              type="button"
+              onClick={() => {
+                setTrendingOnly(true);
+                setSelectedTier("All");
+                setSelectedFirstTimerBucket("All");
+                setSelectedBucket("All");
+                setPage(1);
+              }}
+              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+                trendingOnly
+                  ? "bg-amber-500 text-white font-semibold shadow-2xs"
+                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
+              }`}
+            >
+              <Flame className="h-3.5 w-3.5 text-amber-500" />
+              <span>Trending Today</span>
+            </button>
 
-          {/* Language & Bucket Filter Pills */}
-          <div className="flex flex-col gap-2.5 text-xs">
-            {/* Language Pills */}
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar whitespace-nowrap pb-0.5">
-              <span className="font-mono text-zinc-500 mr-1 flex items-center gap-1 shrink-0">
-                <Code2 className="h-3 w-3 text-zinc-600" /> Lang:
-              </span>
-              {visibleLanguages.map((lang) => (
-                <button
-                  key={lang}
-                  onClick={() => handleLangChange(lang)}
-                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1 font-mono text-[11px] sm:text-xs transition-all cursor-pointer shrink-0 ${
-                    selectedLang === lang
-                      ? "bg-zinc-900 text-white shadow-xs font-semibold"
-                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200/70 border border-transparent"
-                  }`}
-                >
-                  {lang !== "All" && <LangLogo language={lang} />}
-                  <span>{lang}</span>
-                </button>
-              ))}
-              {languages.length > 10 && (
-                <button
-                  onClick={() => setShowAllLanguages(!showAllLanguages)}
-                  className="font-mono text-[11px] text-zinc-700 font-semibold hover:underline px-2 py-1 cursor-pointer shrink-0"
-                >
-                  {showAllLanguages ? "Show Less" : `+${languages.length - 10} More`}
-                </button>
-              )}
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setTrendingOnly(false);
+                setSelectedTier("S");
+                setSelectedFirstTimerBucket("All");
+                setSelectedBucket("All");
+                setPage(1);
+              }}
+              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+                selectedTier === "S"
+                  ? "bg-emerald-700 text-white font-semibold shadow-2xs"
+                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
+              }`}
+            >
+              ⚡ S-Tier Fast Track
+            </button>
 
-            {/* Stars Bucket Filter */}
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar whitespace-nowrap pb-0.5">
-              <span className="font-mono text-zinc-500 mr-1 flex items-center gap-1 shrink-0">
-                <Star className="h-3 w-3 text-zinc-600" /> Stars:
-              </span>
-              {buckets.map((b) => (
-                <button
-                  key={b}
-                  onClick={() => handleBucketChange(b)}
-                  className={`rounded-lg px-2.5 py-1 font-mono text-[11px] sm:text-xs transition-all cursor-pointer shrink-0 ${
-                    selectedBucket === b
-                      ? "border-zinc-900 bg-zinc-900 text-white font-semibold"
-                      : "border border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50"
-                  }`}
-                >
-                  {b}
-                </button>
-              ))}
-            </div>
-          </div>
+            <button
+              type="button"
+              onClick={() => {
+                setTrendingOnly(false);
+                setSelectedTier("All");
+                setSelectedFirstTimerBucket("40-60%");
+                setSelectedBucket("All");
+                setPage(1);
+              }}
+              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+                selectedFirstTimerBucket !== "All"
+                  ? "bg-blue-600 text-white font-semibold shadow-2xs"
+                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
+              }`}
+            >
+              🌱 Good First Issues
+            </button>
 
-          {/* First Timer Support Filter */}
-          <div className="flex items-center gap-2 text-xs overflow-x-auto no-scrollbar whitespace-nowrap pb-0.5">
-            <span className="font-mono text-zinc-500 mr-1 flex items-center gap-1 shrink-0">
-              <ShieldCheck className="h-3.5 w-3.5 text-zinc-600" /> First-Timer friendly:
-            </span>
-            {firstTimerBuckets.map((b) => (
-              <button
-                key={b}
-                onClick={() => handleFirstTimerBucketChange(b)}
-                className={`rounded-lg px-2.5 py-1 font-mono text-[11px] sm:text-xs transition-all cursor-pointer shrink-0 ${
-                  selectedFirstTimerBucket === b
-                    ? "bg-zinc-900 text-white font-semibold shadow-xs"
-                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200/70 border border-transparent"
-                }`}
-              >
-                {b}
-              </button>
-            ))}
+            <button
+              type="button"
+              onClick={() => {
+                setTrendingOnly(false);
+                setSelectedTier("All");
+                setSelectedFirstTimerBucket("All");
+                setSelectedBucket("50k+");
+                setPage(1);
+              }}
+              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+                selectedBucket === "50k+"
+                  ? "bg-purple-700 text-white font-semibold shadow-2xs"
+                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
+              }`}
+            >
+              ⭐ 50k+ Star Giants
+            </button>
           </div>
         </div>
 
@@ -808,29 +701,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
-                className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-5 h-[260px] flex flex-col justify-between"
-              >
-                <div className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-zinc-100 to-transparent animate-shimmer" />
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="h-5 w-32 rounded bg-zinc-200" />
-                    <div className="h-5 w-16 rounded bg-zinc-200" />
-                  </div>
-                  <div className="h-3 w-full rounded bg-zinc-200 mb-2" />
-                  <div className="h-3 w-3/4 rounded bg-zinc-200 mb-5" />
-                  <div className="h-10 w-full rounded bg-zinc-100 border border-zinc-200/50 mb-4" />
-                </div>
-                <div className="flex items-center justify-between pt-3 border-t border-zinc-100">
-                  <div className="h-4 w-20 rounded bg-zinc-200" />
-                  <div className="h-4 w-16 rounded bg-zinc-200" />
-                </div>
-              </div>
+                className="relative overflow-hidden rounded-3xl border border-zinc-200 bg-white p-6 h-[260px] animate-pulse"
+              />
             ))}
           </div>
         ) : repos.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-10">
-              {repos.map((repo, index) => (
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+              {repos.slice(0, 6).map((repo, index) => (
                 <div
                   key={repo.id}
                   className="opacity-0 animate-fade-slide-up"
@@ -841,51 +719,25 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               ))}
             </div>
 
-            {/* Pagination Controls */}
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-zinc-200 pt-8 pb-10 font-mono text-xs text-zinc-500">
-              <div className="text-center sm:text-left">
-                Showing page <span className="font-bold text-zinc-900">{page}</span> of{" "}
-                <span className="font-bold text-zinc-900">{totalPages || 1}</span> ({totalReposCount.toLocaleString()} total)
+            {/* Bottom Callout Banner */}
+            <div className="my-8 rounded-3xl bg-zinc-900 text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+              <div>
+                <h3 className="text-lg sm:text-xl font-bold font-space">
+                  Looking for custom languages, merge rates, or response times?
+                </h3>
+                <p className="text-xs text-zinc-400 mt-1 font-sans">
+                  Filter across 20+ language ecosystems with full pagination in our new dedicated repository index.
+                </p>
               </div>
 
-              <div className="flex items-center justify-center gap-1.5 sm:gap-2">
-                <button
-                  disabled={page <= 1}
-                  onClick={() => handlePageChange(Math.max(page - 1, 1))}
-                  className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 sm:px-3 text-xs font-medium text-zinc-600 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                >
-                  <ChevronLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  <span className="hidden xs:inline sm:inline">Previous</span>
-                </button>
-
-                <div className="flex items-center gap-1 px-1">
-                  {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                    const pageNum = i + 1;
-                    return (
-                      <button
-                        key={pageNum}
-                        onClick={() => handlePageChange(pageNum)}
-                        className={`h-7 w-7 rounded-md font-mono text-xs flex items-center justify-center transition-all ${
-                          page === pageNum
-                            ? "bg-zinc-900 text-white font-bold"
-                            : "hover:bg-zinc-100 text-zinc-600"
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <button
-                  disabled={page >= totalPages}
-                  onClick={() => handlePageChange(Math.min(page + 1, totalPages))}
-                  className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 sm:px-3 text-xs font-medium text-zinc-600 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                >
-                  <span className="hidden xs:inline sm:inline">Next</span>
-                  <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                </button>
-              </div>
+              <Link
+                href="/repos"
+                title="Browse full repository database with all filters"
+                className="inline-flex items-center gap-2 rounded-2xl bg-white text-zinc-950 hover:bg-zinc-100 px-6 py-3 text-xs font-bold font-sans shrink-0 shadow-2xs transition-transform active:scale-98"
+              >
+                <span>Open /repos Explorer</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           </>
         ) : (
