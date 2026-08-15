@@ -22,43 +22,37 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       case "S":
         return {
           badgeClass: "bg-emerald-50 text-emerald-900 border-emerald-300 ring-1 ring-emerald-400/30",
-          label: "S Rank",
-          sub: "Super Welcoming",
+          label: "Super Welcoming",
           indicatorColor: "bg-emerald-500",
         };
       case "A":
         return {
           badgeClass: "bg-blue-50 text-blue-900 border-blue-200 ring-1 ring-blue-300/30",
-          label: "A Rank",
-          sub: "Welcoming",
+          label: "Welcoming",
           indicatorColor: "bg-blue-500",
         };
       case "B":
         return {
           badgeClass: "bg-amber-50 text-amber-900 border-amber-200 ring-1 ring-amber-300/30",
-          label: "B Rank",
-          sub: "Moderate",
+          label: "Moderate",
           indicatorColor: "bg-amber-500",
         };
       case "C":
         return {
           badgeClass: "bg-purple-50 text-purple-900 border-purple-200 ring-1 ring-purple-300/30",
-          label: "C Rank",
-          sub: "Slow Review",
+          label: "Slow Review",
           indicatorColor: "bg-purple-500",
         };
       case "D":
         return {
           badgeClass: "bg-rose-50 text-rose-900 border-rose-200 ring-1 ring-rose-300/30",
-          label: "D Rank",
-          sub: "Unmaintained",
+          label: "Unmaintained",
           indicatorColor: "bg-rose-500",
         };
       default:
         return {
           badgeClass: "bg-zinc-50 text-zinc-900 border-zinc-200 ring-1 ring-zinc-300/30",
           label: "Scored",
-          sub: "Scored",
           indicatorColor: "bg-zinc-400",
         };
     }
@@ -85,6 +79,9 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
     repo.first_timer_success_rate !== undefined && repo.first_timer_success_rate >= 0
       ? `${Math.round(repo.first_timer_success_rate)}%`
       : "-";
+
+  const gfiCount = repo.good_first_issue_count ?? 0;
+  const gfiLabel = gfiCount === 1 ? "1 good first issue" : `${gfiCount} good first issues`;
 
   const handleClick = () => {
     posthog.capture("repo_card_clicked", {
@@ -141,7 +138,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
             </div>
           </div>
 
-          {/* C-Rank Tier Badge */}
+          {/* Rank Badge */}
           <div className={`px-2.5 py-1 rounded-xl text-[11px] font-bold font-mono border shrink-0 flex items-center gap-1.5 ${badgeStyle.badgeClass}`}>
             <span className={`h-1.5 w-1.5 rounded-full ${badgeStyle.indicatorColor}`} />
             <span>{badgeStyle.label}</span>
@@ -153,19 +150,19 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
           {repo.description || "No repository description available."}
         </p>
 
-        {/* Telemetry Metrics Scorecard */}
-        <div className="grid grid-cols-3 gap-2 py-2.5 px-3 bg-zinc-50/80 rounded-xl border border-zinc-100/80 my-auto text-center font-mono">
-          <div>
+        {/* Telemetry Metrics Scorecard with clean spacing & dividers */}
+        <div className="grid grid-cols-3 gap-3 py-3 px-3.5 bg-zinc-50/80 rounded-xl border border-zinc-100/90 my-auto text-center font-mono">
+          <div className="pr-1">
             <div className="text-xs font-bold text-zinc-900">{mergeRate}</div>
-            <div className="text-[10px] text-zinc-500 font-medium">Merge Rate</div>
+            <div className="text-[10px] text-zinc-500 font-medium whitespace-nowrap mt-0.5">Merge Rate</div>
           </div>
-          <div className="border-x border-zinc-200/60">
+          <div className="border-x border-zinc-200/70 px-1">
             <div className="text-xs font-bold text-zinc-900">{firstResponse}</div>
-            <div className="text-[10px] text-zinc-500 font-medium">First Review</div>
+            <div className="text-[10px] text-zinc-500 font-medium whitespace-nowrap mt-0.5">First Review</div>
           </div>
-          <div>
+          <div className="pl-1">
             <div className="text-xs font-bold text-zinc-900">{firstTimerRate}</div>
-            <div className="text-[10px] text-zinc-500 font-medium">1st-Timers</div>
+            <div className="text-[10px] text-zinc-500 font-medium whitespace-nowrap mt-0.5">1st-Timers</div>
           </div>
         </div>
       </div>
@@ -173,10 +170,10 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       {/* Card Footer */}
       <div className="pt-3 mt-3 border-t border-zinc-100 flex items-center justify-between text-[11px] font-mono text-zinc-500">
         <div className="flex items-center gap-2">
-          {repo.good_first_issue_count !== undefined && repo.good_first_issue_count > 0 ? (
-            <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/60 font-medium text-[10px]">
+          {gfiCount > 0 ? (
+            <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60 font-medium text-[10px]">
               <ShieldCheck className="h-3 w-3" />
-              {repo.good_first_issue_count} good first issues
+              {gfiLabel}
             </span>
           ) : repo.is_trending ? (
             <span className="inline-flex items-center gap-0.5 text-orange-700 font-medium">

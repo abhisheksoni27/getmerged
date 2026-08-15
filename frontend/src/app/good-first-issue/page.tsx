@@ -1,0 +1,113 @@
+import React from "react";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { Metadata } from "next";
+import Link from "next/link";
+import { Sprout, ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
+import { LangLogo } from "@/components/LangLogo";
+
+export const metadata: Metadata = {
+  title: "Good First Issues by Programming Language - Opendoor",
+  description: "Discover beginner-friendly Good First Issues across Python, TypeScript, Go, Rust, C#, Java, and other open-source ecosystems with active maintainer reviews.",
+  alternates: {
+    canonical: "https://opendoor.abhishekco.de/good-first-issue",
+  },
+  openGraph: {
+    title: "Good First Issues by Programming Language - Opendoor",
+    description: "Find active beginner-friendly issues in GitHub repositories with high PR merge rates.",
+    url: "https://opendoor.abhishekco.de/good-first-issue",
+    siteName: "Opendoor",
+  },
+};
+
+export default function GoodFirstIssueIndexPage() {
+  const ecosystems = [
+    { name: "Python", slug: "python", desc: "Beginner-friendly issues in Python web frameworks, machine learning, and automation tools." },
+    { name: "TypeScript", slug: "typescript", desc: "Frontend and fullstack issues across Next.js, Node.js, and React developer libraries." },
+    { name: "Go", slug: "go", desc: "Approachable starter issues in cloud tools, backend services, and CLI packages." },
+    { name: "Rust", slug: "rust", desc: "First-timer labeled issues for systems programming and utility crates." },
+    { name: "C#", slug: "csharp", desc: "Beginner tasks across .NET open-source libraries, desktop, and web apps." },
+    { name: "C++", slug: "cpp", desc: "Open-source starter tasks in graphics, game tooling, and core infrastructure." },
+    { name: "Java", slug: "java", desc: "Good first issues across Spring, enterprise frameworks, and Android projects." },
+    { name: "PHP", slug: "php", desc: "Beginner-friendly issues in Laravel packages, Symfony components, and CMS tools." },
+    { name: "Ruby", slug: "ruby", desc: "Starter tasks in Rails engines, developer gems, and Sinatra apps." },
+    { name: "Swift", slug: "swift", desc: "Beginner issues in iOS utilities, macOS open-source apps, and Swift server packages." },
+    { name: "Kotlin", slug: "kotlin", desc: "Starter issues across Android libraries and multiplatform Kotlin projects." },
+    { name: "Dart", slug: "dart", desc: "Beginner issues in Flutter widgets, UI packages, and cross-platform tools." },
+    { name: "Elixir", slug: "elixir", desc: "Approachable issues in Phoenix, Ecto, and distributed OTP open-source tools." },
+    { name: "Zig", slug: "zig", desc: "Starter contributions for systems libraries and modern command-line tools." },
+  ];
+
+  return (
+    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
+      <Header />
+
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-800 font-sans">
+        <Link
+          href="/"
+          title="Return to Opendoor Explorer Home"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
+        </Link>
+
+        <div className="rounded-3xl bg-white p-6 sm:p-10 border border-zinc-200/80 shadow-xs mb-10">
+          <div className="flex items-center gap-2 mb-3.5">
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-900 font-mono">
+              <Sprout className="h-3.5 w-3.5 text-emerald-700" /> Beginner Contributor Hub
+            </span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl font-bold text-zinc-900 tracking-tight font-space">
+            Good First Issues by Stack
+          </h1>
+          <p className="mt-3 text-xs sm:text-sm text-zinc-600 max-w-3xl leading-relaxed font-sans">
+            Find welcoming repositories with labeled beginner issues, fast maintainer review response times, and high first-timer pull request success rates.
+          </p>
+        </div>
+
+        <div className="mb-6 flex items-center justify-between border-b border-zinc-200 pb-4">
+          <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2 font-space">
+            <ShieldCheck className="h-4 w-4 text-emerald-600" />
+            Ecosystems with Beginner Issues ({ecosystems.length})
+          </h2>
+          <span className="text-xs text-zinc-500 font-mono">Live Issues Directory</span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
+          {ecosystems.map((eco) => (
+            <Link
+              key={eco.slug}
+              href={`/good-first-issue/${eco.slug}`}
+              className="group rounded-2xl bg-white p-6 border border-zinc-200/80 shadow-xs hover:border-zinc-300 hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="h-10 w-10 rounded-xl border border-zinc-200 bg-zinc-50 flex items-center justify-center shrink-0">
+                    <LangLogo language={eco.name} />
+                  </div>
+                  <div>
+                    <h3 className="font-space text-lg font-bold text-zinc-900 group-hover:text-zinc-700 transition-colors">
+                      {eco.name}
+                    </h3>
+                    <span className="text-[11px] font-mono text-zinc-400">/good-first-issue/{eco.slug}</span>
+                  </div>
+                </div>
+                <p className="text-xs text-zinc-600 leading-relaxed font-sans">
+                  {eco.desc}
+                </p>
+              </div>
+
+              <div className="pt-4 mt-4 border-t border-zinc-100 flex items-center justify-between text-xs font-mono font-semibold text-zinc-900 group-hover:text-zinc-700">
+                <span>Browse beginner issues</span>
+                <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}

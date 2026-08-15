@@ -167,11 +167,11 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const firstTimerBuckets = ["All", "20-40%", "40-60%", "60-80%", "80-100%"];
   const tiers = [
     { label: "All", value: "All" },
-    { label: "S Rank", value: "S" },
-    { label: "A Rank", value: "A" },
-    { label: "B Rank", value: "B" },
-    { label: "C Rank", value: "C" },
-    { label: "D Rank", value: "D" },
+    { label: "Super Welcoming", value: "S" },
+    { label: "Welcoming", value: "A" },
+    { label: "Moderate", value: "B" },
+    { label: "Slow Review", value: "C" },
+    { label: "Unmaintained", value: "D" },
   ];
 
   const getStarBoundsFromBucket = (bucket: string): { min?: string; max?: string } => {
@@ -893,6 +893,8 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                       weightedScore,
                     };
                   })
+                  // Filter out low-sample ecosystems with fewer than 15 total repos or fewer than 3 welcoming repos to prevent 1-repo skewed rankings
+                  .filter((item) => item.grandTotal >= 15 && (item.sCount + item.aCount) >= 3)
                   .sort((a, b) => b.weightedScore - a.weightedScore)
                   .slice(0, 5)
                   .map((item, idx) => {
@@ -914,11 +916,6 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                                 >
                                   {item.language}
                                 </Link>
-                                {item.language.toLowerCase() === "go" && (
-                                  <span className="inline-flex items-center gap-0.5 rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-mono font-semibold text-emerald-800 border border-emerald-200">
-                                    +4.2% 30d
-                                  </span>
-                                )}
                               </div>
                               <p className="text-xs text-zinc-500 font-sans mt-0.5">
                                 Maintainers merge <strong>{item.sCount + item.aCount}</strong> welcoming projects with an avg <strong>{item.avg_merge_rate ? `${item.avg_merge_rate.toFixed(0)}%` : "84%"}</strong> acceptance rate.
@@ -998,24 +995,41 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             </div>
           </div>
 
-          {/* GitHub Sign-In Banner */}
+          {/* GitHub Sign-In / Contributor Action Banner */}
           <div className="rounded-3xl border border-zinc-200 bg-white p-8 sm:p-12 text-zinc-900 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
             <div className="max-w-xl">
               <h3 className="text-2xl sm:text-3xl font-bold font-space tracking-tight leading-tight">
                 Ready to find your next welcoming open-source contribution?
               </h3>
               <p className="mt-3 text-xs sm:text-sm text-zinc-600 leading-relaxed font-sans">
-                Sign in with your GitHub account to watch repositories, unlock maintainer guidelines, and receive automated PR review alerts.
+                {isLoggedIn
+                  ? "Explore indexed repositories above or filter by your favorite tech stack to find open doors."
+                  : "Sign in with your GitHub account to watch repositories, unlock maintainer guidelines, and receive automated PR review alerts."}
               </p>
             </div>
-            <a
-              href={`${API_BASE_URL}/api/v1/auth/github`}
-              onClick={() => posthog.capture("github_sign_in_clicked", { source: "homepage_cta_banner" })}
-              className="inline-flex items-center gap-2.5 rounded-xl bg-zinc-900 px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs shrink-0 cursor-pointer"
-            >
-              <span>Sign in with GitHub</span>
-              <ArrowRight className="h-4 w-4" />
-            </a>
+            {isLoggedIn ? (
+              <button
+                onClick={() => {
+                  const gridEl = document.getElementById("leaderboard-grid");
+                  if (gridEl) {
+                    gridEl.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                className="inline-flex items-center gap-2.5 rounded-xl bg-zinc-900 px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs shrink-0 cursor-pointer"
+              >
+                <span>Explore Welcoming Repos</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            ) : (
+              <a
+                href={`${API_BASE_URL}/api/v1/auth/github`}
+                onClick={() => posthog.capture("github_sign_in_clicked", { source: "homepage_cta_banner" })}
+                className="inline-flex items-center gap-2.5 rounded-xl bg-zinc-900 px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs shrink-0 cursor-pointer"
+              >
+                <span>Sign in with GitHub</span>
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            )}
           </div>
         </div>
       </section>

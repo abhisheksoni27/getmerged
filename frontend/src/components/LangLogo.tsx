@@ -11,18 +11,23 @@ const SKILL_ICON_MAP: Record<string, string> = {
   rust: "rust",
   "c++": "cpp",
   cpp: "cpp",
+  "c#": "cs",
+  csharp: "cs",
+  cs: "cs",
   java: "java",
   php: "php",
   ruby: "ruby",
   dart: "dart",
   kotlin: "kotlin",
   swift: "swift",
+  elixir: "elixir",
+  zig: "zig",
 };
 
 export function LangLogo({ language, className = "h-4 w-4" }: { language?: string; className?: string }) {
   if (!language) return null;
 
-  const key = language.toLowerCase();
+  const key = language.toLowerCase().trim();
   const iconSlug = SKILL_ICON_MAP[key];
 
   if (!iconSlug) {
