@@ -22,7 +22,7 @@ const dmMono = DM_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://opendoor.abhishekco.de"),
   title: "opendoor - Find Welcoming GitHub Repos for Open Source Contribution | C-Rank™",
-  description: "Stop guessing which door is open. Find GitHub repositories that welcome open source contribution — ranked by PR merge rates, maintainer response time, and first-timer success. The C-Rank™ index for developers building their github profile.",
+  description: "Stop guessing which door is open. Find GitHub repositories that welcome open source contribution, ranked by PR merge rates, maintainer response time, and first-timer success. The C-Rank™ index for developers building their github profile.",
   keywords: [
     "open source contribution",
     "good first issue",
@@ -42,10 +42,13 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "https://opendoor.abhishekco.de",
+    types: {
+      "application/xml": "https://opendoor.abhishekco.de/sitemap.xml",
+    },
   },
   openGraph: {
     title: "opendoor - Find Welcoming GitHub Repos for Open Source Contribution",
-    description: "Find GitHub repositories that welcome open source contribution — ranked by PR merge rates, maintainer response time, and first-timer success.",
+    description: "Find GitHub repositories that welcome open source contribution, ranked by PR merge rates, maintainer response time, and first-timer success.",
     url: "https://opendoor.abhishekco.de",
     siteName: "opendoor",
     type: "website",
@@ -61,7 +64,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "opendoor - Find Welcoming GitHub Repos for Open Source Contribution",
-    description: "Find GitHub repositories that welcome open source contribution — ranked by PR merge rates, maintainer response time, and first-timer success.",
+    description: "Find GitHub repositories that welcome open source contribution, ranked by PR merge rates, maintainer response time, and first-timer success.",
     images: ["/opengraph-image"],
   },
   verification: {

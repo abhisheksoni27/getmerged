@@ -1,8 +1,9 @@
 import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck, ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Privacy Policy - Opendoor",
@@ -20,23 +21,31 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#faf9f6]">
+    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
 
-      <main className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16 flex-1 w-full font-sans text-zinc-800">
-        <div className="border-b border-zinc-200/40 pb-6 mb-8">
-          <div className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold text-emerald-700 bg-emerald-50 px-3.5 py-1.5 rounded-xl mb-3">
-            <ShieldCheck className="h-3.5 w-3.5" /> Privacy & Security Compliance
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full font-sans text-zinc-800">
+        <Link
+          href="/"
+          title="Return to Opendoor Explorer Home"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
+        </Link>
+
+        <div className="rounded-3xl bg-white p-6 sm:p-10 border border-zinc-200/80 shadow-xs mb-8">
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-xl mb-3">
+            <ShieldCheck className="h-3.5 w-3.5 text-emerald-700" /> Privacy & Security Compliance
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold font-space text-zinc-900 tracking-tight">
             Privacy Policy
           </h1>
-          <p className="mt-2.5 text-xs sm:text-sm text-zinc-500 font-sans">
+          <p className="mt-2 text-xs sm:text-sm text-zinc-500 font-sans">
             Last Updated: July 27, 2026
           </p>
         </div>
 
-        <div className="prose prose-sm leading-relaxed text-zinc-600 max-w-none space-y-8 font-sans">
+        <div className="rounded-3xl bg-white p-6 sm:p-10 border border-zinc-200/80 shadow-xs prose prose-sm leading-relaxed text-zinc-600 max-w-none space-y-8 font-sans">
           <section>
             <h2 className="text-lg font-bold font-space text-zinc-900 mb-3">1. Information We Collect</h2>
             <p>

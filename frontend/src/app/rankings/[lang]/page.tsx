@@ -87,27 +87,27 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
   const repos = await getRankingRepos(languageName);
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#faf9f6]">
+    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 flex-1 w-full text-zinc-800 font-sans">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-800 font-sans">
         {/* Navigation Breadcrumb */}
         <Link
           href="/"
           title="Return to Opendoor Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100/70 text-xs text-zinc-600 hover:bg-zinc-200/60 hover:text-zinc-900 transition-colors mb-6 font-sans border border-zinc-200/20"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        {/* Hero Section for Language Rankings */}
-        <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10">
+        {/* Hero Section */}
+        <div className="rounded-3xl bg-white p-6 sm:p-10 border border-zinc-200/80 shadow-xs mb-10">
           <div className="flex flex-wrap items-center gap-2 mb-3.5">
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-brand-cream border-2 border-brand-dark px-3.5 py-1.5 text-xs font-extrabold text-brand-dark font-space shadow-[2px_2px_0px_#222831] rotate-1">
-              <Trophy className="h-3.5 w-3.5 text-brand-dark" /> Top Welcoming Repositories Index
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
+              <Trophy className="h-3.5 w-3.5 text-amber-400" /> Top Welcoming Repositories Index
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-blue-50 border-2 border-blue-900 px-3.5 py-1.5 text-xs font-extrabold text-blue-950 font-space shadow-[2px_2px_0px_#1e3a8a] -rotate-1">
-              <Code2 className="h-3.5 w-3.5 text-blue-900" /> {languageName} Ecosystem
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-900 font-mono">
+              <Code2 className="h-3.5 w-3.5 text-blue-700" /> {languageName} Ecosystem
             </span>
           </div>
 
@@ -119,13 +119,13 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
           </p>
         </div>
 
-        {/* Repositories Grid */}
-        <div className="mb-6 flex items-center justify-between border-b border-zinc-200/40 pb-4">
+        {/* Repositories Grid Header */}
+        <div className="mb-6 flex items-center justify-between border-b border-zinc-200 pb-4">
           <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2 font-space">
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
             Ranked {languageName} Repositories ({repos.length})
           </h2>
-          <span className="text-xs text-zinc-500 font-sans">Updated Daily via GitHub GraphQL</span>
+          <span className="text-xs text-zinc-500 font-mono">Updated Daily via GitHub GraphQL</span>
         </div>
 
         {repos.length > 0 ? (
@@ -135,13 +135,13 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl bg-white p-12 text-center text-zinc-500 text-xs mb-12 shadow-[0_8px_30px_rgb(0,0,0,0.015)] font-sans animate-pulse">
+          <div className="rounded-2xl bg-white p-12 text-center text-zinc-500 text-xs mb-12 border border-dashed border-zinc-300 font-sans">
             No {languageName} repositories indexed yet. Check back after next seed run!
           </div>
         )}
 
-        {/* SEO Article Module */}
-        <section className="rounded-2xl bg-zinc-100/50 p-6 sm:p-8 font-sans shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
+        {/* Informational Section */}
+        <section className="rounded-3xl bg-white p-6 sm:p-8 border border-zinc-200 font-sans shadow-xs">
           <h3 className="text-base font-bold text-zinc-900 mb-3 flex items-center gap-2 font-space">
             <Sparkles className="h-4 w-4 text-emerald-600" />
             Why contribute to {languageName} open-source projects on Opendoor?

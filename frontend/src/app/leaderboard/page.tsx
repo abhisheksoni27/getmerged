@@ -40,31 +40,31 @@ export default async function LeaderboardPage() {
 
   const getBadgeStyle = (tier: string) => {
     switch (tier?.toUpperCase()) {
-      case "S": return "bg-emerald-50 text-emerald-700";
-      case "A": return "bg-blue-50 text-blue-700";
-      case "B": return "bg-amber-50 text-amber-700";
-      case "C": return "bg-orange-50 text-orange-700";
-      default: return "bg-zinc-100 text-zinc-700";
+      case "S": return "bg-emerald-50 text-emerald-900 border-emerald-300";
+      case "A": return "bg-blue-50 text-blue-900 border-blue-200";
+      case "B": return "bg-amber-50 text-amber-900 border-amber-200";
+      case "C": return "bg-purple-50 text-purple-900 border-purple-200";
+      default: return "bg-zinc-50 text-zinc-900 border-zinc-200";
     }
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#faf9f6]">
+    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 flex-1 w-full text-zinc-800">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-800 font-sans">
         <Link
           href="/"
           title="Return to Opendoor Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100/70 text-xs text-zinc-600 hover:bg-zinc-200/60 hover:text-zinc-900 transition-colors mb-6 font-sans border border-zinc-200/20"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-8">
+        <div className="rounded-3xl bg-white p-6 sm:p-10 border border-zinc-200/80 shadow-xs mb-8">
           <div className="flex items-center gap-2 mb-3.5">
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-brand-cream border-2 border-brand-dark px-3.5 py-1.5 text-xs font-extrabold text-brand-dark font-space shadow-[2px_2px_0px_#222831] rotate-1">
-              <Trophy className="h-3.5 w-3.5 text-brand-dark" /> C-Rank™ Global Leaderboard
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
+              <Trophy className="h-3.5 w-3.5 text-amber-400" /> C-Rank™ Global Leaderboard
             </span>
           </div>
 
@@ -76,32 +76,32 @@ export default async function LeaderboardPage() {
           </p>
         </div>
 
-        <div className="overflow-x-auto rounded-2xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
+        <div className="overflow-x-auto rounded-2xl bg-white border border-zinc-200/80 shadow-xs">
           <table className="w-full text-left text-xs text-zinc-600">
-            <thead className="bg-[#faf9f6] text-zinc-800 border-b border-zinc-200/40 font-semibold uppercase tracking-wider font-space">
+            <thead className="bg-zinc-50 text-zinc-800 border-b border-zinc-200 font-semibold uppercase tracking-wider font-space text-[11px]">
               <tr>
-                <th className="py-4 px-4 text-center">Rank</th>
-                <th className="py-4 px-4">Repository</th>
-                <th className="py-4 px-4 text-center">Tier</th>
-                <th className="py-4 px-4 text-right">C-Rank Score</th>
-                <th className="py-4 px-4 text-right">Stars</th>
-                <th className="py-4 px-4 text-right">Merge Rate</th>
-                <th className="py-4 px-4 text-right">Avg Response</th>
+                <th className="py-3.5 px-4 text-center">Rank</th>
+                <th className="py-3.5 px-4">Repository</th>
+                <th className="py-3.5 px-4 text-center">Tier</th>
+                <th className="py-3.5 px-4 text-right">C-Rank Score</th>
+                <th className="py-3.5 px-4 text-right">Stars</th>
+                <th className="py-3.5 px-4 text-right">Merge Rate</th>
+                <th className="py-3.5 px-4 text-right">Avg Response</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200/40 font-mono">
+            <tbody className="divide-y divide-zinc-100 font-mono">
               {repos.map((repo, idx) => {
                 const [owner, name] = repo.full_name.split("/");
                 return (
-                  <tr key={repo.id} className="hover:bg-[#faf9f6]/40 transition-colors">
-                    <td className="py-4 px-4 text-center font-bold text-zinc-500">
+                  <tr key={repo.id} className="hover:bg-zinc-50/60 transition-colors">
+                    <td className="py-3.5 px-4 text-center font-bold text-zinc-400">
                       #{idx + 1}
                     </td>
-                    <td className="py-4 px-4 font-bold text-zinc-900">
+                    <td className="py-3.5 px-4 font-bold text-zinc-900">
                       <Link
                         href={`/${owner}/${name}`}
-                        title={`View ${repo.full_name} C-Rank details & merge telemetry`}
-                        className="hover:text-emerald-600 transition-colors font-space text-sm"
+                        title={`View ${repo.full_name} C-Rank details and merge telemetry`}
+                        className="hover:text-zinc-700 transition-colors font-space text-sm"
                       >
                         {repo.full_name}
                       </Link>
@@ -109,27 +109,27 @@ export default async function LeaderboardPage() {
                         {repo.description}
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-center">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-bold font-sans ${getBadgeStyle(repo.c_rank_tier || "D")}`}>
-                        {repo.c_rank_tier || "D"}
+                    <td className="py-3.5 px-4 text-center">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-bold border ${getBadgeStyle(repo.c_rank_tier || "D")}`}>
+                        {repo.c_rank_tier || "D"} Rank
                       </span>
                     </td>
-                    <td className="py-4 px-4 text-right font-bold text-zinc-900">
+                    <td className="py-3.5 px-4 text-right font-bold text-zinc-900">
                       {repo.c_rank_score?.toFixed(1)}
                     </td>
-                    <td className="py-4 px-4 text-right text-zinc-600">
+                    <td className="py-3.5 px-4 text-right text-zinc-600">
                       <span className="inline-flex items-center gap-1">
-                        <Star className="h-3 w-3 text-amber-500" />
+                        <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                         {repo.stars?.toLocaleString()}
                       </span>
                     </td>
-                    <td className="py-4 px-4 text-right text-zinc-600">
+                    <td className="py-3.5 px-4 text-right text-zinc-600">
                       <span className="inline-flex items-center gap-1">
                         <GitPullRequest className="h-3 w-3 text-emerald-600" />
                         {(repo.external_pr_merge_rate || 0).toFixed(1)}%
                       </span>
                     </td>
-                    <td className="py-4 px-4 text-right text-zinc-600">
+                    <td className="py-3.5 px-4 text-right text-zinc-600">
                       <span className="inline-flex items-center gap-1">
                         <Clock className="h-3 w-3 text-blue-500" />
                         {(repo.time_to_first_response_hours || 0).toFixed(1)}h
