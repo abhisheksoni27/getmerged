@@ -35,6 +35,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			id INTEGER PRIMARY KEY %s,
 			github_id INTEGER UNIQUE,
 			google_id VARCHAR(255) UNIQUE,
+			slug VARCHAR(255) UNIQUE,
 			username TEXT NOT NULL,
 			email TEXT,
 			avatar_url TEXT,
@@ -221,6 +222,7 @@ func AutoMigrate(db *sqlx.DB) error {
 	// Schema alterations for existing databases
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN google_id VARCHAR(255) UNIQUE`)
 	_, _ = db.Exec(`ALTER TABLE users MODIFY github_id INTEGER NULL`)
+	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN slug VARCHAR(255) UNIQUE`)
 
 	return nil
 }

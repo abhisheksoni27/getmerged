@@ -110,21 +110,43 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             <div className="h-9 w-28 rounded-xl bg-zinc-200/60 animate-pulse" />
           ) : user ? (
             <div className="flex items-center gap-2.5 bg-white border border-zinc-200/80 rounded-xl px-3 py-1.5 shadow-2xs">
-              {user.avatar_url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={user.avatar_url}
-                  alt={user.username}
-                  className="h-6 w-6 rounded-full shrink-0 ring-1 ring-zinc-200"
-                />
-              ) : null}
-              <span className="font-sans text-xs font-semibold text-zinc-900 max-w-[100px] truncate">
-                {user.username}
-              </span>
+              {user.slug ? (
+                <Link
+                  href={`/${user.slug}`}
+                  title={`View your public Opendoor profile (@${user.slug})`}
+                  className="flex items-center gap-2 min-w-0 hover:opacity-80 transition-opacity"
+                >
+                  {user.avatar_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={user.avatar_url}
+                      alt={user.username}
+                      className="h-6 w-6 rounded-full shrink-0 ring-1 ring-zinc-200"
+                    />
+                  ) : null}
+                  <span className="font-sans text-xs font-semibold text-zinc-900 max-w-[100px] truncate">
+                    {user.username}
+                  </span>
+                </Link>
+              ) : (
+                <div className="flex items-center gap-2 min-w-0">
+                  {user.avatar_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={user.avatar_url}
+                      alt={user.username}
+                      className="h-6 w-6 rounded-full shrink-0 ring-1 ring-zinc-200"
+                    />
+                  ) : null}
+                  <span className="font-sans text-xs font-semibold text-zinc-900 max-w-[100px] truncate">
+                    {user.username}
+                  </span>
+                </div>
+              )}
               <button
                 onClick={handleLogout}
                 className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 transition-colors cursor-pointer"
-                title="Sign Out"
+                title="Sign Out of Opendoor"
               >
                 <LogOut className="h-3.5 w-3.5" />
               </button>

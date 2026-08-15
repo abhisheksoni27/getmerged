@@ -60,8 +60,41 @@ export interface AIInsights {
 
 export interface User {
   id: number;
-  github_id: number;
+  github_id?: number | null;
+  google_id?: string | null;
+  slug?: string;
   username: string;
   email?: string;
   avatar_url?: string;
+}
+
+export interface UserStats {
+  watchlist_count: number;
+  feedback_count: number;
+  verified_contributions: number | null;
+}
+
+export interface UserFeedbackItem {
+  id: number;
+  repo_id: string;
+  repo_full_name: string;
+  repo_language: string;
+  maintainer_rating: number;
+  review_speed_rating: number;
+  beginner_rating: number;
+  comment?: string;
+  verified_contributor: boolean;
+  created_at: string;
+}
+
+export interface UserProfile {
+  slug: string;
+  username: string;
+  avatar_url?: string | null;
+  member_since: string;
+  provider: "github" | "google" | "both";
+  github_url: string | null;
+  stats: UserStats;
+  watchlist: Repo[];
+  feedback: UserFeedbackItem[];
 }

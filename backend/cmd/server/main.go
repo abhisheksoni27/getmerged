@@ -118,6 +118,7 @@ func main() {
 		api.GET("/stats/macro", handler.GetMacroStats())
 
 		api.GET("/repos/:id/feedback", handler.ListFeedback(database))
+		api.GET("/users/:slug", handler.GetUserProfile(userRepo))
 
 		// Auth Routes
 		authGroup := api.Group("/auth")
