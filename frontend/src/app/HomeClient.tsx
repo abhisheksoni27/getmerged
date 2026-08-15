@@ -32,7 +32,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const [selectedLang, setSelectedLang] = useState<string>("All");
   const [selectedBucket, setSelectedBucket] = useState<string>("All");
   const [selectedTier, setSelectedTier] = useState<string>("All");
-  const [selectedMinMergeRate] = useState<string>("All");
+  const [selectedMinMergeRate, setSelectedMinMergeRate] = useState<string>("All");
   const [selectedFirstTimerBucket, setSelectedFirstTimerBucket] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [trendingOnly, setTrendingOnly] = useState<boolean>(false);
@@ -199,12 +199,16 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
       params.set("max_stars", bounds.max);
     }
 
-    const firstTimerBounds = getFirstTimerBoundsFromBucket(selectedFirstTimerBucket);
-    if (firstTimerBounds.min) {
-      params.set("min_first_timer_success_rate", firstTimerBounds.min);
-    }
-    if (firstTimerBounds.max) {
-      params.set("max_first_timer_success_rate", firstTimerBounds.max);
+    if (selectedFirstTimerBucket === "has_gfi") {
+      params.set("has_good_first_issue", "true");
+    } else {
+      const firstTimerBounds = getFirstTimerBoundsFromBucket(selectedFirstTimerBucket);
+      if (firstTimerBounds.min) {
+        params.set("min_first_timer_success_rate", firstTimerBounds.min);
+      }
+      if (firstTimerBounds.max) {
+        params.set("max_first_timer_success_rate", firstTimerBounds.max);
+      }
     }
 
     try {
@@ -595,50 +599,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               title="Open full multi-filter repository directory"
               className="inline-flex items-center justify-center gap-2 rounded-2xl bg-zinc-950 hover:bg-zinc-800 text-white px-5 py-2.5 text-xs font-semibold shadow-xs transition-all self-start md:self-auto"
             >
-              <span>Explore All 1,400+ Repos & Filters</span>
+              <span>Explore All {stats?.total_repos ? `${stats.total_repos.toLocaleString()} ` : ""}Repositories & Filters</span>
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
-          {/* 4 Clean Quick Category Chips */}
+          {/* User-Specified Category Showroom Chips */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-sans">
-            <button
-              type="button"
-              onClick={() => {
-                setTrendingOnly(false);
-                setSelectedTier("All");
-                setSelectedFirstTimerBucket("All");
-                setSelectedBucket("All");
-                setPage(1);
-              }}
-              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
-                !trendingOnly && selectedTier === "All" && selectedFirstTimerBucket === "All" && selectedBucket === "All"
-                  ? "bg-zinc-900 text-white font-semibold shadow-2xs"
-                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
-              }`}
-            >
-              🌟 All Featured
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setTrendingOnly(true);
-                setSelectedTier("All");
-                setSelectedFirstTimerBucket("All");
-                setSelectedBucket("All");
-                setPage(1);
-              }}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
-                trendingOnly
-                  ? "bg-amber-500 text-white font-semibold shadow-2xs"
-                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
-              }`}
-            >
-              <Flame className="h-3.5 w-3.5 text-amber-500" />
-              <span>Trending Today</span>
-            </button>
-
+            {/* 1. Hall of Fame (S-Tier) */}
             <button
               type="button"
               onClick={() => {
@@ -646,35 +614,39 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setSelectedTier("S");
                 setSelectedFirstTimerBucket("All");
                 setSelectedBucket("All");
+                setSelectedMinMergeRate("All");
                 setPage(1);
               }}
               className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
-                selectedTier === "S"
-                  ? "bg-emerald-700 text-white font-semibold shadow-2xs"
+                selectedTier === "S" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All"
+                  ? "bg-amber-600 text-white font-semibold shadow-2xs"
                   : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
               }`}
             >
-              ⚡ S-Tier Fast Track
+              👑 Hall of Fame
             </button>
 
+            {/* 2. Welcoming (A-Tier & S-Tier) */}
             <button
               type="button"
               onClick={() => {
                 setTrendingOnly(false);
-                setSelectedTier("All");
-                setSelectedFirstTimerBucket("40-60%");
+                setSelectedTier("A");
+                setSelectedFirstTimerBucket("All");
                 setSelectedBucket("All");
+                setSelectedMinMergeRate("All");
                 setPage(1);
               }}
               className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
-                selectedFirstTimerBucket !== "All"
-                  ? "bg-blue-600 text-white font-semibold shadow-2xs"
+                selectedTier === "A"
+                  ? "bg-emerald-700 text-white font-semibold shadow-2xs"
                   : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
               }`}
             >
-              🌱 Good First Issues
+              ⚡ Welcoming
             </button>
 
+            {/* 3. Star Giants (50k+ Stars) */}
             <button
               type="button"
               onClick={() => {
@@ -682,6 +654,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setSelectedTier("All");
                 setSelectedFirstTimerBucket("All");
                 setSelectedBucket("50k+");
+                setSelectedMinMergeRate("All");
                 setPage(1);
               }}
               className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
@@ -690,7 +663,67 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
               }`}
             >
-              ⭐ 50k+ Star Giants
+              ⭐ Star Giants
+            </button>
+
+            {/* 4. Has Good First Issue */}
+            <button
+              type="button"
+              onClick={() => {
+                setTrendingOnly(false);
+                setSelectedTier("All");
+                setSelectedFirstTimerBucket("has_gfi");
+                setSelectedBucket("All");
+                setSelectedMinMergeRate("All");
+                setPage(1);
+              }}
+              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+                selectedFirstTimerBucket === "has_gfi"
+                  ? "bg-blue-600 text-white font-semibold shadow-2xs"
+                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
+              }`}
+            >
+              🌱 Has Good First Issue
+            </button>
+
+            {/* 5. High Merge Rate (>= 60%) */}
+            <button
+              type="button"
+              onClick={() => {
+                setTrendingOnly(false);
+                setSelectedTier("All");
+                setSelectedFirstTimerBucket("All");
+                setSelectedBucket("All");
+                setSelectedMinMergeRate("60%");
+                setPage(1);
+              }}
+              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+                selectedMinMergeRate === "60%"
+                  ? "bg-teal-700 text-white font-semibold shadow-2xs"
+                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
+              }`}
+            >
+              🚀 High Merge Rate
+            </button>
+
+            {/* 6. First Timer Awesome (> 60% Acceptance) */}
+            <button
+              type="button"
+              onClick={() => {
+                setTrendingOnly(false);
+                setSelectedTier("All");
+                setSelectedFirstTimerBucket("60-80%");
+                setSelectedBucket("All");
+                setSelectedMinMergeRate("All");
+                setPage(1);
+              }}
+              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+                selectedFirstTimerBucket === "60-80%"
+                  ? "bg-indigo-600 text-white font-semibold shadow-2xs"
+                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
+              }`}
+            >
+              🎯 First Timer Awesome
             </button>
           </div>
         </div>

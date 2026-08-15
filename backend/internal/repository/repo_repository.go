@@ -52,6 +52,7 @@ type RepoFilter struct {
 	MaxFirstTimerSuccessRate float64
 	HasMinFirstTimer         bool
 	HasMaxFirstTimer         bool
+	HasGoodFirstIssue        bool
 }
 
 type SnapshotRecord struct {
@@ -87,6 +88,11 @@ var allowedSortFields = map[string]string{
 func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]RepoRecord, int, error) {
 	where := "1=1"
 	args := []interface{}{}
+
+	limit := filter.Limit
+	if limit <= 0 {
+		limit = 20
+	}
 
 	if filter.Language != "" {
 		where += " AND LOWER(r.language) = LOWER(?)"
@@ -141,6 +147,10 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 		args = append(args, filter.MaxFirstTimerSuccessRate)
 	}
 
+	if filter.HasGoodFirstIssue {
+		where += " AND s.good_first_issue_count > 0"
+	}
+
 	sortCol, ok := allowedSortFields[filter.SortBy]
 	if !ok {
 		sortCol = "s.c_rank_score"
@@ -189,7 +199,7 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 		LIMIT ? OFFSET ?
 	`, where, sortCol, order)
 
-	dataArgs := append(args, filter.Limit, filter.Offset)
+	dataArgs := append(args, limit, filter.Offset)
 
 	var repos []RepoRecord
 	if err := r.db.SelectContext(ctx, &repos, dataQuery, dataArgs...); err != nil {
