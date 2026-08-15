@@ -94,6 +94,11 @@ export function Footer() {
             </h4>
             <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
               <li>
+                <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm & Formula" className="hover:text-zinc-900 transition-colors font-semibold text-zinc-800">
+                  How C-Rank™ Works
+                </Link>
+              </li>
+              <li>
                 <Link href="/hall-of-fame" title="Super Welcoming Open Source Repositories" className="hover:text-zinc-900 transition-colors">
                   Hall of Fame (Super Welcoming)
                 </Link>

@@ -535,45 +535,154 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           </div>
         </div>
 
-        {/* Top 3 Repos Spotlight Section */}
-        <div className="mt-12 text-left">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-lg font-space font-bold text-zinc-900 flex items-center gap-2">
-                <Flame className="h-4 w-4 text-orange-500 fill-orange-500" /> Today&apos;s Top Welcoming Repositories
+        {/* Educational Storytelling & Problem-Solution Narrative Blocks */}
+        <div className="my-16 space-y-16 text-left">
+          {/* Narrative Block 1: Left Copy, Right Visual (The Star Paradox) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-white p-8 sm:p-12 border border-zinc-200/80 shadow-xs">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1 rounded-xl">
+                <Star className="h-3.5 w-3.5 text-amber-600 fill-amber-400" /> The GitHub Star Illusion
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-bold font-space text-zinc-900 tracking-tight leading-tight">
+                Stars Measure Past Hype. C-Rank Measures Present Hospitality.
               </h2>
-              <p className="text-xs text-zinc-500 font-sans">Active repositories reviewing and merging external pull requests.</p>
+              <p className="text-sm sm:text-base text-zinc-600 font-sans leading-relaxed">
+                Most developers sort GitHub by stars, spend 3 days crafting a spotless PR, and wait 9 months for zero review. Over <strong className="text-zinc-900">42% of repositories with 20k+ stars</strong> are maintained by exhausted teams that haven&apos;t merged an external contribution all year.
+              </p>
+              <div className="pt-2">
+                <Link
+                  href="/how-c-rank-works"
+                  className="inline-flex items-center gap-2 text-xs font-mono font-bold text-zinc-900 hover:text-zinc-700 underline underline-offset-4"
+                >
+                  <span>Learn how we calculate true maintainer pulse</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 bg-zinc-50 border border-zinc-200/80 rounded-2xl p-6 space-y-4 font-mono text-xs shadow-2xs">
+              <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
+                <span className="text-zinc-400">Telemetry Comparison</span>
+                <span className="text-emerald-700 font-bold">Live Data</span>
+              </div>
+              <div className="space-y-3">
+                <div className="p-3 rounded-xl bg-white border border-rose-200/70">
+                  <div className="flex justify-between text-zinc-800 font-bold mb-1">
+                    <span>Popular Ghost Town</span>
+                    <span className="text-rose-600 font-semibold">45k ★</span>
+                  </div>
+                  <div className="text-[11px] text-zinc-500 font-sans">
+                    Avg PR review turnaround: <strong className="text-rose-700">140+ days</strong> (C-Rank: D)
+                  </div>
+                </div>
+                <div className="p-3 rounded-xl bg-white border border-emerald-200">
+                  <div className="flex justify-between text-zinc-800 font-bold mb-1">
+                    <span>Open Door Repository</span>
+                    <span className="text-emerald-700 font-semibold">1.8k ★</span>
+                  </div>
+                  <div className="text-[11px] text-zinc-500 font-sans">
+                    Avg PR review turnaround: <strong className="text-emerald-800">&lt;6 hours</strong> (C-Rank: Super Welcoming)
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {spotlightRepos.length === 0 && loading ? (
-              [1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-5 h-[260px] flex flex-col justify-between"
-                >
-                  <div className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-zinc-100 to-transparent animate-shimmer" />
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="h-5 w-32 rounded bg-zinc-200" />
-                      <div className="h-5 w-16 rounded bg-zinc-200" />
+          {/* Today's Top Welcoming Repositories (Interspersed Live Demonstration) */}
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-200 pb-3">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-space font-bold text-zinc-900 flex items-center gap-2">
+                  <Flame className="h-5 w-5 text-orange-500 fill-orange-500" /> Today&apos;s Open Doors (High Velocity)
+                </h2>
+                <p className="text-xs text-zinc-500 font-sans mt-0.5">Live repositories with verified maintainer activity and sub-24h PR triage.</p>
+              </div>
+              <Link
+                href="/hall-of-fame"
+                className="text-xs font-mono font-bold text-emerald-800 hover:text-emerald-950 inline-flex items-center gap-1 shrink-0"
+              >
+                View S-Tier Hall of Fame <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {spotlightRepos.length === 0 && loading ? (
+                [1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-5 h-[260px] flex flex-col justify-between"
+                  >
+                    <div className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-zinc-100 to-transparent animate-shimmer" />
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="h-5 w-32 rounded bg-zinc-200" />
+                        <div className="h-5 w-16 rounded bg-zinc-200" />
+                      </div>
+                      <div className="h-3 w-full rounded bg-zinc-200 mb-2" />
+                      <div className="h-3 w-3/4 rounded bg-zinc-200 mb-5" />
+                      <div className="h-10 w-full rounded bg-zinc-100 border border-zinc-200/50 mb-4" />
                     </div>
-                    <div className="h-3 w-full rounded bg-zinc-200 mb-2" />
-                    <div className="h-3 w-3/4 rounded bg-zinc-200 mb-5" />
-                    <div className="h-10 w-full rounded bg-zinc-100 border border-zinc-200/50 mb-4" />
+                    <div className="flex items-center justify-between pt-3 border-t border-zinc-100">
+                      <div className="h-4 w-20 rounded bg-zinc-200" />
+                      <div className="h-4 w-16 rounded bg-zinc-200" />
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between pt-3 border-t border-zinc-100">
-                    <div className="h-4 w-20 rounded bg-zinc-200" />
-                    <div className="h-4 w-16 rounded bg-zinc-200" />
-                  </div>
+                ))
+              ) : spotlightRepos.length > 0 ? (
+                spotlightRepos.slice(0, 3).map((r, idx) => (
+                  <RepoCard key={r.id || r.full_name} repo={r} isLoggedIn={isLoggedIn} isSpotlight={true} spotlightIndex={idx} />
+                ))
+              ) : null}
+            </div>
+          </div>
+
+          {/* Narrative Block 2: Left Visual (9-Factor Radar), Right Copy */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-white p-8 sm:p-12 border border-zinc-200/80 shadow-xs">
+            <div className="lg:col-span-5 bg-zinc-900 text-white rounded-2xl p-6 space-y-3 font-mono text-xs shadow-md">
+              <div className="flex justify-between items-center text-zinc-400 border-b border-zinc-800 pb-2">
+                <span>C-Rank™ Engine Weights</span>
+                <span className="text-emerald-400 font-bold">100%</span>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
+                  <span className="text-zinc-300">External Merge Rate</span>
+                  <span className="text-emerald-400 font-bold">27.5%</span>
                 </div>
-              ))
-            ) : spotlightRepos.length > 0 ? (
-              spotlightRepos.slice(0, 3).map((r, idx) => (
-                <RepoCard key={r.id || r.full_name} repo={r} isLoggedIn={isLoggedIn} isSpotlight={true} spotlightIndex={idx} />
-              ))
-            ) : null}
+                <div className="flex justify-between items-center bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
+                  <span className="text-zinc-300">Time to First Review</span>
+                  <span className="text-blue-400 font-bold">15.0%</span>
+                </div>
+                <div className="flex justify-between items-center bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
+                  <span className="text-zinc-300">Commit Pulse & Recency</span>
+                  <span className="text-purple-400 font-bold">15.0%</span>
+                </div>
+                <div className="flex justify-between items-center bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
+                  <span className="text-zinc-300">First-Timer PR Conversion</span>
+                  <span className="text-amber-400 font-bold">10.0%</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-blue-800 bg-blue-50 border border-blue-200 px-3 py-1 rounded-xl">
+                <Sparkles className="h-3.5 w-3.5 text-blue-600" /> Objective Mathematics
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-bold font-space text-zinc-900 tracking-tight leading-tight">
+                9 Telemetry Factors. Zero Subjective Gossip.
+              </h2>
+              <p className="text-sm sm:text-base text-zinc-600 font-sans leading-relaxed">
+                Opendoor evaluates repositories against peer benchmarks across entire programming language ecosystems. We account for reviewer response times, repeat contributor retention, pull request nitpick rates, and maintainer core bus-factors.
+              </p>
+              <div className="pt-2">
+                <Link
+                  href="/how-c-rank-works"
+                  className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-5 py-2.5 font-sans text-xs font-semibold text-white hover:bg-zinc-800 transition-all shadow-xs"
+                >
+                  <span>Explore the full scoring algorithm</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
