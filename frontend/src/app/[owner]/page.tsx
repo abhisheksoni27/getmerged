@@ -53,6 +53,16 @@ export async function generateMetadata({ params }: ProfilePageProps): Promise<Me
   return {
     title,
     description,
+    robots: {
+      index: false,
+      follow: false,
+      nocache: true,
+      googleBot: {
+        index: false,
+        follow: false,
+        noimageindex: true,
+      },
+    },
     alternates: {
       canonical: `https://opendoor.abhishekco.de/${profile.slug}`,
     },
