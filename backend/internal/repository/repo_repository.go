@@ -29,9 +29,10 @@ type RepoRecord struct {
 	LastActivityDays         float64 `db:"last_activity_days" json:"last_activity_days"`
 	ReviewRounds             float64 `db:"review_rounds" json:"review_rounds"`
 	DistinctMaintainerCount  float64 `db:"distinct_maintainer_count" json:"distinct_maintainer_count"`
-	StalenessFlag            bool    `db:"staleness_flag" json:"staleness_flag"`
-	SnapshotDate             string  `db:"snapshot_date" json:"snapshot_date"`
-	GoodFirstIssueCount      int     `db:"good_first_issue_count" json:"good_first_issue_count"`
+	StalenessFlag            bool      `db:"staleness_flag" json:"staleness_flag"`
+	SnapshotDate             string    `db:"snapshot_date" json:"snapshot_date"`
+	GoodFirstIssueCount      int       `db:"good_first_issue_count" json:"good_first_issue_count"`
+	UpdatedAt                time.Time `db:"updated_at" json:"updated_at"`
 }
 
 type RepoFilter struct {
@@ -179,7 +180,8 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 			COALESCE(s.distinct_maintainer_count,0) as distinct_maintainer_count,
 			COALESCE(s.staleness_flag,0) as staleness_flag,
 			COALESCE(s.snapshot_date,'') as snapshot_date,
-			COALESCE(s.good_first_issue_count,0) as good_first_issue_count
+			COALESCE(s.good_first_issue_count,0) as good_first_issue_count,
+			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
 		WHERE %s
@@ -215,7 +217,8 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 			COALESCE(s.distinct_maintainer_count,0) as distinct_maintainer_count,
 			COALESCE(s.staleness_flag,0) as staleness_flag,
 			COALESCE(s.snapshot_date,'') as snapshot_date,
-			COALESCE(s.good_first_issue_count,0) as good_first_issue_count
+			COALESCE(s.good_first_issue_count,0) as good_first_issue_count,
+			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
 		WHERE r.id = ? OR LOWER(r.full_name) = LOWER(?)

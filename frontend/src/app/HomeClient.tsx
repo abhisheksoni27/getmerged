@@ -1145,14 +1145,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 <ArrowRight className="h-4 w-4" />
               </button>
             ) : (
-              <a
-                href={`${API_BASE_URL}/api/v1/auth/github`}
-                onClick={() => posthog.capture("github_sign_in_clicked", { source: "homepage_cta_banner" })}
+              <button
+                onClick={() => openAuthModal("Sign in to Opendoor", "Sign in to access daily trending repositories, page 2+ pagination, and contributor insights.", "homepage_cta_banner")}
+                title="Sign in to Opendoor"
                 className="inline-flex items-center gap-2.5 rounded-xl bg-zinc-900 px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs shrink-0 cursor-pointer"
               >
-                <span>Sign in with GitHub</span>
+                <span>Sign in to Opendoor</span>
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </button>
             )}
           </div>
         </div>

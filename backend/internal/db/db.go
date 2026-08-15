@@ -174,8 +174,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			id INTEGER PRIMARY KEY %s,
 			repository_id VARCHAR(255) NOT NULL,
 			comment_text TEXT NOT NULL,
-			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			UNIQUE(repository_id, comment_text(255))
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`, autoInc),
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS repo_pr_events (
 			id INTEGER PRIMARY KEY %s,

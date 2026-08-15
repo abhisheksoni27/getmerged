@@ -21,6 +21,8 @@ export interface Repo {
   distinct_maintainer_count?: number;
   staleness_flag?: boolean;
   good_first_issue_count?: number;
+  updated_at?: string;
+  snapshot_date?: string;
 }
 
 export interface LanguageTierBreakdown {
