@@ -36,9 +36,10 @@ var weights = struct {
 
 // ComputeCRank calculates the C-Rank score and tier from normalised metrics.
 // If staleness is true, the score is capped to <30 (max 29.9) and assigned D.
-// If no "good first issue" label exists AND first-timer success is below 50,
-// the raw score receives a 10% haircut (maintainer shows no first-timer intent).
-func ComputeCRank(n NormalisedMetrics, staleness bool, gfiCount int) (score float64, tier string) {
+// Continuous logarithmic bonus is applied for beginner-friendly good first issues:
+// gfiBonus = min(5.0, 2.5 * ln(1 + gfiCount)).
+// Universal boundary hysteresis (promotion delta vs demotion buffer) is applied across all tiers.
+func ComputeCRank(n NormalisedMetrics, staleness bool, gfiCount int, prevTier ...string) (score float64, tier string) {
 	rawScore := weights.MergeRate*n.MergeRate +
 		weights.ResponseTime*n.ResponseTime +
 		weights.ActivityRecency*n.ActivityRecency +
@@ -55,15 +56,67 @@ func ComputeCRank(n NormalisedMetrics, staleness bool, gfiCount int) (score floa
 	}
 
 	if gfiCount > 0 {
-		// Repos with active beginner-friendly issues get a 15% score boost (capped at 100)
-		rawScore = math.Min(100.0, rawScore*1.15)
-	} else if gfiCount == 0 && n.FirstTimer < 50 {
-		rawScore *= 0.9
+		// Damped logarithmic bonus (max +5.0 points) instead of discrete 15% spike
+		gfiBonus := math.Min(5.0, 2.5*math.Log(1.0+float64(gfiCount)))
+		rawScore = math.Min(100.0, rawScore+gfiBonus)
 	}
-	return rawScore, scoreTier(rawScore)
+
+	previousTier := ""
+	if len(prevTier) > 0 {
+		previousTier = prevTier[0]
+	}
+
+	return rawScore, scoreTierWithHysteresis(rawScore, previousTier)
 }
 
-// scoreTier maps a raw score to its tier label.
+// scoreTierWithHysteresis maps a score to tier applying universal ±2.0 boundary hysteresis.
+func scoreTierWithHysteresis(score float64, prevTier string) string {
+	switch prevTier {
+	case TierS:
+		if score < 68.0 {
+			return scoreTier(score) // Demoted from S
+		}
+		return TierS // Retain S within 68.0–72.0 band
+
+	case TierA:
+		if score >= 72.0 {
+			return TierS // Promoted to S
+		}
+		if score < 53.0 {
+			return scoreTier(score) // Demoted from A
+		}
+		return TierA // Retain A within 53.0–57.0 band
+
+	case TierB:
+		if score >= 57.0 {
+			return scoreTier(score) // Promoted to A (or S)
+		}
+		if score < 38.0 {
+			return scoreTier(score) // Demoted from B
+		}
+		return TierB // Retain B within 38.0–42.0 band
+
+	case TierC:
+		if score >= 42.0 {
+			return scoreTier(score) // Promoted to B (or higher)
+		}
+		if score < 23.0 {
+			return TierD // Demoted to D
+		}
+		return TierC // Retain C within 23.0–27.0 band
+
+	case TierD:
+		if score >= 27.0 {
+			return scoreTier(score) // Promoted to C (or higher)
+		}
+		return TierD
+
+	default:
+		return scoreTier(score)
+	}
+}
+
+// scoreTier maps a raw score to its baseline tier label without prior state.
 func scoreTier(score float64) string {
 	switch {
 	case score >= 70:
