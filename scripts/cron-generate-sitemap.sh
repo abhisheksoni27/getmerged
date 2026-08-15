@@ -21,8 +21,9 @@ fi
 echo "[$(date -u +%FT%TZ)] sitemap-cron: static XML generation complete." >> "$LOG_FILE"
 
 # 2. Ping Search Engines / IndexNow protocol
-SITEMAP_URL="https://opendoor.abhishekco.de/sitemap.xml"
-curl -s -o /dev/null -w "IndexNow HTTP: %{http_code}\n" "https://www.bing.com/indexnow?url=https://opendoor.abhishekco.de/&key=opendoor-sitemap" >> "$LOG_FILE" 2>&1 || true
+SITEMAP_URL="https://getmerged.abhishekco.de/sitemap.xml"
+INDEXNOW_KEY="0a37a7ee4bcb7d213145568b2d6ead6d"
+curl -s -o /dev/null -w "IndexNow HTTP: %{http_code}\n" "https://www.bing.com/indexnow?url=https://getmerged.abhishekco.de/&key=${INDEXNOW_KEY}" >> "$LOG_FILE" 2>&1 || true
 
 echo "[$(date -u +%FT%TZ)] sitemap-cron: broadcast complete for ${SITEMAP_URL}." >> "$LOG_FILE"
 

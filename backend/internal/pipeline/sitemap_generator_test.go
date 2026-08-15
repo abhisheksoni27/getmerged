@@ -70,8 +70,8 @@ func TestGenerateStaticSitemaps(t *testing.T) {
 	}
 
 	content, err := os.ReadFile(goFile)
-	if err != nil || !strings.Contains(string(content), "https://opendoor.abhishekco.de/golang/go") {
-		t.Fatalf("expected go.xml to contain 'https://opendoor.abhishekco.de/golang/go', got: %s", string(content))
+	if err != nil || !strings.Contains(string(content), "https://getmerged.abhishekco.de/golang/go") {
+		t.Fatalf("expected go.xml to contain 'https://getmerged.abhishekco.de/golang/go', got: %s", string(content))
 	}
 
 	// C# and C++ must be slugged to csharp.xml / cpp.xml, never c#.xml / c++.xml
@@ -94,8 +94,8 @@ func TestGenerateStaticSitemaps(t *testing.T) {
 		t.Fatalf("failed to read master sitemap: %v", err)
 	}
 	for _, want := range []string{
-		"https://opendoor.abhishekco.de/sitemap/csharp.xml",
-		"https://opendoor.abhishekco.de/sitemap/cpp.xml",
+		"https://getmerged.abhishekco.de/sitemap/csharp.xml",
+		"https://getmerged.abhishekco.de/sitemap/cpp.xml",
 	} {
 		if !strings.Contains(string(masterContent), want) {
 			t.Fatalf("expected master sitemap to reference %q, got:\n%s", want, string(masterContent))
@@ -111,10 +111,10 @@ func TestGenerateStaticSitemaps(t *testing.T) {
 		t.Fatalf("failed to read main.xml: %v", err)
 	}
 	for _, want := range []string{
-		"https://opendoor.abhishekco.de/rankings/csharp",
-		"https://opendoor.abhishekco.de/rankings/cpp",
-		"https://opendoor.abhishekco.de/good-first-issue/csharp",
-		"https://opendoor.abhishekco.de/good-first-issue/cpp",
+		"https://getmerged.abhishekco.de/rankings/csharp",
+		"https://getmerged.abhishekco.de/rankings/cpp",
+		"https://getmerged.abhishekco.de/good-first-issue/csharp",
+		"https://getmerged.abhishekco.de/good-first-issue/cpp",
 	} {
 		if !strings.Contains(string(mainContent), want) {
 			t.Fatalf("expected main.xml to reference %q, got:\n%s", want, string(mainContent))
