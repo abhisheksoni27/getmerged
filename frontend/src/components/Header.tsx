@@ -65,15 +65,18 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-5 text-xs font-sans font-medium text-zinc-600">
-            <Link href="/how-c-rank-works" className="hover:text-zinc-900 transition-colors">
+          <nav className="hidden md:flex items-center gap-6 text-xs font-sans font-medium text-zinc-600">
+            <Link href="/how-c-rank-works" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               How C-Rank™ Works
             </Link>
-            <Link href="/rankings" className="hover:text-zinc-900 transition-colors">
+            <Link href="/rankings" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Ecosystems
             </Link>
-            <Link href="/good-first-issue" className="hover:text-zinc-900 transition-colors">
+            <Link href="/good-first-issue" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Good First Issues
+            </Link>
+            <Link href="/hall-of-fame" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
+              Hall of Fame
             </Link>
           </nav>
         </div>
