@@ -420,7 +420,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
       />
 
       {/* Hero Section */}
-      <section className="relative mx-auto max-w-5xl px-4 pt-14 pb-10 text-center sm:px-6 lg:px-8">
+      <section className="relative mx-auto max-w-6xl px-4 pt-14 pb-10 text-center sm:px-6 lg:px-8">
         <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-6xl font-space leading-tight">
           Stop wasting weeks on <span className="bg-[#dfd0b8]/80 text-zinc-900 px-2 rounded-lg">ignored PRs.</span>
         </h1>
