@@ -390,20 +390,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const owner = repo?.owner || fullName.split("/")[0];
   const ownerAvatarUrl = `https://github.com/${owner}.png`;
 
-  const getRankBadgeStyleNeobrutalist = (r?: string) => {
-    switch (r) {
-      case "S":
-        return "bg-emerald-400 text-[#222831]";
-      case "A":
-        return "bg-blue-400 text-white";
-      case "B":
-        return "bg-amber-400 text-[#222831]";
-      case "C":
-        return "bg-purple-400 text-white";
-      default:
-        return "bg-rose-400 text-[#222831]";
-    }
-  };
+
 
   const responseTimeVal = repo?.time_to_first_response_hours || 0;
   const responseScore = responseTimeVal > 0 ? Math.max(0, 100 - (responseTimeVal * 2.5)) : 0;
@@ -433,21 +420,19 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         Back to Explorer
       </Link>
 
-      {/* Hero Header (Neobrutalist Sticker Layout) */}
-      <div className="border-3 border-[#222831] bg-[#dfd0b8] p-6 sm:p-8 shadow-[6px_6px_0px_0px_#222831] rounded-2xl mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 transition-all duration-300 ease-out hover:-translate-y-0.5">
-        <div className="flex items-start gap-4 flex-1">
+      {/* Hero Header */}
+      <div className="border border-zinc-200/90 bg-white p-6 sm:p-8 shadow-xs rounded-3xl mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 transition-all">
+        <div className="flex items-start gap-4 sm:gap-5 flex-1">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={ownerAvatarUrl}
             alt={owner}
-            className="w-16 h-16 rounded-xl border-2 border-[#222831] shadow-[3px_3px_0px_0px_#222831] bg-white shrink-0"
+            className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl border border-zinc-200 bg-zinc-50 shrink-0 object-cover shadow-2xs"
           />
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2 mb-2">
+            <div className="flex flex-wrap items-center gap-2 mb-2.5">
               <span
-                className={`inline-block border-2 border-[#222831] shadow-[2px_2px_0px_0px_#222831] px-2.5 py-0.5 font-space text-xs font-black rounded-lg uppercase tracking-wider ${getRankBadgeStyleNeobrutalist(
-                  rank
-                )}`}
+                className="inline-flex items-center px-3 py-1 font-mono text-xs font-bold rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300"
               >
                 {getRankHumanLabel(rank)}
               </span>
@@ -455,17 +440,17 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 <Link
                   href={`/rankings/${getLanguageSlug(repo.language)}`}
                   title={`View Top Welcoming Open-Source ${repo.language} Projects`}
-                  className="inline-flex items-center gap-1 border-2 border-[#222831] shadow-[2px_2px_0px_0px_#222831] bg-white px-2.5 py-0.5 font-space text-xs font-black rounded-lg text-[#222831] hover:bg-zinc-50 transition-colors"
+                  className="inline-flex items-center gap-1.5 border border-zinc-200 bg-zinc-50 px-3 py-1 font-mono text-xs font-semibold rounded-xl text-zinc-700 hover:border-zinc-300 transition-colors"
                 >
                   <LangLogo language={repo.language} />
                   <span>{repo.language}</span>
                 </Link>
               )}
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black font-space text-[#222831] break-all tracking-tight leading-none">
+            <h1 className="text-2xl sm:text-4xl font-bold font-space text-zinc-900 break-all tracking-tight leading-tight">
               {fullName}
             </h1>
-            <p className="mt-2.5 text-xs sm:text-sm text-[#222831]/80 max-w-2xl leading-relaxed font-sans">
+            <p className="mt-2 text-sm sm:text-base text-zinc-600 max-w-2xl leading-relaxed font-sans">
               {repo?.description ||
                 "Public GitHub repository indexed and scored by maintainer responsiveness for contributor accessibility."}
             </p>
@@ -477,148 +462,136 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <button
               onClick={handleWatchToggle}
               disabled={watchLoading}
-              className={`inline-flex items-center gap-1.5 border-2 border-[#222831] rounded-xl px-4 py-2 text-xs font-bold font-sans transition-all cursor-pointer shadow-[3px_3px_0px_0px_#222831] hover:-translate-y-0.5 active:translate-y-0 ${
+              className={`inline-flex items-center gap-2 border rounded-xl px-5 py-2.5 text-xs font-semibold font-sans transition-all cursor-pointer shadow-xs ${
                 isWatching
-                  ? "bg-emerald-300 text-[#222831]"
-                  : "bg-white text-[#222831] hover:bg-zinc-50"
+                  ? "bg-emerald-50 border-emerald-300 text-emerald-900"
+                  : "bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50 hover:border-zinc-300"
               }`}
             >
-              {isWatching ? <Check className="h-3.5 w-3.5 stroke-[3px]" /> : <Bookmark className="h-3.5 w-3.5 stroke-[3px]" />}
-              {isWatching ? "Watching" : "Watch Repo"}
+              {isWatching ? <Check className="h-4 w-4 text-emerald-600" /> : <Bookmark className="h-4 w-4 text-zinc-500" />}
+              {isWatching ? "Watching Repo" : "Watch Repo"}
             </button>
             <a
               href={repo?.github_url || `https://github.com/${fullName}`}
               target="_blank"
               rel="nofollow noopener noreferrer"
               onClick={() => posthog.capture('repo_github_link_clicked', { repo_full_name: fullName, repo_tier: rank })}
-              className="inline-flex items-center gap-1.5 border-2 border-[#222831] rounded-xl bg-[#222831] px-4 py-2 text-xs font-bold font-sans text-white hover:bg-zinc-800 transition-all shadow-[3px_3px_0px_0px_#222831] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-5 py-2.5 text-xs font-semibold font-sans text-white hover:bg-zinc-800 transition-all shadow-xs cursor-pointer"
             >
-              <GitPullRequest className="h-3.5 w-3.5" />
-              GitHub
+              <GitPullRequest className="h-4 w-4" />
+              <span>GitHub</span>
             </a>
           </div>
-          <p className="text-[10px] font-sans text-[#222831]/75 max-w-xs text-left md:text-right leading-tight">
-            💡 <strong className="text-[#222831]">Why Watch?</strong> Get alerts when this repo&apos;s review speed or rank updates.
+          <p className="text-xs font-sans text-zinc-500 max-w-xs text-left md:text-right leading-normal">
+            Get alerts when review velocity or rank updates.
           </p>
         </div>
       </div>
 
       {/* Macro Metrics Grid & cNPS Gauge Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-10">
         {/* Metric Cards Grid */}
-        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {/* Response Velocity */}
-          <div className="group relative border-3 border-[#222831] bg-white p-5 shadow-[4px_4px_0px_0px_#222831] rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
-            <div className="flex items-center justify-between gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
+          <div className="group relative border border-zinc-200/90 bg-white p-6 shadow-xs rounded-3xl transition-all hover:border-zinc-300 hover:shadow-sm">
+            <div className="flex items-center justify-between gap-2 text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 font-mono">
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-emerald-600 shrink-0" />
                 <span>Response Velocity</span>
               </div>
               <Info className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-700 transition-colors" />
             </div>
-            <div className="text-3xl font-black text-[#222831] font-mono">{responseTimeStr}</div>
-            <div className="text-xs text-zinc-600 mt-1 font-sans font-medium">{responseCommentary}</div>
-            <p className="text-[11px] text-zinc-500 mt-2 pt-2 border-t border-zinc-100 font-sans sm:hidden">
-              Average latency until maintainers review or reply to PRs.
-            </p>
+            <div className="text-3xl sm:text-4xl font-bold text-zinc-900 font-mono tracking-tight">{responseTimeStr}</div>
+            <div className="text-xs sm:text-sm text-zinc-600 mt-1 font-sans font-medium">{responseCommentary}</div>
             {/* Tooltip */}
-            <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 p-3 bg-[#222831] text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none ease-out">
+            <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-zinc-900 text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
               <p className="font-bold mb-1">Average Response Latency</p>
               <p className="text-zinc-300">Tracks hours until a maintainer leaves a review, comment, or PR response.</p>
             </div>
           </div>
 
           {/* Merge Efficiency */}
-          <div className="group relative border-3 border-[#222831] bg-white p-5 shadow-[4px_4px_0px_0px_#222831] rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
-            <div className="flex items-center justify-between gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
+          <div className="group relative border border-zinc-200/90 bg-white p-6 shadow-xs rounded-3xl transition-all hover:border-zinc-300 hover:shadow-sm">
+            <div className="flex items-center justify-between gap-2 text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 font-mono">
               <div className="flex items-center gap-2">
                 <GitMerge className="h-4 w-4 text-blue-600 shrink-0" />
                 <span>Merge Efficiency</span>
               </div>
               <Info className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-700 transition-colors" />
             </div>
-            <div className="text-3xl font-black text-[#222831] font-mono">{mergeRateStr}</div>
-            <div className="text-xs text-zinc-600 mt-1 font-sans font-medium">{mergeCommentary}</div>
-            <p className="text-[11px] text-zinc-500 mt-2 pt-2 border-t border-zinc-100 font-sans sm:hidden">
-              Percentage of external community PRs successfully merged.
-            </p>
+            <div className="text-3xl sm:text-4xl font-bold text-zinc-900 font-mono tracking-tight">{mergeRateStr}</div>
+            <div className="text-xs sm:text-sm text-zinc-600 mt-1 font-sans font-medium">{mergeCommentary}</div>
             {/* Tooltip */}
-            <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 p-3 bg-[#222831] text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none ease-out">
+            <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-zinc-900 text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
               <p className="font-bold mb-1">External Acceptance Rate</p>
               <p className="text-zinc-300">Percentage of community pull requests successfully merged into main.</p>
             </div>
           </div>
 
           {/* First-Timer Success */}
-          <div className="group relative border-3 border-[#222831] bg-white p-5 shadow-[4px_4px_0px_0px_#222831] rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
-            <div className="flex items-center justify-between gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
+          <div className="group relative border border-zinc-200/90 bg-white p-6 shadow-xs rounded-3xl transition-all hover:border-zinc-300 hover:shadow-sm">
+            <div className="flex items-center justify-between gap-2 text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 font-mono">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
                 <span>First-Timer Success</span>
               </div>
               <Info className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-700 transition-colors" />
             </div>
-            <div className="text-3xl font-black text-[#222831] font-mono">{firstTimerSuccessStr}</div>
-            <div className="text-xs text-zinc-600 mt-1 font-sans font-medium">{firstTimerCommentary}</div>
-            <p className="text-[11px] text-zinc-500 mt-2 pt-2 border-t border-zinc-100 font-sans sm:hidden">
-              Success rate for developers opening their first PR here.
-            </p>
+            <div className="text-3xl sm:text-4xl font-bold text-zinc-900 font-mono tracking-tight">{firstTimerSuccessStr}</div>
+            <div className="text-xs sm:text-sm text-zinc-600 mt-1 font-sans font-medium">{firstTimerCommentary}</div>
             {/* Tooltip */}
-            <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 p-3 bg-[#222831] text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none ease-out">
+            <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-zinc-900 text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
               <p className="font-bold mb-1">First PR Conversion</p>
               <p className="text-zinc-300">Rate at which developers submitting their first repository PR succeed.</p>
             </div>
           </div>
 
           {/* Active Maintainers */}
-          <div className="group relative border-3 border-[#222831] bg-white p-5 shadow-[4px_4px_0px_0px_#222831] rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
-            <div className="flex items-center justify-between gap-2 text-xs font-black text-zinc-500 uppercase tracking-wider mb-2 font-mono">
+          <div className="group relative border border-zinc-200/90 bg-white p-6 shadow-xs rounded-3xl transition-all hover:border-zinc-300 hover:shadow-sm">
+            <div className="flex items-center justify-between gap-2 text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 font-mono">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-amber-500 shrink-0" />
                 <span>Active Maintainers</span>
               </div>
               <Info className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-700 transition-colors" />
             </div>
-            <div className="text-3xl font-black text-[#222831] font-mono">
+            <div className="text-3xl sm:text-4xl font-bold text-zinc-900 font-mono tracking-tight">
               {distinctMaintainers > 0 ? distinctMaintainers : "-"}
             </div>
-            <div className="text-xs text-zinc-600 mt-1 font-sans font-medium">{maintainersCommentary}</div>
-            <p className="text-[11px] text-zinc-500 mt-2 pt-2 border-t border-zinc-100 font-sans sm:hidden">
-              Unique maintainers actively reviewing community submissions.
-            </p>
+            <div className="text-xs sm:text-sm text-zinc-600 mt-1 font-sans font-medium">{maintainersCommentary}</div>
             {/* Tooltip */}
-            <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 p-3 bg-[#222831] text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none ease-out">
+            <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-zinc-900 text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
               <p className="font-bold mb-1">Distinct Reviewers</p>
               <p className="text-zinc-300">Number of unique maintainers actively reviewing community code submissions.</p>
             </div>
           </div>
         </div>
 
-        {/* Contributor Vibe Score Circular Gauge Card */}
-        <div className="border-3 border-[#222831] bg-white p-6 shadow-[4px_4px_0px_0px_#222831] rounded-2xl flex flex-col items-center justify-between text-center transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#222831]">
-          <div className="w-full flex justify-between items-center border-b border-zinc-100 pb-2 mb-3">
-            <span className="text-xs font-black text-zinc-400 uppercase tracking-wider font-mono">Contributor Vibe</span>
-            <span className={`px-2 py-0.5 text-[10px] font-black font-mono border-2 border-[#222831] rounded-md ${
-              vibeScore >= 75 ? "bg-emerald-100 text-emerald-800" : vibeScore >= 50 ? "bg-blue-100 text-blue-800" : "bg-rose-100 text-rose-800"
+        {/* Contributor Vibe Score Card */}
+        <div className="border border-zinc-200/90 bg-white p-6 shadow-xs rounded-3xl flex flex-col items-center justify-between text-center transition-all hover:border-zinc-300 hover:shadow-sm">
+          <div className="w-full flex justify-between items-center border-b border-zinc-100 pb-3 mb-4">
+            <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider font-mono">Contributor Vibe</span>
+            <span className={`px-2.5 py-0.5 text-[10px] font-bold font-mono border rounded-lg ${
+              vibeScore >= 75 ? "bg-emerald-50 text-emerald-800 border-emerald-300" : vibeScore >= 50 ? "bg-blue-50 text-blue-800 border-blue-200" : "bg-rose-50 text-rose-800 border-rose-200"
             }`}>
               {vibeScore >= 75 ? "HIGH MERGE VIBES" : vibeScore >= 50 ? "SELECTIVE" : "STEEP CURVE"}
             </span>
           </div>
 
-          <div className="relative flex items-center justify-center w-36 h-36">
+          <div className="relative flex items-center justify-center w-40 h-40">
             {(() => {
-              const radius = 50;
+              const radius = 54;
               const strokeWidth = 10;
-              const circumference = 2 * Math.PI * radius; // ~314.16
+              const circumference = 2 * Math.PI * radius;
               const vibePercentage = Math.min(100, Math.max(0, vibeScore));
               const strokeDashoffset = circumference - (vibePercentage / 100) * circumference;
 
               return (
                 <>
-                  <svg viewBox="0 0 120 120" className="w-full h-full transform -rotate-90">
-                    <circle cx="60" cy="60" r={radius} fill="transparent" stroke="#f4f4f5" strokeWidth={strokeWidth} />
+                  <svg viewBox="0 0 130 130" className="w-full h-full transform -rotate-90">
+                    <circle cx="65" cy="65" r={radius} fill="transparent" stroke="#f4f4f5" strokeWidth={strokeWidth} />
                     <circle
-                      cx="60" cy="60" r={radius} fill="transparent"
+                      cx="65" cy="65" r={radius} fill="transparent"
                       stroke={vibeScore >= 75 ? "#10b981" : vibeScore >= 50 ? "#3b82f6" : "#f43f5e"}
                       strokeWidth={strokeWidth}
                       strokeDasharray={circumference}
@@ -628,10 +601,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     />
                   </svg>
                   <div className="absolute flex flex-col items-center justify-center">
-                    <span className="text-3xl font-black text-[#222831] font-mono">
-                      {vibeScore}<span className="text-sm font-normal text-zinc-400">/100</span>
+                    <span className="text-4xl font-extrabold text-zinc-900 font-mono">
+                      {vibeScore}<span className="text-base font-normal text-zinc-400">/100</span>
                     </span>
-                    <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider font-mono">PR Merge Index</span>
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider font-mono mt-0.5">PR Merge Index</span>
                   </div>
                 </>
               );
