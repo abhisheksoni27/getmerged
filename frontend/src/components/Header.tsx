@@ -66,16 +66,16 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
           </Link>
 
           <nav className="hidden md:flex items-center gap-6 text-xs font-sans font-medium text-zinc-600">
-            <Link href="/how-c-rank-works" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
+            <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm and Methodology" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               How C-Rank™ Works
             </Link>
-            <Link href="/rankings" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
+            <Link href="/rankings" title="Browse Top Open Source Repositories by Language Ecosystem" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Ecosystems
             </Link>
-            <Link href="/good-first-issue" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
+            <Link href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Good First Issues
             </Link>
-            <Link href="/hall-of-fame" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
+            <Link href="/hall-of-fame" title="View Top Super Welcoming Open Source Repositories" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Hall of Fame
             </Link>
           </nav>
@@ -83,19 +83,19 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
 
         {/* Snapped Sticky Search Bar */}
         {showSearchBar && (
-          <div className="flex-1 max-w-md mx-4 animate-fade-slide-up">
+          <div className="flex-1 min-w-0 max-w-sm lg:max-w-md mx-3 lg:mx-4 animate-fade-slide-up">
             <button
               type="button"
               onClick={onOpenSearch}
-              className="w-full relative flex items-center justify-between rounded-xl border border-zinc-200 bg-white/90 px-3.5 py-2 shadow-xs hover:border-zinc-300 transition-all cursor-pointer group text-left"
+              className="w-full relative flex items-center justify-between rounded-xl border border-zinc-200 bg-white/90 px-3 py-1.5 sm:py-2 shadow-xs hover:border-zinc-300 transition-all cursor-pointer group text-left"
             >
-              <div className="flex items-center gap-2 overflow-hidden flex-1 mr-2">
+              <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">
                 <Search className="h-4 w-4 text-zinc-400 group-hover:text-zinc-600 shrink-0 transition-colors" />
-                <span className="text-xs text-zinc-700 truncate font-sans">
+                <span className="text-xs text-zinc-700 truncate font-sans block max-w-[200px] sm:max-w-none">
                   {searchQuery || placeholderText || "Search repositories..."}
                 </span>
               </div>
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-500">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-500 shrink-0">
                 <span>⌘</span>K
               </kbd>
             </button>

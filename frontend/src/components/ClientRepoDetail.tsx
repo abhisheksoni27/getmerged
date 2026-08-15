@@ -426,6 +426,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         repo={repo}
         rank={rank}
         rankLabel={getRankHumanLabel(rank)}
+        score={score}
         isWatching={isWatching}
         watchLoading={watchLoading}
         onWatchToggle={handleWatchToggle}

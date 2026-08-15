@@ -87,18 +87,18 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
   const famousRepos = useMemo(
     () => [
-      "freeCodeCamp/freeCodeCamp",
       "facebook/react",
       "vuejs/vue",
-      "twbs/bootstrap",
-      "sindresorhus/awesome",
-      "tensorflow/tensorflow",
-      "torvalds/linux",
-      "goldbergyoni/nodebestpractices",
-      "ohmyzsh/ohmyzsh",
-      "flutter/flutter",
-      "microsoft/vscode",
       "vercel/next.js",
+      "golang/go",
+      "rust-lang/rust",
+      "oven-sh/bun",
+      "tailwindlabs/tailwindcss",
+      "astral-sh/uv",
+      "shadcn/ui",
+      "huggingface/transformers",
+      "supabase/supabase",
+      "django/django",
     ],
     []
   );
@@ -111,25 +111,8 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
     return () => clearInterval(interval);
   }, [famousRepos.length]);
 
-  // Sticky header search bar on scroll up
+  // Sticky header search bar whenever hero search is out of view
   const [isHeroSearchVisible, setIsHeroSearchVisible] = useState<boolean>(true);
-  const [isScrollingUp, setIsScrollingUp] = useState<boolean>(false);
-  const lastScrollY = useRef<number>(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY < lastScrollY.current && currentScrollY > 200) {
-        setIsScrollingUp(true);
-      } else {
-        setIsScrollingUp(false);
-      }
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     if (!heroSearchRef.current) return;
@@ -413,7 +396,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
     <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <RelativityCanvas />
       <Header
-        showSearchBar={isScrollingUp && !isHeroSearchVisible}
+        showSearchBar={!isHeroSearchVisible}
         onOpenSearch={() => setIsSearchModalOpen(true)}
         searchQuery={searchQuery}
         placeholderText={`Search repositories, e.g. ${famousRepos[placeholderIndex]}`}
@@ -421,10 +404,6 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
       {/* Hero Section */}
       <section className="relative mx-auto max-w-6xl px-4 pt-14 pb-10 text-center sm:px-6 lg:px-8">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/25 text-orange-700 font-mono text-xs font-bold mb-6 shadow-2xs">
-          <span className="flex h-2 w-2 rounded-full bg-[#ff5722] animate-pulse" />
-          <span>The Glassdoor for Open Source</span>
-        </div>
         <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-6xl font-space leading-tight">
           Stop wasting weeks on <span className="bg-gradient-to-r from-amber-200/90 via-orange-200/90 to-amber-200/90 text-zinc-950 px-3 py-0.5 rounded-xl border border-orange-300/60 shadow-xs inline-block transform -rotate-1">ignored PRs.</span>
         </h1>
@@ -1243,6 +1222,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                         key={r.id || r.full_name}
                         href={`/${r.full_name}`}
                         onClick={() => setIsSearchModalOpen(false)}
+                        title={`View ${r.full_name} C-Rank scorecard, PR response time & merge metrics`}
                         className="flex items-center justify-between p-3 rounded-xl hover:bg-zinc-50 transition-colors group cursor-pointer block no-underline text-current pt-3"
                       >
                         <div className="flex items-center gap-3 min-w-0">

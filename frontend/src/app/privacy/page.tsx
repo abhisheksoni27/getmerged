@@ -71,7 +71,7 @@ export default function PrivacyPolicyPage() {
             </p>
             <p className="mt-3">
               Analytics only run after you give consent via the cookie banner. You can accept or reject them at any time; rejecting does not affect sign-in or core functionality. See our{" "}
-              <Link href="/terms" className="underline font-semibold">Terms of Service</Link> for details on acceptable use.
+              <Link href="/terms" title="Read Opendoor Terms of Service" className="underline font-semibold">Terms of Service</Link> for details on acceptable use.
             </p>
           </section>
 
