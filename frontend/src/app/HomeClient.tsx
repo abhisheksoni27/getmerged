@@ -421,8 +421,12 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
       {/* Hero Section */}
       <section className="relative mx-auto max-w-6xl px-4 pt-14 pb-10 text-center sm:px-6 lg:px-8">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/25 text-orange-700 font-mono text-xs font-bold mb-6 shadow-2xs">
+          <span className="flex h-2 w-2 rounded-full bg-[#ff5722] animate-pulse" />
+          <span>The Glassdoor for Open Source</span>
+        </div>
         <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-6xl font-space leading-tight">
-          Stop wasting weeks on <span className="bg-[#dfd0b8]/80 text-zinc-900 px-2 rounded-lg">ignored PRs.</span>
+          Stop wasting weeks on <span className="bg-gradient-to-r from-amber-200/90 via-orange-200/90 to-amber-200/90 text-zinc-950 px-3 py-0.5 rounded-xl border border-orange-300/60 shadow-xs inline-block transform -rotate-1">ignored PRs.</span>
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-base text-zinc-600 sm:text-lg leading-relaxed font-sans">
           Find repositories where maintainers actually review and merge contributions, backed by real PR response rates and first-timer success metrics.
@@ -537,24 +541,27 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
         {/* Educational Storytelling & Problem-Solution Narrative Blocks */}
         <div className="my-16 space-y-16 text-left">
-          {/* Narrative Block 1: Left Copy, Right Visual (The Star Paradox) */}
+          {/* Narrative Block 1: Left Copy, Right Visual (The Star Paradox & Zombie PRs) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-white p-8 sm:p-12 border border-zinc-200/80 shadow-xs">
             <div className="lg:col-span-7 space-y-4">
               <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1 rounded-xl">
                 <Star className="h-3.5 w-3.5 text-amber-600 fill-amber-400" /> The GitHub Star Illusion
               </div>
               <h2 className="text-2xl sm:text-4xl font-bold font-space text-zinc-900 tracking-tight leading-tight">
-                Stars Measure Past Hype. C-Rank Measures Present Hospitality.
+                Stars Measure Yesterday&apos;s Hype. C-Rank Measures Today&apos;s Open Doors.
               </h2>
               <p className="text-sm sm:text-base text-zinc-600 font-sans leading-relaxed">
-                Most developers sort GitHub by stars, spend 3 days crafting a spotless PR, and wait 9 months for zero review. Over <strong className="text-zinc-900">42% of repositories with 20k+ stars</strong> are maintained by exhausted teams that haven&apos;t merged an external contribution all year.
+                Over <strong className="text-zinc-900">60% of open-source maintainers</strong> are unpaid and overwhelmed by backlogs. When contributors sort solely by GitHub stars, they walk straight into exhausted projects where pull requests become &ldquo;zombie PRs&rdquo; that sit unreviewed for months.
+              </p>
+              <p className="text-xs sm:text-sm text-zinc-500 font-sans leading-relaxed">
+                Opendoor bypasses vanity stars by monitoring real maintainer review turnaround, first-timer acceptance rates, and external PR merge velocity.
               </p>
               <div className="pt-2">
                 <Link
                   href="/how-c-rank-works"
                   className="inline-flex items-center gap-2 text-xs font-mono font-bold text-zinc-900 hover:text-zinc-700 underline underline-offset-4"
                 >
-                  <span>Learn how we calculate true maintainer pulse</span>
+                  <span>Read the science of open source hospitality</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
@@ -562,26 +569,26 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
             <div className="lg:col-span-5 bg-zinc-50 border border-zinc-200/80 rounded-2xl p-6 space-y-4 font-mono text-xs shadow-2xs">
               <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
-                <span className="text-zinc-400">Telemetry Comparison</span>
-                <span className="text-emerald-700 font-bold">Live Data</span>
+                <span className="text-zinc-400">Live Telemetry Contrast</span>
+                <span className="text-emerald-700 font-bold">Real-time</span>
               </div>
               <div className="space-y-3">
-                <div className="p-3 rounded-xl bg-white border border-rose-200/70">
+                <div className="p-3.5 rounded-xl bg-white border border-rose-200/70">
                   <div className="flex justify-between text-zinc-800 font-bold mb-1">
-                    <span>Popular Ghost Town</span>
+                    <span>Famous Ghost Town</span>
                     <span className="text-rose-600 font-semibold">45k ★</span>
                   </div>
-                  <div className="text-[11px] text-zinc-500 font-sans">
-                    Avg PR review turnaround: <strong className="text-rose-700">140+ days</strong> (C-Rank: D)
+                  <div className="text-[11px] text-zinc-500 font-sans leading-relaxed">
+                    Median PR review wait: <strong className="text-rose-700">140+ days</strong> (C-Rank: Unmaintained)
                   </div>
                 </div>
-                <div className="p-3 rounded-xl bg-white border border-emerald-200">
+                <div className="p-3.5 rounded-xl bg-white border border-emerald-200">
                   <div className="flex justify-between text-zinc-800 font-bold mb-1">
-                    <span>Open Door Repository</span>
+                    <span>Welcoming Open Door</span>
                     <span className="text-emerald-700 font-semibold">1.8k ★</span>
                   </div>
-                  <div className="text-[11px] text-zinc-500 font-sans">
-                    Avg PR review turnaround: <strong className="text-emerald-800">&lt;6 hours</strong> (C-Rank: Super Welcoming)
+                  <div className="text-[11px] text-zinc-500 font-sans leading-relaxed">
+                    Median PR review wait: <strong className="text-emerald-800">&lt;6 hours</strong> (C-Rank: Super Welcoming)
                   </div>
                 </div>
               </div>
@@ -593,9 +600,9 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-200 pb-3">
               <div>
                 <h2 className="text-xl sm:text-2xl font-space font-bold text-zinc-900 flex items-center gap-2">
-                  <Flame className="h-5 w-5 text-orange-500 fill-orange-500" /> Today&apos;s Open Doors (High Velocity)
+                  <Flame className="h-5 w-5 text-orange-500 fill-orange-500" /> Today&apos;s Open Doors (High Review Velocity)
                 </h2>
-                <p className="text-xs text-zinc-500 font-sans mt-0.5">Live repositories with verified maintainer activity and sub-24h PR triage.</p>
+                <p className="text-xs text-zinc-500 font-sans mt-0.5">Verified active maintainers actively merging community contributions right now.</p>
               </div>
               <Link
                 href="/hall-of-fame"
@@ -640,25 +647,25 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-white p-8 sm:p-12 border border-zinc-200/80 shadow-xs">
             <div className="lg:col-span-5 bg-zinc-900 text-white rounded-2xl p-6 space-y-3 font-mono text-xs shadow-md">
               <div className="flex justify-between items-center text-zinc-400 border-b border-zinc-800 pb-2">
-                <span>C-Rank™ Engine Weights</span>
-                <span className="text-emerald-400 font-bold">100%</span>
+                <span>C-Rank™ Multi-Factor Telemetry</span>
+                <span className="text-emerald-400 font-bold">Continuous Index</span>
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between items-center bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
                   <span className="text-zinc-300">External Merge Rate</span>
-                  <span className="text-emerald-400 font-bold">27.5%</span>
+                  <span className="text-emerald-400 font-bold">Primary</span>
                 </div>
                 <div className="flex justify-between items-center bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
-                  <span className="text-zinc-300">Time to First Review</span>
-                  <span className="text-blue-400 font-bold">15.0%</span>
+                  <span className="text-zinc-300">Review Turnaround Latency</span>
+                  <span className="text-blue-400 font-bold">Core Factor</span>
                 </div>
                 <div className="flex justify-between items-center bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
                   <span className="text-zinc-300">Commit Pulse & Recency</span>
-                  <span className="text-purple-400 font-bold">15.0%</span>
+                  <span className="text-purple-400 font-bold">Core Factor</span>
                 </div>
                 <div className="flex justify-between items-center bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
                   <span className="text-zinc-300">First-Timer PR Conversion</span>
-                  <span className="text-amber-400 font-bold">10.0%</span>
+                  <span className="text-amber-400 font-bold">Hospitality</span>
                 </div>
               </div>
             </div>
@@ -671,14 +678,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 9 Telemetry Factors. Zero Subjective Gossip.
               </h2>
               <p className="text-sm sm:text-base text-zinc-600 font-sans leading-relaxed">
-                Opendoor evaluates repositories against peer benchmarks across entire programming language ecosystems. We account for reviewer response times, repeat contributor retention, pull request nitpick rates, and maintainer core bus-factors.
+                Opendoor benchmarks repositories against peer codebases across 20+ language ecosystems. We measure reviewer turnaround velocity, repeat contributor retention, pull request friction, and maintainer core bus-factors.
               </p>
               <div className="pt-2">
                 <Link
                   href="/how-c-rank-works"
                   className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-5 py-2.5 font-sans text-xs font-semibold text-white hover:bg-zinc-800 transition-all shadow-xs"
                 >
-                  <span>Explore the full scoring algorithm</span>
+                  <span>Explore the scoring methodology</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>

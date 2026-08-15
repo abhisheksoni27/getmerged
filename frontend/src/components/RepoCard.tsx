@@ -97,7 +97,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       href={`/${ownerPart}/${namePart}`}
       onClick={handleClick}
       title={`View ${repo.full_name} C-Rank scorecard, PR response time & merge metrics`}
-      className={`group relative flex h-full flex-col justify-between rounded-2xl p-5 border transition-all duration-200 block text-current no-underline cursor-pointer ${
+      className={`group dev-card-glow relative flex h-full flex-col justify-between rounded-2xl p-5 border transition-all duration-200 block text-current no-underline cursor-pointer ${
         isSpotlight
           ? "border-zinc-300 bg-white shadow-md hover:shadow-lg hover:border-zinc-400 hover:-translate-y-0.5"
           : "border-zinc-200/90 bg-white shadow-xs hover:shadow-md hover:border-zinc-300 hover:-translate-y-0.5"
