@@ -36,47 +36,47 @@ export function StatusClient() {
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#faf9f6]">
+    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
-      <main className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 flex-1 w-full font-sans text-zinc-800">
+      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 flex-1 w-full font-sans text-zinc-800">
         <Link
           href="/"
           title="Return to Opendoor Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100/70 text-xs text-zinc-600 hover:bg-zinc-200/60 hover:text-zinc-900 transition-colors mb-6 font-sans border border-zinc-200/20"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200/40 pb-6 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 pb-6 mb-8">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 flex items-center gap-3 font-space">
-              <Server className="h-7 w-7 text-brand-dark animate-pulse" />
+              <Server className="h-6 w-6 text-zinc-900" />
               Opendoor System Status
             </h1>
-            <p className="mt-1.5 text-xs text-zinc-500 font-sans">
+            <p className="mt-1 text-xs text-zinc-500 font-sans">
               Real-time API operational status, latency metrics, and backend service health checks.
             </p>
           </div>
 
           <button
             onClick={checkHealth}
-            className="inline-flex items-center gap-2 rounded-xl bg-zinc-100/70 px-4 py-2.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-200/60 transition-all self-start sm:self-auto shadow-xs cursor-pointer"
+            className="inline-flex items-center gap-2 rounded-xl bg-white border border-zinc-200 px-3.5 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 transition-all self-start sm:self-auto shadow-2xs cursor-pointer"
           >
-            <RefreshCw className={`h-3.5 w-3.5 ${healthStatus === "checking" ? "animate-spin text-brand-dark" : ""}`} />
+            <RefreshCw className={`h-3.5 w-3.5 ${healthStatus === "checking" ? "animate-spin text-zinc-900" : "text-zinc-500"}`} />
             Refresh Status
           </button>
         </div>
 
         {/* Global Operational Status Banner */}
         <div
-          className={`rounded-2xl p-6 mb-8 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.015)] transition-all ${
+          className={`rounded-3xl p-6 mb-8 flex items-center justify-between border shadow-xs transition-all ${
             healthStatus === "healthy"
-              ? "bg-emerald-50/70 text-emerald-900"
+              ? "bg-emerald-50/80 border-emerald-200 text-emerald-900"
               : healthStatus === "degraded"
-              ? "bg-amber-50/70 text-amber-900"
+              ? "bg-amber-50/80 border-amber-200 text-amber-900"
               : healthStatus === "unhealthy"
-              ? "bg-rose-50/70 text-rose-900"
-              : "bg-zinc-100/60 text-zinc-900"
+              ? "bg-rose-50/80 border-rose-200 text-rose-900"
+              : "bg-white border-zinc-200 text-zinc-900"
           }`}
         >
           <div className="flex items-center gap-4">
@@ -99,43 +99,35 @@ export function StatusClient() {
           </div>
 
           {latencyMs !== null && (
-            <div className="hidden sm:flex flex-col items-end">
-              <span className="text-xl font-bold text-emerald-700 font-mono">{latencyMs} ms</span>
-              <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-sans">Roundtrip Latency</span>
+            <div className="hidden sm:flex flex-col items-end font-mono">
+              <span className="text-xl font-bold text-emerald-700">{latencyMs} ms</span>
+              <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-sans">Latency</span>
             </div>
           )}
         </div>
 
         {/* Service Health Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 font-sans">
-          <div className="rounded-2xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] border border-zinc-100">
+          <div className="rounded-3xl bg-white p-6 shadow-xs border border-zinc-200/80">
             <div className="flex items-center justify-between text-xs mb-3">
-              <span className="font-bold text-zinc-800 flex items-center gap-2">
-                <Zap className="h-4 w-4 text-brand-dark animate-bounce" /> API Gateway Health
+              <span className="font-bold text-zinc-900 flex items-center gap-2 font-space text-sm">
+                <Zap className="h-4 w-4 text-amber-500" /> API Gateway Health
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-700">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[10px] font-bold font-mono bg-emerald-50 text-emerald-800 border border-emerald-200">
                 ACTIVE
               </span>
             </div>
             <p className="text-xs text-zinc-500 font-sans">
-              Endpoint: <code className="bg-[#faf9f6] px-1.5 py-0.5 rounded text-[11px] font-mono">{API_BASE_URL}/api/v1/health</code>
+              Endpoint: <code className="bg-zinc-50 border border-zinc-200 px-1.5 py-0.5 rounded text-[11px] font-mono">{API_BASE_URL}/api/v1/health</code>
             </p>
           </div>
 
-          <div className="rounded-2xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] border border-zinc-100">
+          <div className="rounded-3xl bg-white p-6 shadow-xs border border-zinc-200/80">
             <div className="flex items-center justify-between text-xs mb-3">
-              <span className="font-bold text-zinc-800 flex items-center gap-2">
+              <span className="font-bold text-zinc-900 flex items-center gap-2 font-space text-sm">
                 <ShieldCheck className="h-4 w-4 text-blue-600" /> Valkey Tag Cache Engine
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-blue-50 text-blue-700">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500"></span>
-                </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[10px] font-bold font-mono bg-blue-50 text-blue-800 border border-blue-200">
                 OPERATIONAL
               </span>
             </div>
