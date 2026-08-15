@@ -102,7 +102,12 @@ const FAQS = [
   },
 ];
 
-export function ReposClient() {
+interface ReposClientProps {
+  initialRepos?: Repo[];
+  initialTotal?: number;
+}
+
+export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -110,8 +115,8 @@ export function ReposClient() {
   const urlPage = parseInt(searchParams.get("page") || "1", 10);
   const initialPage = isNaN(urlPage) || urlPage < 1 ? 1 : urlPage;
 
-  const [repos, setRepos] = useState<Repo[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [repos, setRepos] = useState<Repo[]>(initialRepos);
+  const [loading, setLoading] = useState<boolean>(initialRepos.length === 0);
   const [searchQuery, setSearchQuery] = useState<string>(searchParams.get("q") || "");
   const [selectedLang, setSelectedLang] = useState<string>(searchParams.get("lang") || "All");
   const [selectedTier, setSelectedTier] = useState<string>(searchParams.get("tier") || "All");
@@ -122,8 +127,10 @@ export function ReposClient() {
 
   // Pagination
   const [page, setPage] = useState<number>(initialPage);
-  const [totalCount, setTotalCount] = useState<number>(0);
+  const [totalCount, setTotalCount] = useState<number>(initialTotal);
   const perPage = 24;
+
+  const isInitialMount = React.useRef(true);
 
   // Mobile Bottom Sheet Modal State
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState<boolean>(false);
@@ -237,8 +244,12 @@ export function ReposClient() {
   }, [page, searchQuery, selectedLang, selectedTier, selectedStarBucket, selectedMergeRate, selectedFirstTimer, trendingOnly]);
 
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      if (initialRepos.length > 0) return;
+    }
     fetchRepos();
-  }, [fetchRepos]);
+  }, [fetchRepos, initialRepos.length]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / perPage));
 
@@ -330,7 +341,7 @@ export function ReposClient() {
                 Total Repositories
               </span>
               <span className="text-xl font-bold font-mono text-zinc-950">
-                {totalCount > 0 ? totalCount.toLocaleString() : "1,400+"}
+                {totalCount.toLocaleString()}
               </span>
             </div>
           </div>

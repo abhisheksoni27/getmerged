@@ -1,6 +1,8 @@
 import React from "react";
 import { Metadata } from "next";
 import { ReposClient } from "./ReposClient";
+import { Repo } from "@/types/opendoor";
+import { API_BASE_URL } from "@/lib/api";
 
 interface ReposPageProps {
   searchParams: Promise<{
@@ -15,12 +17,83 @@ interface ReposPageProps {
   }>;
 }
 
+function getStarBounds(bucket?: string) {
+  switch (bucket) {
+    case "<5k":
+      return { max: "5000" };
+    case "5k-20k":
+      return { min: "5000", max: "20000" };
+    case "20k-50k":
+      return { min: "20000", max: "50000" };
+    case "50k+":
+      return { min: "50000" };
+    default:
+      return {};
+  }
+}
+
+async function getReposSSR(paramsObj: {
+  page?: string;
+  lang?: string;
+  tier?: string;
+  stars?: string;
+  merge_rate?: string;
+  first_timer?: string;
+  trending?: string;
+  q?: string;
+}): Promise<{ repos: Repo[]; total: number }> {
+  const page = parseInt(paramsObj.page || "1", 10) || 1;
+  const perPage = 24;
+
+  const params = new URLSearchParams();
+  params.set("page", page.toString());
+  params.set("per_page", perPage.toString());
+  params.set("sort", "stars");
+  params.set("order", "desc");
+
+  if (paramsObj.q?.trim()) params.set("name", paramsObj.q.trim());
+  if (paramsObj.lang && paramsObj.lang !== "All") params.set("language", paramsObj.lang);
+  if (paramsObj.tier && paramsObj.tier !== "All") params.set("tier", paramsObj.tier);
+  if (paramsObj.trending === "true") params.set("trending", "true");
+  if (paramsObj.merge_rate && paramsObj.merge_rate !== "All") params.set("min_merge_rate", paramsObj.merge_rate);
+  if (paramsObj.first_timer && paramsObj.first_timer !== "All") params.set("min_first_timer_success_rate", paramsObj.first_timer);
+
+  const bounds = getStarBounds(paramsObj.stars);
+  if (bounds.min) params.set("min_stars", bounds.min);
+  if (bounds.max) params.set("max_stars", bounds.max);
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/repos?${params.toString()}`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return { repos: [], total: 0 };
+    const data = await res.json();
+    const rawList = data.data || data.repos || [];
+    const total = data.meta?.total ?? data.total ?? (Array.isArray(rawList) ? rawList.length : 0);
+
+    if (Array.isArray(rawList)) {
+      const mappedList: Repo[] = rawList.map((r: Record<string, unknown>) => ({
+        ...(r as unknown as Repo),
+        c_rank_tier: (r.c_rank_tier as string) || (r.class_rank as string) || "A",
+        first_timer_success_rate:
+          (r.first_timer_success_rate as number) !== undefined
+            ? (r.first_timer_success_rate as number)
+            : (r.first_timer_rate as number),
+      }));
+      return { repos: mappedList, total };
+    }
+    return { repos: [], total: 0 };
+  } catch (e) {
+    console.error("SSR fetch failed for /repos", e);
+    return { repos: [], total: 0 };
+  }
+}
+
 export async function generateMetadata({ searchParams }: ReposPageProps): Promise<Metadata> {
   const resolvedParams = await searchParams;
   const pageNum = parseInt(resolvedParams.page || "1", 10);
   const isPaged = !isNaN(pageNum) && pageNum > 1;
 
-  // Build canonical URL for each page or clean /repos
   const canonicalUrl = isPaged
     ? `https://opendoor.abhishekco.de/repos?page=${pageNum}`
     : "https://opendoor.abhishekco.de/repos";
@@ -63,7 +136,10 @@ export async function generateMetadata({ searchParams }: ReposPageProps): Promis
   };
 }
 
-export default function ReposPage() {
+export default async function ReposPage({ searchParams }: ReposPageProps) {
+  const resolvedParams = await searchParams;
+  const { repos: initialRepos, total: initialTotal } = await getReposSSR(resolvedParams);
+
   const collectionJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -174,7 +250,7 @@ export default function ReposPage() {
           </div>
         }
       >
-        <ReposClient />
+        <ReposClient initialRepos={initialRepos} initialTotal={initialTotal} />
       </React.Suspense>
     </>
   );

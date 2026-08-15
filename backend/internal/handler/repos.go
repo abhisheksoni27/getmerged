@@ -163,6 +163,8 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			return
 		}
 
+		hasGoodFirstIssue := strings.ToLower(strings.TrimSpace(c.Query("has_good_first_issue"))) == "true"
+
 		filter := repository.RepoFilter{
 			Language:                 lang,
 			Tier:                     tierParam,
@@ -180,6 +182,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			MaxFirstTimerSuccessRate: maxFirstTimer,
 			HasMinFirstTimer:         hasMinFirstTimer,
 			HasMaxFirstTimer:         hasMaxFirstTimer,
+			HasGoodFirstIssue:        hasGoodFirstIssue,
 		}
 
 		repos, total, err := repoStore.List(c.Request.Context(), filter)

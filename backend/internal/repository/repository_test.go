@@ -158,6 +158,35 @@ func TestRepoRepository_ListFiltersSnapshotDate(t *testing.T) {
 	}
 }
 
+func TestRepoRepository_ListFiltersGoodFirstIssue(t *testing.T) {
+	database, _ := setupTestDB(t)
+	defer database.Close()
+
+	repo := repository.NewRepoRepository(database)
+	ctx := context.Background()
+
+	now := time.Now()
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('1', 'with/gfi', 'with', 'gfi', 'Go', 5000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, good_first_issue_count) VALUES ('1', '2026-07-26', 'A', 80.0, 5)`)
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('2', 'without/gfi', 'without', 'gfi', 'Go', 6000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, good_first_issue_count) VALUES ('2', '2026-07-26', 'A', 80.0, 0)`)
+
+	// Filter with HasGoodFirstIssue = true
+	repos, total, err := repo.List(ctx, repository.RepoFilter{
+		HasGoodFirstIssue: true,
+	})
+	if err != nil {
+		t.Fatalf("List failed: %v", err)
+	}
+	if total != 1 || len(repos) != 1 {
+		t.Fatalf("expected 1 repo with GFI, got total %d, len %d", total, len(repos))
+	}
+	if repos[0].FullName != "with/gfi" {
+		t.Fatalf("expected with/gfi, got %s", repos[0].FullName)
+	}
+}
+
 func TestRepoRepository_GetRelatedRepos(t *testing.T) {
 	database, _ := setupTestDB(t)
 	defer database.Close()
