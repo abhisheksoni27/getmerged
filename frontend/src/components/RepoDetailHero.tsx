@@ -10,6 +10,7 @@ interface RepoDetailHeroProps {
   repo: Repo | null;
   rank: string;
   rankLabel: string;
+  score: number;
   isWatching: boolean;
   watchLoading: boolean;
   onWatchToggle: () => void;
@@ -20,6 +21,7 @@ export function RepoDetailHero({
   fullName,
   repo,
   rankLabel,
+  score,
   isWatching,
   watchLoading,
   onWatchToggle,
@@ -27,6 +29,7 @@ export function RepoDetailHero({
 }: RepoDetailHeroProps) {
   const owner = repo?.owner || fullName.split("/")[0];
   const ownerAvatarUrl = `https://github.com/${owner}.png`;
+  const roundedScore = Math.round(score);
 
   return (
     <div className="border border-zinc-200/90 bg-white p-6 sm:p-8 shadow-xs rounded-3xl mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 transition-all">
@@ -42,6 +45,13 @@ export function RepoDetailHero({
             <span className="inline-flex items-center px-3 py-1 font-mono text-xs font-bold rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300">
               {rankLabel}
             </span>
+            {roundedScore > 0 && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 font-mono text-xs font-bold rounded-xl bg-zinc-900 text-white shadow-2xs">
+                <span>C-Rank Score:</span>
+                <span className="text-emerald-400">{roundedScore}</span>
+                <span className="text-zinc-400 font-normal">/100</span>
+              </span>
+            )}
             {repo?.language && (
               <Link
                 href={`/rankings/${getLanguageSlug(repo.language)}`}
