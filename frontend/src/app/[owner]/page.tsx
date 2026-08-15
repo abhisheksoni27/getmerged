@@ -2,17 +2,17 @@ import React from "react";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RepoCard } from "@/components/RepoCard";
-import { LangLogo } from "@/components/LangLogo";
+import { UserFeedbackList } from "@/components/UserFeedbackList";
 import { UserProfile } from "@/types/opendoor";
 import {
   Calendar,
   Bookmark,
   MessageSquare,
   ShieldCheck,
-  Star,
   ExternalLink,
   User as UserIcon,
 } from "lucide-react";
@@ -77,6 +77,25 @@ export default async function UserProfilePage({ params }: ProfilePageProps) {
 
   if (!profile) {
     notFound();
+  }
+
+  // Detect if current viewer is the profile owner
+  let currentUserSlug: string | undefined;
+  const cookieStore = await cookies();
+  const token = cookieStore.get("opendoor_token")?.value;
+  if (token) {
+    try {
+      const meRes = await fetch(`${INTERNAL_API_URL}/api/v1/auth/me`, {
+        headers: { Cookie: `opendoor_token=${token}` },
+        cache: "no-store",
+      });
+      if (meRes.ok) {
+        const meData = await meRes.json();
+        currentUserSlug = meData.user?.slug;
+      }
+    } catch {
+      // Unauthenticated
+    }
   }
 
   const memberSinceFormatted = new Date(profile.member_since).toLocaleDateString("en-US", {
@@ -234,84 +253,11 @@ export default async function UserProfilePage({ params }: ProfilePageProps) {
             </span>
           </div>
 
-          {profile.feedback.length > 0 ? (
-            <div className="space-y-4">
-              {profile.feedback.map((item) => (
-                <div
-                  key={item.id}
-                  className="rounded-2xl border border-zinc-200/90 bg-white p-5 sm:p-6 shadow-2xs font-sans transition-all"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      {item.repo_language && <LangLogo language={item.repo_language} />}
-                      <Link
-                        href={`/${item.repo_full_name}`}
-                        title={`View ${item.repo_full_name} C-Rank scorecard`}
-                        className="text-sm font-space font-bold text-zinc-900 hover:text-orange-600 transition-colors truncate"
-                      >
-                        {item.repo_full_name}
-                      </Link>
-                    </div>
-
-                    <div className="flex items-center gap-2 shrink-0">
-                      {item.verified_contributor && (
-                        <span className="inline-flex items-center gap-1 rounded-xl bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-800">
-                          <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
-                          <span>Verified Contributor</span>
-                        </span>
-                      )}
-                      <span className="text-[11px] font-mono text-zinc-400">
-                        {new Date(item.created_at).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Ratings Breakdown */}
-                  <div className="grid grid-cols-3 gap-2 bg-zinc-50 border border-zinc-200/80 rounded-xl p-3 text-xs mb-3">
-                    <div>
-                      <span className="text-zinc-500 text-[11px] block">Maintainer</span>
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
-                        <strong className="text-zinc-900 font-mono">{item.maintainer_rating}/5</strong>
-                      </div>
-                    </div>
-                    <div>
-                      <span className="text-zinc-500 text-[11px] block">Review Speed</span>
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
-                        <strong className="text-zinc-900 font-mono">{item.review_speed_rating}/5</strong>
-                      </div>
-                    </div>
-                    <div>
-                      <span className="text-zinc-500 text-[11px] block">Beginner Friendly</span>
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
-                        <strong className="text-zinc-900 font-mono">{item.beginner_rating}/5</strong>
-                      </div>
-                    </div>
-                  </div>
-
-                  {item.comment && (
-                    <p className="text-xs sm:text-sm text-zinc-700 leading-relaxed font-sans italic bg-white border border-zinc-100 rounded-xl p-3.5">
-                      &ldquo;{item.comment}&rdquo;
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-3xl border border-dashed border-zinc-300 bg-white/60 p-8 text-center font-sans">
-              <MessageSquare className="h-8 w-8 text-zinc-300 mx-auto mb-2" />
-              <p className="text-sm font-semibold text-zinc-800">No community reviews submitted yet</p>
-              <p className="text-xs text-zinc-500 mt-1 max-w-sm mx-auto">
-                Reviews left on repositories will appear here with ratings and sentiment telemetry.
-              </p>
-            </div>
-          )}
+          <UserFeedbackList
+            initialFeedback={profile.feedback}
+            profileSlug={profile.slug}
+            currentUserSlug={currentUserSlug}
+          />
         </section>
       </main>
 
