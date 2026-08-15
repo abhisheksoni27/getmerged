@@ -92,10 +92,34 @@ export default function ReposPage() {
       },
       {
         "@type": "Question",
+        name: "How does Opendoor help first-time open-source contributors?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "We measure the First-Timer PR Acceptance Rate and scan for active beginner-friendly issues (good first issue, help wanted). This allows new contributors to identify projects where maintainers actively review and mentor external submissions rather than leaving PRs untouched.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Why should I use C-Rank™ instead of just sorting by GitHub stars?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "GitHub stars reflect historical popularity rather than current maintainer availability. Many famous 50k+ star repositories suffer from maintainer burnout with massive unreviewed PR backlogs. C-Rank™ measures live reviewer responsiveness, external merge rates, and review turnaround times.",
+        },
+      },
+      {
+        "@type": "Question",
         name: "How many welcoming repositories do you index across different languages?",
         acceptedAnswer: {
           "@type": "Answer",
           text: "We actively evaluate over 1,400+ repositories across 20+ programming ecosystems. Our S-Tier (Super Welcoming) and A-Tier (Welcoming) catalog includes 350+ JavaScript & TypeScript projects, 280+ Python repos, 190+ Go tools, 120+ Rust systems, alongside high-velocity repositories in Java, C++, PHP, Kotlin, Swift, and more.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Does Opendoor track private code or require repository write access?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "No. All telemetry is calculated strictly from public GitHub GraphQL events and public pull request activity without requesting code access or write permissions.",
         },
       },
       {

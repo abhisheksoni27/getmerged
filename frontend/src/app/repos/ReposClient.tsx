@@ -69,8 +69,20 @@ const FAQS = [
     a: "Yes, completely free. Opendoor is built for the global developer and contributor community to make open-source contribution transparent and frictionless. You can browse, filter, inspect maintainer turnaround velocity, and track repository health without paywalls.",
   },
   {
+    q: "How does Opendoor help first-time open-source contributors?",
+    a: "We measure the First-Timer PR Acceptance Rate and scan for active beginner-friendly issues (good first issue, help wanted). This allows new contributors to identify projects where maintainers actively review and mentor external submissions rather than leaving PRs untouched.",
+  },
+  {
+    q: "Why should I use C-Rank™ instead of just sorting by GitHub stars?",
+    a: "GitHub stars reflect historical popularity rather than current maintainer availability. Many famous 50k+ star repositories suffer from maintainer burnout with massive unreviewed PR backlogs. C-Rank™ measures live reviewer responsiveness, external merge rates, and review turnaround times.",
+  },
+  {
     q: "How many welcoming repositories do you index across different languages?",
     a: "We actively evaluate over 1,400+ repositories across 20+ programming ecosystems. Our S-Tier (Super Welcoming) and A-Tier (Welcoming) catalog includes 350+ JavaScript & TypeScript projects, 280+ Python repos, 190+ Go tools, 120+ Rust systems, alongside high-velocity repositories in Java, C++, PHP, Kotlin, Swift, and more.",
+  },
+  {
+    q: "Does Opendoor track private code or require repository write access?",
+    a: "No. All telemetry is calculated strictly from public GitHub GraphQL events and public pull request activity without requesting code access or write permissions.",
   },
   {
     q: "How are repositories evaluated in this directory?",
