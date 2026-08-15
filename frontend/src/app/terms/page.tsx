@@ -6,18 +6,18 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Terms of Service - Opendoor",
+  title: "Terms of Service - GetMerged",
   description:
-    "Opendoor platform terms of service: acceptable use, C-Rank™ telemetry, user feedback rules, intellectual property, liability limits, and open source license.",
+    "GetMerged platform terms of service: acceptable use, C-Rank™ telemetry, user feedback rules, intellectual property, liability limits, and open source license.",
   alternates: {
-    canonical: "https://opendoor.abhishekco.de/terms",
+    canonical: "https://getmerged.abhishekco.de/terms",
   },
   openGraph: {
-    title: "Terms of Service - Opendoor",
+    title: "Terms of Service - GetMerged",
     description:
-      "Opendoor platform terms of service: acceptable use, C-Rank™ telemetry, user feedback rules, intellectual property, liability limits, and open source license.",
-    url: "https://opendoor.abhishekco.de/terms",
-    siteName: "Opendoor",
+      "GetMerged platform terms of service: acceptable use, C-Rank™ telemetry, user feedback rules, intellectual property, liability limits, and open source license.",
+    url: "https://getmerged.abhishekco.de/terms",
+    siteName: "GetMerged",
   },
 };
 
@@ -29,7 +29,7 @@ export default function TermsPage() {
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full font-sans text-zinc-800">
         <Link
           href="/"
-          title="Return to Opendoor Explorer Home"
+          title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
@@ -51,12 +51,12 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold font-space text-zinc-900 mb-3">1. Acceptance of Terms</h2>
             <p>
-              By accessing or using Opendoor (&quot;the Platform&quot;), you agree to be bound by these Terms of
+              By accessing or using GetMerged (&quot;the Platform&quot;), you agree to be bound by these Terms of
               Service (&quot;Terms&quot;) and acknowledge our{" "}
-              <Link href="/privacy" title="View Opendoor Privacy Policy" className="text-zinc-900 underline font-semibold">
+              <Link href="/privacy" title="View GetMerged Privacy Policy" className="text-zinc-900 underline font-semibold">
                 Privacy Policy
               </Link>
-              . If you do not agree to these Terms, you may not access or use the Platform. Opendoor is an
+              . If you do not agree to these Terms, you may not access or use the Platform. GetMerged is an
               open-source analytics platform that indexes public GitHub repositories to calculate objective C-Rank™
               metrics.
             </p>
@@ -135,7 +135,7 @@ export default function TermsPage() {
               <li>You will provide honest, constructive feedback based on your actual pull request experience.</li>
               <li>Spam, harassment, hate speech, or defamatory reviews will be removed immediately.</li>
               <li>GitHub contributor verification is performed automatically by inspecting public commit history.</li>
-              <li>By submitting feedback, you grant Opendoor a non-exclusive, royalty-free, worldwide license to display, host, and use it to operate and improve the Platform. You retain ownership of your content.</li>
+              <li>By submitting feedback, you grant GetMerged a non-exclusive, royalty-free, worldwide license to display, host, and use it to operate and improve the Platform. You retain ownership of your content.</li>
             </ul>
           </section>
 
@@ -153,7 +153,7 @@ export default function TermsPage() {
             <h2 className="text-lg font-bold font-space text-zinc-900 mb-3">8. Intellectual Property</h2>
             <p>
               <strong>Our content:</strong> The Platform, including its design, the C-Rank™ name and methodology,
-              trademarks, logos, and original content, is owned by or licensed to Opendoor. The open source code is
+              trademarks, logos, and original content, is owned by or licensed to GetMerged. The open source code is
               licensed separately (see Section 12).
             </p>
             <p className="mt-3">
@@ -189,7 +189,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold font-space text-zinc-900 mb-3">11. Limitation of Liability</h2>
             <p>
-              To the maximum extent permitted by law, Opendoor, its maintainers, and contributors shall not be liable
+              To the maximum extent permitted by law, GetMerged, its maintainers, and contributors shall not be liable
               for any indirect, incidental, special, consequential, or punitive damages, or for any loss of data,
               profits, or goodwill, arising out of or in connection with your use of the Platform. This includes any
               pull request rejections, maintainer review delays, or external repository decisions, over which we have no
@@ -206,7 +206,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold font-space text-zinc-900 mb-3">12. Open Source License</h2>
             <p>
-              The Opendoor backend and frontend code bases are open source and licensed under the MIT License.
+              The GetMerged backend and frontend code bases are open source and licensed under the MIT License.
               Contributions are welcome on{" "}
               <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" title="Contribute to opendoor on GitHub" className="text-zinc-900 underline font-semibold">
                 GitHub
@@ -228,7 +228,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold font-space text-zinc-900 mb-3">14. Indemnification</h2>
             <p>
-              To the maximum extent permitted by law, you agree to indemnify and hold harmless Opendoor, its
+              To the maximum extent permitted by law, you agree to indemnify and hold harmless GetMerged, its
               maintainers, contributors, and agents from and against any claims, damages, liabilities, and expenses
               (including reasonable legal fees) arising out of your use of the Platform, your violation of these Terms,
               or your violation of any rights of a third party.
@@ -260,7 +260,7 @@ export default function TermsPage() {
             <p>
               If any provision of these Terms is found to be unenforceable, that provision will be limited or removed
               to the minimum extent necessary, and the remaining provisions will remain in full force and effect.
-              These Terms, together with the Privacy Policy, constitute the entire agreement between you and Opendoor
+              These Terms, together with the Privacy Policy, constitute the entire agreement between you and GetMerged
               regarding your use of the Platform and supersede any prior agreements.
             </p>
           </section>
@@ -273,7 +273,7 @@ export default function TermsPage() {
                 GitHub Repository
               </a>{" "}
               or review our{" "}
-              <Link href="/privacy" title="View Opendoor Privacy Policy" className="text-zinc-900 underline font-semibold">
+              <Link href="/privacy" title="View GetMerged Privacy Policy" className="text-zinc-900 underline font-semibold">
                 Privacy Policy
               </Link>{" "}
               for details on how we handle your data.

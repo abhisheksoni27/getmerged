@@ -69,7 +69,7 @@ export function RepoBadgeGenerator({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={badgePreviewUrl}
-            alt={`Opendoor C-Rank badge for ${fullName}`}
+            alt={`GetMerged C-Rank badge for ${fullName}`}
             width={280}
             height={28}
             className="h-7 w-auto"
@@ -77,7 +77,7 @@ export function RepoBadgeGenerator({
         </div>
         <button
           onClick={() => {
-            navigator.clipboard.writeText(`[![Opendoor C-Rank](${badgeMarkdownUrl})](https://opendoor.abhishekco.de/${fullName})`);
+            navigator.clipboard.writeText(`[![GetMerged C-Rank](${badgeMarkdownUrl})](https://getmerged.abhishekco.de/${fullName})`);
             posthog.capture("badge_copied", { repo_full_name: fullName });
             setBadgeCopied(true);
             setTimeout(() => setBadgeCopied(false), 2000);

@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import { ClientRepoDetail } from "@/components/ClientRepoDetail";
 import { getLanguageSlug } from "@/lib/languageSlug";
 
-const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://opendoor.abhishekco.de";
+const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
 
 interface PageProps {
   params: Promise<{ owner: string; name: string }>;
@@ -42,25 +42,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const repo = await getRepoData(fullName);
 
   const title = repo
-    ? `${fullName} C-Rank™ (${repo.c_rank_tier || "A"} Tier) - Opendoor`
-    : `${fullName} - Opendoor Open Source Explorer`;
+    ? `${fullName} C-Rank™ (${repo.c_rank_tier || "A"} Tier) - GetMerged`
+    : `${fullName} - GetMerged Open Source Explorer`;
 
   const description = repo?.description
-    ? `${repo.description} Scored ${repo.c_rank_score?.toFixed(1) || 75.0}/100 on Opendoor C-Rank™. View maintainer response times, PR merge rates, and first-timer success metrics.`
+    ? `${repo.description} Scored ${repo.c_rank_score?.toFixed(1) || 75.0}/100 on GetMerged C-Rank™. View maintainer response times, PR merge rates, and first-timer success metrics.`
     : `Find out if ${fullName} welcomes external pull requests. View response times and maintainer review speed metrics.`;
 
   return {
     title,
     description,
     alternates: {
-      canonical: `https://opendoor.abhishekco.de/${owner}/${name}`,
+      canonical: `https://getmerged.abhishekco.de/${owner}/${name}`,
     },
     openGraph: {
       title,
       description,
       type: "website",
-      url: `https://opendoor.abhishekco.de/${owner}/${name}`,
-      siteName: "Opendoor",
+      url: `https://getmerged.abhishekco.de/${owner}/${name}`,
+      siteName: "GetMerged",
     },
     twitter: {
       card: "summary_large_image",
@@ -159,19 +159,19 @@ export default async function RepoDetailPage({ params }: PageProps) {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://opendoor.abhishekco.de",
+        item: "https://getmerged.abhishekco.de",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: `${repo?.language || "Multi-Language"} Good First Issues`,
-        item: `https://opendoor.abhishekco.de/good-first-issue/${langSlug}`,
+        item: `https://getmerged.abhishekco.de/good-first-issue/${langSlug}`,
       },
       {
         "@type": "ListItem",
         position: 3,
         name: fullName,
-        item: `https://opendoor.abhishekco.de/${fullName}`,
+        item: `https://getmerged.abhishekco.de/${fullName}`,
       },
     ],
   };

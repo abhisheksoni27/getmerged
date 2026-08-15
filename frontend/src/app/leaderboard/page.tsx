@@ -8,16 +8,16 @@ import Link from "next/link";
 import { Trophy, ArrowLeft, Star, GitPullRequest, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Open Source Welcoming Leaderboard (C-Rank™) - Opendoor",
+  title: "Open Source Welcoming Leaderboard (C-Rank™) - GetMerged",
   description: "Comprehensive leaderboard of top open-source GitHub repositories ranked by contributor-friendliness, PR merge speed, and maintainer responsiveness.",
   alternates: {
-    canonical: "https://opendoor.abhishekco.de/leaderboard",
+    canonical: "https://getmerged.abhishekco.de/leaderboard",
   },
   openGraph: {
-    title: "Open Source Welcoming Leaderboard - Opendoor",
+    title: "Open Source Welcoming Leaderboard - GetMerged",
     description: "Ranked list of all open-source repositories based on C-Rank™ metrics.",
-    url: "https://opendoor.abhishekco.de/leaderboard",
-    siteName: "Opendoor",
+    url: "https://getmerged.abhishekco.de/leaderboard",
+    siteName: "GetMerged",
   },
 };
 
@@ -55,7 +55,7 @@ export default async function LeaderboardPage() {
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-800 font-sans">
         <Link
           href="/"
-          title="Return to Opendoor Explorer Home"
+          title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer

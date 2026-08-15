@@ -9,16 +9,16 @@ import { ArrowLeft, ShieldCheck, Trophy } from "lucide-react";
 import { RepoCard } from "@/components/RepoCard";
 
 export const metadata: Metadata = {
-  title: "Open Source Hall of Fame (S-Tier Repositories) - Opendoor",
+  title: "Open Source Hall of Fame (S-Tier Repositories) - GetMerged",
   description: "The Hall of Fame showcases S-Tier public GitHub repositories with elite PR merge rates and rapid maintainer responses.",
   alternates: {
-    canonical: "https://opendoor.abhishekco.de/hall-of-fame",
+    canonical: "https://getmerged.abhishekco.de/hall-of-fame",
   },
   openGraph: {
-    title: "Open Source Hall of Fame - Opendoor",
+    title: "Open Source Hall of Fame - GetMerged",
     description: "Featured showcase of top S-Tier open-source repositories welcoming contributors.",
-    url: "https://opendoor.abhishekco.de/hall-of-fame",
-    siteName: "Opendoor",
+    url: "https://getmerged.abhishekco.de/hall-of-fame",
+    siteName: "GetMerged",
   },
 };
 
@@ -46,7 +46,7 @@ export default async function HallOfFamePage() {
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-800">
         <Link
           href="/"
-          title="Return to Opendoor Explorer Home"
+          title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer

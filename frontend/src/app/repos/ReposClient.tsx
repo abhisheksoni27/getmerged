@@ -66,10 +66,10 @@ const FIRST_TIMER_BUCKETS = [
 const FAQS = [
   {
     q: "Are these open-source metrics and rankings 100% free to access?",
-    a: "Yes, completely free. Opendoor is built for the global developer and contributor community to make open-source contribution transparent and frictionless. You can browse, filter, inspect maintainer turnaround velocity, and track repository health without paywalls.",
+    a: "Yes, completely free. GetMerged is built for the global developer and contributor community to make open-source contribution transparent and frictionless. You can browse, filter, inspect maintainer turnaround velocity, and track repository health without paywalls.",
   },
   {
-    q: "How does Opendoor help first-time open-source contributors?",
+    q: "How does GetMerged help first-time open-source contributors?",
     a: "We measure the First-Timer PR Acceptance Rate and scan for active beginner-friendly issues (good first issue, help wanted). This allows new contributors to identify projects where maintainers actively review and mentor external submissions rather than leaving PRs untouched.",
   },
   {
@@ -81,7 +81,7 @@ const FAQS = [
     a: "We actively evaluate over 1,400+ repositories across 20+ programming ecosystems. Our S-Tier (Super Welcoming) and A-Tier (Welcoming) catalog includes 350+ JavaScript & TypeScript projects, 280+ Python repos, 190+ Go tools, 120+ Rust systems, alongside high-velocity repositories in Java, C++, PHP, Kotlin, Swift, and more.",
   },
   {
-    q: "Does Opendoor track private code or require repository write access?",
+    q: "Does GetMerged track private code or require repository write access?",
     a: "No. All telemetry is calculated strictly from public GitHub GraphQL events and public pull request activity without requesting code access or write permissions.",
   },
   {
@@ -311,7 +311,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
       <main className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1">
         {/* Breadcrumb Navigation */}
         <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-zinc-500">
-          <Link href="/" title="Back to Opendoor Home" className="hover:text-zinc-900 transition-colors">
+          <Link href="/" title="Back to GetMerged Home" className="hover:text-zinc-900 transition-colors">
             Home
           </Link>
           <span>/</span>

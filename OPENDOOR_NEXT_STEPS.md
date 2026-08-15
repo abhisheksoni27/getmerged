@@ -1,4 +1,4 @@
-# Opendoor — Next Steps (single source of truth)
+# GetMerged (formerly Opendoor) — Next Steps (single source of truth)
 
 > **One file.** Everything else is archived under `archive/` (old `ROADMAP.md`,
 > `GROWTH_STRATEGY.md`, `PRODUCT.md`, `DESIGN.md`, `tasks/`). Useful content has
@@ -22,16 +22,38 @@
 | **Monetization** | ❌ none live (no `/pricing`, no payment webhook) |
 | **Blog** | ❌ none (no `/blog`, no MDX support) |
 
-**Verdict:** features are done. The next 10 weeks are monetization + content + B2B.
+**Verdict:** features are done. The next 10 weeks: validate value → monetize → content → measure → B2B interviews (§10).
 
 ---
 
 ## 1. Positioning & north star
 
-- **"Glassdoor for open-source repositories."** Tagline: *Don't guess which door is open. Opendoor shows you.*
+- **"Glassdoor for open-source repositories."** Tagline: *Don't guess which door is open. GetMerged shows you.*
 - **The moat is objectivity.** C-Rank™ is reproducible math from public GitHub data. Aggregators (GFI sites, GitHub's own `/contribute`, Copilot Chat) can list issues — they cannot claim an auditable S–D score. **Never gate the data; gate personalisation and time-saving.**
 - **Glassdoor crossover = job boards / hiring.** Contributors are talent; merged-PR history is verifiable proof. Recruiters already pay for this signal elsewhere (FoundDev, Gitsight, OpenQ). Our C-Rank + contributor data is the same asset.
 - **Platform risk:** GitHub keeps absorbing the surface (Explore, `/contribute`, Copilot). Win on transparent scoring + community + content, not aggregation.
+
+### ✅ 1.1 Brand — **resolved: renamed to GetMerged**
+
+**Why we renamed:** "Opendoor" is a litigated real-estate trademark — Opendoor
+Labs Inc. holds USPTO reg. #5326559 for OPENDOOR and has actively sued over it
+(Open Mortgage, 2019); a separate Open Door Real Estate also opposed the mark.
+Opendoor.com is a major iBuyer with a large Partner API/ecosystem. Consequences
+we avoided:
+- **SEO noise** — "opendoor" queries surface houses, not repos.
+- **Trademark risk** — real if we expand into hiring/recruiting (§3.6) where the
+  real-estate mark's "services" classes could overlap.
+- **Social confusion** — a trademark holder that litigates is the worst kind of
+  neighbor.
+
+**Decision (2026-08-15): full rename, no domain purchase.**
+- **Brand:** **GetMerged** (one word). Tagline: *Don't guess which door is open. GetMerged shows you.*
+- **Host:** `getmerged.abhishekco.de` (subdomain of the existing personal domain —
+  **no new domain bought**, no money spent). Later domain upgrades stay optional.
+- **Score:** **C-Rank™** unchanged (™ preserved).
+- **Migration:** old `opendoor.abhishekco.de` → redirect to the new subdomain once
+  the rename ships in code (weeks 1–3, §10). Repo/working name stays `opendoor`
+  internally; public-facing copy uses GetMerged.
 
 ---
 
@@ -69,7 +91,8 @@ Pro $5/mo  → Contributor DNA, weekly personalized digest, PR Likelihood score,
 
 - **Upgrade trigger:** blurred personalised-digest preview + locked PR-likelihood on repo pages.
 - **Login triggers:** "See trending" and page-2 pagination (high intent, low friction).
-- **Contributor DNA** — the data layer behind digest + PR-Likelihood + First-Merge Track. Runs on the *user's own* GitHub token (zero opendoor API budget). Full mechanics in §3.3.
+- **⚠️ SEO depth:** the page-2 login wall must not cap crawl depth. Keep repo pages + rankings SSR'd for crawlers (auth enforced client-side for pagination), and let the sitemap (§7) cover every repo/rankings URL so Google never depends on logged-in pagination. Never `noindex` gated pages that have SEO value.
+- **Contributor DNA** — the data layer behind digest + PR-Likelihood + First-Merge Track. Runs on the *user's own* GitHub token (zero GetMerged API budget). Full mechanics in §3.3.
 - **Weekly digest** (Monday, Resend email + in-app): 5 repos + 5 issues matched to profile with PR-likelihood. *The habit trigger.*
 - **PR Likelihood score** (formula, no LLM per-request): `merge_rate×.40 + skill_match×.30 + first_timer_success×.20 + recency×.10`; LLM only writes the "Why / Watch out" text, cached per repo+skill.
 - **First-Merge Track** (`is_newbie`): 5 curated repos (S/A, first-timer >60%, response <48h, bus factor ≥2) + exact issue + AI PR checklist → on merge detect: confetti + shareable card → acquisition flywheel.
@@ -78,11 +101,18 @@ Pro $5/mo  → Contributor DNA, weekly personalized digest, PR Likelihood score,
 
 **Goal:** a cached profile of the user that powers the weekly digest (§3.2), PR-Likelihood, and First-Merge Track. Think of it as the contributor's "skill card" — languages, level, contribution style, goals.
 
-**Data source = the user's own GitHub token → zero burden on opendoor.**
+**Data source = the user's own GitHub token → zero burden on GetMerged.**
 - On OAuth login GitHub gives us the user's access token. Scope stays minimal (`user:email`, public data only — we never request `repo`, never touch private repos).
-- **Currently the token is discarded after login.** We add an encrypted `github_access_token` column on `users` (encrypt with existing `ENCRYPTION_KEY`) and store it at login.
-- Every DNA data pull uses **their** token → rides their own 5,000 req/hr GitHub rate limit and quota. Opendoor spends 0 API budget and 0 money on profiling.
-- Token health: classic-app OAuth tokens don't expire on their own; on a `401`, prompt the user to re-login.
+- **Currently the token is discarded after login.** We persist the token so DNA can pull the user's own data later. (See security below — this is the single biggest change to the auth layer and needs its own review.)
+- Every DNA data pull uses **their** token → rides their own 5,000 req/hr GitHub rate limit and quota. GetMerged spends 0 API budget and 0 money on profiling.
+
+**🔒 Security & privacy review (required before build — feedback round 1):**
+
+1. **Token storage.** Encrypt at rest (AES-GCM with the existing `ENCRYPTION_KEY`, per-row IV, `key_id` for rotation) — never plaintext. Move the key to a secret manager / separate env surface, not app code. Audit-log every decrypt/use. *GitHub best practice:* prefer **short-lived tokens** — switch the OAuth flow to **expiring access tokens (8h) + refresh tokens (6mo)** via the `offline_access` scope (GitHub now enables this by default for new apps), and store the **refresh token** encrypted; the short-lived access token lives in memory/Valkey. Use **PKCE** on the auth flow.
+2. **Revocation — first-class UX, not an error toast.** On `401`, route to a "Reconnect GitHub" flow that re-runs OAuth (keeps entitlements, just re-links the token). Handle GitHub-side revoke (user removes the app in GitHub settings) at next profile refresh/login. Provide an explicit "Disconnect GitHub / stop profiling" button that deletes the stored token + profile.
+3. **Consent.** Profiling is now processing personal data, not just displaying a public profile. Add explicit consent at profile-build time, update the privacy policy, allow **opt-out** (stop building/refreshing) and **data deletion** (delete `contributor_profiles` + token; GDPR/CCPA right to erasure — give a `DELETE /api/v1/me/data` endpoint + UI). Get legal sign-off before launch.
+4. **Abuse / rate-limit handling.** Profile builds are background jobs: queue them, cap concurrency (e.g. 5 workers), and respect GitHub **secondary** rate limits (backoff + retry on `403`/`429`). A stampede of builds must never hammer GitHub from our server or wedge the crawl pipeline.
+5. **Compliance trigger.** Even with public data, storing OAuth tokens + building user profiles may hit GDPR/CCPA obligations. This is a deliberate product decision — document it, don't surprise users.
 
 **Build flow (first pass on login, then weekly cron for active/Pro users):**
 
@@ -108,11 +138,18 @@ Pro $5/mo  → Contributor DNA, weekly personalized digest, PR Likelihood score,
 
 3. **Persist** as a `contributor_profiles` row (JSON). Build once, refresh weekly.
 
-4. **Consumers:** weekly digest (5 repos + 5 issues matched to the card) · PR-Likelihood (skill-match input) · First-Merge Track (curation) · later the recruiter/B2B signal (§3.5).
+4. **Consumers:** weekly digest (5 repos + 5 issues matched to the card) · PR-Likelihood (skill-match input) · First-Merge Track (curation) · later the recruiter/B2B signal (§3.6).
 
-**Privacy & consent:** only public data; the card is also the `/u/[username]` public profile; users can delete it; we never post on their behalf.
+**Privacy & consent:** only public data; the card is also the `/u/[username]` public profile; users can delete it (endpoint in §3.3 security); we never post on their behalf.
 
-### 3.4 The $5 math
+### 3.4 Pricing & subscription lifecycle
+
+- **Price is a hypothesis, not a fact.** $5/mo is low for a tool that predicts PR success and may become a hiring signal. Test **$8–12/mo**, plus an **annual (~2×) plan**. Use PostHog to measure activation first (see §11) — the conversion table below is meaningless without a real funnel number.
+- **Subscription lifecycle** must be first-class: free trial or freemium, cancel, pause, **dunning** (failed payment emails), refunds, and churn. dodopayments/Paddle handle the payment state machine; we handle the entitlements + UX.
+- **Email consent:** the weekly digest is *marketing email* — require explicit consent (checkbox, not pre-ticked), include one-click unsubscribe + a plain-text footer, and don't auto-subscribe OAuth users to it. `user:email` gives the address; consent gives the right to use it.
+- **Conversion reality check:** with ~current user base, 3% of 1k = 30 Pro = $150 MRR. Before banking on the table, instrument the funnel: visitors → OAuth signups → activated free → upgraded (§11).
+
+### 3.5 The $5 math (directional only — validate via §11 funnel)
 
 | Users | Conv | MRR |
 |---|---|---|
@@ -121,7 +158,7 @@ Pro $5/mo  → Contributor DNA, weekly personalized digest, PR Likelihood score,
 | 50k | 5% | $12.5k |
 | 200k | 5% | $50k |
 
-### 3.5 B2B layers (after trust, ~month 3+)
+### 3.6 B2B layers (after trust + Pro retention proof, ~month 3+)
 
 1. **Recruiter access (Portfolio Pass B2B)** — FoundDev model: devs opt-in, recruiters search shipped-code profiles + MatchScore. Highest ARPU. We already hold the data; add opt-in + recruiter UI.
 2. **Developer-data API licensing** — OpenQ model: sell repo/contributor intelligence to DevRel/GTM teams. Same dataset, new surface.
@@ -129,9 +166,16 @@ Pro $5/mo  → Contributor DNA, weekly personalized digest, PR Likelihood score,
 
 ---
 
-## 4. Blog & content engine — fully automated (claude-blog)
+## 4. Blog & content engine — semi-automated, human-gated (claude-blog)
 
 Use **AgriciDaniel/claude-blog** (claude-blog.md skill suite: 30 commands, 4-agent pipeline, 5-gate delivery contract, 0–100 scoring, dual Google + AI-citation/GEO optimization).
+
+> **Editorial gate (trust non-negotiable):** our moat is objectivity, so a
+> *fully automated* blog is a brand risk. claude-blog's delivery contract catches
+> style and structure — not factual nuance or brand voice. Every automated weekly
+> report gets a **15-minute human sanity check** before publish: verify the data
+> JSON matches the post's claims, tone matches brand, no invented stats. This is a
+> hard gate in the pipeline, not a suggestion.
 
 ### 4.1 Pipeline (weekly cron + on-demand)
 
@@ -143,9 +187,11 @@ cron → scripts/blog-pipeline.sh
   2. claude-blog /blog write "<State of Welcoming OSS — Weekly>"
      (agents research, draft from data JSON, inject charts)
   3. claude-blog /blog analyze → gate ≥ 90, zero P0
-  4. write MDX + frontmatter → frontend/src/app/blog/posts/
-  5. update blog index + sitemap
-  6. commit (hooks auto-deploy) or open PR
+  4. **HUMAN EDITORIAL GATE** — 15-min sanity check vs data JSON + brand voice
+     (pipeline stops here and pings; no autopublish)
+  5. write MDX + frontmatter → frontend/src/app/blog/posts/
+  6. update blog index + sitemap
+  7. commit (hooks auto-deploy) or open PR
 ```
 
 ### 4.2 Content mix (users can come for anything)
@@ -154,7 +200,7 @@ cron → scripts/blog-pipeline.sh
 - **Evergreen clusters** (from `/blog strategy`): open source onboarding, good-first-issue how-tos, per-language "best repos for first PRs", OSS sustainability, contributor-portfolio building.
 - **SEO/GEO:** every post JSON-LD `Article`, cross-linked to repo/rankings pages (internal-link rule engine, §7), optimized for AI-citation platforms.
 - **Newsletter** (weekly digest doubles as distribution; GFI roundup option for non-Pro readers → free-list growth).
-- **2 posts/week ceiling** — quality over volume; claude-blog's delivery contract enforces it.
+- **Cadence (clarified):** exactly **1 weekly data report** (auto-drafted → human-gated → published) **+ ≤1 evergreen post/week** (from the cluster queue, written on-demand via `/blog write`, not silently batch-generated). Ceiling ~2 posts/week; never autopublish evergreen content without review.
 
 ### 4.3 Frontend work
 
@@ -176,7 +222,7 @@ cron → scripts/blog-pipeline.sh
 | # | Loop | Why it wins | Build |
 |---|------|-------------|-------|
 | 1 | **Badge & embed flywheel** | Every C-Rank/contributor badge embedded in a README = permanent backlink + discovery. Repo badge + contributor-grade badge already ship — make embedding frictionless | one-click embed copy on repo + profile pages; per-language repo badges; maintainer "welcomes newcomers" badge (badge doubles as social proof maintainers WANT to share); banner preview |
-| 2 | **Wrapped-style proof cards** (upgrade of "Merge Streak trophies") | "I got my PR merged — found via Opendoor" is an emotional, shareable moment; streaks/achievements drive return visits | achievement system (real merged-PR stats → badges: Speedster, Closer, First-Merge); annual/quarterly **Contribution Wrapped** card; one-click share to X/LinkedIn with copy |
+| 2 | **Wrapped-style proof cards** (upgrade of "Merge Streak trophies") | "I got my PR merged — found via GetMerged" is an emotional, shareable moment; streaks/achievements drive return visits | achievement system (real merged-PR stats → badges: Speedster, Closer, First-Merge); annual/quarterly **Contribution Wrapped** card; one-click share to X/LinkedIn with copy |
 | 3 | **First-merge celebration** | Newbie success is the strongest acquisition event; every first merge = free marketing | confetti + auto-share card + tweet template (already in First-Merge Track §3) |
 | 4 | **Weekly data report as social object** | Our automated "State of Welcoming OSS" report is unique data — shareable + linkable; feeds Reddit/HN/tech media | auto-post report to X/LinkedIn; "send to HN/Reddit" packaging (claude-blog `/blog repurpose`) |
 | 5 | **DoorPal browser extension** | Overlays C-Rank on github.com; every install = persistent distribution point | GitHub-inject extension; MVP = repo-page C-Rank chip + GFI quality |
@@ -186,12 +232,54 @@ cron → scripts/blog-pipeline.sh
 
 ### 5.2 Launch & distribution surfaces (one-off + recurring)
 
-- **Launch ops:** Show HN ("Show HN: Opendoor — C-Rank, a score for whether your PR will get merged"), Reddit (r/programming, r/webdev, language subs), Dev.to/Hashnode syndication, Product Hunt — coordinated within a 48h window for GitHub Trending velocity.
+- **Launch ops:** Show HN ("Show HN: GetMerged — C-Rank, a score for whether your PR will get merged"), Reddit (r/programming, r/webdev, language subs), Dev.to/Hashnode syndication, Product Hunt — coordinated within a 48h window for GitHub Trending velocity.
 - **Micro-KOL outreach:** find maintainers of 1k–10k-star repos in our niche, DM them their repo's welcome score + badge → high-converting share.
-- **GEO/measurement:** track where ChatGPT / Perplexity / Copilot surface opendoor (astrophile-style `geo` checks); feed wins into the blog pipeline.
+- **GEO/measurement:** track where ChatGPT / Perplexity / Copilot surface getmerged (astrophile-style `geo` checks); feed wins into the blog pipeline.
 - **Newsletter** (weekly digest, §3/§4) is the retention + distribution backbone.
 
-### 5.3 Discarded (from old NEXT_STEPS)
+### 5.3 One-click maintainer install — the badge prompt hack (growth hack)
+
+**Mechanic:** the single highest-friction step in the badge flywheel is "maintainer
+finds the badge, learns the markdown, edits README by hand." We remove that
+friction: **one button copies a pre-written prompt; the maintainer pastes it into
+Claude / Gemini / Codex / Copilot; the AI edits their README and adds our badge.**
+Precedent is strong — readme-craft, general-readme-skill, and the README-generator
+ecosystem all prove "one prompt → README + badges" is how maintainers operate in
+2026. We ride that habit.
+
+**The prompt (served on a `/maintainers` page + repo-page CTA, one-click copy):**
+
+```
+You are editing this repository's README to add a "C-Rank" welcome badge
+from GetMerged (getmerged.abhishekco.de), a service that scores how welcoming
+an open-source repo is to new contributors.
+
+Tasks:
+1. Find the README (README.md / README.rst) and locate the H1 title line.
+2. Insert this badge block directly under the H1, aligned with any existing
+   badges, and nothing else. Keep the existing badge URLs as-is.
+3. Use the exact markdown (replace OWNER/REPO with this repo's name):
+   [![C-Rank™](https://getmerged.abhishekco.de/OWNER/REPO/raw/badge.svg)](https://getmerged.abhishekco.de/OWNER/REPO)
+4. If a C-Rank badge already exists, do nothing and say so.
+5. Do NOT rewrite, reformat, or reorder anything else in the README.
+6. Show the diff and let the user confirm before writing the file.
+```
+
+**Why it works:** the prompt is *conservative* (add a badge, touch nothing else)
+so maintainers trust it; it needs no signup; and every executed prompt = a
+permanent backlink + badge on someone else's homepage. It also self-serves the
+**micro-KOL outreach** — the DM is "here's your score + this 10-second prompt."
+
+**Variants (cheap, later):**
+- Publish the same logic as a **SKILL.md** so Claude Code / Codex users can
+  `/add-crank-badge` instead of pasting text (or `npx @getmerged/badge` CLI).
+- A "badge for your README" wizard on `/maintainers` that pre-fills OWNER/REPO
+  and emits the exact prompt with their repo baked in.
+
+**Metric:** prompts copied → badges added to live READMEs → unique referring
+domains from badge embeds (quarterly count).
+
+### 5.4 Discarded (from old NEXT_STEPS)
 
 | Item | Why dropped |
 |------|-------------|
@@ -242,7 +330,7 @@ cron → scripts/blog-pipeline.sh
 
 ### C. Cheap-to-compute, C-Rank inputs (add after A)
 
-**6. Time-to-First-Triage** — hours from issue open → first maintainer label/comment. Fast triage = active repo. New `issues` GraphQL query (~2 pts/repo). Feeds C-Rank.
+**6. Time-to-First-Triage** — hours from *issue* open → first maintainer action (label/comment/assignment). Fast triage = active repo. **Differs from the existing C-Rank `time_to_first_response`:** that signal measures the first *comment on a pull request*; triage measures the *issue queue*, which is what contributors hit before they even write a PR. New `issues` GraphQL query (~2 pts/repo). Feeds C-Rank + GFI Quality.
 **7. Issue→PR Conversion** — do labelled issues (`good first issue`/`help wanted`) actually close via a merged PR? Proves the label is real. Cross-ref closed issues to linked PRs. ✅ + one query. Feeds C-Rank + GFI Quality.
 **8. Weekly Activity Trend** — 4-week rolling delta of merge rate + response time; ↑↓ arrows on cards. A B trending to A beats a stagnant A. Computed from existing daily snapshots. ✅ Feeds C-Rank + display.
 **9. Review Coverage** — % of external PRs with ≥1 non-author comment. Blind merges and silent closes are both red flags. ✅ from stored comments. Feeds C-Rank.
@@ -289,19 +377,62 @@ cron → scripts/blog-pipeline.sh
 - **No pgvector** at current scale (<50k repos); in-process cosine fine.
 - **TDD for backend** (Red → Green → Refactor). Frontend must pass `npm run lint`.
 - No fabricated testimonials/social proof. No fake/mock data — real API data or clean empty/loading states.
-- Brand: **Opendoor** (one word), **C-Rank™** (™ preserved), tagline fixed.
+- Brand: **GetMerged** (one word, formerly *Opendoor*), **C-Rank™** (™ preserved), tagline fixed. Host: `getmerged.abhishekco.de` (subdomain; no domain purchase). Renamed due to trademark collision — see §1.1.
+- **Consent & deletion (GDPR/CCPA):** token storage + DNA profiling (§3.3) and the marketing email digest (§3.4) both require explicit consent, opt-out, and a data-deletion path (`DELETE /api/v1/me/data`). Legal sign-off before launch.
 - Pay stack: dodopayments → Paddle MoR (India-first, global-capable). **Not** RevenueCat, not raw Stripe.
 
 ---
 
 ## 10. Execution order (next 10 weeks)
 
+**Sequencing principle (from review):** validate *value + payments* before
+scoring moats, prove *Pro retention + content trust* before scaling, and
+treat *B2B as interviews only* — no recruiter UI until a buyer answers yes.
+Deferred items are intentional; do not pull them in early.
+
 | Weeks | Focus | Ship |
 |-------|-------|------|
-| 1–2 | Monetization core | dodopayments webhook → Pro entitlements + middleware; `/pricing`; Contributor DNA |
-| 3–4 | Pro value | weekly digest; PR Likelihood score; First-Merge Track + celebration card; upgrade triggers |
-| 5 | Blog foundation | MDX support; `/blog` + `/blog/[slug]`; `/internal/blog-report`; blog-pipeline.sh v1 |
-| 6–7 | Content engine live | weekly data-report posts; evergreen cluster A (open source onboarding + GFI how-tos); newsletter |
-| 8 | Scoring moats | GFI-quality score; onboarding docs score; PR-rejection classifier; bus factor |
-| 9 | B2B v1 | recruiter opt-in + Portfolio Pass; `/compare`; `/contribute` wizard |
-| 10 | Scale + measure | tiered crawl; GH Archive backfill; GitHub App migration kickoff; annual report experiment |
+| 1–3 | Validate + core payments | **10–20 customer-discovery interviews** (contributors + maintainers: how do you pick a repo to PR into? would you pay for PR-likelihood?) · dodopayments webhook → Pro entitlements + middleware · `/pricing` · token storage (encrypted, expiring+refresh, PKCE) + consent/opt-out/delete (§3.3) · **brand rename to GetMerged ships in code** (`getmerged.abhishekco.de`, old subdomain → redirect, §1.1) |
+| 4–6 | Pro value + content foundation | Contributor DNA · weekly digest · PR Likelihood score · First-Merge Track + celebration card · upgrade triggers · MDX + `/blog` + `/internal/blog-report` + blog-pipeline v1 with human editorial gate · one-click maintainer badge prompt page (§5.3) |
+| 7–8 | Moats + measurement | Scoring moats (GFI-quality, onboarding docs, PR-rejection classifier, bus factor) · tiered crawl · **measurement (§11): activation, funnel, retention, churn signals instrumented in PostHog** · 1 human-gated weekly data report live |
+| 9–10 | Scale + B2B interviews | B2B **interviews only** (recruiters/hiring managers; no UI yet) · newsletter · Wrapped-style share cards · annual report experiment · **GH Archive backfill ❌ dropped** (diff backfill exists) · **GitHub App migration ❌ dropped** (not needed now) · scale crawl + fix churn |
+
+> Reviewer note on scope: `/compare`, `/contribute` wizard, `/topics`, `/org`,
+> and the recruiter UI are **not** in the 10 weeks. They only earn a slot if a
+> measured signal (activation, Pro retention, or a "yes" from B2B interviews)
+> justifies them.
+
+---
+
+## 11. Activation, retention & measurement (added from review)
+
+Funnels are guesses until instrumented. Wire these into PostHog before spending
+on acquisition (§5).
+
+**Activation events**
+- Free: OAuth signup → lands on repo/rankings → **saves a watchlist item** or
+  clicks page-2 (the two gated actions) → **repeat visit within 7 days**.
+- Pro: pays → **opens the first weekly digest** → **uses PR Likelihood** on a
+  repo → (if newbie) starts the First-Merge Track.
+- North-star-ish proxy: a contributor who **picks a repo they found via us and
+  merges a PR there**.
+
+**Funnel to instrument** (define real numbers, then apply §3.5's conversion
+table): visitors → OAuth signup → activated (≥1 gated action) → Pro → retained
+30d.
+
+**Churn signals (watch weekly):**
+- Digest open/click rate drops (email health, not just MRR).
+- Watchlist usage drops (personalization losing value).
+- PR Likelihood clicks drop to zero.
+- Failed payments (dunning) — dunning UX saves revenue before it's "churn".
+
+**Customer discovery (before building Pro):** the 10–20 interviews in week 1–3
+must answer: (a) what triggers a Pro purchase, (b) who'd pay $8–12 for PR
+Likelihood, (c) which B2B buyer would pay for contributor data. Keep an
+evidence log; don't build un-validated features.
+
+**Support burden (plan, not an afterthought):** digest corrections and bad
+predictions are support tickets + trust damage. Have a visible feedback path
+(e.g. "wrong prediction? tell us") wired to the weekly editorial review, and a
+mailbox for Pro users. Measure complaints like a metric, not a mail folder.

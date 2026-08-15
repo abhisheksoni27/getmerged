@@ -95,12 +95,12 @@ export async function generateMetadata({ searchParams }: ReposPageProps): Promis
   const isPaged = !isNaN(pageNum) && pageNum > 1;
 
   const canonicalUrl = isPaged
-    ? `https://opendoor.abhishekco.de/repos?page=${pageNum}`
-    : "https://opendoor.abhishekco.de/repos";
+    ? `https://getmerged.abhishekco.de/repos?page=${pageNum}`
+    : "https://getmerged.abhishekco.de/repos";
 
   const title = isPaged
-    ? `Open-Source Repositories Directory - Page ${pageNum} | Opendoor`
-    : "Open-Source Repositories Directory & Filter Index | Opendoor";
+    ? `Open-Source Repositories Directory - Page ${pageNum} | GetMerged`
+    : "Open-Source Repositories Directory & Filter Index | GetMerged";
 
   const description = isPaged
     ? `Explore page ${pageNum} of 1,400+ public GitHub repositories evaluated by C-Rank™ on PR merge rate, maintainer response speed, and first-time contributor friendliness.`
@@ -126,7 +126,7 @@ export async function generateMetadata({ searchParams }: ReposPageProps): Promis
       description,
       type: "website",
       url: canonicalUrl,
-      siteName: "Opendoor",
+      siteName: "GetMerged",
     },
     twitter: {
       card: "summary_large_image",
@@ -144,13 +144,13 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "Open-Source Repository Explorer & Directory",
-    url: "https://opendoor.abhishekco.de/repos",
+    url: "https://getmerged.abhishekco.de/repos",
     description:
       "Comprehensive directory of open-source repositories scored by PR merge velocity and maintainer responsiveness.",
     isPartOf: {
       "@type": "WebSite",
-      name: "Opendoor",
-      url: "https://opendoor.abhishekco.de",
+      name: "GetMerged",
+      url: "https://getmerged.abhishekco.de",
     },
   };
 
@@ -163,12 +163,12 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
         name: "Are these open-source metrics and rankings 100% free to access?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes, completely free. Opendoor is built for the global developer and contributor community to make open-source contribution transparent and frictionless. You can browse, filter, inspect maintainer turnaround velocity, and track repository health without paywalls.",
+          text: "Yes, completely free. GetMerged is built for the global developer and contributor community to make open-source contribution transparent and frictionless. You can browse, filter, inspect maintainer turnaround velocity, and track repository health without paywalls.",
         },
       },
       {
         "@type": "Question",
-        name: "How does Opendoor help first-time open-source contributors?",
+        name: "How does GetMerged help first-time open-source contributors?",
         acceptedAnswer: {
           "@type": "Answer",
           text: "We measure the First-Timer PR Acceptance Rate and scan for active beginner-friendly issues (good first issue, help wanted). This allows new contributors to identify projects where maintainers actively review and mentor external submissions rather than leaving PRs untouched.",
@@ -192,7 +192,7 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
       },
       {
         "@type": "Question",
-        name: "Does Opendoor track private code or require repository write access?",
+        name: "Does GetMerged track private code or require repository write access?",
         acceptedAnswer: {
           "@type": "Answer",
           text: "No. All telemetry is calculated strictly from public GitHub GraphQL events and public pull request activity without requesting code access or write permissions.",

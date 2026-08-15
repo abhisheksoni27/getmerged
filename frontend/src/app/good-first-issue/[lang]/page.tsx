@@ -22,8 +22,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const languageName = displayNameFromSlug(lang);
-  const title = `Good First Issues in ${languageName} (Beginner Friendly) - Opendoor`;
-  const description = `Find open-source ${languageName} repositories with active Good First Issues, beginner-friendly labels, fast review response times, and high first-timer merge rates on Opendoor.`;
+  const title = `Good First Issues in ${languageName} (Beginner Friendly) - GetMerged`;
+  const description = `Find open-source ${languageName} repositories with active Good First Issues, beginner-friendly labels, fast review response times, and high first-timer merge rates on GetMerged.`;
 
   return {
     title,
@@ -39,14 +39,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       "developer portfolio",
     ],
     alternates: {
-      canonical: `https://opendoor.abhishekco.de/good-first-issue/${canonicalLang}`,
+      canonical: `https://getmerged.abhishekco.de/good-first-issue/${canonicalLang}`,
     },
     openGraph: {
       title,
       description,
       type: "website",
-      url: `https://opendoor.abhishekco.de/good-first-issue/${canonicalLang}`,
-      siteName: "Opendoor",
+      url: `https://getmerged.abhishekco.de/good-first-issue/${canonicalLang}`,
+      siteName: "GetMerged",
     },
     twitter: {
       card: "summary_large_image",
@@ -91,8 +91,8 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: `Good First Issues in ${languageName}`,
-    description: `Browse beginner-friendly open-source ${languageName} repositories with open good first issues on Opendoor.`,
-    url: `https://opendoor.abhishekco.de/good-first-issue/${canonicalLang}`,
+    description: `Browse beginner-friendly open-source ${languageName} repositories with open good first issues on GetMerged.`,
+    url: `https://getmerged.abhishekco.de/good-first-issue/${canonicalLang}`,
   };
 
   return (
@@ -107,7 +107,7 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
         {/* Navigation Breadcrumb */}
         <Link
           href="/"
-          title="Return to Opendoor Explorer Home"
+          title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
@@ -128,7 +128,7 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
             Good First Issues in {languageName}
           </h1>
           <p className="mt-3 text-xs sm:text-sm text-zinc-600 max-w-3xl leading-relaxed font-sans">
-            Looking for your first open-source contribution in <strong>{languageName}</strong>? Opendoor indexes repositories with active beginner labels (<code>good first issue</code>, <code>beginner-friendly</code>, <code>first-timers-only</code>, <code>up-for-grabs</code>) combined with real maintainer review response telemetry.
+            Looking for your first open-source contribution in <strong>{languageName}</strong>? GetMerged indexes repositories with active beginner labels (<code>good first issue</code>, <code>beginner-friendly</code>, <code>first-timers-only</code>, <code>up-for-grabs</code>) combined with real maintainer review response telemetry.
           </p>
         </div>
 
@@ -161,7 +161,7 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
           </h3>
           <div className="prose prose-sm text-zinc-600 leading-relaxed max-w-none space-y-3 text-xs sm:text-sm font-sans">
             <p>
-              Finding approachable <strong>Good First Issues in {languageName}</strong> allows you to build real-world software engineering experience. Instead of submitting PRs to abandoned repositories, Opendoor verifies maintainer review speeds and first-timer acceptance rates before you write a single line of code.
+              Finding approachable <strong>Good First Issues in {languageName}</strong> allows you to build real-world software engineering experience. Instead of submitting PRs to abandoned repositories, GetMerged verifies maintainer review speeds and first-timer acceptance rates before you write a single line of code.
             </p>
             <p>
               Select any repository above to inspect maintainer response times, view active beginner issue tags, and click through to claim your issue on GitHub!
