@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, DM_Sans, DM_Mono } from "next/font/google";
 import "./globals.css";
 import { PostHogInit } from "@/app/posthog-init";
+import { CookieBanner } from "@/components/CookieBanner";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -82,6 +83,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-white text-zinc-900">
         <PostHogInit />
         {children}
+        <CookieBanner />
       </body>
     </html>
   );
