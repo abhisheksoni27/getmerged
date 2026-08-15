@@ -63,12 +63,20 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 	slog.Info("sitemap generator: starting static generation", "dir", publicDir)
 
 	type repoInfo struct {
-		FullName string `db:"full_name"`
-		Language string `db:"language"`
+		FullName  string  `db:"full_name"`
+		Language  string  `db:"language"`
+		UpdatedAt *string `db:"updated_at"`
 	}
 
 	var repos []repoInfo
-	query := `SELECT full_name, COALESCE(language, 'other') as language FROM repositories`
+	query := `
+		SELECT
+			r.full_name,
+			COALESCE(r.language, 'other') as language,
+			COALESCE(s.snapshot_date, DATE(r.updated_at)) as updated_at
+		FROM repositories r
+		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
+	`
 	if err := db.Select(&repos, query); err != nil {
 		return fmt.Errorf("fetch repos for sitemap: %w", err)
 	}
@@ -97,6 +105,7 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 	// 1. Generate main.xml for homepage & core platform landing pages
 	mainUrls := []URL{
 		{Loc: baseUrl, LastMod: today, ChangeFreq: "daily", Priority: "1.0"},
+		{Loc: fmt.Sprintf("%s/repos", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "1.0"},
 		{Loc: fmt.Sprintf("%s/how-c-rank-works", baseUrl), LastMod: today, ChangeFreq: "weekly", Priority: "0.9"},
 		{Loc: fmt.Sprintf("%s/leaderboard", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "0.9"},
 		{Loc: fmt.Sprintf("%s/good-first-issue", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "0.9"},
@@ -146,9 +155,13 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		for _, r := range langRepos {
 			parts := strings.Split(r.FullName, "/")
 			if len(parts) == 2 {
+				lastMod := today
+				if r.UpdatedAt != nil && *r.UpdatedAt != "" {
+					lastMod = *r.UpdatedAt
+				}
 				urlset.URLs = append(urlset.URLs, URL{
 					Loc:        fmt.Sprintf("%s/%s/%s", baseUrl, parts[0], parts[1]),
-					LastMod:    today,
+					LastMod:    lastMod,
 					ChangeFreq: "daily",
 					Priority:   "0.8",
 				})
