@@ -48,6 +48,8 @@ type RepoFilter struct {
 	Offset                   int
 	Trending                 bool
 	SnapshotDate             string
+	MaxLastActivityDays      int
+	ExcludeStale             bool
 	MinFirstTimerSuccessRate float64
 	MaxFirstTimerSuccessRate float64
 	HasMinFirstTimer         bool
@@ -122,6 +124,15 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 	if filter.SnapshotDate != "" {
 		where += " AND s.snapshot_date = ?"
 		args = append(args, filter.SnapshotDate)
+	}
+
+	if filter.MaxLastActivityDays > 0 {
+		where += " AND s.last_activity_days <= ?"
+		args = append(args, filter.MaxLastActivityDays)
+	}
+
+	if filter.ExcludeStale {
+		where += " AND s.staleness_flag = 0"
 	}
 
 	if filter.MinStars > 0 {

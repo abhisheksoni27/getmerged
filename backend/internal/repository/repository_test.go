@@ -187,6 +187,38 @@ func TestRepoRepository_ListFiltersGoodFirstIssue(t *testing.T) {
 	}
 }
 
+func TestRepoRepository_ListFiltersRecencyAndStaleness(t *testing.T) {
+	database, _ := setupTestDB(t)
+	defer database.Close()
+
+	repo := repository.NewRepoRepository(database)
+	ctx := context.Background()
+	now := time.Now()
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('1', 'active/repo', 'active', 'repo', 'Go', 5000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, last_activity_days, staleness_flag) VALUES ('1', '2026-08-16', 'S', 90.0, 3, 0)`)
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('2', 'inactive/repo', 'inactive', 'repo', 'Go', 6000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, last_activity_days, staleness_flag) VALUES ('2', '2026-08-16', 'S', 90.0, 14, 0)`)
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('3', 'stale/repo', 'stale', 'repo', 'Go', 7000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, last_activity_days, staleness_flag) VALUES ('3', '2026-08-16', 'D', 25.0, 2, 1)`)
+
+	repos, total, err := repo.List(ctx, repository.RepoFilter{
+		MaxLastActivityDays: 7,
+		ExcludeStale:        true,
+	})
+	if err != nil {
+		t.Fatalf("List failed: %v", err)
+	}
+	if total != 1 || len(repos) != 1 {
+		t.Fatalf("expected 1 repo, got total %d, len %d", total, len(repos))
+	}
+	if repos[0].FullName != "active/repo" {
+		t.Fatalf("expected active/repo, got %s", repos[0].FullName)
+	}
+}
+
 func TestRepoRepository_GetRelatedRepos(t *testing.T) {
 	database, _ := setupTestDB(t)
 	defer database.Close()

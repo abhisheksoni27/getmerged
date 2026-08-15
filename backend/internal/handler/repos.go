@@ -164,6 +164,8 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		}
 
 		hasGoodFirstIssue := strings.ToLower(strings.TrimSpace(c.Query("has_good_first_issue"))) == "true"
+		maxActivityDays, _ := strconv.Atoi(strings.TrimSpace(c.Query("max_last_activity_days")))
+		excludeStale := strings.ToLower(strings.TrimSpace(c.Query("exclude_stale"))) == "true"
 
 		filter := repository.RepoFilter{
 			Language:                 lang,
@@ -178,6 +180,8 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			Offset:                   offset,
 			Trending:                 trendingParam == "true",
 			SnapshotDate:             snapshotDateFor(scoredTodayParam == "true"),
+			MaxLastActivityDays:      maxActivityDays,
+			ExcludeStale:             excludeStale,
 			MinFirstTimerSuccessRate: minFirstTimer,
 			MaxFirstTimerSuccessRate: maxFirstTimer,
 			HasMinFirstTimer:         hasMinFirstTimer,

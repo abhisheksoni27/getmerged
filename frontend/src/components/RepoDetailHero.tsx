@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Check, Bookmark, GitPullRequest } from "lucide-react";
+import { Check, Bookmark, GitPullRequest, Star } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { Repo } from "@/types/opendoor";
@@ -50,6 +50,15 @@ export function RepoDetailHero({
                 <span>C-Rank Score:</span>
                 <span className="text-emerald-400">{roundedScore}</span>
                 <span className="text-zinc-400 font-normal">/100</span>
+              </span>
+            )}
+            {typeof repo?.stars === "number" && repo.stars >= 0 && (
+              <span
+                title={`${repo.stars.toLocaleString()} GitHub stars`}
+                className="inline-flex items-center gap-1.5 border border-zinc-200 bg-zinc-50 px-3 py-1 font-mono text-xs font-semibold rounded-xl text-zinc-700 shadow-2xs"
+              >
+                <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-500" />
+                <span>{repo.stars >= 1000 ? `${(repo.stars / 1000).toFixed(1)}k` : repo.stars}</span>
               </span>
             )}
             {repo?.language && (
