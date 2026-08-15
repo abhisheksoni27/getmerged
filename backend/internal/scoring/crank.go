@@ -34,6 +34,32 @@ var weights = struct {
 	Responsiveness:    0.025,
 }
 
+// ConfidenceWeight computes a Bayesian sample-size confidence factor between 0.0 and 1.0.
+// Uses an exponential saturation curve: 1 - exp(-n / k) where k = 6.0 PRs.
+// With n=1 PR: ~0.15 confidence.
+// With n=3 PRs: ~0.39 confidence.
+// With n=6 PRs: ~0.63 confidence.
+// With n=15 PRs: ~0.92 confidence.
+// With n>=20 PRs: ~0.97+ confidence.
+func ConfidenceWeight(sampleSize int) float64 {
+	if sampleSize <= 0 {
+		return 0.0
+	}
+	// k = 6.0 provides smooth transition from prior to observed performance
+	return 1.0 - math.Exp(-float64(sampleSize)/6.0)
+}
+
+// ComputeConfidenceScore applies Bayesian shrinkage towards global neutral prior (50.0)
+// for repositories with small sample sizes, preventing 1-2 PR repos from achieving undeserved S-tiers.
+func ComputeConfidenceScore(rawScore float64, totalPRs int) float64 {
+	if totalPRs <= 0 {
+		return rawScore
+	}
+	const globalPrior = 50.0
+	confidence := ConfidenceWeight(totalPRs)
+	return confidence*rawScore + (1.0-confidence)*globalPrior
+}
+
 // ComputeCRank calculates the C-Rank score and tier from normalised metrics.
 // If staleness is true, the score is capped to <30 (max 29.9) and assigned D.
 // Continuous logarithmic bonus is applied for beginner-friendly good first issues:

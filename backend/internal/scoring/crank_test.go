@@ -251,3 +251,23 @@ func TestCalculateAdaptiveRescan(t *testing.T) {
 	}
 }
 
+func TestComputeConfidenceScore_SmallSampleShrinkage(t *testing.T) {
+	// A repo with 1 PR having 100% metrics should not receive 100 score.
+	// It should shrink towards neutral prior (50).
+	rawScore := 100.0
+	score1PR := scoring.ComputeConfidenceScore(rawScore, 1)
+	if score1PR > 60.0 {
+		t.Errorf("1 PR score should shrink heavily towards 50, got %.2f", score1PR)
+	}
+
+	score5PRs := scoring.ComputeConfidenceScore(rawScore, 5)
+	if score5PRs <= score1PR || score5PRs > 85.0 {
+		t.Errorf("5 PRs score should be higher than 1 PR but still damped, got %.2f", score5PRs)
+	}
+
+	score30PRs := scoring.ComputeConfidenceScore(rawScore, 30)
+	if score30PRs < 98.0 {
+		t.Errorf("30 PRs should preserve near full confidence, got %.2f", score30PRs)
+	}
+}
+

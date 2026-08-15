@@ -58,6 +58,7 @@ type RawMetrics struct {
 	ReviewCoverage            float64 // percentage 0–100 of external PRs that received maintainer/human review/comment
 	BotActivityRatio          float64 // percentage 0–100 of comments made by bot accounts
 	BusFactor                 int     // count of distinct maintainers commenting across PRs
+	ExternalPRCount           int     // total external PRs in the 180-day window
 	StalenessFlag             bool
 	GoodFirstIssueCount       int // open issues labeled "good first issue" at snapshot time
 }
@@ -207,6 +208,7 @@ func ComputeMetrics(prs []PR, staleness bool) RawMetrics {
 		ReviewCoverage:          reviewCoverage,
 		BotActivityRatio:        botActivityRatio,
 		BusFactor:               len(maintainerSet),
+		ExternalPRCount:         externalClosed,
 	}
 
 	if externalClosed > 0 {
