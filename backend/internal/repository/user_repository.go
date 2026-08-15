@@ -12,7 +12,8 @@ import (
 
 type User struct {
 	ID        int64   `db:"id" json:"id"`
-	GithubID  int64   `db:"github_id" json:"github_id"`
+	GithubID  *int64  `db:"github_id" json:"github_id,omitempty"`
+	GoogleID  *string `db:"google_id" json:"google_id,omitempty"`
 	Username  string  `db:"username" json:"username"`
 	Email     *string `db:"email" json:"email,omitempty"`
 	AvatarURL *string `db:"avatar_url" json:"avatar_url,omitempty"`
@@ -22,8 +23,10 @@ type User struct {
 
 type UserRepository interface {
 	FindByGithubID(ctx context.Context, githubID int64) (*User, error)
+	FindByGoogleID(ctx context.Context, googleID string) (*User, error)
 	FindByID(ctx context.Context, id int64) (*User, error)
 	UpsertUser(ctx context.Context, githubID int64, username, email, avatarURL string) (int64, error)
+	UpsertGoogleUser(ctx context.Context, googleID string, username, email, avatarURL string) (int64, error)
 }
 
 type sqlxUserRepository struct {
@@ -44,7 +47,18 @@ func NewUserRepository(db *sqlx.DB, cfg *config.Config) UserRepository {
 
 func (r *sqlxUserRepository) FindByGithubID(ctx context.Context, githubID int64) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, username, email, avatar_url, created_at, updated_at FROM users WHERE github_id = ?", githubID)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, username, email, avatar_url, created_at, updated_at FROM users WHERE github_id = ?", githubID)
+	if err != nil {
+		return nil, err
+	}
+
+	r.decryptUserPII(&user)
+	return &user, nil
+}
+
+func (r *sqlxUserRepository) FindByGoogleID(ctx context.Context, googleID string) (*User, error) {
+	var user User
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, username, email, avatar_url, created_at, updated_at FROM users WHERE google_id = ?", googleID)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +69,7 @@ func (r *sqlxUserRepository) FindByGithubID(ctx context.Context, githubID int64)
 
 func (r *sqlxUserRepository) FindByID(ctx context.Context, id int64) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, username, email, avatar_url, created_at, updated_at FROM users WHERE id = ?", id)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, username, email, avatar_url, created_at, updated_at FROM users WHERE id = ?", id)
 	if err != nil {
 		return nil, err
 	}
@@ -76,6 +90,34 @@ func (r *sqlxUserRepository) UpsertUser(ctx context.Context, githubID int64, use
 			INSERT INTO users (github_id, username, email, avatar_url, created_at, updated_at)
 			VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 		`, githubID, encUsername, encEmail, encAvatar)
+		if err != nil {
+			return 0, err
+		}
+		return res.LastInsertId()
+	}
+
+	_, err = r.db.ExecContext(ctx, `
+		UPDATE users SET username = ?, email = ?, avatar_url = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?
+	`, encUsername, encEmail, encAvatar, existingID)
+	if err != nil {
+		return 0, err
+	}
+
+	return existingID, nil
+}
+
+func (r *sqlxUserRepository) UpsertGoogleUser(ctx context.Context, googleID string, username, email, avatarURL string) (int64, error) {
+	encUsername, _ := crypto.EncryptAESGCM([]byte(username), r.encKey)
+	encEmail, _ := crypto.EncryptAESGCM([]byte(email), r.encKey)
+	encAvatar, _ := crypto.EncryptAESGCM([]byte(avatarURL), r.encKey)
+
+	var existingID int64
+	err := r.db.GetContext(ctx, &existingID, "SELECT id FROM users WHERE google_id = ?", googleID)
+	if err == sql.ErrNoRows || err != nil {
+		res, err := r.db.ExecContext(ctx, `
+			INSERT INTO users (google_id, username, email, avatar_url, created_at, updated_at)
+			VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+		`, googleID, encUsername, encEmail, encAvatar)
 		if err != nil {
 			return 0, err
 		}

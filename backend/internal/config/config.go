@@ -19,6 +19,8 @@ type Config struct {
 	InternalAPIKey     string
 	GithubClientID     string
 	GithubClientSecret string
+	GoogleClientID     string
+	GoogleClientSecret string
 	JWTSecret          string
 	EncryptionKey      string
 	OpencodeAPIKey     string
@@ -46,6 +48,8 @@ func Load() (*Config, error) {
 		OpencodeAPIKey: os.Getenv("OPENCODE_API_KEY"), // optional in dev if AI insights disabled
 		TelegramBotToken: os.Getenv("TELEGRAM_BOT_TOKEN"),
 		TelegramChatID:   os.Getenv("TELEGRAM_CHAT_ID"),
+		GoogleClientID:   os.Getenv("GOOGLE_CLIENT_ID"),
+		GoogleClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
 	}
 	if c.LogFile == "" {
 		c.LogFile = "opendoor.log"
