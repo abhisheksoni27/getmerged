@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { X, ShieldCheck, Flame, ArrowRight } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 import posthog from "posthog-js";
@@ -17,9 +18,15 @@ export function AuthModal({
   isOpen,
   onClose,
   title = "Unlock Full Platform Telemetry",
-  description = "Sign in with GitHub to access daily trending repositories, page 2+ results, and detailed maintainer insights.",
+  description = "Sign in with GitHub or Google to access daily trending repositories, page 2+ results, and detailed maintainer insights.",
   source = "modal",
 }: AuthModalProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -36,19 +43,19 @@ export function AuthModal({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 min-h-screen w-screen overflow-y-auto">
       {/* Blurred Backdrop Overlay */}
       <div
-        className="fixed inset-0 bg-zinc-900/60 backdrop-blur-sm transition-opacity animate-fade-in cursor-pointer"
+        className="fixed inset-0 bg-zinc-950/70 backdrop-blur-md transition-opacity animate-fade-in cursor-pointer w-screen h-screen"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Modal Dialog Card */}
-      <div className="relative w-full max-w-md rounded-3xl bg-white p-7 sm:p-9 shadow-2xl border border-zinc-200/90 z-10 animate-scale-up">
+      <div className="relative w-full max-w-md my-auto rounded-3xl bg-white p-7 sm:p-9 shadow-2xl border border-zinc-200/90 z-10 animate-scale-up">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -140,6 +147,7 @@ export function AuthModal({
           </p>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
