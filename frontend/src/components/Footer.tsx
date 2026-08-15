@@ -109,22 +109,22 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/status" title="Opendoor Service & Pipeline Status" className="hover:text-zinc-900 transition-colors flex items-center gap-1.5">
+                <Link href="/status" title="GetMerged Service & Pipeline Status" className="hover:text-zinc-900 transition-colors flex items-center gap-1.5">
                   <Activity className="h-3.5 w-3.5 text-emerald-600" /> System Status
                 </Link>
               </li>
               <li>
-                <a href="/api/v1/health" target="_blank" title="Check Opendoor API health status" className="hover:text-zinc-900 transition-colors">
+                <a href="/api/v1/health" target="_blank" title="Check GetMerged API health status" className="hover:text-zinc-900 transition-colors">
                   API Health
                 </a>
               </li>
               <li>
-                <Link href="/privacy" title="Opendoor Privacy Policy" className="hover:text-zinc-900 transition-colors">
+                <Link href="/privacy" title="GetMerged Privacy Policy" className="hover:text-zinc-900 transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" title="Opendoor Terms of Service" className="hover:text-zinc-900 transition-colors">
+                <Link href="/terms" title="GetMerged Terms of Service" className="hover:text-zinc-900 transition-colors">
                   Terms of Service
                 </Link>
               </li>
@@ -153,10 +153,10 @@ export function Footer() {
         {/* Bottom Copyright Bar */}
         <div className="border-t border-zinc-200 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
           <div>
-            © {new Date().getFullYear()} opendoor, Glassdoor for Open Source Repositories.
+            © {new Date().getFullYear()} GetMerged, Glassdoor for Open Source Repositories.
           </div>
           <div className="flex items-center gap-6">
-            <Link href="/" title="Opendoor Open Source Explorer Home" className="hover:text-zinc-900 transition-colors">Home</Link>
+            <Link href="/" title="GetMerged Open Source Explorer Home" className="hover:text-zinc-900 transition-colors">Home</Link>
             <Link href="/hall-of-fame" title="Hall of Fame" className="hover:text-zinc-900 transition-colors">Hall of Fame</Link>
             <Link href="/leaderboard" title="Leaderboard" className="hover:text-zinc-900 transition-colors">Leaderboard</Link>
             <Link href="/status" title="System Status" className="hover:text-zinc-900 transition-colors">Status</Link>

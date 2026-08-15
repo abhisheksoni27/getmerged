@@ -41,7 +41,7 @@ export function StatusClient() {
       <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 flex-1 w-full font-sans text-zinc-800">
         <Link
           href="/"
-          title="Return to Opendoor Explorer Home"
+          title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
@@ -51,7 +51,7 @@ export function StatusClient() {
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 flex items-center gap-3 font-space">
               <Server className="h-6 w-6 text-zinc-900" />
-              Opendoor System Status
+              GetMerged System Status
             </h1>
             <p className="mt-1 text-xs text-zinc-500 font-sans">
               Real-time API operational status, latency metrics, and backend service health checks.

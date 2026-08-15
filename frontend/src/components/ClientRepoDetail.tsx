@@ -88,7 +88,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         ].filter(Boolean).join("&")}`
       : "";
   const badgePreviewUrl = `${API_BASE_URL}/badge/${fullName}.svg${badgeQuery}`;
-  const badgeMarkdownUrl = `https://opendoor.abhishekco.de/badge/${fullName}.svg${badgeQuery}`;
+  const badgeMarkdownUrl = `https://getmerged.abhishekco.de/badge/${fullName}.svg${badgeQuery}`;
 
   useEffect(() => {
     if (!repo && fullName) {
@@ -282,7 +282,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         <main className="mx-auto max-w-6xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
           <Link
             href="/"
-            title="Return to Opendoor Explorer Home"
+            title="Return to GetMerged Explorer Home"
             className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-zinc-900 transition-colors mb-8"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
@@ -309,7 +309,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             <div className="flex items-center justify-center gap-3">
               <Link
                 href="/"
-                title="Return to Opendoor Explorer Home"
+                title="Return to GetMerged Explorer Home"
                 className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -325,7 +325,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       <main className="mx-auto max-w-6xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
         <Link
           href="/"
-          title="Return to Opendoor Explorer Home"
+          title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-zinc-900 transition-colors mb-8"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
@@ -414,7 +414,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       {/* Navigation Breadcrumb */}
       <Link
         href="/"
-        title="Return to Opendoor Explorer Home"
+        title="Return to GetMerged Explorer Home"
         className="inline-flex items-center gap-1.5 text-xs font-sans text-zinc-500 hover:text-zinc-900 transition-colors mb-6"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
@@ -535,7 +535,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                 <span className="text-[11px] font-sans text-zinc-500">Looking for more {repo.language} beginner tasks?</span>
                 <Link
                   href={`/good-first-issue/${getLanguageSlug(repo.language)}`}
-                  title={`Explore all ${repo.language} Good First Issues on Opendoor`}
+                  title={`Explore all ${repo.language} Good First Issues on GetMerged`}
                   className="text-xs font-bold text-emerald-700 hover:text-emerald-800 font-sans inline-flex items-center gap-1 hover:underline"
                 >
                   Explore all {repo.language} Good First Issues <ArrowRight className="h-3.5 w-3.5" />
@@ -609,7 +609,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={badgePreviewUrl}
-              alt={`Opendoor C-Rank badge for ${fullName}`}
+              alt={`GetMerged C-Rank badge for ${fullName}`}
               width={280}
               height={28}
               className="h-7 w-auto"
@@ -617,7 +617,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </div>
           <button
             onClick={() => {
-              navigator.clipboard.writeText(`[![Opendoor C-Rank](${badgeMarkdownUrl})](https://opendoor.abhishekco.de/${fullName})`);
+              navigator.clipboard.writeText(`[![GetMerged C-Rank](${badgeMarkdownUrl})](https://getmerged.abhishekco.de/${fullName})`);
               posthog.capture('badge_copied', { repo_full_name: fullName });
               setBadgeCopied(true);
               setTimeout(() => setBadgeCopied(false), 2000);
@@ -1184,7 +1184,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </h2>
           <div className="rounded-xl border-2 border-brand-dark bg-white p-4 text-zinc-700 leading-relaxed max-w-none space-y-3 font-sans shadow-[3px_3px_0px_#222831]">
             <p>
-              When evaluating whether to contribute to <strong className="text-zinc-950">{fullName}</strong>, response velocity and maintainer engagement are crucial. Opendoor continuously tracks pull request trajectories, first-comment latency, and code review rounds to help developers avoid submitting pull requests to backlogged repositories.
+              When evaluating whether to contribute to <strong className="text-zinc-950">{fullName}</strong>, response velocity and maintainer engagement are crucial. GetMerged continuously tracks pull request trajectories, first-comment latency, and code review rounds to help developers avoid submitting pull requests to backlogged repositories.
             </p>
             <p>
               Currently, maintainers of {fullName} acknowledge new external contributions in approximately{" "}
@@ -1264,7 +1264,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     What is the external contributor pull request merge rate for {fullName}?
                   </h3>
                   <p className="text-xs text-zinc-700 leading-relaxed font-sans">
-                    The external pull request merge rate is <strong className="text-zinc-950">{mergeRateStr}</strong>. Opendoor isolates non-core community contributions so external developers get an accurate benchmark of PR acceptance probability.
+                    The external pull request merge rate is <strong className="text-zinc-950">{mergeRateStr}</strong>. GetMerged isolates non-core community contributions so external developers get an accurate benchmark of PR acceptance probability.
                   </p>
                 </div>
               </div>
@@ -1392,7 +1392,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
         <section className="rounded-2xl border-2 border-brand-dark bg-zinc-950 p-5 sm:p-6 text-white shadow-[5px_5px_0px_#222831]">
           <h2 className="text-xs font-space font-extrabold text-yellow-200 uppercase tracking-wider mb-2">
-            Opendoor C-Rank™ Indexing Standard
+            GetMerged C-Rank™ Indexing Standard
           </h2>
           <p className="text-xs text-zinc-200 leading-relaxed font-sans">
             All telemetry metrics displayed for {fullName} are automatically retrieved via the GitHub GraphQL API and recalculated daily. Insider pull requests submitted by repository owners or organization members are excluded from merge rate calculations to preserve objective external contributor statistics.

@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "opendoor - Glassdoor for Open Source Repositories";
+export const alt = "GetMerged - Glassdoor for Open Source Repositories";
 export const size = {
   width: 1200,
   height: 630,
@@ -36,7 +36,7 @@ export default function Image() {
             }}
           />
           <span style={{ color: "#a1a1aa", fontSize: "24px", fontWeight: 600 }}>
-            opendoor.abhishekco.de
+            getmerged.abhishekco.de
           </span>
         </div>
 

@@ -439,7 +439,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 Over <strong className="text-zinc-900">60% of open-source maintainers</strong> are unpaid and overwhelmed by backlogs. When contributors sort solely by GitHub stars, they walk straight into exhausted projects where pull requests become &ldquo;zombie PRs&rdquo; that sit unreviewed for months.
               </p>
               <p className="text-xs sm:text-sm text-zinc-500 font-sans leading-relaxed">
-                Opendoor bypasses vanity stars by monitoring real maintainer review turnaround, first-timer acceptance rates, and external PR merge velocity.
+                GetMerged bypasses vanity stars by monitoring real maintainer review turnaround, first-timer acceptance rates, and external PR merge velocity.
               </p>
               <div className="pt-2">
                 <Link
@@ -563,7 +563,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 9 Telemetry Factors. Zero Subjective Gossip.
               </h2>
               <p className="text-sm sm:text-base text-zinc-600 font-sans leading-relaxed">
-                Opendoor benchmarks repositories against peer codebases across 20+ language ecosystems. We measure reviewer turnaround velocity, repeat contributor retention, pull request friction, and maintainer core bus-factors.
+                GetMerged benchmarks repositories against peer codebases across 20+ language ecosystems. We measure reviewer turnaround velocity, repeat contributor retention, pull request friction, and maintainer core bus-factors.
               </p>
               <div className="pt-2">
                 <Link
@@ -814,7 +814,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             </h2>
             <p className="mt-4 text-xs sm:text-sm lg:text-base text-zinc-600 leading-relaxed font-sans">
               Thousands of open-source contributors waste hours writing clean pull requests only to have them sit unreviewed for months. 
-              <strong> Opendoor</strong> uses objective mathematical telemetry to grade repository maintainer responsiveness, merge velocity, and first-time contributor success.
+              <strong> GetMerged</strong> uses objective mathematical telemetry to grade repository maintainer responsiveness, merge velocity, and first-time contributor success.
             </p>
           </div>
 
@@ -835,7 +835,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   <span className="text-xs text-zinc-400 font-sans font-semibold hidden sm:inline">Share:</span>
                   <a
                     href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                      "No more writing PRs for dead repos. opendoor grades public GitHub projects using mathematical PR merge rates and review times. Check out these rankings! 🚪✨\n\nhttps://opendoor.abhishekco.de"
+                      "No more writing PRs for dead repos. GetMerged grades public GitHub projects using mathematical PR merge rates and review times. Check out these rankings! 🚪✨\n\nhttps://getmerged.abhishekco.de"
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -848,8 +848,8 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                     <span>Twitter / X</span>
                   </a>
                   <a
-                    href={`https://www.reddit.com/submit?url=${encodeURIComponent("https://opendoor.abhishekco.de")}&title=${encodeURIComponent(
-                      "Don't waste time on dead repos. opendoor scores projects by PR merge rates, review times, and first-timer success."
+                    href={`https://www.reddit.com/submit?url=${encodeURIComponent("https://getmerged.abhishekco.de")}&title=${encodeURIComponent(
+                      "Don't waste time on dead repos. GetMerged scores projects by PR merge rates, review times, and first-timer success."
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -908,7 +908,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   })
                   .filter((item) => item.grandTotal >= 15 && (item.sCount + item.aCount) >= 3)
                   .sort((a, b) => b.weightedScore - a.weightedScore)
-                  .slice(0, 5)
+                  .slice(0, 10)
                   .map((item, idx) => {
                     const rankMedal = idx === 0 ? "1" : idx === 1 ? "2" : idx === 2 ? "3" : `${idx + 1}`;
                     return (
@@ -1008,10 +1008,10 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           <div className="rounded-3xl border border-zinc-200 bg-[#faf9f6] p-8 sm:p-12 shadow-xs mb-16">
             <div className="max-w-3xl mb-10">
               <h3 className="text-2xl sm:text-3xl font-bold font-space text-zinc-900 tracking-tight">
-                How Opendoor Eliminates Ghost-Town Repositories
+                How GetMerged Eliminates Ghost-Town Repositories
               </h3>
               <p className="text-xs sm:text-sm text-zinc-600 font-sans mt-2 leading-relaxed">
-                We do not rely on subjective opinions or vanity star counts. Opendoor queries raw GitHub GraphQL event streams continuously to compute real maintainer velocity metrics.
+                We do not rely on subjective opinions or vanity star counts. GetMerged queries raw GitHub GraphQL event streams continuously to compute real maintainer velocity metrics.
               </p>
             </div>
 
@@ -1075,11 +1075,11 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               </button>
             ) : (
               <button
-                onClick={() => openAuthModal("Sign in to Opendoor", "Sign in to access daily trending repositories, page 2+ pagination, and contributor insights.", "homepage_cta_banner")}
-                title="Sign in to Opendoor"
+                onClick={() => openAuthModal("Sign in to GetMerged", "Sign in to access daily trending repositories, page 2+ pagination, and contributor insights.", "homepage_cta_banner")}
+                title="Sign in to GetMerged"
                 className="inline-flex items-center gap-2.5 rounded-xl bg-zinc-900 px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs shrink-0 cursor-pointer"
               >
-                <span>Sign in to Opendoor</span>
+                <span>Sign in to GetMerged</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
             )}

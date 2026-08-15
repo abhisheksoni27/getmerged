@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Repo } from "@/types/opendoor";
 
-const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://opendoor.abhishekco.de";
+const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
 
 export async function GET(
   request: NextRequest,
@@ -34,7 +34,7 @@ export async function GET(
     const mergeRate = ((repo.external_pr_merge_rate || 0) * 100).toFixed(1);
     const firstTimerRate = ((repo.first_timer_success_rate || 0) * 100).toFixed(1);
 
-    const markdown = `# ${repo.full_name} - Opendoor C-Rank™ Report
+    const markdown = `# ${repo.full_name} - GetMerged C-Rank™ Report
 
 - **C-Rank™ Score**: ${score.toFixed(1)} / 100
 - **Responsiveness Tier**: Tier ${rank}
@@ -56,7 +56,7 @@ ${
 }
 
 ---
-Source: Opendoor Open Source Explorer (https://opendoor.abhishekco.de/repo/${owner}/${name})
+Source: GetMerged Open Source Explorer (https://getmerged.abhishekco.de/repo/${owner}/${name})
 `;
 
     return new NextResponse(markdown, {

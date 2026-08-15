@@ -13,6 +13,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: "https://opendoor.abhishekco.de/sitemap.xml",
+    sitemap: "https://getmerged.abhishekco.de/sitemap.xml",
   };
 }

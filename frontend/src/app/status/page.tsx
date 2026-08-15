@@ -3,20 +3,20 @@ import { Metadata } from "next";
 import { StatusClient } from "./StatusClient";
 
 export const metadata: Metadata = {
-  title: "System Status - Opendoor",
+  title: "System Status - GetMerged",
   description: "Real-time API operational status, latency metrics, and backend service health checks.",
   robots: {
     index: false,
     follow: true,
   },
   alternates: {
-    canonical: "https://opendoor.abhishekco.de/status",
+    canonical: "https://getmerged.abhishekco.de/status",
   },
   openGraph: {
-    title: "System Status - Opendoor",
+    title: "System Status - GetMerged",
     description: "Real-time API operational status, latency metrics, and backend service health checks.",
-    url: "https://opendoor.abhishekco.de/status",
-    siteName: "Opendoor",
+    url: "https://getmerged.abhishekco.de/status",
+    siteName: "GetMerged",
   },
 };
 

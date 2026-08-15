@@ -6,18 +6,18 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy - Opendoor",
+  title: "Privacy Policy - GetMerged",
   description:
-    "Opendoor privacy policy details GitHub and Google OAuth data collection, encryption, analytics consent, data retention, and your GDPR and CCPA rights.",
+    "GetMerged privacy policy details GitHub and Google OAuth data collection, encryption, analytics consent, data retention, and your GDPR and CCPA rights.",
   alternates: {
-    canonical: "https://opendoor.abhishekco.de/privacy",
+    canonical: "https://getmerged.abhishekco.de/privacy",
   },
   openGraph: {
-    title: "Privacy Policy - Opendoor",
+    title: "Privacy Policy - GetMerged",
     description:
-      "Opendoor privacy policy details GitHub and Google OAuth data collection, encryption, analytics consent, data retention, and your GDPR and CCPA rights.",
-    url: "https://opendoor.abhishekco.de/privacy",
-    siteName: "Opendoor",
+      "GetMerged privacy policy details GitHub and Google OAuth data collection, encryption, analytics consent, data retention, and your GDPR and CCPA rights.",
+    url: "https://getmerged.abhishekco.de/privacy",
+    siteName: "GetMerged",
   },
 };
 
@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full font-sans text-zinc-800">
         <Link
           href="/"
-          title="Return to Opendoor Explorer Home"
+          title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
@@ -51,13 +51,13 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="text-lg font-bold font-space text-zinc-900 mb-3">1. Introduction & Scope</h2>
             <p>
-              Opendoor (&quot;we&quot;, &quot;our&quot;, or &quot;the Platform&quot;) helps open-source contributors
+              GetMerged (&quot;we&quot;, &quot;our&quot;, or &quot;the Platform&quot;) helps open-source contributors
               discover GitHub repositories where pull requests are actually welcomed and merged. This Privacy Policy
               explains what personal data we collect, why we collect it, how long we keep it, who we share it with,
               and the choices and rights you have.
             </p>
             <p className="mt-3">
-              This policy applies to all visitors of <a href="https://opendoor.abhishekco.de" className="underline font-semibold" title="Opendoor homepage">opendoor.abhishekco.de</a>,
+              This policy applies to all visitors of <a href="https://getmerged.abhishekco.de" className="underline font-semibold" title="GetMerged homepage">getmerged.abhishekco.de</a>,
               the web application, and any related features, including sign-in, watchlists, contributor feedback, and
               AI-generated repository insights. It does not apply to the practices of GitHub, Google, or any third-party
               service you access through links on the Platform.
@@ -188,7 +188,7 @@ export default function PrivacyPolicyPage() {
             </div>
             <p className="mt-4">
               We may also disclose personal data when required by law, legal process, or government request, or when
-              necessary to protect the rights, property, or safety of Opendoor, its users, or the public.
+              necessary to protect the rights, property, or safety of GetMerged, its users, or the public.
             </p>
           </section>
 
@@ -308,7 +308,7 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="text-lg font-bold font-space text-zinc-900 mb-3">13. Business Transfers</h2>
             <p>
-              If Opendoor is involved in a merger, acquisition, reorganization, or sale of assets, your personal data
+              If GetMerged is involved in a merger, acquisition, reorganization, or sale of assets, your personal data
               may be transferred as part of that transaction. We will notify you and take steps to ensure it continues
               to be handled in accordance with this policy.
             </p>
@@ -338,7 +338,7 @@ export default function PrivacyPolicyPage() {
                 .
               </li>
               <li>Use the contact details listed in our{" "}
-                <Link href="/terms" title="View Opendoor Terms of Service" className="text-zinc-900 underline font-semibold">
+                <Link href="/terms" title="View GetMerged Terms of Service" className="text-zinc-900 underline font-semibold">
                   Terms of Service
                 </Link>.
               </li>

@@ -4,7 +4,7 @@ import type { MacroStats } from "@/types/opendoor";
 
 async function getMacroStats(): Promise<MacroStats | null> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://opendoor.abhishekco.de";
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
     const res = await fetch(`${baseUrl}/api/v1/stats/macro`, {
       next: { revalidate: 3600 },
     });
@@ -22,12 +22,12 @@ export default async function HomePage() {
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "opendoor",
-    url: "https://opendoor.abhishekco.de",
+    name: "GetMerged",
+    url: "https://getmerged.abhishekco.de",
     description: "Glassdoor for open-source repositories. Objective metrics on PR merge rates and maintainer response times.",
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://opendoor.abhishekco.de/?search={search_term_string}",
+      target: "https://getmerged.abhishekco.de/?search={search_term_string}",
       "query-input": "required name=search_term_string",
     },
   };
@@ -35,17 +35,17 @@ export default async function HomePage() {
   const orgJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "opendoor",
-    url: "https://opendoor.abhishekco.de",
-    logo: "https://opendoor.abhishekco.de/icon.svg",
+    name: "GetMerged",
+    url: "https://getmerged.abhishekco.de",
+    logo: "https://getmerged.abhishekco.de/icon.svg",
     sameAs: ["https://github.com/abhisheksoni27/opendoor"],
   };
 
   const webAppJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "opendoor",
-    url: "https://opendoor.abhishekco.de",
+    name: "GetMerged",
+    url: "https://getmerged.abhishekco.de",
     description: "Glassdoor for open-source repositories. Objective C-Rank™ metrics on PR merge rates and response times.",
     applicationCategory: "DeveloperApplication",
     operatingSystem: "All",

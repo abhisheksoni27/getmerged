@@ -21,16 +21,16 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "How C-Rank™ Works - The Science of Open Source Hospitality - Opendoor",
-  description: "Why 60% of open-source maintainers burn out and millions of pull requests become zombie PRs. Learn how Opendoor filters open doors from ghost towns.",
+  title: "How C-Rank™ Works - The Science of Open Source Hospitality - GetMerged",
+  description: "Why 60% of open-source maintainers burn out and millions of pull requests become zombie PRs. Learn how GetMerged filters open doors from ghost towns.",
   alternates: {
-    canonical: "https://opendoor.abhishekco.de/how-c-rank-works",
+    canonical: "https://getmerged.abhishekco.de/how-c-rank-works",
   },
   openGraph: {
     title: "How C-Rank™ Works - The Science of Open Source Hospitality",
     description: "GitHub stars measure past vanity. C-Rank measures present hospitality. Explore how we calculate real maintainer velocity from raw GraphQL telemetry.",
-    url: "https://opendoor.abhishekco.de/how-c-rank-works",
-    siteName: "Opendoor",
+    url: "https://getmerged.abhishekco.de/how-c-rank-works",
+    siteName: "GetMerged",
   },
 };
 
@@ -155,7 +155,7 @@ export default function HowCRankWorksPage() {
       <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full font-sans text-zinc-800">
         <Link
           href="/"
-          title="Return to Opendoor Explorer Home"
+          title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-8 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
@@ -214,7 +214,7 @@ export default function HowCRankWorksPage() {
               <div className="h-10 w-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 mb-4">
                 <Sparkles className="h-5 w-5" />
               </div>
-              <div className="font-space text-2xl font-bold text-zinc-900 mb-1">The Opendoor Fix</div>
+              <div className="font-space text-2xl font-bold text-zinc-900 mb-1">The GetMerged Fix</div>
               <p className="text-xs text-zinc-600 leading-relaxed">
                 We analyze live GraphQL event streams to pinpoint repos where maintainers are active, responsive, and genuinely excited to merge community code.
               </p>
@@ -318,7 +318,7 @@ export default function HowCRankWorksPage() {
           </div>
           <Link
             href="/"
-            title="Explore Open Source Repositories on Opendoor"
+            title="Explore Open Source Repositories on GetMerged"
             className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-sans text-xs font-bold text-zinc-900 hover:bg-zinc-100 active:scale-95 transition-all shadow-xs shrink-0"
           >
             <span>Explore Welcoming Repos</span>

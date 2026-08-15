@@ -22,8 +22,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const languageName = displayNameFromSlug(lang);
-  const title = `Top Welcoming Open-Source ${languageName} Projects (C-Rank™) - Opendoor`;
-  const description = `Discover high-ranking open-source ${languageName} repositories with fast maintainer response times and high PR merge rates on Opendoor.`;
+  const title = `Top Welcoming Open-Source ${languageName} Projects (C-Rank™) - GetMerged`;
+  const description = `Discover high-ranking open-source ${languageName} repositories with fast maintainer response times and high PR merge rates on GetMerged.`;
 
   return {
     title,
@@ -39,14 +39,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       "maintainer response time",
     ],
     alternates: {
-      canonical: `https://opendoor.abhishekco.de/rankings/${canonicalLang}`,
+      canonical: `https://getmerged.abhishekco.de/rankings/${canonicalLang}`,
     },
     openGraph: {
       title,
       description,
       type: "website",
-      url: `https://opendoor.abhishekco.de/rankings/${canonicalLang}`,
-      siteName: "Opendoor",
+      url: `https://getmerged.abhishekco.de/rankings/${canonicalLang}`,
+      siteName: "GetMerged",
     },
     twitter: {
       card: "summary_large_image",
@@ -94,7 +94,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
         {/* Navigation Breadcrumb */}
         <Link
           href="/"
-          title="Return to Opendoor Explorer Home"
+          title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
@@ -115,7 +115,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             Top Welcoming Open-Source {languageName} Repositories
           </h1>
           <p className="mt-3 text-xs sm:text-sm text-zinc-600 max-w-3xl leading-relaxed font-sans">
-            Ranked by Opendoor&apos;s proprietary <strong>C-Rank™</strong> score. These public GitHub {languageName} projects feature high external pull request merge rates, rapid maintainer review turnarounds, and constructive contributor vibes.
+            Ranked by GetMerged&apos;s proprietary <strong>C-Rank™</strong> score. These public GitHub {languageName} projects feature high external pull request merge rates, rapid maintainer review turnarounds, and constructive contributor vibes.
           </p>
         </div>
 
@@ -144,14 +144,14 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
         <section className="rounded-3xl bg-white p-6 sm:p-8 border border-zinc-200 font-sans shadow-xs">
           <h3 className="text-base font-bold text-zinc-900 mb-3 flex items-center gap-2 font-space">
             <Sparkles className="h-4 w-4 text-emerald-600" />
-            Why contribute to {languageName} open-source projects on Opendoor?
+            Why contribute to {languageName} open-source projects on GetMerged?
           </h3>
           <div className="prose prose-sm text-zinc-600 leading-relaxed max-w-none space-y-3 text-xs sm:text-sm font-sans">
             <p>
               Contributing to open-source {languageName} codebases is one of the fastest ways to expand your software engineering portfolio. However, submitting pull requests to unmaintained repositories leads to frustration when PRs remain untouched for months.
             </p>
             <p>
-              Opendoor eliminates guessing by analyzing maintainer response times, PR merge rates, and first-timer success metrics across the entire {languageName} open-source ecosystem.
+              GetMerged eliminates guessing by analyzing maintainer response times, PR merge rates, and first-timer success metrics across the entire {languageName} open-source ecosystem.
             </p>
           </div>
         </section>

@@ -21,7 +21,7 @@ export default async function Image({
   let score = "75.0";
 
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://opendoor.abhishekco.de";
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
     const res = await fetch(`${baseUrl}/api/v1/repos?name=${encodeURIComponent(fullName)}`);
     if (res.ok) {
       const data = await res.json();
@@ -76,7 +76,7 @@ export default async function Image({
             }}
           />
           <span style={{ color: "#a1a1aa", fontSize: "24px", fontWeight: 600 }}>
-            opendoor.abhishekco.de
+            getmerged.abhishekco.de
           </span>
         </div>
 

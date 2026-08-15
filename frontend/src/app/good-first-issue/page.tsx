@@ -7,16 +7,16 @@ import { Sprout, ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 
 export const metadata: Metadata = {
-  title: "Good First Issues by Programming Language - Opendoor",
+  title: "Good First Issues by Programming Language - GetMerged",
   description: "Discover beginner-friendly Good First Issues across Python, TypeScript, Go, Rust, C#, Java, and other open-source ecosystems with active maintainer reviews.",
   alternates: {
-    canonical: "https://opendoor.abhishekco.de/good-first-issue",
+    canonical: "https://getmerged.abhishekco.de/good-first-issue",
   },
   openGraph: {
-    title: "Good First Issues by Programming Language - Opendoor",
+    title: "Good First Issues by Programming Language - GetMerged",
     description: "Find active beginner-friendly issues in GitHub repositories with high PR merge rates.",
-    url: "https://opendoor.abhishekco.de/good-first-issue",
-    siteName: "Opendoor",
+    url: "https://getmerged.abhishekco.de/good-first-issue",
+    siteName: "GetMerged",
   },
 };
 
@@ -45,7 +45,7 @@ export default function GoodFirstIssueIndexPage() {
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-800 font-sans">
         <Link
           href="/"
-          title="Return to Opendoor Explorer Home"
+          title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer

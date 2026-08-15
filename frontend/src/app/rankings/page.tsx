@@ -7,16 +7,16 @@ import { Trophy, ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 
 export const metadata: Metadata = {
-  title: "Open Source Ecosystem Rankings (C-Rank™) - Opendoor",
+  title: "Open Source Ecosystem Rankings (C-Rank™) - GetMerged",
   description: "Browse repository contributor-friendliness rankings by programming language and ecosystem. Find welcoming GitHub repos across Python, TypeScript, Go, Rust, C#, and more.",
   alternates: {
-    canonical: "https://opendoor.abhishekco.de/rankings",
+    canonical: "https://getmerged.abhishekco.de/rankings",
   },
   openGraph: {
-    title: "Open Source Ecosystem Rankings - Opendoor",
+    title: "Open Source Ecosystem Rankings - GetMerged",
     description: "Explore top welcoming open-source repositories ranked by programming language and C-Rank™ telemetry.",
-    url: "https://opendoor.abhishekco.de/rankings",
-    siteName: "Opendoor",
+    url: "https://getmerged.abhishekco.de/rankings",
+    siteName: "GetMerged",
   },
 };
 
@@ -45,7 +45,7 @@ export default function RankingsIndexPage() {
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-800 font-sans">
         <Link
           href="/"
-          title="Return to Opendoor Explorer Home"
+          title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer

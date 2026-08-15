@@ -56,7 +56,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
         <div className="flex items-center gap-6 shrink-0">
           <Link
             href="/"
-            title="opendoor - Find Welcoming Open Source Repositories"
+            title="GetMerged - Find Welcoming Open Source Repositories"
             className="flex items-center gap-2.5 group shrink-0"
           >
             <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-white font-space font-bold text-xs shadow-xs group-hover:scale-105 transition-transform duration-200">
@@ -64,7 +64,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-[#dfd0b8]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-space text-base font-bold tracking-tight text-zinc-900">opendoor</span>
+              <span className="font-space text-base font-bold tracking-tight text-zinc-900">GetMerged</span>
             </div>
           </Link>
 
@@ -117,7 +117,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               {user.slug ? (
                 <Link
                   href={`/${user.slug}`}
-                  title={`View your public Opendoor profile (@${user.slug})`}
+                  title={`View your public GetMerged profile (@${user.slug})`}
                   className="flex items-center gap-2 min-w-0 hover:opacity-80 transition-opacity"
                 >
                   {user.avatar_url ? (
@@ -150,7 +150,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <button
                 onClick={handleLogout}
                 className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 transition-colors cursor-pointer"
-                title="Sign Out of Opendoor"
+                title="Sign Out of GetMerged"
               >
                 <LogOut className="h-3.5 w-3.5" />
               </button>
@@ -163,7 +163,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   posthog.capture("sign_in_modal_opened", { source: "header" });
                   setIsAuthModalOpen(true);
                 }}
-                title="Sign in to Opendoor"
+                title="Sign in to GetMerged"
                 className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-semibold text-white shadow-xs hover:bg-zinc-800 active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer"
               >
                 <span>Sign in</span>
@@ -171,7 +171,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <AuthModal
                 isOpen={isAuthModalOpen}
                 onClose={() => setIsAuthModalOpen(false)}
-                title="Welcome to Opendoor"
+                title="Welcome to GetMerged"
                 description="Sign in to unlock full repository metrics, track maintainer velocity, and submit contributor reviews."
                 source="header"
               />

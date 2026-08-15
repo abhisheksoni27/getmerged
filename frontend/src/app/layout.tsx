@@ -21,8 +21,8 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://opendoor.abhishekco.de"),
-  title: "opendoor - Find Welcoming GitHub Repos for Open Source Contribution | C-Rank™",
+  metadataBase: new URL("https://getmerged.abhishekco.de"),
+  title: "GetMerged - Find Welcoming GitHub Repos for Open Source Contribution | C-Rank™",
   description: "Stop guessing which door is open. Find GitHub repositories that welcome open source contribution, ranked by PR merge rates, maintainer response time, and first-timer success. The C-Rank™ index for developers building their github profile.",
   keywords: [
     "open source contribution",
@@ -42,29 +42,29 @@ export const metadata: Metadata = {
     "software development best practices",
   ],
   alternates: {
-    canonical: "https://opendoor.abhishekco.de",
+    canonical: "https://getmerged.abhishekco.de",
     types: {
-      "application/xml": "https://opendoor.abhishekco.de/sitemap.xml",
+      "application/xml": "https://getmerged.abhishekco.de/sitemap.xml",
     },
   },
   openGraph: {
-    title: "opendoor - Find Welcoming GitHub Repos for Open Source Contribution",
+    title: "GetMerged - Find Welcoming GitHub Repos for Open Source Contribution",
     description: "Find GitHub repositories that welcome open source contribution, ranked by PR merge rates, maintainer response time, and first-timer success.",
-    url: "https://opendoor.abhishekco.de",
-    siteName: "opendoor",
+    url: "https://getmerged.abhishekco.de",
+    siteName: "GetMerged",
     type: "website",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "opendoor - Find Welcoming GitHub Repos for Open Source Contribution",
+        alt: "GetMerged - Find Welcoming GitHub Repos for Open Source Contribution",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "opendoor - Find Welcoming GitHub Repos for Open Source Contribution",
+    title: "GetMerged - Find Welcoming GitHub Repos for Open Source Contribution",
     description: "Find GitHub repositories that welcome open source contribution, ranked by PR merge rates, maintainer response time, and first-timer success.",
     images: ["/opengraph-image"],
   },

@@ -22,7 +22,7 @@ interface ProfilePageProps {
 }
 
 const INTERNAL_API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://opendoor.abhishekco.de";
+  process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
 
 async function getUserProfile(slug: string): Promise<UserProfile | null> {
   try {
@@ -43,12 +43,12 @@ export async function generateMetadata({ params }: ProfilePageProps): Promise<Me
 
   if (!profile) {
     return {
-      title: "User Profile Not Found - Opendoor",
+      title: "User Profile Not Found - GetMerged",
     };
   }
 
-  const title = `${profile.username} (@${profile.slug}) - Contributor Profile | Opendoor`;
-  const description = `Explore ${profile.username}'s open source footprint on Opendoor. Tracking ${profile.stats.watchlist_count} repositories, ${profile.stats.feedback_count} reviews, and maintainer feedback scores.`;
+  const title = `${profile.username} (@${profile.slug}) - Contributor Profile | GetMerged`;
+  const description = `Explore ${profile.username}'s open source footprint on GetMerged. Tracking ${profile.stats.watchlist_count} repositories, ${profile.stats.feedback_count} reviews, and maintainer feedback scores.`;
 
   return {
     title,
@@ -64,14 +64,14 @@ export async function generateMetadata({ params }: ProfilePageProps): Promise<Me
       },
     },
     alternates: {
-      canonical: `https://opendoor.abhishekco.de/${profile.slug}`,
+      canonical: `https://getmerged.abhishekco.de/${profile.slug}`,
     },
     openGraph: {
       title,
       description,
       type: "profile",
-      url: `https://opendoor.abhishekco.de/${profile.slug}`,
-      siteName: "Opendoor",
+      url: `https://getmerged.abhishekco.de/${profile.slug}`,
+      siteName: "GetMerged",
     },
     twitter: {
       card: "summary",
@@ -136,7 +136,7 @@ export default async function UserProfilePage({ params }: ProfilePageProps) {
       <main className="flex-1 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Breadcrumb Navigation */}
         <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-zinc-500">
-          <Link href="/" title="Back to Opendoor Home" className="hover:text-zinc-900 transition-colors">
+          <Link href="/" title="Back to GetMerged Home" className="hover:text-zinc-900 transition-colors">
             Home
           </Link>
           <span>/</span>
