@@ -77,7 +77,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
   // Server-Side Data Fetching -> Pure SSR
   const repo = await getRepoData(fullName);
 
-  // Schema.org JSON-LD Structured Data (removed fake aggregateRating)
+  // Schema.org JSON-LD Structured Data (with freshness dateModified for SEO)
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
@@ -85,6 +85,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
     description: repo?.description || "Public open-source repository",
     programmingLanguage: repo?.language || "Multi-Language",
     codeRepository: repo?.github_url || `https://github.com/${fullName}`,
+    ...(repo?.updated_at ? { dateModified: new Date(repo.updated_at).toISOString() } : {}),
   };
 
   // Generate 8 to 10 rich context-driven FAQs based on real repository telemetry
