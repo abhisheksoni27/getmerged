@@ -31,7 +31,8 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
       .then((data) => {
         if (data?.user) {
           setUser(data.user);
-          posthog.identify(String(data.user.github_id), {
+          const distinctId = data.user.slug || `user_${data.user.username}`;
+          posthog.identify(distinctId, {
             username: data.user.username,
           });
         }

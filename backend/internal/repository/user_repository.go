@@ -48,8 +48,7 @@ type UserProfile struct {
 	Username    string             `json:"username"`
 	AvatarURL   *string            `json:"avatar_url,omitempty"`
 	MemberSince time.Time          `json:"member_since"`
-	Provider    string             `json:"provider"`
-	GithubURL   *string            `json:"github_url"`
+	GithubURL   *string            `json:"github_url,omitempty"`
 	Stats       UserStats          `json:"stats"`
 	Watchlist   []RepoRecord       `json:"watchlist"`
 	Feedback    []UserFeedbackItem `json:"feedback"`
@@ -257,14 +256,7 @@ func (r *sqlxUserRepository) GetUserProfileBySlug(ctx context.Context, slug stri
 		return nil, err
 	}
 
-	provider := "google"
 	var githubURL *string
-	if user.GithubID != nil && user.GoogleID != nil {
-		provider = "both"
-	} else if user.GithubID != nil {
-		provider = "github"
-	}
-
 	if user.GithubID != nil {
 		ghLink := fmt.Sprintf("https://github.com/%s", user.SlugOrUsername())
 		githubURL = &ghLink
@@ -344,7 +336,6 @@ func (r *sqlxUserRepository) GetUserProfileBySlug(ctx context.Context, slug stri
 		Username:    user.Username,
 		AvatarURL:   user.AvatarURL,
 		MemberSince: user.CreatedAt,
-		Provider:    provider,
 		GithubURL:   githubURL,
 		Stats: UserStats{
 			WatchlistCount:        watchlistCount,

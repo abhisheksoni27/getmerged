@@ -92,8 +92,7 @@ export interface UserProfile {
   username: string;
   avatar_url?: string | null;
   member_since: string;
-  provider: "github" | "google" | "both";
-  github_url: string | null;
+  github_url?: string | null;
   stats: UserStats;
   watchlist: Repo[];
   feedback: UserFeedbackItem[];

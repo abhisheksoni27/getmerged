@@ -133,6 +133,42 @@ func ListFeedback(db *sqlx.DB) gin.HandlerFunc {
 	}
 }
 
+// DeleteFeedback handles DELETE /api/v1/user/feedback/:id
+func DeleteFeedback(db *sqlx.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userIDVal, exists := c.Get(middleware.UserIDKey)
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "authentication required"})
+			return
+		}
+		userID, ok := userIDVal.(int64)
+		if !ok || userID == 0 {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "authentication required"})
+			return
+		}
+
+		feedbackID := c.Param("id")
+		if feedbackID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "feedback ID is required"})
+			return
+		}
+
+		res, err := db.ExecContext(c.Request.Context(), "DELETE FROM contributor_feedback WHERE id = ? AND user_id = ?", feedbackID, userID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete feedback"})
+			return
+		}
+
+		rows, _ := res.RowsAffected()
+		if rows == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"error": "feedback not found or unauthorized"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "feedback deleted successfully"})
+	}
+}
+
 func checkGitHubContributorStatus(fullName, username, ghToken string) bool {
 	if fullName == "" || username == "" {
 		return false

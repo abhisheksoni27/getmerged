@@ -53,8 +53,8 @@ func TestSlugGenerationAndResolution(t *testing.T) {
 	if err != nil {
 		t.Fatalf("GetUserProfileBySlug failed: %v", err)
 	}
-	if profile.Username != "Linus Torvalds" || profile.Provider != "github" {
-		t.Fatalf("unexpected profile details: %+v", profile)
+	if profile.Username != "Linus Torvalds" {
+		t.Fatalf("unexpected profile username: %s", profile.Username)
 	}
 	if profile.GithubURL == nil || *profile.GithubURL != "https://github.com/torvalds" {
 		t.Fatalf("expected github_url for github user, got %v", profile.GithubURL)
@@ -64,9 +64,6 @@ func TestSlugGenerationAndResolution(t *testing.T) {
 	gProfile, err := userRepo.GetUserProfileBySlug(ctx, "torvalds-2")
 	if err != nil {
 		t.Fatalf("GetUserProfileBySlug for google user failed: %v", err)
-	}
-	if gProfile.Provider != "google" {
-		t.Fatalf("expected provider 'google', got %s", gProfile.Provider)
 	}
 	if gProfile.GithubURL != nil {
 		t.Fatalf("expected nil github_url for google user, got %v", gProfile.GithubURL)
