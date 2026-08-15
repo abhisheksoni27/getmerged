@@ -81,7 +81,7 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		return fmt.Errorf("fetch repos for sitemap: %w", err)
 	}
 
-	baseUrl := "https://opendoor.abhishekco.de"
+	baseUrl := "https://getmerged.abhishekco.de"
 	today := time.Now().UTC().Format(time.RFC3339)
 
 	// Group repos by canonical slug (mirrors frontend getLanguageSlug so the
