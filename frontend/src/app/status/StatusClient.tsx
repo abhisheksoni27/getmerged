@@ -111,28 +111,28 @@ export function StatusClient() {
           <div className="rounded-3xl bg-white p-6 shadow-xs border border-zinc-200/80">
             <div className="flex items-center justify-between text-xs mb-3">
               <span className="font-bold text-zinc-900 flex items-center gap-2 font-space text-sm">
-                <Zap className="h-4 w-4 text-amber-500" /> API Gateway Health
+                <Zap className="h-4 w-4 text-amber-500" /> API Services
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[10px] font-bold font-mono bg-emerald-50 text-emerald-800 border border-emerald-200">
-                ACTIVE
+                OPERATIONAL
               </span>
             </div>
             <p className="text-xs text-zinc-500 font-sans">
-              Endpoint: <code className="bg-zinc-50 border border-zinc-200 px-1.5 py-0.5 rounded text-[11px] font-mono">{API_BASE_URL}/api/v1/health</code>
+              Repository scoring, telemetry analysis, and ranking query engine.
             </p>
           </div>
 
           <div className="rounded-3xl bg-white p-6 shadow-xs border border-zinc-200/80">
             <div className="flex items-center justify-between text-xs mb-3">
               <span className="font-bold text-zinc-900 flex items-center gap-2 font-space text-sm">
-                <ShieldCheck className="h-4 w-4 text-blue-600" /> Valkey Tag Cache Engine
+                <ShieldCheck className="h-4 w-4 text-emerald-600" /> In-Memory Cache
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[10px] font-bold font-mono bg-blue-50 text-blue-800 border border-blue-200">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[10px] font-bold font-mono bg-emerald-50 text-emerald-800 border border-emerald-200">
                 OPERATIONAL
               </span>
             </div>
             <p className="text-xs text-zinc-500 font-sans">
-              In-memory cache layer with tag-based invalidation support.
+              High-throughput edge caching and automated score invalidation layer.
             </p>
           </div>
         </div>
