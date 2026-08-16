@@ -496,6 +496,12 @@ on acquisition (§10).
 - **Story 11.5**: Freshness signals — `lastModified` = snapshot date + "updated Xh ago" on repo pages.
 - **Story 11.6**: Annual "State of Welcoming OSS" report at `/reports/[year]` — backlink + authority asset from the blog pipeline (§4.1).
 
+### 🎯 Epic 12: Good First Issue Strict Repo Scoping & Ingestion Integrity
+*Ensure repo scorecards exclusively render verified issues belonging to that exact repository.*
+- **Story 12.1**: Fix repo identifier parsing and URL decoding across `/api/v1/repos/:id/good-first-issues` to guarantee exact repo ID matching and eliminate cross-repo issue bleed.
+- **Story 12.2**: Audit GFI ingestion pipeline (`repo_good_first_issues`) with strict foreign key verification and automated data purge for orphaned issue rows.
+- **Story 12.3**: Update frontend `ClientRepoDetail` to assert `issue.repo_full_name === current_repo_full_name` as a secondary client-side integrity gate.
+
 
 
 

@@ -57,7 +57,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
   const [isGuidelinesOpen, setIsGuidelinesOpen] = useState(false);
   const [relatedRepos, setRelatedRepos] = useState<Repo[]>([]);
-  const [gfiList, setGfiList] = useState<Array<{ id: number; title: string; html_url: string; body_snippet?: string; quality_score?: number }>>([]);
+  const [gfiList, setGfiList] = useState<Array<{ id: number; title: string; html_url: string; body_snippet?: string; quality_score?: number; repo_full_name?: string }>>([]);
   const [maintainerRating, setMaintainerRating] = useState(0);
   const [reviewSpeedRating, setReviewSpeedRating] = useState(0);
   const [beginnerRating, setBeginnerRating] = useState(0);
@@ -165,12 +165,17 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         })
         .catch(() => {});
 
-      // 4. Fetch Real Good First Issues (Story 10.2)
+      // 4. Fetch Real Good First Issues (Story 10.2 & Story 12.3)
       fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/good-first-issues`)
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
           if (data?.data && Array.isArray(data.data)) {
-            setGfiList(data.data);
+            const currentFullName = fullName.toLowerCase();
+            const filtered = data.data.filter((item: { repo_full_name?: string }) => {
+              if (!item.repo_full_name) return true;
+              return item.repo_full_name.toLowerCase() === currentFullName;
+            });
+            setGfiList(filtered);
           }
         })
         .catch(() => {});
