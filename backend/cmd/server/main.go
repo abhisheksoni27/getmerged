@@ -118,6 +118,7 @@ func main() {
 		api.GET("/health", handler.Health())
 		api.GET("/repos", handler.ListRepos(repoStore))
 		api.GET("/repos/:id", handler.GetRepo(repoStore))
+		api.GET("/repos/:owner/:name/pr-likelihood", handler.GetPRLikelihoodHandler(repoStore))
 		api.GET("/repos/:id/related", handler.GetRelatedReposHandler(repoStore))
 		api.GET("/repos/:id/good-first-issues", handler.GetRepoGoodFirstIssues(gfiRepo, repoStore))
 		api.GET("/issues/good-first", handler.ListGoodFirstIssues(gfiRepo))

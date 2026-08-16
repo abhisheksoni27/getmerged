@@ -445,3 +445,85 @@ func GetRelatedReposHandler(repoStore repository.RepoRepository) gin.HandlerFunc
 		})
 	}
 }
+
+type PRLikelihoodResponse struct {
+	Repository                      string   `json:"repository"`
+	CRankTier                       string   `json:"c_rank_tier"`
+	OverallAcceptanceRate           *float64 `json:"overall_acceptance_rate"`
+	FirstTimerAcceptanceRate        *float64 `json:"first_timer_acceptance_rate"`
+	RepeatContributorAcceptanceRate *float64 `json:"repeat_contributor_acceptance_rate"`
+	ResponseTimeP50Hours            *float64 `json:"response_time_p50_hours"`
+	ResponseTimeP90Hours            *float64 `json:"response_time_p90_hours"`
+	MedianTimeToMergeHours          *float64 `json:"median_time_to_merge_hours"`
+	BusFactor                       int      `json:"bus_factor"`
+	StalenessFlag                   bool     `json:"staleness_flag"`
+	CalculatedAt                    *string  `json:"calculated_at"`
+}
+
+// GetPRLikelihoodHandler handles GET /api/v1/repos/:owner/:name/pr-likelihood
+func GetPRLikelihoodHandler(repoStore repository.RepoRepository) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		owner := c.Param("owner")
+		name := c.Param("name")
+		fullName := owner + "/" + name
+
+		repo, err := repoStore.FindByIDOrName(c.Request.Context(), fullName)
+		if err == sql.ErrNoRows || repo == nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "repository not found"})
+			return
+		}
+
+		// Set HTTP caching headers (1 hour TTL, 24h stale-while-revalidate)
+		c.Header("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400")
+
+		isStale := repo.StalenessFlag || time.Since(repo.UpdatedAt) > 180*24*time.Hour
+
+		var overallRate, firstTimerRate, repeatRate, p50, p90, mergeHours *float64
+		if repo.ExternalPRMergeRate > 0 {
+			v := repo.ExternalPRMergeRate
+			overallRate = &v
+		}
+		if repo.FirstTimerSuccessRate > 0 {
+			v := repo.FirstTimerSuccessRate
+			firstTimerRate = &v
+		}
+		if repo.RepeatContributorRate > 0 {
+			v := repo.RepeatContributorRate
+			repeatRate = &v
+		}
+		if repo.ResponseP50Hours > 0 {
+			v := repo.ResponseP50Hours
+			p50 = &v
+		} else if repo.TimeToFirstResponseHours > 0 {
+			v := repo.TimeToFirstResponseHours
+			p50 = &v
+		}
+		if repo.ResponseP90Hours > 0 {
+			v := repo.ResponseP90Hours
+			p90 = &v
+		}
+		if repo.TimeToMergeHours > 0 {
+			v := repo.TimeToMergeHours
+			mergeHours = &v
+		}
+
+		var calcAt *string
+		if repo.SnapshotDate != "" {
+			calcAt = &repo.SnapshotDate
+		}
+
+		c.JSON(http.StatusOK, PRLikelihoodResponse{
+			Repository:                      repo.FullName,
+			CRankTier:                       repo.CRankTier,
+			OverallAcceptanceRate:           overallRate,
+			FirstTimerAcceptanceRate:        firstTimerRate,
+			RepeatContributorAcceptanceRate: repeatRate,
+			ResponseTimeP50Hours:            p50,
+			ResponseTimeP90Hours:            p90,
+			MedianTimeToMergeHours:          mergeHours,
+			BusFactor:                       int(repo.DistinctMaintainerCount),
+			StalenessFlag:                   isStale,
+			CalculatedAt:                    calcAt,
+		})
+	}
+}
