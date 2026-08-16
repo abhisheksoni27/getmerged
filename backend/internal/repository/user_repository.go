@@ -13,15 +13,17 @@ import (
 )
 
 type User struct {
-	ID        int64     `db:"id" json:"id"`
-	GithubID  *int64    `db:"github_id" json:"github_id,omitempty"`
-	GoogleID  *string   `db:"google_id" json:"google_id,omitempty"`
-	Slug      *string   `db:"slug" json:"slug,omitempty"`
-	Username  string    `db:"username" json:"username"`
-	Email     *string   `db:"email" json:"email,omitempty"`
-	AvatarURL *string   `db:"avatar_url" json:"avatar_url,omitempty"`
-	CreatedAt time.Time `db:"created_at" json:"created_at"`
-	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
+	ID               int64      `db:"id" json:"id"`
+	GithubID         *int64     `db:"github_id" json:"github_id,omitempty"`
+	GoogleID         *string    `db:"google_id" json:"google_id,omitempty"`
+	Slug             *string    `db:"slug" json:"slug,omitempty"`
+	Username         string     `db:"username" json:"username"`
+	Email            *string    `db:"email" json:"email,omitempty"`
+	AvatarURL        *string    `db:"avatar_url" json:"avatar_url,omitempty"`
+	ProfilingConsent bool       `db:"profiling_consent" json:"profiling_consent"`
+	DeletedAt        *time.Time `db:"deleted_at" json:"-"`
+	CreatedAt        time.Time  `db:"created_at" json:"created_at"`
+	UpdatedAt        time.Time  `db:"updated_at" json:"updated_at"`
 }
 
 type UserStats struct {
@@ -62,6 +64,9 @@ type UserRepository interface {
 	GetUserProfileBySlug(ctx context.Context, slug string) (*UserProfile, error)
 	UpsertUser(ctx context.Context, githubID int64, username, email, avatarURL string) (int64, error)
 	UpsertGoogleUser(ctx context.Context, googleID string, username, email, avatarURL string) (int64, error)
+	UpdateProfilingConsent(ctx context.Context, userID int64, consent bool) error
+	SoftDeleteUser(ctx context.Context, userID int64) error
+	PurgeDeletedUsers(ctx context.Context) (int64, error)
 }
 
 type sqlxUserRepository struct {
@@ -82,7 +87,7 @@ func NewUserRepository(db *sqlx.DB, cfg *config.Config) UserRepository {
 
 func (r *sqlxUserRepository) FindByGithubID(ctx context.Context, githubID int64) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, created_at, updated_at FROM users WHERE github_id = ?", githubID)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, deleted_at, created_at, updated_at FROM users WHERE github_id = ? AND deleted_at IS NULL", githubID)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +98,7 @@ func (r *sqlxUserRepository) FindByGithubID(ctx context.Context, githubID int64)
 
 func (r *sqlxUserRepository) FindByGoogleID(ctx context.Context, googleID string) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, created_at, updated_at FROM users WHERE google_id = ?", googleID)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, deleted_at, created_at, updated_at FROM users WHERE google_id = ? AND deleted_at IS NULL", googleID)
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +109,7 @@ func (r *sqlxUserRepository) FindByGoogleID(ctx context.Context, googleID string
 
 func (r *sqlxUserRepository) FindByID(ctx context.Context, id int64) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, created_at, updated_at FROM users WHERE id = ?", id)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, deleted_at, created_at, updated_at FROM users WHERE id = ? AND deleted_at IS NULL", id)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +120,7 @@ func (r *sqlxUserRepository) FindByID(ctx context.Context, id int64) (*User, err
 
 func (r *sqlxUserRepository) FindBySlug(ctx context.Context, slug string) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, created_at, updated_at FROM users WHERE slug = ?", slug)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, deleted_at, created_at, updated_at FROM users WHERE slug = ? AND deleted_at IS NULL", slug)
 	if err != nil {
 		return nil, err
 	}
@@ -370,6 +375,41 @@ func (u *User) SlugOrUsername() string {
 		return *u.Slug
 	}
 	return strings.ToLower(u.Username)
+}
+
+func (r *sqlxUserRepository) UpdateProfilingConsent(ctx context.Context, userID int64, consent bool) error {
+	_, err := r.db.ExecContext(ctx, "UPDATE users SET profiling_consent = ?, profiling_consent_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = ?", consent, userID)
+	return err
+}
+
+func (r *sqlxUserRepository) SoftDeleteUser(ctx context.Context, userID int64) error {
+	_, err := r.db.ExecContext(ctx, `
+		UPDATE users SET
+			deleted_at = CURRENT_TIMESTAMP,
+			username = 'Deleted User',
+			email = NULL,
+			avatar_url = NULL,
+			email_hash = NULL,
+			profiling_consent = FALSE,
+			updated_at = CURRENT_TIMESTAMP
+		WHERE id = ? AND deleted_at IS NULL
+	`, userID)
+	return err
+}
+
+func (r *sqlxUserRepository) PurgeDeletedUsers(ctx context.Context) (int64, error) {
+	// 1. Purge watchlists of deleted users
+	_, _ = r.db.ExecContext(ctx, "DELETE FROM user_watchlists WHERE user_id IN (SELECT id FROM users WHERE deleted_at IS NOT NULL)")
+
+	// 2. Purge oauth tokens of deleted users
+	_, _ = r.db.ExecContext(ctx, "DELETE FROM user_oauth_tokens WHERE user_id IN (SELECT id FROM users WHERE deleted_at IS NOT NULL)")
+
+	// 3. Hard delete purged users
+	res, err := r.db.ExecContext(ctx, "DELETE FROM users WHERE deleted_at IS NOT NULL")
+	if err != nil {
+		return 0, err
+	}
+	return res.RowsAffected()
 }
 
 func (r *sqlxUserRepository) decryptUserPII(user *User) {

@@ -297,9 +297,89 @@ func GetCurrentUser(userRepo repository.UserRepository) gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, gin.H{"user": gin.H{
-			"slug":       user.Slug,
-			"username":   user.Username,
-			"avatar_url": user.AvatarURL,
+			"slug":              user.Slug,
+			"username":          user.Username,
+			"avatar_url":        user.AvatarURL,
+			"profiling_consent": user.ProfilingConsent,
 		}})
+	}
+}
+
+type UpdateConsentBody struct {
+	ProfilingConsent bool `json:"profiling_consent"`
+}
+
+// UpdateConsent handles PATCH /api/v1/user/consent
+func UpdateConsent(userRepo repository.UserRepository) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userIDVal, exists := c.Get(middleware.UserIDKey)
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthenticated"})
+			return
+		}
+
+		var body UpdateConsentBody
+		if err := c.ShouldBindJSON(&body); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
+			return
+		}
+
+		userID := userIDVal.(int64)
+		if err := userRepo.UpdateProfilingConsent(c.Request.Context(), userID, body.ProfilingConsent); err != nil {
+			slog.Error("failed to update profiling consent", "user_id", userID, "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update consent"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"status":            "ok",
+			"profiling_consent": body.ProfilingConsent,
+		})
+	}
+}
+
+type DeleteDataBody struct {
+	Confirm                  bool   `json:"confirm"`
+	DeleteConfirmationPhrase string `json:"delete_confirmation_phrase"`
+}
+
+// DeleteUserData handles DELETE /api/v1/me/data (GDPR Right to Erasure)
+func DeleteUserData(cfg *config.Config, userRepo repository.UserRepository) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userIDVal, exists := c.Get(middleware.UserIDKey)
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthenticated"})
+			return
+		}
+
+		var body DeleteDataBody
+		if err := c.ShouldBindJSON(&body); err != nil || !body.Confirm || body.DeleteConfirmationPhrase != "DELETE MY ACCOUNT" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "must confirm with phrase 'DELETE MY ACCOUNT'"})
+			return
+		}
+
+		userID := userIDVal.(int64)
+		if err := userRepo.SoftDeleteUser(c.Request.Context(), userID); err != nil {
+			slog.Error("failed to soft delete user", "user_id", userID, "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete user data"})
+			return
+		}
+
+		// Clear auth cookie
+		isSecure := cfg.GinMode == "release"
+		http.SetCookie(c.Writer, &http.Cookie{
+			Name:     "opendoor_token",
+			Value:    "",
+			Path:     "/",
+			MaxAge:   -1,
+			HttpOnly: false,
+			Secure:   isSecure,
+			SameSite: http.SameSiteLaxMode,
+		})
+
+		c.JSON(http.StatusOK, gin.H{
+			"status":  "deleted",
+			"message": "All user data scheduled for complete purge",
+		})
 	}
 }

@@ -4,9 +4,9 @@
 
 ## 📋 Status Overview
 - **Active Sprint**: Sprint 2: Contributor DNA & Secure Auth
-- **Total Stories Completed**: 5
+- **Total Stories Completed**: 6
 - **Build Status**: 🟢 Passing (`go test ./...` & `npm run lint`)
-- **Last Sync**: 2026-08-17 01:06 IST
+- **Last Sync**: 2026-08-17 01:09 IST
 
 ---
 
@@ -22,7 +22,8 @@
 | **Story 1.2** | GFI Quality Score (Maintainer authorship, response latency <48h, word count heuristics, doc waivers) & `quality_score` (0–100) | 🟢 100% Passing (`internal/scoring/gfi_quality_test.go`) | `2b598be` |
 | **Story 1.3** | 90-Day Bus Factor calculation from distinct active insiders & C-Rank Safety Cap (Bus Factor <= 1 -> max Tier B) | 🟢 100% Passing (`internal/scoring/bus_factor_test.go`) | `874ecd6` |
 | **Story 1.4** | Expose `onboarding_score`, `bus_factor` (maintainers), and `gfi_quality_score` across Backend API & Repo Scorecards UI | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `0994973` |
-| **Story 2.1** | Encrypt OAuth GitHub access/refresh tokens with AES-256-GCM (`v1:` envelope, `user_oauth_tokens` table, singleflight refresh) | 🟢 100% Passing (`internal/auth/token_manager_test.go`, `internal/repository/oauth_token_repository_test.go`) | `HEAD` |
+| **Story 2.1** | Encrypt OAuth GitHub access/refresh tokens with AES-256-GCM (`v1:` envelope, `user_oauth_tokens` table, singleflight refresh) | 🟢 100% Passing (`internal/auth/token_manager_test.go`, `internal/repository/oauth_token_repository_test.go`) | `0ae92f6` |
+| **Story 2.2** | GDPR Right to Erasure (`DELETE /api/v1/me/data`), profiling consent management (`PATCH /api/v1/user/consent`), and soft-delete filtering | 🟢 100% Passing (`internal/repository/repository_test.go`) | `HEAD` |
 
 ---
 
@@ -34,4 +35,4 @@
 ---
 
 ## 🎯 Next Queued Story
-- **Story 2.2**: Implement `DELETE /api/v1/me/data` and explicit GDPR profiling consent checkbox.
+- **Story 2.3**: Build Contributor DNA background worker restricted to ≤2 search queries (`author:{login} type:pr` and `is:merged`) + REST profile endpoints.

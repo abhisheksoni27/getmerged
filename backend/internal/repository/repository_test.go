@@ -101,6 +101,29 @@ func TestUserRepository_UpsertAndFind(t *testing.T) {
 	if user.Email == nil || *user.Email != "dev@opendoor.dev" {
 		t.Fatalf("expected email 'dev@opendoor.dev', got %v", user.Email)
 	}
+	if user.ProfilingConsent {
+		t.Fatalf("expected profiling_consent to be false by default")
+	}
+
+	// 2. Test updating consent
+	if err := repo.UpdateProfilingConsent(ctx, userID, true); err != nil {
+		t.Fatalf("UpdateProfilingConsent failed: %v", err)
+	}
+	updatedUser, err := repo.FindByID(ctx, userID)
+	if err != nil || !updatedUser.ProfilingConsent {
+		t.Fatalf("expected profiling_consent to be true after update")
+	}
+
+	// 3. Test soft delete
+	if err := repo.SoftDeleteUser(ctx, userID); err != nil {
+		t.Fatalf("SoftDeleteUser failed: %v", err)
+	}
+
+	// Deleted user should return not found
+	deletedLookup, err := repo.FindByID(ctx, userID)
+	if err == nil || deletedLookup != nil {
+		t.Fatalf("expected soft-deleted user to not be found by FindByID")
+	}
 }
 
 func TestRepoRepository_ListAndFind(t *testing.T) {

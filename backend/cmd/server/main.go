@@ -142,6 +142,8 @@ func main() {
 	userApi.Use(middleware.UserAuth(cfg.JWTSecret))
 	{
 		userApi.GET("/auth/me", handler.GetCurrentUser(userRepo))
+		userApi.PATCH("/user/consent", handler.UpdateConsent(userRepo))
+		userApi.DELETE("/me/data", handler.DeleteUserData(cfg, userRepo))
 		userApi.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
 		userApi.POST("/user/watchlist", handler.AddToWatchlist(watchlistRepo))
 		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist(watchlistRepo))
