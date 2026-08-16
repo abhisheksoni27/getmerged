@@ -31,17 +31,19 @@ func ListGoodFirstIssues(gfiRepo repository.GFIRepository) gin.HandlerFunc {
 	}
 }
 
-// GetRepoGoodFirstIssues handles GET /api/v1/repos/:id/good-first-issues
+// GetRepoGoodFirstIssues handles GET /api/v1/repos/:id/good-first-issues (Story 10.2)
 func GetRepoGoodFirstIssues(gfiRepo repository.GFIRepository, repoStore repository.RepoRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		identifier := c.Param("id")
+		c.Header("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400")
+
 		repo, err := repoStore.FindByIDOrName(c.Request.Context(), identifier)
 		if err != nil || repo == nil {
 			c.JSON(http.StatusNotFound, gin.H{"error": "repository not found"})
 			return
 		}
 
-		issues, err := gfiRepo.ListByRepoID(c.Request.Context(), repo.ID, 15)
+		issues, err := gfiRepo.ListByRepoID(c.Request.Context(), repo.ID, 5)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch repository good first issues"})
 			return

@@ -57,6 +57,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
   const [isGuidelinesOpen, setIsGuidelinesOpen] = useState(false);
   const [relatedRepos, setRelatedRepos] = useState<Repo[]>([]);
+  const [gfiList, setGfiList] = useState<Array<{ id: number; title: string; html_url: string; body_snippet?: string; quality_score?: number }>>([]);
   const [maintainerRating, setMaintainerRating] = useState(0);
   const [reviewSpeedRating, setReviewSpeedRating] = useState(0);
   const [beginnerRating, setBeginnerRating] = useState(0);
@@ -160,6 +161,16 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         .then((data) => {
           if (data?.related && Array.isArray(data.related)) {
             setRelatedRepos(data.related);
+          }
+        })
+        .catch(() => {});
+
+      // 4. Fetch Real Good First Issues (Story 10.2)
+      fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/good-first-issues`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.data && Array.isArray(data.data)) {
+            setGfiList(data.data);
           }
         })
         .catch(() => {});
@@ -513,60 +524,74 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         <PRAcceptanceWidget owner={repo.owner} name={repo.name} />
       )}
 
-      {/* Good First Issues Count (F3) */}
-      <div className="rounded-2xl bg-white p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] font-mono">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-emerald-600" /> Open Good First Issues ({repo?.good_first_issue_count ?? 0})
-          </h3>
-          <a
-            href={`https://github.com/${fullName}/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22good%20first%20issue%22%2Cgood-first-issue%2Cgood_first_issue%2C%22first%20timers%20only%22%2Cfirst-timer%2Cbeginner%2Cbeginner-friendly%2C%22beginner%20friendly%22%2Ceasy%2Ceasy-fix%2C%22easy%20fix%22%2Clow-hanging-fruit%2C%22low%20hanging%20fruit%22%2C%22help%20wanted%22%2Chelp-wanted%2Cstarter%2Cstarter-issue%2Cbitesize%2Cnew-contributor%2Cup-for-grabs%2Ce-easy%2CE-mentor`}
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-            className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1"
-          >
-            View on GitHub <ArrowRight className="h-3 w-3" />
-          </a>
-        </div>
-        {(repo?.good_first_issue_count ?? 0) > 0 ? (
-          <div className="space-y-3">
+      {/* Good First Issues Cards (Story 10.2 & Story 10.3) */}
+      {((repo?.good_first_issue_count ?? 0) > 0 || gfiList.length > 0) && (
+        <div className="rounded-2xl bg-white p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] font-mono">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-emerald-600" /> Active Good First Issues ({gfiList.length > 0 ? gfiList.length : (repo?.good_first_issue_count ?? 0)})
+            </h3>
+            <a
+              href={`https://github.com/${fullName}/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22good%20first%20issue%22%2Cgood-first-issue`}
+              target="_blank"
+              rel="nofollow noopener noreferrer"
+              title="View all good first issues directly on GitHub"
+              className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1"
+            >
+              View on GitHub <ArrowRight className="h-3 w-3" />
+            </a>
+          </div>
+
+          {gfiList.length > 0 ? (
+            <div className="space-y-3 font-sans">
+              {gfiList.map((issue) => (
+                <div
+                  key={issue.id}
+                  className="p-3.5 rounded-xl border border-zinc-200 bg-zinc-50/50 hover:bg-zinc-50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                >
+                  <div className="min-w-0 flex-1">
+                    <a
+                      href={issue.html_url}
+                      target="_blank"
+                      rel="nofollow noopener noreferrer"
+                      title={issue.title}
+                      className="text-xs sm:text-sm font-bold text-zinc-900 hover:text-emerald-600 transition-colors line-clamp-1 block"
+                    >
+                      🎯 {issue.title}
+                    </a>
+                    {issue.body_snippet && (
+                      <p className="text-xs text-zinc-500 mt-1 line-clamp-2">{issue.body_snippet}</p>
+                    )}
+                  </div>
+                  {issue.quality_score !== undefined && issue.quality_score > 0 && (
+                    <span className="shrink-0 text-[11px] font-mono font-bold bg-emerald-50 text-emerald-700 px-2 py-1 rounded-lg border border-emerald-200/60 self-start sm:self-center">
+                      Quality: {issue.quality_score}/100
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
             <p className="text-xs text-zinc-600 font-sans">
-              This repo currently has <strong>{repo?.good_first_issue_count}</strong> open{" "}
-              <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700 font-mono">good first issue</code> issues -
-              a great entry point for your first contribution.
+              This repository currently has <strong>{repo?.good_first_issue_count}</strong> open{" "}
+              <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700 font-mono">good first issue</code> tickets available for newcomers.
             </p>
-            {repo?.language && (
-              <div className="pt-2 border-t border-zinc-100 flex items-center justify-between">
-                <span className="text-[11px] font-sans text-zinc-500">Looking for more {repo.language} beginner tasks?</span>
-                <Link
-                  href={`/good-first-issue/${getLanguageSlug(repo.language)}`}
-                  title={`Explore all ${repo.language} Good First Issues on GetMerged`}
-                  className="text-xs font-bold text-emerald-700 hover:text-emerald-800 font-sans inline-flex items-center gap-1 hover:underline"
-                >
-                  Explore all {repo.language} Good First Issues <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="space-y-2">
-            <p className="text-xs text-zinc-500 font-sans bg-zinc-100/50 p-4 rounded-xl text-center">
-              No open `good first issue` labels currently found on GitHub for this repo.
-            </p>
-            {repo?.language && (
-              <div className="text-center pt-2">
-                <Link
-                  href={`/good-first-issue/${getLanguageSlug(repo.language)}`}
-                  title={`Browse open ${repo.language} beginner tasks across other projects`}
-                  className="text-xs font-bold text-emerald-700 hover:text-emerald-800 font-sans inline-flex items-center gap-1 hover:underline"
-                >
-                  Browse open {repo.language} Good First Issues across other repos <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+          )}
+
+          {repo?.language && (
+            <div className="pt-3 mt-3 border-t border-zinc-100 flex items-center justify-between font-sans">
+              <span className="text-[11px] text-zinc-500">Looking for more {repo.language} beginner tasks?</span>
+              <Link
+                href={`/good-first-issue/${getLanguageSlug(repo.language)}`}
+                title={`Explore all ${repo.language} Good First Issues on GetMerged`}
+                className="text-xs font-bold text-emerald-700 hover:text-emerald-800 inline-flex items-center gap-1 hover:underline"
+              >
+                Explore {repo.language} Good First Issues <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Dynamic README Badge Embed (F1) */}
       <div className="rounded-2xl bg-white p-4 sm:p-5 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-6 font-mono">

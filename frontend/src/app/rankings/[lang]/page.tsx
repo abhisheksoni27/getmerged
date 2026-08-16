@@ -5,6 +5,7 @@ import { RepoCard } from "@/components/RepoCard";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import { canonicalizeSlug, displayNameFromSlug } from "@/lib/languageSlug";
+import { getEcosystemMetadata } from "@/lib/ecosystem-descriptions";
 import { Sparkles, Code2, ArrowLeft, ShieldCheck, Trophy } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -22,8 +23,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const languageName = displayNameFromSlug(lang);
-  const title = `Top Welcoming Open-Source ${languageName} Projects (C-Rank™) - GetMerged`;
-  const description = `Discover high-ranking open-source ${languageName} repositories with fast maintainer response times and high PR merge rates on GetMerged.`;
+  const meta = getEcosystemMetadata(canonicalLang);
+  const title = meta.title;
+  const description = meta.description;
 
   return {
     title,
