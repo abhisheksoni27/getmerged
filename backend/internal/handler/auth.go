@@ -2,6 +2,7 @@ package handler
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"log/slog"
@@ -13,6 +14,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/auth"
 	"github.com/abhisheksoni27/opendoor/internal/config"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
+	"github.com/abhisheksoni27/opendoor/internal/pipeline"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
 )
@@ -380,6 +382,88 @@ func DeleteUserData(cfg *config.Config, userRepo repository.UserRepository) gin.
 		c.JSON(http.StatusOK, gin.H{
 			"status":  "deleted",
 			"message": "All user data scheduled for complete purge",
+		})
+	}
+}
+
+// GetContributorDNA handles GET /api/v1/user/dna
+func GetContributorDNA(profileRepo repository.ContributorProfileRepository) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userIDVal, exists := c.Get(middleware.UserIDKey)
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthenticated"})
+			return
+		}
+
+		userID := userIDVal.(int64)
+		prof, err := profileRepo.GetByUserID(c.Request.Context(), userID)
+		if err != nil {
+			slog.Error("failed to get contributor profile", "user_id", userID, "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch profile"})
+			return
+		}
+
+		if prof == nil {
+			c.JSON(http.StatusOK, gin.H{
+				"status": "unprofiled",
+				"dna":    nil,
+			})
+			return
+		}
+
+		var parsedDNA interface{}
+		if prof.DNAJSON != nil && *prof.DNAJSON != "" {
+			_ = json.Unmarshal([]byte(*prof.DNAJSON), &parsedDNA)
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"status":            prof.ProfilingStatus,
+			"dna":               parsedDNA,
+			"total_merged_prs":  prof.TotalMergedPRs,
+			"last_error":        prof.LastError,
+			"analyzed_at":       prof.AnalyzedAt,
+		})
+	}
+}
+
+// RefreshContributorDNA handles POST /api/v1/user/dna/refresh
+func RefreshContributorDNA(profileRepo repository.ContributorProfileRepository, worker pipeline.ContributorDNAWorker) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userIDVal, exists := c.Get(middleware.UserIDKey)
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthenticated"})
+			return
+		}
+
+		userID := userIDVal.(int64)
+		allowed, err := profileRepo.RequestRefresh(c.Request.Context(), userID)
+		if err != nil {
+			slog.Error("failed to request dna refresh", "user_id", userID, "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to request refresh"})
+			return
+		}
+
+		if !allowed {
+			c.JSON(http.StatusTooManyRequests, gin.H{
+				"error": "Profile analysis can only be requested once every 24 hours",
+			})
+			return
+		}
+
+		// Asynchronously trigger background profiling worker
+		if worker != nil {
+			go func(uid int64) {
+				ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+				defer cancel()
+				if err := worker.AnalyzeUser(ctx, uid); err != nil {
+					slog.Warn("async dna worker run failed", "user_id", uid, "err", err)
+				}
+			}(userID)
+		}
+
+		c.JSON(http.StatusAccepted, gin.H{
+			"status":  "pending",
+			"message": "Contributor DNA analysis queued",
 		})
 	}
 }

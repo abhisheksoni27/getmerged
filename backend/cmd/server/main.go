@@ -74,7 +74,9 @@ func main() {
 	// Initialize Repository Layer
 	userRepo := repository.NewUserRepository(database, cfg)
 	oauthTokenRepo := repository.NewOAuthTokenRepository(database, cfg)
+	profileRepo := repository.NewContributorProfileRepository(database)
 	tokenMgr := auth.NewTokenManager(oauthTokenRepo, cfg, nil)
+	dnaWorker := pipeline.NewContributorDNAWorker(userRepo, profileRepo, tokenMgr, cfg.GithubToken, nil)
 	repoStore := repository.NewRepoRepository(database)
 	watchlistRepo := repository.NewWatchlistRepository(database)
 	aiRepo := repository.NewAIRepository(database)
@@ -144,6 +146,8 @@ func main() {
 		userApi.GET("/auth/me", handler.GetCurrentUser(userRepo))
 		userApi.PATCH("/user/consent", handler.UpdateConsent(userRepo))
 		userApi.DELETE("/me/data", handler.DeleteUserData(cfg, userRepo))
+		userApi.GET("/user/dna", handler.GetContributorDNA(profileRepo))
+		userApi.POST("/user/dna/refresh", handler.RefreshContributorDNA(profileRepo, dnaWorker))
 		userApi.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
 		userApi.POST("/user/watchlist", handler.AddToWatchlist(watchlistRepo))
 		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist(watchlistRepo))
