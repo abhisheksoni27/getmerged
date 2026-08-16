@@ -4,9 +4,9 @@
 
 ## 📋 Status Overview
 - **Active Sprint**: Sprint 2: Contributor DNA & Secure Auth
-- **Total Stories Completed**: 9
+- **Total Stories Completed**: 10
 - **Build Status**: 🟢 Passing (`go test ./...` & `npm run lint`)
-- **Last Sync**: 2026-08-17 01:17 IST
+- **Last Sync**: 2026-08-17 01:19 IST
 
 ---
 
@@ -26,7 +26,8 @@
 | **Story 2.2** | GDPR Right to Erasure (`DELETE /api/v1/me/data`), profiling consent management (`PATCH /api/v1/user/consent`), and soft-delete filtering | 🟢 100% Passing (`internal/repository/repository_test.go`) | `ccf656f` |
 | **Story 2.3** | Contributor DNA background worker with strict 1-query budget, 24h atomic throttling, and `GET /api/v1/user/dna` endpoints | 🟢 100% Passing (`internal/pipeline/contributor_dna_test.go`) | `8d92574` |
 | **Story 2.4** | Contributor DNA schema synthesis (`primary_languages`, `skill_level`, `pr_size_preference`, `review_engagement`) cached and attached to `/users/:slug` | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `d936eec` |
-| **Story 3.1** | Pure response latency percentiles calculation (p50, p90) and first-timer merge rates stored in snapshots | 🟢 100% Passing (`internal/scoring/percentiles_test.go`) | `HEAD` |
+| **Story 3.1** | Pure response latency percentiles calculation (p50, p90) and first-timer merge rates stored in snapshots | 🟢 100% Passing (`internal/scoring/percentiles_test.go`) | `04954b5` |
+| **Story 3.2** | `GET /api/v1/repos/:owner/:name/pr-likelihood` sub-10ms endpoint with null-safe JSON and HTTP Cache-Control | 🟢 100% Passing (`internal/handler/repos_handler_test.go`) | `HEAD` |
 
 ---
 
@@ -38,4 +39,4 @@
 ---
 
 ## 🎯 Next Queued Story
-- **Story 3.2**: Implement `GET /api/v1/repos/:owner/:name/pr-likelihood` reading precomputed metrics from MySQL with sub-10ms response time.
+- **Story 3.3**: Async worker pushes maintainer comment text to local `nlp_sidecar` to classify maintainer vibe (warm vs. strict, nitpicks, bot gatekeeping) and caches result.

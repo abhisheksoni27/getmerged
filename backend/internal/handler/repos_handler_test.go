@@ -320,3 +320,44 @@ func TestGetRelatedReposHandler(t *testing.T) {
 		t.Fatalf("expected related repos body to contain 'gofiber/fiber', got: %s", body)
 	}
 }
+
+func TestGetPRLikelihoodHandler(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	database := setupBadgeTestDB(t)
+	defer database.Close()
+
+	repoStore := repository.NewRepoRepository(database)
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('pr-1', 'facebook/react', 'facebook', 'react', 'JavaScript', 220000, ?)`, time.Now())
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, external_pr_merge_rate, first_timer_success_rate, response_p50_hours, response_p90_hours, time_to_merge_hours, distinct_maintainer_count, updated_at) VALUES ('pr-1', '2026-08-17', 'S', 98.0, 85.0, 75.0, 3.5, 18.0, 48.0, 12, ?)`, time.Now())
+
+	r := gin.New()
+	r.GET("/api/v1/repos/:owner/:name/pr-likelihood", handler.GetPRLikelihoodHandler(repoStore))
+
+	req := httptest.NewRequest("GET", "/api/v1/repos/facebook/react/pr-likelihood", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200 OK, got %d", w.Code)
+	}
+
+	if cacheHeader := w.Header().Get("Cache-Control"); !strings.Contains(cacheHeader, "public, max-age=3600") {
+		t.Fatalf("expected Cache-Control header, got %s", cacheHeader)
+	}
+
+	var resp handler.PRLikelihoodResponse
+	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
+		t.Fatalf("failed to decode response: %v", err)
+	}
+
+	if resp.Repository != "facebook/react" || resp.CRankTier != "S" {
+		t.Fatalf("unexpected response payload: %+v", resp)
+	}
+	if resp.OverallAcceptanceRate == nil || *resp.OverallAcceptanceRate != 85.0 {
+		t.Fatalf("expected overall acceptance rate 85.0, got %v", resp.OverallAcceptanceRate)
+	}
+	if resp.ResponseTimeP50Hours == nil || *resp.ResponseTimeP50Hours != 3.5 {
+		t.Fatalf("expected p50 3.5, got %v", resp.ResponseTimeP50Hours)
+	}
+}
