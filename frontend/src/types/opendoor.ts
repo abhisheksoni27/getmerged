@@ -21,6 +21,7 @@ export interface Repo {
   distinct_maintainer_count?: number;
   staleness_flag?: boolean;
   good_first_issue_count?: number;
+  onboarding_score?: number;
   updated_at?: string;
   snapshot_date?: string;
 }
@@ -112,6 +113,7 @@ export interface GoodFirstIssueItem {
   url: string;
   comments_count: number;
   labels_json: string;
+  quality_score?: number;
   created_at: string;
   synced_at: string;
 }
