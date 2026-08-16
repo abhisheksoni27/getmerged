@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
+	"github.com/abhisheksoni27/opendoor/internal/pipeline"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/gin-gonic/gin"
@@ -587,6 +588,62 @@ func GetOptimalTimeHandler(repoStore repository.RepoRepository) gin.HandlerFunc 
 		c.JSON(http.StatusOK, gin.H{
 			"repository":   repo.FullName,
 			"optimal_time": res,
+		})
+	}
+}
+
+// GetFitRadarHandler handles GET /api/v1/repos/:id/fit-radar (Story 7.2)
+func GetFitRadarHandler(repoStore repository.RepoRepository, profileRepo repository.ContributorProfileRepository) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := c.Param("id")
+		owner := c.Param("owner")
+		name := c.Param("name")
+		fullName := c.Query("name")
+
+		if id != "" {
+			fullName = id
+		} else if owner != "" && name != "" {
+			fullName = owner + "/" + name
+		}
+
+		repo, err := repoStore.FindByIDOrName(c.Request.Context(), fullName)
+		if err == sql.ErrNoRows || repo == nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "repository not found"})
+			return
+		}
+
+		// Security: Use private caching if authenticated, public if anonymous
+		userIDVal, isAuth := c.Get(middleware.UserIDKey)
+		var userLangs []string
+		var prSizePref string
+
+		if isAuth {
+			c.Header("Cache-Control", "private, no-cache, no-store, must-revalidate")
+			userID := userIDVal.(int64)
+			if profile, err := profileRepo.GetByUserID(c.Request.Context(), userID); err == nil && profile != nil && profile.DNAJSON != nil {
+				var dna pipeline.ContributorDNAResult
+				if err := json.Unmarshal([]byte(*profile.DNAJSON), &dna); err == nil {
+					userLangs = dna.PrimaryLanguages
+					prSizePref = dna.PRSizePreference
+				}
+			}
+		} else {
+			c.Header("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400")
+		}
+
+		radar := scoring.CalculateFitRadar(scoring.FitRadarInput{
+			RepoLanguage:        repo.Language,
+			RepoOnboardingScore: repo.OnboardingScore,
+			FirstTimerRate:      repo.FirstTimerSuccessRate,
+			ResponseP50Hours:    repo.ResponseP50Hours,
+			ExternalMergeRate:   repo.ExternalPRMergeRate,
+			UserPrimaryLangs:    userLangs,
+			UserPRSizePref:      prSizePref,
+		})
+
+		c.JSON(http.StatusOK, gin.H{
+			"repository": repo.FullName,
+			"fit_radar":  radar,
 		})
 	}
 }
