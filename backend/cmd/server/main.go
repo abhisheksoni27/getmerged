@@ -16,6 +16,7 @@ import (
 
 	_ "github.com/abhisheksoni27/opendoor/docs"
 	"github.com/abhisheksoni27/opendoor/internal/ai"
+	"github.com/abhisheksoni27/opendoor/internal/auth"
 	"github.com/abhisheksoni27/opendoor/internal/config"
 	"github.com/abhisheksoni27/opendoor/internal/db"
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
@@ -72,6 +73,8 @@ func main() {
 
 	// Initialize Repository Layer
 	userRepo := repository.NewUserRepository(database, cfg)
+	oauthTokenRepo := repository.NewOAuthTokenRepository(database, cfg)
+	tokenMgr := auth.NewTokenManager(oauthTokenRepo, cfg, nil)
 	repoStore := repository.NewRepoRepository(database)
 	watchlistRepo := repository.NewWatchlistRepository(database)
 	aiRepo := repository.NewAIRepository(database)
@@ -128,7 +131,7 @@ func main() {
 		authGroup := api.Group("/auth")
 		{
 			authGroup.GET("/github", handler.GitHubOAuthRedirect(cfg))
-			authGroup.GET("/github/callback", handler.GitHubOAuthCallback(cfg, userRepo))
+			authGroup.GET("/github/callback", handler.GitHubOAuthCallback(cfg, userRepo, tokenMgr))
 			authGroup.GET("/google", handler.GoogleOAuthRedirect(cfg))
 			authGroup.GET("/google/callback", handler.GoogleOAuthCallback(cfg, userRepo))
 		}

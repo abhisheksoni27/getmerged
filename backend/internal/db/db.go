@@ -43,6 +43,15 @@ func AutoMigrate(db *sqlx.DB) error {
 			created_at DATETIME NOT NULL,
 			updated_at DATETIME NOT NULL
 		);`, autoInc),
+		`CREATE TABLE IF NOT EXISTS user_oauth_tokens (
+			user_id INTEGER NOT NULL,
+			provider VARCHAR(50) NOT NULL DEFAULT 'github',
+			access_token_enc TEXT NOT NULL,
+			refresh_token_enc TEXT,
+			expires_at DATETIME,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY(user_id, provider)
+		);`,
 		`CREATE TABLE IF NOT EXISTS user_watchlists (
 			user_id INTEGER NOT NULL,
 			repo_id VARCHAR(255) NOT NULL,
