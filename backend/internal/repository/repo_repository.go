@@ -32,6 +32,7 @@ type RepoRecord struct {
 	StalenessFlag            bool      `db:"staleness_flag" json:"staleness_flag"`
 	SnapshotDate             string    `db:"snapshot_date" json:"snapshot_date"`
 	GoodFirstIssueCount      int       `db:"good_first_issue_count" json:"good_first_issue_count"`
+	OnboardingScore          int       `db:"onboarding_score" json:"onboarding_score"`
 	UpdatedAt                time.Time `db:"updated_at" json:"updated_at"`
 }
 
@@ -199,6 +200,7 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 			COALESCE(s.staleness_flag,0) as staleness_flag,
 			COALESCE(s.snapshot_date,'') as snapshot_date,
 			COALESCE(s.good_first_issue_count,0) as good_first_issue_count,
+			COALESCE(s.onboarding_score,0) as onboarding_score,
 			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
@@ -236,6 +238,7 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 			COALESCE(s.staleness_flag,0) as staleness_flag,
 			COALESCE(s.snapshot_date,'') as snapshot_date,
 			COALESCE(s.good_first_issue_count,0) as good_first_issue_count,
+			COALESCE(s.onboarding_score,0) as onboarding_score,
 			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
@@ -455,7 +458,9 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 			COALESCE(s.distinct_maintainer_count, 0) as distinct_maintainer_count,
 			COALESCE(s.staleness_flag, 0) as staleness_flag,
 			COALESCE(s.snapshot_date, '') as snapshot_date,
-			COALESCE(s.good_first_issue_count, 0) as good_first_issue_count
+			COALESCE(s.good_first_issue_count, 0) as good_first_issue_count,
+			COALESCE(s.onboarding_score, 0) as onboarding_score,
+			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON r.id = s.repository_id
 		WHERE r.id != ? AND LOWER(r.language) = LOWER(?)
@@ -481,6 +486,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 			&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
 			&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
 			&rec.DistinctMaintainerCount, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
+			&rec.OnboardingScore, &rec.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -513,7 +519,9 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 				COALESCE(s.distinct_maintainer_count, 0) as distinct_maintainer_count,
 				COALESCE(s.staleness_flag, 0) as staleness_flag,
 				COALESCE(s.snapshot_date, '') as snapshot_date,
-				COALESCE(s.good_first_issue_count, 0) as good_first_issue_count
+				COALESCE(s.good_first_issue_count, 0) as good_first_issue_count,
+				COALESCE(s.onboarding_score, 0) as onboarding_score,
+				r.updated_at
 			FROM repositories r
 			LEFT JOIN latest_snapshots s ON r.id = s.repository_id
 			WHERE r.id NOT IN %s
@@ -533,6 +541,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 					&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
 					&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
 					&rec.DistinctMaintainerCount, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
+					&rec.OnboardingScore, &rec.UpdatedAt,
 				); err == nil {
 					rec.StalenessFlag = staleInt == 1
 					repos = append(repos, &rec)

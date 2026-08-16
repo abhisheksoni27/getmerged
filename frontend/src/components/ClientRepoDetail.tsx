@@ -445,6 +445,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         distinctMaintainers={distinctMaintainers}
         maintainersCommentary={maintainersCommentary}
         vibeScore={vibeScore}
+        onboardingScore={repo?.onboarding_score}
       />
 
       {/* Interactive README C-Rank Live Badge Generator (Issue #50) */}

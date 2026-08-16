@@ -42,6 +42,8 @@ type repoResponse struct {
 	DistinctMaintainerCount  float64 `json:"distinct_maintainer_count"`
 	StalenessFlag            bool    `json:"staleness_flag"`
 	SnapshotDate             string  `json:"snapshot_date"`
+	GoodFirstIssueCount      int     `json:"good_first_issue_count"`
+	OnboardingScore          int     `json:"onboarding_score"`
 }
 
 type metaResponse struct {
