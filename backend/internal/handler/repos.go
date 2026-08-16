@@ -16,6 +16,7 @@ import (
 
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
+	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/gin-gonic/gin"
 )
 
@@ -525,5 +526,19 @@ func GetPRLikelihoodHandler(repoStore repository.RepoRepository) gin.HandlerFunc
 			StalenessFlag:                   isStale,
 			CalculatedAt:                    calcAt,
 		})
+	}
+}
+
+// EvaluatePreflightHandler handles POST /api/v1/preflight/evaluate (Story 4.1 & 4.2)
+func EvaluatePreflightHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var input scoring.PreflightInput
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid preflight request payload"})
+			return
+		}
+
+		result := scoring.EvaluatePreflight(input)
+		c.JSON(http.StatusOK, result)
 	}
 }
