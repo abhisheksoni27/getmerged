@@ -153,6 +153,10 @@ func TestComputeMetrics_ReviewCoverage_BotActivity_BusFactor(t *testing.T) {
 			AuthorLogin:       "user1",
 			FirstCommentAt:    &commentTime,
 			CommentAuthors:    []string{"maintainer1", "dependabot[bot]"},
+			Commenters: []scoring.Commenter{
+				{Login: "maintainer1", AuthorAssociation: "MEMBER"},
+				{Login: "dependabot[bot]", AuthorAssociation: "NONE"},
+			},
 		},
 		{
 			State:             "MERGED",
@@ -160,6 +164,10 @@ func TestComputeMetrics_ReviewCoverage_BotActivity_BusFactor(t *testing.T) {
 			AuthorAssociation: "CONTRIBUTOR",
 			AuthorLogin:       "user2",
 			CommentAuthors:    []string{"maintainer2", "maintainer1"},
+			Commenters: []scoring.Commenter{
+				{Login: "maintainer2", AuthorAssociation: "OWNER"},
+				{Login: "maintainer1", AuthorAssociation: "MEMBER"},
+			},
 		},
 		{
 			State:             "CLOSED",
@@ -167,6 +175,9 @@ func TestComputeMetrics_ReviewCoverage_BotActivity_BusFactor(t *testing.T) {
 			AuthorAssociation: "CONTRIBUTOR",
 			AuthorLogin:       "user3",
 			CommentAuthors:    []string{"user3"},
+			Commenters: []scoring.Commenter{
+				{Login: "user3", AuthorAssociation: "NONE"},
+			},
 		},
 	}
 

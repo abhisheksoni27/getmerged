@@ -188,7 +188,7 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	var prevTier string
 	_ = db.Get(&prevTier, "SELECT c_rank_tier FROM latest_snapshots WHERE repository_id = ?", repoID)
 
-	score, tier := scoring.ComputeCRank(thisNormed, raw.StalenessFlag, raw.GoodFirstIssueCount, prevTier)
+	score, tier := scoring.ComputeCRankWithBusFactor(thisNormed, raw.StalenessFlag, raw.GoodFirstIssueCount, raw.BusFactor, prevTier)
 
 	// PR comment text insertion is now entirely handled by the GHArchive stream worker
 

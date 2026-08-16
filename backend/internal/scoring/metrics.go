@@ -31,6 +31,12 @@ func isBot(login string) bool {
 // FirstTimerAssociation marks a contributor's first PR to this repo.
 const FirstTimerAssociation = "FIRST_TIME_CONTRIBUTOR"
 
+// Commenter holds the author login and repository association of a comment or review.
+type Commenter struct {
+	Login             string
+	AuthorAssociation string
+}
+
 // PR represents a single pull request for metric computation.
 type PR struct {
 	State             string     // CLOSED | MERGED
@@ -41,6 +47,7 @@ type PR struct {
 	FirstCommentAt    *time.Time // first human comment timestamp (may be nil)
 	TotalComments     int
 	CommentAuthors    []string
+	Commenters        []Commenter
 }
 
 // RawMetrics holds the unscaled metric values for a repository snapshot.
@@ -122,11 +129,22 @@ func ComputeMetrics(prs []PR, staleness bool) RawMetrics {
 		}
 	}
 
+	window90 := time.Now().UTC().Add(-90 * 24 * time.Hour)
 	// Calculate ReviewRounds (median comments per merged external PR) and DistinctMaintainerCount
 	var reviewCounts []float64
 	maintainerSet := map[string]bool{}
 
+	// BusFactor maintainers: distinct active insiders (OWNER, MEMBER, COLLABORATOR) in the last 90 days
+	busFactorMaintainers := map[string]bool{}
+
 	for _, pr := range prs {
+		// Insiders authoring PRs within 90 days
+		if !ExternalAssociations[pr.AuthorAssociation] && pr.AuthorLogin != "" && !isBot(pr.AuthorLogin) {
+			if pr.CreatedAt.After(window90) || (pr.MergedAt != nil && pr.MergedAt.After(window90)) {
+				busFactorMaintainers[pr.AuthorLogin] = true
+			}
+		}
+
 		if pr.CreatedAt.Before(window180) || !ExternalAssociations[pr.AuthorAssociation] {
 			continue
 		}
@@ -136,6 +154,13 @@ func ComputeMetrics(prs []PR, staleness bool) RawMetrics {
 		for _, author := range pr.CommentAuthors {
 			if author != pr.AuthorLogin && author != "" && !isBot(author) {
 				maintainerSet[author] = true
+			}
+		}
+		for _, cm := range pr.Commenters {
+			if !ExternalAssociations[cm.AuthorAssociation] && cm.Login != "" && !isBot(cm.Login) {
+				if pr.CreatedAt.After(window90) || (pr.MergedAt != nil && pr.MergedAt.After(window90)) {
+					busFactorMaintainers[cm.Login] = true
+				}
 			}
 		}
 	}
@@ -208,7 +233,7 @@ func ComputeMetrics(prs []PR, staleness bool) RawMetrics {
 		TotalContributors:       float64(len(allContributors)),
 		ReviewCoverage:          reviewCoverage,
 		BotActivityRatio:        botActivityRatio,
-		BusFactor:               len(maintainerSet),
+		BusFactor:               len(busFactorMaintainers),
 		ExternalPRCount:         externalClosed,
 	}
 
