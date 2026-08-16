@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -54,6 +55,7 @@ type UserProfile struct {
 	Stats       UserStats          `json:"stats"`
 	Watchlist   []RepoRecord       `json:"watchlist"`
 	Feedback    []UserFeedbackItem `json:"feedback"`
+	DNA         interface{}        `json:"dna,omitempty"`
 }
 
 type UserRepository interface {
@@ -349,6 +351,14 @@ func (r *sqlxUserRepository) GetUserProfileBySlug(ctx context.Context, slug stri
 		feedback = []UserFeedbackItem{}
 	}
 
+	// 4. Fetch cached contributor DNA
+	var dnaParsed interface{}
+	var dnaRaw sql.NullString
+	_ = r.db.GetContext(ctx, &dnaRaw, "SELECT dna_json FROM contributor_profiles WHERE user_id = ? AND profiling_status = 'completed'", user.ID)
+	if dnaRaw.Valid && dnaRaw.String != "" {
+		_ = json.Unmarshal([]byte(dnaRaw.String), &dnaParsed)
+	}
+
 	slugVal := ""
 	if user.Slug != nil {
 		slugVal = *user.Slug
@@ -367,6 +377,7 @@ func (r *sqlxUserRepository) GetUserProfileBySlug(ctx context.Context, slug stri
 		},
 		Watchlist: watchlist,
 		Feedback:  feedback,
+		DNA:       dnaParsed,
 	}, nil
 }
 
