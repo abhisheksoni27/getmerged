@@ -467,3 +467,41 @@ func RefreshContributorDNA(profileRepo repository.ContributorProfileRepository, 
 		})
 	}
 }
+
+// GetUserMatchesHandler handles GET /api/v1/user/matches (Story 8.1)
+func GetUserMatchesHandler(profileRepo repository.ContributorProfileRepository, repoStore repository.RepoRepository) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userIDVal, exists := c.Get(middleware.UserIDKey)
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+			return
+		}
+		userID := userIDVal.(int64)
+
+		c.Header("Cache-Control", "private, no-cache, no-store, must-revalidate")
+
+		var userLangs []string
+		if profile, err := profileRepo.GetByUserID(c.Request.Context(), userID); err == nil && profile != nil && profile.DNAJSON != nil {
+			var dna pipeline.ContributorDNAResult
+			if err := json.Unmarshal([]byte(*profile.DNAJSON), &dna); err == nil {
+				userLangs = dna.PrimaryLanguages
+			}
+		}
+
+		topRepos, _, err := repoStore.List(c.Request.Context(), repository.RepoFilter{
+			Tier:     "S",
+			MinStars: 50,
+			Limit:    5,
+		})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch matches"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"user_id":           userID,
+			"primary_languages": userLangs,
+			"matched_repos":     topRepos,
+		})
+	}
+}
