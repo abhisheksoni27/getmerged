@@ -55,6 +55,16 @@ func AutoMigrate(db *sqlx.DB) error {
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			PRIMARY KEY(user_id, provider)
 		);`,
+		`CREATE TABLE IF NOT EXISTS contributor_profiles (
+			user_id INTEGER PRIMARY KEY,
+			profiling_status VARCHAR(50) NOT NULL DEFAULT 'pending',
+			dna_json TEXT,
+			total_merged_prs INTEGER DEFAULT 0,
+			last_error TEXT,
+			locked_until DATETIME,
+			analyzed_at DATETIME,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
 		`CREATE TABLE IF NOT EXISTS user_watchlists (
 			user_id INTEGER NOT NULL,
 			repo_id VARCHAR(255) NOT NULL,
