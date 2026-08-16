@@ -31,7 +31,7 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
     let isMounted = true;
     async function fetchLikelihood() {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/repos/${owner}/${name}/pr-likelihood`);
+        const res = await fetch(`${API_BASE_URL}/api/v1/pr-likelihood?name=${encodeURIComponent(`${owner}/${name}`)}`);
         if (res.ok) {
           const json = await res.json();
           if (isMounted) setData(json);
