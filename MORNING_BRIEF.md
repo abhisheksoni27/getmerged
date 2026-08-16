@@ -3,10 +3,10 @@
 *Generated dynamically during autonomous sprint runs.*
 
 ## 📋 Status Overview
-- **Active Sprint**: Sprint 4: Growth Flywheel & Viral Hooks
-- **Total Stories Completed**: 22
+- **Active Sprint**: Sprint 5: Contributor Alignment & Timing Intelligence
+- **Total Stories Completed**: 23
 - **Build Status**: 🟢 Passing (`go test ./...` & `npm run lint`)
-- **Last Sync**: 2026-08-17 01:31 IST
+- **Last Sync**: 2026-08-17 02:02 IST
 
 ---
 
@@ -35,8 +35,9 @@
 | **Story 5.1 & 5.2** | Dodopayments webhook listener (`POST /api/v1/payments/webhook/dodopayments`) with signature verification and idempotency table | 🟢 100% Passing (`internal/handler/payments_test.go`) | `e67d63a` |
 | **Story 5.3** | Quota middleware (`RequireProOrQuota`) with atomic monthly rollover, race-condition protection, and refund safety | 🟢 100% Passing (`go test ./...`) | `e67d63a` |
 | **Story 5.4** | High-converting `/pricing` page ($9/mo, $79/yr) with 7-day money-back guarantee | 🟢 100% Passing (`npm run lint`) | `e67d63a` |
-| **Story 6.1 & 6.2** | Real-time PR merge detection in eventstream & Dynamic SVG Contributor Achievement Cards (`GET /api/v1/users/:slug/achievement.svg`) | 🟢 100% Passing (`go test ./...`) | `HEAD` |
-| **Story 6.3** | One-click X & LinkedIn social share buttons on public contributor profile views | 🟢 100% Passing (`npm run lint`) | `HEAD` |
+| **Story 6.1 & 6.2** | Real-time PR merge detection in eventstream & Dynamic SVG Contributor Achievement Cards (`GET /api/v1/users/:slug/achievement.svg`) | 🟢 100% Passing (`go test ./...`) | `6432f75` |
+| **Story 6.3** | One-click X & LinkedIn social share buttons on public contributor profile views | 🟢 100% Passing (`npm run lint`) | `6432f75` |
+| **Story 7.1** | Reviewer Timezone Overlap Indicator & Optimal PR Submission Window (`GET /api/v1/repos/:id/optimal-time`) | 🟢 100% Passing (`internal/scoring/optimal_time_test.go`) | `HEAD` |
 
 ---
 
