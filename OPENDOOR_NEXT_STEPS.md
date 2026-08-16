@@ -465,5 +465,16 @@ on acquisition (§10).
 - **Story 6.4**: Execute 4x targeted Reddit data drops across `r/learnprogramming`, `r/cscareerquestions`, and language subreddits.
 - **Story 6.5**: Launch on Show HN highlighting GraphQL crawl architecture and objective C-Rank math.
 
+### ⏱️ Epic 7: Contributor Alignment & Timing Intelligence (Sprint 5)
+*Dynamic reviewer availability and contributor persona matchmaking.*
+- **Story 7.1**: Reviewer Timezone Overlap Indicator & Optimal PR Submission Window (`GET /api/v1/repos/:id/optimal-time`).
+- **Story 7.2**: Contributor Fit Radar & PR Size / Filetype Success Probability Breakdown (`GET /api/v1/repos/:id/fit-radar`).
+
+### 🎓 Epic 8: Maintainer Quality & Retention Flywheel (Sprint 6)
+*Nurturing maintainer vibes and personalized contributor retention.*
+- **Story 7.3**: Maintainer Mentorship Index measuring encouraging responses vs 1-word rejects attached to repo scorecards.
+- **Story 7.4**: Automated Weekly Contributor Digest generator delivering personalized high-probability issues.
+
+
 
 
