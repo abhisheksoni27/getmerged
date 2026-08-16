@@ -292,6 +292,9 @@ func main() {
 
 			// For global recalculation re-anchor, evaluate clean baseline thresholds (S >= 70.0)
 			score, tier := scoring.ComputeCRank(normed, raw.StalenessFlag, raw.GoodFirstIssueCount)
+			if raw.ExternalPRCount > 0 && !raw.StalenessFlag {
+				score = scoring.ComputeConfidenceScore(score, raw.ExternalPRCount)
+			}
 
 			staleness := 0
 			if raw.StalenessFlag {
