@@ -461,12 +461,19 @@ type PRLikelihoodResponse struct {
 	CalculatedAt                    *string  `json:"calculated_at"`
 }
 
-// GetPRLikelihoodHandler handles GET /api/v1/repos/:owner/:name/pr-likelihood
+// GetPRLikelihoodHandler handles GET /api/v1/repos/:id/pr-likelihood or /api/v1/pr-likelihood
 func GetPRLikelihoodHandler(repoStore repository.RepoRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		id := c.Param("id")
 		owner := c.Param("owner")
 		name := c.Param("name")
-		fullName := owner + "/" + name
+		fullName := c.Query("name")
+
+		if id != "" {
+			fullName = id
+		} else if owner != "" && name != "" {
+			fullName = owner + "/" + name
+		}
 
 		repo, err := repoStore.FindByIDOrName(c.Request.Context(), fullName)
 		if err == sql.ErrNoRows || repo == nil {
