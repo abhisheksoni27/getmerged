@@ -3,10 +3,10 @@
 *Generated dynamically during autonomous sprint runs.*
 
 ## 📋 Status Overview
-- **Active Sprint**: Sprint 1: The Core Data Moats
-- **Total Stories Completed**: 4
+- **Active Sprint**: Sprint 2: Contributor DNA & Secure Auth
+- **Total Stories Completed**: 5
 - **Build Status**: 🟢 Passing (`go test ./...` & `npm run lint`)
-- **Last Sync**: 2026-08-17 00:39 IST
+- **Last Sync**: 2026-08-17 01:06 IST
 
 ---
 
@@ -21,7 +21,8 @@
 | **Story 1.1** | Onboarding Docs Checker (`CONTRIBUTING.md`, PR/issue templates, Code of Conduct) & `onboarding_score` (0–100) | 🟢 100% Passing (`internal/scoring/onboarding_test.go`) | `3a33606` |
 | **Story 1.2** | GFI Quality Score (Maintainer authorship, response latency <48h, word count heuristics, doc waivers) & `quality_score` (0–100) | 🟢 100% Passing (`internal/scoring/gfi_quality_test.go`) | `2b598be` |
 | **Story 1.3** | 90-Day Bus Factor calculation from distinct active insiders & C-Rank Safety Cap (Bus Factor <= 1 -> max Tier B) | 🟢 100% Passing (`internal/scoring/bus_factor_test.go`) | `874ecd6` |
-| **Story 1.4** | Expose `onboarding_score`, `bus_factor` (maintainers), and `gfi_quality_score` across Backend API & Repo Scorecards UI | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `HEAD` |
+| **Story 1.4** | Expose `onboarding_score`, `bus_factor` (maintainers), and `gfi_quality_score` across Backend API & Repo Scorecards UI | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `0994973` |
+| **Story 2.1** | Encrypt OAuth GitHub access/refresh tokens with AES-256-GCM (`v1:` envelope, `user_oauth_tokens` table, singleflight refresh) | 🟢 100% Passing (`internal/auth/token_manager_test.go`, `internal/repository/oauth_token_repository_test.go`) | `HEAD` |
 
 ---
 
@@ -33,4 +34,4 @@
 ---
 
 ## 🎯 Next Queued Story
-- **Story 2.1**: Implement user authentication state persistence, CSRF protection, and secure session management.
+- **Story 2.2**: Implement `DELETE /api/v1/me/data` and explicit GDPR profiling consent checkbox.

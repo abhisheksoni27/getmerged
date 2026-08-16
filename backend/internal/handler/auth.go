@@ -33,7 +33,7 @@ func GitHubOAuthRedirect(cfg *config.Config) gin.HandlerFunc {
 var httpClient = &http.Client{Timeout: 10 * time.Second}
 
 // GitHubOAuthCallback handles GET /api/v1/auth/github/callback
-func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository) gin.HandlerFunc {
+func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository, tokenMgr auth.TokenManager) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		code := c.Query("code")
 		if code == "" {
@@ -71,8 +71,11 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository)
 		defer resp.Body.Close()
 
 		var tokenResp struct {
-			AccessToken string `json:"access_token"`
-			Error       string `json:"error"`
+			AccessToken     string `json:"access_token"`
+			RefreshToken    string `json:"refresh_token"`
+			ExpiresIn       int    `json:"expires_in"`
+			RefreshTokenExp int    `json:"refresh_token_expires_in"`
+			Error           string `json:"error"`
 		}
 		if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil || tokenResp.AccessToken == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid OAuth authorization code"})
@@ -105,6 +108,13 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository)
 			slog.Error("failed to save user", "github_id", ghUser.ID, "err", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save user", "details": err.Error()})
 			return
+		}
+
+		// Save encrypted tokens via TokenManager (Story 2.1)
+		if tokenMgr != nil {
+			if err := tokenMgr.SaveGithubToken(c.Request.Context(), userID, tokenResp.AccessToken, tokenResp.RefreshToken, tokenResp.ExpiresIn); err != nil {
+				slog.Error("failed to persist encrypted oauth tokens", "user_id", userID, "err", err)
+			}
 		}
 
 		// Issue Custom Signed Opendoor JWT Token

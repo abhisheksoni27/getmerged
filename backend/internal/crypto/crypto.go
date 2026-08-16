@@ -40,10 +40,10 @@ func EncryptAESGCM(plaintext, key []byte) (string, error) {
 	}
 
 	ciphertext := gcm.Seal(nonce, nonce, plaintext, nil)
-	return base64.StdEncoding.EncodeToString(ciphertext), nil
+	return "v1:" + base64.StdEncoding.EncodeToString(ciphertext), nil
 }
 
-// DecryptAESGCM decrypts a base64-encoded AES-256-GCM ciphertext string.
+// DecryptAESGCM decrypts a v1:<base64> or legacy <base64> AES-256-GCM ciphertext string.
 func DecryptAESGCM(cryptoText string, key []byte) (string, error) {
 	if len(key) != 32 {
 		return "", errors.New("encryption key must be exactly 32 bytes (AES-256)")
@@ -52,7 +52,12 @@ func DecryptAESGCM(cryptoText string, key []byte) (string, error) {
 		return "", nil
 	}
 
-	data, err := base64.StdEncoding.DecodeString(cryptoText)
+	payload := cryptoText
+	if strings.HasPrefix(cryptoText, "v1:") {
+		payload = strings.TrimPrefix(cryptoText, "v1:")
+	}
+
+	data, err := base64.StdEncoding.DecodeString(payload)
 	if err != nil {
 		return "", fmt.Errorf("base64 decode error: %w", err)
 	}
