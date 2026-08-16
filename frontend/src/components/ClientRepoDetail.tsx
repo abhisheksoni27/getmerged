@@ -23,6 +23,7 @@ import {
   RefreshCw,
   PartyPopper,
   Copy,
+  ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
@@ -57,7 +58,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
   const [isGuidelinesOpen, setIsGuidelinesOpen] = useState(false);
   const [relatedRepos, setRelatedRepos] = useState<Repo[]>([]);
-  const [gfiList, setGfiList] = useState<Array<{ id: number; title: string; html_url: string; body_snippet?: string; quality_score?: number; repo_full_name?: string }>>([]);
+  const [gfiList, setGfiList] = useState<Array<{ id: number; title: string; url?: string; html_url?: string; body_text?: string; body_snippet?: string; quality_score?: number; created_at?: string; comments_count?: number; repo_full_name?: string }>>([]);
   const [maintainerRating, setMaintainerRating] = useState(0);
   const [reviewSpeedRating, setReviewSpeedRating] = useState(0);
   const [beginnerRating, setBeginnerRating] = useState(0);
@@ -549,32 +550,61 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
           {gfiList.length > 0 ? (
             <div className="space-y-3 font-sans">
-              {gfiList.map((issue) => (
-                <div
-                  key={issue.id}
-                  className="p-3.5 rounded-xl border border-zinc-200 bg-zinc-50/50 hover:bg-zinc-50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-                >
-                  <div className="min-w-0 flex-1">
-                    <a
-                      href={issue.html_url}
-                      target="_blank"
-                      rel="nofollow noopener noreferrer"
-                      title={issue.title}
-                      className="text-xs sm:text-sm font-bold text-zinc-900 hover:text-emerald-600 transition-colors line-clamp-1 block"
-                    >
-                      🎯 {issue.title}
-                    </a>
-                    {issue.body_snippet && (
-                      <p className="text-xs text-zinc-500 mt-1 line-clamp-2">{issue.body_snippet}</p>
-                    )}
+              {gfiList.map((issue) => {
+                const issueUrl = issue.url || issue.html_url || `https://github.com/${fullName}/issues/${issue.id}`;
+                const dateStr = issue.created_at
+                  ? new Date(issue.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+                  : null;
+
+                return (
+                  <div
+                    key={issue.id}
+                    className="p-4 rounded-xl border border-zinc-200/90 bg-white hover:border-emerald-500 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
+                        <a
+                          href={issueUrl}
+                          target="_blank"
+                          rel="nofollow noopener noreferrer"
+                          title={`Open ${issue.title} on GitHub`}
+                          className="text-sm font-bold text-zinc-900 group-hover:text-emerald-700 transition-colors line-clamp-1 flex items-center gap-1.5"
+                        >
+                          <span>🎯 {issue.title}</span>
+                          <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 text-emerald-600" />
+                        </a>
+                      </div>
+                      {(issue.body_snippet || issue.body_text) && (
+                        <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">
+                          {issue.body_snippet || issue.body_text}
+                        </p>
+                      )}
+                      <div className="flex items-center gap-3 mt-2 text-[11px] font-mono text-zinc-600 flex-wrap">
+                        {dateStr && <span>📅 Opened {dateStr}</span>}
+                        {issue.comments_count !== undefined && (
+                          <span>💬 {issue.comments_count} {issue.comments_count === 1 ? "comment" : "comments"}</span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
+                      {issue.quality_score !== undefined && issue.quality_score > 0 && (
+                        <span className="text-[11px] font-mono font-bold bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-lg border border-emerald-200/80">
+                          Quality: {issue.quality_score}/100
+                        </span>
+                      )}
+                      <a
+                        href={issueUrl}
+                        target="_blank"
+                        rel="nofollow noopener noreferrer"
+                        title={`Contribute to ${issue.title} on GitHub`}
+                        className="px-3 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1 transition-all"
+                      >
+                        Contribute <ArrowRight className="h-3 w-3" />
+                      </a>
+                    </div>
                   </div>
-                  {issue.quality_score !== undefined && issue.quality_score > 0 && (
-                    <span className="shrink-0 text-[11px] font-mono font-bold bg-emerald-50 text-emerald-700 px-2 py-1 rounded-lg border border-emerald-200/60 self-start sm:self-center">
-                      Quality: {issue.quality_score}/100
-                    </span>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <p className="text-xs text-zinc-600 font-sans">
