@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"github.com/abhisheksoni27/opendoor/internal/repository"
@@ -35,6 +36,9 @@ func ListGoodFirstIssues(gfiRepo repository.GFIRepository) gin.HandlerFunc {
 func GetRepoGoodFirstIssues(gfiRepo repository.GFIRepository, repoStore repository.RepoRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		identifier := c.Param("id")
+		if unescaped, err := url.QueryUnescape(identifier); err == nil {
+			identifier = unescaped
+		}
 		c.Header("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400")
 
 		repo, err := repoStore.FindByIDOrName(c.Request.Context(), identifier)

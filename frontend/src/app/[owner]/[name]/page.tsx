@@ -24,10 +24,7 @@ async function getRepoData(fullName: string): Promise<Repo | null> {
     const data = await res.json();
     const rawList = data.data || data.repos;
     if (Array.isArray(rawList) && rawList.length > 0) {
-      return (
-        rawList.find((r: Repo) => r.full_name.toLowerCase() === fullName.toLowerCase()) ||
-        rawList[0]
-      );
+      return rawList.find((r: Repo) => r.full_name.toLowerCase() === fullName.toLowerCase()) || null;
     }
   } catch (e) {
     console.error("SSR fetch failed for repo:", fullName, e);
