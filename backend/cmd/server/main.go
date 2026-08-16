@@ -159,6 +159,7 @@ func main() {
 		userApi.DELETE("/me/data", handler.DeleteUserData(cfg, userRepo))
 		userApi.GET("/user/dna", handler.GetContributorDNA(profileRepo))
 		userApi.POST("/user/dna/refresh", handler.RefreshContributorDNA(profileRepo, dnaWorker))
+		userApi.GET("/user/matches", handler.GetUserMatchesHandler(profileRepo, repoStore))
 		userApi.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
 		userApi.POST("/user/watchlist", handler.AddToWatchlist(watchlistRepo))
 		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist(watchlistRepo))
