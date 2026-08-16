@@ -15,10 +15,13 @@ export interface Repo {
   score?: number;
   c_rank_score?: number;
   time_to_first_response_hours?: number;
+  response_p50_hours?: number;
+  response_p90_hours?: number;
   external_pr_merge_rate?: number;
   first_timer_success_rate?: number;
   time_to_merge_hours?: number;
   distinct_maintainer_count?: number;
+  bus_factor?: number;
   staleness_flag?: boolean;
   good_first_issue_count?: number;
   onboarding_score?: number;
