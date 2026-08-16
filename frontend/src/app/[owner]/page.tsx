@@ -216,6 +216,46 @@ export default async function UserProfilePage({ params }: ProfilePageProps) {
               )}
             </div>
           </div>
+
+          {/* Achievement Card & Viral Share Buttons (Story 6.2 & 6.3) */}
+          <div className="mt-8 pt-6 border-t border-zinc-100 font-sans">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+              <div>
+                <h2 className="text-sm font-bold font-space text-zinc-900">Verified Contributor Achievement Card</h2>
+                <p className="text-xs text-zinc-500">Dynamically generated live badge proof for social profiles.</p>
+              </div>
+
+              <div className="flex items-center gap-2 font-mono text-xs">
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out my verified open-source contributor profile on @GetMerged! Tracking PR merge metrics and maintainer responsiveness.`)}&url=${encodeURIComponent(`https://getmerged.abhishekco.de/${profile.slug}`)}`}
+                  target="_blank"
+                  rel="nofollow noopener noreferrer"
+                  title="Share your Contributor Card on X"
+                  className="px-3 py-1.5 rounded-xl bg-black text-white font-bold hover:bg-zinc-800 transition-all flex items-center gap-1.5"
+                >
+                  Share on X
+                </a>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://getmerged.abhishekco.de/${profile.slug}`)}`}
+                  target="_blank"
+                  rel="nofollow noopener noreferrer"
+                  title="Share your Contributor Card on LinkedIn"
+                  className="px-3 py-1.5 rounded-xl bg-[#0A66C2] text-white font-bold hover:bg-[#084e96] transition-all flex items-center gap-1.5"
+                >
+                  Share on LinkedIn
+                </a>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-zinc-200 overflow-hidden max-w-lg bg-zinc-900 p-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/api/v1/users/${profile.slug}/achievement.svg`}
+                alt={`${profile.username}'s Contributor Achievement Card`}
+                className="w-full h-auto rounded-xl"
+              />
+            </div>
+          </div>
         </section>
 
         {/* Section: Watched Repositories */}

@@ -4,9 +4,9 @@
 
 ## 📋 Status Overview
 - **Active Sprint**: Sprint 4: Growth Flywheel & Viral Hooks
-- **Total Stories Completed**: 19
+- **Total Stories Completed**: 22
 - **Build Status**: 🟢 Passing (`go test ./...` & `npm run lint`)
-- **Last Sync**: 2026-08-17 01:29 IST
+- **Last Sync**: 2026-08-17 01:31 IST
 
 ---
 
@@ -32,9 +32,11 @@
 | **Story 3.4** | Frontend `PRAcceptanceWidget` displaying merge odds, p50/p90 latency, and maintainer breadth on repo detail view | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `4b37f52` |
 | **Story 4.1 & 4.2** | Pure heuristic PR evaluation engine (`EvaluatePreflight`) and `POST /api/v1/preflight/evaluate` endpoint | 🟢 100% Passing (`internal/scoring/preflight_test.go`) | `59a038b` |
 | **Story 4.3** | Interactive `/preflight` validation UI with conventional commit checks, test detection, and size alerts | 🟢 100% Passing (`npm run lint`) | `59a038b` |
-| **Story 5.1 & 5.2** | Dodopayments webhook listener (`POST /api/v1/payments/webhook/dodopayments`) with signature verification and idempotency table | 🟢 100% Passing (`internal/handler/payments_test.go`) | `HEAD` |
-| **Story 5.3** | Quota middleware (`RequireProOrQuota`) with atomic monthly rollover, race-condition protection, and refund safety | 🟢 100% Passing (`go test ./...`) | `HEAD` |
-| **Story 5.4** | High-converting `/pricing` page ($9/mo, $79/yr) with 7-day money-back guarantee | 🟢 100% Passing (`npm run lint`) | `HEAD` |
+| **Story 5.1 & 5.2** | Dodopayments webhook listener (`POST /api/v1/payments/webhook/dodopayments`) with signature verification and idempotency table | 🟢 100% Passing (`internal/handler/payments_test.go`) | `e67d63a` |
+| **Story 5.3** | Quota middleware (`RequireProOrQuota`) with atomic monthly rollover, race-condition protection, and refund safety | 🟢 100% Passing (`go test ./...`) | `e67d63a` |
+| **Story 5.4** | High-converting `/pricing` page ($9/mo, $79/yr) with 7-day money-back guarantee | 🟢 100% Passing (`npm run lint`) | `e67d63a` |
+| **Story 6.1 & 6.2** | Real-time PR merge detection in eventstream & Dynamic SVG Contributor Achievement Cards (`GET /api/v1/users/:slug/achievement.svg`) | 🟢 100% Passing (`go test ./...`) | `HEAD` |
+| **Story 6.3** | One-click X & LinkedIn social share buttons on public contributor profile views | 🟢 100% Passing (`npm run lint`) | `HEAD` |
 
 ---
 
@@ -46,4 +48,4 @@
 ---
 
 ## 🎯 Next Queued Story
-- **Story 6.1**: Implement PR merge webhook listener to detect when a user PR gets merged in an indexed repository.
+- **Story 6.4 & 6.5**: Launch preparation on Show HN & Developer Community Data Drops.
