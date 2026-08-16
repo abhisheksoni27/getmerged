@@ -14,6 +14,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/valkey-io/valkey-go"
 	"golang.org/x/time/rate"
 )
@@ -891,13 +892,20 @@ func formatGoodFirstIssueQuery(owner, name string) string {
 
 // GoodFirstIssue represents a beginner-friendly issue fetched from GitHub GraphQL search.
 type GoodFirstIssue struct {
-	Number        int       `json:"number"`
-	Title         string    `json:"title"`
-	BodyText      string    `json:"body_text"`
-	URL           string    `json:"url"`
-	CreatedAt     time.Time `json:"created_at"`
-	CommentsCount int       `json:"comments_count"`
-	LabelsJSON    string    `json:"labels_json"`
+	Number                  int       `json:"number"`
+	Title                   string    `json:"title"`
+	BodyText                string    `json:"body_text"`
+	URL                     string    `json:"url"`
+	CreatedAt               time.Time `json:"created_at"`
+	CommentsCount           int       `json:"comments_count"`
+	LabelsJSON              string    `json:"labels_json"`
+	AuthorAssociation       string    `json:"author_association"`
+	IsMaintainerAuthored    bool      `json:"is_maintainer_authored"`
+	MaintainerResponseHours float64   `json:"maintainer_response_hours"`
+	HasMentorComment        bool      `json:"has_mentor_comment"`
+	WordCount               int       `json:"word_count"`
+	HasCodeSnippets         bool      `json:"has_code_snippets"`
+	QualityScore            int       `json:"quality_score"`
 }
 
 // FetchGoodFirstIssueCount returns the number of open beginner-friendly issues for a repo.
@@ -942,13 +950,18 @@ func (c *Client) FetchGoodFirstIssuesList(owner, name string, limit int) ([]Good
 			Search struct {
 				IssueCount int `json:"issueCount"`
 				Nodes      []struct {
-					Number    int    `json:"number"`
-					Title     string `json:"title"`
-					BodyText  string `json:"bodyText"`
-					URL       string `json:"url"`
-					CreatedAt string `json:"createdAt"`
-					Comments  struct {
+					Number            int    `json:"number"`
+					Title             string `json:"title"`
+					BodyText          string `json:"bodyText"`
+					URL               string `json:"url"`
+					CreatedAt         string `json:"createdAt"`
+					AuthorAssociation string `json:"authorAssociation"`
+					Comments          struct {
 						TotalCount int `json:"totalCount"`
+						Nodes      []struct {
+							CreatedAt         string `json:"createdAt"`
+							AuthorAssociation string `json:"authorAssociation"`
+						} `json:"nodes"`
 					} `json:"comments"`
 					Labels struct {
 						Nodes []struct {
@@ -971,11 +984,14 @@ func (c *Client) FetchGoodFirstIssuesList(owner, name string, limit int) ([]Good
 		c.handleRateLimit(resp.Data.RateLimit)
 	}
 
+	now := time.Now().UTC()
 	var issues []GoodFirstIssue
 	for _, n := range resp.Data.Search.Nodes {
 		var labels []map[string]string
+		var labelNames []string
 		for _, l := range n.Labels.Nodes {
 			labels = append(labels, map[string]string{"name": l.Name, "color": l.Color})
+			labelNames = append(labelNames, l.Name)
 		}
 		lblBytes, _ := json.Marshal(labels)
 
@@ -984,20 +1000,58 @@ func (c *Client) FetchGoodFirstIssuesList(owner, name string, limit int) ([]Good
 			createdAt = t
 		}
 
-		// Keep body preview to reasonable length (e.g. up to 1000 chars) for storage efficiency
+		isMaintainerAuthored := n.AuthorAssociation == "OWNER" || n.AuthorAssociation == "MEMBER" || n.AuthorAssociation == "COLLABORATOR"
+		var maintainerResponseHours float64
+		var hasMentorComment bool
+
+		for _, cm := range n.Comments.Nodes {
+			isMentor := cm.AuthorAssociation == "OWNER" || cm.AuthorAssociation == "MEMBER" || cm.AuthorAssociation == "COLLABORATOR"
+			if isMentor {
+				hasMentorComment = true
+				if maintainerResponseHours == 0 && cm.CreatedAt != "" {
+					if ct, err := time.Parse(time.RFC3339, cm.CreatedAt); err == nil && !createdAt.IsZero() {
+						maintainerResponseHours = ct.Sub(createdAt).Hours()
+						if maintainerResponseHours < 0 {
+							maintainerResponseHours = 0
+						}
+					}
+				}
+			}
+		}
+
+		wordCount, hasCodeSnippets, hasDocLabel, hasGfiLabel := scoring.InspectGFIQuality(n.BodyText, labelNames)
+		qualityScore := scoring.CalculateGFIQualityScore(scoring.GFIQualityInput{
+			IsMaintainerAuthored:     isMaintainerAuthored,
+			MaintainerResponseHours: maintainerResponseHours,
+			HasMentorComment:        hasMentorComment,
+			WordCount:               wordCount,
+			HasCodeSnippets:         hasCodeSnippets,
+			HasDocLabel:             hasDocLabel,
+			CreatedAt:               createdAt,
+			HasGfiLabel:             hasGfiLabel,
+		}, now)
+
+		// Keep body preview to reasonable length (up to 1000 chars) for storage efficiency
 		body := n.BodyText
 		if len(body) > 1000 {
 			body = body[:1000]
 		}
 
 		issues = append(issues, GoodFirstIssue{
-			Number:        n.Number,
-			Title:         n.Title,
-			BodyText:      body,
-			URL:           n.URL,
-			CreatedAt:     createdAt,
-			CommentsCount: n.Comments.TotalCount,
-			LabelsJSON:    string(lblBytes),
+			Number:                  n.Number,
+			Title:                   n.Title,
+			BodyText:                body,
+			URL:                     n.URL,
+			CreatedAt:               createdAt,
+			CommentsCount:           n.Comments.TotalCount,
+			LabelsJSON:              string(lblBytes),
+			AuthorAssociation:       n.AuthorAssociation,
+			IsMaintainerAuthored:    isMaintainerAuthored,
+			MaintainerResponseHours: maintainerResponseHours,
+			HasMentorComment:        hasMentorComment,
+			WordCount:               wordCount,
+			HasCodeSnippets:         hasCodeSnippets,
+			QualityScore:            qualityScore,
 		})
 	}
 
