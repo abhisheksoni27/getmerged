@@ -79,12 +79,12 @@ These are genuine product gaps nobody owns, and each doubles as blog content.
 - **Decision log:** PRODUCT.md previously said RevenueCat; NEXT_STEPS said Stripe+UPI. Both superseded — MoR route chosen (single API, tax handled, global reach).
 - Pattern: provider webhook → set `is_pro` + `subscription_expires_at` on `users` (cached in Valkey). Go middleware returns `402 {upgrade_url}` on gated endpoints.
 
-### 3.2 Pro tier ($5/mo) — gate personalisation, never the data
+### 3.2 Pro tier ($9/mo or $79/yr) — gate personalisation, never the data
 
 ```
 Anonymous  → page 1, tier badge, language filter, public metrics
 Free (OAuth) → unlimited pages/filters, trending, watchlist ≤10, AI vibe check, GFI widget
-Pro $5/mo  → Contributor DNA, weekly personalized digest, PR Likelihood score,
+Pro $9/mo  → Contributor DNA, weekly personalized digest, PR Likelihood score,
              score-history trends, First-Merge Track, unlimited watchlist + tier-change
              push, unlimited /compare
 ```
@@ -103,8 +103,8 @@ Pro $5/mo  → Contributor DNA, weekly personalized digest, PR Likelihood score,
 
 **Data source = the user's own GitHub token → zero burden on GetMerged.**
 - On OAuth login GitHub gives us the user's access token. Scope stays minimal (`user:email`, public data only — we never request `repo`, never touch private repos).
-- **Currently the token is discarded after login.** We persist the token so DNA can pull the user's own data later. (See security below — this is the single biggest change to the auth layer and needs its own review.)
-- Every DNA data pull uses **their** token → rides their own 5,000 req/hr GitHub rate limit and quota. GetMerged spends 0 API budget and 0 money on profiling.
+- **Currently the token is discarded after login.** We persist the token so DNA can pull the user's own data later.
+- DNA data pull uses **their** token. Note: GitHub Search API is capped at **30 req/min** per user, so DNA builds are batched into at most **2 search queries** (`author:{login} type:pr` and `author:{login} is:pr is:merged`), and standard REST endpoints for user/starred/repos.
 
 **🔒 Security & privacy review (required before build — feedback round 1):**
 
@@ -116,12 +116,12 @@ Pro $5/mo  → Contributor DNA, weekly personalized digest, PR Likelihood score,
 
 **Build flow (first pass on login, then weekly cron for active/Pro users):**
 
-1. **Fetch raw signals** (all public, ~10–30 requests per build):
+1. **Fetch raw signals** (strictly capped at ≤2 search calls to obey 30 req/min search rate limit):
    - `GET /user` → id, login, account age
-   - `GET /search/issues?q=author:{login}+type:pr` → every PR they authored
-   - `GET /search/issues?q=author:{login}+is:pr+is:merged` → merged PRs
-   - `GET /users/{login}/repos` → repos they own (languages, stars)
-   - `GET /users/{login}/starred` (cap ~100) → interests
+   - `GET /search/issues?q=author:{login}+type:pr&per_page=100` → PRs authored
+   - `GET /search/issues?q=author:{login}+is:pr+is:merged&per_page=100` → merged PRs
+   - `GET /users/{login}/repos?per_page=100` → repos they own (languages, stars)
+   - `GET /users/{login}/starred?per_page=100` → interests
 
 2. **Compute attributes** — deterministic heuristics + one cheap local inference (nlp_sidecar). No cloud LLM per user.
 
@@ -383,43 +383,33 @@ domains from badge embeds (quarterly count).
 
 ---
 
-## 10. Execution order (next 10 weeks)
+## 10. Execution Plan: 60-Day Sprint to 100 Paid Subscribers ($900+ MRR)
 
-**Sequencing principle (from review):** validate *value + payments* before
-scoring moats, prove *Pro retention + content trust* before scaling, and
-treat *B2B as interviews only* — no recruiter UI until a buyer answers yes.
-Deferred items are intentional; do not pull them in early.
+**Unified Sequencing Principle:** Build core analytical and data moats first → build interactive tools with free quotas → gate power features via Dodopayments → execute targeted community distribution.
 
-| Weeks | Focus | Ship |
-|-------|-------|------|
-| 1–3 | Validate + core payments | **10–20 customer-discovery interviews** (contributors + maintainers: how do you pick a repo to PR into? would you pay for PR-likelihood?) · dodopayments webhook → Pro entitlements + middleware · `/pricing` · token storage (encrypted, expiring+refresh, PKCE) + consent/opt-out/delete (§3.3) · **brand rename to GetMerged ships in code** (`getmerged.abhishekco.de`, old subdomain → redirect, §1.1) |
-| 4–6 | Pro value + content foundation | Contributor DNA · weekly digest · PR Likelihood score · First-Merge Track + celebration card · upgrade triggers · MDX + `/blog` + `/internal/blog-report` + blog-pipeline v1 with human editorial gate · one-click maintainer badge prompt page (§5.3) |
-| 7–8 | Moats + measurement | Scoring moats (GFI-quality, onboarding docs, PR-rejection classifier, bus factor) · tiered crawl · **measurement (§11): activation, funnel, retention, churn signals instrumented in PostHog** · 1 human-gated weekly data report live |
-| 9–10 | Scale + B2B interviews | B2B **interviews only** (recruiters/hiring managers; no UI yet) · newsletter · Wrapped-style share cards · annual report experiment · **GH Archive backfill ❌ dropped** (diff backfill exists) · **GitHub App migration ❌ dropped** (not needed now) · scale crawl + fix churn |
-
-> Reviewer note on scope: `/compare`, `/contribute` wizard, `/topics`, `/org`,
-> and the recruiter UI are **not** in the 10 weeks. They only earn a slot if a
-> measured signal (activation, Pro retention, or a "yes" from B2B interviews)
-> justifies them.
+| Sprint | Timeline | Focus | Deliverables |
+|---|---|---|---|
+| **Sprint 1: The Core Data Moats** | Days 1–15 | Score Quality & Moats | **Onboarding Docs Score** (`CONTRIBUTING.md`, templates) · **GFI Quality Score** (issue-level mergeability) · **Bus Factor Gate** · **Brand Rename to GetMerged** (`getmerged.abhishekco.de` redirect) · **OAuth Token Storage** (encrypted AES-GCM, refresh/PKCE) + GDPR deletion endpoint |
+| **Sprint 2: The Acceptance Engine** | Days 16–30 | Predictive Tooling | **Async PR Ghost & Likelihood Predictor** (MySQL cached metrics + p50/p90 latency) · **Static Heuristic Pre-Flight Checker** · **Contributor DNA Engine** (≤2 search queries/user) · Free un-blurred preview on sample repos |
+| **Sprint 3: Payments & Entitlements** | Days 31–45 | Paywall & Conversion | **Dodopayments Webhook** (`subscription.created`, `renewed`, `cancelled`) · **Persistent MySQL Quota Tracking** (3 free evaluations/month; unlimited Pro) · `/pricing` page ($9/mo, $79/yr) · Pro gating middleware · Monday morning match digest (Resend) |
+| **Sprint 4: Growth & Distribution** | Days 46–60 | Acquisition & Viral Loops | **4x Data-Driven Reddit Drops** (`r/learnprogramming`, `r/cscareerquestions`, language subs) · **Show HN Launch** · **Shareable Merged-PR Achievement Cards** · Bootcamp & GSoC fellowship outreach |
 
 ---
 
-## 11. Activation, retention & measurement (added from review)
+## 11. Activation, retention & measurement
 
 Funnels are guesses until instrumented. Wire these into PostHog before spending
-on acquisition (§5).
+on acquisition (§10).
 
 **Activation events**
 - Free: OAuth signup → lands on repo/rankings → **saves a watchlist item** or
-  clicks page-2 (the two gated actions) → **repeat visit within 7 days**.
+  evaluates a repo PR likelihood → **repeat visit within 7 days**.
 - Pro: pays → **opens the first weekly digest** → **uses PR Likelihood** on a
   repo → (if newbie) starts the First-Merge Track.
 - North-star-ish proxy: a contributor who **picks a repo they found via us and
   merges a PR there**.
 
-**Funnel to instrument** (define real numbers, then apply §3.5's conversion
-table): visitors → OAuth signup → activated (≥1 gated action) → Pro → retained
-30d.
+**Funnel to instrument:** visitors → OAuth signup → activated (≥1 gated action) → Pro → retained 30d.
 
 **Churn signals (watch weekly):**
 - Digest open/click rate drops (email health, not just MRR).
@@ -427,89 +417,53 @@ table): visitors → OAuth signup → activated (≥1 gated action) → Pro → 
 - PR Likelihood clicks drop to zero.
 - Failed payments (dunning) — dunning UX saves revenue before it's "churn".
 
-**Customer discovery (before building Pro):** the 10–20 interviews in week 1–3
-must answer: (a) what triggers a Pro purchase, (b) who'd pay $8–12 for PR
-Likelihood, (c) which B2B buyer would pay for contributor data. Keep an
-evidence log; don't build un-validated features.
-
-**Support burden (plan, not an afterthought):** digest corrections and bad
-predictions are support tickets + trust damage. Have a visible feedback path
-(e.g. "wrong prediction? tell us") wired to the weekly editorial review, and a
-mailbox for Pro users. Measure complaints like a metric, not a mail folder.
-
 ---
 
-## 12. Monetization Fast-Track: 60-Day Sprint to 100 Paid Subscribers ($900+ MRR)
+## 12. Detailed Macro Epics & Granular Sub-Stories (Build-First, Paywall-Second Architecture)
 
-### 12.1 The Core Psychology: Why Developers Pay
-Developers will **never** pay for issue aggregators (goodfirstissue.dev, GitHub explore are free). Developers **gladly pay** for:
-1. **Time Saved**: Skipping 15+ hours spent reading docs/cloning repos only to get ghosted by inactive maintainers.
-2. **Career Acceleration / Job Signals**: Verifiable proof of merged PRs in real production codebases instead of tutorial projects.
+### 🧱 Epic 1: Repository Data Moats & Onboarding Scoring (Sprint 1)
+*Compute objective repository signals that no other aggregator provides.*
+- **Story 1.1**: Implement Onboarding Docs checker (inspects `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue/PR templates via GitHub API) and store `onboarding_score` (0–100).
+- **Story 1.2**: Implement GFI Quality Score calculating issue description clarity, scope, maintainer response <48h, and mentor comment presence.
+- **Story 1.3**: Calculate repository 90-day Bus Factor from distinct active maintainers; enforce cap (bus factor = 1 → max tier B).
+- **Story 1.4**: Update C-Rank nightly calculation pipeline to incorporate Onboarding Docs and Bus Factor into global rank.
+- **Story 1.5**: Execute brand rename to GetMerged across frontend copy, metadata, and routing.
 
-### 12.2 Pro Feature Set & High-Converting Value Hooks ($9/mo or $79/yr)
-- **PR Pre-Flight Simulator**: Paste your PR diff before submitting; runs checks against maintainer personas (e.g. *"Maintainer @alice rejects PRs missing unit tests 92% of the time. Add test in `_test.go`"*).
-- **PR Acceptance & Ghost Predictor**: Real-time response estimate (*"Avg maintainer review: 3.4 hrs. 85% first-timer merge rate"*).
-- **Ghost Insurance (Ironclad Risk Reversal)**: If a Pro user opens a PR in a recommended S-Tier repo and receives zero response in 14 days, they get **1 month free Pro** + automated priority re-matching.
-- **Career Contributor Pass**: Verified shareable badge & LinkedIn card showcasing merged PRs in top-tier open source codebases.
+### 🧬 Epic 2: Contributor DNA & Secure Auth (Sprint 1–2)
+*Extract user skills and contribution habits securely without hitting API abuse limits.*
+- **Story 2.1**: Update OAuth login flow to encrypt GitHub access/refresh tokens with AES-GCM and store in `users` table.
+- **Story 2.2**: Implement `DELETE /api/v1/me/data` and explicit GDPR profiling consent checkbox.
+- **Story 2.3**: Build Contributor DNA background worker restricted to ≤2 search queries (`author:{login} type:pr` and `is:merged`) + REST profile endpoints.
+- **Story 2.4**: Generate contributor DNA JSON (`primary_languages`, `skill_level`, `pr_size_preference`, `feedback_tolerance`) and cache in `contributor_profiles`.
 
-### 12.3 Distribution Engine: Targeted Community Playbook (Reddit, HN, Discord)
-- **Reddit Data Drops (Weekly)**:
-  - `r/learnprogramming`, `r/cscareerquestions`: *"We analyzed 40,000 GitHub repos to find why 50% of 'Good First Issues' are traps (and how to find repos that actually merge your code)."*
-  - Language subs (`r/golang`, `r/rust`, `r/python`, `r/reactjs`): *"Top 20 Most Welcoming [Language] Repos for First-Time Contributors in 2026."*
-- **Show HN Launch**: *"Show HN: GetMerged – C-Rank scoring on 40k GitHub repos to prevent PR ghosting"*.
-- **Bootcamp & Fellowship Outreach**: Direct alignment with Google Summer of Code (GSoC) & MLH prep cohorts looking for their first merged PRs.
+### 🏗️ Epic 3: Async PR Ghost & Acceptance Predictor (Sprint 2)
+*Compute response latency percentiles and acceptance odds from stored event data.*
+- **Story 3.1**: Compute maintainer response latency percentiles (p50, p90) and first-timer merge rates from stored `repo_pr_events` via background worker.
+- **Story 3.2**: Implement `GET /api/v1/repos/:owner/:name/pr-likelihood` reading precomputed metrics from MySQL with sub-10ms response time.
+- **Story 3.3**: Async worker pushes maintainer comment text to local `nlp_sidecar` to classify maintainer vibe (warm vs. strict, nitpicks, bot gatekeeping) and caches result.
+- **Story 3.4**: Build frontend "PR Acceptance & Review Time" widget on `/repo/[owner]/[name]` with full un-blurred view on sample repos.
 
-### 12.4 60-Day Execution Timeline
+### 🛠️ Epic 4: Static Heuristic Pre-Flight Checker (Sprint 2)
+*Fast, client-side/heuristic diff and PR validation checklist without expensive LLM diff parsing.*
+- **Story 4.1**: Implement `POST /api/v1/preflight/evaluate` accepting target repo and file changes summary.
+- **Story 4.2**: Validate PR against heuristic rules: presence of test files (`*_test.*`, `test_*`), docs updates, commit message conventional format, and PR size threshold.
+- **Story 4.3**: Build interactive UI at `/preflight` showing pass/fail status with actionable guidance.
 
-| Sprint | Days | Key Objectives | Milestone |
-|---|---|---|---|
-| **Sprint 1: Payments & Core Gate** | Days 1–10 | Dodopayments integration ($9/mo, $79/yr) · `/pricing` page · Gated PR Likelihood & Maintainer Persona preview | 0 → 10 Early Adopters |
-| **Sprint 2: Community Sprints** | Days 11–25 | 4x Data-driven Reddit posts · Show HN launch · PR Pre-Flight Simulator v1 | 35 Paid Subscribers |
-| **Sprint 3: Retention & Viral Loops** | Days 26–45 | Automated Monday match digest · Shareable "PR Merged" achievement cards · Ghost Insurance guarantee live | 70 Paid Subscribers |
-| **Sprint 4: Scale to 100+** | Days 46–60 | Bootcamp/GSoC community partnerships · Micro-KOL maintainer outreach · SEO cluster expansion | **100+ Paid Subscribers ($900+ MRR)** |
+### 💳 Epic 5: Dodopayments & Quota Entitlements (Sprint 3)
+*Monetization infrastructure with resilient MySQL quota tracking.*
+- **Story 5.1**: Create DB migration for `users`: `is_pro`, `subscription_id`, `subscription_expires_at`, `billing_cycle`, and `monthly_eval_count`.
+- **Story 5.2**: Implement `POST /api/v1/payments/webhook/dodopayments` handling `subscription.created`, `renewed`, `cancelled`, and `payment.failed`.
+- **Story 5.3**: Build Go middleware `RequirePro()` and persistent MySQL quota checker (3 free likelihood evaluations/user/month; unlimited for Pro).
+- **Story 5.4**: Build high-converting `/pricing` page ($9/mo, $79/yr) with 7-day money-back guarantee.
+- **Story 5.5**: Implement Resend email pipeline for Monday morning personalized match digest delivering 3 high-probability issues.
 
----
+### 🚀 Epic 6: Growth Flywheel & Social Proof (Sprint 4)
+*Acquisition and shareable achievements.*
+- **Story 6.1**: Implement PR merge webhook listener to detect when a user PR gets merged in an indexed repository.
+- **Story 6.2**: Generate SVG & PNG Contributor Achievement Cards (*"Top 5% Go Contributor – PR Merged in [Repo]"*) on merge detect.
+- **Story 6.3**: Add one-click LinkedIn and X share buttons with pre-formatted copy linking to user's public profile `/u/[username]`.
+- **Story 6.4**: Execute 4x targeted Reddit data drops across `r/learnprogramming`, `r/cscareerquestions`, and language subreddits.
+- **Story 6.5**: Launch on Show HN highlighting GraphQL crawl architecture and objective C-Rank math.
 
-## 13. Detailed Macro Epics & Sub-Level Stories (Build-First, Paywall-Second Architecture)
-
-### 🏗️ Epic 1: The PR Ghost & Acceptance Predictor (The Core "Wow" Engine)
-*Build the raw analytical and predictive engine first, verify accuracy on live repos, then add upgrade gates.*
-- **Story 1.1**: Compute maintainer response latency percentiles (p50, p90) and first-timer merge rates from stored `repo_pr_events`.
-- **Story 1.2**: Implement `GET /api/v1/repos/:owner/:name/pr-likelihood` returning acceptance odds, time-to-review estimate, and rejection risk flags.
-- **Story 1.3**: Connect Python `nlp_sidecar` maintainer persona (warm vs. strict, nitpick level, CI bot traps) to the PR likelihood response payload.
-- **Story 1.4**: Build the frontend "Acceptance Predictor" widget on `/repo/[owner]/[name]` showing un-blurred data for sample repos.
-- **Story 1.5**: Implement freemium quota tracking in Valkey (3 free likelihood checks/user/month; unlimited for Pro).
-
-### 🛠️ Epic 2: PR Pre-Flight Simulator (Diff & Issue Evaluator)
-*Interactive tool where developers test their PRs before opening them on GitHub.*
-- **Story 2.1**: Implement `POST /api/v1/preflight/simulate` accepting repo name, target issue, and PR diff/summary text.
-- **Story 2.2**: Evaluate diff against repo rules: missing test files, docs changes, PR title conventional commit format, and lines-changed threshold.
-- **Story 2.3**: Build UI at `/preflight` with interactive diff editor and real-time pass/fail checklist.
-- **Story 2.4**: Generate actionable AI suggestions (e.g. *"Maintainer requires tests in `_test.go` for all backend logic"*).
-- **Story 2.5**: Add paywall gate: 1 free simulation/day for free users; unlimited simulations for Pro.
-
-### 🧬 Epic 3: Contributor DNA & Personalized Weekly Matcher
-*Build user profiling from their own GitHub activity to match them with high-merge-probability issues.*
-- **Story 3.1**: Store user OAuth access token encrypted with AES-GCM and implement token refresh/PKCE flow.
-- **Story 3.2**: Build async background job to compute Contributor DNA (languages, preferred PR size, skill level, feedback tolerance).
-- **Story 3.3**: Create matching algorithm pairing user DNA with active S/A-Tier Good First Issues.
-- **Story 3.4**: Implement Resend email pipeline for Monday morning digest delivering 3 personalized high-probability issues.
-- **Story 3.5**: Add opt-in marketing email consent checkbox, one-click unsubscribe, and `DELETE /api/v1/me/data` erasure endpoint.
-
-### 💳 Epic 4: Dodopayments & Entitlements Infrastructure (The Paywall Layer)
-*Plug in payments only after Epics 1–3 deliver undeniable product value.*
-- **Story 4.1**: Create DB migration for `users`: `is_pro`, `subscription_id`, `subscription_expires_at`, `billing_cycle`.
-- **Story 4.2**: Implement `POST /api/v1/payments/webhook/dodopayments` handling `subscription.created`, `renewed`, `cancelled`, and `payment.failed`.
-- **Story 4.3**: Build Go middleware `RequirePro()` returning `402 Payment Required` with checkout redirect on gated endpoints.
-- **Story 4.4**: Build high-converting `/pricing` page with monthly ($9/mo) and annual ($79/yr) plans and 7-day money-back guarantee.
-- **Story 4.5**: Add automated dunning email notifications and billing portal link for active subscribers.
-
-### 🛡️ Epic 5: Ghost Insurance & Career Contributor Pass (Viral Proof Engine)
-*Risk reversal and proof-of-work badges that turn merged PRs into social distribution.*
-- **Story 5.1**: Build PR tracking monitor checking status of user PRs submitted to recommended S-Tier repos.
-- **Story 5.2**: Implement Ghost Insurance claim trigger (if no maintainer reply in 14 days, auto-grant 1 month free Pro credit).
-- **Story 5.3**: Generate SVG & PNG Contributor Achievement Cards (*"Top 5% Go Contributor – PR Merged in [Repo]"*) on PR merge detection.
-- **Story 5.4**: Add one-click LinkedIn and X share buttons with pre-formatted copy linking back to user's public profile `/u/[username]`.
-- **Story 5.5**: Build embeddable dynamic README badges for contributors showing verified merged count and C-Rank tier.
 
 
