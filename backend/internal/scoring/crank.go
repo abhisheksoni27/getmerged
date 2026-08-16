@@ -62,10 +62,17 @@ func ComputeConfidenceScore(rawScore float64, totalPRs int) float64 {
 
 // ComputeCRank calculates the C-Rank score and tier from normalised metrics.
 // If staleness is true, the score is capped to <30 (max 29.9) and assigned D.
+// ComputeCRank calculates the C-Rank score and tier from normalised metrics.
+// If staleness is true, the score is capped to <30 (max 29.9) and assigned D.
 // Continuous logarithmic bonus is applied for beginner-friendly good first issues:
 // gfiBonus = min(5.0, 2.5 * ln(1 + gfiCount)).
 // Universal boundary hysteresis (promotion delta vs demotion buffer) is applied across all tiers.
 func ComputeCRank(n NormalisedMetrics, staleness bool, gfiCount int, prevTier ...string) (score float64, tier string) {
+	return ComputeCRankWithBusFactor(n, staleness, gfiCount, 2, prevTier...)
+}
+
+// ComputeCRankWithBusFactor computes C-Rank and enforces Bus Factor safety capping (BusFactor <= 1 -> max tier B).
+func ComputeCRankWithBusFactor(n NormalisedMetrics, staleness bool, gfiCount int, busFactor int, prevTier ...string) (score float64, tier string) {
 	rawScore := weights.MergeRate*n.MergeRate +
 		weights.ResponseTime*n.ResponseTime +
 		weights.ActivityRecency*n.ActivityRecency +
@@ -92,7 +99,14 @@ func ComputeCRank(n NormalisedMetrics, staleness bool, gfiCount int, prevTier ..
 		previousTier = prevTier[0]
 	}
 
-	return rawScore, scoreTierWithHysteresis(rawScore, previousTier)
+	calculatedTier := scoreTierWithHysteresis(rawScore, previousTier)
+
+	// Story 1.3: Enforce Bus Factor safety cap (bus factor <= 1 -> max tier B)
+	if busFactor <= 1 && (calculatedTier == TierS || calculatedTier == TierA) {
+		calculatedTier = TierB
+	}
+
+	return rawScore, calculatedTier
 }
 
 // scoreTierWithHysteresis maps a score to tier applying universal ±2.0 boundary hysteresis.
