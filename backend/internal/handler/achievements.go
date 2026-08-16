@@ -18,7 +18,7 @@ func RenderAchievementCardHandler(userRepo repository.UserRepository) gin.Handle
 			return
 		}
 
-		profile, err := userRepo.FindByUsername(c.Request.Context(), slug)
+		profile, err := userRepo.GetUserProfileBySlug(c.Request.Context(), slug)
 		if err != nil || profile == nil {
 			c.String(http.StatusNotFound, "User not found")
 			return
@@ -29,12 +29,18 @@ func RenderAchievementCardHandler(userRepo repository.UserRepository) gin.Handle
 		skillLevel := "Active Contributor"
 
 		if profile.DNA != nil {
-			mergedCount = profile.DNA.TotalMergedPRs
-			if len(profile.DNA.PrimaryLanguages) > 0 {
-				primaryLang = profile.DNA.PrimaryLanguages[0]
-			}
-			if profile.DNA.SkillLevel != "" {
-				skillLevel = profile.DNA.SkillLevel
+			if dnaMap, ok := profile.DNA.(map[string]interface{}); ok {
+				if mc, ok := dnaMap["total_merged_prs"].(float64); ok {
+					mergedCount = int(mc)
+				}
+				if pl, ok := dnaMap["primary_languages"].([]interface{}); ok && len(pl) > 0 {
+					if lStr, ok := pl[0].(string); ok {
+						primaryLang = lStr
+					}
+				}
+				if sl, ok := dnaMap["skill_level"].(string); ok && sl != "" {
+					skillLevel = sl
+				}
 			}
 		}
 
