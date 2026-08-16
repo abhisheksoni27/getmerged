@@ -122,6 +122,8 @@ func main() {
 		api.GET("/pr-likelihood", handler.GetPRLikelihoodHandler(repoStore))
 		api.GET("/repos/:id/optimal-time", handler.GetOptimalTimeHandler(repoStore))
 		api.GET("/optimal-time", handler.GetOptimalTimeHandler(repoStore))
+		api.GET("/repos/:id/fit-radar", handler.GetFitRadarHandler(repoStore, profileRepo))
+		api.GET("/fit-radar", handler.GetFitRadarHandler(repoStore, profileRepo))
 		api.GET("/repos/:id/related", handler.GetRelatedReposHandler(repoStore))
 		api.GET("/repos/:id/good-first-issues", handler.GetRepoGoodFirstIssues(gfiRepo, repoStore))
 		api.GET("/issues/good-first", handler.ListGoodFirstIssues(gfiRepo))
