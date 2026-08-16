@@ -129,6 +129,7 @@ func main() {
 
 		api.GET("/repos/:id/feedback", handler.ListFeedback(database))
 		api.GET("/users/:slug", handler.GetUserProfile(userRepo))
+		api.POST("/preflight/evaluate", handler.EvaluatePreflightHandler())
 
 		// Auth Routes
 		authGroup := api.Group("/auth")

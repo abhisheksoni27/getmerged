@@ -3,10 +3,10 @@
 *Generated dynamically during autonomous sprint runs.*
 
 ## 📋 Status Overview
-- **Active Sprint**: Sprint 2: Contributor DNA & Secure Auth
-- **Total Stories Completed**: 12
+- **Active Sprint**: Sprint 3: Dodopayments & Monetization
+- **Total Stories Completed**: 15
 - **Build Status**: 🟢 Passing (`go test ./...` & `npm run lint`)
-- **Last Sync**: 2026-08-17 01:21 IST
+- **Last Sync**: 2026-08-17 01:24 IST
 
 ---
 
@@ -29,7 +29,9 @@
 | **Story 3.1** | Pure response latency percentiles calculation (p50, p90) and first-timer merge rates stored in snapshots | 🟢 100% Passing (`internal/scoring/percentiles_test.go`) | `04954b5` |
 | **Story 3.2** | `GET /api/v1/repos/:owner/:name/pr-likelihood` sub-10ms endpoint with null-safe JSON and HTTP Cache-Control | 🟢 100% Passing (`internal/handler/repos_handler_test.go`) | `fac72ef` |
 | **Story 3.3** | Async worker & repository bounded maintainer comment retrieval with Python NLP sidecar sentiment caching | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `c9b806d` |
-| **Story 3.4** | Frontend `PRAcceptanceWidget` displaying merge odds, p50/p90 latency, and maintainer breadth on repo detail view | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `HEAD` |
+| **Story 3.4** | Frontend `PRAcceptanceWidget` displaying merge odds, p50/p90 latency, and maintainer breadth on repo detail view | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `4b37f52` |
+| **Story 4.1 & 4.2** | Pure heuristic PR evaluation engine (`EvaluatePreflight`) and `POST /api/v1/preflight/evaluate` endpoint | 🟢 100% Passing (`internal/scoring/preflight_test.go`) | `HEAD` |
+| **Story 4.3** | Interactive `/preflight` validation UI with conventional commit checks, test detection, and size alerts | 🟢 100% Passing (`npm run lint`) | `HEAD` |
 
 ---
 
@@ -41,4 +43,4 @@
 ---
 
 ## 🎯 Next Queued Story
-- **Story 4.1**: Implement `POST /api/v1/preflight/evaluate` accepting target repo and file changes summary.
+- **Story 5.1**: Create DB migration for `users`: `is_pro`, `subscription_id`, `subscription_expires_at`, `billing_cycle`, and `monthly_eval_count`.
