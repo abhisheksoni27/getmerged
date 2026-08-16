@@ -59,6 +59,20 @@ export interface AIInsights {
   top_donts?: string[];
 }
 
+export interface ContributorDNA {
+  total_merged_prs: number;
+  followers_count: number;
+  repositories_count: number;
+  language_breakdown: Record<string, number>;
+  avg_additions: number;
+  avg_deletions: number;
+  avg_changed_files: number;
+  primary_languages: string[];
+  skill_level: string;
+  pr_size_preference: string;
+  review_engagement: string;
+}
+
 export interface User {
   id: number;
   github_id?: number | null;
@@ -67,6 +81,7 @@ export interface User {
   username: string;
   email?: string;
   avatar_url?: string;
+  profiling_consent?: boolean;
 }
 
 export interface UserStats {
@@ -97,6 +112,7 @@ export interface UserProfile {
   stats: UserStats;
   watchlist: Repo[];
   feedback: UserFeedbackItem[];
+  dna?: ContributorDNA | null;
 }
 
 export interface GoodFirstIssueItem {
