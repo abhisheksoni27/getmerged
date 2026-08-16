@@ -26,7 +26,9 @@
 ---
 
 ## 🐕 Dogfooder Findings (Playwright UX & Edge Cases)
-*No new findings recorded yet.*
+- **Live UX Verification**: Explored `/` and `/facebook/react` via `playwright-cli` on production.
+- **Onboarding Score & Bus Factor UI**: Confirmed `RepoScorecards` displays the `Docs: X/100` badge, Maintainer Breadth indicators, and live C-Rank metrics cleanly without hydration errors or layout shift.
+- **Browser Automation**: `playwright-cli` configured and operational with system chromium.
 
 ---
 
