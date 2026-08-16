@@ -475,6 +475,27 @@ on acquisition (§10).
 - **Story 7.3**: Maintainer Mentorship Index measuring encouraging responses vs 1-word rejects attached to repo scorecards.
 - **Story 7.4**: Automated Weekly Contributor Digest generator delivering personalized high-probability issues.
 
+### 🤖 Epic 9: AI Prompt Badge Installer — Profile & Repo (Growth)
+*One-click copy of AI prompts that add GetMerged badges to GitHub profiles AND repos. Two separate surfaces, two separate UI sections, never conflated.*
+- **Story 9.1**: Repo badge prompt UI on `/maintainers` + repo-page CTA — one-click copy of the repo README badge prompt (OWNER/REPO pre-filled, §5.3 prompt). Server "Copy prompt" button, no signup.
+- **Story 9.2**: **Separate** Profile badge prompt UI — emits a prompt that inserts the contributor C-Rank badge into the user's GitHub profile README (`[![GetMerged™](https://getmerged.abhishekco.de/u/[username]/raw/badge.svg)](https://getmerged.abhishekco.de/u/[username])`). Distinct section + distinct copy from 9.1.
+- **Story 9.3**: Both prompts conservative (insert badge block only, touch nothing else, show diff, let user confirm); track prompts-copied → badges-live per surface (profile vs repo).
+
+### 🌍 Epic 10: Language-Specific Content & Repo-Page GFI
+*Kill the ~40% duplicate-content problem: localize copy and data per language, and surface real good-first-issue content on repo pages instead of a bare count.*
+- **Story 10.1**: Language-specific copy + data on every language surface (`/rankings/[lang]`, language filter on `/repos`, GFI pages) — per-language intro, meta description, JSON-LD, and curated context, so each language page carries distinct value.
+- **Story 10.2**: Repo detail page (`/repo/[owner]/[name]`) shows **good-first-issue content** (issue title, description snippet, labels, issue URL) fetched from stored GFI data — not just a count.
+- **Story 10.3**: Graceful fallback — if a repo has no GFI content, show only the count (or omit the block); never fake or invent issue content.
+
+### 🔍 Epic 11: SEO & Content-System Backlog (Growth)
+*Ship the pending §7 backlog: more indexable surfaces, internal links, freshness, and authority pages.*
+- **Story 11.1**: Build `/compare/[a]/[b]` repo comparison page (SSR, unique title/JSON-LD per pair).
+- **Story 11.2**: Build `/topics/[topic]` + `/org/[org]` surfaces (needs topics index); each with distinct metadata + copy.
+- **Story 11.3**: Build `/contribute` wizard — indexable landing that routes contributors to ranked repos/GFIs.
+- **Story 11.4**: Internal-link rule engine — cross-link repo → language ranking → tier neighbors → compare → GFI; every repo/ranking page gets unique inbound context.
+- **Story 11.5**: Freshness signals — `lastModified` = snapshot date + "updated Xh ago" on repo pages.
+- **Story 11.6**: Annual "State of Welcoming OSS" report at `/reports/[year]` — backlink + authority asset from the blog pipeline (§4.1).
+
 
 
 
