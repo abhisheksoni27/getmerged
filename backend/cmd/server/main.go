@@ -71,10 +71,10 @@ func main() {
 	aiClient := ai.NewAIClient(cfg.OpencodeAPIKey)
 	telegramNotifier := notification.NewTelegramNotifier(cfg.TelegramBotToken, cfg.TelegramChatID)
 
-	// Initialize Repository Layer
 	userRepo := repository.NewUserRepository(database, cfg)
 	oauthTokenRepo := repository.NewOAuthTokenRepository(database, cfg)
 	profileRepo := repository.NewContributorProfileRepository(database)
+	entitlementRepo := repository.NewEntitlementRepository(database)
 	tokenMgr := auth.NewTokenManager(oauthTokenRepo, cfg, nil)
 	dnaWorker := pipeline.NewContributorDNAWorker(userRepo, profileRepo, tokenMgr, cfg.GithubToken, nil)
 	repoStore := repository.NewRepoRepository(database)
@@ -130,6 +130,7 @@ func main() {
 		api.GET("/repos/:id/feedback", handler.ListFeedback(database))
 		api.GET("/users/:slug", handler.GetUserProfile(userRepo))
 		api.POST("/preflight/evaluate", handler.EvaluatePreflightHandler())
+		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo))
 
 		// Auth Routes
 		authGroup := api.Group("/auth")

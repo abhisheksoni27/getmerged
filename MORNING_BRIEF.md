@@ -3,10 +3,10 @@
 *Generated dynamically during autonomous sprint runs.*
 
 ## 📋 Status Overview
-- **Active Sprint**: Sprint 3: Dodopayments & Monetization
-- **Total Stories Completed**: 15
+- **Active Sprint**: Sprint 4: Growth Flywheel & Viral Hooks
+- **Total Stories Completed**: 19
 - **Build Status**: 🟢 Passing (`go test ./...` & `npm run lint`)
-- **Last Sync**: 2026-08-17 01:24 IST
+- **Last Sync**: 2026-08-17 01:29 IST
 
 ---
 
@@ -30,8 +30,11 @@
 | **Story 3.2** | `GET /api/v1/repos/:owner/:name/pr-likelihood` sub-10ms endpoint with null-safe JSON and HTTP Cache-Control | 🟢 100% Passing (`internal/handler/repos_handler_test.go`) | `fac72ef` |
 | **Story 3.3** | Async worker & repository bounded maintainer comment retrieval with Python NLP sidecar sentiment caching | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `c9b806d` |
 | **Story 3.4** | Frontend `PRAcceptanceWidget` displaying merge odds, p50/p90 latency, and maintainer breadth on repo detail view | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `4b37f52` |
-| **Story 4.1 & 4.2** | Pure heuristic PR evaluation engine (`EvaluatePreflight`) and `POST /api/v1/preflight/evaluate` endpoint | 🟢 100% Passing (`internal/scoring/preflight_test.go`) | `HEAD` |
-| **Story 4.3** | Interactive `/preflight` validation UI with conventional commit checks, test detection, and size alerts | 🟢 100% Passing (`npm run lint`) | `HEAD` |
+| **Story 4.1 & 4.2** | Pure heuristic PR evaluation engine (`EvaluatePreflight`) and `POST /api/v1/preflight/evaluate` endpoint | 🟢 100% Passing (`internal/scoring/preflight_test.go`) | `59a038b` |
+| **Story 4.3** | Interactive `/preflight` validation UI with conventional commit checks, test detection, and size alerts | 🟢 100% Passing (`npm run lint`) | `59a038b` |
+| **Story 5.1 & 5.2** | Dodopayments webhook listener (`POST /api/v1/payments/webhook/dodopayments`) with signature verification and idempotency table | 🟢 100% Passing (`internal/handler/payments_test.go`) | `HEAD` |
+| **Story 5.3** | Quota middleware (`RequireProOrQuota`) with atomic monthly rollover, race-condition protection, and refund safety | 🟢 100% Passing (`go test ./...`) | `HEAD` |
+| **Story 5.4** | High-converting `/pricing` page ($9/mo, $79/yr) with 7-day money-back guarantee | 🟢 100% Passing (`npm run lint`) | `HEAD` |
 
 ---
 
@@ -43,4 +46,4 @@
 ---
 
 ## 🎯 Next Queued Story
-- **Story 5.1**: Create DB migration for `users`: `is_pro`, `subscription_id`, `subscription_expires_at`, `billing_cycle`, and `monthly_eval_count`.
+- **Story 6.1**: Implement PR merge webhook listener to detect when a user PR gets merged in an indexed repository.

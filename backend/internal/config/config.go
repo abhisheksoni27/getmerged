@@ -30,6 +30,7 @@ type Config struct {
 	LogLevel           string
 	TelegramBotToken   string
 	TelegramChatID     string
+	DodopaymentsWebhookSecret string
 	DiscoveryIntervalMinutes int
 	DiscoveryMaxNewPerRun    int
 	SnapshotRetentionDays    int
@@ -48,6 +49,7 @@ func Load() (*Config, error) {
 		OpencodeAPIKey: os.Getenv("OPENCODE_API_KEY"), // optional in dev if AI insights disabled
 		TelegramBotToken: os.Getenv("TELEGRAM_BOT_TOKEN"),
 		TelegramChatID:   os.Getenv("TELEGRAM_CHAT_ID"),
+		DodopaymentsWebhookSecret: os.Getenv("DODOPAYMENTS_WEBHOOK_SECRET"),
 		GoogleClientID:   os.Getenv("GOOGLE_CLIENT_ID"),
 		GoogleClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
 	}

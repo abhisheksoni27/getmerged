@@ -65,6 +65,23 @@ func AutoMigrate(db *sqlx.DB) error {
 			analyzed_at DATETIME,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
+		`CREATE TABLE IF NOT EXISTS user_entitlements (
+			user_id INTEGER PRIMARY KEY,
+			is_pro BOOLEAN DEFAULT FALSE,
+			subscription_id VARCHAR(255),
+			subscription_expires_at DATETIME,
+			billing_cycle VARCHAR(50),
+			monthly_eval_count INTEGER DEFAULT 0,
+			current_period_start DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			subscription_updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
+		`CREATE TABLE IF NOT EXISTS payment_webhook_events (
+			event_id VARCHAR(255) PRIMARY KEY,
+			event_type VARCHAR(100) NOT NULL,
+			payload_json TEXT NOT NULL,
+			processed_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
 		`CREATE TABLE IF NOT EXISTS user_watchlists (
 			user_id INTEGER NOT NULL,
 			repo_id VARCHAR(255) NOT NULL,
