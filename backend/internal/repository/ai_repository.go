@@ -136,10 +136,15 @@ func (r *sqlxAIRepository) SavePRComments(ctx context.Context, repoID string, co
 }
 
 func (r *sqlxAIRepository) GetPRComments(ctx context.Context, repoID string, limit int) ([]string, error) {
+	if limit <= 0 || limit > 30 {
+		limit = 30
+	}
 	var comments []string
 	err := r.db.SelectContext(ctx, &comments, `
 		SELECT comment_text FROM repo_pr_comments
 		WHERE repository_id = ?
+		  AND author_association IN ('OWNER', 'MEMBER', 'COLLABORATOR')
+		  AND author_login NOT LIKE '%[bot]%'
 		ORDER BY created_at DESC
 		LIMIT ?
 	`, repoID, limit)
