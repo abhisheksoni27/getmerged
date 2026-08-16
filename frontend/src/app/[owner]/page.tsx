@@ -255,6 +255,16 @@ export default async function UserProfilePage({ params }: ProfilePageProps) {
                 className="w-full h-auto rounded-xl"
               />
             </div>
+
+            {/* GitHub Profile README Badge Markdown Embed (Story 9.2) */}
+            <div className="mt-4 p-4 rounded-2xl bg-zinc-50 border border-zinc-200/80 font-mono text-xs max-w-lg">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-zinc-600 font-bold">GitHub Profile README Badge Markdown:</span>
+              </div>
+              <div className="bg-white p-2.5 rounded-xl border border-zinc-200 text-zinc-800 break-all select-all font-mono text-[11px]">
+                {`[![GetMerged Contributor Proof](https://getmerged.abhishekco.de/api/v1/users/${profile.slug}/achievement.svg)](https://getmerged.abhishekco.de/${profile.slug})`}
+              </div>
+            </div>
           </div>
         </section>
 
