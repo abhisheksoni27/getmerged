@@ -33,6 +33,7 @@ import { RepoDetailHero } from "@/components/RepoDetailHero";
 import { RepoScorecards } from "@/components/RepoScorecards";
 import { RepoBadgeGenerator } from "@/components/RepoBadgeGenerator";
 import { SimilarRepos } from "@/components/SimilarRepos";
+import { PRAcceptanceWidget } from "@/components/PRAcceptanceWidget";
 
 interface ClientRepoDetailProps {
   repo: Repo | null;
@@ -507,7 +508,10 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       </div>
 
 
-      {/* C-Rank Weight Formula Visualizer & History Timeline Removed */}
+      {/* PR Acceptance & Review Speed Forecast Widget (Epic 3, Story 3.4) */}
+      {repo?.owner && repo?.name && (
+        <PRAcceptanceWidget owner={repo.owner} name={repo.name} />
+      )}
 
       {/* Good First Issues Count (F3) */}
       <div className="rounded-2xl bg-white p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] font-mono">

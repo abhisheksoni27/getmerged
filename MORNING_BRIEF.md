@@ -4,7 +4,7 @@
 
 ## 📋 Status Overview
 - **Active Sprint**: Sprint 2: Contributor DNA & Secure Auth
-- **Total Stories Completed**: 11
+- **Total Stories Completed**: 12
 - **Build Status**: 🟢 Passing (`go test ./...` & `npm run lint`)
 - **Last Sync**: 2026-08-17 01:21 IST
 
@@ -28,7 +28,8 @@
 | **Story 2.4** | Contributor DNA schema synthesis (`primary_languages`, `skill_level`, `pr_size_preference`, `review_engagement`) cached and attached to `/users/:slug` | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `d936eec` |
 | **Story 3.1** | Pure response latency percentiles calculation (p50, p90) and first-timer merge rates stored in snapshots | 🟢 100% Passing (`internal/scoring/percentiles_test.go`) | `04954b5` |
 | **Story 3.2** | `GET /api/v1/repos/:owner/:name/pr-likelihood` sub-10ms endpoint with null-safe JSON and HTTP Cache-Control | 🟢 100% Passing (`internal/handler/repos_handler_test.go`) | `fac72ef` |
-| **Story 3.3** | Async worker & repository bounded maintainer comment retrieval with Python NLP sidecar sentiment caching | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `HEAD` |
+| **Story 3.3** | Async worker & repository bounded maintainer comment retrieval with Python NLP sidecar sentiment caching | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `c9b806d` |
+| **Story 3.4** | Frontend `PRAcceptanceWidget` displaying merge odds, p50/p90 latency, and maintainer breadth on repo detail view | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `HEAD` |
 
 ---
 
@@ -40,4 +41,4 @@
 ---
 
 ## 🎯 Next Queued Story
-- **Story 3.4**: Build frontend "PR Acceptance & Review Time" widget on `/repo/[owner]/[name]` with full un-blurred view on sample repos.
+- **Story 4.1**: Implement `POST /api/v1/preflight/evaluate` accepting target repo and file changes summary.
