@@ -4,9 +4,9 @@
 
 ## 📋 Status Overview
 - **Active Sprint**: Sprint 6: Maintainer Quality & Retention Flywheel
-- **Total Stories Completed**: 26
+- **Total Stories Completed**: 27
 - **Build Status**: 🟢 Passing (`go test ./...` & `npm run lint`)
-- **Last Sync**: 2026-08-17 02:11 IST
+- **Last Sync**: 2026-08-17 02:13 IST
 
 ---
 
@@ -40,7 +40,8 @@
 | **Story 7.1** | Reviewer Timezone Overlap Indicator & Optimal PR Submission Window (`GET /api/v1/repos/:id/optimal-time`) | 🟢 100% Passing (`internal/scoring/optimal_time_test.go`) | `1d3ab19` |
 | **Story 7.2** | Contributor Fit Radar & PR Size / Filetype Success Probability Breakdown (`GET /api/v1/repos/:id/fit-radar`) | 🟢 100% Passing (`internal/scoring/fit_radar_test.go`) | `57a7ac2` |
 | **Story 7.3** | Maintainer Mentorship Index (measuring encouraging comments vs 1-word rejects) | 🟢 100% Passing (`internal/scoring/mentorship_test.go`) | `29d21c2` |
-| **Story 7.4** | Automated Weekly Contributor Digest Generator (`POST /internal/jobs/weekly-digest`) | 🟢 100% Passing (`internal/notification/digest_test.go`) | `HEAD` |
+| **Story 7.4** | Automated Weekly Contributor Digest Generator (`POST /internal/jobs/weekly-digest`) | 🟢 100% Passing (`internal/notification/digest_test.go`) | `1b48db7` |
+| **Story 8.3** | Shields.io Compliant Badge JSON & 302 SVG Redirect Endpoint (`GET /api/v1/badges/:owner/:name/badge.json`) | 🟢 100% Passing (`go test ./...`) | `HEAD` |
 
 ---
 
