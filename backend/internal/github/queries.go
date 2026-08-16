@@ -65,6 +65,17 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
     stargazerCount
     description
     primaryLanguage { name }
+    isArchived
+    hasIssuesEnabled
+    issueTemplates { name }
+    pullRequestTemplates { filename }
+    contributing: object(expression: "HEAD:CONTRIBUTING.md") { id }
+    contributingLower: object(expression: "HEAD:contributing.md") { id }
+    contributingGithub: object(expression: "HEAD:.github/CONTRIBUTING.md") { id }
+    contributingDocs: object(expression: "HEAD:docs/CONTRIBUTING.md") { id }
+    codeOfConduct: object(expression: "HEAD:CODE_OF_CONDUCT.md") { id }
+    codeOfConductLower: object(expression: "HEAD:code_of_conduct.md") { id }
+    codeOfConductGithub: object(expression: "HEAD:.github/CODE_OF_CONDUCT.md") { id }
     pullRequests(
       first: 5
       after: $cursor
