@@ -31,6 +31,7 @@ type BackgroundCrawler struct {
 	snapshotRetention time.Duration
 	workers           int
 	lastSnapshotPurge time.Time
+	langScheduler     *LanguageScheduler
 }
 
 // NewBackgroundCrawler initializes a BackgroundCrawler instance.
@@ -41,10 +42,11 @@ func NewBackgroundCrawler(db *sqlx.DB, gh *ghclient.Client, telegram *notificati
 		telegram:          telegram,
 		stopChan:          make(chan struct{}),
 		lastMetricWindow:  time.Now().UTC(),
-		discoveryInterval: 15 * time.Minute,
-		discoveryMaxNew:   10,
+		discoveryInterval: 3 * time.Minute,
+		discoveryMaxNew:   25,
 		snapshotRetention: 90 * 24 * time.Hour,
 		workers:           10,
+		langScheduler:     NewLanguageScheduler(db),
 	}
 }
 
@@ -352,12 +354,16 @@ func (c *BackgroundCrawler) processDiscoveryBatch() error {
 		return nil
 	}
 
-	lang := SeedLanguages[c.lastLang%len(SeedLanguages)]
-	bucket := DiscoveryStarBuckets[c.lastBucket%len(DiscoveryStarBuckets)]
-	c.lastBucket++
-	if c.lastBucket%len(DiscoveryStarBuckets) == 0 {
+	var lang string
+	if c.langScheduler != nil {
+		lang = c.langScheduler.Next()
+	} else {
+		lang = SeedLanguages[c.lastLang%len(SeedLanguages)]
 		c.lastLang++
 	}
+
+	bucket := DiscoveryStarBuckets[c.lastBucket%len(DiscoveryStarBuckets)]
+	c.lastBucket++
 
 	slog.Info("background crawler [P3 Discovery]: sweeping", "language", lang, "stars", fmt.Sprintf("%d..%d", bucket.MinStars, bucket.MaxStars))
 
