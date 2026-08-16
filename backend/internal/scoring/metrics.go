@@ -69,6 +69,8 @@ type RawMetrics struct {
 	StalenessFlag             bool
 	GoodFirstIssueCount       int // open issues labeled "good first issue" at snapshot time
 	OnboardingScore           int // repository documentation readiness score (0–100)
+	ResponseP50Hours          float64 // 50th percentile response latency in hours
+	ResponseP90Hours          float64 // 90th percentile response latency in hours
 }
 
 // ComputeMetrics derives all raw metrics from a slice of PRs.
@@ -257,6 +259,9 @@ func ComputeMetrics(prs []PR, staleness bool) RawMetrics {
 
 	m.TimeToFirstResponseHours = median(responseTimes)
 	m.TimeToMergeHours = median(mergeTimes)
+	p50, p90 := ComputePercentiles(responseTimes)
+	m.ResponseP50Hours = p50
+	m.ResponseP90Hours = p90
 	// Maintainer responsiveness mirrors response time (lower hours = more responsive)
 	m.MaintainerResponsiveness = m.TimeToFirstResponseHours
 
