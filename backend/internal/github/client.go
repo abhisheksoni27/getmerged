@@ -78,9 +78,15 @@ type Repo struct {
 
 // RepoMeta holds metadata for a repository.
 type RepoMeta struct {
-	Stars       int
-	Language    string
-	Description string
+	Stars            int
+	Language         string
+	Description      string
+	IsArchived       bool
+	HasIssuesEnabled bool
+	HasContributing  bool
+	HasPRTemplate    bool
+	HasIssueTemplate bool
+	HasCodeOfConduct bool
 }
 
 // PR holds pull-request data needed for metric computation.
@@ -438,9 +444,24 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 				Repository struct {
 					StargazerCount  int    `json:"stargazerCount"`
 					Description     string `json:"description"`
+					IsArchived      bool   `json:"isArchived"`
+					HasIssuesEnabled bool   `json:"hasIssuesEnabled"`
 					PrimaryLanguage *struct {
 						Name string `json:"name"`
 					} `json:"primaryLanguage"`
+					IssueTemplates []struct {
+						Name string `json:"name"`
+					} `json:"issueTemplates"`
+					PullRequestTemplates []struct {
+						Filename string `json:"filename"`
+					} `json:"pullRequestTemplates"`
+					Contributing       *struct{ ID string `json:"id"` } `json:"contributing"`
+					ContributingLower  *struct{ ID string `json:"id"` } `json:"contributingLower"`
+					ContributingGithub *struct{ ID string `json:"id"` } `json:"contributingGithub"`
+					ContributingDocs   *struct{ ID string `json:"id"` } `json:"contributingDocs"`
+					CodeOfConduct      *struct{ ID string `json:"id"` } `json:"codeOfConduct"`
+					CodeOfConductLower *struct{ ID string `json:"id"` } `json:"codeOfConductLower"`
+					CodeOfConductGithub *struct{ ID string `json:"id"` } `json:"codeOfConductGithub"`
 					PullRequests struct {
 						PageInfo struct {
 							HasNextPage bool   `json:"hasNextPage"`
@@ -504,9 +525,20 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 
 		meta.Stars = resp.Data.Repository.StargazerCount
 		meta.Description = resp.Data.Repository.Description
+		meta.IsArchived = resp.Data.Repository.IsArchived
+		meta.HasIssuesEnabled = resp.Data.Repository.HasIssuesEnabled
 		if resp.Data.Repository.PrimaryLanguage != nil {
 			meta.Language = resp.Data.Repository.PrimaryLanguage.Name
 		}
+		meta.HasIssueTemplate = len(resp.Data.Repository.IssueTemplates) > 0
+		meta.HasPRTemplate = len(resp.Data.Repository.PullRequestTemplates) > 0
+		meta.HasContributing = resp.Data.Repository.Contributing != nil ||
+			resp.Data.Repository.ContributingLower != nil ||
+			resp.Data.Repository.ContributingGithub != nil ||
+			resp.Data.Repository.ContributingDocs != nil
+		meta.HasCodeOfConduct = resp.Data.Repository.CodeOfConduct != nil ||
+			resp.Data.Repository.CodeOfConductLower != nil ||
+			resp.Data.Repository.CodeOfConductGithub != nil
 
 		nodes := resp.Data.Repository.PullRequests.Nodes
 		slog.Debug("github: PR page fetched",

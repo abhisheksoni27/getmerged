@@ -61,6 +61,7 @@ type RawMetrics struct {
 	ExternalPRCount           int     // total external PRs in the 180-day window
 	StalenessFlag             bool
 	GoodFirstIssueCount       int // open issues labeled "good first issue" at snapshot time
+	OnboardingScore           int // repository documentation readiness score (0–100)
 }
 
 // ComputeMetrics derives all raw metrics from a slice of PRs.

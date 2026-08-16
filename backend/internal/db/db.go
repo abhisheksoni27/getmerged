@@ -90,6 +90,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			c_rank_score REAL DEFAULT 0,
 			c_rank_tier VARCHAR(10) DEFAULT 'D',
 			good_first_issue_count INTEGER DEFAULT 0,
+			onboarding_score INTEGER DEFAULT 0,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			UNIQUE(repository_id, snapshot_date)
 		);`,
@@ -152,6 +153,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			c_rank_score REAL DEFAULT 0,
 			c_rank_tier VARCHAR(10) DEFAULT 'D',
 			good_first_issue_count INTEGER DEFAULT 0,
+			onboarding_score INTEGER DEFAULT 0,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS repo_raw_comments (
@@ -240,6 +242,8 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN google_id VARCHAR(255) UNIQUE`)
 	_, _ = db.Exec(`ALTER TABLE users MODIFY github_id INTEGER NULL`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN slug VARCHAR(255) UNIQUE`)
+	_, _ = db.Exec(`ALTER TABLE daily_snapshots ADD COLUMN onboarding_score INTEGER DEFAULT 0`)
+	_, _ = db.Exec(`ALTER TABLE latest_snapshots ADD COLUMN onboarding_score INTEGER DEFAULT 0`)
 
 	return nil
 }
