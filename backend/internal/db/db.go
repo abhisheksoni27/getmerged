@@ -289,6 +289,10 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN slug VARCHAR(255) UNIQUE`)
 	_, _ = db.Exec(`ALTER TABLE daily_snapshots ADD COLUMN onboarding_score INTEGER DEFAULT 0`)
 	_, _ = db.Exec(`ALTER TABLE latest_snapshots ADD COLUMN onboarding_score INTEGER DEFAULT 0`)
+	_, _ = db.Exec(`ALTER TABLE daily_snapshots ADD COLUMN response_p50_hours REAL DEFAULT 0`)
+	_, _ = db.Exec(`ALTER TABLE daily_snapshots ADD COLUMN response_p90_hours REAL DEFAULT 0`)
+	_, _ = db.Exec(`ALTER TABLE latest_snapshots ADD COLUMN response_p50_hours REAL DEFAULT 0`)
+	_, _ = db.Exec(`ALTER TABLE latest_snapshots ADD COLUMN response_p90_hours REAL DEFAULT 0`)
 	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN quality_score INTEGER DEFAULT 0`)
 
 	return nil
