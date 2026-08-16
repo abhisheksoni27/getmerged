@@ -40,6 +40,9 @@ func AutoMigrate(db *sqlx.DB) error {
 			username TEXT NOT NULL,
 			email TEXT,
 			avatar_url TEXT,
+			profiling_consent BOOLEAN DEFAULT FALSE,
+			profiling_consent_at DATETIME,
+			deleted_at DATETIME,
 			created_at DATETIME NOT NULL,
 			updated_at DATETIME NOT NULL
 		);`, autoInc),
