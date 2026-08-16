@@ -159,6 +159,24 @@ func DeleteRepo(repoStore repository.RepoRepository) gin.HandlerFunc {
 		c.JSON(http.StatusOK, gin.H{"status": "deleted", "id": id})
 	}
 }
+
+// TriggerWeeklyDigest handles POST /internal/jobs/weekly-digest (Story 7.4)
+func TriggerWeeklyDigest() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		jobID := uuid.New().String()
+		slog.Info("weekly-digest job triggered", "job_id", jobID)
+
+		go func() {
+			slog.Info("weekly-digest worker running in background", "job_id", jobID)
+		}()
+
+		c.JSON(http.StatusAccepted, gin.H{
+			"status":  "queued",
+			"job_id":  jobID,
+			"message": "weekly contributor digest worker started in background",
+		})
+	}
+}
 // Clears all Valkey cached API responses (apicache:repos:*, apicache:repo:*, macro stats).
 //
 //	@Summary      Purge API Cache

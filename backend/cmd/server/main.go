@@ -177,6 +177,7 @@ func main() {
 		internal.POST("/purge-cache", handler.PurgeCache())
 		internal.POST("/cache/purge-tag", handler.PurgeTagCache())
 		internal.POST("/migrate-latest-snapshots", handler.MigrateLatestSnapshots())
+		internal.POST("/jobs/weekly-digest", handler.TriggerWeeklyDigest())
 		internal.DELETE("/repos/:id", handler.DeleteRepo(repoStore))
 	}
 
