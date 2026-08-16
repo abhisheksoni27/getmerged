@@ -113,6 +113,8 @@ func AutoMigrate(db *sqlx.DB) error {
 			c_rank_tier VARCHAR(10) DEFAULT 'D',
 			good_first_issue_count INTEGER DEFAULT 0,
 			onboarding_score INTEGER DEFAULT 0,
+			response_p50_hours REAL DEFAULT 0,
+			response_p90_hours REAL DEFAULT 0,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			UNIQUE(repository_id, snapshot_date)
 		);`,
@@ -176,6 +178,8 @@ func AutoMigrate(db *sqlx.DB) error {
 			c_rank_tier VARCHAR(10) DEFAULT 'D',
 			good_first_issue_count INTEGER DEFAULT 0,
 			onboarding_score INTEGER DEFAULT 0,
+			response_p50_hours REAL DEFAULT 0,
+			response_p90_hours REAL DEFAULT 0,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS repo_raw_comments (

@@ -107,6 +107,8 @@ func setupBadgeTestDB(t *testing.T) *sqlx.DB {
 		staleness_flag INTEGER DEFAULT 0,
 		good_first_issue_count INTEGER DEFAULT 0,
 		onboarding_score INTEGER DEFAULT 0,
+		response_p50_hours REAL DEFAULT 0,
+		response_p90_hours REAL DEFAULT 0,
 		updated_at DATETIME NOT NULL
 	);
 	`

@@ -4,9 +4,9 @@
 
 ## 📋 Status Overview
 - **Active Sprint**: Sprint 2: Contributor DNA & Secure Auth
-- **Total Stories Completed**: 8
+- **Total Stories Completed**: 9
 - **Build Status**: 🟢 Passing (`go test ./...` & `npm run lint`)
-- **Last Sync**: 2026-08-17 01:14 IST
+- **Last Sync**: 2026-08-17 01:17 IST
 
 ---
 
@@ -25,7 +25,8 @@
 | **Story 2.1** | Encrypt OAuth GitHub access/refresh tokens with AES-256-GCM (`v1:` envelope, `user_oauth_tokens` table, singleflight refresh) | 🟢 100% Passing (`internal/auth/token_manager_test.go`, `internal/repository/oauth_token_repository_test.go`) | `0ae92f6` |
 | **Story 2.2** | GDPR Right to Erasure (`DELETE /api/v1/me/data`), profiling consent management (`PATCH /api/v1/user/consent`), and soft-delete filtering | 🟢 100% Passing (`internal/repository/repository_test.go`) | `ccf656f` |
 | **Story 2.3** | Contributor DNA background worker with strict 1-query budget, 24h atomic throttling, and `GET /api/v1/user/dna` endpoints | 🟢 100% Passing (`internal/pipeline/contributor_dna_test.go`) | `8d92574` |
-| **Story 2.4** | Contributor DNA schema synthesis (`primary_languages`, `skill_level`, `pr_size_preference`, `review_engagement`) cached and attached to `/users/:slug` | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `HEAD` |
+| **Story 2.4** | Contributor DNA schema synthesis (`primary_languages`, `skill_level`, `pr_size_preference`, `review_engagement`) cached and attached to `/users/:slug` | 🟢 100% Passing (`go test ./...` & `npm run lint`) | `d936eec` |
+| **Story 3.1** | Pure response latency percentiles calculation (p50, p90) and first-timer merge rates stored in snapshots | 🟢 100% Passing (`internal/scoring/percentiles_test.go`) | `HEAD` |
 
 ---
 
@@ -37,4 +38,4 @@
 ---
 
 ## 🎯 Next Queued Story
-- **Story 3.1**: Compute maintainer response latency percentiles (p50, p90) and first-timer merge rates from stored `repo_pr_events` via background worker.
+- **Story 3.2**: Implement `GET /api/v1/repos/:owner/:name/pr-likelihood` reading precomputed metrics from MySQL with sub-10ms response time.
