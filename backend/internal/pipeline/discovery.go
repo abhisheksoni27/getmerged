@@ -18,10 +18,12 @@ type StarBucket struct {
 }
 
 var DiscoveryStarBuckets = []StarBucket{
+	{MinStars: 100, MaxStars: 250},
+	{MinStars: 250, MaxStars: 500},
 	{MinStars: 500, MaxStars: 1000},
 	{MinStars: 1000, MaxStars: 5000},
 	{MinStars: 5000, MaxStars: 20000},
-	{MinStars: 20000, MaxStars: 1000000},
+	{MinStars: 20000, MaxStars: 50000},
 }
 
 // discoveryCursorRow mirrors the discovery_cursors table row.
