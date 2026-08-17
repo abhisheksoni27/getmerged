@@ -23,14 +23,24 @@ interface ComparePageProps {
 
 async function fetchRepoData(fullName: string): Promise<Repo | null> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}`, {
-      next: { revalidate: 3600 },
-    });
+    const res = await fetch(
+      `${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(fullName)}`,
+      {
+        next: { revalidate: 3600 },
+      }
+    );
     if (res.status === 404) return null;
     if (!res.ok) {
       throw new Error(`Failed to fetch repo ${fullName}: ${res.statusText}`);
     }
-    return await res.json();
+    const data = await res.json();
+    const rawList = data.data || data.repos;
+    if (Array.isArray(rawList) && rawList.length > 0) {
+      return (
+        rawList.find((r: Repo) => r.full_name.toLowerCase() === fullName.toLowerCase()) || null
+      );
+    }
+    return null;
   } catch (err) {
     console.error("fetchRepoData error:", err);
     throw err; // Trigger error boundary for 5xx transient failures
