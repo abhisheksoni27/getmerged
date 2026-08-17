@@ -31,7 +31,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const [stats, setStats] = useState<MacroStats | null>(initialStats);
   const [selectedLang, setSelectedLang] = useState<string>("All");
   const [selectedBucket, setSelectedBucket] = useState<string>("All");
-  const [selectedTier, setSelectedTier] = useState<string>("All");
+  const [selectedTier, setSelectedTier] = useState<string>("S");
   const [selectedMinMergeRate, setSelectedMinMergeRate] = useState<string>("All");
   const [selectedFirstTimerBucket, setSelectedFirstTimerBucket] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -609,6 +609,8 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             {/* 1. Hall of Fame (S-Tier) */}
             <button
               type="button"
+              aria-pressed={selectedTier === "S" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All"}
+              title="Filter repositories by S-Tier Hall of Fame"
               onClick={() => {
                 setTrendingOnly(false);
                 setSelectedTier("S");
@@ -629,6 +631,8 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             {/* 2. Welcoming (A-Tier & S-Tier) */}
             <button
               type="button"
+              aria-pressed={selectedTier === "A" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All"}
+              title="Filter repositories by Welcoming (A-Tier)"
               onClick={() => {
                 setTrendingOnly(false);
                 setSelectedTier("A");
@@ -649,6 +653,8 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             {/* 3. Star Giants (50k+ Stars) */}
             <button
               type="button"
+              aria-pressed={selectedBucket === "50k+"}
+              title="Filter repositories with 50k+ stars"
               onClick={() => {
                 setTrendingOnly(false);
                 setSelectedTier("All");
@@ -669,6 +675,8 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             {/* 4. Has Good First Issue */}
             <button
               type="button"
+              aria-pressed={selectedFirstTimerBucket === "has_gfi"}
+              title="Filter repositories with good first issues"
               onClick={() => {
                 setTrendingOnly(false);
                 setSelectedTier("All");
@@ -689,6 +697,8 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             {/* 5. High Merge Rate (>= 60%) */}
             <button
               type="button"
+              aria-pressed={selectedMinMergeRate === "60%"}
+              title="Filter repositories with high merge rate (>= 60%)"
               onClick={() => {
                 setTrendingOnly(false);
                 setSelectedTier("All");
@@ -709,6 +719,8 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             {/* 6. First Timer Awesome (> 60% Acceptance) */}
             <button
               type="button"
+              aria-pressed={selectedFirstTimerBucket === "60-80%"}
+              title="Filter repositories with awesome first-timer acceptance (> 60%)"
               onClick={() => {
                 setTrendingOnly(false);
                 setSelectedTier("All");
