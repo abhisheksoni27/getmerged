@@ -32,7 +32,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/replikativ/datahike</loc>
-    <lastmod>2026-08-16</lastmod>
+    <lastmod>2026-08-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -44,7 +44,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/penpot/penpot</loc>
-    <lastmod>2026-08-16</lastmod>
+    <lastmod>2026-08-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -85,6 +85,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/metosin/malli</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/seancorfield/honeysql</loc>
     <lastmod>2026-08-16</lastmod>
     <changefreq>daily</changefreq>
@@ -92,7 +98,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/metabase/metabase</loc>
-    <lastmod>2026-08-16</lastmod>
+    <lastmod>2026-08-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
