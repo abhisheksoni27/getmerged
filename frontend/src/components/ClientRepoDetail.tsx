@@ -35,6 +35,7 @@ import { RepoScorecards } from "@/components/RepoScorecards";
 import { RepoBadgeGenerator } from "@/components/RepoBadgeGenerator";
 import { SimilarRepos } from "@/components/SimilarRepos";
 import { PRAcceptanceWidget } from "@/components/PRAcceptanceWidget";
+import { buildPrompt } from "@/lib/prompt";
 
 interface ClientRepoDetailProps {
   repo: Repo | null;
@@ -48,6 +49,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [isWatching, setIsWatching] = useState(false);
   const [watchLoading, setWatchLoading] = useState(false);
   const [badgeCopied, setBadgeCopied] = useState(false);
+  const [promptCopied, setPromptCopied] = useState(false);
   const [insights, setInsights] = useState<AIInsights | null>(null);
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [feedbackError, setFeedbackError] = useState<string | null>(null);
@@ -500,9 +502,35 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         <div className={`grid transition-all duration-500 ease-in-out ${isGuidelinesOpen ? "grid-rows-[1fr] opacity-100 mt-5" : "grid-rows-[0fr] opacity-0"}`}>
           <div className="overflow-hidden">
             <div className="border-t border-zinc-150 pt-4 space-y-4">
-              <p className="text-sm font-sans text-zinc-700">
-                Follow these instructions to increase the success rate of your pull requests in <strong>{fullName}</strong>:
-              </p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <p className="text-sm font-sans text-zinc-700">
+                  Follow these instructions to increase the success rate of your pull requests in <strong>{fullName}</strong>:
+                </p>
+                <button
+                  type="button"
+                  disabled={!insights}
+                  onClick={() => {
+                    if (!insights) return;
+                    const text = buildPrompt(fullName, insights);
+                    navigator.clipboard.writeText(text);
+                    posthog.capture("prompt_copied", { repo_full_name: fullName });
+                    setPromptCopied(true);
+                    setTimeout(() => setPromptCopied(false), 2000);
+                  }}
+                  title="Copy paste-ready contribution prompt for LLMs"
+                  className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 disabled:bg-zinc-200 disabled:text-zinc-400 disabled:cursor-not-allowed disabled:transform-none text-white font-semibold text-xs transition-all cursor-pointer shadow-xs inline-flex items-center justify-center gap-2 shrink-0 self-start sm:self-center"
+                >
+                  {promptCopied ? (
+                    <span className="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
+                      <Check className="h-3.5 w-3.5" /> Copied Prompt!
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5">
+                      <Copy className="h-3.5 w-3.5" /> Copy Prompt
+                    </span>
+                  )}
+                </button>
+              </div>
               {insights?.pr_guidelines && insights.pr_guidelines.length > 0 ? (
                 <ul className="space-y-3 font-sans text-sm text-[#222831]">
                   {insights.pr_guidelines.map((guide, idx) => (
@@ -628,79 +656,6 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         </div>
       )}
 
-      {/* Dynamic README Badge Embed (F1) */}
-      <div className="rounded-2xl bg-white p-4 sm:p-5 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-6 font-mono">
-        <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2 mb-2 font-space">
-          <ShieldCheck className="h-4 w-4 text-emerald-600" /> Embed OpenDoor Badge on your Repo/Profile
-        </h3>
-        <p className="text-xs text-zinc-600 font-sans mb-4">
-          Show potential contributors your maintainer responsiveness with a dynamic live badge:
-        </p>
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-4 font-sans">
-          <label className="flex items-center gap-2 text-xs text-zinc-600 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={badgeShowPoints}
-              onChange={(e) => setBadgeShowPoints(e.target.checked)}
-              className="accent-emerald-600 h-3.5 w-3.5"
-            />
-            Show score
-          </label>
-          <label className="flex items-center gap-2 text-xs text-zinc-600">
-            Color
-            <select
-              value={badgeColor}
-              onChange={(e) => setBadgeColor(e.target.value)}
-              className="rounded-xl border border-transparent bg-zinc-100/50 px-2 py-1 text-xs text-zinc-700 focus:outline-none focus:ring-0 cursor-pointer"
-            >
-              <option value="auto">Default</option>
-              <option value="emerald">Emerald</option>
-              <option value="green">Green</option>
-              <option value="blue">Blue</option>
-              <option value="purple">Purple</option>
-              <option value="pink">Pink</option>
-              <option value="amber">Amber</option>
-              <option value="orange">Orange</option>
-              <option value="red">Red</option>
-              <option value="cyan">Cyan</option>
-              <option value="slate">Slate</option>
-              <option value="zinc">Zinc</option>
-            </select>
-          </label>
-        </div>
-        
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-zinc-50 border border-zinc-200/80 rounded-2xl shadow-2xs">
-          <div className="flex items-center min-h-10 overflow-hidden">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={badgePreviewUrl}
-              alt={`GetMerged C-Rank badge for ${fullName}`}
-              width={280}
-              height={28}
-              className="h-7 w-auto"
-            />
-          </div>
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText(`[![GetMerged C-Rank](${badgeMarkdownUrl})](https://getmerged.abhishekco.de/${fullName})`);
-              posthog.capture('badge_copied', { repo_full_name: fullName });
-              setBadgeCopied(true);
-              setTimeout(() => setBadgeCopied(false), 2000);
-            }}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 text-white font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-xs inline-flex items-center justify-center gap-2"
-          >
-            {badgeCopied ? (
-              <span className="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
-                <Check className="h-3.5 w-3.5" /> Copied Markdown!
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1.5">
-                <Copy className="h-3.5 w-3.5" /> Copy Markdown
-              </span>
-            )}
-          </button>
-        </div>
-      </div>
 
       {/* AI Insights & Maintainer Guidelines Section - Data-Backed Only (Rule 12 compliant) */}
       {insights && (

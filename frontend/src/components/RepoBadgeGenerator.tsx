@@ -75,25 +75,52 @@ export function RepoBadgeGenerator({
             className="h-7 w-auto"
           />
         </div>
-        <button
-          onClick={() => {
-            navigator.clipboard.writeText(`[![GetMerged C-Rank](${badgeMarkdownUrl})](https://getmerged.abhishekco.de/${fullName})`);
-            posthog.capture("badge_copied", { repo_full_name: fullName });
-            setBadgeCopied(true);
-            setTimeout(() => setBadgeCopied(false), 2000);
-          }}
-          className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 text-white font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-xs inline-flex items-center justify-center gap-2"
-        >
-          {badgeCopied ? (
-            <span className="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
-              <Check className="h-3.5 w-3.5" /> Copied Markdown!
-            </span>
-          ) : (
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(`[![GetMerged C-Rank](${badgeMarkdownUrl})](https://getmerged.abhishekco.de/${fullName})`);
+              posthog.capture("badge_copied", { repo_full_name: fullName });
+              setBadgeCopied(true);
+              setTimeout(() => setBadgeCopied(false), 2000);
+            }}
+            title="Copy markdown badge embed code for GitHub README"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 text-white font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-xs inline-flex items-center justify-center gap-2"
+          >
+            {badgeCopied ? (
+              <span className="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
+                <Check className="h-3.5 w-3.5" /> Copied Markdown!
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5">
+                <Copy className="h-3.5 w-3.5" /> Copy Markdown
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => {
+              const prompt = `Add the GetMerged C-Rank™ maintainer badge to the top of our repository README.md (right below the main title/hero section):
+
+\`\`\`markdown
+[![GetMerged C-Rank](${badgeMarkdownUrl})](https://getmerged.abhishekco.de/${fullName})
+\`\`\`
+
+Why:
+- Shows contributors that our repo actively reviews and merges external pull requests.
+- Displays our live C-Rank scorecard and response time metrics directly from https://getmerged.abhishekco.de/${fullName}.`;
+              navigator.clipboard.writeText(prompt);
+              posthog.capture("badge_prompt_copied", { repo_full_name: fullName });
+              setBadgeCopied(true);
+              setTimeout(() => setBadgeCopied(false), 2000);
+            }}
+            title="Copy AI prompt to add GetMerged badge to your repo README via Cursor, Copilot, or Claude"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white hover:bg-zinc-100 active:scale-95 text-zinc-900 border border-zinc-200 font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-2xs inline-flex items-center justify-center gap-2"
+          >
             <span className="inline-flex items-center gap-1.5">
-              <Copy className="h-3.5 w-3.5" /> Copy Markdown
+              <Copy className="h-3.5 w-3.5" /> Copy AI Prompt (for LLMs)
             </span>
-          )}
-        </button>
+          </button>
+        </div>
       </div>
     </div>
   );
