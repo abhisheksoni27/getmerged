@@ -53,3 +53,8 @@ export function displayNameFromSlug(slug: string): string {
       return canonical.charAt(0).toUpperCase() + canonical.slice(1);
   }
 }
+
+export function getLanguageFromSlug(slug: string): string {
+  return displayNameFromSlug(slug);
+}
+
