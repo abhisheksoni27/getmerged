@@ -22,7 +22,6 @@ import {
   Zap,
   RefreshCw,
   PartyPopper,
-  Copy,
   ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
@@ -35,7 +34,6 @@ import { RepoScorecards } from "@/components/RepoScorecards";
 import { RepoBadgeGenerator } from "@/components/RepoBadgeGenerator";
 import { SimilarRepos } from "@/components/SimilarRepos";
 import { PRAcceptanceWidget } from "@/components/PRAcceptanceWidget";
-import { buildPrompt } from "@/lib/prompt";
 
 interface ClientRepoDetailProps {
   repo: Repo | null;
@@ -49,7 +47,6 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [isWatching, setIsWatching] = useState(false);
   const [watchLoading, setWatchLoading] = useState(false);
   const [badgeCopied, setBadgeCopied] = useState(false);
-  const [promptCopied, setPromptCopied] = useState(false);
   const [insights, setInsights] = useState<AIInsights | null>(null);
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [feedbackError, setFeedbackError] = useState<string | null>(null);
@@ -502,35 +499,9 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         <div className={`grid transition-all duration-500 ease-in-out ${isGuidelinesOpen ? "grid-rows-[1fr] opacity-100 mt-5" : "grid-rows-[0fr] opacity-0"}`}>
           <div className="overflow-hidden">
             <div className="border-t border-zinc-150 pt-4 space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <p className="text-sm font-sans text-zinc-700">
-                  Follow these instructions to increase the success rate of your pull requests in <strong>{fullName}</strong>:
-                </p>
-                <button
-                  type="button"
-                  disabled={!insights}
-                  onClick={() => {
-                    if (!insights) return;
-                    const text = buildPrompt(fullName, insights);
-                    navigator.clipboard.writeText(text);
-                    posthog.capture("prompt_copied", { repo_full_name: fullName });
-                    setPromptCopied(true);
-                    setTimeout(() => setPromptCopied(false), 2000);
-                  }}
-                  title="Copy paste-ready contribution prompt for LLMs"
-                  className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 disabled:bg-zinc-200 disabled:text-zinc-400 disabled:cursor-not-allowed disabled:transform-none text-white font-semibold text-xs transition-all cursor-pointer shadow-xs inline-flex items-center justify-center gap-2 shrink-0 self-start sm:self-center"
-                >
-                  {promptCopied ? (
-                    <span className="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
-                      <Check className="h-3.5 w-3.5" /> Copied Prompt!
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1.5">
-                      <Copy className="h-3.5 w-3.5" /> Copy Prompt
-                    </span>
-                  )}
-                </button>
-              </div>
+              <p className="text-sm font-sans text-zinc-700">
+                Follow these instructions to increase the success rate of your pull requests in <strong>{fullName}</strong>:
+              </p>
               {insights?.pr_guidelines && insights.pr_guidelines.length > 0 ? (
                 <ul className="space-y-3 font-sans text-sm text-[#222831]">
                   {insights.pr_guidelines.map((guide, idx) => (
