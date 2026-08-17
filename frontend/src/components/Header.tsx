@@ -59,10 +59,11 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             title="GetMerged - Find Welcoming Open Source Repositories"
             className="flex items-center gap-2.5 group shrink-0"
           >
-            <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-white font-space font-bold text-xs shadow-xs group-hover:scale-105 transition-transform duration-200">
-              <span>OD</span>
-              <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-[#dfd0b8]" />
-            </div>
+            <svg viewBox="0 0 32 32" className="h-8 w-8 rounded-lg shadow-xs group-hover:scale-105 transition-transform duration-200" aria-hidden="true">
+                <rect width="32" height="32" rx="8" fill="#222831" />
+                <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700" fill="#ffffff">GM</text>
+                <circle cx="25" cy="7" r="2.5" fill="#dfd0b8" />
+              </svg>
             <div className="flex flex-col">
               <span className="font-space text-base font-bold tracking-tight text-zinc-900">GetMerged</span>
             </div>
