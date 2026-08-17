@@ -9,7 +9,7 @@ test.describe("Core User Flows (Phase 1)", () => {
   });
 
   test("Repo scorecard loads with exact C-Rank metrics", async ({ page }) => {
-    await page.goto("/facebook/react");
+    await page.goto("/facebook/react", { waitUntil: "domcontentloaded" });
     await expect(page).toHaveTitle(/facebook\/react/);
     await expect(page.getByRole("heading", { name: "facebook/react", exact: true })).toBeVisible();
   });
