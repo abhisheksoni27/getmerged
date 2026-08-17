@@ -11,12 +11,12 @@ test.describe("Core User Flows (Phase 1)", () => {
   test("Repo scorecard loads with exact C-Rank metrics", async ({ page }) => {
     await page.goto("/facebook/react");
     await expect(page).toHaveTitle(/facebook\/react/);
-    await expect(page.locator("text=facebook/react")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "facebook/react", exact: true })).toBeVisible();
   });
 
   test("Contribute hub loads with language ecosystem tiles", async ({ page }) => {
     await page.goto("/contribute");
-    await expect(page.locator("text=Stop Guessing")).toBeVisible();
-    await expect(page.locator("text=TypeScript")).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Stop Guessing/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /TypeScript/i }).first()).toBeVisible();
   });
 });
