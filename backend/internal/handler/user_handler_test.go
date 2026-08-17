@@ -7,9 +7,11 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/abhisheksoni27/opendoor/internal/auth"
 	"github.com/abhisheksoni27/opendoor/internal/config"
 	"github.com/abhisheksoni27/opendoor/internal/db"
 	"github.com/abhisheksoni27/opendoor/internal/handler"
+	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
@@ -116,4 +118,66 @@ func TestGetUserProfileHandler(t *testing.T) {
 			t.Fatalf("expected 404, got %d: %s", w.Code, w.Body.String())
 		}
 	})
+}
+
+func TestAuthMeResolvesAfterSoftDeletedReauth(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	database, cfg := setupUserHandlerTestDB(t)
+	defer database.Close()
+
+	userRepo := repository.NewUserRepository(database, cfg)
+	ctx := context.Background()
+
+	userID, err := userRepo.UpsertGoogleUser(ctx, "goog-reauth", "Resurrected Dev", "resurrected@example.com", "https://avatar/r")
+	if err != nil {
+		t.Fatalf("failed to seed user: %v", err)
+	}
+
+	if err := userRepo.SoftDeleteUser(ctx, userID); err != nil {
+		t.Fatalf("failed to soft delete user: %v", err)
+	}
+
+	// Re-login through the OAuth callback upsert path
+	userID2, err := userRepo.UpsertGoogleUser(ctx, "goog-reauth", "Resurrected Dev", "resurrected@example.com", "https://avatar/r2")
+	if err != nil {
+		t.Fatalf("re-auth upsert failed: %v", err)
+	}
+	if userID2 != userID {
+		t.Fatalf("expected re-auth to keep id %d, got %d", userID, userID2)
+	}
+
+	jwtSecret := "test-jwt-secret-0123456789abcdefghij"
+	signedToken, err := auth.GenerateToken(userID2, "Resurrected Dev", jwtSecret)
+	if err != nil {
+		t.Fatalf("failed to generate token: %v", err)
+	}
+
+	r := gin.New()
+	r.Use(middleware.UserAuth(jwtSecret))
+	r.GET("/api/v1/auth/me", handler.GetCurrentUser(userRepo))
+
+	req, _ := http.NewRequest("GET", "/api/v1/auth/me", nil)
+	req.Header.Set("Authorization", "Bearer "+signedToken)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200 from /auth/me after resurrection, got %d: %s", w.Code, w.Body.String())
+	}
+
+	var resp struct {
+		User struct {
+			Slug     string `json:"slug"`
+			Username string `json:"username"`
+		} `json:"user"`
+	}
+	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	if resp.User.Slug != "resurrected-dev" {
+		t.Fatalf("expected slug 'resurrected-dev', got %q", resp.User.Slug)
+	}
+	if resp.User.Username != "Resurrected Dev" {
+		t.Fatalf("expected username 'Resurrected Dev', got %q", resp.User.Username)
+	}
 }
