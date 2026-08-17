@@ -255,6 +255,12 @@ func AutoMigrate(db *sqlx.DB) error {
 			synced_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			UNIQUE(repository_id, issue_number)
 		);`, autoInc),
+		`CREATE TABLE IF NOT EXISTS repository_topics (
+			topic VARCHAR(100) NOT NULL,
+			repository_id VARCHAR(255) NOT NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (topic, repository_id)
+		);`,
 	}
 
 	for i, stmt := range statements {
@@ -278,6 +284,8 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_pr_comments_repo_pr ON repo_pr_comments(repository_id, pr_number, created_at)`,
 		`CREATE INDEX IF NOT EXISTS idx_gfi_repo_created ON repo_good_first_issues(repository_id, created_at DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_gfi_quality_score ON repo_good_first_issues(quality_score DESC)`,
+		`CREATE INDEX IF NOT EXISTS idx_repositories_owner ON repositories(owner(191))`,
+		`CREATE INDEX IF NOT EXISTS idx_repo_topic_repo_id ON repository_topics(repository_id)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)

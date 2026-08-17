@@ -191,6 +191,8 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			HasMinFirstTimer:         hasMinFirstTimer,
 			HasMaxFirstTimer:         hasMaxFirstTimer,
 			HasGoodFirstIssue:        hasGoodFirstIssue,
+			Owner:                    strings.TrimSpace(c.Query("owner")),
+			Topic:                    strings.TrimSpace(c.Query("topic")),
 		}
 
 		repos, total, err := repoStore.List(c.Request.Context(), filter)

@@ -58,6 +58,8 @@ type RepoFilter struct {
 	HasMinFirstTimer         bool
 	HasMaxFirstTimer         bool
 	HasGoodFirstIssue        bool
+	Owner                    string
+	Topic                    string
 }
 
 type SnapshotRecord struct {
@@ -160,6 +162,16 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 
 	if filter.HasGoodFirstIssue {
 		where += " AND s.good_first_issue_count > 0"
+	}
+
+	if filter.Owner != "" {
+		where += " AND r.owner = ?"
+		args = append(args, filter.Owner)
+	}
+
+	if filter.Topic != "" {
+		where += " AND r.id IN (SELECT repository_id FROM repository_topics WHERE topic = ?)"
+		args = append(args, strings.ToLower(filter.Topic))
 	}
 
 	sortCol, ok := allowedSortFields[filter.SortBy]
