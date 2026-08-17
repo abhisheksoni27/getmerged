@@ -165,6 +165,17 @@ func (r *sqlxUserRepository) generateUniqueSlug(ctx context.Context, baseName st
 	}
 }
 
+// reclaimEmailHash clears the blind email index on any other active row claiming it, so the
+// incoming OAuth-verified email can be re-assigned to the matched row without violating
+// UNIQUE(email_hash).
+func (r *sqlxUserRepository) reclaimEmailHash(ctx context.Context, emailHash string, excludeID int64) error {
+	if emailHash == "" {
+		return nil
+	}
+	_, err := r.db.ExecContext(ctx, "UPDATE users SET email_hash = NULL WHERE email_hash = ? AND deleted_at IS NULL AND id != ?", emailHash, excludeID)
+	return err
+}
+
 func (r *sqlxUserRepository) UpsertUser(ctx context.Context, githubID int64, username, email, avatarURL string) (int64, error) {
 	encUsername, _ := crypto.EncryptAESGCM([]byte(username), r.encKey)
 	encEmail, _ := crypto.EncryptAESGCM([]byte(email), r.encKey)
@@ -178,7 +189,7 @@ func (r *sqlxUserRepository) UpsertUser(ctx context.Context, githubID int64, use
 
 	// 1. Try matching by github_id
 	err := r.db.GetContext(ctx, &existing, "SELECT id, slug FROM users WHERE github_id = ?", githubID)
-	
+
 	// 2. If not found by github_id, try linking via verified email hash
 	if (err == sql.ErrNoRows || err != nil) && emailHash != "" {
 		err = r.db.GetContext(ctx, &existing, "SELECT id, slug FROM users WHERE email_hash = ?", emailHash)
@@ -210,8 +221,12 @@ func (r *sqlxUserRepository) UpsertUser(ctx context.Context, githubID int64, use
 		slugToUse = newSlug
 	}
 
+	if err := r.reclaimEmailHash(ctx, emailHash, existing.ID); err != nil {
+		return 0, err
+	}
+
 	_, err = r.db.ExecContext(ctx, `
-		UPDATE users SET github_id = ?, slug = ?, email_hash = ?, username = ?, email = ?, avatar_url = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?
+		UPDATE users SET github_id = ?, slug = ?, email_hash = ?, username = ?, email = ?, avatar_url = ?, deleted_at = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?
 	`, githubID, slugToUse, emailHash, encUsername, encEmail, encAvatar, existing.ID)
 	if err != nil {
 		return 0, err
@@ -265,8 +280,12 @@ func (r *sqlxUserRepository) UpsertGoogleUser(ctx context.Context, googleID stri
 		slugToUse = newSlug
 	}
 
+	if err := r.reclaimEmailHash(ctx, emailHash, existing.ID); err != nil {
+		return 0, err
+	}
+
 	_, err = r.db.ExecContext(ctx, `
-		UPDATE users SET google_id = ?, slug = ?, email_hash = ?, username = ?, email = ?, avatar_url = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?
+		UPDATE users SET google_id = ?, slug = ?, email_hash = ?, username = ?, email = ?, avatar_url = ?, deleted_at = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?
 	`, googleID, slugToUse, emailHash, encUsername, encEmail, encAvatar, existing.ID)
 	if err != nil {
 		return 0, err

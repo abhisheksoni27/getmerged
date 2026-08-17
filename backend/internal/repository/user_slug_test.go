@@ -2,6 +2,7 @@ package repository_test
 
 import (
 	"context"
+	"database/sql"
 	"testing"
 
 	"github.com/abhisheksoni27/opendoor/internal/repository"
@@ -97,5 +98,163 @@ func TestSlugGenerationAndResolution(t *testing.T) {
 	_, err = userRepo.GetUserProfileBySlug(ctx, "nonexistent-slug-404")
 	if err == nil {
 		t.Fatalf("expected error for nonexistent slug, got nil")
+	}
+}
+
+func TestSoftDeletedUserResurrectionViaGoogle(t *testing.T) {
+	database, cfg := setupTestDB(t)
+	defer database.Close()
+
+	userRepo := repository.NewUserRepository(database, cfg)
+	ctx := context.Background()
+
+	userID, err := userRepo.UpsertGoogleUser(ctx, "google-gh72", "Abhishek Soni", "abhishek@example.com", "https://avatar/google/1")
+	if err != nil {
+		t.Fatalf("failed to create google user: %v", err)
+	}
+
+	if err := userRepo.SoftDeleteUser(ctx, userID); err != nil {
+		t.Fatalf("failed to soft delete user: %v", err)
+	}
+	if _, err := userRepo.FindByID(ctx, userID); err == nil {
+		t.Fatalf("expected soft-deleted user to be hidden from FindByID")
+	}
+
+	reAuthID, err := userRepo.UpsertGoogleUser(ctx, "google-gh72", "Abhishek Soni", "abhishek@example.com", "https://avatar/google/2")
+	if err != nil {
+		t.Fatalf("re-auth upsert failed: %v", err)
+	}
+	if reAuthID != userID {
+		t.Fatalf("expected re-auth to return original id %d, got %d", userID, reAuthID)
+	}
+
+	var deletedAt sql.NullTime
+	if err := database.Get(&deletedAt, "SELECT deleted_at FROM users WHERE id = ?", userID); err != nil {
+		t.Fatalf("failed to read deleted_at: %v", err)
+	}
+	if deletedAt.Valid {
+		t.Fatalf("expected deleted_at to be NULL after resurrection, got %v", deletedAt.Time)
+	}
+
+	resurrected, err := userRepo.FindByID(ctx, userID)
+	if err != nil {
+		t.Fatalf("FindByID after resurrection failed: %v", err)
+	}
+	if resurrected.ProfilingConsent {
+		t.Fatalf("expected profiling_consent to remain FALSE after resurrection")
+	}
+	if resurrected.Email == nil || *resurrected.Email != "abhishek@example.com" {
+		t.Fatalf("expected email restored after resurrection, got %v", resurrected.Email)
+	}
+
+	byGoogle, err := userRepo.FindByGoogleID(ctx, "google-gh72")
+	if err != nil {
+		t.Fatalf("FindByGoogleID after resurrection failed: %v", err)
+	}
+	if byGoogle.ID != userID {
+		t.Fatalf("expected FindByGoogleID to resolve user %d, got %d", userID, byGoogle.ID)
+	}
+}
+
+func TestSoftDeletedUserResurrectionViaGithub(t *testing.T) {
+	database, cfg := setupTestDB(t)
+	defer database.Close()
+
+	userRepo := repository.NewUserRepository(database, cfg)
+	ctx := context.Background()
+
+	userID, err := userRepo.UpsertUser(ctx, 727272, "Github Dev", "github@example.com", "https://avatar/gh/1")
+	if err != nil {
+		t.Fatalf("failed to create github user: %v", err)
+	}
+
+	if err := userRepo.SoftDeleteUser(ctx, userID); err != nil {
+		t.Fatalf("failed to soft delete user: %v", err)
+	}
+	if _, err := userRepo.FindByGithubID(ctx, 727272); err == nil {
+		t.Fatalf("expected soft-deleted user to be hidden from FindByGithubID")
+	}
+
+	reAuthID, err := userRepo.UpsertUser(ctx, 727272, "Github Dev", "github@example.com", "https://avatar/gh/2")
+	if err != nil {
+		t.Fatalf("re-auth upsert failed: %v", err)
+	}
+	if reAuthID != userID {
+		t.Fatalf("expected re-auth to return original id %d, got %d", userID, reAuthID)
+	}
+
+	var deletedAt sql.NullTime
+	if err := database.Get(&deletedAt, "SELECT deleted_at FROM users WHERE id = ?", userID); err != nil {
+		t.Fatalf("failed to read deleted_at: %v", err)
+	}
+	if deletedAt.Valid {
+		t.Fatalf("expected deleted_at to be NULL after resurrection, got %v", deletedAt.Time)
+	}
+
+	resurrected, err := userRepo.FindByID(ctx, userID)
+	if err != nil {
+		t.Fatalf("FindByID after resurrection failed: %v", err)
+	}
+	if resurrected.ProfilingConsent {
+		t.Fatalf("expected profiling_consent to remain FALSE after resurrection")
+	}
+	if resurrected.Email == nil || *resurrected.Email != "github@example.com" {
+		t.Fatalf("expected email restored after resurrection, got %v", resurrected.Email)
+	}
+
+	byGithub, err := userRepo.FindByGithubID(ctx, 727272)
+	if err != nil {
+		t.Fatalf("FindByGithubID after resurrection failed: %v", err)
+	}
+	if byGithub.ID != userID {
+		t.Fatalf("expected FindByGithubID to resolve user %d, got %d", userID, byGithub.ID)
+	}
+}
+
+func TestSoftDeletedResurrectionReclaimsEmailHashFromActiveRow(t *testing.T) {
+	database, cfg := setupTestDB(t)
+	defer database.Close()
+
+	userRepo := repository.NewUserRepository(database, cfg)
+	ctx := context.Background()
+
+	// User A (google) soft-deleted, freeing its email_hash slot
+	aID, err := userRepo.UpsertGoogleUser(ctx, "google-compete", "Alice", "shared@example.com", "https://avatar/a")
+	if err != nil {
+		t.Fatalf("failed to create user A: %v", err)
+	}
+	if err := userRepo.SoftDeleteUser(ctx, aID); err != nil {
+		t.Fatalf("failed to soft delete user A: %v", err)
+	}
+
+	// User B (github) registers with the same email while A is deleted, claiming email_hash
+	bID, err := userRepo.UpsertUser(ctx, 9001, "Bob", "shared@example.com", "https://avatar/b")
+	if err != nil {
+		t.Fatalf("failed to create user B: %v", err)
+	}
+
+	// A re-auths via google, reclaiming the verified email
+	reAuthID, err := userRepo.UpsertGoogleUser(ctx, "google-compete", "Alice", "shared@example.com", "https://avatar/a2")
+	if err != nil {
+		t.Fatalf("re-auth upsert with competing email_hash failed: %v", err)
+	}
+	if reAuthID != aID {
+		t.Fatalf("expected re-auth to return user A id %d, got %d", aID, reAuthID)
+	}
+
+	byGoogle, err := userRepo.FindByGoogleID(ctx, "google-compete")
+	if err != nil {
+		t.Fatalf("FindByGoogleID should resolve user A after resurrection: %v", err)
+	}
+	if byGoogle.ID != aID {
+		t.Fatalf("expected FindByGoogleID to resolve user A %d, got %d", aID, byGoogle.ID)
+	}
+
+	byGithub, err := userRepo.FindByGithubID(ctx, 9001)
+	if err != nil {
+		t.Fatalf("competing row B should remain resolvable by github id: %v", err)
+	}
+	if byGithub.ID != bID {
+		t.Fatalf("expected FindByGithubID to resolve user B %d, got %d", bID, byGithub.ID)
 	}
 }
