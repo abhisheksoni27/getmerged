@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Check, Bookmark, GitPullRequest, Star } from "lucide-react";
+import { Check, Bookmark, GitPullRequest, Star, Scale } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { Repo } from "@/types/opendoor";
@@ -92,6 +92,14 @@ export function RepoDetailHero({
 
       <div className="flex flex-col items-start md:items-end gap-2.5 shrink-0">
         <div className="flex flex-wrap items-center gap-2.5">
+          <Link
+            href={`/compare?a=${encodeURIComponent(fullName)}`}
+            title={`Compare ${fullName} with another repository`}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold font-sans rounded-xl border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700 hover:text-zinc-900 transition-all shadow-xs cursor-pointer"
+          >
+            <Scale className="h-4 w-4 text-zinc-500" />
+            <span>Compare</span>
+          </Link>
           <button
             onClick={onWatchToggle}
             disabled={watchLoading}

@@ -120,6 +120,7 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 	mainUrls := []URL{
 		{Loc: baseUrl, LastMod: today, ChangeFreq: "daily", Priority: "1.0"},
 		{Loc: fmt.Sprintf("%s/repos", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "1.0"},
+		{Loc: fmt.Sprintf("%s/compare", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "0.9"},
 		{Loc: fmt.Sprintf("%s/how-c-rank-works", baseUrl), LastMod: today, ChangeFreq: "weekly", Priority: "0.9"},
 		{Loc: fmt.Sprintf("%s/leaderboard", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "0.9"},
 		{Loc: fmt.Sprintf("%s/good-first-issue", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "0.9"},
@@ -221,6 +222,100 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 			Loc:     fmt.Sprintf("%s/sitemap/%s", baseUrl, url.PathEscape(fileName)),
 			LastMod: today,
 		})
+	}
+
+	// 3. Generate compare.xml for bounded head-to-head repo comparisons (Top 10 Tier S/A per language vs 3 rank neighbors, max 1000)
+	type rankedRepo struct {
+		FullName string  `db:"full_name"`
+		Language string  `db:"language"`
+		RankTier string  `db:"c_rank_tier"`
+		Score    float64 `db:"c_rank_score"`
+	}
+
+	var rankedRepos []rankedRepo
+	rankedQuery := `
+		SELECT
+			r.full_name,
+			COALESCE(r.language, 'other') as language,
+			COALESCE(s.c_rank_tier, 'A') as c_rank_tier,
+			COALESCE(s.c_rank_score, 0) as c_rank_score
+		FROM repositories r
+		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
+		WHERE COALESCE(s.c_rank_tier, 'A') IN ('S', 'A')
+		ORDER BY COALESCE(s.c_rank_score, 0) DESC, r.stars DESC
+	`
+	if err := db.Select(&rankedRepos, rankedQuery); err != nil {
+		slog.Warn("sitemap generator: could not fetch ranked repos for compare sitemap", "err", err)
+	} else {
+		langRanked := make(map[string][]rankedRepo)
+		for _, rr := range rankedRepos {
+			l := languageSlug(rr.Language)
+			if l == "" {
+				l = "other"
+			}
+			langRanked[l] = append(langRanked[l], rr)
+		}
+
+		var compareUrls []URL
+		seenPairs := make(map[string]bool)
+
+		for _, list := range langRanked {
+			limit := len(list)
+			if limit > 10 {
+				limit = 10
+			}
+			for i := 0; i < limit; i++ {
+				for j := i + 1; j <= i+3 && j < len(list); j++ {
+					if len(compareUrls) >= 1000 {
+						break
+					}
+					repoA := list[i].FullName
+					repoB := list[j].FullName
+					partsA := strings.Split(repoA, "/")
+					partsB := strings.Split(repoB, "/")
+					if len(partsA) != 2 || len(partsB) != 2 {
+						continue
+					}
+					// Sort lexicographically to ensure canonical URL
+					if strings.ToLower(repoA) > strings.ToLower(repoB) {
+						repoA, repoB = repoB, repoA
+					}
+					pairKey := fmt.Sprintf("%s vs %s", strings.ToLower(repoA), strings.ToLower(repoB))
+					if seenPairs[pairKey] {
+						continue
+					}
+					seenPairs[pairKey] = true
+
+					compareUrls = append(compareUrls, URL{
+						Loc:        fmt.Sprintf("%s/compare/%s/vs/%s", baseUrl, repoA, repoB),
+						LastMod:    today,
+						ChangeFreq: "daily",
+						Priority:   "0.7",
+					})
+				}
+				if len(compareUrls) >= 1000 {
+					break
+				}
+			}
+			if len(compareUrls) >= 1000 {
+				break
+			}
+		}
+
+		if len(compareUrls) > 0 {
+			compareUrlset := URLSet{URLs: compareUrls}
+			compareOutput, err := xml.MarshalIndent(compareUrlset, "", "  ")
+			if err == nil {
+				compareFilePath := filepath.Join(sitemapDir, "compare.xml")
+				xmlHeader := []byte(xml.Header)
+				if err := os.WriteFile(compareFilePath, append(xmlHeader, compareOutput...), 0644); err == nil {
+					indexSitemaps = append(indexSitemaps, Sitemap{
+						Loc:     fmt.Sprintf("%s/sitemap/compare.xml", baseUrl),
+						LastMod: today,
+					})
+				}
+			}
+		}
 	}
 
 	// Master sitemap.xml index

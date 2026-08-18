@@ -3,7 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Repo } from "@/types/opendoor";
-import { Star, ArrowUpRight, Flame, ShieldCheck } from "lucide-react";
+import { Star, ArrowUpRight, Flame, ShieldCheck, Scale } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 import posthog from "posthog-js";
 
@@ -111,6 +111,24 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       e.preventDefault();
       e.stopPropagation();
       router.push(`/topics/${encodeURIComponent(topic)}`);
+    }
+  };
+
+  const handleCompareClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    posthog.capture("compare_cta_clicked", {
+      repo_full_name: repo.full_name,
+      source: "repo_card",
+    });
+    router.push(`/compare?a=${encodeURIComponent(repo.full_name)}`);
+  };
+
+  const handleCompareKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+      router.push(`/compare?a=${encodeURIComponent(repo.full_name)}`);
     }
   };
 
@@ -238,9 +256,24 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
             <span>Telemetry active</span>
           )}
         </div>
-        <span className="font-semibold text-zinc-900 group-hover:text-zinc-700 flex items-center gap-0.5">
-          View details →
-        </span>
+        <div className="flex items-center gap-2">
+          <span
+            role="button"
+            tabIndex={0}
+            data-testid="compare-cta"
+            title={`Compare ${repo.full_name} with another repository`}
+            aria-label={`Compare ${repo.full_name}`}
+            onClick={handleCompareClick}
+            onKeyDown={handleCompareKeyDown}
+            className="inline-flex items-center gap-1 text-xs font-medium text-zinc-500 hover:text-emerald-700 bg-zinc-100/70 hover:bg-emerald-50 px-2 py-1 rounded-md border border-zinc-200/60 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1"
+          >
+            <Scale className="h-3 w-3" />
+            <span>Compare</span>
+          </span>
+          <span className="font-semibold text-zinc-900 group-hover:text-zinc-700 flex items-center gap-0.5">
+            View details →
+          </span>
+        </div>
       </div>
     </a>
   );

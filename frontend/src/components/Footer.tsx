@@ -109,6 +109,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/compare" title="Compare Open Source Repositories Head-to-Head" className="hover:text-zinc-900 transition-colors">
+                  Compare Repositories
+                </Link>
+              </li>
+              <li>
                 <Link href="/status" title="GetMerged Service & Pipeline Status" className="hover:text-zinc-900 transition-colors flex items-center gap-1.5">
                   <Activity className="h-3.5 w-3.5 text-emerald-600" /> System Status
                 </Link>

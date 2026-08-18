@@ -43,6 +43,13 @@ build-backfill:
 build-backfill-topics:
 	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/backfill-topics ./cmd/backfill_topics
 
+build-generate-sitemap:
+	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/generate_sitemap ./cmd/generate_sitemap
+
+generate-sitemap-server: build-generate-sitemap
+	cp backend/bin/generate_sitemap /opt/opendoor/backend/generate_sitemap
+	chmod +x /opt/opendoor/backend/generate_sitemap
+
 backfill-topics-server: build-backfill-topics
 	cp backend/bin/backfill-topics /opt/opendoor/backend/backfill-topics
 	chmod +x /opt/opendoor/backend/backfill-topics
