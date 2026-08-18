@@ -99,3 +99,68 @@ func TestAutoMigrate_DeletedAtColumnMigration(t *testing.T) {
 	}
 }
 
+func TestAutoMigrate_ProfilingConsentColumnsMigration(t *testing.T) {
+	database, err := sqlx.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("failed to open memory SQLite db: %v", err)
+	}
+	defer database.Close()
+
+	// Simulate legacy schema lacking profiling_consent and profiling_consent_at
+	database.MustExec(`
+		CREATE TABLE users (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			github_id INTEGER UNIQUE,
+			google_id VARCHAR(255) UNIQUE,
+			slug VARCHAR(255) UNIQUE,
+			email_hash VARCHAR(64) UNIQUE,
+			username TEXT NOT NULL,
+			email TEXT,
+			avatar_url TEXT,
+			deleted_at DATETIME,
+			created_at DATETIME NOT NULL,
+			updated_at DATETIME NOT NULL
+		);
+	`)
+
+	if err := db.AutoMigrate(database); err != nil {
+		t.Fatalf("AutoMigrate failed: %v", err)
+	}
+
+	type colInfo struct {
+		CID       int     `db:"cid"`
+		Name      string  `db:"name"`
+		Type      string  `db:"type"`
+		NotNull   int     `db:"notnull"`
+		DfltValue *string `db:"dflt_value"`
+		PK        int     `db:"pk"`
+	}
+	var cols []colInfo
+	if err := database.Select(&cols, "PRAGMA table_info(users)"); err != nil {
+		t.Fatalf("failed to read table info: %v", err)
+	}
+
+	hasProfilingConsent := false
+	hasProfilingConsentAt := false
+	for _, col := range cols {
+		if col.Name == "profiling_consent" {
+			hasProfilingConsent = true
+		}
+		if col.Name == "profiling_consent_at" {
+			hasProfilingConsentAt = true
+		}
+	}
+	if !hasProfilingConsent {
+		t.Fatalf("expected profiling_consent column to be added to legacy users table by AutoMigrate")
+	}
+	if !hasProfilingConsentAt {
+		t.Fatalf("expected profiling_consent_at column to be added to legacy users table by AutoMigrate")
+	}
+
+	// Idempotency: second run should not fail
+	if err := db.AutoMigrate(database); err != nil {
+		t.Fatalf("second AutoMigrate run failed: %v", err)
+	}
+}
+
+
