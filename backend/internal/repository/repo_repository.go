@@ -36,6 +36,7 @@ type RepoRecord struct {
 	ResponseP50Hours         float64   `db:"response_p50_hours" json:"response_p50_hours"`
 	ResponseP90Hours         float64   `db:"response_p90_hours" json:"response_p90_hours"`
 	UpdatedAt                time.Time `db:"updated_at" json:"updated_at"`
+	Topics                   []string  `db:"-" json:"topics"`
 }
 
 type RepoFilter struct {
@@ -76,6 +77,9 @@ type RepoRepository interface {
 	InsertSnapshot(ctx context.Context, repoID string, raw scoring.RawMetrics, score float64, tier string) error
 	FetchLatestSnapshotsSample(ctx context.Context, limit int) ([]scoring.RawMetrics, error)
 	GetRelatedRepos(ctx context.Context, repo *RepoRecord, limit int) ([]*RepoRecord, error)
+	UpsertTopics(ctx context.Context, repoID string, topics []string) error
+	GetTopicsByRepoID(ctx context.Context, repoID string) ([]string, error)
+	GetAllDistinctTopics(ctx context.Context) ([]string, error)
 }
 
 type sqlxRepoRepository struct {
@@ -232,7 +236,88 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 		return nil, 0, err
 	}
 
+	r.attachTopics(ctx, repos)
+
 	return repos, total, nil
+}
+
+// attachTopics batches one query to attach repository_topics rows to each
+// RepoRecord so callers never hit an N+1 fetch per repo.
+func (r *sqlxRepoRepository) attachTopics(ctx context.Context, repos []RepoRecord) {
+	if len(repos) == 0 {
+		return
+	}
+
+	ids := make([]interface{}, len(repos))
+	for i := range repos {
+		ids[i] = repos[i].ID
+	}
+
+	query, args, err := sqlx.In(`SELECT repository_id, topic FROM repository_topics WHERE repository_id IN (?)`, ids)
+	if err != nil {
+		return
+	}
+	query = r.db.Rebind(query)
+
+	var rows []struct {
+		RepositoryID string `db:"repository_id"`
+		Topic        string `db:"topic"`
+	}
+	if err := r.db.SelectContext(ctx, &rows, query, args...); err != nil {
+		return
+	}
+
+	topicsByRepo := make(map[string][]string, len(rows))
+	for _, row := range rows {
+		topicsByRepo[row.RepositoryID] = append(topicsByRepo[row.RepositoryID], row.Topic)
+	}
+	for i := range repos {
+		repos[i].Topics = topicsByRepo[repos[i].ID]
+	}
+}
+
+// UpsertTopics persists normalized lowercase topic strings for a repository,
+// ignoring duplicates so repeated crawls are idempotent.
+func (r *sqlxRepoRepository) UpsertTopics(ctx context.Context, repoID string, topics []string) error {
+	if len(topics) == 0 {
+		return nil
+	}
+
+	query := "INSERT IGNORE INTO repository_topics (topic, repository_id) VALUES (?, ?)"
+	if r.db.DriverName() == "sqlite" {
+		query = "INSERT OR IGNORE INTO repository_topics (topic, repository_id) VALUES (?, ?)"
+	}
+
+	seen := make(map[string]bool, len(topics))
+	for _, t := range topics {
+		t = strings.ToLower(strings.TrimSpace(t))
+		if t == "" || seen[t] {
+			continue
+		}
+		seen[t] = true
+		if _, err := r.db.ExecContext(ctx, query, t, repoID); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// GetTopicsByRepoID returns the topics for a repository in insertion order.
+func (r *sqlxRepoRepository) GetTopicsByRepoID(ctx context.Context, repoID string) ([]string, error) {
+	var topics []string
+	err := r.db.SelectContext(ctx, &topics, `
+		SELECT topic FROM repository_topics WHERE repository_id = ? ORDER BY created_at ASC
+	`, repoID)
+	return topics, err
+}
+
+// GetAllDistinctTopics returns every topic that has at least one indexed repository.
+func (r *sqlxRepoRepository) GetAllDistinctTopics(ctx context.Context) ([]string, error) {
+	var topics []string
+	err := r.db.SelectContext(ctx, &topics, `
+		SELECT DISTINCT topic FROM repository_topics ORDER BY topic ASC
+	`)
+	return topics, err
 }
 
 func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier string) (*RepoRecord, error) {
@@ -266,6 +351,11 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 	var repo RepoRecord
 	if err := r.db.GetContext(ctx, &repo, query, identifier, identifier); err != nil {
 		return nil, err
+	}
+
+	topics, err := r.GetTopicsByRepoID(ctx, repo.ID)
+	if err == nil {
+		repo.Topics = topics
 	}
 
 	return &repo, nil

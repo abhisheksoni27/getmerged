@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { Repo } from "@/types/opendoor";
 import { Star, ArrowUpRight, Flame, ShieldCheck } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
@@ -14,6 +15,7 @@ interface RepoCardProps {
 }
 
 export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
+  const router = useRouter();
   const rank = repo.class_rank || repo.c_rank_tier || "A";
   const [ownerPart, namePart] = repo.full_name ? repo.full_name.split("/") : [repo.owner || "", repo.name || ""];
 
@@ -92,6 +94,29 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
     });
   };
 
+  const handleTopicChipClick = (e: React.MouseEvent, topic: string) => {
+    // The card is an outer <a>; navigate programmatically on the interactive
+    // chip span to avoid illegal nested <a> DOM nodes (valid HTML5).
+    e.preventDefault();
+    e.stopPropagation();
+    posthog.capture("topic_chip_clicked", {
+      topic,
+      repo_full_name: repo.full_name,
+    });
+    router.push(`/topics/${encodeURIComponent(topic)}`);
+  };
+
+  const handleTopicChipKeyDown = (e: React.KeyboardEvent, topic: string) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+      router.push(`/topics/${encodeURIComponent(topic)}`);
+    }
+  };
+
+  const topicChips = (repo.topics || []).filter(Boolean).slice(0, 3);
+  const topicOverflow = (repo.topics || []).length - topicChips.length;
+
   return (
     <a
       href={`/${ownerPart}/${namePart}`}
@@ -149,6 +174,35 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
         <p className="text-xs text-zinc-600 line-clamp-2 leading-relaxed font-sans font-normal mb-4 min-h-[2.5rem]">
           {repo.description || "No repository description available."}
         </p>
+
+        {/* Topic chips - interactive spans (not nested <a>) linking to topic landings */}
+        {topicChips.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5 mb-4">
+            {topicChips.map((topic) => (
+              <span
+                key={topic}
+                role="button"
+                tabIndex={0}
+                data-testid="topic-chip"
+                aria-label={`Filter by topic ${topic}`}
+                title={`Explore ${topic} repositories`}
+                onClick={(e) => handleTopicChipClick(e, topic)}
+                onKeyDown={(e) => handleTopicChipKeyDown(e, topic)}
+                className="inline-flex items-center px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-700 border border-zinc-200 font-mono text-[10px] sm:text-[11px] font-medium hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1"
+              >
+                #{topic}
+              </span>
+            ))}
+            {topicOverflow > 0 && (
+              <span
+                className="inline-flex items-center px-2 py-0.5 rounded-md bg-zinc-50 text-zinc-500 border border-zinc-200 font-mono text-[10px] sm:text-[11px] font-medium"
+                aria-hidden="true"
+              >
+                +{topicOverflow}
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Telemetry Metrics Scorecard with clean spacing & dividers */}
         <div className="grid grid-cols-3 gap-3 py-3 px-3.5 bg-zinc-50/80 rounded-xl border border-zinc-100/90 my-auto text-center font-mono">

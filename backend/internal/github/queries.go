@@ -18,6 +18,7 @@ query SearchRepos($query: String!, $cursor: String) {
         stargazerCount
         description
         url
+        repositoryTopics(first: 10) { nodes { topic { name } } }
       }
     }
   }
@@ -47,6 +48,27 @@ query SearchReposPage($query: String!, $first: Int!, $cursor: String) {
         stargazerCount
         description
         url
+        repositoryTopics(first: 10) { nodes { topic { name } } }
+      }
+    }
+  }
+  rateLimit {
+    remaining
+    resetAt
+    cost
+  }
+}
+`
+
+// RepoTopicsQuery fetches up to 10 repository topics for a specific repository.
+const RepoTopicsQuery = `
+query RepoTopics($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    repositoryTopics(first: 10) {
+      nodes {
+        topic {
+          name
+        }
       }
     }
   }
@@ -69,6 +91,7 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
     hasIssuesEnabled
     issueTemplates { name }
     pullRequestTemplates { filename }
+    repositoryTopics(first: 10) { nodes { topic { name } } }
     contributing: object(expression: "HEAD:CONTRIBUTING.md") { id }
     contributingLower: object(expression: "HEAD:contributing.md") { id }
     contributingGithub: object(expression: "HEAD:.github/CONTRIBUTING.md") { id }

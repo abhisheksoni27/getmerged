@@ -38,13 +38,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const fullName = `${owner}/${name}`;
   const repo = await getRepoData(fullName);
 
+  const score = repo?.c_rank_score ? repo.c_rank_score.toFixed(1) : "75.0";
+  const tier = repo?.c_rank_tier || "A";
+
   const title = repo
-    ? `${fullName} C-Rank™ (${repo.c_rank_tier || "A"} Tier) - GetMerged`
-    : `${fullName} - GetMerged Open Source Explorer`;
+    ? `${fullName} Contributor Review & C-Rank™: ${score}/100 (${tier} Tier) | GetMerged`
+    : `${fullName} Contributor Review & C-Rank™ | GetMerged`;
 
   const description = repo?.description
-    ? `${repo.description} Scored ${repo.c_rank_score?.toFixed(1) || 75.0}/100 on GetMerged C-Rank™. View maintainer response times, PR merge rates, and first-timer success metrics.`
-    : `Find out if ${fullName} welcomes external pull requests. View response times and maintainer review speed metrics.`;
+    ? `${fullName} scored ${score}/100 (${tier} Tier) on C-Rank™. Maintainer response time: ${(repo.time_to_first_response_hours || 0).toFixed(1)}h, PR merge rate: ${(repo.external_pr_merge_rate || 0).toFixed(1)}%. ${repo.description}`
+    : `Contributor reviews and open source health metrics for ${fullName}. View maintainer response times, PR merge rates, and first-timer success on GetMerged.`;
 
   return {
     title,
@@ -74,7 +77,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
   // Server-Side Data Fetching -> Pure SSR
   const repo = await getRepoData(fullName);
 
-  // Schema.org JSON-LD Structured Data (with AggregateRating and freshness dateModified for SEO)
+  // Schema.org JSON-LD Structured Data (SoftwareSourceCode & freshness dateModified)
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
@@ -87,16 +90,6 @@ export default async function RepoDetailPage({ params }: PageProps) {
       name: owner,
       url: `https://github.com/${owner}`,
     },
-    ...(repo?.c_rank_score ? {
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: (repo.c_rank_score / 20).toFixed(1), // 0-5 star scale equivalent
-        bestRating: "5",
-        worstRating: "1",
-        ratingCount: Math.max(10, Math.floor((repo.stars || 100) / 10)),
-        reviewCount: Math.max(5, repo.good_first_issue_count || 5),
-      },
-    } : {}),
     ...(repo?.updated_at ? { dateModified: new Date(repo.updated_at).toISOString() } : {}),
   };
 

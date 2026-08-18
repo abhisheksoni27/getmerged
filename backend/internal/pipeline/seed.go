@@ -124,17 +124,30 @@ func upsertRepo(db *sqlx.DB, r github.Repo) (string, error) {
 			INSERT INTO repositories (id, full_name, owner, name, language, stars, description, github_url, updated_at)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 		`, id, r.FullName, r.Owner, r.Name, r.Language, r.Stars, strings.TrimSpace(r.Description), r.URL, time.Now().UTC())
-		return id, err
+		if err != nil {
+			return "", err
+		}
 	} else if err != nil {
 		return "", err
+	} else {
+		_, err = db.Exec(`
+			UPDATE repositories
+			SET updated_at = ?, stars = ?, description = ?, language = ?
+			WHERE id = ?
+		`, time.Now().UTC(), r.Stars, strings.TrimSpace(r.Description), r.Language, id)
+		if err != nil {
+			return "", err
+		}
 	}
 
-	_, err = db.Exec(`
-		UPDATE repositories
-		SET updated_at = ?, stars = ?, description = ?, language = ?
-		WHERE id = ?
-	`, time.Now().UTC(), r.Stars, strings.TrimSpace(r.Description), r.Language, id)
-	return id, err
+	// Persist repository_topics so topic landings resolve (IDEA-20260818-03).
+	if len(r.Topics) > 0 {
+		if err := repository.NewRepoRepository(db).UpsertTopics(context.Background(), id, r.Topics); err != nil {
+			slog.Warn("upsertRepo: UpsertTopics failed", "repo", r.FullName, "err", err)
+		}
+	}
+
+	return id, nil
 }
 
 func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullName string, existingMetrics []scoring.RawMetrics) ([]scoring.RawMetrics, error) {

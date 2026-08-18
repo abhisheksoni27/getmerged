@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const languageName = displayNameFromSlug(lang);
-  const title = `Good First Issues in ${languageName} (Beginner Friendly) - GetMerged`;
-  const description = `Find open-source ${languageName} repositories with active Good First Issues, beginner-friendly labels, fast review response times, and high first-timer merge rates on GetMerged.`;
+  const title = `Best ${languageName} Good First Issues & Beginner Repos (2026) | GetMerged`;
+  const description = `Find top ${languageName} open-source repositories with active Good First Issues, beginner-friendly labels, fast review times, and high first-timer merge rates on GetMerged.`;
 
   return {
     title,

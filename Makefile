@@ -40,6 +40,13 @@ build-recalculate-linux-arm:
 build-backfill:
 	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/backfill ./cmd/backfill
 
+build-backfill-topics:
+	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/backfill-topics ./cmd/backfill_topics
+
+backfill-topics-server: build-backfill-topics
+	cp backend/bin/backfill-topics /opt/opendoor/backend/backfill-topics
+	chmod +x /opt/opendoor/backend/backfill-topics
+
 
 recalculate-history: build-recalculate-linux-arm
 	scp backend/bin/recalculate-history-linux-arm deploy@oracle:/tmp/recalculate-history

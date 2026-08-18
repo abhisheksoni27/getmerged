@@ -70,6 +70,12 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 					continue
 				}
 
+				if len(meta.Topics) > 0 {
+					if err := repository.NewRepoRepository(db).UpsertTopics(context.Background(), r.ID, meta.Topics); err != nil {
+						slog.Warn("cron: UpsertTopics failed", "repo", r.FullName, "err", err)
+					}
+				}
+
 				gfiIssues, gfiCount, err := gh.FetchGoodFirstIssuesList(r.Owner, r.Name, 5)
 				if err != nil {
 					slog.Warn("cron: FetchGoodFirstIssuesList failed - assuming none", "repo", r.FullName, "err", err)
