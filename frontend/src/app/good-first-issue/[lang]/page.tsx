@@ -5,6 +5,7 @@ import { RepoCard } from "@/components/RepoCard";
 import { Repo, GoodFirstIssueItem } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import { canonicalizeSlug, displayNameFromSlug } from "@/lib/languageSlug";
+import { formatFreshness } from "@/lib/freshness";
 import { Sparkles, Code2, ArrowLeft, ShieldCheck, Sprout, ExternalLink, MessageSquare, Star, Award } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -219,6 +220,7 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
                 return (
                   <div
                     key={`${iss.repository_id}-${iss.issue_number}`}
+                    data-created-at={iss.created_at}
                     className="group rounded-2xl bg-white p-4 sm:p-5 border border-zinc-200 shadow-2xs hover:shadow-md hover:border-zinc-300 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
                   >
                     <div className="flex-1 min-w-0">
@@ -235,6 +237,13 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
                         </span>
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200">
                           <Award className="h-3 w-3" /> Tier {iss.c_rank_tier} ({iss.c_rank_score.toFixed(0)} pts)
+                        </span>
+                        <span
+                          data-freshness
+                          title={`Created ${new Date(iss.created_at).toISOString()}`}
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200"
+                        >
+                          {formatFreshness(iss.created_at)}
                         </span>
                         {iss.stars > 0 && (
                           <span className="inline-flex items-center gap-1 text-[11px] font-mono text-zinc-500">
