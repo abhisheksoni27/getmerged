@@ -57,7 +57,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
   const [isGuidelinesOpen, setIsGuidelinesOpen] = useState(false);
   const [relatedRepos, setRelatedRepos] = useState<Repo[]>([]);
-  const [gfiList, setGfiList] = useState<Array<{ id: number; title: string; url?: string; html_url?: string; body_text?: string; body_snippet?: string; quality_score?: number; created_at?: string; comments_count?: number; repo_full_name?: string }>>([]);
+  const [gfiList, setGfiList] = useState<Array<{ id: number; issue_number?: number; title: string; url?: string; html_url?: string; body_text?: string; body_snippet?: string; quality_score?: number; created_at?: string; comments_count?: number; repo_full_name?: string }>>([]);
   const [maintainerRating, setMaintainerRating] = useState(0);
   const [reviewSpeedRating, setReviewSpeedRating] = useState(0);
   const [beginnerRating, setBeginnerRating] = useState(0);
@@ -172,8 +172,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           if (data?.data && Array.isArray(data.data)) {
             const currentFullName = fullName.toLowerCase();
             const filtered = data.data.filter((item: { repo_full_name?: string }) => {
-              if (!item.repo_full_name) return true;
-              return item.repo_full_name.toLowerCase() === currentFullName;
+              return Boolean(item.repo_full_name && item.repo_full_name.toLowerCase() === currentFullName);
             });
             setGfiList(filtered);
           }
@@ -528,104 +527,130 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       {repo?.owner && repo?.name && (
         <PRAcceptanceWidget owner={repo.owner} name={repo.name} />
       )}
-
+      
       {/* Good First Issues Cards (Story 10.2 & Story 10.3) */}
-      {((repo?.good_first_issue_count ?? 0) > 0 || gfiList.length > 0) && (
-        <div className="rounded-2xl bg-white p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] font-mono">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-emerald-600" /> Active Good First Issues ({gfiList.length > 0 ? gfiList.length : (repo?.good_first_issue_count ?? 0)})
-            </h3>
-            <a
-              href={`https://github.com/${fullName}/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22good%20first%20issue%22%2Cgood-first-issue`}
-              target="_blank"
-              rel="nofollow noopener noreferrer"
-              title="View all good first issues directly on GitHub"
-              className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1"
-            >
-              View on GitHub <ArrowRight className="h-3 w-3" />
-            </a>
-          </div>
+      <div className="rounded-2xl bg-white p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] font-mono">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-emerald-600" /> Active Good First Issues ({gfiList.length > 0 ? gfiList.length : (repo?.good_first_issue_count ?? 0)})
+          </h3>
+          <a
+            href={`https://github.com/${fullName}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2Cgood-first-issue`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="View on GitHub"
+            className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1"
+          >
+            View on GitHub <ArrowRight className="h-3 w-3" />
+          </a>
+        </div>
 
-          {gfiList.length > 0 ? (
-            <div className="space-y-3 font-sans">
-              {gfiList.map((issue) => {
-                const issueUrl = issue.url || issue.html_url || `https://github.com/${fullName}/issues/${issue.id}`;
-                const dateStr = issue.created_at
-                  ? new Date(issue.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-                  : null;
+        {gfiList.length > 0 ? (
+          <div className="space-y-3 font-sans">
+            {gfiList.map((issue) => {
+              const issueNumber = issue.issue_number || (typeof issue.id === "number" && issue.id > 0 ? issue.id : null);
+              const issueUrl = (issue.url && new RegExp(`^https://github\\.com/${fullName}/issues/\\d+$`, "i").test(issue.url))
+                ? issue.url
+                : (issueNumber ? `https://github.com/${fullName}/issues/${issueNumber}` : `https://github.com/${fullName}/issues`);
 
-                return (
-                  <div
-                    key={issue.id}
-                    className="p-4 rounded-xl border border-zinc-200/90 bg-white hover:border-emerald-500 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <a
-                          href={issueUrl}
-                          target="_blank"
-                          rel="nofollow noopener noreferrer"
-                          title={`Open ${issue.title} on GitHub`}
-                          className="text-sm font-bold text-zinc-900 group-hover:text-emerald-700 transition-colors line-clamp-1 flex items-center gap-1.5"
-                        >
-                          <span>🎯 {issue.title}</span>
-                          <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 text-emerald-600" />
-                        </a>
-                      </div>
-                      {(issue.body_snippet || issue.body_text) && (
-                        <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">
-                          {issue.body_snippet || issue.body_text}
-                        </p>
-                      )}
-                      <div className="flex items-center gap-3 mt-2 text-[11px] font-mono text-zinc-600 flex-wrap">
-                        {dateStr && <span>📅 Opened {dateStr}</span>}
-                        {issue.comments_count !== undefined && (
-                          <span>💬 {issue.comments_count} {issue.comments_count === 1 ? "comment" : "comments"}</span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
-                      {issue.quality_score !== undefined && issue.quality_score > 0 && (
-                        <span className="text-[11px] font-mono font-bold bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-lg border border-emerald-200/80">
-                          Quality: {issue.quality_score}/100
+              const dateStr = issue.created_at
+                ? new Date(issue.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+                : null;
+
+              return (
+                <div
+                  key={issue.id}
+                  className="p-4 sm:p-5 rounded-lg border border-zinc-200/90 bg-white hover:border-emerald-500 hover:-translate-y-px hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      {issueNumber && (
+                        <span className="font-mono text-xs font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/80">
+                          #{issueNumber}
                         </span>
                       )}
                       <a
                         href={issueUrl}
                         target="_blank"
-                        rel="nofollow noopener noreferrer"
-                        title={`Contribute to ${issue.title} on GitHub`}
-                        className="px-3 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1 transition-all"
+                        rel="noopener noreferrer"
+                        title={`Open #${issueNumber || ""} ${issue.title} on GitHub`}
+                        className="text-sm sm:text-base font-medium text-zinc-900 group-hover:text-emerald-700 transition-colors line-clamp-2 flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:ring-offset-2 active:scale-[0.99]"
                       >
-                        Contribute <ArrowRight className="h-3 w-3" />
+                        <span>🎯 {issue.title}</span>
+                        <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 text-emerald-600" />
                       </a>
                     </div>
+                    {(issue.body_snippet || issue.body_text) && (
+                      <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">
+                        {issue.body_snippet || issue.body_text}
+                      </p>
+                    )}
+                    <div className="flex items-center gap-3 mt-2 text-[11px] font-mono text-zinc-600 flex-wrap">
+                      {dateStr && <span>📅 Opened {dateStr}</span>}
+                      {issue.comments_count !== undefined && (
+                        <span>💬 {issue.comments_count} {issue.comments_count === 1 ? "comment" : "comments"}</span>
+                      )}
+                    </div>
                   </div>
-                );
-              })}
-            </div>
-          ) : (
-            <p className="text-xs text-zinc-600 font-sans">
-              This repository currently has <strong>{repo?.good_first_issue_count}</strong> open{" "}
-              <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700 font-mono">good first issue</code> tickets available for newcomers.
+                  <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
+                    {issue.quality_score !== undefined && issue.quality_score > 0 && (
+                      <span className="text-[11px] font-mono font-bold bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-lg border border-emerald-200/80">
+                        Quality: {issue.quality_score}/100
+                      </span>
+                    )}
+                    <a
+                      href={issueUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={`Contribute to ${issue.title} on GitHub`}
+                      className="px-3 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1 transition-all active:scale-[0.99]"
+                    >
+                      Contribute <ArrowRight className="h-3 w-3" />
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="bg-zinc-50/60 border border-zinc-200/80 rounded-lg p-6 text-center text-zinc-600 font-sans">
+            <p className="text-xs text-zinc-600">
+              {repo?.good_first_issue_count ? (
+                <>
+                  This repository currently has <strong>{repo.good_first_issue_count}</strong> open{" "}
+                  <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700 font-mono">good first issue</code> tickets available for newcomers.
+                </>
+              ) : (
+                <>No cached good first issues currently tracked for <strong>{fullName}</strong>.</>
+              )}
             </p>
-          )}
-
-          {repo?.language && (
-            <div className="pt-3 mt-3 border-t border-zinc-100 flex items-center justify-between font-sans">
-              <span className="text-[11px] text-zinc-500">Looking for more {repo.language} beginner tasks?</span>
-              <Link
-                href={`/good-first-issue/${getLanguageSlug(repo.language)}`}
-                title={`Explore all ${repo.language} Good First Issues on GetMerged`}
-                className="text-xs font-bold text-emerald-700 hover:text-emerald-800 inline-flex items-center gap-1 hover:underline"
+            <p className="text-xs text-zinc-500 mt-2">
+              <a
+                href={`https://github.com/${fullName}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2Cgood-first-issue`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="View all good first issues directly on GitHub"
+                className="text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1 underline underline-offset-2"
               >
-                Explore {repo.language} Good First Issues <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          )}
-        </div>
-      )}
+                View all good first issues directly on GitHub <ArrowRight className="h-3 w-3 inline" />
+              </a>
+            </p>
+          </div>
+        )}
+
+        {repo?.language && (
+          <div className="pt-3 mt-3 border-t border-zinc-100 flex items-center justify-between font-sans">
+            <span className="text-[11px] text-zinc-500">Looking for more {repo.language} beginner tasks?</span>
+            <Link
+              href={`/good-first-issue/${getLanguageSlug(repo.language)}`}
+              title={`Explore all ${repo.language} Good First Issues on GetMerged`}
+              className="text-xs font-bold text-emerald-700 hover:text-emerald-800 inline-flex items-center gap-1 hover:underline"
+            >
+              Explore {repo.language} GFI <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+        )}
+      </div>
 
 
       {/* AI Insights & Maintainer Guidelines Section - Data-Backed Only (Rule 12 compliant) */}
