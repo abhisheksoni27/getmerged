@@ -41,9 +41,23 @@ interface ClientRepoDetailProps {
 }
 
 export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
-  const [isLoggedIn] = useState(() => {
-    return typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
-  });
+  const [currentUser, setCurrentUser] = useState<{
+    username?: string;
+    auth_provider?: string;
+    has_github?: boolean;
+  } | null>(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/v1/auth/me`, { credentials: "include" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.user) {
+          setCurrentUser(data.user);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const [isWatching, setIsWatching] = useState(false);
   const [watchLoading, setWatchLoading] = useState(false);
   const [badgeCopied, setBadgeCopied] = useState(false);
@@ -78,6 +92,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
     setIsAuthModalOpen(true);
   };
 
+  const isLoggedIn = Boolean(currentUser || (typeof document !== "undefined" && document.cookie.includes("opendoor_token=")));
   const rank = repo?.class_rank || repo?.c_rank_tier || "A";
   const score = repo?.c_rank_score ?? repo?.score ?? 0;
   const allFeedbackRatingsSelected = maintainerRating > 0 && reviewSpeedRating > 0 && beginnerRating > 0;
@@ -765,10 +780,47 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               Rate what actually matters after opening a pull request here.
             </p>
           </div>
-          <span className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-emerald-950 bg-emerald-200 px-3.5 py-1.5 rounded-lg border-2 border-brand-dark shadow-[2px_2px_0px_#222831] shrink-0">
-            <ShieldCheck className="h-4 w-4 text-emerald-600" />
-            GitHub Verification Active
-          </span>
+          {currentUser ? (
+            currentUser.auth_provider === "github" || currentUser.has_github ? (
+              <span
+                id="auth-provider-badge"
+                data-testid="auth-provider-badge"
+                className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-emerald-950 bg-emerald-200 px-3.5 py-1.5 rounded-lg border-2 border-brand-dark shadow-[2px_2px_0px_#222831] shrink-0"
+              >
+                <ShieldCheck className="h-4 w-4 text-emerald-700" />
+                Signed in with GitHub
+              </span>
+            ) : (
+              <a
+                id="auth-provider-badge"
+                data-testid="auth-provider-badge"
+                href={`${API_BASE_URL}/api/v1/auth/github`}
+                className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-amber-950 bg-amber-200 hover:bg-amber-300 px-3.5 py-1.5 rounded-lg border-2 border-brand-dark shadow-[2px_2px_0px_#222831] transition-colors shrink-0 cursor-pointer"
+                title="Link GitHub account to verify contributor status"
+              >
+                <ShieldCheck className="h-4 w-4 text-amber-700" />
+                Google Account (Link GitHub to verify)
+              </a>
+            )
+          ) : (
+            <button
+              type="button"
+              id="auth-provider-badge"
+              data-testid="auth-provider-badge"
+              onClick={() =>
+                openAuthModal(
+                  "Submit Repository Ratings",
+                  "Sign in to verify your contributor signal and submit ratings.",
+                  "feedback_verify"
+                )
+              }
+              className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-zinc-900 bg-zinc-100 hover:bg-zinc-200 px-3.5 py-1.5 rounded-lg border-2 border-brand-dark shadow-[2px_2px_0px_#222831] transition-colors cursor-pointer shrink-0"
+              title="Sign in with GitHub to verify contributor status"
+            >
+              <ShieldCheck className="h-4 w-4 text-zinc-600" />
+              Sign in to verify
+            </button>
+          )}
         </div>
 
         {/* Interactive Contributor Feedback Form / Thank You Widget */}
@@ -844,8 +896,8 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
                   <p className="text-xs sm:text-sm font-sans text-zinc-700 max-w-md mx-auto leading-relaxed">
                     {isVerifiedContributor
-                      ? "🎖️ Verified Contributor match! Your scores carry 3x weight on the maintainer leaderboard."
-                      : "Your review has been broadcasted and factored into the global C-Rank™ community algorithm."}
+                      ? "Verified Contributor! Your review is confirmed by your public commit history on this repository."
+                      : "Thank you! Your ratings have been recorded to help guide future community contributors."}
                   </p>
                 </div>
 
@@ -934,18 +986,18 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                   },
                 ].map((rating) => (
                   <div key={rating.label} className="rounded-xl border-2 border-brand-dark bg-[#faf9f6] p-3 shadow-[2px_2px_0px_#222831]">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <span className="font-mono text-xs font-bold text-zinc-900">
                         {rating.label}
                       </span>
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1.5" role="radiogroup" aria-label={rating.label}>
                         {[1, 2, 3, 4, 5].map((star) => (
                           <button
                             key={star}
                             type="button"
                             onClick={() => rating.setValue(star)}
                             aria-label={`${rating.label}: ${star} star${star === 1 ? "" : "s"}`}
-                            className={`rounded-lg border-2 border-brand-dark p-1.5 shadow-[1px_1px_0px_#222831] transition-all cursor-pointer ${
+                            className={`rounded-lg border-2 border-brand-dark p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center shadow-[1px_1px_0px_#222831] transition-all cursor-pointer ${
                               rating.value >= star
                                 ? "bg-yellow-300 text-zinc-950 scale-105"
                                 : "bg-white text-zinc-300 hover:bg-yellow-100"
@@ -1165,99 +1217,6 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
                     ) : (
                       <>
                         {fullName} does not have open beginner labels indexed currently, but external PRs for bugs and documentation improvements are evaluated via normal issue triage.
-                      </>
-                    )}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* FAQ 6 */}
-            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
-              <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-purple-200 font-mono text-xs font-extrabold text-purple-950 shadow-[1px_1px_0px_#222831]">
-                  06
-                </span>
-                <div>
-                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
-                    How many distinct maintainers review contributions in {fullName}?
-                  </h3>
-                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
-                    Telemetry shows approximately <strong className="text-zinc-950">{repo?.distinct_maintainer_count || 1}</strong> distinct maintainer(s) actively participating in code review rounds, discussions, and commit merges.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* FAQ 7 */}
-            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
-              <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-lime-200 font-mono text-xs font-extrabold text-lime-950 shadow-[1px_1px_0px_#222831]">
-                  07
-                </span>
-                <div>
-                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
-                    How long does it typically take for a PR to be merged into {fullName}?
-                  </h3>
-                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
-                    On average, merged pull requests spend ~<strong className="text-zinc-950">{(repo?.time_to_merge_hours || 24.0).toFixed(1)} hours</strong> in review and CI testing before being merged into the primary branch.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* FAQ 8 */}
-            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
-              <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-indigo-200 font-mono text-xs font-extrabold text-indigo-950 shadow-[1px_1px_0px_#222831]">
-                  08
-                </span>
-                <div>
-                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
-                    What programming language and ecosystem does {fullName} belong to?
-                  </h3>
-                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
-                    {fullName} is developed in <strong className="text-zinc-950">{repo?.language || "Open Source"}</strong> with {repo?.stars?.toLocaleString() || "multiple"} stars. Contributing helps build verified public commits for your developer portfolio.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* FAQ 9 */}
-            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
-              <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-teal-200 font-mono text-xs font-extrabold text-teal-950 shadow-[1px_1px_0px_#222831]">
-                  09
-                </span>
-                <div>
-                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
-                    How can I maximize my PR acceptance rate for {fullName}?
-                  </h3>
-                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
-                    Always link an existing GitHub issue in your PR body, write clean automated unit tests, keep pull request diffs small and focused, and run local linters prior to submission.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* FAQ 10 */}
-            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
-              <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-rose-200 font-mono text-xs font-extrabold text-rose-950 shadow-[1px_1px_0px_#222831]">
-                  10
-                </span>
-                <div>
-                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
-                    Is {fullName} actively maintained or at risk of staleness?
-                  </h3>
-                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
-                    {repo?.staleness_flag ? (
-                      <>
-                        {fullName} has experienced lower commit and PR turnaround activity over the past 90 days. Contributors should verify maintainer responsiveness on open issues before starting major contributions.
-                      </>
-                    ) : (
-                      <>
-                        {fullName} is actively maintained with frequent PR reviews, continuous telemetry updates, and regular maintainer feedback.
                       </>
                     )}
                   </p>
