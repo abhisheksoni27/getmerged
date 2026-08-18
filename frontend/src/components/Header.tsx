@@ -8,6 +8,8 @@ import { User } from "@/types/opendoor";
 import posthog from "posthog-js";
 import { AuthModal } from "@/components/AuthModal";
 
+import { useSearch } from "@/context/SearchContext";
+
 interface HeaderProps {
   showSearchBar?: boolean;
   onOpenSearch?: () => void;
@@ -19,6 +21,12 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const { openSearch, heroSearchVisible, searchQuery: contextQuery } = useSearch();
+
+  const isSearchVisible = showSearchBar !== undefined ? showSearchBar : !heroSearchVisible;
+  const handleOpenSearch = onOpenSearch || (() => openSearch());
+  const displayQuery = searchQuery || contextQuery;
 
   useEffect(() => {
     const hasToken = typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
@@ -89,17 +97,18 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
         </div>
 
         {/* Snapped Sticky Search Bar */}
-        {showSearchBar && (
+        {isSearchVisible && (
           <div className="flex-1 min-w-0 max-w-sm lg:max-w-md mx-3 lg:mx-4 animate-fade-slide-up">
             <button
               type="button"
-              onClick={onOpenSearch}
-              className="w-full relative flex items-center justify-between rounded-xl border border-zinc-200 bg-white/90 px-3 py-1.5 sm:py-2 shadow-xs hover:border-zinc-300 transition-all cursor-pointer group text-left"
+              onClick={handleOpenSearch}
+              aria-label="Search repositories"
+              className="w-full relative flex items-center justify-between h-9 sm:h-10 rounded-xl border border-zinc-200 bg-white/90 px-3 py-1.5 sm:py-2 shadow-xs hover:border-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:outline-none transition-all active:scale-[0.99] cursor-pointer group text-left"
             >
               <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">
                 <Search className="h-4 w-4 text-zinc-400 group-hover:text-zinc-600 shrink-0 transition-colors" />
                 <span className="text-xs text-zinc-700 truncate font-sans block max-w-[200px] sm:max-w-none">
-                  {searchQuery || placeholderText || "Search repositories..."}
+                  {displayQuery || placeholderText || "Search repositories..."}
                 </span>
               </div>
               <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-500 shrink-0">

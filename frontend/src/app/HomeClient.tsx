@@ -13,14 +13,14 @@ import {
   Star,
   Sparkles,
   ArrowRight,
-  X,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { API_BASE_URL } from "@/lib/api";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import posthog from "posthog-js";
 import Link from "next/link";
 import { AuthModal } from "@/components/AuthModal";
+import { useSearch } from "@/context/SearchContext";
 
 interface HomeClientProps {
   initialStats: MacroStats | null;
@@ -55,19 +55,8 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const [page, setPage] = useState<number>(1);
   const perPage = 15;
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLoading(true);
-    const query = e.target.value;
-    setSearchQuery(query);
-    setPage(1);
-    if (query.trim()) {
-      posthog.capture("repo_searched", { query: query.trim() });
-    }
-  };
-
-  // Floating Search Modal State
-  const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
-  const searchModalInputRef = useRef<HTMLInputElement | null>(null);
+  // Search integration with GlobalSearch & Header
+  const { openSearch, setHeroSearchVisible } = useSearch();
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const heroSearchRef = useRef<HTMLDivElement | null>(null);
 
@@ -97,42 +86,21 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
     return () => clearInterval(interval);
   }, [famousRepos.length]);
 
-  // Sticky header search bar whenever hero search is out of view
-  const [isHeroSearchVisible, setIsHeroSearchVisible] = useState<boolean>(true);
-
+  // Manage header search trigger visibility via IntersectionObserver on #hero-search-container
   useEffect(() => {
     if (!heroSearchRef.current) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsHeroSearchVisible(entry.isIntersecting);
+        setHeroSearchVisible(entry.isIntersecting);
       },
       { threshold: 0.1 }
     );
     observer.observe(heroSearchRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setIsSearchModalOpen((prev) => !prev);
-      } else if (e.key === "Escape") {
-        setIsSearchModalOpen(false);
-      }
+    return () => {
+      observer.disconnect();
+      setHeroSearchVisible(false);
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  useEffect(() => {
-    if (isSearchModalOpen) {
-      setTimeout(() => {
-        searchModalInputRef.current?.focus();
-        searchModalInputRef.current?.select();
-      }, 50);
-    }
-  }, [isSearchModalOpen]);
+  }, [setHeroSearchVisible]);
 
   const getStarBoundsFromBucket = (bucket: string): { min?: string; max?: string } => {
     switch (bucket) {
@@ -302,8 +270,6 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
     <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <RelativityCanvas />
       <Header
-        showSearchBar={!isHeroSearchVisible}
-        onOpenSearch={() => setIsSearchModalOpen(true)}
         searchQuery={searchQuery}
         placeholderText={`Search repositories, e.g. ${famousRepos[placeholderIndex]}`}
       />
@@ -318,9 +284,9 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
         </p>
 
         {/* Hero Search Bar */}
-        <div ref={heroSearchRef} className="mt-8 max-w-2xl mx-auto">
+        <div id="hero-search-container" ref={heroSearchRef} className="mt-8 max-w-2xl mx-auto">
           <div
-            onClick={() => setIsSearchModalOpen(true)}
+            onClick={() => openSearch(searchQuery)}
             className="relative flex items-center rounded-2xl border border-zinc-300 bg-white px-4 py-3.5 shadow-sm hover:border-zinc-400 hover:shadow-md transition-all cursor-pointer group"
           >
             <Search className="h-5 w-5 text-zinc-400 group-hover:text-zinc-600 shrink-0 transition-colors" />
@@ -365,7 +331,6 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   setSearchQuery(term);
                   setLoading(true);
                   setPage(1);
-                  setIsSearchModalOpen(false);
                   posthog.capture("repo_searched", { query: term, source: "hero_chip" });
                   const gridEl = document.getElementById("leaderboard-grid");
                   if (gridEl) {
@@ -1109,118 +1074,6 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
         description={authModalConfig.description}
         source={authModalConfig.source}
       />
-
-      <AnimatePresence>
-        {isSearchModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-zinc-950/40 backdrop-blur-sm"
-            onClick={() => setIsSearchModalOpen(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.98, y: -10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.98, y: -10 }}
-              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full max-w-2xl bg-white border border-zinc-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Search Input Header */}
-              <div className="relative flex items-center border-b border-zinc-100 bg-zinc-50/50 p-4">
-                <Search className="absolute left-5 h-5 w-5 text-zinc-400" />
-                <input
-                  ref={searchModalInputRef}
-                  type="text"
-                  placeholder={`Search repositories by name, e.g. ${famousRepos[placeholderIndex]}`}
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  className="w-full pl-10 pr-24 py-1.5 text-base font-sans text-zinc-900 placeholder-zinc-400 focus:outline-none bg-transparent"
-                  autoFocus
-                />
-                <div className="absolute right-4 flex items-center gap-2">
-                  <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-zinc-200 bg-white px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-400 shadow-2xs">
-                    ESC
-                  </kbd>
-                  <button
-                    onClick={() => setIsSearchModalOpen(false)}
-                    className="p-1 rounded-lg text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Modal Body / Results Container */}
-              <div className="max-h-96 overflow-y-auto p-3 space-y-1 font-sans divide-y divide-zinc-100">
-                {repos.length > 0 ? (
-                  repos.slice(0, 6).map((r) => {
-                    const rankTier = r.class_rank || r.c_rank_tier || "A";
-                    return (
-                      <a
-                        key={r.id || r.full_name}
-                        href={`/${r.full_name}`}
-                        onClick={() => setIsSearchModalOpen(false)}
-                        title={`View ${r.full_name} C-Rank scorecard, PR response time & merge metrics`}
-                        className="flex items-center justify-between p-3 rounded-xl hover:bg-zinc-50 transition-colors group cursor-pointer block no-underline text-current pt-3"
-                      >
-                        <div className="flex items-center gap-3 min-w-0">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={`https://github.com/${r.full_name?.split('/')[0]}.png`}
-                            alt={r.full_name}
-                            className="h-8 w-8 rounded-lg border border-zinc-200 bg-white shrink-0 object-cover"
-                            onError={(e) => {
-                              (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png";
-                            }}
-                          />
-                          <div className="min-w-0">
-                            <div className="font-space text-sm font-bold text-zinc-900 group-hover:text-zinc-700 transition-colors truncate">
-                              {r.full_name}
-                            </div>
-                            <div className="text-xs text-zinc-500 truncate font-sans">
-                              {r.description || "No description provided."}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-3 shrink-0 ml-3">
-                          <span className="text-xs font-mono text-zinc-500 font-medium">
-                            {r.language}
-                          </span>
-                          <span className={`px-2 py-0.5 text-[10px] font-bold font-mono border rounded-lg ${
-                            rankTier === "S" ? "bg-emerald-50 text-emerald-900 border-emerald-300" :
-                            rankTier === "A" ? "bg-blue-50 text-blue-900 border-blue-200" : "bg-amber-50 text-amber-900 border-amber-200"
-                          }`}>
-                            {rankTier} Rank
-                          </span>
-                        </div>
-                      </a>
-                    );
-                  })
-                ) : (
-                  <div className="p-8 text-center text-xs text-zinc-500 font-mono">
-                    No repositories found matching &quot;{searchQuery}&quot;.
-                  </div>
-                )}
-              </div>
-
-              {/* Modal Footer */}
-              <div className="px-5 py-3 bg-zinc-50 border-t border-zinc-100 flex items-center justify-between text-[11px] font-mono text-zinc-500">
-                <span>Press <kbd className="bg-zinc-200 px-1 py-0.5 rounded text-zinc-700">ESC</kbd> to close</span>
-                <button
-                  onClick={() => setIsSearchModalOpen(false)}
-                  className="text-zinc-900 font-semibold hover:underline cursor-pointer"
-                >
-                  View all explorer results →
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

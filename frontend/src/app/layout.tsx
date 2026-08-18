@@ -3,6 +3,8 @@ import { Space_Grotesk, DM_Sans, DM_Mono } from "next/font/google";
 import "./globals.css";
 import { PostHogInit } from "@/app/posthog-init";
 import { CookieBanner } from "@/components/CookieBanner";
+import { SearchProvider } from "@/context/SearchContext";
+import { GlobalSearch } from "@/components/GlobalSearch";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -82,7 +84,10 @@ export default function RootLayout({
     <html lang="en" className={`${spaceGrotesk.variable} ${dmSans.variable} ${dmMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-white text-zinc-900">
         <PostHogInit />
-        {children}
+        <SearchProvider>
+          {children}
+          <GlobalSearch />
+        </SearchProvider>
         <CookieBanner />
       </body>
     </html>
