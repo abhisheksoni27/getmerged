@@ -887,7 +887,12 @@ func IsBotLogin(login string) bool {
 }
 
 func formatGoodFirstIssueQuery(owner, name string) string {
-	return fmt.Sprintf(`repo:%s/%s is:issue is:open label:"good first issue",good-first-issue,good_first_issue,first-timers-only,first-timer,beginner,beginner-friendly,"beginner friendly",easy,easy-fix,"easy fix",low-hanging-fruit,"low hanging fruit","help wanted",help-wanted,starter,starter-issue,bitesize,new-contributor,up-for-grabs,e-easy,E-mentor`, owner, name)
+	return formatGoodFirstIssueQueryWithTime(owner, name, time.Now().UTC())
+}
+
+func formatGoodFirstIssueQueryWithTime(owner, name string, now time.Time) string {
+	cutoff := now.AddDate(0, -9, 0).Format("2006-01-02")
+	return fmt.Sprintf(`repo:%s/%s is:issue is:open created:>=%s label:"good first issue",good-first-issue,good_first_issue,first-timers-only,first-timer,beginner,beginner-friendly,"beginner friendly",easy,easy-fix,"easy fix",low-hanging-fruit,"low hanging fruit","help wanted",help-wanted,starter,starter-issue,bitesize,new-contributor,up-for-grabs,e-easy,E-mentor`, owner, name, cutoff)
 }
 
 // GoodFirstIssue represents a beginner-friendly issue fetched from GitHub GraphQL search.

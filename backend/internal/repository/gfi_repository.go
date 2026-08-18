@@ -41,12 +41,22 @@ func NewGFIRepository(db *sqlx.DB) GFIRepository {
 	return &sqlxGFIRepository{db: db}
 }
 
+func GFICutoffUTC() time.Time {
+	return time.Now().UTC().AddDate(0, -9, 0)
+}
+
 func (r *sqlxGFIRepository) UpsertIssues(ctx context.Context, repoID string, issues []github.GoodFirstIssue) error {
 	if len(issues) == 0 {
 		return nil
 	}
 
+	cutoff := GFICutoffUTC()
+
 	for _, issue := range issues {
+		if !issue.CreatedAt.IsZero() && issue.CreatedAt.UTC().Before(cutoff) {
+			continue
+		}
+
 		query := `
 			INSERT INTO repo_good_first_issues (
 				repository_id, issue_number, title, body_text, url, comments_count, labels_json, quality_score, created_at, synced_at
@@ -90,8 +100,9 @@ func (r *sqlxGFIRepository) ListByLanguage(ctx context.Context, language string,
 		limit = 30
 	}
 
-	whereClause := "1=1"
-	args := []interface{}{}
+	cutoff := GFICutoffUTC()
+	whereClause := "g.created_at >= ?"
+	args := []interface{}{cutoff}
 	if language != "" && stringsToLower(language) != "all" {
 		whereClause += " AND LOWER(rep.language) = LOWER(?)"
 		args = append(args, language)
@@ -125,6 +136,7 @@ func (r *sqlxGFIRepository) ListByRepoID(ctx context.Context, repoID string, lim
 		limit = 10
 	}
 
+	cutoff := GFICutoffUTC()
 	query := `
 		SELECT
 			g.id, g.repository_id, rep.full_name as repo_full_name, COALESCE(rep.language, '') as language,
@@ -134,13 +146,13 @@ func (r *sqlxGFIRepository) ListByRepoID(ctx context.Context, repoID string, lim
 		FROM repo_good_first_issues g
 		INNER JOIN repositories rep ON g.repository_id = rep.id
 		LEFT JOIN latest_snapshots s ON rep.id = s.repository_id
-		WHERE g.repository_id = ?
+		WHERE g.repository_id = ? AND g.created_at >= ?
 		ORDER BY g.quality_score DESC, g.created_at DESC
 		LIMIT ?
 	`
 
 	var items []GoodFirstIssueItem
-	err := r.db.SelectContext(ctx, &items, query, repoID, limit)
+	err := r.db.SelectContext(ctx, &items, query, repoID, cutoff, limit)
 	if err != nil {
 		return nil, err
 	}
