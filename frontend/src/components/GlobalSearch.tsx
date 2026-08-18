@@ -121,11 +121,16 @@ export function GlobalSearch() {
         setSelectedIndex((prev) => (prev > 0 ? prev - 1 : results.length - 1));
       }
     } else if (e.key === "Enter") {
-      if (selectedIndex >= 0 && selectedIndex < results.length) {
+      const targetRepo =
+        selectedIndex >= 0 && selectedIndex < results.length
+          ? results[selectedIndex]
+          : results.length > 0
+          ? results[0]
+          : null;
+      if (targetRepo) {
         e.preventDefault();
-        const selectedRepo = results[selectedIndex];
         closeSearch();
-        router.push(`/${selectedRepo.full_name}`);
+        router.push(`/${targetRepo.full_name}`);
       }
     } else if (e.key === "Tab") {
       // Focus trapping
@@ -159,7 +164,7 @@ export function GlobalSearch() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.18 }}
+          transition={{ duration: 0.15 }}
           className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-zinc-950/40 backdrop-blur-sm"
           onClick={closeSearch}
         >
@@ -172,7 +177,7 @@ export function GlobalSearch() {
             initial={{ opacity: 0, scale: 0.98, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: -10 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="w-full max-w-2xl bg-white border border-zinc-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col focus:outline-none"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={handleKeyDown}
