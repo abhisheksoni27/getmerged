@@ -49,8 +49,8 @@ async function fetchRepoData(fullName: string): Promise<Repo | null> {
 
 export async function generateMetadata({ params }: ComparePageProps): Promise<Metadata> {
   const { slug = [] } = await params;
-  if (slug.length !== 4 || slug[2] !== "vs") {
-    return { title: "Compare Repositories | GetMerged" };
+  if (slug.length !== 5 || slug[2] !== "vs") {
+    return { title: "Compare Open Source Repositories | GetMerged" };
   }
 
   const repoA = `${slug[0]}/${slug[1]}`;

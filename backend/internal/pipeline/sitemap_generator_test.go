@@ -1,6 +1,7 @@
 package pipeline_test
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -175,3 +176,65 @@ func TestGenerateStaticSitemaps(t *testing.T) {
 		t.Fatalf("main.xml must not reference raw c#/c++ language URLs:\n%s", string(mainContent))
 	}
 }
+
+func TestGenerateStaticSitemaps_CompareSitemap(t *testing.T) {
+	database, err := sqlx.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("failed to open memory db: %v", err)
+	}
+	defer database.Close()
+
+	if err := db.AutoMigrate(database); err != nil {
+		t.Fatalf("failed to auto migrate: %v", err)
+	}
+
+	now := time.Now()
+	// Insert repos in Go and Rust with Tier S/A
+	for i := 1; i <= 15; i++ {
+		database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES (?, ?, ?, ?, 'Go', ?, ?)`,
+			fmt.Sprintf("go-%d", i), fmt.Sprintf("org-go/repo-%02d", i), "org-go", fmt.Sprintf("repo-%02d", i), 10000-i*100, now)
+		database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_score, c_rank_tier) VALUES (?, ?, ?, 'S')`,
+			fmt.Sprintf("go-%d", i), "2026-08-18", 95.0-float64(i))
+	}
+
+	tempDir, err := os.MkdirTemp("", "sitemap_compare_test_*")
+	if err != nil {
+		t.Fatalf("failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	if err := pipeline.GenerateStaticSitemaps(database, tempDir); err != nil {
+		t.Fatalf("expected GenerateStaticSitemaps to succeed, got: %v", err)
+	}
+
+	// 1. main.xml must contain /compare
+	mainContent, err := os.ReadFile(filepath.Join(tempDir, "sitemap", "main.xml"))
+	if err != nil {
+		t.Fatalf("failed to read main.xml: %v", err)
+	}
+	if !strings.Contains(string(mainContent), "https://getmerged.abhishekco.de/compare") {
+		t.Fatalf("expected main.xml to contain https://getmerged.abhishekco.de/compare, got:\n%s", string(mainContent))
+	}
+
+	// 2. compare.xml must exist in sitemap directory
+	compareFile := filepath.Join(tempDir, "sitemap", "compare.xml")
+	compareContent, err := os.ReadFile(compareFile)
+	if err != nil {
+		t.Fatalf("failed to read sitemap/compare.xml: %v", err)
+	}
+
+	compareStr := string(compareContent)
+	if !strings.Contains(compareStr, "https://getmerged.abhishekco.de/compare/") {
+		t.Fatalf("expected compare.xml to contain compare URLs, got:\n%s", compareStr)
+	}
+
+	// 3. master sitemap.xml must include compare.xml
+	masterContent, err := os.ReadFile(filepath.Join(tempDir, "sitemap.xml"))
+	if err != nil {
+		t.Fatalf("failed to read master sitemap: %v", err)
+	}
+	if !strings.Contains(string(masterContent), "https://getmerged.abhishekco.de/sitemap/compare.xml") {
+		t.Fatalf("expected master sitemap to reference compare.xml, got:\n%s", string(masterContent))
+	}
+}
+
