@@ -27,6 +27,7 @@ export interface Repo {
   onboarding_score?: number;
   updated_at?: string;
   snapshot_date?: string;
+  topics?: string[];
 }
 
 export interface LanguageTierBreakdown {

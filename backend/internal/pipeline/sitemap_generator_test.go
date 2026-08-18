@@ -13,6 +13,57 @@ import (
 	_ "modernc.org/sqlite"
 )
 
+func TestGenerateStaticSitemaps_TopicURLs(t *testing.T) {
+	database, err := sqlx.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("failed to open memory db: %v", err)
+	}
+	defer database.Close()
+
+	if err := db.AutoMigrate(database); err != nil {
+		t.Fatalf("failed to auto migrate: %v", err)
+	}
+
+	now := time.Now()
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('1', 'tokio-rs/tokio', 'tokio-rs', 'tokio', 'Rust', 25000, ?)`, now)
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('2', 'huggingface/transformers', 'huggingface', 'transformers', 'Python', 130000, ?)`, now)
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('3', 'neovim/neovim', 'neovim', 'neovim', 'Lua', 85000, ?)`, now)
+
+	database.MustExec(`INSERT INTO repository_topics (topic, repository_id) VALUES ('rust', '1')`)
+	database.MustExec(`INSERT INTO repository_topics (topic, repository_id) VALUES ('machine-learning', '2')`)
+	database.MustExec(`INSERT INTO repository_topics (topic, repository_id) VALUES ('ai', '2')`)
+
+	tempDir, err := os.MkdirTemp("", "sitemap_topic_test_*")
+	if err != nil {
+		t.Fatalf("failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	if err := pipeline.GenerateStaticSitemaps(database, tempDir); err != nil {
+		t.Fatalf("expected GenerateStaticSitemaps to succeed, got: %v", err)
+	}
+
+	mainContent, err := os.ReadFile(filepath.Join(tempDir, "sitemap", "main.xml"))
+	if err != nil {
+		t.Fatalf("failed to read main.xml: %v", err)
+	}
+
+	for _, want := range []string{
+		"https://getmerged.abhishekco.de/topics/rust",
+		"https://getmerged.abhishekco.de/topics/machine-learning",
+		"https://getmerged.abhishekco.de/topics/ai",
+	} {
+		if !strings.Contains(string(mainContent), want) {
+			t.Fatalf("expected main.xml to reference %q, got:\n%s", want, string(mainContent))
+		}
+	}
+
+	// A topic with zero indexed repositories must never be emitted (no 404 in sitemap)
+	if strings.Contains(string(mainContent), "/topics/never-indexed") {
+		t.Fatalf("main.xml must not reference /topics/never-indexed (no indexed repos):\n%s", string(mainContent))
+	}
+}
+
 func TestGenerateStaticSitemaps(t *testing.T) {
 	database, err := sqlx.Open("sqlite", ":memory:")
 	if err != nil {

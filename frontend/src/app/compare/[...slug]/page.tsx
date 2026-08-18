@@ -54,10 +54,10 @@ export async function generateMetadata({ params }: ComparePageProps): Promise<Me
   }
 
   const repoA = `${slug[0]}/${slug[1]}`;
-  const repoB = `${slug[2]}/${slug[3]}`;
+  const repoB = `${slug[3]}/${slug[4]}`;
 
   return {
-    title: `${repoA} vs ${repoB}: Which Welcomes Pull Requests Better? | GetMerged`,
+    title: `${repoA} vs ${repoB} Review & C-Rank™ Comparison (2026) | GetMerged`,
     description: `Compare ${repoA} vs ${repoB} pull request merge rates, maintainer response times, 90-day bus factor, and first-timer acceptance odds on GetMerged.`,
     alternates: {
       canonical: `https://getmerged.abhishekco.de/compare/${repoA}/vs/${repoB}`,

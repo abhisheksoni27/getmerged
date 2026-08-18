@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: OrgPageProps): Promise<Metada
     return { title: "Organization Not Found | GetMerged" };
   }
 
-  const title = `${org} Open Source Repositories Ranked by Contributor Friendliness | GetMerged`;
+  const title = `${org} Contributor Reviews & Open Source Repos | GetMerged`;
   const description = `Explore ${repos.length} open-source repositories from ${org}. View real PR merge rates, maintainer response times, 90-day bus factor, and Good First Issues.`;
 
   return {

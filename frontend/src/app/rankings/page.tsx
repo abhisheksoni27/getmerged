@@ -7,13 +7,13 @@ import { Trophy, ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 
 export const metadata: Metadata = {
-  title: "Open Source Ecosystem Rankings (C-Rank™) - GetMerged",
+  title: "Top Open Source Repos Ranked by Contributor Friendliness (2026) | GetMerged",
   description: "Browse repository contributor-friendliness rankings by programming language and ecosystem. Find welcoming GitHub repos across Python, TypeScript, Go, Rust, C#, and more.",
   alternates: {
     canonical: "https://getmerged.abhishekco.de/rankings",
   },
   openGraph: {
-    title: "Open Source Ecosystem Rankings - GetMerged",
+    title: "Top Open Source Repos Ranked by Contributor Friendliness | GetMerged",
     description: "Explore top welcoming open-source repositories ranked by programming language and C-Rank™ telemetry.",
     url: "https://getmerged.abhishekco.de/rankings",
     siteName: "GetMerged",

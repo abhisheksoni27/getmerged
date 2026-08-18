@@ -7,16 +7,16 @@ export interface EcosystemMetadata {
 
 const ECOSYSTEM_METADATA: Record<string, EcosystemMetadata> = {
   go: {
-    title: "Top Welcoming Go (Golang) Repositories & Good First Issues | GetMerged",
-    description: "Explore the most welcoming Go (Golang) open-source projects. Filtered by objective PR merge rate, maintainer response time, and first-timer friendliness.",
-    headline: "Go Ecosystem",
-    tagline: "High-concurrency microservices, cloud-native tools, and performant backend packages with active maintainers.",
+    title: "Best Go Open Source Repos Ranked by Maintainer Response (2026) | GetMerged",
+    description: "Top Golang backend, cloud-native, and CLI projects ranked by contributor merge likelihood and review turnaround.",
+    headline: "Go (Golang) Ecosystem",
+    tagline: "Cloud infrastructure, backend engines, and developer CLIs with active maintainer triage.",
   },
   typescript: {
-    title: "Best Welcoming TypeScript Repositories for Contributors | GetMerged",
-    description: "Find high-probability TypeScript repositories accepting external pull requests. Scored by C-Rank™ maintainer turnaround and PR merge rates.",
-    headline: "TypeScript Ecosystem",
-    tagline: "Modern web frameworks, developer tooling, and enterprise frontend libraries actively merging newcomer PRs.",
+    title: "Best TypeScript Open Source Repos Ranked by Maintainer Response (2026) | GetMerged",
+    description: "Discover top TypeScript repositories where external pull requests get reviewed fast and merged reliably.",
+    headline: "TypeScript & JavaScript Ecosystem",
+    tagline: "Modern fullstack, UI component, and tooling repositories welcoming external PRs.",
   },
   javascript: {
     title: "Top JavaScript Open Source Projects Welcoming PRs | GetMerged",
@@ -25,16 +25,16 @@ const ECOSYSTEM_METADATA: Record<string, EcosystemMetadata> = {
     tagline: "Vibrant node modules, React/Vue components, and client-side utilities with responsive maintainers.",
   },
   python: {
-    title: "Welcoming Python Open Source Repositories & Good First Issues | GetMerged",
-    description: "Discover welcoming Python repositories across AI, data science, and web frameworks. Scored with objective C-Rank telemetry.",
-    headline: "Python Ecosystem",
-    tagline: "Machine learning libraries, automation tools, and async backend APIs actively onboarding contributors.",
+    title: "Best Python Open Source Repos Ranked by Maintainer Response (2026) | GetMerged",
+    description: "Browse the top Python open-source repositories scored by PR merge velocity, reviewer responsiveness, and first-time contributor success on C-Rank™.",
+    headline: "Python Open Source Ecosystem",
+    tagline: "High-velocity data science, web framework, and automation projects with welcoming maintainers.",
   },
   rust: {
-    title: "Top Welcoming Rust Repositories for New Contributors | GetMerged",
-    description: "Find Rust open-source crates and systems projects where maintainers actively guide and merge external contributions.",
-    headline: "Rust Ecosystem",
-    tagline: "Memory-safe systems programming, CLI utilities, and high-performance engines with welcoming review cultures.",
+    title: "Best Rust Open Source Repos Ranked by Maintainer Response (2026) | GetMerged",
+    description: "High-performance systems programming and CLI crates in Rust ranked by responsive code review teams.",
+    headline: "Rust Systems Ecosystem",
+    tagline: "Memory-safe crates and tooling projects with supportive maintainers.",
   },
   java: {
     title: "Welcoming Java Open Source Projects & First-Timer PRs | GetMerged",
@@ -64,7 +64,7 @@ export function getEcosystemMetadata(lang: string): EcosystemMetadata {
 
   const capitalized = lang ? lang.charAt(0).toUpperCase() + lang.slice(1) : "Open Source";
   return {
-    title: `Top Welcoming ${capitalized} Repositories & PR Likelihood | GetMerged`,
+    title: `Best ${capitalized} Open Source Repos Ranked by Contributor Friendliness (2026) | GetMerged`,
     description: `Discover welcoming open-source ${capitalized} repositories ranked by real pull request merge velocity, reviewer responsiveness, and first-timer acceptance rates.`,
     headline: `${capitalized} Ecosystem`,
     tagline: `Discover active ${capitalized} projects where external pull requests are actively reviewed and merged.`,

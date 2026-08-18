@@ -7,13 +7,13 @@ import { Sprout, ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 
 export const metadata: Metadata = {
-  title: "Good First Issues by Programming Language - GetMerged",
-  description: "Discover beginner-friendly Good First Issues across Python, TypeScript, Go, Rust, C#, Java, and other open-source ecosystems with active maintainer reviews.",
+  title: "Find Good First Issues: Top Beginner Repos Ranked by Merge Rate (2026) | GetMerged",
+  description: "Discover beginner-friendly Good First Issues across Python, TypeScript, Go, Rust, C#, Java, and other open-source ecosystems ranked by maintainer merge rates.",
   alternates: {
     canonical: "https://getmerged.abhishekco.de/good-first-issue",
   },
   openGraph: {
-    title: "Good First Issues by Programming Language - GetMerged",
+    title: "Find Good First Issues: Top Beginner Repos Ranked by Merge Rate | GetMerged",
     description: "Find active beginner-friendly issues in GitHub repositories with high PR merge rates.",
     url: "https://getmerged.abhishekco.de/good-first-issue",
     siteName: "GetMerged",

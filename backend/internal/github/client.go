@@ -75,6 +75,7 @@ type Repo struct {
 	Stars       int
 	Description string
 	URL         string
+	Topics      []string
 }
 
 // RepoMeta holds metadata for a repository.
@@ -88,6 +89,7 @@ type RepoMeta struct {
 	HasPRTemplate    bool
 	HasIssueTemplate bool
 	HasCodeOfConduct bool
+	Topics           []string
 }
 
 // PR holds pull-request data needed for metric computation.
@@ -177,9 +179,16 @@ func (c *Client) SearchRepos(language string, minStars, maxRepos int) ([]Repo, e
 						PrimaryLanguage *struct {
 							Name string `json:"name"`
 						} `json:"primaryLanguage"`
-						StargazerCount int    `json:"stargazerCount"`
-						Description    string `json:"description"`
-						URL            string `json:"url"`
+						StargazerCount   int    `json:"stargazerCount"`
+						Description      string `json:"description"`
+						URL              string `json:"url"`
+						RepositoryTopics struct {
+							Nodes []struct {
+								Topic struct {
+									Name string `json:"name"`
+								} `json:"topic"`
+							} `json:"nodes"`
+						} `json:"repositoryTopics"`
 					} `json:"nodes"`
 				} `json:"search"`
 				RateLimit rateLimitInfo `json:"rateLimit"`
@@ -200,6 +209,12 @@ func (c *Client) SearchRepos(language string, minStars, maxRepos int) ([]Repo, e
 			if n.PrimaryLanguage != nil {
 				lang = n.PrimaryLanguage.Name
 			}
+			var topics []string
+			for _, tn := range n.RepositoryTopics.Nodes {
+				if tName := strings.TrimSpace(strings.ToLower(tn.Topic.Name)); tName != "" {
+					topics = append(topics, tName)
+				}
+			}
 			repos = append(repos, Repo{
 				NodeID:      n.ID,
 				FullName:    n.NameWithOwner,
@@ -209,6 +224,7 @@ func (c *Client) SearchRepos(language string, minStars, maxRepos int) ([]Repo, e
 				Stars:       n.StargazerCount,
 				Description: n.Description,
 				URL:         n.URL,
+				Topics:      topics,
 			})
 		}
 
@@ -243,9 +259,16 @@ func (c *Client) FetchTrendingRepos(limit int) ([]Repo, error) {
 					PrimaryLanguage *struct {
 						Name string `json:"name"`
 					} `json:"primaryLanguage"`
-					StargazerCount int    `json:"stargazerCount"`
-					Description    string `json:"description"`
-					URL            string `json:"url"`
+					StargazerCount   int    `json:"stargazerCount"`
+					Description      string `json:"description"`
+					URL              string `json:"url"`
+					RepositoryTopics struct {
+						Nodes []struct {
+							Topic struct {
+								Name string `json:"name"`
+							} `json:"topic"`
+						} `json:"nodes"`
+					} `json:"repositoryTopics"`
 				} `json:"nodes"`
 			} `json:"search"`
 			RateLimit rateLimitInfo `json:"rateLimit"`
@@ -267,6 +290,12 @@ func (c *Client) FetchTrendingRepos(limit int) ([]Repo, error) {
 		if n.PrimaryLanguage != nil {
 			lang = n.PrimaryLanguage.Name
 		}
+		var topics []string
+		for _, tn := range n.RepositoryTopics.Nodes {
+			if tName := strings.TrimSpace(strings.ToLower(tn.Topic.Name)); tName != "" {
+				topics = append(topics, tName)
+			}
+		}
 		repos = append(repos, Repo{
 			NodeID:      n.ID,
 			FullName:    n.NameWithOwner,
@@ -276,6 +305,7 @@ func (c *Client) FetchTrendingRepos(limit int) ([]Repo, error) {
 			Stars:       n.StargazerCount,
 			Description: n.Description,
 			URL:         n.URL,
+			Topics:      topics,
 		})
 	}
 
@@ -302,9 +332,16 @@ func (c *Client) FetchCustomQueryRepos(queryStr string, limit int) ([]Repo, erro
 					PrimaryLanguage *struct {
 						Name string `json:"name"`
 					} `json:"primaryLanguage"`
-					StargazerCount int    `json:"stargazerCount"`
-					Description    string `json:"description"`
-					URL            string `json:"url"`
+					StargazerCount   int    `json:"stargazerCount"`
+					Description      string `json:"description"`
+					URL              string `json:"url"`
+					RepositoryTopics struct {
+						Nodes []struct {
+							Topic struct {
+								Name string `json:"name"`
+							} `json:"topic"`
+						} `json:"nodes"`
+					} `json:"repositoryTopics"`
 				} `json:"nodes"`
 			} `json:"search"`
 			RateLimit rateLimitInfo `json:"rateLimit"`
@@ -326,6 +363,12 @@ func (c *Client) FetchCustomQueryRepos(queryStr string, limit int) ([]Repo, erro
 		if n.PrimaryLanguage != nil {
 			lang = n.PrimaryLanguage.Name
 		}
+		var topics []string
+		for _, tn := range n.RepositoryTopics.Nodes {
+			if tName := strings.TrimSpace(strings.ToLower(tn.Topic.Name)); tName != "" {
+				topics = append(topics, tName)
+			}
+		}
 		repos = append(repos, Repo{
 			NodeID:      n.ID,
 			FullName:    n.NameWithOwner,
@@ -335,6 +378,7 @@ func (c *Client) FetchCustomQueryRepos(queryStr string, limit int) ([]Repo, erro
 			Stars:       n.StargazerCount,
 			Description: n.Description,
 			URL:         n.URL,
+			Topics:      topics,
 		})
 	}
 
@@ -384,6 +428,13 @@ func (c *Client) FetchCustomQueryReposPage(queryStr string, first int, after str
 					StargazerCount int    `json:"stargazerCount"`
 					Description    string `json:"description"`
 					URL            string `json:"url"`
+					RepositoryTopics struct {
+						Nodes []struct {
+							Topic struct {
+								Name string `json:"name"`
+							} `json:"topic"`
+						} `json:"nodes"`
+					} `json:"repositoryTopics"`
 				} `json:"nodes"`
 			} `json:"search"`
 			RateLimit rateLimitInfo `json:"rateLimit"`
@@ -409,6 +460,12 @@ func (c *Client) FetchCustomQueryReposPage(queryStr string, first int, after str
 		if n.PrimaryLanguage != nil {
 			lang = n.PrimaryLanguage.Name
 		}
+		var topics []string
+		for _, tn := range n.RepositoryTopics.Nodes {
+			if tName := strings.TrimSpace(strings.ToLower(tn.Topic.Name)); tName != "" {
+				topics = append(topics, tName)
+			}
+		}
 		result.Repos = append(result.Repos, Repo{
 			NodeID:      n.ID,
 			FullName:    n.NameWithOwner,
@@ -418,10 +475,48 @@ func (c *Client) FetchCustomQueryReposPage(queryStr string, first int, after str
 			Stars:       n.StargazerCount,
 			Description: n.Description,
 			URL:         n.URL,
+			Topics:      topics,
 		})
 	}
 
 	return result, nil
+}
+
+// FetchRepoTopics returns the normalized lowercase repository topics for a repo.
+func (c *Client) FetchRepoTopics(owner, name string) ([]string, error) {
+	vars := map[string]any{"owner": owner, "name": name}
+
+	var resp struct {
+		Data struct {
+			Repository struct {
+				RepositoryTopics struct {
+					Nodes []struct {
+						Topic struct {
+							Name string `json:"name"`
+						} `json:"topic"`
+					} `json:"nodes"`
+				} `json:"repositoryTopics"`
+			} `json:"repository"`
+			RateLimit rateLimitInfo `json:"rateLimit"`
+		} `json:"data"`
+	}
+
+	fromCache, err := c.do(RepoTopicsQuery, vars, &resp)
+	if err != nil {
+		return nil, fmt.Errorf("FetchRepoTopics(%s/%s): %w", owner, name, err)
+	}
+
+	if !fromCache {
+		c.handleRateLimit(resp.Data.RateLimit)
+	}
+
+	var topics []string
+	for _, tn := range resp.Data.Repository.RepositoryTopics.Nodes {
+		if tName := strings.TrimSpace(strings.ToLower(tn.Topic.Name)); tName != "" {
+			topics = append(topics, tName)
+		}
+	}
+	return topics, nil
 }
 
 // FetchPRs returns all closed/merged PRs for a repo within the last windowDays days and repo metadata.
@@ -456,6 +551,13 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 					PullRequestTemplates []struct {
 						Filename string `json:"filename"`
 					} `json:"pullRequestTemplates"`
+					RepositoryTopics struct {
+						Nodes []struct {
+							Topic struct {
+								Name string `json:"name"`
+							} `json:"topic"`
+						} `json:"nodes"`
+					} `json:"repositoryTopics"`
 					Contributing       *struct{ ID string `json:"id"` } `json:"contributing"`
 					ContributingLower  *struct{ ID string `json:"id"` } `json:"contributingLower"`
 					ContributingGithub *struct{ ID string `json:"id"` } `json:"contributingGithub"`
@@ -540,6 +642,11 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 		meta.HasCodeOfConduct = resp.Data.Repository.CodeOfConduct != nil ||
 			resp.Data.Repository.CodeOfConductLower != nil ||
 			resp.Data.Repository.CodeOfConductGithub != nil
+		for _, tn := range resp.Data.Repository.RepositoryTopics.Nodes {
+			if tName := strings.TrimSpace(strings.ToLower(tn.Topic.Name)); tName != "" {
+				meta.Topics = append(meta.Topics, tName)
+			}
+		}
 
 		nodes := resp.Data.Repository.PullRequests.Nodes
 		slog.Debug("github: PR page fetched",

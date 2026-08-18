@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: TopicPageProps): Promise<Meta
   }
 
   const capitalizedTopic = topic.charAt(0).toUpperCase() + topic.slice(1);
-  const title = `Top ${capitalizedTopic} Open Source Repositories That Welcome Contributors | GetMerged`;
+  const title = `Best ${capitalizedTopic} Open Source Repositories & C-Rank™ | GetMerged`;
   const description = `Find active ${topic} open-source repositories with fast pull request review turnaround, high merge rates, and Good First Issues on GetMerged.`;
 
   return {

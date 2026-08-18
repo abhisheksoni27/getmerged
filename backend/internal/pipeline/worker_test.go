@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/abhisheksoni27/opendoor/internal/ai"
+	"github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/jmoiron/sqlx"
 	_ "modernc.org/sqlite"
@@ -72,6 +73,12 @@ func testDB(t *testing.T) *sqlx.DB {
 			raw_summary TEXT,
 			warmth_score REAL DEFAULT 7.5,
 			updated_at DATETIME
+		)`,
+		`CREATE TABLE IF NOT EXISTS repository_topics (
+			topic VARCHAR(100) NOT NULL,
+			repository_id VARCHAR(255) NOT NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (topic, repository_id)
 		)`,
 	} {
 		if _, err := database.Exec(stmt); err != nil {
@@ -219,6 +226,56 @@ func TestEnqueueDueRepos_ReEnqueuesCompleted(t *testing.T) {
 	}
 	if status != "pending" {
 		t.Errorf("expected status to be reset to 'pending' on re-enqueue, got %s", status)
+	}
+}
+
+func TestUpsertRepo_PersistsTopics(t *testing.T) {
+	dbConn := testDB(t)
+
+	repo := github.Repo{
+		FullName: "tokio-rs/tokio",
+		Owner:    "tokio-rs",
+		Name:     "tokio",
+		Language: "Rust",
+		Stars:    25000,
+		URL:      "https://github.com/tokio-rs/tokio",
+		Topics:   []string{"RUST", "async", "network"},
+	}
+
+	id, err := upsertRepo(dbConn, repo)
+	if err != nil {
+		t.Fatalf("upsertRepo failed: %v", err)
+	}
+
+	var topics []string
+	if err := dbConn.Select(&topics, "SELECT topic FROM repository_topics WHERE repository_id = ? ORDER BY topic", id); err != nil {
+		t.Fatalf("query topics failed: %v", err)
+	}
+	if len(topics) != 3 {
+		t.Fatalf("expected 3 persisted topics, got %d (%v)", len(topics), topics)
+	}
+	for _, want := range []string{"async", "network", "rust"} {
+		found := false
+		for _, got := range topics {
+			if got == want {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Errorf("expected persisted topic %q in %v", want, topics)
+		}
+	}
+
+	// Re-upsert must be idempotent (no duplicate rows)
+	_, err = upsertRepo(dbConn, repo)
+	if err != nil {
+		t.Fatalf("second upsertRepo failed: %v", err)
+	}
+	var count int
+	_ = dbConn.Get(&count, "SELECT COUNT(1) FROM repository_topics WHERE repository_id = ?", id)
+	if count != 3 {
+		t.Fatalf("expected idempotent topic persistence (3 rows), got %d", count)
 	}
 }
 

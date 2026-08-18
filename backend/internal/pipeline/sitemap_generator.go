@@ -36,6 +36,20 @@ func languageSlug(lang string) string {
 	}, normalized)
 }
 
+// topicSlug sanitizes a repository topic for use in sitemap URLs. GitHub topic
+// names are lowercase alphanumeric + hyphens, but defensive sanitization keeps
+// raw '#'/'+' out of sitemap.xml the same way languageSlug does.
+func topicSlug(topic string) string {
+	normalized := strings.ToLower(strings.TrimSpace(topic))
+	normalized = strings.ReplaceAll(normalized, " ", "-")
+	return strings.Map(func(r rune) rune {
+		if (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9') || r == '-' {
+			return r
+		}
+		return -1
+	}, normalized)
+}
+
 type URL struct {
 	Loc        string `xml:"loc"`
 	LastMod    string `xml:"lastmod"`
@@ -129,6 +143,26 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 				LastMod:    today,
 				ChangeFreq: "daily",
 				Priority:   "0.9",
+			})
+		}
+	}
+
+	// Add topic landings (/topics/[topic]) to main sitemap - only for distinct
+	// topics with >= 1 indexed repository so search engines never hit a 404.
+	var topics []string
+	if err := db.Select(&topics, "SELECT DISTINCT topic FROM repository_topics"); err != nil {
+		slog.Warn("sitemap generator: could not fetch topics", "err", err)
+	} else {
+		for _, t := range topics {
+			slug := topicSlug(t)
+			if slug == "" {
+				continue
+			}
+			mainUrls = append(mainUrls, URL{
+				Loc:        fmt.Sprintf("%s/topics/%s", baseUrl, slug),
+				LastMod:    today,
+				ChangeFreq: "daily",
+				Priority:   "0.7",
 			})
 		}
 	}
