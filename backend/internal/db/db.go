@@ -144,7 +144,8 @@ func AutoMigrate(db *sqlx.DB) error {
 			beginner_friendly_rating INTEGER NOT NULL,
 			comment TEXT,
 			verified_pr_author BOOLEAN DEFAULT FALSE,
-			created_at DATETIME NOT NULL
+			created_at DATETIME NOT NULL,
+			UNIQUE(user_id, repository_id)
 		);`, autoInc),
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS ai_repo_insights (
 			id INTEGER PRIMARY KEY %s,
@@ -305,6 +306,11 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN deleted_at DATETIME`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN profiling_consent BOOLEAN DEFAULT FALSE`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN profiling_consent_at DATETIME`)
+	_, _ = db.Exec(`ALTER TABLE contributor_feedback ADD UNIQUE KEY uq_cf_user_repo (user_id, repository_id)`)
+	_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_cf_user_repo ON contributor_feedback(user_id, repository_id)`)
+	_, _ = db.Exec(`INSERT IGNORE INTO contributor_feedback (repository_id, user_id, maintainer_rating, review_speed_rating, beginner_friendly_rating, comment, verified_pr_author, created_at)
+		SELECT repository_id, CAST(user_id AS UNSIGNED), maintainer_rating, review_speed_rating, beginner_rating, comment, verified_contributor, created_at
+		FROM contributor_feedbacks`)
 
 	return nil
 }

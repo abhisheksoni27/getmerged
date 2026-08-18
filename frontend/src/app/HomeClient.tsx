@@ -1054,7 +1054,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 </div>
                 <h4 className="font-space text-lg font-bold text-zinc-900">Verified Contributor Badges</h4>
                 <p className="text-xs text-zinc-600 leading-relaxed">
-                  Sign in with GitHub to cross-reference merged commits. Reviews submitted by verified contributors carry weighted maintainer sentiment points.
+                  Sign in with GitHub to cross-reference merged commits. Reviews submitted by verified contributors provide authentic community ratings and maintainer turnaround insights.
                 </p>
               </div>
             </div>
