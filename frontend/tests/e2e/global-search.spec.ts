@@ -68,7 +68,32 @@ test.describe("Global Search Everywhere (IDEA-20260818-01)", () => {
     expect(targetHref).toBeTruthy();
 
     await firstResult.click();
-    await page.waitForURL(`**${targetHref}`);
+    await page.waitForURL(`**${targetHref}`, { waitUntil: "domcontentloaded" });
+    expect(page.url()).toContain(targetHref!);
+    await expect(modal).toBeHidden();
+  });
+
+  test("AC3: Keyboard navigation using Arrow keys and Enter navigates to selected repo and closes modal", async ({ page }) => {
+    await page.goto("/facebook/react", { waitUntil: "domcontentloaded" });
+    await dismissCookieBanner(page);
+
+    await page.keyboard.press("Control+k");
+    const modal = searchModal(page);
+    await expect(modal).toBeVisible();
+
+    const searchInput = modal.locator('input[type="text"]');
+    await searchInput.fill("react");
+
+    const firstResult = searchResults(page).first();
+    await expect(firstResult).toBeVisible({ timeout: 5000 });
+    const targetHref = await firstResult.getAttribute("href");
+    expect(targetHref).toBeTruthy();
+
+    // Navigate down and activate with Enter
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+
+    await page.waitForURL(`**${targetHref}`, { waitUntil: "domcontentloaded" });
     expect(page.url()).toContain(targetHref!);
     await expect(modal).toBeHidden();
   });
