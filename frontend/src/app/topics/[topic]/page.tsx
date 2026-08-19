@@ -94,7 +94,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
         "@type": "ListItem",
         position: 2,
         name: "Topics",
-        item: "https://getmerged.abhishekco.de/repos",
+        item: "https://getmerged.abhishekco.de/topics",
       },
       {
         "@type": "ListItem",

@@ -13,6 +13,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/expressjs/expressjs.com</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/react/react-native-website</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>daily</changefreq>
@@ -21,6 +27,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/react-hook-form/documentation</loc>
     <lastmod>2026-08-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/cloudflare/cloudflare-docs</loc>
+    <lastmod>2026-08-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -56,6 +68,12 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/prisma/web</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/all-contributors/allcontributors.org</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -97,6 +115,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/greatfrontend/top-javascript-interview-questions</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/LibreChat-AI/librechat.ai</loc>
     <lastmod>2026-08-16</lastmod>
     <changefreq>daily</changefreq>
@@ -116,6 +140,12 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/LearnPrompt/LearnPrompt</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/greatfrontend/top-reactjs-interview-questions</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -165,6 +195,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/withastro/astro.build</loc>
     <lastmod>2026-08-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/detekt/detekt</loc>
+    <lastmod>2026-08-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

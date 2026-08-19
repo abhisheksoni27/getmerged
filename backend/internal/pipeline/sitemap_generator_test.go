@@ -50,6 +50,7 @@ func TestGenerateStaticSitemaps_TopicURLs(t *testing.T) {
 	}
 
 	for _, want := range []string{
+		"https://getmerged.abhishekco.de/topics",
 		"https://getmerged.abhishekco.de/topics/rust",
 		"https://getmerged.abhishekco.de/topics/machine-learning",
 		"https://getmerged.abhishekco.de/topics/ai",
