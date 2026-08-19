@@ -34,6 +34,7 @@ import { RepoScorecards } from "@/components/RepoScorecards";
 import { RepoBadgeGenerator } from "@/components/RepoBadgeGenerator";
 import { SimilarRepos } from "@/components/SimilarRepos";
 import { PRAcceptanceWidget } from "@/components/PRAcceptanceWidget";
+import { OptimalReviewWindow } from "@/components/OptimalReviewWindow";
 
 interface ClientRepoDetailProps {
   repo: Repo | null;
@@ -542,6 +543,9 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
       {repo?.owner && repo?.name && (
         <PRAcceptanceWidget owner={repo.owner} name={repo.name} />
       )}
+
+      {/* Optimal PR Submission Window & Maintainer Activity Heatmap (Story 7.1 / IDEA-20260819-01) */}
+      <OptimalReviewWindow fullName={fullName} />
       
       {/* Good First Issues Cards (Story 10.2 & Story 10.3) */}
       <div className="rounded-2xl bg-white p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] font-mono">

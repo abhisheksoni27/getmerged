@@ -361,3 +361,65 @@ func TestGetPRLikelihoodHandler(t *testing.T) {
 		t.Fatalf("expected p50 3.5, got %v", resp.ResponseTimeP50Hours)
 	}
 }
+
+func TestGetOptimalTimeHandler(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	database := setupBadgeTestDB(t)
+	defer database.Close()
+
+	repoStore := repository.NewRepoRepository(database)
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('opt-1', 'facebook/react', 'facebook', 'react', 'JavaScript', 220000, ?)`, time.Now())
+
+	r := gin.New()
+	r.GET("/api/v1/optimal-time", handler.GetOptimalTimeHandler(repoStore))
+	r.GET("/api/v1/repos/:owner/:name/optimal-time", handler.GetOptimalTimeHandler(repoStore))
+
+	t.Run("by query param name", func(t *testing.T) {
+		req := httptest.NewRequest("GET", "/api/v1/optimal-time?name=facebook/react", nil)
+		w := httptest.NewRecorder()
+		r.ServeHTTP(w, req)
+
+		if w.Code != http.StatusOK {
+			t.Fatalf("expected 200 OK, got %d", w.Code)
+		}
+
+		if cacheHeader := w.Header().Get("Cache-Control"); !strings.Contains(cacheHeader, "public, max-age=3600") {
+			t.Fatalf("expected Cache-Control header, got %s", cacheHeader)
+		}
+
+		var payload struct {
+			Repository  string `json:"repository"`
+			OptimalTime struct {
+				PrimaryStartHourUTC  int         `json:"primary_start_hour_utc"`
+				PrimaryEndHourUTC    int         `json:"primary_end_hour_utc"`
+				PeakHourUTC          int         `json:"peak_hour_utc"`
+				HourlyHeatmap        [24]float64 `json:"hourly_heatmap"`
+				RecommendedDayWindow string      `json:"recommended_day_window"`
+				ConfidenceScore      float64     `json:"confidence_score"`
+			} `json:"optimal_time"`
+		}
+
+		if err := json.NewDecoder(w.Body).Decode(&payload); err != nil {
+			t.Fatalf("failed to decode response: %v", err)
+		}
+
+		if payload.Repository != "facebook/react" {
+			t.Fatalf("expected facebook/react, got %s", payload.Repository)
+		}
+		if payload.OptimalTime.RecommendedDayWindow == "" {
+			t.Fatalf("expected non-empty recommended day window")
+		}
+	})
+
+	t.Run("not found", func(t *testing.T) {
+		req := httptest.NewRequest("GET", "/api/v1/optimal-time?name=nonexistent/repo", nil)
+		w := httptest.NewRecorder()
+		r.ServeHTTP(w, req)
+
+		if w.Code != http.StatusNotFound {
+			t.Fatalf("expected 404 Not Found, got %d", w.Code)
+		}
+	})
+}
+
