@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { CompareShareBar } from "@/components/CompareShareBar";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import {
@@ -137,6 +138,9 @@ export default async function ComparePage({ params }: ComparePageProps) {
             Objective C-Rank™ telemetry comparison benchmarked across PR merge rates, reviewer latency, maintainer breadth, and newcomer hospitality.
           </p>
         </div>
+
+        {/* Compare Share & Export Bar */}
+        <CompareShareBar repoA={repoA} repoB={repoB} />
 
         {/* Side-by-Side Comparison Matrix */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">

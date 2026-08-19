@@ -160,7 +160,7 @@ export function Footer() {
           <div>
             © {new Date().getFullYear()} GetMerged, Glassdoor for Open Source Repositories.
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-6 gap-y-2">
             <Link href="/" title="GetMerged Open Source Explorer Home" className="hover:text-zinc-900 transition-colors">Home</Link>
             <Link href="/hall-of-fame" title="Hall of Fame" className="hover:text-zinc-900 transition-colors">Hall of Fame</Link>
             <Link href="/leaderboard" title="Leaderboard" className="hover:text-zinc-900 transition-colors">Leaderboard</Link>
