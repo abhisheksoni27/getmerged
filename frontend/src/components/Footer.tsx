@@ -114,6 +114,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/topics" title="Browse Open Source Repositories by Topic" className="hover:text-zinc-900 transition-colors">
+                  Topics Directory
+                </Link>
+              </li>
+              <li>
                 <Link href="/status" title="GetMerged Service & Pipeline Status" className="hover:text-zinc-900 transition-colors flex items-center gap-1.5">
                   <Activity className="h-3.5 w-3.5 text-emerald-600" /> System Status
                 </Link>

@@ -130,6 +130,7 @@ func main() {
 		api.GET("/history/:id", handler.GetRepoHistory(repoStore))
 		api.POST("/repos/queue", handler.RequestRepoIndexing(database))
 		api.GET("/languages", handler.ListLanguages(database))
+		api.GET("/topics", handler.ListTopics(repoStore))
 		api.GET("/stats/macro", handler.GetMacroStats())
 
 		api.GET("/repos/:id/feedback", handler.ListFeedback(database))

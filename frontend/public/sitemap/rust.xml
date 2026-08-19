@@ -98,7 +98,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/timhartmann7/omnyssh</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -391,6 +391,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/bvanjoi/bolt-ts</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/metrics-rs/quanta</loc>
     <lastmod>2026-08-16</lastmod>
     <changefreq>daily</changefreq>
@@ -500,7 +506,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SoCkEt7/Livediff</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -739,6 +745,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/hakoerber/git-repo-manager</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/JakeStanger/ironbar</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>daily</changefreq>
@@ -932,7 +944,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ProvableHQ/leo</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1034,7 +1046,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jm2/tributary</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1166,7 +1178,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/lightseekorg/smg</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2042,7 +2054,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/coreos/bootupd</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2055,6 +2067,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/mpobaschnig/vaults</loc>
     <lastmod>2026-08-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/basecompute/baseRT</loc>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2079,6 +2097,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/librefang/librefang</loc>
     <lastmod>2026-08-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Kamino-Finance/klend</loc>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2234,7 +2258,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mlua-rs/mlua</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2504,7 +2528,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/sharkdp/hyperfine</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2582,7 +2606,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nimiq/core-rs-albatross</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2653,8 +2677,14 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/oxidecomputer/third-party-api-clients</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/fractalbits-labs/fractalbits</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -3026,7 +3056,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/agnesoft/agdb</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -3212,7 +3242,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/vulkano-rs/vulkano</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -3296,7 +3326,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ProtonWallet/andromeda</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -3356,7 +3386,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rust-embedded/heapless</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -3403,6 +3433,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/afonsojramos/discrakt</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/mahlquistj/octotype</loc>
     <lastmod>2026-08-16</lastmod>
     <changefreq>daily</changefreq>
@@ -3410,7 +3446,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/OpenZeppelin/openzeppelin-relayer</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -3998,7 +4034,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/agentclientprotocol/rust-sdk</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -4208,7 +4244,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rwf2/Rocket</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -4244,7 +4280,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/PVDoriginal/firefly</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -4628,7 +4664,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/suiyuebaobao/C-SSH</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -4700,7 +4736,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pop-os/libcosmic</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -5029,6 +5065,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/fenio/anylinuxfs-gui</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/anhosh/egui_dock</loc>
     <lastmod>2026-08-16</lastmod>
     <changefreq>daily</changefreq>
@@ -5162,7 +5204,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rust-lang/rust-bindgen</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -5210,7 +5252,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/raydium-io/raydium-clmm</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -5402,7 +5444,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/UpdateHub/updatehub</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -5558,7 +5600,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/paritytech/polkavm</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -5726,7 +5768,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/crocidb/bulletty</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -6362,7 +6404,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/timescale/timescaledb-toolkit</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -6423,6 +6465,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/appsinacup/godot-rapier-physics</loc>
     <lastmod>2026-08-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/alexichepura/bevy_garage</loc>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -6519,6 +6567,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/Wangnov/claude-code-statusline-pro</loc>
     <lastmod>2026-08-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/GianIac/numax</loc>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -6626,7 +6680,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ogham/exa</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -6794,7 +6848,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ogulcancelik/herdr</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -7280,7 +7334,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/kemokempo/iced_term</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -7352,7 +7406,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cosmic-utils/cosmic-project-collection</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -7496,7 +7550,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Tele-AI/Fluxon</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -7520,7 +7574,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/tari-project/tari</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -7586,7 +7640,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/maplant/scheme-rs</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -7754,7 +7808,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/linebender/xilem</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -7868,7 +7922,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nathansbradshaw/zed-angular</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -7892,7 +7946,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/styx-emulator/styx-emulator</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -7995,6 +8049,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/rusqlite/rusqlite</loc>
     <lastmod>2026-08-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/rust-lang/libs-team</loc>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -8198,7 +8258,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/svenstaro/dummyhttp</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -8359,6 +8419,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/PommeMC/Client</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/ConocoFieldsForever/atlas</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>daily</changefreq>
@@ -8366,7 +8432,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/AlexsJones/llmserve</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -8587,6 +8653,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/milieuim/vaultix</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/xremap/xremap</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>daily</changefreq>
@@ -8624,7 +8696,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hyperion-mc/hyperion</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -8648,7 +8720,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cloudflare/pingora</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -8690,7 +8762,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/genmeta/dquic</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -9182,7 +9254,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/wizardsardine/liana</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -9290,7 +9362,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pop-os/cosmic-files</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -9404,7 +9476,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bitcoindevkit/bdk-ffi</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -9422,7 +9494,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rojo-rbx/rbx-dom</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -9458,7 +9530,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/BloopAI/vibe-kanban</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -9704,7 +9776,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mt-empty/pi-inky-weather-epd</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -9950,7 +10022,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Zackriya-Solutions/meetily</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -9998,7 +10070,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/scalameta/metals-zed</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -10034,7 +10106,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/sadoyan/aralez</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -10149,6 +10221,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/orottier/web-audio-api-rs</loc>
     <lastmod>2026-08-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/kristoferlund/ratcn</loc>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -10508,7 +10586,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/benjajaja/mdfried</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -10723,6 +10801,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/tackler-ng/tackler</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/MathNya/umya-spreadsheet</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>daily</changefreq>
@@ -10742,7 +10826,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/oldj/SwitchHosts</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -10880,7 +10964,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/tkhq/qos</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -11108,7 +11192,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rtk-ai/icm</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -11480,7 +11564,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/qltysh/qlty</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -11546,7 +11630,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hyperium/http</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -11618,7 +11702,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/software-mansion/smelter</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -11672,7 +11756,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ynqa/promkit</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -11720,7 +11804,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/librekeys/picoforge</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -11822,7 +11906,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/eza-community/eza</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -11852,7 +11936,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ethui/ethui</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -11888,7 +11972,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/twistedfall/opencv-rust</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -11906,7 +11990,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rsasaki0109/rust_robotics</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -12020,7 +12104,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/yomorun/yomo</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -12056,7 +12140,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/soplang/soplang</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -12452,7 +12536,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/modiqo/skillspec</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -12524,7 +12608,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cea-sec/usbsas</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -12578,7 +12662,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/libkrun/libkrun</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -12632,7 +12716,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/KDAB/cxx-qt</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -12662,7 +12746,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pop-os/xdg-desktop-portal-cosmic</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -13022,7 +13106,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Findomain/Findomain</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -13238,7 +13322,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/yuezk/GlobalProtect-openconnect</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -13418,7 +13502,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Hans-Halverson/brimstone</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -13442,7 +13526,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/patonw/leaves</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -13735,6 +13819,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/lucaceriani/ooo</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/macro-inc/macro</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>daily</changefreq>
@@ -13772,7 +13862,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/skim-rs/skim</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -13904,7 +13994,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/awslabs/duvet</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14042,7 +14132,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pop-os/cosmic-edit</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14139,6 +14229,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/leegeunhyeok/craby</loc>
     <lastmod>2026-08-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/moonrepo/starbase</loc>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14294,7 +14390,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/udoprog/musli</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14330,7 +14426,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/microsoft/python-environment-tools</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14403,6 +14499,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/OpenCentauri/OpenCentauri</loc>
     <lastmod>2026-08-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ramakay/claude-self-reflect</loc>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14510,7 +14612,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/TheAlgorithms/Rust</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14684,7 +14786,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/raine/anki-llm</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14750,7 +14852,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/open-software-network/os-june</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14954,7 +15056,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/0dotxyz/marginfi-v2</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -15158,7 +15260,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pop-os/cosmic-applets</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -15284,13 +15386,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/casey/just</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/huggingface/xet-core</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -15542,7 +15644,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/acrlabs/simkube</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -15596,7 +15698,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/signalapp/ringrtc</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -15674,7 +15776,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Sirulex/cursor-clip</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -15794,7 +15896,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/microsoft/coreutils</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -15824,7 +15926,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/vxfemboy/wipedicks</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -16082,7 +16184,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NLnetLabs/domain</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -16292,7 +16394,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pop-os/cosmic-panel</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -16820,7 +16922,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/tamasfe/taplo</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -16832,7 +16934,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/music-assistant/desktop-app</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -17162,7 +17264,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/aws/aws-lambda-web-adapter</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -17198,7 +17300,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/circlefin/arc-node</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -17558,7 +17660,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/typstyle-rs/typstyle</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -17576,7 +17678,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hoodie/icalendar</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -17648,7 +17750,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/torrust/torrust-tracker</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -17678,7 +17780,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/posit-dev/air</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -17696,7 +17798,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pwnwriter/haylxon</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -17804,7 +17906,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/un-nf/404</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -17912,7 +18014,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/PlasmaFAIR/fortitude</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -17924,7 +18026,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rivet-dev/agentos</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -18194,7 +18296,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/getgems-io/ton-grpc</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -18397,6 +18499,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/mihaigalos/dusage</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/tauri-apps/plugins-workspace</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>daily</changefreq>
@@ -18446,7 +18554,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/surrealdb/surrealdb</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -18590,7 +18698,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pop-os/cosmic-store</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -18698,7 +18806,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Schniz/fnm</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -18716,7 +18824,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/shanselman/winget-tui</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -18788,7 +18896,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nicholassm/disruptor-rs</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -18932,7 +19040,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/yynxxxxx/Codex-X</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -19034,7 +19142,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pop-os/cosmic-launcher</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -19088,7 +19196,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/TabbyML/tabby</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -19167,6 +19275,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/microsoft/mxc</loc>
     <lastmod>2026-08-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/xemwebe/yahoo_finance_api</loc>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -19268,7 +19382,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ppXD/Wisp</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -19496,7 +19610,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/farcasterxyz/snapchain</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -19687,14 +19801,20 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/Jamessdevops/micracode</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/Smithay/smithay</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/smartcorelib/smartcore</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -19712,7 +19832,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hahwul/urx</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -19832,7 +19952,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/KonaeAkira/raphael-rs</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -19886,7 +20006,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/restsend/rsipstack</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -19952,7 +20072,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/retis-org/retis</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -20204,7 +20324,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ozontech/pg_doorman</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -20342,7 +20462,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SpikeHD/Dorion</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -20373,6 +20493,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/paritytech/litep2p</loc>
     <lastmod>2026-08-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/system76/firmware-update</loc>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -20450,7 +20576,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/istio/ztunnel</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
