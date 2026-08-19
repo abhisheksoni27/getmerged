@@ -48,4 +48,56 @@ func TestEvaluatePreflight(t *testing.T) {
 			t.Errorf("expected score < 70, got %v", result.OverallScore)
 		}
 	})
+
+	t.Run("conventional commit title check validation", func(t *testing.T) {
+		findConventionalCheck := func(checks []scoring.PreflightCheckItem) *scoring.PreflightCheckItem {
+			for i := range checks {
+				if checks[i].Key == "conventional_title" {
+					return &checks[i]
+				}
+			}
+			return nil
+		}
+
+		// Case 1: Freeform non-conventional title
+		nonConvInput := scoring.PreflightInput{
+			RepoFullName:  "facebook/react",
+			PRTitle:       "this is a really long freeform commit message without any conventional prefix",
+			PRDescription: "A long enough description to pass the depth heuristic.",
+			ChangedFiles:  []string{"src/parser.ts"},
+			Additions:     25,
+		}
+		nonConvResult := scoring.EvaluatePreflight(nonConvInput)
+		nonConvCheck := findConventionalCheck(nonConvResult.Checks)
+		if nonConvCheck == nil {
+			t.Fatalf("expected conventional_title check item to be present")
+		}
+		if nonConvCheck.Passed {
+			t.Errorf("expected conventional_title.passed to be false for freeform title")
+		}
+		if nonConvCheck.Severity != "warning" {
+			t.Errorf("expected conventional_title.severity to be 'warning', got %s", nonConvCheck.Severity)
+		}
+
+		// Case 2: Valid fix(core): conventional title
+		convInput := scoring.PreflightInput{
+			RepoFullName:  "facebook/react",
+			PRTitle:       "fix(core): resolve null pointer exception in parser",
+			PRDescription: "A long enough description to pass the depth heuristic.",
+			ChangedFiles:  []string{"src/parser.ts"},
+			Additions:     25,
+		}
+		convResult := scoring.EvaluatePreflight(convInput)
+		convCheck := findConventionalCheck(convResult.Checks)
+		if convCheck == nil {
+			t.Fatalf("expected conventional_title check item to be present")
+		}
+		if !convCheck.Passed {
+			t.Errorf("expected conventional_title.passed to be true for fix(core): title")
+		}
+		if convCheck.Severity != "info" {
+			t.Errorf("expected conventional_title.severity to be 'info', got %s", convCheck.Severity)
+		}
+	})
 }
+

@@ -93,6 +93,7 @@ function PreflightContent() {
 
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<EvaluationResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const rawParam = searchParams
@@ -104,9 +105,10 @@ function PreflightContent() {
     }
   }, [searchParams, repoFullName]);
 
-  const handleEvaluate = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const performEvaluation = async () => {
     setLoading(true);
+    setError(null);
+    setResult(null);
 
     const changedFiles = changedFilesText
       .split("\n")
@@ -128,19 +130,62 @@ function PreflightContent() {
         }),
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        setResult(data);
+      if (!res.ok) {
+        throw new Error(`Preflight evaluation failed with status ${res.status}`);
       }
+
+      const data = await res.json();
+      setResult(data);
+      setError(null);
     } catch (err) {
       console.error("Preflight evaluation failed", err);
+      setError("Evaluation service is temporarily unavailable. Please verify your inputs and retry.");
     } finally {
       setLoading(false);
     }
   };
 
+  const handleEvaluate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await performEvaluation();
+  };
+
   return (
     <>
+      {/* Error & Retry Banner */}
+      {error && (
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="rounded-2xl bg-[#fef2f2] p-5 sm:p-6 border-2 border-[#fecaca] shadow-[4px_4px_0px_#222831] mb-8 font-sans transition-all duration-150 ease-out"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5 shrink-0">
+                <AlertTriangle className="h-5 w-5 text-[#dc2626]" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-[#991b1b] font-mono">
+                  Evaluation Request Failed
+                </h3>
+                <p className="text-xs text-[#991b1b] mt-0.5 font-sans">
+                  {error}
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={performEvaluation}
+              disabled={loading}
+              aria-label="Retry evaluation"
+              className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-white border border-[#dc2626] text-[#dc2626] font-mono font-bold text-xs uppercase tracking-wider hover:bg-[#fee2e2] active:scale-[0.98] transition-all duration-100 disabled:opacity-50 cursor-pointer shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 shrink-0"
+            >
+              {loading ? "Retrying..." : "Retry Evaluation"}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Input Form */}
       <form
         onSubmit={handleEvaluate}
