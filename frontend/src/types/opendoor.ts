@@ -138,3 +138,21 @@ export interface GoodFirstIssueItem {
   synced_at: string;
 }
 
+export interface OptimalTimeResult {
+  primary_start_hour_utc: number;
+  primary_end_hour_utc: number;
+  secondary_start_hour_utc?: number | null;
+  secondary_end_hour_utc?: number | null;
+  peak_hour_utc: number;
+  active_maintainer_count: number;
+  hourly_heatmap: number[];
+  recommended_day_window: string;
+  confidence_score: number;
+}
+
+export interface OptimalTimeResponse {
+  repository: string;
+  optimal_time: OptimalTimeResult;
+}
+
+
