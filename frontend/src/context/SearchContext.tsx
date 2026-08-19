@@ -29,25 +29,26 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
     if (pathname !== "/") {
       setHeroSearchVisible(false);
     }
+    lastActiveElementRef.current = null;
   }, [pathname]);
 
   const openSearch = useCallback((initialQuery?: string) => {
     if (typeof document !== "undefined" && document.activeElement instanceof HTMLElement) {
       lastActiveElementRef.current = document.activeElement;
     }
-    if (initialQuery !== undefined) {
-      setSearchQuery(initialQuery);
-    }
+    setSearchQuery(initialQuery ?? "");
     setIsOpen(true);
   }, []);
 
   const closeSearch = useCallback(() => {
     setIsOpen(false);
+    setSearchQuery("");
     // Restore focus to trigger element on dismissal
     if (lastActiveElementRef.current && typeof lastActiveElementRef.current.focus === "function") {
+      const elemToFocus = lastActiveElementRef.current;
       setTimeout(() => {
-        if (lastActiveElementRef.current && typeof document !== "undefined" && document.body.contains(lastActiveElementRef.current)) {
-          lastActiveElementRef.current.focus();
+        if (elemToFocus && typeof document !== "undefined" && document.body.contains(elemToFocus)) {
+          elemToFocus.focus();
         }
       }, 50);
     }
