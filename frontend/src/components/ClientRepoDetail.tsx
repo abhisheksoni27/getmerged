@@ -540,9 +540,11 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
 
 
       {/* PR Acceptance & Review Speed Forecast Widget (Epic 3, Story 3.4) */}
-      {repo?.owner && repo?.name && (
-        <PRAcceptanceWidget owner={repo.owner} name={repo.name} />
-      )}
+      {fullName && (() => {
+        const [owner, name] = fullName.split("/");
+        if (!owner || !name) return null;
+        return <PRAcceptanceWidget owner={owner} name={name} />;
+      })()}
 
       {/* Optimal PR Submission Window & Maintainer Activity Heatmap (Story 7.1 / IDEA-20260819-01) */}
       <OptimalReviewWindow fullName={fullName} />

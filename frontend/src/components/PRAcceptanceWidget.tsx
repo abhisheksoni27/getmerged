@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Clock, Percent, Users, ShieldAlert, Sparkles, CheckCircle2 } from "lucide-react";
+import Link from "next/link";
+import { Clock, Percent, Users, ShieldAlert, Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 
 interface PRAcceptanceWidgetProps {
@@ -66,16 +67,29 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
 
   return (
     <div className="rounded-2xl bg-white p-5 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-6 font-mono">
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-emerald-600" />
           <h3 className="text-base font-bold text-zinc-900 font-space">
             PR Acceptance & Review Speed Forecast
           </h3>
         </div>
-        <span className="text-[11px] font-sans text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full">
-          Precomputed via Live PR Events
-        </span>
+        <div className="flex items-center gap-2 flex-wrap">
+          <Link
+            href={`/preflight?repo=${encodeURIComponent(`${owner}/${name}`)}`}
+            data-testid="pr-preflight-cta"
+            title={`Run pre-flight evaluation for ${owner}/${name}`}
+            aria-label={`Run pre-flight evaluation for ${owner}/${name}`}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 active:scale-[0.98]"
+          >
+            <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
+            <span>Run Pre-flight PR Check</span>
+            <ArrowRight className="h-3 w-3 text-emerald-700 dark:text-emerald-300" />
+          </Link>
+          <span className="text-[11px] font-sans text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full">
+            Precomputed via Live PR Events
+          </span>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 font-sans">
