@@ -72,6 +72,48 @@ test.describe("Phase 1: Preflight PR Evaluator", () => {
     await expect(page.getByText(/Pre-flight Score/i)).toBeVisible({ timeout: 15000 });
     await expect(page.getByText(/Conventional Commit Title/i)).toBeVisible();
   });
+
+  test("Renders error and retry banner when evaluation API responds with 500 and recovers on retry", async ({ page }) => {
+    await page.route("**/api/v1/preflight/evaluate", async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: "application/json",
+        body: JSON.stringify({ error: "Internal server error" }),
+      });
+    });
+
+    await page.goto("/preflight", { waitUntil: "domcontentloaded" });
+    await page.getByPlaceholder("e.g. facebook/react").fill("wvlet/wvlet");
+    await page.getByPlaceholder("e.g. fix(core): resolve null pointer exception in parser").fill("fix(core): resolve parser null deref");
+    await page.getByRole("button", { name: /Run Pre-Flight Check/i }).click();
+
+    const alertBanner = page.getByRole("alert").filter({ hasText: /Evaluation Request Failed/i });
+    await expect(alertBanner).toBeVisible({ timeout: 10000 });
+    const retryBtn = page.getByRole("button", { name: /Retry Evaluation/i });
+    await expect(retryBtn).toBeVisible();
+
+    // Now unroute so retry succeeds
+    await page.unroute("**/api/v1/preflight/evaluate");
+    await retryBtn.click();
+
+    await expect(page.getByText(/Pre-flight Score/i)).toBeVisible({ timeout: 15000 });
+    await expect(alertBanner).not.toBeVisible();
+  });
+
+  test("Renders error and retry banner when evaluation API experiences network failure", async ({ page }) => {
+    await page.route("**/api/v1/preflight/evaluate", async (route) => {
+      await route.abort("failed");
+    });
+
+    await page.goto("/preflight", { waitUntil: "domcontentloaded" });
+    await page.getByPlaceholder("e.g. facebook/react").fill("wvlet/wvlet");
+    await page.getByPlaceholder("e.g. fix(core): resolve null pointer exception in parser").fill("fix(core): resolve parser null deref");
+    await page.getByRole("button", { name: /Run Pre-Flight Check/i }).click();
+
+    const alertBanner = page.getByRole("alert").filter({ hasText: /Evaluation Request Failed/i });
+    await expect(alertBanner).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole("button", { name: /Retry Evaluation/i })).toBeVisible();
+  });
 });
 
 test.describe("Phase 1: Compare Head-to-Head", () => {
