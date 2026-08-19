@@ -30,6 +30,7 @@ export function GlobalSearch() {
   const [results, setResults] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const selectedIndexRef = useRef<number>(-1);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -49,6 +50,8 @@ export function GlobalSearch() {
   const fetchResults = useCallback(async (query: string) => {
     if (!query.trim()) {
       setResults([]);
+      selectedIndexRef.current = -1;
+      setSelectedIndex(-1);
       setLoading(false);
       return;
     }
@@ -96,15 +99,19 @@ export function GlobalSearch() {
     return () => clearTimeout(timer);
   }, [searchQuery, isOpen, fetchResults]);
 
-  // Autofocus input and reset selection when modal opens
+  // Autofocus input and reset selection when modal opens; clean up on close
   useEffect(() => {
     if (isOpen) {
+      selectedIndexRef.current = -1;
       setSelectedIndex(-1);
       const timer = setTimeout(() => {
         inputRef.current?.focus();
-        inputRef.current?.select();
       }, 50);
       return () => clearTimeout(timer);
+    } else {
+      setResults([]);
+      selectedIndexRef.current = -1;
+      setSelectedIndex(-1);
     }
   }, [isOpen]);
 
@@ -113,22 +120,27 @@ export function GlobalSearch() {
     if (e.key === "ArrowDown") {
       e.preventDefault();
       if (results.length > 0) {
-        setSelectedIndex((prev) => (prev < results.length - 1 ? prev + 1 : 0));
+        const next = selectedIndexRef.current < results.length - 1 ? selectedIndexRef.current + 1 : 0;
+        selectedIndexRef.current = next;
+        setSelectedIndex(next);
       }
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       if (results.length > 0) {
-        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : results.length - 1));
+        const prev = selectedIndexRef.current > 0 ? selectedIndexRef.current - 1 : results.length - 1;
+        selectedIndexRef.current = prev;
+        setSelectedIndex(prev);
       }
     } else if (e.key === "Enter") {
+      e.preventDefault();
+      const currIndex = selectedIndexRef.current;
       const targetRepo =
-        selectedIndex >= 0 && selectedIndex < results.length
-          ? results[selectedIndex]
+        currIndex >= 0 && currIndex < results.length
+          ? results[currIndex]
           : results.length > 0
           ? results[0]
           : null;
       if (targetRepo) {
-        e.preventDefault();
         closeSearch();
         router.push(`/${targetRepo.full_name}`);
       }
@@ -192,6 +204,7 @@ export function GlobalSearch() {
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
+                  selectedIndexRef.current = -1;
                   setSelectedIndex(-1);
                 }}
                 className="w-full pl-10 pr-24 py-1.5 text-base font-sans text-zinc-900 placeholder-zinc-400 focus:outline-none bg-transparent"
@@ -199,7 +212,7 @@ export function GlobalSearch() {
               />
               <div className="absolute right-4 flex items-center gap-2">
                 {loading && <Loader2 className="h-4 w-4 text-zinc-400 animate-spin mr-1" />}
-                <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-zinc-200 bg-white px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-400 shadow-2xs">
+                <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-zinc-200 bg-white px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-500 shadow-2xs">
                   ESC
                 </kbd>
                 <button
@@ -230,7 +243,7 @@ export function GlobalSearch() {
                       onClick={closeSearch}
                       title={`View ${r.full_name} C-Rank scorecard, PR response time & merge metrics`}
                       className={`flex items-center justify-between p-3 rounded-xl transition-all group cursor-pointer block no-underline text-current pt-3 ${
-                        isSelected ? "bg-zinc-100 ring-1 ring-zinc-300" : "hover:bg-zinc-50"
+                        isSelected ? "bg-zinc-100 ring-1 ring-zinc-300 font-medium" : "hover:bg-zinc-50"
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
