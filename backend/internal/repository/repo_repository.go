@@ -80,6 +80,7 @@ type RepoRepository interface {
 	UpsertTopics(ctx context.Context, repoID string, topics []string) error
 	GetTopicsByRepoID(ctx context.Context, repoID string) ([]string, error)
 	GetAllDistinctTopics(ctx context.Context) ([]string, error)
+	GetMaintainerEvents(ctx context.Context, repoID string) ([]scoring.MaintainerEvent, error)
 }
 
 type sqlxRepoRepository struct {
@@ -669,4 +670,39 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 	}
 
 	return repos, nil
+}
+
+// GetMaintainerEvents queries repo_pr_comments for maintainer activity within the last 90 days
+// and extracts HourUTC and DayOfWeek in Go to maintain driver-agnostic compatibility (MySQL & SQLite).
+func (r *sqlxRepoRepository) GetMaintainerEvents(ctx context.Context, repoID string) ([]scoring.MaintainerEvent, error) {
+	since := time.Now().UTC().AddDate(0, 0, -90)
+	query := `
+		SELECT author_login, created_at
+		FROM repo_pr_comments
+		WHERE repository_id = ?
+		  AND author_association IN ('MEMBER', 'OWNER', 'COLLABORATOR')
+		  AND created_at >= ?
+		ORDER BY created_at DESC
+	`
+	rows, err := r.db.QueryContext(ctx, query, repoID, since)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var events []scoring.MaintainerEvent
+	for rows.Next() {
+		var authorLogin string
+		var createdAt time.Time
+		if err := rows.Scan(&authorLogin, &createdAt); err != nil {
+			return nil, err
+		}
+		utcTime := createdAt.UTC()
+		events = append(events, scoring.MaintainerEvent{
+			MaintainerLogin: authorLogin,
+			HourUTC:         utcTime.Hour(),
+			DayOfWeek:       utcTime.Weekday(),
+		})
+	}
+	return events, nil
 }

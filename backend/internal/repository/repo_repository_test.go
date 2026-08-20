@@ -77,3 +77,65 @@ func TestRepoRepository_Topics(t *testing.T) {
 		t.Fatalf("expected 6 distinct topics, got %d (%v)", len(allTopics), allTopics)
 	}
 }
+
+func TestRepoRepository_GetMaintainerEvents(t *testing.T) {
+	database, err := sqlx.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("failed to open memory db: %v", err)
+	}
+	defer database.Close()
+
+	if err := db.AutoMigrate(database); err != nil {
+		t.Fatalf("failed to auto migrate: %v", err)
+	}
+
+	repoStore := repository.NewRepoRepository(database)
+	ctx := context.Background()
+
+	now := time.Now().UTC()
+	recentMaintainerTime := now.AddDate(0, 0, -5)
+	oldMaintainerTime := now.AddDate(0, 0, -100) // Older than 90 days
+
+	// Valid maintainer event (recent)
+	database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at)
+		VALUES ('repo-1', 101, 'issue_comment', 'alice_member', 'MEMBER', 'looks good', ?)`, recentMaintainerTime)
+
+	// Valid owner event (recent)
+	database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at)
+		VALUES ('repo-1', 102, 'review_comment', 'bob_owner', 'OWNER', 'approved', ?)`, recentMaintainerTime.Add(time.Hour))
+
+	// Valid collaborator event (recent)
+	database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at)
+		VALUES ('repo-1', 103, 'issue_comment', 'charlie_collab', 'COLLABORATOR', 'merged', ?)`, recentMaintainerTime.Add(2*time.Hour))
+
+	// Non-maintainer (FIRST_TIME_CONTRIBUTOR / NONE) -> should be excluded
+	database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at)
+		VALUES ('repo-1', 104, 'issue_comment', 'stranger', 'NONE', 'question', ?)`, recentMaintainerTime)
+
+	// Outdated maintainer event (>90 days old) -> should be excluded
+	database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at)
+		VALUES ('repo-1', 105, 'issue_comment', 'retired_maintainer', 'MEMBER', 'old comment', ?)`, oldMaintainerTime)
+
+	// Another repo maintainer event -> should be excluded
+	database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at)
+		VALUES ('repo-2', 201, 'issue_comment', 'other_member', 'MEMBER', 'other repo', ?)`, recentMaintainerTime)
+
+	events, err := repoStore.GetMaintainerEvents(ctx, "repo-1")
+	if err != nil {
+		t.Fatalf("GetMaintainerEvents failed: %v", err)
+	}
+
+	if len(events) != 3 {
+		t.Fatalf("expected 3 maintainer events for repo-1, got %d", len(events))
+	}
+
+	for _, ev := range events {
+		if ev.HourUTC < 0 || ev.HourUTC > 23 {
+			t.Errorf("invalid HourUTC: %d", ev.HourUTC)
+		}
+		if ev.DayOfWeek < time.Sunday || ev.DayOfWeek > time.Saturday {
+			t.Errorf("invalid DayOfWeek: %v", ev.DayOfWeek)
+		}
+	}
+}
+
