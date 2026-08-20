@@ -3,10 +3,13 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { TopicDirectoryGrid } from "@/components/TopicDirectoryGrid";
 import { API_BASE_URL } from "@/lib/api";
 import { Tag, ArrowLeft, ArrowRight, Compass } from "lucide-react";
 
 export const revalidate = 3600; // Edge cache for 1 hour
+
+const INITIAL_TOPIC_LIMIT = 100;
 
 async function fetchTopics(): Promise<string[]> {
   try {
@@ -45,6 +48,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function TopicsIndexPage() {
   const topics = await fetchTopics();
+  const initialTopics = topics.slice(0, INITIAL_TOPIC_LIMIT);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -71,8 +75,8 @@ export default async function TopicsIndexPage() {
     name: "Open Source Repository Topics Index",
     description:
       "Curated topic directories ranked by maintainer responsiveness and contributor merge odds.",
-    numberOfItems: topics.length,
-    itemListElement: topics.map((topic, idx) => ({
+    numberOfItems: initialTopics.length,
+    itemListElement: initialTopics.map((topic, idx) => ({
       "@type": "ListItem",
       position: idx + 1,
       name: `#${topic}`,
@@ -111,7 +115,7 @@ export default async function TopicsIndexPage() {
             Explore Repositories by Topic{" "}
             {topics.length > 0 && (
               <span className="text-zinc-500 font-normal text-xl sm:text-2xl">
-                ({topics.length} Topics)
+                ({topics.length.toLocaleString()} Topics)
               </span>
             )}
           </h1>
@@ -141,22 +145,11 @@ export default async function TopicsIndexPage() {
             </Link>
           </div>
         ) : (
-          /* Topic Directory Grid */
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            {topics.map((topic) => (
-              <Link
-                key={topic}
-                href={`/topics/${topic}`}
-                title={`Explore #${topic} repositories and contributor metrics`}
-                className="group p-4 rounded-2xl border border-zinc-200/80 bg-white hover:border-emerald-500/80 hover:shadow-xs transition-all flex items-center justify-between min-w-0"
-              >
-                <span className="font-space text-sm sm:text-base font-bold text-zinc-900 group-hover:text-emerald-700 transition-colors truncate">
-                  #{topic}
-                </span>
-                <ArrowRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
-              </Link>
-            ))}
-          </div>
+          /* Topic Directory Grid with on-demand remainder expansion */
+          <TopicDirectoryGrid
+            initialTopics={initialTopics}
+            totalCount={topics.length}
+          />
         )}
       </main>
 
