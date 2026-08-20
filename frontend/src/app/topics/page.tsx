@@ -5,23 +5,31 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { TopicDirectoryGrid } from "@/components/TopicDirectoryGrid";
 import { API_BASE_URL } from "@/lib/api";
+import { TopicStat } from "@/types/opendoor";
 import { Tag, ArrowLeft, ArrowRight, Compass } from "lucide-react";
 
 export const revalidate = 3600; // Edge cache for 1 hour
 
 const INITIAL_TOPIC_LIMIT = 100;
 
-async function fetchTopics(): Promise<string[]> {
+interface TopicsPayload {
+  topics: string[];
+  stats: TopicStat[];
+}
+
+async function fetchTopics(): Promise<TopicsPayload> {
   try {
     const res = await fetch(`${API_BASE_URL}/api/v1/topics`, {
       next: { revalidate: 3600 },
     });
-    if (!res.ok) return [];
+    if (!res.ok) return { topics: [], stats: [] };
     const data = await res.json();
-    return data.topics || data.data || [];
+    const topics: string[] = data.topics || data.data || [];
+    const stats: TopicStat[] = data.topic_stats || [];
+    return { topics, stats };
   } catch (err) {
     console.error("fetchTopics error:", err);
-    return [];
+    return { topics: [], stats: [] };
   }
 }
 
@@ -47,8 +55,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function TopicsIndexPage() {
-  const topics = await fetchTopics();
+  const { topics, stats } = await fetchTopics();
   const initialTopics = topics.slice(0, INITIAL_TOPIC_LIMIT);
+  const initialStats = stats.slice(0, INITIAL_TOPIC_LIMIT);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -148,6 +157,7 @@ export default async function TopicsIndexPage() {
           /* Topic Directory Grid with on-demand remainder expansion */
           <TopicDirectoryGrid
             initialTopics={initialTopics}
+            initialStats={initialStats}
             totalCount={topics.length}
           />
         )}

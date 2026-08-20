@@ -155,4 +155,10 @@ export interface OptimalTimeResponse {
   optimal_time: OptimalTimeResult;
 }
 
+export interface TopicStat {
+  name: string;
+  repo_count: number;
+  avg_external_pr_merge_rate: number;
+}
+
 

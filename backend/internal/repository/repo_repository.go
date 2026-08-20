@@ -69,6 +69,12 @@ type SnapshotRecord struct {
 	CRankTier    string  `db:"c_rank_tier" json:"c_rank_tier"`
 }
 
+type TopicStat struct {
+	Name                   string  `db:"name" json:"name"`
+	RepoCount              int     `db:"repo_count" json:"repo_count"`
+	AvgExternalPRMergeRate float64 `db:"avg_external_pr_merge_rate" json:"avg_external_pr_merge_rate"`
+}
+
 type RepoRepository interface {
 	List(ctx context.Context, filter RepoFilter) ([]RepoRecord, int, error)
 	FindByIDOrName(ctx context.Context, identifier string) (*RepoRecord, error)
@@ -80,6 +86,7 @@ type RepoRepository interface {
 	UpsertTopics(ctx context.Context, repoID string, topics []string) error
 	GetTopicsByRepoID(ctx context.Context, repoID string) ([]string, error)
 	GetAllDistinctTopics(ctx context.Context) ([]string, error)
+	GetAllTopicStats(ctx context.Context) ([]TopicStat, error)
 	GetMaintainerEvents(ctx context.Context, repoID string) ([]scoring.MaintainerEvent, error)
 }
 
@@ -312,13 +319,33 @@ func (r *sqlxRepoRepository) GetTopicsByRepoID(ctx context.Context, repoID strin
 	return topics, err
 }
 
-// GetAllDistinctTopics returns every topic that has at least one indexed repository.
+// GetAllDistinctTopics returns every topic that has at least one indexed repository ordered by popularity.
 func (r *sqlxRepoRepository) GetAllDistinctTopics(ctx context.Context) ([]string, error) {
 	var topics []string
 	err := r.db.SelectContext(ctx, &topics, `
-		SELECT DISTINCT topic FROM repository_topics ORDER BY topic ASC
+		SELECT t.topic
+		FROM repository_topics t
+		LEFT JOIN latest_snapshots s ON t.repository_id = s.repository_id
+		GROUP BY t.topic
+		ORDER BY COUNT(t.repository_id) DESC, t.topic ASC
 	`)
 	return topics, err
+}
+
+// GetAllTopicStats returns distinct topics with repository count and average merge rate, ordered by popularity.
+func (r *sqlxRepoRepository) GetAllTopicStats(ctx context.Context) ([]TopicStat, error) {
+	var stats []TopicStat
+	err := r.db.SelectContext(ctx, &stats, `
+		SELECT
+			t.topic AS name,
+			COUNT(t.repository_id) AS repo_count,
+			COALESCE(AVG(s.external_pr_merge_rate), 0.0) AS avg_external_pr_merge_rate
+		FROM repository_topics t
+		LEFT JOIN latest_snapshots s ON t.repository_id = s.repository_id
+		GROUP BY t.topic
+		ORDER BY repo_count DESC, t.topic ASC
+	`)
+	return stats, err
 }
 
 func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier string) (*RepoRecord, error) {
