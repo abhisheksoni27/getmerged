@@ -37,8 +37,9 @@ func TestListTopics(t *testing.T) {
 	}
 
 	var resp struct {
-		Topics []string `json:"topics"`
-		Data   []string `json:"data"`
+		Topics     []string               `json:"topics"`
+		Data       []string               `json:"data"`
+		TopicStats []repository.TopicStat `json:"topic_stats"`
 	}
 	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to unmarshal JSON: %v", err)
@@ -48,16 +49,23 @@ func TestListTopics(t *testing.T) {
 		t.Fatalf("expected 4 distinct topics, got %d: %v", len(resp.Topics), resp.Topics)
 	}
 
-	// Should be alphabetically ordered: async, cli, machine-learning, rust
-	expected := []string{"async", "cli", "machine-learning", "rust"}
-	for i, want := range expected {
-		if resp.Topics[i] != want {
-			t.Errorf("expected topic %d to be %q, got %q", i, want, resp.Topics[i])
-		}
+	// rust has count 2; async, cli, machine-learning have count 1
+	if resp.Topics[0] != "rust" {
+		t.Errorf("expected first topic by popularity to be 'rust', got %q", resp.Topics[0])
 	}
 
 	if len(resp.Data) != 4 {
 		t.Fatalf("expected data key with 4 topics, got %d", len(resp.Data))
+	}
+	if resp.Data[0] != "rust" {
+		t.Errorf("expected data[0] to be 'rust', got %q", resp.Data[0])
+	}
+
+	if len(resp.TopicStats) != 4 {
+		t.Fatalf("expected 4 topic_stats items, got %d", len(resp.TopicStats))
+	}
+	if resp.TopicStats[0].Name != "rust" || resp.TopicStats[0].RepoCount != 2 {
+		t.Errorf("expected topic_stats[0] to be rust with repo_count 2, got %+v", resp.TopicStats[0])
 	}
 }
 
@@ -81,8 +89,9 @@ func TestListTopics_Empty(t *testing.T) {
 	}
 
 	var resp struct {
-		Topics []string `json:"topics"`
-		Data   []string `json:"data"`
+		Topics     []string               `json:"topics"`
+		Data       []string               `json:"data"`
+		TopicStats []repository.TopicStat `json:"topic_stats"`
 	}
 	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to unmarshal JSON: %v", err)
@@ -93,5 +102,8 @@ func TestListTopics_Empty(t *testing.T) {
 	}
 	if resp.Data == nil || len(resp.Data) != 0 {
 		t.Fatalf("expected empty non-nil slice for data, got: %v", resp.Data)
+	}
+	if resp.TopicStats == nil || len(resp.TopicStats) != 0 {
+		t.Fatalf("expected empty non-nil slice for topic_stats, got: %v", resp.TopicStats)
 	}
 }

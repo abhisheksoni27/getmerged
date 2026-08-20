@@ -1,18 +1,15 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
+import { TopicReposExplorer } from "@/components/TopicReposExplorer";
 import {
   Tag,
   GitPullRequest,
   Clock,
-  Sparkles,
-  ArrowRight,
-  ExternalLink,
 } from "lucide-react";
 
 export const revalidate = 3600; // Edge cache for 1 hour
@@ -160,61 +157,8 @@ export default async function TopicPage({ params }: TopicPageProps) {
           </div>
         </div>
 
-        {/* Repository Grid */}
-        <div className="space-y-4">
-          {repos.map((repo) => (
-            <div
-              key={repo.id}
-              className="p-5 rounded-2xl border border-zinc-200/80 bg-white hover:border-emerald-500/80 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
-            >
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
-                    {repo.c_rank_tier || repo.class_rank || "A"} Tier
-                  </span>
-                  <span className="text-xs font-mono bg-zinc-100 text-zinc-700 px-2 py-0.5 rounded-md font-medium">
-                    {repo.language || "Multi-language"}
-                  </span>
-                  {(repo.good_first_issue_count ?? 0) > 0 && (
-                    <span className="text-xs font-mono bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md font-bold flex items-center gap-1 border border-emerald-200/60">
-                      <Sparkles className="h-3 w-3" /> {repo.good_first_issue_count} GFIs
-                    </span>
-                  )}
-                </div>
-                <h2 className="font-space text-lg font-bold text-zinc-900 group-hover:text-emerald-700 transition-colors">
-                  <Link
-                    href={`/${repo.full_name}`}
-                    title={`View contributor metrics for ${repo.full_name}`}
-                    className="hover:underline flex items-center gap-1.5"
-                  >
-                    {repo.full_name}
-                    <ExternalLink className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-emerald-600" />
-                  </Link>
-                </h2>
-                {repo.description && (
-                  <p className="text-xs text-zinc-500 mt-1 line-clamp-2 leading-relaxed">
-                    {repo.description}
-                  </p>
-                )}
-                <div className="flex items-center gap-4 mt-3 text-xs font-mono text-zinc-500 flex-wrap">
-                  <span>Merge Rate: <strong className="text-zinc-900">{(repo.external_pr_merge_rate || 0).toFixed(1)}%</strong></span>
-                  <span>Response: <strong className="text-zinc-900">{(repo.response_p50_hours || repo.time_to_first_response_hours || 0).toFixed(1)}h</strong></span>
-                  <span>Maintainers: <strong className="text-zinc-900">{repo.bus_factor || 1} active</strong></span>
-                </div>
-              </div>
-
-              <div className="shrink-0 self-start sm:self-center">
-                <Link
-                  href={`/${repo.full_name}`}
-                  title={`Open full scorecard for ${repo.full_name}`}
-                  className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1.5 transition-all shadow-xs"
-                >
-                  View Scorecard <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* Repository Grid with language filter + rankings cross-links */}
+        <TopicReposExplorer topic={topic} repos={repos} />
       </main>
 
       <Footer />

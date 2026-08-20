@@ -76,7 +76,8 @@ test.describe("Topic Hub and Discovery (IDEA-20260818-03)", () => {
 
     // Navigate to /topics
     await page.goto("/topics", { waitUntil: "domcontentloaded" });
-    const initialTopicCards = page.locator('main a[href^="/topics/"]');
+    // Trending strip and grid are separate; bound applies to the grid itself
+    const initialTopicCards = page.locator('#topics-grid a[href^="/topics/"]');
     const initialCount = await initialTopicCards.count();
     expect(initialCount).toBeGreaterThan(0);
     expect(initialCount).toBeLessThanOrEqual(100);
@@ -96,4 +97,41 @@ test.describe("Topic Hub and Discovery (IDEA-20260818-03)", () => {
         .toBeGreaterThan(initialCount);
     }
   });
+
+  test("Topics index renders Trending strip, card repo counts, and search-as-you-type filter (IDEA-20260820-01)", async ({ page }) => {
+    await page.goto("/topics", { waitUntil: "domcontentloaded" });
+
+    // 1. Trending topics strip
+    const trendingStrip = page.getByRole("region", { name: /Trending Topics/i }).or(page.getByText(/Trending Topics/i));
+    await expect(trendingStrip.first()).toBeVisible();
+
+    // 2. Cards show repo counts
+    const firstCard = page.locator('main a[href^="/topics/"]').first();
+    await expect(firstCard).toBeVisible();
+    await expect(firstCard).toContainText(/repo/i);
+
+    // 3. Search-as-you-type
+    const searchInput = page.getByPlaceholder(/Search topics/i).or(page.getByLabel(/Search topics/i));
+    await expect(searchInput).toBeVisible();
+    await searchInput.fill("rust");
+
+    // After typing 'rust', #rust card should be visible
+    const rustCard = page.locator('main a[href="/topics/rust"]');
+    await expect(rustCard).toBeVisible();
+    await expect(rustCard).toContainText(/repo/i);
+  });
+
+  test("Topic detail page /topics/rust renders language filter and cross-link to rankings (IDEA-20260820-01)", async ({ page }) => {
+    await page.goto("/topics/rust", { waitUntil: "domcontentloaded" });
+
+    // Language filter container
+    const langFilterBar = page.getByRole("region", { name: /Language filter/i }).or(page.getByText(/Filter by language/i).or(page.locator('[data-testid="language-filter"]')));
+    await expect(langFilterBar.first()).toBeVisible();
+
+    // Cross-link to rankings exists for language(s) present on page
+    const rankingsLink = page.locator('main a[href^="/rankings/"]');
+    const linkCount = await rankingsLink.count();
+    expect(linkCount).toBeGreaterThan(0);
+  });
 });
+
