@@ -37,6 +37,7 @@ type RepoRecord struct {
 	ResponseP90Hours         float64   `db:"response_p90_hours" json:"response_p90_hours"`
 	UpdatedAt                time.Time `db:"updated_at" json:"updated_at"`
 	Topics                   []string  `db:"-" json:"topics"`
+	IsScored                 bool      `db:"is_scored" json:"is_scored"`
 }
 
 type RepoFilter struct {
@@ -229,6 +230,7 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 			COALESCE(s.onboarding_score,0) as onboarding_score,
 			COALESCE(s.response_p50_hours,0) as response_p50_hours,
 			COALESCE(s.response_p90_hours,0) as response_p90_hours,
+			CASE WHEN COALESCE(s.c_rank_score, 0) > 0 THEN 1 ELSE 0 END as is_scored,
 			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
@@ -370,6 +372,7 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 			COALESCE(s.onboarding_score,0) as onboarding_score,
 			COALESCE(s.response_p50_hours,0) as response_p50_hours,
 			COALESCE(s.response_p90_hours,0) as response_p90_hours,
+			CASE WHEN COALESCE(s.c_rank_score, 0) > 0 THEN 1 ELSE 0 END as is_scored,
 			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
@@ -606,6 +609,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 			COALESCE(s.snapshot_date, '') as snapshot_date,
 			COALESCE(s.good_first_issue_count, 0) as good_first_issue_count,
 			COALESCE(s.onboarding_score, 0) as onboarding_score,
+			CASE WHEN COALESCE(s.c_rank_score, 0) > 0 THEN 1 ELSE 0 END as is_scored,
 			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON r.id = s.repository_id
@@ -626,17 +630,19 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 	for rows.Next() {
 		var rec RepoRecord
 		var staleInt int
+		var isScoredInt int
 		if err := rows.Scan(
 			&rec.ID, &rec.FullName, &rec.Language, &rec.Stars, &rec.Description, &rec.GithubURL,
 			&rec.CRankTier, &rec.CRankScore, &rec.ExternalPRMergeRate, &rec.TimeToFirstResponseHours,
 			&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
 			&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
 			&rec.DistinctMaintainerCount, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
-			&rec.OnboardingScore, &rec.UpdatedAt,
+			&rec.OnboardingScore, &isScoredInt, &rec.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
 		rec.StalenessFlag = staleInt == 1
+		rec.IsScored = isScoredInt == 1
 		repos = append(repos, &rec)
 	}
 
@@ -667,6 +673,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 				COALESCE(s.snapshot_date, '') as snapshot_date,
 				COALESCE(s.good_first_issue_count, 0) as good_first_issue_count,
 				COALESCE(s.onboarding_score, 0) as onboarding_score,
+				CASE WHEN COALESCE(s.c_rank_score, 0) > 0 THEN 1 ELSE 0 END as is_scored,
 				r.updated_at
 			FROM repositories r
 			LEFT JOIN latest_snapshots s ON r.id = s.repository_id
@@ -681,15 +688,17 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 			for fRows.Next() {
 				var rec RepoRecord
 				var staleInt int
+				var isScoredInt int
 				if err := fRows.Scan(
 					&rec.ID, &rec.FullName, &rec.Language, &rec.Stars, &rec.Description, &rec.GithubURL,
 					&rec.CRankTier, &rec.CRankScore, &rec.ExternalPRMergeRate, &rec.TimeToFirstResponseHours,
 					&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
 					&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
 					&rec.DistinctMaintainerCount, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
-					&rec.OnboardingScore, &rec.UpdatedAt,
+					&rec.OnboardingScore, &isScoredInt, &rec.UpdatedAt,
 				); err == nil {
 					rec.StalenessFlag = staleInt == 1
+					rec.IsScored = isScoredInt == 1
 					repos = append(repos, &rec)
 				}
 			}

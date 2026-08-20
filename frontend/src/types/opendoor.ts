@@ -28,6 +28,7 @@ export interface Repo {
   updated_at?: string;
   snapshot_date?: string;
   topics?: string[];
+  is_scored?: boolean;
 }
 
 export interface LanguageTierBreakdown {

@@ -187,3 +187,57 @@ func TestRepoRepository_GetMaintainerEvents(t *testing.T) {
 	}
 }
 
+func TestRepoRecord_IsScored(t *testing.T) {
+	database, err := sqlx.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("failed to open memory db: %v", err)
+	}
+	defer database.Close()
+
+	if err := db.AutoMigrate(database); err != nil {
+		t.Fatalf("failed to auto migrate: %v", err)
+	}
+
+	repoStore := repository.NewRepoRepository(database)
+	ctx := context.Background()
+	now := time.Now()
+
+	// Repo 1: Unscored (c_rank_score = 0, no snapshot)
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('unscored-1', 'facebook/react', 'facebook', 'react', 'JavaScript', 220000, ?)`, now)
+
+	// Repo 2: Scored (c_rank_score = 84.5)
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('scored-1', 'vercel/next.js', 'vercel', 'next.js', 'JavaScript', 120000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, external_pr_merge_rate) VALUES ('scored-1', '2026-08-20', 'A', 84.5, 60.0)`)
+
+	unscoredRepo, err := repoStore.FindByIDOrName(ctx, "facebook/react")
+	if err != nil {
+		t.Fatalf("FindByIDOrName for unscored repo failed: %v", err)
+	}
+	if unscoredRepo.IsScored {
+		t.Errorf("expected IsScored=false for unscored repo, got true")
+	}
+
+	scoredRepo, err := repoStore.FindByIDOrName(ctx, "vercel/next.js")
+	if err != nil {
+		t.Fatalf("FindByIDOrName for scored repo failed: %v", err)
+	}
+	if !scoredRepo.IsScored {
+		t.Errorf("expected IsScored=true for scored repo, got false")
+	}
+
+	// Test List method as well
+	listRepos, _, err := repoStore.List(ctx, repository.RepoFilter{})
+	if err != nil {
+		t.Fatalf("List failed: %v", err)
+	}
+	for _, r := range listRepos {
+		if r.FullName == "facebook/react" && r.IsScored {
+			t.Errorf("expected IsScored=false in List for facebook/react, got true")
+		}
+		if r.FullName == "vercel/next.js" && !r.IsScored {
+			t.Errorf("expected IsScored=true in List for vercel/next.js, got false")
+		}
+	}
+}
+
+

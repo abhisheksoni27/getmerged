@@ -14,7 +14,10 @@ export function SimilarRepos({ relatedRepos, language }: SimilarReposProps) {
   if (!relatedRepos || relatedRepos.length === 0) return null;
 
   return (
-    <div className="rounded-3xl bg-white p-6 sm:p-8 border border-zinc-200/80 shadow-xs mb-8">
+    <div
+      data-testid="similar-repos-rail"
+      className="rounded-3xl bg-white p-6 sm:p-8 border border-zinc-200/80 shadow-xs mb-8"
+    >
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-zinc-100">
         <div>
           <h3 className="text-lg font-bold text-zinc-900 flex items-center gap-2 font-space">
