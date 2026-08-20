@@ -30,6 +30,7 @@ export function RepoDetailHero({
   const owner = repo?.owner || fullName.split("/")[0];
   const ownerAvatarUrl = `https://github.com/${owner}.png`;
   const roundedScore = Math.round(score);
+  const isScored = repo?.is_scored ?? (score > 0);
 
   return (
     <div className="border border-zinc-200/90 bg-white p-6 sm:p-8 shadow-xs rounded-3xl mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 transition-all">
@@ -42,14 +43,22 @@ export function RepoDetailHero({
         />
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-2.5">
-            <span className="inline-flex items-center px-3 py-1 font-mono text-xs font-bold rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300">
-              {rankLabel}
-            </span>
-            {roundedScore > 0 && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 font-mono text-xs font-bold rounded-xl bg-zinc-900 text-white shadow-2xs">
-                <span>C-Rank Score:</span>
-                <span className="text-emerald-400">{roundedScore}</span>
-                <span className="text-zinc-400 font-normal">/100</span>
+            {isScored ? (
+              <>
+                <span className="inline-flex items-center px-3 py-1 font-mono text-xs font-bold rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300">
+                  {rankLabel}
+                </span>
+                {roundedScore > 0 && (
+                  <span className="inline-flex items-center gap-1 px-3 py-1 font-mono text-xs font-bold rounded-xl bg-zinc-900 text-white shadow-2xs">
+                    <span>C-Rank Score:</span>
+                    <span className="text-emerald-400">{roundedScore}</span>
+                    <span className="text-zinc-400 font-normal">/100</span>
+                  </span>
+                )}
+              </>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 text-zinc-700 border border-zinc-300/80 font-mono text-xs font-semibold tracking-tight">
+                Unscored • No Public PR Telemetry
               </span>
             )}
             {typeof repo?.stars === "number" && repo.stars >= 0 && (

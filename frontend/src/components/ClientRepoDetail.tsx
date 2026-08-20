@@ -35,6 +35,8 @@ import { RepoBadgeGenerator } from "@/components/RepoBadgeGenerator";
 import { SimilarRepos } from "@/components/SimilarRepos";
 import { PRAcceptanceWidget } from "@/components/PRAcceptanceWidget";
 import { OptimalReviewWindow } from "@/components/OptimalReviewWindow";
+import { UnscoredExplainer } from "@/components/UnscoredExplainer";
+import { isRepoScored } from "@/lib/repo-metadata";
 
 interface ClientRepoDetailProps {
   repo: Repo | null;
@@ -465,6 +467,11 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         onWatchToggle={handleWatchToggle}
         onGithubClick={() => posthog.capture('repo_github_link_clicked', { repo_full_name: fullName, repo_tier: rank })}
       />
+
+      {/* Unscored explainer + verified-welcoming alternatives (IDEA-20260820-02 AC2) */}
+      {!isRepoScored(repo) && (
+        <UnscoredExplainer fullName={fullName} language={repo?.language} />
+      )}
 
       {/* Macro Metrics Grid & cNPS Gauge Row */}
       <RepoScorecards
