@@ -111,6 +111,17 @@ func setupBadgeTestDB(t *testing.T) *sqlx.DB {
 		response_p90_hours REAL DEFAULT 0,
 		updated_at DATETIME NOT NULL
 	);
+
+	CREATE TABLE IF NOT EXISTS repo_pr_comments (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		repository_id TEXT NOT NULL,
+		pr_number INTEGER NOT NULL,
+		source_type TEXT NOT NULL,
+		author_login TEXT NOT NULL,
+		author_association TEXT NOT NULL,
+		comment_text TEXT NOT NULL,
+		created_at DATETIME NOT NULL
+	);
 	`
 	database.MustExec(schema)
 
@@ -370,13 +381,102 @@ func TestGetOptimalTimeHandler(t *testing.T) {
 	repoStore := repository.NewRepoRepository(database)
 
 	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('opt-1', 'facebook/react', 'facebook', 'react', 'JavaScript', 220000, ?)`, time.Now())
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('opt-2', 'vuejs/core', 'vuejs', 'core', 'TypeScript', 45000, ?)`, time.Now())
+
+	// Seed maintainer comments for facebook/react: maintainer active at 17:00 UTC on Tuesday (e.g., 2026-08-18 17:00:00 UTC)
+	for i := 0; i < 10; i++ {
+		tVal := time.Date(2026, 8, 18, 17, i, 0, 0, time.UTC)
+		database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at) VALUES ('opt-1', ?, 'issue_comment', 'gaearon', 'MEMBER', 'LGTM', ?)`, i+1, tVal)
+	}
+
+	// Seed maintainer comments for vuejs/core: maintainer active at 09:00 UTC on Wednesday (e.g., 2026-08-19 09:00:00 UTC)
+	for i := 0; i < 15; i++ {
+		tVal := time.Date(2026, 8, 19, 9, i, 0, 0, time.UTC)
+		database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at) VALUES ('opt-2', ?, 'issue_comment', 'yyx990803', 'OWNER', 'Thanks', ?)`, i+1, tVal)
+	}
 
 	r := gin.New()
 	r.GET("/api/v1/optimal-time", handler.GetOptimalTimeHandler(repoStore))
-	r.GET("/api/v1/repos/:owner/:name/optimal-time", handler.GetOptimalTimeHandler(repoStore))
+	r.GET("/api/v1/repos/:id/optimal-time", handler.GetOptimalTimeHandler(repoStore))
 
-	t.Run("by query param name", func(t *testing.T) {
-		req := httptest.NewRequest("GET", "/api/v1/optimal-time?name=facebook/react", nil)
+	t.Run("by query param name with distinct repo heatmaps", func(t *testing.T) {
+		reqReact := httptest.NewRequest("GET", "/api/v1/optimal-time?name=facebook/react", nil)
+		wReact := httptest.NewRecorder()
+		r.ServeHTTP(wReact, reqReact)
+
+		if wReact.Code != http.StatusOK {
+			t.Fatalf("expected 200 OK, got %d", wReact.Code)
+		}
+
+		if cacheHeader := wReact.Header().Get("Cache-Control"); !strings.Contains(cacheHeader, "public, max-age=3600") {
+			t.Fatalf("expected Cache-Control header, got %s", cacheHeader)
+		}
+
+		var payloadReact struct {
+			Repository  string `json:"repository"`
+			OptimalTime struct {
+				PrimaryStartHourUTC   int         `json:"primary_start_hour_utc"`
+				PrimaryEndHourUTC     int         `json:"primary_end_hour_utc"`
+				PeakHourUTC           int         `json:"peak_hour_utc"`
+				ActiveMaintainerCount int         `json:"active_maintainer_count"`
+				HourlyHeatmap         [24]float64 `json:"hourly_heatmap"`
+				RecommendedDayWindow  string      `json:"recommended_day_window"`
+				ConfidenceScore       float64     `json:"confidence_score"`
+			} `json:"optimal_time"`
+		}
+
+		if err := json.NewDecoder(wReact.Body).Decode(&payloadReact); err != nil {
+			t.Fatalf("failed to decode response: %v", err)
+		}
+
+		if payloadReact.Repository != "facebook/react" {
+			t.Fatalf("expected facebook/react, got %s", payloadReact.Repository)
+		}
+		if payloadReact.OptimalTime.PeakHourUTC != 17 {
+			t.Fatalf("expected peak hour 17 for react, got %d", payloadReact.OptimalTime.PeakHourUTC)
+		}
+		if payloadReact.OptimalTime.ActiveMaintainerCount != 1 {
+			t.Fatalf("expected 1 active maintainer for react, got %d", payloadReact.OptimalTime.ActiveMaintainerCount)
+		}
+
+		// Now query vuejs/core by ID
+		reqVue := httptest.NewRequest("GET", "/api/v1/repos/opt-2/optimal-time", nil)
+		wVue := httptest.NewRecorder()
+		r.ServeHTTP(wVue, reqVue)
+
+		if wVue.Code != http.StatusOK {
+			t.Fatalf("expected 200 OK, got %d", wVue.Code)
+		}
+
+		var payloadVue struct {
+			Repository  string `json:"repository"`
+			OptimalTime struct {
+				PrimaryStartHourUTC   int         `json:"primary_start_hour_utc"`
+				PrimaryEndHourUTC     int         `json:"primary_end_hour_utc"`
+				PeakHourUTC           int         `json:"peak_hour_utc"`
+				ActiveMaintainerCount int         `json:"active_maintainer_count"`
+				HourlyHeatmap         [24]float64 `json:"hourly_heatmap"`
+				RecommendedDayWindow  string      `json:"recommended_day_window"`
+				ConfidenceScore       float64     `json:"confidence_score"`
+			} `json:"optimal_time"`
+		}
+
+		if err := json.NewDecoder(wVue.Body).Decode(&payloadVue); err != nil {
+			t.Fatalf("failed to decode response: %v", err)
+		}
+
+		if payloadVue.OptimalTime.PeakHourUTC != 9 {
+			t.Fatalf("expected peak hour 9 for vue, got %d", payloadVue.OptimalTime.PeakHourUTC)
+		}
+		if payloadVue.OptimalTime.PeakHourUTC == payloadReact.OptimalTime.PeakHourUTC {
+			t.Fatalf("expected different peak hours for react and vue")
+		}
+	})
+
+	t.Run("empty events fallback", func(t *testing.T) {
+		database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('empty-repo', 'org/empty', 'org', 'empty', 'Go', 10, ?)`, time.Now())
+
+		req := httptest.NewRequest("GET", "/api/v1/optimal-time?name=org/empty", nil)
 		w := httptest.NewRecorder()
 		r.ServeHTTP(w, req)
 
@@ -384,31 +484,22 @@ func TestGetOptimalTimeHandler(t *testing.T) {
 			t.Fatalf("expected 200 OK, got %d", w.Code)
 		}
 
-		if cacheHeader := w.Header().Get("Cache-Control"); !strings.Contains(cacheHeader, "public, max-age=3600") {
-			t.Fatalf("expected Cache-Control header, got %s", cacheHeader)
-		}
-
 		var payload struct {
 			Repository  string `json:"repository"`
 			OptimalTime struct {
-				PrimaryStartHourUTC  int         `json:"primary_start_hour_utc"`
-				PrimaryEndHourUTC    int         `json:"primary_end_hour_utc"`
-				PeakHourUTC          int         `json:"peak_hour_utc"`
-				HourlyHeatmap        [24]float64 `json:"hourly_heatmap"`
-				RecommendedDayWindow string      `json:"recommended_day_window"`
-				ConfidenceScore      float64     `json:"confidence_score"`
+				ActiveMaintainerCount int     `json:"active_maintainer_count"`
+				ConfidenceScore       float64 `json:"confidence_score"`
 			} `json:"optimal_time"`
 		}
-
 		if err := json.NewDecoder(w.Body).Decode(&payload); err != nil {
 			t.Fatalf("failed to decode response: %v", err)
 		}
 
-		if payload.Repository != "facebook/react" {
-			t.Fatalf("expected facebook/react, got %s", payload.Repository)
+		if payload.OptimalTime.ConfidenceScore != 0.0 {
+			t.Fatalf("expected 0.0 confidence, got %v", payload.OptimalTime.ConfidenceScore)
 		}
-		if payload.OptimalTime.RecommendedDayWindow == "" {
-			t.Fatalf("expected non-empty recommended day window")
+		if payload.OptimalTime.ActiveMaintainerCount != 0 {
+			t.Fatalf("expected 0 maintainers, got %d", payload.OptimalTime.ActiveMaintainerCount)
 		}
 	})
 

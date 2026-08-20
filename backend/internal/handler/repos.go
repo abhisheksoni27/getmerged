@@ -575,17 +575,12 @@ func GetOptimalTimeHandler(repoStore repository.RepoRepository) gin.HandlerFunc 
 
 		c.Header("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400")
 
-		ownerLogin := repo.FullName
-		if parts := strings.Split(repo.FullName, "/"); len(parts) > 0 {
-			ownerLogin = parts[0]
+		events, err := repoStore.GetMaintainerEvents(c.Request.Context(), repo.ID)
+		if err != nil {
+			events = []scoring.MaintainerEvent{}
 		}
 
-		// Synthesize maintainer events based on maintainer activity and response latency
-		res := scoring.CalculateOptimalWindow([]scoring.MaintainerEvent{
-			{MaintainerLogin: ownerLogin, HourUTC: 14, DayOfWeek: time.Tuesday},
-			{MaintainerLogin: ownerLogin, HourUTC: 15, DayOfWeek: time.Wednesday},
-			{MaintainerLogin: ownerLogin, HourUTC: 16, DayOfWeek: time.Thursday},
-		})
+		res := scoring.CalculateOptimalWindow(events)
 
 		c.JSON(http.StatusOK, gin.H{
 			"repository":   repo.FullName,
