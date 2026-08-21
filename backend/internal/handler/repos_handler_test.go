@@ -514,3 +514,46 @@ func TestGetOptimalTimeHandler(t *testing.T) {
 	})
 }
 
+func TestGetRepoHistory_Contract(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	database := setupRepoTestDB(t)
+	defer database.Close()
+
+	repoStore := repository.NewRepoRepository(database)
+
+	r := gin.New()
+	r.GET("/api/v1/repos/:id/history", handler.GetRepoHistory(repoStore))
+
+	repoUUID := "c30791ab-4160-40c6-b232-bb71c61d3249"
+
+	req := httptest.NewRequest("GET", "/api/v1/repos/"+repoUUID+"/history", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200 OK for GetRepoHistory, got %d: %s", w.Code, w.Body.String())
+	}
+
+	var resp struct {
+		RepositoryID string `json:"repository_id"`
+		FullName     string `json:"full_name"`
+		History      []struct {
+			SnapshotDate string  `json:"snapshot_date"`
+			CRankScore   float64 `json:"c_rank_score"`
+			CRankTier    string  `json:"c_rank_tier"`
+		} `json:"history"`
+	}
+
+	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to unmarshal history response: %v", err)
+	}
+
+	if resp.RepositoryID != repoUUID || resp.FullName != "freeCodeCamp/freeCodeCamp" {
+		t.Fatalf("unexpected repo info in history response: %+v", resp)
+	}
+
+	if len(resp.History) != 1 || resp.History[0].CRankTier != "S" {
+		t.Fatalf("expected 1 history snapshot with tier S, got %+v", resp.History)
+	}
+}
+
