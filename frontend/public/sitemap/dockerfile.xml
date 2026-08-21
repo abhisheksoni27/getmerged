@@ -44,19 +44,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-sabnzbd</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dciancu/unifi-protect-unvr-docker-arm64</loc>
     <lastmod>2026-08-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Jamesits/docker-ripe-atlas</loc>
-    <lastmod>2026-08-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -75,6 +69,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/blacktop/docker-ghidra</loc>
     <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/rust-lang/docker-rust</loc>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -152,7 +152,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/goldbergyoni/nodebestpractices</loc>
-    <lastmod>2026-08-16</lastmod>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -177,6 +177,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-swag</loc>
     <lastmod>2026-08-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-tautulli</loc>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -350,7 +356,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/k8s-operatorhub/community-operators</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -392,7 +398,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jauderho/dockerfiles</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Perl/docker-perl</loc>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -428,7 +440,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/GuillaumeFalourd/useful-actions</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -453,6 +465,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/StaPH-B/docker-builds</loc>
     <lastmod>2026-08-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/AyhanMansur/3X-Ui-on-railway</loc>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -501,6 +519,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/Supporterino/truenas-graphite-to-prometheus</loc>
     <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Sinotrade/Shioaji</loc>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -602,7 +626,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/redhat-openshift-ecosystem/community-operators-prod</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/carlossg/docker-maven</loc>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -650,7 +680,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/coreruleset/modsecurity-crs-docker</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -752,7 +782,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Tecnativa/doodba</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -776,7 +806,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/BenoitAnastay/paperless-home-assistant-addon</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -794,13 +824,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dotnet/dotnet-docker</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/tianon/dockerfiles</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -813,6 +843,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-firefox</loc>
     <lastmod>2026-08-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/sethforprivacy/simple-monerod-docker</loc>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
