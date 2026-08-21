@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { LogOut, Search } from "lucide-react";
+import { Bookmark, LogOut, Search } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { User } from "@/types/opendoor";
@@ -157,6 +157,14 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   </span>
                 </div>
               )}
+              <Link
+                href="/watchlist"
+                title="My Watchlist"
+                className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-sans font-medium text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-colors border-l border-zinc-200/80 pl-2.5 ml-0.5"
+              >
+                <Bookmark className="h-3.5 w-3.5 text-zinc-500" />
+                <span className="hidden sm:inline">My Watchlist</span>
+              </Link>
               <button
                 onClick={handleLogout}
                 className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 transition-colors cursor-pointer"
