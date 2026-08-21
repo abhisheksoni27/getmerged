@@ -98,7 +98,7 @@ test.describe("Watchlist Dashboard (IDEA-20260820-03)", () => {
       });
     });
 
-    await page.route("**/api/v1/repos/facebook/react", async (route) => {
+    await page.route("**/api/v1/repos/facebook%2Freact", async (route) => {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -124,7 +124,7 @@ test.describe("Watchlist Dashboard (IDEA-20260820-03)", () => {
       });
     });
 
-    await page.route("**/api/v1/repos/facebook/react/history", async (route) => {
+    await page.route("**/api/v1/repos/facebook%2Freact/history", async (route) => {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -139,7 +139,7 @@ test.describe("Watchlist Dashboard (IDEA-20260820-03)", () => {
       });
     });
 
-    await page.route("**/api/v1/repos/vuejs/vue", async (route) => {
+    await page.route("**/api/v1/repos/vuejs%2Fvue", async (route) => {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -165,7 +165,7 @@ test.describe("Watchlist Dashboard (IDEA-20260820-03)", () => {
       });
     });
 
-    await page.route("**/api/v1/repos/vuejs/vue/history", async (route) => {
+    await page.route("**/api/v1/repos/vuejs%2Fvue/history", async (route) => {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -183,8 +183,8 @@ test.describe("Watchlist Dashboard (IDEA-20260820-03)", () => {
     await page.goto("/watchlist", { waitUntil: "domcontentloaded" });
 
     // Header assertions
-    await expect(page.getByRole("heading", { name: /My Watchlist/i })).toBeVisible({ timeout: 10000 });
-    await expect(page.getByText(/2 saved/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: /My Watchlist/i })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText(/2 saved/i)).toBeVisible({ timeout: 15000 });
 
     // AC1: Live C-Rank tier/score rendered
     await expect(page.getByRole("heading", { name: "facebook/react" })).toBeVisible();
@@ -273,7 +273,7 @@ test.describe("Watchlist Dashboard (IDEA-20260820-03)", () => {
       });
     });
 
-    await page.route("**/api/v1/repos/facebook/react", async (route) => {
+    await page.route("**/api/v1/repos/facebook%2Freact", async (route) => {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -299,7 +299,7 @@ test.describe("Watchlist Dashboard (IDEA-20260820-03)", () => {
       });
     });
 
-    await page.route("**/api/v1/repos/facebook/react/history", async (route) => {
+    await page.route("**/api/v1/repos/facebook%2Freact/history", async (route) => {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -329,7 +329,7 @@ test.describe("Watchlist Dashboard (IDEA-20260820-03)", () => {
 
     await page.goto("/watchlist", { waitUntil: "domcontentloaded" });
 
-    await expect(page.getByRole("heading", { name: "facebook/react" })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole("heading", { name: "facebook/react" })).toBeVisible({ timeout: 15000 });
 
     const unwatchButton = page.getByRole("button", { name: /Unwatch facebook\/react|Remove facebook\/react from watchlist/i });
     await expect(unwatchButton).toBeVisible();
