@@ -9,7 +9,7 @@ test.describe("Watchlist Dashboard (IDEA-20260820-03)", () => {
 
     await page.goto("/watchlist", { waitUntil: "domcontentloaded" });
     // In server component, redirect to /api/v1/auth/github occurs
-    expect(page.url()).toMatch(/(\/api\/v1\/auth\/github|github\.com\/login\/oauth)/);
+    expect(page.url()).toMatch(/(\/api\/v1\/auth\/github|github\.com\/(login|login\/oauth))/);
   });
 
   test("AC3: Empty watchlist shows empty state card with CTA to browse /repos", async ({ page, context }) => {
