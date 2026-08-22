@@ -140,6 +140,7 @@ func main() {
 		api.GET("/badges/:owner/:name/badge.svg", handler.GetRepoBadgeSVG(repoStore))
 		api.POST("/preflight/evaluate", handler.EvaluatePreflightHandler())
 		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo))
+		api.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
 
 		// Auth Routes
 		authGroup := api.Group("/auth")
@@ -161,7 +162,6 @@ func main() {
 		userApi.GET("/user/dna", handler.GetContributorDNA(profileRepo))
 		userApi.POST("/user/dna/refresh", handler.RefreshContributorDNA(profileRepo, dnaWorker))
 		userApi.GET("/user/matches", handler.GetUserMatchesHandler(profileRepo, repoStore))
-		userApi.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
 		userApi.POST("/user/watchlist", handler.AddToWatchlist(watchlistRepo))
 		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist(watchlistRepo))
 		userApi.GET("/user/watchlist", handler.ListWatchlist(watchlistRepo))
