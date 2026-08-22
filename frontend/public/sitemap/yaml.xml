@@ -1,110 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://getmerged.abhishekco.de/web-platform-dx/web-features</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/usnistgov/macos_security</loc>
-    <lastmod>2026-08-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/okwilkins/h8s</loc>
-    <lastmod>2026-08-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Mafyuh/iac</loc>
-    <lastmod>2026-08-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/stashapp/CommunityScrapers</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/RealOrangeOne/infrastructure</loc>
-    <lastmod>2026-08-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/aquaproj/aqua-registry</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/billimek/k8s-gitops</loc>
-    <lastmod>2026-08-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/bjw-s-labs/home-ops</loc>
-    <lastmod>2026-08-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/haraldkoch/kochhaus-home</loc>
-    <lastmod>2026-08-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/ishioni/homelab-ops</loc>
-    <lastmod>2026-08-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/waifulabs/infrastructure</loc>
-    <lastmod>2026-08-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/chr1sd/home-ops</loc>
-    <lastmod>2026-08-16</lastmod>
+    <loc>https://getmerged.abhishekco.de/onedr0p/home-ops</loc>
+    <lastmod>2026-08-17T04:03:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/k3s-io/k3s-ansible</loc>
-    <lastmod>2026-08-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/onedr0p/home-ops</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-17T04:03:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/onedr0p/cluster-template</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-08-17T04:03:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/joryirving/home-ops</loc>
-    <lastmod>2026-08-21</lastmod>
+    <loc>https://getmerged.abhishekco.de/usnistgov/macos_security</loc>
+    <lastmod>2026-08-17T04:03:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/web-platform-dx/web-features</loc>
+    <lastmod>2026-08-19T12:09:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/bjw-s-labs/home-ops</loc>
+    <lastmod>2026-08-19T12:09:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/stashapp/CommunityScrapers</loc>
+    <lastmod>2026-08-16T22:54:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Mafyuh/iac</loc>
+    <lastmod>2026-08-19T12:09:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/billimek/k8s-gitops</loc>
+    <lastmod>2026-08-19T12:09:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/aquaproj/aqua-registry</loc>
+    <lastmod>2026-08-18T03:03:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hackclub/dns</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-16T19:07:20Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/waifulabs/infrastructure</loc>
+    <lastmod>2026-08-16T23:24:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/joryirving/home-ops</loc>
+    <lastmod>2026-08-16T23:24:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/haraldkoch/kochhaus-home</loc>
+    <lastmod>2026-08-16T23:24:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/okwilkins/h8s</loc>
+    <lastmod>2026-08-16T23:24:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/chr1sd/home-ops</loc>
+    <lastmod>2026-08-16T23:24:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/RealOrangeOne/infrastructure</loc>
+    <lastmod>2026-08-17T22:48:24Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ishioni/homelab-ops</loc>
+    <lastmod>2026-08-16T23:24:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

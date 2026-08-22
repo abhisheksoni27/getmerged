@@ -1,80 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://getmerged.abhishekco.de/shirok/Gauche</loc>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/cosmos72/schemesh</loc>
-    <lastmod>2026-08-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/yuriy-chumak/ol</loc>
-    <lastmod>2026-08-20</lastmod>
+    <loc>https://getmerged.abhishekco.de/cisco/ChezScheme</loc>
+    <lastmod>2026-08-19T05:21:27Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gambit/gambit</loc>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/cisco/ChezScheme</loc>
-    <lastmod>2026-08-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/objecthub/swift-lispkit</loc>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/opencog/learn</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-18T12:40:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ashinn/chibi-scheme</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/scality/metalk8s</loc>
-    <lastmod>2026-08-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/NalaGinrut/artanis</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-18T12:40:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/webyrd/Barliman</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-18T12:40:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/guenchi/Igropyr</loc>
-    <lastmod>2026-08-19</lastmod>
+    <loc>https://getmerged.abhishekco.de/shirok/Gauche</loc>
+    <lastmod>2026-08-18T23:45:02Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/MoganLab/mogan</loc>
+    <lastmod>2026-08-22T15:30:54Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/objecthub/swift-lispkit</loc>
+    <lastmod>2026-08-18T07:07:06Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/scality/metalk8s</loc>
+    <lastmod>2026-08-20T12:26:40Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/cosmos72/schemesh</loc>
+    <lastmod>2026-08-20T12:26:40Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/yuriy-chumak/ol</loc>
+    <lastmod>2026-08-20T12:26:40Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/NalaGinrut/artanis</loc>
+    <lastmod>2026-08-20T12:26:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jolt-lang/jolt</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-18T05:52:04Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/opencog/learn</loc>
+    <lastmod>2026-08-19T11:27:28Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/guenchi/Igropyr</loc>
+    <lastmod>2026-08-19T11:27:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

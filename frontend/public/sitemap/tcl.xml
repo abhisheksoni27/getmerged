@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://getmerged.abhishekco.de/macports/macports-base</loc>
-    <lastmod>2026-08-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Gcenx/macports-wine</loc>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/rust-lang/crates.io-index</loc>
-    <lastmod>2026-08-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Xilinx/XilinxTclStore</loc>
-    <lastmod>2026-08-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/macports/macports-ports</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-19T05:36:28Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/macports/macports-base</loc>
+    <lastmod>2026-08-19T05:36:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/BRL-CAD/brlcad</loc>
-    <lastmod>2026-08-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/pavel-demin/red-pitaya-notes</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-08-19T05:36:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/envmodules/modules</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-08-17T08:30:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/rust-lang/crates.io-index</loc>
+    <lastmod>2026-08-16T22:54:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/pavel-demin/red-pitaya-notes</loc>
+    <lastmod>2026-08-17T13:33:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Xilinx/XilinxTclStore</loc>
+    <lastmod>2026-08-20T12:44:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fpgadeveloper/fpga-drive-aximm-pcie</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-08-17T13:33:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Gcenx/macports-wine</loc>
+    <lastmod>2026-08-18T07:22:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

@@ -1,92 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://getmerged.abhishekco.de/xgo-dev/llgo</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Xilinx/llvm-aie</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/llvm/llvm-project</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/llvm-mos/llvm-mos</loc>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/KhronosGroup/SPIRV-LLVM-Translator</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/google/clspv</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/f0rki/mapping-high-level-constructs-to-llvm-ir</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/komimoe/Arkari</loc>
-    <lastmod>2026-08-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/schism-dev/schism</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/arm/arm-toolchain</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/CHIP-SPV/chipStar</loc>
-    <lastmod>2026-08-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/jeandle/jeandle-llvm</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/metashell/metashell</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-08-16T15:29:16Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/EnzymeAD/Enzyme</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-18T22:53:58Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/intel/llvm</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-18T22:53:58Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/google/clspv</loc>
+    <lastmod>2026-08-21T08:00:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/xgo-dev/llgo</loc>
+    <lastmod>2026-08-18T06:16:04Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/f0rki/mapping-high-level-constructs-to-llvm-ir</loc>
+    <lastmod>2026-08-21T08:00:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/KhronosGroup/SPIRV-LLVM-Translator</loc>
+    <lastmod>2026-08-21T08:00:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/llvm-mos/llvm-mos</loc>
+    <lastmod>2026-08-18T06:16:04Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/metashell/metashell</loc>
+    <lastmod>2026-08-17T12:39:45Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/CHIP-SPV/chipStar</loc>
+    <lastmod>2026-08-16T22:33:45Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/komimoe/Arkari</loc>
+    <lastmod>2026-08-19T17:12:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/arm/arm-toolchain</loc>
+    <lastmod>2026-08-21T15:06:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Xilinx/llvm-aie</loc>
+    <lastmod>2026-08-21T15:06:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jeandle/jeandle-llvm</loc>
+    <lastmod>2026-08-21T15:06:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/schism-dev/schism</loc>
+    <lastmod>2026-08-21T15:06:49Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

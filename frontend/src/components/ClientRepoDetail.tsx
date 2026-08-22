@@ -439,12 +439,12 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
   const compositeScore = (mergeScore * 0.4) + (responseScore * 0.3) + (firstTimerScore * 0.3);
   const vibeScore = Math.round(compositeScore);
 
-  const distinctMaintainers = repo?.distinct_maintainer_count !== undefined ? repo.distinct_maintainer_count : 0;
-  const maintainersCommentary = distinctMaintainers > 5
+  const busFactor = repo?.bus_factor ?? 0;
+  const maintainersCommentary = busFactor > 5
     ? "Highly collaborative maintainer core"
-    : distinctMaintainers > 1
+    : busFactor > 1
     ? "Small core review team"
-    : distinctMaintainers === 1
+    : busFactor === 1
     ? "Single maintainer review bottleneck"
     : "No active GitHub maintainers found (may review internally on Gerrit or internal tools)";
 
@@ -622,7 +622,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
         mergeCommentary={mergeCommentary}
         firstTimerSuccessStr={firstTimerSuccessStr}
         firstTimerCommentary={firstTimerCommentary}
-        distinctMaintainers={distinctMaintainers}
+        busFactor={busFactor}
         maintainersCommentary={maintainersCommentary}
         vibeScore={vibeScore}
         onboardingScore={repo?.onboarding_score}

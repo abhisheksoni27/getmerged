@@ -1,56 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://getmerged.abhishekco.de/fable-compiler/Fable.Python</loc>
-    <lastmod>2026-08-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/fsbolero/Bolero</loc>
-    <lastmod>2026-08-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/bryanedds/Nu</loc>
-    <lastmod>2026-08-19</lastmod>
+    <loc>https://getmerged.abhishekco.de/dotnet/fsharp</loc>
+    <lastmod>2026-08-19T11:00:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fable-compiler/Fable</loc>
-    <lastmod>2026-08-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/fscheck/FsCheck</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-19T16:42:27Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/giraffe-fsharp/Giraffe</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-19T16:42:27Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/darklang/dark</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-19T16:42:27Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/dotnet/fsharp</loc>
-    <lastmod>2026-08-21</lastmod>
+    <loc>https://getmerged.abhishekco.de/bryanedds/Nu</loc>
+    <lastmod>2026-08-19T16:42:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fscheck/FsCheck</loc>
+    <lastmod>2026-08-19T16:42:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fsbolero/Bolero</loc>
+    <lastmod>2026-08-19T16:42:27Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/serilog-contrib/serilog-sinks-grafana-loki</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-20T10:53:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fable-compiler/Fable.Python</loc>
+    <lastmod>2026-08-20T10:53:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/aardvark-platform/aardvark.rendering</loc>
+    <lastmod>2026-08-22T08:52:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
