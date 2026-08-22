@@ -62,6 +62,7 @@ type RepoFilter struct {
 	HasGoodFirstIssue        bool
 	Owner                    string
 	Topic                    string
+	MinMaintainers           float64
 }
 
 type SnapshotRecord struct {
@@ -185,6 +186,11 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 	if filter.Topic != "" {
 		where += " AND r.id IN (SELECT repository_id FROM repository_topics WHERE topic = ?)"
 		args = append(args, strings.ToLower(filter.Topic))
+	}
+
+	if filter.MinMaintainers > 0 {
+		where += " AND COALESCE(s.distinct_maintainer_count,0) >= ?"
+		args = append(args, filter.MinMaintainers)
 	}
 
 	sortCol, ok := allowedSortFields[filter.SortBy]
