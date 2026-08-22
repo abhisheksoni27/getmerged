@@ -13,6 +13,7 @@ type PreflightInput struct {
 	Additions      int      `json:"additions"`
 	Deletions      int      `json:"deletions"`
 	LinkedIssueURL string   `json:"linked_issue_url,omitempty"`
+	PRURL          string   `json:"pr_url,omitempty"`
 }
 
 type PreflightCheckItem struct {

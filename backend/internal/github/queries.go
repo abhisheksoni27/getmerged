@@ -154,6 +154,30 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
 }
 `
 
+// RepoPRDetailQuery fetches a single pull request with its metadata and changed-file paths.
+const RepoPRDetailQuery = `
+query RepoPRDetail($owner: String!, $name: String!, $number: Int!) {
+  repository(owner: $owner, name: $name) {
+    pullRequest(number: $number) {
+      title
+      body
+      additions
+      deletions
+      files(first: 50) {
+        nodes {
+          path
+        }
+      }
+    }
+  }
+  rateLimit {
+    remaining
+    resetAt
+    cost
+  }
+}
+`
+
 // RepoStalenessQuery checks if any external PR was merged in the last 6 months.
 const RepoStalenessQuery = `
 query RepoStaleness($owner: String!, $name: String!) {

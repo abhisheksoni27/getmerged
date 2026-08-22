@@ -86,8 +86,10 @@ export default async function RepoDetailPage({ params }: PageProps) {
   const fullName = `${owner}/${name}`;
 
   // Server-Side Data Fetching -> Pure SSR
-  const repo = await getRepoData(fullName);
-  const insights = await getRepoInsights(repo?.id != null ? String(repo.id) : fullName);
+  const [repo, insights] = await Promise.all([
+    getRepoData(fullName),
+    getRepoInsights(fullName),
+  ]);
 
   // Schema.org JSON-LD Structured Data (SoftwareSourceCode & freshness dateModified)
   const jsonLd = {

@@ -84,6 +84,7 @@ function PreflightContent() {
     : null;
 
   const [repoFullName, setRepoFullName] = useState<string>(() => parseRepoParam(queryRepo));
+  const [prUrl, setPRUrl] = useState("");
   const [prTitle, setPRTitle] = useState("");
   const [prDescription, setPRDescription] = useState("");
   const [changedFilesText, setChangedFilesText] = useState("");
@@ -92,6 +93,7 @@ function PreflightContent() {
   const [linkedIssueURL, setLinkedIssueURL] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [fetchingPR, setFetchingPR] = useState(false);
   const [result, setResult] = useState<EvaluationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -104,6 +106,38 @@ function PreflightContent() {
       setRepoFullName(sanitized);
     }
   }, [searchParams, repoFullName]);
+
+  const fetchPRDetails = async (url: string) => {
+    setFetchingPR(true);
+    setError(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/preflight/pr-details`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pr_url: url.trim() }),
+      });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData?.error || `Failed to fetch PR details (status ${res.status})`);
+      }
+      const data = await res.json();
+      if (data.repo_full_name && !repoFullName) {
+        setRepoFullName(data.repo_full_name);
+      }
+      if (data.pr_title) setPRTitle(data.pr_title);
+      if (data.pr_description) setPRDescription(data.pr_description);
+      if (data.changed_files && Array.isArray(data.changed_files)) {
+        setChangedFilesText(data.changed_files.join("\n"));
+      }
+      if (data.additions) setAdditions(data.additions);
+      if (data.deletions) setDeletions(data.deletions);
+    } catch (err) {
+      console.error("Failed to fetch PR details", err);
+      setError(err instanceof Error ? err.message : "Failed to fetch PR details.");
+    } finally {
+      setFetchingPR(false);
+    }
+  };
 
   const performEvaluation = async () => {
     setLoading(true);
@@ -127,6 +161,7 @@ function PreflightContent() {
           additions: Number(additions) || 0,
           deletions: Number(deletions) || 0,
           linked_issue_url: linkedIssueURL.trim(),
+          pr_url: prUrl.trim(),
         }),
       });
 
@@ -178,7 +213,7 @@ function PreflightContent() {
               onClick={performEvaluation}
               disabled={loading}
               aria-label="Retry evaluation"
-              className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-white border border-[#dc2626] text-[#dc2626] font-mono font-bold text-xs uppercase tracking-wider hover:bg-[#fee2e2] active:scale-[0.98] transition-all duration-100 disabled:opacity-50 cursor-pointer shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 shrink-0"
+              className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-[#dc2626] text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-[#b91c1c] active:scale-[0.98] transition-all duration-100 disabled:opacity-50 cursor-pointer shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 shrink-0"
             >
               {loading ? "Retrying..." : "Retry Evaluation"}
             </button>
@@ -191,6 +226,39 @@ function PreflightContent() {
         onSubmit={handleEvaluate}
         className="rounded-2xl bg-white p-5 sm:p-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-8 font-sans"
       >
+        <div className="mb-4">
+          <label
+            htmlFor="pr-url-input"
+            className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1.5 font-mono"
+          >
+            Pull Request URL (auto-fetch diff & metadata)
+          </label>
+          <div className="flex gap-2">
+            <input
+              id="pr-url-input"
+              type="text"
+              placeholder="https://github.com/owner/repo/pull/123"
+              value={prUrl}
+              onChange={(e) => setPRUrl(e.target.value)}
+              onBlur={(e) => {
+                const val = e.target.value.trim();
+                if (val && /github\.com\/.+\/.+\/pull\/\d+/i.test(val)) {
+                  fetchPRDetails(val);
+                }
+              }}
+              className="flex-1 px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-zinc-50/50 font-mono text-sm text-zinc-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all outline-none"
+            />
+            {fetchingPR && (
+              <span className="inline-flex items-center px-3 py-2 rounded-xl bg-zinc-100 text-zinc-600 text-xs font-mono">
+                Fetching...
+              </span>
+            )}
+          </div>
+          <p className="text-[11px] text-zinc-500 mt-1 font-sans">
+            Paste a GitHub PR link to auto-populate title, diff stats, and changed files.
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
             <label

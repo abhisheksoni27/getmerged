@@ -80,11 +80,11 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
             data-testid="pr-preflight-cta"
             title={`Run pre-flight evaluation for ${owner}/${name}`}
             aria-label={`Run pre-flight evaluation for ${owner}/${name}`}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 active:scale-[0.98]"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white border border-emerald-800 hover:bg-emerald-500 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 active:scale-[0.98] shadow-sm"
           >
-            <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
+            <Sparkles className="h-3.5 w-3.5 text-white" aria-hidden="true" />
             <span>Run Pre-flight PR Check</span>
-            <ArrowRight className="h-3 w-3 text-emerald-700 dark:text-emerald-300" />
+            <ArrowRight className="h-3 w-3 text-white" aria-hidden="true" />
           </Link>
           <span className="text-[11px] font-sans text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full">
             Precomputed via Live PR Events
