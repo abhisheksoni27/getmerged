@@ -75,6 +75,8 @@ type TopicStat struct {
 	Name                   string  `db:"name" json:"name"`
 	RepoCount              int     `db:"repo_count" json:"repo_count"`
 	AvgExternalPRMergeRate float64 `db:"avg_external_pr_merge_rate" json:"avg_external_pr_merge_rate"`
+	AvgStars               float64 `db:"avg_stars" json:"avg_stars"`
+	AvgResponseHours       float64 `db:"avg_response_hours" json:"avg_response_hours"`
 }
 
 type RepoRepository interface {
@@ -347,9 +349,12 @@ func (r *sqlxRepoRepository) GetAllTopicStats(ctx context.Context) ([]TopicStat,
 		SELECT
 			t.topic AS name,
 			COUNT(t.repository_id) AS repo_count,
-			COALESCE(AVG(s.external_pr_merge_rate), 0.0) AS avg_external_pr_merge_rate
+			COALESCE(AVG(s.external_pr_merge_rate), 0.0) AS avg_external_pr_merge_rate,
+			COALESCE(AVG(r.stars), 0.0) AS avg_stars,
+			COALESCE(AVG(COALESCE(NULLIF(s.response_p50_hours, 0), NULLIF(s.time_to_first_response_hours, 0), 0)), 0.0) AS avg_response_hours
 		FROM repository_topics t
 		LEFT JOIN latest_snapshots s ON t.repository_id = s.repository_id
+		LEFT JOIN repositories r ON t.repository_id = r.id
 		GROUP BY t.topic
 		ORDER BY repo_count DESC, t.topic ASC
 	`)

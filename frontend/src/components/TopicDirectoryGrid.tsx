@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import {
   ArrowRight,
   ChevronDown,
@@ -17,6 +18,7 @@ interface TopicDirectoryGridProps {
   initialTopics: string[];
   initialStats: TopicStat[];
   totalCount: number;
+  initialPage?: number;
 }
 
 const PAGE_SIZE = 100;
@@ -26,13 +28,30 @@ function mergeRateLabel(rate: number): string {
   return rate > 0 ? `${rate.toFixed(1)}%` : "";
 }
 
+function formatStars(stars?: number): string {
+  if (!stars || stars < 1) return "";
+  return stars >= 1000 ? `${(stars / 1000).toFixed(1)}k` : Math.round(stars).toString();
+}
+
+function formatResponseHours(hours?: number): string {
+  if (!hours || hours <= 0) return "";
+  if (hours < 1) return "<1h";
+  if (hours < 24) return `${Math.round(hours)}h`;
+  return `${Math.round(hours / 24)}d`;
+}
+
 export function TopicDirectoryGrid({
   initialTopics,
   initialStats,
   totalCount,
+  initialPage = 1,
 }: TopicDirectoryGridProps) {
-  const [query, setQuery] = useState("");
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [query, setQuery] = useState(searchParams.get("q") || "");
+  const [visibleCount, setVisibleCount] = useState(() => Math.max(PAGE_SIZE, initialPage * PAGE_SIZE));
   const [fullStats, setFullStats] = useState<TopicStat[] | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);
 
@@ -45,7 +64,7 @@ export function TopicDirectoryGrid({
       .slice(0, TRENDING_COUNT);
   }, [fullStats, initialStats]);
 
-  const loadFullStats = async (): Promise<TopicStat[] | null> => {
+  const loadFullStats = useCallback(async (): Promise<TopicStat[] | null> => {
     if (fullStats) return fullStats;
     try {
       const res = await fetch(`${API_BASE_URL}/api/v1/topics`);
@@ -59,7 +78,18 @@ export function TopicDirectoryGrid({
       console.error("Failed to load full topic list:", err);
     }
     return fullStats;
-  };
+  }, [fullStats]);
+
+  // Sync if URL query param changes
+  useEffect(() => {
+    const urlPage = parseInt(searchParams.get("page") || "1", 10);
+    if (!isNaN(urlPage) && urlPage > 1) {
+      setVisibleCount((prev) => Math.max(prev, urlPage * PAGE_SIZE));
+      if (!fullStats) {
+        loadFullStats();
+      }
+    }
+  }, [searchParams, fullStats, loadFullStats]);
 
   const visibleStats = useMemo(() => {
     const source = fullStats ?? initialStats;
@@ -93,7 +123,20 @@ export function TopicDirectoryGrid({
     setLoadingMore(true);
     const stats = fullStats ?? (await loadFullStats());
     if (stats) setFullStats(stats);
-    setVisibleCount((count) => count + PAGE_SIZE);
+    const nextCount = visibleCount + PAGE_SIZE;
+    setVisibleCount(nextCount);
+    const nextPage = Math.ceil(nextCount / PAGE_SIZE);
+
+    // Dynamically update URL query param for SEO & canonical parity
+    const currentParams = new URLSearchParams(searchParams.toString());
+    if (nextPage > 1) {
+      currentParams.set("page", nextPage.toString());
+    } else {
+      currentParams.delete("page");
+    }
+    const newUrl = `${pathname}?${currentParams.toString()}`;
+    router.replace(newUrl, { scroll: false });
+
     setLoadingMore(false);
   };
 
@@ -102,7 +145,7 @@ export function TopicDirectoryGrid({
       {!isFiltering && trendingTopics.length > 0 && (
         <section
           aria-label="Trending Topics"
-          className="mb-6 p-4 rounded-2xl bg-white border border-zinc-200/80 shadow-2xs"
+          className="mb-6 p-4 rounded-none bg-white border-2 border-black border-b-4 shadow-[4px_4px_0px_0px_#000]"
         >
           <h2 className="text-xs font-mono font-bold text-zinc-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
             <TrendingUp className="h-3.5 w-3.5 text-emerald-600" /> Trending
@@ -115,10 +158,10 @@ export function TopicDirectoryGrid({
                 href={`/topics/${stat.name}`}
                 title={`Explore #${stat.name} repositories and contributor metrics`}
                 aria-label={`Explore trending topic #${stat.name}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-50 hover:bg-emerald-50 text-zinc-800 hover:text-emerald-800 border border-zinc-200/80 hover:border-emerald-300 font-sans text-xs font-semibold transition-all group"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-white hover:bg-emerald-50 text-black border-2 border-black font-sans text-xs font-bold transition-colors group"
               >
                 #{stat.name}
-                <span className="font-mono text-[10px] text-zinc-500 group-hover:text-emerald-700">
+                <span className="font-mono text-[10px] text-zinc-600 group-hover:text-emerald-800">
                   {stat.repo_count.toLocaleString()} repos
                 </span>
               </Link>
@@ -127,28 +170,34 @@ export function TopicDirectoryGrid({
         </section>
       )}
 
-      <div className="relative mb-6 max-w-md w-full">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
-        <input
-          type="search"
-          value={query}
-          onChange={(event) => handleQueryChange(event.target.value)}
-          placeholder="Search topics..."
-          aria-label="Search topics"
-          className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-zinc-300 bg-white text-zinc-900 placeholder:text-zinc-400 font-sans text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all shadow-2xs"
-        />
-        {query && (
-          <button
-            type="button"
-            onClick={() => setQuery("")}
-            aria-label="Clear search"
-            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        )}
+      <div className="mb-6 max-w-md w-full">
+        {/* Inner relative wrapper spans ONLY the input row so the search icon
+            stays vertically centered (fixes icon hanging below input). */}
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-900">
+            <Search className="h-4 w-4" strokeWidth={2.5} />
+          </div>
+          <input
+            type="text"
+            value={query}
+            onChange={(event) => handleQueryChange(event.target.value)}
+            placeholder="Search topics..."
+            aria-label="Search topics"
+            className="w-full pl-10 pr-9 py-2.5 rounded-none border-2 border-black bg-white text-zinc-900 placeholder:text-zinc-500 font-sans font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-shadow shadow-[3px_3px_0px_0px_#000]"
+          />
+          {query && (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              aria-label="Clear search"
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-none border border-black bg-white text-zinc-700 hover:bg-zinc-100 transition-colors"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
         <p
-          className="mt-1.5 text-xs font-mono text-zinc-500 flex items-center justify-between"
+          className="mt-1.5 text-xs font-mono text-zinc-600 flex items-center justify-between"
           aria-live="polite"
         >
           {isFiltering
@@ -162,38 +211,58 @@ export function TopicDirectoryGrid({
           id="topics-grid"
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
         >
-          {visibleStats.map((stat) => (
-            <Link
-              key={stat.name}
-              href={`/topics/${stat.name}`}
-              title={`Explore #${stat.name} repositories and contributor metrics`}
-              aria-label={`Explore #${stat.name} topic`}
-              className="group p-4 rounded-2xl border border-zinc-200/80 bg-white hover:border-emerald-500/80 hover:shadow-xs transition-all flex items-center justify-between min-w-0"
-            >
-              <span className="min-w-0">
-                <span className="block font-space text-sm sm:text-base font-bold text-zinc-900 group-hover:text-emerald-700 transition-colors truncate">
-                  #{stat.name}
+          {visibleStats.map((stat) => {
+            const starsLabel = formatStars(stat.avg_stars);
+            const responseLabel = formatResponseHours(stat.avg_response_hours);
+            return (
+              <Link
+                key={stat.name}
+                href={`/topics/${stat.name}`}
+                title={`Explore #${stat.name} repositories and contributor metrics`}
+                aria-label={`Explore #${stat.name} topic`}
+                className="group p-4 rounded-none border-2 border-black border-b-4 bg-white hover:bg-emerald-50 hover:-translate-y-0.5 transition-transform flex flex-col min-w-0"
+              >
+                <span className="flex items-start justify-between gap-2 min-w-0">
+                  <span className="font-space text-sm sm:text-base font-extrabold text-black truncate">
+                    #{stat.name}
+                  </span>
+                  <ArrowRight className="h-3.5 w-3.5 text-zinc-500 group-hover:text-emerald-700 group-hover:translate-x-0.5 transition-all shrink-0 mt-0.5" />
                 </span>
-                <span className="mt-1 flex items-center gap-1.5 flex-wrap">
-                  <span className="px-2 py-0.5 rounded-md bg-zinc-100 group-hover:bg-emerald-50 group-hover:text-emerald-800 text-zinc-600 font-mono text-[11px] font-medium border border-zinc-200/60 transition-colors">
+                <span className="mt-2 flex items-center gap-1.5 flex-wrap">
+                  <span className="px-2 py-0.5 rounded-none bg-black text-white font-mono text-[11px] font-bold">
                     {stat.repo_count.toLocaleString()} repos
                   </span>
+                  {starsLabel && (
+                    <span
+                      className="px-2 py-0.5 rounded-none bg-amber-100 text-amber-900 font-mono text-[11px] font-bold border border-black"
+                      title="Average stars per repository"
+                    >
+                      ★ {starsLabel}
+                    </span>
+                  )}
                   {mergeRateLabel(stat.avg_external_pr_merge_rate) && (
                     <span
-                      className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-mono text-[11px] font-medium border border-emerald-200/60"
+                      className="px-2 py-0.5 rounded-none bg-emerald-100 text-emerald-900 font-mono text-[11px] font-bold border border-black"
                       title="Average external PR merge rate"
                     >
                       {mergeRateLabel(stat.avg_external_pr_merge_rate)} merge
                     </span>
                   )}
+                  {responseLabel && (
+                    <span
+                      className="px-2 py-0.5 rounded-none bg-zinc-100 text-zinc-800 font-mono text-[11px] font-bold border border-black"
+                      title="Median time to first review"
+                    >
+                      {responseLabel} first review
+                    </span>
+                  )}
                 </span>
-              </span>
-              <ArrowRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       ) : (
-        <div className="p-8 text-center bg-white rounded-2xl border border-zinc-200/80 shadow-2xs my-6">
+        <div className="p-8 text-center bg-white rounded-none border-2 border-black border-b-4 shadow-[4px_4px_0px_0px_#000] my-6">
           <h3 className="font-space text-base font-bold text-zinc-900 mb-1">
             No topics match &quot;{query.trim()}&quot;
           </h3>
@@ -203,7 +272,7 @@ export function TopicDirectoryGrid({
           <button
             type="button"
             onClick={() => setQuery("")}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-zinc-300 bg-white text-zinc-900 font-sans text-sm font-medium hover:bg-zinc-50 active:scale-[0.98] transition-all focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 focus:ring-offset-2 cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border-2 border-black border-b-4 bg-white text-black font-sans text-sm font-bold hover:bg-zinc-100 active:translate-y-0.5 active:border-b-2 transition-all focus:outline-none cursor-pointer"
           >
             Clear search
           </button>
@@ -219,7 +288,7 @@ export function TopicDirectoryGrid({
             aria-controls="topics-grid"
             aria-expanded={!hasMore}
             aria-label={`Show more topics, ${remainingCount.toLocaleString()} remaining`}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-zinc-300 bg-white text-zinc-900 font-sans text-sm font-medium hover:bg-zinc-50 active:scale-[0.98] transition-all focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 focus:ring-offset-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-2xs"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border-2 border-black border-b-4 bg-white text-black font-sans text-sm font-bold hover:bg-emerald-50 active:translate-y-0.5 active:border-b-2 transition-all focus:outline-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loadingMore ? (
               <>

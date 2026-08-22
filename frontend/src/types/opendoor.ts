@@ -161,6 +161,8 @@ export interface TopicStat {
   name: string;
   repo_count: number;
   avg_external_pr_merge_rate: number;
+  avg_stars?: number;
+  avg_response_hours?: number;
 }
 
 
