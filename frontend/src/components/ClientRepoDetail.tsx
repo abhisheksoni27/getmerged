@@ -75,7 +75,6 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
   const [isVerifiedContributor, setIsVerifiedContributor] = useState(false);
   const [githubNotFound, setGithubNotFound] = useState(false);
   const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
-  const [isGuidelinesOpen, setIsGuidelinesOpen] = useState(false);
   const [relatedRepos, setRelatedRepos] = useState<Repo[]>([]);
   const [gfiList, setGfiList] = useState<Array<{ id: number; issue_number?: number; title: string; url?: string; html_url?: string; body_text?: string; body_snippet?: string; quality_score?: number; created_at?: string; comments_count?: number; repo_full_name?: string }>>([]);
   const [maintainerRating, setMaintainerRating] = useState(0);
@@ -643,48 +642,6 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
 
       {/* Similar Repositories & Alternatives Interlinking (Issue #55) */}
       <SimilarRepos relatedRepos={relatedRepos} language={repo?.language} />
-
-      {/* Collapsible Guideline Drawer */}
-      <div className="rounded-2xl border-3 border-[#222831] bg-white p-5 sm:p-6 shadow-[6px_6px_0px_0px_#222831] mb-10 transition-all duration-300">
-        <button
-          onClick={() => setIsGuidelinesOpen(!isGuidelinesOpen)}
-          className="w-full flex items-center justify-between font-space text-base sm:text-lg font-black text-[#222831] cursor-pointer"
-        >
-          <div className="flex items-center gap-2.5">
-            <Sparkles className="h-5 w-5 text-indigo-600 animate-pulse" />
-            <span>Interactive Onboarding & Contribution Guidelines</span>
-          </div>
-          <span className="text-xl font-bold font-mono transition-transform duration-300" style={{ transform: isGuidelinesOpen ? "rotate(90deg)" : "rotate(0deg)" }}>
-            ▶
-          </span>
-        </button>
-
-        <div className={`grid transition-all duration-500 ease-in-out ${isGuidelinesOpen ? "grid-rows-[1fr] opacity-100 mt-5" : "grid-rows-[0fr] opacity-0"}`}>
-          <div className="overflow-hidden">
-            <div className="border-t border-zinc-150 pt-4 space-y-4">
-              <p className="text-sm font-sans text-zinc-700">
-                Follow these instructions to increase the success rate of your pull requests in <strong>{fullName}</strong>:
-              </p>
-              {insights?.pr_guidelines && insights.pr_guidelines.length > 0 ? (
-                <ul className="space-y-3 font-sans text-sm text-[#222831]">
-                  {insights.pr_guidelines.map((guide, idx) => (
-                    <li key={idx} className="flex items-start gap-2.5 p-3 rounded-xl bg-zinc-50 border border-zinc-200/60">
-                      <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
-                      <span>{guide}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <div className="p-4 rounded-xl bg-indigo-50/50 border border-indigo-100 text-indigo-900 text-xs font-sans">
-                  ✨ {isLoggedIn 
-                    ? "Maintainer onboarding check: No specific rules fetched. Generally ensure tests pass and pull request scope is focused."
-                    : "Unlock full maintainer vibes & onboarding instructions: Please sign in with GitHub below to view detailed checklist guidelines."}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
 
 
       {/* PR Acceptance & Review Speed Forecast Widget (Epic 3, Story 3.4) */}
