@@ -303,10 +303,23 @@ func GetCurrentUser(userRepo repository.UserRepository) gin.HandlerFunc {
 			authProvider = "github"
 		}
 
+		avatarURL := user.AvatarURL
+		if avatarURL != nil && *avatarURL != "" {
+			formatted := *avatarURL
+			if strings.Contains(formatted, "githubusercontent.com") && !strings.Contains(formatted, "s=") {
+				if strings.Contains(formatted, "?") {
+					formatted += "&s=64"
+				} else {
+					formatted += "?s=64"
+				}
+			}
+			avatarURL = &formatted
+		}
+
 		c.JSON(http.StatusOK, gin.H{"user": gin.H{
 			"slug":              user.Slug,
 			"username":          user.Username,
-			"avatar_url":        user.AvatarURL,
+			"avatar_url":        avatarURL,
 			"profiling_consent": user.ProfilingConsent,
 			"auth_provider":     authProvider,
 			"has_github":        user.GithubID != nil,
