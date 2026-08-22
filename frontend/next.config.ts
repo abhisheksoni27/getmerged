@@ -3,7 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   async rewrites() {
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
     return [
+      {
+        source: "/api/v1/auth/:path*",
+        destination: `${apiBase}/api/v1/auth/:path*`,
+      },
       {
         source: "/ingest/static/:path*",
         destination: "https://us-assets.i.posthog.com/static/:path*",
