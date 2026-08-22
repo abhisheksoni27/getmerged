@@ -33,8 +33,25 @@ async function fetchTopics(): Promise<TopicsPayload> {
   }
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const title = "Browse Open Source Repositories by Topic & Stack | GetMerged";
+interface TopicsPageProps {
+  searchParams: Promise<{ page?: string; q?: string }>;
+}
+
+export async function generateMetadata({
+  searchParams,
+}: TopicsPageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const pageNum = parseInt(params.page || "1", 10);
+  const validPage = isNaN(pageNum) || pageNum < 1 ? 1 : pageNum;
+  const canonicalUrl =
+    validPage > 1
+      ? `https://getmerged.abhishekco.de/topics?page=${validPage}`
+      : "https://getmerged.abhishekco.de/topics";
+
+  const title =
+    validPage > 1
+      ? `Browse Open Source Repositories by Topic & Stack (Page ${validPage}) | GetMerged`
+      : "Browse Open Source Repositories by Topic & Stack | GetMerged";
   const description =
     "Explore indexed open-source repositories by topic and tag. Discover active projects scored by C-Rank™, PR merge velocity, and contributor responsiveness.";
 
@@ -42,22 +59,27 @@ export async function generateMetadata(): Promise<Metadata> {
     title,
     description,
     alternates: {
-      canonical: "https://getmerged.abhishekco.de/topics",
+      canonical: canonicalUrl,
     },
     openGraph: {
       title,
       description,
-      url: "https://getmerged.abhishekco.de/topics",
+      url: canonicalUrl,
       siteName: "GetMerged",
       type: "website",
     },
   };
 }
 
-export default async function TopicsIndexPage() {
+export default async function TopicsIndexPage({ searchParams }: TopicsPageProps) {
+  const params = await searchParams;
+  const pageNum = parseInt(params.page || "1", 10);
+  const initialPage = isNaN(pageNum) || pageNum < 1 ? 1 : pageNum;
+
   const { topics, stats } = await fetchTopics();
-  const initialTopics = topics.slice(0, INITIAL_TOPIC_LIMIT);
-  const initialStats = stats.slice(0, INITIAL_TOPIC_LIMIT);
+  const initialLimit = Math.max(INITIAL_TOPIC_LIMIT, initialPage * INITIAL_TOPIC_LIMIT);
+  const initialTopics = topics.slice(0, initialLimit);
+  const initialStats = stats.slice(0, initialLimit);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -94,7 +116,7 @@ export default async function TopicsIndexPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#faf9f6] dev-grid-pattern flex flex-col font-sans">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
@@ -110,14 +132,14 @@ export default async function TopicsIndexPage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-white border-2 border-black border-b-4 text-xs text-black hover:bg-zinc-100 transition-colors mb-6 font-sans font-bold"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Header Section */}
-        <div className="mb-8 border-b border-zinc-200/80 pb-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs font-mono font-bold mb-3">
+        <div className="mb-8 p-6 sm:p-8 rounded-none bg-white border-2 border-black border-b-4 shadow-[4px_4px_0px_0px_#000]">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-emerald-100 border-2 border-black text-black text-xs font-mono font-bold mb-3">
             <Tag className="h-3.5 w-3.5" /> Topic Directory
           </div>
           <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight">
@@ -135,8 +157,8 @@ export default async function TopicsIndexPage() {
 
         {/* Empty State */}
         {topics.length === 0 ? (
-          <div className="p-8 sm:p-12 text-center bg-white rounded-3xl border border-zinc-200/80 shadow-xs max-w-lg mx-auto my-8">
-            <div className="h-12 w-12 rounded-2xl bg-zinc-100 text-zinc-500 flex items-center justify-center mx-auto mb-4">
+          <div className="p-8 sm:p-12 text-center bg-white rounded-none border-2 border-black border-b-4 shadow-[4px_4px_0px_0px_#000] max-w-lg mx-auto my-8">
+            <div className="h-12 w-12 rounded-none bg-zinc-100 text-black border-2 border-black flex items-center justify-center mx-auto mb-4">
               <Compass className="h-6 w-6" />
             </div>
             <h2 className="font-space text-lg font-bold text-zinc-900 mb-2">
@@ -148,7 +170,7 @@ export default async function TopicsIndexPage() {
             <Link
               href="/"
               title="Return to home page"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs transition-all shadow-xs"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-none bg-black hover:bg-zinc-800 text-white border-2 border-black border-b-4 font-bold text-xs transition-all"
             >
               Explore Repositories <ArrowRight className="h-3.5 w-3.5" />
             </Link>
@@ -159,6 +181,7 @@ export default async function TopicsIndexPage() {
             initialTopics={initialTopics}
             initialStats={initialStats}
             totalCount={topics.length}
+            initialPage={initialPage}
           />
         )}
       </main>

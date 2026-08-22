@@ -72,51 +72,50 @@ type Sitemap struct {
 	LastMod string `xml:"lastmod"`
 }
 
-// GenerateStaticSitemaps writes static XML sitemap index and language partition files to publicDir.
-func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
-	slog.Info("sitemap generator: starting static generation", "dir", publicDir)
+// MinTopicRepoThreshold defines the minimum number of indexed repositories
+// required before a topic landing page is published to Google sitemaps.
+const MinTopicRepoThreshold = 1
 
-	type repoInfo struct {
+// GenerateStaticSitemaps partitions the database into static sitemaps and writes to publicDir.
+func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
+	baseUrl := "https://getmerged.abhishekco.de"
+	today := time.Now().UTC().Format("2006-01-02")
+	sitemapDir := filepath.Join(publicDir, "sitemap")
+
+	if err := os.MkdirAll(sitemapDir, 0755); err != nil {
+		return fmt.Errorf("create sitemap dir: %w", err)
+	}
+
+	indexSitemaps := []Sitemap{}
+
+	// 1. Fetch distinct languages
+	type repoLang struct {
 		FullName  string  `db:"full_name"`
 		Language  string  `db:"language"`
 		UpdatedAt *string `db:"updated_at"`
 	}
 
-	var repos []repoInfo
+	var repos []repoLang
 	query := `
-		SELECT
-			r.full_name,
-			COALESCE(r.language, 'other') as language,
-			COALESCE(s.snapshot_date, DATE(r.updated_at)) as updated_at
-		FROM repositories r
-		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
+		SELECT full_name, COALESCE(language, 'other') as language, updated_at
+		FROM repositories
+		ORDER BY stars DESC
 	`
 	if err := db.Select(&repos, query); err != nil {
 		return fmt.Errorf("fetch repos for sitemap: %w", err)
 	}
 
-	baseUrl := "https://getmerged.abhishekco.de"
-	today := time.Now().UTC().Format(time.RFC3339)
-
-	// Group repos by canonical slug (mirrors frontend getLanguageSlug so the
-	// sitemap never emits raw '#'/'+' language segments).
-	langMap := make(map[string][]repoInfo)
+	// Group repos by canonical language slug
+	langMap := make(map[string][]repoLang)
 	for _, r := range repos {
-		lang := languageSlug(r.Language)
-		if lang == "" {
-			lang = "other"
+		slug := languageSlug(r.Language)
+		if slug == "" {
+			slug = "other"
 		}
-		langMap[lang] = append(langMap[lang], r)
+		langMap[slug] = append(langMap[slug], r)
 	}
 
-	sitemapDir := filepath.Join(publicDir, "sitemap")
-	if err := os.MkdirAll(sitemapDir, 0755); err != nil {
-		return fmt.Errorf("create sitemap directory: %w", err)
-	}
-
-	var indexSitemaps []Sitemap
-
-	// 1. Generate main.xml for homepage & core platform landing pages
+	// Generate main.xml for core landing pages and hubs
 	mainUrls := []URL{
 		{Loc: baseUrl, LastMod: today, ChangeFreq: "daily", Priority: "1.0"},
 		{Loc: fmt.Sprintf("%s/repos", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "1.0"},
@@ -150,9 +149,16 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 	}
 
 	// Add topic landings (/topics/[topic]) to main sitemap - only for distinct
-	// topics with >= 1 indexed repository so search engines never hit a 404.
+	// topics with >= MinTopicRepoThreshold indexed repositories so search engines never hit a 404 or thin content.
 	var topics []string
-	if err := db.Select(&topics, "SELECT DISTINCT topic FROM repository_topics"); err != nil {
+	topicQuery := `
+		SELECT topic
+		FROM repository_topics
+		GROUP BY topic
+		HAVING COUNT(repository_id) >= ?
+		ORDER BY COUNT(repository_id) DESC, topic ASC
+	`
+	if err := db.Select(&topics, topicQuery, MinTopicRepoThreshold); err != nil {
 		slog.Warn("sitemap generator: could not fetch topics", "err", err)
 	} else {
 		for _, t := range topics {

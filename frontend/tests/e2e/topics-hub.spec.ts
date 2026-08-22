@@ -121,6 +121,15 @@ test.describe("Topic Hub and Discovery (IDEA-20260818-03)", () => {
     await expect(rustCard).toContainText(/repo/i);
   });
 
+  test("Show more topics dynamically updates ?page=2 query param (GH-84)", async ({ page }) => {
+    await page.goto("/topics", { waitUntil: "domcontentloaded" });
+    const showMoreButton = page.getByRole("button", { name: /Show more topics/i });
+    if (await showMoreButton.isVisible()) {
+      await showMoreButton.click();
+      await expect(page).toHaveURL(/page=2/);
+    }
+  });
+
   test("Topic detail page /topics/rust renders language filter and cross-link to rankings (IDEA-20260820-01)", async ({ page }) => {
     await page.goto("/topics/rust", { waitUntil: "domcontentloaded" });
 
