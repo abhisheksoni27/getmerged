@@ -42,14 +42,17 @@ import { isRepoScored } from "@/lib/repo-metadata";
 interface ClientRepoDetailProps {
   repo: Repo | null;
   fullName: string;
+  initialInsights?: AIInsights | null;
 }
 
-export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
+export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepoDetailProps) {
   const [currentUser, setCurrentUser] = useState<{
     username?: string;
     auth_provider?: string;
     has_github?: boolean;
   } | null>(null);
+
+  const [insights, setInsights] = useState<AIInsights | null>(initialInsights || null);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/v1/auth/me`, { credentials: "include" })
@@ -65,7 +68,6 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
   const [isWatching, setIsWatching] = useState(false);
   const [watchLoading, setWatchLoading] = useState(false);
   const [badgeCopied, setBadgeCopied] = useState(false);
-  const [insights, setInsights] = useState<AIInsights | null>(null);
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [feedbackError, setFeedbackError] = useState<string | null>(null);
   const [badgeShowPoints, setBadgeShowPoints] = useState(false);

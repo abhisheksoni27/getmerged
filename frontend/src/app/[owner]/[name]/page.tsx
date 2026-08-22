@@ -1,7 +1,7 @@
 import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Repo } from "@/types/opendoor";
+import { Repo, AIInsights } from "@/types/opendoor";
 import { Metadata } from "next";
 import { ClientRepoDetail } from "@/components/ClientRepoDetail";
 import { getLanguageSlug } from "@/lib/languageSlug";
@@ -12,6 +12,23 @@ const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.a
 
 interface PageProps {
   params: Promise<{ owner: string; name: string }>;
+}
+
+async function getRepoInsights(targetIdOrName: string): Promise<AIInsights | null> {
+  try {
+    const res = await fetch(
+      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(targetIdOrName)}/insights`,
+      {
+        next: { revalidate: 3600 },
+      }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data?.insights || null;
+  } catch (e) {
+    console.error("SSR fetch failed for repo insights:", targetIdOrName, e);
+  }
+  return null;
 }
 
 async function getRepoData(fullName: string): Promise<Repo | null> {
@@ -69,6 +86,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
 
   // Server-Side Data Fetching -> Pure SSR
   const repo = await getRepoData(fullName);
+  const insights = await getRepoInsights(repo?.id || fullName);
 
   // Schema.org JSON-LD Structured Data (SoftwareSourceCode & freshness dateModified)
   const jsonLd = {
@@ -145,7 +163,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <link rel="alternate" type="text/markdown" href={`/${owner}/${name}/raw`} />
-      <ClientRepoDetail repo={repo} fullName={fullName} />
+      <ClientRepoDetail repo={repo} fullName={fullName} initialInsights={insights} />
       <Footer />
     </div>
   );

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/exec"
@@ -88,66 +89,30 @@ func GetNLPSidecarURL() string {
 	return "http://127.0.0.1:8095/analyze"
 }
 
-// GenerateRepoInsights prompts AI model to extract maintainer vibe check & PR guidelines,
-// trying Python NLP sidecar first, then Opencode API, and falling back to zero-cost local classifier.
+// GenerateRepoInsights generates high-fidelity LLM insights using Kilo CLI.
+// It retries with exponential backoff on transient token exhaustion or rate limits,
+// and fails fast with an error rather than degrading into low-quality synthetic heuristics.
 func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string, prComments, issueComments []string) (*AIInsightsResponse, error) {
-	// 1. Try Kilo LLM CLI with kilo-auto/free
-	if kiloResp, err := c.generateWithKiloCLI(ctx, repoFullName, prComments, issueComments); err == nil && kiloResp != nil {
-		return kiloResp, nil
+	var lastErr error
+	backoff := 2 * time.Second
+
+	for attempt := 1; attempt <= 3; attempt++ {
+		resp, err := c.generateWithKiloCLI(ctx, repoFullName, prComments, issueComments)
+		if err == nil && resp != nil && len(resp.DeepSections) > 0 {
+			return resp, nil
+		}
+		lastErr = err
+		slog.Warn("Kilo generation attempt failed or returned empty deep sections, waiting for recovery...", "repo", repoFullName, "attempt", attempt, "err", err, "backoff", backoff)
+		
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(backoff):
+		}
+		backoff *= 2
 	}
 
-	// 2. Try Python NLP Micro-Sidecar (http://127.0.0.1:8095/analyze)
-	if sidecarResp, err := c.callPythonNLPSidecar(ctx, repoFullName, prComments, issueComments); err == nil && sidecarResp != nil {
-		return sidecarResp, nil
-	}
-
-	if c.apiKey == "" {
-		return c.GenerateLocalZeroCostInsights(repoFullName, prComments, issueComments), nil
-	}
-
-	systemPrompt := `You are a veteran open-source contributor mentor who has reviewed thousands of PRs. You produce sharp, evidence-grounded insights — never generic advice. Every do, don't, and narrative section MUST cite or paraphrase concrete signals from the supplied comments (phrasing, recurring maintainer behavior, specific friction patterns). If the comments don't support a claim, don't make it. Respond in JSON format with all fields: maintainer_vibe (string), pr_guidelines (string array, 3+ items), issue_quality_score (number 1-10), raw_summary (string), warmth_score (number 1-10), patience_score (number 1-10), nitpick_ratio (number 0-1), maintainer_persona (string), top_dos (string array, 3+ items, each tied to observed reviewer behavior in this repo), top_donts (string array, 3+ items, each tied to actual friction visible in the comments), deep_sections (array of exactly 3 objects with title and body): deep_sections[0].title = "What Contributors Actually Say" with body quoting/paraphrasing the most revealing real comment patterns; [1].title = "Hidden Friction Signals" describing non-obvious review bottlenecks, repeated complaint themes, or silent rejection patterns found in the data; [2].title = "Unwritten Rules" surfacing contribution norms that only emerge from reading these discussions.`
-
-	prompt := fmt.Sprintf("Analyze PR reviews and issue discussion for '%s'. Derive pr_guidelines, top_dos, and top_donts only from PR reviews. Use both sources for maintainer_vibe, issue_quality_score, and deep_sections.\n\nPR reviews: %v\n\nIssue comments: %v", repoFullName, prComments, issueComments)
-
-	reqBody, err := json.Marshal(map[string]any{
-		"model": "opencode-default",
-		"messages": []map[string]string{
-			{"role": "system", "content": systemPrompt},
-			{"role": "user", "content": prompt},
-		},
-		"response_format": map[string]string{"type": "json_object"},
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.endpoint, bytes.NewReader(reqBody))
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Set("Authorization", "Bearer "+c.apiKey)
-	req.Header.Set("Content-Type", "application/json")
-
-	res, err := c.httpClient.Do(req)
-	if err != nil || res.StatusCode != http.StatusOK {
-		return c.GenerateLocalZeroCostInsights(repoFullName, prComments, issueComments), nil
-	}
-	defer res.Body.Close()
-
-	var apiResp struct {
-		Choices []struct {
-			Message struct {
-				Content string `json:"content"`
-			} `json:"message"`
-		} `json:"choices"`
-	}
-
-	if err := json.NewDecoder(res.Body).Decode(&apiResp); err != nil || len(apiResp.Choices) == 0 {
-		return c.GenerateLocalZeroCostInsights(repoFullName, prComments, issueComments), nil
-	}
-
-	return ParseInsightsJSON(apiResp.Choices[0].Message.Content)
+	return nil, fmt.Errorf("kilo code generation exhausted retries for %s: %w", repoFullName, lastErr)
 }
 
 func (c *AIClient) generateWithKiloCLI(ctx context.Context, repoFullName string, prComments, issueComments []string) (*AIInsightsResponse, error) {
