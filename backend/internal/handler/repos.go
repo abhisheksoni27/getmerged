@@ -546,8 +546,10 @@ func GetPRLikelihoodHandler(repoStore repository.RepoRepository) gin.HandlerFunc
 	}
 }
 
-// EvaluatePreflightHandler handles POST /api/v1/preflight/evaluate (Story 4.1 & 4.2)
-func EvaluatePreflightHandler() gin.HandlerFunc {
+// EvaluatePreflightHandler handles POST /api/v1/preflight/evaluate (Story 4.1 & 4.2, GH-83).
+// When pr_url is provided, PR metadata and diff stats are auto-fetched from GitHub
+// instead of being manually entered in the form.
+func EvaluatePreflightHandler(gh *ghclient.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var input scoring.PreflightInput
 		if err := c.ShouldBindJSON(&input); err != nil {
@@ -555,8 +557,67 @@ func EvaluatePreflightHandler() gin.HandlerFunc {
 			return
 		}
 
+		if input.PRURL != "" {
+			owner, name, number, ok := ghclient.ParsePRURL(input.PRURL)
+			if !ok {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "invalid pull request URL"})
+				return
+			}
+			details, err := gh.FetchPRDetails(owner, name, number)
+			if err != nil {
+				slog.Error("preflight: auto-fetch PR details failed", "pr_url", input.PRURL, "err", err)
+				c.JSON(http.StatusBadGateway, gin.H{"error": "could not fetch pull request data from GitHub"})
+				return
+			}
+			if strings.TrimSpace(input.RepoFullName) == "" {
+				input.RepoFullName = owner + "/" + name
+			}
+			input.PRTitle = details.Title
+			input.PRDescription = details.Body
+			input.ChangedFiles = details.ChangedFiles
+			input.Additions = details.Additions
+			input.Deletions = details.Deletions
+		}
+
 		result := scoring.EvaluatePreflight(input)
 		c.JSON(http.StatusOK, result)
+	}
+}
+
+// FetchPRDetailsHandler handles POST /api/v1/preflight/pr-details (GH-83).
+// It returns PR metadata (title, body, changed files, additions, deletions)
+// without performing the heuristic evaluation, so the frontend can auto-populate the form.
+func FetchPRDetailsHandler(gh *ghclient.Client) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var req struct {
+			PRURL string `json:"pr_url" binding:"required"`
+		}
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request payload"})
+			return
+		}
+
+		owner, name, number, ok := ghclient.ParsePRURL(req.PRURL)
+		if !ok {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid pull request URL"})
+			return
+		}
+
+		details, err := gh.FetchPRDetails(owner, name, number)
+		if err != nil {
+			slog.Error("preflight: fetch PR details failed", "pr_url", req.PRURL, "err", err)
+			c.JSON(http.StatusBadGateway, gin.H{"error": "could not fetch pull request data from GitHub"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"repo_full_name": owner + "/" + name,
+			"pr_title":       details.Title,
+			"pr_description": details.Body,
+			"changed_files":  details.ChangedFiles,
+			"additions":      details.Additions,
+			"deletions":      details.Deletions,
+		})
 	}
 }
 

@@ -10,6 +10,8 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -21,6 +23,8 @@ import (
 
 const graphqlEndpoint = "https://api.github.com/graphql"
 const cacheTTL = 1 * time.Hour
+
+var prURLRegex = regexp.MustCompile(`^https?://(?:www\.)?github\.com/([\w.\-]+)/([\w.\-]+)/pull/(\d+)`)
 
 // Client is a GitHub GraphQL client with built-in rate-limit handling and Valkey caching.
 type Client struct {
@@ -1168,4 +1172,78 @@ func (c *Client) FetchGoodFirstIssuesList(owner, name string, limit int) ([]Good
 	}
 
 	return issues, resp.Data.Search.IssueCount, nil
+}
+
+// PRDetails holds the auto-fetchable metadata of a single pull request.
+type PRDetails struct {
+	Title       string   `json:"title"`
+	Body        string   `json:"body"`
+	Additions   int      `json:"additions"`
+	Deletions   int      `json:"deletions"`
+	ChangedFiles []string `json:"changed_files"`
+}
+
+// FetchPRDetails fetches title, body, delta size, and changed-file paths for one PR.
+func (c *Client) FetchPRDetails(owner, name string, number int) (*PRDetails, error) {
+	vars := map[string]any{"owner": owner, "name": name, "number": number}
+
+	var resp struct {
+		Data struct {
+			Repository struct {
+				PullRequest *struct {
+					Title     string `json:"title"`
+					Body      string `json:"body"`
+					Additions int    `json:"additions"`
+					Deletions int    `json:"deletions"`
+					Files     struct {
+						Nodes []struct {
+							Path string `json:"path"`
+						} `json:"nodes"`
+					} `json:"files"`
+				} `json:"pullRequest"`
+			} `json:"repository"`
+			RateLimit rateLimitInfo `json:"rateLimit"`
+		} `json:"data"`
+	}
+
+	fromCache, err := c.do(RepoPRDetailQuery, vars, &resp)
+	if err != nil {
+		return nil, fmt.Errorf("FetchPRDetails(%s/%s#%d): %w", owner, name, number, err)
+	}
+
+	if !fromCache {
+		c.handleRateLimit(resp.Data.RateLimit)
+	}
+
+	pr := resp.Data.Repository.PullRequest
+	if pr == nil {
+		return nil, fmt.Errorf("FetchPRDetails(%s/%s#%d): pull request not found", owner, name, number)
+	}
+
+	details := &PRDetails{
+		Title:        pr.Title,
+		Body:         pr.Body,
+		Additions:    pr.Additions,
+		Deletions:    pr.Deletions,
+		ChangedFiles: make([]string, 0, len(pr.Files.Nodes)),
+	}
+	for _, f := range pr.Files.Nodes {
+		if f.Path != "" {
+			details.ChangedFiles = append(details.ChangedFiles, f.Path)
+		}
+	}
+	return details, nil
+}
+
+// ParsePRURL extracts owner, repo name, and PR number from a GitHub pull request URL.
+func ParsePRURL(prURL string) (owner, name string, number int, ok bool) {
+	matches := prURLRegex.FindStringSubmatch(strings.TrimSpace(prURL))
+	if matches == nil {
+		return "", "", 0, false
+	}
+	n, err := strconv.Atoi(matches[3])
+	if err != nil {
+		return "", "", 0, false
+	}
+	return matches[1], matches[2], n, true
 }

@@ -147,59 +147,61 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
 
   useEffect(() => {
     const hasToken = typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
-
-    if (hasToken && repo?.id) {
-      // 1. Check watchlist status
-      fetch(`${API_BASE_URL}/api/v1/user/watchlist`, { credentials: "include" })
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data) => {
-          if (data?.watchlist && Array.isArray(data.watchlist)) {
-            const found = data.watchlist.some(
-              (item: string | { repo_id: string }) =>
-                typeof item === "string" ? item === String(repo.id) : String(item.repo_id) === String(repo.id)
-            );
-            setIsWatching(found);
-          }
-        })
-        .catch(() => {});
-    }
-
     const targetId = repo?.id ? repo.id : (fullName ? encodeURIComponent(fullName) : "");
-    if (targetId) {
-      // 2. Fetch AI Insights (public endpoint, no auth required)
-      fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/insights`, { credentials: "include" })
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data) => {
-          if (data?.insights) {
-            setInsights(data.insights);
-          }
-        })
-        .catch(() => {});
 
-      // 3. Fetch Similar/Related Repositories for Interlinking (Issue #55)
-      fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/related?limit=3`)
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data) => {
-          if (data?.related && Array.isArray(data.related)) {
-            setRelatedRepos(data.related);
-          }
-        })
-        .catch(() => {});
+    const fetchWatchlist = async () => {
+      if (!(hasToken && repo?.id)) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/user/watchlist`, { credentials: "include" });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data?.watchlist && Array.isArray(data.watchlist)) {
+          const found = data.watchlist.some(
+            (item: string | { repo_id: string }) =>
+              typeof item === "string" ? item === String(repo.id) : String(item.repo_id) === String(repo.id)
+          );
+          setIsWatching(found);
+        }
+      } catch {}
+    };
 
-      // 4. Fetch Real Good First Issues (Story 10.2 & Story 12.3)
-      fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/good-first-issues`)
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data) => {
-          if (data?.data && Array.isArray(data.data)) {
-            const currentFullName = fullName.toLowerCase();
-            const filtered = data.data.filter((item: { repo_full_name?: string }) => {
-              return Boolean(item.repo_full_name && item.repo_full_name.toLowerCase() === currentFullName);
-            });
-            setGfiList(filtered);
-          }
-        })
-        .catch(() => {});
-    }
+    const fetchInsights = async () => {
+      if (!targetId) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/insights`, { credentials: "include" });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data?.insights) setInsights(data.insights);
+      } catch {}
+    };
+
+    const fetchRelated = async () => {
+      if (!targetId) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/related?limit=3`, { credentials: "include" });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data?.related && Array.isArray(data.related)) setRelatedRepos(data.related);
+      } catch {}
+    };
+
+    const fetchGFIs = async () => {
+      if (!targetId) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/good-first-issues`, { credentials: "include" });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data?.data && Array.isArray(data.data)) {
+          const currentFullName = fullName.toLowerCase();
+          const filtered = data.data.filter((item: { repo_full_name?: string }) => {
+            return Boolean(item.repo_full_name && item.repo_full_name.toLowerCase() === currentFullName);
+          });
+          setGfiList(filtered);
+        }
+      } catch {}
+    };
+
+    Promise.allSettled([fetchWatchlist(), fetchInsights(), fetchRelated(), fetchGFIs()]);
   }, [repo?.id, fullName]);
 
   const handleWatchToggle = async () => {
@@ -1051,11 +1053,11 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                             type="button"
                             onClick={() => rating.setValue(star)}
                             aria-label={`${rating.label}: ${star} star${star === 1 ? "" : "s"}`}
-                            className={`rounded-lg border-2 border-brand-dark p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center shadow-[1px_1px_0px_#222831] transition-all cursor-pointer ${
-                              rating.value >= star
-                                ? "bg-yellow-300 text-zinc-950 scale-105"
-                                : "bg-white text-zinc-300 hover:bg-yellow-100"
-                            }`}
+                             className={`rounded-lg border-2 border-brand-dark p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center shadow-[1px_1px_0px_#222831] transition-all cursor-pointer ${
+                               rating.value >= star
+                                 ? "bg-yellow-300 text-zinc-950 scale-105"
+                                 : "bg-zinc-100 text-zinc-500 hover:bg-yellow-100 hover:text-zinc-700"
+                             }`}
                           >
                             <Star className={`h-4 w-4 ${rating.value >= star ? "fill-current" : ""}`} />
                           </button>
