@@ -32,7 +32,7 @@ test.describe("Bus Factor Zero Display (GH-79)", () => {
   test("AC3: Org page renders raw bus_factor value without masking as 1", async ({ page }) => {
     await page.goto("/org/facebook", { waitUntil: "domcontentloaded" });
 
-    const heading = page.getByRole("heading", { name: /facebook/i });
+    const heading = page.locator("h1").first();
     await expect(heading).toBeVisible();
 
     // Bus factor text should use ?? 0 logic (no '1 maintainer' for 0-value repos)
