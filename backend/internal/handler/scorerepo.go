@@ -156,6 +156,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 			guidelinesBytes, _ := json.Marshal(insightsResp.PRGuidelines)
 			dosBytes, _ := json.Marshal(insightsResp.TopDos)
 			dontsBytes, _ := json.Marshal(insightsResp.TopDonts)
+			deepSectionsBytes, _ := json.Marshal(insightsResp.DeepSections)
 
 			saveErr := aiRepo.SaveInsights(c.Request.Context(), &repository.AIInsights{
 				RepoID:            repoID,
@@ -169,6 +170,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 				MaintainerPersona: insightsResp.MaintainerPersona,
 				DosJSON:           string(dosBytes),
 				DontsJSON:         string(dontsBytes),
+				DeepSectionsJSON:  string(deepSectionsBytes),
 			})
 			if saveErr != nil {
 				slog.Error("score-repo: SaveInsights failed", "repo", fullName, "err", saveErr)

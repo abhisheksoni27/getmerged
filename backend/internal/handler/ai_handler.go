@@ -24,6 +24,8 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 			_ = json.Unmarshal([]byte(cached.DosJSON), &dos)
 			var donts []string
 			_ = json.Unmarshal([]byte(cached.DontsJSON), &donts)
+			var deepSections []ai.DeepSection
+			_ = json.Unmarshal([]byte(cached.DeepSectionsJSON), &deepSections)
 
 			c.JSON(http.StatusOK, gin.H{
 				"insights": gin.H{
@@ -38,6 +40,7 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 					"maintainer_persona":  cached.MaintainerPersona,
 					"top_dos":             dos,
 					"top_donts":           donts,
+					"deep_sections":       deepSections,
 				},
 			})
 			return
@@ -66,6 +69,7 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 		guidelinesBytes, _ := json.Marshal(insights.PRGuidelines)
 		dosBytes, _ := json.Marshal(insights.TopDos)
 		dontsBytes, _ := json.Marshal(insights.TopDonts)
+		deepSectionsBytes, _ := json.Marshal(insights.DeepSections)
 
 		newInsights := &repository.AIInsights{
 			RepoID:            repo.ID,
@@ -79,6 +83,7 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 			MaintainerPersona: insights.MaintainerPersona,
 			DosJSON:           string(dosBytes),
 			DontsJSON:         string(dontsBytes),
+			DeepSectionsJSON:  string(deepSectionsBytes),
 		}
 
 		if err := aiRepo.SaveInsights(c.Request.Context(), newInsights); err != nil {
@@ -98,6 +103,7 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 				"maintainer_persona":  insights.MaintainerPersona,
 				"top_dos":             insights.TopDos,
 				"top_donts":           insights.TopDonts,
+				"deep_sections":       insights.DeepSections,
 			},
 		})
 	}

@@ -74,6 +74,7 @@ func setupAIInsightsTestDB(t *testing.T) *sqlx.DB {
 		maintainer_persona TEXT DEFAULT 'Encouraging Technical Mentor',
 		dos_json TEXT DEFAULT '[]',
 		donts_json TEXT DEFAULT '[]',
+		deep_sections_json TEXT,
 		updated_at DATETIME NOT NULL
 	);
 	`

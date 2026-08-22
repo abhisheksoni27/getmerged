@@ -72,6 +72,7 @@ func testDB(t *testing.T) *sqlx.DB {
 			issue_quality_score REAL DEFAULT 0,
 			raw_summary TEXT,
 			warmth_score REAL DEFAULT 7.5,
+			deep_sections_json TEXT,
 			updated_at DATETIME
 		)`,
 		`CREATE TABLE IF NOT EXISTS repository_topics (

@@ -19,17 +19,32 @@ type AIClient struct {
 	httpClient *http.Client
 }
 
+type DeepSection struct {
+	Title string `json:"title"`
+	Body  string `json:"body"`
+}
+
 type AIInsightsResponse struct {
-	MaintainerVibe    string   `json:"maintainer_vibe"`
-	PRGuidelines      []string `json:"pr_guidelines"`
-	IssueQualityScore float64  `json:"issue_quality_score"`
-	RawSummary        string   `json:"raw_summary"`
-	WarmthScore       float64  `json:"warmth_score"`
-	PatienceScore     float64  `json:"patience_score"`
-	NitpickRatio      float64  `json:"nitpick_ratio"`
-	MaintainerPersona string   `json:"maintainer_persona"`
-	TopDos            []string `json:"top_dos"`
-	TopDonts          []string `json:"top_donts"`
+	MaintainerVibe    string        `json:"maintainer_vibe"`
+	PRGuidelines      []string      `json:"pr_guidelines"`
+	IssueQualityScore float64       `json:"issue_quality_score"`
+	RawSummary        string        `json:"raw_summary"`
+	WarmthScore       float64       `json:"warmth_score"`
+	PatienceScore     float64       `json:"patience_score"`
+	NitpickRatio      float64       `json:"nitpick_ratio"`
+	MaintainerPersona string        `json:"maintainer_persona"`
+	TopDos            []string      `json:"top_dos"`
+	TopDonts          []string      `json:"top_donts"`
+	DeepSections      []DeepSection `json:"deep_sections,omitempty"`
+}
+
+// ParseInsightsJSON decodes a raw AI JSON payload into AIInsightsResponse.
+func ParseInsightsJSON(raw string) (*AIInsightsResponse, error) {
+	var insights AIInsightsResponse
+	if err := json.Unmarshal([]byte(raw), &insights); err != nil {
+		return nil, err
+	}
+	return &insights, nil
 }
 
 func NewAIClient(apiKey string) *AIClient {
@@ -60,12 +75,14 @@ func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string
 		return c.GenerateLocalZeroCostInsights(repoFullName, prComments, issueComments), nil
 	}
 
-	prompt := fmt.Sprintf("Analyze PR reviews and issue discussion for '%s'. Derive pr_guidelines, top_dos, and top_donts only from PR reviews. Use both sources only for maintainer_vibe and issue_quality_score.\n\nPR reviews: %v\n\nIssue comments: %v", repoFullName, prComments, issueComments)
+	systemPrompt := `You are a veteran open-source contributor mentor who has reviewed thousands of PRs. You produce sharp, evidence-grounded insights — never generic advice. Every do, don't, and narrative section MUST cite or paraphrase concrete signals from the supplied comments (phrasing, recurring maintainer behavior, specific friction patterns). If the comments don't support a claim, don't make it. Respond in JSON format with all fields: maintainer_vibe (string), pr_guidelines (string array, 3+ items), issue_quality_score (number 1-10), raw_summary (string), warmth_score (number 1-10), patience_score (number 1-10), nitpick_ratio (number 0-1), maintainer_persona (string), top_dos (string array, 3+ items, each tied to observed reviewer behavior in this repo), top_donts (string array, 3+ items, each tied to actual friction visible in the comments), deep_sections (array of exactly 3 objects with title and body): deep_sections[0].title = "What Contributors Actually Say" with body quoting/paraphrasing the most revealing real comment patterns; [1].title = "Hidden Friction Signals" describing non-obvious review bottlenecks, repeated complaint themes, or silent rejection patterns found in the data; [2].title = "Unwritten Rules" surfacing contribution norms that only emerge from reading these discussions.`
+
+	prompt := fmt.Sprintf("Analyze PR reviews and issue discussion for '%s'. Derive pr_guidelines, top_dos, and top_donts only from PR reviews. Use both sources for maintainer_vibe, issue_quality_score, and deep_sections.\n\nPR reviews: %v\n\nIssue comments: %v", repoFullName, prComments, issueComments)
 
 	reqBody, err := json.Marshal(map[string]any{
 		"model": "opencode-default",
 		"messages": []map[string]string{
-			{"role": "system", "content": "You are an expert open-source contributor mentor. Respond in JSON format with all fields: maintainer_vibe (string), pr_guidelines (string array, 3+ items), issue_quality_score (number 1-10), raw_summary (string), warmth_score (number 1-10), patience_score (number 1-10), nitpick_ratio (number 0-1), maintainer_persona (string), top_dos (string array, 3+ items), top_donts (string array, 3+ items)."},
+			{"role": "system", "content": systemPrompt},
 			{"role": "user", "content": prompt},
 		},
 		"response_format": map[string]string{"type": "json_object"},
@@ -100,12 +117,7 @@ func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string
 		return c.GenerateLocalZeroCostInsights(repoFullName, prComments, issueComments), nil
 	}
 
-	var insights AIInsightsResponse
-	if err := json.Unmarshal([]byte(apiResp.Choices[0].Message.Content), &insights); err != nil {
-		return c.GenerateLocalZeroCostInsights(repoFullName, prComments, issueComments), nil
-	}
-
-	return &insights, nil
+	return ParseInsightsJSON(apiResp.Choices[0].Message.Content)
 }
 
 // GenerateLocalZeroCostInsights performs pure local sentiment & rule extraction with zero API cost.
