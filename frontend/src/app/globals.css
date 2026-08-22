@@ -186,12 +186,6 @@ body {
   outline-offset: 2px;
 }
 
-.nb-theme :where(input, textarea, select):not(:where(.nb-opt-out, .nb-opt-out *)) {
-  border: 2px solid var(--nb-border-color);
-  border-radius: calc(var(--nb-radius) - 0.25rem);
-  background-color: #ffffff;
-}
-
 .nb-theme :where(input:disabled, textarea:disabled, select:disabled):not(:where(.nb-opt-out, .nb-opt-out *)) {
   background-color: #eceae2;
   color: rgba(17, 17, 17, 0.45);
