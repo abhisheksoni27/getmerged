@@ -58,6 +58,52 @@ func TestAIClient_DerivesDosAndDontsFromPRComments(t *testing.T) {
 	assertContains(t, res.TopDonts, "Do not mix unrelated refactors with feature work")
 }
 
+func TestAIClient_NoKeywordMatchPadsToThreeGenericDosAndDonts(t *testing.T) {
+	client := ai.NewAIClient("")
+	prComments := []string{"This PR looks really nice and helpful. Great work!"}
+
+	res, err := client.GenerateRepoInsights(context.Background(), "test-org/test-repo", prComments, nil)
+	if err != nil {
+		t.Fatalf("expected insights without error, got: %v", err)
+	}
+
+	if len(res.TopDos) != 3 {
+		t.Fatalf("expected exactly 3 dos for no-keyword-match fallback, got %d: %+v", len(res.TopDos), res.TopDos)
+	}
+	if len(res.TopDonts) != 3 {
+		t.Fatalf("expected exactly 3 donts for no-keyword-match fallback, got %d: %+v", len(res.TopDonts), res.TopDonts)
+	}
+
+	assertContains(t, res.TopDos, "Ensure code complies with the project coding style")
+	assertContains(t, res.TopDos, "Keep PRs scoped to a single concern")
+	assertContains(t, res.TopDos, "Include context and link to the related issue")
+	assertContains(t, res.TopDonts, "Do not submit PRs without linking an issue")
+	assertContains(t, res.TopDonts, "Do not break existing tests without fixing them")
+	assertContains(t, res.TopDonts, "Do not mix unrelated refactors in a single PR")
+}
+
+func TestAIClient_PartialKeywordMatchPadsToMinimumThree(t *testing.T) {
+	client := ai.NewAIClient("")
+	prComments := []string{"Please add tests for this feature."}
+
+	res, err := client.GenerateRepoInsights(context.Background(), "test-org/test-repo", prComments, nil)
+	if err != nil {
+		t.Fatalf("expected insights without error, got: %v", err)
+	}
+
+	if len(res.TopDos) < 3 {
+		t.Fatalf("expected at least 3 dos after padding, got %d: %+v", len(res.TopDos), res.TopDos)
+	}
+	if len(res.TopDonts) < 3 {
+		t.Fatalf("expected at least 3 donts after padding, got %d: %+v", len(res.TopDonts), res.TopDonts)
+	}
+
+	assertContains(t, res.TopDos, "Add or update tests for changed behavior before requesting review")
+	assertContains(t, res.TopDonts, "Do not leave requested test coverage unresolved")
+	assertContains(t, res.TopDos, "Keep PRs scoped to a single concern")
+	assertContains(t, res.TopDonts, "Do not mix unrelated refactors in a single PR")
+}
+
 func TestAIClient_AllFieldsPopulated(t *testing.T) {
 	client := ai.NewAIClient("")
 	prComments := []string{
