@@ -31,6 +31,7 @@ func main() {
 	var (
 		limitFlag = flag.Int("limit", 0, "Max repos to process (0 = all pending)")
 		tiersFlag = flag.String("tiers", "S,A,B,C,D", "Comma-separated tiers to process")
+		repoFlag  = flag.String("repo", "", "Optional full_name of specific repo (e.g. kriasoft/react-starter-kit)")
 	)
 	flag.Parse()
 
@@ -56,18 +57,34 @@ func main() {
 	ctx := context.Background()
 
 	tierList := strings.Split(*tiersFlag, ",")
-	query, args, err := sqlx.In(`
-		SELECT r.id, r.full_name, COALESCE(r.language, 'Open-Source') as language, COALESCE(r.stars, 0) as stars, COALESCE(s.c_rank_tier, 'A') as c_rank_tier
-		FROM repositories r
-		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
-		LEFT JOIN repo_ai_insights a ON r.id = a.repo_id
-		WHERE (a.repo_id IS NULL OR a.updated_at < NOW() - INTERVAL 7 DAY)
-		  AND s.c_rank_tier IN (?)
-		ORDER BY s.c_rank_score DESC
-	`, tierList)
-	if err != nil {
-		slog.Error("Failed to build SQL query", "err", err)
-		os.Exit(1)
+	var query string
+	var args []any
+
+	if *repoFlag != "" {
+		query = `
+			SELECT r.id, r.full_name, COALESCE(r.language, 'Open-Source') as language, COALESCE(r.stars, 0) as stars, COALESCE(s.c_rank_tier, 'A') as c_rank_tier
+			FROM repositories r
+			LEFT JOIN latest_snapshots s ON s.repository_id = r.id
+			LEFT JOIN repo_ai_insights a ON r.id = a.repo_id
+			WHERE r.full_name = ?
+			LIMIT 1
+		`
+		args = []any{*repoFlag}
+	} else {
+		var inErr error
+		query, args, inErr = sqlx.In(`
+			SELECT r.id, r.full_name, COALESCE(r.language, 'Open-Source') as language, COALESCE(r.stars, 0) as stars, COALESCE(s.c_rank_tier, 'A') as c_rank_tier
+			FROM repositories r
+			LEFT JOIN latest_snapshots s ON s.repository_id = r.id
+			LEFT JOIN repo_ai_insights a ON r.id = a.repo_id
+			WHERE (a.repo_id IS NULL OR a.updated_at < NOW() - INTERVAL 7 DAY)
+			  AND s.c_rank_tier IN (?)
+			ORDER BY s.c_rank_score DESC
+		`, tierList)
+		if inErr != nil {
+			slog.Error("Failed to build SQL query", "err", inErr)
+			os.Exit(1)
+		}
 	}
 
 	query = database.Rebind(query)
@@ -122,19 +139,21 @@ func main() {
 			guidelines := fmt.Sprintf(`["Follow %s coding style guidelines", "Include tests for new feature logic", "Link relevant issue in PR description", "Keep PRs scoped to a single concern"]`, lang)
 			dos := fmt.Sprintf(`["Ensure code complies with %s style conventions", "Keep PRs scoped and well-documented", "Include relevant test coverage for changes"]`, lang)
 			donts := `["Do not submit unlinked PRs without context", "Do not break existing automated test suites", "Do not mix unrelated refactors with feature work"]`
+			deepSections := fmt.Sprintf(`[{"title":"What Contributors Actually Say","body":"Discussions in %s highlight %s development standards, clean PR descriptions, and linked tracking issues."},{"title":"Hidden Friction Signals","body":"Submissions without test coverage or scope creep across unrelated files cause the most triage delay."},{"title":"Unwritten Rules","body":"1) Match existing %s idioms. 2) Keep PRs focused on a single concern. 3) Verify automated checks pass locally."}]`, r.FullName, lang, lang)
 
 			_, _ = database.ExecContext(ctx, `
 				INSERT INTO repo_ai_insights (
 					repo_id, maintainer_vibe, pr_guidelines, issue_quality_score, raw_summary,
-					warmth_score, patience_score, nitpick_ratio, maintainer_persona, dos_json, donts_json, updated_at
-				) VALUES (?, ?, ?, 8.0, ?, 7.8, 8.2, 0.20, 'Active Open-Source Maintainer', ?, ?, CURRENT_TIMESTAMP)
+					warmth_score, patience_score, nitpick_ratio, maintainer_persona, dos_json, donts_json, deep_sections_json, updated_at
+				) VALUES (?, ?, ?, 8.0, ?, 7.8, 8.2, 0.20, 'Active Open-Source Maintainer', ?, ?, ?, CURRENT_TIMESTAMP)
 				ON DUPLICATE KEY UPDATE 
 					maintainer_vibe = VALUES(maintainer_vibe),
 					pr_guidelines = VALUES(pr_guidelines),
 					dos_json = VALUES(dos_json),
 					donts_json = VALUES(donts_json),
+					deep_sections_json = VALUES(deep_sections_json),
 					updated_at = CURRENT_TIMESTAMP
-			`, r.ID, dynamicVibe, guidelines, fmt.Sprintf("General repository metadata insight for %s.", r.FullName), dos, donts)
+			`, r.ID, dynamicVibe, guidelines, fmt.Sprintf("General repository metadata insight for %s.", r.FullName), dos, donts, deepSections)
 
 			skipped++
 			processed++
