@@ -119,8 +119,14 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository,
 			}
 		}
 
-		// Issue Custom Signed Opendoor JWT Token
-		signedToken, err := auth.GenerateToken(userID, ghUser.Login, cfg.JWTSecret)
+		// Issue Custom Signed Opendoor JWT Token using the stored username so it
+		// stays stable across re-logins even if the GitHub login changed.
+		stored, err := userRepo.FindByID(c.Request.Context(), userID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to load user"})
+			return
+		}
+		signedToken, err := auth.GenerateToken(userID, stored.Username, cfg.JWTSecret)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate authentication token"})
 			return
