@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"sort"
 	"strings"
 	"time"
@@ -39,6 +40,14 @@ func NewAIClient(apiKey string) *AIClient {
 	}
 }
 
+// GetNLPSidecarURL returns the configured NLP sidecar URL from environment.
+func GetNLPSidecarURL() string {
+	if url := os.Getenv("NLP_SIDECAR_URL"); url != "" {
+		return url
+	}
+	return "http://127.0.0.1:8095/analyze"
+}
+
 // GenerateRepoInsights prompts AI model to extract maintainer vibe check & PR guidelines,
 // trying Python NLP sidecar first, then Opencode API, and falling back to zero-cost local classifier.
 func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string, prComments, issueComments []string) (*AIInsightsResponse, error) {
@@ -56,7 +65,7 @@ func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string
 	reqBody, err := json.Marshal(map[string]any{
 		"model": "opencode-default",
 		"messages": []map[string]string{
-			{"role": "system", "content": "You are an expert open-source contributor mentor. Respond in JSON format with fields maintainer_vibe, pr_guidelines (string array), issue_quality_score (number), and raw_summary."},
+			{"role": "system", "content": "You are an expert open-source contributor mentor. Respond in JSON format with all fields: maintainer_vibe (string), pr_guidelines (string array, 3+ items), issue_quality_score (number 1-10), raw_summary (string), warmth_score (number 1-10), patience_score (number 1-10), nitpick_ratio (number 0-1), maintainer_persona (string), top_dos (string array, 3+ items), top_donts (string array, 3+ items)."},
 			{"role": "user", "content": prompt},
 		},
 		"response_format": map[string]string{"type": "json_object"},
@@ -258,7 +267,7 @@ func (c *AIClient) callPythonNLPSidecar(ctx context.Context, repoFullName string
 		return nil, err
 	}
 
-	req, err := http.NewRequestWithContext(sidecarCtx, http.MethodPost, "http://127.0.0.1:8095/analyze", bytes.NewReader(bodyBytes))
+	req, err := http.NewRequestWithContext(sidecarCtx, http.MethodPost, GetNLPSidecarURL(), bytes.NewReader(bodyBytes))
 	if err != nil {
 		return nil, err
 	}

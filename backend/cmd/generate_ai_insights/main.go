@@ -119,9 +119,9 @@ func main() {
 				dynamicVibe = fmt.Sprintf("Growing %s project in %s welcoming community pull requests and bug fixes.", lang, r.FullName)
 			}
 
-			guidelines := fmt.Sprintf(`["Follow %s coding style guidelines", "Include tests for new feature logic", "Link relevant issue in PR description"]`, lang)
-			dos := fmt.Sprintf(`["Ensure code complies with %s style conventions", "Keep PRs scoped and well-documented"]`, lang)
-			donts := `["Do not submit unlinked PRs without context", "Do not break existing automated test suites"]`
+			guidelines := fmt.Sprintf(`["Follow %s coding style guidelines", "Include tests for new feature logic", "Link relevant issue in PR description", "Keep PRs scoped to a single concern"]`, lang)
+			dos := fmt.Sprintf(`["Ensure code complies with %s style conventions", "Keep PRs scoped and well-documented", "Include relevant test coverage for changes"]`, lang)
+			donts := fmt.Sprintf(`["Do not submit unlinked PRs without context", "Do not break existing automated test suites", "Do not mix unrelated refactors with feature work"]`, lang)
 
 			_, _ = database.ExecContext(ctx, `
 				INSERT INTO repo_ai_insights (

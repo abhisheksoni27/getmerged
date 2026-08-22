@@ -487,6 +487,104 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         onboardingScore={repo?.onboarding_score}
       />
 
+      {/* AI Insights & Maintainer Guidelines Section - Data-Backed Only (Rule 12 compliant) */}
+      {insights && (
+        <div className="relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-5 sm:p-6 shadow-[5px_5px_0px_#222831] overflow-hidden mb-10">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-zinc-950 shadow-[2px_2px_0px_#222831] -rotate-2">
+              <Sparkles className="h-4 w-4" />
+            </div>
+            <h2 className="font-space text-base font-extrabold text-zinc-950">
+              AI Maintainer Review Guidelines
+            </h2>
+          </div>
+
+          <div className="space-y-6 pt-2 font-sans">
+            {/* Persona Overview Banner */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border-2 border-brand-dark bg-zinc-950 text-white shadow-[3px_3px_0px_#222831]">
+              <div>
+                <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
+                  Review Persona
+                </span>
+                <h3 className="text-base font-space font-bold mt-0.5">
+                  {insights.maintainer_persona || `${fullName.split("/")[1] || "Core"} Maintainer Team`}
+                </h3>
+              </div>
+              <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t-2 sm:border-t-0 sm:border-l-2 border-white/30 pt-2 sm:pt-0 sm:pl-4">
+                {insights.warmth_score != null && insights.warmth_score > 0 && (
+                  <div>
+                    <div className="text-zinc-400 text-[10px]">Warmth Score</div>
+                    <div className="text-emerald-400 font-bold text-sm">{insights.warmth_score.toFixed(1)}/10</div>
+                  </div>
+                )}
+                {insights.patience_score != null && insights.patience_score > 0 && (
+                  <div>
+                    <div className="text-zinc-400 text-[10px]">Patience Score</div>
+                    <div className="text-blue-400 font-bold text-sm">{insights.patience_score.toFixed(1)}/10</div>
+                  </div>
+                )}
+                {insights.nitpick_ratio != null && insights.nitpick_ratio > 0 && (
+                  <div>
+                    <div className="text-zinc-400 text-[10px]">Nitpick Rate</div>
+                    <div className="text-amber-400 font-bold text-sm">{(insights.nitpick_ratio * 100).toFixed(0)}%</div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Description */}
+            {insights.maintainer_vibe && (
+              <div className="p-4 rounded-xl border-2 border-brand-dark bg-white shadow-[2px_2px_0px_#222831]">
+                <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed">
+                  {insights.maintainer_vibe}
+                </p>
+              </div>
+            )}
+
+            {/* Top Do's & Don'ts Checklist */}
+            {((insights.top_dos && insights.top_dos.length > 0) || (insights.top_donts && insights.top_donts.length > 0)) && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                {/* Do's */}
+                {insights.top_dos && insights.top_dos.length > 0 && (
+                  <div className="rounded-xl border-2 border-brand-dark bg-emerald-100 p-4 shadow-[3px_3px_0px_#222831]">
+                    <h4 className="text-xs font-mono font-bold text-emerald-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                      Top PR Submission Do&apos;s
+                    </h4>
+                    <ul className="space-y-2 text-xs text-emerald-950 font-sans">
+                      {insights.top_dos.map((doItem, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-emerald-600 font-bold">•</span>
+                          <span>{doItem}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Don'ts */}
+                {insights.top_donts && insights.top_donts.length > 0 && (
+                  <div className="rounded-xl border-2 border-brand-dark bg-rose-100 p-4 shadow-[3px_3px_0px_#222831]">
+                    <h4 className="text-xs font-mono font-bold text-rose-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                      <AlertCircle className="h-4 w-4 text-rose-600" />
+                      Top PR Friction Pitfalls (Don&apos;ts)
+                    </h4>
+                    <ul className="space-y-2 text-xs text-rose-950 font-sans">
+                      {insights.top_donts.map((dontItem, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-rose-600 font-bold">•</span>
+                          <span>{dontItem}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Interactive README C-Rank Live Badge Generator (Issue #50) */}
       <RepoBadgeGenerator
         fullName={fullName}
@@ -680,104 +778,6 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         )}
       </div>
 
-
-      {/* AI Insights & Maintainer Guidelines Section - Data-Backed Only (Rule 12 compliant) */}
-      {insights && (
-        <div className="relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-5 sm:p-6 shadow-[5px_5px_0px_#222831] overflow-hidden mb-10">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-zinc-950 shadow-[2px_2px_0px_#222831] -rotate-2">
-              <Sparkles className="h-4 w-4" />
-            </div>
-            <h2 className="font-space text-base font-extrabold text-zinc-950">
-              AI Maintainer Review Guidelines
-            </h2>
-          </div>
-
-          <div className="space-y-6 pt-2 font-sans">
-            {/* Persona Overview Banner */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border-2 border-brand-dark bg-zinc-950 text-white shadow-[3px_3px_0px_#222831]">
-              <div>
-                <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
-                  Review Persona
-                </span>
-                <h3 className="text-base font-space font-bold mt-0.5">
-                  {insights.maintainer_persona || `${fullName.split("/")[1] || "Core"} Maintainer Team`}
-                </h3>
-              </div>
-              <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t-2 sm:border-t-0 sm:border-l-2 border-white/30 pt-2 sm:pt-0 sm:pl-4">
-                {insights.warmth_score != null && insights.warmth_score > 0 && (
-                  <div>
-                    <div className="text-zinc-400 text-[10px]">Warmth Score</div>
-                    <div className="text-emerald-400 font-bold text-sm">{insights.warmth_score.toFixed(1)}/10</div>
-                  </div>
-                )}
-                {insights.patience_score != null && insights.patience_score > 0 && (
-                  <div>
-                    <div className="text-zinc-400 text-[10px]">Patience Score</div>
-                    <div className="text-blue-400 font-bold text-sm">{insights.patience_score.toFixed(1)}/10</div>
-                  </div>
-                )}
-                {insights.nitpick_ratio != null && insights.nitpick_ratio > 0 && (
-                  <div>
-                    <div className="text-zinc-400 text-[10px]">Nitpick Rate</div>
-                    <div className="text-amber-400 font-bold text-sm">{(insights.nitpick_ratio * 100).toFixed(0)}%</div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Description */}
-            {insights.maintainer_vibe && (
-              <div className="p-4 rounded-xl border-2 border-brand-dark bg-white shadow-[2px_2px_0px_#222831]">
-                <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed">
-                  {insights.maintainer_vibe}
-                </p>
-              </div>
-            )}
-
-            {/* Top Do's & Don'ts Checklist */}
-            {((insights.top_dos && insights.top_dos.length > 0) || (insights.top_donts && insights.top_donts.length > 0)) && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-                {/* Do's */}
-                {insights.top_dos && insights.top_dos.length > 0 && (
-                  <div className="rounded-xl border-2 border-brand-dark bg-emerald-100 p-4 shadow-[3px_3px_0px_#222831]">
-                    <h4 className="text-xs font-mono font-bold text-emerald-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                      Top PR Submission Do&apos;s
-                    </h4>
-                    <ul className="space-y-2 text-xs text-emerald-950 font-sans">
-                      {insights.top_dos.map((doItem, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <span className="text-emerald-600 font-bold">•</span>
-                          <span>{doItem}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {/* Don'ts */}
-                {insights.top_donts && insights.top_donts.length > 0 && (
-                  <div className="rounded-xl border-2 border-brand-dark bg-rose-100 p-4 shadow-[3px_3px_0px_#222831]">
-                    <h4 className="text-xs font-mono font-bold text-rose-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                      <AlertCircle className="h-4 w-4 text-rose-600" />
-                      Top PR Friction Pitfalls (Don&apos;ts)
-                    </h4>
-                    <ul className="space-y-2 text-xs text-rose-950 font-sans">
-                      {insights.top_donts.map((dontItem, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <span className="text-rose-600 font-bold">•</span>
-                          <span>{dontItem}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Issues #6, #7, #8: Contributor Community Feedback & Verification Module */}
       <div className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-orange-100 via-white to-yellow-100 p-5 sm:p-8 shadow-[5px_5px_0px_#222831] mb-10 font-sans">

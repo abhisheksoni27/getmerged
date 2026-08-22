@@ -5,7 +5,7 @@ test.describe("Bus Factor Zero Display (GH-79)", () => {
     await page.goto("/facebook/react", { waitUntil: "domcontentloaded" });
 
     // The bus factor metric value should render the number directly, not '-'
-    const busFactorCard = page.locator("text=Maintainers & Bus Factor").locator("..");
+    const busFactorCard = page.locator("div.group").filter({ hasText: "Maintainers & Bus Factor" });
     const metricValue = busFactorCard.locator(".text-3xl, .text-4xl").first();
     await expect(metricValue).toBeVisible();
 
