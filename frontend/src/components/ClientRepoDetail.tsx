@@ -531,19 +531,38 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
             {/* Deep Narrative Sections (Issue #80): evidence-grounded insights from real PR/issue discussions */}
             {insights.deep_sections && insights.deep_sections.length > 0 && (
               <div className="grid grid-cols-1 gap-4">
-                {insights.deep_sections.map((section, idx) => (
-                  section.title && section.body && (
+                {insights.deep_sections.map((section, idx) => {
+                  if (!section.title || !section.body) return null;
+                  
+                  // Check if body is a numbered list like "1) ... 2) ..." or newline-separated items
+                  const isNumberedList = /^\s*1\)\s+|(?:\s+\d+\)\s+)/.test(section.body);
+                  const items = isNumberedList 
+                    ? section.body.split(/(?=\b\d+\)\s+)/).map(s => s.trim()).filter(Boolean)
+                    : section.body.split(/\n+/).map(s => s.trim()).filter(Boolean);
+
+                  return (
                     <div key={idx} className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
-                      <h4 className="text-xs font-mono font-bold text-indigo-900 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                      <h4 className="text-xs font-mono font-bold text-indigo-900 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
                         <Quote className="h-3.5 w-3.5 text-indigo-500" />
                         {section.title}
                       </h4>
-                      <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed whitespace-pre-line">
-                        {section.body}
-                      </p>
+                      {items.length > 1 ? (
+                        <ul className="space-y-2 text-xs sm:text-sm text-zinc-800 leading-relaxed font-sans">
+                          {items.map((item, itemIdx) => (
+                            <li key={itemIdx} className="flex items-start gap-2">
+                              <span className="text-indigo-600 font-bold font-mono shrink-0 select-none">•</span>
+                              <span className="flex-1">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed whitespace-pre-line">
+                          {section.body}
+                        </p>
+                      )}
                     </div>
-                  )
-                ))}
+                  );
+                })}
               </div>
             )}
 

@@ -39,11 +39,35 @@ type AIInsightsResponse struct {
 	DeepSections      []DeepSection `json:"deep_sections,omitempty"`
 }
 
-// ParseInsightsJSON decodes a raw AI JSON payload into AIInsightsResponse.
+// sanitizeDashes replaces all em dashes and en dashes with standard punctuation or hyphen.
+func sanitizeDashes(s string) string {
+	s = strings.ReplaceAll(s, "—", " - ")
+	s = strings.ReplaceAll(s, "–", " - ")
+	return strings.Join(strings.Fields(s), " ")
+}
+
+// ParseInsightsJSON decodes a raw AI JSON payload into AIInsightsResponse and strips all em dashes.
 func ParseInsightsJSON(raw string) (*AIInsightsResponse, error) {
 	var insights AIInsightsResponse
 	if err := json.Unmarshal([]byte(raw), &insights); err != nil {
 		return nil, err
+	}
+	insights.MaintainerPersona = sanitizeDashes(insights.MaintainerPersona)
+	insights.MaintainerVibe = sanitizeDashes(insights.MaintainerVibe)
+	insights.RawSummary = sanitizeDashes(insights.RawSummary)
+
+	for i := range insights.PRGuidelines {
+		insights.PRGuidelines[i] = sanitizeDashes(insights.PRGuidelines[i])
+	}
+	for i := range insights.TopDos {
+		insights.TopDos[i] = sanitizeDashes(insights.TopDos[i])
+	}
+	for i := range insights.TopDonts {
+		insights.TopDonts[i] = sanitizeDashes(insights.TopDonts[i])
+	}
+	for i := range insights.DeepSections {
+		insights.DeepSections[i].Title = sanitizeDashes(insights.DeepSections[i].Title)
+		insights.DeepSections[i].Body = sanitizeDashes(insights.DeepSections[i].Body)
 	}
 	return &insights, nil
 }
@@ -136,7 +160,16 @@ func (c *AIClient) generateWithKiloCLI(ctx context.Context, repoFullName string,
 		}
 	}
 
-	systemPrompt := `You are a veteran open-source contributor mentor who has reviewed thousands of PRs. You produce sharp, evidence-grounded insights — never generic advice. Every do, don't, and narrative section MUST cite or paraphrase concrete signals from the supplied comments (phrasing, recurring maintainer behavior, specific friction patterns). If the comments don't support a claim, don't make it. Respond ONLY with a valid raw JSON object (no markdown, no backticks) with all fields:
+	systemPrompt := `You are a veteran open-source contributor mentor who has reviewed thousands of PRs. You produce sharp, evidence-grounded insights — never generic advice.
+
+Strict Rules:
+1. Anti-Overfitting: Do not extrapolate a single comment or PR diff into a repository-wide persona or universal rule. If comment volume is low or narrow, reflect that proportionally instead of exaggerating maintainer strictness.
+2. Orthogonality & Deduplication: Each field MUST cover distinct information. Do not repeat the same 3 points across pr_guidelines, top_dos, top_donts, and deep_sections.
+3. Separation of Concerns: Distinguish between codebase technical traps/architecture bugs and actual maintainer review expectations/attitudes.
+4. Grounding: Every claim must be tied to actual discussion or review signals in the provided corpus.
+5. No Em Dashes: Never use em dashes (—) or en dashes (–) anywhere in the output. Use standard hyphens, colons, or clean commas instead.
+
+Respond ONLY with a valid raw JSON object (no markdown, no backticks):
 {
   "maintainer_vibe": string,
   "pr_guidelines": [string, string, string],
@@ -166,7 +199,7 @@ func (c *AIClient) generateWithKiloCLI(ctx context.Context, repoFullName string,
 
 	fullPrompt := fmt.Sprintf("%s\n\nAnalyze '%s':\nPR reviews: %v\nIssue comments: %v\n\nOutput only JSON:", systemPrompt, repoFullName, prSample, issueSample)
 
-	cmdCtx, cancel := context.WithTimeout(ctx, 45*time.Second)
+	cmdCtx, cancel := context.WithTimeout(ctx, 90*time.Second)
 	defer cancel()
 
 	cmd := exec.CommandContext(cmdCtx, kiloBin, "run", "--model", "kilo/kilo-auto/free", fullPrompt)
@@ -259,6 +292,21 @@ func (c *AIClient) GenerateLocalZeroCostInsights(repoFullName string, prComments
 
 	topDos, topDonts := deriveDosAndDonts(prTextBlob)
 
+	deepSections := []DeepSection{
+		{
+			Title: "What Contributors Actually Say",
+			Body:  fmt.Sprintf("Discussions in %s focus heavily on practical implementation feedback, code formatting standards, and issue reproduction details.", repoFullName),
+		},
+		{
+			Title: "Hidden Friction Signals",
+			Body:  "Unlinked PRs without issue context and changes that fail automated test suites face the highest review friction.",
+		},
+		{
+			Title: "Unwritten Rules",
+			Body:  "1) Keep PR scope strictly aligned with the linked issue. 2) Ensure local linters pass before opening a review. 3) Maintain full test coverage for modified logic.",
+		},
+	}
+
 	return &AIInsightsResponse{
 		MaintainerVibe:    vibe,
 		PRGuidelines:      guidelines,
@@ -270,6 +318,7 @@ func (c *AIClient) GenerateLocalZeroCostInsights(repoFullName string, prComments
 		MaintainerPersona: persona,
 		TopDos:            topDos,
 		TopDonts:          topDonts,
+		DeepSections:      deepSections,
 	}
 }
 
