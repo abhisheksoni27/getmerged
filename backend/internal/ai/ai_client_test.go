@@ -104,6 +104,20 @@ func TestAIClient_PartialKeywordMatchPadsToMinimumThree(t *testing.T) {
 	assertContains(t, res.TopDonts, "Do not mix unrelated refactors in a single PR")
 }
 
+func TestAIClient_EmptyCommentsReturnsAtLeastThreeDosAndDonts(t *testing.T) {
+	client := ai.NewAIClient("")
+	result := client.GenerateLocalZeroCostInsights("test-org/test-repo", []string{}, []string{})
+	if result == nil {
+		t.Fatal("expected non-nil AIInsightsResponse")
+	}
+	if len(result.TopDos) < 3 {
+		t.Fatalf("expected at least 3 dos for empty comments, got %d: %+v", len(result.TopDos), result.TopDos)
+	}
+	if len(result.TopDonts) < 3 {
+		t.Fatalf("expected at least 3 donts for empty comments, got %d: %+v", len(result.TopDonts), result.TopDonts)
+	}
+}
+
 func TestAIClient_AllFieldsPopulated(t *testing.T) {
 	client := ai.NewAIClient("")
 	prComments := []string{
