@@ -146,13 +146,14 @@ func (r *sqlxAIRepository) GetPRComments(ctx context.Context, repoID string, lim
 	err := r.db.SelectContext(ctx, &comments, `
 		SELECT comment_text FROM repo_pr_comments
 		WHERE repository_id = ?
-		  AND author_association IN ('OWNER', 'MEMBER', 'COLLABORATOR')
+		  AND (author_association IN ('OWNER', 'MEMBER', 'COLLABORATOR') OR author_association = '')
 		  AND author_login NOT LIKE '%[bot]%'
 		ORDER BY created_at DESC
 		LIMIT ?
 	`, repoID, limit)
-	if err != nil {
-		return nil, err
+	if err != nil || len(comments) == 0 {
+		// Fallback to raw comments if pr comments table is empty
+		return r.GetRawComments(ctx, repoID, limit)
 	}
 	return comments, nil
 }
@@ -178,5 +179,8 @@ func (r *sqlxAIRepository) GetIssueComments(ctx context.Context, repoID string, 
 		ORDER BY id DESC
 		LIMIT ?
 	`, repoID, limit)
+	if err != nil || len(comments) == 0 {
+		return r.GetRawComments(ctx, repoID, limit)
+	}
 	return comments, err
 }

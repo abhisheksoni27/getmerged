@@ -28,7 +28,7 @@ export function RepoDetailHero({
   onGithubClick,
 }: RepoDetailHeroProps) {
   const owner = repo?.owner || fullName.split("/")[0];
-  const ownerAvatarUrl = `https://github.com/${owner}.png`;
+  const ownerAvatarUrl = `https://github.com/${owner}.png?size=64`;
   const roundedScore = Math.round(score);
   const isScored = repo?.is_scored ?? (score > 0);
 

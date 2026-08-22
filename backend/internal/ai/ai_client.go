@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/exec"
 	"sort"
 	"strings"
 	"time"
@@ -66,7 +67,12 @@ func GetNLPSidecarURL() string {
 // GenerateRepoInsights prompts AI model to extract maintainer vibe check & PR guidelines,
 // trying Python NLP sidecar first, then Opencode API, and falling back to zero-cost local classifier.
 func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string, prComments, issueComments []string) (*AIInsightsResponse, error) {
-	// 1. Try Python NLP Micro-Sidecar (http://127.0.0.1:8095/analyze)
+	// 1. Try Kilo LLM CLI with kilo-auto/free
+	if kiloResp, err := c.generateWithKiloCLI(ctx, repoFullName, prComments, issueComments); err == nil && kiloResp != nil {
+		return kiloResp, nil
+	}
+
+	// 2. Try Python NLP Micro-Sidecar (http://127.0.0.1:8095/analyze)
 	if sidecarResp, err := c.callPythonNLPSidecar(ctx, repoFullName, prComments, issueComments); err == nil && sidecarResp != nil {
 		return sidecarResp, nil
 	}
@@ -118,6 +124,69 @@ func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string
 	}
 
 	return ParseInsightsJSON(apiResp.Choices[0].Message.Content)
+}
+
+func (c *AIClient) generateWithKiloCLI(ctx context.Context, repoFullName string, prComments, issueComments []string) (*AIInsightsResponse, error) {
+	kiloBin := "/home/deploy/.nvm/versions/node/v24.18.0/bin/kilo"
+	if _, err := os.Stat(kiloBin); err != nil {
+		var errLook error
+		kiloBin, errLook = exec.LookPath("kilo")
+		if errLook != nil {
+			return nil, errLook
+		}
+	}
+
+	systemPrompt := `You are a veteran open-source contributor mentor who has reviewed thousands of PRs. You produce sharp, evidence-grounded insights — never generic advice. Every do, don't, and narrative section MUST cite or paraphrase concrete signals from the supplied comments (phrasing, recurring maintainer behavior, specific friction patterns). If the comments don't support a claim, don't make it. Respond ONLY with a valid raw JSON object (no markdown, no backticks) with all fields:
+{
+  "maintainer_vibe": string,
+  "pr_guidelines": [string, string, string],
+  "issue_quality_score": float (1-10),
+  "raw_summary": string,
+  "warmth_score": float (1-10),
+  "patience_score": float (1-10),
+  "nitpick_ratio": float (0-1),
+  "maintainer_persona": string,
+  "top_dos": [string, string, string],
+  "top_donts": [string, string, string],
+  "deep_sections": [
+    {"title": "What Contributors Actually Say", "body": string},
+    {"title": "Hidden Friction Signals", "body": string},
+    {"title": "Unwritten Rules", "body": string}
+  ]
+}`
+
+	prSample := prComments
+	if len(prSample) > 20 {
+		prSample = prSample[:20]
+	}
+	issueSample := issueComments
+	if len(issueSample) > 20 {
+		issueSample = issueSample[:20]
+	}
+
+	fullPrompt := fmt.Sprintf("%s\n\nAnalyze '%s':\nPR reviews: %v\nIssue comments: %v\n\nOutput only JSON:", systemPrompt, repoFullName, prSample, issueSample)
+
+	cmdCtx, cancel := context.WithTimeout(ctx, 45*time.Second)
+	defer cancel()
+
+	cmd := exec.CommandContext(cmdCtx, kiloBin, "run", "--model", "kilo/kilo-auto/free", fullPrompt)
+	var outBuf bytes.Buffer
+	cmd.Stdout = &outBuf
+	cmd.Stderr = nil
+
+	if err := cmd.Run(); err != nil {
+		return nil, err
+	}
+
+	raw := strings.TrimSpace(outBuf.String())
+	// Strip possible markdown code fence
+	if start := strings.Index(raw, "{"); start != -1 {
+		if end := strings.LastIndex(raw, "}"); end != -1 && end > start {
+			raw = raw[start : end+1]
+		}
+	}
+
+	return ParseInsightsJSON(raw)
 }
 
 // GenerateLocalZeroCostInsights performs pure local sentiment & rule extraction with zero API cost.
