@@ -137,7 +137,7 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
                   Response: <strong className="text-zinc-900">{(repo.response_p50_hours || repo.time_to_first_response_hours || 0).toFixed(1)}h</strong>
                 </span>
                 <span>
-                  Maintainers: <strong className="text-zinc-900">{repo.bus_factor || 1} active</strong>
+                  Maintainers: <strong className="text-zinc-900">{repo.bus_factor ?? 0} active</strong>
                 </span>
               </div>
             </div>

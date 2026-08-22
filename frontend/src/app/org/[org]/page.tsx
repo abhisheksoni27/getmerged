@@ -205,7 +205,7 @@ export default async function OrgPage({ params }: OrgPageProps) {
                 <div className="flex items-center gap-4 mt-3 text-xs font-mono text-zinc-500 flex-wrap">
                   <span>Merge Rate: <strong className="text-zinc-900">{(repo.external_pr_merge_rate || 0).toFixed(1)}%</strong></span>
                   <span>Response: <strong className="text-zinc-900">{(repo.response_p50_hours || repo.time_to_first_response_hours || 0).toFixed(1)}h</strong></span>
-                  <span>Bus Factor: <strong className="text-zinc-900">{repo.bus_factor || 1} maintainers</strong></span>
+                  <span>Bus Factor: <strong className="text-zinc-900">{repo.bus_factor ?? 0} maintainers</strong></span>
                 </div>
               </div>
 

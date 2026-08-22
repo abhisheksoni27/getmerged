@@ -177,7 +177,7 @@ export default async function ComparePage({ params }: ComparePageProps) {
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-50 border border-zinc-100">
                   <span className="text-zinc-500 flex items-center gap-1.5"><Users className="h-3.5 w-3.5 text-purple-500" /> 90-Day Bus Factor</span>
-                  <strong className="text-zinc-900 font-bold">{repoA.bus_factor || 1} Maintainers</strong>
+                  <strong className="text-zinc-900 font-bold">{repoA.bus_factor ?? 0} Maintainers</strong>
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-50 border border-zinc-100">
                   <span className="text-zinc-500 flex items-center gap-1.5"><FileText className="h-3.5 w-3.5 text-emerald-500" /> Onboarding Readiness</span>
@@ -230,7 +230,7 @@ export default async function ComparePage({ params }: ComparePageProps) {
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-50 border border-zinc-100">
                   <span className="text-zinc-500 flex items-center gap-1.5"><Users className="h-3.5 w-3.5 text-purple-500" /> 90-Day Bus Factor</span>
-                  <strong className="text-zinc-900 font-bold">{repoB.bus_factor || 1} Maintainers</strong>
+                  <strong className="text-zinc-900 font-bold">{repoB.bus_factor ?? 0} Maintainers</strong>
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-50 border border-zinc-100">
                   <span className="text-zinc-500 flex items-center gap-1.5"><FileText className="h-3.5 w-3.5 text-emerald-500" /> Onboarding Readiness</span>

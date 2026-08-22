@@ -93,16 +93,26 @@ export function RepoScorecards({
               <Users className="h-4 w-4 text-amber-500 shrink-0" />
               <span>Maintainers & Bus Factor</span>
             </div>
-            {distinctMaintainers <= 1 && distinctMaintainers > 0 && (
+            {distinctMaintainers === 0 && (
+              <span className="px-1.5 py-0.5 text-[9px] font-bold font-mono bg-rose-50 text-rose-700 border border-rose-200 rounded">
+                NO ACTIVE MAINTAINERS
+              </span>
+            )}
+            {distinctMaintainers === 1 && (
               <span className="px-1.5 py-0.5 text-[9px] font-bold font-mono bg-amber-50 text-amber-700 border border-amber-200 rounded">
                 BUS FACTOR: 1
+              </span>
+            )}
+            {distinctMaintainers <= 1 && (
+              <span className="px-1.5 py-0.5 text-[9px] font-bold font-mono bg-zinc-100 text-zinc-600 border border-zinc-200 rounded">
+                Tier Capped to B
               </span>
             )}
             <Info className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-700 transition-colors" />
           </div>
           <div className="flex items-baseline gap-2">
             <div className="text-3xl sm:text-4xl font-bold text-zinc-900 font-mono tracking-tight">
-              {distinctMaintainers > 0 ? distinctMaintainers : "-"}
+              {distinctMaintainers}
             </div>
             {onboardingScore !== undefined && onboardingScore > 0 && (
               <span className="text-xs font-mono font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
@@ -112,8 +122,11 @@ export function RepoScorecards({
           </div>
           <div className="text-xs sm:text-sm text-zinc-600 mt-1 font-sans font-medium">{maintainersCommentary}</div>
           <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-zinc-900 text-white text-xs rounded-xl shadow-lg border border-zinc-800 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
-            <p className="font-bold mb-1">Distinct Reviewers & Docs</p>
+            <p className="font-bold mb-1">Distinct Reviewers &amp; Docs</p>
             <p className="text-zinc-300">Active maintainers in the 90-day window and newcomer documentation readiness score.</p>
+            {distinctMaintainers <= 1 && (
+              <p className="text-amber-300 mt-1 font-medium">Tier capped to Tier B for contributor safety when bus factor is 0 or 1.</p>
+            )}
           </div>
         </div>
       </div>
