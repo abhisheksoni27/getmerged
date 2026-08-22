@@ -57,6 +57,22 @@ const nextConfig: NextConfig = {
           key: "Strict-Transport-Security",
           value: "max-age=31536000; includeSubDomains; preload",
         },
+        {
+          key: "X-Content-Type-Options",
+          value: "nosniff",
+        },
+        {
+          key: "X-Frame-Options",
+          value: "DENY",
+        },
+        {
+          key: "Referrer-Policy",
+          value: "strict-origin-when-cross-origin",
+        },
+        {
+          key: "Content-Security-Policy-Report-Only",
+          value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://us.i.posthog.com https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com data:; img-src 'self' data: https://github.com https://avatars.githubusercontent.com https://*.githubusercontent.com https://raw.githubusercontent.com; connect-src 'self' https://getmerged.abhishekco.de https://us.i.posthog.com https://api.github.com; frame-ancestors 'none';",
+        },
       ],
     },
     {

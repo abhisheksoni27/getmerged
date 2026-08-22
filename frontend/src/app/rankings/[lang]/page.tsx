@@ -207,6 +207,20 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
       name: "GetMerged",
       url: "https://getmerged.abhishekco.de",
     },
+    variableMeasured: [
+      "PR Merge Rate (90d)",
+      "Time to First Review Response",
+      "First-Timer Merge Success Rate",
+      "Good First Issue Count",
+      "C-Rank Score",
+    ],
+    distribution: [
+      {
+        "@type": "DataDownload",
+        encodingFormat: "application/json",
+        contentUrl: `https://getmerged.abhishekco.de/api/v1/repos?language=${encodeURIComponent(languageName)}`,
+      },
+    ],
   };
 
   return (

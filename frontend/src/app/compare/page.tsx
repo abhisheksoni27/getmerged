@@ -12,6 +12,25 @@ export const metadata: Metadata = {
 };
 
 export default function CompareHubPage() {
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://getmerged.abhishekco.de",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Compare Repositories",
+        item: "https://getmerged.abhishekco.de/compare",
+      },
+    ],
+  };
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -28,6 +47,10 @@ export default function CompareHubPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

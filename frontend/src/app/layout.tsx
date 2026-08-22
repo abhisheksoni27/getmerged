@@ -24,8 +24,12 @@ const dmMono = DM_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://getmerged.abhishekco.de"),
-  title: "GetMerged - Find Welcoming GitHub Repos for Open Source Contribution | C-Rank™",
-  description: "Stop guessing which door is open. Find GitHub repositories that welcome open source contribution, ranked by PR merge rates, maintainer response time, and first-timer success. The C-Rank™ index for developers building their github profile.",
+  title: "GetMerged - Find Welcoming Open Source Repositories | C-Rank™",
+  description: "Find GitHub repositories that welcome open source contribution, ranked by PR merge rates, maintainer response time, and first-timer success.",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/apple-touch-icon.png",
+  },
   keywords: [
     "open source contribution",
     "good first issue",
