@@ -159,9 +159,12 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           }
         })
         .catch(() => {});
+    }
 
-      // 2. Fetch AI Insights
-      fetch(`${API_BASE_URL}/api/v1/repos/${repo.id}/insights`, { credentials: "include" })
+    const targetId = repo?.id ? repo.id : (fullName ? encodeURIComponent(fullName) : "");
+    if (targetId) {
+      // 2. Fetch AI Insights (public endpoint, no auth required)
+      fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/insights`, { credentials: "include" })
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
           if (data?.insights) {
@@ -169,10 +172,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           }
         })
         .catch(() => {});
-    }
 
-    const targetId = repo?.id ? repo.id : (fullName ? encodeURIComponent(fullName) : "");
-    if (targetId) {
       // 3. Fetch Similar/Related Repositories for Interlinking (Issue #55)
       fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/related?limit=3`)
         .then((res) => (res.ok ? res.json() : null))
