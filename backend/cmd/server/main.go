@@ -138,7 +138,7 @@ func main() {
 		api.GET("/users/:slug/achievement.svg", handler.RenderAchievementCardHandler(userRepo))
 		api.GET("/badges/:owner/:name/badge.json", handler.GetRepoBadgeJSON(repoStore))
 		api.GET("/badges/:owner/:name/badge.svg", handler.GetRepoBadgeSVG(repoStore))
-		api.POST("/preflight/evaluate", handler.EvaluatePreflightHandler())
+		api.POST("/preflight/evaluate", handler.EvaluatePreflightHandler(gh))
 		api.POST("/preflight/pr-details", handler.FetchPRDetailsHandler(gh))
 		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo))
 		api.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
