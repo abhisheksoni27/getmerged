@@ -18,11 +18,11 @@ Instead of relying on vanity metrics like GitHub Stars, GetMerged calculates a p
 9. **Maintainer Responsiveness (2.5% weight)**: Speed of response to issue discussions and follow-up reviews.
 
 ## Tier Taxonomy
-- **S-Class (Score >= 70.0)**: Elite welcoming tier. Fast review turnaround (<4h), high merge rate (>65%), supportive first-timer environment.
-- **A-Class (Score >= 55.0)**: Welcoming repository. Regular active reviews (<24h), healthy contributor acceptance.
-- **B-Class (Score >= 40.0)**: Standard open-source pace. 1–3 day review turnaround.
-- **C-Class (Score >= 25.0)**: Selective review or high nitpick friction.
-- **D-Class (Score < 25.0)**: Stale or unmaintained repositories where PRs risk sitting indefinitely.
+- **Super Welcoming (Tier S - Score >= 70.0)**: Elite welcoming tier. Fast review turnaround (<4h), high first-timer merge rate (>65%), supportive newcomer environment.
+- **Welcoming (Tier A - Score >= 55.0)**: Welcoming repository. Regular active reviews (<24h), healthy contributor acceptance.
+- **Moderate (Tier B - Score >= 40.0)**: Standard open-source pace. 1–3 day review turnaround.
+- **Slow Review (Tier C - Score >= 25.0)**: Selective review or high nitpick friction.
+- **Unmaintained (Tier D - Score < 25.0)**: Stale or unmaintained repositories where PRs risk sitting indefinitely.
 
 ## Primary Endpoints
 - **Web App**: https://getmerged.abhishekco.de

@@ -21,6 +21,26 @@ const nextConfig: NextConfig = {
         source: "/ingest/:path*",
         destination: "https://us.i.posthog.com/:path*",
       },
+      {
+        source: "/repo/:owner/:name.md",
+        destination: "/:owner/:name/raw",
+      },
+      {
+        source: "/:owner/:name.md",
+        destination: "/:owner/:name/raw",
+      },
+      {
+        source: "/repo/:owner/:name/raw",
+        destination: "/:owner/:name/raw",
+      },
+      {
+        source: "/how-c-rank-works.md",
+        destination: "/llms-full.txt",
+      },
+      {
+        source: "/about.md",
+        destination: "/llms.txt",
+      },
     ];
   },
   skipTrailingSlashRedirect: true,
