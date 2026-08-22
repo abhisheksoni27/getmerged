@@ -206,7 +206,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               </Link>
               <button
                 onClick={handleLogout}
-                className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 transition-colors cursor-pointer"
+                className="text-zinc-500 hover:text-zinc-700 transition-colors cursor-pointer"
                 title="Sign Out of GetMerged"
               >
                 <LogOut className="h-3.5 w-3.5" />
