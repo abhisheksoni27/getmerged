@@ -32,6 +32,7 @@ export interface Repo {
   has_contributing_md?: boolean;
   updated_at?: string;
   snapshot_date?: string;
+  score_source?: "computed" | "fallback" | string;
   topics?: string[];
   is_scored?: boolean;
 }
