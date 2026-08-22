@@ -73,7 +73,7 @@ export default async function WatchlistPage() {
   const token = cookieStore.get("opendoor_token")?.value;
 
   if (!token) {
-    redirect(`${API_BASE_URL}/api/v1/auth/github`);
+    redirect("/api/v1/auth/github");
   }
 
   const initialItems = await getWatchlistData(token);
