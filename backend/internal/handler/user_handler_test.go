@@ -181,3 +181,89 @@ func TestAuthMeResolvesAfterSoftDeletedReauth(t *testing.T) {
 		t.Fatalf("expected username 'Resurrected Dev', got %q", resp.User.Username)
 	}
 }
+
+func TestUsernameStableAcrossGithubRelogin(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	database, cfg := setupUserHandlerTestDB(t)
+	defer database.Close()
+
+	userRepo := repository.NewUserRepository(database, cfg)
+	ctx := context.Background()
+
+	userID, err := userRepo.UpsertUser(ctx, 5150, "originalname", "orig@github.com", "https://avatar/o")
+	if err != nil {
+		t.Fatalf("failed to seed github user: %v", err)
+	}
+
+	// Re-login with a changed GitHub login: username must not be overwritten.
+	if _, err := userRepo.UpsertUser(ctx, 5150, "renamedlogin", "orig@github.com", "https://avatar/o2"); err != nil {
+		t.Fatalf("re-login upsert failed: %v", err)
+	}
+
+	stored, err := userRepo.FindByID(ctx, userID)
+	if err != nil {
+		t.Fatalf("failed to load stored user: %v", err)
+	}
+	if stored.Username != "originalname" {
+		t.Fatalf("expected preserved username 'originalname', got %q", stored.Username)
+	}
+
+	jwtSecret := "test-jwt-secret-0123456789abcdefghij"
+	signedToken, err := auth.GenerateToken(userID, stored.Username, jwtSecret)
+	if err != nil {
+		t.Fatalf("failed to generate token: %v", err)
+	}
+
+	r := gin.New()
+	r.Use(middleware.UserAuth(jwtSecret))
+	r.GET("/api/v1/auth/me", handler.GetCurrentUser(userRepo))
+	r.GET("/api/v1/users/:slug", handler.GetUserProfile(userRepo))
+
+	fetchMe := func() string {
+		t.Helper()
+		req, _ := http.NewRequest("GET", "/api/v1/auth/me", nil)
+		req.Header.Set("Authorization", "Bearer "+signedToken)
+		w := httptest.NewRecorder()
+		r.ServeHTTP(w, req)
+		if w.Code != http.StatusOK {
+			t.Fatalf("expected 200 from /api/v1/auth/me, got %d: %s", w.Code, w.Body.String())
+		}
+		var payload struct {
+			User struct {
+				Username string `json:"username"`
+			} `json:"user"`
+		}
+		if err := json.Unmarshal(w.Body.Bytes(), &payload); err != nil {
+			t.Fatalf("failed to parse /auth/me response: %v", err)
+		}
+		return payload.User.Username
+	}
+
+	fetchProfile := func() string {
+		t.Helper()
+		req, _ := http.NewRequest("GET", "/api/v1/users/originalname", nil)
+		req.Header.Set("Authorization", "Bearer "+signedToken)
+		w := httptest.NewRecorder()
+		r.ServeHTTP(w, req)
+		if w.Code != http.StatusOK {
+			t.Fatalf("expected 200 from profile, got %d: %s", w.Code, w.Body.String())
+		}
+		var payload struct {
+			Username string `json:"username"`
+		}
+		if err := json.Unmarshal(w.Body.Bytes(), &payload); err != nil {
+			t.Fatalf("failed to parse profile response: %v", err)
+		}
+		return payload.Username
+	}
+
+	meUsername := fetchMe()
+	profileUsername := fetchProfile()
+
+	if meUsername != profileUsername {
+		t.Fatalf("username mismatch after re-login: /auth/me=%q profile=%q", meUsername, profileUsername)
+	}
+	if meUsername != "originalname" {
+		t.Fatalf("expected stable username 'originalname' on both endpoints, got %q", meUsername)
+	}
+}

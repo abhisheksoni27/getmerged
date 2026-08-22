@@ -131,7 +131,8 @@ func (r *sqlxUserRepository) FindBySlug(ctx context.Context, slug string) (*User
 	return &user, nil
 }
 
-func (r *sqlxUserRepository) generateUniqueSlug(ctx context.Context, baseName string, currentUserID int64) (string, error) {
+// sanitizeSlug lowercases a display name into its public slug form.
+func sanitizeSlug(baseName string) string {
 	sanitized := strings.ToLower(strings.TrimSpace(baseName))
 	var clean []rune
 	for _, ch := range sanitized {
@@ -141,7 +142,66 @@ func (r *sqlxUserRepository) generateUniqueSlug(ctx context.Context, baseName st
 			clean = append(clean, '-')
 		}
 	}
-	baseSlug := strings.Trim(string(clean), "-")
+	return strings.Trim(string(clean), "-")
+}
+
+// githubSignupHandle picks the display username for a brand-new GitHub signup:
+// the raw GitHub login when unused, otherwise login + "-gh", then numeric
+// suffixes until unique. Availability is checked against the plaintext unique
+// slug column because usernames are encrypted at rest.
+func (r *sqlxUserRepository) githubSignupHandle(ctx context.Context, login string) (string, error) {
+	base := strings.TrimSpace(login)
+	if base == "" {
+		base = "user"
+	}
+	baseSlug := sanitizeSlug(base)
+	if baseSlug == "" {
+		baseSlug = "user"
+	}
+
+	slugFree := func(slug string) (bool, error) {
+		var id int64
+		err := r.db.GetContext(ctx, &id, "SELECT id FROM users WHERE slug = ?", slug)
+		if err == sql.ErrNoRows {
+			return true, nil
+		}
+		if err != nil {
+			return false, err
+		}
+		return false, nil
+	}
+
+	free, err := slugFree(baseSlug)
+	if err != nil {
+		return "", err
+	}
+	if free {
+		return base, nil
+	}
+
+	free, err = slugFree(baseSlug + "-gh")
+	if err != nil {
+		return "", err
+	}
+	if free {
+		return base + "-gh", nil
+	}
+
+	for i := 2; i < 1000; i++ {
+		handle := fmt.Sprintf("%s-gh-%d", base, i)
+		free, err := slugFree(fmt.Sprintf("%s-gh-%d", baseSlug, i))
+		if err != nil {
+			return "", err
+		}
+		if free {
+			return handle, nil
+		}
+	}
+	return "", fmt.Errorf("no unique username available for %q", login)
+}
+
+func (r *sqlxUserRepository) generateUniqueSlug(ctx context.Context, baseName string, currentUserID int64) (string, error) {
+	baseSlug := sanitizeSlug(baseName)
 	if baseSlug == "" {
 		baseSlug = "user"
 	}
@@ -196,7 +256,13 @@ func (r *sqlxUserRepository) UpsertUser(ctx context.Context, githubID int64, use
 	}
 
 	if err == sql.ErrNoRows || err != nil {
-		slug, err := r.generateUniqueSlug(ctx, username, 0)
+		// New signup: keep the GitHub username when free, else derive a unique one.
+		signupUsername, err := r.githubSignupHandle(ctx, username)
+		if err != nil {
+			return 0, err
+		}
+		encUsername, _ = crypto.EncryptAESGCM([]byte(signupUsername), r.encKey)
+		slug, err := r.generateUniqueSlug(ctx, signupUsername, 0)
 		if err != nil {
 			return 0, err
 		}
@@ -210,24 +276,28 @@ func (r *sqlxUserRepository) UpsertUser(ctx context.Context, githubID int64, use
 		return res.LastInsertId()
 	}
 
-	var slugToUse string
-	if existing.Slug != nil && *existing.Slug != "" {
-		slugToUse = *existing.Slug
-	} else {
-		newSlug, err := r.generateUniqueSlug(ctx, username, existing.ID)
-		if err != nil {
-			return 0, err
-		}
-		slugToUse = newSlug
-	}
-
 	if err := r.reclaimEmailHash(ctx, emailHash, existing.ID); err != nil {
 		return 0, err
 	}
 
+	if existing.Slug != nil && *existing.Slug != "" {
+		// Returning user: never overwrite the existing username or slug.
+		_, err = r.db.ExecContext(ctx, `
+			UPDATE users SET github_id = ?, email_hash = ?, email = ?, avatar_url = ?, deleted_at = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?
+		`, githubID, emailHash, encEmail, encAvatar, existing.ID)
+		if err != nil {
+			return 0, err
+		}
+		return existing.ID, nil
+	}
+
+	newSlug, err := r.generateUniqueSlug(ctx, username, existing.ID)
+	if err != nil {
+		return 0, err
+	}
 	_, err = r.db.ExecContext(ctx, `
-		UPDATE users SET github_id = ?, slug = ?, email_hash = ?, username = ?, email = ?, avatar_url = ?, deleted_at = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?
-	`, githubID, slugToUse, emailHash, encUsername, encEmail, encAvatar, existing.ID)
+		UPDATE users SET github_id = ?, slug = ?, email_hash = ?, email = ?, avatar_url = ?, deleted_at = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?
+	`, githubID, newSlug, emailHash, encEmail, encAvatar, existing.ID)
 	if err != nil {
 		return 0, err
 	}

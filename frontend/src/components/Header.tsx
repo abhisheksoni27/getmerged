@@ -114,6 +114,15 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                 transition={{ duration: 0.24, ease: EASE_OUT_EXPO }}
               />
             </Link>
+            <Link href="/guides" title="Open Source Contribution Guides and Best Practices" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
+              Guides
+              <motion.span
+                className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#ff5722] rounded-full origin-right"
+                initial={{ scaleX: 0 }}
+                whileHover={reduceMotion ? undefined : { scaleX: 1 }}
+                transition={{ duration: 0.24, ease: EASE_OUT_EXPO }}
+              />
+            </Link>
             <Link href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Good First Issues
               <motion.span

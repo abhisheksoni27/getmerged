@@ -29,7 +29,7 @@ func TestSlugGenerationAndResolution(t *testing.T) {
 		t.Fatalf("expected slug 'torvalds', got %v", user1.Slug)
 	}
 
-	// Re-login preserves existing slug
+	// Re-login preserves existing slug AND username even when GitHub login changed
 	ghUserID2, err := userRepo.UpsertUser(ctx, 1001, "Linus Torvalds", "linus@kernel.org", "https://avatar.url/linus2")
 	if err != nil || ghUserID2 != ghUserID {
 		t.Fatalf("re-login upsert failed: %v", err)
@@ -37,6 +37,31 @@ func TestSlugGenerationAndResolution(t *testing.T) {
 	user1Again, _ := userRepo.FindByID(ctx, ghUserID)
 	if user1Again.Slug == nil || *user1Again.Slug != "torvalds" {
 		t.Fatalf("expected preserved slug 'torvalds', got %v", user1Again.Slug)
+	}
+	if user1Again.Username != "Torvalds" {
+		t.Fatalf("expected preserved username 'Torvalds', got %q", user1Again.Username)
+	}
+
+	// 2. New GitHub signup appends -gh then numeric suffix on username collisions
+	collideID, err := userRepo.UpsertUser(ctx, 2002, "Torvalds", "other@kernel.org", "https://avatar.url/other")
+	if err != nil {
+		t.Fatalf("failed to upsert colliding github user: %v", err)
+	}
+	collideUser, _ := userRepo.FindByID(ctx, collideID)
+	if collideUser.Username != "Torvalds-gh" {
+		t.Fatalf("expected collision username 'Torvalds-gh', got %q", collideUser.Username)
+	}
+	if collideUser.Slug == nil || *collideUser.Slug != "torvalds-gh" {
+		t.Fatalf("expected collision slug 'torvalds-gh', got %v", collideUser.Slug)
+	}
+
+	collideID2, err := userRepo.UpsertUser(ctx, 2003, "Torvalds", "third@kernel.org", "https://avatar.url/third")
+	if err != nil {
+		t.Fatalf("failed to upsert second colliding github user: %v", err)
+	}
+	collideUser2, _ := userRepo.FindByID(ctx, collideID2)
+	if collideUser2.Username != "Torvalds-gh-2" {
+		t.Fatalf("expected numeric suffix username 'Torvalds-gh-2', got %q", collideUser2.Username)
 	}
 
 	// 2. Google User creation generates unique slug and handles collision
@@ -54,7 +79,7 @@ func TestSlugGenerationAndResolution(t *testing.T) {
 	if err != nil {
 		t.Fatalf("GetUserProfileBySlug failed: %v", err)
 	}
-	if profile.Username != "Linus Torvalds" {
+	if profile.Username != "Torvalds" {
 		t.Fatalf("unexpected profile username: %s", profile.Username)
 	}
 	if profile.GithubURL == nil || *profile.GithubURL != "https://github.com/torvalds" {
