@@ -31,7 +31,7 @@ interface PowerhouseRepo {
   description: string;
   github_url: string;
   c_rank_tier: string;
-  distinct_maintainer_count: number;
+  bus_factor: number;
 }
 
 async function getPowerhouses(): Promise<{ repos: PowerhouseRepo[]; total: number }> {
@@ -141,7 +141,7 @@ export default async function CommunityPowerhousesPage() {
                         </h3>
                         <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[11px] font-mono font-semibold text-emerald-800">
                           <Users className="h-3 w-3" />
-                          {Math.round(repo.distinct_maintainer_count)} maintainers
+                          {Math.round(repo.bus_factor)} maintainers
                         </span>
                       </div>
                     </div>

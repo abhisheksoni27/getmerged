@@ -1,68 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://getmerged.abhishekco.de/KDE/plasma-workspace-wallpapers</loc>
-    <lastmod>2026-08-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/BlankSpruce/gersemi</loc>
-    <lastmod>2026-08-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/iarsystems/cmake-tutorial</loc>
-    <lastmod>2026-08-18</lastmod>
+    <loc>https://getmerged.abhishekco.de/microsoft/vcpkg</loc>
+    <lastmod>2026-08-18T06:43:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/vixcpp/vix</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/psxrestore/Condemned2Recomp</loc>
-    <lastmod>2026-08-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Mr-Ojii/L-SMASH-Works-Auto-Builds</loc>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/desktop-app/cmake_helpers</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-20T03:44:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nvpro-samples/build_all</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-21T06:45:48Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/BlankSpruce/gersemi</loc>
+    <lastmod>2026-08-20T03:44:40Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/KDE/plasma-workspace-wallpapers</loc>
+    <lastmod>2026-08-20T03:44:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/lifting-bits/sleigh</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-18T11:01:04Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Mr-Ojii/L-SMASH-Works-Auto-Builds</loc>
+    <lastmod>2026-08-18T11:01:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/scivision/mumps-superbuild</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-19T03:39:27Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/microsoft/vcpkg</loc>
-    <lastmod>2026-08-21</lastmod>
+    <loc>https://getmerged.abhishekco.de/desktop-app/cmake_helpers</loc>
+    <lastmod>2026-08-19T09:39:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/psxrestore/Condemned2Recomp</loc>
+    <lastmod>2026-08-19T03:39:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/iarsystems/cmake-tutorial</loc>
+    <lastmod>2026-08-18T11:01:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

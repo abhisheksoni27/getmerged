@@ -1,38 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://getmerged.abhishekco.de/JohnEarnest/chip8Archive</loc>
-    <lastmod>2026-08-16</lastmod>
+    <loc>https://getmerged.abhishekco.de/TapXWorld/ChinaTextbook</loc>
+    <lastmod>2026-08-16T14:17:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/OpenVPN/openvpn-build</loc>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/gavinhoward/bc</loc>
-    <lastmod>2026-08-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/cmusphinx/sphinxtrain</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/TapXWorld/ChinaTextbook</loc>
-    <lastmod>2026-08-16</lastmod>
+    <lastmod>2026-08-18T23:41:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/yous/YousList</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-18T03:03:29Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/gavinhoward/bc</loc>
+    <lastmod>2026-08-16T23:06:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/larrykollar/Unix-Text-Processing</loc>
+    <lastmod>2026-08-22T15:24:54Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JohnEarnest/chip8Archive</loc>
+    <lastmod>2026-08-16T23:06:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/cmusphinx/sphinxtrain</loc>
+    <lastmod>2026-08-16T23:06:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
