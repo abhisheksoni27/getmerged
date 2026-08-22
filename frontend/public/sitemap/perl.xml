@@ -319,6 +319,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/dkogan/vnlog</loc>
+    <lastmod>2026-08-22T22:21:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/mozilla-bteam/bmo</loc>
     <lastmod>2026-08-20T12:05:41Z</lastmod>
     <changefreq>daily</changefreq>
@@ -355,6 +361,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/finance-quote/finance-quote</loc>
+    <lastmod>2026-08-22T22:21:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/openSUSE/obs-build</loc>
     <lastmod>2026-08-20T12:05:41Z</lastmod>
     <changefreq>daily</changefreq>
@@ -385,6 +397,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/trizen/sidef</loc>
+    <lastmod>2026-08-22T22:21:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/kivitendo/kivitendo-erp</loc>
     <lastmod>2026-08-17T08:06:46Z</lastmod>
     <changefreq>daily</changefreq>
@@ -403,12 +421,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/perltidy/perltidy</loc>
-    <lastmod>2026-08-17T08:06:46Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/duckduckgo/duckduckgo-locales</loc>
     <lastmod>2026-08-17T08:06:46Z</lastmod>
     <changefreq>daily</changefreq>
@@ -416,6 +428,12 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mschilli/log4perl</loc>
+    <lastmod>2026-08-17T08:06:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/perltidy/perltidy</loc>
     <lastmod>2026-08-17T08:06:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
