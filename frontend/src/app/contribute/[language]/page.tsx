@@ -4,93 +4,113 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Repo } from "@/types/opendoor";
+import { MatchRepo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
-import { getLanguageFromSlug } from "@/lib/languageSlug";
+import { getLanguageFromSlug, getLanguageSlug, displayNameFromSlug } from "@/lib/languageSlug";
 import {
   Sparkles,
   ArrowRight,
   ExternalLink,
   Lock,
   Compass,
+  CheckCircle2,
 } from "lucide-react";
 
 export const revalidate = 3600;
 
+const LEVELS = [
+  { value: "beginner", label: "First-time contributor" },
+  { value: "experienced", label: "Experienced contributor" },
+] as const;
+
 interface ContributeLangPageProps {
   params: Promise<{ language: string }>;
+  searchParams: Promise<{ level?: string }>;
 }
 
-async function fetchRankedRepos(language: string): Promise<Repo[]> {
+const SITE_URL = "https://getmerged.abhishekco.de";
+
+function normalizeLevel(raw?: string): "beginner" | "experienced" {
+  return raw === "experienced" ? "experienced" : "beginner";
+}
+
+async function fetchMatches(language: string, level: string): Promise<MatchRepo[]> {
   try {
     const rawLang = getLanguageFromSlug(language);
     const res = await fetch(
-      `${API_BASE_URL}/api/v1/repos?language=${encodeURIComponent(rawLang)}&has_good_first_issue=true&per_page=15&sort=c_rank_score&order=desc`,
+      `${API_BASE_URL}/api/v1/match?languages=${encodeURIComponent(rawLang)}&level=${level}&limit=15`,
       { next: { revalidate: 3600 } }
     );
     if (!res.ok) return [];
     const data = await res.json();
-    return data.data || data.repos || [];
+    return data.data || [];
   } catch (err) {
-    console.error("fetchRankedRepos error:", err);
+    console.error("fetchMatches error:", err);
     return [];
   }
 }
 
-export async function generateMetadata({ params }: ContributeLangPageProps): Promise<Metadata> {
-  const { language } = await params;
+function buildMetadata(language: string, level: string): Metadata {
   const canonicalLang = getLanguageFromSlug(language);
+  const audience =
+    level === "experienced" ? "Experienced Developers" : "Beginners";
+  const title = `Best ${canonicalLang} Open Source Repositories for ${audience} | GetMerged`;
+  const description = `Hand-picked ${canonicalLang} GitHub repositories matched to ${level === "experienced" ? "experienced" : "first-time"} contributors — ranked by real merge rates, maintainer response times, and first-PR success.`;
 
   return {
-    title: `Best ${canonicalLang} Open Source Repositories to Contribute To | GetMerged`,
-    description: `Discover top-rated ${canonicalLang} GitHub repositories that welcome contributors with sub-24h review turnarounds, high merge rates, and active Good First Issues.`,
+    title,
+    description,
     alternates: {
-      canonical: `https://getmerged.abhishekco.de/contribute/${language}`,
+      canonical: `${SITE_URL}/contribute/${language}?level=${level}`,
     },
     openGraph: {
-      title: `Best ${canonicalLang} Open Source Repositories to Contribute To | GetMerged`,
-      description: `Find active ${canonicalLang} repositories with verified Good First Issues and fast maintainer response times.`,
-      url: `https://getmerged.abhishekco.de/contribute/${language}`,
+      title,
+      description,
+      url: `${SITE_URL}/contribute/${language}?level=${level}`,
       siteName: "GetMerged",
       type: "website",
     },
   };
 }
 
-export default async function ContributeLangPage({ params }: ContributeLangPageProps) {
+export async function generateMetadata({ params, searchParams }: ContributeLangPageProps): Promise<Metadata> {
   const { language } = await params;
+  const { level } = await searchParams;
+  return buildMetadata(language, normalizeLevel(level));
+}
+
+export default async function ContributeLangPage({ params, searchParams }: ContributeLangPageProps) {
+  const { language } = await params;
+  const { level: rawLevel } = await searchParams;
+  const level = normalizeLevel(rawLevel);
   const canonicalLang = getLanguageFromSlug(language);
-  const repos = await fetchRankedRepos(language);
+
+  if (!canonicalLang) {
+    notFound();
+  }
+
+  const repos = await fetchMatches(language, level);
 
   if (!repos || repos.length === 0) {
     notFound();
   }
 
-  // Showcase Top 3, gate remaining behind GitHub OAuth
+  // Showcase Top 3, gate remaining behind sign-in
   const visibleRepos = repos.slice(0, 3);
   const gatedCount = Math.max(0, repos.length - 3);
+  const langSlug = getLanguageSlug(canonicalLang);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://getmerged.abhishekco.de",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Contribute Hub",
-        item: "https://getmerged.abhishekco.de/contribute",
-      },
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Contribute Hub", item: `${SITE_URL}/contribute` },
       {
         "@type": "ListItem",
         position: 3,
-        name: `${canonicalLang} Opportunities`,
-        item: `https://getmerged.abhishekco.de/contribute/${language}`,
+        name: `${canonicalLang} for ${level === "experienced" ? "Experienced Devs" : "Beginners"}`,
+        item: `${SITE_URL}/contribute/${langSlug}?level=${level}`,
       },
     ],
   };
@@ -98,40 +118,75 @@ export default async function ContributeLangPage({ params }: ContributeLangPageP
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: `Top ${canonicalLang} Contributor-Friendly Repositories`,
-    description: `Curated ${canonicalLang} repositories ranked by objective maintainer responsiveness and pull request merge likelihood.`,
+    name: `Best ${canonicalLang} Repositories for ${level === "experienced" ? "Experienced" : "First-Time"} Contributors`,
     itemListElement: visibleRepos.map((repo, idx) => ({
       "@type": "ListItem",
       position: idx + 1,
       name: repo.full_name,
-      url: `https://getmerged.abhishekco.de/${repo.full_name}`,
+      url: `${SITE_URL}/${repo.full_name}`,
     })),
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `Which ${canonicalLang} repositories are best for ${level === "experienced" ? "experienced developers" : "first-time contributors"}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `Based on objective C-Rank data across merge rates, review turnaround, and first-PR success, the top ${canonicalLang} repositories include ${visibleRepos.map((r) => r.full_name).join(", ")}.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How does GetMerged rank repositories?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "GetMerged scores public GitHub repos from S to D tier using objective metrics: external PR merge rate, time to first response, time to merge, and first-timer success rate.",
+        },
+      },
+    ],
   };
 
   return (
     <div className="min-h-screen bg-[#fafafa] flex flex-col font-sans">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <Header />
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Header */}
-        <div className="mb-8 border-b border-zinc-200/80 pb-6">
+        <div className="mb-6 border-b border-zinc-200/80 pb-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs font-mono font-bold mb-3">
-            <Compass className="h-3.5 w-3.5" /> Curated Ecosystem Match
+            <Compass className="h-3.5 w-3.5" /> Contributor Matchmaker
           </div>
           <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight">
-            Top {canonicalLang} Repositories Ready for Your PRs
+            Best {canonicalLang} Repos to Contribute To
           </h1>
           <p className="text-sm text-zinc-600 font-sans mt-2 max-w-2xl">
-            Vetted {canonicalLang} open-source repositories with active maintainers, rapid review cycles, and verified Good First Issues.
+            Matched to your experience level using real merge rates, maintainer response times, and first-PR success data.
           </p>
+        </div>
+
+        {/* Audience switcher */}
+        <div className="flex gap-2 mb-8">
+          {LEVELS.map((lv) => (
+            <Link
+              key={lv.value}
+              href={`/contribute/${langSlug}?level=${lv.value}`}
+              title={`Show best ${canonicalLang} repositories for ${lv.label.toLowerCase()}s`}
+              className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
+                lv.value === level
+                  ? "bg-zinc-900 text-white border-zinc-900"
+                  : "bg-white text-zinc-700 border-zinc-200 hover:border-zinc-400"
+              }`}
+            >
+              {lv.label}
+            </Link>
+          ))}
         </div>
 
         {/* Visible Top 3 Matched Repos */}
@@ -139,15 +194,17 @@ export default async function ContributeLangPage({ params }: ContributeLangPageP
           {visibleRepos.map((repo) => (
             <div
               key={repo.id}
-              className="p-5 rounded-2xl border border-zinc-200/80 bg-white hover:border-emerald-500/80 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+              className="p-5 rounded-2xl border border-b-2 border-b-zinc-900/10 border-zinc-200/80 bg-white hover:border-emerald-500/80 hover:border-b-emerald-700 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                  {typeof repo.match_score === "number" && (
+                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-zinc-900 text-white">
+                      {Math.round(repo.match_score)}% match
+                    </span>
+                  )}
                   <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
                     {repo.c_rank_tier || repo.class_rank || "A"} Tier
-                  </span>
-                  <span className="text-xs font-mono bg-zinc-100 text-zinc-700 px-2 py-0.5 rounded-md font-medium">
-                    {repo.language || "Multi-language"}
                   </span>
                   {(repo.good_first_issue_count ?? 0) > 0 && (
                     <span className="text-xs font-mono bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md font-bold flex items-center gap-1 border border-emerald-200/60">
@@ -166,39 +223,51 @@ export default async function ContributeLangPage({ params }: ContributeLangPageP
                   </Link>
                 </h2>
                 {repo.description && (
-                  <p className="text-xs text-zinc-500 mt-1 line-clamp-2 leading-relaxed">
-                    {repo.description}
-                  </p>
+                  <p className="text-xs text-zinc-500 mt-1 line-clamp-2 leading-relaxed">{repo.description}</p>
                 )}
-                <div className="flex items-center gap-4 mt-3 text-xs font-mono text-zinc-500 flex-wrap">
-                  <span>Merge Rate: <strong className="text-zinc-900">{(repo.external_pr_merge_rate || 0).toFixed(1)}%</strong></span>
-                  <span>Response: <strong className="text-zinc-900">{(repo.response_p50_hours || repo.time_to_first_response_hours || 0).toFixed(1)}h</strong></span>
-                  <span>Maintainers: <strong className="text-zinc-900">{repo.bus_factor ?? 0} active</strong></span>
-                </div>
+
+                {/* Why this repo matches you */}
+                {repo.reasons && repo.reasons.length > 0 && (
+                  <ul className="mt-2 space-y-1">
+                    {repo.reasons.slice(0, 3).map((reason) => (
+                      <li key={reason} className="text-xs text-zinc-600 flex items-start gap-1.5">
+                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0 mt-px" />
+                        {reason}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
-              <div className="shrink-0 self-start sm:self-center">
+              <div className="shrink-0 self-start sm:self-center flex flex-col gap-2 items-stretch">
                 <Link
                   href={`/${repo.full_name}`}
                   title={`Open full scorecard for ${repo.full_name}`}
-                  className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1.5 transition-all shadow-xs"
+                  className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
                 >
                   View Scorecard <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+                <Link
+                  href={`/how-to-contribute/${repo.full_name}`}
+                  title={`Read how to contribute to ${repo.full_name}`}
+                  className="px-4 py-2 rounded-xl border border-zinc-300 hover:border-zinc-500 text-zinc-700 font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all"
+                >
+                  How to Contribute
                 </Link>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Conversion Gate: Unlock Full Dataset */}
+        {/* Conversion Gate */}
         {gatedCount > 0 && (
           <div className="rounded-3xl border-2 border-dashed border-emerald-300 bg-emerald-50/50 p-6 text-center mb-8">
             <Lock className="h-6 w-6 text-emerald-700 mx-auto mb-2" />
             <h3 className="font-space text-lg font-bold text-zinc-900">
-              Unlock {gatedCount}+ More {canonicalLang} Opportunities
+              Unlock {gatedCount}+ More {displayNameFromSlug(canonicalLang)} Opportunities
             </h3>
             <p className="text-xs text-zinc-600 font-sans mt-1 max-w-md mx-auto">
-              Sign in with GitHub to view your personalized Contributor Fit Radar, tailored issue matchmaker, and weekly digest alerts.
+              Sign in with GitHub to view personalized matches, your Contributor Fit Radar, and weekly digest alerts.
             </p>
             <div className="mt-4">
               <Link
@@ -206,7 +275,7 @@ export default async function ContributeLangPage({ params }: ContributeLangPageP
                 title={`Explore all ranked ${canonicalLang} repositories on GetMerged`}
                 className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs inline-flex items-center gap-2 transition-all shadow-xs"
               >
-                Browse All Ranked {canonicalLang} Repositories <ArrowRight className="h-4 w-4" />
+                Browse All Ranked Repositories <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>

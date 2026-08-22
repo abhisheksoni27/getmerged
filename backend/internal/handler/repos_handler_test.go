@@ -56,6 +56,7 @@ func setupRepoTestDB(t *testing.T) *sqlx.DB {
 		last_activity_days REAL,
 		review_rounds REAL,
 		distinct_maintainer_count REAL,
+			bus_factor INTEGER DEFAULT 0,
 		staleness_flag INTEGER DEFAULT 0,
 		created_at DATETIME NOT NULL
 	);
@@ -104,11 +105,14 @@ func setupBadgeTestDB(t *testing.T) *sqlx.DB {
 		last_activity_days REAL DEFAULT 0,
 		review_rounds REAL DEFAULT 0,
 		distinct_maintainer_count REAL DEFAULT 0,
+			bus_factor INTEGER DEFAULT 0,
 		staleness_flag INTEGER DEFAULT 0,
 		good_first_issue_count INTEGER DEFAULT 0,
 		onboarding_score INTEGER DEFAULT 0,
 		response_p50_hours REAL DEFAULT 0,
 		response_p90_hours REAL DEFAULT 0,
+		pr_count_6m INTEGER DEFAULT 0,
+		issue_count_6m INTEGER DEFAULT 0,
 		updated_at DATETIME NOT NULL
 	);
 

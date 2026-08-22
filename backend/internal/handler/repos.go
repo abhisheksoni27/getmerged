@@ -540,7 +540,7 @@ func GetPRLikelihoodHandler(repoStore repository.RepoRepository) gin.HandlerFunc
 			ResponseTimeP50Hours:            p50,
 			ResponseTimeP90Hours:            p90,
 			MedianTimeToMergeHours:          mergeHours,
-			BusFactor:                       int(repo.DistinctMaintainerCount),
+			BusFactor:                       repo.BusFactor,
 			StalenessFlag:                   isStale,
 			CalculatedAt:                    calcAt,
 		})

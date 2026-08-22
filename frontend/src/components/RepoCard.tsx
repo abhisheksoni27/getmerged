@@ -84,6 +84,23 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
 
   const gfiCount = repo.good_first_issue_count ?? 0;
   const gfiLabel = gfiCount === 1 ? "1 good first issue" : `${gfiCount} good first issues`;
+  const gfiIssuesUrl = `https://github.com/${repo.full_name}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22`;
+
+  const handleGfiClick = () => {
+    posthog.capture("gfi_badge_clicked", {
+      repo_full_name: repo.full_name,
+      source: "repo_card",
+    });
+    window.open(gfiIssuesUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleGfiKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+      handleGfiClick();
+    }
+  };
 
   const handleClick = () => {
     posthog.capture("repo_card_clicked", {
@@ -243,7 +260,20 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       <div className="pt-3 mt-3 border-t border-zinc-100 flex items-center justify-between text-[11px] font-mono text-zinc-500">
         <div className="flex items-center gap-2">
           {gfiCount > 0 ? (
-            <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60 font-medium text-[10px]">
+            <span
+              role="button"
+              tabIndex={0}
+              data-testid="gfi-badge"
+              aria-label={`View ${gfiLabel} on ${repo.full_name}`}
+              title={`View open good first issues on ${repo.full_name}`}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleGfiClick();
+              }}
+              onKeyDown={handleGfiKeyDown}
+              className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60 font-medium text-[10px] hover:bg-emerald-100 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1"
+            >
               <ShieldCheck className="h-3 w-3" />
               {gfiLabel}
             </span>

@@ -134,6 +134,7 @@ func main() {
 		api.GET("/stats/macro", handler.GetMacroStats())
 
 		api.GET("/repos/:id/feedback", handler.ListFeedback(database))
+		api.GET("/match", handler.MatchReposHandler(repoStore))
 		api.GET("/users/:slug", handler.GetUserProfile(userRepo))
 		api.GET("/users/:slug/achievement.svg", handler.RenderAchievementCardHandler(userRepo))
 		api.GET("/badges/:owner/:name/badge.json", handler.GetRepoBadgeJSON(repoStore))
