@@ -28,10 +28,16 @@ func TestBusFactorCalculationAndTierCap(t *testing.T) {
 		},
 	}
 
-	metrics := ComputeMetrics(prs, false)
+	metrics := ComputeMetrics(prs, false, 90)
 	// Alice is 1 distinct maintainer within 90 days
 	if metrics.BusFactor != 1 {
 		t.Errorf("expected BusFactor = 1, got %d", metrics.BusFactor)
+	}
+
+	// Widening the window to 180 days pulls dave (MEMBER, 120d old) back in
+	metrics180 := ComputeMetrics(prs, false, 180)
+	if metrics180.BusFactor != 2 {
+		t.Errorf("expected BusFactor = 2 within 180-day window, got %d", metrics180.BusFactor)
 	}
 
 	// 2. Test C-Rank clamping when BusFactor <= 1
@@ -63,5 +69,27 @@ func TestBusFactorCalculationAndTierCap(t *testing.T) {
 	score2, tier2 := ComputeCRankWithBusFactor(normed, false, 0, 2)
 	if tier2 != TierS {
 		t.Errorf("expected tier to be S when BusFactor=2, got %s (score=%.2f)", tier2, score2)
+	}
+}
+
+func TestBusFactorWindowDaysFromEnv(t *testing.T) {
+	t.Setenv("BUS_FACTOR_WINDOW_DAYS", "180")
+	if got := BusFactorWindowDays(); got != 180 {
+		t.Errorf("expected 180 from env, got %d", got)
+	}
+
+	t.Setenv("BUS_FACTOR_WINDOW_DAYS", "not-a-number")
+	if got := BusFactorWindowDays(); got != 90 {
+		t.Errorf("expected fallback 90 on invalid env, got %d", got)
+	}
+
+	t.Setenv("BUS_FACTOR_WINDOW_DAYS", "")
+	if got := BusFactorWindowDays(); got != 90 {
+		t.Errorf("expected fallback 90 on unset env, got %d", got)
+	}
+
+	t.Setenv("BUS_FACTOR_WINDOW_DAYS", "-5")
+	if got := BusFactorWindowDays(); got != 90 {
+		t.Errorf("expected fallback 90 on negative env, got %d", got)
 	}
 }

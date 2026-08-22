@@ -58,7 +58,7 @@ func NormaliseAll(all []RawMetrics) []NormalisedMetrics {
 			Responsiveness:    scoreTimeMetric(m.MaintainerResponsiveness, responsiveness),
 			ActivityRecency:   scoreDaysMetric(m.LastActivityDays),
 			ReviewRounds:      scoreRoundsMetric(m.ReviewRounds, reviewRounds),
-			MaintainerBreadth: scoreMaintainerMetric(m.DistinctMaintainerCount),
+			MaintainerBreadth: scoreMaintainerMetric(float64(m.BusFactor)),
 		}
 	}
 	return result
@@ -102,7 +102,7 @@ func scoreRoundsMetric(rounds float64, population []float64) float64 {
 	}
 }
 
-// scoreMaintainerMetric scores distinct maintainer count (higher is better).
+// scoreMaintainerMetric scores the active maintainer (bus factor) count (higher is better).
 // Always uses absolute benchmark scoring regardless of population size.
 func scoreMaintainerMetric(count float64) float64 {
 	switch {

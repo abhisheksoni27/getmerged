@@ -29,6 +29,7 @@ type RepoRecord struct {
 	LastActivityDays         float64 `db:"last_activity_days" json:"last_activity_days"`
 	ReviewRounds             float64 `db:"review_rounds" json:"review_rounds"`
 	DistinctMaintainerCount  float64 `db:"distinct_maintainer_count" json:"distinct_maintainer_count"`
+	BusFactor                int     `db:"bus_factor" json:"bus_factor"`
 	StalenessFlag            bool      `db:"staleness_flag" json:"staleness_flag"`
 	SnapshotDate             string    `db:"snapshot_date" json:"snapshot_date"`
 	GoodFirstIssueCount      int       `db:"good_first_issue_count" json:"good_first_issue_count"`
@@ -193,7 +194,7 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 	}
 
 	if filter.MinMaintainers > 0 {
-		where += " AND COALESCE(s.distinct_maintainer_count,0) >= ?"
+		where += " AND COALESCE(s.bus_factor,0) >= ?"
 		args = append(args, filter.MinMaintainers)
 	}
 
@@ -234,6 +235,7 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 			COALESCE(s.last_activity_days,180) as last_activity_days,
 			COALESCE(s.review_rounds,0) as review_rounds,
 			COALESCE(s.distinct_maintainer_count,0) as distinct_maintainer_count,
+			COALESCE(s.bus_factor,0) as bus_factor,
 			COALESCE(s.staleness_flag,0) as staleness_flag,
 			COALESCE(s.snapshot_date,'') as snapshot_date,
 			COALESCE(s.good_first_issue_count,0) as good_first_issue_count,
@@ -381,6 +383,7 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 			COALESCE(s.last_activity_days,180) as last_activity_days,
 			COALESCE(s.review_rounds,0) as review_rounds,
 			COALESCE(s.distinct_maintainer_count,0) as distinct_maintainer_count,
+			COALESCE(s.bus_factor,0) as bus_factor,
 			COALESCE(s.staleness_flag,0) as staleness_flag,
 			COALESCE(s.snapshot_date,'') as snapshot_date,
 			COALESCE(s.good_first_issue_count,0) as good_first_issue_count,
@@ -453,9 +456,9 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count,
+			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count,
 			response_p50_hours, response_p90_hours
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON DUPLICATE KEY UPDATE
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
 			time_to_first_response_hours  = VALUES(time_to_first_response_hours),
@@ -466,6 +469,7 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 			last_activity_days            = VALUES(last_activity_days),
 			review_rounds                 = VALUES(review_rounds),
 			distinct_maintainer_count     = VALUES(distinct_maintainer_count),
+			bus_factor                    = VALUES(bus_factor),
 			staleness_flag                = VALUES(staleness_flag),
 			c_rank_score                  = VALUES(c_rank_score),
 			c_rank_tier                   = VALUES(c_rank_tier),
@@ -485,6 +489,7 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 		raw.LastActivityDays,
 		raw.ReviewRounds,
 		raw.DistinctMaintainerCount,
+		raw.BusFactor,
 		staleness,
 		score,
 		tier,
@@ -502,9 +507,9 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count,
+			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count,
 			response_p50_hours, response_p90_hours, updated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		ON DUPLICATE KEY UPDATE
 			snapshot_date                 = VALUES(snapshot_date),
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
@@ -516,6 +521,7 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 			last_activity_days            = VALUES(last_activity_days),
 			review_rounds                 = VALUES(review_rounds),
 			distinct_maintainer_count     = VALUES(distinct_maintainer_count),
+			bus_factor                    = VALUES(bus_factor),
 			staleness_flag                = VALUES(staleness_flag),
 			c_rank_score                  = VALUES(c_rank_score),
 			c_rank_tier                   = VALUES(c_rank_tier),
@@ -535,6 +541,7 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 		raw.LastActivityDays,
 		raw.ReviewRounds,
 		raw.DistinctMaintainerCount,
+		raw.BusFactor,
 		staleness,
 		score,
 		tier,
@@ -653,7 +660,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 			&rec.CRankTier, &rec.CRankScore, &rec.ExternalPRMergeRate, &rec.TimeToFirstResponseHours,
 			&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
 			&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
-			&rec.DistinctMaintainerCount, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
+			&rec.DistinctMaintainerCount, &rec.BusFactor, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
 			&rec.OnboardingScore, &isScoredInt, &rec.UpdatedAt,
 		); err != nil {
 			return nil, err
@@ -711,7 +718,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 					&rec.CRankTier, &rec.CRankScore, &rec.ExternalPRMergeRate, &rec.TimeToFirstResponseHours,
 					&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
 					&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
-					&rec.DistinctMaintainerCount, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
+					&rec.DistinctMaintainerCount, &rec.BusFactor, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
 					&rec.OnboardingScore, &isScoredInt, &rec.UpdatedAt,
 				); err == nil {
 					rec.StalenessFlag = staleInt == 1

@@ -181,7 +181,7 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	for i, p := range prs {
 		scoringPRs[i] = p
 	}
-	raw := scoring.ComputeMetrics(scoringPRs, false)
+	raw := scoring.ComputeMetrics(scoringPRs, false, scoring.BusFactorWindowDays())
 	raw.GoodFirstIssueCount = gfiCount
 	raw.PRsCreated6m = len(prs)
 	if issueCount, err := gh.FetchIssuesCreatedCount(owner, name, 180); err != nil {
@@ -238,8 +238,8 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, onboarding_score
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, onboarding_score
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON DUPLICATE KEY UPDATE
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
 			time_to_first_response_hours  = VALUES(time_to_first_response_hours),
@@ -250,6 +250,7 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			last_activity_days            = VALUES(last_activity_days),
 			review_rounds                 = VALUES(review_rounds),
 			distinct_maintainer_count     = VALUES(distinct_maintainer_count),
+			bus_factor                    = VALUES(bus_factor),
 			staleness_flag                = VALUES(staleness_flag),
 			c_rank_score                  = VALUES(c_rank_score),
 			c_rank_tier                   = VALUES(c_rank_tier),
@@ -268,6 +269,7 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 		m.LastActivityDays,
 		m.ReviewRounds,
 		m.DistinctMaintainerCount,
+		m.BusFactor,
 		staleness,
 		score,
 		tier,
@@ -284,9 +286,9 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, onboarding_score,
+			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, onboarding_score,
 			pr_count_6m, issue_count_6m, updated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		ON DUPLICATE KEY UPDATE
 			snapshot_date                 = VALUES(snapshot_date),
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
@@ -298,6 +300,7 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			last_activity_days            = VALUES(last_activity_days),
 			review_rounds                 = VALUES(review_rounds),
 			distinct_maintainer_count     = VALUES(distinct_maintainer_count),
+			bus_factor                    = VALUES(bus_factor),
 			staleness_flag                = VALUES(staleness_flag),
 			c_rank_score                  = VALUES(c_rank_score),
 			c_rank_tier                   = VALUES(c_rank_tier),
@@ -318,6 +321,7 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 		m.LastActivityDays,
 		m.ReviewRounds,
 		m.DistinctMaintainerCount,
+		m.BusFactor,
 		staleness,
 		score,
 		tier,

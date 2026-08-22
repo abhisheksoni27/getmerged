@@ -218,7 +218,7 @@ func main() {
 					continue
 				}
 
-				raw := scoring.ComputeMetrics(scoringPRs, false)
+				raw := scoring.ComputeMetrics(scoringPRs, false, scoring.BusFactorWindowDays())
 				raw.GoodFirstIssueCount = r.GoodFirstIssueCount
 
 				resCh <- computeResult{repo: r, raw: raw}

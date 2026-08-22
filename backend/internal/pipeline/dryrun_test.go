@@ -138,7 +138,7 @@ func TestDryRunRescore(t *testing.T) {
 	// compute raw metrics
 	scaled := map[string]scoring.RawMetrics{}
 	for id, prs := range byRepo {
-		raw := scoring.ComputeMetrics(prs, false)
+		raw := scoring.ComputeMetrics(prs, false, 90)
 		scaled[id] = raw
 	}
 
