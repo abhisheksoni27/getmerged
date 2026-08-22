@@ -249,8 +249,12 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             Top Welcoming Open-Source {languageName} Repositories
           </h1>
           <p className="mt-3 text-xs sm:text-sm text-zinc-600 max-w-3xl leading-relaxed font-sans">
-            Ranked by contributor welcoming score computed from newcomer 90-day PR merge rates, open good first issues, and documentation readiness.
+            Ranked by contributor welcoming score computed from newcomer 90-day PR merge rates (40%), response velocity (25%), first-timer success (20%), and documentation readiness (15%).
           </p>
+          <div className="mt-2.5 flex items-center gap-2 text-[11px] font-mono text-zinc-500">
+            <RefreshCw className="w-3 h-3 text-emerald-600" />
+            <span>Telemetry updated: {latestSnapshotDate ? latestSnapshotDate.toUTCString().slice(0, 16) : "Daily"} UTC</span>
+          </div>
           <div className="mt-5">
             <Link
               href={`/good-first-issue/${canonicalLang}`}

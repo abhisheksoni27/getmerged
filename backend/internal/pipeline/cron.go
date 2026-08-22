@@ -137,6 +137,21 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 	for i, rm := range all {
 		rawSlice[i] = rm.raw
 	}
+
+	// Issue #92: provenance guard. Percentile normalisation against fewer than
+	// MinNormalisationPeers collapses every metric to the neutral 50th-percentile
+	// prior, stamping fake ~50 scores. Mark those snapshots as fallback so
+	// rankings can exclude them, and log the root cause.
+	peerCount := len(rawSlice)
+	scoreSource := scoring.ResolveScoreSource(peerCount)
+	if scoreSource == scoring.ScoreSourceFallback {
+		slog.Warn("cron: degraded score provenance - scores marked fallback",
+			"reason", "insufficient_normalisation_peers",
+			"peers", peerCount,
+			"required", scoring.MinNormalisationPeers,
+		)
+	}
+
 	normed := scoring.NormaliseAll(rawSlice)
 
 	for i, rm := range all {
@@ -147,9 +162,10 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 			"score", score,
 			"tier", tier,
 			"stale", rm.raw.StalenessFlag,
+			"score_source", scoreSource,
 		)
 
-		if err := insertSnapshot(db, rm.repo.ID, rm.raw, score, tier); err != nil {
+		if err := insertSnapshot(db, rm.repo.ID, rm.raw, score, tier, scoreSource); err != nil {
 			slog.Error("cron: insertSnapshot failed", "repo", rm.repo.FullName, "err", err)
 		}
 		if err := touchRepoAdaptive(db, rm.repo.ID, rm.meta.Language, rm.meta.Stars, rm.meta.Description, tier, rm.raw, rm.repo.ConsecutiveStagnantScans); err != nil {
@@ -271,10 +287,13 @@ func reposNeedingUpdate(db *sqlx.DB) ([]repoRow, error) {
 	return rows, err
 }
 
-func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float64, tier string) error {
+func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float64, tier string, scoreSource string) error {
 	staleness := 0
 	if m.StalenessFlag {
 		staleness = 1
+	}
+	if scoreSource != scoring.ScoreSourceFallback {
+		scoreSource = scoring.ScoreSourceComputed
 	}
 	today := time.Now().UTC().Format("2006-01-02")
 

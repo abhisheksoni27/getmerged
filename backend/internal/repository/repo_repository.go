@@ -20,6 +20,7 @@ type RepoRecord struct {
 	GithubURL                string  `db:"github_url" json:"github_url"`
 	CRankTier                string  `db:"c_rank_tier" json:"c_rank_tier"`
 	CRankScore               float64 `db:"c_rank_score" json:"c_rank_score"`
+	ScoreSource              string  `db:"score_source" json:"score_source"`
 	ExternalPRMergeRate      float64 `db:"external_pr_merge_rate" json:"external_pr_merge_rate"`
 	TimeToFirstResponseHours float64 `db:"time_to_first_response_hours" json:"time_to_first_response_hours"`
 	TimeToMergeHours         float64 `db:"time_to_merge_hours" json:"time_to_merge_hours"`
@@ -243,6 +244,7 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 			COALESCE(r.description,'') as description, COALESCE(r.github_url,'') as github_url,
 			COALESCE(s.c_rank_tier,'D') as c_rank_tier,
 			COALESCE(s.c_rank_score,0) as c_rank_score,
+			COALESCE(s.score_source,'computed') as score_source,
 			COALESCE(s.external_pr_merge_rate,0) as external_pr_merge_rate,
 			COALESCE(s.time_to_first_response_hours,0) as time_to_first_response_hours,
 			COALESCE(s.time_to_merge_hours,0) as time_to_merge_hours,
@@ -391,6 +393,7 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 			COALESCE(r.description,'') as description, COALESCE(r.github_url,'') as github_url,
 			COALESCE(s.c_rank_tier,'D') as c_rank_tier,
 			COALESCE(s.c_rank_score,0) as c_rank_score,
+			COALESCE(s.score_source,'computed') as score_source,
 			COALESCE(s.external_pr_merge_rate,0) as external_pr_merge_rate,
 			COALESCE(s.time_to_first_response_hours,0) as time_to_first_response_hours,
 			COALESCE(s.time_to_merge_hours,0) as time_to_merge_hours,
@@ -453,10 +456,13 @@ func (r *sqlxRepoRepository) Delete(ctx context.Context, id string) error {
 	return err
 }
 
-func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, raw scoring.RawMetrics, score float64, tier string) error {
+func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, raw scoring.RawMetrics, score float64, tier string, scoreSource string) error {
 	staleness := 0
 	if raw.StalenessFlag {
 		staleness = 1
+	}
+	if scoreSource != scoring.ScoreSourceFallback {
+		scoreSource = scoring.ScoreSourceComputed
 	}
 
 	today := time.Now().UTC().Format("2006-01-02")
@@ -473,9 +479,9 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count,
+			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, score_source, good_first_issue_count,
 			response_p50_hours, response_p90_hours
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON DUPLICATE KEY UPDATE
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
 			time_to_first_response_hours  = VALUES(time_to_first_response_hours),
@@ -490,6 +496,7 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 			staleness_flag                = VALUES(staleness_flag),
 			c_rank_score                  = VALUES(c_rank_score),
 			c_rank_tier                   = VALUES(c_rank_tier),
+			score_source                  = VALUES(score_source),
 			good_first_issue_count        = VALUES(good_first_issue_count),
 			response_p50_hours            = VALUES(response_p50_hours),
 			response_p90_hours            = VALUES(response_p90_hours)
@@ -510,6 +517,7 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 		staleness,
 		score,
 		tier,
+		scoreSource,
 		raw.GoodFirstIssueCount,
 		raw.ResponseP50Hours,
 		raw.ResponseP90Hours,
@@ -524,9 +532,9 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count,
+			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, score_source, good_first_issue_count,
 			response_p50_hours, response_p90_hours, updated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		ON DUPLICATE KEY UPDATE
 			snapshot_date                 = VALUES(snapshot_date),
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
@@ -542,6 +550,7 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 			staleness_flag                = VALUES(staleness_flag),
 			c_rank_score                  = VALUES(c_rank_score),
 			c_rank_tier                   = VALUES(c_rank_tier),
+			score_source                  = VALUES(score_source),
 			good_first_issue_count        = VALUES(good_first_issue_count),
 			response_p50_hours            = VALUES(response_p50_hours),
 			response_p90_hours            = VALUES(response_p90_hours),
@@ -562,6 +571,7 @@ func (r *sqlxRepoRepository) InsertSnapshot(ctx context.Context, repoID string, 
 		staleness,
 		score,
 		tier,
+		scoreSource,
 		raw.GoodFirstIssueCount,
 		raw.ResponseP50Hours,
 		raw.ResponseP90Hours,
@@ -637,6 +647,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 			r.id, r.full_name, COALESCE(r.language, '') as language, r.stars, COALESCE(r.description, '') as description, COALESCE(r.github_url, '') as github_url,
 			COALESCE(s.c_rank_tier, 'A') as c_rank_tier,
 			COALESCE(s.c_rank_score, 75.0) as c_rank_score,
+			COALESCE(s.score_source, 'computed') as score_source,
 			COALESCE(s.external_pr_merge_rate, 0) as external_pr_merge_rate,
 			COALESCE(s.time_to_first_response_hours, 0) as time_to_first_response_hours,
 			COALESCE(s.time_to_merge_hours, 0) as time_to_merge_hours,
@@ -675,7 +686,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 		var isScoredInt int
 		if err := rows.Scan(
 			&rec.ID, &rec.FullName, &rec.Language, &rec.Stars, &rec.Description, &rec.GithubURL,
-			&rec.CRankTier, &rec.CRankScore, &rec.ExternalPRMergeRate, &rec.TimeToFirstResponseHours,
+			&rec.CRankTier, &rec.CRankScore, &rec.ScoreSource, &rec.ExternalPRMergeRate, &rec.TimeToFirstResponseHours,
 			&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
 			&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
 			&rec.DistinctMaintainerCount, &rec.BusFactor, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
@@ -734,7 +745,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 				var isScoredInt int
 				if err := fRows.Scan(
 					&rec.ID, &rec.FullName, &rec.Language, &rec.Stars, &rec.Description, &rec.GithubURL,
-					&rec.CRankTier, &rec.CRankScore, &rec.ExternalPRMergeRate, &rec.TimeToFirstResponseHours,
+					&rec.CRankTier, &rec.CRankScore, &rec.ScoreSource, &rec.ExternalPRMergeRate, &rec.TimeToFirstResponseHours,
 					&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
 					&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
 					&rec.DistinctMaintainerCount, &rec.BusFactor, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,

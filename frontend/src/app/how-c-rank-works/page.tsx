@@ -154,10 +154,22 @@ export default function HowCRankWorksPage() {
     headline: "How C-Rank™ Works - The Science of Open Source Hospitality",
     description: "Methodology and mathematical telemetry behind C-Rank scoring for open-source GitHub repositories.",
     url: "https://getmerged.abhishekco.de/how-c-rank-works",
+    datePublished: "2026-08-01T00:00:00Z",
+    dateModified: "2026-08-23T00:00:00Z",
+    author: {
+      "@type": "Organization",
+      name: "GetMerged Engineering Team",
+      url: "https://getmerged.abhishekco.de/about",
+    },
+    image: "https://getmerged.abhishekco.de/opengraph-image.png",
     publisher: {
       "@type": "Organization",
       name: "GetMerged",
       url: "https://getmerged.abhishekco.de",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://getmerged.abhishekco.de/icon.svg",
+      },
     },
   };
 

@@ -33,6 +33,10 @@ const nextConfig: NextConfig = {
           key: "Cache-Control",
           value: "public, max-age=0, must-revalidate",
         },
+        {
+          key: "Strict-Transport-Security",
+          value: "max-age=31536000; includeSubDomains; preload",
+        },
       ],
     },
     {

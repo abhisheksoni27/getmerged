@@ -11,6 +11,27 @@ const (
 	TierD = "D"
 )
 
+// Provenance values stored with every score record (Issue #92).
+const (
+	// ScoreSourceComputed marks scores derived from a sufficient peer population.
+	ScoreSourceComputed = "computed"
+	// ScoreSourceFallback marks scores produced without sufficient peers;
+	// percentile metrics collapse to the neutral 50th-percentile prior.
+	ScoreSourceFallback = "fallback"
+)
+
+// MinNormalisationPeers is the minimum population size for percentile
+// normalisation to be meaningful. Below this, PercentileRank collapses to 50.
+const MinNormalisationPeers = 2
+
+// ResolveScoreSource classifies score provenance from the normalisation peer count.
+func ResolveScoreSource(peerCount int) string {
+	if peerCount < MinNormalisationPeers {
+		return ScoreSourceFallback
+	}
+	return ScoreSourceComputed
+}
+
 // weights defines the C-Rank weighted sum coefficients (must sum to 1.0).
 var weights = struct {
 	MergeRate         float64

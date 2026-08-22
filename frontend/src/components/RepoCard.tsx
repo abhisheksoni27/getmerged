@@ -172,6 +172,8 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
               <img
                 src={`https://github.com/${ownerPart}.png?size=64`}
                 alt={ownerPart}
+                width={36}
+                height={36}
                 className="h-full w-full object-cover"
                 loading="lazy"
                 onError={(e) => {

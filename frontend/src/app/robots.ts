@@ -9,8 +9,24 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/"],
       },
       {
-        userAgent: ["GPTBot", "ClaudeBot", "PerplexityBot", "Anthropic-ai"],
+        userAgent: "GPTBot",
         allow: "/",
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "ClaudeBot",
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "PerplexityBot",
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "Anthropic-ai",
+        allow: "/",
+        disallow: ["/api/"],
       },
     ],
     sitemap: "https://getmerged.abhishekco.de/sitemap.xml",

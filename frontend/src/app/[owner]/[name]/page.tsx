@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Repo, AIInsights } from "@/types/opendoor";
 import { Metadata } from "next";
+import { notFound, redirect } from "next/navigation";
 import { ClientRepoDetail } from "@/components/ClientRepoDetail";
 import { getLanguageSlug } from "@/lib/languageSlug";
 
@@ -58,19 +59,30 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const fullName = `${owner}/${name}`;
   const repo = await getRepoData(fullName);
 
-  const { title, description } = buildRepoMetadata(fullName, repo);
+  if (!repo) {
+    return {
+      title: "Repository Not Found | GetMerged",
+      description: "The requested repository is not indexed in GetMerged.",
+      robots: {
+        index: false,
+        follow: true,
+      },
+    };
+  }
+
+  const { title, description } = buildRepoMetadata(repo.full_name, repo);
 
   return {
     title,
     description,
     alternates: {
-      canonical: `https://getmerged.abhishekco.de/${owner}/${name}`,
+      canonical: `https://getmerged.abhishekco.de/${repo.full_name}`,
     },
     openGraph: {
       title,
       description,
       type: "website",
-      url: `https://getmerged.abhishekco.de/${owner}/${name}`,
+      url: `https://getmerged.abhishekco.de/${repo.full_name}`,
       siteName: "GetMerged",
     },
     twitter: {
@@ -86,10 +98,17 @@ export default async function RepoDetailPage({ params }: PageProps) {
   const fullName = `${owner}/${name}`;
 
   // Server-Side Data Fetching -> Pure SSR
-  const [repo, insights] = await Promise.all([
-    getRepoData(fullName),
-    getRepoInsights(fullName),
-  ]);
+  const repo = await getRepoData(fullName);
+  if (!repo) {
+    notFound();
+  }
+
+  // Enforce canonical casing redirect (e.g., /Torvalds/Linux -> /torvalds/linux or exact casing)
+  if (fullName !== repo.full_name) {
+    redirect(`/${repo.full_name}`);
+  }
+
+  const insights = await getRepoInsights(repo.full_name);
 
   // Schema.org JSON-LD Structured Data (SoftwareSourceCode & freshness dateModified)
   const jsonLd = {
