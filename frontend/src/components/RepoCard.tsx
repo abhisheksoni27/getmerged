@@ -153,12 +153,12 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
             <div className="h-9 w-9 rounded-xl border border-zinc-200/80 bg-zinc-50 overflow-hidden shrink-0 shadow-2xs group-hover:border-zinc-300 transition-colors">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`https://github.com/${ownerPart}.png`}
+                src={`https://github.com/${ownerPart}.png?size=64`}
                 alt={ownerPart}
                 className="h-full w-full object-cover"
                 loading="lazy"
                 onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png";
+                  (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
                 }}
               />
             </div>

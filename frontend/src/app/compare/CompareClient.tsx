@@ -317,11 +317,11 @@ export default function CompareClient() {
                   <div className="flex items-center gap-3 min-w-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={`https://github.com/${repoA.owner}.png`}
+                      src={`https://github.com/${repoA.owner}.png?size=64`}
                       alt={repoA.owner}
                       className="h-9 w-9 rounded-xl border border-zinc-200 bg-white object-cover shrink-0"
                       onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png";
+                        (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
                       }}
                     />
                     <div className="min-w-0">
@@ -438,11 +438,11 @@ export default function CompareClient() {
                   <div className="flex items-center gap-3 min-w-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={`https://github.com/${repoB.owner}.png`}
+                      src={`https://github.com/${repoB.owner}.png?size=64`}
                       alt={repoB.owner}
                       className="h-9 w-9 rounded-xl border border-zinc-200 bg-white object-cover shrink-0"
                       onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png";
+                        (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
                       }}
                     />
                     <div className="min-w-0">

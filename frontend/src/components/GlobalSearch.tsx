@@ -250,11 +250,11 @@ export function GlobalSearch() {
                       <div className="flex items-center gap-3 min-w-0">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={`https://github.com/${r.full_name?.split("/")[0]}.png`}
+                          src={`https://github.com/${r.full_name?.split("/")[0]}.png?size=64`}
                           alt={r.full_name}
                           className="h-8 w-8 rounded-lg border border-zinc-200 bg-white shrink-0 object-cover"
                           onError={(e) => {
-                            (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png";
+                            (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
                           }}
                         />
                         <div className="min-w-0">
