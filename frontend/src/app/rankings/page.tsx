@@ -99,6 +99,10 @@ export default function RankingsIndexPage() {
           <p className="mt-3 text-xs sm:text-sm text-zinc-600 max-w-3xl leading-relaxed font-sans">
             Explore contributor-friendly repositories grouped by language. Each ecosystem is scored with live GitHub PR telemetry, maintainer responsiveness, and first-timer acceptance rates.
           </p>
+          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-zinc-500">
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
+            <span>Telemetry updated: {new Date().toUTCString().slice(0, 16)} UTC (Daily Sync)</span>
+          </div>
         </div>
 
         <div className="mb-6 flex items-center justify-between border-b border-zinc-200 pb-4">

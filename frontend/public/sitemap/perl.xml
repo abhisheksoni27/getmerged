@@ -205,14 +205,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ko-ichi-h/khcoder</loc>
-    <lastmod>2026-08-18T12:16:04Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/centreon/centreon-plugins</loc>
+    <lastmod>2026-08-18T06:49:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/centreon/centreon-plugins</loc>
-    <lastmod>2026-08-18T06:49:04Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/ko-ichi-h/khcoder</loc>
+    <lastmod>2026-08-18T12:16:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -385,13 +385,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/silnrsi/font-charis</loc>
+    <loc>https://getmerged.abhishekco.de/kivitendo/kivitendo-erp</loc>
     <lastmod>2026-08-17T08:06:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/kivitendo/kivitendo-erp</loc>
+    <loc>https://getmerged.abhishekco.de/silnrsi/font-charis</loc>
     <lastmod>2026-08-17T08:06:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -403,6 +403,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/perltidy/perltidy</loc>
+    <lastmod>2026-08-17T08:06:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/duckduckgo/duckduckgo-locales</loc>
     <lastmod>2026-08-17T08:06:46Z</lastmod>
     <changefreq>daily</changefreq>
@@ -410,12 +416,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mschilli/log4perl</loc>
-    <lastmod>2026-08-17T08:06:46Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/perltidy/perltidy</loc>
     <lastmod>2026-08-17T08:06:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -445,13 +445,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/shogo82148/actions-setup-perl</loc>
+    <loc>https://getmerged.abhishekco.de/vaskozl/home-infra</loc>
     <lastmod>2026-08-17T08:06:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/vaskozl/home-infra</loc>
+    <loc>https://getmerged.abhishekco.de/shogo82148/actions-setup-perl</loc>
     <lastmod>2026-08-17T08:06:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

@@ -73,19 +73,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/sky-ecosystem/spells-mainnet</loc>
-    <lastmod>2026-08-19T18:21:28Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/delegatexyz/delegate-registry</loc>
     <lastmod>2026-08-19T18:21:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Auditware/radar</loc>
+    <loc>https://getmerged.abhishekco.de/sky-ecosystem/spells-mainnet</loc>
     <lastmod>2026-08-19T18:21:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -93,6 +87,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/across-protocol/contracts</loc>
     <lastmod>2026-08-20T21:44:35Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Auditware/radar</loc>
+    <lastmod>2026-08-19T18:21:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -127,13 +127,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/pcaversaccio/malleable-signatures</loc>
+    <loc>https://getmerged.abhishekco.de/lidofinance/staking-modules</loc>
     <lastmod>2026-08-19T18:21:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/lidofinance/staking-modules</loc>
+    <loc>https://getmerged.abhishekco.de/pcaversaccio/malleable-signatures</loc>
     <lastmod>2026-08-19T18:21:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

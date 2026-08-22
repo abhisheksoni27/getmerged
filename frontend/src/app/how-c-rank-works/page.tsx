@@ -327,6 +327,87 @@ export default function HowCRankWorksPage() {
           </div>
         </div>
 
+        {/* C-Rank Mathematical Formula Weights Table */}
+        <div className="space-y-6 mb-16">
+          <div className="border-b border-zinc-200 pb-4">
+            <h2 className="text-2xl font-bold font-space text-zinc-900">
+              C-Rank™ Mathematical Weights &amp; Formula
+            </h2>
+            <p className="text-xs sm:text-sm text-zinc-500 font-sans mt-1">
+              Deterministic, reproducible scoring calculated directly from GitHub GraphQL telemetry.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto rounded-2xl bg-white border border-zinc-200/80 shadow-xs">
+            <table className="w-full text-left text-xs text-zinc-700 font-sans">
+              <thead className="bg-zinc-50 text-zinc-900 border-b border-zinc-200 font-semibold font-space uppercase tracking-wider text-[11px]">
+                <tr>
+                  <th className="py-3.5 px-5">Telemetry Signal</th>
+                  <th className="py-3.5 px-4 text-center font-mono">Weight</th>
+                  <th className="py-3.5 px-4 font-mono">Window</th>
+                  <th className="py-3.5 px-5">Evaluation Metric</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-100 font-sans">
+                <tr className="hover:bg-zinc-50/60 transition-colors">
+                  <td className="py-3.5 px-5 font-bold text-zinc-900 font-space">1. External PR Merge Rate</td>
+                  <td className="py-3.5 px-4 text-center font-mono font-bold text-emerald-700 bg-emerald-50/50">27.5%</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-500">180 days</td>
+                  <td className="py-3.5 px-5 text-zinc-600">Ratio of merged vs. closed external (non-bot) pull requests.</td>
+                </tr>
+                <tr className="hover:bg-zinc-50/60 transition-colors">
+                  <td className="py-3.5 px-5 font-bold text-zinc-900 font-space">2. Time to First Review Response</td>
+                  <td className="py-3.5 px-4 text-center font-mono font-bold text-blue-700 bg-blue-50/50">15.0%</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-500">Trailing PRs</td>
+                  <td className="py-3.5 px-5 text-zinc-600">Median hours before a maintainer posts an actionable comment.</td>
+                </tr>
+                <tr className="hover:bg-zinc-50/60 transition-colors">
+                  <td className="py-3.5 px-5 font-bold text-zinc-900 font-space">3. Activity Recency</td>
+                  <td className="py-3.5 px-4 text-center font-mono font-bold text-purple-700 bg-purple-50/50">15.0%</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-500">Rolling</td>
+                  <td className="py-3.5 px-5 text-zinc-600">Days since last merged PR or maintainer commit pulse.</td>
+                </tr>
+                <tr className="hover:bg-zinc-50/60 transition-colors">
+                  <td className="py-3.5 px-5 font-bold text-zinc-900 font-space">4. First-Timer Success Rate</td>
+                  <td className="py-3.5 px-4 text-center font-mono font-bold text-amber-700 bg-amber-50/50">10.0%</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-500">Historical</td>
+                  <td className="py-3.5 px-5 text-zinc-600">Acceptance rate for authors submitting their first pull request.</td>
+                </tr>
+                <tr className="hover:bg-zinc-50/60 transition-colors">
+                  <td className="py-3.5 px-5 font-bold text-zinc-900 font-space">5. Time to Final Merge</td>
+                  <td className="py-3.5 px-4 text-center font-mono font-bold text-indigo-700 bg-indigo-50/50">10.0%</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-500">Merged PRs</td>
+                  <td className="py-3.5 px-5 text-zinc-600">Turnaround hours from initial PR opening to merged branch.</td>
+                </tr>
+                <tr className="hover:bg-zinc-50/60 transition-colors">
+                  <td className="py-3.5 px-5 font-bold text-zinc-900 font-space">6. Repeat Contributor Retention</td>
+                  <td className="py-3.5 px-4 text-center font-mono font-bold text-cyan-700 bg-cyan-50/50">10.0%</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-500">Cohorts</td>
+                  <td className="py-3.5 px-5 text-zinc-600">Percentage of contributors returning for PR #2 and #3.</td>
+                </tr>
+                <tr className="hover:bg-zinc-50/60 transition-colors">
+                  <td className="py-3.5 px-5 font-bold text-zinc-900 font-space">7. Review Rounds &amp; Depth</td>
+                  <td className="py-3.5 px-4 text-center font-mono font-bold text-orange-700 bg-orange-50/50">5.0%</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-500">Per PR</td>
+                  <td className="py-3.5 px-5 text-zinc-600">Constructive feedback rounds without excessive review churn.</td>
+                </tr>
+                <tr className="hover:bg-zinc-50/60 transition-colors">
+                  <td className="py-3.5 px-5 font-bold text-zinc-900 font-space">8. Maintainer Breadth (Bus Factor)</td>
+                  <td className="py-3.5 px-4 text-center font-mono font-bold text-rose-700 bg-rose-50/50">5.0%</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-500">90 days</td>
+                  <td className="py-3.5 px-5 text-zinc-600">Distinct active reviewers. Bus Factor = 1 caps score at Tier B.</td>
+                </tr>
+                <tr className="hover:bg-zinc-50/60 transition-colors">
+                  <td className="py-3.5 px-5 font-bold text-zinc-900 font-space">9. Discussion &amp; Issue Triage</td>
+                  <td className="py-3.5 px-4 text-center font-mono font-bold text-emerald-800 bg-emerald-50/50">2.5%</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-500">Issues</td>
+                  <td className="py-3.5 px-5 text-zinc-600">Responsiveness to incoming community issue questions.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         {/* Tier Classification Hierarchy */}
         <div className="space-y-6 mb-16">
           <div className="border-b border-zinc-200 pb-4">
