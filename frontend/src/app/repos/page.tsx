@@ -141,6 +141,38 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
   const resolvedParams = await searchParams;
   const { repos: initialRepos, total: initialTotal } = await getReposSSR(resolvedParams);
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://getmerged.abhishekco.de",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Repositories Directory",
+        item: "https://getmerged.abhishekco.de/repos",
+      },
+    ],
+  };
+
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Indexed Open-Source Repositories",
+    description: "Curated open-source repositories scored by PR merge velocity and maintainer responsiveness.",
+    itemListElement: initialRepos.slice(0, 24).map((r, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: r.full_name,
+      url: `https://getmerged.abhishekco.de/${r.full_name}`,
+    })),
+  };
+
   const collectionJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -148,6 +180,7 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
     url: "https://getmerged.abhishekco.de/repos",
     description:
       "Comprehensive directory of open-source repositories scored by PR merge velocity and maintainer responsiveness.",
+    mainEntity: itemListJsonLd,
     isPartOf: {
       "@type": "WebSite",
       name: "GetMerged",
@@ -236,6 +269,10 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}

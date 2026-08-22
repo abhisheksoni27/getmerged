@@ -29,8 +29,8 @@ interface HomeClientProps {
 
 function CountUp({ value, duration = 1.2 }: { value: number; duration?: number }) {
   const reduceMotion = useReducedMotion();
-  const count = useMotionValue(0);
-  const [display, setDisplay] = useState(0);
+  const count = useMotionValue(value);
+  const [display, setDisplay] = useState(value);
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
