@@ -155,9 +155,12 @@ body {
 .nb-theme :where(button, [role="button"], summary):not(:where(.nb-opt-out, .nb-opt-out *)) {
   border: var(--nb-border-w) solid var(--nb-border-color);
   border-radius: var(--nb-radius);
-  background-color: var(--color-nb-paper);
   box-shadow: var(--nb-shadow-s);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.nb-theme :where(button:not([class*="bg-"]), [role="button"]:not([class*="bg-"]), summary:not([class*="bg-"])):not(:where(.nb-opt-out, .nb-opt-out *)) {
+  background-color: var(--color-nb-paper);
 }
 
 .nb-theme :where(button:hover:not(:disabled):not([disabled]), [role="button"]:hover, summary:hover):not(:where(.nb-opt-out, .nb-opt-out *)) {

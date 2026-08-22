@@ -20,6 +20,7 @@ interface RepoDetailHeroProps {
 export function RepoDetailHero({
   fullName,
   repo,
+  rank,
   rankLabel,
   score,
   isWatching,
@@ -45,11 +46,21 @@ export function RepoDetailHero({
           <div className="flex flex-wrap items-center gap-2 mb-2.5">
             {isScored ? (
               <>
-                <span className="inline-flex items-center px-3 py-1 font-mono text-xs font-bold rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300">
+                <span className={`inline-flex items-center px-3 py-1 font-mono text-xs font-bold rounded-xl border-2 border-black shadow-[2px_2px_0px_#000] text-black ${
+                  rank === "S"
+                    ? "bg-[#8ce99a]"
+                    : rank === "A"
+                    ? "bg-[#bfdbff]"
+                    : rank === "B"
+                    ? "bg-[#ffd93d]"
+                    : rank === "C"
+                    ? "bg-[#e5dbff]"
+                    : "bg-[#ffb3c7]"
+                }`}>
                   {rankLabel}
                 </span>
                 {roundedScore > 0 && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 font-mono text-xs font-bold rounded-xl bg-zinc-900 text-white shadow-2xs">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 font-mono text-xs font-bold rounded-xl bg-zinc-900 text-white shadow-[2px_2px_0px_#000] border-2 border-black">
                     <span>C-Rank Score:</span>
                     <span className="text-emerald-400">{roundedScore}</span>
                     <span className="text-zinc-400 font-normal">/100</span>

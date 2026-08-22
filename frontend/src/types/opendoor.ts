@@ -27,6 +27,9 @@ export interface Repo {
   pr_count_6m?: number;
   issue_count_6m?: number;
   onboarding_score?: number;
+  newcomer_PR_merge_rate_90d_pct?: number | null;
+  good_first_issue_count_open?: number;
+  has_contributing_md?: boolean;
   updated_at?: string;
   snapshot_date?: string;
   topics?: string[];

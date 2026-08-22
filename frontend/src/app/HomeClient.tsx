@@ -633,7 +633,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           </div>
 
           {/* User-Specified Category Showroom Chips */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-sans">
+          <div className="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none text-xs font-sans">
             {/* 1. Hall of Fame (S-Tier) */}
             <motion.button
               type="button"
@@ -648,10 +648,10 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-medium transition-colors shrink-0 cursor-pointer ${
+              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
                 selectedTier === "S" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All"
-                  ? "bg-amber-600 text-white font-semibold shadow-2xs"
-                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
+                  ? "bg-[#ffd93d] text-black shadow-[3px_3px_0px_#000]"
+                  : "bg-white text-zinc-800 hover:bg-[#fff9db] hover:shadow-[2px_2px_0px_#000]"
               }`}
             >
               👑 Hall of Fame
@@ -671,10 +671,10 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-medium transition-colors shrink-0 cursor-pointer ${
+              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
                 selectedTier === "A"
-                  ? "bg-emerald-700 text-white font-semibold shadow-2xs"
-                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
+                  ? "bg-[#8ce99a] text-black shadow-[3px_3px_0px_#000]"
+                  : "bg-white text-zinc-800 hover:bg-[#ebfbee] hover:shadow-[2px_2px_0px_#000]"
               }`}
             >
               ⚡ Welcoming
@@ -694,10 +694,10 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-medium transition-colors shrink-0 cursor-pointer ${
+              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
                 selectedBucket === "50k+"
-                  ? "bg-purple-700 text-white font-semibold shadow-2xs"
-                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
+                  ? "bg-[#e5dbff] text-black shadow-[3px_3px_0px_#000]"
+                  : "bg-white text-zinc-800 hover:bg-[#f3f0ff] hover:shadow-[2px_2px_0px_#000]"
               }`}
             >
               ⭐ Star Giants
@@ -717,10 +717,10 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-medium transition-colors shrink-0 cursor-pointer ${
+              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
                 selectedFirstTimerBucket === "has_gfi"
-                  ? "bg-blue-600 text-white font-semibold shadow-2xs"
-                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
+                  ? "bg-[#bfdbff] text-black shadow-[3px_3px_0px_#000]"
+                  : "bg-white text-zinc-800 hover:bg-[#e7f5ff] hover:shadow-[2px_2px_0px_#000]"
               }`}
             >
               🌱 Has Good First Issue
@@ -740,10 +740,10 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-medium transition-colors shrink-0 cursor-pointer ${
+              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
                 selectedMinMergeRate === "60%"
-                  ? "bg-teal-700 text-white font-semibold shadow-2xs"
-                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
+                  ? "bg-[#ffc9c9] text-black shadow-[3px_3px_0px_#000]"
+                  : "bg-white text-zinc-800 hover:bg-[#ffe3e3] hover:shadow-[2px_2px_0px_#000]"
               }`}
             >
               🚀 High Merge Rate
@@ -763,10 +763,10 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-medium transition-colors shrink-0 cursor-pointer ${
+              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
                 selectedFirstTimerBucket === "60-80%"
-                  ? "bg-indigo-600 text-white font-semibold shadow-2xs"
-                  : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
+                  ? "bg-[#ffb3c7] text-black shadow-[3px_3px_0px_#000]"
+                  : "bg-white text-zinc-800 hover:bg-[#fff0f6] hover:shadow-[2px_2px_0px_#000]"
               }`}
             >
               🎯 First Timer Awesome

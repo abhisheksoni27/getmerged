@@ -23,39 +23,39 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
     switch (r) {
       case "S":
         return {
-          badgeClass: "bg-emerald-50 text-emerald-900 border-emerald-300 ring-1 ring-emerald-400/30",
+          badgeClass: "bg-[#8ce99a] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
           label: "Super Welcoming",
-          indicatorColor: "bg-emerald-500",
+          indicatorColor: "bg-emerald-600",
         };
       case "A":
         return {
-          badgeClass: "bg-blue-50 text-blue-900 border-blue-200 ring-1 ring-blue-300/30",
+          badgeClass: "bg-[#bfdbff] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
           label: "Welcoming",
-          indicatorColor: "bg-blue-500",
+          indicatorColor: "bg-blue-600",
         };
       case "B":
         return {
-          badgeClass: "bg-amber-50 text-amber-900 border-amber-200 ring-1 ring-amber-300/30",
+          badgeClass: "bg-[#ffd93d] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
           label: "Moderate",
-          indicatorColor: "bg-amber-500",
+          indicatorColor: "bg-amber-600",
         };
       case "C":
         return {
-          badgeClass: "bg-purple-50 text-purple-900 border-purple-200 ring-1 ring-purple-300/30",
+          badgeClass: "bg-[#e5dbff] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
           label: "Slow Review",
-          indicatorColor: "bg-purple-500",
+          indicatorColor: "bg-purple-600",
         };
       case "D":
         return {
-          badgeClass: "bg-rose-50 text-rose-900 border-rose-200 ring-1 ring-rose-300/30",
+          badgeClass: "bg-[#ffb3c7] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
           label: "Unmaintained",
-          indicatorColor: "bg-rose-500",
+          indicatorColor: "bg-rose-600",
         };
       default:
         return {
-          badgeClass: "bg-zinc-50 text-zinc-900 border-zinc-200 ring-1 ring-zinc-300/30",
+          badgeClass: "bg-[#faf9f6] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
           label: "Scored",
-          indicatorColor: "bg-zinc-400",
+          indicatorColor: "bg-zinc-600",
         };
     }
   };
