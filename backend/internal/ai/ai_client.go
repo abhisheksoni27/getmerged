@@ -215,6 +215,18 @@ func deriveGuidelines(text string) []string {
 	return dos
 }
 
+var genericDos = []string{
+	"Ensure code complies with the project coding style",
+	"Keep PRs scoped to a single concern",
+	"Include context and link to the related issue",
+}
+
+var genericDonts = []string{
+	"Do not submit PRs without linking an issue",
+	"Do not break existing tests without fixing them",
+	"Do not mix unrelated refactors in a single PR",
+}
+
 func deriveDosAndDonts(text string) ([]string, []string) {
 	type scoredRule struct {
 		score int
@@ -246,8 +258,11 @@ func deriveDosAndDonts(text string) ([]string, []string) {
 		}
 	}
 
-	if len(dos) == 0 {
-		return []string{"Follow maintainer feedback from recent PR reviews"}, []string{"Do not ignore unresolved maintainer review comments"}
+	for i := len(dos); i < 3; i++ {
+		dos = append(dos, genericDos[i])
+	}
+	for i := len(donts); i < 3; i++ {
+		donts = append(donts, genericDonts[i])
 	}
 
 	return dos, donts
