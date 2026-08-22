@@ -105,15 +105,20 @@ export function RepoDetailHero({
               <CircleDot className="h-3.5 w-3.5 text-emerald-600" />
               <span>{typeof repo?.issue_count_6m === "number" ? repo.issue_count_6m : (repo?.good_first_issue_count ? `${repo.good_first_issue_count}+` : "0")} Issues (last 6 months)</span>
             </span>
-            {repo?.updated_at && (
-              <span
-                title={`Last indexed and scored on ${new Date(repo.updated_at).toUTCString()}`}
-                className="inline-flex items-center gap-1.5 border border-zinc-200/90 bg-zinc-50 px-3 py-1 font-mono text-[11px] text-zinc-500 rounded-xl"
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
-                <span>Updated: {new Date(repo.updated_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
-              </span>
-            )}
+            {repo?.updated_at && (() => {
+              const d = new Date(repo.updated_at);
+              const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+              const dateStr = !isNaN(d.getTime()) ? `${months[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}` : null;
+              return dateStr ? (
+                <span
+                  title={`Last indexed and scored on ${d.toUTCString()}`}
+                  className="inline-flex items-center gap-1.5 border border-zinc-200/90 bg-zinc-50 px-3 py-1 font-mono text-[11px] text-zinc-500 rounded-xl"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
+                  <span suppressHydrationWarning>Updated: {dateStr}</span>
+                </span>
+              ) : null;
+            })()}
           </div>
           <h1 className="text-2xl sm:text-4xl font-bold font-space text-zinc-900 break-all tracking-tight leading-tight">
             {fullName}
