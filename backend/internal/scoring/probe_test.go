@@ -51,6 +51,6 @@ func TestProbeExact(t *testing.T) {
 	}
 	fmt.Println("PRs found:", len(prs))
 	for _, p := range prs { fmt.Printf("  #%s %s merged=%v\n", p.AuthorLogin, p.State, p.MergedAt != nil) }
-	raw := ComputeMetrics(prs, false)
+	raw := ComputeMetrics(prs, false, 90)
 	fmt.Printf("merge_rate=%.1f last_activity=%.1f ttm=%.1f first=%.1f\n", raw.ExternalPRMergeRate, raw.LastActivityDays, raw.TimeToMergeHours, raw.FirstTimerSuccessRate)
 }

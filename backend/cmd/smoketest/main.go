@@ -88,7 +88,7 @@ func main() {
 			fails++
 			continue
 		}
-		raw = scoring.ComputeMetrics(prs, false)
+		raw = scoring.ComputeMetrics(prs, false, 90)
 		raw.GoodFirstIssueCount = s.GFI
 
 		mergeOK := approx(raw.ExternalPRMergeRate, s.MergeRate, 1.0)

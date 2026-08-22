@@ -101,7 +101,7 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 					}
 				}
 
-				raw := scoring.ComputeMetrics(scoringPRs, false)
+				raw := scoring.ComputeMetrics(scoringPRs, false, scoring.BusFactorWindowDays())
 				raw.GoodFirstIssueCount = gfiCount
 				raw.PRsCreated6m = len(prs)
 				if issueCount, err := gh.FetchIssuesCreatedCount(r.Owner, r.Name, prWindowDays); err != nil {
@@ -290,8 +290,8 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON DUPLICATE KEY UPDATE
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
 			time_to_first_response_hours  = VALUES(time_to_first_response_hours),
@@ -302,6 +302,7 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			last_activity_days            = VALUES(last_activity_days),
 			review_rounds                 = VALUES(review_rounds),
 			distinct_maintainer_count     = VALUES(distinct_maintainer_count),
+			bus_factor                    = VALUES(bus_factor),
 			staleness_flag                = VALUES(staleness_flag),
 			c_rank_score                  = VALUES(c_rank_score),
 			c_rank_tier                   = VALUES(c_rank_tier),
@@ -319,6 +320,7 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 		m.LastActivityDays,
 		m.ReviewRounds,
 		m.DistinctMaintainerCount,
+		m.BusFactor,
 		staleness,
 		score,
 		tier,
@@ -334,9 +336,9 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count,
+			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count,
 			pr_count_6m, issue_count_6m, updated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		ON DUPLICATE KEY UPDATE
 			snapshot_date                 = VALUES(snapshot_date),
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
@@ -348,6 +350,7 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			last_activity_days            = VALUES(last_activity_days),
 			review_rounds                 = VALUES(review_rounds),
 			distinct_maintainer_count     = VALUES(distinct_maintainer_count),
+			bus_factor                    = VALUES(bus_factor),
 			staleness_flag                = VALUES(staleness_flag),
 			c_rank_score                  = VALUES(c_rank_score),
 			c_rank_tier                   = VALUES(c_rank_tier),
@@ -367,6 +370,7 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 		m.LastActivityDays,
 		m.ReviewRounds,
 		m.DistinctMaintainerCount,
+		m.BusFactor,
 		staleness,
 		score,
 		tier,

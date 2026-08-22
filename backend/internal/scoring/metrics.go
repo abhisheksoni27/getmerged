@@ -3,7 +3,9 @@
 package scoring
 
 import (
+	"os"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -75,10 +77,23 @@ type RawMetrics struct {
 	IssuesCreated6m           int     // issues opened in the last ~6 months (GitHub search count)
 }
 
+// DefaultBusFactorWindowDays is the BusFactor lookback when BUS_FACTOR_WINDOW_DAYS is unset.
+const DefaultBusFactorWindowDays = 90
+
+// BusFactorWindowDays returns the BusFactor lookback window in days,
+// configurable via BUS_FACTOR_WINDOW_DAYS. Falls back to 90 when unset or invalid.
+func BusFactorWindowDays() int {
+	if v, err := strconv.Atoi(os.Getenv("BUS_FACTOR_WINDOW_DAYS")); err == nil && v > 0 {
+		return v
+	}
+	return DefaultBusFactorWindowDays
+}
+
 // ComputeMetrics derives all raw metrics from a slice of PRs.
 // Only PRs within the last 180 days are considered.
 // staleness is true if no external PR was merged in the last 6 months.
-func ComputeMetrics(prs []PR, staleness bool) RawMetrics {
+// busFactorWindowDays bounds how far back insiders count toward BusFactor.
+func ComputeMetrics(prs []PR, staleness bool, busFactorWindowDays int) RawMetrics {
 	window180 := time.Now().UTC().Add(-180 * 24 * time.Hour)
 
 	var (
@@ -133,12 +148,13 @@ func ComputeMetrics(prs []PR, staleness bool) RawMetrics {
 		}
 	}
 
-	window90 := time.Now().UTC().Add(-90 * 24 * time.Hour)
+	window90 := time.Now().UTC().Add(-time.Duration(busFactorWindowDays) * 24 * time.Hour)
 	// Calculate ReviewRounds (median comments per merged external PR) and DistinctMaintainerCount
 	var reviewCounts []float64
 	maintainerSet := map[string]bool{}
 
-	// BusFactor maintainers: distinct active insiders (OWNER, MEMBER, COLLABORATOR) in the last 90 days
+	// BusFactor maintainers: distinct active insiders (OWNER, MEMBER, COLLABORATOR)
+	// within the configurable BusFactor window (default 90 days)
 	busFactorMaintainers := map[string]bool{}
 
 	for _, pr := range prs {

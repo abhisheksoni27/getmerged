@@ -107,7 +107,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 			}
 		}
 
-		raw := scoring.ComputeMetrics(scoringPRs, false)
+		raw := scoring.ComputeMetrics(scoringPRs, false, scoring.BusFactorWindowDays())
 		raw.GoodFirstIssueCount = gfiCount
 
 		// --- Normalise against existing DB population ---
