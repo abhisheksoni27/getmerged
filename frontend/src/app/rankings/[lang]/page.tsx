@@ -94,11 +94,12 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
   const languageName = displayNameFromSlug(canonicalLang);
   const fetchedRepos = await getRankingRepos(languageName);
 
-  // Filter qualifying repos: primary language matches & stars >= 100
+  // Filter qualifying repos: primary language matches, stars >= 100 & score_source != fallback
   const qualifying = fetchedRepos.filter((r) => {
     const isLangMatch = (r.language || "").toLowerCase() === languageName.toLowerCase();
     const hasMinStars = (r.stars ?? 0) >= 100;
-    return isLangMatch && hasMinStars;
+    const isNotFallback = r.score_source !== "fallback";
+    return isLangMatch && hasMinStars && isNotFallback;
   });
 
   // Calculate score and map items

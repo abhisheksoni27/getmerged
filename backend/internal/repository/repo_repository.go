@@ -68,6 +68,8 @@ type RepoFilter struct {
 	Owner                    string
 	Topic                    string
 	MinMaintainers           float64
+	ScoreSource              string
+	ExcludeFallback          bool
 }
 
 type SnapshotRecord struct {
@@ -89,7 +91,7 @@ type RepoRepository interface {
 	FindByIDOrName(ctx context.Context, identifier string) (*RepoRecord, error)
 	GetScoreHistory(ctx context.Context, repoID string, days int) ([]SnapshotRecord, error)
 	Delete(ctx context.Context, id string) error
-	InsertSnapshot(ctx context.Context, repoID string, raw scoring.RawMetrics, score float64, tier string) error
+	InsertSnapshot(ctx context.Context, repoID string, raw scoring.RawMetrics, score float64, tier string, scoreSource string) error
 	FetchLatestSnapshotsSample(ctx context.Context, limit int) ([]scoring.RawMetrics, error)
 	GetRelatedRepos(ctx context.Context, repo *RepoRecord, limit int) ([]*RepoRecord, error)
 	UpsertTopics(ctx context.Context, repoID string, topics []string) error
@@ -214,6 +216,15 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 	if filter.MinMaintainers > 0 {
 		where += " AND COALESCE(s.bus_factor,0) >= ?"
 		args = append(args, filter.MinMaintainers)
+	}
+
+	if filter.ScoreSource != "" {
+		where += " AND s.score_source = ?"
+		args = append(args, filter.ScoreSource)
+	}
+
+	if filter.ExcludeFallback {
+		where += " AND COALESCE(s.score_source, 'computed') != 'fallback'"
 	}
 
 	sortCol, ok := allowedSortFields[filter.SortBy]

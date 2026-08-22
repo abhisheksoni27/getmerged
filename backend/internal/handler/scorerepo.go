@@ -140,7 +140,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 			}
 		}
 
-		if err := repoStore.InsertSnapshot(c.Request.Context(), repoID, raw, score, tier); err != nil {
+		if err := repoStore.InsertSnapshot(c.Request.Context(), repoID, raw, score, tier, scoring.ScoreSourceComputed); err != nil {
 			slog.Error("score-repo: insert snapshot failed", "repo", fullName, "err", err)
 		} else {
 			slog.Info("score-repo: successfully saved to DB", "repo", fullName, "repo_id", repoID)

@@ -177,6 +177,8 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		hasGoodFirstIssue := strings.ToLower(strings.TrimSpace(c.Query("has_good_first_issue"))) == "true"
 		maxActivityDays, _ := strconv.Atoi(strings.TrimSpace(c.Query("max_last_activity_days")))
 		excludeStale := strings.ToLower(strings.TrimSpace(c.Query("exclude_stale"))) == "true"
+		scoreSource := strings.TrimSpace(c.Query("score_source"))
+		excludeFallback := strings.ToLower(strings.TrimSpace(c.Query("exclude_fallback"))) == "true"
 
 		filter := repository.RepoFilter{
 			Language:                 lang,
@@ -201,6 +203,8 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			Owner:                    strings.TrimSpace(c.Query("owner")),
 			Topic:                    strings.TrimSpace(c.Query("topic")),
 			MinMaintainers:           minMaintainers,
+			ScoreSource:              scoreSource,
+			ExcludeFallback:          excludeFallback,
 		}
 
 		repos, total, err := repoStore.List(c.Request.Context(), filter)

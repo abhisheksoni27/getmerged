@@ -193,11 +193,30 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	// Normalise against the caller-provided population snapshot when available
 	// (avoids re-fetching the entire latest_snapshots table per repo - the old
 	// N+1 behaviour that throttled the crawler to ~620 repos/hr).
+	// Issue #92 defect fix: a failed or empty peer fetch previously fell through
+	// silently with a single-repo population, collapsing every percentile to the
+	// neutral 50 prior (the mass of score=50 rows on rankings). Fail hard so the
+	// repo is retried by the next crawl instead of persisting a junk score.
 	dbMetrics := existingMetrics
 	if len(dbMetrics) == 0 {
-		if m, err := fetchDBMetrics(db); err == nil && len(m) > 0 {
-			dbMetrics = m
+		m, err := fetchDBMetrics(db)
+		if err != nil {
+			return existingMetrics, fmt.Errorf("fetchDBMetrics: %w", err)
 		}
+		if len(m) == 0 {
+			return existingMetrics, fmt.Errorf("fetchDBMetrics: empty normalisation population")
+		}
+		dbMetrics = m
+	}
+	peerCount := len(dbMetrics)
+	scoreSource := scoring.ResolveScoreSource(peerCount)
+	if scoreSource == scoring.ScoreSourceFallback {
+		slog.Warn("scoreAndSaveRepo: degraded score provenance - marking fallback",
+			"repo", fullName,
+			"reason", "insufficient_normalisation_peers",
+			"peers", peerCount,
+			"required", scoring.MinNormalisationPeers,
+		)
 	}
 	dbMetrics = append(dbMetrics, raw)
 
@@ -213,16 +232,19 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 
 	// AI Insights are now generated asynchronously via cron.
 
-	if err := saveSnapshot(db, repoID, raw, score, tier); err != nil {
+	if err := saveSnapshot(db, repoID, raw, score, tier, scoreSource); err != nil {
 		return existingMetrics, err
 	}
 	return append(existingMetrics, raw), nil
 }
 
-func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float64, tier string) error {
+func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float64, tier string, scoreSource string) error {
 	staleness := 0
 	if m.StalenessFlag {
 		staleness = 1
+	}
+	if scoreSource != scoring.ScoreSourceFallback {
+		scoreSource = scoring.ScoreSourceComputed
 	}
 	today := time.Now().UTC().Format("2006-01-02")
 
@@ -238,8 +260,8 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, onboarding_score
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, score_source, good_first_issue_count, onboarding_score
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON DUPLICATE KEY UPDATE
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
 			time_to_first_response_hours  = VALUES(time_to_first_response_hours),
@@ -254,6 +276,7 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			staleness_flag                = VALUES(staleness_flag),
 			c_rank_score                  = VALUES(c_rank_score),
 			c_rank_tier                   = VALUES(c_rank_tier),
+			score_source                  = VALUES(score_source),
 			good_first_issue_count        = VALUES(good_first_issue_count),
 			onboarding_score              = VALUES(onboarding_score)
 	`,
@@ -273,6 +296,7 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 		staleness,
 		score,
 		tier,
+		scoreSource,
 		m.GoodFirstIssueCount,
 		m.OnboardingScore,
 	)
