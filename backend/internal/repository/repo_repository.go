@@ -35,6 +35,8 @@ type RepoRecord struct {
 	OnboardingScore          int       `db:"onboarding_score" json:"onboarding_score"`
 	ResponseP50Hours         float64   `db:"response_p50_hours" json:"response_p50_hours"`
 	ResponseP90Hours         float64   `db:"response_p90_hours" json:"response_p90_hours"`
+	PrCount6m                int       `db:"pr_count_6m" json:"pr_count_6m"`
+	IssueCount6m             int       `db:"issue_count_6m" json:"issue_count_6m"`
 	UpdatedAt                time.Time `db:"updated_at" json:"updated_at"`
 	Topics                   []string  `db:"-" json:"topics"`
 	IsScored                 bool      `db:"is_scored" json:"is_scored"`
@@ -238,6 +240,8 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 			COALESCE(s.onboarding_score,0) as onboarding_score,
 			COALESCE(s.response_p50_hours,0) as response_p50_hours,
 			COALESCE(s.response_p90_hours,0) as response_p90_hours,
+			COALESCE(s.pr_count_6m,0) as pr_count_6m,
+			COALESCE(s.issue_count_6m,0) as issue_count_6m,
 			CASE WHEN COALESCE(s.c_rank_score, 0) > 0 THEN 1 ELSE 0 END as is_scored,
 			r.updated_at
 		FROM repositories r
@@ -383,6 +387,8 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 			COALESCE(s.onboarding_score,0) as onboarding_score,
 			COALESCE(s.response_p50_hours,0) as response_p50_hours,
 			COALESCE(s.response_p90_hours,0) as response_p90_hours,
+			COALESCE(s.pr_count_6m,0) as pr_count_6m,
+			COALESCE(s.issue_count_6m,0) as issue_count_6m,
 			CASE WHEN COALESCE(s.c_rank_score, 0) > 0 THEN 1 ELSE 0 END as is_scored,
 			r.updated_at
 		FROM repositories r

@@ -71,6 +71,8 @@ type RawMetrics struct {
 	OnboardingScore           int // repository documentation readiness score (0–100)
 	ResponseP50Hours          float64 // 50th percentile response latency in hours
 	ResponseP90Hours          float64 // 90th percentile response latency in hours
+	PRsCreated6m              int     // all PRs opened in the 180-day window (external + internal)
+	IssuesCreated6m           int     // issues opened in the last ~6 months (GitHub search count)
 }
 
 // ComputeMetrics derives all raw metrics from a slice of PRs.

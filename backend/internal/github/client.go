@@ -1025,6 +1025,34 @@ type GoodFirstIssue struct {
 }
 
 // FetchGoodFirstIssueCount returns the number of open beginner-friendly issues for a repo.
+// FetchIssuesCreatedCount returns the number of issues opened in the repository
+// within the last `days` days, via a single GitHub search count query.
+func (c *Client) FetchIssuesCreatedCount(owner, name string, days int) (int, error) {
+	cutoff := time.Now().UTC().AddDate(0, 0, -days).Format("2006-01-02")
+	queryStr := fmt.Sprintf("repo:%s/%s is:issue created:>=%s", owner, name, cutoff)
+	vars := map[string]any{"query": queryStr}
+
+	var resp struct {
+		Data struct {
+			Search struct {
+				IssueCount int `json:"issueCount"`
+			} `json:"search"`
+			RateLimit rateLimitInfo `json:"rateLimit"`
+		} `json:"data"`
+	}
+
+	fromCache, err := c.do(RepoGfiCountQuery, vars, &resp)
+	if err != nil {
+		return 0, fmt.Errorf("FetchIssuesCreatedCount: %w", err)
+	}
+
+	if !fromCache {
+		c.handleRateLimit(resp.Data.RateLimit)
+	}
+
+	return resp.Data.Search.IssueCount, nil
+}
+
 func (c *Client) FetchGoodFirstIssueCount(owner, name string) (int, error) {
 	queryStr := formatGoodFirstIssueQuery(owner, name)
 	vars := map[string]any{"query": queryStr}
