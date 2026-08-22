@@ -103,6 +103,12 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 
 				raw := scoring.ComputeMetrics(scoringPRs, false)
 				raw.GoodFirstIssueCount = gfiCount
+				raw.PRsCreated6m = len(prs)
+				if issueCount, err := gh.FetchIssuesCreatedCount(r.Owner, r.Name, prWindowDays); err != nil {
+					slog.Warn("cron: FetchIssuesCreatedCount failed - assuming none", "repo", r.FullName, "err", err)
+				} else {
+					raw.IssuesCreated6m = issueCount
+				}
 				results <- repoMetrics{repo: r, raw: raw, meta: meta}
 			}
 		}()
@@ -328,8 +334,9 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, updated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count,
+			pr_count_6m, issue_count_6m, updated_at
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		ON DUPLICATE KEY UPDATE
 			snapshot_date                 = VALUES(snapshot_date),
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
@@ -345,6 +352,8 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			c_rank_score                  = VALUES(c_rank_score),
 			c_rank_tier                   = VALUES(c_rank_tier),
 			good_first_issue_count        = VALUES(good_first_issue_count),
+			pr_count_6m                   = VALUES(pr_count_6m),
+			issue_count_6m                = VALUES(issue_count_6m),
 			updated_at                    = CURRENT_TIMESTAMP
 	`,
 		repoID,
@@ -362,6 +371,8 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 		score,
 		tier,
 		m.GoodFirstIssueCount,
+		m.PRsCreated6m,
+		m.IssuesCreated6m,
 	)
 	if err != nil {
 		return err

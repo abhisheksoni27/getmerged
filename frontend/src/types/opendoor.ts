@@ -24,6 +24,8 @@ export interface Repo {
   bus_factor?: number;
   staleness_flag?: boolean;
   good_first_issue_count?: number;
+  pr_count_6m?: number;
+  issue_count_6m?: number;
   onboarding_score?: number;
   updated_at?: string;
   snapshot_date?: string;

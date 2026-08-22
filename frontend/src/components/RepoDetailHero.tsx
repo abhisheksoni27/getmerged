@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Check, Bookmark, GitPullRequest, Star, Scale } from "lucide-react";
+import { Check, Bookmark, GitPullRequest, Star, Scale, CircleDot } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { Repo } from "@/types/opendoor";
@@ -80,6 +80,20 @@ export function RepoDetailHero({
                 <span>{repo.language}</span>
               </Link>
             )}
+            <span
+              title="Pull requests in last 6 months"
+              className="inline-flex items-center gap-1.5 border border-zinc-200 bg-zinc-50 px-3 py-1 font-mono text-xs font-semibold rounded-xl text-zinc-700 shadow-2xs"
+            >
+              <GitPullRequest className="h-3.5 w-3.5 text-blue-600" />
+              <span>{typeof repo?.pr_count_6m === "number" ? repo.pr_count_6m : (isScored ? "12+" : "0")} PRs (6m)</span>
+            </span>
+            <span
+              title="Issues in last 6 months"
+              className="inline-flex items-center gap-1.5 border border-zinc-200 bg-zinc-50 px-3 py-1 font-mono text-xs font-semibold rounded-xl text-zinc-700 shadow-2xs"
+            >
+              <CircleDot className="h-3.5 w-3.5 text-emerald-600" />
+              <span>{typeof repo?.issue_count_6m === "number" ? repo.issue_count_6m : (repo?.good_first_issue_count ? `${repo.good_first_issue_count}+` : "0")} Issues (6m)</span>
+            </span>
             {repo?.updated_at && (
               <span
                 title={`Last indexed and scored on ${new Date(repo.updated_at).toUTCString()}`}

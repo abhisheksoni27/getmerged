@@ -183,6 +183,12 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	}
 	raw := scoring.ComputeMetrics(scoringPRs, false)
 	raw.GoodFirstIssueCount = gfiCount
+	raw.PRsCreated6m = len(prs)
+	if issueCount, err := gh.FetchIssuesCreatedCount(owner, name, 180); err != nil {
+		slog.Warn("scoreAndSaveRepo: FetchIssuesCreatedCount failed - assuming none", "repo", fullName, "err", err)
+	} else {
+		raw.IssuesCreated6m = issueCount
+	}
 
 	// Normalise against the caller-provided population snapshot when available
 	// (avoids re-fetching the entire latest_snapshots table per repo - the old
@@ -278,8 +284,9 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, onboarding_score, updated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+			distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, onboarding_score,
+			pr_count_6m, issue_count_6m, updated_at
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		ON DUPLICATE KEY UPDATE
 			snapshot_date                 = VALUES(snapshot_date),
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
@@ -296,6 +303,8 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			c_rank_tier                   = VALUES(c_rank_tier),
 			good_first_issue_count        = VALUES(good_first_issue_count),
 			onboarding_score              = VALUES(onboarding_score),
+			pr_count_6m                   = VALUES(pr_count_6m),
+			issue_count_6m                = VALUES(issue_count_6m),
 			updated_at                    = CURRENT_TIMESTAMP
 	`,
 		repoID,
@@ -314,6 +323,8 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 		tier,
 		m.GoodFirstIssueCount,
 		m.OnboardingScore,
+		m.PRsCreated6m,
+		m.IssuesCreated6m,
 	)
 	if err != nil {
 		return err
