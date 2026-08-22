@@ -150,6 +150,7 @@ func main() {
 		guidelinesBytes, _ := json.Marshal(insightsResp.PRGuidelines)
 		dosBytes, _ := json.Marshal(insightsResp.TopDos)
 		dontsBytes, _ := json.Marshal(insightsResp.TopDonts)
+		deepSectionsBytes, _ := json.Marshal(insightsResp.DeepSections)
 
 		err = aiRepo.SaveInsights(ctx, &repository.AIInsights{
 			RepoID:            r.ID,
@@ -163,6 +164,7 @@ func main() {
 			MaintainerPersona: insightsResp.MaintainerPersona,
 			DosJSON:           string(dosBytes),
 			DontsJSON:         string(dontsBytes),
+			DeepSectionsJSON:  string(deepSectionsBytes),
 		})
 
 		if err != nil {

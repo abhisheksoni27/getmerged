@@ -62,6 +62,7 @@ export interface AIInsights {
   maintainer_persona?: string;
   top_dos?: string[];
   top_donts?: string[];
+  deep_sections?: { title: string; body: string }[];
 }
 
 export interface ContributorDNA {

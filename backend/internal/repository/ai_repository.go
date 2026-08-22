@@ -19,6 +19,7 @@ type AIInsights struct {
 	MaintainerPersona string    `db:"maintainer_persona" json:"maintainer_persona"`
 	DosJSON           string    `db:"dos_json" json:"dos_json"`
 	DontsJSON         string    `db:"donts_json" json:"donts_json"`
+	DeepSectionsJSON  string    `db:"deep_sections_json" json:"deep_sections_json"`
 	UpdatedAt         time.Time `db:"updated_at" json:"updated_at"`
 }
 
@@ -60,6 +61,7 @@ func (r *sqlxAIRepository) GetInsights(ctx context.Context, repoID string) (*AII
 		       COALESCE(maintainer_persona, 'Encouraging Technical Mentor') as maintainer_persona,
 		       COALESCE(dos_json, '[]') as dos_json,
 		       COALESCE(donts_json, '[]') as donts_json,
+		       COALESCE(deep_sections_json, '[]') as deep_sections_json,
 		       updated_at
 		FROM repo_ai_insights WHERE repo_id = ?
 	`, repoID)
@@ -73,9 +75,9 @@ func (r *sqlxAIRepository) SaveInsights(ctx context.Context, insights *AIInsight
 	_, err := r.db.ExecContext(ctx, `
 		INSERT INTO repo_ai_insights (
 			repo_id, maintainer_vibe, pr_guidelines, issue_quality_score, raw_summary,
-			warmth_score, patience_score, nitpick_ratio, maintainer_persona, dos_json, donts_json, updated_at
+			warmth_score, patience_score, nitpick_ratio, maintainer_persona, dos_json, donts_json, deep_sections_json, updated_at
 		)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		ON DUPLICATE KEY UPDATE
 			maintainer_vibe = VALUES(maintainer_vibe),
 			pr_guidelines = VALUES(pr_guidelines),
@@ -87,9 +89,10 @@ func (r *sqlxAIRepository) SaveInsights(ctx context.Context, insights *AIInsight
 			maintainer_persona = VALUES(maintainer_persona),
 			dos_json = VALUES(dos_json),
 			donts_json = VALUES(donts_json),
+			deep_sections_json = VALUES(deep_sections_json),
 			updated_at = CURRENT_TIMESTAMP
 	`, insights.RepoID, insights.MaintainerVibe, insights.PRGuidelines, insights.IssueQualityScore, insights.RawSummary,
-		insights.WarmthScore, insights.PatienceScore, insights.NitpickRatio, insights.MaintainerPersona, insights.DosJSON, insights.DontsJSON)
+		insights.WarmthScore, insights.PatienceScore, insights.NitpickRatio, insights.MaintainerPersona, insights.DosJSON, insights.DontsJSON, insights.DeepSectionsJSON)
 	return err
 }
 

@@ -217,6 +217,54 @@ func TestAIClient_GenerateRepoInsightsPromptIncludesAllFields(t *testing.T) {
 	}
 }
 
+func TestAIClient_LocalFallbackReturnsNoDeepSections(t *testing.T) {
+	client := ai.NewAIClient("")
+	res := client.GenerateLocalZeroCostInsights("test-org/test-repo", []string{"add tests please"}, nil)
+	if len(res.DeepSections) != 0 {
+		t.Fatalf("expected no deep sections from local classifier (no fabricated content), got %+v", res.DeepSections)
+	}
+}
+
+func TestParseInsightsJSONWithDeepSections(t *testing.T) {
+	raw := `{
+		"maintainer_vibe": "sharp reviewer",
+		"pr_guidelines": ["link issues"],
+		"issue_quality_score": 7.5,
+		"raw_summary": "ok",
+		"warmth_score": 6.1,
+		"patience_score": 7.0,
+		"nitpick_ratio": 0.3,
+		"maintainer_persona": "Gatekeeper",
+		"top_dos": ["do a"],
+		"top_donts": ["dont b"],
+		"deep_sections": [
+			{"title": "What Contributors Actually Say", "body": "Reviewers repeatedly flag..."},
+			{"title": "Unwritten Rules", "body": "PRs touching core/ need an issue first."}
+		]
+	}`
+
+	res, err := ai.ParseInsightsJSON(raw)
+	if err != nil {
+		t.Fatalf("expected parse success, got: %v", err)
+	}
+	if len(res.DeepSections) != 2 {
+		t.Fatalf("expected 2 deep sections, got %d", len(res.DeepSections))
+	}
+	if res.DeepSections[0].Title == "" || res.DeepSections[0].Body == "" {
+		t.Fatalf("expected populated deep section, got %+v", res.DeepSections[0])
+	}
+}
+
+func TestParseInsightsJSONWithoutDeepSections(t *testing.T) {
+	res, err := ai.ParseInsightsJSON(`{"maintainer_vibe":"vibe","raw_summary":"s"}`)
+	if err != nil {
+		t.Fatalf("expected parse success without deep_sections, got: %v", err)
+	}
+	if len(res.DeepSections) != 0 {
+		t.Fatalf("expected empty deep sections, got %+v", res.DeepSections)
+	}
+}
+
 func assertContains(t *testing.T, values []string, want string) {
 	t.Helper()
 	for _, value := range values {

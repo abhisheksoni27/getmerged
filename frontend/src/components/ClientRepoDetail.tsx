@@ -23,6 +23,7 @@ import {
   RefreshCw,
   PartyPopper,
   ExternalLink,
+  Quote,
 } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
@@ -473,21 +474,7 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
         <UnscoredExplainer fullName={fullName} language={repo?.language} />
       )}
 
-      {/* Macro Metrics Grid & cNPS Gauge Row */}
-      <RepoScorecards
-        responseTimeStr={responseTimeStr}
-        responseCommentary={responseCommentary}
-        mergeRateStr={mergeRateStr}
-        mergeCommentary={mergeCommentary}
-        firstTimerSuccessStr={firstTimerSuccessStr}
-        firstTimerCommentary={firstTimerCommentary}
-        distinctMaintainers={distinctMaintainers}
-        maintainersCommentary={maintainersCommentary}
-        vibeScore={vibeScore}
-        onboardingScore={repo?.onboarding_score}
-      />
-
-      {/* AI Insights & Maintainer Guidelines Section - Data-Backed Only (Rule 12 compliant) */}
+      {/* AI Insights & Maintainer Review Guidelines - moved up per Issue #80 */}
       {insights && (
         <div className="relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-5 sm:p-6 shadow-[5px_5px_0px_#222831] overflow-hidden mb-10">
           <div className="flex items-center gap-2 mb-4">
@@ -541,6 +528,25 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
               </div>
             )}
 
+            {/* Deep Narrative Sections (Issue #80): evidence-grounded insights from real PR/issue discussions */}
+            {insights.deep_sections && insights.deep_sections.length > 0 && (
+              <div className="grid grid-cols-1 gap-4">
+                {insights.deep_sections.map((section, idx) => (
+                  section.title && section.body && (
+                    <div key={idx} className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+                      <h4 className="text-xs font-mono font-bold text-indigo-900 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <Quote className="h-3.5 w-3.5 text-indigo-500" />
+                        {section.title}
+                      </h4>
+                      <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed whitespace-pre-line">
+                        {section.body}
+                      </p>
+                    </div>
+                  )
+                ))}
+              </div>
+            )}
+
             {/* Top Do's & Don'ts Checklist */}
             {((insights.top_dos && insights.top_dos.length > 0) || (insights.top_donts && insights.top_donts.length > 0)) && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
@@ -584,6 +590,20 @@ export function ClientRepoDetail({ repo, fullName }: ClientRepoDetailProps) {
           </div>
         </div>
       )}
+
+      {/* Macro Metrics Grid & cNPS Gauge Row */}
+      <RepoScorecards
+        responseTimeStr={responseTimeStr}
+        responseCommentary={responseCommentary}
+        mergeRateStr={mergeRateStr}
+        mergeCommentary={mergeCommentary}
+        firstTimerSuccessStr={firstTimerSuccessStr}
+        firstTimerCommentary={firstTimerCommentary}
+        distinctMaintainers={distinctMaintainers}
+        maintainersCommentary={maintainersCommentary}
+        vibeScore={vibeScore}
+        onboardingScore={repo?.onboarding_score}
+      />
 
       {/* Interactive README C-Rank Live Badge Generator (Issue #50) */}
       <RepoBadgeGenerator
