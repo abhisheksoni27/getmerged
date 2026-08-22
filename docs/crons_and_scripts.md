@@ -105,6 +105,34 @@ cd /opt/opendoor/backend && export $(cat /opt/opendoor/.env | grep -v '^#' | xar
 ~/src/opendoor/scripts/install-crontab.sh && crontab -l
 ```
 
+**Expire AI insights cache (force regeneration with deep sections, Issue #80):**
+
+After deploying the deep-sections change, expire existing caches so the
+in-server AI insights cron (every 30 min, 20 repos/batch) regenerates them with
+the new `deep_sections` narrative. Highest-value repos go first only via the
+batch tool; the cron picks by recency.
+
+```sql
+-- one-time, on production MySQL:
+UPDATE repo_ai_insights SET updated_at = '2000-01-01';
+```
+
+Then either let the cron drain (~20 repos/30 min) or accelerate with the batch
+tool ordered by C-Rank score:
+
+```bash
+cd /opt/opendoor/backend && export $(cat /opt/opendoor/.env | grep -v '^#' | xargs) \
+  && ./generate_ai_insights -tiers "S,A,B,C,D"
+```
+
+Verify fill progress:
+
+```sql
+SELECT COUNT(*) AS total,
+       SUM(deep_sections_json IS NOT NULL AND deep_sections_json != '[]') AS with_deep
+FROM repo_ai_insights;
+```
+
 **Smoke test (crawler vs DB-event agreement, N random repos):**
 
 ```bash
