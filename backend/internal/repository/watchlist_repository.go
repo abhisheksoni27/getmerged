@@ -38,7 +38,7 @@ func (r *sqlxWatchlistRepository) Add(ctx context.Context, userID int64, repoID 
 	query := `
 		INSERT INTO user_watchlists (user_id, repo_id, notify_rank_change, created_at)
 		VALUES (?, ?, TRUE, CURRENT_TIMESTAMP)
-		ON DUPLICATE KEY UPDATE id=id
+		ON DUPLICATE KEY UPDATE notify_rank_change=VALUES(notify_rank_change)
 	`
 	if r.db.DriverName() == "sqlite" {
 		query = `
