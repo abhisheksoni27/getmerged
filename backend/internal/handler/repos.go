@@ -118,6 +118,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		maxStarsStr := strings.TrimSpace(c.Query("max_stars"))
 		minFirstTimerStr := strings.TrimSpace(c.Query("min_first_timer_success_rate"))
 		maxFirstTimerStr := strings.TrimSpace(c.Query("max_first_timer_success_rate"))
+		minMaintainersStr := strings.TrimSpace(c.Query("min_maintainers"))
 
 		page := 1
 		if p, err := strconv.Atoi(pageStr); err == nil && p > 0 {
@@ -157,6 +158,11 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			hasMaxFirstTimer = true
 		}
 
+		var minMaintainers float64
+		if mv, err := strconv.ParseFloat(minMaintainersStr, 64); err == nil && mv > 0 {
+			minMaintainers = mv
+		}
+
 		// Backend Gating: page > 1 or trending=true require authentication (Q9, Q10)
 		userID, isLoggedIn := c.Get(middleware.UserIDKey)
 		if (page > 1 || trendingParam == "true") && (!isLoggedIn || userID == "") {
@@ -193,6 +199,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			HasGoodFirstIssue:        hasGoodFirstIssue,
 			Owner:                    strings.TrimSpace(c.Query("owner")),
 			Topic:                    strings.TrimSpace(c.Query("topic")),
+			MinMaintainers:           minMaintainers,
 		}
 
 		repos, total, err := repoStore.List(c.Request.Context(), filter)
