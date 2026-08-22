@@ -45,6 +45,7 @@ type RepoRecord struct {
 
 type RepoFilter struct {
 	Language                 string
+	Languages                []string
 	Tier                     string
 	MinMergeRate             float64
 	MinStars                 int
@@ -123,6 +124,22 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 	if filter.Language != "" {
 		where += " AND LOWER(r.language) = LOWER(?)"
 		args = append(args, filter.Language)
+	}
+
+	if len(filter.Languages) > 0 {
+		lowered := make([]interface{}, 0, len(filter.Languages))
+		placeholders := make([]string, 0, len(filter.Languages))
+		for _, l := range filter.Languages {
+			if l == "" {
+				continue
+			}
+			lowered = append(lowered, strings.ToLower(l))
+			placeholders = append(placeholders, "?")
+		}
+		if len(lowered) > 0 {
+			where += " AND LOWER(r.language) IN (" + strings.Join(placeholders, ",") + ")"
+			args = append(args, lowered...)
+		}
 	}
 
 	if filter.Tier != "" {
@@ -629,6 +646,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 			COALESCE(s.last_activity_days, 0) as last_activity_days,
 			COALESCE(s.review_rounds, 0) as review_rounds,
 			COALESCE(s.distinct_maintainer_count, 0) as distinct_maintainer_count,
+			COALESCE(s.bus_factor, 0) as bus_factor,
 			COALESCE(s.staleness_flag, 0) as staleness_flag,
 			COALESCE(s.snapshot_date, '') as snapshot_date,
 			COALESCE(s.good_first_issue_count, 0) as good_first_issue_count,
@@ -693,6 +711,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 				COALESCE(s.last_activity_days, 0) as last_activity_days,
 				COALESCE(s.review_rounds, 0) as review_rounds,
 				COALESCE(s.distinct_maintainer_count, 0) as distinct_maintainer_count,
+				COALESCE(s.bus_factor, 0) as bus_factor,
 				COALESCE(s.staleness_flag, 0) as staleness_flag,
 				COALESCE(s.snapshot_date, '') as snapshot_date,
 				COALESCE(s.good_first_issue_count, 0) as good_first_issue_count,

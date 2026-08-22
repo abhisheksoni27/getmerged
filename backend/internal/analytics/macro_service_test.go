@@ -48,6 +48,7 @@ func TestComputeAndCacheMacroStats(t *testing.T) {
 		last_activity_days REAL,
 		review_rounds REAL,
 		distinct_maintainer_count REAL,
+			bus_factor INTEGER DEFAULT 0,
 		staleness_flag INTEGER DEFAULT 0,
 		created_at DATETIME NOT NULL
 	);

@@ -48,6 +48,7 @@ func setupTestDB(t *testing.T) (*sqlx.DB, *config.Config) {
 		last_activity_days REAL,
 		review_rounds REAL,
 		distinct_maintainer_count REAL,
+			bus_factor INTEGER DEFAULT 0,
 		staleness_flag INTEGER DEFAULT 0,
 		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		UNIQUE(repository_id, snapshot_date)
@@ -66,6 +67,7 @@ func setupTestDB(t *testing.T) (*sqlx.DB, *config.Config) {
 		last_activity_days REAL DEFAULT 0,
 		review_rounds REAL DEFAULT 0,
 		distinct_maintainer_count REAL DEFAULT 0,
+			bus_factor INTEGER DEFAULT 0,
 		staleness_flag INTEGER DEFAULT 0,
 		good_first_issue_count INTEGER DEFAULT 0
 	);

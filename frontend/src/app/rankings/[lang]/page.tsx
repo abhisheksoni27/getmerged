@@ -6,7 +6,7 @@ import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import { canonicalizeSlug, displayNameFromSlug } from "@/lib/languageSlug";
 import { getEcosystemMetadata } from "@/lib/ecosystem-descriptions";
-import { Sparkles, Code2, ArrowLeft, ShieldCheck, Trophy } from "lucide-react";
+import { Sparkles, Code2, ArrowLeft, ShieldCheck, Trophy, Sprout } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
@@ -184,6 +184,16 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
           <p className="mt-3 text-xs sm:text-sm text-zinc-600 max-w-3xl leading-relaxed font-sans">
             Ranked by GetMerged&apos;s proprietary <strong>C-Rank™</strong> score. These public GitHub {languageName} projects feature high external pull request merge rates, rapid maintainer review turnarounds, and constructive contributor vibes.
           </p>
+          <div className="mt-5">
+            <Link
+              href={`/good-first-issue/${canonicalLang}`}
+              title={`Browse open ${languageName} good first issues`}
+              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700 transition-colors shadow-xs"
+            >
+              <Sprout className="h-3.5 w-3.5" />
+              Browse Good First Issues in {languageName}
+            </Link>
+          </div>
         </div>
 
         {/* Repositories Grid Header */}

@@ -282,7 +282,7 @@ func main() {
 				external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 				first_timer_success_rate, repeat_contributor_rate,
 				maintainer_responsiveness, last_activity_days, review_rounds,
-				distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, updated_at
+				distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, updated_at
 			) VALUES `)
 
 		var args []interface{}
@@ -304,13 +304,13 @@ func main() {
 			if j > 0 {
 				queryBuilder.WriteString(", ")
 			}
-			queryBuilder.WriteString("(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)")
+			queryBuilder.WriteString("(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)")
 			args = append(args,
 				r.ID, today,
 				raw.ExternalPRMergeRate, raw.TimeToFirstResponseHours, raw.TimeToMergeHours,
 				raw.FirstTimerSuccessRate, raw.RepeatContributorRate, raw.MaintainerResponsiveness,
 				raw.LastActivityDays, raw.ReviewRounds, raw.DistinctMaintainerCount,
-				staleness, score, tier, raw.GoodFirstIssueCount,
+				raw.BusFactor, staleness, score, tier, raw.GoodFirstIssueCount,
 			)
 		}
 
@@ -326,6 +326,7 @@ func main() {
 				last_activity_days            = VALUES(last_activity_days),
 				review_rounds                 = VALUES(review_rounds),
 				distinct_maintainer_count     = VALUES(distinct_maintainer_count),
+				bus_factor                    = VALUES(bus_factor),
 				staleness_flag                = VALUES(staleness_flag),
 				c_rank_score                  = VALUES(c_rank_score),
 				c_rank_tier                   = VALUES(c_rank_tier),

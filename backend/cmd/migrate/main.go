@@ -76,10 +76,15 @@ func main() {
 			continue
 		}
 		
+		busFactor := interface{}(0)
+		if v, ok := results["bus_factor"]; ok && v != nil {
+			busFactor = v
+		}
+
 		_, err := mysqlDB.Exec(`
-			INSERT IGNORE INTO latest_snapshots (repository_id, snapshot_date, external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours, first_timer_success_rate, repeat_contributor_rate, maintainer_responsiveness, last_activity_days, review_rounds, distinct_maintainer_count, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, updated_at)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-		`, results["repository_id"], results["snapshot_date"], results["external_pr_merge_rate"], results["time_to_first_response_hours"], results["time_to_merge_hours"], results["first_timer_success_rate"], results["repeat_contributor_rate"], results["maintainer_responsiveness"], results["last_activity_days"], results["review_rounds"], results["distinct_maintainer_count"], results["staleness_flag"], results["c_rank_score"], results["c_rank_tier"], results["good_first_issue_count"], results["updated_at"])
+			INSERT IGNORE INTO latest_snapshots (repository_id, snapshot_date, external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours, first_timer_success_rate, repeat_contributor_rate, maintainer_responsiveness, last_activity_days, review_rounds, distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, updated_at)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		`, results["repository_id"], results["snapshot_date"], results["external_pr_merge_rate"], results["time_to_first_response_hours"], results["time_to_merge_hours"], results["first_timer_success_rate"], results["repeat_contributor_rate"], results["maintainer_responsiveness"], results["last_activity_days"], results["review_rounds"], results["distinct_maintainer_count"], busFactor, results["staleness_flag"], results["c_rank_score"], results["c_rank_tier"], results["good_first_issue_count"], results["updated_at"])
 		
 		if err != nil {
 			log.Println("Failed snapshot:", err)

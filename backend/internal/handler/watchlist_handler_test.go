@@ -57,6 +57,7 @@ func setupTestDB(t *testing.T) *sqlx.DB {
 		last_activity_days REAL,
 		review_rounds REAL,
 		distinct_maintainer_count REAL,
+			bus_factor INTEGER DEFAULT 0,
 		staleness_flag INTEGER DEFAULT 0,
 		created_at DATETIME NOT NULL
 	);

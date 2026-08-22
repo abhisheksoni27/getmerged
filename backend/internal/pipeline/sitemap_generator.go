@@ -130,7 +130,7 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		{Loc: fmt.Sprintf("%s/terms", baseUrl), LastMod: today, ChangeFreq: "monthly", Priority: "0.3"},
 	}
 
-	// Add language rankings and GFI hubs to main sitemap
+	// Add language rankings, GFI hubs, and matchmaker pages to main sitemap
 	for lang := range langMap {
 		if lang != "" && lang != "other" {
 			mainUrls = append(mainUrls, URL{
@@ -144,6 +144,18 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 				LastMod:    today,
 				ChangeFreq: "daily",
 				Priority:   "0.9",
+			})
+			mainUrls = append(mainUrls, URL{
+				Loc:        fmt.Sprintf("%s/contribute/%s?level=beginner", baseUrl, lang),
+				LastMod:    today,
+				ChangeFreq: "daily",
+				Priority:   "0.9",
+			})
+			mainUrls = append(mainUrls, URL{
+				Loc:        fmt.Sprintf("%s/contribute/%s?level=experienced", baseUrl, lang),
+				LastMod:    today,
+				ChangeFreq: "weekly",
+				Priority:   "0.8",
 			})
 		}
 	}
@@ -229,6 +241,34 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 			Loc:     fmt.Sprintf("%s/sitemap/%s", baseUrl, url.PathEscape(fileName)),
 			LastMod: today,
 		})
+	}
+
+	// 2b. Generate how-to-contribute.xml with one guide URL per indexed repo
+	var howToUrls []URL
+	for _, r := range repos {
+		parts := strings.Split(r.FullName, "/")
+		if len(parts) != 2 {
+			continue
+		}
+		howToUrls = append(howToUrls, URL{
+			Loc:        fmt.Sprintf("%s/how-to-contribute/%s/%s", baseUrl, parts[0], parts[1]),
+			LastMod:    today,
+			ChangeFreq: "weekly",
+			Priority:   "0.7",
+		})
+	}
+	if len(howToUrls) > 0 {
+		howToUrlset := URLSet{URLs: howToUrls}
+		if output, err := xml.MarshalIndent(howToUrlset, "", "  "); err == nil {
+			filePath := filepath.Join(sitemapDir, "how-to-contribute.xml")
+			xmlHeader := []byte(xml.Header)
+			if err := os.WriteFile(filePath, append(xmlHeader, output...), 0644); err == nil {
+				indexSitemaps = append(indexSitemaps, Sitemap{
+					Loc:     fmt.Sprintf("%s/sitemap/how-to-contribute.xml", baseUrl),
+					LastMod: today,
+				})
+			}
+		}
 	}
 
 	// 3. Generate compare.xml for bounded head-to-head repo comparisons (Top 10 Tier S/A per language vs 3 rank neighbors, max 1000)

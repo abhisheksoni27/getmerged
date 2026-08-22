@@ -307,6 +307,8 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE latest_snapshots ADD COLUMN response_p50_hours REAL DEFAULT 0`)
 	_, _ = db.Exec(`ALTER TABLE latest_snapshots ADD COLUMN response_p90_hours REAL DEFAULT 0`)
 	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN quality_score INTEGER DEFAULT 0`)
+	_, _ = db.Exec(`ALTER TABLE daily_snapshots ADD COLUMN bus_factor INTEGER DEFAULT 0`)
+	_, _ = db.Exec(`ALTER TABLE latest_snapshots ADD COLUMN bus_factor INTEGER DEFAULT 0`)
 	_, _ = db.Exec(`ALTER TABLE latest_snapshots ADD COLUMN pr_count_6m INTEGER DEFAULT 0`)
 	_, _ = db.Exec(`ALTER TABLE latest_snapshots ADD COLUMN issue_count_6m INTEGER DEFAULT 0`)
 	_, _ = db.Exec(`ALTER TABLE repo_ai_insights ADD COLUMN deep_sections_json MEDIUMTEXT NULL`)
