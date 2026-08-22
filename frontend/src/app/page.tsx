@@ -19,52 +19,57 @@ async function getMacroStats(): Promise<MacroStats | null> {
 export default async function HomePage() {
   const initialStats = await getMacroStats();
 
-  const websiteJsonLd = {
+  const graphJsonLd = {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "GetMerged",
-    url: "https://getmerged.abhishekco.de",
-    description: "Glassdoor for open-source repositories. Objective metrics on PR merge rates and maintainer response times.",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://getmerged.abhishekco.de/repos?q={search_term_string}",
-      "query-input": "required name=search_term_string",
-    },
-  };
-
-  const orgJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "GetMerged",
-    url: "https://getmerged.abhishekco.de",
-    logo: "https://getmerged.abhishekco.de/icon.svg",
-    sameAs: ["https://github.com/abhisheksoni27/getmerged"],
-  };
-
-  const webAppJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "GetMerged",
-    url: "https://getmerged.abhishekco.de",
-    description: "Glassdoor for open-source repositories. Objective C-Rank™ metrics on PR merge rates and response times.",
-    applicationCategory: "DeveloperApplication",
-    operatingSystem: "All",
-    keywords: "open source contribution, good first issue, github repositories, github profile, developer portfolio, pull request merge rate, maintainer response time",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://getmerged.abhishekco.de/#website",
+        name: "GetMerged",
+        url: "https://getmerged.abhishekco.de",
+        description: "Glassdoor for open-source repositories. Objective metrics on PR merge rates and maintainer response times.",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: "https://getmerged.abhishekco.de/repos?q={search_term_string}",
+          "query-input": "required name=search_term_string",
+        },
+        publisher: {
+          "@id": "https://getmerged.abhishekco.de/#organization",
+        },
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://getmerged.abhishekco.de/#organization",
+        name: "GetMerged",
+        url: "https://getmerged.abhishekco.de",
+        logo: "https://getmerged.abhishekco.de/icon.svg",
+        sameAs: ["https://github.com/abhisheksoni27/getmerged"],
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://getmerged.abhishekco.de/#webapp",
+        name: "GetMerged",
+        url: "https://getmerged.abhishekco.de",
+        description: "Glassdoor for open-source repositories. Objective C-Rank™ metrics on PR merge rates and response times.",
+        applicationCategory: "DeveloperApplication",
+        operatingSystem: "All",
+        browserRequirements: "Requires modern web browser with JavaScript enabled",
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD",
+          availability: "https://schema.org/InStock",
+        },
+        keywords: "open source contribution, good first issue, github repositories, github profile, developer portfolio, pull request merge rate, maintainer response time",
+      },
+    ],
   };
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd) }}
       />
       <HomeClient initialStats={initialStats} />
     </>

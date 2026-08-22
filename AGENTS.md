@@ -32,6 +32,15 @@ Think of it as *Glassdoor for open‑source repos*: don't guess which door is op
 15. Skeptic Gate: Whenever proposing major architectural changes, core database schemas, pricing/monetization strategies, or high-risk pipelines, run a ruthless review via the `skeptic` subagent / `skeptic-review` skill before requesting user approval. Routine edits, bug fixes, and minor copy do not need this gate.
 16. UI Design: All UI tasks must strictly follow the neo-brutalist design system defined in [`design.md`](design.md), especially emphasizing bottom-line borders on components/elements. Never skip.
 
+# Always push & conditional deploy
+17. After every completed task (done = lint green + tests green): commit and push ONLY the current non-protected branch. NEVER push to `main`/`master` directly.
+18. Deploy depends on what changed:
+    - Paths under `autonomous_sdlc/api`, `db`, `engine`, or `services` → restart BE via `scripts/manage.sh restart`.
+    - Paths under `autonomous_sdlc/ui` → rebuild/restart FE.
+    - Both changed → do both.
+    - Docs-only changes → no deploy.
+19. If push or any deploy step fails: retry ONCE, then stop and report the error in the task output. Never silently continue.
+
 # Output style, and communication
 Do not output fluff. Be to the point, omit fluff words, or sentences that do not add any value. Never repeat yourself. Try returning at least 50% less tokens/words than usual based on these. Whenever you think of responding, think again. Can you make it half, without losing the information? If yes, do it. Rinse and repeat until you have reached an absolute point where no more reduction can happen. That is when you respond back. THIS IS A NO-BRAINER NO-TOLERANCE rule. NEVER SKIP THIS.  
 

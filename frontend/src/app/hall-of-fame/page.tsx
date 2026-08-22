@@ -48,7 +48,13 @@ export default async function HallOfFamePage() {
       "@type": "ListItem",
       position: i + 1,
       name: r.full_name,
-      url: `https://getmerged.abhishekco.de/${r.full_name}`,
+      item: {
+        "@type": "SoftwareSourceCode",
+        name: r.full_name,
+        url: `https://getmerged.abhishekco.de/${r.full_name}`,
+        programmingLanguage: r.language || "Other",
+        codeRepository: r.github_url || `https://github.com/${r.full_name}`,
+      },
     })),
   };
 
