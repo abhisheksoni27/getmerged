@@ -74,6 +74,7 @@ export function GlobalSearch() {
               : (r.first_timer_rate as number),
         }));
         setResults(mappedList);
+        setSelectedIndex(selectedIndexRef.current);
       } else {
         setResults([]);
       }
