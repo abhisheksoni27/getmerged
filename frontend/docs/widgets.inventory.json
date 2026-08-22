@@ -1,0 +1,33 @@
+{
+  "issue": "GH-91",
+  "themeLayer": "src/app/globals.css",
+  "wrapperClass": "nb-theme",
+  "optOutClass": "nb-opt-out",
+  "states": ["default", "hover", "focus", "disabled"],
+  "widgets": [
+    { "name": "AuthModal", "path": "src/components/AuthModal.tsx", "route": "/" },
+    { "name": "ClientRepoDetail", "path": "src/components/ClientRepoDetail.tsx", "route": "/repos" },
+    { "name": "CompareShareBar", "path": "src/components/CompareShareBar.tsx", "route": "/compare" },
+    { "name": "CookieBanner", "path": "src/components/CookieBanner.tsx", "route": "/" },
+    { "name": "Footer", "path": "src/components/Footer.tsx", "route": "/" },
+    { "name": "GlobalSearch", "path": "src/components/GlobalSearch.tsx", "route": "/" },
+    { "name": "Header", "path": "src/components/Header.tsx", "route": "/" },
+    { "name": "LangLogo", "path": "src/components/LangLogo.tsx", "route": "/rankings" },
+    { "name": "OptimalReviewWindow", "path": "src/components/OptimalReviewWindow.tsx", "route": "/repos" },
+    { "name": "PRAcceptanceWidget", "path": "src/components/PRAcceptanceWidget.tsx", "route": "/repos" },
+    { "name": "RelativityCanvas", "path": "src/components/RelativityCanvas.tsx", "route": "/leaderboard" },
+    { "name": "RepoBadgeGenerator", "path": "src/components/RepoBadgeGenerator.tsx", "route": "/repos" },
+    { "name": "RepoCard", "path": "src/components/RepoCard.tsx", "route": "/repos" },
+    { "name": "RepoDetailHero", "path": "src/components/RepoDetailHero.tsx", "route": "/repos" },
+    { "name": "RepoScorecards", "path": "src/components/RepoScorecards.tsx", "route": "/repos" },
+    { "name": "ShimmerButton", "path": "src/components/ShimmerButton.tsx", "route": "/" },
+    { "name": "SimilarRepos", "path": "src/components/SimilarRepos.tsx", "route": "/repos" },
+    { "name": "TopicDirectoryGrid", "path": "src/components/TopicDirectoryGrid.tsx", "route": "/topics" },
+    { "name": "TopicReposExplorer", "path": "src/components/TopicReposExplorer.tsx", "route": "/topics" },
+    { "name": "UnscoredExplainer", "path": "src/components/UnscoredExplainer.tsx", "route": "/repos" },
+    { "name": "UserFeedbackList", "path": "src/components/UserFeedbackList.tsx", "route": "/repos" },
+    { "name": "CountUp", "path": "src/app/HomeClient.tsx", "route": "/" },
+    { "name": "TierDeltaIndicatorChip", "path": "src/app/watchlist/WatchlistClient.tsx", "route": "/watchlist" },
+    { "name": "WatchedRepoCard", "path": "src/app/watchlist/WatchlistClient.tsx", "route": "/watchlist" }
+  ]
+}
