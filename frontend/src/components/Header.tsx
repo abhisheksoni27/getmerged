@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Bookmark, LogOut, Search } from "lucide-react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { User } from "@/types/opendoor";
@@ -9,6 +10,7 @@ import posthog from "posthog-js";
 import { AuthModal } from "@/components/AuthModal";
 
 import { useSearch } from "@/context/SearchContext";
+import { EASE_OUT_EXPO, useReducedMotion } from "@/lib/motion";
 
 interface HeaderProps {
   showSearchBar?: boolean;
@@ -21,6 +23,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   const { openSearch, heroSearchVisible, searchQuery: contextQuery } = useSearch();
 
@@ -67,31 +70,67 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             title="GetMerged - Find Welcoming Open Source Repositories"
             className="flex items-center gap-2.5 group shrink-0"
           >
-            <svg viewBox="0 0 32 32" className="h-8 w-8 rounded-lg shadow-xs group-hover:scale-105 transition-transform duration-200" aria-hidden="true">
+            <motion.svg
+              viewBox="0 0 32 32"
+              className="h-8 w-8 rounded-lg shadow-xs"
+              whileHover={reduceMotion ? undefined : { scale: 1.08 }}
+              transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
+              aria-hidden="true"
+            >
                 <rect width="32" height="32" rx="8" fill="#222831" />
                 <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700" fill="#ffffff">GM</text>
                 <circle cx="25" cy="7" r="2.5" fill="#dfd0b8" />
-              </svg>
+            </motion.svg>
             <div className="flex flex-col">
               <span className="font-space text-base font-bold tracking-tight text-zinc-900">GetMerged</span>
             </div>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6 text-xs font-sans font-medium text-zinc-600">
-            <Link href="/repos" title="Explore All Open Source Repositories" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
+            <Link href="/repos" title="Explore All Open Source Repositories" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Repositories
+              <motion.span
+                className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#ff5722] rounded-full origin-right"
+                initial={{ scaleX: 0 }}
+                whileHover={reduceMotion ? undefined : { scaleX: 1 }}
+                transition={{ duration: 0.24, ease: EASE_OUT_EXPO }}
+              />
             </Link>
-            <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm and Methodology" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
+            <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm and Methodology" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               How C-Rank™ Works
+              <motion.span
+                className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#ff5722] rounded-full origin-right"
+                initial={{ scaleX: 0 }}
+                whileHover={reduceMotion ? undefined : { scaleX: 1 }}
+                transition={{ duration: 0.24, ease: EASE_OUT_EXPO }}
+              />
             </Link>
-            <Link href="/rankings" title="Browse Top Open Source Repositories by Language Ecosystem" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
+            <Link href="/rankings" title="Browse Top Open Source Repositories by Language Ecosystem" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Ecosystems
+              <motion.span
+                className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#ff5722] rounded-full origin-right"
+                initial={{ scaleX: 0 }}
+                whileHover={reduceMotion ? undefined : { scaleX: 1 }}
+                transition={{ duration: 0.24, ease: EASE_OUT_EXPO }}
+              />
             </Link>
-            <Link href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
+            <Link href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Good First Issues
+              <motion.span
+                className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#ff5722] rounded-full origin-right"
+                initial={{ scaleX: 0 }}
+                whileHover={reduceMotion ? undefined : { scaleX: 1 }}
+                transition={{ duration: 0.24, ease: EASE_OUT_EXPO }}
+              />
             </Link>
-            <Link href="/hall-of-fame" title="View Top Super Welcoming Open Source Repositories" className="nav-link-hover text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
+            <Link href="/hall-of-fame" title="View Top Super Welcoming Open Source Repositories" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Hall of Fame
+              <motion.span
+                className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#ff5722] rounded-full origin-right"
+                initial={{ scaleX: 0 }}
+                whileHover={reduceMotion ? undefined : { scaleX: 1 }}
+                transition={{ duration: 0.24, ease: EASE_OUT_EXPO }}
+              />
             </Link>
           </nav>
         </div>

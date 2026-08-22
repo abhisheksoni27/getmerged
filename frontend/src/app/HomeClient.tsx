@@ -14,16 +14,42 @@ import {
   Sparkles,
   ArrowRight,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, animate, useInView } from "framer-motion";
 import { API_BASE_URL } from "@/lib/api";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import posthog from "posthog-js";
 import Link from "next/link";
 import { AuthModal } from "@/components/AuthModal";
 import { useSearch } from "@/context/SearchContext";
+import { EASE_OUT_EXPO, useReducedMotion } from "@/lib/motion";
 
 interface HomeClientProps {
   initialStats: MacroStats | null;
+}
+
+function CountUp({ value, duration = 1.2 }: { value: number; duration?: number }) {
+  const reduceMotion = useReducedMotion();
+  const count = useMotionValue(0);
+  const [display, setDisplay] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  useEffect(() => {
+    if (!isInView) return;
+    if (reduceMotion) {
+      setDisplay(value);
+      return;
+    }
+    count.set(0);
+    const controls = animate(count, value, {
+      duration,
+      ease: EASE_OUT_EXPO,
+      onUpdate: (latest) => setDisplay(Math.round(latest)),
+    });
+    return () => controls.stop();
+  }, [isInView, value, duration, reduceMotion, count]);
+
+  return <span ref={ref}>{display.toLocaleString()}</span>;
 }
 
 export default function HomeClient({ initialStats }: HomeClientProps) {
@@ -276,15 +302,32 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
 
       {/* Hero Section */}
       <section className="relative mx-auto max-w-6xl px-4 pt-14 pb-10 text-center sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-6xl font-space leading-tight">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+          className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-6xl font-space leading-tight"
+        >
           Stop wasting weeks on <span className="bg-gradient-to-r from-amber-200/90 via-orange-200/90 to-amber-200/90 text-zinc-950 px-3 py-0.5 rounded-xl border border-orange-300/60 shadow-xs inline-block transform -rotate-1">ignored PRs.</span>
-        </h1>
-        <p className="mx-auto mt-4 max-w-xl text-base text-zinc-600 sm:text-lg leading-relaxed font-sans">
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: EASE_OUT_EXPO, delay: 0.1 }}
+          className="mx-auto mt-4 max-w-xl text-base text-zinc-600 sm:text-lg leading-relaxed font-sans"
+        >
           Find repositories where maintainers actually review and merge contributions, backed by real PR response rates and first-timer success metrics.
-        </p>
+        </motion.p>
 
         {/* Hero Search Bar */}
-        <div id="hero-search-container" ref={heroSearchRef} className="mt-8 max-w-2xl mx-auto">
+        <motion.div
+          id="hero-search-container"
+          ref={heroSearchRef}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: EASE_OUT_EXPO, delay: 0.2 }}
+          className="mt-8 max-w-2xl mx-auto"
+        >
           <div
             onClick={() => openSearch(searchQuery)}
             className="relative flex items-center rounded-2xl border border-zinc-300 bg-white px-4 py-3.5 shadow-sm hover:border-zinc-400 hover:shadow-md transition-all cursor-pointer group"
@@ -321,12 +364,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           {/* Quick Search Chips */}
           <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs">
             <span className="font-mono text-zinc-400">Quick explore:</span>
-            {["nextjs", "react", "rust", "bun", "fastapi"].map((term) => (
+            {["nextjs", "react", "rust", "bun", "fastapi"].map((term, i) => (
               <motion.button
                 key={term}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: EASE_OUT_EXPO, delay: 0.3 + i * 0.05 }}
                 whileHover={{ y: -1.5, scale: 1.02 }}
                 whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.16, ease: [0.2, 0, 0, 1] }}
                 onClick={() => {
                   setSearchQuery(term);
                   setLoading(true);
@@ -343,10 +388,16 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               </motion.button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Macro Telemetry Grid */}
-        <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-3xl mx-auto rounded-2xl bg-white p-4 sm:p-5 border border-zinc-200/80 shadow-xs items-center text-center">
+        <motion.div
+          className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-3xl mx-auto rounded-2xl bg-white p-4 sm:p-5 border border-zinc-200/80 shadow-xs items-center text-center"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+        >
           <div>
             <div className="text-xl sm:text-2xl font-bold font-mono text-zinc-900">
               {stats?.avg_response_hours ? "82%" : <div className="h-6 w-12 bg-zinc-100 rounded animate-pulse mx-auto" />}
@@ -370,7 +421,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           <div>
             <div className="text-xl sm:text-2xl font-bold font-mono text-zinc-900">
               {stats?.s_class_count !== undefined ? (
-                stats.s_class_count.toLocaleString()
+                <CountUp value={stats.s_class_count} />
               ) : (
                 <div className="h-6 w-12 bg-zinc-100 rounded animate-pulse mx-auto" />
               )}
@@ -380,19 +431,25 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           <div>
             <div className="text-xl sm:text-2xl font-bold font-mono text-zinc-900">
               {stats?.total_repos ? (
-                stats.total_repos.toLocaleString()
+                <CountUp value={stats.total_repos} />
               ) : (
                 <div className="h-6 w-12 bg-zinc-100 rounded animate-pulse mx-auto" />
               )}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-500 font-mono">Repos Scored</div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Educational Storytelling & Problem-Solution Narrative Blocks */}
         <div className="my-16 space-y-16 text-left">
           {/* Narrative Block 1: Left Copy, Right Visual (The Star Paradox & Zombie PRs) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-white p-8 sm:p-12 border border-zinc-200/80 shadow-xs">
+          <motion.div
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-white p-8 sm:p-12 border border-zinc-200/80 shadow-xs"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+          >
             <div className="lg:col-span-7 space-y-4">
               <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1 rounded-xl">
                 <Star className="h-3.5 w-3.5 text-amber-600 fill-amber-400" /> The GitHub Star Illusion
@@ -443,7 +500,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Today's Top Welcoming Repositories (Interspersed Live Demonstration) */}
           <div className="space-y-4">
@@ -494,7 +551,13 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           </div>
 
           {/* Narrative Block 2: Left Visual (9-Factor Radar), Right Copy */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-white p-8 sm:p-12 border border-zinc-200/80 shadow-xs">
+          <motion.div
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-white p-8 sm:p-12 border border-zinc-200/80 shadow-xs"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+          >
             <div className="lg:col-span-5 bg-zinc-900 text-white rounded-2xl p-6 space-y-3 font-mono text-xs shadow-md">
               <div className="flex justify-between items-center text-zinc-400 border-b border-zinc-800 pb-2">
                 <span>C-Rank™ Multi-Factor Telemetry</span>
@@ -540,7 +603,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 </Link>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -572,7 +635,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           {/* User-Specified Category Showroom Chips */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-sans">
             {/* 1. Hall of Fame (S-Tier) */}
-            <button
+            <motion.button
               type="button"
               aria-pressed={selectedTier === "S" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All"}
               title="Filter repositories by S-Tier Hall of Fame"
@@ -584,17 +647,18 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setSelectedMinMergeRate("All");
                 setPage(1);
               }}
-              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+              whileTap={{ scale: 0.96 }}
+              className={`px-4 py-2 rounded-xl font-medium transition-colors shrink-0 cursor-pointer ${
                 selectedTier === "S" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All"
                   ? "bg-amber-600 text-white font-semibold shadow-2xs"
                   : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
               }`}
             >
               👑 Hall of Fame
-            </button>
+            </motion.button>
 
             {/* 2. Welcoming (A-Tier & S-Tier) */}
-            <button
+            <motion.button
               type="button"
               aria-pressed={selectedTier === "A" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All"}
               title="Filter repositories by Welcoming (A-Tier)"
@@ -606,17 +670,18 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setSelectedMinMergeRate("All");
                 setPage(1);
               }}
-              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+              whileTap={{ scale: 0.96 }}
+              className={`px-4 py-2 rounded-xl font-medium transition-colors shrink-0 cursor-pointer ${
                 selectedTier === "A"
                   ? "bg-emerald-700 text-white font-semibold shadow-2xs"
                   : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
               }`}
             >
               ⚡ Welcoming
-            </button>
+            </motion.button>
 
             {/* 3. Star Giants (50k+ Stars) */}
-            <button
+            <motion.button
               type="button"
               aria-pressed={selectedBucket === "50k+"}
               title="Filter repositories with 50k+ stars"
@@ -628,17 +693,18 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setSelectedMinMergeRate("All");
                 setPage(1);
               }}
-              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+              whileTap={{ scale: 0.96 }}
+              className={`px-4 py-2 rounded-xl font-medium transition-colors shrink-0 cursor-pointer ${
                 selectedBucket === "50k+"
                   ? "bg-purple-700 text-white font-semibold shadow-2xs"
                   : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
               }`}
             >
               ⭐ Star Giants
-            </button>
+            </motion.button>
 
             {/* 4. Has Good First Issue */}
-            <button
+            <motion.button
               type="button"
               aria-pressed={selectedFirstTimerBucket === "has_gfi"}
               title="Filter repositories with good first issues"
@@ -650,17 +716,18 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setSelectedMinMergeRate("All");
                 setPage(1);
               }}
-              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+              whileTap={{ scale: 0.96 }}
+              className={`px-4 py-2 rounded-xl font-medium transition-colors shrink-0 cursor-pointer ${
                 selectedFirstTimerBucket === "has_gfi"
                   ? "bg-blue-600 text-white font-semibold shadow-2xs"
                   : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
               }`}
             >
               🌱 Has Good First Issue
-            </button>
+            </motion.button>
 
             {/* 5. High Merge Rate (>= 60%) */}
-            <button
+            <motion.button
               type="button"
               aria-pressed={selectedMinMergeRate === "60%"}
               title="Filter repositories with high merge rate (>= 60%)"
@@ -672,17 +739,18 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setSelectedMinMergeRate("60%");
                 setPage(1);
               }}
-              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+              whileTap={{ scale: 0.96 }}
+              className={`px-4 py-2 rounded-xl font-medium transition-colors shrink-0 cursor-pointer ${
                 selectedMinMergeRate === "60%"
                   ? "bg-teal-700 text-white font-semibold shadow-2xs"
                   : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
               }`}
             >
               🚀 High Merge Rate
-            </button>
+            </motion.button>
 
             {/* 6. First Timer Awesome (> 60% Acceptance) */}
-            <button
+            <motion.button
               type="button"
               aria-pressed={selectedFirstTimerBucket === "60-80%"}
               title="Filter repositories with awesome first-timer acceptance (> 60%)"
@@ -694,14 +762,15 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                 setSelectedMinMergeRate("All");
                 setPage(1);
               }}
-              className={`px-4 py-2 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+              whileTap={{ scale: 0.96 }}
+              className={`px-4 py-2 rounded-xl font-medium transition-colors shrink-0 cursor-pointer ${
                 selectedFirstTimerBucket === "60-80%"
                   ? "bg-indigo-600 text-white font-semibold shadow-2xs"
                   : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100"
               }`}
             >
               🎯 First Timer Awesome
-            </button>
+            </motion.button>
           </div>
         </div>
 
@@ -719,13 +788,15 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
           <>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
               {repos.slice(0, 6).map((repo, index) => (
-                <div
+                <motion.div
                   key={repo.id}
-                  className="opacity-0 animate-fade-slide-up"
-                  style={{ animationDelay: `${index * 30}ms` }}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.4, ease: EASE_OUT_EXPO, delay: index * 0.04 }}
                 >
                   <RepoCard repo={repo} isLoggedIn={isLoggedIn} />
-                </div>
+                </motion.div>
               ))}
             </div>
 
@@ -889,7 +960,14 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   .map((item, idx) => {
                     const rankMedal = idx === 0 ? "1" : idx === 1 ? "2" : idx === 2 ? "3" : `${idx + 1}`;
                     return (
-                      <div key={item.language} className="py-5 first:pt-2 last:pb-2 group transition-colors">
+                      <motion.div
+                        key={item.language}
+                        initial={{ opacity: 0, y: 12 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-40px" }}
+                        transition={{ duration: 0.35, ease: EASE_OUT_EXPO, delay: idx * 0.05 }}
+                        className="py-5 first:pt-2 last:pb-2 group transition-colors"
+                      >
                         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                           <div className="flex items-center gap-3">
                             <span className="font-mono text-sm font-bold text-zinc-400 w-6">#{rankMedal}</span>
@@ -957,7 +1035,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                               </div>
                             </div>
 
-                            {/* Welcoming & Score Badges */}
+                             {/* Welcoming & Score Badges */}
                             <div className="flex items-center gap-6 text-right shrink-0">
                               <div>
                                 <div className="text-[11px] text-zinc-400 font-sans">Welcoming</div>
@@ -974,7 +1052,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   })}
               </div>

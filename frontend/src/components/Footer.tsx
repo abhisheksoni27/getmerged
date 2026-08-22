@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { ShieldCheck, Activity, Trophy, Sparkles, Sprout } from "lucide-react";
+import { EASE_OUT_EXPO } from "@/lib/motion";
 
 export function Footer() {
   const rankingLangs = [
@@ -23,7 +25,13 @@ export function Footer() {
   ];
 
   return (
-    <footer className="border-t border-zinc-200 bg-white text-zinc-600 font-sans pt-16 pb-12 mt-auto">
+    <motion.footer
+      className="border-t border-zinc-200 bg-white text-zinc-600 font-sans pt-16 pb-12 mt-auto"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Top 4-Column Directory Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
@@ -175,6 +183,6 @@ export function Footer() {
           </div>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 }
