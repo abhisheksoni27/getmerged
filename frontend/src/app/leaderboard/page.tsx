@@ -72,11 +72,11 @@ export default async function LeaderboardPage() {
 
   const getBadgeStyle = (tier: string) => {
     switch (tier?.toUpperCase()) {
-      case "S": return "bg-emerald-50 text-emerald-900 border-emerald-300";
-      case "A": return "bg-blue-50 text-blue-900 border-blue-200";
-      case "B": return "bg-amber-50 text-amber-900 border-amber-200";
-      case "C": return "bg-purple-50 text-purple-900 border-purple-200";
-      default: return "bg-zinc-50 text-zinc-900 border-zinc-200";
+      case "S": return "bg-[#8ce99a] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]";
+      case "A": return "bg-[#bfdbff] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]";
+      case "B": return "bg-[#ffd93d] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]";
+      case "C": return "bg-[#e5dbff] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]";
+      default: return "bg-[#ffb3c7] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]";
     }
   };
 

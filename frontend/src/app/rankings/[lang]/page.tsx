@@ -1,18 +1,25 @@
 import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { RepoCard } from "@/components/RepoCard";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import { canonicalizeSlug, displayNameFromSlug } from "@/lib/languageSlug";
 import { getEcosystemMetadata } from "@/lib/ecosystem-descriptions";
-import { Sparkles, Code2, ArrowLeft, ShieldCheck, Trophy, Sprout } from "lucide-react";
+import { Sparkles, Code2, ArrowLeft, Trophy, Sprout, Star, GitPullRequest, AlertTriangle, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 interface PageProps {
   params: Promise<{ lang: string }>;
+}
+
+export interface RankedRepoItem {
+  repo: Repo;
+  score: number;
+  mergeRate: number;
+  goodFirstIssues: number;
+  hasContributing: boolean;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -62,9 +69,8 @@ async function getRankingRepos(languageName: string): Promise<Repo[]> {
   try {
     const queryParams = new URLSearchParams({
       language: languageName,
-      sort: "c_rank_score",
-      order: "desc",
-      per_page: "15",
+      min_stars: "100",
+      per_page: "100",
     });
     const res = await fetch(`${API_BASE_URL}/api/v1/repos?${queryParams.toString()}`, {
       next: { revalidate: 3600 },
@@ -86,7 +92,68 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
   }
 
   const languageName = displayNameFromSlug(canonicalLang);
-  const repos = await getRankingRepos(languageName);
+  const fetchedRepos = await getRankingRepos(languageName);
+
+  // Filter qualifying repos: primary language matches & stars >= 100
+  const qualifying = fetchedRepos.filter((r) => {
+    const isLangMatch = (r.language || "").toLowerCase() === languageName.toLowerCase();
+    const hasMinStars = (r.stars ?? 0) >= 100;
+    return isLangMatch && hasMinStars;
+  });
+
+  // Calculate score and map items
+  // score = 0.5*newcomer_PR_merge_rate_90d_pct + 0.3*good_first_issue_count_open + 0.2*(has_contributing_md ? 1 : 0)
+  // Repos with newcomer merge rate NULL treated as 0 in score
+  // Ties broken by good_first_issue_count_open desc, then full_name asc
+  const scoredList: RankedRepoItem[] = qualifying.map((repo) => {
+    const rawMergeRate = repo.newcomer_PR_merge_rate_90d_pct ?? repo.first_timer_success_rate ?? repo.external_pr_merge_rate;
+    const mergeRate = typeof rawMergeRate === "number" && !isNaN(rawMergeRate) ? rawMergeRate : 0;
+    const goodFirstIssues = repo.good_first_issue_count_open ?? repo.good_first_issue_count ?? 0;
+    const hasContributing = repo.has_contributing_md ?? (repo.onboarding_score ? repo.onboarding_score >= 40 : false);
+    const contributingFactor = hasContributing ? 1 : 0;
+
+    const score = 0.5 * mergeRate + 0.3 * goodFirstIssues + 0.2 * contributingFactor;
+
+    return {
+      repo,
+      score,
+      mergeRate,
+      goodFirstIssues,
+      hasContributing,
+    };
+  });
+
+  // Sort: score desc, ties broken by good_first_issue_count_open desc, then full_name asc
+  scoredList.sort((a, b) => {
+    if (b.score !== a.score) {
+      return b.score - a.score;
+    }
+    if (b.goodFirstIssues !== a.goodFirstIssues) {
+      return b.goodFirstIssues - a.goodFirstIssues;
+    }
+    return a.repo.full_name.localeCompare(b.repo.full_name);
+  });
+
+  // Top 50 repos
+  const rankedItems = scoredList.slice(0, 50);
+
+  // Check snapshot staleness (>7 days old)
+  let latestSnapshotDate: Date | null = null;
+  for (const item of rankedItems) {
+    const rawDate = item.repo.snapshot_date || item.repo.updated_at;
+    if (rawDate) {
+      const d = new Date(rawDate);
+      if (!isNaN(d.getTime())) {
+        if (!latestSnapshotDate || d > latestSnapshotDate) {
+          latestSnapshotDate = d;
+        }
+      }
+    }
+  }
+
+  const now = new Date();
+  const isDataStale = latestSnapshotDate ? (now.getTime() - latestSnapshotDate.getTime()) > 7 * 24 * 60 * 60 * 1000 : false;
+  const isDataAbsentOrFailed = rankedItems.length === 0 || isDataStale;
 
   // Schema.org Structured Data
   const itemListJsonLd = {
@@ -94,11 +161,11 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
     "@type": "ItemList",
     name: `Top Welcoming Open-Source ${languageName} Repositories`,
     description: `Ranked list of public GitHub ${languageName} repositories with high PR merge rates and fast maintainer response times.`,
-    itemListElement: repos.map((r, i) => ({
+    itemListElement: rankedItems.map((item, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      name: r.full_name,
-      url: `https://getmerged.abhishekco.de/${r.full_name}`,
+      name: item.repo.full_name,
+      url: `https://getmerged.abhishekco.de/${item.repo.full_name}`,
     })),
   };
 
@@ -131,7 +198,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
     "@context": "https://schema.org",
     "@type": "Dataset",
     name: `${languageName} Open-Source Repository Contributor Friendliness Dataset`,
-    description: `Empirical telemetry including PR merge rates, first-response hours, and C-Rank™ scores across ${languageName} repositories.`,
+    description: `Empirical telemetry including PR merge rates, newcomer merge rates, and welcoming scores across ${languageName} repositories.`,
     url: `https://getmerged.abhishekco.de/rankings/${canonicalLang}`,
     license: "https://creativecommons.org/licenses/by/4.0/",
     creator: {
@@ -182,7 +249,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             Top Welcoming Open-Source {languageName} Repositories
           </h1>
           <p className="mt-3 text-xs sm:text-sm text-zinc-600 max-w-3xl leading-relaxed font-sans">
-            Ranked by GetMerged&apos;s proprietary <strong>C-Rank™</strong> score. These public GitHub {languageName} projects feature high external pull request merge rates, rapid maintainer review turnarounds, and constructive contributor vibes.
+            Ranked by contributor welcoming score computed from newcomer 90-day PR merge rates, open good first issues, and documentation readiness.
           </p>
           <div className="mt-5">
             <Link
@@ -196,24 +263,109 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Repositories Grid Header */}
+        {/* Repositories Header with count note */}
         <div className="mb-6 flex items-center justify-between border-b border-zinc-200 pb-4">
-          <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2 font-space">
-            <ShieldCheck className="h-4 w-4 text-emerald-600" />
-            Ranked {languageName} Repositories ({repos.length})
-          </h2>
+          <div>
+            <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2 font-space">
+              Ranked {languageName} Repositories
+            </h2>
+            {rankedItems.length > 0 && (
+              <p className="text-xs text-zinc-500 font-sans mt-0.5">
+                {rankedItems.length < 50
+                  ? `Showing ${rankedItems.length} of 50`
+                  : `Showing top 50 repositories`}
+              </p>
+            )}
+          </div>
           <span className="text-xs text-zinc-500 font-mono">Updated Daily via GitHub GraphQL</span>
         </div>
 
-        {repos.length > 0 ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-12">
-            {repos.map((repo) => (
-              <RepoCard key={repo.id} repo={repo} />
-            ))}
+        {/* Repositories Table or Error State */}
+        {isDataAbsentOrFailed ? (
+          <div className="rounded-2xl bg-white p-8 sm:p-12 text-center text-zinc-600 mb-12 border border-dashed border-red-200 shadow-xs">
+            <div className="mx-auto w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mb-4">
+              <AlertTriangle className="h-6 w-6 text-red-500" />
+            </div>
+            <h3 className="text-base font-bold text-zinc-900 mb-2 font-space">
+              Unable to load {languageName} rankings snapshot
+            </h3>
+            <p className="text-xs sm:text-sm text-zinc-500 max-w-md mx-auto mb-4 font-sans leading-relaxed">
+              {isDataStale
+                ? `Snapshot data is stale (>7 days old).`
+                : `No snapshot data currently available for ${languageName}.`}
+              {latestSnapshotDate && (
+                <span className="block mt-1 text-zinc-600 font-mono text-xs">
+                  Last successful snapshot: {latestSnapshotDate.toUTCString()}
+                </span>
+              )}
+            </p>
+            <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-500 bg-zinc-50 border border-zinc-200 px-3 py-1.5 rounded-lg">
+              <RefreshCw className="h-3.5 w-3.5 animate-spin text-zinc-400" />
+              <span>Please retry in a few moments or run the snapshot pipeline.</span>
+            </div>
           </div>
         ) : (
-          <div className="rounded-2xl bg-white p-12 text-center text-zinc-500 text-xs mb-12 border border-dashed border-zinc-300 font-sans">
-            No {languageName} repositories indexed yet. Check back after next seed run!
+          <div className="overflow-x-auto rounded-2xl bg-white border border-zinc-200/80 shadow-xs mb-12">
+            <table className="w-full text-left text-xs text-zinc-600">
+              <thead className="bg-zinc-50 text-zinc-800 border-b border-zinc-200 font-semibold uppercase tracking-wider font-space text-[11px]">
+                <tr>
+                  <th className="py-3.5 px-4 text-center w-16">Rank</th>
+                  <th className="py-3.5 px-4">Repository</th>
+                  <th className="py-3.5 px-4 text-right">Score</th>
+                  <th className="py-3.5 px-4 text-right">Merge Rate</th>
+                  <th className="py-3.5 px-4 text-right">Open Good-First-Issues</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-100 font-mono">
+                {rankedItems.map((item, idx) => {
+                  const [owner, name] = item.repo.full_name.split("/");
+                  return (
+                    <tr key={item.repo.id} className="hover:bg-zinc-50/60 transition-colors">
+                      <td className="py-3.5 px-4 text-center font-bold text-zinc-400">
+                        #{idx + 1}
+                      </td>
+                      <td className="py-3.5 px-4 font-bold text-zinc-900">
+                        <div className="flex items-center gap-2">
+                          <Link
+                            href={`/${owner}/${name}`}
+                            title={`View ${item.repo.full_name} details and merge telemetry`}
+                            className="hover:text-emerald-700 transition-colors font-space text-sm"
+                          >
+                            {item.repo.full_name}
+                          </Link>
+                          {item.repo.stars !== undefined && (
+                            <span className="inline-flex items-center gap-0.5 text-[11px] font-normal text-zinc-400">
+                              <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
+                              {item.repo.stars.toLocaleString()}
+                            </span>
+                          )}
+                        </div>
+                        {item.repo.description && (
+                          <div className="text-[11px] font-normal text-zinc-400 font-sans truncate max-w-lg mt-0.5">
+                            {item.repo.description}
+                          </div>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-4 text-right font-bold text-zinc-900 text-sm">
+                        {item.score.toFixed(1)}
+                      </td>
+                      <td className="py-3.5 px-4 text-right text-zinc-600">
+                        <span className="inline-flex items-center gap-1">
+                          <GitPullRequest className="h-3.5 w-3.5 text-emerald-600" />
+                          {item.mergeRate.toFixed(1)}%
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-4 text-right text-zinc-600">
+                        <span className="inline-flex items-center gap-1 font-semibold text-zinc-800">
+                          <Sprout className="h-3.5 w-3.5 text-emerald-600" />
+                          {item.goodFirstIssues}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         )}
 

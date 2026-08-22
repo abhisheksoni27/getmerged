@@ -272,12 +272,16 @@ export function GlobalSearch() {
                           {r.language || "Other"}
                         </span>
                         <span
-                          className={`px-2 py-0.5 text-[10px] font-bold font-mono border rounded-lg ${
+                          className={`px-2 py-0.5 text-[10px] font-bold font-mono border-2 border-black rounded-lg shadow-[1px_1px_0px_#000] text-black ${
                             rankTier === "S"
-                              ? "bg-emerald-50 text-emerald-900 border-emerald-300"
+                              ? "bg-[#8ce99a]"
                               : rankTier === "A"
-                              ? "bg-blue-50 text-blue-900 border-blue-200"
-                              : "bg-amber-50 text-amber-900 border-amber-200"
+                              ? "bg-[#bfdbff]"
+                              : rankTier === "B"
+                              ? "bg-[#ffd93d]"
+                              : rankTier === "C"
+                              ? "bg-[#e5dbff]"
+                              : "bg-[#ffb3c7]"
                           }`}
                         >
                           {rankTier} Rank
