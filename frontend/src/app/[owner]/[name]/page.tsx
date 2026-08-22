@@ -14,10 +14,11 @@ interface PageProps {
   params: Promise<{ owner: string; name: string }>;
 }
 
-async function getRepoInsights(targetIdOrName: string): Promise<AIInsights | null> {
+async function getRepoInsights(targetIdOrName: string | number): Promise<AIInsights | null> {
   try {
+    const target = String(targetIdOrName);
     const res = await fetch(
-      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(targetIdOrName)}/insights`,
+      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(target)}/insights`,
       {
         next: { revalidate: 3600 },
       }
@@ -86,7 +87,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
 
   // Server-Side Data Fetching -> Pure SSR
   const repo = await getRepoData(fullName);
-  const insights = await getRepoInsights(repo?.id || fullName);
+  const insights = await getRepoInsights(repo?.id != null ? String(repo.id) : fullName);
 
   // Schema.org JSON-LD Structured Data (SoftwareSourceCode & freshness dateModified)
   const jsonLd = {

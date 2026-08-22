@@ -383,10 +383,23 @@ func (r *sqlxUserRepository) GetUserProfileBySlug(ctx context.Context, slug stri
 		slugVal = *user.Slug
 	}
 
+	avatarURL := user.AvatarURL
+	if avatarURL != nil && *avatarURL != "" {
+		formatted := *avatarURL
+		if strings.Contains(formatted, "githubusercontent.com") && !strings.Contains(formatted, "s=") {
+			if strings.Contains(formatted, "?") {
+				formatted += "&s=64"
+			} else {
+				formatted += "?s=64"
+			}
+		}
+		avatarURL = &formatted
+	}
+
 	return &UserProfile{
 		Slug:        slugVal,
 		Username:    user.Username,
-		AvatarURL:   user.AvatarURL,
+		AvatarURL:   avatarURL,
 		MemberSince: user.CreatedAt,
 		GithubURL:   githubURL,
 		Stats: UserStats{
