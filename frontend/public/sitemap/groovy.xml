@@ -90,4 +90,28 @@
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/nebula-plugins/nebula-release-plugin</loc>
+    <lastmod>2026-08-22T21:09:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/gradlex-org/extra-java-module-info</loc>
+    <lastmod>2026-08-22T21:09:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/gradlex-org/build-parameters</loc>
+    <lastmod>2026-08-22T21:09:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/spotbugs/spotbugs-maven-plugin</loc>
+    <lastmod>2026-08-22T21:09:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

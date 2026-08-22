@@ -43,6 +43,36 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/fsprojects/FSharp.Formatting</loc>
+    <lastmod>2026-08-22T20:54:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/B2R2-org/B2R2</loc>
+    <lastmod>2026-08-22T20:54:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Lanayx/Oxpecker</loc>
+    <lastmod>2026-08-22T20:54:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JetBrains/resharper-fsharp</loc>
+    <lastmod>2026-08-22T20:54:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fsprojects/SwaggerProvider</loc>
+    <lastmod>2026-08-22T20:54:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/serilog-contrib/serilog-sinks-grafana-loki</loc>
     <lastmod>2026-08-20T10:53:39Z</lastmod>
     <changefreq>daily</changefreq>

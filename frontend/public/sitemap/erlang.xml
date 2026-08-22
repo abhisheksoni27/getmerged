@@ -60,4 +60,22 @@
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/lpgauth/shackle</loc>
+    <lastmod>2026-08-22T20:51:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/WhatsApp/edb</loc>
+    <lastmod>2026-08-22T20:51:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/hexpm/hex_core</loc>
+    <lastmod>2026-08-22T20:51:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
