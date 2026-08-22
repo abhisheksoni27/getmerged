@@ -53,6 +53,12 @@ func TestBusFactorCalculationAndTierCap(t *testing.T) {
 		t.Errorf("expected tier to be clamped to B when BusFactor=1, got %s (score=%.2f)", tier, score)
 	}
 
+	// With bus factor 0, perfect 100 score should be clamped to Tier B
+	score0, tier0 := ComputeCRankWithBusFactor(normed, false, 0, 0)
+	if tier0 != TierB {
+		t.Errorf("expected tier to be clamped to B when BusFactor=0, got %s (score=%.2f)", tier0, score0)
+	}
+
 	// With bus factor 2, perfect 100 score should remain Tier S
 	score2, tier2 := ComputeCRankWithBusFactor(normed, false, 0, 2)
 	if tier2 != TierS {
