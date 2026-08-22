@@ -243,34 +243,6 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		})
 	}
 
-	// 2b. Generate how-to-contribute.xml with one guide URL per indexed repo
-	var howToUrls []URL
-	for _, r := range repos {
-		parts := strings.Split(r.FullName, "/")
-		if len(parts) != 2 {
-			continue
-		}
-		howToUrls = append(howToUrls, URL{
-			Loc:        fmt.Sprintf("%s/how-to-contribute/%s/%s", baseUrl, parts[0], parts[1]),
-			LastMod:    today,
-			ChangeFreq: "weekly",
-			Priority:   "0.7",
-		})
-	}
-	if len(howToUrls) > 0 {
-		howToUrlset := URLSet{URLs: howToUrls}
-		if output, err := xml.MarshalIndent(howToUrlset, "", "  "); err == nil {
-			filePath := filepath.Join(sitemapDir, "how-to-contribute.xml")
-			xmlHeader := []byte(xml.Header)
-			if err := os.WriteFile(filePath, append(xmlHeader, output...), 0644); err == nil {
-				indexSitemaps = append(indexSitemaps, Sitemap{
-					Loc:     fmt.Sprintf("%s/sitemap/how-to-contribute.xml", baseUrl),
-					LastMod: today,
-				})
-			}
-		}
-	}
-
 	// 3. Generate compare.xml for bounded head-to-head repo comparisons (Top 10 Tier S/A per language vs 3 rank neighbors, max 1000)
 	type rankedRepo struct {
 		FullName string  `db:"full_name"`
