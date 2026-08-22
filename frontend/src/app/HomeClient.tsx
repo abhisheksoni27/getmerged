@@ -330,7 +330,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
         >
           <div
             onClick={() => openSearch(searchQuery)}
-            className="relative flex items-center rounded-2xl border border-zinc-300 bg-white px-4 py-3.5 shadow-sm hover:border-zinc-400 hover:shadow-md transition-all cursor-pointer group"
+            className="nb-opt-out relative flex items-center rounded-2xl border border-zinc-300 bg-white px-4 py-3.5 shadow-sm hover:border-zinc-400 hover:shadow-md transition-all cursor-pointer group"
           >
             <Search className="h-5 w-5 text-zinc-400 group-hover:text-zinc-600 shrink-0 transition-colors" />
             <input

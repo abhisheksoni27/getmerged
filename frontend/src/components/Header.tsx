@@ -142,7 +142,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               type="button"
               onClick={handleOpenSearch}
               aria-label="Search repositories"
-              className="w-full relative flex items-center justify-between h-9 sm:h-10 rounded-xl border border-zinc-200 bg-white/90 px-3 py-1.5 sm:py-2 shadow-xs hover:border-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:outline-none transition-all active:scale-[0.99] cursor-pointer group text-left"
+              className="nb-opt-out w-full relative flex items-center justify-between h-9 sm:h-10 rounded-xl border border-zinc-200 bg-white/90 px-3 py-1.5 sm:py-2 shadow-xs hover:border-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:outline-none transition-all active:scale-[0.99] cursor-pointer group text-left"
             >
               <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">
                 <Search className="h-4 w-4 text-zinc-400 group-hover:text-zinc-600 shrink-0 transition-colors" />

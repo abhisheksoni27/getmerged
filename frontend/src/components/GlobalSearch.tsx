@@ -191,7 +191,7 @@ export function GlobalSearch() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: -10 }}
             transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-2xl bg-white border border-zinc-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col focus:outline-none"
+            className="nb-opt-out w-full max-w-2xl bg-white border border-zinc-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col focus:outline-none"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={handleKeyDown}
           >
