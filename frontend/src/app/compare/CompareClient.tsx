@@ -589,6 +589,7 @@ export default function CompareClient() {
               <Link
                 key={`${item.repoA}-vs-${item.repoB}`}
                 href={`/compare/${item.repoA}/vs/${item.repoB}`}
+                title={`Compare ${item.repoA} vs ${item.repoB} maintainer review metrics`}
                 className="group p-5 rounded-2xl bg-white border border-zinc-200/80 shadow-2xs hover:shadow-md hover:border-zinc-300 hover:-translate-y-0.5 transition-all duration-150 flex flex-col justify-between"
               >
                 <div>

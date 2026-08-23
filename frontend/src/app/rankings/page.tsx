@@ -118,6 +118,7 @@ export default function RankingsIndexPage() {
             <Link
               key={eco.slug}
               href={`/rankings/${eco.slug}`}
+              title={`View ${eco.name} Open Source Repository Rankings`}
               className="group rounded-2xl bg-white p-6 border border-zinc-200/80 shadow-xs hover:border-zinc-300 hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between"
             >
               <div>

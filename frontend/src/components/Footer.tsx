@@ -49,7 +49,7 @@ export function Footer() {
                     title={`Top Welcoming ${lang.name} Open Source Repositories`}
                     className="hover:text-zinc-900 transition-colors"
                   >
-                    Top {lang.name} Repos
+                    {`Top ${lang.name} Repos`}
                   </Link>
                 </li>
               ))}
@@ -70,7 +70,7 @@ export function Footer() {
                     title={`Top Welcoming ${lang.name} Open Source Repositories`}
                     className="hover:text-zinc-900 transition-colors"
                   >
-                    Top {lang.name} Repos
+                    {`Top ${lang.name} Repos`}
                   </Link>
                 </li>
               ))}
@@ -91,7 +91,7 @@ export function Footer() {
                     title={`Beginner Friendly Good First Issues in ${lang.name}`}
                     className="hover:text-zinc-900 transition-colors"
                   >
-                    {lang.name} Good First Issues
+                    {`${lang.name} Good First Issues`}
                   </Link>
                 </li>
               ))}
@@ -168,6 +168,8 @@ export function Footer() {
               <Link
                 key={`cloud-${lang.slug}`}
                 href={`/good-first-issue/${lang.slug}`}
+                prefetch={false}
+                title={`Good First Issues in ${lang.name}`}
                 className="px-2.5 py-1 rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-600 hover:text-zinc-900 hover:border-zinc-300 transition-all"
               >
                 {lang.name}
