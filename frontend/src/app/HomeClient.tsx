@@ -257,15 +257,15 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const [spotlightRepos, setSpotlightRepos] = useState<Repo[]>([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/v1/repos?scored_today=true&max_last_activity_days=7&exclude_stale=true&sort=c_rank_score&order=desc&per_page=30`)
+    fetch(`${API_BASE_URL}/api/v1/repos?scored_today=true&max_last_activity_days=7&exclude_stale=true&exclude_fallback=true&min_tier=B&sort=c_rank_score&order=desc&per_page=30`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         const rawList = data?.data || data?.repos;
         if (Array.isArray(rawList) && rawList.length > 0) {
           const mapped: Repo[] = rawList.map((r: Record<string, unknown>) => ({
             ...(r as unknown as Repo),
-            c_rank_tier: (r.c_rank_tier as string) || (r.class_rank as string) || "A",
-            class_rank: (r.class_rank as string) || (r.c_rank_tier as string) || "A",
+            c_rank_tier: (r.c_rank_tier as string) || (r.class_rank as string) || "",
+            class_rank: (r.class_rank as string) || (r.c_rank_tier as string) || "",
             first_timer_success_rate: (r.first_timer_success_rate as number) !== undefined ? (r.first_timer_success_rate as number) : (r.first_timer_rate as number),
           }));
 
