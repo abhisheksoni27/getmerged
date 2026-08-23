@@ -45,6 +45,7 @@ export function Footer() {
                 <li key={`rank-${lang.slug}`}>
                   <Link
                     href={`/rankings/${lang.slug}`}
+                    prefetch={false}
                     title={`Top Welcoming ${lang.name} Open Source Repositories`}
                     className="hover:text-zinc-900 transition-colors"
                   >
@@ -65,6 +66,7 @@ export function Footer() {
                 <li key={`rank-more-${lang.slug}`}>
                   <Link
                     href={`/rankings/${lang.slug}`}
+                    prefetch={false}
                     title={`Top Welcoming ${lang.name} Open Source Repositories`}
                     className="hover:text-zinc-900 transition-colors"
                   >
@@ -85,6 +87,7 @@ export function Footer() {
                 <li key={`gfi-${lang.slug}`}>
                   <Link
                     href={`/good-first-issue/${lang.slug}`}
+                    prefetch={false}
                     title={`Beginner Friendly Good First Issues in ${lang.name}`}
                     className="hover:text-zinc-900 transition-colors"
                   >
@@ -102,37 +105,37 @@ export function Footer() {
             </h4>
             <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
               <li>
-                <Link href="/guides" title="Open Source Contribution Guides and Best Practices" className="hover:text-zinc-900 transition-colors font-semibold text-zinc-800">
+                <Link href="/guides" prefetch={false} title="Open Source Contribution Guides and Best Practices" className="hover:text-zinc-900 transition-colors font-semibold text-zinc-800">
                   Contribution Guides
                 </Link>
               </li>
               <li>
-                <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm & Formula" className="hover:text-zinc-900 transition-colors font-semibold text-zinc-800">
+                <Link href="/how-c-rank-works" prefetch={false} title="How C-Rank Works - Scoring Algorithm & Formula" className="hover:text-zinc-900 transition-colors font-semibold text-zinc-800">
                   How C-Rank™ Works
                 </Link>
               </li>
               <li>
-                <Link href="/hall-of-fame" title="Super Welcoming Open Source Repositories" className="hover:text-zinc-900 transition-colors">
+                <Link href="/hall-of-fame" prefetch={false} title="Super Welcoming Open Source Repositories" className="hover:text-zinc-900 transition-colors">
                   Hall of Fame (Super Welcoming)
                 </Link>
               </li>
               <li>
-                <Link href="/leaderboard" title="Top 50 Global Leaderboard" className="hover:text-zinc-900 transition-colors">
+                <Link href="/leaderboard" prefetch={false} title="Top 50 Global Leaderboard" className="hover:text-zinc-900 transition-colors">
                   Top 50 Global Leaderboard
                 </Link>
               </li>
               <li>
-                <Link href="/compare" title="Compare Open Source Repositories Head-to-Head" className="hover:text-zinc-900 transition-colors">
+                <Link href="/compare" prefetch={false} title="Compare Open Source Repositories Head-to-Head" className="hover:text-zinc-900 transition-colors">
                   Compare Repositories
                 </Link>
               </li>
               <li>
-                <Link href="/topics" title="Browse Open Source Repositories by Topic" className="hover:text-zinc-900 transition-colors">
+                <Link href="/topics" prefetch={false} title="Browse Open Source Repositories by Topic" className="hover:text-zinc-900 transition-colors">
                   Topics Directory
                 </Link>
               </li>
               <li>
-                <Link href="/status" title="GetMerged Service & Pipeline Status" className="hover:text-zinc-900 transition-colors flex items-center gap-1.5">
+                <Link href="/status" prefetch={false} title="GetMerged Service & Pipeline Status" className="hover:text-zinc-900 transition-colors flex items-center gap-1.5">
                   <Activity className="h-3.5 w-3.5 text-emerald-600" /> System Status
                 </Link>
               </li>
@@ -142,12 +145,12 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <Link href="/privacy" title="GetMerged Privacy Policy" className="hover:text-zinc-900 transition-colors">
+                <Link href="/privacy" prefetch={false} title="GetMerged Privacy Policy" className="hover:text-zinc-900 transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" title="GetMerged Terms of Service" className="hover:text-zinc-900 transition-colors">
+                <Link href="/terms" prefetch={false} title="GetMerged Terms of Service" className="hover:text-zinc-900 transition-colors">
                   Terms of Service
                 </Link>
               </li>
@@ -179,12 +182,12 @@ export function Footer() {
             © {new Date().getFullYear()} GetMerged, Glassdoor for Open Source Repositories.
           </div>
           <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-6 gap-y-2">
-            <Link href="/" title="GetMerged Open Source Explorer Home" className="hover:text-zinc-900 transition-colors">Home</Link>
-            <Link href="/hall-of-fame" title="Hall of Fame" className="hover:text-zinc-900 transition-colors">Hall of Fame</Link>
-            <Link href="/leaderboard" title="Leaderboard" className="hover:text-zinc-900 transition-colors">Leaderboard</Link>
-            <Link href="/status" title="System Status" className="hover:text-zinc-900 transition-colors">Status</Link>
-            <Link href="/privacy" title="Privacy Policy" className="hover:text-zinc-900 transition-colors">Privacy</Link>
-            <Link href="/terms" title="Terms of Service" className="hover:text-zinc-900 transition-colors">Terms</Link>
+            <Link href="/" prefetch={false} title="GetMerged Open Source Explorer Home" className="hover:text-zinc-900 transition-colors">Home</Link>
+            <Link href="/hall-of-fame" prefetch={false} title="Hall of Fame" className="hover:text-zinc-900 transition-colors">Hall of Fame</Link>
+            <Link href="/leaderboard" prefetch={false} title="Leaderboard" className="hover:text-zinc-900 transition-colors">Leaderboard</Link>
+            <Link href="/status" prefetch={false} title="System Status" className="hover:text-zinc-900 transition-colors">Status</Link>
+            <Link href="/privacy" prefetch={false} title="Privacy Policy" className="hover:text-zinc-900 transition-colors">Privacy</Link>
+            <Link href="/terms" prefetch={false} title="Terms of Service" className="hover:text-zinc-900 transition-colors">Terms</Link>
           </div>
         </div>
       </div>

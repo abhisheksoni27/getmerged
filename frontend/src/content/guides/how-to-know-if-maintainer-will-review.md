@@ -49,7 +49,6 @@ Our research method analyzed 53,000 public GitHub repositories with a sample siz
 > - Projects with a single maintainer suffer long delays when that person is busy.
 > - Always check median response time, tail latency, recent merges, and team size before you submit code.
 
-<!-- ORIGINAL DATA -->
 ## Signal 1: The p50 First Response Latency
 
 **Response latency** refers to the median time between pull request creation and the first human review comment. Automated bots like Dependabot are excluded from this metric to keep data accurate.
@@ -72,7 +71,6 @@ In our repository index, the median response time across all projects is 27 hour
 
 For example, high-velocity infrastructure projects like Kubernetes maintain a p50 response time under 4 hours. Teams assign rotating reviewers who inspect new pull requests daily. In contrast, unmaintained packages often take four weeks or longer to post a single reply. Understanding this baseline helps you set realistic expectations for your submission.
 
-<!-- UNIQUE INSIGHT -->
 ## Signal 2: The p90 Tail and Review Variance
 
 **Tail latency** refers to the time required to review 90% of submitted community pull requests. While median metrics show typical speed, the 90th percentile reveals severe triage bottlenecks.
@@ -90,7 +88,6 @@ When a repository has a narrow gap between p50 and p90 latency, maintainers trea
 
 For instance, Python libraries that lack dedicated triage teams often have a fast p50 alongside an extreme p90 tail exceeding 45 days. If a repository has a p90 latency over 30 days, we suggest opening an issue to discuss your change before writing code.
 
-<!-- ORIGINAL DATA -->
 ## Signal 3: The 180-Day Activity Pulse
 
 **Activity pulse** is the number of calendar days since a repository merged its last external pull request. An external author is any contributor who is not a repo owner or member.
@@ -108,7 +105,6 @@ Tracking external merges ensures you do not mistake internal corporate velocity 
 
 When a project has not merged an outside contribution in over 180 days, its external review loop is inactive. In that case, your pull request will likely sit without review.
 
-<!-- UNIQUE INSIGHT -->
 ## Signal 4: Review Coverage and Comment Rounds
 
 **Review coverage** refers to the percentage of external pull requests that receive at least one comment from a maintainer. High coverage guarantees that contributors receive helpful guidance on their code.
@@ -125,7 +121,6 @@ High review coverage reflects an active culture where maintainers respect outsid
 
 Consider the median number of review rounds per merged pull request. Low review counts of one to three comments indicate quick approvals for small changes. High review counts of ten or more comments reflect extensive design debates. For example, projects in the Rust ecosystem emphasize rigorous checks and frequently require multiple revision cycles.
 
-<!-- ORIGINAL DATA -->
 ## Signal 5: Maintainer Breadth and Bus Factor
 
 **Bus factor** is the count of distinct maintainers who reviewed or authored code in the repository during the trailing 90 days. A project that relies on one person carries substantial risk for outside contributors.

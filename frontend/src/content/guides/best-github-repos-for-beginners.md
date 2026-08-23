@@ -49,7 +49,6 @@ At GetMerged, we track first-timer results across 53,000 public GitHub repos. Ou
 > - Clear setup guides help newcomers finish their pull requests 40% more often.
 > - Always check maintainer review speed before you claim an open task.
 
-<!-- ORIGINAL DATA -->
 ## How We Measure Beginner Friendliness
 
 **Beginner friendliness** refers to a repo proven track record of reviewing and merging code from new contributors.
@@ -70,7 +69,6 @@ Our team studied pull request outcomes across six major coding languages. Accord
 
 For example, Go repos use standard formatting tools that stop style debates and speed up reviews.
 
-<!-- UNIQUE INSIGHT -->
 ## What Makes a High-Quality Starter Issue
 
 **Starter issue** refers to a scoped task made for developers doing their first pull request.
@@ -87,7 +85,6 @@ Software studies from the [ACM Digital Library](https://dl.acm.org/) show that v
 
 For instance, empirical studies published in [IEEE Software](https://www.ieee.org/) show that adding exact file paths cuts onboarding time by half.
 
-<!-- ORIGINAL DATA -->
 ## Ecosystem Breakdown and Recommended Repositories
 
 Each language ecosystem has its own review style and community pace:
@@ -106,7 +103,6 @@ Each language ecosystem has its own review style and community pace:
 
 Industry data from [GitHub Octoverse](https://github.blog/) shows that repos with active setup guides get three times more first-time pull requests.
 
-<!-- UNIQUE INSIGHT -->
 ## How to Pick Your First Issue Safely
 
 Follow this simple plan to pick an issue that gets merged:
