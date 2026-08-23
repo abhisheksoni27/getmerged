@@ -51,6 +51,12 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "string",
+                        "description": "Minimum C-Rank tier floor (S, A, B, C, D); keeps tiers at or above",
+                        "name": "min_tier",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "Page number (default 1)",
                         "name": "page",
