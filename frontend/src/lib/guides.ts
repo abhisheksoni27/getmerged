@@ -38,12 +38,19 @@ export function getAllGuides(): GuideMeta[] {
     const words = content.trim().split(/\s+/).length;
     const minutes = Math.ceil(words / 200);
 
+    const formatDate = (val: unknown) => {
+      if (!val) return "2026-08-23";
+      if (val instanceof Date) return val.toISOString().slice(0, 10);
+      const s = String(val).trim();
+      return s.length >= 10 ? s.slice(0, 10) : s;
+    };
+
     guides.push({
       title: data.title || fileName.replace(/\.md$/, ""),
       description: data.description || "",
       slug: data.slug || fileName.replace(/\.md$/, ""),
-      date: data.date ? String(data.date) : "2026-08-23",
-      lastUpdated: data.lastUpdated ? String(data.lastUpdated) : "2026-08-23",
+      date: formatDate(data.date),
+      lastUpdated: formatDate(data.lastUpdated || data.date),
       author: data.author || "GetMerged Team",
       section: data.section || "Guides",
       keywords: data.keywords || [],
@@ -67,12 +74,19 @@ export function getGuideBySlug(slug: string): GuidePost | null {
   const words = content.trim().split(/\s+/).length;
   const minutes = Math.ceil(words / 200);
 
+  const formatDate = (val: unknown) => {
+    if (!val) return "2026-08-23";
+    if (val instanceof Date) return val.toISOString().slice(0, 10);
+    const s = String(val).trim();
+    return s.length >= 10 ? s.slice(0, 10) : s;
+  };
+
   return {
     title: data.title || slug,
     description: data.description || "",
     slug: data.slug || slug,
-    date: data.date ? String(data.date) : "2026-08-23",
-    lastUpdated: data.lastUpdated ? String(data.lastUpdated) : "2026-08-23",
+    date: formatDate(data.date),
+    lastUpdated: formatDate(data.lastUpdated || data.date),
     author: data.author || "GetMerged Team",
     section: data.section || "Guides",
     keywords: data.keywords || [],
