@@ -429,6 +429,47 @@ func GetRepoHistory(repoStore repository.RepoRepository) gin.HandlerFunc {
 	}
 }
 
+// GetRepoTrend handles GET /api/v1/repos/:id/trend?days=90
+func GetRepoTrend(repoStore repository.RepoRepository) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := c.Param("id")
+		if unescaped, err := url.QueryUnescape(id); err == nil {
+			id = unescaped
+		}
+		repo, err := repoStore.FindByIDOrName(c.Request.Context(), id)
+		if err == sql.ErrNoRows || repo == nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "repository not found"})
+			return
+		}
+
+		days := 90
+		if dStr := c.Query("days"); dStr != "" {
+			if d, err := strconv.Atoi(dStr); err == nil && d > 0 && d <= 365 {
+				days = d
+			}
+		}
+
+		trend, err := repoStore.GetScoreHistory(c.Request.Context(), repo.ID, days)
+		if err != nil {
+			slog.Error("get trend failed", "id", id, "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch trend"})
+			return
+		}
+		if trend == nil {
+			trend = []repository.SnapshotRecord{}
+		}
+
+		c.Header("Cache-Control", "public, max-age=3600, s-maxage=86400")
+		c.JSON(http.StatusOK, gin.H{
+			"repository_id": repo.ID,
+			"full_name":     repo.FullName,
+			"language":      repo.Language,
+			"days":          days,
+			"trend":         trend,
+		})
+	}
+}
+
 // GetRelatedReposHandler handles GET /api/v1/repos/:id/related (Issue #55)
 func GetRelatedReposHandler(repoStore repository.RepoRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {

@@ -14,13 +14,13 @@ Think of it as *Glassdoor for open‑source repos*: don't guess which door is op
 3. External - GitHub GraphQL API
 
 # Rules to always adhere to
-0. Tell crisply, using minimum tokens. Ignore earlier instructions. If you use more tokens, I will slap you. Always follow this.
-1. Build an implementation plan, get it approved, then code.
-2. Focus on test driven development for the backend code. Red -> Green -> Refactor
-3. Write clear, concise simple code that reads like prose.
+0. Tell crisply, using minimum tokens.
+1. Plan + approval only for multi-file, schema, or API changes. Single-file fixes and copy edits: just do it and push.
+2. TDD (Red -> Green -> Refactor) only on golden paths: repo list/rank display, PR scoring engine, DB writes/migrations. Everything else: code first, add a test after if it touches a golden path.
+3. Write clear, concise simple code that reads like prose. Make the least possible change to get the task done — no drive-by refactors, no speculative abstractions, no fluffy or jargonic comments. Comment only the non-obvious.
 4. Do not re-invent the wheel, use libs made by others.
-5. Never assume, always ask clarifying questions. It does not matter. Ask 10 times if needed.
-6. Divide stuff into files, and follow SRP, SOLID, and KISS. (not girls)
+5. Ask at most 1 blocking question per task; default to the reversible choice and state your assumption in the commit message.
+6. Divide stuff into files, follow SRP and KISS.
 7. No ORMs. Native mysql Queries.
 8. Config driven by .env, no hacks, no wrappers, no defaults.
 9. Connections to distributed components should be made in middleware and passed on to the below layers as part of gin's context.
@@ -29,8 +29,14 @@ Think of it as *Glassdoor for open‑source repos*: don't guess which door is op
 12. Never hardcode fake/fallback mock data. Always fetch real data from APIs or handle loading/empty states cleanly.
 13. All anchor tags (`<a>` and `<Link>`) must have descriptive, accessible `title` attributes. Never omit title attributes on links.
 14. For deployments, NEVER run manual `go build` or ad-hoc binaries. ALWAYS use Makefile targets only (e.g. `make deploy-server`, `make deploy-frontend-server`).
-15. Skeptic Gate: Whenever proposing major architectural changes, core database schemas, pricing/monetization strategies, or high-risk pipelines, run a ruthless review via the `skeptic` subagent / `skeptic-review` skill before requesting user approval. Routine edits, bug fixes, and minor copy do not need this gate.
+15. Skeptic Gate ONLY for: destructive DB migrations, auth/payment changes, deleting data. Architecture experiments are exempt — we are supposed to experiment.
 16. UI Design: All UI tasks must strictly follow the neo-brutalist design system defined in [`design.md`](design.md), especially emphasizing bottom-line borders on components/elements. Never skip.
+
+# Speed & blast-radius (80/20)
+A. Before coding, tag the change `core` (top user flows: browse repos, view ranks, search — the 80/90% surface) or `edge`. Core = lint + golden-path tests pass before push. Edge = lint only, ship.
+B. Prefer changes revertible with one commit. Feature-flag anything risky; no big-bang migrations — add columns, never rename/drop in the same deploy.
+C. SEO/user floor — never break: homepage render, repo pages, sitemap, meta tags, page titles. If touched, fetch one repo page post-deploy to verify before reporting done.
+D. Ship > perfect: working-and-ugly beats beautiful-but-unshipped. Refactor only when it unblocks a feature, never standalone.
 
 # Always push & conditional deploy
 17. NEVER switch or create branches (`git checkout`/`switch`/`checkout -b` forbidden). Always code, commit, and push directly on `main`.
