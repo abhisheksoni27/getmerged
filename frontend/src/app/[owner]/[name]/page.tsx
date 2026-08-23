@@ -84,11 +84,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: "website",
       url: `https://getmerged.abhishekco.de/${repo.full_name}`,
       siteName: "GetMerged",
+      images: [
+        {
+          url: `https://getmerged.abhishekco.de/${repo.full_name}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${repo.full_name} C-Rank scorecard`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [`https://getmerged.abhishekco.de/${repo.full_name}/opengraph-image`],
     },
   };
 }

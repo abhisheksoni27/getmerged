@@ -37,6 +37,20 @@ export async function generateMetadata({ params }: GuidePageProps): Promise<Meta
       url: `https://getmerged.abhishekco.de/guides/${slug}`,
       siteName: "GetMerged",
       type: "article",
+      images: [
+        {
+          url: `https://getmerged.abhishekco.de/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: guide.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${guide.title} | GetMerged`,
+      description: guide.description,
+      images: [`https://getmerged.abhishekco.de/opengraph-image`],
     },
   };
 }

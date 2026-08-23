@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const languageName = displayNameFromSlug(lang);
-  const title = `Best ${languageName} Good First Issues & Beginner Repos (2026) | GetMerged`;
+  const title = `Best ${languageName} Good First Issues | GetMerged`;
   const description = `Find top ${languageName} open-source repositories with active Good First Issues, beginner-friendly labels, fast review times, and high first-timer merge rates on GetMerged.`;
 
   return {
@@ -57,11 +57,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: "website",
       url: `https://getmerged.abhishekco.de/good-first-issue/${canonicalLang}`,
       siteName: "GetMerged",
+      images: [
+        {
+          url: `https://getmerged.abhishekco.de/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [`https://getmerged.abhishekco.de/opengraph-image`],
     },
   };
 }
