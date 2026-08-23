@@ -46,9 +46,16 @@ build-backfill-topics:
 build-generate-sitemap:
 	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/generate_sitemap ./cmd/generate_sitemap
 
+build-morning-brief:
+	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/morning_brief ./cmd/morning_brief
+
 generate-sitemap-server: build-generate-sitemap
 	cp backend/bin/generate_sitemap /opt/opendoor/backend/generate_sitemap
 	chmod +x /opt/opendoor/backend/generate_sitemap
+
+morning-brief-server: build-morning-brief
+	cp backend/bin/morning_brief /opt/opendoor/backend/morning_brief
+	chmod +x /opt/opendoor/backend/morning_brief
 
 backfill-topics-server: build-backfill-topics
 	cp backend/bin/backfill-topics /opt/opendoor/backend/backfill-topics
