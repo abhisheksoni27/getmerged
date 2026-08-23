@@ -70,6 +70,7 @@ type RepoFilter struct {
 	MinMaintainers           float64
 	ScoreSource              string
 	ExcludeFallback          bool
+	MinTier                  string
 }
 
 type SnapshotRecord struct {
@@ -115,6 +116,15 @@ var allowedSortFields = map[string]string{
 	"time_to_first_response_hours": "s.time_to_first_response_hours",
 }
 
+// tierFloor lists tiers at or above a given minimum, ordered best to worst.
+var tierFloor = map[string][]string{
+	"S": {"S"},
+	"A": {"S", "A"},
+	"B": {"S", "A", "B"},
+	"C": {"S", "A", "B", "C"},
+	"D": {"S", "A", "B", "C", "D"},
+}
+
 func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]RepoRecord, int, error) {
 	where := "1=1"
 	args := []interface{}{}
@@ -148,6 +158,15 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 	if filter.Tier != "" {
 		where += " AND s.c_rank_tier = ?"
 		args = append(args, filter.Tier)
+	}
+
+	if len(tierFloor[filter.MinTier]) > 0 {
+		tiers := tierFloor[filter.MinTier]
+		placeholders := strings.TrimSuffix(strings.Repeat("?,", len(tiers)), ",")
+		where += " AND s.c_rank_tier IN (" + placeholders + ")"
+		for _, t := range tiers {
+			args = append(args, t)
+		}
 	}
 
 	if filter.MinMergeRate > 0 {

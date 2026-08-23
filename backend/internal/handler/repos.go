@@ -179,6 +179,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		excludeStale := strings.ToLower(strings.TrimSpace(c.Query("exclude_stale"))) == "true"
 		scoreSource := strings.TrimSpace(c.Query("score_source"))
 		excludeFallback := strings.ToLower(strings.TrimSpace(c.Query("exclude_fallback"))) == "true"
+		minTier := strings.ToUpper(strings.TrimSpace(c.Query("min_tier")))
 
 		filter := repository.RepoFilter{
 			Language:                 lang,
@@ -205,6 +206,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			MinMaintainers:           minMaintainers,
 			ScoreSource:              scoreSource,
 			ExcludeFallback:          excludeFallback,
+			MinTier:                  minTier,
 		}
 
 		repos, total, err := repoStore.List(c.Request.Context(), filter)
