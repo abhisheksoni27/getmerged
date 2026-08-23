@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { RepoCard } from "@/components/RepoCard";
 import { UserFeedbackList } from "@/components/UserFeedbackList";
 import { UserProfile } from "@/types/opendoor";
+import { LogoutButton } from "@/components/LogoutButton";
 import {
   Calendar,
   Bookmark,
@@ -215,6 +216,12 @@ export default async function UserProfilePage({ params }: ProfilePageProps) {
                 </div>
               )}
             </div>
+            {/* Owner-only: Sign out */}
+            {currentUserSlug === profile.slug && (
+              <div className="shrink-0">
+                <LogoutButton />
+              </div>
+            )}
           </div>
 
           {/* Achievement Card & Viral Share Buttons (Story 6.2 & 6.3) */}
