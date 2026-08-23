@@ -268,6 +268,17 @@ func AutoMigrate(db *sqlx.DB) error {
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			PRIMARY KEY (topic, repository_id)
 		);`,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS daily_metrics (
+			id INTEGER PRIMARY KEY %s,
+			category VARCHAR(100) NOT NULL,
+			stat_name VARCHAR(100) NOT NULL,
+			stat_value REAL NOT NULL,
+			stat_date VARCHAR(20) NOT NULL,
+			stat_type VARCHAR(50) NOT NULL,
+			metadata TEXT,
+			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(category, stat_name, stat_date)
+		);`, autoInc),
 	}
 
 	for i, stmt := range statements {
@@ -293,6 +304,7 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_gfi_quality_score ON repo_good_first_issues(quality_score DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_repositories_owner ON repositories(owner(191))`,
 		`CREATE INDEX IF NOT EXISTS idx_repo_topic_repo_id ON repository_topics(repository_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_daily_metrics_lookup ON daily_metrics(category, stat_name, stat_date DESC)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)
