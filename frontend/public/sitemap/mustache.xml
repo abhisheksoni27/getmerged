@@ -55,6 +55,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/jenkinsci/helm-charts</loc>
+    <lastmod>2026-08-23T18:19:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/MoJo2600/pihole-kubernetes</loc>
     <lastmod>2026-08-21T08:18:49Z</lastmod>
     <changefreq>daily</changefreq>

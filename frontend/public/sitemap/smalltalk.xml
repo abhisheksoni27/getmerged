@@ -7,6 +7,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/pharo-project/pharo</loc>
+    <lastmod>2026-08-23T11:46:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/Cuis-Smalltalk/Cuis-Smalltalk-Dev</loc>
     <lastmod>2026-08-17T03:42:45Z</lastmod>
     <changefreq>daily</changefreq>

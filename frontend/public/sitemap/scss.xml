@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://getmerged.abhishekco.de/primer/css</loc>
+    <lastmod>2026-08-22T22:51:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/material-components/material-web</loc>
+    <lastmod>2026-08-22T22:51:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/just-the-docs/just-the-docs</loc>
+    <lastmod>2026-08-22T22:51:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/uswds/uswds</loc>
+    <lastmod>2026-08-22T22:51:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/swiftlang/swift-org-website</loc>
     <lastmod>2026-08-22T14:55:07Z</lastmod>
     <changefreq>daily</changefreq>

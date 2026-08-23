@@ -55,6 +55,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/pulp-platform/cheshire</loc>
+    <lastmod>2026-08-22T23:36:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/jotego/jtcores</loc>
     <lastmod>2026-08-19T05:48:27Z</lastmod>
     <changefreq>daily</changefreq>
@@ -63,6 +69,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/GideonZ/1541ultimate</loc>
     <lastmod>2026-08-19T05:48:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/openecos-projects/icsprout55-pdk</loc>
+    <lastmod>2026-08-22T23:36:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

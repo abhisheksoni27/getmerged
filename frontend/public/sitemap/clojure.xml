@@ -49,6 +49,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/swarmpit/swarmpit</loc>
+    <lastmod>2026-08-23T03:54:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/xtdb/xtdb</loc>
     <lastmod>2026-08-16T15:23:08Z</lastmod>
     <changefreq>daily</changefreq>
@@ -151,6 +157,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/cljfx/cljfx</loc>
+    <lastmod>2026-08-23T03:54:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/yogthos/Selmer</loc>
     <lastmod>2026-08-21T06:51:49Z</lastmod>
     <changefreq>daily</changefreq>
@@ -187,14 +199,62 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/flow-storm/flow-storm-debugger</loc>
+    <lastmod>2026-08-23T16:49:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/cognitect-labs/aws-api</loc>
     <lastmod>2026-08-18T11:07:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/techascent/tech.ml.dataset</loc>
+    <lastmod>2026-08-23T16:49:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Deep-Symmetry/beat-link-trigger</loc>
+    <lastmod>2026-08-23T16:49:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JulianBirch/cljs-ajax</loc>
+    <lastmod>2026-08-23T16:49:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/clj-commons/rewrite-clj</loc>
+    <lastmod>2026-08-23T16:49:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/eslam3kl/SQLiDetector</loc>
+    <lastmod>2026-08-23T16:49:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/seancorfield/dot-clojure</loc>
     <lastmod>2026-08-19T03:45:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/yaml/yamlscript</loc>
+    <lastmod>2026-08-23T16:49:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/cljdoc/cljdoc</loc>
+    <lastmod>2026-08-23T16:49:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

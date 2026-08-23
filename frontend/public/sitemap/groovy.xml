@@ -103,6 +103,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/gesellix/docker-client</loc>
+    <lastmod>2026-08-23T09:49:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/gradlex-org/build-parameters</loc>
     <lastmod>2026-08-22T21:09:38Z</lastmod>
     <changefreq>daily</changefreq>

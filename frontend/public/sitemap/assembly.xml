@@ -157,6 +157,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/z00m128/sjasmplus</loc>
+    <lastmod>2026-08-23T03:30:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/apple/swift-nio-ssl</loc>
     <lastmod>2026-08-18T21:53:59Z</lastmod>
     <changefreq>daily</changefreq>
@@ -205,6 +211,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/maziac/DeZog</loc>
+    <lastmod>2026-08-23T03:30:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/visrealm/pico9918</loc>
+    <lastmod>2026-08-23T03:30:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/sonicretro/skdisasm</loc>
     <lastmod>2026-08-18T21:53:59Z</lastmod>
     <changefreq>daily</changefreq>
@@ -249,6 +267,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/IsoFrieze/SMWDisX</loc>
     <lastmod>2026-08-19T15:57:28Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ShadowOne333/A-Link-to-the-Past-Redux</loc>
+    <lastmod>2026-08-23T16:25:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

@@ -49,14 +49,32 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/Hibbiki/chromium-win64</loc>
+    <lastmod>2026-08-23T03:33:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/Chara-Freedom/Tor-Portable</loc>
     <lastmod>2026-08-18T21:56:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/TairikuOokami/Windows</loc>
+    <lastmod>2026-08-23T16:28:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/shlima/keneetic-antifilter</loc>
     <lastmod>2026-08-19T04:54:40Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/celguar/spp-classics-cmangos</loc>
+    <lastmod>2026-08-23T16:28:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

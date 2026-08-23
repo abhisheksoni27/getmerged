@@ -7,6 +7,24 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/Azure/bicep</loc>
+    <lastmod>2026-08-23T03:36:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Azure/ALZ-Bicep</loc>
+    <lastmod>2026-08-23T16:31:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Azure/bicep-registry-modules</loc>
+    <lastmod>2026-08-23T16:31:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/Azure/avdaccelerator</loc>
     <lastmod>2026-08-21T14:51:51Z</lastmod>
     <changefreq>daily</changefreq>

@@ -121,6 +121,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/openconfig/gnoi</loc>
+    <lastmod>2026-08-23T11:55:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/aspect-build/aspect-cli</loc>
     <lastmod>2026-08-17T08:24:46Z</lastmod>
     <changefreq>daily</changefreq>
@@ -145,14 +151,32 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/bazelbuild/platforms</loc>
+    <lastmod>2026-08-23T11:55:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/bazel-contrib/rules_cuda</loc>
     <lastmod>2026-08-17T08:24:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/keith/rules_multirun</loc>
+    <lastmod>2026-08-23T11:55:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/cgrindel/rules_swift_package_manager</loc>
     <lastmod>2026-08-17T08:24:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/bazelbuild/apple_support</loc>
+    <lastmod>2026-08-23T11:55:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -165,6 +189,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/bazelbuild/rules_java</loc>
     <lastmod>2026-08-17T22:30:24Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/bazel-contrib/rules_distroless</loc>
+    <lastmod>2026-08-23T11:55:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

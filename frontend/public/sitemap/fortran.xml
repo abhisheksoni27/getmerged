@@ -121,13 +121,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/pencil-code/pencil-code</loc>
+    <loc>https://getmerged.abhishekco.de/ExtremeFLOW/neko</loc>
     <lastmod>2026-08-20T04:17:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ExtremeFLOW/neko</loc>
+    <loc>https://getmerged.abhishekco.de/pencil-code/pencil-code</loc>
     <lastmod>2026-08-20T04:17:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -169,13 +169,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/CliMT/climt</loc>
+    <loc>https://getmerged.abhishekco.de/damask-multiphysics/DAMASK</loc>
     <lastmod>2026-08-20T04:17:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/damask-multiphysics/DAMASK</loc>
+    <loc>https://getmerged.abhishekco.de/CliMT/climt</loc>
     <lastmod>2026-08-20T04:17:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -199,6 +199,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/horses-framework/horses3d</loc>
+    <lastmod>2026-08-23T17:19:20Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/danieljprice/phantom</loc>
     <lastmod>2026-08-20T04:17:41Z</lastmod>
     <changefreq>daily</changefreq>
@@ -207,6 +213,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/cp2k/dbcsr</loc>
     <lastmod>2026-08-20T04:17:41Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/myroms/roms</loc>
+    <lastmod>2026-08-23T17:19:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -231,6 +243,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/geospace-code/h5fortran</loc>
     <lastmod>2026-08-21T07:18:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/amrvac/amrvac</loc>
+    <lastmod>2026-08-23T17:19:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

@@ -79,6 +79,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/ansible-lockdown/RHEL9-CIS</loc>
+    <lastmod>2026-08-22T23:51:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/okwilkins/h8s</loc>
     <lastmod>2026-08-16T23:24:46Z</lastmod>
     <changefreq>daily</changefreq>

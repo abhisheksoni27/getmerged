@@ -157,14 +157,32 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-radarr</loc>
+    <lastmod>2026-08-23T17:07:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-jellyfin</loc>
     <lastmod>2026-08-20T04:05:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-nextcloud</loc>
+    <lastmod>2026-08-23T17:07:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-obsidian</loc>
     <lastmod>2026-08-17T12:24:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/apache/apisix-docker</loc>
+    <lastmod>2026-08-23T17:07:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -189,6 +207,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-transmission</loc>
     <lastmod>2026-08-20T04:05:40Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/anonaddy/docker</loc>
+    <lastmod>2026-08-23T17:07:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -249,6 +273,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/Tecnativa/doodba</loc>
     <lastmod>2026-08-17T12:24:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-prowlarr</loc>
+    <lastmod>2026-08-23T17:07:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -409,14 +439,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-homeassistant</loc>
-    <lastmod>2026-08-17T02:45:46Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/kubernetes-sigs/contributor-playground</loc>
+    <lastmod>2026-08-18T03:03:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/kubernetes-sigs/contributor-playground</loc>
-    <lastmod>2026-08-18T03:03:29Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-homeassistant</loc>
+    <lastmod>2026-08-17T02:45:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -427,14 +457,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/MicrosoftDocs/azure-docs-powershell</loc>
-    <lastmod>2026-08-19T04:00:28Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/crazy-max/docker-nextcloud</loc>
+    <lastmod>2026-08-17T02:45:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/crazy-max/docker-nextcloud</loc>
-    <lastmod>2026-08-17T02:45:46Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/MicrosoftDocs/azure-docs-powershell</loc>
+    <lastmod>2026-08-19T04:00:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -487,13 +517,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-freshrss</loc>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-faster-whisper</loc>
     <lastmod>2026-08-17T07:30:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-faster-whisper</loc>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-freshrss</loc>
     <lastmod>2026-08-17T07:30:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -751,14 +781,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/laravel/vapor-php-build</loc>
-    <lastmod>2026-08-20T17:29:46Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/streetsidesoftware/cspell-cli</loc>
+    <lastmod>2026-08-18T22:27:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/streetsidesoftware/cspell-cli</loc>
-    <lastmod>2026-08-18T22:27:01Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/laravel/vapor-php-build</loc>
+    <lastmod>2026-08-20T17:29:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -865,14 +895,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-librespeed</loc>
-    <lastmod>2026-08-17T07:30:47Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/naskio/docker-n8n-python</loc>
+    <lastmod>2026-08-19T16:33:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/naskio/docker-n8n-python</loc>
-    <lastmod>2026-08-19T16:33:29Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-librespeed</loc>
+    <lastmod>2026-08-17T07:30:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -889,14 +919,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-wikijs</loc>
-    <lastmod>2026-08-18T22:27:01Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/dream10201/115Docker</loc>
+    <lastmod>2026-08-17T07:30:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/dream10201/115Docker</loc>
-    <lastmod>2026-08-17T07:30:47Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-wikijs</loc>
+    <lastmod>2026-08-18T22:27:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
