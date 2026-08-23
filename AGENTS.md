@@ -33,7 +33,7 @@ Think of it as *Glassdoor for open‑source repos*: don't guess which door is op
 16. UI Design: All UI tasks must strictly follow the neo-brutalist design system defined in [`design.md`](design.md), especially emphasizing bottom-line borders on components/elements. Never skip.
 
 # Always push & conditional deploy
-17. After every completed task (done = lint green + tests green): commit and push ONLY the current non-protected branch. NEVER push to `main`/`master` directly.
+17. NEVER switch or create branches (`git checkout`/`switch`/`checkout -b` forbidden). Always code, commit, and push directly on `main`.
 18. Deploy depends on what changed:
     - Paths under `autonomous_sdlc/api`, `db`, `engine`, or `services` → restart BE via `scripts/manage.sh restart`.
     - Paths under `autonomous_sdlc/ui` → rebuild/restart FE.
