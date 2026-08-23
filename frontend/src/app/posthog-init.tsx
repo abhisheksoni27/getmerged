@@ -21,6 +21,23 @@ export function PostHogInit() {
       });
       if (getConsent() === "accepted") {
         posthog.opt_in_capturing();
+
+        // Web Vitals RUM Monitoring (INP, LCP, CLS, FCP, TTFB)
+        import("web-vitals").then(({ onCLS, onFCP, onINP, onLCP, onTTFB }) => {
+          const sendMetric = (metric: { name: string; value: number; id: string; rating?: string }) => {
+            posthog.capture("$web_vitals", {
+              metric_name: metric.name,
+              metric_value: metric.value,
+              metric_id: metric.id,
+              metric_rating: metric.rating,
+            });
+          };
+          onCLS(sendMetric);
+          onFCP(sendMetric);
+          onINP(sendMetric);
+          onLCP(sendMetric);
+          onTTFB(sendMetric);
+        }).catch(() => {});
       }
     };
 
