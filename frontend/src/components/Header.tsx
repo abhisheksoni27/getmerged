@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Bookmark, LogOut, Search } from "lucide-react";
+import { Bookmark, Search } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
@@ -51,14 +51,6 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
       .catch(() => {})
       .finally(() => setAuthLoading(false));
   }, []);
-
-  const handleLogout = () => {
-    posthog.capture("user_signed_out");
-    posthog.reset();
-    document.cookie = "opendoor_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-    setUser(null);
-    window.location.reload();
-  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-zinc-200/80 bg-[#faf9f6]/90 backdrop-blur-md transition-all">
@@ -213,13 +205,6 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                 <Bookmark className="h-3.5 w-3.5 text-zinc-500" />
                 <span className="hidden sm:inline">My Watchlist</span>
               </Link>
-              <button
-                onClick={handleLogout}
-                className="text-zinc-500 hover:text-zinc-700 transition-colors cursor-pointer"
-                title="Sign Out of GetMerged"
-              >
-                <LogOut className="h-3.5 w-3.5" />
-              </button>
             </div>
           ) : (
             <>
