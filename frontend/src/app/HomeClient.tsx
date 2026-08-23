@@ -13,6 +13,8 @@ import {
   Star,
   Sparkles,
   ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
 } from "lucide-react";
 import { motion, useMotionValue, animate, useInView } from "framer-motion";
 import { API_BASE_URL } from "@/lib/api";
@@ -601,6 +603,68 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                   <span>Explore the scoring methodology</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Narrative Block 3: Maintainer Persona & Repository Claim Flow */}
+          <motion.div
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-[#faf9f6] p-8 sm:p-12 border-2 border-black shadow-[6px_6px_0px_#000]"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+          >
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-900 bg-[#8ce99a] border border-black px-3 py-1 shadow-[2px_2px_0px_#000]">
+                <ShieldCheck className="h-3.5 w-3.5" /> Maintainer Workspace
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold font-space text-zinc-900 tracking-tight leading-tight">
+                Own an Open Source Repository? See Why Outside Contributors Bounce.
+              </h2>
+              <p className="text-sm sm:text-base text-zinc-700 font-sans leading-relaxed">
+                Discover your codebase&apos;s objective C-Rank™ grade, review turnaround latency, and first-timer acceptance score. Learn how to optimize your CONTRIBUTING.md, clear zombie PR bottlenecks, and attract dependable repeat contributors.
+              </p>
+              <div className="pt-2 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() => openSearch()}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white font-mono text-xs font-bold border-2 border-black shadow-[3px_3px_0px_#fff] hover:bg-zinc-800 cursor-pointer"
+                >
+                  <Search className="h-3.5 w-3.5" /> Check Your Repository Grade
+                </button>
+                <Link
+                  href="/guides/how-to-know-if-maintainer-will-review"
+                  title="Maintainer Hospitality Best Practices"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-black font-mono text-xs font-bold border-2 border-black shadow-[3px_3px_0px_#000] hover:bg-zinc-100"
+                >
+                  Read Reviewer Playbook <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 bg-white border-2 border-black p-6 space-y-3 font-mono text-xs shadow-[4px_4px_0px_#000]">
+              <div className="font-bold text-zinc-900 border-b-2 border-black pb-2 flex items-center justify-between">
+                <span>Maintainer Health Check</span>
+                <span className="text-emerald-700">Live Telemetry</span>
+              </div>
+              <div className="space-y-2 pt-1">
+                <div className="flex items-center gap-2 text-zinc-700">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                  <span>p50 Review Turnaround &lt; 24h</span>
+                </div>
+                <div className="flex items-center gap-2 text-zinc-700">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                  <span>Outside PR Merge Rate &gt; 65%</span>
+                </div>
+                <div className="flex items-center gap-2 text-zinc-700">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                  <span>Multi-Maintainer Core (Bus Factor &gt; 1)</span>
+                </div>
+                <div className="flex items-center gap-2 text-zinc-700">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                  <span>Scoped Good First Issues (&lt; 60d)</span>
+                </div>
               </div>
             </div>
           </motion.div>

@@ -204,6 +204,10 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
           <p className="mt-3 text-xs sm:text-sm text-zinc-600 max-w-3xl leading-relaxed font-sans">
             Explore curated starter issues in high-scoring <strong>{languageName}</strong> repositories. Every listed issue belongs to a welcoming repository scored by C-Rank™ on PR merge rates, review responsiveness, and first-timer acceptance.
           </p>
+          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-zinc-500">
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
+            <span>Telemetry updated: {new Date().toUTCString().slice(0, 16)} UTC (Continuous Sync)</span>
+          </div>
         </div>
 
         {/* Real Live Issues Feed (Audit H9 Target Shape) */}

@@ -120,6 +120,10 @@ export default async function LeaderboardPage() {
           <p className="mt-3 text-xs sm:text-sm text-zinc-600 max-w-3xl leading-relaxed font-sans">
             Ranked by overall <strong>C-Rank™</strong> score. Evaluates PR merge rates, maintainer response times, first-timer success rates, and active maintainer breadth.
           </p>
+          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-zinc-500">
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
+            <span>Telemetry updated: {new Date().toUTCString().slice(0, 16)} UTC (Daily Sync)</span>
+          </div>
         </div>
 
         <div className="overflow-x-auto rounded-2xl bg-white border border-zinc-200/80 shadow-xs">
