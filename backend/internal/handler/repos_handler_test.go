@@ -561,3 +561,105 @@ func TestGetRepoHistory_Contract(t *testing.T) {
 	}
 }
 
+func TestGetRepoTrend_Contract(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	database := setupRepoTestDB(t)
+	defer database.Close()
+
+	repoUUID := "c30791ab-4160-40c6-b232-bb71c61d3249"
+	now := time.Now()
+	database.MustExec(`INSERT INTO daily_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, created_at) VALUES (?, '2026-07-25', 'A', 82.0, ?)`, repoUUID, now)
+	database.MustExec(`INSERT INTO daily_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, created_at) VALUES (?, '2026-07-27', 'S', 96.0, ?)`, repoUUID, now)
+
+	repoStore := repository.NewRepoRepository(database)
+
+	r := gin.New()
+	r.GET("/api/v1/repos/:id/trend", handler.GetRepoTrend(repoStore))
+
+	req := httptest.NewRequest("GET", "/api/v1/repos/"+repoUUID+"/trend?days=30", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200 OK for trend, got %d: %s", w.Code, w.Body.String())
+	}
+
+	var resp struct {
+		RepositoryID string `json:"repository_id"`
+		FullName     string `json:"full_name"`
+		Days         int    `json:"days"`
+		Trend        []struct {
+			SnapshotDate string  `json:"snapshot_date"`
+			CRankScore   float64 `json:"c_rank_score"`
+			CRankTier    string  `json:"c_rank_tier"`
+		} `json:"trend"`
+	}
+	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to unmarshal trend response: %v", err)
+	}
+
+	if resp.RepositoryID != repoUUID || resp.FullName != "freeCodeCamp/freeCodeCamp" {
+		t.Fatalf("unexpected repo info in trend response: %+v", resp)
+	}
+	if resp.Days != 30 {
+		t.Fatalf("expected days echoed as 30, got %d", resp.Days)
+	}
+	if len(resp.Trend) != 3 {
+		t.Fatalf("expected 3 trend points (all seeded snapshots), got %d: %+v", len(resp.Trend), resp.Trend)
+	}
+	if resp.Trend[0].SnapshotDate != "2026-07-25" || resp.Trend[0].CRankScore != 82.0 {
+		t.Fatalf("expected ascending order starting 2026-07-25@82.0, got %+v", resp.Trend[0])
+	}
+	if w.Header().Get("Cache-Control") == "" {
+		t.Fatal("expected Cache-Control header on trend response")
+	}
+}
+
+func TestGetRepoTrend_NotFound(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	database := setupRepoTestDB(t)
+	defer database.Close()
+
+	repoStore := repository.NewRepoRepository(database)
+
+	r := gin.New()
+	r.GET("/api/v1/repos/:id/trend", handler.GetRepoTrend(repoStore))
+
+	req := httptest.NewRequest("GET", "/api/v1/repos/nonexistent/repo/trend", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusNotFound {
+		t.Fatalf("expected 404 Not Found, got %d", w.Code)
+	}
+}
+
+func TestGetRepoTrend_DefaultDays(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	database := setupRepoTestDB(t)
+	defer database.Close()
+
+	repoStore := repository.NewRepoRepository(database)
+
+	r := gin.New()
+	r.GET("/api/v1/repos/:id/trend", handler.GetRepoTrend(repoStore))
+
+	req := httptest.NewRequest("GET", "/api/v1/repos/c30791ab-4160-40c6-b232-bb71c61d3249/trend", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200 OK with default days, got %d", w.Code)
+	}
+
+	var resp struct {
+		Days int `json:"days"`
+	}
+	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("unmarshal error: %v", err)
+	}
+	if resp.Days != 90 {
+		t.Fatalf("expected default days=90, got %d", resp.Days)
+	}
+}
+

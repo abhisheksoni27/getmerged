@@ -128,8 +128,10 @@ func main() {
 		api.GET("/repos/:id/good-first-issues", handler.GetRepoGoodFirstIssues(gfiRepo, repoStore))
 		api.GET("/issues/good-first", handler.ListGoodFirstIssues(gfiRepo))
 		api.GET("/history/:id", handler.GetRepoHistory(repoStore))
+		api.GET("/repos/:id/trend", handler.GetRepoTrend(repoStore))
 		api.POST("/repos/queue", handler.RequestRepoIndexing(database))
 		api.GET("/languages", handler.ListLanguages(database))
+		api.GET("/languages/trends", handler.GetLanguageTrends(database))
 		api.GET("/topics", handler.ListTopics(repoStore))
 		api.GET("/stats/macro", handler.GetMacroStats())
 

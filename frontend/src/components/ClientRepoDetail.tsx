@@ -34,6 +34,7 @@ import { RepoDetailHero } from "@/components/RepoDetailHero";
 import { RepoScorecards } from "@/components/RepoScorecards";
 import { RepoBadgeGenerator } from "@/components/RepoBadgeGenerator";
 import { SimilarRepos } from "@/components/SimilarRepos";
+import { RepoTrendChart } from "@/components/RepoTrendChart";
 import { PRAcceptanceWidget } from "@/components/PRAcceptanceWidget";
 import { OptimalReviewWindow } from "@/components/OptimalReviewWindow";
 import { UnscoredExplainer } from "@/components/UnscoredExplainer";
@@ -613,6 +614,11 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
           </div>
         </div>
       )}
+
+      {/* C-Rank Trend */}
+      <div className="mb-8">
+        <RepoTrendChart repoId={fullName} />
+      </div>
 
       {/* Macro Metrics Grid & cNPS Gauge Row */}
       <RepoScorecards
