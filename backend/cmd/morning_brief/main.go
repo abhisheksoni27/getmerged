@@ -167,7 +167,11 @@ func parseNginxLogsForDate(logDir string, targetDate string) (googlebot int, tot
 				if ip == "" {
 					ip = entry.Time
 				}
-				ipMap[ip] = true
+				if entry.CFConnectingIP != "" && entry.CFConnectingIP != "127.0.0.1" {
+					ipMap[entry.CFConnectingIP] = true
+				} else if entry.CFConnectingIP == "" && entry.Time != "" && !strings.Contains(entry.UserAgent, "Go-http-client") {
+					// Fallback
+				}
 
 				uaLower := strings.ToLower(entry.UserAgent)
 				if strings.Contains(uaLower, "googlebot") {

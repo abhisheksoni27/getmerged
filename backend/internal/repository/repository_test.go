@@ -183,6 +183,37 @@ func TestRepoRepository_ListFiltersSnapshotDate(t *testing.T) {
 	}
 }
 
+func TestRepoRepository_ListFiltersMinTier(t *testing.T) {
+	database, _ := setupTestDB(t)
+	defer database.Close()
+
+	repo := repository.NewRepoRepository(database)
+	ctx := context.Background()
+	now := time.Now()
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('1', 'great/repo', 'great', 'repo', 'Go', 5000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score) VALUES ('1', '2026-07-26', 'S', 95.0)`)
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('2', 'ok/repo', 'ok', 'repo', 'Rust', 4000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score) VALUES ('2', '2026-07-26', 'B', 45.0)`)
+
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('3', 'jitsi/lib-jitsi-meet', 'jitsi', 'lib-jitsi-meet', 'JavaScript', 1500, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score) VALUES ('3', '2026-07-26', 'D', 8.0)`)
+
+	repos, total, err := repo.List(ctx, repository.RepoFilter{Limit: 10, SortBy: "c_rank_score", Order: "desc", MinTier: "B"})
+	if err != nil {
+		t.Fatalf("List failed: %v", err)
+	}
+	if total != 2 || len(repos) != 2 {
+		t.Fatalf("expected 2 repos at tier B or better, got total %d, len %d", total, len(repos))
+	}
+	for _, r := range repos {
+		if r.FullName == "jitsi/lib-jitsi-meet" {
+			t.Fatalf("D-tier repo must be excluded when min_tier=B")
+		}
+	}
+}
+
 func TestRepoRepository_ListFiltersGoodFirstIssue(t *testing.T) {
 	database, _ := setupTestDB(t)
 	defer database.Close()
