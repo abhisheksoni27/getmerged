@@ -72,6 +72,7 @@ var allowedSortFields = map[string]string{
 //	@Param        min_stars query  int     false  "Minimum star count"
 //	@Param        name      query  string  false  "Partial name search"
 //	@Param        sort      query  string  false  "Sort column (c_rank_score, stars, time_to_first_response_hours)"
+//	@Param        min_tier  query  string  false  "Minimum C-Rank tier floor (S, A, B, C, D); keeps tiers at or above"
 //	@Param        page      query  int     false  "Page number (default 1)"
 //	@Param        per_page  query  int     false  "Items per page (default 20, max 100)"
 //	@Success      200       {object}  map[string]any
