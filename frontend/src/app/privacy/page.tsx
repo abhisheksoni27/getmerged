@@ -355,12 +355,18 @@ export default function PrivacyPolicyPage() {
             </p>
             <ul className="list-disc pl-5 space-y-2 mt-2">
               <li>Open an issue or DM the maintainers on our official{" "}
-                <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" title="View opendoor on GitHub" className="text-zinc-900 underline font-semibold">
-                  GitHub Repository
+                <a href="https://github.com/GetMergedApp" target="_blank" rel="noreferrer" title="View GetMergedApp on GitHub" className="text-zinc-900 underline font-semibold">
+                  GitHub Organization
                 </a>
                 .
               </li>
-              <li>Use the contact details listed in our{" "}
+              <li>Email us directly at{" "}
+                <a href="mailto:hi@abhishekco.de" title="Email GetMerged support" className="text-zinc-900 underline font-semibold">
+                  hi@abhishekco.de
+                </a>
+                .
+              </li>
+              <li>Review the terms in our{" "}
                 <Link href="/terms" title="View GetMerged Terms of Service" className="text-zinc-900 underline font-semibold">
                   Terms of Service
                 </Link>.
