@@ -280,28 +280,37 @@ export function TopicDirectoryGrid({
       )}
 
       {hasMore && (
-        <div className="mt-8 flex flex-col items-center justify-center gap-2 pt-4">
-          <button
-            type="button"
-            onClick={handleShowMore}
-            disabled={loadingMore}
-            aria-controls="topics-grid"
-            aria-expanded={!hasMore}
-            aria-label={`Show more topics, ${remainingCount.toLocaleString()} remaining`}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border-2 border-black border-b-4 bg-white text-black font-sans text-sm font-bold hover:bg-emerald-50 active:translate-y-0.5 active:border-b-2 transition-all focus:outline-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            {loadingMore ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin text-zinc-500" />
-                Loading topics...
-              </>
-            ) : (
-              <>
-                <ChevronDown className="h-4 w-4 text-zinc-500" />
-                Show more topics ({remainingCount.toLocaleString()} remaining)
-              </>
-            )}
-          </button>
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 pt-4">
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={handleShowMore}
+              disabled={loadingMore}
+              aria-controls="topics-grid"
+              aria-expanded={!hasMore}
+              aria-label={`Show more topics, ${remainingCount.toLocaleString()} remaining`}
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border-2 border-black border-b-4 bg-white text-black font-sans text-sm font-bold hover:bg-emerald-50 active:translate-y-0.5 active:border-b-2 transition-all focus:outline-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {loadingMore ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin text-zinc-500" />
+                  Loading topics...
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-4 w-4 text-zinc-500" />
+                  Show more topics ({remainingCount.toLocaleString()} remaining)
+                </>
+              )}
+            </button>
+            <Link
+              href={`/topics?page=${Math.min(Math.ceil(effectiveTotal / PAGE_SIZE), Math.ceil(visibleCount / PAGE_SIZE) + 1)}`}
+              title={`Explore next page of repository topics (Page ${Math.ceil(visibleCount / PAGE_SIZE) + 1})`}
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-none border-2 border-black border-b-4 bg-[#ffd93d] text-black font-mono text-xs font-bold hover:bg-amber-300 transition-all"
+            >
+              Next Page ({Math.ceil(visibleCount / PAGE_SIZE) + 1}) &rarr;
+            </Link>
+          </div>
           <span className="text-xs font-mono text-zinc-500">
             Showing {visibleCount.toLocaleString()} of{" "}
             {effectiveTotal.toLocaleString()} topics
