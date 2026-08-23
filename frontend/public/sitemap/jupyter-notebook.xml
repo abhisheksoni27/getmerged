@@ -373,6 +373,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/mongodb-developer/genai-devday-notebooks</loc>
+    <lastmod>2026-08-23T17:55:20Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/nsidc/NSIDC-Data-Tutorials</loc>
     <lastmod>2026-08-16T22:30:46Z</lastmod>
     <changefreq>daily</changefreq>

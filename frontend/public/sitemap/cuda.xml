@@ -18,4 +18,52 @@
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/owensgroup/RXMesh</loc>
+    <lastmod>2026-08-23T04:06:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/pyscf/gpu4pyscf</loc>
+    <lastmod>2026-08-23T04:06:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/NVIDIA-BioNeMo/nvMolKit</loc>
+    <lastmod>2026-08-23T04:06:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/uccl-project/mKernel</loc>
+    <lastmod>2026-08-23T04:06:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/nerficg-project/faster-gaussian-splatting</loc>
+    <lastmod>2026-08-23T17:01:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/openvdb/fvdb-core</loc>
+    <lastmod>2026-08-23T17:01:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/MIT-Lu-Lab/cuPDLPx</loc>
+    <lastmod>2026-08-23T17:01:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/BlinkDL/Albatross</loc>
+    <lastmod>2026-08-23T17:01:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

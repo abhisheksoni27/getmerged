@@ -43,8 +43,26 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/pingcap/kvproto</loc>
+    <lastmod>2026-08-23T16:43:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/scivision/mumps-superbuild</loc>
     <lastmod>2026-08-19T03:39:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/lukka/CppCMakeVcpkgTemplate</loc>
+    <lastmod>2026-08-23T16:43:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/KDE/extra-cmake-modules</loc>
+    <lastmod>2026-08-23T16:43:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

@@ -37,6 +37,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/Clozure/ccl</loc>
+    <lastmod>2026-08-23T05:39:50Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/acl2/acl2</loc>
     <lastmod>2026-08-18T03:03:29Z</lastmod>
     <changefreq>daily</changefreq>
@@ -87,6 +93,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/40ants/reblocks</loc>
     <lastmod>2026-08-22T20:33:40Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/40ants/teddy</loc>
+    <lastmod>2026-08-23T09:13:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

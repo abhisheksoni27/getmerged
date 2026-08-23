@@ -90,4 +90,10 @@
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JordanMarr/FSharp.SystemCommandLine</loc>
+    <lastmod>2026-08-23T04:21:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

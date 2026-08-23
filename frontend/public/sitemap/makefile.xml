@@ -289,6 +289,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/coolsnowwolf/packages</loc>
+    <lastmod>2026-08-23T05:15:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/hellogcc/osdt-weekly</loc>
     <lastmod>2026-08-17T07:48:47Z</lastmod>
     <changefreq>daily</changefreq>
@@ -361,14 +367,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/OP-TEE/build</loc>
-    <lastmod>2026-08-20T18:23:41Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/moq-wg/moq-transport</loc>
+    <lastmod>2026-08-22T09:46:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/moq-wg/moq-transport</loc>
-    <lastmod>2026-08-22T09:46:10Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/OP-TEE/build</loc>
+    <lastmod>2026-08-20T18:23:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -469,13 +475,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/cachix/docs.cachix.org</loc>
+    <loc>https://getmerged.abhishekco.de/plone/documentation</loc>
     <lastmod>2026-08-17T07:48:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/plone/documentation</loc>
+    <loc>https://getmerged.abhishekco.de/cachix/docs.cachix.org</loc>
     <lastmod>2026-08-17T07:48:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
