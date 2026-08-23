@@ -132,9 +132,20 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight font-space text-zinc-900 mb-4 leading-tight">
             {guide.title}
           </h1>
-          <p className="text-zinc-700 text-sm sm:text-base leading-relaxed">
+          <p className="text-zinc-700 text-sm sm:text-base leading-relaxed mb-6">
             {guide.description}
           </p>
+
+          <div className="overflow-hidden border-2 border-black bg-zinc-100 shadow-[4px_4px_0px_#000]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`/images/guides/${guide.slug}.jpg`}
+              alt={guide.title}
+              width={1200}
+              height={630}
+              className="w-full h-auto object-cover max-h-[420px]"
+            />
+          </div>
         </div>
 
         {/* Content Body */}
