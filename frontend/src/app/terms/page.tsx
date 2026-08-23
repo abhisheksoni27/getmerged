@@ -292,10 +292,12 @@ export default function TermsPage() {
             <h2 className="text-lg font-bold font-space text-zinc-900 mb-3">18. Contact</h2>
             <p>
               Questions about these Terms? Please reach out via our official{" "}
-              <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" title="View opendoor on GitHub" className="text-zinc-900 underline font-semibold">
-                GitHub Repository
-              </a>{" "}
-              or review our{" "}
+              <a href="https://github.com/GetMergedApp" target="_blank" rel="noreferrer" title="View GetMergedApp on GitHub" className="text-zinc-900 underline font-semibold">
+                GitHub Organization
+              </a>, email us at{" "}
+              <a href="mailto:hi@abhishekco.de" title="Email GetMerged support" className="text-zinc-900 underline font-semibold">
+                hi@abhishekco.de
+              </a>, or review our{" "}
               <Link href="/privacy" title="View GetMerged Privacy Policy" className="text-zinc-900 underline font-semibold">
                 Privacy Policy
               </Link>{" "}

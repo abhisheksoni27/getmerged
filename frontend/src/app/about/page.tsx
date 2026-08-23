@@ -89,10 +89,10 @@ export default function AboutPage() {
 
           <div className="pt-4 flex flex-wrap gap-4 border-t-2 border-zinc-200">
             <a
-              href="https://github.com/abhisheksoni27/getmerged"
+              href="https://github.com/GetMergedApp"
               target="_blank"
               rel="noopener noreferrer"
-              title="GetMerged GitHub Repository"
+              title="GetMerged GitHub Organization"
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-black text-white font-mono text-xs font-bold border-2 border-black shadow-[3px_3px_0px_#000] hover:bg-zinc-800 transition-colors"
             >
               <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
@@ -102,12 +102,12 @@ export default function AboutPage() {
             </a>
 
             <a
-              href="mailto:support@getmerged.abhishekco.de"
+              href="mailto:hi@abhishekco.de"
               title="Contact GetMerged Engineering"
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#8ce99a] text-black font-mono text-xs font-bold border-2 border-black shadow-[3px_3px_0px_#000] hover:bg-[#72d482] transition-colors"
             >
               <Mail className="w-4 h-4" />
-              support@getmerged.abhishekco.de
+              hi@abhishekco.de
             </a>
 
             <Link
