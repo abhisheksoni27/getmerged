@@ -416,6 +416,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               href={`https://github.com/${fullName}`}
               target="_blank"
               rel="nofollow noopener noreferrer"
+              title={`View ${fullName} on GitHub`}
               className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-white px-6 py-3 text-xs font-mono font-medium text-zinc-700 hover:bg-zinc-50 transition-all"
             >
               <GitPullRequest className="h-4 w-4" />

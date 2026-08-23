@@ -155,6 +155,7 @@ export function RepoDetailHero({
             href={repo?.github_url || `https://github.com/${fullName}`}
             target="_blank"
             rel="nofollow noopener noreferrer"
+            title={`View ${fullName} repository on GitHub`}
             onClick={onGithubClick}
             className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-5 py-2.5 text-xs font-semibold font-sans text-white hover:bg-zinc-800 transition-all shadow-xs cursor-pointer"
           >

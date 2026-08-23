@@ -114,6 +114,7 @@ export default function GoodFirstIssueIndexPage() {
             <Link
               key={eco.slug}
               href={`/good-first-issue/${eco.slug}`}
+              title={`View ${eco.name} Good First Issues and beginner tickets`}
               className="group rounded-2xl bg-white p-6 border border-zinc-200/80 shadow-xs hover:border-zinc-300 hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between"
             >
               <div>

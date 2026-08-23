@@ -317,6 +317,7 @@ export function GlobalSearch() {
               <Link
                 href="/repos"
                 onClick={closeSearch}
+                title="View all repository search results in the repository explorer"
                 className="text-zinc-900 font-semibold hover:underline cursor-pointer font-sans"
               >
                 View all explorer results →

@@ -340,6 +340,7 @@ function WatchedRepoCard({ item, onUnwatch }: WatchedCardProps) {
           </button>
           <Link
             href={`/${ownerPart}/${namePart}`}
+            title={`View ${repo.full_name} details and C-Rank breakdown`}
             className="font-semibold text-zinc-900 hover:text-emerald-700 transition-colors flex items-center gap-0.5 no-underline"
           >
             View details →
@@ -364,6 +365,7 @@ function WatchlistEmptyState() {
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
         <Link
           href="/repos"
+          title="Browse all indexed open source repositories"
           className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900 text-white font-sans text-sm font-semibold hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs no-underline"
         >
           <Compass className="h-4 w-4" />
@@ -371,6 +373,7 @@ function WatchlistEmptyState() {
         </Link>
         <Link
           href="/good-first-issue"
+          title="Explore beginner friendly good first issues"
           className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-zinc-700 hover:text-zinc-900 font-sans text-sm font-medium hover:bg-zinc-50 transition-colors no-underline"
         >
           <span>Explore Good First Issues</span>
@@ -465,6 +468,7 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
           <div className="flex items-center gap-3">
             <Link
               href="/repos"
+              title="Explore all indexed open source repositories"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-zinc-200/90 text-zinc-800 hover:bg-zinc-50 hover:border-zinc-300 font-sans text-xs font-semibold shadow-2xs transition-all no-underline"
             >
               <Compass className="h-3.5 w-3.5 text-zinc-500" />

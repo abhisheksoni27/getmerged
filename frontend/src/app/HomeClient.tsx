@@ -468,6 +468,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               <div className="pt-2">
                 <Link
                   href="/how-c-rank-works"
+                  title="Read the science of open source hospitality"
                   className="inline-flex items-center gap-2 text-xs font-mono font-bold text-zinc-900 hover:text-zinc-700 underline underline-offset-4"
                 >
                   <span>Read the science of open source hospitality</span>
@@ -515,6 +516,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               </div>
               <Link
                 href="/hall-of-fame"
+                title="View S-Tier Hall of Fame repositories"
                 className="text-xs font-mono font-bold text-emerald-800 hover:text-emerald-950 inline-flex items-center gap-1 shrink-0"
               >
                 View S-Tier Hall of Fame <ArrowRight className="h-3 w-3" />
@@ -598,6 +600,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
               <div className="pt-2">
                 <Link
                   href="/how-c-rank-works"
+                  title="Explore the C-Rank scoring methodology"
                   className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-5 py-2.5 font-sans text-xs font-semibold text-white hover:bg-zinc-800 transition-all shadow-xs"
                 >
                   <span>Explore the scoring methodology</span>
@@ -951,6 +954,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    title="Share GetMerged rankings on Twitter / X"
                     onClick={() => posthog.capture("rankings_shared", { platform: "twitter" })}
                     className="inline-flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-bold text-zinc-900 hover:bg-zinc-50 transition-all font-sans cursor-pointer shadow-2xs"
                   >
@@ -965,6 +969,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    title="Share GetMerged on Reddit"
                     onClick={() => posthog.capture("rankings_shared", { platform: "reddit" })}
                     className="inline-flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-bold text-zinc-900 hover:bg-zinc-50 transition-all font-sans cursor-pointer shadow-2xs"
                   >
