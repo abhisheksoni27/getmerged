@@ -113,10 +113,21 @@ export default function GuidesHubPage() {
                   </span>
                 </div>
 
+                <div className="mb-4 overflow-hidden border-2 border-black bg-zinc-100 shadow-[2px_2px_0px_#000]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/images/guides/${guide.slug}.jpg`}
+                    alt={guide.title}
+                    width={600}
+                    height={315}
+                    className="w-full h-40 object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+
                 <h2 className="text-xl font-bold font-space tracking-tight text-zinc-900 mb-2.5 leading-snug">
                   {guide.title}
                 </h2>
-                <p className="text-xs sm:text-sm text-zinc-600 font-sans leading-relaxed mb-6 line-clamp-3">
+                <p className="text-xs sm:text-sm text-zinc-600 font-sans leading-relaxed mb-6 line-clamp-2">
                   {guide.description}
                 </p>
               </div>
