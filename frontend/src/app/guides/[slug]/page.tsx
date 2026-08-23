@@ -152,54 +152,55 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
         <article className="border-2 border-black bg-white p-6 sm:p-10 shadow-[6px_6px_0px_#000] mb-10 text-zinc-900">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
+            /* eslint-disable @typescript-eslint/no-unused-vars */
             components={{
-              h1: ({ ...props }) => (
+              h1: ({ node, ...props }) => (
                 <h1 className="text-2xl sm:text-3xl font-extrabold font-space text-zinc-950 mt-8 mb-4 leading-tight border-b-2 border-black pb-3" {...props} />
               ),
-              h2: ({ ...props }) => (
+              h2: ({ node, ...props }) => (
                 <h2 className="text-xl sm:text-2xl font-bold font-space text-zinc-950 mt-10 mb-4 leading-snug border-b-2 border-zinc-200 pb-2 flex items-center gap-2" {...props} />
               ),
-              h3: ({ ...props }) => (
+              h3: ({ node, ...props }) => (
                 <h3 className="text-lg sm:text-xl font-bold font-space text-zinc-900 mt-6 mb-3" {...props} />
               ),
-              p: ({ ...props }) => (
+              p: ({ node, ...props }) => (
                 <p className="text-sm sm:text-base leading-relaxed text-zinc-800 my-4 font-sans" {...props} />
               ),
-              ul: ({ ...props }) => (
+              ul: ({ node, ...props }) => (
                 <ul className="list-disc list-outside ml-6 my-4 space-y-2 text-sm sm:text-base text-zinc-800" {...props} />
               ),
-              ol: ({ ...props }) => (
+              ol: ({ node, ...props }) => (
                 <ol className="list-decimal list-outside ml-6 my-4 space-y-2 text-sm sm:text-base text-zinc-800" {...props} />
               ),
-              li: ({ ...props }) => (
+              li: ({ node, ...props }) => (
                 <li className="leading-relaxed" {...props} />
               ),
-              blockquote: ({ ...props }) => (
+              blockquote: ({ node, ...props }) => (
                 <div className="border-2 border-black bg-amber-50 p-5 my-6 shadow-[3px_3px_0px_#000] text-zinc-900">
                   <blockquote className="space-y-2 text-sm sm:text-base italic" {...props} />
                 </div>
               ),
-              table: ({ ...props }) => (
+              table: ({ node, ...props }) => (
                 <div className="my-6 overflow-x-auto border-2 border-black shadow-[4px_4px_0px_#000]">
                   <table className="w-full text-left text-xs sm:text-sm font-sans divide-y-2 divide-black bg-white" {...props} />
                 </div>
               ),
-              thead: ({ ...props }) => (
+              thead: ({ node, ...props }) => (
                 <thead className="bg-[#8ce99a] text-black font-space font-bold uppercase tracking-wider text-xs border-b-2 border-black" {...props} />
               ),
-              tbody: ({ ...props }) => (
+              tbody: ({ node, ...props }) => (
                 <tbody className="divide-y divide-zinc-200" {...props} />
               ),
-              tr: ({ ...props }) => (
+              tr: ({ node, ...props }) => (
                 <tr className="hover:bg-zinc-50 transition-colors" {...props} />
               ),
-              th: ({ ...props }) => (
+              th: ({ node, ...props }) => (
                 <th className="py-3 px-4 font-bold border-r border-black last:border-r-0" {...props} />
               ),
-              td: ({ ...props }) => (
+              td: ({ node, ...props }) => (
                 <td className="py-3 px-4 text-zinc-800 border-r border-zinc-200 last:border-r-0" {...props} />
               ),
-              code: ({ className, children, ...props }) => {
+              code: ({ node, className, children, ...props }) => {
                 const isInline = !className;
                 return isInline ? (
                   <code className="px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-300 font-mono text-xs font-bold text-zinc-900" {...props}>
@@ -213,16 +214,34 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
                   </pre>
                 );
               },
-              a: ({ href, children, ...props }) => (
-                <Link
-                  href={href || "#"}
-                  title={typeof children === "string" ? children : "Learn more on GetMerged"}
-                  className="font-bold text-black underline underline-offset-4 decoration-2 decoration-emerald-500 hover:text-emerald-700 hover:decoration-black transition-all"
-                  {...props}
-                >
-                  {children}
-                </Link>
-              ),
+              a: ({ node, href, children, ...props }) => {
+                const isInternal = href && (href.startsWith("/") || href.startsWith("#"));
+                if (isInternal) {
+                  return (
+                    <Link
+                      href={href}
+                      prefetch={false}
+                      title={typeof children === "string" ? children : "Learn more on GetMerged"}
+                      className="font-bold text-black underline underline-offset-4 decoration-2 decoration-emerald-500 hover:text-emerald-700 hover:decoration-black transition-all"
+                      {...props}
+                    >
+                      {children}
+                    </Link>
+                  );
+                }
+                return (
+                  <a
+                    href={href || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={typeof children === "string" ? children : "Authoritative reference"}
+                    className="font-bold text-black underline underline-offset-4 decoration-2 decoration-emerald-500 hover:text-emerald-700 hover:decoration-black transition-all"
+                    {...props}
+                  >
+                    {children}
+                  </a>
+                );
+              },
             }}
           >
             {guide.content}

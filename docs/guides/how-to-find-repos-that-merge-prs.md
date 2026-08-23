@@ -49,7 +49,6 @@ We run this evaluation pipeline at GetMerged across 53,000 public GitHub reposit
 > - Projects without a merged external pull request in 180 days are flagged as stale and capped at D-tier status.
 > - High-scoring repositories maintain a p50 first-response latency under 24 hours.
 
-<!-- ORIGINAL DATA -->
 ## Why Star Counts Fail as a Project Filter
 
 **Star illusion** is the mistaken belief that GitHub star counts reflect maintainer availability or review velocity. Stars measure historical attention rather than ongoing review capacity.
@@ -67,7 +66,6 @@ According to research from the [Linux Foundation 2025 Report](https://www.linuxf
 
 For example, large foundation projects maintain dedicated review shifts. In contrast, viral utilities created by solo developers often attract thousands of stars while leaving community pull requests unreviewed.
 
-<!-- UNIQUE INSIGHT -->
 ## The C-Rank Scoring Formula Explained
 
 **C-Rank** is a composite metric that scores repository contributor health from 0 to 100 based on observed pull request outcomes.
@@ -88,7 +86,6 @@ Software engineering research from the [ACM Digital Library](https://dl.acm.org/
 
 For instance, empirical studies published in [IEEE Software](https://www.ieee.org/) confirm that rapid first responses strongly correlate with patch completion rates.
 
-<!-- ORIGINAL DATA -->
 ## Detecting Ghost Codebases Before You Code
 
 **Ghost codebase** refers to an open source repository that appears active due to bot commits or automated dependency updates but has ceased reviewing community contributions.
@@ -108,7 +105,6 @@ Industry data from [GitHub Octoverse](https://github.blog/) reveals that thousan
 
 Before you invest time writing code, consult our guide on [how to know if a maintainer will review](/guides/how-to-know-if-maintainer-will-review).
 
-<!-- UNIQUE INSIGHT -->
 ## Step-by-Step Repository Selection Strategy
 
 Finding a welcoming open source project requires a structured selection process:

@@ -49,7 +49,6 @@ This pre-flight checklist provides a structured routine to ensure your pull requ
 > - Keep diffs focused; small patches achieve a 95% fit score compared to 60% for large rewrites.
 > - Submit as a draft pull request first, marking ready only after automated CI suites pass cleanly.
 
-<!-- ORIGINAL DATA -->
 ## Stage 1: Repository Pre-Flight Verification
 
 **Repository pre-flight** refers to the initial validation of maintainer responsiveness and project activity before writing code.
@@ -66,7 +65,6 @@ According to the [Linux Foundation 2025 Report](https://www.linuxfoundation.org/
 
 For example, checking repository telemetry with our guide on [how to know if a maintainer will review](/guides/how-to-know-if-maintainer-will-review) prevents submitting code to abandoned queues.
 
-<!-- UNIQUE INSIGHT -->
 ## Stage 2: Issue Selection and Scope Confirmation
 
 **Issue scoping** is the process of confirming task boundaries with maintainers before modifying source code.
@@ -82,7 +80,6 @@ Software engineering research from the [ACM Digital Library](https://dl.acm.org/
 
 For instance, empirical studies published in [IEEE Software](https://www.ieee.org/) show that claiming tasks publicly avoids wasted duplicate effort across distributed open source teams.
 
-<!-- ORIGINAL DATA -->
 ## Stage 3: Local Implementation and Test Discipline
 
 **Test discipline** refers to running automated unit tests and formatting tools locally prior to pushing git commits.
@@ -103,7 +100,6 @@ Industry benchmarks from [GitHub Octoverse](https://github.blog/) indicate that 
 
 For example, projects in Go and Rust enforce strict compiler rules that reject unformatted submissions immediately.
 
-<!-- UNIQUE INSIGHT -->
 ## Stage 4: Commit Hygiene and Pull Request Opening
 
 **Commit hygiene** is the practice of crafting atomic commits with clear, descriptive messages and issue references.

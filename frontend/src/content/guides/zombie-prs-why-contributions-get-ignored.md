@@ -49,7 +49,6 @@ These ignored patches waste time for developers. In this study, we measure revie
 > - Over 41% of active repositories operate with a bus factor of one, creating severe review bottlenecks.
 > - Pull requests that do not receive a human response within 72 hours suffer an 82% abandonment probability.
 
-<!-- ORIGINAL DATA -->
 ## The GitHub Star Illusion and Contribution Reality
 
 **Star illusion** is the false idea that popular repos have more time to review outside code. Many coders assume that projects with many stars review pull requests fast.
@@ -67,7 +66,6 @@ According to the [Linux Foundation 2025 Report](https://www.linuxfoundation.org/
 
 For example, large foundation repos keep active triage teams. In contrast, viral tools built by solo coders often get thousands of stars but have no time to review outside code.
 
-<!-- UNIQUE INSIGHT -->
 ## The 72-Hour Review Abandonment Curve
 
 **Abandonment curve** refers to the mathematical probability that an open pull request will never receive human review as elapsed time increases.
@@ -85,7 +83,6 @@ Once a pull request sits past two weeks without human words, its lifetime chance
 
 For instance, empirical studies published in [IEEE Software](https://www.ieee.org/) show that slow code reviews cause merge conflicts with incoming code. As new code merges into main, old pull requests rot and need hard rebases.
 
-<!-- ORIGINAL DATA -->
 ## Bus Factor Bottlenecks in Open Source
 
 **Bus factor** is the count of distinct maintainers who actively review or merge code in a repository over a 90-day window. When a project relies on one coder, review speed depends on that single person time.
@@ -102,7 +99,6 @@ Industry reports from [GitHub Octoverse](https://github.blog/) show that maintai
 
 When you pick a project, check maintainer count first. Choosing projects with multiple active reviewers protects your time from sudden project stops.
 
-<!-- UNIQUE INSIGHT -->
 ## Why Maintainers Ignore External Pull Requests
 
 Understanding why maintainers pause helps you open pull requests that get merged fast. Technical reports from [Google Open Source](https://opensource.google/) show four main reasons maintainers skip outside code:
