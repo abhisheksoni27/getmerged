@@ -72,7 +72,7 @@ var ogFace = basicfont.Face7x13
 func drawScaledText(img *image.RGBA, s string, x, y, scale int, clr color.Color) {
 	face := ogFace
 	for _, r := range s {
-		dr, mask, maskp, adv, ok := face.Glyph(fixed.I(0), r)
+		dr, mask, maskp, adv, ok := face.Glyph(fixed.Point26_6{}, r)
 		if !ok {
 			continue
 		}
@@ -93,7 +93,7 @@ func drawScaledText(img *image.RGBA, s string, x, y, scale int, clr color.Color)
 func approxTextWidth(s string, scale int) int {
 	total := 0
 	for _, r := range s {
-		_, _, _, adv, ok := ogFace.Glyph(fixed.I(0), r)
+		_, _, _, adv, ok := ogFace.Glyph(fixed.Point26_6{}, r)
 		if !ok {
 			continue
 		}
