@@ -115,3 +115,41 @@ Use the included `Makefile` commands for deployment to your production server:
 ## 📜 License
 
 Distributed under the MIT License. Built for open-source contributors worldwide.
+
+---
+
+## ✈️ Preflight GitHub Action (`opendoor/preflight`)
+
+Add one line to any workflow and every push to a PR posts a check run forecasting acceptance odds with the C-Rank:
+
+```yaml
+- uses: opendoor/preflight@main
+  with: { token: "${{ secrets.PREFLIGHT_TOKEN }}" }
+```
+
+### Inputs
+
+| Input | Required | Default | Description |
+| --- | --- | --- | --- |
+| `api_url` | no | `https://getmerged.abhishekco.de` | Forecast API base URL |
+| `token` | no | — | `PREFLIGHT_TOKEN`; omit on fork PRs |
+| `github_token` | no | `${{ github.token }}` | Reads the PR diff, publishes the check run |
+| `pr_number` | no | event payload | Pull request number |
+
+### Outputs
+
+| Output | Description |
+| --- | --- |
+| `score` | Preflight score 0-100 (empty when skipped/unavailable) |
+| `rank` | C-Rank grade A-F |
+| `conclusion` | `success` (≥70) · `neutral` (40-69) · `failure` (<40) · `skipped` (no PR diff) |
+
+### Quota model
+
+- **Fork PRs** (no repo secrets): public unauthenticated endpoint, **1 eval/month/IP**, check runs published read-only via job summary.
+- **Repo-owner PRs**: pass the `PREFLIGHT_TOKEN` secret for **3 evals/month/token** on a rolling 30-day window.
+- On `429 {limit, reset_at}` the action posts a neutral check: *"Quota exhausted — upgrade to Pro"* — the build never fails.
+
+### Reliability contract
+
+API timeout (10s), 5xx, or malformed response → neutral check **"Forecast unavailable"**, exit 0. Only invalid input (no PR diff) → `skipped`. The check run is named deterministically `preflight/<pr-number>`; pushes reuse the head SHA so stale runs auto-supersede, and in-flight runs are guarded by an idempotency key (`sha+attempt`).

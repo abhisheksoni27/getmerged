@@ -1,0 +1,52 @@
+name: 'opendoor/preflight'
+description: >-
+  Preflight PR evaluator — forecasts pull-request acceptance odds (score 0-100,
+  C-Rank A-F) on every push using the OpenDoor static Preflight engine, posted
+  as a GitHub check run with annotations. Never blocks contributor CI.
+branding:
+  icon: 'check-circle'
+  color: 'emerald'
+
+inputs:
+  api_url:
+    description: 'Base URL of the OpenDoor forecast API'
+    required: false
+    default: 'https://getmerged.abhishekco.de'
+  token:
+    description: >-
+      PREFLIGHT_TOKEN for repo-owner quota (3 evals/month/token, rolling
+      30-day window). Leave empty on fork PRs to use the public unauthenticated
+      endpoint (1 eval/month/IP).
+    required: false
+    default: ''
+  github_token:
+    description: 'GitHub token used to read the PR diff and publish the check run.'
+    required: false
+    default: ${{ github.token }}
+  pr_number:
+    description: 'Pull request number (defaults to the pull_request event payload).'
+    required: false
+    default: ''
+
+outputs:
+  score:
+    description: 'Preflight score 0-100 (empty when skipped or unavailable).'
+    value: ${{ steps.preflight.outputs.score }}
+  rank:
+    description: 'C-Rank grade A-F.'
+    value: ${{ steps.preflight.outputs.rank }}
+  conclusion:
+    description: 'Check conclusion: success | neutral | failure | skipped.'
+    value: ${{ steps.preflight.outputs.conclusion }}
+
+runs:
+  using: 'composite'
+  steps:
+    - id: preflight
+      shell: bash
+      env:
+        INPUT_API_URL: ${{ inputs.api_url }}
+        INPUT_TOKEN: ${{ inputs.token }}
+        INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
+        INPUT_PR_NUMBER: ${{ inputs.pr_number }}
+      run: node "${{ github.action_path }}/dist/index.js"
