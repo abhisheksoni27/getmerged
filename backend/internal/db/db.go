@@ -361,7 +361,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			revoked_at DATETIME,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			expires_at DATETIME NOT NULL
-		);`, autoInc),
+		);`),
 	}
 
 	for i, stmt := range statements {
