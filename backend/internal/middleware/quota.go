@@ -31,8 +31,9 @@ func RequireProOrQuota(entRepo repository.EntitlementRepository) gin.HandlerFunc
 
 		if !allowed {
 			c.JSON(http.StatusPaymentRequired, gin.H{
-				"error":        "Monthly free evaluation quota exceeded (3/3). Upgrade to Pro for unlimited evaluations.",
-				"upgrade_url": "/pricing",
+				"error":                 "Monthly free evaluation quota exceeded (3/3). Upgrade to Pro for unlimited evaluations.",
+				"upgrade_url":           "/pricing",
+				"evaluations_remaining": 0,
 			})
 			c.Abort()
 			return
