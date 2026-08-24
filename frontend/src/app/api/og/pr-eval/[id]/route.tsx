@@ -28,7 +28,7 @@ export async function GET(
   const rawScore = stored?.score !== undefined ? stored.score : (searchParams.get("score") ? parseFloat(searchParams.get("score")!) : null);
   const scoreDisplay = rawScore !== null && !isNaN(rawScore) ? `${Math.round(rawScore)}` : "—";
 
-  let verdict = stored?.verdict || searchParams.get("verdict") || (rawScore !== null && rawScore >= 70 ? "PRE-FLIGHT READY" : "ADJUSTMENTS RECOMMENDED");
+  const verdict = stored?.verdict || searchParams.get("verdict") || (rawScore !== null && rawScore >= 70 ? "PRE-FLIGHT READY" : "ADJUSTMENTS RECOMMENDED");
   const isReady = verdict.toUpperCase().includes("READY");
 
   const verdictLabel = isReady ? "PRE-FLIGHT READY" : "ADJUSTMENTS RECOMMENDED";
