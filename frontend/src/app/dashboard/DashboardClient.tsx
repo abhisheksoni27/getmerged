@@ -204,7 +204,7 @@ export function DashboardClient() {
           {data.prs.map((pr) => {
             const meta = STATE_META[pr.state] ?? STATE_META.open;
             return (
-              <li key={pr.prid ?? pr.pr_id} className="rounded-xl border border-zinc-200 bg-white p-4 shadow-[2px_2px_0px_#000]/5">
+              <li key={pr.pr_id} className="rounded-xl border border-zinc-200 bg-white p-4 shadow-[2px_2px_0px_#000]/5">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">

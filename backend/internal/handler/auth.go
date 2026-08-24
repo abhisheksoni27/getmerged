@@ -142,7 +142,7 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository,
 		// One-time referral credit for first GitHub OAuth signup via referral link.
 		if isNewUser && entRepo != nil {
 			if refCode, err := c.Cookie("opendoor_ref"); err == nil && refCode != "" {
-				if referrerID, ok, err := entRepo.FindUserIDByReferralCode(c.Request.Context(), refCode); err == nil && ok {
+				if referrerID, ok, err := ResolveReferralAttribution(c.Request.Context(), entRepo, cfg.JWTSecret, refCode); err == nil && ok {
 					if err := entRepo.ApplySignupReferral(c.Request.Context(), referrerID, userID); err != nil {
 						slog.Warn("failed to apply signup referral", "referrer_id", referrerID, "new_user_id", userID, "err", err)
 					}

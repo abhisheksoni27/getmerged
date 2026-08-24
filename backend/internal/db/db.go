@@ -348,6 +348,20 @@ func AutoMigrate(db *sqlx.DB) error {
 			last_error TEXT,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS share_cards (
+			id VARCHAR(64) PRIMARY KEY,
+			user_id INTEGER NOT NULL,
+			repo_full_name VARCHAR(255) NOT NULL,
+			pr_title TEXT,
+			summary TEXT,
+			overall_score REAL DEFAULT 0,
+			ready_to_merge BOOLEAN DEFAULT FALSE,
+			ref_token VARCHAR(128) NOT NULL,
+			consent_given BOOLEAN NOT NULL DEFAULT FALSE,
+			revoked_at DATETIME,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			expires_at DATETIME NOT NULL
+		);`, autoInc),
 	}
 
 	for i, stmt := range statements {
@@ -377,6 +391,7 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_pr_snapshots_user ON pr_snapshots(user_id, github_updated_at DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_pr_snapshots_repo ON pr_snapshots(repository_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_pr_transitions_pr ON pr_state_transitions(pr_id, occurred_at DESC)`,
+		`CREATE INDEX IF NOT EXISTS idx_share_cards_user ON share_cards(user_id, created_at DESC)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)

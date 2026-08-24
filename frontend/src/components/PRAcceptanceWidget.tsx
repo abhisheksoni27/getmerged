@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Clock, Percent, Users, ShieldAlert, Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
+import { ShareForecastButton } from "@/components/ShareForecastButton";
 
 interface PRAcceptanceWidgetProps {
   owner: string;
@@ -75,6 +76,12 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
           </h3>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
+          <ShareForecastButton
+            repoFullName={`${owner}/${name}`}
+            overallScore={data.overall_acceptance_rate}
+            readyToMerge={data.overall_acceptance_rate !== null ? data.overall_acceptance_rate >= 50 : undefined}
+            variant="compact"
+          />
           <Link
             href={`/preflight?repo=${encodeURIComponent(`${owner}/${name}`)}`}
             data-testid="pr-preflight-cta"
