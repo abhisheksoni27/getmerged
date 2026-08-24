@@ -25,11 +25,16 @@ func ListTopics(repoStore repository.RepoRepository) gin.HandlerFunc {
 		topics := make([]string, len(stats))
 		for i, stat := range stats {
 			topics[i] = stat.Name
+			// Round long float tails — they bloat the payload past Next.js's 2MB
+			// data-cache limit (~7.9MB -> ~4.8MB) with zero UI impact.
+			stat.AvgExternalPRMergeRate = round2(stat.AvgExternalPRMergeRate)
+			stat.AvgStars = round2(stat.AvgStars)
+			stat.AvgResponseHours = round2(stat.AvgResponseHours)
+			stats[i] = stat
 		}
 
 		c.JSON(http.StatusOK, gin.H{
 			"topics":      topics,
-			"data":        topics,
 			"topic_stats": stats,
 		})
 	}
