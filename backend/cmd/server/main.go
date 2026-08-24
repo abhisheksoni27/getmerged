@@ -24,6 +24,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/notification"
 	"github.com/abhisheksoni27/opendoor/internal/pipeline"
+	"github.com/abhisheksoni27/opendoor/internal/prtracker"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -96,6 +97,12 @@ func main() {
 		pipeline.StartAIInsightsCron(database, aiClient, aiRepo)
 		defer crawler.Stop()
 	}
+
+	// PR Tracker: 15-min poll cron reusing the existing notifier queue (AC2, AC8).
+	prTrackerStore := prtracker.NewStore(database)
+	prTrackerSvc := prtracker.NewService(prTrackerStore, tokenMgr, prtracker.NewGHClient(vkClient), database)
+	stopPRTrackerCron := prTrackerSvc.StartCron(15 * time.Minute)
+	defer stopPRTrackerCron()
 
 	gin.SetMode(cfg.GinMode)
 	r := gin.New()
@@ -173,6 +180,11 @@ func main() {
 		userApi.POST("/user/watchlist", handler.AddToWatchlist(watchlistRepo))
 		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist(watchlistRepo))
 		userApi.GET("/user/watchlist", handler.ListWatchlist(watchlistRepo))
+
+		// My PR Tracker (personal pull-request journey on scored repos)
+		userApi.GET("/user/prs", handler.GetUserPRsHandler(prTrackerSvc, entitlementRepo))
+		userApi.GET("/user/prs/connection", handler.GetPRConnectionHandler(prTrackerSvc))
+		userApi.POST("/user/prs/reconnect", handler.ReconnectPRConnectionHandler(prTrackerSvc))
 		userApi.POST("/user/feedback", handler.CreateFeedback(database, cfg.GithubToken))
 		userApi.DELETE("/user/feedback/:id", handler.DeleteFeedback(database))
 	}

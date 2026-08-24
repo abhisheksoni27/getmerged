@@ -314,6 +314,40 @@ func AutoMigrate(db *sqlx.DB) error {
 			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 			UNIQUE(category, stat_name, stat_date)
 		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS pr_snapshots (
+			id INTEGER PRIMARY KEY %s,
+			pr_id VARCHAR(255) NOT NULL,
+			user_id INTEGER NOT NULL,
+			repository_id VARCHAR(255) NOT NULL,
+			pr_number INTEGER NOT NULL,
+			title TEXT,
+			html_url TEXT,
+			state VARCHAR(30) NOT NULL DEFAULT 'open',
+			pr_created_at DATETIME,
+			github_updated_at DATETIME,
+			merged_at DATETIME,
+			fetched_at DATETIME NOT NULL,
+			snapshot_at DATETIME NOT NULL,
+			UNIQUE(pr_id, snapshot_at)
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS pr_state_transitions (
+			id INTEGER PRIMARY KEY %s,
+			pr_id VARCHAR(255) NOT NULL,
+			user_id INTEGER NOT NULL,
+			from_state VARCHAR(30) NOT NULL DEFAULT '',
+			to_state VARCHAR(30) NOT NULL,
+			notified BOOLEAN DEFAULT FALSE,
+			occurred_at DATETIME NOT NULL
+		);`, autoInc),
+		`CREATE TABLE IF NOT EXISTS pr_connections (
+			user_id INTEGER PRIMARY KEY,
+			github_login TEXT,
+			status VARCHAR(40) NOT NULL DEFAULT 'active',
+			last_limited BOOLEAN DEFAULT FALSE,
+			last_synced_at DATETIME,
+			last_error TEXT,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
 	}
 
 	for i, stmt := range statements {
@@ -340,6 +374,9 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_repositories_owner ON repositories(owner(191))`,
 		`CREATE INDEX IF NOT EXISTS idx_repo_topic_repo_id ON repository_topics(repository_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_daily_metrics_lookup ON daily_metrics(category, stat_name, stat_date DESC)`,
+		`CREATE INDEX IF NOT EXISTS idx_pr_snapshots_user ON pr_snapshots(user_id, github_updated_at DESC)`,
+		`CREATE INDEX IF NOT EXISTS idx_pr_snapshots_repo ON pr_snapshots(repository_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_pr_transitions_pr ON pr_state_transitions(pr_id, occurred_at DESC)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)
