@@ -38,7 +38,6 @@ func TestListTopics(t *testing.T) {
 
 	var resp struct {
 		Topics     []string               `json:"topics"`
-		Data       []string               `json:"data"`
 		TopicStats []repository.TopicStat `json:"topic_stats"`
 	}
 	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
@@ -52,13 +51,6 @@ func TestListTopics(t *testing.T) {
 	// rust has count 2; async, cli, machine-learning have count 1
 	if resp.Topics[0] != "rust" {
 		t.Errorf("expected first topic by popularity to be 'rust', got %q", resp.Topics[0])
-	}
-
-	if len(resp.Data) != 4 {
-		t.Fatalf("expected data key with 4 topics, got %d", len(resp.Data))
-	}
-	if resp.Data[0] != "rust" {
-		t.Errorf("expected data[0] to be 'rust', got %q", resp.Data[0])
 	}
 
 	if len(resp.TopicStats) != 4 {
@@ -90,7 +82,6 @@ func TestListTopics_Empty(t *testing.T) {
 
 	var resp struct {
 		Topics     []string               `json:"topics"`
-		Data       []string               `json:"data"`
 		TopicStats []repository.TopicStat `json:"topic_stats"`
 	}
 	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
@@ -99,9 +90,6 @@ func TestListTopics_Empty(t *testing.T) {
 
 	if resp.Topics == nil || len(resp.Topics) != 0 {
 		t.Fatalf("expected empty non-nil slice for topics, got: %v", resp.Topics)
-	}
-	if resp.Data == nil || len(resp.Data) != 0 {
-		t.Fatalf("expected empty non-nil slice for data, got: %v", resp.Data)
 	}
 	if resp.TopicStats == nil || len(resp.TopicStats) != 0 {
 		t.Fatalf("expected empty non-nil slice for topic_stats, got: %v", resp.TopicStats)
