@@ -34,53 +34,37 @@ definitions:
           type: string
         type: array
     type: object
-  handler.repoResponse:
+  notification.WeeklyDigestSummary:
     properties:
-      c_rank_score:
-        type: number
-      c_rank_tier:
-        type: string
-      description:
-        type: string
-      distinct_maintainer_count:
-        type: number
-      external_pr_merge_rate:
-        type: number
-      first_timer_success_rate:
-        type: number
-      full_name:
-        type: string
-      github_url:
-        type: string
-      id:
-        type: string
-      issue_triage_speed_hours:
-        type: number
-      language:
-        type: string
-      last_activity_days:
-        type: number
-      maintainer_responsiveness:
-        type: number
-      repeat_contributor_rate:
-        type: number
-      review_rounds:
-        type: number
-      snapshot_date:
-        type: string
-      staleness_flag:
-        type: boolean
-      stars:
+      alerts_found:
         type: integer
-      time_to_first_response_hours:
-        type: number
-      time_to_merge_hours:
-        type: number
+      emails_failed:
+        type: integer
+      emails_sent:
+        type: integer
+      failed:
+        type: integer
+      sent:
+        type: integer
+      skipped_new:
+        type: integer
+      status:
+        type: string
+      users_considered:
+        type: integer
+      webhooks_disabled:
+        type: integer
+      webhooks_failed:
+        type: integer
+      webhooks_sent:
+        type: integer
+      week_start:
+        type: string
     type: object
 host: opendoor.abhishekco.de
 info:
   contact: {}
-  description: Find open-source repositories that welcome contributors — ranked by
+  description: Find open-source repositories that welcome contributors - ranked by
     C-Rank™.
   title: OpenDoor API
   version: "1.0"
@@ -106,9 +90,10 @@ paths:
         in: query
         name: sort
         type: string
-      - description: Sort order (asc, desc)
+      - description: Minimum C-Rank tier floor (S, A, B, C, D); keeps tiers at or
+          above
         in: query
-        name: order
+        name: min_tier
         type: string
       - description: Page number (default 1)
         in: query
@@ -135,37 +120,6 @@ paths:
       summary: List repositories
       tags:
       - repos
-  /api/v1/repos/{id}:
-    get:
-      description: Returns details and latest C-Rank score for a single repository.
-      parameters:
-      - description: Repository ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handler.repoResponse'
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Get repository details
-      tags:
-      - repos
   /health:
     get:
       description: Returns service health status, uptime, database/cache connectivity,
@@ -180,6 +134,71 @@ paths:
       summary: Health Check
       tags:
       - system
+  /internal/jobs/weekly-digest:
+    post:
+      description: Computes C-Rank changes on watched repos and emails alert digests.
+        Synchronous.
+      parameters:
+      - description: Job secret
+        in: header
+        name: X-Job-Secret
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/notification.WeeklyDigestSummary'
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Trigger weekly watchlist digest
+      tags:
+      - internal
+  /internal/migrate-latest-snapshots:
+    post:
+      description: Backfills latest_snapshots table with latest record for each repo.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Migrate latest snapshots
+      tags:
+      - internal
+  /internal/purge-cache:
+    post:
+      description: Flushes all Valkey cached API responses in one request.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Purge API Cache
+      tags:
+      - internal
   /internal/repos/{id}:
     delete:
       description: Deletes a repository record and all of its daily snapshot history.
@@ -280,6 +299,23 @@ paths:
       summary: Trigger database seed job
       tags:
       - internal
+  /internal/sync-trending:
+    post:
+      description: Fetches repos trending in the last 24h from OSSInsight and marks
+        them in the database.
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Sync trending repos
+      tags:
+      - internal
   /internal/update-scores:
     post:
       description: Fetches GitHub data for stale repos and recomputes C-Rank scores.
@@ -298,8 +334,13 @@ paths:
       tags:
       - internal
 securityDefinitions:
-  ApiKeyAuth:
+  BearerAuth:
+    description: 'Public API key auth. Create a key in your dashboard, then send:
+      Authorization: Bearer odk_... Limits per key - Free: 60 req/hour + 10 req/min
+      burst; Pro: 600 req/hour + 100 req/min burst. Errors: 401 code=ERR_MALFORMED_AUTH_HEADER
+      or ERR_INVALID_API_KEY (invalid/revoked); 429 code=ERR_RATE_LIMITED with Retry-After
+      header.'
     in: header
-    name: x-api-key
+    name: Authorization
     type: apiKey
 swagger: "2.0"
