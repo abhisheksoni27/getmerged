@@ -20,7 +20,10 @@ interface TopicsPayload {
 async function fetchTopics(): Promise<TopicsPayload> {
   try {
     const res = await fetch(`${API_BASE_URL}/api/v1/topics`, {
-      next: { revalidate: 3600 },
+      // Payload (~4.9MB) exceeds Next.js's 2MB data-cache entry limit, so
+      // caching attempts fail loudly every request. Skip the data cache;
+      // the CDN/edge layer still caches the response itself.
+      cache: "no-store",
     });
     if (!res.ok) return { topics: [], stats: [] };
     const data = await res.json();
