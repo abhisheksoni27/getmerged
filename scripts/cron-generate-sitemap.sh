@@ -34,6 +34,7 @@ if [[ -n $(git status -s frontend/public/sitemap.xml frontend/public/sitemap/) ]
   echo "[$(date -u +%FT%TZ)] sitemap-cron: git changes detected in public sitemaps, committing..." >> "$LOG_FILE"
   git add frontend/public/sitemap.xml frontend/public/sitemap/
   git commit -m "chore(seo): auto-generate updated static XML sitemaps [skip ci]" >> "$LOG_FILE" 2>&1 || true
+  git pull --rebase || true
   git push origin main >> "$LOG_FILE" 2>&1 || true
   echo "[$(date -u +%FT%TZ)] sitemap-cron: git push complete." >> "$LOG_FILE"
 else
