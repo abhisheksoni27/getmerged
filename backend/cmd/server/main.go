@@ -153,7 +153,7 @@ func main() {
 		authGroup := api.Group("/auth")
 		{
 			authGroup.GET("/github", handler.GitHubOAuthRedirect(cfg))
-			authGroup.GET("/github/callback", handler.GitHubOAuthCallback(cfg, userRepo, tokenMgr))
+			authGroup.GET("/github/callback", handler.GitHubOAuthCallback(cfg, userRepo, tokenMgr, entitlementRepo))
 			authGroup.GET("/google", handler.GoogleOAuthRedirect(cfg))
 			authGroup.GET("/google/callback", handler.GoogleOAuthCallback(cfg, userRepo))
 		}
@@ -169,6 +169,7 @@ func main() {
 		userApi.GET("/user/dna", handler.GetContributorDNA(profileRepo))
 		userApi.POST("/user/dna/refresh", handler.RefreshContributorDNA(profileRepo, dnaWorker))
 		userApi.GET("/user/matches", handler.GetUserMatchesHandler(profileRepo, repoStore))
+		userApi.GET("/user/referral", handler.GetMyReferral(entitlementRepo))
 		userApi.POST("/user/watchlist", handler.AddToWatchlist(watchlistRepo))
 		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist(watchlistRepo))
 		userApi.GET("/user/watchlist", handler.ListWatchlist(watchlistRepo))

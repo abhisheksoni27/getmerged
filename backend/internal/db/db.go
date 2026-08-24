@@ -43,9 +43,19 @@ func AutoMigrate(db *sqlx.DB) error {
 			profiling_consent BOOLEAN DEFAULT FALSE,
 			profiling_consent_at DATETIME,
 			digest_unsubscribed BOOLEAN DEFAULT FALSE,
+			referral_code VARCHAR(32) UNIQUE,
 			deleted_at DATETIME,
 			created_at DATETIME NOT NULL,
 			updated_at DATETIME NOT NULL
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS referral_credits (
+			id INTEGER PRIMARY KEY %s,
+			referrer_id INTEGER NOT NULL,
+			new_user_id INTEGER NOT NULL,
+			referrer_bonus INTEGER NOT NULL DEFAULT 0,
+			referee_bonus INTEGER NOT NULL DEFAULT 0,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(referrer_id, new_user_id)
 		);`, autoInc),
 		`CREATE TABLE IF NOT EXISTS user_oauth_tokens (
 			user_id INTEGER NOT NULL,
@@ -73,6 +83,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			subscription_expires_at DATETIME,
 			billing_cycle VARCHAR(50),
 			monthly_eval_count INTEGER DEFAULT 0,
+			bonus_evals INTEGER DEFAULT 0,
 			current_period_start DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			subscription_updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -356,6 +367,9 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN profiling_consent BOOLEAN DEFAULT FALSE`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN profiling_consent_at DATETIME`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN digest_unsubscribed BOOLEAN DEFAULT FALSE`)
+	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN referral_code VARCHAR(32) UNIQUE`)
+	_, _ = db.Exec(`ALTER TABLE user_entitlements ADD COLUMN bonus_evals INTEGER DEFAULT 0`)
+	_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_referral_credits_new_user ON referral_credits(new_user_id)`)
 	_, _ = db.Exec(`ALTER TABLE contributor_feedback ADD UNIQUE KEY uq_cf_user_repo (user_id, repository_id)`)
 	_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_cf_user_repo ON contributor_feedback(user_id, repository_id)`)
 	_, _ = db.Exec(`INSERT IGNORE INTO contributor_feedback (repository_id, user_id, maintainer_rating, review_speed_rating, beginner_friendly_rating, comment, verified_pr_author, created_at)

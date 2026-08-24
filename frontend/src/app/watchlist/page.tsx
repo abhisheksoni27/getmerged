@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { API_BASE_URL } from "@/lib/api";
 import { WatchlistClient, WatchedRepoItem } from "./WatchlistClient";
+import { ReferralCard } from "@/components/ReferralCard";
 
 export const metadata: Metadata = {
   title: "My Watchlist - C-Rank™ Changes & Repository Monitoring | GetMerged",
@@ -81,7 +82,8 @@ export default async function WatchlistPage() {
   return (
     <div className="flex min-h-screen flex-col bg-[#faf9f6]">
       <Header />
-      <main className="flex-1">
+      <main className="flex-1 pt-8">
+        <ReferralCard />
         <WatchlistClient initialItems={initialItems} />
       </main>
       <Footer />
