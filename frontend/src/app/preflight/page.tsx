@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Sparkles, CheckCircle2, AlertTriangle, XCircle, ArrowRight } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
+import { ShareForecastButton } from "@/components/ShareForecastButton";
 
 interface CheckItem {
   key: string;
@@ -410,13 +411,21 @@ function PreflightContent() {
               </div>
               <p className="text-sm font-semibold text-zinc-800">{result.summary}</p>
             </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold font-mono text-zinc-900">
-                {result.overall_score.toFixed(0)}
-                <span className="text-sm text-zinc-400">/100</span>
-              </div>
-              <div className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">
-                Pre-flight Score
+            <div className="flex items-center gap-4">
+              <ShareForecastButton
+                repoFullName={repoFullName || "Repository"}
+                overallScore={result.overall_score}
+                readyToMerge={result.ready_to_merge}
+                className="shrink-0"
+              />
+              <div className="text-right">
+                <div className="text-2xl font-bold font-mono text-zinc-900">
+                  {result.overall_score.toFixed(0)}
+                  <span className="text-sm text-zinc-400">/100</span>
+                </div>
+                <div className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">
+                  Pre-flight Score
+                </div>
               </div>
             </div>
           </div>

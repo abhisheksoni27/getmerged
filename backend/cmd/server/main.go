@@ -81,6 +81,7 @@ func main() {
 	repoStore := repository.NewRepoRepository(database)
 	watchlistRepo := repository.NewWatchlistRepository(database)
 	aiRepo := repository.NewAIRepository(database)
+	shareCardRepo := repository.NewShareCardRepository(database)
 
 	// Start continuous background crawler worker loop
 	gfiRepo := repository.NewGFIRepository(database)
@@ -120,6 +121,14 @@ func main() {
 
 	// Public SVG Badge Route (F1)
 	r.GET("/badge/:owner/:repo", handler.GetBadgeSVG(repoStore))
+
+	// Public share-card routes: no auth to view (AC1), 30 req/min/IP rate limit
+	// and 24h CDN/Valkey cache with purge-on-revoke (AC2, AC4).
+	cardRL := middleware.RateLimitPerIP(30, time.Minute)
+	r.GET("/api/v1/cards/:id", cardRL, handler.GetShareCardHandler(shareCardRepo))
+	r.GET("/api/v1/cards/:id/og.png", cardRL, handler.GetShareCardOGHandler(shareCardRepo))
+	r.GET("/og/forecast/:id", cardRL, handler.GetShareCardOGHandler(shareCardRepo))
+	r.GET("/api/v1/og/forecast/:id", cardRL, handler.GetShareCardOGHandler(shareCardRepo))
 
 	// Public API
 	api := r.Group("/api/v1")
@@ -177,6 +186,9 @@ func main() {
 		userApi.POST("/user/dna/refresh", handler.RefreshContributorDNA(profileRepo, dnaWorker))
 		userApi.GET("/user/matches", handler.GetUserMatchesHandler(profileRepo, repoStore))
 		userApi.GET("/user/referral", handler.GetMyReferral(entitlementRepo))
+		userApi.POST("/preflight/share", handler.CreateShareCardHandler(shareCardRepo, cfg.JWTSecret))
+		userApi.GET("/user/share-cards", handler.ListShareCardsHandler(shareCardRepo))
+		userApi.DELETE("/user/share-cards/:id", handler.RevokeShareCardHandler(shareCardRepo))
 		userApi.POST("/user/watchlist", handler.AddToWatchlist(watchlistRepo))
 		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist(watchlistRepo))
 		userApi.GET("/user/watchlist", handler.ListWatchlist(watchlistRepo))
