@@ -516,9 +516,10 @@ const docTemplate = `{
         }
     },
     "securityDefinitions": {
-        "ApiKeyAuth": {
+        "BearerAuth": {
+            "description": "Public API key auth. Create a key in your dashboard, then send: Authorization: Bearer odk_... Limits per key - Free: 60 req/hour + 10 req/min burst; Pro: 600 req/hour + 100 req/min burst. Errors: 401 code=ERR_MALFORMED_AUTH_HEADER or ERR_INVALID_API_KEY (invalid/revoked); 429 code=ERR_RATE_LIMITED with Retry-After header.",
             "type": "apiKey",
-            "name": "x-api-key",
+            "name": "Authorization",
             "in": "header"
         }
     }

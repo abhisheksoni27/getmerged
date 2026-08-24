@@ -365,6 +365,16 @@ func AutoMigrate(db *sqlx.DB) error {
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			expires_at DATETIME NOT NULL
 		);`),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS user_api_keys (
+			id INTEGER PRIMARY KEY %s,
+			user_id INTEGER NOT NULL,
+			name VARCHAR(255) NOT NULL DEFAULT 'default',
+			key_prefix VARCHAR(16) NOT NULL,
+			key_hash VARCHAR(64) UNIQUE NOT NULL,
+			last_used_at DATETIME,
+			revoked_at DATETIME,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
 	}
 
 	for i, stmt := range statements {
@@ -395,6 +405,7 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_pr_snapshots_repo ON pr_snapshots(repository_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_pr_transitions_pr ON pr_state_transitions(pr_id, occurred_at DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_share_cards_user ON share_cards(user_id, created_at DESC)`,
+		`CREATE INDEX IF NOT EXISTS idx_user_api_keys_user ON user_api_keys(user_id)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)

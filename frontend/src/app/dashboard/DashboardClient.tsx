@@ -5,6 +5,7 @@ import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { TopMatches } from "@/components/TopMatches";
 import { ForYou } from "@/components/ForYou";
+import { ApiKeysCard } from "./ApiKeysCard";
 import {
   GitPullRequest,
   Clock,
@@ -151,6 +152,9 @@ export function DashboardClient() {
       <div className="mb-6">
         <ForYou />
         <TopMatches />
+      </div>
+      <div className="mb-6">
+        <ApiKeysCard />
       </div>
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>

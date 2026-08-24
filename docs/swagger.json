@@ -46,8 +46,8 @@
                     },
                     {
                         "type": "string",
-                        "description": "Sort order (asc, desc)",
-                        "name": "order",
+                        "description": "Minimum C-Rank tier floor (S, A, B, C, D); keeps tiers at or above",
+                        "name": "min_tier",
                         "in": "query"
                     },
                     {
@@ -83,22 +83,42 @@
                 }
             }
         },
-        "/api/v1/repos/{id}": {
+        "/health": {
             "get": {
-                "description": "Returns details and latest C-Rank score for a single repository.",
+                "description": "Returns service health status, uptime, database/cache connectivity, and deployed git commit hash.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "repos"
+                    "system"
                 ],
-                "summary": "Get repository details",
+                "summary": "Health Check",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.HealthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/internal/jobs/weekly-digest": {
+            "post": {
+                "description": "Computes C-Rank changes on watched repos and emails alert digests. Synchronous.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "internal"
+                ],
+                "summary": "Trigger weekly watchlist digest",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Repository ID",
-                        "name": "id",
-                        "in": "path",
+                        "description": "Job secret",
+                        "name": "X-Job-Secret",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -106,11 +126,11 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handler.repoResponse"
+                            "$ref": "#/definitions/notification.WeeklyDigestSummary"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "403": {
+                        "description": "Forbidden",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -130,21 +150,55 @@
                 }
             }
         },
-        "/health": {
-            "get": {
-                "description": "Returns service health status, uptime, database/cache connectivity, and deployed git commit hash.",
+        "/internal/migrate-latest-snapshots": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Backfills latest_snapshots table with latest record for each repo.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "system"
+                    "internal"
                 ],
-                "summary": "Health Check",
+                "summary": "Migrate latest snapshots",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handler.HealthResponse"
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/internal/purge-cache": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Flushes all Valkey cached API responses in one request.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "internal"
+                ],
+                "summary": "Purge API Cache",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -305,6 +359,32 @@
                 }
             }
         },
+        "/internal/sync-trending": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Fetches repos trending in the last 24h from OSSInsight and marks them in the database.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "internal"
+                ],
+                "summary": "Sync trending repos",
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/internal/update-scores": {
             "post": {
                 "security": [
@@ -387,76 +467,53 @@
                 }
             }
         },
-        "handler.repoResponse": {
+        "notification.WeeklyDigestSummary": {
             "type": "object",
             "properties": {
-                "c_rank_score": {
-                    "type": "number"
-                },
-                "c_rank_tier": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "distinct_maintainer_count": {
-                    "type": "number"
-                },
-                "external_pr_merge_rate": {
-                    "type": "number"
-                },
-                "first_timer_success_rate": {
-                    "type": "number"
-                },
-                "full_name": {
-                    "type": "string"
-                },
-                "github_url": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "issue_triage_speed_hours": {
-                    "type": "number"
-                },
-                "language": {
-                    "type": "string"
-                },
-                "last_activity_days": {
-                    "type": "number"
-                },
-                "maintainer_responsiveness": {
-                    "type": "number"
-                },
-                "repeat_contributor_rate": {
-                    "type": "number"
-                },
-                "review_rounds": {
-                    "type": "number"
-                },
-                "snapshot_date": {
-                    "type": "string"
-                },
-                "staleness_flag": {
-                    "type": "boolean"
-                },
-                "stars": {
+                "alerts_found": {
                     "type": "integer"
                 },
-                "time_to_first_response_hours": {
-                    "type": "number"
+                "emails_failed": {
+                    "type": "integer"
                 },
-                "time_to_merge_hours": {
-                    "type": "number"
+                "emails_sent": {
+                    "type": "integer"
+                },
+                "failed": {
+                    "type": "integer"
+                },
+                "sent": {
+                    "type": "integer"
+                },
+                "skipped_new": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "users_considered": {
+                    "type": "integer"
+                },
+                "webhooks_disabled": {
+                    "type": "integer"
+                },
+                "webhooks_failed": {
+                    "type": "integer"
+                },
+                "webhooks_sent": {
+                    "type": "integer"
+                },
+                "week_start": {
+                    "type": "string"
                 }
             }
         }
     },
     "securityDefinitions": {
-        "ApiKeyAuth": {
+        "BearerAuth": {
+            "description": "Public API key auth. Create a key in your dashboard, then send: Authorization: Bearer odk_... Limits per key - Free: 60 req/hour + 10 req/min burst; Pro: 600 req/hour + 100 req/min burst. Errors: 401 code=ERR_MALFORMED_AUTH_HEADER or ERR_INVALID_API_KEY (invalid/revoked); 429 code=ERR_RATE_LIMITED with Retry-After header.",
             "type": "apiKey",
-            "name": "x-api-key",
+            "name": "Authorization",
             "in": "header"
         }
     }

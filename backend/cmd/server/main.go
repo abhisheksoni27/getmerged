@@ -3,9 +3,10 @@
 // @description     Find open-source repositories that welcome contributors - ranked by C-Rank™.
 // @host            opendoor.abhishekco.de
 // @BasePath        /
-// @securityDefinitions.apikey ApiKeyAuth
+// @securityDefinitions.apikey BearerAuth
 // @in              header
-// @name            x-api-key
+// @name            Authorization
+// @description     Public API key auth. Create a key in your dashboard, then send: Authorization: Bearer odk_... Limits per key - Free: 60 req/hour + 10 req/min burst; Pro: 600 req/hour + 100 req/min burst. Errors: 401 code=ERR_MALFORMED_AUTH_HEADER or ERR_INVALID_API_KEY (invalid/revoked); 429 code=ERR_RATE_LIMITED with Retry-After header.
 package main
 
 import (
@@ -14,7 +15,6 @@ import (
 	"os"
 	"time"
 
-	_ "github.com/abhisheksoni27/opendoor/docs"
 	"github.com/abhisheksoni27/opendoor/internal/ai"
 	"github.com/abhisheksoni27/opendoor/internal/auth"
 	"github.com/abhisheksoni27/opendoor/internal/config"
@@ -76,6 +76,7 @@ func main() {
 	oauthTokenRepo := repository.NewOAuthTokenRepository(database, cfg)
 	profileRepo := repository.NewContributorProfileRepository(database)
 	entitlementRepo := repository.NewEntitlementRepository(database)
+	apiKeyRepo := repository.NewAPIKeyRepository(database)
 	tokenMgr := auth.NewTokenManager(oauthTokenRepo, cfg, nil)
 	dnaWorker := pipeline.NewContributorDNAWorker(userRepo, profileRepo, tokenMgr, cfg.GithubToken, nil)
 	repoStore := repository.NewRepoRepository(database)
@@ -132,9 +133,14 @@ func main() {
 
 	// Public API
 	api := r.Group("/api/v1")
+	// AC2/AC3/AC4: public API keys (Authorization: Bearer odk_...) authenticate
+	// with stable error codes and enforce free-tier/Pro sliding-window limits
+	// (hourly + per-minute burst) with a Redis-cached entitlement tier.
+	api.Use(middleware.APIKeyAuth(apiKeyRepo, entitlementRepo, []byte(cfg.EncryptionKey)))
 	api.Use(middleware.OptionalUserAuth(cfg.JWTSecret))
 	{
 		api.GET("/health", handler.Health())
+		api.GET("/docs/swagger.json", handler.PublicSwaggerSpec())
 		api.GET("/repos", handler.ListRepos(repoStore))
 		api.GET("/repos/:id", handler.GetRepo(repoStore))
 		api.GET("/repos/:id/pr-likelihood", handler.GetPRLikelihoodHandler(repoStore))
@@ -188,6 +194,11 @@ func main() {
 		userApi.GET("/user/top-matches", handler.GetTopMatchesHandler(userRepo, repoStore))
 		userApi.GET("/user/for-you", handler.GetForYouHandler(userRepo, repoStore, gfiRepo, entitlementRepo))
 		userApi.GET("/user/referral", handler.GetMyReferral(entitlementRepo))
+
+		// Public API key management (AC1)
+		userApi.GET("/user/api-keys", handler.ListAPIKeys(apiKeyRepo, entitlementRepo))
+		userApi.POST("/user/api-keys", handler.CreateAPIKey(apiKeyRepo, []byte(cfg.EncryptionKey)))
+		userApi.DELETE("/user/api-keys/:id", handler.RevokeAPIKey(apiKeyRepo))
 		userApi.POST("/preflight/share", handler.CreateShareCardHandler(shareCardRepo, cfg.JWTSecret))
 		userApi.GET("/user/share-cards", handler.ListShareCardsHandler(shareCardRepo))
 		userApi.DELETE("/user/share-cards/:id", handler.RevokeShareCardHandler(shareCardRepo))
