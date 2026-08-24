@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://getmerged.abhishekco.de/sysprog21/lkmpg</loc>
+    <lastmod>2026-08-24T00:07:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/lervag/vimtex</loc>
+    <lastmod>2026-08-24T00:07:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/tuna/thuthesis</loc>
     <lastmod>2026-08-19T05:39:27Z</lastmod>
     <changefreq>daily</changefreq>
@@ -175,13 +187,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/latex3/babel</loc>
+    <loc>https://getmerged.abhishekco.de/aml4td/website</loc>
     <lastmod>2026-08-21T16:36:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/aml4td/website</loc>
+    <loc>https://getmerged.abhishekco.de/latex3/babel</loc>
     <lastmod>2026-08-21T16:36:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
