@@ -108,6 +108,9 @@ func main() {
 	// Health Check
 	r.GET("/health", handler.Health())
 
+	// One-click digest unsubscribe (public, token-verified)
+	r.GET("/unsubscribe", handler.Unsubscribe(cfg))
+
 	// Public SVG Badge Route (F1)
 	r.GET("/badge/:owner/:repo", handler.GetBadgeSVG(repoStore))
 
@@ -185,7 +188,7 @@ func main() {
 		internal.POST("/purge-cache", handler.PurgeCache())
 		internal.POST("/cache/purge-tag", handler.PurgeTagCache())
 		internal.POST("/migrate-latest-snapshots", handler.MigrateLatestSnapshots())
-		internal.POST("/jobs/weekly-digest", handler.TriggerWeeklyDigest())
+		internal.POST("/jobs/weekly-digest", handler.TriggerWeeklyDigest(cfg))
 		internal.DELETE("/repos/:id", handler.DeleteRepo(repoStore))
 	}
 

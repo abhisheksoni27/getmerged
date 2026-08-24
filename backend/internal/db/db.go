@@ -42,6 +42,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			avatar_url TEXT,
 			profiling_consent BOOLEAN DEFAULT FALSE,
 			profiling_consent_at DATETIME,
+			digest_unsubscribed BOOLEAN DEFAULT FALSE,
 			deleted_at DATETIME,
 			created_at DATETIME NOT NULL,
 			updated_at DATETIME NOT NULL
@@ -169,6 +170,29 @@ func AutoMigrate(db *sqlx.DB) error {
 			payload TEXT NOT NULL,
 			status VARCHAR(50) NOT NULL DEFAULT 'pending',
 			created_at DATETIME NOT NULL
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS digest_runs (
+			id INTEGER PRIMARY KEY %s,
+			week_start DATE NOT NULL UNIQUE,
+			status VARCHAR(20) NOT NULL DEFAULT 'running',
+			started_at DATETIME NOT NULL,
+			finished_at DATETIME,
+			alerted_repos INTEGER DEFAULT 0,
+			emails_sent INTEGER DEFAULT 0,
+			emails_failed INTEGER DEFAULT 0,
+			skipped_new INTEGER DEFAULT 0
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS digest_recipients (
+			id INTEGER PRIMARY KEY %s,
+			week_start DATE NOT NULL,
+			user_id INTEGER NOT NULL,
+			email TEXT,
+			status VARCHAR(20) NOT NULL DEFAULT 'pending',
+			error TEXT,
+			attempts INTEGER DEFAULT 0,
+			created_at DATETIME NOT NULL,
+			updated_at DATETIME NOT NULL,
+			UNIQUE(week_start, user_id)
 		);`, autoInc),
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS indexing_queue (
 			id INTEGER PRIMARY KEY %s,
@@ -331,6 +355,7 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN deleted_at DATETIME`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN profiling_consent BOOLEAN DEFAULT FALSE`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN profiling_consent_at DATETIME`)
+	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN digest_unsubscribed BOOLEAN DEFAULT FALSE`)
 	_, _ = db.Exec(`ALTER TABLE contributor_feedback ADD UNIQUE KEY uq_cf_user_repo (user_id, repository_id)`)
 	_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_cf_user_repo ON contributor_feedback(user_id, repository_id)`)
 	_, _ = db.Exec(`INSERT IGNORE INTO contributor_feedback (repository_id, user_id, maintainer_rating, review_speed_rating, beginner_friendly_rating, comment, verified_pr_author, created_at)

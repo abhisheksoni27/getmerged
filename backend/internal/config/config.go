@@ -31,6 +31,13 @@ type Config struct {
 	TelegramBotToken   string
 	TelegramChatID     string
 	DodopaymentsWebhookSecret string
+	JobSecret          string
+	SMTPHost           string
+	SMTPPort           string
+	SMTPUser           string
+	SMTPPassword       string
+	SMTPFrom           string
+	AppBaseURL         string
 	DiscoveryIntervalMinutes int
 	DiscoveryMaxNewPerRun    int
 	SnapshotRetentionDays    int
@@ -52,9 +59,22 @@ func Load() (*Config, error) {
 		DodopaymentsWebhookSecret: os.Getenv("DODOPAYMENTS_WEBHOOK_SECRET"),
 		GoogleClientID:   os.Getenv("GOOGLE_CLIENT_ID"),
 		GoogleClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+		JobSecret:        os.Getenv("JOB_SECRET"),
+		SMTPHost:         os.Getenv("SMTP_HOST"),
+		SMTPPort:         os.Getenv("SMTP_PORT"),
+		SMTPUser:         os.Getenv("SMTP_USER"),
+		SMTPPassword:     os.Getenv("SMTP_PASSWORD"),
+		SMTPFrom:         os.Getenv("SMTP_FROM"),
+		AppBaseURL:       os.Getenv("APP_BASE_URL"),
 	}
 	if c.LogFile == "" {
 		c.LogFile = "opendoor.log"
+	}
+	if c.SMTPHost != "" && c.SMTPPort == "" {
+		c.SMTPPort = "587"
+	}
+	if c.AppBaseURL == "" {
+		c.AppBaseURL = "https://getmerged.abhishekco.de"
 	}
 
 	// Optional crawler tuning knobs. Falls back to conservative defaults
