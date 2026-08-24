@@ -823,13 +823,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/xcpcio/xcpcio</loc>
+    <loc>https://getmerged.abhishekco.de/JustArchiNET/ASF-ui</loc>
     <lastmod>2026-08-20T06:26:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JustArchiNET/ASF-ui</loc>
+    <loc>https://getmerged.abhishekco.de/xcpcio/xcpcio</loc>
     <lastmod>2026-08-20T06:26:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -889,14 +889,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/compiiile/compiiile</loc>
-    <lastmod>2026-08-19T12:06:31Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/LightNovelShelf/Web</loc>
+    <lastmod>2026-08-22T16:21:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/LightNovelShelf/Web</loc>
-    <lastmod>2026-08-22T16:21:57Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/compiiile/compiiile</loc>
+    <lastmod>2026-08-19T12:06:31Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -913,14 +913,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/zeasin/qihang-erp-open</loc>
-    <lastmod>2026-08-20T06:26:42Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/misenhower/splatoon3.ink</loc>
+    <lastmod>2026-08-19T12:06:31Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/misenhower/splatoon3.ink</loc>
-    <lastmod>2026-08-19T12:06:31Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/zeasin/qihang-erp-open</loc>
+    <lastmod>2026-08-20T06:26:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1033,13 +1033,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/zxwk1998/vue3-admin-better</loc>
+    <loc>https://getmerged.abhishekco.de/misskey-dev/misskey-hub-next</loc>
     <lastmod>2026-08-24T01:16:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/misskey-dev/misskey-hub-next</loc>
+    <loc>https://getmerged.abhishekco.de/zxwk1998/vue3-admin-better</loc>
     <lastmod>2026-08-24T01:16:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1171,14 +1171,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ActivityWatch/aw-webui</loc>
-    <lastmod>2026-08-20T23:47:44Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/olivi-eh/xivtodo</loc>
+    <lastmod>2026-08-24T01:16:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/olivi-eh/xivtodo</loc>
-    <lastmod>2026-08-24T01:16:20Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/ActivityWatch/aw-webui</loc>
+    <lastmod>2026-08-20T23:47:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1255,19 +1255,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/sky-systems/sky_phone</loc>
-    <lastmod>2026-08-20T23:47:44Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/zelytra/BetterFleet</loc>
     <lastmod>2026-08-24T01:16:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/joonaspaakko/audible-library-extractor</loc>
+    <loc>https://getmerged.abhishekco.de/sky-systems/sky_phone</loc>
     <lastmod>2026-08-20T23:47:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1275,6 +1269,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/linkcraftstudio/feedlog</loc>
     <lastmod>2026-08-24T01:16:21Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/joonaspaakko/audible-library-extractor</loc>
+    <lastmod>2026-08-20T23:47:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
