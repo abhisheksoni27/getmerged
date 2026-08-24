@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { X, ShieldCheck, Flame, ArrowRight } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
+import { getReferralCode } from "@/lib/referral";
 import posthog from "posthog-js";
 
 interface AuthModalProps {
@@ -22,10 +23,18 @@ export function AuthModal({
   source = "modal",
 }: AuthModalProps) {
   const [mounted, setMounted] = useState(false);
+  const [refQS, setRefQS] = useState("");
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      const ref = getReferralCode();
+      setRefQS(ref ? `?ref=${encodeURIComponent(ref)}` : "");
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -100,7 +109,7 @@ export function AuthModal({
           <div className="mt-6 w-full space-y-3 font-sans">
             {/* Primary GitHub OAuth Button */}
             <a
-              href={`${API_BASE_URL}/api/v1/auth/github`}
+              href={`${API_BASE_URL}/api/v1/auth/github${refQS}`}
               onClick={() => posthog.capture("github_sign_in_clicked", { source })}
               title="Sign in with GitHub account"
               className="flex w-full items-center justify-center gap-3 rounded-2xl bg-zinc-900 px-5 py-3.5 text-xs sm:text-sm font-semibold text-white shadow-xs hover:bg-zinc-800 active:scale-[0.98] transition-all cursor-pointer no-underline group"

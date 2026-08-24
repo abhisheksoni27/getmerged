@@ -19,6 +19,7 @@ import {
 import { motion, useMotionValue, animate, useInView } from "framer-motion";
 import { API_BASE_URL } from "@/lib/api";
 import { getLanguageSlug } from "@/lib/languageSlug";
+import { captureReferralFromUrl } from "@/lib/referral";
 import posthog from "posthog-js";
 import Link from "next/link";
 import { AuthModal } from "@/components/AuthModal";
@@ -106,6 +107,11 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
     []
   );
   const [placeholderIndex, setPlaceholderIndex] = useState<number>(0);
+
+  // Persist referral attribution from /?ref=CODE for 30 days (AC1)
+  useEffect(() => {
+    captureReferralFromUrl();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {

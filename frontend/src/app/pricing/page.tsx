@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import Link from "next/link";
 import { Check, Zap, ShieldCheck, Sparkles, ArrowRight } from "lucide-react";
 
 export default function PricingPage() {
@@ -155,6 +156,13 @@ export default function PricingPage() {
             >
               Upgrade to Pro Now <ArrowRight className="h-4 w-4" />
             </button>
+            <p className="mt-3 text-center text-[11px] text-zinc-500 font-sans">
+              Out of free evaluations?{" "}
+              <Link href="/watchlist" title="Invite friends to earn bonus evaluation credits" className="text-emerald-700 font-semibold hover:underline">
+                or invite friends
+              </Link>{" "}
+              to earn extra credits.
+            </p>
           </div>
         </div>
 

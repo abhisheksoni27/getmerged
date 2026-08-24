@@ -22,6 +22,19 @@ import (
 // GitHubOAuthRedirect handles GET /api/v1/auth/github
 func GitHubOAuthRedirect(cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Persist referral attribution for 30 days (AC1).
+		if ref := c.Query("ref"); ref != "" && len(ref) <= 64 {
+			isSecure := cfg.GinMode == "release"
+			http.SetCookie(c.Writer, &http.Cookie{
+				Name:     "opendoor_ref",
+				Value:    ref,
+				Path:     "/",
+				MaxAge:   30 * 24 * 3600,
+				HttpOnly: false,
+				Secure:   isSecure,
+				SameSite: http.SameSiteLaxMode,
+			})
+		}
 		scheme := "https"
 		if c.Request.TLS == nil && c.GetHeader("X-Forwarded-Proto") != "https" {
 			scheme = "http"
@@ -35,7 +48,7 @@ func GitHubOAuthRedirect(cfg *config.Config) gin.HandlerFunc {
 var httpClient = &http.Client{Timeout: 10 * time.Second}
 
 // GitHubOAuthCallback handles GET /api/v1/auth/github/callback
-func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository, tokenMgr auth.TokenManager) gin.HandlerFunc {
+func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository, tokenMgr auth.TokenManager, entRepo repository.EntitlementRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		code := c.Query("code")
 		if code == "" {
@@ -105,6 +118,13 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository,
 		bodyBytes, _ := io.ReadAll(userResp.Body)
 		_ = json.Unmarshal(bodyBytes, &ghUser)
 
+		// Detect brand-new signup before upsert so referral credit lands
+		// exactly once at first successful GitHub OAuth (AC2).
+		isNewUser := true
+		if existing, err := userRepo.FindByGithubID(c.Request.Context(), ghUser.ID); err == nil && existing != nil {
+			isNewUser = false
+		}
+
 		userID, err := userRepo.UpsertUser(c.Request.Context(), ghUser.ID, ghUser.Login, ghUser.Email, ghUser.AvatarURL)
 		if err != nil {
 			slog.Error("failed to save user", "github_id", ghUser.ID, "err", err)
@@ -117,6 +137,27 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository,
 			if err := tokenMgr.SaveGithubToken(c.Request.Context(), userID, tokenResp.AccessToken, tokenResp.RefreshToken, tokenResp.ExpiresIn); err != nil {
 				slog.Error("failed to persist encrypted oauth tokens", "user_id", userID, "err", err)
 			}
+		}
+
+		// One-time referral credit for first GitHub OAuth signup via referral link.
+		if isNewUser && entRepo != nil {
+			if refCode, err := c.Cookie("opendoor_ref"); err == nil && refCode != "" {
+				if referrerID, ok, err := entRepo.FindUserIDByReferralCode(c.Request.Context(), refCode); err == nil && ok {
+					if err := entRepo.ApplySignupReferral(c.Request.Context(), referrerID, userID); err != nil {
+						slog.Warn("failed to apply signup referral", "referrer_id", referrerID, "new_user_id", userID, "err", err)
+					}
+				}
+			}
+			// Attribution consumed; drop the cookie.
+			isSecure := cfg.GinMode == "release"
+			http.SetCookie(c.Writer, &http.Cookie{
+				Name:     "opendoor_ref",
+				Value:    "",
+				Path:     "/",
+				MaxAge:   -1,
+				Secure:   isSecure,
+				SameSite: http.SameSiteLaxMode,
+			})
 		}
 
 		// Issue Custom Signed Opendoor JWT Token using the stored username so it

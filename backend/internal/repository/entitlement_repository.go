@@ -2,7 +2,9 @@ package repository
 
 import (
 	"context"
+	"crypto/rand"
 	"database/sql"
+	"math/big"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -26,7 +28,21 @@ type EntitlementRepository interface {
 	RefundQuota(ctx context.Context, userID int64) error
 	RecordWebhookEvent(ctx context.Context, eventID, eventType, payloadJSON string) (bool, error)
 	UpdateSubscription(ctx context.Context, userID int64, isPro bool, subID, cycle string, expiresAt *time.Time, eventTime time.Time) error
+	EnsureReferralCode(ctx context.Context, userID int64) (string, error)
+	FindUserIDByReferralCode(ctx context.Context, code string) (int64, bool, error)
+	ApplySignupReferral(ctx context.Context, referrerID, newUserID int64) error
+	GetReferralStats(ctx context.Context, userID int64) (invites int64, credits int64, err error)
 }
+
+// Referral bonus constants: one-time grants stacked on the free tier.
+const (
+	referralReferrerBonus = 3
+	referralRefereeBonus  = 1
+	referralLifetimeCap   = 10
+)
+
+// referralCodeCharset is base62; codes are 16 chars drawn from crypto/rand.
+const referralCodeCharset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 type sqlxEntitlementRepository struct {
 	db *sqlx.DB
@@ -83,11 +99,11 @@ func (r *sqlxEntitlementRepository) DeductQuota(ctx context.Context, userID int6
 			    ELSE current_period_start 
 			  END,
 			  updated_at = CURRENT_TIMESTAMP
-			WHERE user_id = ? 
+			WHERE user_id = ?
 			  AND (
-			    is_pro = TRUE 
+			    is_pro = TRUE
 			    OR strftime('%Y-%m', current_period_start) != strftime('%Y-%m', CURRENT_TIMESTAMP)
-			    OR monthly_eval_count < 3
+			    OR monthly_eval_count < 3 + COALESCE(bonus_evals, 0)
 			  );
 		`
 	} else {
@@ -97,11 +113,11 @@ func (r *sqlxEntitlementRepository) DeductQuota(ctx context.Context, userID int6
 			  monthly_eval_count = IF(DATE_FORMAT(current_period_start, '%Y-%m') != DATE_FORMAT(NOW(), '%Y-%m'), 1, monthly_eval_count + 1),
 			  current_period_start = IF(DATE_FORMAT(current_period_start, '%Y-%m') != DATE_FORMAT(NOW(), '%Y-%m'), NOW(), current_period_start),
 			  updated_at = CURRENT_TIMESTAMP
-			WHERE user_id = ? 
+			WHERE user_id = ?
 			  AND (
-			    is_pro = TRUE 
+			    is_pro = TRUE
 			    OR DATE_FORMAT(current_period_start, '%Y-%m') != DATE_FORMAT(NOW(), '%Y-%m')
-			    OR monthly_eval_count < 3
+			    OR monthly_eval_count < 3 + COALESCE(bonus_evals, 0)
 			  );
 		`
 	}
@@ -165,4 +181,156 @@ func (r *sqlxEntitlementRepository) UpdateSubscription(ctx context.Context, user
 
 	_, err := r.db.ExecContext(ctx, query, userID, isPro, subID, cycle, expiresAt, eventTime)
 	return err
+}
+
+func generateReferralCode() (string, error) {
+	code := make([]byte, 16)
+	max := big.NewInt(int64(len(referralCodeCharset)))
+	for i := range code {
+		n, err := rand.Int(rand.Reader, max)
+		if err != nil {
+			return "", err
+		}
+		code[i] = referralCodeCharset[n.Int64()]
+	}
+	return string(code), nil
+}
+
+// EnsureReferralCode returns the user's high-entropy referral code, lazily
+// generating and persisting one if it does not exist yet.
+func (r *sqlxEntitlementRepository) EnsureReferralCode(ctx context.Context, userID int64) (string, error) {
+	var code string
+	err := r.db.GetContext(ctx, &code, "SELECT referral_code FROM users WHERE id = ? AND deleted_at IS NULL", userID)
+	if err == nil && code != "" {
+		return code, nil
+	}
+	if err != nil && err != sql.ErrNoRows {
+		return "", err
+	}
+
+	for attempt := 0; attempt < 5; attempt++ {
+		code, err = generateReferralCode()
+		if err != nil {
+			return "", err
+		}
+		res, err := r.db.ExecContext(ctx,
+			"UPDATE users SET referral_code = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND deleted_at IS NULL AND (referral_code IS NULL OR referral_code = '')",
+			code, userID)
+		if err != nil {
+			return "", err
+		}
+		rows, _ := res.RowsAffected()
+		if rows > 0 {
+			return code, nil
+		}
+		// Concurrent generation won the race; read the stored code.
+		err = r.db.GetContext(ctx, &code, "SELECT referral_code FROM users WHERE id = ?", userID)
+		if err == nil && code != "" {
+			return code, nil
+		}
+	}
+	return "", sql.ErrNoRows
+}
+
+// FindUserIDByReferralCode resolves a referral code to an active user.
+func (r *sqlxEntitlementRepository) FindUserIDByReferralCode(ctx context.Context, code string) (int64, bool, error) {
+	var referrerID int64
+	err := r.db.GetContext(ctx, &referrerID, "SELECT id FROM users WHERE referral_code = ? AND deleted_at IS NULL", code)
+	if err == sql.ErrNoRows {
+		return 0, false, nil
+	}
+	if err != nil {
+		return 0, false, err
+	}
+	return referrerID, true, nil
+}
+
+// ApplySignupReferral grants ONE-TIME bonus preflight evaluations for a new
+// signup: +3 to the referrer, +1 to the referee, stacked on the free tier.
+// The referral_credits ledger enforces UNIQUE(referrer_id, new_user_id) at the
+// DB level, so concurrent OAuth callbacks cannot double-credit. Grants beyond
+// the lifetime cap are silently dropped.
+func (r *sqlxEntitlementRepository) ApplySignupReferral(ctx context.Context, referrerID, newUserID int64) error {
+	if referrerID <= 0 || newUserID <= 0 {
+		return nil
+	}
+
+	// Ensure entitlement rows exist for both sides before crediting.
+	insertEnt := "INSERT IGNORE INTO user_entitlements (user_id, current_period_start) VALUES (?, CURRENT_TIMESTAMP)"
+	if r.db.DriverName() == "sqlite" {
+		insertEnt = "INSERT OR IGNORE INTO user_entitlements (user_id, current_period_start) VALUES (?, CURRENT_TIMESTAMP)"
+	}
+	_, _ = r.db.ExecContext(ctx, insertEnt, referrerID)
+	_, _ = r.db.ExecContext(ctx, insertEnt, newUserID)
+
+	// Idempotent ledger insert; zero rows affected means already credited.
+	insertLedger := "INSERT IGNORE INTO referral_credits (referrer_id, new_user_id) VALUES (?, ?)"
+	if r.db.DriverName() == "sqlite" {
+		insertLedger = "INSERT OR IGNORE INTO referral_credits (referrer_id, new_user_id) VALUES (?, ?)"
+	}
+	res, err := r.db.ExecContext(ctx, insertLedger, referrerID, newUserID)
+	if err != nil {
+		return err
+	}
+	rows, _ := res.RowsAffected()
+	if rows == 0 {
+		return nil // duplicate callback under concurrency: no double credit
+	}
+
+	// Referee always gets +1 unless lifetime cap reached.
+	refereeBonus := int64(0)
+	var refereeGrants int64
+	if err := r.db.GetContext(ctx, &refereeGrants,
+		"SELECT COUNT(*) FROM referral_credits WHERE new_user_id = ? AND referee_bonus > 0", newUserID); err == nil && refereeGrants < referralLifetimeCap {
+		refereeBonus = referralRefereeBonus
+	}
+
+	// Referrer gets +3 only for a distinct active account within cap;
+	// otherwise referee still gets +1 and referrer gets nothing (AC4).
+	referrerBonus := int64(0)
+	if referrerID != newUserID {
+		var active int64
+		if err := r.db.GetContext(ctx, &active,
+			"SELECT COUNT(*) FROM users WHERE id = ? AND deleted_at IS NULL", referrerID); err == nil && active > 0 {
+			var referrerGrants int64
+			if err := r.db.GetContext(ctx, &referrerGrants,
+				"SELECT COUNT(*) FROM referral_credits WHERE referrer_id = ? AND referrer_bonus > 0", referrerID); err == nil && referrerGrants < referralLifetimeCap {
+				referrerBonus = referralReferrerBonus
+			}
+		}
+	}
+
+	if _, err := r.db.ExecContext(ctx,
+		"UPDATE referral_credits SET referrer_bonus = ?, referee_bonus = ? WHERE referrer_id = ? AND new_user_id = ?",
+		referrerBonus, refereeBonus, referrerID, newUserID); err != nil {
+		return err
+	}
+
+	if refereeBonus > 0 {
+		if _, err := r.db.ExecContext(ctx,
+			"UPDATE user_entitlements SET bonus_evals = COALESCE(bonus_evals, 0) + ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?",
+			refereeBonus, newUserID); err != nil {
+			return err
+		}
+	}
+	if referrerBonus > 0 {
+		if _, err := r.db.ExecContext(ctx,
+			"UPDATE user_entitlements SET bonus_evals = COALESCE(bonus_evals, 0) + ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?",
+			referrerBonus, referrerID); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// GetReferralStats returns lifetime successful invites and credits earned as a referrer.
+func (r *sqlxEntitlementRepository) GetReferralStats(ctx context.Context, userID int64) (invites int64, credits int64, err error) {
+	err = r.db.GetContext(ctx, &invites,
+		"SELECT COUNT(*) FROM referral_credits WHERE referrer_id = ? AND referrer_bonus > 0", userID)
+	if err != nil {
+		return 0, 0, err
+	}
+	err = r.db.GetContext(ctx, &credits,
+		"SELECT COALESCE(SUM(referrer_bonus), 0) FROM referral_credits WHERE referrer_id = ? AND referrer_bonus > 0", userID)
+	return invites, credits, err
 }
