@@ -139,6 +139,10 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository,
 			}
 		}
 
+		// Auto-import top public repo languages as skills. Best-effort with its
+		// own 2s per-request timeout; runs async so sign-in is never blocked.
+		go ImportGithubSkills(context.Background(), tokenResp.AccessToken, userID, userRepo)
+
 		// One-time referral credit for first GitHub OAuth signup via referral link.
 		if isNewUser && entRepo != nil {
 			if refCode, err := c.Cookie("opendoor_ref"); err == nil && refCode != "" {
@@ -368,6 +372,7 @@ func GetCurrentUser(userRepo repository.UserRepository) gin.HandlerFunc {
 			"username":          user.Username,
 			"avatar_url":        avatarURL,
 			"profiling_consent": user.ProfilingConsent,
+			"skills":            user.Skills,
 			"auth_provider":     authProvider,
 			"has_github":        user.GithubID != nil,
 		}})
