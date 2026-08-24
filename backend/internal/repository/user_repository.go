@@ -23,6 +23,8 @@ type User struct {
 	AvatarURL        *string    `db:"avatar_url" json:"avatar_url,omitempty"`
 	ProfilingConsent bool       `db:"profiling_consent" json:"profiling_consent"`
 	Skills           *string    `db:"skills" json:"skills,omitempty"`
+	LangSnapshot     *string    `db:"lang_snapshot" json:"lang_snapshot,omitempty"`
+	LangSnapshotAt   *time.Time `db:"lang_snapshot_at" json:"lang_snapshot_at,omitempty"`
 	DeletedAt        *time.Time `db:"deleted_at" json:"-"`
 	CreatedAt        time.Time  `db:"created_at" json:"created_at"`
 	UpdatedAt        time.Time  `db:"updated_at" json:"updated_at"`
@@ -69,6 +71,7 @@ type UserRepository interface {
 	UpsertGoogleUser(ctx context.Context, googleID string, username, email, avatarURL string) (int64, error)
 	UpdateProfilingConsent(ctx context.Context, userID int64, consent bool) error
 	UpdateUserSkills(ctx context.Context, userID int64, skills string) error
+	UpdateLanguageSnapshot(ctx context.Context, userID int64, snapshotJSON string) error
 	SoftDeleteUser(ctx context.Context, userID int64) error
 	PurgeDeletedUsers(ctx context.Context) (int64, error)
 }
@@ -91,7 +94,7 @@ func NewUserRepository(db *sqlx.DB, cfg *config.Config) UserRepository {
 
 func (r *sqlxUserRepository) FindByGithubID(ctx context.Context, githubID int64) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, skills, deleted_at, created_at, updated_at FROM users WHERE github_id = ? AND deleted_at IS NULL", githubID)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE github_id = ? AND deleted_at IS NULL", githubID)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +105,7 @@ func (r *sqlxUserRepository) FindByGithubID(ctx context.Context, githubID int64)
 
 func (r *sqlxUserRepository) FindByGoogleID(ctx context.Context, googleID string) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, skills, deleted_at, created_at, updated_at FROM users WHERE google_id = ? AND deleted_at IS NULL", googleID)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE google_id = ? AND deleted_at IS NULL", googleID)
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +116,7 @@ func (r *sqlxUserRepository) FindByGoogleID(ctx context.Context, googleID string
 
 func (r *sqlxUserRepository) FindByID(ctx context.Context, id int64) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, skills, deleted_at, created_at, updated_at FROM users WHERE id = ? AND deleted_at IS NULL", id)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE id = ? AND deleted_at IS NULL", id)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +127,7 @@ func (r *sqlxUserRepository) FindByID(ctx context.Context, id int64) (*User, err
 
 func (r *sqlxUserRepository) FindBySlug(ctx context.Context, slug string) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, skills, deleted_at, created_at, updated_at FROM users WHERE slug = ? AND deleted_at IS NULL", slug)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE slug = ? AND deleted_at IS NULL", slug)
 	if err != nil {
 		return nil, err
 	}
@@ -499,6 +502,11 @@ func (r *sqlxUserRepository) UpdateProfilingConsent(ctx context.Context, userID 
 
 func (r *sqlxUserRepository) UpdateUserSkills(ctx context.Context, userID int64, skills string) error {
 	_, err := r.db.ExecContext(ctx, "UPDATE users SET skills = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?", skills, userID)
+	return err
+}
+
+func (r *sqlxUserRepository) UpdateLanguageSnapshot(ctx context.Context, userID int64, snapshotJSON string) error {
+	_, err := r.db.ExecContext(ctx, "UPDATE users SET lang_snapshot = ?, lang_snapshot_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = ?", snapshotJSON, userID)
 	return err
 }
 

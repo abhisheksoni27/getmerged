@@ -500,6 +500,15 @@ const docTemplate = `{
                 "users_considered": {
                     "type": "integer"
                 },
+                "webhooks_disabled": {
+                    "type": "integer"
+                },
+                "webhooks_failed": {
+                    "type": "integer"
+                },
+                "webhooks_sent": {
+                    "type": "integer"
+                },
                 "week_start": {
                     "type": "string"
                 }
