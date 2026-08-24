@@ -42,6 +42,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			avatar_url TEXT,
 			profiling_consent BOOLEAN DEFAULT FALSE,
 			profiling_consent_at DATETIME,
+			skills VARCHAR(100) NULL,
 			digest_unsubscribed BOOLEAN DEFAULT FALSE,
 			referral_code VARCHAR(32) UNIQUE,
 			deleted_at DATETIME,
@@ -418,6 +419,7 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN deleted_at DATETIME`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN profiling_consent BOOLEAN DEFAULT FALSE`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN profiling_consent_at DATETIME`)
+	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN skills VARCHAR(100) NULL`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN digest_unsubscribed BOOLEAN DEFAULT FALSE`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN referral_code VARCHAR(32) UNIQUE`)
 	_, _ = db.Exec(`ALTER TABLE user_entitlements ADD COLUMN bonus_evals INTEGER DEFAULT 0`)

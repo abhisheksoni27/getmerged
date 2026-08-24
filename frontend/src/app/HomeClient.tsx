@@ -23,6 +23,7 @@ import { captureReferralFromUrl } from "@/lib/referral";
 import posthog from "posthog-js";
 import Link from "next/link";
 import { AuthModal } from "@/components/AuthModal";
+import { TopMatches } from "@/components/TopMatches";
 import { useSearch } from "@/context/SearchContext";
 import { EASE_OUT_EXPO, useReducedMotion } from "@/lib/motion";
 
@@ -397,6 +398,9 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
             ))}
           </div>
         </motion.div>
+
+        {/* Personalized matches from GitHub-imported skills (hidden when signed out or empty) */}
+        {isLoggedIn && <TopMatches />}
 
         {/* Macro Telemetry Grid */}
         <motion.div

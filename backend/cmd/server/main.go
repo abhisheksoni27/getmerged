@@ -185,6 +185,7 @@ func main() {
 		userApi.GET("/user/dna", handler.GetContributorDNA(profileRepo))
 		userApi.POST("/user/dna/refresh", handler.RefreshContributorDNA(profileRepo, dnaWorker))
 		userApi.GET("/user/matches", handler.GetUserMatchesHandler(profileRepo, repoStore))
+		userApi.GET("/user/top-matches", handler.GetTopMatchesHandler(userRepo, repoStore))
 		userApi.GET("/user/referral", handler.GetMyReferral(entitlementRepo))
 		userApi.POST("/preflight/share", handler.CreateShareCardHandler(shareCardRepo, cfg.JWTSecret))
 		userApi.GET("/user/share-cards", handler.ListShareCardsHandler(shareCardRepo))
