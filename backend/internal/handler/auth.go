@@ -139,6 +139,24 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository,
 			}
 		}
 
+		// Refresh the personalized 'For You' language snapshot on every
+		// successful login (AC1, AC3). Bounded timeouts so login is never
+		// blocked; on failure keep the existing snapshot and surface a
+		// non-blocking banner via a transient cookie (AC4).
+		if err := SyncGithubLanguages(c.Request.Context(), tokenResp.AccessToken, userID, userRepo); err != nil {
+			slog.Warn("github language sync failed during login", "user_id", userID, "err", err)
+			syncSecure := cfg.GinMode == "release"
+			http.SetCookie(c.Writer, &http.Cookie{
+				Name:     "opendoor_sync_failed",
+				Value:    "1",
+				Path:     "/",
+				MaxAge:   600,
+				HttpOnly: false,
+				Secure:   syncSecure,
+				SameSite: http.SameSiteLaxMode,
+			})
+		}
+
 		// Auto-import top public repo languages as skills. Best-effort with its
 		// own 2s per-request timeout; runs async so sign-in is never blocked.
 		go ImportGithubSkills(context.Background(), tokenResp.AccessToken, userID, userRepo)
