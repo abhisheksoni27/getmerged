@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -97,6 +98,7 @@ function PreflightContent() {
   const [fetchingPR, setFetchingPR] = useState(false);
   const [result, setResult] = useState<EvaluationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [upgrade, setUpgrade] = useState<{ message: string; remaining: number } | null>(null);
 
   useEffect(() => {
     const rawParam = searchParams
@@ -144,6 +146,7 @@ function PreflightContent() {
     setLoading(true);
     setError(null);
     setResult(null);
+    setUpgrade(null);
 
     const changedFiles = changedFilesText
       .split("\n")
@@ -167,6 +170,19 @@ function PreflightContent() {
       });
 
       if (!res.ok) {
+        if (res.status === 402 || res.status === 429) {
+          const errData = await res.json().catch(() => ({}));
+          setUpgrade({
+            message:
+              errData?.error ||
+              "Monthly free evaluation quota exceeded (3/3). Upgrade to Pro for unlimited evaluations.",
+            remaining:
+              typeof errData?.evaluations_remaining === "number"
+                ? errData.evaluations_remaining
+                : 0,
+          });
+          return;
+        }
         throw new Error(`Preflight evaluation failed with status ${res.status}`);
       }
 
@@ -188,6 +204,50 @@ function PreflightContent() {
 
   return (
     <>
+      {/* Pro Quota Paywall Modal */}
+      {upgrade && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="upgrade-modal-title"
+        >
+          <div className="w-full max-w-md rounded-2xl bg-white border-2 border-brand-dark shadow-[4px_4px_0px_#222831] p-6 font-sans">
+            <h2
+              id="upgrade-modal-title"
+              className="text-lg font-bold font-space text-zinc-900 tracking-tight mb-2"
+            >
+              Free Evaluations Used Up
+            </h2>
+            <p className="text-sm text-zinc-600 mb-4">{upgrade.message}</p>
+            <div className="rounded-xl bg-zinc-50 border border-zinc-200 px-4 py-3 mb-5 flex items-center justify-between">
+              <span className="text-xs font-mono uppercase tracking-wider text-zinc-500">
+                Evaluations remaining this month
+              </span>
+              <span data-testid="quota-remaining" className="text-xl font-bold font-mono text-zinc-900">
+                {upgrade.remaining}
+                <span className="text-sm text-zinc-400">/3</span>
+              </span>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link
+                href="/pricing"
+                className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all cursor-pointer shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+              >
+                Upgrade to Pro — $9/mo
+              </Link>
+              <button
+                type="button"
+                onClick={() => setUpgrade(null)}
+                className="inline-flex items-center justify-center px-4 py-2.5 rounded-xl border border-zinc-300 bg-white text-zinc-700 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-100 active:scale-[0.98] transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+              >
+                Maybe Later
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Error & Retry Banner */}
       {error && (
         <div
