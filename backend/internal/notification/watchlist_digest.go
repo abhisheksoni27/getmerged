@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"log/slog"
 	"math"
+	"net/http"
 	"strconv"
 	"strings"
 	"sync"
@@ -33,6 +34,11 @@ type WeeklyDigestConfig struct {
 	Mailer    DigestMailer
 	BaseURL   string
 	JobSecret string
+
+	// Slack/Discord webhook fan-out (optional, additive channel):
+	EncryptionKey []byte
+	Telegram      *TelegramNotifier
+	WebhookClient *http.Client
 }
 
 // WeeklyDigestSummary reports the outcome of one weekly-digest run.
@@ -47,6 +53,10 @@ type WeeklyDigestSummary struct {
 
 	EmailsSent   int `json:"emails_sent"`
 	EmailsFailed int `json:"emails_failed"`
+
+	WebhooksSent     int `json:"webhooks_sent"`
+	WebhooksFailed   int `json:"webhooks_failed"`
+	WebhooksDisabled int `json:"webhooks_disabled"`
 }
 
 // RepoAlert captures a C-Rank change on one watched repo.
@@ -203,6 +213,16 @@ func RunWeeklyDigest(ctx context.Context, db *sqlx.DB, cfg WeeklyDigestConfig) (
 		}
 		summary.SkippedNew += len(newRepos)
 		summary.AlertsFound += len(alerts)
+
+		// Slack/Discord fan-out (AC1): every alert event reaches all enabled
+		// webhooks of the user, independent of the email path.
+		RunUserWebhookAlerts(ctx, db, u.ID, alerts, WebhookAlertDeps{
+			HTTPClient:    cfg.WebhookClient,
+			EncryptionKey: cfg.EncryptionKey,
+			Telegram:      cfg.Telegram,
+			Mailer:        cfg.Mailer,
+			BaseURL:       cfg.BaseURL,
+		}, summary)
 
 		// No email without at least one alerting repo.
 		if len(alerts) == 0 {

@@ -194,6 +194,12 @@ func main() {
 		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist(watchlistRepo))
 		userApi.GET("/user/watchlist", handler.ListWatchlist(watchlistRepo))
 
+		// Slack/Discord webhook alert channels for watchlist C-Rank changes.
+		webhookRepo := repository.NewWatchlistWebhookRepository(database, []byte(cfg.EncryptionKey))
+		userApi.POST("/user/watchlist/webhooks", handler.AddWatchlistWebhook(webhookRepo))
+		userApi.GET("/user/watchlist/webhooks", handler.ListWatchlistWebhooks(webhookRepo))
+		userApi.DELETE("/user/watchlist/webhooks/:id", handler.RemoveWatchlistWebhook(webhookRepo))
+
 		// My PR Tracker (personal pull-request journey on scored repos)
 		userApi.GET("/user/prs", handler.GetUserPRsHandler(prTrackerSvc, entitlementRepo))
 		userApi.GET("/user/prs/connection", handler.GetPRConnectionHandler(prTrackerSvc))
@@ -214,7 +220,7 @@ func main() {
 		internal.POST("/purge-cache", handler.PurgeCache())
 		internal.POST("/cache/purge-tag", handler.PurgeTagCache())
 		internal.POST("/migrate-latest-snapshots", handler.MigrateLatestSnapshots())
-		internal.POST("/jobs/weekly-digest", handler.TriggerWeeklyDigest(cfg))
+		internal.POST("/jobs/weekly-digest", handler.TriggerWeeklyDigest(cfg, telegramNotifier))
 		internal.DELETE("/repos/:id", handler.DeleteRepo(repoStore))
 	}
 
