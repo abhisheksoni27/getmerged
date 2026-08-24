@@ -175,7 +175,7 @@ func DeleteRepo(repoStore repository.RepoRepository) gin.HandlerFunc {
 //	@Failure      403  {object}  map[string]string
 //	@Failure      500  {object}  map[string]string
 //	@Router       /internal/jobs/weekly-digest [post]
-func TriggerWeeklyDigest(cfg *config.Config) gin.HandlerFunc {
+func TriggerWeeklyDigest(cfg *config.Config, telegram *notification.TelegramNotifier) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := middleware.MustDB(c)
 		if db == nil {
@@ -191,9 +191,11 @@ func TriggerWeeklyDigest(cfg *config.Config) gin.HandlerFunc {
 
 		mailer := notification.NewSMTPMailer(cfg.SMTPHost, cfg.SMTPPort, cfg.SMTPUser, cfg.SMTPPassword, cfg.SMTPFrom)
 		summary, err := notification.RunWeeklyDigest(c.Request.Context(), db, notification.WeeklyDigestConfig{
-			Mailer:    mailer,
-			BaseURL:   cfg.AppBaseURL,
-			JobSecret: cfg.JobSecret,
+			Mailer:        mailer,
+			BaseURL:       cfg.AppBaseURL,
+			JobSecret:     cfg.JobSecret,
+			EncryptionKey: []byte(cfg.EncryptionKey),
+			Telegram:      telegram,
 		})
 		if err != nil {
 			slog.Error("weekly-digest run failed", "err", err)
