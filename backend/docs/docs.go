@@ -109,6 +109,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/internal/jobs/weekly-digest": {
+            "post": {
+                "description": "Computes C-Rank changes on watched repos and emails alert digests. Synchronous.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "internal"
+                ],
+                "summary": "Trigger weekly watchlist digest",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Job secret",
+                        "name": "X-Job-Secret",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/notification.WeeklyDigestSummary"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/internal/migrate-latest-snapshots": {
             "post": {
                 "security": [
@@ -423,6 +470,38 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "notification.WeeklyDigestSummary": {
+            "type": "object",
+            "properties": {
+                "alerts_found": {
+                    "type": "integer"
+                },
+                "emails_failed": {
+                    "type": "integer"
+                },
+                "emails_sent": {
+                    "type": "integer"
+                },
+                "failed": {
+                    "type": "integer"
+                },
+                "sent": {
+                    "type": "integer"
+                },
+                "skipped_new": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "users_considered": {
+                    "type": "integer"
+                },
+                "week_start": {
+                    "type": "string"
                 }
             }
         }

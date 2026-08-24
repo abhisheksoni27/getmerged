@@ -238,7 +238,7 @@ func GetShareCardHandler(cardRepo repository.ShareCardRepository) gin.HandlerFun
 		}
 
 		if vk != nil {
-			_ = vk.Do(c.Request.Context(), vk.B().Setex().Key(cacheKey).Seconds(cardCacheTTL).String(string(body)).Build())
+			_ = vk.Do(c.Request.Context(), vk.B().Setex().Key(cacheKey).Seconds(cardCacheTTL).Value(string(body)).Build())
 		}
 		c.Data(http.StatusOK, "application/json", body)
 	}
@@ -281,7 +281,7 @@ func GetShareCardOGHandler(cardRepo repository.ShareCardRepository) gin.HandlerF
 		png := renderShareCardPNG(card)
 		c.Header("Cache-Control", fmt.Sprintf("public, max-age=%d, s-maxage=%d", cardCacheTTL, cardCacheTTL))
 		if vk != nil {
-			_ = vk.Do(c.Request.Context(), vk.B().Setex().Key(cacheKey).Seconds(cardCacheTTL).String(base64.StdEncoding.EncodeToString(png)).Build())
+			_ = vk.Do(c.Request.Context(), vk.B().Setex().Key(cacheKey).Seconds(cardCacheTTL).Value(base64.StdEncoding.EncodeToString(png)).Build())
 		}
 		c.Data(http.StatusOK, "image/png", png)
 	}
