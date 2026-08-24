@@ -5,8 +5,10 @@ import (
 	"net/http"
 
 	"github.com/abhisheksoni27/opendoor/internal/analytics"
+	"github.com/abhisheksoni27/opendoor/internal/config"
 	"github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
+	"github.com/abhisheksoni27/opendoor/internal/notification"
 	"github.com/abhisheksoni27/opendoor/internal/pipeline"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
@@ -161,22 +163,48 @@ func DeleteRepo(repoStore repository.RepoRepository) gin.HandlerFunc {
 }
 
 // TriggerWeeklyDigest handles POST /internal/jobs/weekly-digest (Story 7.4)
-func TriggerWeeklyDigest() gin.HandlerFunc {
+// Requires header X-Job-Secret matching env JOB_SECRET. Runs the digest
+// synchronously and returns a run summary.
+//
+//	@Summary      Trigger weekly watchlist digest
+//	@Description  Computes C-Rank changes on watched repos and emails alert digests. Synchronous.
+//	@Tags         internal
+//	@Produce      json
+//	@Param        X-Job-Secret  header    string  true  "Job secret"
+//	@Success      200  {object}  notification.WeeklyDigestSummary
+//	@Failure      403  {object}  map[string]string
+//	@Failure      500  {object}  map[string]string
+//	@Router       /internal/jobs/weekly-digest [post]
+func TriggerWeeklyDigest(cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		jobID := uuid.New().String()
-		slog.Info("weekly-digest job triggered", "job_id", jobID)
+		db := middleware.MustDB(c)
+		if db == nil {
+			return
+		}
 
-		go func() {
-			slog.Info("weekly-digest worker running in background", "job_id", jobID)
-		}()
+		// AC1: X-Job-Secret must match env JOB_SECRET (fail closed when unset).
+		if cfg.JobSecret == "" || c.GetHeader("X-Job-Secret") != cfg.JobSecret {
+			slog.Warn("weekly-digest rejected", "ip", c.ClientIP(), "reason", "invalid or missing X-Job-Secret")
+			c.JSON(http.StatusForbidden, gin.H{"error": "forbidden"})
+			return
+		}
 
-		c.JSON(http.StatusAccepted, gin.H{
-			"status":  "queued",
-			"job_id":  jobID,
-			"message": "weekly contributor digest worker started in background",
+		mailer := notification.NewSMTPMailer(cfg.SMTPHost, cfg.SMTPPort, cfg.SMTPUser, cfg.SMTPPassword, cfg.SMTPFrom)
+		summary, err := notification.RunWeeklyDigest(c.Request.Context(), db, notification.WeeklyDigestConfig{
+			Mailer:    mailer,
+			BaseURL:   cfg.AppBaseURL,
+			JobSecret: cfg.JobSecret,
 		})
+		if err != nil {
+			slog.Error("weekly-digest run failed", "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "weekly digest run failed"})
+			return
+		}
+
+		c.JSON(http.StatusOK, summary)
 	}
 }
+
 // Clears all Valkey cached API responses (apicache:repos:*, apicache:repo:*, macro stats).
 //
 //	@Summary      Purge API Cache
