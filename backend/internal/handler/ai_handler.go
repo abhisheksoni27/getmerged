@@ -54,6 +54,39 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 			return
 		}
 
+		// Check if insights exist for repo.ID if repoID was different (e.g. requested by full_name)
+		if repo.ID != repoID {
+			cachedByRepoID, err := aiRepo.GetInsights(c.Request.Context(), repo.ID)
+			if err == nil && cachedByRepoID != nil {
+				var guidelines []string
+				_ = json.Unmarshal([]byte(cachedByRepoID.PRGuidelines), &guidelines)
+				var dos []string
+				_ = json.Unmarshal([]byte(cachedByRepoID.DosJSON), &dos)
+				var donts []string
+				_ = json.Unmarshal([]byte(cachedByRepoID.DontsJSON), &donts)
+				var deepSections []ai.DeepSection
+				_ = json.Unmarshal([]byte(cachedByRepoID.DeepSectionsJSON), &deepSections)
+
+				c.JSON(http.StatusOK, gin.H{
+					"insights": gin.H{
+						"repo_id":             cachedByRepoID.RepoID,
+						"maintainer_vibe":     cachedByRepoID.MaintainerVibe,
+						"pr_guidelines":       guidelines,
+						"issue_quality_score": cachedByRepoID.IssueQualityScore,
+						"raw_summary":         cachedByRepoID.RawSummary,
+						"warmth_score":        cachedByRepoID.WarmthScore,
+						"patience_score":      cachedByRepoID.PatienceScore,
+						"nitpick_ratio":       cachedByRepoID.NitpickRatio,
+						"maintainer_persona":  cachedByRepoID.MaintainerPersona,
+						"top_dos":             dos,
+						"top_donts":           donts,
+						"deep_sections":       deepSections,
+					},
+				})
+				return
+			}
+		}
+
 		// 3. Keep PR guidance and issue discussion as separate evidence sources.
 		prComments, _ := aiRepo.GetPRComments(c.Request.Context(), repo.ID, 100)
 		issueComments, _ := aiRepo.GetIssueComments(c.Request.Context(), repo.ID, 100)
