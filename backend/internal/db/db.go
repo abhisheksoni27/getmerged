@@ -80,6 +80,9 @@ func AutoMigrate(db *sqlx.DB) error {
 			last_error TEXT,
 			locked_until DATETIME,
 			analyzed_at DATETIME,
+			persona VARCHAR(64),
+			stars_pulled_in INTEGER,
+			updated_persona_at DATETIME,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
 		`CREATE TABLE IF NOT EXISTS user_entitlements (
@@ -597,6 +600,10 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE crank_alert_state ADD COLUMN dead_lettered BOOLEAN NOT NULL DEFAULT FALSE`)
 	_, _ = db.Exec(`ALTER TABLE crank_alert_state ADD COLUMN last_failed_hash VARCHAR(64) DEFAULT ''`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN email_invalid BOOLEAN DEFAULT FALSE`)
+	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN persona VARCHAR(64)`)
+	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN stars_pulled_in INTEGER`)
+	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN updated_persona_at DATETIME`)
+	_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_contributor_profiles_persona ON contributor_profiles(persona)`)
 	_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_referral_credits_new_user ON referral_credits(new_user_id)`)
 	_, _ = db.Exec(`ALTER TABLE contributor_feedback ADD UNIQUE KEY uq_cf_user_repo (user_id, repository_id)`)
 	_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_cf_user_repo ON contributor_feedback(user_id, repository_id)`)

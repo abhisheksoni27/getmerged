@@ -57,8 +57,13 @@ func (s *gfiSubscriber) prefsComplete() bool {
 // suppressed reports whether sends must be dropped for this subscriber right
 // now (dequeue-time suppression, AC4).
 func (s *gfiSubscriber) suppressed() bool {
-	return !s.VerifiedAt.Valid || s.UnsubscribedAt.Valid || s.Disabled ||
-		s.HardBounces >= MaxHardBounces || strings.TrimSpace(s.Email) == ""
+	if !s.VerifiedAt.Valid || s.VerifiedAt.Time.IsZero() {
+		return true
+	}
+	if s.UnsubscribedAt.Valid && !s.UnsubscribedAt.Time.IsZero() {
+		return true
+	}
+	return s.Disabled || s.HardBounces >= MaxHardBounces || strings.TrimSpace(s.Email) == ""
 }
 
 func csvNonEmpty(csv string) bool {
@@ -780,3 +785,21 @@ func ValidateGFIEmail(raw string) (string, bool) {
 	}
 	return e, true
 }
+
+// ResetGFIDigestLockForTest clears the in-memory week lock so tests can re-run.
+func ResetGFIDigestLockForTest() {
+	gfiDigestMu.Lock()
+	defer gfiDigestMu.Unlock()
+	gfiDigestLock = map[string]bool{}
+}
+
+// SelectDigestMatchesForTest exposes digest matching queries for unit tests.
+func SelectDigestMatchesForTest(ctx context.Context, db *sqlx.DB, subID int64, languages, tiers string, windowStart time.Time) ([]gfiDigestItem, error) {
+	sub := gfiSubscriber{
+		ID:        subID,
+		Languages: languages,
+		Tiers:     tiers,
+	}
+	return selectDigestMatches(ctx, db, sub, windowStart)
+}
+

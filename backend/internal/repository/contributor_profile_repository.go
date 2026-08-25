@@ -24,6 +24,7 @@ type ContributorProfileRepository interface {
 	RequestRefresh(ctx context.Context, userID int64) (bool, error)
 	ClaimPendingJob(ctx context.Context, userID int64) (bool, error)
 	SaveSuccess(ctx context.Context, userID int64, dnaJSON string, totalMerged int) error
+	SaveSuccessWithPersona(ctx context.Context, userID int64, dnaJSON string, totalMerged int, persona string, starsPulledIn int) error
 	SaveFailure(ctx context.Context, userID int64, status string, errMsg string) error
 }
 
@@ -111,6 +112,23 @@ func (r *sqlxContributorProfileRepository) SaveSuccess(ctx context.Context, user
 		    updated_at = CURRENT_TIMESTAMP
 		WHERE user_id = ?
 	`, dnaJSON, totalMerged, userID)
+	return err
+}
+
+func (r *sqlxContributorProfileRepository) SaveSuccessWithPersona(ctx context.Context, userID int64, dnaJSON string, totalMerged int, persona string, starsPulledIn int) error {
+	_, err := r.db.ExecContext(ctx, `
+		UPDATE contributor_profiles
+		SET profiling_status = 'completed',
+		    dna_json = ?,
+		    total_merged_prs = ?,
+		    persona = ?,
+		    stars_pulled_in = ?,
+		    updated_persona_at = CURRENT_TIMESTAMP,
+		    last_error = NULL,
+		    analyzed_at = CURRENT_TIMESTAMP,
+		    updated_at = CURRENT_TIMESTAMP
+		WHERE user_id = ?
+	`, dnaJSON, totalMerged, persona, starsPulledIn, userID)
 	return err
 }
 

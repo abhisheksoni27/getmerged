@@ -12,7 +12,31 @@ import (
 	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/auth"
+	"github.com/abhisheksoni27/opendoor/internal/dna"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
+)
+
+// Re-export the DNA result type under the pipeline namespace so existing
+// callers (and tests) keep working without a code change at the call site.
+// The canonical home is internal/dna.
+type ContributorDNAResult = dna.Result
+type TemporalSig = dna.Temporal
+type TopRepo = dna.TopRepo
+
+const (
+	PersonaEmerging     = dna.PersonaEmerging
+	PersonaNightOwl     = dna.PersonaNightOwl
+	PersonaSpecialist   = dna.PersonaSpecialist
+	PersonaPolyglot     = dna.PersonaPolyglot
+	PersonaBuilder      = dna.PersonaBuilder
+	PersonaQuietShipper = dna.PersonaQuietShipper
+)
+
+const (
+	TemporalNightOwl   = dna.TemporalNightOwl
+	TemporalLunch      = dna.TemporalLunch
+	TemporalNineToFive = dna.TemporalNineToFive
+	TemporalSparse     = dna.TemporalSparse
 )
 
 type ContributorDNAWorker interface {
@@ -220,100 +244,36 @@ func (w *contributorDNAWorker) AnalyzeUser(ctx context.Context, userID int64) er
 	}
 
 	// 4. Synthesize Contributor DNA Model
-	dna := computeContributorDNA(gqlResp.Data)
-	dnaJSON, err := json.Marshal(dna)
+	dnodes := make([]dna.Node, 0, len(gqlResp.Data.Search.Nodes))
+	for _, pr := range gqlResp.Data.Search.Nodes {
+		lang := ""
+		if pr.Repository.PrimaryLanguage != nil {
+			lang = pr.Repository.PrimaryLanguage.Name
+		}
+		dnodes = append(dnodes, dna.Node{
+			MergedAt:  pr.MergedAt,
+			Lang:      lang,
+			Repo:      pr.Repository.NameWithOwner,
+			Stars:     pr.Repository.StargazerCount,
+			Additions: pr.Additions,
+			Deletions: pr.Deletions,
+			Files:     pr.ChangedFiles,
+			Comments:  pr.Comments.TotalCount,
+			Reviews:   pr.Reviews.TotalCount,
+		})
+	}
+	result := dna.Compute(dnodes, gqlResp.Data.User.Followers.TotalCount, gqlResp.Data.User.Repositories.TotalCount)
+	dnaJSON, err := json.Marshal(result)
 	if err != nil {
 		_ = w.profileRepo.SaveFailure(ctx, userID, "failed", err.Error())
 		return err
 	}
 
 	totalMerged := len(gqlResp.Data.Search.Nodes)
-	if err := w.profileRepo.SaveSuccess(ctx, userID, string(dnaJSON), totalMerged); err != nil {
+	if err := w.profileRepo.SaveSuccessWithPersona(ctx, userID, string(dnaJSON), totalMerged, result.Persona, result.StarsPulledIn); err != nil {
 		slog.Error("failed to save contributor profile success", "user_id", userID, "err", err)
 		return err
 	}
 
 	return nil
-}
-
-type ContributorDNAResult struct {
-	TotalMergedPRs     int               `json:"total_merged_prs"`
-	FollowersCount     int               `json:"followers_count"`
-	RepositoriesCount  int               `json:"repositories_count"`
-	LanguageBreakdown  map[string]int    `json:"language_breakdown"`
-	AvgAdditions       float64           `json:"avg_additions"`
-	AvgDeletions       float64           `json:"avg_deletions"`
-	AvgChangedFiles    float64           `json:"avg_changed_files"`
-	PrimaryLanguages   []string          `json:"primary_languages"`
-	SkillLevel         string            `json:"skill_level"`
-	PRSizePreference   string            `json:"pr_size_preference"`
-	ReviewEngagement   string            `json:"review_engagement"`
-}
-
-func computeContributorDNA(data GraphQLDNAData) ContributorDNAResult {
-	res := ContributorDNAResult{
-		TotalMergedPRs:    len(data.Search.Nodes),
-		FollowersCount:    data.User.Followers.TotalCount,
-		RepositoriesCount: data.User.Repositories.TotalCount,
-		LanguageBreakdown: make(map[string]int),
-	}
-
-	if res.TotalMergedPRs == 0 {
-		res.SkillLevel = "Novice"
-		res.PRSizePreference = "Compact"
-		res.ReviewEngagement = "Light"
-		return res
-	}
-
-	var totalAdds, totalDels, totalFiles, totalComments int
-	for _, pr := range data.Search.Nodes {
-		totalAdds += pr.Additions
-		totalDels += pr.Deletions
-		totalFiles += pr.ChangedFiles
-		totalComments += pr.Comments.TotalCount + pr.Reviews.TotalCount
-
-		if pr.Repository.PrimaryLanguage != nil && pr.Repository.PrimaryLanguage.Name != "" {
-			res.LanguageBreakdown[pr.Repository.PrimaryLanguage.Name]++
-		}
-	}
-
-	n := float64(res.TotalMergedPRs)
-	res.AvgAdditions = float64(totalAdds) / n
-	res.AvgDeletions = float64(totalDels) / n
-	res.AvgChangedFiles = float64(totalFiles) / n
-
-	// Skill Level Classification
-	if res.TotalMergedPRs >= 25 {
-		res.SkillLevel = "Veteran Contributor"
-	} else if res.TotalMergedPRs >= 5 {
-		res.SkillLevel = "Active Contributor"
-	} else {
-		res.SkillLevel = "Emerging Contributor"
-	}
-
-	// PR Size Preference
-	avgDelta := res.AvgAdditions + res.AvgDeletions
-	if avgDelta > 500 {
-		res.PRSizePreference = "Large & Architectural"
-	} else if avgDelta > 100 {
-		res.PRSizePreference = "Medium Scope"
-	} else {
-		res.PRSizePreference = "Surgical / Focused"
-	}
-
-	// Review Engagement
-	avgEngagement := float64(totalComments) / n
-	if avgEngagement > 5 {
-		res.ReviewEngagement = "Deeply Collaborative"
-	} else if avgEngagement > 1 {
-		res.ReviewEngagement = "Responsive"
-	} else {
-		res.ReviewEngagement = "Direct & Minimal"
-	}
-
-	for lang := range res.LanguageBreakdown {
-		res.PrimaryLanguages = append(res.PrimaryLanguages, lang)
-	}
-
-	return res
 }
