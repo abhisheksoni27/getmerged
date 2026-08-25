@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CompareShareBar } from "@/components/CompareShareBar";
+import { VsShowdownCard } from "@/components/VsShowdownCard";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import {
@@ -57,11 +58,26 @@ export async function generateMetadata({ params }: ComparePageProps): Promise<Me
   const repoA = `${slug[0]}/${slug[1]}`;
   const repoB = `${slug[3]}/${slug[4]}`;
 
+  const canonical = `https://getmerged.abhishekco.de/compare/${repoA}/vs/${repoB}`;
+  const ogImage = `/api/og/vs?a=${encodeURIComponent(repoA)}&b=${encodeURIComponent(repoB)}`;
+
   return {
     title: `${repoA} vs ${repoB} Review & C-Rank™ Comparison (2026) | GetMerged`,
     description: `Compare ${repoA} vs ${repoB} pull request merge rates, maintainer response times, 90-day bus factor, and first-timer acceptance odds on GetMerged.`,
     alternates: {
-      canonical: `https://getmerged.abhishekco.de/compare/${repoA}/vs/${repoB}`,
+      canonical,
+    },
+    openGraph: {
+      title: `${repoA} vs ${repoB}: Should I Contribute? Showdown`,
+      description: `Maintainer responsiveness & merge velocity verdict between ${repoA} and ${repoB}.`,
+      url: canonical,
+      images: [{ url: ogImage, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${repoA} vs ${repoB}: Should I Contribute? Showdown`,
+      description: `Maintainer responsiveness & merge velocity verdict between ${repoA} and ${repoB}.`,
+      images: [ogImage],
     },
   };
 }
@@ -141,6 +157,9 @@ export default async function ComparePage({ params }: ComparePageProps) {
 
         {/* Compare Share & Export Bar */}
         <CompareShareBar repoA={repoA} repoB={repoB} />
+
+        {/* Should I Contribute? Repo vs Repo Showdown */}
+        <VsShowdownCard repoA={repoA} repoB={repoB} />
 
         {/* Side-by-Side Comparison Matrix */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
