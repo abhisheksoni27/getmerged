@@ -147,7 +147,9 @@ export function RepoDetailHero({
           </Link>
           {onClaimClick && (
             <button
+              type="button"
               onClick={onClaimClick}
+              title={isVerified ? `Open Maintainer Console for ${fullName}` : `Verify maintainer ownership of ${fullName}`}
               className={`inline-flex items-center gap-2 border rounded-xl px-4 py-2.5 text-xs font-semibold font-sans transition-all cursor-pointer shadow-xs ${
                 isVerified
                   ? "bg-amber-50 border-amber-300 text-amber-900 hover:bg-amber-100"
