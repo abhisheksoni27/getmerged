@@ -1,9 +1,9 @@
 import { API_BASE_URL } from "./api";
 import type { PREvalOutcome } from "./pr-verdict";
 
-// AC6: short 60s TTL keeps shared pages fresh while bounding load; staleness
-// is anyway capped by the backend sync cadence (15 min max).
-const TTL_MS = 60_000;
+// AC4: outcome data is cached 1h; stale cache is acceptable because terminal
+// verdicts are immutable and the share pages revalidate on render (ISR).
+const TTL_MS = 3_600_000;
 
 declare global {
   // eslint-disable-next-line no-var

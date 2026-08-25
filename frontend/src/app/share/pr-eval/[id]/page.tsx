@@ -196,7 +196,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
                     {outcome?.creator_login && (
                       <span className="mr-2">@{outcome.creator_login}</span>
                     )}
-                    {accuracyView ? accuracyView.label : "Not enough data"}
+                    {accuracyView ? accuracyView.label : "—"}
                   </div>
                 </>
               ) : (

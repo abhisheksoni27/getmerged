@@ -3,6 +3,7 @@ package handler
 import (
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/prtracker"
@@ -14,18 +15,26 @@ import (
 // verified outcome against it. Public: payloads are non-sensitive share data.
 func RegisterPREvalHandler(store *prtracker.Store) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var body struct {
-			EvalID    string `json:"eval_id"`
-			Repo      string `json:"repo"`
-			PRNumber  int    `json:"pr_number"`
-			Score     int    `json:"score"`
-			Timestamp int64  `json:"timestamp"`
-		}
+	var body struct {
+		EvalID    string `json:"eval_id"`
+		Repo      string `json:"repo"`
+		PRNumber  int    `json:"pr_number"`
+		Score     int    `json:"score"`
+		Timestamp int64  `json:"timestamp"`
+		IsPublic  *bool  `json:"is_public"`
+	}
 		if err := c.ShouldBindJSON(&body); err != nil || body.EvalID == "" || body.Repo == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "eval_id and repo are required"})
 			return
 		}
-		if len(body.EvalID) > 128 || len(body.Repo) > 255 {
+		// AC5: match key is the repo full_name lowercased at eval-save time.
+		repo := strings.ToLower(strings.TrimSpace(body.Repo))
+		repo = strings.TrimPrefix(strings.TrimPrefix(repo, "https://github.com/"), "http://github.com/")
+		if repo == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "eval_id and repo are required"})
+			return
+		}
+		if len(body.EvalID) > 128 || len(repo) > 255 {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "payload too long"})
 			return
 		}
@@ -33,11 +42,16 @@ func RegisterPREvalHandler(store *prtracker.Store) gin.HandlerFunc {
 		if body.Timestamp > 0 {
 			createdAt = time.UnixMilli(body.Timestamp).UTC()
 		}
+		isPublic := true // registrations come from public share pages (AC5)
+		if body.IsPublic != nil {
+			isPublic = *body.IsPublic
+		}
 		if err := store.RegisterEval(c.Request.Context(), prtracker.EvalRegistration{
 			EvalID:    body.EvalID,
-			Repo:      body.Repo,
+			Repo:      repo,
 			PRNumber:  body.PRNumber,
 			Score:     body.Score,
+			IsPublic:  isPublic,
 			CreatedAt: createdAt,
 		}); err != nil {
 			slog.Error("register pr-eval failed", "err", err)
@@ -64,6 +78,9 @@ func GetPREvalOutcomeHandler(store *prtracker.Store) gin.HandlerFunc {
 			return
 		}
 		out.EvalID = "" // already known to the caller via path
+		// AC4: 5-minute verdict TTL; outcome_hash in the payload lets OG/page
+		// URLs cache-bust the moment a verdict changes.
+		c.Header("Cache-Control", "public, max-age=300")
 		c.JSON(http.StatusOK, out)
 	}
 }

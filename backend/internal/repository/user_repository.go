@@ -22,6 +22,7 @@ type User struct {
 	Email            *string    `db:"email" json:"email,omitempty"`
 	AvatarURL        *string    `db:"avatar_url" json:"avatar_url,omitempty"`
 	ProfilingConsent bool       `db:"profiling_consent" json:"profiling_consent"`
+	PublicAccuracy   bool       `db:"public_accuracy" json:"public_accuracy"`
 	Skills           *string    `db:"skills" json:"skills,omitempty"`
 	LangSnapshot     *string    `db:"lang_snapshot" json:"lang_snapshot,omitempty"`
 	LangSnapshotAt   *time.Time `db:"lang_snapshot_at" json:"lang_snapshot_at,omitempty"`
@@ -70,6 +71,7 @@ type UserRepository interface {
 	UpsertUser(ctx context.Context, githubID int64, username, email, avatarURL string) (int64, error)
 	UpsertGoogleUser(ctx context.Context, googleID string, username, email, avatarURL string) (int64, error)
 	UpdateProfilingConsent(ctx context.Context, userID int64, consent bool) error
+	UpdatePublicAccuracy(ctx context.Context, userID int64, public bool) error
 	UpdateUserSkills(ctx context.Context, userID int64, skills string) error
 	UpdateLanguageSnapshot(ctx context.Context, userID int64, snapshotJSON string) error
 	SoftDeleteUser(ctx context.Context, userID int64) error
@@ -497,6 +499,11 @@ func (u *User) SlugOrUsername() string {
 
 func (r *sqlxUserRepository) UpdateProfilingConsent(ctx context.Context, userID int64, consent bool) error {
 	_, err := r.db.ExecContext(ctx, "UPDATE users SET profiling_consent = ?, profiling_consent_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = ?", consent, userID)
+	return err
+}
+
+func (r *sqlxUserRepository) UpdatePublicAccuracy(ctx context.Context, userID int64, public bool) error {
+	_, err := r.db.ExecContext(ctx, "UPDATE users SET public_accuracy = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?", public, userID)
 	return err
 }
 

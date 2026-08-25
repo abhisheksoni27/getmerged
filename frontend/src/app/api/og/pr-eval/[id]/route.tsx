@@ -195,7 +195,7 @@ export async function GET(
       width: CARD_WIDTH,
       height: CARD_HEIGHT,
       headers: {
-        "Cache-Control": "public, s-maxage=86400",
+        "Cache-Control": "public, max-age=300",
       },
     }
   );

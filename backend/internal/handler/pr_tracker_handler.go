@@ -27,11 +27,12 @@ type BenchmarkLine struct {
 
 type prItem struct {
 	*prtracker.TrackedPR
-	AgeHours       float64             `json:"age_hours"`
-	Stale          bool                `json:"stale"`
-	Benchmark      *BenchmarkLine      `json:"benchmark"`
-	Forecast       *prtracker.Forecast `json:"forecast,omitempty"`
-	ForecastLocked bool                `json:"forecast_locked"`
+	AgeHours       float64              `json:"age_hours"`
+	Stale          bool                 `json:"stale"`
+	Benchmark      *BenchmarkLine       `json:"benchmark"`
+	Forecast       *prtracker.Forecast  `json:"forecast,omitempty"`
+	ForecastLocked bool                 `json:"forecast_locked"`
+	Outcome        *prtracker.EvalOutcome `json:"outcome,omitempty"` // verified verdict (AC1/AC2)
 }
 
 // GetUserPRsHandler handles GET /api/v1/user/prs.
@@ -85,6 +86,13 @@ func GetUserPRsHandler(svc *prtracker.Service, entRepo repository.EntitlementRep
 		}
 
 		now := time.Now().UTC()
+		// Verified verdicts for saved evaluations (AC1/AC2): keyed "repo#number",
+		// rendered by dashboard cards from the same field set as share pages/OG.
+		outcomes, oerr := svc.Store.OutcomesForUserPRs(ctx, userID)
+		if oerr != nil {
+			slog.Warn("user/prs: load eval outcomes failed", "err", oerr)
+			outcomes = nil
+		}
 		items := make([]prItem, 0, len(prs))
 		for i := range prs {
 			p := &prs[i]
@@ -103,6 +111,12 @@ func GetUserPRsHandler(svc *prtracker.Service, entRepo repository.EntitlementRep
 				item.Forecast = prtracker.ComputeForecast(item.AgeHours, p.State, p.ResponseP50H, p.ResponseP90H)
 			} else {
 				item.ForecastLocked = true
+			}
+			if outcomes != nil {
+				if o, ok := outcomes[p.PRID]; ok {
+					oc := o
+					item.Outcome = &oc
+				}
 			}
 			items = append(items, item)
 		}
