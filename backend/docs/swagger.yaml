@@ -34,6 +34,25 @@ definitions:
           type: string
         type: array
     type: object
+  notification.CRankAlertSummary:
+    properties:
+      alerts_found:
+        type: integer
+      baselined:
+        type: integer
+      cas_lost:
+        type: integer
+      dead_lettered:
+        type: integer
+      failed:
+        type: integer
+      sent:
+        type: integer
+      skipped_cooldown:
+        type: integer
+      watchers_considered:
+        type: integer
+    type: object
   notification.WeeklyDigestSummary:
     properties:
       alerts_found:
@@ -134,6 +153,40 @@ paths:
       summary: Health Check
       tags:
       - system
+  /internal/jobs/crank-change-alerts:
+    post:
+      description: Emails watchlist users when a watched repo crosses a C-Rank tier
+        boundary or drops sharply. Synchronous.
+      parameters:
+      - description: Job secret
+        in: header
+        name: X-Job-Secret
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/notification.CRankAlertSummary'
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Trigger C-Rank change alerts
+      tags:
+      - internal
   /internal/jobs/weekly-digest:
     post:
       description: Computes C-Rank changes on watched repos and emails alert digests.
