@@ -161,6 +161,12 @@ func main() {
 	r.GET("/og/forecast/:id", cardRL, handler.GetShareCardOGHandler(shareCardRepo))
 	r.GET("/api/v1/og/forecast/:id", cardRL, handler.GetShareCardOGHandler(shareCardRepo))
 
+	// Verified PR-eval outcomes: public registration + verdict lookup
+	// (AC1-AC6). Root-level like /cards to stay outside the API-key group.
+	evalRL := middleware.RateLimitPerIP(60, time.Minute)
+	r.POST("/api/v1/pr-evals", evalRL, handler.RegisterPREvalHandler(prTrackerStore))
+	r.GET("/api/v1/pr-evals/:id/outcome", evalRL, handler.GetPREvalOutcomeHandler(prTrackerStore))
+
 	// Public API
 	api := r.Group("/api/v1")
 	// AC2/AC3/AC4: public API keys (Authorization: Bearer odk_...) authenticate

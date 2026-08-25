@@ -1,6 +1,8 @@
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 import { getEvaluation } from "@/lib/pr-eval-store";
+import { getEvalOutcome } from "@/lib/eval-outcome-client";
+import { formatVerdict } from "@/lib/pr-verdict";
 
 export const runtime = "nodejs";
 
@@ -35,6 +37,17 @@ export async function GET(
   const verdictColor = isReady ? "#059669" : "#d97706";
   const verdictBg = isReady ? "#ecfdf5" : "#fffbeb";
   const verdictBorder = isReady ? "#a7f3d0" : "#fde68a";
+
+  // Verified outcome (AC1/AC5): rendered from the same verdict field as the
+  // share page and dashboard cards. Absent -> card stays a static snapshot.
+  const outcome = await getEvalOutcome(id);
+  const outcomeView = formatVerdict(outcome);
+  const outcomeStyles: Record<string, { bg: string; color: string; border: string }> = {
+    good: { bg: "#ecfdf5", color: "#059669", border: "#a7f3d0" },
+    bad: { bg: "#fef2f2", color: "#dc2626", border: "#fecaca" },
+    muted: { bg: "#f3f4f6", color: "#374151", border: "#d1d5db" },
+  };
+  const os = outcomeView ? outcomeStyles[outcomeView.tone] : null;
 
   return new ImageResponse(
     (
@@ -104,6 +117,28 @@ export async function GET(
                 {verdictLabel}
               </div>
             </div>
+
+            {/* Verified Outcome pill (AC1) — e.g. 'Predicted 82% → Merged in 4 days ✓' */}
+            {outcomeView && os && (
+              <div style={{ display: "flex", alignItems: "center", marginTop: "12px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "8px 18px",
+                    borderRadius: "9999px",
+                    backgroundColor: os.bg,
+                    border: `2px solid ${os.border}`,
+                    color: os.color,
+                    fontSize: "18px",
+                    fontWeight: 800,
+                    letterSpacing: "0.3px",
+                  }}
+                >
+                  {outcomeView.text}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Score Tile */}

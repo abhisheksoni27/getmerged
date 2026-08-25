@@ -5,30 +5,41 @@ import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getEvaluation, validateReferrerId } from "@/lib/pr-eval-store";
-import { Sparkles, CheckCircle2, AlertTriangle, ArrowRight, GitPullRequest, ExternalLink, ShieldCheck } from "lucide-react";
+import { getEvalOutcome } from "@/lib/eval-outcome-client";
+import { formatVerdict, formatAccuracy } from "@/lib/pr-verdict";
+import { Sparkles, CheckCircle2, AlertTriangle, ArrowRight, GitPullRequest, ExternalLink, ShieldCheck, XCircle, Hourglass } from "lucide-react";
 
 interface PageProps {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
+// AC6: shared pages use a short 60s revalidate so verdicts track the backend
+// sync cadence (15 min max staleness) without hammering the outcome API.
+export const revalidate = 60;
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const sParams = await searchParams;
   const stored = getEvaluation(id);
+  const outcome = await getEvalOutcome(id);
 
-  const repo = stored?.repo || (typeof sParams.repo === "string" ? sParams.repo : "Open Source Repository");
-  const score = stored?.score !== undefined ? stored.score : (typeof sParams.score === "string" ? parseFloat(sParams.score) : 75);
-  const verdict = stored?.verdict || (typeof sParams.verdict === "string" ? sParams.verdict : "PRE-FLIGHT READY");
+  const repo = stored?.repo || "Open Source Repository";
+  const score = stored?.score !== undefined ? stored.score : 75;
+  const verdict = stored?.verdict || "PRE-FLIGHT READY";
+  const verdictView = formatVerdict(outcome);
 
-  const ogUrl = `/api/og/pr-eval/${encodeURIComponent(id)}?repo=${encodeURIComponent(repo)}&score=${score}&verdict=${encodeURIComponent(verdict)}`;
+  // ?v=<outcome_hash> busts CDN caches when a new verdict lands (AC5/AC6).
+  const ogUrl = `/api/og/pr-eval/${encodeURIComponent(id)}?repo=${encodeURIComponent(repo)}&score=${score}&verdict=${encodeURIComponent(verdict)}&v=${encodeURIComponent(outcome?.outcome_hash || "0")}`;
+  const description = verdictView
+    ? `Preflight PR evaluation results for ${repo}. Verdict: ${verdict}. Outcome: ${verdictView.text}`
+    : `Preflight PR evaluation results and contributor readiness score for ${repo}. Verdict: ${verdict}.`;
 
   return {
     title: `PR Evaluation (${score}/100) - ${repo} | GetMerged`,
-    description: `Preflight PR evaluation results and contributor readiness score for ${repo}. Verdict: ${verdict}.`,
+    description,
     openGraph: {
       title: `PR Evaluation (${score}/100) - ${repo}`,
-      description: `Preflight PR evaluation results: ${verdict}`,
+      description,
       images: [
         {
           url: ogUrl,
@@ -41,7 +52,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     twitter: {
       card: "summary_large_image",
       title: `PR Evaluation (${score}/100) - ${repo}`,
-      description: `Preflight PR evaluation results: ${verdict}`,
+      description,
       images: [ogUrl],
     },
   };
@@ -67,6 +78,12 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
   const validatedReferrerId = validateReferrerId(rawRef);
 
   const isReady = verdict.toUpperCase().includes("READY");
+
+  // Verified outcome (AC1-AC4): null degrades to the static snapshot with
+  // 'Outcome unavailable' — no crash, no wrong data.
+  const outcome = await getEvalOutcome(id);
+  const verdictView = formatVerdict(outcome);
+  const accuracyView = formatAccuracy(outcome);
 
   const repoClean = repo.replace(/^https?:\/\/github\.com\//i, "").trim();
   const cRankUrl = `/${repoClean}${validatedReferrerId ? `?ref=${encodeURIComponent(validatedReferrerId)}` : ""}`;
@@ -147,6 +164,47 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
                 ? "This pull request successfully met all static quality checks, convention tests, and merge readiness heuristics for this repository."
                 : "This pull request has recommendations for improving changeset scope, test coverage, or conventional naming prior to maintainer review."}
             </p>
+
+            {/* Verified Outcome (AC1): live verdict synced from the PR tracker */}
+            <div className="mb-6 p-4 rounded-xl bg-zinc-50 border border-zinc-200" data-testid="verified-outcome">
+              <span className="text-xs font-mono font-bold text-zinc-500 uppercase tracking-wider block mb-2">
+                Verified Outcome
+              </span>
+              {verdictView ? (
+                <>
+                  <div className="inline-flex items-center gap-2">
+                    {verdictView.tone === "good" && (
+                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono bg-emerald-100 text-emerald-800 border border-emerald-300">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                        {verdictView.text}
+                      </span>
+                    )}
+                    {verdictView.tone === "bad" && (
+                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono bg-red-100 text-red-800 border border-red-300">
+                        <XCircle className="h-4 w-4 text-red-600" />
+                        {verdictView.text}
+                      </span>
+                    )}
+                    {verdictView.tone === "muted" && (
+                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono bg-zinc-100 text-zinc-700 border border-zinc-300">
+                        <Hourglass className="h-4 w-4 text-zinc-500" />
+                        {verdictView.text}
+                      </span>
+                    )}
+                  </div>
+                  <div className="mt-2 text-[11px] font-mono text-zinc-500">
+                    {outcome?.creator_login && (
+                      <span className="mr-2">@{outcome.creator_login}</span>
+                    )}
+                    {accuracyView ? accuracyView.label : "Not enough data"}
+                  </div>
+                </>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono bg-zinc-100 text-zinc-600 border border-zinc-300">
+                  Outcome unavailable
+                </span>
+              )}
+            </div>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-4 border-t border-zinc-100">
