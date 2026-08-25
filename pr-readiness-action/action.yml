@@ -1,0 +1,74 @@
+name: 'opendoor/pr-readiness-action'
+description: >-
+  PR Readiness & C-Rank™ Check — forecasts pull-request merge odds with
+  OpenDoor's C-Rank™ engine, audits submission-guidelines compliance, and posts
+  an actionable pre-flight report as a PR comment (create-or-update, idempotent).
+  Advisory by default; optional gate mode. Fork-safe.
+branding:
+  icon: 'gauge'
+  color: 'emerald'
+
+inputs:
+  api-key:
+    description: >-
+      OpenDoor API key (PREFLIGHT_TOKEN). Optional: without it the guidelines
+      check still runs locally and C-Rank renders as "N/A — API key unavailable".
+    required: false
+    default: ''
+  score-threshold:
+    description: 'Minimum C-Rank score (0-100) required to pass when gate is true.'
+    required: false
+    default: '70'
+  gate:
+    description: >-
+      When true, exit 1 if C-Rank < score-threshold (requires api-key).
+      Default false: advisory-only, always exits 0 after posting.
+    required: false
+    default: 'false'
+  instance-id:
+    description: >-
+      Unique id when running multiple instances of this action on one PR, so
+      each manages its own comment without collisions.
+    required: false
+    default: 'default'
+  api-url:
+    description: 'Base URL of the OpenDoor forecast API.'
+    required: false
+    default: 'https://getmerged.abhishekco.de'
+  app-url:
+    description: 'Base URL of the OpenDoor web app (used for the telemetry report link).'
+    required: false
+    default: 'https://opendoor.abhishekco.de'
+  github-token:
+    description: 'Token used to read PR metadata and post the readiness comment.'
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  c-rank:
+    description: 'C-Rank score 0-100, or N/A when no api-key was provided.'
+    value: ${{ steps.readiness.outputs.c-rank }}
+  grade:
+    description: 'C-Rank letter grade A-F, or empty.'
+    value: ${{ steps.readiness.outputs.grade }}
+  verdict:
+    description: 'pass | fail | advisory'
+    value: ${{ steps.readiness.outputs.verdict }}
+  comment-url:
+    description: 'URL of the posted/updated readiness comment.'
+    value: ${{ steps.readiness.outputs.comment-url }}
+
+runs:
+  using: 'composite'
+  steps:
+    - id: readiness
+      shell: bash
+      env:
+        INPUT_API_KEY: ${{ inputs.api-key }}
+        INPUT_SCORE_THRESHOLD: ${{ inputs.score-threshold }}
+        INPUT_GATE: ${{ inputs.gate }}
+        INPUT_INSTANCE_ID: ${{ inputs.instance-id }}
+        INPUT_API_URL: ${{ inputs.api-url }}
+        INPUT_APP_URL: ${{ inputs.app-url }}
+        INPUT_GITHUB_TOKEN: ${{ inputs.github-token }}
+      run: node "${{ github.action_path }}/src/index.js"
