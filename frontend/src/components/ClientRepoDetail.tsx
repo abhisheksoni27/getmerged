@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import { motion } from "framer-motion";
 import { Repo, AIInsights } from "@/types/opendoor";
 import {
   ArrowLeft,
@@ -24,10 +25,13 @@ import {
   PartyPopper,
   ExternalLink,
   Quote,
+  BarChart3,
+  Scale,
 } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { getLanguageSlug } from "@/lib/languageSlug";
+import { EASE_OUT_EXPO } from "@/lib/motion";
 import posthog from "posthog-js";
 import { AuthModal } from "@/components/AuthModal";
 import { RepoDetailHero } from "@/components/RepoDetailHero";
@@ -39,7 +43,9 @@ import { PRAcceptanceWidget } from "@/components/PRAcceptanceWidget";
 import { OptimalReviewWindow } from "@/components/OptimalReviewWindow";
 import { UnscoredExplainer } from "@/components/UnscoredExplainer";
 import { MaintainerConsoleModal } from "@/components/MaintainerConsoleModal";
+import { RepoStickyBar, RepoSectionTab } from "@/components/RepoStickyBar";
 import { isRepoScored } from "@/lib/repo-metadata";
+
 
 interface ClientRepoDetailProps {
   repo: Repo | null;
@@ -309,6 +315,51 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       default:
         return "Scored";
     }
+  };  const tabs: RepoSectionTab[] = useMemo(() => [
+    { id: "overview", label: "Overview", icon: Sparkles },
+    ...(insights ? [{ id: "guidelines", label: "AI Guidelines", icon: Sparkles }] : []),
+    { id: "scorecards", label: "Scorecards", icon: Activity },
+    { id: "trends", label: "Trends & Forecast", icon: BarChart3 },
+    { id: "good-first-issues", label: "Good First Issues", icon: ShieldCheck },
+    { id: "community-feedback", label: "Community Vibe", icon: Users },
+    ...(relatedRepos.length > 0 ? [{ id: "alternatives", label: "Similar Repos", icon: Scale }] : []),
+    { id: "faqs", label: "FAQs & Guide", icon: FileCode2 },
+  ], [insights, relatedRepos.length]);
+
+  const [activeSection, setActiveSection] = useState<string>("overview");
+  const [showSticky, setShowSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowSticky(window.scrollY > 240);
+
+      const sectionIds = tabs.map((t) => t.id);
+      const scrollPos = window.scrollY + 170;
+
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionIds[i]);
+        if (el) {
+          const top = el.offsetTop;
+          if (top <= scrollPos) {
+            setActiveSection(sectionIds[i]);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [tabs]);
+
+  const scrollToSection = (id: string) => {
+    setActiveSection(id);
+    const el = document.getElementById(id);
+    if (el) {
+      const topOffset = el.getBoundingClientRect().top + window.scrollY - 130;
+      window.scrollTo({ top: topOffset, behavior: "smooth" });
+    }
   };
 
   if (isCheckingGithub) {
@@ -429,10 +480,6 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
     );
   }
 
-
-
-
-
   const responseTimeVal = repo?.time_to_first_response_hours || 0;
   const responseScore = responseTimeVal > 0 ? Math.max(0, 100 - (responseTimeVal * 2.5)) : 0;
   const mergeScore = repo?.external_pr_merge_rate || 0;
@@ -450,32 +497,84 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
     : "No active GitHub maintainers found (may review internally on Gerrit or internal tools)";
 
   return (
-    <main className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 py-10 sm:py-12 flex-1 w-full overflow-hidden">
-      {/* Navigation Breadcrumb */}
-      <Link
-        href="/"
-        title="Return to GetMerged Explorer Home"
-        className="inline-flex items-center gap-1.5 text-xs font-sans text-zinc-500 hover:text-zinc-900 transition-colors mb-6"
-      >
-        <ArrowLeft className="h-3.5 w-3.5" />
-        Back to Explorer
-      </Link>
-
-      {/* Hero Header */}
-      <RepoDetailHero
+    <>
+      {/* Sticky Header with Scrollspy Section Tabs */}
+      <RepoStickyBar
         fullName={fullName}
         repo={repo}
         rank={rank}
         rankLabel={getRankHumanLabel(rank)}
-        score={score}
         isWatching={isWatching}
         watchLoading={watchLoading}
-        isClaimed={isRepoClaimed}
-        isVerified={isRepoVerified}
-        onClaimClick={handleClaimClick}
         onWatchToggle={handleWatchToggle}
-        onGithubClick={() => posthog.capture('repo_github_link_clicked', { repo_full_name: fullName, repo_tier: rank })}
+        activeSection={activeSection}
+        onSectionClick={scrollToSection}
+        tabs={tabs}
+        visible={showSticky}
       />
+
+      <main className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 py-8 sm:py-10 flex-1 w-full overflow-hidden">
+        {/* Navigation Breadcrumb */}
+        <Link
+          href="/"
+          title="Return to GetMerged Explorer Home"
+          className="inline-flex items-center gap-1.5 text-xs font-sans text-zinc-500 hover:text-zinc-900 transition-colors mb-6"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Back to Explorer
+        </Link>
+
+        {/* Section 1: Overview & Hero */}
+        <motion.section
+          id="overview"
+          className="scroll-mt-36 mb-8"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
+        >
+          {/* Hero Header */}
+          <RepoDetailHero
+            fullName={fullName}
+            repo={repo}
+            rank={rank}
+            rankLabel={getRankHumanLabel(rank)}
+            score={score}
+            isWatching={isWatching}
+            watchLoading={watchLoading}
+            isClaimed={isRepoClaimed}
+            isVerified={isRepoVerified}
+            onClaimClick={handleClaimClick}
+            onWatchToggle={handleWatchToggle}
+            onGithubClick={() => posthog.capture('repo_github_link_clicked', { repo_full_name: fullName, repo_tier: rank })}
+          />
+
+          {/* In-Page Quick Navigation Tabs Bar */}
+          <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-2 px-1 mb-2">
+            <span className="text-xs font-mono text-zinc-500 font-bold shrink-0 mr-1 flex items-center gap-1">
+              Jump to:
+            </span>
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeSection === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => scrollToSection(tab.id)}
+                  title={`Scroll to ${tab.label}`}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
+                    isActive
+                      ? "bg-[#ffd93d] text-zinc-950 shadow-[2px_2px_0px_#000]"
+                      : "bg-white text-zinc-800 hover:bg-[#fff9db] hover:shadow-[2px_2px_0px_#000]"
+                  }`}
+                >
+                  <Icon className={`h-3.5 w-3.5 ${isActive ? "text-black" : "text-zinc-600"}`} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </motion.section>
 
       {/* Maintainer Console Modal (AC1 & AC6) */}
       <MaintainerConsoleModal
@@ -496,7 +595,14 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
 
       {/* AI Insights & Maintainer Review Guidelines - moved up per Issue #80 */}
       {insights && (
-        <div className="relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-5 sm:p-6 shadow-[5px_5px_0px_#222831] overflow-hidden mb-10">
+        <motion.section
+          id="guidelines"
+          className="scroll-mt-36 relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-5 sm:p-6 shadow-[5px_5px_0px_#222831] overflow-hidden mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+        >
           <div className="flex items-center gap-2 mb-4">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-zinc-950 shadow-[2px_2px_0px_#222831] -rotate-2">
               <Sparkles className="h-4 w-4" />
@@ -627,47 +733,81 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               </div>
             )}
           </div>
-        </div>
+        </motion.section>
       )}
 
-      {/* C-Rank Trend */}
-      <div className="mb-8">
+      {/* Scorecards & Macro Metrics */}
+      <motion.section
+        id="scorecards"
+        className="scroll-mt-36 space-y-8 mb-10"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+      >
+        <RepoScorecards
+          responseTimeStr={responseTimeStr}
+          responseCommentary={responseCommentary}
+          mergeRateStr={mergeRateStr}
+          mergeCommentary={mergeCommentary}
+          firstTimerSuccessStr={firstTimerSuccessStr}
+          firstTimerCommentary={firstTimerCommentary}
+          busFactor={busFactor}
+          maintainersCommentary={maintainersCommentary}
+          vibeScore={vibeScore}
+          onboardingScore={repo?.onboarding_score}
+        />
+
+        {/* Interactive README C-Rank Live Badge Generator (Issue #50) */}
+        <RepoBadgeGenerator fullName={fullName} />
+      </motion.section>
+
+      {/* Trends & Forecasts */}
+      <motion.section
+        id="trends"
+        className="scroll-mt-36 space-y-8 mb-10"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+      >
+        {/* C-Rank Trend */}
         <RepoTrendChart repoId={fullName} />
-      </div>
 
-      {/* Macro Metrics Grid & cNPS Gauge Row */}
-      <RepoScorecards
-        responseTimeStr={responseTimeStr}
-        responseCommentary={responseCommentary}
-        mergeRateStr={mergeRateStr}
-        mergeCommentary={mergeCommentary}
-        firstTimerSuccessStr={firstTimerSuccessStr}
-        firstTimerCommentary={firstTimerCommentary}
-        busFactor={busFactor}
-        maintainersCommentary={maintainersCommentary}
-        vibeScore={vibeScore}
-        onboardingScore={repo?.onboarding_score}
-      />
+        {/* PR Acceptance & Review Speed Forecast Widget (Epic 3, Story 3.4) */}
+        {fullName && (() => {
+          const [owner, name] = fullName.split("/");
+          if (!owner || !name) return null;
+          return <PRAcceptanceWidget owner={owner} name={name} />;
+        })()}
 
-      {/* Interactive README C-Rank Live Badge Generator (Issue #50) */}
-      <RepoBadgeGenerator fullName={fullName} />
+        {/* Optimal PR Submission Window & Maintainer Activity Heatmap (Story 7.1 / IDEA-20260819-01) */}
+        <OptimalReviewWindow fullName={fullName} />
+      </motion.section>
 
       {/* Similar Repositories & Alternatives Interlinking (Issue #55) */}
-      <SimilarRepos relatedRepos={relatedRepos} language={repo?.language} />
-
-
-      {/* PR Acceptance & Review Speed Forecast Widget (Epic 3, Story 3.4) */}
-      {fullName && (() => {
-        const [owner, name] = fullName.split("/");
-        if (!owner || !name) return null;
-        return <PRAcceptanceWidget owner={owner} name={name} />;
-      })()}
-
-      {/* Optimal PR Submission Window & Maintainer Activity Heatmap (Story 7.1 / IDEA-20260819-01) */}
-      <OptimalReviewWindow fullName={fullName} />
+      {relatedRepos.length > 0 && (
+        <motion.section
+          id="alternatives"
+          className="scroll-mt-36 mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+        >
+          <SimilarRepos relatedRepos={relatedRepos} language={repo?.language} />
+        </motion.section>
+      )}
       
       {/* Good First Issues Cards (Story 10.2 & Story 10.3) */}
-      <div className="rounded-2xl bg-white p-4 sm:p-5 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] font-mono">
+      <motion.section
+        id="good-first-issues"
+        className="scroll-mt-36 rounded-2xl bg-white p-4 sm:p-5 mb-10 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] font-mono"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+      >
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-emerald-600" /> Active Good First Issues ({gfiList.length > 0 ? gfiList.length : (repo?.good_first_issue_count ?? 0)})
@@ -676,7 +816,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             href={`https://github.com/${fullName}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2Cgood-first-issue`}
             target="_blank"
             rel="noopener noreferrer"
-            title="View on GitHub"
+            title="View open good first issues on GitHub"
             className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1"
           >
             View on GitHub <ArrowRight className="h-3 w-3" />
@@ -788,11 +928,18 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             </Link>
           </div>
         )}
-      </div>
+      </motion.section>
 
 
       {/* Issues #6, #7, #8: Contributor Community Feedback & Verification Module */}
-      <div className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-orange-100 via-white to-yellow-100 p-5 sm:p-8 shadow-[5px_5px_0px_#222831] mb-10 font-sans">
+      <motion.section
+        id="community-feedback"
+        className="scroll-mt-36 rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-orange-100 via-white to-yellow-100 p-5 sm:p-8 shadow-[5px_5px_0px_#222831] mb-10 font-sans"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+      >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b-2 border-brand-dark pb-5">
           <div>
             <h2 className="text-xl sm:text-2xl font-extrabold font-space text-zinc-950 flex items-center gap-2.5">
@@ -1125,10 +1272,17 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             </>
           )}
         </div>
-      </div>
+      </motion.section>
 
       {/* Content-Heavy SEO Modules for Search Engines & Crawlers */}
-      <div className="space-y-8 font-sans border-t-2 border-brand-dark pt-8 text-zinc-800">
+      <motion.section
+        id="faqs"
+        className="scroll-mt-36 space-y-8 font-sans border-t-2 border-brand-dark pt-8 text-zinc-800"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+      >
         <section className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-emerald-100 via-white to-cyan-100 p-5 sm:p-6 shadow-[5px_5px_0px_#222831]">
           <h2 className="text-base sm:text-lg font-extrabold font-space text-zinc-950 mb-3 flex items-center gap-2">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border-2 border-brand-dark bg-emerald-200 shadow-[2px_2px_0px_#222831] rotate-2">
@@ -1259,7 +1413,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             All telemetry metrics displayed for {fullName} are automatically retrieved via the GitHub GraphQL API and recalculated daily. Insider pull requests submitted by repository owners or organization members are excluded from merge rate calculations to preserve objective external contributor statistics.
           </p>
         </section>
-      </div>
+      </motion.section>
 
       {/* Auth Modal Component */}
       <AuthModal
@@ -1270,6 +1424,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
         source={authModalConfig.source}
       />
     </main>
+    </>
   );
 }
 
