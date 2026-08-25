@@ -483,6 +483,38 @@ func AutoMigrate(db *sqlx.DB) error {
 			skipped_count INTEGER NOT NULL DEFAULT 0,
 			PRIMARY KEY (installation_id, usage_date)
 		);`,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS gfi_subscribers (
+			id INTEGER PRIMARY KEY %s,
+			email VARCHAR(255) UNIQUE NOT NULL,
+			languages TEXT NULL,
+			tech_stacks TEXT NULL,
+			tiers VARCHAR(20) NULL,
+			frequency VARCHAR(16) NOT NULL DEFAULT 'weekly',
+			verified_at DATETIME NULL,
+			unsubscribed_at DATETIME NULL,
+			disabled BOOLEAN NOT NULL DEFAULT FALSE,
+			hard_bounces INTEGER NOT NULL DEFAULT 0,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS gfi_email_queue (
+			id INTEGER PRIMARY KEY %s,
+			subscriber_id INTEGER NOT NULL,
+			idempotency_key VARCHAR(255) UNIQUE NOT NULL,
+			repo_id VARCHAR(255) NOT NULL,
+			issue_number INTEGER NOT NULL,
+			status VARCHAR(20) NOT NULL DEFAULT 'pending',
+			attempts INTEGER NOT NULL DEFAULT 0,
+			last_error TEXT NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			sent_at DATETIME NULL
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS gfi_signup_attempts (
+			id INTEGER PRIMARY KEY %s,
+			ip VARCHAR(64) NOT NULL,
+			email VARCHAR(255) NOT NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
 	}
 
 	for i, stmt := range statements {
@@ -519,6 +551,9 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_user_api_keys_user ON user_api_keys(user_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_repo_claims_user ON repo_claims(owner_user_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_repo_claims_repo_state ON repo_claims(repo_id, state)`,
+		`CREATE INDEX IF NOT EXISTS idx_gfi_email_queue_pending ON gfi_email_queue(status, created_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_gfi_email_queue_sub ON gfi_email_queue(subscriber_id, repo_id, issue_number)`,
+		`CREATE INDEX IF NOT EXISTS idx_gfi_signup_attempts_lookup ON gfi_signup_attempts(ip, email, created_at)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)

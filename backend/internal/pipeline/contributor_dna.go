@@ -100,28 +100,37 @@ query ContributorDNA($login: String!, $searchQuery: String!) {
 }
 `
 
+// Named types for the GraphQL response. Extracted from inline anonymous
+// structs so the persona/temporal/stars helpers (and their tests) can pass
+// values around without redeclaring the literal. JSON wire format unchanged.
+type DNAUser struct {
+	CreatedAt     string `json:"createdAt"`
+	Followers     struct{ TotalCount int `json:"totalCount"` } `json:"followers"`
+	Repositories struct{ TotalCount int `json:"totalCount"` } `json:"repositories"`
+}
+
+type DNARepo struct {
+	NameWithOwner   string `json:"nameWithOwner"`
+	PrimaryLanguage *struct{ Name string `json:"name"` } `json:"primaryLanguage"`
+	StargazerCount  int    `json:"stargazerCount"`
+}
+
+type DNANode struct {
+	Additions    int    `json:"additions"`
+	Deletions    int    `json:"deletions"`
+	ChangedFiles int    `json:"changedFiles"`
+	MergedAt     string `json:"mergedAt"`
+	CreatedAt    string `json:"createdAt"`
+	Repository   DNARepo    `json:"repository"`
+	Comments     struct{ TotalCount int `json:"totalCount"` } `json:"comments"`
+	Reviews      struct{ TotalCount int `json:"totalCount"` } `json:"reviews"`
+}
+
 type GraphQLDNAData struct {
-	User struct {
-		CreatedAt  string `json:"createdAt"`
-		Followers  struct { TotalCount int `json:"totalCount"` } `json:"followers"`
-		Repositories struct { TotalCount int `json:"totalCount"` } `json:"repositories"`
-	} `json:"user"`
+	User   DNAUser `json:"user"`
 	Search struct {
-		IssueCount int `json:"issueCount"`
-		Nodes      []struct {
-			Additions    int    `json:"additions"`
-			Deletions    int    `json:"deletions"`
-			ChangedFiles int    `json:"changedFiles"`
-			MergedAt     string `json:"mergedAt"`
-			CreatedAt    string `json:"createdAt"`
-			Repository   struct {
-				NameWithOwner   string `json:"nameWithOwner"`
-				PrimaryLanguage *struct { Name string `json:"name"` } `json:"primaryLanguage"`
-				StargazerCount  int `json:"stargazerCount"`
-			} `json:"repository"`
-			Comments struct { TotalCount int `json:"totalCount"` } `json:"comments"`
-			Reviews  struct { TotalCount int `json:"totalCount"` } `json:"reviews"`
-		} `json:"nodes"`
+		IssueCount int      `json:"issueCount"`
+		Nodes      []DNANode `json:"nodes"`
 	} `json:"search"`
 }
 
