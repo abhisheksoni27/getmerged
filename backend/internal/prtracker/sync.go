@@ -274,6 +274,11 @@ func (s *Service) runPass(ctx context.Context) {
 	passCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
 	defer cancel()
 	synced, _ := s.SyncAllConnectedUsers(passCtx)
+	// Reconciliation fallback (AC7): re-resolve every registered eval against
+	// fresh snapshots even for users whose own sync was skipped this pass.
+	if _, err := s.Store.UpdateEvalOutcomes(passCtx); err != nil {
+		slog.Warn("prtracker cron: eval outcome reconciliation failed", "err", err)
+	}
 	if n, err := notification.ProcessPendingNotifications(passCtx, s.DB, notification.NewPlaceholderCommunicationClient()); err != nil {
 		slog.Warn("prtracker cron: notify drain failed", "err", err)
 	} else if n > 0 {

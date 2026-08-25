@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
+import { formatVerdict, formatAccuracy, type PREvalOutcome } from "@/lib/pr-verdict";
 import { TopMatches } from "@/components/TopMatches";
 import { ForYou } from "@/components/ForYou";
 import { ApiKeysCard } from "./ApiKeysCard";
@@ -51,6 +52,7 @@ export interface TrackedPR {
   benchmark: Benchmark | null;
   forecast?: Forecast | null;
   forecast_locked: boolean;
+  outcome?: PREvalOutcome | null;
 }
 
 interface Connection {
@@ -213,6 +215,15 @@ export function DashboardClient() {
         <ul className="space-y-3">
           {data.prs.map((pr) => {
             const meta = STATE_META[pr.state] ?? STATE_META.open;
+            // Verified verdict (AC1/AC3): same field set as share pages/OG.
+            const verdictView = formatVerdict(pr.outcome ?? null);
+            const accuracyView = formatAccuracy(pr.outcome ?? null);
+            const verdictCls =
+              verdictView?.tone === "good"
+                ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                : verdictView?.tone === "bad"
+                  ? "bg-red-100 text-red-700 border border-red-300"
+                  : "bg-zinc-100 text-zinc-600 border border-zinc-300";
             return (
               <li key={pr.pr_id} className="rounded-xl border border-zinc-200 bg-white p-4 shadow-[2px_2px_0px_#000]/5">
                 <div className="flex items-start justify-between gap-3">
@@ -251,6 +262,18 @@ export function DashboardClient() {
                   p50 {fmtHours(pr.benchmark?.response_p50_hours)} · p90 {fmtHours(pr.benchmark?.response_p90_hours)} · merge{" "}
                   {fmtHours(pr.benchmark?.median_time_to_merge_hours)}
                 </div>
+
+                {/* AC1: verified outcome synced from the PR tracker */}
+                {verdictView && (
+                  <div className="mt-2 flex items-center gap-2 flex-wrap" data-testid="pr-verdict">
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold font-mono ${verdictCls}`}>
+                      {verdictView.text}
+                    </span>
+                    {accuracyView && (
+                      <span className="text-[11px] font-mono text-zinc-500">{accuracyView.label}</span>
+                    )}
+                  </div>
+                )}
 
                 {/* AC4: Pro-gated transparent rule-based forecast */}
                 <div className="mt-2">

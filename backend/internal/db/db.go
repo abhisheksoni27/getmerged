@@ -42,6 +42,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			avatar_url TEXT,
 			profiling_consent BOOLEAN DEFAULT FALSE,
 			profiling_consent_at DATETIME,
+			public_accuracy BOOLEAN DEFAULT FALSE,
 			skills VARCHAR(100) NULL,
 			lang_snapshot TEXT NULL,
 			lang_snapshot_at DATETIME NULL,
@@ -364,10 +365,12 @@ func AutoMigrate(db *sqlx.DB) error {
 			predicted_score INTEGER NOT NULL DEFAULT 0,
 			owner_user_id INTEGER NULL,
 			outcome VARCHAR(20) NOT NULL DEFAULT 'pending',
+			is_public BOOLEAN DEFAULT FALSE,
 			resolved_at DATETIME NULL,
 			merged_at DATETIME NULL,
 			days_to_merge REAL NULL,
 			outcome_hash VARCHAR(40) NOT NULL DEFAULT '',
+			last_synced_at DATETIME NULL,
 			created_at DATETIME NOT NULL,
 			updated_at DATETIME NOT NULL,
 			UNIQUE(eval_id)
@@ -502,6 +505,9 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE repo_ai_insights ADD COLUMN deep_sections_json MEDIUMTEXT NULL`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN deleted_at DATETIME`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN profiling_consent BOOLEAN DEFAULT FALSE`)
+	_, _ = db.Exec(`ALTER TABLE pr_evaluations ADD COLUMN is_public BOOLEAN DEFAULT FALSE`)
+	_, _ = db.Exec(`ALTER TABLE pr_evaluations ADD COLUMN last_synced_at DATETIME NULL`)
+	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN public_accuracy BOOLEAN DEFAULT FALSE`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN profiling_consent_at DATETIME`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN skills VARCHAR(100) NULL`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN lang_snapshot TEXT NULL`)
