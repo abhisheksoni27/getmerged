@@ -392,6 +392,7 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 	defer rows.Close()
 
 	var prs []scoring.PR
+	var windows []struct{ open, close time.Time }
 	for rows.Next() {
 		var prNumber int
 		var openedAt, closedAt, firstCommentAt sql.NullTime
@@ -424,7 +425,37 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 			pr.FirstCommentAt = &firstCommentAtTime
 		}
 
+		windows = append(windows, struct{ open, close time.Time }{openedAt.Time, closedAt.Time})
 		prs = append(prs, pr)
+	}
+
+	// Distinct-maintainer signal: attribute commenters to PRs whose lifecycle
+	// window contains the comment. repo_raw_comments carries no association,
+	// so any non-author commenter counts (bots are filtered at ingestion).
+	if len(windows) > 0 {
+		cRows, err := db.Query(`
+			SELECT c.created_at, c.author_login
+			FROM repo_raw_comments c
+			WHERE c.repository_id = ?
+			  AND c.created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+		`, repoID, days)
+		if err != nil {
+			return nil, err
+		}
+		defer cRows.Close()
+		for cRows.Next() {
+			var ca time.Time
+			var login string
+			if err := cRows.Scan(&ca, &login); err != nil {
+				return nil, err
+			}
+			for i, w := range windows {
+				inWindow := ca.After(w.open) && (!w.close.IsZero() && ca.Before(w.close) || w.close.IsZero() && !ca.After(time.Now().UTC()))
+				if inWindow && login != prs[i].AuthorLogin {
+					prs[i].CommentAuthors = append(prs[i].CommentAuthors, login)
+				}
+			}
+		}
 	}
 	return prs, nil
 }
