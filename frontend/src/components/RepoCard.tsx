@@ -23,37 +23,37 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
     switch (r) {
       case "S":
         return {
-          badgeClass: "bg-[#8ce99a] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
+          badgeClass: "bg-[#8ce99a] text-zinc-950 border border-emerald-600/30 font-bold",
           label: "Super Welcoming",
           indicatorColor: "bg-emerald-600",
         };
       case "A":
         return {
-          badgeClass: "bg-[#bfdbff] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
+          badgeClass: "bg-[#bfdbff] text-zinc-950 border border-blue-600/30 font-bold",
           label: "Welcoming",
           indicatorColor: "bg-blue-600",
         };
       case "B":
         return {
-          badgeClass: "bg-[#ffd93d] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
+          badgeClass: "bg-[#ffd93d] text-zinc-950 border border-amber-600/30 font-bold",
           label: "Moderate",
           indicatorColor: "bg-amber-600",
         };
       case "C":
         return {
-          badgeClass: "bg-[#e5dbff] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
+          badgeClass: "bg-[#e5dbff] text-zinc-950 border border-purple-600/30 font-bold",
           label: "Slow Review",
           indicatorColor: "bg-purple-600",
         };
       case "D":
         return {
-          badgeClass: "bg-[#ffb3c7] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
+          badgeClass: "bg-[#ffb3c7] text-zinc-950 border border-rose-600/30 font-bold",
           label: "Unmaintained",
           indicatorColor: "bg-rose-600",
         };
       default:
         return {
-          badgeClass: "bg-[#faf9f6] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
+          badgeClass: "bg-zinc-100 text-zinc-800 border border-zinc-200 font-bold",
           label: "Scored",
           indicatorColor: "bg-zinc-600",
         };
@@ -112,8 +112,6 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
   };
 
   const handleTopicChipClick = (e: React.MouseEvent, topic: string) => {
-    // The card is an outer <a>; navigate programmatically on the interactive
-    // chip span to avoid illegal nested <a> DOM nodes (valid HTML5).
     e.preventDefault();
     e.stopPropagation();
     posthog.capture("topic_chip_clicked", {
@@ -157,17 +155,17 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       href={`/${ownerPart}/${namePart}`}
       onClick={handleClick}
       title={`View ${repo.full_name} C-Rank scorecard, PR response time & merge metrics`}
-      className={`group dev-card-glow relative flex h-full flex-col justify-between rounded-2xl p-5 border transition-all duration-200 block text-current no-underline cursor-pointer ${
+      className={`group dev-card-glow relative flex h-full flex-col justify-between rounded-2xl p-5 bg-white border transition-all duration-200 block text-current no-underline cursor-pointer border-b-4 border-b-zinc-900 hover:-translate-y-0.5 ${
         isSpotlight
-          ? "border-zinc-300 bg-white shadow-md hover:shadow-lg hover:border-zinc-400 hover:-translate-y-0.5"
-          : "border-zinc-200/90 bg-white shadow-xs hover:shadow-md hover:border-zinc-300 hover:-translate-y-0.5"
+          ? "border-zinc-300 shadow-md hover:border-zinc-400 hover:border-b-black"
+          : "border-zinc-200/90 shadow-xs hover:border-zinc-300 hover:border-b-black"
       }`}
     >
       <div className="flex flex-col flex-1">
         {/* Card Header */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3 min-w-0 flex-1">
-            <div className="h-9 w-9 rounded-xl border border-zinc-200/80 bg-zinc-50 overflow-hidden shrink-0 shadow-2xs group-hover:border-zinc-300 transition-colors">
+            <div className="h-9 w-9 rounded-xl border border-zinc-200 bg-zinc-50 overflow-hidden shrink-0 group-hover:border-zinc-300 transition-colors">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`https://github.com/${ownerPart}.png?size=64`}
@@ -201,48 +199,46 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
           </div>
 
           {/* Rank Badge */}
-          <div className={`px-2.5 py-1 rounded-xl text-[11px] font-bold font-mono border shrink-0 flex items-center gap-1.5 ${badgeStyle.badgeClass}`}>
+          <div className={`px-2.5 py-1 rounded-xl text-[11px] font-bold font-mono shrink-0 flex items-center gap-1.5 ${badgeStyle.badgeClass}`}>
             <span className={`h-1.5 w-1.5 rounded-full ${badgeStyle.indicatorColor}`} />
             <span>{badgeStyle.label}</span>
           </div>
         </div>
 
         {/* Description */}
-        <p className="text-xs text-zinc-600 line-clamp-2 leading-relaxed font-sans font-normal mb-4 min-h-[2.5rem]">
+        <p className="text-xs text-zinc-600 line-clamp-2 leading-relaxed font-sans font-normal mb-3 h-10">
           {repo.description || "No repository description available."}
         </p>
 
-        {/* Topic chips - interactive spans (not nested <a>) linking to topic landings */}
-        {topicChips.length > 0 && (
-          <div className="flex flex-wrap items-center gap-1.5 mb-4">
-            {topicChips.map((topic) => (
-              <span
-                key={topic}
-                role="button"
-                tabIndex={0}
-                data-testid="topic-chip"
-                aria-label={`Filter by topic ${topic}`}
-                title={`Explore ${topic} repositories`}
-                onClick={(e) => handleTopicChipClick(e, topic)}
-                onKeyDown={(e) => handleTopicChipKeyDown(e, topic)}
-                className="inline-flex items-center px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-700 border border-zinc-200 font-mono text-[10px] sm:text-[11px] font-medium hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1"
-              >
-                #{topic}
-              </span>
-            ))}
-            {topicOverflow > 0 && (
-              <span
-                className="inline-flex items-center px-2 py-0.5 rounded-md bg-zinc-50 text-zinc-500 border border-zinc-200 font-mono text-[10px] sm:text-[11px] font-medium"
-                aria-hidden="true"
-              >
-                +{topicOverflow}
-              </span>
-            )}
-          </div>
-        )}
+        {/* Topic chips */}
+        <div className="h-6 flex items-center gap-1.5 overflow-hidden mb-3.5">
+          {topicChips.map((topic) => (
+            <span
+              key={topic}
+              role="button"
+              tabIndex={0}
+              data-testid="topic-chip"
+              aria-label={`Filter by topic ${topic}`}
+              title={`Explore ${topic} repositories`}
+              onClick={(e) => handleTopicChipClick(e, topic)}
+              onKeyDown={(e) => handleTopicChipKeyDown(e, topic)}
+              className="inline-flex items-center px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-700 border border-zinc-200/80 font-mono text-[10px] sm:text-[11px] font-medium hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200 transition-colors cursor-pointer shrink-0 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40"
+            >
+              #{topic}
+            </span>
+          ))}
+          {topicOverflow > 0 && (
+            <span
+              className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-zinc-50 text-zinc-500 border border-zinc-200 font-mono text-[10px] sm:text-[11px] font-medium shrink-0"
+              aria-hidden="true"
+            >
+              +{topicOverflow}
+            </span>
+          )}
+        </div>
 
-        {/* Telemetry Metrics Scorecard with clean spacing & dividers */}
-        <div className="grid grid-cols-3 gap-3 py-3 px-3.5 bg-zinc-50/80 rounded-xl border border-zinc-100/90 my-auto text-center font-mono">
+        {/* Telemetry Metrics Scorecard */}
+        <div className="grid grid-cols-3 gap-2 py-2.5 px-3 bg-zinc-50/80 rounded-xl border border-zinc-100 mb-3.5 text-center font-mono">
           <div className="pr-1">
             <div className="text-xs font-bold text-zinc-900">{mergeRate}</div>
             <div className="text-[10px] text-zinc-500 font-medium whitespace-nowrap mt-0.5">Merge Rate</div>
@@ -259,8 +255,8 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       </div>
 
       {/* Card Footer */}
-      <div className="pt-3 mt-3 border-t border-zinc-100 flex items-center justify-between text-[11px] font-mono text-zinc-500">
-        <div className="flex items-center gap-2">
+      <div className="pt-3 border-t border-zinc-100 flex items-center justify-between gap-2 text-[11px] font-mono text-zinc-500 min-h-[36px]">
+        <div className="flex items-center gap-2 min-w-0">
           {gfiCount > 0 ? (
             <span
               role="button"
@@ -274,21 +270,21 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
                 handleGfiClick();
               }}
               onKeyDown={handleGfiKeyDown}
-              className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60 font-medium text-[10px] hover:bg-emerald-100 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1"
+              className="inline-flex items-center gap-1 text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/80 font-medium text-[10px] sm:text-[11px] hover:bg-emerald-100 transition-colors cursor-pointer shrink-0 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40"
             >
-              <ShieldCheck className="h-3 w-3" />
-              {gfiLabel}
+              <ShieldCheck className="h-3 w-3 shrink-0 text-emerald-600" />
+              <span>{gfiLabel}</span>
             </span>
           ) : repo.is_trending ? (
-            <span className="inline-flex items-center gap-0.5 text-orange-700 font-medium">
-              <Flame className="h-3 w-3 fill-orange-500" />
-              Trending
+            <span className="inline-flex items-center gap-1 text-orange-700 font-medium shrink-0 whitespace-nowrap">
+              <Flame className="h-3 w-3 fill-orange-500 shrink-0" />
+              <span>Trending</span>
             </span>
           ) : (
-            <span>Telemetry active</span>
+            <span className="text-zinc-500 shrink-0 whitespace-nowrap">Telemetry active</span>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <span
             role="button"
             tabIndex={0}
@@ -297,12 +293,12 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
             aria-label={`Compare ${repo.full_name}`}
             onClick={handleCompareClick}
             onKeyDown={handleCompareKeyDown}
-            className="inline-flex items-center gap-1 text-xs font-medium text-zinc-500 hover:text-emerald-700 bg-zinc-100/70 hover:bg-emerald-50 px-2 py-1 rounded-md border border-zinc-200/60 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1"
+            className="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-600 hover:text-emerald-700 bg-zinc-100/80 hover:bg-emerald-50 px-2 py-0.5 rounded-md border border-zinc-200/80 transition-colors cursor-pointer shrink-0 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40"
           >
-            <Scale className="h-3 w-3" />
+            <Scale className="h-3 w-3 shrink-0" />
             <span>Compare</span>
           </span>
-          <span className="font-semibold text-zinc-900 group-hover:text-zinc-700 flex items-center gap-0.5">
+          <span className="font-semibold text-zinc-900 group-hover:text-emerald-600 flex items-center gap-0.5 text-[11px] shrink-0 whitespace-nowrap transition-colors">
             View details →
           </span>
         </div>
