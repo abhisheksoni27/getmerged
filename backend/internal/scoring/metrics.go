@@ -185,12 +185,40 @@ func ComputeMetrics(prs []PR, staleness bool, busFactorWindowDays int) RawMetric
 		}
 	}
 
-	// Calculate LastActivityDays from the most recent merged external PR
-	// BusFactor fallback: event-stream derived PRs carry no author associations,
-	// so the insider map stays empty. Non-author human commenters on external
-	// PRs are the same maintainer signal, so reuse them rather than reporting 0.
+	// BusFactor fallback: when PRs come from event streams without author association
+	// metadata, insider associations are unavailable. Count active non-author human
+	// commenters within the BusFactor window (90 days). For projects with multiple
+	// commenters, require >=2 interactions (or >=20% of comments) to filter single one-off drive-by comments.
 	if len(busFactorMaintainers) == 0 {
-		busFactorMaintainers = maintainerSet
+		commenterCounts90 := map[string]int{}
+		for _, pr := range prs {
+			prActiveInWindow := pr.CreatedAt.After(window90) || (pr.MergedAt != nil && pr.MergedAt.After(window90))
+			if !prActiveInWindow {
+				continue
+			}
+			for _, author := range pr.CommentAuthors {
+				if author != pr.AuthorLogin && author != "" && !isBot(author) {
+					commenterCounts90[author]++
+				}
+			}
+		}
+
+		if len(commenterCounts90) <= 2 {
+			for author := range commenterCounts90 {
+				busFactorMaintainers[author] = true
+			}
+		} else {
+			for author, count := range commenterCounts90 {
+				if count >= 2 {
+					busFactorMaintainers[author] = true
+				}
+			}
+			if len(busFactorMaintainers) == 0 {
+				for author := range commenterCounts90 {
+					busFactorMaintainers[author] = true
+				}
+			}
+		}
 	}
 
 	// Calculate LastActivityDays from the most recent merged external PR
