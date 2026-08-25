@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "GetMerged: C-Rank™ & Acceptance Odds for GitHub",
+  "version": "1.0.0",
+  "description": "Instant C-Rank™ grade, maintainer review speed and acceptance odds injected onto GitHub pull request pages, with a one-click 'Analyze this PR' preflight.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://github.com/*",
+    "https://api.github.com/*",
+    "https://getmerged.abhishekco.de/*"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "getmerged-extension@abhishekco.de",
+      "strict_min_version": "113.0"
+    }
+  }
+}

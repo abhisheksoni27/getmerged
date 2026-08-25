@@ -1,0 +1,133 @@
+.gm-widget {
+  margin: 8px 0;
+  padding: 10px 12px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  background: #f6f8fa;
+  color: #1f2328;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  max-width: 720px;
+}
+
+.gm-widget.gm-fallback {
+  position: fixed;
+  top: 64px;
+  right: 16px;
+  z-index: 2147483646;
+  width: 320px;
+  box-shadow: 0 8px 24px rgba(31, 35, 40, 0.15);
+}
+
+.gm-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.gm-brand {
+  font-weight: 600;
+  color: #0969da !important;
+  text-decoration: none !important;
+}
+
+.gm-analyze-btn {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(31, 35, 40, 0.15);
+  background: #2da44e !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+
+.gm-analyze-btn:hover {
+  background: #2c974b !important;
+}
+
+.gm-top {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.gm-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.gm-odds {
+  font-weight: 600;
+  color: #1f883d;
+}
+
+.gm-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 1px 0;
+}
+
+.gm-label {
+  color: #59636e;
+}
+
+.gm-value {
+  font-weight: 600;
+}
+
+.gm-note {
+  margin-top: 4px;
+  color: #9a6700;
+  font-size: 12px;
+}
+
+.gm-status {
+  padding: 2px 0;
+}
+
+.gm-muted {
+  color: #59636e;
+}
+
+.gm-checklist {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+.gm-check-item {
+  list-style: disc;
+  margin: 2px 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .gm-widget {
+    border-color: #3d444d;
+    background: #151b23;
+    color: #f0f6fc;
+  }
+
+  .gm-brand {
+    color: #4493f8 !important;
+  }
+
+  .gm-odds {
+    color: #3fb950;
+  }
+
+  .gm-label,
+  .gm-muted {
+    color: #9198a1;
+  }
+}
