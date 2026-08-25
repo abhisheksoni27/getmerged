@@ -175,4 +175,67 @@ export interface TopicStat {  name: string;
   avg_response_hours?: number;
 }
 
+export interface MaintainerChecklistItem {
+  id: string;
+  title: string;
+  description: string;
+  impact_pts: number;
+  category: string;
+  fix_guidance: string;
+  link_url: string;
+  completed: boolean;
+}
+
+export interface MaintainerClaimDTO {
+  id: number;
+  repo_id: string;
+  owner_user_id: number;
+  verification_method: "file" | "org" | "direct" | string;
+  state: "pending" | "verified" | "revoked" | string;
+  verified_at?: string | null;
+  last_checked_at?: string | null;
+  expires_at: string;
+}
+
+export interface MaintainerConsolePayload {
+  repo_full_name: string;
+  is_claimed: boolean;
+  is_verified: boolean;
+  claim?: MaintainerClaimDTO;
+  c_rank_score: number;
+  c_rank_tier: string;
+  breakdown: {
+    external_pr_merge_rate: number;
+    time_to_first_response_hours: number;
+    response_p50_hours: number;
+    response_p90_hours: number;
+    time_to_merge_hours: number;
+    first_timer_success_rate: number;
+    repeat_contributor_rate: number;
+    maintainer_responsiveness: number;
+    distinct_maintainer_count: number;
+    bus_factor: number;
+    good_first_issue_count: number;
+    onboarding_score: number;
+  };
+  checklist: MaintainerChecklistItem[];
+}
+
+export interface ClaimInitiateResponse {
+  claim_id: number;
+  repo_id: string;
+  full_name: string;
+  state: string;
+  verification_method: string;
+  nonce_token?: string;
+  file_instructions?: {
+    file_name: string;
+    file_content: string;
+    nonce: string;
+    commit_guidance: string;
+  };
+  org_verified?: boolean;
+  expires_at: string;
+}
+
 
