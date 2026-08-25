@@ -23,6 +23,7 @@ type User struct {
 	AvatarURL        *string    `db:"avatar_url" json:"avatar_url,omitempty"`
 	ProfilingConsent bool       `db:"profiling_consent" json:"profiling_consent"`
 	PublicAccuracy   bool       `db:"public_accuracy" json:"public_accuracy"`
+	IsPublic         bool       `db:"is_public" json:"is_public"`
 	Skills           *string    `db:"skills" json:"skills,omitempty"`
 	LangSnapshot     *string    `db:"lang_snapshot" json:"lang_snapshot,omitempty"`
 	LangSnapshotAt   *time.Time `db:"lang_snapshot_at" json:"lang_snapshot_at,omitempty"`
@@ -62,12 +63,45 @@ type UserProfile struct {
 	DNA         interface{}        `json:"dna,omitempty"`
 }
 
+type PublicRepoTier struct {
+	FullName  string `json:"full_name"`
+	CRankTier string `json:"c_rank_tier"`
+}
+
+// PublicEvalItem is one row of the /u profile eval feed (latest 20).
+type PublicEvalItem struct {
+	RepoFullName   string    `db:"repository_full_name" json:"repository_full_name"`
+	PRNumber       *int      `db:"pr_number" json:"pr_number,omitempty"`
+	PredictedScore int       `db:"predicted_score" json:"predicted_score"`
+	Outcome        string    `db:"outcome" json:"outcome"`
+	CreatedAt      time.Time `db:"created_at" json:"created_at"`
+}
+
+// PublicContributorProfile is the /u/[username] payload: aggregate forecast
+// track record only. Accuracy is nil when nothing has settled yet so callers
+// hide it instead of rendering 0%/NaN.
+type PublicContributorProfile struct {
+	Slug         string           `json:"slug"`
+	Username     string           `json:"username"`
+	AvatarURL    *string          `json:"avatar_url,omitempty"`
+	MemberSince  time.Time        `json:"member_since"`
+	IsPublic     bool             `json:"is_public"`
+	TotalEvals   int              `json:"total_evals"`
+	AccuracyRate *float64         `json:"accuracy_rate"`
+	AccuracyN    int              `json:"accuracy_n"`
+	MergedCount  int              `json:"merged_count"`
+	Repos        []PublicRepoTier `json:"repos"`
+	Evals        []PublicEvalItem `json:"evals"`
+}
+
 type UserRepository interface {
 	FindByGithubID(ctx context.Context, githubID int64) (*User, error)
 	FindByGoogleID(ctx context.Context, googleID string) (*User, error)
 	FindByID(ctx context.Context, id int64) (*User, error)
 	FindBySlug(ctx context.Context, slug string) (*User, error)
 	GetUserProfileBySlug(ctx context.Context, slug string) (*UserProfile, error)
+	GetPublicContributorProfileBySlug(ctx context.Context, slug string) (*PublicContributorProfile, error)
+	UpdateProfilePublic(ctx context.Context, userID int64, public bool) error
 	UpsertUser(ctx context.Context, githubID int64, username, email, avatarURL string) (int64, error)
 	UpsertGoogleUser(ctx context.Context, googleID string, username, email, avatarURL string) (int64, error)
 	UpdateProfilingConsent(ctx context.Context, userID int64, consent bool) error
@@ -96,7 +130,7 @@ func NewUserRepository(db *sqlx.DB, cfg *config.Config) UserRepository {
 
 func (r *sqlxUserRepository) FindByGithubID(ctx context.Context, githubID int64) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE github_id = ? AND deleted_at IS NULL", githubID)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, is_public, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE github_id = ? AND deleted_at IS NULL", githubID)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +141,7 @@ func (r *sqlxUserRepository) FindByGithubID(ctx context.Context, githubID int64)
 
 func (r *sqlxUserRepository) FindByGoogleID(ctx context.Context, googleID string) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE google_id = ? AND deleted_at IS NULL", googleID)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, is_public, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE google_id = ? AND deleted_at IS NULL", googleID)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +152,7 @@ func (r *sqlxUserRepository) FindByGoogleID(ctx context.Context, googleID string
 
 func (r *sqlxUserRepository) FindByID(ctx context.Context, id int64) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE id = ? AND deleted_at IS NULL", id)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, is_public, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE id = ? AND deleted_at IS NULL", id)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +163,7 @@ func (r *sqlxUserRepository) FindByID(ctx context.Context, id int64) (*User, err
 
 func (r *sqlxUserRepository) FindBySlug(ctx context.Context, slug string) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE slug = ? AND deleted_at IS NULL", slug)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, is_public, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE slug = ? AND deleted_at IS NULL", slug)
 	if err != nil {
 		return nil, err
 	}
@@ -152,6 +186,29 @@ func sanitizeSlug(baseName string) string {
 	return strings.Trim(string(clean), "-")
 }
 
+// reservedSlugs collide with first-party app routes (frontend pages, API,
+// OG images, static assets) and are blocked at signup AND route level.
+var reservedSlugs = map[string]struct{}{
+	"api":          {},
+	"og":           {},
+	"u":            {},
+	"dashboard":    {},
+	"login":        {},
+	"settings":     {},
+	"static":       {},
+	"public":       {},
+	"assets":       {},
+	"images":       {},
+	"_next":        {},
+	"favicon.ico":  {},
+}
+
+// IsReservedSlug reports whether a slug would shadow an app route.
+func IsReservedSlug(slug string) bool {
+	_, ok := reservedSlugs[strings.ToLower(strings.TrimSpace(slug))]
+	return ok
+}
+
 // githubSignupHandle picks the display username for a brand-new GitHub signup:
 // the raw GitHub login when unused, otherwise login + "-gh", then numeric
 // suffixes until unique. Availability is checked against the plaintext unique
@@ -167,6 +224,9 @@ func (r *sqlxUserRepository) githubSignupHandle(ctx context.Context, login strin
 	}
 
 	slugFree := func(slug string) (bool, error) {
+		if IsReservedSlug(slug) {
+			return false, nil
+		}
 		var id int64
 		err := r.db.GetContext(ctx, &id, "SELECT id FROM users WHERE slug = ?", slug)
 		if err == sql.ErrNoRows {
@@ -216,6 +276,11 @@ func (r *sqlxUserRepository) generateUniqueSlug(ctx context.Context, baseName st
 	candidate := baseSlug
 	counter := 2
 	for {
+		if IsReservedSlug(candidate) {
+			candidate = fmt.Sprintf("%s-%d", baseSlug, counter)
+			counter++
+			continue
+		}
 		var existingID int64
 		err := r.db.GetContext(ctx, &existingID, "SELECT id FROM users WHERE slug = ?", candidate)
 		if err == sql.ErrNoRows {
@@ -488,6 +553,78 @@ func (r *sqlxUserRepository) GetUserProfileBySlug(ctx context.Context, slug stri
 		Feedback:  feedback,
 		DNA:       dnaParsed,
 	}, nil
+}
+
+func (r *sqlxUserRepository) UpdateProfilePublic(ctx context.Context, userID int64, public bool) error {
+	_, err := r.db.ExecContext(ctx, "UPDATE users SET is_public = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?", public, userID)
+	return err
+}
+
+// GetPublicContributorProfileBySlug resolves a case-insensitive slug to the
+// user's aggregate PR-forecast track record: total evals, hit rate over
+// settled evals, merged count and the C-Rank tiers of repos merged into.
+// Callers MUST 404 unless IsPublic is true — this method returns data for
+// private users too so the handler owns the privacy gate.
+func (r *sqlxUserRepository) GetPublicContributorProfileBySlug(ctx context.Context, slug string) (*PublicContributorProfile, error) {
+	user, err := r.FindBySlug(ctx, strings.ToLower(strings.TrimSpace(slug)))
+	if err != nil {
+		return nil, err
+	}
+
+	profile := &PublicContributorProfile{
+		Username:  user.Username,
+		AvatarURL: user.AvatarURL,
+		MemberSince: user.CreatedAt,
+		IsPublic:    user.IsPublic,
+		Repos:       []PublicRepoTier{},
+		Evals:       []PublicEvalItem{},
+	}
+	if user.Slug != nil {
+		profile.Slug = *user.Slug
+	}
+
+	var stats struct {
+		Total   int `db:"total"`
+		Settled int `db:"settled"`
+		Hits    int `db:"hits"`
+		Merged  int `db:"merged"`
+	}
+	err = r.db.GetContext(ctx, &stats, `
+		SELECT COUNT(*) AS total,
+		       COALESCE(SUM(CASE WHEN outcome IN ('hit','miss') THEN 1 ELSE 0 END), 0) AS settled,
+		       COALESCE(SUM(CASE WHEN outcome = 'hit' THEN 1 ELSE 0 END), 0) AS hits,
+		       COALESCE(SUM(CASE WHEN merged_at IS NOT NULL THEN 1 ELSE 0 END), 0) AS merged
+		FROM pr_evaluations WHERE owner_user_id = ?`, user.ID)
+	if err == nil {
+		profile.TotalEvals = stats.Total
+		profile.AccuracyN = stats.Settled
+		profile.MergedCount = stats.Merged
+		if stats.Settled > 0 {
+			rate := float64(stats.Hits) / float64(stats.Settled)
+			profile.AccuracyRate = &rate
+		}
+	}
+
+	_ = r.db.SelectContext(ctx, &profile.Repos, `
+		SELECT e.repository_full_name AS full_name,
+		       COALESCE(s.c_rank_tier, 'D') AS c_rank_tier
+		FROM pr_evaluations e
+		LEFT JOIN latest_snapshots s ON LOWER(s.repository_id) = LOWER(e.repository_full_name)
+		WHERE e.owner_user_id = ? AND e.merged_at IS NOT NULL
+		GROUP BY e.repository_full_name
+		ORDER BY e.repository_full_name
+		LIMIT 50`, user.ID)
+
+	// AC2: eval feed capped at latest 20; the /u page links to the dashboard
+	// for anything older.
+	_ = r.db.SelectContext(ctx, &profile.Evals, `
+		SELECT repository_full_name, pr_number, predicted_score, outcome, created_at
+		FROM pr_evaluations
+		WHERE owner_user_id = ?
+		ORDER BY created_at DESC
+		LIMIT 20`, user.ID)
+
+	return profile, nil
 }
 
 func (u *User) SlugOrUsername() string {

@@ -390,6 +390,7 @@ func GetCurrentUser(userRepo repository.UserRepository) gin.HandlerFunc {
 			"username":          user.Username,
 			"avatar_url":        avatarURL,
 			"profiling_consent": user.ProfilingConsent,
+			"is_public":         user.IsPublic,
 			"skills":            user.Skills,
 			"auth_provider":     authProvider,
 			"has_github":        user.GithubID != nil,

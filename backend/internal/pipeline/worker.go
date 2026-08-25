@@ -169,12 +169,17 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		FROM repositories r
 		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
 		LEFT JOIN indexing_queue q ON r.full_name = q.full_name
-		WHERE r.updated_at <= ?
+		WHERE r.updated_at <= NOW() - INTERVAL
+		        CASE
+		          WHEN COALESCE(ls.c_rank_tier, 'D') IN ('S','A') THEN 3
+		          WHEN COALESCE(ls.c_rank_tier, 'D') = 'B' THEN 5
+		          ELSE 10
+		        END DAY
 		  AND EXISTS (SELECT 1 FROM repo_pr_events e WHERE e.repository_id = r.id)
 		  AND (q.status IS NULL OR q.status NOT IN ('pending', 'processing'))
-		ORDER BY r.updated_at ASC
+		ORDER BY ls.c_rank_tier ASC, r.updated_at ASC
 		LIMIT 1000
-	`, time.Now().UTC().Add(-24*time.Hour))
+	`)
 	if err != nil {
 		slog.Error("background crawler producer: query due repos failed", "err", err)
 		return

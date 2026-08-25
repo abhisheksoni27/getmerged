@@ -76,6 +76,13 @@ const nextConfig: NextConfig = {
       ],
     },
     {
+      // AC3: profile HTML + OG responses must not be CDN-cached while the
+      // is_public flip has no tag-based purge path. Revisit with s-maxage +
+      // revalidateTag("profile:<username>") once purge exists.
+      source: "/u/:path*",
+      headers: [{ key: "Cache-Control", value: "private, no-store" }],
+    },
+    {
       // Match all immutable JS/CSS static build chunks
       source: "/_next/static/:path*",
       headers: [
@@ -84,6 +91,10 @@ const nextConfig: NextConfig = {
           value: "public, max-age=31536000, immutable",
         },
       ],
+    },
+    {
+      source: "/api/og/u/:path*",
+      headers: [{ key: "Cache-Control", value: "private, no-store" }],
     },
     {
       source: "/icon.svg",
