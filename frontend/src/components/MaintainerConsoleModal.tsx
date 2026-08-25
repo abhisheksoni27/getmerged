@@ -151,10 +151,35 @@ export function MaintainerConsoleModal({
 
   const copyNonce = () => {
     if (claimData?.file_instructions?.file_content) {
-      navigator.clipboard.writeText(claimData.file_instructions.file_content);
+      const text = claimData.file_instructions.file_content;
+      if (typeof navigator !== "undefined" && navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        }).catch(() => {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    }
+  };
+
+  const fallbackCopy = (text: string) => {
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    }
+    } catch {}
   };
 
   if (!isOpen) return null;
