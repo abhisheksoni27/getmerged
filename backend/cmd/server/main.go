@@ -18,6 +18,7 @@ import (
 
 	"github.com/abhisheksoni27/opendoor/internal/ai"
 	"github.com/abhisheksoni27/opendoor/internal/auth"
+	"github.com/abhisheksoni27/opendoor/internal/claim"
 	"github.com/abhisheksoni27/opendoor/internal/config"
 	"github.com/abhisheksoni27/opendoor/internal/db"
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
@@ -85,6 +86,8 @@ func main() {
 	watchlistRepo := repository.NewWatchlistRepository(database)
 	aiRepo := repository.NewAIRepository(database)
 	shareCardRepo := repository.NewShareCardRepository(database)
+	claimRepo := repository.NewClaimRepository(database)
+	claimSvc := claim.NewService(database, claimRepo, repoStore, tokenMgr, gh, cfg)
 
 	// Start continuous background crawler worker loop
 	gfiRepo := repository.NewGFIRepository(database)
@@ -126,6 +129,11 @@ func main() {
 			slog.Error("crank change alerts failed", "err", err)
 		}
 	}
+
+	// Claim re-verification cron (AC4): weekly lazy + scheduled re-check of
+	// all claims; failures lapse the claim (7-day grace) before release.
+	stopClaimCron := startClaimReverifyCron(claimSvc)
+	defer stopClaimCron()
 
 	gin.SetMode(cfg.GinMode)
 	r := gin.New()
@@ -192,6 +200,7 @@ func main() {
 		api.POST("/preflight/pr-details", handler.FetchPRDetailsHandler(gh))
 		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo))
 		api.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
+		api.GET("/repos/:owner/:name/claim-status", handler.GetPublicClaimStatusHandler(claimRepo))
 
 		// Auth Routes
 		authGroup := api.Group("/auth")
@@ -216,6 +225,18 @@ func main() {
 		userApi.GET("/user/top-matches", handler.GetTopMatchesHandler(userRepo, repoStore))
 		userApi.GET("/user/for-you", handler.GetForYouHandler(userRepo, repoStore, gfiRepo, entitlementRepo))
 		userApi.GET("/user/referral", handler.GetMyReferral(entitlementRepo))
+
+		// Maintainer Claims & C-Rank Console (AC1, AC2, AC3, AC6, AC8)
+		userApi.POST("/repos/:owner/:name/claim", handler.PostClaimRepoHandler(claimSvc))
+		userApi.POST("/repos/:owner/:name/verify", handler.PostVerifyRepoHandler(claimSvc))
+		userApi.GET("/repos/:owner/:name/console", handler.GetMaintainerConsoleHandler(claimSvc))
+		userApi.POST("/repos/:owner/:name/claim-dispute", handler.PostClaimDisputeHandler(claimRepo))
+		userApi.GET("/user/claims", handler.GetUserClaimsListHandler(claimRepo))
+
+		// Top-level aliases for direct paths (AC1)
+		r.POST("/repo/:owner/:name/claim", middleware.UserAuth(cfg.JWTSecret), handler.PostClaimRepoHandler(claimSvc))
+		r.POST("/repo/:owner/:name/verify", middleware.UserAuth(cfg.JWTSecret), handler.PostVerifyRepoHandler(claimSvc))
+		r.GET("/repo/:owner/:name/console", middleware.UserAuth(cfg.JWTSecret), handler.GetMaintainerConsoleHandler(claimSvc))
 
 		// Public API key management (AC1)
 		userApi.GET("/user/api-keys", handler.ListAPIKeys(apiKeyRepo, entitlementRepo))
@@ -312,4 +333,43 @@ func setupLogger(ginMode, logFilePath, logLevel string) {
 
 	slog.SetDefault(slog.New(handler))
 	slog.Info("logging initialized", "file", logFilePath, "level", level.String())
+}
+
+// startClaimReverifyCron runs the weekly claim re-verification job (AC4):
+// once shortly after boot and then every 7 days. Each run re-checks all
+// claims; failed checks lapse the claim (console locked + grace email) and
+// lapses past their 7-day grace are released.
+func startClaimReverifyCron(claimSvc *claim.Service) func() {
+	stop := make(chan struct{})
+	run := func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+		defer cancel()
+		kept, failed, err := claimSvc.RunWeeklyReverification(ctx)
+		if err != nil {
+			slog.Error("weekly claim re-verification failed", "err", err)
+			return
+		}
+		slog.Info("weekly claim re-verification done", "kept_or_restored", kept, "lapsed_or_released", failed)
+	}
+
+	go func() {
+		ticker := time.NewTicker(7 * 24 * time.Hour)
+		defer ticker.Stop()
+		select {
+		case <-stop:
+			return
+		case <-time.After(time.Minute):
+			run()
+		}
+		for {
+			select {
+			case <-stop:
+				return
+			case <-ticker.C:
+				run()
+			}
+		}
+	}()
+
+	return func() { close(stop) }
 }

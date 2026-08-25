@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { OrgClaimButton } from "@/components/OrgClaimButton";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import {
@@ -209,14 +210,15 @@ export default async function OrgPage({ params }: OrgPageProps) {
                 </div>
               </div>
 
-              <div className="shrink-0 self-start sm:self-center">
+              <div className="shrink-0 self-start sm:self-center flex flex-col items-stretch gap-2">
                 <Link
                   href={`/${repo.full_name}`}
                   title={`Open full scorecard for ${repo.full_name}`}
-                  className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1.5 transition-all shadow-xs"
+                  className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
                 >
                   View Scorecard <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
+                <OrgClaimButton fullName={repo.full_name} />
               </div>
             </div>
           ))}

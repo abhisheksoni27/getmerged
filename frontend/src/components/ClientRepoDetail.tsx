@@ -38,6 +38,7 @@ import { RepoTrendChart } from "@/components/RepoTrendChart";
 import { PRAcceptanceWidget } from "@/components/PRAcceptanceWidget";
 import { OptimalReviewWindow } from "@/components/OptimalReviewWindow";
 import { UnscoredExplainer } from "@/components/UnscoredExplainer";
+import { MaintainerConsoleModal } from "@/components/MaintainerConsoleModal";
 import { isRepoScored } from "@/lib/repo-metadata";
 
 interface ClientRepoDetailProps {
@@ -90,9 +91,26 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalConfig, setAuthModalConfig] = useState<{ title?: string; description?: string; source?: string }>({});
 
+  // Maintainer Console Modal State
+  const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
+  const [isRepoClaimed, setIsRepoClaimed] = useState(false);
+  const [isRepoVerified, setIsRepoVerified] = useState(false);
+
   const openAuthModal = (title?: string, description?: string, source = "modal") => {
     setAuthModalConfig({ title, description, source });
     setIsAuthModalOpen(true);
+  };
+
+  const handleClaimClick = () => {
+    if (!isLoggedIn) {
+      openAuthModal(
+        "Claim Repository Ownership",
+        "Sign in with GitHub to verify maintainer status and unlock the C-Rank Console.",
+        "claim"
+      );
+      return;
+    }
+    setIsClaimModalOpen(true);
   };
 
   const isLoggedIn = Boolean(currentUser || (typeof document !== "undefined" && document.cookie.includes("opendoor_token=")));
@@ -172,23 +190,19 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       } catch {}
     };
 
-    const fetchGFIs = async () => {
-      if (!targetId) return;
+    const fetchClaimStatus = async () => {
+      const parts = fullName.split("/");
+      if (parts.length !== 2) return;
       try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/good-first-issues`, { credentials: "include" });
+        const res = await fetch(`${API_BASE_URL}/api/v1/repos/${parts[0]}/${parts[1]}/claim-status`, { credentials: "include" });
         if (!res.ok) return;
         const data = await res.json();
-        if (data?.data && Array.isArray(data.data)) {
-          const currentFullName = fullName.toLowerCase();
-          const filtered = data.data.filter((item: { repo_full_name?: string }) => {
-            return Boolean(item.repo_full_name && item.repo_full_name.toLowerCase() === currentFullName);
-          });
-          setGfiList(filtered);
-        }
+        if (data?.is_claimed) setIsRepoClaimed(true);
+        if (data?.is_verified) setIsRepoVerified(true);
       } catch {}
     };
 
-    Promise.allSettled([fetchWatchlist(), fetchInsights(), fetchRelated(), fetchGFIs()]);
+    Promise.allSettled([fetchWatchlist(), fetchInsights(), fetchRelated(), fetchClaimStatus()]);
   }, [repo?.id, fullName]);
 
   const handleWatchToggle = async () => {
@@ -457,8 +471,23 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
         score={score}
         isWatching={isWatching}
         watchLoading={watchLoading}
+        isClaimed={isRepoClaimed}
+        isVerified={isRepoVerified}
+        onClaimClick={handleClaimClick}
         onWatchToggle={handleWatchToggle}
         onGithubClick={() => posthog.capture('repo_github_link_clicked', { repo_full_name: fullName, repo_tier: rank })}
+      />
+
+      {/* Maintainer Console Modal (AC1 & AC6) */}
+      <MaintainerConsoleModal
+        fullName={fullName}
+        isOpen={isClaimModalOpen}
+        onClose={() => setIsClaimModalOpen(false)}
+        isInitiallyVerified={isRepoVerified}
+        onVerificationSuccess={() => {
+          setIsRepoClaimed(true);
+          setIsRepoVerified(true);
+        }}
       />
 
       {/* Unscored explainer + verified-welcoming alternatives (IDEA-20260820-02 AC2) */}

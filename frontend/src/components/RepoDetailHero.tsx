@@ -13,6 +13,9 @@ interface RepoDetailHeroProps {
   score: number;
   isWatching: boolean;
   watchLoading: boolean;
+  isClaimed?: boolean;
+  isVerified?: boolean;
+  onClaimClick?: () => void;
   onWatchToggle: () => void;
   onGithubClick: () => void;
 }
@@ -25,6 +28,9 @@ export function RepoDetailHero({
   score,
   isWatching,
   watchLoading,
+  isClaimed,
+  isVerified,
+  onClaimClick,
   onWatchToggle,
   onGithubClick,
 }: RepoDetailHeroProps) {
@@ -139,6 +145,19 @@ export function RepoDetailHero({
             <Scale className="h-4 w-4 text-zinc-500" />
             <span>Compare</span>
           </Link>
+          {onClaimClick && (
+            <button
+              onClick={onClaimClick}
+              className={`inline-flex items-center gap-2 border rounded-xl px-4 py-2.5 text-xs font-semibold font-sans transition-all cursor-pointer shadow-xs ${
+                isVerified
+                  ? "bg-amber-50 border-amber-300 text-amber-900 hover:bg-amber-100"
+                  : "bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50 hover:border-zinc-300"
+              }`}
+            >
+              <span className={`w-2 h-2 rounded-full ${isVerified ? "bg-emerald-500" : "bg-amber-500"}`} />
+              <span>{isVerified ? "Maintainer Console" : "Claim this repo"}</span>
+            </button>
+          )}
           <button
             onClick={onWatchToggle}
             disabled={watchLoading}

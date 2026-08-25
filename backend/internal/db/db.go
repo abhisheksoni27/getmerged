@@ -389,6 +389,32 @@ func AutoMigrate(db *sqlx.DB) error {
 			revoked_at DATETIME,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS repo_claims (
+			id INTEGER PRIMARY KEY %s,
+			repo_id VARCHAR(255) NOT NULL,
+			full_name VARCHAR(255) NOT NULL DEFAULT '',
+			owner_user_id INTEGER NOT NULL,
+			verification_method VARCHAR(50) NOT NULL DEFAULT 'file',
+			state VARCHAR(30) NOT NULL DEFAULT 'pending',
+			nonce_token VARCHAR(128) NOT NULL,
+			expires_at DATETIME NOT NULL,
+			verified_at DATETIME,
+			last_checked_at DATETIME,
+			revoked_at DATETIME,
+			revoke_reason VARCHAR(255) DEFAULT '',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(repo_id, owner_user_id)
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS claim_disputes (
+			id INTEGER PRIMARY KEY %s,
+			repo_full_name VARCHAR(255) NOT NULL,
+			reporter_user_id INTEGER NOT NULL,
+			claimed_user_id INTEGER,
+			note TEXT,
+			status VARCHAR(30) NOT NULL DEFAULT 'open',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
 	}
 
 	for i, stmt := range statements {
@@ -420,6 +446,8 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_pr_transitions_pr ON pr_state_transitions(pr_id, occurred_at DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_share_cards_user ON share_cards(user_id, created_at DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_user_api_keys_user ON user_api_keys(user_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_repo_claims_user ON repo_claims(owner_user_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_repo_claims_repo_state ON repo_claims(repo_id, state)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)
@@ -465,6 +493,9 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`INSERT IGNORE INTO contributor_feedback (repository_id, user_id, maintainer_rating, review_speed_rating, beginner_friendly_rating, comment, verified_pr_author, created_at)
 		SELECT repository_id, CAST(user_id AS UNSIGNED), maintainer_rating, review_speed_rating, beginner_rating, comment, verified_contributor, created_at
 		FROM contributor_feedbacks`)
+	_, _ = db.Exec(`ALTER TABLE repo_claims ADD UNIQUE KEY uq_repo_claims_user (repo_id, owner_user_id)`)
+	_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_repo_claims_user ON repo_claims(repo_id, owner_user_id)`)
+	_, _ = db.Exec(`ALTER TABLE repo_claims ADD COLUMN full_name VARCHAR(255) NOT NULL DEFAULT ''`)
 
 	return nil
 }
