@@ -21,6 +21,7 @@ import {
   MessageSquareWarning,
   Merge,
   CircleDashed,
+  Share2,
 } from "lucide-react";
 
 interface Benchmark {
@@ -63,6 +64,40 @@ interface Connection {
   limited: boolean;
 }
 
+interface MeInfo {
+  slug?: string | null;
+  username?: string;
+  is_public?: boolean;
+}
+
+// Clipboard write with graceful fallback (AC2): async Clipboard API first,
+// hidden-textarea execCommand fallback, throws only when both fail so the
+// caller can surface a visible error toast instead of an unhandled rejection.
+async function copyToClipboard(text: string): Promise<void> {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+  } catch {
+    // fall through to execCommand fallback
+  }
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    if (!ok) throw new Error("execCommand copy failed");
+  } catch {
+    throw new Error("Could not access the clipboard");
+  }
+}
+
 interface DashboardData {
   prs: TrackedPR[];
   generated_at: string;
@@ -91,6 +126,121 @@ export function DashboardClient() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [me, setMe] = useState<MeInfo | null>(null);
+  const [sharing, setSharing] = useState(false);
+  const [updatingVisibility, setUpdatingVisibility] = useState(false);
+  const [toast, setToast] = useState<{ kind: "success" | "error"; msg: string } | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 3500);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/auth/me`, { credentials: "include" });
+        if (!res.ok) return;
+        const json = await res.json();
+        if (!cancelled) setMe(json?.user ?? null);
+      } catch {
+        // profile sharing degrades silently; tracker data is independent
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // AC2: Share profile flow — prompt to go public first when needed, then
+  // share/copy /u/<username>. Copy failure surfaces a visible URL (AC4).
+  async function setProfileVisibility(isPublic: boolean): Promise<void> {
+    setUpdatingVisibility(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/user/profile-visibility`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ is_public: isPublic }),
+      });
+      if (!res.ok) throw new Error("Failed to update profile visibility");
+      setMe((prev) => (prev ? { ...prev, is_public: isPublic } : prev));
+      setToast({
+        kind: "success",
+        msg: isPublic ? "Profile is now public" : "Profile is now private",
+      });
+    } catch (e) {
+      setToast({ kind: "error", msg: e instanceof Error ? e.message : "Could not update visibility" });
+    } finally {
+      setUpdatingVisibility(false);
+    }
+  }
+
+  // AC4: navigator.share when available AND in a secure context; clipboard
+  // guarded by the same check; execCommand fallback; never a DOMException crash.
+  async function shareOrCopy(url: string): Promise<"shared" | "copied" | "failed"> {
+    try {
+      if (typeof navigator.share === "function" && window.isSecureContext) {
+        await navigator.share({
+          title: "My GetMerged contributor track record",
+          text: "Verify my PR forecast track record on GetMerged:",
+          url,
+        });
+        return "shared";
+      }
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") return "shared";
+      // fall through to clipboard fallbacks
+    }
+    try {
+      if (window.isSecureContext && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+        return "copied";
+      }
+    } catch {
+      // fall through to execCommand fallback / visible URL
+    }
+    try {
+      await copyToClipboard(url);
+      return "copied";
+    } catch {
+      return "failed";
+    }
+  }
+
+  async function shareProfile() {
+    if (sharing) return;
+    const slug = me?.slug || (me?.username ? me.username.toLowerCase() : "");
+    if (!slug) {
+      setToast({ kind: "error", msg: "Profile unavailable — try reloading the page." });
+      return;
+    }
+    setSharing(true);
+    try {
+      if (!me?.is_public) {
+        const ok = window.confirm(
+          "Make profile public?\n\nYour PR forecast track record (evals, accuracy and merged repos) will be visible to anyone with your link. You can change this later in settings."
+        );
+        if (!ok) return;
+        await setProfileVisibility(true);
+      }
+      const url = `${window.location.origin}/u/${encodeURIComponent(slug)}`;
+      const result = await shareOrCopy(url);
+      if (result === "shared") {
+        setToast({ kind: "success", msg: "Profile shared" });
+      } else if (result === "copied") {
+        setToast({ kind: "success", msg: "Profile link copied to clipboard" });
+      } else {
+        setToast({ kind: "error", msg: `Copy failed — your link: ${url}` });
+      }
+    } catch (e) {
+      setToast({ kind: "error", msg: e instanceof Error ? e.message : "Could not share profile link" });
+    } finally {
+      setSharing(false);
+    }
+  }
 
   const load = useCallback(async (refresh = false) => {
     if (refresh) setRefreshing(true);
@@ -169,16 +319,67 @@ export function DashboardClient() {
             Your open pull requests to C+ ranked repos, with live review benchmarks.
           </p>
         </div>
-        <button
-          onClick={() => load(true)}
-          disabled={refreshing}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 cursor-pointer whitespace-nowrap"
-          title="Live refresh is rate-limited to once every 5 minutes per user"
-        >
-          <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
-          Refresh
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          {me?.slug && (
+            <>
+              {/* AC1: profile is private by default; explicit opt-in toggle */}
+              <label
+                className="flex items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-2.5 py-2 text-xs font-semibold text-zinc-700 cursor-pointer select-none"
+                title="Anyone with your /u link can see your track record"
+              >
+                <input
+                  type="checkbox"
+                  data-testid="public-profile-toggle"
+                  checked={!!me.is_public}
+                  disabled={updatingVisibility}
+                  onChange={(e) => setProfileVisibility(e.target.checked)}
+                  className="h-3.5 w-3.5 accent-emerald-600 cursor-pointer disabled:opacity-50"
+                />
+                Public
+              </label>
+              <button
+                onClick={shareProfile}
+                disabled={sharing}
+                data-testid="share-profile"
+                title={me?.is_public ? "Copy your public profile link" : "Make your profile public and copy the link"}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50 cursor-pointer whitespace-nowrap"
+              >
+                <Share2 className={`h-3.5 w-3.5 ${sharing ? "animate-pulse" : ""}`} />
+                Share profile
+              </button>
+            </>
+          )}
+          <button
+            onClick={() => load(true)}
+            disabled={refreshing}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 cursor-pointer whitespace-nowrap"
+            title="Live refresh is rate-limited to once every 5 minutes per user"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
+            Refresh
+          </button>
+        </div>
       </div>
+
+      {/* AC2: share-flow feedback (success/error) as a visible toast */}
+      {toast && (
+        <div
+          data-testid="share-toast"
+          role="status"
+          className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold shadow-lg ${
+            toast.kind === "success"
+              ? "bg-emerald-50 border-emerald-300 text-emerald-800"
+              : "bg-red-50 border-red-300 text-red-700"
+          }`}
+        >
+          {toast.kind === "success" ? (
+            <CheckCircle2 className="h-4 w-4 shrink-0" />
+          ) : (
+            <AlertTriangle className="h-4 w-4 shrink-0" />
+          )}
+          {toast.msg}
+        </div>
+      )}
 
       {/* AC6: reconnect banner */}
       {conn?.status === "reconnect_required" && (

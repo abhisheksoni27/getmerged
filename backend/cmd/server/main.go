@@ -183,6 +183,11 @@ func main() {
 	r.POST("/api/v1/pr-evals", evalRL, handler.RegisterPREvalHandler(prTrackerStore))
 	r.GET("/api/v1/pr-evals/:id/outcome", evalRL, handler.GetPREvalOutcomeHandler(prTrackerStore))
 
+	// Public contributor profile (/u/[username]): aggregate PR-forecast track
+	// record. Root-level like /cards to stay outside the API-key group; static
+	// "u" child never conflicts with the group's other static segments (AC4).
+	r.GET("/api/v1/u/:username", handler.GetPublicContributorProfileHandler(userRepo))
+
 	// Public API
 	api := r.Group("/api/v1")
 	// AC2/AC3/AC4: public API keys (Authorization: Bearer odk_...) authenticate
@@ -241,6 +246,7 @@ func main() {
 	{
 		userApi.GET("/auth/me", handler.GetCurrentUser(userRepo))
 		userApi.PATCH("/user/consent", handler.UpdateConsent(userRepo))
+		userApi.PATCH("/user/profile-visibility", handler.UpdateProfileVisibilityHandler(userRepo))
 		userApi.DELETE("/me/data", handler.DeleteUserData(cfg, userRepo))
 		userApi.GET("/user/dna", handler.GetContributorDNA(profileRepo))
 		userApi.POST("/user/dna/refresh", handler.RefreshContributorDNA(profileRepo, dnaWorker))
