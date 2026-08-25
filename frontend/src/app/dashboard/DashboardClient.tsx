@@ -6,6 +6,7 @@ import { API_BASE_URL } from "@/lib/api";
 import { formatVerdict, formatAccuracy, type PREvalOutcome } from "@/lib/pr-verdict";
 import { TopMatches } from "@/components/TopMatches";
 import { ForYou } from "@/components/ForYou";
+import { FirstMergeTrack } from "@/components/FirstMergeTrack";
 import { ApiKeysCard } from "./ApiKeysCard";
 import {
   GitPullRequest,
@@ -151,6 +152,7 @@ export function DashboardClient() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 pb-16">
+      <FirstMergeTrack trackedPRs={data?.prs} />
       <div className="mb-6">
         <ForYou />
         <TopMatches />
