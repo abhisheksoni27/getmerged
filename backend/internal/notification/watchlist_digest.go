@@ -94,24 +94,49 @@ type digestUser struct {
 	Email    string `db:"email"`
 }
 
-// UnsubscribeToken derives the per-user unsubscribe HMAC token.
+// unsubscribeTokenTTL bounds the validity of embedded unsubscribe links (AC7).
+const unsubscribeTokenTTL = 30 * 24 * time.Hour
+
+// UnsubscribeToken derives the per-user expiring unsubscribe token:
+// "<expiry-unix>.<hmac(uid:expiry, secret)>".
 func UnsubscribeToken(userID int64, secret string) string {
+	return ExpiringUnsubscribeToken(userID, secret, time.Now().UTC().Add(unsubscribeTokenTTL))
+}
+
+// ExpiringUnsubscribeToken builds a token valid until exp.
+func ExpiringUnsubscribeToken(userID int64, secret string, exp time.Time) string {
+	expUnix := exp.UTC().Unix()
 	mac := hmac.New(sha256.New, []byte(secret))
-	mac.Write([]byte(strconv.FormatInt(userID, 10)))
-	return hex.EncodeToString(mac.Sum(nil))
+	fmt.Fprintf(mac, "%d:%d", userID, expUnix)
+	return fmt.Sprintf("%d.%s", expUnix, hex.EncodeToString(mac.Sum(nil)))
 }
 
 // VerifyUnsubscribeToken validates an unsubscribe request's uid/token pair.
+// Expired or malformed tokens are rejected; callers must return 4xx and
+// leave subscriptions untouched (AC7).
 func VerifyUnsubscribeToken(uidStr, token, secret string) bool {
 	if secret == "" || uidStr == "" || token == "" {
 		return false
 	}
 	uid, err := strconv.ParseInt(uidStr, 10, 64)
+	if err != nil || uid <= 0 {
+		return false
+	}
+	dot := strings.IndexByte(token, '.')
+	if dot <= 0 || dot == len(token)-1 {
+		return false
+	}
+	expUnix, err := strconv.ParseInt(token[:dot], 10, 64)
 	if err != nil {
 		return false
 	}
-	expected := UnsubscribeToken(uid, secret)
-	return hmac.Equal([]byte(expected), []byte(token))
+	if time.Now().UTC().Unix() >= expUnix {
+		return false // expired
+	}
+	mac := hmac.New(sha256.New, []byte(secret))
+	fmt.Fprintf(mac, "%d:%d", uid, expUnix)
+	expected := hex.EncodeToString(mac.Sum(nil))
+	return hmac.Equal([]byte(expected), []byte(token[dot+1:]))
 }
 
 // mondayAnchor returns the Monday 00:00 UTC anchor of the week containing now (AC5).

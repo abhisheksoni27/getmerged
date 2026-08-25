@@ -10,6 +10,7 @@
 package main
 
 import (
+	"context"
 	"io"
 	"log/slog"
 	"os"
@@ -27,6 +28,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/prtracker"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -106,6 +108,25 @@ func main() {
 	stopPRTrackerCron := prTrackerSvc.StartCron(15 * time.Minute)
 	defer stopPRTrackerCron()
 
+	// Watchlist C-Rank change alerts: run at the end of every snapshot cycle
+	// with the real SMTP mailer and the existing unsubscribe flow.
+	pipeline.CRankAlertHook = func(hookDB *sqlx.DB) {
+		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+		defer cancel()
+		mailer := notification.NewSMTPMailer(cfg.SMTPHost, cfg.SMTPPort, cfg.SMTPUser, cfg.SMTPPassword, cfg.SMTPFrom)
+		if _, err := notification.RunCRankChangeAlerts(ctx, hookDB, notification.CRankAlertConfig{
+			Mailer:    mailer,
+			BaseURL:   cfg.AppBaseURL,
+			JobSecret: cfg.JobSecret,
+
+			DropThresholdPoints: cfg.AlertDropThreshold,
+			Cooldown:            time.Duration(cfg.AlertCooldownHours) * time.Hour,
+			MaxSendFailures:     cfg.MaxSendFailures,
+		}); err != nil {
+			slog.Error("crank change alerts failed", "err", err)
+		}
+	}
+
 	gin.SetMode(cfg.GinMode)
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
@@ -117,8 +138,9 @@ func main() {
 	// Health Check
 	r.GET("/health", handler.Health())
 
-	// One-click digest unsubscribe (public, token-verified)
+	// One-click digest unsubscribe / resubscribe (public, token-verified)
 	r.GET("/unsubscribe", handler.Unsubscribe(cfg))
+	r.GET("/resubscribe", handler.Resubscribe(cfg))
 
 	// Public SVG Badge Route (F1)
 	r.GET("/badge/:owner/:repo", handler.GetBadgeSVG(repoStore))
@@ -233,6 +255,7 @@ func main() {
 		internal.POST("/cache/purge-tag", handler.PurgeTagCache())
 		internal.POST("/migrate-latest-snapshots", handler.MigrateLatestSnapshots())
 		internal.POST("/jobs/weekly-digest", handler.TriggerWeeklyDigest(cfg, telegramNotifier))
+		internal.POST("/jobs/crank-change-alerts", handler.TriggerCRankChangeAlerts(cfg))
 		internal.DELETE("/repos/:id", handler.DeleteRepo(repoStore))
 	}
 

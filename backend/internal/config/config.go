@@ -11,37 +11,40 @@ import (
 // Config holds all required runtime configuration.
 // Every field must be set in .env - the app will not start otherwise.
 type Config struct {
-	GithubToken        string
-	DatabaseURL        string
-	ValkeyURL          string
-	ValkeyUsername     string
-	ValkeyPassword     string
-	InternalAPIKey     string
-	GithubClientID     string
-	GithubClientSecret string
-	GoogleClientID     string
-	GoogleClientSecret string
-	JWTSecret          string
-	EncryptionKey      string
-	OpencodeAPIKey     string
-	Port               string
-	GinMode            string
-	LogFile            string
-	LogLevel           string
-	TelegramBotToken   string
-	TelegramChatID     string
+	GithubToken               string
+	DatabaseURL               string
+	ValkeyURL                 string
+	ValkeyUsername            string
+	ValkeyPassword            string
+	InternalAPIKey            string
+	GithubClientID            string
+	GithubClientSecret        string
+	GoogleClientID            string
+	GoogleClientSecret        string
+	JWTSecret                 string
+	EncryptionKey             string
+	OpencodeAPIKey            string
+	Port                      string
+	GinMode                   string
+	LogFile                   string
+	LogLevel                  string
+	TelegramBotToken          string
+	TelegramChatID            string
 	DodopaymentsWebhookSecret string
-	JobSecret          string
-	SMTPHost           string
-	SMTPPort           string
-	SMTPUser           string
-	SMTPPassword       string
-	SMTPFrom           string
-	AppBaseURL         string
-	DiscoveryIntervalMinutes int
-	DiscoveryMaxNewPerRun    int
-	SnapshotRetentionDays    int
-	CrawlerWorkers           int
+	JobSecret                 string
+	SMTPHost                  string
+	SMTPPort                  string
+	SMTPUser                  string
+	SMTPPassword              string
+	SMTPFrom                  string
+	AppBaseURL                string
+	DiscoveryIntervalMinutes  int
+	DiscoveryMaxNewPerRun     int
+	SnapshotRetentionDays     int
+	CrawlerWorkers            int
+	AlertDropThreshold        float64
+	AlertCooldownHours        int
+	MaxSendFailures           int
 }
 
 // Load reads .env (if present) then validates all required variables are set.
@@ -50,22 +53,22 @@ func Load() (*Config, error) {
 	_ = godotenv.Load()
 
 	c := &Config{
-		ValkeyUsername: os.Getenv("VALKEY_USERNAME"), // optional - defaults to "default" if empty
-		ValkeyPassword: os.Getenv("VALKEY_PASSWORD"), // optional - empty OK for local dev
-		LogFile:        os.Getenv("LOG_FILE"),        // optional - defaults to opendoor.log if empty
-		OpencodeAPIKey: os.Getenv("OPENCODE_API_KEY"), // optional in dev if AI insights disabled
-		TelegramBotToken: os.Getenv("TELEGRAM_BOT_TOKEN"),
-		TelegramChatID:   os.Getenv("TELEGRAM_CHAT_ID"),
+		ValkeyUsername:            os.Getenv("VALKEY_USERNAME"),  // optional - defaults to "default" if empty
+		ValkeyPassword:            os.Getenv("VALKEY_PASSWORD"),  // optional - empty OK for local dev
+		LogFile:                   os.Getenv("LOG_FILE"),         // optional - defaults to opendoor.log if empty
+		OpencodeAPIKey:            os.Getenv("OPENCODE_API_KEY"), // optional in dev if AI insights disabled
+		TelegramBotToken:          os.Getenv("TELEGRAM_BOT_TOKEN"),
+		TelegramChatID:            os.Getenv("TELEGRAM_CHAT_ID"),
 		DodopaymentsWebhookSecret: os.Getenv("DODOPAYMENTS_WEBHOOK_SECRET"),
-		GoogleClientID:   os.Getenv("GOOGLE_CLIENT_ID"),
-		GoogleClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-		JobSecret:        os.Getenv("JOB_SECRET"),
-		SMTPHost:         os.Getenv("SMTP_HOST"),
-		SMTPPort:         os.Getenv("SMTP_PORT"),
-		SMTPUser:         os.Getenv("SMTP_USER"),
-		SMTPPassword:     os.Getenv("SMTP_PASSWORD"),
-		SMTPFrom:         os.Getenv("SMTP_FROM"),
-		AppBaseURL:       os.Getenv("APP_BASE_URL"),
+		GoogleClientID:            os.Getenv("GOOGLE_CLIENT_ID"),
+		GoogleClientSecret:        os.Getenv("GOOGLE_CLIENT_SECRET"),
+		JobSecret:                 os.Getenv("JOB_SECRET"),
+		SMTPHost:                  os.Getenv("SMTP_HOST"),
+		SMTPPort:                  os.Getenv("SMTP_PORT"),
+		SMTPUser:                  os.Getenv("SMTP_USER"),
+		SMTPPassword:              os.Getenv("SMTP_PASSWORD"),
+		SMTPFrom:                  os.Getenv("SMTP_FROM"),
+		AppBaseURL:                os.Getenv("APP_BASE_URL"),
 	}
 	if c.LogFile == "" {
 		c.LogFile = "opendoor.log"
@@ -104,6 +107,22 @@ func Load() (*Config, error) {
 		c.CrawlerWorkers = 10
 	}
 
+	// C-Rank watchlist alert tuning knobs (AC1/AC3/AC4).
+	c.AlertDropThreshold, _ = strconv.ParseFloat(os.Getenv("ALERT_DROP_THRESHOLD"), 64)
+	if c.AlertDropThreshold <= 0 {
+		c.AlertDropThreshold = 10
+	}
+
+	c.AlertCooldownHours, _ = strconv.Atoi(os.Getenv("ALERT_COOLDOWN_HOURS"))
+	if c.AlertCooldownHours <= 0 {
+		c.AlertCooldownHours = 24
+	}
+
+	c.MaxSendFailures, _ = strconv.Atoi(os.Getenv("MAX_SEND_FAILURES"))
+	if c.MaxSendFailures <= 0 {
+		c.MaxSendFailures = 5
+	}
+
 	required := map[string]*string{
 		"GITHUB_TOKEN":         &c.GithubToken,
 		"DATABASE_URL":         &c.DatabaseURL,
@@ -111,8 +130,8 @@ func Load() (*Config, error) {
 		"INTERNAL_API_KEY":     &c.InternalAPIKey,
 		"GITHUB_CLIENT_ID":     &c.GithubClientID,
 		"GITHUB_CLIENT_SECRET": &c.GithubClientSecret,
-		"JWT_SECRET":          &c.JWTSecret,
-		"ENCRYPTION_KEY":      &c.EncryptionKey,
+		"JWT_SECRET":           &c.JWTSecret,
+		"ENCRYPTION_KEY":       &c.EncryptionKey,
 		"PORT":                 &c.Port,
 		"GIN_MODE":             &c.GinMode,
 	}

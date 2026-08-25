@@ -3,6 +3,7 @@ package handler
 import (
 	"log/slog"
 	"net/http"
+	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/analytics"
 	"github.com/abhisheksoni27/opendoor/internal/config"
@@ -200,6 +201,55 @@ func TriggerWeeklyDigest(cfg *config.Config, telegram *notification.TelegramNoti
 		if err != nil {
 			slog.Error("weekly-digest run failed", "err", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "weekly digest run failed"})
+			return
+		}
+
+		c.JSON(http.StatusOK, summary)
+	}
+}
+
+// TriggerCRankChangeAlerts handles POST /internal/jobs/crank-change-alerts.
+// Requires header X-Job-Secret matching env JOB_SECRET. Compares each watched
+// repo's two newest snapshots and emails C-Rank change alerts synchronously
+// through the real SMTP mailer, honoring the 24h per-repo-per-watcher cooldown
+// and the existing unsubscribe flow.
+//
+//	@Summary      Trigger C-Rank change alerts
+//	@Description  Emails watchlist users when a watched repo crosses a C-Rank tier boundary or drops sharply. Synchronous.
+//	@Tags         internal
+//	@Produce      json
+//	@Security     ApiKeyAuth
+//	@Param        X-Job-Secret  header    string  true  "Job secret"
+//	@Success      200  {object}  notification.CRankAlertSummary
+//	@Failure      403  {object}  map[string]string
+//	@Failure      500  {object}  map[string]string
+//	@Router       /internal/jobs/crank-change-alerts [post]
+func TriggerCRankChangeAlerts(cfg *config.Config) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		db := middleware.MustDB(c)
+		if db == nil {
+			return
+		}
+
+		if cfg.JobSecret == "" || c.GetHeader("X-Job-Secret") != cfg.JobSecret {
+			slog.Warn("crank-change-alerts rejected", "ip", c.ClientIP(), "reason", "invalid or missing X-Job-Secret")
+			c.JSON(http.StatusForbidden, gin.H{"error": "forbidden"})
+			return
+		}
+
+		mailer := notification.NewSMTPMailer(cfg.SMTPHost, cfg.SMTPPort, cfg.SMTPUser, cfg.SMTPPassword, cfg.SMTPFrom)
+		summary, err := notification.RunCRankChangeAlerts(c.Request.Context(), db, notification.CRankAlertConfig{
+			Mailer:    mailer,
+			BaseURL:   cfg.AppBaseURL,
+			JobSecret: cfg.JobSecret,
+
+			DropThresholdPoints: cfg.AlertDropThreshold,
+			Cooldown:            time.Duration(cfg.AlertCooldownHours) * time.Hour,
+			MaxSendFailures:     cfg.MaxSendFailures,
+		})
+		if err != nil {
+			slog.Error("crank-change-alerts run failed", "err", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "c-rank change alert run failed"})
 			return
 		}
 
