@@ -174,6 +174,11 @@ func (s *Service) SyncUser(ctx context.Context, userID int64, login string) (*Sy
 	if err := s.Store.TouchSynced(ctx, userID, now, limited); err != nil {
 		return res, err
 	}
+	// Resolve saved eval forecasts against the fresh snapshots (AC1/AC2);
+	// changed terminal verdicts enqueue their OG regen job (AC5).
+	if _, err := s.Store.UpdateEvalOutcomes(ctx); err != nil {
+		slog.Warn("prtracker sync: eval outcome update failed", "err", err)
+	}
 	res.Limited = limited
 	res.Synced = true
 	return res, nil
@@ -274,5 +279,6 @@ func (s *Service) runPass(ctx context.Context) {
 	} else if n > 0 {
 		slog.Info("prtracker cron: notifications delivered", "count", n)
 	}
+	_ = s.Store.CompleteOGRegenJobs(passCtx) // drain OG regen queue (AC5/AC6 cache-bust)
 	slog.Info("prtracker cron pass complete", "synced", synced)
 }

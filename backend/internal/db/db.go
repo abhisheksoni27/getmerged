@@ -356,6 +356,32 @@ func AutoMigrate(db *sqlx.DB) error {
 			notified BOOLEAN DEFAULT FALSE,
 			occurred_at DATETIME NOT NULL
 		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS pr_evaluations (
+			id INTEGER PRIMARY KEY %s,
+			eval_id VARCHAR(128) NOT NULL,
+			repository_full_name VARCHAR(255) NOT NULL,
+			pr_number INTEGER NULL,
+			predicted_score INTEGER NOT NULL DEFAULT 0,
+			owner_user_id INTEGER NULL,
+			outcome VARCHAR(20) NOT NULL DEFAULT 'pending',
+			resolved_at DATETIME NULL,
+			merged_at DATETIME NULL,
+			days_to_merge REAL NULL,
+			outcome_hash VARCHAR(40) NOT NULL DEFAULT '',
+			created_at DATETIME NOT NULL,
+			updated_at DATETIME NOT NULL,
+			UNIQUE(eval_id)
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS og_regen_queue (
+			id INTEGER PRIMARY KEY %s,
+			eval_id VARCHAR(128) NOT NULL,
+			outcome_hash VARCHAR(40) NOT NULL,
+			status VARCHAR(20) NOT NULL DEFAULT 'pending',
+			attempts INTEGER NOT NULL DEFAULT 0,
+			created_at DATETIME NOT NULL,
+			completed_at DATETIME NULL,
+			UNIQUE(eval_id, outcome_hash)
+		);`, autoInc),
 		`CREATE TABLE IF NOT EXISTS pr_connections (
 			user_id INTEGER PRIMARY KEY,
 			github_login TEXT,
@@ -444,6 +470,9 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_pr_snapshots_user ON pr_snapshots(user_id, github_updated_at DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_pr_snapshots_repo ON pr_snapshots(repository_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_pr_transitions_pr ON pr_state_transitions(pr_id, occurred_at DESC)`,
+	`CREATE INDEX IF NOT EXISTS idx_pr_evals_repo ON pr_evaluations(repository_full_name, pr_number)`,
+	`CREATE INDEX IF NOT EXISTS idx_pr_evals_owner ON pr_evaluations(owner_user_id, outcome)`,
+	`CREATE INDEX IF NOT EXISTS idx_og_regen_pending ON og_regen_queue(status, created_at)`,
 		`CREATE INDEX IF NOT EXISTS idx_share_cards_user ON share_cards(user_id, created_at DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_user_api_keys_user ON user_api_keys(user_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_repo_claims_user ON repo_claims(owner_user_id)`,
