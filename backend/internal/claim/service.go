@@ -681,14 +681,15 @@ func splitFullName(fn string) (owner, name string, ok bool) {
 
 // MaintainerConsolePayload encapsulates C-Rank breakdown, checklist, and claim status (AC6).
 type MaintainerConsolePayload struct {
-	RepoFullName string                             `json:"repo_full_name"`
-	IsClaimed    bool                               `json:"is_claimed"`
-	IsVerified   bool                               `json:"is_verified"`
-	Claim        *RepoClaimRecordDTO                `json:"claim,omitempty"`
-	CRankScore   float64                            `json:"c_rank_score"`
-	CRankTier    string                             `json:"c_rank_tier"`
-	Breakdown    CRankBreakdownDTO                  `json:"breakdown"`
-	Checklist    []scoring.MaintainerChecklistItem  `json:"checklist"`
+	RepoFullName   string                             `json:"repo_full_name"`
+	IsClaimed      bool                               `json:"is_claimed"`
+	IsVerified     bool                               `json:"is_verified"`
+	HasIssuesWrite bool                               `json:"has_issues_write"`
+	Claim          *RepoClaimRecordDTO                `json:"claim,omitempty"`
+	CRankScore     float64                            `json:"c_rank_score"`
+	CRankTier      string                             `json:"c_rank_tier"`
+	Breakdown      CRankBreakdownDTO                  `json:"breakdown"`
+	Checklist      []scoring.MaintainerChecklistItem  `json:"checklist"`
 }
 
 type CRankBreakdownDTO struct {
@@ -812,13 +813,27 @@ func (s *Service) GetMaintainerConsole(ctx context.Context, owner, name string, 
 		busFactor,
 	)
 
+	hasIssuesWrite := true
+	var appWrite bool
+	err = s.db.GetContext(ctx, &appWrite, `
+		SELECT i.has_issues_write
+		FROM ghapp_installations i
+		JOIN ghapp_installation_repos r ON i.installation_id = r.installation_id
+		WHERE r.full_name = ?
+		LIMIT 1
+	`, fullName)
+	if err == nil {
+		hasIssuesWrite = appWrite
+	}
+
 	return &MaintainerConsolePayload{
-		RepoFullName: fullName,
-		IsClaimed:    true,
-		IsVerified:   true,
-		Claim:        toClaimDTO(claim, fullName),
-		CRankScore:   score,
-		CRankTier:    tier,
+		RepoFullName:   fullName,
+		IsClaimed:      true,
+		IsVerified:     true,
+		HasIssuesWrite: hasIssuesWrite,
+		Claim:          toClaimDTO(claim, fullName),
+		CRankScore:     score,
+		CRankTier:      tier,
 		Breakdown: CRankBreakdownDTO{
 			ExternalPRMergeRate:      mergeRate,
 			TimeToFirstResponseHours: timeToFirst,

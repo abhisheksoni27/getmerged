@@ -444,6 +444,44 @@ func AutoMigrate(db *sqlx.DB) error {
 			status VARCHAR(30) NOT NULL DEFAULT 'open',
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`, autoInc),
+		`CREATE TABLE IF NOT EXISTS ghapp_installations (
+			installation_id BIGINT PRIMARY KEY,
+			account_login VARCHAR(255) NOT NULL DEFAULT '',
+			account_id BIGINT NOT NULL DEFAULT 0,
+			installer_login VARCHAR(255) NOT NULL DEFAULT '',
+			installer_id BIGINT NOT NULL DEFAULT 0,
+			has_issues_write BOOLEAN NOT NULL DEFAULT FALSE,
+			org_verified_at DATETIME NULL,
+			installed_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
+		`CREATE TABLE IF NOT EXISTS ghapp_installation_repos (
+			installation_id BIGINT NOT NULL,
+			repo_id BIGINT NOT NULL,
+			full_name VARCHAR(255) NOT NULL,
+			is_private BOOLEAN NOT NULL DEFAULT FALSE,
+			added_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (installation_id, repo_id)
+		);`,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS ghapp_welcomes (
+			id INTEGER PRIMARY KEY %s,
+			installation_id BIGINT NOT NULL,
+			repo_id BIGINT NOT NULL,
+			contributor_login VARCHAR(255) NOT NULL,
+			pr_number INTEGER NOT NULL DEFAULT 0,
+			comment_id BIGINT NOT NULL DEFAULT 0,
+			status VARCHAR(32) NOT NULL DEFAULT 'pending',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(repo_id, pr_number)
+		);`, autoInc),
+		`CREATE TABLE IF NOT EXISTS ghapp_budget_usage (
+			installation_id BIGINT NOT NULL,
+			usage_date DATE NOT NULL,
+			posted_count INTEGER NOT NULL DEFAULT 0,
+			skipped_count INTEGER NOT NULL DEFAULT 0,
+			PRIMARY KEY (installation_id, usage_date)
+		);`,
 	}
 
 	for i, stmt := range statements {
@@ -473,9 +511,9 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_pr_snapshots_user ON pr_snapshots(user_id, github_updated_at DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_pr_snapshots_repo ON pr_snapshots(repository_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_pr_transitions_pr ON pr_state_transitions(pr_id, occurred_at DESC)`,
-	`CREATE INDEX IF NOT EXISTS idx_pr_evals_repo ON pr_evaluations(repository_full_name, pr_number)`,
-	`CREATE INDEX IF NOT EXISTS idx_pr_evals_owner ON pr_evaluations(owner_user_id, outcome)`,
-	`CREATE INDEX IF NOT EXISTS idx_og_regen_pending ON og_regen_queue(status, created_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_pr_evals_repo ON pr_evaluations(repository_full_name, pr_number)`,
+		`CREATE INDEX IF NOT EXISTS idx_pr_evals_owner ON pr_evaluations(owner_user_id, outcome)`,
+		`CREATE INDEX IF NOT EXISTS idx_og_regen_pending ON og_regen_queue(status, created_at)`,
 		`CREATE INDEX IF NOT EXISTS idx_share_cards_user ON share_cards(user_id, created_at DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_user_api_keys_user ON user_api_keys(user_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_repo_claims_user ON repo_claims(owner_user_id)`,
@@ -531,6 +569,19 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE repo_claims ADD UNIQUE KEY uq_repo_claims_user (repo_id, owner_user_id)`)
 	_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_repo_claims_user ON repo_claims(repo_id, owner_user_id)`)
 	_, _ = db.Exec(`ALTER TABLE repo_claims ADD COLUMN full_name VARCHAR(255) NOT NULL DEFAULT ''`)
+	// ghapp_welcomes (AC2): idempotency keyed UNIQUE(repo_id, issue_number)
+	// with status pending|posted|failed. Best-effort legacy migration for
+	// pre-existing tables created under the old contributor_login key.
+	if db.DriverName() == "sqlite" {
+		_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_ghapp_welcomes_repo_issue ON ghapp_welcomes(repo_id, pr_number)`)
+	} else {
+		var idxCount int
+		if err := db.Get(&idxCount, `SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = 'ghapp_welcomes' AND index_name = 'idx_ghapp_welcomes_repo_issue'`); err == nil && idxCount == 0 {
+			_, _ = db.Exec(`CREATE UNIQUE INDEX idx_ghapp_welcomes_repo_issue ON ghapp_welcomes(repo_id, pr_number)`)
+		}
+	}
+	_, _ = db.Exec(`UPDATE ghapp_welcomes SET status = 'posted' WHERE status IN ('claimed', 'deleted_remotely') AND comment_id > 0`)
+	_, _ = db.Exec(`UPDATE ghapp_welcomes SET status = 'failed' WHERE status IN ('claimed', 'dropped', 'deleted_remotely') AND comment_id = 0`)
 
 	return nil
 }
