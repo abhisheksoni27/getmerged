@@ -230,6 +230,14 @@ func main() {
 		api.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
 		api.GET("/repos/:id/claim-status", handler.GetPublicClaimStatusHandler(claimRepo))
 
+		// Good First Issue alerts & digest (AC1, AC5, AC6, AC8)
+		api.POST("/gfi-alerts/subscribe", handler.GFISubscribeHandler(cfg))
+		api.GET("/gfi-alerts/verify", handler.GFIVerifyHandler(cfg))
+		api.GET("/gfi-alerts/prefs", handler.GFIPrefsHandler(cfg))
+		api.POST("/gfi-alerts/prefs", handler.GFIPrefsHandler(cfg))
+		api.GET("/gfi-alerts/unsubscribe", handler.GFIUnsubscribeHandler(cfg))
+		api.POST("/webhooks/email-events", handler.GFIEmailWebhookHandler(cfg))
+
 		// Auth Routes
 		authGroup := api.Group("/auth")
 		{
@@ -305,6 +313,7 @@ func main() {
 		internal.POST("/cache/purge-tag", handler.PurgeTagCache())
 		internal.POST("/migrate-latest-snapshots", handler.MigrateLatestSnapshots())
 		internal.POST("/jobs/weekly-digest", handler.TriggerWeeklyDigest(cfg, telegramNotifier))
+		internal.POST("/jobs/gfi-digest", handler.TriggerGFIDigestHandler(cfg))
 		internal.POST("/jobs/crank-change-alerts", handler.TriggerCRankChangeAlerts(cfg))
 		internal.DELETE("/repos/:id", handler.DeleteRepo(repoStore))
 	}

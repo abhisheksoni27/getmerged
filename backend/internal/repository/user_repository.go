@@ -10,6 +10,7 @@ import (
 
 	"github.com/abhisheksoni27/opendoor/internal/config"
 	"github.com/abhisheksoni27/opendoor/internal/crypto"
+	"github.com/abhisheksoni27/opendoor/internal/dna"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -60,7 +61,7 @@ type UserProfile struct {
 	Stats       UserStats          `json:"stats"`
 	Watchlist   []RepoRecord       `json:"watchlist"`
 	Feedback    []UserFeedbackItem `json:"feedback"`
-	DNA         interface{}        `json:"dna,omitempty"`
+	DNA         *dna.Result        `json:"dna,omitempty"`
 }
 
 type PublicRepoTier struct {
@@ -92,6 +93,9 @@ type PublicContributorProfile struct {
 	MergedCount  int              `json:"merged_count"`
 	Repos        []PublicRepoTier `json:"repos"`
 	Evals        []PublicEvalItem `json:"evals"`
+	// DNA powers the persona banner + identity-card sections. Nil for
+	// users who haven't opted in to profiling or have no merged PRs yet.
+	DNA *dna.Result `json:"dna,omitempty"`
 }
 
 type UserRepository interface {
@@ -512,12 +516,16 @@ func (r *sqlxUserRepository) GetUserProfileBySlug(ctx context.Context, slug stri
 		feedback = []UserFeedbackItem{}
 	}
 
-	// 4. Fetch cached contributor DNA
-	var dnaParsed interface{}
+	// 4. Fetch cached contributor DNA (typed, not interface{} — the FE
+	// expects the real shape so persona/temporal/stars fields are present).
+	var dnaParsed *dna.Result
 	var dnaRaw sql.NullString
 	_ = r.db.GetContext(ctx, &dnaRaw, "SELECT dna_json FROM contributor_profiles WHERE user_id = ? AND profiling_status = 'completed'", user.ID)
 	if dnaRaw.Valid && dnaRaw.String != "" {
-		_ = json.Unmarshal([]byte(dnaRaw.String), &dnaParsed)
+		var parsed dna.Result
+		if err := json.Unmarshal([]byte(dnaRaw.String), &parsed); err == nil {
+			dnaParsed = &parsed
+		}
 	}
 
 	slugVal := ""
@@ -623,6 +631,19 @@ func (r *sqlxUserRepository) GetPublicContributorProfileBySlug(ctx context.Conte
 		WHERE owner_user_id = ?
 		ORDER BY created_at DESC
 		LIMIT 20`, user.ID)
+
+	// DNA: same source as the owner page. Surfaces persona + stars + top repos
+	// on the public card. Nil for users without a completed profile.
+	var dnaRaw sql.NullString
+	_ = r.db.GetContext(ctx, &dnaRaw,
+		"SELECT dna_json FROM contributor_profiles WHERE user_id = ? AND profiling_status = 'completed'",
+		user.ID)
+	if dnaRaw.Valid && dnaRaw.String != "" {
+		var parsed dna.Result
+		if err := json.Unmarshal([]byte(dnaRaw.String), &parsed); err == nil {
+			profile.DNA = &parsed
+		}
+	}
 
 	return profile, nil
 }
