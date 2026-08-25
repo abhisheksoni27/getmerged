@@ -186,6 +186,14 @@ func ComputeMetrics(prs []PR, staleness bool, busFactorWindowDays int) RawMetric
 	}
 
 	// Calculate LastActivityDays from the most recent merged external PR
+	// BusFactor fallback: event-stream derived PRs carry no author associations,
+	// so the insider map stays empty. Non-author human commenters on external
+	// PRs are the same maintainer signal, so reuse them rather than reporting 0.
+	if len(busFactorMaintainers) == 0 {
+		busFactorMaintainers = maintainerSet
+	}
+
+	// Calculate LastActivityDays from the most recent merged external PR
 	var lastActivityDays float64 = 999
 	for _, pr := range prs {
 		if pr.State == "MERGED" && pr.MergedAt != nil {
