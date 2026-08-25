@@ -12,7 +12,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// PostClaimRepoHandler handles POST /api/v1/repos/:owner/:name/claim (AC1)
+func getOwnerAndName(c *gin.Context) (string, string) {
+	owner := c.Param("owner")
+	name := c.Param("name")
+	if owner != "" && name != "" {
+		return owner, name
+	}
+	id := c.Param("id")
+	if strings.Contains(id, "/") {
+		parts := strings.SplitN(id, "/", 2)
+		return parts[0], parts[1]
+	}
+	return owner, name
+}
+
+// PostClaimRepoHandler handles POST /api/v1/repos/:id/claim or /api/v1/repos/:owner/:name/claim (AC1)
 // and POST /repo/:owner/:name/claim
 func PostClaimRepoHandler(claimSvc *claim.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -23,8 +37,7 @@ func PostClaimRepoHandler(claimSvc *claim.Service) gin.HandlerFunc {
 		}
 		userClaims := claimsVal.(*auth.Claims)
 
-		owner := c.Param("owner")
-		name := c.Param("name")
+		owner, name := getOwnerAndName(c)
 		if owner == "" || name == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "owner and repo name required"})
 			return
@@ -44,7 +57,7 @@ func PostClaimRepoHandler(claimSvc *claim.Service) gin.HandlerFunc {
 	}
 }
 
-// PostVerifyRepoHandler handles POST /api/v1/repos/:owner/:name/verify (AC2, AC3, AC5, AC7)
+// PostVerifyRepoHandler handles POST /api/v1/repos/:id/verify or /api/v1/repos/:owner/:name/verify (AC2, AC3, AC5, AC7)
 func PostVerifyRepoHandler(claimSvc *claim.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		claimsVal, exists := c.Get("user_claims")
@@ -54,8 +67,7 @@ func PostVerifyRepoHandler(claimSvc *claim.Service) gin.HandlerFunc {
 		}
 		userClaims := claimsVal.(*auth.Claims)
 
-		owner := c.Param("owner")
-		name := c.Param("name")
+		owner, name := getOwnerAndName(c)
 		if owner == "" || name == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "owner and repo name required"})
 			return
@@ -88,7 +100,7 @@ func PostVerifyRepoHandler(claimSvc *claim.Service) gin.HandlerFunc {
 	}
 }
 
-// GetMaintainerConsoleHandler handles GET /api/v1/repos/:owner/:name/console (AC6)
+// GetMaintainerConsoleHandler handles GET /api/v1/repos/:id/console or /api/v1/repos/:owner/:name/console (AC6)
 func GetMaintainerConsoleHandler(claimSvc *claim.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		claimsVal, exists := c.Get("user_claims")
@@ -98,8 +110,7 @@ func GetMaintainerConsoleHandler(claimSvc *claim.Service) gin.HandlerFunc {
 		}
 		userClaims := claimsVal.(*auth.Claims)
 
-		owner := c.Param("owner")
-		name := c.Param("name")
+		owner, name := getOwnerAndName(c)
 		if owner == "" || name == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "owner and repo name required"})
 			return
@@ -120,12 +131,14 @@ func GetMaintainerConsoleHandler(claimSvc *claim.Service) gin.HandlerFunc {
 	}
 }
 
-// GetPublicClaimStatusHandler handles GET /api/v1/repos/:owner/:name/claim-status (AC8)
+// GetPublicClaimStatusHandler handles GET /api/v1/repos/:id/claim-status (AC8)
 func GetPublicClaimStatusHandler(claimRepo repository.ClaimRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		owner := c.Param("owner")
-		name := c.Param("name")
-		fullName := owner + "/" + name
+		owner, name := getOwnerAndName(c)
+		fullName := c.Param("id")
+		if owner != "" && name != "" {
+			fullName = owner + "/" + name
+		}
 
 		claimRecord, err := claimRepo.GetVerifiedClaimByRepoID(c.Request.Context(), fullName)
 		if err != nil || claimRecord == nil {
@@ -168,9 +181,7 @@ func GetUserClaimsListHandler(claimRepo repository.ClaimRepository) gin.HandlerF
 	}
 }
 
-// PostClaimDisputeHandler handles POST /api/v1/repos/:owner/:name/claim-dispute (AC3).
-// A second claimant who sees "already claimed by @user" files a report into
-// the admin review queue; no auto-transfer happens.
+// PostClaimDisputeHandler handles POST /api/v1/repos/:id/claim-dispute or /api/v1/repos/:owner/:name/claim-dispute (AC3).
 func PostClaimDisputeHandler(claimRepo repository.ClaimRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		claimsVal, exists := c.Get("user_claims")
@@ -180,8 +191,7 @@ func PostClaimDisputeHandler(claimRepo repository.ClaimRepository) gin.HandlerFu
 		}
 		userClaims := claimsVal.(*auth.Claims)
 
-		owner := c.Param("owner")
-		name := c.Param("name")
+		owner, name := getOwnerAndName(c)
 		if owner == "" || name == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "owner and repo name required"})
 			return

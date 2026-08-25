@@ -14,10 +14,9 @@ export function OrgClaimButton({ fullName }: OrgClaimButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const parts = fullName.split("/");
-    if (parts.length !== 2) return;
+    if (!fullName) return;
     let active = true;
-    fetch(`${API_BASE_URL}/api/v1/repos/${parts[0]}/${parts[1]}/claim-status`, { credentials: "include" })
+    fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/claim-status`, { credentials: "include" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (active) setClaimed(Boolean(data?.is_claimed));

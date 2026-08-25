@@ -191,10 +191,9 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
     };
 
     const fetchClaimStatus = async () => {
-      const parts = fullName.split("/");
-      if (parts.length !== 2) return;
+      if (!fullName) return;
       try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/repos/${parts[0]}/${parts[1]}/claim-status`, { credentials: "include" });
+        const res = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/claim-status`, { credentials: "include" });
         if (!res.ok) return;
         const data = await res.json();
         if (data?.is_claimed) setIsRepoClaimed(true);
