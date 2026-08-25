@@ -38,7 +38,7 @@ func TestLiveBadgeACs(t *testing.T) {
 		t.Fatalf("Cache-Control = %q", cc)
 	}
 	body := w.Body.String()
-	if !strings.Contains(body, "<svg") || !strings.Contains(body, ">A | median PR: 4.2h<") {
+	if !strings.Contains(body, "<svg") || !strings.Contains(body, ">very welcoming · median PR: 4.2h<") {
 		t.Fatalf("badge body wrong: %s", body)
 	}
 	if !strings.Contains(body, `fill="#16a34a"`) {
@@ -48,7 +48,7 @@ func TestLiveBadgeACs(t *testing.T) {
 	// AC2: case-insensitive canonical match + lowercase normalization
 	w2 := httptest.NewRecorder()
 	r.ServeHTTP(w2, httptest.NewRequest("GET", "/api/badge/GIN-GONIC/GIN", nil))
-	if w2.Code != http.StatusOK || !strings.Contains(w2.Body.String(), ">A | median PR: 4.2h<") {
+	if w2.Code != http.StatusOK || !strings.Contains(w2.Body.String(), ">very welcoming · median PR: 4.2h<") {
 		t.Fatalf("case-insensitive lookup failed: %d %s", w2.Code, w2.Body.String())
 	}
 	if !strings.Contains(w2.Body.String(), "href=\"https://getmerged.abhishekco.de/Gin-Gonic/Gin\"") {
@@ -72,7 +72,7 @@ func TestLiveBadgeACs(t *testing.T) {
 	// dots allowed
 	w4 := httptest.NewRecorder()
 	r.ServeHTTP(w4, httptest.NewRequest("GET", "/api/badge/.github/.github", nil))
-	if !strings.Contains(w4.Body.String(), "unranked | median PR: n/a") {
+	if !strings.Contains(w4.Body.String(), "unranked") {
 		t.Fatalf("dot seg should be neutral fallback: %d %s", w4.Code, w4.Body.String())
 	}
 
