@@ -56,16 +56,20 @@ func TestGFIDoubleOptInTokens(t *testing.T) {
 	}
 }
 
-// AC6: Unsubscribe token (90d TTL, immediate opt-out).
+// AC4: Unsubscribe token (30d TTL, bound to subscriber_id + email hash).
 func TestGFIUnsubscribeToken(t *testing.T) {
 	secret := "secret-gfi-123"
 	subID := int64(101)
+	email := "dev@example.com"
 
-	tok := notification.GFIUnsubscribeToken(subID, secret)
-	if sid, ok := notification.VerifyGFIUnsubscribeToken("101", tok, secret); !ok || sid != 101 {
+	tok := notification.GFIUnsubscribeToken(subID, email, secret)
+	if sid, ok := notification.VerifyGFIUnsubscribeToken("101", tok, email, secret); !ok || sid != 101 {
 		t.Fatalf("expected unsub token to verify for sid 101, got sid=%d ok=%v", sid, ok)
 	}
-	if _, ok := notification.VerifyGFIUnsubscribeToken("101", tok, "wrong-secret"); ok {
+	if _, ok := notification.VerifyGFIUnsubscribeToken("101", tok, "other@example.com", secret); ok {
+		t.Fatalf("expected wrong email binding to fail")
+	}
+	if _, ok := notification.VerifyGFIUnsubscribeToken("101", tok, email, "wrong-secret"); ok {
 		t.Fatalf("expected wrong secret to fail")
 	}
 }
@@ -87,7 +91,7 @@ func TestGFIInstantAlertEnqueueAndDedup(t *testing.T) {
 	// Insert fresh good first issue for r1
 	_, err = d.Exec(`
 		INSERT INTO repo_good_first_issues (repository_id, issue_number, title, url, labels_json, quality_score, created_at)
-		VALUES ('r1', 100, 'Fix doc typo in fmt', 'https://github.com/golang/go/issues/100', '[]', 90, ?)
+		VALUES ('r1', 100, 'Fix doc typo in fmt', 'https://github.com/golang/go/issues/100', '["good first issue"]', 90, ?)
 	`, now.Add(-10*time.Minute).Format("2006-01-02 15:04:05"))
 	if err != nil {
 		t.Fatal(err)
@@ -111,7 +115,8 @@ func TestGFIInstantAlertEnqueueAndDedup(t *testing.T) {
 		t.Fatalf("expected 0 new matches on duplicate enqueue, got %d", n2)
 	}
 
-	// Process queue
+	// Process queue (fast-forward the AC2 15-min batch window first)
+	_, _ = d.Exec(`UPDATE gfi_email_queue SET next_attempt_at = ?`, now.UTC())
 	mailer := &countingMailer{}
 	cfg := notification.GFIAlertConfig{
 		Mailer:    mailer,
@@ -149,7 +154,7 @@ func TestGFIDequeueSuppression(t *testing.T) {
 	// Insert issue
 	_, err = d.Exec(`
 		INSERT INTO repo_good_first_issues (repository_id, issue_number, title, url, labels_json, quality_score, created_at)
-		VALUES ('r1', 101, 'Refactor test utils', 'https://github.com/golang/go/issues/101', '[]', 85, ?)
+		VALUES ('r1', 101, 'Refactor test utils', 'https://github.com/golang/go/issues/101', '["good first issue"]', 85, ?)
 	`, now.Add(-5*time.Minute).Format("2006-01-02 15:04:05"))
 	if err != nil {
 		t.Fatal(err)
@@ -167,6 +172,7 @@ func TestGFIDequeueSuppression(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	_, _ = d.Exec(`UPDATE gfi_email_queue SET next_attempt_at = ?`, now.UTC())
 	mailer := &countingMailer{}
 	cfg := notification.GFIAlertConfig{
 		Mailer:    mailer,
@@ -243,7 +249,7 @@ func TestGFIDigestPreferencesAndSharedCursor(t *testing.T) {
 	// Issue on r1 (Go, S)
 	_, _ = d.Exec(`
 		INSERT INTO repo_good_first_issues (repository_id, issue_number, title, url, labels_json, quality_score, created_at)
-		VALUES ('r1', 201, 'Add benchmark for net/http', 'https://github.com/golang/go/issues/201', '[]', 95, ?)
+		VALUES ('r1', 201, 'Add benchmark for net/http', 'https://github.com/golang/go/issues/201', '["good first issue"]', 95, ?)
 	`, now.Add(-1*time.Hour).Format("2006-01-02 15:04:05"))
 
 	mailer := &countingMailer{}
@@ -272,10 +278,10 @@ func TestGFIDigestPreferencesAndSharedCursor(t *testing.T) {
 		VALUES ('r1', 202, 'Fix compiler warning', 'https://github.com/golang/go/issues/202', '[]', 95, ?)
 	`, now.Add(-1*time.Hour).Format("2006-01-02 15:04:05"))
 
-	// Pre-mark as sent in gfi_email_queue
+	// Pre-mark as sent via the weekly-mode sent-log cursor (AC3)
 	_, _ = d2.Exec(`
-		INSERT INTO gfi_email_queue (subscriber_id, idempotency_key, repo_id, issue_number, status, sent_at)
-		VALUES (6, 'r1:202:6', 'r1', 202, 'sent', CURRENT_TIMESTAMP)
+		INSERT INTO gfi_email_queue (subscriber_id, idempotency_key, repo_id, issue_number, delivery_mode, status, sent_at)
+		VALUES (6, 'r1:202:6:w', 'r1', 202, 'weekly', 'sent', CURRENT_TIMESTAMP)
 	`)
 
 	items, err := notification.SelectDigestMatchesForTest(context.Background(), d2, 6, "Go", "S", now.Add(-7*24*time.Hour))
@@ -286,3 +292,70 @@ func TestGFIDigestPreferencesAndSharedCursor(t *testing.T) {
 		t.Fatalf("expected 0 items due to shared cursor in gfi_email_queue, got %d", len(items))
 	}
 }
+
+// AC7: Baseline verification: seeded fixture (subscriber + 2 matching issues) produces
+// exactly one email per subscriber-issue through either path (instant or digest).
+func TestGFIBaselineVerificationSeededFixture(t *testing.T) {
+	d := seedGFIBase(t)
+	now := time.Now().UTC()
+
+	// Seed 1 subscriber (matches Go, S tier)
+	_, err := d.Exec(`
+		INSERT INTO gfi_subscribers (id, email, languages, tiers, frequency, verified_at, disabled, hard_bounces)
+		VALUES (10, 'coder@example.com', 'Go', 'S,A', 'instant', CURRENT_TIMESTAMP, FALSE, 0)
+	`)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Seed 2 matching issues for r1 (Go, S tier)
+	_, err = d.Exec(`
+		INSERT INTO repo_good_first_issues (repository_id, issue_number, title, url, labels_json, quality_score, created_at)
+		VALUES 
+			('r1', 501, 'Add test coverage for router', 'https://github.com/golang/go/issues/501', '["good first issue"]', 90, ?),
+			('r1', 502, 'Improve docs on context package', 'https://github.com/golang/go/issues/502', '["good first issue"]', 92, ?)
+	`, now.Add(-15*time.Minute).Format("2006-01-02 15:04:05"), now.Add(-10*time.Minute).Format("2006-01-02 15:04:05"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Instant alert path: enqueue both issues
+	n, err := notification.EnqueueGFIInstantAlerts(context.Background(), d, "r1", []int{501, 502}, now)
+	if err != nil || n != 2 {
+		t.Fatalf("expected 2 enqueued matches, got %d (err: %v)", n, err)
+	}
+
+	// Race condition / duplicate enqueue: must insert-or-ignore and add 0 rows
+	nDup, err := notification.EnqueueGFIInstantAlerts(context.Background(), d, "r1", []int{501, 502}, now)
+	if err != nil || nDup != 0 {
+		t.Fatalf("expected 0 new matches on duplicate enqueue, got %d", nDup)
+	}
+
+	// Drain queue (fast-forward the AC2 15-min batch window first)
+	_, _ = d.Exec(`UPDATE gfi_email_queue SET next_attempt_at = ?`, now.UTC())
+	mailer := &countingMailer{}
+	cfg := notification.GFIAlertConfig{
+		Mailer:    mailer,
+		BaseURL:   "https://getmerged.abhishekco.de",
+		JobSecret: "secret-gfi-123",
+	}
+
+	summary, err := notification.ProcessGFIEmailQueue(context.Background(), d, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if summary.Sent != 2 || mailer.count() != 1 {
+		t.Fatalf("expected 2 items sent in 1 batched email, got sent=%d mailer=%d", summary.Sent, mailer.count())
+	}
+
+	// Subsequent weekly digest run for same subscriber & issues must find 0 new matches due to DB UNIQUE / shared queue
+	notification.ResetGFIDigestLockForTest()
+	digestSummary, err := notification.RunGFIDigest(context.Background(), d, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if digestSummary.DigestsSent != 0 || digestSummary.MatchesFound != 0 {
+		t.Fatalf("expected 0 digest emails sent as issues were already alerted, got %+v", digestSummary)
+	}
+}
+

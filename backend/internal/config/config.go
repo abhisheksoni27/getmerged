@@ -37,7 +37,15 @@ type Config struct {
 	SMTPUser                  string
 	SMTPPassword              string
 	SMTPFrom                  string
+	SMTPPhysicalAddress       string
+	AdminEmail                string
 	AppBaseURL                string
+	// AC7: purpose-scoped HMAC keys for GFI email tokens. The *_OLD vars
+	// enable rotation: during the dual-key window both old and new verify.
+	EmailTokenKey     string
+	EmailTokenKeyOld  string
+	UnsubscribeKey    string
+	UnsubscribeKeyOld string
 	GithubAppID                string
 	GithubAppPrivateKey        string
 	GithubAppWebhookSecret     string
@@ -72,7 +80,13 @@ func Load() (*Config, error) {
 		SMTPUser:                  os.Getenv("SMTP_USER"),
 		SMTPPassword:              os.Getenv("SMTP_PASSWORD"),
 		SMTPFrom:                  os.Getenv("SMTP_FROM"),
+		SMTPPhysicalAddress:       os.Getenv("SMTP_PHYSICAL_ADDRESS"),
+		AdminEmail:                os.Getenv("ADMIN_EMAIL"),
 		AppBaseURL:                os.Getenv("APP_BASE_URL"),
+		EmailTokenKey:             os.Getenv("EMAIL_TOKEN_HMAC_KEY"),
+		EmailTokenKeyOld:          os.Getenv("EMAIL_TOKEN_HMAC_KEY_OLD"),
+		UnsubscribeKey:            os.Getenv("UNSUBSCRIBE_HMAC_KEY"),
+		UnsubscribeKeyOld:         os.Getenv("UNSUBSCRIBE_HMAC_KEY_OLD"),
 		GithubAppID:               os.Getenv("GITHUB_APP_ID"),
 		GithubAppPrivateKey:       os.Getenv("GITHUB_APP_PRIVATE_KEY"),
 		GithubAppWebhookSecret:    os.Getenv("GITHUB_APP_WEBHOOK_SECRET"),
@@ -89,6 +103,12 @@ func Load() (*Config, error) {
 	}
 	if c.AppBaseURL == "" {
 		c.AppBaseURL = "https://getmerged.abhishekco.de"
+	}
+	if c.EmailTokenKey == "" {
+		c.EmailTokenKey = c.JobSecret
+	}
+	if c.UnsubscribeKey == "" {
+		c.UnsubscribeKey = c.JobSecret
 	}
 
 	// Optional crawler tuning knobs. Falls back to conservative defaults
@@ -164,4 +184,31 @@ func Load() (*Config, error) {
 	}
 
 	return c, nil
+}
+
+// EmailTokenKeys returns the verify-token key chain (AC7): primary first,
+// then the rotation old key while the dual-key window is open. Falls back to
+// JobSecret when no purpose-scoped key is configured.
+func (c *Config) EmailTokenKeys() []string {
+	keys := []string{c.EmailTokenKey}
+	if c.EmailTokenKeyOld != "" && c.EmailTokenKeyOld != c.EmailTokenKey {
+		keys = append(keys, c.EmailTokenKeyOld)
+	}
+	if c.EmailTokenKey == c.JobSecret {
+		return keys
+	}
+	return append(keys, c.JobSecret)
+}
+
+// UnsubscribeKeys returns the unsubscribe-token key chain (AC7), same
+// rotation semantics as EmailTokenKeys.
+func (c *Config) UnsubscribeKeys() []string {
+	keys := []string{c.UnsubscribeKey}
+	if c.UnsubscribeKeyOld != "" && c.UnsubscribeKeyOld != c.UnsubscribeKey {
+		keys = append(keys, c.UnsubscribeKeyOld)
+	}
+	if c.UnsubscribeKey == c.JobSecret {
+		return keys
+	}
+	return append(keys, c.JobSecret)
 }

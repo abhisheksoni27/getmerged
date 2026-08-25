@@ -96,6 +96,7 @@ func setupBadgeTestDB(t *testing.T) *sqlx.DB {
 		snapshot_date TEXT NOT NULL,
 		c_rank_tier TEXT,
 		c_rank_score REAL,
+		score_source TEXT DEFAULT 'computed',
 		external_pr_merge_rate REAL DEFAULT 0,
 		time_to_first_response_hours REAL DEFAULT 0,
 		time_to_merge_hours REAL DEFAULT 0,

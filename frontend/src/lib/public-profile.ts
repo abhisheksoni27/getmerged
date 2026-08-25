@@ -56,6 +56,9 @@ export interface PublicProfile {
   merged_count: number;
   repos: PublicProfileRepoTier[];
   evals?: PublicProfileEval[];
+  // DNA powers the persona banner. Optional — the API omits it when
+  // the user hasn't consented to profiling or has no completed analysis.
+  dna?: import("@/types/opendoor").ContributorDNA;
 }
 
 /**

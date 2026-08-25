@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
     const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
     return [
       {
+        // AC6: one-click email unsubscribe /u/{userId}?sig=... proxies to the
+        // API when (and only when) a sig is present; bare /u/ pages stay
+        // public profiles.
+        source: "/u/:uid",
+        has: [{ type: "query", key: "sig" }],
+        destination: `${apiBase}/api/v1/gfi-alerts/unsubscribe-short?uid=:uid`,
+      },
+      {
         source: "/api/v1/auth/:path*",
         destination: `${apiBase}/api/v1/auth/:path*`,
       },

@@ -27,26 +27,28 @@ func RenderAchievementCardHandler(userRepo repository.UserRepository) gin.Handle
 		mergedCount := 0
 		primaryLang := "Open Source"
 		skillLevel := "Active Contributor"
+		persona := ""
 
 		if profile.DNA != nil {
-			if dnaMap, ok := profile.DNA.(map[string]interface{}); ok {
-				if mc, ok := dnaMap["total_merged_prs"].(float64); ok {
-					mergedCount = int(mc)
-				}
-				if pl, ok := dnaMap["primary_languages"].([]interface{}); ok && len(pl) > 0 {
-					if lStr, ok := pl[0].(string); ok {
-						primaryLang = lStr
-					}
-				}
-				if sl, ok := dnaMap["skill_level"].(string); ok && sl != "" {
-					skillLevel = sl
-				}
+			mergedCount = profile.DNA.TotalMergedPRs
+			if len(profile.DNA.PrimaryLanguages) > 0 && profile.DNA.PrimaryLanguages[0] != "" {
+				primaryLang = profile.DNA.PrimaryLanguages[0]
 			}
+			if profile.DNA.SkillLevel != "" {
+				skillLevel = profile.DNA.SkillLevel
+			}
+			persona = profile.DNA.Persona
 		}
 
 		escapedUsername := escapeXML(profile.Username)
 		escapedLang := escapeXML(primaryLang)
 		escapedSkill := escapeXML(skillLevel)
+		escapedPersona := escapeXML(persona)
+		personaLine := ""
+		if escapedPersona != "" {
+			personaLine = fmt.Sprintf(`  <text x="132" y="68" fill="#FCD34D" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700">%s</text>
+		`, escapedPersona)
+		}
 
 		svg := fmt.Sprintf(`<svg width="500" height="260" viewBox="0 0 500 260" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -66,7 +68,7 @@ func RenderAchievementCardHandler(userRepo repository.UserRepository) gin.Handle
 
   <!-- Logo Brand -->
   <text x="40" y="52" fill="#10B981" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="800" letter-spacing="1">GETMERGED</text>
-  <text x="132" y="52" fill="#71717A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">VERIFIED CONTRIBUTOR</text>
+  <text x="132" y="52" fill="#71717A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">VERIFIED CONTRIBUTOR</text>%s
 
   <!-- User Handle -->
   <text x="40" y="96" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="800">@%s</text>
@@ -87,7 +89,7 @@ func RenderAchievementCardHandler(userRepo repository.UserRepository) gin.Handle
 
   <!-- URL watermark -->
   <text x="40" y="232" fill="#52525B" font-family="monospace" font-size="10">getmerged.abhishekco.de/u/%s</text>
-</svg>`,
+</svg>`, personaLine,
 			escapedUsername, escapedSkill, escapedLang,
 			mergedCount, escapedLang, escapedUsername,
 		)

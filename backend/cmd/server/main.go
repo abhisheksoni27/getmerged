@@ -138,6 +138,10 @@ func main() {
 	stopClaimCron := startClaimReverifyCron(claimSvc)
 	defer stopClaimCron()
 
+	// GFI alert outbox drain every 5 min + weekly digest Mondays 09:00 UTC.
+	stopGFIAlertCron := startGFIAlertCron(cfg, database, gh)
+	defer stopGFIAlertCron()
+
 	// GitHub App daily org claim re-verification (AC3) & nightly sweep (AC2)
 	stopGhAppCron := startGhAppDailyCron(ghAppSvc)
 	defer stopGhAppCron()
@@ -236,6 +240,13 @@ func main() {
 		api.GET("/gfi-alerts/prefs", handler.GFIPrefsHandler(cfg))
 		api.POST("/gfi-alerts/prefs", handler.GFIPrefsHandler(cfg))
 		api.GET("/gfi-alerts/unsubscribe", handler.GFIUnsubscribeHandler(cfg))
+		// RFC 8058 one-click unsubscribe: providers POST to the same
+		// List-Unsubscribe URL; the token rides in the query string.
+		api.POST("/gfi-alerts/unsubscribe", handler.GFIUnsubscribeHandler(cfg))
+		// AC6 short scheme /u/{userId}?sig= proxied here by the frontend.
+		api.GET("/gfi-alerts/unsubscribe-short", handler.GFIUnsubscribeShortHandler(cfg))
+		api.POST("/gfi-alerts/unsubscribe-short", handler.GFIUnsubscribeShortHandler(cfg))
+		api.GET("/gfi-alerts/claim", handler.GFIClaimLinkHandler(cfg))
 		api.POST("/webhooks/email-events", handler.GFIEmailWebhookHandler(cfg))
 
 		// Auth Routes
@@ -274,6 +285,10 @@ func main() {
 		r.POST("/repo/:owner/:name/claim", middleware.UserAuth(cfg.JWTSecret), handler.PostClaimRepoHandler(claimSvc))
 		r.POST("/repo/:owner/:name/verify", middleware.UserAuth(cfg.JWTSecret), handler.PostVerifyRepoHandler(claimSvc))
 		r.GET("/repo/:owner/:name/console", middleware.UserAuth(cfg.JWTSecret), handler.GetMaintainerConsoleHandler(claimSvc))
+
+		// AC6: one-click unsubscribe /u/{userId}?sig=HMAC(secret, userId+expiry30d)
+		r.GET("/u/:userid", handler.GFIUnsubscribeShortHandler(cfg))
+		r.POST("/u/:userid", handler.GFIUnsubscribeShortHandler(cfg))
 
 		// Public API key management (AC1)
 		userApi.GET("/user/api-keys", handler.ListAPIKeys(apiKeyRepo, entitlementRepo))
@@ -314,6 +329,7 @@ func main() {
 		internal.POST("/migrate-latest-snapshots", handler.MigrateLatestSnapshots())
 		internal.POST("/jobs/weekly-digest", handler.TriggerWeeklyDigest(cfg, telegramNotifier))
 		internal.POST("/jobs/gfi-digest", handler.TriggerGFIDigestHandler(cfg))
+		internal.GET("/jobs/gfi-paused", handler.ListGFIPausedSubscribersHandler(cfg))
 		internal.POST("/jobs/crank-change-alerts", handler.TriggerCRankChangeAlerts(cfg))
 		internal.DELETE("/repos/:id", handler.DeleteRepo(repoStore))
 	}
@@ -371,6 +387,95 @@ func setupLogger(ginMode, logFilePath, logLevel string) {
 
 	slog.SetDefault(slog.New(handler))
 	slog.Info("logging initialized", "file", logFilePath, "level", level.String())
+}
+
+// startGFIAlertCron keeps the good-first-issue alert pipeline running (AC2):
+// the batched outbox drains every 5 minutes so 15-min alert windows flush,
+// and the weekly digest fires Mondays 09:00 UTC. Zero-match digest runs are
+// silent no-ops; send failures back off inside the queue processor.
+func startGFIAlertCron(cfg *config.Config, database *sqlx.DB, gh *ghclient.Client) func() {
+	stop := make(chan struct{})
+	alertCfg := notification.GFIAlertConfig{
+		Mailer:          notification.NewSMTPMailer(cfg.SMTPHost, cfg.SMTPPort, cfg.SMTPUser, cfg.SMTPPassword, cfg.SMTPFrom),
+		BaseURL:         cfg.AppBaseURL,
+		JobSecret:       cfg.JobSecret,
+		UnsubscribeKey:  cfg.UnsubscribeKey,
+		PhysicalAddress: cfg.SMTPPhysicalAddress,
+		GitHub:          gh,
+		AdminEmail:      cfg.AdminEmail,
+	}
+	drain := func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+		defer cancel()
+		s, err := notification.ProcessGFIEmailQueue(ctx, database, alertCfg)
+		if err != nil {
+			slog.Error("gfi queue drain failed", "err", err)
+			return
+		}
+		if s.Sent > 0 || s.Dropped > 0 || s.Failed > 0 {
+			slog.Info("gfi queue drained", "sent", s.Sent, "dropped", s.Dropped, "failed", s.Failed)
+		}
+	}
+	runDigest := func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+		defer cancel()
+		s, err := notification.RunGFIDigest(ctx, database, alertCfg)
+		if err != nil {
+			slog.Error("weekly gfi digest failed", "err", err)
+			return
+		}
+		slog.Info("weekly gfi digest done", "digests_sent", s.DigestsSent, "matches", s.MatchesFound, "skipped_no_match", s.SkippedNoMatch)
+	}
+	nextMondayNineUTC := func() time.Duration {
+		now := time.Now().UTC()
+		t := time.Date(now.Year(), now.Month(), now.Day(), 9, 0, 0, 0, time.UTC)
+		t = t.AddDate(0, 0, (int(time.Monday)-int(t.Weekday())+7)%7)
+		if !t.After(now) {
+			t = t.AddDate(0, 0, 7)
+		}
+		return t.Sub(now)
+	}
+
+	go func() {
+		drainTicker := time.NewTicker(5 * time.Minute)
+		hourlyTicker := time.NewTicker(time.Hour)
+		digestTimer := time.NewTimer(nextMondayNineUTC())
+		defer drainTicker.Stop()
+		defer hourlyTicker.Stop()
+		defer digestTimer.Stop()
+		for {
+			select {
+			case <-stop:
+				return
+			case <-drainTicker.C:
+				drain()
+			case <-hourlyTicker.C:
+				// AC6 hourly matcher sweep: re-enqueue unstamped recent
+				// issues (cursor = alert_dedup_key); failures resume next cycle.
+				sweepCtx, sweepCancel := context.WithTimeout(context.Background(), 5*time.Minute)
+				if n := notification.RunGFIMatcherSweep(sweepCtx, database); n > 0 {
+					slog.Info("gfi matcher sweep enqueued", "count", n)
+					drain()
+				}
+				sweepCancel()
+				// AC2 daily fallback digest for instant-cap overflow; the
+				// once-per-UTC-day guard lives inside the runner.
+				fbCtx, fbCancel := context.WithTimeout(context.Background(), 10*time.Minute)
+				if s, err := notification.RunGFIDailyFallbackDigest(fbCtx, database, alertCfg); err != nil {
+					slog.Error("gfi fallback digest failed", "err", err)
+				} else if s.FallbackSent > 0 || s.Failed > 0 {
+					slog.Info("gfi fallback digest done", "sent", s.FallbackSent, "failed", s.Failed)
+				}
+				fbCancel()
+			case <-digestTimer.C:
+				runDigest()
+				drain()
+				digestTimer.Reset(nextMondayNineUTC())
+			}
+		}
+	}()
+
+	return func() { close(stop) }
 }
 
 // startClaimReverifyCron runs the weekly claim re-verification job (AC4):

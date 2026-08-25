@@ -9,6 +9,7 @@ import (
 	"time"
 
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
+	"github.com/abhisheksoni27/opendoor/internal/notification"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/google/uuid"
@@ -86,7 +87,20 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 					slog.Warn("cron: FetchGoodFirstIssuesList failed - assuming none", "repo", r.FullName, "err", err)
 				} else if len(gfiIssues) > 0 {
 					gfiRepo := repository.NewGFIRepository(db)
-					_ = gfiRepo.UpsertIssues(context.Background(), r.ID, gfiIssues)
+					if err := gfiRepo.UpsertIssues(context.Background(), r.ID, gfiIssues); err != nil {
+						slog.Warn("cron: UpsertIssues failed", "repo", r.FullName, "err", err)
+					}
+					// Fan out instant alerts for freshly ingested issues;
+					// insert-or-ignore dedupe makes this idempotent.
+					nums := make([]int, 0, len(gfiIssues))
+					for _, gi := range gfiIssues {
+						nums = append(nums, gi.Number)
+					}
+					if n, err := notification.EnqueueGFIInstantAlerts(context.Background(), db, r.ID, nums, time.Now()); err != nil {
+						slog.Warn("cron: GFI instant alert enqueue failed", "repo", r.FullName, "err", err)
+					} else if n > 0 {
+						slog.Info("cron: queued GFI instant alerts", "repo", r.FullName, "count", n)
+					}
 				}
 
 				slog.Debug("cron: fetched data", "repo", r.FullName, "prs", len(prs))

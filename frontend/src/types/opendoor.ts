@@ -83,6 +83,20 @@ export interface ContributorDNA {
   skill_level: string;
   pr_size_preference: string;
   review_engagement: string;
+  // Identity-card fields (2026-Q3). All optional so old stored payloads parse.
+  persona?: string;
+  persona_verdict?: string;
+  persona_signals?: string[];
+  temporal?: {
+    peak_hour_utc: number;
+    label: string;
+  };
+  stars_pulled_in?: number;
+  top_repos?: {
+    name_with_owner: string;
+    stargazer_count: number;
+    primary_language?: string | null;
+  }[];
 }
 
 export interface User {
