@@ -68,11 +68,8 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
 
   const [isWatching, setIsWatching] = useState(false);
   const [watchLoading, setWatchLoading] = useState(false);
-  const [badgeCopied, setBadgeCopied] = useState(false);
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [feedbackError, setFeedbackError] = useState<string | null>(null);
-  const [badgeShowPoints, setBadgeShowPoints] = useState(false);
-  const [badgeColor, setBadgeColor] = useState("auto");
   const [isVerifiedContributor, setIsVerifiedContributor] = useState(false);
   const [githubNotFound, setGithubNotFound] = useState(false);
   const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
@@ -102,16 +99,6 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
   const rank = repo?.class_rank || repo?.c_rank_tier || "A";
   const score = repo?.c_rank_score ?? repo?.score ?? 0;
   const allFeedbackRatingsSelected = maintainerRating > 0 && reviewSpeedRating > 0 && beginnerRating > 0;
-
-  const badgeQuery =
-    badgeShowPoints || badgeColor !== "auto"
-      ? `?${[
-          badgeShowPoints ? "points=1" : "",
-          badgeColor !== "auto" ? `color=${badgeColor}` : "",
-        ].filter(Boolean).join("&")}`
-      : "";
-  const badgePreviewUrl = `${API_BASE_URL}/badge/${fullName}.svg${badgeQuery}`;
-  const badgeMarkdownUrl = `https://getmerged.abhishekco.de/badge/${fullName}.svg${badgeQuery}`;
 
   useEffect(() => {
     if (!repo && fullName) {
@@ -635,17 +622,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       />
 
       {/* Interactive README C-Rank Live Badge Generator (Issue #50) */}
-      <RepoBadgeGenerator
-        fullName={fullName}
-        badgeShowPoints={badgeShowPoints}
-        setBadgeShowPoints={setBadgeShowPoints}
-        badgeColor={badgeColor}
-        setBadgeColor={setBadgeColor}
-        badgePreviewUrl={badgePreviewUrl}
-        badgeMarkdownUrl={badgeMarkdownUrl}
-        badgeCopied={badgeCopied}
-        setBadgeCopied={setBadgeCopied}
-      />
+      <RepoBadgeGenerator fullName={fullName} />
 
       {/* Similar Repositories & Alternatives Interlinking (Issue #55) */}
       <SimilarRepos relatedRepos={relatedRepos} language={repo?.language} />

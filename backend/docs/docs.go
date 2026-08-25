@@ -109,6 +109,58 @@ const docTemplate = `{
                 }
             }
         },
+        "/internal/jobs/crank-change-alerts": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Emails watchlist users when a watched repo crosses a C-Rank tier boundary or drops sharply. Synchronous.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "internal"
+                ],
+                "summary": "Trigger C-Rank change alerts",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Job secret",
+                        "name": "X-Job-Secret",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/notification.CRankAlertSummary"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/internal/jobs/weekly-digest": {
             "post": {
                 "description": "Computes C-Rank changes on watched repos and emails alert digests. Synchronous.",
@@ -470,6 +522,35 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "notification.CRankAlertSummary": {
+            "type": "object",
+            "properties": {
+                "alerts_found": {
+                    "type": "integer"
+                },
+                "baselined": {
+                    "type": "integer"
+                },
+                "cas_lost": {
+                    "type": "integer"
+                },
+                "dead_lettered": {
+                    "type": "integer"
+                },
+                "failed": {
+                    "type": "integer"
+                },
+                "sent": {
+                    "type": "integer"
+                },
+                "skipped_cooldown": {
+                    "type": "integer"
+                },
+                "watchers_considered": {
+                    "type": "integer"
                 }
             }
         },

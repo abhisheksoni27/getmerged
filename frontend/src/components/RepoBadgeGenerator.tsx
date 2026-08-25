@@ -1,98 +1,117 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import posthog from "posthog-js";
 
+const SITE_URL = "https://getmerged.abhishekco.de";
+
 interface RepoBadgeGeneratorProps {
   fullName: string;
-  badgeShowPoints: boolean;
-  setBadgeShowPoints: (val: boolean) => void;
-  badgeColor: string;
-  setBadgeColor: (val: string) => void;
-  badgePreviewUrl: string;
-  badgeMarkdownUrl: string;
-  badgeCopied: boolean;
-  setBadgeCopied: (val: boolean) => void;
 }
 
-export function RepoBadgeGenerator({
-  fullName,
-  badgeShowPoints,
-  setBadgeShowPoints,
-  badgeColor,
-  setBadgeColor,
-  badgePreviewUrl,
-  badgeMarkdownUrl,
-  badgeCopied,
-  setBadgeCopied,
-}: RepoBadgeGeneratorProps) {
+export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
+  const [activeTab, setActiveTab] = useState<"markdown" | "html">("markdown");
+  const [copied, setCopied] = useState(false);
+  const [badgeAvailable, setBadgeAvailable] = useState(true);
+
+  const parts = fullName.split("/");
+  const owner = parts[0];
+  const name = parts[1];
+
+  const badgeSvgUrl = `${SITE_URL}/api/v1/badges/${owner}/${name}/badge.svg`;
+  const repoLinkUrl = `${SITE_URL}/${fullName}?utm_source=github&utm_medium=badge`;
+
+  const markdownSnippet = `[![GetMerged C-Rank](${badgeSvgUrl})](${repoLinkUrl})`;
+  const htmlSnippet = `<a href="${repoLinkUrl}"><img src="${badgeSvgUrl}" alt="GetMerged C-Rank badge for ${fullName}" /></a>`;
+
+  const snippet = activeTab === "markdown" ? markdownSnippet : htmlSnippet;
+
+  // Hide the whole block when the badge endpoint is unavailable (404/network error)
+  useEffect(() => {
+    if (!owner || !name) return;
+    let cancelled = false;
+    fetch(`${SITE_URL}/api/v1/badges/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/badge.json`)
+      .then((res) => {
+        if (!cancelled) setBadgeAvailable(res.ok);
+      })
+      .catch(() => {
+        if (!cancelled) setBadgeAvailable(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [owner, name]);
+
+  if (!owner || !name || !badgeAvailable) return null;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(snippet).then(() => {
+      posthog.capture("badge_embed_copied", { repo_full_name: fullName, format: activeTab });
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
   return (
     <div className="rounded-3xl border border-zinc-200/80 bg-white p-6 sm:p-8 shadow-xs mb-8">
       <div className="mb-4">
         <h3 className="font-space text-lg font-bold text-zinc-900">
-          Embed C-Rank Badge on GitHub README
+          Embed C-Rank Badge
         </h3>
         <p className="text-xs sm:text-sm text-zinc-600 font-sans mt-0.5">
           Show contributors that your repository actively reviews and merges external pull requests.
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-600 mb-5">
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={badgeShowPoints}
-            onChange={(e) => setBadgeShowPoints(e.target.checked)}
-            className="rounded border-zinc-300 text-zinc-900 focus:ring-0"
-          />
-          <span>Show Raw C-Rank Score Points</span>
-        </label>
-
-        <label className="flex items-center gap-2">
-          <span>Badge Color:</span>
-          <select
-            value={badgeColor}
-            onChange={(e) => setBadgeColor(e.target.value)}
-            className="rounded-lg border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-mono text-zinc-800"
-          >
-            <option value="auto">Auto (Match C-Rank Tier)</option>
-            <option value="emerald">Emerald</option>
-            <option value="blue">Blue</option>
-            <option value="amber">Amber</option>
-            <option value="purple">Purple</option>
-            <option value="rose">Rose</option>
-          </select>
-        </label>
+      {/* Live badge preview */}
+      <div className="flex items-center min-h-10 p-4 bg-zinc-50 border border-zinc-200/80 rounded-2xl shadow-2xs mb-5">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={badgeSvgUrl}
+          alt={`GetMerged C-Rank badge for ${fullName}`}
+          width={280}
+          height={28}
+          className="h-7 w-auto"
+        />
       </div>
 
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-zinc-50 border border-zinc-200/80 rounded-2xl shadow-2xs">
-        <div className="flex items-center min-h-10 overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={badgePreviewUrl}
-            alt={`GetMerged C-Rank badge for ${fullName}`}
-            width={280}
-            height={28}
-            className="h-7 w-auto"
-          />
-        </div>
+      {/* Snippet format tabs */}
+      <div className="flex items-center gap-2 mb-3">
+        {(["markdown", "html"] as const).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => {
+              setActiveTab(tab);
+              setCopied(false);
+            }}
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+              activeTab === tab
+                ? "bg-zinc-900 text-white shadow-xs"
+                : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
+            }`}
+          >
+            {tab === "markdown" ? "Markdown" : "HTML"}
+          </button>
+        ))}
+      </div>
+
+      {/* Snippet + copy action */}
+      <div className="p-4 bg-zinc-50 border border-zinc-200/80 rounded-2xl shadow-2xs">
+        <pre className="text-xs font-mono text-zinc-700 whitespace-pre-wrap break-all mb-4 select-all">{snippet}</pre>
         <div className="flex flex-wrap items-center gap-3">
           <button
-            onClick={() => {
-              navigator.clipboard.writeText(`[![GetMerged C-Rank](${badgeMarkdownUrl})](https://getmerged.abhishekco.de/${fullName})`);
-              posthog.capture("badge_copied", { repo_full_name: fullName });
-              setBadgeCopied(true);
-              setTimeout(() => setBadgeCopied(false), 2000);
-            }}
-            title="Copy markdown badge embed code for GitHub README"
+            onClick={handleCopy}
+            title={`Copy ${activeTab === "markdown" ? "markdown" : "HTML"} badge embed code`}
             className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 text-white font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-xs inline-flex items-center justify-center gap-2"
           >
-            {badgeCopied ? (
+            {copied ? (
               <span className="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
-                <Check className="h-3.5 w-3.5" /> Copied Markdown!
+                <Check className="h-3.5 w-3.5" /> Copied!
               </span>
             ) : (
               <span className="inline-flex items-center gap-1.5">
-                <Copy className="h-3.5 w-3.5" /> Copy Markdown
+                <Copy className="h-3.5 w-3.5" /> Copy {activeTab === "markdown" ? "Markdown" : "HTML"}
               </span>
             )}
           </button>
@@ -102,16 +121,16 @@ export function RepoBadgeGenerator({
               const prompt = `Add the GetMerged C-Rank™ maintainer badge to the top of our repository README.md (right below the main title/hero section):
 
 \`\`\`markdown
-[![GetMerged C-Rank](${badgeMarkdownUrl})](https://getmerged.abhishekco.de/${fullName})
+${markdownSnippet}
 \`\`\`
 
 Why:
 - Shows contributors that our repo actively reviews and merges external pull requests.
-- Displays our live C-Rank scorecard and response time metrics directly from https://getmerged.abhishekco.de/${fullName}.`;
+- Displays our live C-Rank scorecard and response time metrics directly from ${SITE_URL}/${fullName}.`;
               navigator.clipboard.writeText(prompt);
               posthog.capture("badge_prompt_copied", { repo_full_name: fullName });
-              setBadgeCopied(true);
-              setTimeout(() => setBadgeCopied(false), 2000);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
             }}
             title="Copy AI prompt to add GetMerged badge to your repo README via Cursor, Copilot, or Claude"
             className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white hover:bg-zinc-100 active:scale-95 text-zinc-900 border border-zinc-200 font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-2xs inline-flex items-center justify-center gap-2"
