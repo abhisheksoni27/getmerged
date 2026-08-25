@@ -163,7 +163,9 @@ func (c *BackgroundCrawler) pruneOldSnapshots() {
 // and enqueues them into indexing_queue with priority.
 func (c *BackgroundCrawler) EnqueueDueRepos() {
 	slog.Info("background crawler producer: checking due repos to enqueue")
-	rows, err := c.db.Query(`
+	// Tiered rescan cadence: S/A every 3d, B 5d, C/D 10d. SQLite (test
+	// harness) lacks MySQL's INTERVAL syntax, so branch the query.
+	query := `
 		SELECT r.full_name, r.owner, r.name,
 		       COALESCE(ls.c_rank_tier, 'D') AS tier
 		FROM repositories r
@@ -179,7 +181,27 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		  AND (q.status IS NULL OR q.status NOT IN ('pending', 'processing'))
 		ORDER BY ls.c_rank_tier ASC, r.updated_at ASC
 		LIMIT 1000
-	`)
+	`
+	if c.db.DriverName() == "sqlite" {
+		query = `
+			SELECT r.full_name, r.owner, r.name,
+			       COALESCE(ls.c_rank_tier, 'D') AS tier
+			FROM repositories r
+			LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
+			LEFT JOIN indexing_queue q ON r.full_name = q.full_name
+			WHERE r.updated_at <= datetime('now',
+			        '-' || CASE
+			          WHEN COALESCE(ls.c_rank_tier, 'D') IN ('S','A') THEN 3
+			          WHEN COALESCE(ls.c_rank_tier, 'D') = 'B' THEN 5
+			          ELSE 10
+			        END || ' days')
+			  AND EXISTS (SELECT 1 FROM repo_pr_events e WHERE e.repository_id = r.id)
+			  AND (q.status IS NULL OR q.status NOT IN ('pending', 'processing'))
+			ORDER BY ls.c_rank_tier ASC, r.updated_at ASC
+			LIMIT 1000
+		`
+	}
+	rows, err := c.db.Query(query)
 	if err != nil {
 		slog.Error("background crawler producer: query due repos failed", "err", err)
 		return
