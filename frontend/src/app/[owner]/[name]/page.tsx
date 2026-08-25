@@ -117,7 +117,8 @@ export default async function RepoDetailPage({ params }: PageProps) {
     redirect(`/${repo.full_name}`);
   }
 
-  const insights = await getRepoInsights(repo.full_name);
+  const targetInsightKey = repo?.id ? String(repo.id) : repo.full_name;
+  const insights = await getRepoInsights(targetInsightKey);
 
   // Schema.org JSON-LD Structured Data (SoftwareSourceCode & freshness dateModified)
   const jsonLd = {

@@ -177,7 +177,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
     };
 
     const fetchInsights = async () => {
-      if (!targetId) return;
+      if (!targetId || initialInsights) return;
       try {
         const res = await fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/insights`, { credentials: "include" });
         if (!res.ok) return;
@@ -208,7 +208,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
     };
 
     Promise.allSettled([fetchWatchlist(), fetchInsights(), fetchRelated(), fetchClaimStatus()]);
-  }, [repo?.id, fullName]);
+  }, [repo?.id, fullName, initialInsights]);
 
   const handleWatchToggle = async () => {
     if (!isLoggedIn) {
