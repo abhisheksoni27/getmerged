@@ -93,3 +93,29 @@ func TestBusFactorWindowDaysFromEnv(t *testing.T) {
 		t.Errorf("expected fallback 90 on negative env, got %d", got)
 	}
 }
+
+func TestBusFactorFallbackForEventStreamPRs(t *testing.T) {
+	now := time.Now().UTC()
+	prs := []PR{
+		{
+			CreatedAt:         now.Add(-10 * 24 * time.Hour),
+			AuthorLogin:       "external_dev",
+			AuthorAssociation: "CONTRIBUTOR",
+			CommentAuthors:    []string{"reviewer1", "reviewer2"},
+		},
+		{
+			CreatedAt:         now.Add(-20 * 24 * time.Hour),
+			AuthorLogin:       "another_dev",
+			AuthorAssociation: "CONTRIBUTOR",
+			CommentAuthors:    []string{"reviewer1", "reviewer3"},
+		},
+	}
+
+	metrics := ComputeMetrics(prs, false, 90)
+	// reviewer1 has 2 comments, reviewer2 and reviewer3 have 1 comment each.
+	// Fallback should include active reviewers with multi-touch or overall team size.
+	if metrics.BusFactor < 1 {
+		t.Errorf("expected BusFactor >= 1 with active reviewers, got %d", metrics.BusFactor)
+	}
+}
+
