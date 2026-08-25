@@ -160,6 +160,15 @@ func main() {
 	// Public SVG Badge Route (F1)
 	r.GET("/badge/:owner/:repo", handler.GetBadgeSVG(repoStore))
 
+	// Live embeddable badge: shields-style SVG with C-Rank grade + median PR
+	// response time, 5-min CDN cache, neutral fallback for unscored repos.
+	// Public (no auth) so it works in README <img> tags. Root level like /cards
+	// to avoid the API-key group; static /api/badge prefix never conflicts
+	// with the static /api/v1 group (no wildcard mixing).
+	// AC4: 60 req/min per IP, 429 when exceeded.
+	badgeRL := middleware.RateLimitPerIP(60, time.Minute)
+	r.GET("/api/badge/:owner/:repo", badgeRL, handler.GetLiveBadgeSVG(repoStore, cfg.AppBaseURL))
+
 	// Public share-card routes: no auth to view (AC1), 30 req/min/IP rate limit
 	// and 24h CDN/Valkey cache with purge-on-revoke (AC2, AC4).
 	cardRL := middleware.RateLimitPerIP(30, time.Minute)

@@ -19,7 +19,7 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
   const owner = parts[0];
   const name = parts[1];
 
-  const badgeSvgUrl = `${SITE_URL}/api/v1/badges/${owner}/${name}/badge.svg`;
+  const badgeSvgUrl = `${SITE_URL}/api/badge/${owner}/${name}`;
   const repoLinkUrl = `${SITE_URL}/${fullName}?utm_source=github&utm_medium=badge`;
 
   const markdownSnippet = `[![GetMerged C-Rank](${badgeSvgUrl})](${repoLinkUrl})`;
@@ -31,7 +31,7 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
   useEffect(() => {
     if (!owner || !name) return;
     let cancelled = false;
-    fetch(`${SITE_URL}/api/v1/badges/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/badge.json`)
+    fetch(`${SITE_URL}/api/badge/${encodeURIComponent(owner)}/${encodeURIComponent(name)}`)
       .then((res) => {
         if (!cancelled) setBadgeAvailable(res.ok);
       })
@@ -45,12 +45,54 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
 
   if (!owner || !name || !badgeAvailable) return null;
 
+  const onCopied = (eventName: string, props?: Record<string, string>) => {
+    try {
+      posthog.capture(eventName, props);
+    } catch {
+      // analytics must never break copying
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const legacyCopy = (text: string) => {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    } catch {
+      // best-effort fallback; nothing else to do
+    }
+  };
+
+  const copyText = (text: string, eventName: string, props?: Record<string, string>) => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard
+          .writeText(text)
+          .then(() => onCopied(eventName, props))
+          .catch(() => {
+            legacyCopy(text);
+            onCopied(eventName, props);
+          });
+      } else {
+        legacyCopy(text);
+        onCopied(eventName, props);
+      }
+    } catch {
+      legacyCopy(text);
+      onCopied(eventName, props);
+    }
+  };
+
   const handleCopy = () => {
-    navigator.clipboard.writeText(snippet).then(() => {
-      posthog.capture("badge_embed_copied", { repo_full_name: fullName, format: activeTab });
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    copyText(snippet, "badge_embed_copied", { repo_full_name: fullName, format: activeTab });
   };
 
   return (
@@ -127,10 +169,7 @@ ${markdownSnippet}
 Why:
 - Shows contributors that our repo actively reviews and merges external pull requests.
 - Displays our live C-Rank scorecard and response time metrics directly from ${SITE_URL}/${fullName}.`;
-              navigator.clipboard.writeText(prompt);
-              posthog.capture("badge_prompt_copied", { repo_full_name: fullName });
-              setCopied(true);
-              setTimeout(() => setCopied(false), 2000);
+              copyText(prompt, "badge_prompt_copied", { repo_full_name: fullName });
             }}
             title="Copy AI prompt to add GetMerged badge to your repo README via Cursor, Copilot, or Claude"
             className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white hover:bg-zinc-100 active:scale-95 text-zinc-900 border border-zinc-200 font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-2xs inline-flex items-center justify-center gap-2"
