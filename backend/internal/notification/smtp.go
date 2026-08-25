@@ -2,12 +2,69 @@ package notification
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net"
+	"net/mail"
 	"net/smtp"
+	"regexp"
 	"strings"
 	"time"
 )
+
+// ErrHardBounce marks a permanent delivery failure: hard bounce or invalid
+// recipient address (AC8). Watchers flagged this way are suppressed until
+// they re-verify through the unsubscribe/resubscribe flow.
+var ErrHardBounce = errors.New("hard bounce")
+
+// SendError carries SMTP failure classification.
+type SendError struct {
+	Permanent bool
+	Err       error
+}
+
+func (e *SendError) Error() string { return e.Err.Error() }
+func (e *SendError) Unwrap() error { return e.Err }
+
+// NewHardBounceError builds a permanent send failure.
+func NewHardBounceError(msg string) error {
+	return &SendError{Permanent: true, Err: fmt.Errorf("%w: %s", ErrHardBounce, msg)}
+}
+
+// IsHardBounce reports whether err is a permanent provider rejection.
+func IsHardBounce(err error) bool {
+	if err == nil {
+		return false
+	}
+	var se *SendError
+	if errors.As(err, &se) {
+		return se.Permanent
+	}
+	return false
+}
+
+// smtpCodeRe extracts "550-" / "550 " style reply codes from net/smtp errors.
+var smtpCodeRe = regexp.MustCompile(`(?:^|\s)(\d{3})(?:\s|-)`)
+
+// classifySendError maps raw transport/SMTP failures to SendError. 5xx codes
+// other than transient 552 (storage) are permanent; everything else retries.
+func classifySendError(err error) error {
+	if err == nil {
+		return nil
+	}
+	for _, m := range smtpCodeRe.FindAllStringSubmatch(err.Error(), -1) {
+		switch m[1] {
+		case "552", "554":
+			// Mailbox full / greylisting-style: retryable.
+			continue
+		default:
+			if strings.HasPrefix(m[1], "5") {
+				return &SendError{Permanent: true, Err: fmt.Errorf("%w: %s", ErrHardBounce, err)}
+			}
+		}
+	}
+	return &SendError{Permanent: false, Err: err}
+}
 
 // SMTPMailer delivers email via SMTP (email-only channel for digests).
 type SMTPMailer struct {
@@ -32,6 +89,10 @@ func (m *SMTPMailer) IsConfigured() bool {
 func (m *SMTPMailer) Send(_ context.Context, to, subject, textBody, htmlBody string) error {
 	if !m.IsConfigured() {
 		return fmt.Errorf("smtp not configured")
+	}
+	// Invalid recipient address syntax is a permanent failure (AC8).
+	if _, err := mail.ParseAddress(to); err != nil {
+		return NewHardBounceError(fmt.Sprintf("invalid recipient address %q", to))
 	}
 
 	boundary := fmt.Sprintf("opendoor-%d", time.Now().UnixNano())
@@ -61,5 +122,5 @@ func (m *SMTPMailer) Send(_ context.Context, to, subject, textBody, htmlBody str
 	if m.User != "" {
 		auth = smtp.PlainAuth("", m.User, m.Password, m.Host)
 	}
-	return smtp.SendMail(addr, auth, m.From, []string{to}, []byte(msg))
+	return classifySendError(smtp.SendMail(addr, auth, m.From, []string{to}, []byte(msg)))
 }

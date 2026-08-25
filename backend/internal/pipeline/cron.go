@@ -20,6 +20,11 @@ const (
 	staleHours   = 24
 )
 
+// CRankAlertHook, when set (wired from cmd/server), runs after each snapshot
+// upsert cycle to deliver watchlist C-Rank change alert emails via the real
+// SMTP client. Failures are logged, never fatal to the scoring cron.
+var CRankAlertHook func(db *sqlx.DB)
+
 // repoRow mirrors the repositories table for scanning.
 type repoRow struct {
 	ID                      string    `db:"id"`
@@ -187,6 +192,11 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 	}
 	if err := GenerateStaticSitemaps(db, publicDir); err != nil {
 		slog.Error("cron: sitemap generation failed", "err", err)
+	}
+
+	// Watchlist C-Rank change alerts run at the end of every snapshot cycle.
+	if CRankAlertHook != nil {
+		CRankAlertHook(db)
 	}
 
 	return nil

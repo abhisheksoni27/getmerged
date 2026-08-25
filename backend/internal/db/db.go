@@ -46,6 +46,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			lang_snapshot TEXT NULL,
 			lang_snapshot_at DATETIME NULL,
 			digest_unsubscribed BOOLEAN DEFAULT FALSE,
+			email_invalid BOOLEAN DEFAULT FALSE,
 			referral_code VARCHAR(32) UNIQUE,
 			deleted_at DATETIME,
 			created_at DATETIME NOT NULL,
@@ -208,6 +209,19 @@ func AutoMigrate(db *sqlx.DB) error {
 			updated_at DATETIME NOT NULL,
 			UNIQUE(week_start, user_id)
 		);`, autoInc),
+		`CREATE TABLE IF NOT EXISTS crank_alert_state (
+			user_id INTEGER NOT NULL,
+			repo_id VARCHAR(255) NOT NULL,
+			last_alerted_tier VARCHAR(10) DEFAULT '',
+			last_alerted_score REAL DEFAULT 0,
+			last_alerted_snapshot_date VARCHAR(255) DEFAULT '',
+			last_notified_unix INTEGER NOT NULL DEFAULT 0,
+			rank_hash VARCHAR(64) DEFAULT '',
+			fail_count INTEGER NOT NULL DEFAULT 0,
+			dead_lettered BOOLEAN NOT NULL DEFAULT FALSE,
+			last_failed_hash VARCHAR(64) DEFAULT '',
+			PRIMARY KEY(user_id, repo_id)
+		);`,
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS indexing_queue (
 			id INTEGER PRIMARY KEY %s,
 			full_name VARCHAR(255) UNIQUE NOT NULL,
@@ -438,6 +452,13 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN digest_unsubscribed BOOLEAN DEFAULT FALSE`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN referral_code VARCHAR(32) UNIQUE`)
 	_, _ = db.Exec(`ALTER TABLE user_entitlements ADD COLUMN bonus_evals INTEGER DEFAULT 0`)
+	// C-Rank alert state: rank hash for CAS writes (AC2/AC6), failure cap and
+	// dead-letter flag (AC3), plus watcher e-mail validity suppression (AC8).
+	_, _ = db.Exec(`ALTER TABLE crank_alert_state ADD COLUMN rank_hash VARCHAR(64) DEFAULT ''`)
+	_, _ = db.Exec(`ALTER TABLE crank_alert_state ADD COLUMN fail_count INTEGER NOT NULL DEFAULT 0`)
+	_, _ = db.Exec(`ALTER TABLE crank_alert_state ADD COLUMN dead_lettered BOOLEAN NOT NULL DEFAULT FALSE`)
+	_, _ = db.Exec(`ALTER TABLE crank_alert_state ADD COLUMN last_failed_hash VARCHAR(64) DEFAULT ''`)
+	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN email_invalid BOOLEAN DEFAULT FALSE`)
 	_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_referral_credits_new_user ON referral_credits(new_user_id)`)
 	_, _ = db.Exec(`ALTER TABLE contributor_feedback ADD UNIQUE KEY uq_cf_user_repo (user_id, repository_id)`)
 	_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_cf_user_repo ON contributor_feedback(user_id, repository_id)`)
