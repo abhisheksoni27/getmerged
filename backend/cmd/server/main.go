@@ -21,6 +21,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/claim"
 	"github.com/abhisheksoni27/opendoor/internal/config"
 	"github.com/abhisheksoni27/opendoor/internal/db"
+	"github.com/abhisheksoni27/opendoor/internal/ghapp"
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/handler"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
@@ -88,6 +89,8 @@ func main() {
 	shareCardRepo := repository.NewShareCardRepository(database)
 	claimRepo := repository.NewClaimRepository(database)
 	claimSvc := claim.NewService(database, claimRepo, repoStore, tokenMgr, gh, cfg)
+	ghAppSvc := ghapp.NewService(database, cfg, userRepo, claimRepo, repoStore, aiRepo)
+	defer ghAppSvc.Stop()
 
 	// Start continuous background crawler worker loop
 	gfiRepo := repository.NewGFIRepository(database)
@@ -134,6 +137,10 @@ func main() {
 	// all claims; failures lapse the claim (7-day grace) before release.
 	stopClaimCron := startClaimReverifyCron(claimSvc)
 	defer stopClaimCron()
+
+	// GitHub App daily org claim re-verification (AC3) & nightly sweep (AC2)
+	stopGhAppCron := startGhAppDailyCron(ghAppSvc)
+	defer stopGhAppCron()
 
 	gin.SetMode(cfg.GinMode)
 	r := gin.New()
@@ -205,6 +212,7 @@ func main() {
 		api.POST("/preflight/evaluate", middleware.RequireProOrQuota(entitlementRepo), handler.EvaluatePreflightHandler(gh))
 		api.POST("/preflight/pr-details", handler.FetchPRDetailsHandler(gh))
 		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo))
+		api.POST("/webhooks/github-app", handler.GithubAppWebhookHandler(ghAppSvc))
 		api.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
 		api.GET("/repos/:id/claim-status", handler.GetPublicClaimStatusHandler(claimRepo))
 
@@ -379,3 +387,50 @@ func startClaimReverifyCron(claimSvc *claim.Service) func() {
 
 	return func() { close(stop) }
 }
+
+// startGhAppDailyCron runs daily org claim re-verification (AC3) and nightly sweep repair (AC2).
+func startGhAppDailyCron(ghAppSvc *ghapp.Service) func() {
+	stop := make(chan struct{})
+	if ghAppSvc == nil || !ghAppSvc.Enabled() {
+		return func() {}
+	}
+	run := func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+		defer cancel()
+		verified, revoked, err := ghAppSvc.ReverifyOrgClaims(ctx)
+		if err != nil {
+			slog.Error("daily ghapp org re-verification failed", "err", err)
+		} else if verified > 0 || revoked > 0 {
+			slog.Info("daily ghapp org re-verification done", "verified", verified, "revoked", revoked)
+		}
+
+		cleaned, sweepErr := ghAppSvc.NightlySweepCommentCheck(ctx)
+		if sweepErr != nil {
+			slog.Error("nightly ghapp comment sweep failed", "err", sweepErr)
+		} else if cleaned > 0 {
+			slog.Info("nightly ghapp comment sweep done", "repaired_count", cleaned)
+		}
+	}
+
+	go func() {
+		ticker := time.NewTicker(24 * time.Hour)
+		defer ticker.Stop()
+		select {
+		case <-stop:
+			return
+		case <-time.After(2 * time.Minute):
+			run()
+		}
+		for {
+			select {
+			case <-stop:
+				return
+			case <-ticker.C:
+				run()
+			}
+		}
+	}()
+
+	return func() { close(stop) }
+}
+

@@ -38,6 +38,10 @@ type Config struct {
 	SMTPPassword              string
 	SMTPFrom                  string
 	AppBaseURL                string
+	GithubAppID                string
+	GithubAppPrivateKey        string
+	GithubAppWebhookSecret     string
+	GithubAppDailyCommentBudget int
 	DiscoveryIntervalMinutes  int
 	DiscoveryMaxNewPerRun     int
 	SnapshotRetentionDays     int
@@ -69,9 +73,16 @@ func Load() (*Config, error) {
 		SMTPPassword:              os.Getenv("SMTP_PASSWORD"),
 		SMTPFrom:                  os.Getenv("SMTP_FROM"),
 		AppBaseURL:                os.Getenv("APP_BASE_URL"),
+		GithubAppID:               os.Getenv("GITHUB_APP_ID"),
+		GithubAppPrivateKey:       os.Getenv("GITHUB_APP_PRIVATE_KEY"),
+		GithubAppWebhookSecret:    os.Getenv("GITHUB_APP_WEBHOOK_SECRET"),
 	}
 	if c.LogFile == "" {
 		c.LogFile = "opendoor.log"
+	}
+	c.GithubAppDailyCommentBudget, _ = strconv.Atoi(os.Getenv("GITHUB_APP_DAILY_COMMENT_BUDGET"))
+	if c.GithubAppDailyCommentBudget <= 0 {
+		c.GithubAppDailyCommentBudget = 50
 	}
 	if c.SMTPHost != "" && c.SMTPPort == "" {
 		c.SMTPPort = "587"
