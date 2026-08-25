@@ -47,14 +47,10 @@ export function MaintainerConsoleModal({
   const [claimData, setClaimData] = useState<ClaimInitiateResponse | null>(null);
   const [consoleData, setConsoleData] = useState<MaintainerConsolePayload | null>(null);
 
-  const parts = fullName.split("/");
-  const owner = parts[0] || "";
-  const name = parts[1] || "";
-
   const fetchConsole = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/repos/${owner}/${name}/console`, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/console`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -68,14 +64,14 @@ export function MaintainerConsoleModal({
     } finally {
       setLoading(false);
     }
-  }, [owner, name]);
+  }, [fullName]);
 
   const initiateClaim = useCallback(async () => {
     setLoading(true);
     setError(null);
     setConflict(false);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/repos/${owner}/${name}/claim`, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/claim`, {
         method: "POST",
         credentials: "include",
       });
@@ -96,13 +92,13 @@ export function MaintainerConsoleModal({
     } finally {
       setLoading(false);
     }
-  }, [owner, name, fetchConsole, onVerificationSuccess]);
+  }, [fullName, fetchConsole, onVerificationSuccess]);
 
   const fileDispute = async () => {
     setDisputing(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/repos/${owner}/${name}/claim-dispute`, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/claim-dispute`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -134,7 +130,7 @@ export function MaintainerConsoleModal({
     setVerifying(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/repos/${owner}/${name}/verify`, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/verify`, {
         method: "POST",
         credentials: "include",
       });

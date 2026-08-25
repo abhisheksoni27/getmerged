@@ -200,7 +200,7 @@ func main() {
 		api.POST("/preflight/pr-details", handler.FetchPRDetailsHandler(gh))
 		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo))
 		api.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
-		api.GET("/repos/:owner/:name/claim-status", handler.GetPublicClaimStatusHandler(claimRepo))
+		api.GET("/repos/:id/claim-status", handler.GetPublicClaimStatusHandler(claimRepo))
 
 		// Auth Routes
 		authGroup := api.Group("/auth")
@@ -227,10 +227,10 @@ func main() {
 		userApi.GET("/user/referral", handler.GetMyReferral(entitlementRepo))
 
 		// Maintainer Claims & C-Rank Console (AC1, AC2, AC3, AC6, AC8)
-		userApi.POST("/repos/:owner/:name/claim", handler.PostClaimRepoHandler(claimSvc))
-		userApi.POST("/repos/:owner/:name/verify", handler.PostVerifyRepoHandler(claimSvc))
-		userApi.GET("/repos/:owner/:name/console", handler.GetMaintainerConsoleHandler(claimSvc))
-		userApi.POST("/repos/:owner/:name/claim-dispute", handler.PostClaimDisputeHandler(claimRepo))
+		userApi.POST("/repos/:id/claim", handler.PostClaimRepoHandler(claimSvc))
+		userApi.POST("/repos/:id/verify", handler.PostVerifyRepoHandler(claimSvc))
+		userApi.GET("/repos/:id/console", handler.GetMaintainerConsoleHandler(claimSvc))
+		userApi.POST("/repos/:id/claim-dispute", handler.PostClaimDisputeHandler(claimRepo))
 		userApi.GET("/user/claims", handler.GetUserClaimsListHandler(claimRepo))
 
 		// Top-level aliases for direct paths (AC1)
