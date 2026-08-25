@@ -7,6 +7,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/WebAssembly/wasi-sdk</loc>
+    <lastmod>2026-08-25T08:45:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/vixcpp/vix</loc>
     <lastmod>2026-08-20T03:44:40Z</lastmod>
     <changefreq>daily</changefreq>

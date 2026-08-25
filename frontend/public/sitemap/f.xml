@@ -43,6 +43,42 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/razzmatazz/csharp-language-server</loc>
+    <lastmod>2026-08-25T10:41:14Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ionide/ionide-vscode-fsharp</loc>
+    <lastmod>2026-08-25T10:41:14Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fsprojects/FSharp.Data</loc>
+    <lastmod>2026-08-25T10:41:14Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fsprojects/fantomas</loc>
+    <lastmod>2026-08-25T10:41:14Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/dotnet/performance</loc>
+    <lastmod>2026-08-25T10:41:14Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ScottArbeit/Grace</loc>
+    <lastmod>2026-08-25T10:41:14Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/fsprojects/FSharp.Formatting</loc>
     <lastmod>2026-08-22T20:54:38Z</lastmod>
     <changefreq>daily</changefreq>

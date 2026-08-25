@@ -31,6 +31,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/nginx/ansible-role-nginx</loc>
+    <lastmod>2026-08-25T12:47:13Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/konstruktoid/ansible-role-hardening</loc>
+    <lastmod>2026-08-25T12:47:13Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/open-telemetry/semantic-conventions</loc>
     <lastmod>2026-08-21T14:54:49Z</lastmod>
     <changefreq>daily</changefreq>
@@ -133,13 +145,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/zimmertr/Kubernetes-Manifests</loc>
+    <loc>https://getmerged.abhishekco.de/archlinux/infrastructure</loc>
     <lastmod>2026-08-22T21:27:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/archlinux/infrastructure</loc>
+    <loc>https://getmerged.abhishekco.de/zimmertr/Kubernetes-Manifests</loc>
     <lastmod>2026-08-22T21:27:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
