@@ -24,6 +24,17 @@ var badgeTierColors = map[string]string{
 	"unranked": "#9ca3af",
 }
 
+// badgeTierVerdicts maps tiers to plain-English contributor-facing phrases
+// (the raw letter grade alone means nothing to someone who has never seen C-Rank).
+var badgeTierVerdicts = map[string]string{
+	"S":        "super welcoming",
+	"A":        "very welcoming",
+	"B":        "welcoming",
+	"C":        "selective",
+	"D":        "hard going",
+	"unranked": "unranked",
+}
+
 // badgeSegmentRe validates owner/repo path segments before lookup (AC2).
 // Dots are allowed (e.g. ".github"); anything else, including "/" from %2F,
 // is rejected.
@@ -61,7 +72,7 @@ var liveBadgeTemplate = template.Must(template.New("liveBadge").Parse(
 <text x="{{.LabelX}}" y="14">{{.Label}}</text>
 <text x="{{.MsgX}}" y="14">{{.Message}}</text>
 </g>
-{{if .Link}}</a>{{end}}</svg>`))
+</svg>{{if .Link}}</a>{{end}}`))
 
 // renderLiveBadge executes liveBadgeTemplate. Widths are estimated at ~7px
 // per character (Verdana semibold, 11px).
@@ -122,7 +133,7 @@ func GetLiveBadgeSVG(repoStore repository.RepoRepository, appBaseURL string) gin
 	return func(c *gin.Context) {
 		owner, name := c.Param("owner"), c.Param("repo")
 		if !badgeSegmentRe.MatchString(owner) || !badgeSegmentRe.MatchString(name) {
-			writeBadgeSVG(c, http.StatusNotFound, "C-Rank\u2122", "unranked", badgeTierColors["unranked"], "")
+			writeBadgeSVG(c, http.StatusNotFound, "GetMerged", "unranked", badgeTierColors["unranked"], "")
 			return
 		}
 		fullName := strings.ToLower(owner) + "/" + strings.ToLower(name)
@@ -144,17 +155,21 @@ func GetLiveBadgeSVG(repoStore repository.RepoRepository, appBaseURL string) gin
 			prLabel = d
 		}
 
-		message := "unranked | median PR: n/a"
+		message := "unranked"
 		color := badgeTierColors["unranked"]
 		if tier != "" {
 			if tc, ok := badgeTierColors[tier]; ok {
 				color = tc
 			}
-			message = tier + " | median PR: " + prLabel
+			verdict := badgeTierVerdicts[tier]
+			if verdict == "" {
+				verdict = tier
+			}
+			message = verdict + " · median PR: " + prLabel
 		}
 
 		reportURL := strings.TrimSuffix(appBaseURL, "/") + "/" + fullName
-		writeBadgeSVG(c, http.StatusOK, "C-Rank\u2122", message, color, reportURL)
+		writeBadgeSVG(c, http.StatusOK, "GetMerged", message, color, reportURL)
 	}
 }
 
