@@ -32,7 +32,13 @@ type RawPREvent struct {
 
 type RawCommentEvent struct {
 	RepositoryID string    `db:"repository_id"`
+	AuthorLogin  string    `db:"author_login"`
 	CreatedAt    time.Time `db:"created_at"`
+}
+
+type commentMeta struct {
+	login     string
+	createdAt time.Time
 }
 
 func main() {
@@ -95,7 +101,7 @@ func main() {
 
 	var commentEvents []RawCommentEvent
 	err = database.Select(&commentEvents, `
-		SELECT repository_id, created_at
+		SELECT repository_id, author_login, created_at
 		FROM repo_raw_comments
 		WHERE created_at >= DATE_SUB(NOW(), INTERVAL 180 DAY)
 	`)
@@ -105,9 +111,9 @@ func main() {
 	log.Printf("Loaded %d comment events in %v", len(commentEvents), time.Since(commentStart))
 
 	// Step 4: Index comments in Go memory by repository_id
-	repoComments := make(map[string][]time.Time, len(repos))
+	repoComments := make(map[string][]commentMeta, len(repos))
 	for _, c := range commentEvents {
-		repoComments[c.RepositoryID] = append(repoComments[c.RepositoryID], c.CreatedAt)
+		repoComments[c.RepositoryID] = append(repoComments[c.RepositoryID], commentMeta{login: c.AuthorLogin, createdAt: c.CreatedAt})
 	}
 
 	// Step 5: Group PR events by repo -> PR in Go memory
@@ -199,15 +205,19 @@ func main() {
 						pr.State = "OPEN"
 					}
 
-					// Find earliest comment within 30 days of PR open
+					// Find earliest comment within 30 days of PR open + collect comment authors
 					var firstComment *time.Time
 					limit30d := pa.openedAt.Add(30 * 24 * time.Hour)
-					for _, cTime := range comments {
-						if cTime.After(pa.openedAt) && cTime.Before(limit30d) {
-							if firstComment == nil || cTime.Before(*firstComment) {
-								tCopy := cTime
+					for _, cm := range comments {
+						if cm.createdAt.After(pa.openedAt) && cm.createdAt.Before(limit30d) {
+							if firstComment == nil || cm.createdAt.Before(*firstComment) {
+								tCopy := cm.createdAt
 								firstComment = &tCopy
 							}
+						}
+						inWindow := cm.createdAt.After(pa.openedAt) && (pa.closedAt == nil || cm.createdAt.Before(*pa.closedAt))
+						if inWindow && cm.login != pa.actorLogin && cm.login != "" {
+							pr.CommentAuthors = append(pr.CommentAuthors, cm.login)
 						}
 					}
 					pr.FirstCommentAt = firstComment
