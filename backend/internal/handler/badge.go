@@ -1,14 +1,162 @@
 package handler
 
 import (
+	"bytes"
 	"database/sql"
 	"fmt"
+	"html/template"
 	"net/http"
 	"net/url"
+	"regexp"
+	"strings"
 
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
 )
+
+// badgeTierColors maps C-Rank tiers to badge fill colors (hex).
+var badgeTierColors = map[string]string{
+	"S":        "#059669",
+	"A":        "#16a34a",
+	"B":        "#d97706",
+	"C":        "#ea580c",
+	"D":        "#dc2626",
+	"unranked": "#9ca3af",
+}
+
+// badgeSegmentRe validates owner/repo path segments before lookup (AC2).
+// Dots are allowed (e.g. ".github"); anything else, including "/" from %2F,
+// is rejected.
+var badgeSegmentRe = regexp.MustCompile(`^[A-Za-z0-9._-]{1,100}$`)
+
+// liveBadgeData feeds liveBadgeTemplate. All free-text fields (Label,
+// Message, Link) flow through template actions so html/template
+// XML-escapes them automatically (AC1: no string concatenation of text).
+type liveBadgeData struct {
+	Total, LabelW, MsgW int
+	LabelX, MsgX        float64
+	Label, Message      string
+	Color               string
+	Link                string
+}
+
+// liveBadgeTemplate renders a shields.io-style flat two-segment badge.
+// When Link is non-empty the SVG is wrapped in an anchor pointing at the
+// public report card. Parsed once at init; html/template escapes all
+// dynamic values (AC1).
+var liveBadgeTemplate = template.Must(template.New("liveBadge").Parse(
+	`{{if .Link}}<a href="{{.Link}}" target="_blank" rel="noopener">{{end}}` +
+		`<svg xmlns="http://www.w3.org/2000/svg" width="{{.Total}}" height="20" role="img" aria-label="{{.Label}}: {{.Message}}">
+<title>{{.Label}}: {{.Message}}</title>
+<defs>
+<linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient>
+<clipPath id="r"><rect width="{{.Total}}" height="20" rx="3" fill="#fff"/></clipPath>
+</defs>
+<g clip-path="url(#r)">
+<rect width="{{.Total}}" height="20" fill="#555"/>
+<rect x="{{.LabelW}}" width="{{.MsgW}}" height="20" fill="{{.Color}}"/>
+<rect width="{{.Total}}" height="20" fill="url(#s)"/>
+</g>
+<g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11" font-weight="600" text-rendering="geometricPrecision">
+<text x="{{.LabelX}}" y="14">{{.Label}}</text>
+<text x="{{.MsgX}}" y="14">{{.Message}}</text>
+</g>
+{{if .Link}}</a>{{end}}</svg>`))
+
+// renderLiveBadge executes liveBadgeTemplate. Widths are estimated at ~7px
+// per character (Verdana semibold, 11px).
+func renderLiveBadge(label, message, color, link string) (string, error) {
+	labelW := len([]rune(label))*7 + 18
+	msgW := len([]rune(message))*7 + 18
+	var buf bytes.Buffer
+	err := liveBadgeTemplate.Execute(&buf, liveBadgeData{
+		Total:  labelW + msgW,
+		LabelW: labelW,
+		MsgW:   msgW,
+		LabelX: float64(labelW) / 2,
+		MsgX:   float64(labelW) + float64(msgW)/2,
+		Label:  label,
+		Message: message,
+		Color:  color,
+		Link:   link,
+	})
+	return buf.String(), err
+}
+
+// writeBadgeSVG writes the rendered SVG with the exact AC3 headers.
+func writeBadgeSVG(c *gin.Context, status int, label, message, color, link string) {
+	svg, err := renderLiveBadge(label, message, color, link)
+	if err != nil {
+		// Template execution must never surface a 500 (AC4): fall back to a
+		// minimal static neutral SVG.
+		svg = `<svg xmlns="http://www.w3.org/2000/svg" width="132" height="20" role="img" aria-label="C-Rank™: unranked"><title>C-Rank™: unranked</title><rect width="132" height="20" fill="#9ca3af"/><text x="66" y="14" fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11" font-weight="600">C-Rank™: unranked</text></svg>`
+	}
+	c.Header("Content-Type", "image/svg+xml")
+	c.Header("Cache-Control", "public, max-age=300, s-maxage=300")
+	c.String(status, "%s", svg)
+}
+
+// formatBadgeHours formats median PR response hours for badge display
+// (e.g. "42m", "4.2h", "3d"). Returns "" when there is no data.
+func formatBadgeHours(hours float64) string {
+	switch {
+	case hours <= 0:
+		return ""
+	case hours < 1:
+		return fmt.Sprintf("%dm", int(hours*60+0.5))
+	case hours < 48:
+		return fmt.Sprintf("%.1fh", hours)
+	default:
+		return fmt.Sprintf("%.1fd", hours/24)
+	}
+}
+
+// GetLiveBadgeSVG handles GET /api/badge/:owner/:repo (AC1): serves a live
+// shields-style SVG showing the verified C-Rank grade and median PR
+// response time directly (no third-party redirect), with a 5-minute CDN
+// cache. Owner/repo are validated and lowercased before a canonical
+// case-insensitive lookup (AC2). Unknown/unscored repos get a neutral gray
+// fallback SVG, never an error page (AC4). Embedded links point at the
+// public report card page.
+func GetLiveBadgeSVG(repoStore repository.RepoRepository, appBaseURL string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		owner, name := c.Param("owner"), c.Param("repo")
+		if !badgeSegmentRe.MatchString(owner) || !badgeSegmentRe.MatchString(name) {
+			writeBadgeSVG(c, http.StatusNotFound, "C-Rank\u2122", "unranked", badgeTierColors["unranked"], "")
+			return
+		}
+		fullName := strings.ToLower(owner) + "/" + strings.ToLower(name)
+
+		tier := ""
+		var respHours float64
+		repo, err := repoStore.FindByIDOrName(c.Request.Context(), fullName)
+		if err == nil && repo != nil && repo.IsScored && repo.CRankTier != "" {
+			tier = repo.CRankTier
+			respHours = repo.ResponseP50Hours
+			if respHours <= 0 {
+				respHours = repo.TimeToFirstResponseHours
+			}
+			fullName = repo.FullName // canonical case for the report link
+		}
+
+		prLabel := "n/a"
+		if d := formatBadgeHours(respHours); d != "" {
+			prLabel = d
+		}
+
+		message := "unranked | median PR: n/a"
+		color := badgeTierColors["unranked"]
+		if tier != "" {
+			if tc, ok := badgeTierColors[tier]; ok {
+				color = tc
+			}
+			message = tier + " | median PR: " + prLabel
+		}
+
+		reportURL := strings.TrimSuffix(appBaseURL, "/") + "/" + fullName
+		writeBadgeSVG(c, http.StatusOK, "C-Rank\u2122", message, color, reportURL)
+	}
+}
 
 type ShieldsBadgeResponse struct {
 	SchemaVersion int    `json:"schemaVersion"`
