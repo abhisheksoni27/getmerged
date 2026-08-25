@@ -362,8 +362,7 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 }
 
 func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) {
-	// Aggregate events per PR: opened event_at = CreatedAt, any 'closed'/'merged' = MergedAt,
-	// first comment from repo_raw_comments joined by repo+time proximity.
+	// Aggregate events per PR: opened event_at = CreatedAt, any 'closed'/'merged' = MergedAt
 	cutoff := fmt.Sprintf("DATE_SUB(NOW(), INTERVAL %d DAY)", days)
 	rows, err := db.Query(fmt.Sprintf(`
 		SELECT
@@ -371,15 +370,7 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 			MIN(CASE WHEN e.action = 'opened' THEN e.event_at END) AS opened_at,
 			MIN(CASE WHEN e.action IN ('closed','merged') THEN e.event_at END) AS closed_at,
 			MAX(CASE WHEN e.action = 'merged' THEN 1 ELSE 0 END) AS was_merged,
-			MIN(e.actor_login) AS actor_login,
-			(
-				SELECT MIN(c.created_at)
-				FROM repo_raw_comments c
-				WHERE c.repository_id = e.repository_id
-				  AND c.created_at > MIN(CASE WHEN e.action = 'opened' THEN e.event_at END)
-				  AND c.created_at < DATE_ADD(MIN(CASE WHEN e.action = 'opened' THEN e.event_at END), INTERVAL 30 DAY)
-				LIMIT 1
-			) AS first_comment_at
+			MIN(e.actor_login) AS actor_login
 		FROM repo_pr_events e
 		WHERE e.repository_id = ?
 		  AND e.event_at >= %s
@@ -395,10 +386,10 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 	var windows []struct{ open, close time.Time }
 	for rows.Next() {
 		var prNumber int
-		var openedAt, closedAt, firstCommentAt sql.NullTime
+		var openedAt, closedAt sql.NullTime
 		var wasMerged int
 		var actorLogin string
-		if err := rows.Scan(&prNumber, &openedAt, &closedAt, &wasMerged, &actorLogin, &firstCommentAt); err != nil {
+		if err := rows.Scan(&prNumber, &openedAt, &closedAt, &wasMerged, &actorLogin); err != nil {
 			return nil, err
 		}
 
@@ -418,11 +409,6 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 			pr.State = "CLOSED"
 		} else {
 			pr.State = "OPEN"
-		}
-
-		if firstCommentAt.Valid {
-			firstCommentAtTime := firstCommentAt.Time
-			pr.FirstCommentAt = &firstCommentAtTime
 		}
 
 		windows = append(windows, struct{ open, close time.Time }{openedAt.Time, closedAt.Time})
