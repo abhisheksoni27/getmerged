@@ -43,6 +43,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/emacs-eask/cli</loc>
+    <lastmod>2026-08-25T10:32:13Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/rswgnu/hyperbole</loc>
     <lastmod>2026-08-18T05:52:04Z</lastmod>
     <changefreq>daily</changefreq>

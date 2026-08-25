@@ -19,6 +19,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/ebitengine/purego</loc>
+    <lastmod>2026-08-25T07:46:29Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/0xAX/asm</loc>
+    <lastmod>2026-08-25T07:46:29Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/netwide-assembler/nasm</loc>
     <lastmod>2026-08-20T10:08:40Z</lastmod>
     <changefreq>daily</changefreq>
@@ -37,6 +49,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/apple/swift-crypto</loc>
+    <lastmod>2026-08-25T07:46:29Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/Rangi42/polishedcrystal</loc>
     <lastmod>2026-08-20T10:08:40Z</lastmod>
     <changefreq>daily</changefreq>
@@ -45,6 +63,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/z88dk/z88dk</loc>
     <lastmod>2026-08-20T05:20:53Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/espressif/esp-dl</loc>
+    <lastmod>2026-08-25T07:46:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -343,14 +367,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/LLONSIT/Wave-Race-64</loc>
-    <lastmod>2026-08-19T15:57:28Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/pq-code-package/mldsa-native</loc>
+    <lastmod>2026-08-20T16:53:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/pq-code-package/mldsa-native</loc>
-    <lastmod>2026-08-20T16:53:40Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/LLONSIT/Wave-Race-64</loc>
+    <lastmod>2026-08-19T15:57:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
