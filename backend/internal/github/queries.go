@@ -215,6 +215,21 @@ query RepoGfiCount($query: String!) {
 }
 `
 
+// IssueStateQuery fetches the live state and assignee count of one issue.
+// Cost is 1 point; used for send-time revalidation of queued alert items.
+const IssueStateQuery = `
+query IssueState($owner: String!, $name: String!, $number: Int!) {
+  repository(owner: $owner, name: $name) {
+    issue(number: $number) {
+      state
+      assignees(first: 1) {
+        totalCount
+      }
+    }
+  }
+}
+`
+
 // RepoGfiListQuery returns up to $first open issues matching beginner friendly search query,
 // including issue bodyText (0 extra rate-limit cost since it's in the same single GraphQL node request).
 const RepoGfiListQuery = `

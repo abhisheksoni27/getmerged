@@ -19,8 +19,9 @@ var ErrHardBounce = errors.New("hard bounce")
 
 // SendError carries SMTP failure classification.
 type SendError struct {
-	Permanent bool
-	Err       error
+	Permanent   bool
+	RateLimited bool
+	Err         error
 }
 
 func (e *SendError) Error() string { return e.Err.Error() }
@@ -43,27 +44,46 @@ func IsHardBounce(err error) bool {
 	return false
 }
 
+// IsRateLimited reports whether err is a provider throttle (AC6): the queue
+// pauses and resumes with backoff instead of burning send attempts.
+func IsRateLimited(err error) bool {
+	if err == nil {
+		return false
+	}
+	var se *SendError
+	return errors.As(err, &se) && se.RateLimited
+}
+
+// smtpRateLimitCodes are transient throttle replies that pause the queue.
+var smtpRateLimitCodes = map[string]bool{"421": true, "429": true, "450": true, "451": true, "452": true}
+
 // smtpCodeRe extracts "550-" / "550 " style reply codes from net/smtp errors.
 var smtpCodeRe = regexp.MustCompile(`(?:^|\s)(\d{3})(?:\s|-)`)
 
 // classifySendError maps raw transport/SMTP failures to SendError. 5xx codes
-// other than transient 552 (storage) are permanent; everything else retries.
+// other than transient 552 (storage) are permanent; 421/429/45x throttles set
+// RateLimited; everything else retries as a soft failure.
 func classifySendError(err error) error {
 	if err == nil {
 		return nil
 	}
+	rateLimited := false
 	for _, m := range smtpCodeRe.FindAllStringSubmatch(err.Error(), -1) {
 		switch m[1] {
 		case "552", "554":
 			// Mailbox full / greylisting-style: retryable.
 			continue
 		default:
+			if smtpRateLimitCodes[m[1]] {
+				rateLimited = true
+				continue
+			}
 			if strings.HasPrefix(m[1], "5") {
 				return &SendError{Permanent: true, Err: fmt.Errorf("%w: %s", ErrHardBounce, err)}
 			}
 		}
 	}
-	return &SendError{Permanent: false, Err: err}
+	return &SendError{RateLimited: rateLimited, Permanent: false, Err: err}
 }
 
 // SMTPMailer delivers email via SMTP (email-only channel for digests).
@@ -86,7 +106,13 @@ func (m *SMTPMailer) IsConfigured() bool {
 }
 
 // Send delivers a multipart/alternative (text + HTML) email message.
-func (m *SMTPMailer) Send(_ context.Context, to, subject, textBody, htmlBody string) error {
+func (m *SMTPMailer) Send(ctx context.Context, to, subject, textBody, htmlBody string) error {
+	return m.SendWithHeaders(ctx, to, subject, textBody, htmlBody, nil)
+}
+
+// SendWithHeaders delivers like Send but injects extra RFC 5322 headers
+// (AC1: List-Unsubscribe + List-Unsubscribe-Post for one-click opt-out).
+func (m *SMTPMailer) SendWithHeaders(_ context.Context, to, subject, textBody, htmlBody string, headers map[string]string) error {
 	if !m.IsConfigured() {
 		return fmt.Errorf("smtp not configured")
 	}
@@ -102,7 +128,16 @@ func (m *SMTPMailer) Send(_ context.Context, to, subject, textBody, htmlBody str
 		"Subject: " + subject,
 		"MIME-Version: 1.0",
 		fmt.Sprintf(`Content-Type: multipart/alternative; boundary="%s"`, boundary),
-		"",
+	}, "\r\n")
+	for k, v := range headers {
+		k = strings.TrimSpace(k)
+		v = strings.TrimSpace(v)
+		if k == "" || v == "" || strings.ContainsAny(k, ": \r\n") || strings.ContainsAny(v, "\r\n") {
+			continue // never inject header-splitting content
+		}
+		msg += "\r\n" + k + ": " + v
+	}
+	msg += "\r\n\r\n" + strings.Join([]string{
 		"--" + boundary,
 		"Content-Type: text/plain; charset=UTF-8",
 		"Content-Transfer-Encoding: 8bit",

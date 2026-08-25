@@ -16,7 +16,6 @@ func TestLiveBadgeACs(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	database := setupBadgeTestDB(t)
 	defer database.Close()
-	database.MustExec(`ALTER TABLE latest_snapshots ADD COLUMN score_source TEXT DEFAULT 'computed'`)
 
 	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('b1', 'Gin-Gonic/Gin', 'gin-gonic', 'gin', 'Go', 1, ?)`, time.Now())
 	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, response_p50_hours, updated_at) VALUES ('b1', '2026-01-01', 'A', 90.0, 4.25, ?)`, time.Now())

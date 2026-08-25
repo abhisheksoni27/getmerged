@@ -317,6 +317,11 @@ func AutoMigrate(db *sqlx.DB) error {
 			quality_score INTEGER DEFAULT 0,
 			created_at DATETIME NOT NULL,
 			synced_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			alert_dedup_key VARCHAR(128) NOT NULL DEFAULT '',
+			alert_content_hash VARCHAR(64) NOT NULL DEFAULT '',
+			alert_refresh_fired_at DATETIME NULL,
+			issue_updated_at DATETIME NULL,
+			alert_last_updated_at DATETIME NULL,
 			UNIQUE(repository_id, issue_number)
 		);`, autoInc),
 		`CREATE TABLE IF NOT EXISTS repository_topics (
@@ -495,8 +500,10 @@ func AutoMigrate(db *sqlx.DB) error {
 			frequency VARCHAR(16) NOT NULL DEFAULT 'weekly',
 			verified_at DATETIME NULL,
 			unsubscribed_at DATETIME NULL,
+			opt_out BOOLEAN NOT NULL DEFAULT FALSE,
 			disabled BOOLEAN NOT NULL DEFAULT FALSE,
 			hard_bounces INTEGER NOT NULL DEFAULT 0,
+			soft_bounces INTEGER NOT NULL DEFAULT 0,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`, autoInc),
@@ -506,16 +513,99 @@ func AutoMigrate(db *sqlx.DB) error {
 			idempotency_key VARCHAR(255) UNIQUE NOT NULL,
 			repo_id VARCHAR(255) NOT NULL,
 			issue_number INTEGER NOT NULL,
+			delivery_mode VARCHAR(16) NOT NULL DEFAULT 'instant',
 			status VARCHAR(20) NOT NULL DEFAULT 'pending',
 			attempts INTEGER NOT NULL DEFAULT 0,
 			last_error TEXT NULL,
+			next_attempt_at DATETIME NULL,
+			claimed_at DATETIME NULL,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			sent_at DATETIME NULL
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS email_suppressions (
+			id INTEGER PRIMARY KEY %s,
+			email VARCHAR(255) UNIQUE NOT NULL,
+			reason VARCHAR(32) NOT NULL DEFAULT 'hard_bounce',
+			source VARCHAR(32) NOT NULL DEFAULT '',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`, autoInc),
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS gfi_signup_attempts (
 			id INTEGER PRIMARY KEY %s,
 			ip VARCHAR(64) NOT NULL,
 			email VARCHAR(255) NOT NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS gfi_endpoint_rate_limits (
+			id INTEGER PRIMARY KEY %s,
+			ip VARCHAR(64) NOT NULL,
+			endpoint VARCHAR(32) NOT NULL DEFAULT '',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
+		`CREATE TABLE IF NOT EXISTS gfi_daily_send_counts (
+			subscriber_id INTEGER NOT NULL,
+			day VARCHAR(10) NOT NULL,
+			email_count INTEGER NOT NULL DEFAULT 0,
+			PRIMARY KEY (subscriber_id, day)
+		);`,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS user_alert_prefs (
+			user_id INTEGER PRIMARY KEY,
+			languages TEXT NULL,
+			tech_stacks TEXT NULL,
+			tiers VARCHAR(20) NULL,
+			frequency VARCHAR(16) NOT NULL DEFAULT 'weekly',
+			unsubscribed_at DATETIME NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS gfi_notification_log (
+			id INTEGER PRIMARY KEY %s,
+			user_id INTEGER NOT NULL,
+			issue_key VARCHAR(300) NOT NULL,
+			repo_id VARCHAR(255) NOT NULL DEFAULT '',
+			issue_number INTEGER NOT NULL DEFAULT 0,
+			source VARCHAR(16) NOT NULL DEFAULT 'digest',
+			status VARCHAR(20) NOT NULL DEFAULT 'pending',
+			attempts INTEGER NOT NULL DEFAULT 0,
+			next_attempt_at DATETIME NULL,
+			claimed_at DATETIME NULL,
+			cycle_key VARCHAR(20) NOT NULL DEFAULT '',
+			notified_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(user_id, issue_key)
+		);`, autoInc),
+		`CREATE TABLE IF NOT EXISTS gfi_digest_watermark (
+			watermark_key VARCHAR(50) PRIMARY KEY,
+			last_issue_opened_at DATETIME NOT NULL,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS email_suppression_events (
+			id INTEGER PRIMARY KEY %s,
+			event_id VARCHAR(255) UNIQUE NOT NULL,
+			email VARCHAR(255) NOT NULL DEFAULT '',
+			event_type VARCHAR(32) NOT NULL DEFAULT 'bounce',
+			provider VARCHAR(32) NOT NULL DEFAULT '',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
+		`CREATE TABLE IF NOT EXISTS gfi_digest_send_cursor (
+			cursor_key VARCHAR(64) PRIMARY KEY,
+			last_user_id INTEGER NOT NULL DEFAULT 0,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
+		// AC7: portable advisory locks — one row per job name, owner token
+		// + expiry so overlapping cron runs no-op and stale locks expire.
+		`CREATE TABLE IF NOT EXISTS job_locks (
+			name VARCHAR(64) PRIMARY KEY,
+			owner VARCHAR(64) NOT NULL DEFAULT '',
+			locked_until DATETIME NOT NULL
+		);`,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS gfi_claim_links (
+			id INTEGER PRIMARY KEY %s,
+			token_hash CHAR(64) UNIQUE NOT NULL,
+			subscriber_id INTEGER NOT NULL,
+			repo_id VARCHAR(255) NOT NULL,
+			full_name VARCHAR(255) NOT NULL DEFAULT '',
+			issue_number INTEGER NOT NULL DEFAULT 0,
+			expires_at DATETIME NOT NULL,
+			consumed_at DATETIME NULL,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`, autoInc),
 	}
@@ -556,7 +646,19 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_repo_claims_repo_state ON repo_claims(repo_id, state)`,
 		`CREATE INDEX IF NOT EXISTS idx_gfi_email_queue_pending ON gfi_email_queue(status, created_at)`,
 		`CREATE INDEX IF NOT EXISTS idx_gfi_email_queue_sub ON gfi_email_queue(subscriber_id, repo_id, issue_number)`,
+		`CREATE INDEX IF NOT EXISTS idx_job_locks_expiry ON job_locks(locked_until)`,
 		`CREATE INDEX IF NOT EXISTS idx_gfi_signup_attempts_lookup ON gfi_signup_attempts(ip, email, created_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_gfi_endpoint_rate_limits_lookup ON gfi_endpoint_rate_limits(ip, endpoint, created_at)`,
+		// AC10: indexed match phase — repos joined to prefs per language/tier
+		// bucket instead of per-user scans.
+		`CREATE INDEX IF NOT EXISTS idx_repositories_language_id ON repositories(language, id)`,
+		`CREATE INDEX IF NOT EXISTS idx_latest_snapshots_tier_repo ON latest_snapshots(c_rank_tier, repository_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_gfi_created_at ON repo_good_first_issues(created_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_gfi_alert_dedup ON repo_good_first_issues(alert_dedup_key)`,
+		`CREATE INDEX IF NOT EXISTS idx_gfi_notification_log_pending ON gfi_notification_log(status, next_attempt_at, user_id)`,
+		// AC3: one notification per user/issue regardless of the instant or
+		// digest path; INSERT (OR) IGNORE against this index is the dedup rule.
+		`CREATE UNIQUE INDEX IF NOT EXISTS uq_gfi_notification_log_user_issue ON gfi_notification_log(user_id, issue_key)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)
@@ -613,6 +715,58 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE repo_claims ADD UNIQUE KEY uq_repo_claims_user (repo_id, owner_user_id)`)
 	_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_repo_claims_user ON repo_claims(repo_id, owner_user_id)`)
 	_, _ = db.Exec(`ALTER TABLE repo_claims ADD COLUMN full_name VARCHAR(255) NOT NULL DEFAULT ''`)
+	// GFI outbox (AC4): exponential-backoff scheduling + atomic claim stamp on
+	// pre-existing queue tables created before retries were introduced.
+	_, _ = db.Exec(`ALTER TABLE gfi_email_queue ADD COLUMN next_attempt_at DATETIME NULL`)
+	_, _ = db.Exec(`ALTER TABLE gfi_email_queue ADD COLUMN claimed_at DATETIME NULL`)
+	// GFI sent-log per-mode dedup (AC3): delivery_mode splits instant vs
+	// weekly rows so one send per mode per issue is possible.
+	_, _ = db.Exec(`ALTER TABLE gfi_email_queue ADD COLUMN delivery_mode VARCHAR(16) NOT NULL DEFAULT 'instant'`)
+	if db.DriverName() == "sqlite" {
+		_, _ = db.Exec(`DROP INDEX IF EXISTS uq_gfi_email_queue_sub_issue`)
+	} else {
+		var oldIdxCount int
+		if err := db.Get(&oldIdxCount, `SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = 'gfi_email_queue' AND index_name = 'uq_gfi_email_queue_sub_issue'`); err == nil && oldIdxCount > 0 {
+			_, _ = db.Exec(`DROP INDEX uq_gfi_email_queue_sub_issue ON gfi_email_queue`)
+		}
+	}
+	// AC4: notification dedup is UNIQUE(user_id, issue_id) with NO mode
+	// component — delivery mode is scheduling only, so a user gets an issue
+	// exactly once regardless of instant/weekly switches. Collapse any
+	// per-mode duplicates left by the old schema, then swap the indexes.
+	_, _ = db.Exec(`
+		DELETE FROM gfi_email_queue WHERE id IN (
+			SELECT id FROM (
+				SELECT q.id FROM gfi_email_queue q
+				JOIN gfi_email_queue newer ON newer.subscriber_id = q.subscriber_id
+					AND newer.repo_id = q.repo_id AND newer.issue_number = q.issue_number
+					AND newer.id > q.id
+			) dup
+		)`)
+	if db.DriverName() == "sqlite" {
+		_, _ = db.Exec(`DROP INDEX IF EXISTS uq_gfi_email_queue_sub_issue_mode`)
+		_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS uq_gfi_email_queue_user_issue ON gfi_email_queue(subscriber_id, repo_id, issue_number)`)
+	} else {
+		var modeIdxCount int
+		if err := db.Get(&modeIdxCount, `SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = 'gfi_email_queue' AND index_name = 'uq_gfi_email_queue_sub_issue_mode'`); err == nil && modeIdxCount > 0 {
+			_, _ = db.Exec(`DROP INDEX uq_gfi_email_queue_sub_issue_mode ON gfi_email_queue`)
+		}
+		var uqCount int
+		if err := db.Get(&uqCount, `SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = 'gfi_email_queue' AND index_name = 'uq_gfi_email_queue_user_issue'`); err == nil && uqCount == 0 {
+			_, _ = db.Exec(`CREATE UNIQUE INDEX uq_gfi_email_queue_user_issue ON gfi_email_queue(subscriber_id, repo_id, issue_number)`)
+		}
+	}
+	// GFI alert permanence (AC1): permanent per-issue dedup key + matched-fields content hash.
+	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN alert_dedup_key VARCHAR(128) NOT NULL DEFAULT ''`)
+	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN alert_content_hash VARCHAR(64) NOT NULL DEFAULT ''`)
+	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN alert_refresh_fired_at DATETIME NULL`)
+	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN issue_updated_at DATETIME NULL`)
+	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN alert_last_updated_at DATETIME NULL`)
+	// GFI prefs opt-out flag set by the stateless unsubscribe flow (AC4).
+	_, _ = db.Exec(`ALTER TABLE gfi_subscribers ADD COLUMN opt_out BOOLEAN NOT NULL DEFAULT FALSE`)
+	// Soft-bounce reputation counter (AC6): decrements deliverability trust
+	// without counting toward the hard-bounce auto-disable.
+	_, _ = db.Exec(`ALTER TABLE gfi_subscribers ADD COLUMN soft_bounces INTEGER NOT NULL DEFAULT 0`)
 	// ghapp_welcomes (AC2): idempotency keyed UNIQUE(repo_id, issue_number)
 	// with status pending|posted|failed. Best-effort legacy migration for
 	// pre-existing tables created under the old contributor_login key.

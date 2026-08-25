@@ -20,8 +20,10 @@ MANAGED=$'# ── Opendoor nightly global re-anchor (after update-scores at 00:
 MANAGED+="30 3 * * * $SCRIPTS/cron-recalculate.sh"$'\n'
 MANAGED+=$'# ── Opendoor rolling event backfill (30-day window, Sundays 05:00 UTC)\n'
 MANAGED+="0 5 * * 0 $SCRIPTS/cron-backfill-rolling.sh 30 \"S,A,B,C,D\" \"S,A,B,C,D\""$'\n'
+MANAGED+=$'# ── GFI weekly digest + outbox drain (Mondays 09:00 UTC, AC3)\n'
+MANAGED+="0 9 * * 1 $SCRIPTS/cron-gfi-digest.sh"$'\n'
 
-chmod +x "$SCRIPTS/cron-recalculate.sh" "$SCRIPTS/cron-backfill-rolling.sh"
+chmod +x "$SCRIPTS/cron-recalculate.sh" "$SCRIPTS/cron-backfill-rolling.sh" "$SCRIPTS/cron-gfi-digest.sh"
 
 TMP="$(mktemp)"
 

@@ -1078,6 +1078,29 @@ func (c *Client) FetchGoodFirstIssueCount(owner, name string) (int, error) {
 	return resp.Data.Search.IssueCount, nil
 }
 
+// FetchIssueOpenUnassigned reports whether an issue is still open and has no
+// assignees (AC4 send-time revalidation of queued alert items).
+func (c *Client) FetchIssueOpenUnassigned(owner, name string, number int) (bool, bool, error) {
+	vars := map[string]any{"owner": owner, "name": name, "number": number}
+	var resp struct {
+		Data struct {
+			Repository struct {
+				Issue struct {
+					State     string `json:"state"`
+					Assignees struct {
+						TotalCount int `json:"totalCount"`
+					} `json:"assignees"`
+				} `json:"issue"`
+			} `json:"repository"`
+		} `json:"data"`
+	}
+	if _, err := c.do(IssueStateQuery, vars, &resp); err != nil {
+		return false, false, fmt.Errorf("FetchIssueOpenUnassigned: %w", err)
+	}
+	iss := resp.Data.Repository.Issue
+	return strings.EqualFold(iss.State, "open"), iss.Assignees.TotalCount == 0, nil
+}
+
 // FetchGoodFirstIssuesList fetches up to limit active Good First Issues for a repo including titles, bodyText, numbers, and labels.
 func (c *Client) FetchGoodFirstIssuesList(owner, name string, limit int) ([]GoodFirstIssue, int, error) {
 	if limit <= 0 {

@@ -1,14 +1,17 @@
 package handler
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log/slog"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/ai"
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
+	"github.com/abhisheksoni27/opendoor/internal/notification"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/gin-gonic/gin"
@@ -136,6 +139,15 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 				if database, ok := v.(*sqlx.DB); ok {
 					gfiRepo := repository.NewGFIRepository(database)
 					_ = gfiRepo.UpsertIssues(c.Request.Context(), repoID, gfiIssues)
+					// Fan out instant alerts for freshly ingested issues;
+					// insert-or-ignore dedupe makes repeated scans idempotent.
+					nums := make([]int, 0, len(gfiIssues))
+					for _, gi := range gfiIssues {
+						nums = append(nums, gi.Number)
+					}
+					if _, err := notification.EnqueueGFIInstantAlerts(context.Background(), database, repoID, nums, time.Now()); err != nil {
+						slog.Warn("score-repo: GFI instant alert enqueue failed", "repo", fullName, "err", err)
+					}
 				}
 			}
 		}
