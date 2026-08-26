@@ -133,6 +133,15 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                 transition={{ duration: 0.24, ease: EASE_OUT_EXPO }}
               />
             </Link>
+            <Link href="/hacktoberfest" title="Hacktoberfest 2026 Welcome Hub & Live Merge Tracker" className="relative text-orange-600 hover:text-orange-700 font-bold transition-colors">
+              Hacktoberfest
+              <motion.span
+                className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#ff5722] rounded-full origin-right"
+                initial={{ scaleX: 0 }}
+                whileHover={reduceMotion ? undefined : { scaleX: 1 }}
+                transition={{ duration: 0.24, ease: EASE_OUT_EXPO }}
+              />
+            </Link>
           </nav>
         </div>
 

@@ -23,6 +23,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/db"
 	"github.com/abhisheksoni27/opendoor/internal/ghapp"
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
+	"github.com/abhisheksoni27/opendoor/internal/hacktoberfest"
 	"github.com/abhisheksoni27/opendoor/internal/handler"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/notification"
@@ -114,6 +115,12 @@ func main() {
 	prTrackerSvc := prtracker.NewService(prTrackerStore, tokenMgr, prtracker.NewGHClient(vkClient), database)
 	stopPRTrackerCron := prTrackerSvc.StartCron(15 * time.Minute)
 	defer stopPRTrackerCron()
+
+	// Hacktoberfest hub: lazy 5-min poll over active viewers only (AC5).
+	hbStore := hacktoberfest.NewStore(database)
+	hbSvc := hacktoberfest.NewService(hbStore, prTrackerStore, tokenMgr, prtracker.NewGHClient(vkClient), cfg.JWTSecret)
+	stopHacktoberfestCron := hbSvc.StartCron(5 * time.Minute)
+	defer stopHacktoberfestCron()
 
 	// Stalled-PR rescue alerts: hourly sweep comparing tracked open PRs
 	// against each repo's merged p75 wait; email + configured Slack/Discord.
@@ -237,6 +244,10 @@ func main() {
 		api.GET("/topics", handler.ListTopics(repoStore))
 		api.GET("/stats/macro", handler.GetMacroStats())
 
+		// Hacktoberfest welcome-hub leaderboard: public, ranked by C-Rank tier
+		// + GFI quality; >60% first-timer rate is a badge/weight, not a filter.
+		api.GET("/hacktoberfest/leaderboard", handler.GetHacktoberfestLeaderboardHandler(hbStore))
+
 		api.GET("/repos/:id/feedback", handler.ListFeedback(database))
 		api.GET("/match", handler.MatchReposHandler(repoStore))
 		api.GET("/users/:slug", handler.GetUserProfile(userRepo))
@@ -327,6 +338,11 @@ func main() {
 		userApi.GET("/user/prs", handler.GetUserPRsHandler(prTrackerSvc, entitlementRepo))
 		userApi.GET("/user/prs/connection", handler.GetPRConnectionHandler(prTrackerSvc))
 		userApi.POST("/user/prs/reconnect", handler.ReconnectPRConnectionHandler(prTrackerSvc))
+
+		// Hacktoberfest hub: live "X of 4 merged" progress + stream-hint nudge
+		userApi.GET("/hacktoberfest/progress", handler.GetHacktoberfestProgressHandler(hbSvc))
+		userApi.POST("/hacktoberfest/nudge", handler.PostHacktoberfestNudgeHandler(hbSvc))
+
 		userApi.POST("/user/feedback", handler.CreateFeedback(database, cfg.GithubToken))
 		userApi.DELETE("/user/feedback/:id", handler.DeleteFeedback(database))
 	}
