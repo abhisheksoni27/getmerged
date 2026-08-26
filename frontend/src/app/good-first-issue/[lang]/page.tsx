@@ -50,6 +50,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ],
     alternates: {
       canonical: `https://getmerged.abhishekco.de/good-first-issue/${canonicalLang}`,
+      types: {
+        "application/atom+xml": `https://getmerged.abhishekco.de/feeds/${canonicalLang}.xml`,
+      },
     },
     openGraph: {
       title,

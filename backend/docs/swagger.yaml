@@ -40,15 +40,17 @@ definitions:
         type: integer
       baselined:
         type: integer
-      cas_lost:
-        type: integer
       dead_lettered:
         type: integer
-      failed:
+      emails_failed:
         type: integer
-      sent:
+      emails_sent:
         type: integer
-      skipped_cooldown:
+      queued:
+        type: integer
+      retrying:
+        type: integer
+      unsubscribed_skipped:
         type: integer
       watchers_considered:
         type: integer
@@ -156,13 +158,17 @@ paths:
   /internal/jobs/crank-change-alerts:
     post:
       description: Emails watchlist users when a watched repo crosses a C-Rank tier
-        boundary or drops sharply. Synchronous.
+        boundary or shifts by the configured delta. Synchronous.
       parameters:
       - description: Job secret
         in: header
         name: X-Job-Secret
         required: true
         type: string
+      - description: Report would-be alerts without sending
+        in: query
+        name: dry_run
+        type: boolean
       produces:
       - application/json
       responses:

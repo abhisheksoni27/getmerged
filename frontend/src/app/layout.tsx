@@ -51,6 +51,7 @@ export const metadata: Metadata = {
     canonical: "https://getmerged.abhishekco.de",
     types: {
       "application/xml": "https://getmerged.abhishekco.de/sitemap.xml",
+      "application/atom+xml": "https://getmerged.abhishekco.de/feeds/top.xml",
     },
   },
   openGraph: {

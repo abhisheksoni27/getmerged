@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   description: "Discover beginner-friendly Good First Issues across Python, TypeScript, Go, Rust, C#, Java, and other open-source ecosystems ranked by maintainer merge rates.",
   alternates: {
     canonical: "https://getmerged.abhishekco.de/good-first-issue",
+    types: {
+      "application/atom+xml": "https://getmerged.abhishekco.de/good-first-issue/feed.xml",
+    },
   },
   openGraph: {
     title: "Find Good First Issues: Top Beginner Repos Ranked by Merge Rate | GetMerged",

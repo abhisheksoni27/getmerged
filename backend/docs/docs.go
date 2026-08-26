@@ -116,7 +116,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Emails watchlist users when a watched repo crosses a C-Rank tier boundary or drops sharply. Synchronous.",
+                "description": "Emails watchlist users when a watched repo crosses a C-Rank tier boundary or shifts by the configured delta. Synchronous.",
                 "produces": [
                     "application/json"
                 ],
@@ -131,6 +131,12 @@ const docTemplate = `{
                         "name": "X-Job-Secret",
                         "in": "header",
                         "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Report would-be alerts without sending",
+                        "name": "dry_run",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -534,19 +540,22 @@ const docTemplate = `{
                 "baselined": {
                     "type": "integer"
                 },
-                "cas_lost": {
-                    "type": "integer"
-                },
                 "dead_lettered": {
                     "type": "integer"
                 },
-                "failed": {
+                "emails_failed": {
                     "type": "integer"
                 },
-                "sent": {
+                "emails_sent": {
                     "type": "integer"
                 },
-                "skipped_cooldown": {
+                "queued": {
+                    "type": "integer"
+                },
+                "retrying": {
+                    "type": "integer"
+                },
+                "unsubscribed_skipped": {
                     "type": "integer"
                 },
                 "watchers_considered": {
