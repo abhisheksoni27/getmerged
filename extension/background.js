@@ -2,6 +2,9 @@
 
 const GM_BASE = 'https://getmerged.abhishekco.de';
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+const CHIP_TTL_MS = 5 * 60 * 1000;
+const CHIP_BATCH_MAX = 20;
+const CHIP_FETCH_GAP_MS = 120;
 const FETCH_TIMEOUT_MS = 15000;
 const memStore = new Map();
 
@@ -114,16 +117,87 @@ async function handlePRData(msg) {
   }
 }
 
+function safeRepoPart(value) {
+  try {
+    const v = String(value == null ? '' : value).trim();
+    if (!v || v.length > 128 || /[/?#\\%]/.test(v)) return '';
+    return v;
+  } catch (_) {
+    return '';
+  }
+}
+
+async function chipScore(owner, repo) {
+  const fullName = owner + '/' + repo;
+  const key = 'gmchip:' + fullName.toLowerCase();
+  try {
+    const hit = await cacheGet(key);
+    if (
+      hit &&
+      typeof hit.tier === 'string' &&
+      hit.tier &&
+      typeof hit.fetched_at === 'number' &&
+      Date.now() - hit.fetched_at < CHIP_TTL_MS
+    ) {
+      return { tier: hit.tier, net: false };
+    }
+  } catch (_) {}
+  const url = GM_BASE + '/api/v1/pr-likelihood?name=' + encodeURIComponent(fullName);
+  const data = await fetchJSON(url);
+  const tier = data && typeof data.c_rank_tier === 'string' ? data.c_rank_tier.toUpperCase() : '';
+  if (!tier) return { tier: '', net: true };
+  await cacheSet(key, { fetched_at: Date.now(), tier });
+  return { tier, net: true };
+}
+
+async function handleRepoScores(msg) {
+  let input = [];
+  try {
+    input = Array.isArray(msg && msg.repos) ? msg.repos.slice(0, CHIP_BATCH_MAX) : [];
+  } catch (_) {
+    input = [];
+  }
+  const scores = {};
+  for (let i = 0; i < input.length; i++) {
+    const item = input[i];
+    const owner = safeRepoPart(item && item.owner);
+    const repo = safeRepoPart(item && item.repo);
+    if (!owner || !repo) continue;
+    let res = null;
+    try {
+      res = await chipScore(owner, repo);
+    } catch (_) {
+      res = null;
+    }
+    scores[owner + '/' + repo] = res && res.tier ? { tier: res.tier } : null;
+    if (res && res.net && i < input.length - 1) {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, CHIP_FETCH_GAP_MS));
+      } catch (_) {}
+    }
+  }
+  return { ok: true, scores };
+}
+
 function wire() {
   try {
     const api = globalThis.chrome || globalThis.browser;
     if (!api || !api.runtime || !api.runtime.onMessage) return;
     api.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
-      if (!msg || msg.type !== 'gm_pr_data') return undefined;
-      handlePRData(msg)
-        .then(sendResponse)
-        .catch(() => sendResponse({ ok: false, reason: 'unavailable' }));
-      return true;
+      if (!msg || typeof msg.type !== 'string') return undefined;
+      if (msg.type === 'gm_pr_data') {
+        handlePRData(msg)
+          .then(sendResponse)
+          .catch(() => sendResponse({ ok: false, reason: 'unavailable' }));
+        return true;
+      }
+      if (msg.type === 'gm_repo_scores') {
+        handleRepoScores(msg)
+          .then(sendResponse)
+          .catch(() => sendResponse({ ok: false }));
+        return true;
+      }
+      return undefined;
     });
   } catch (_) {}
 }
