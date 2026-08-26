@@ -24,6 +24,7 @@ import {
   Merge,
   CircleDashed,
   Share2,
+  Sparkles,
 } from "lucide-react";
 
 interface Benchmark {
@@ -480,6 +481,20 @@ export function DashboardClient() {
                     {accuracyView && (
                       <span className="text-[11px] font-mono text-zinc-500">{accuracyView.label}</span>
                     )}
+                  </div>
+                )}
+
+                {/* One-click AI Preflight deep-link (prefills via pr_url auto-fetch) */}
+                {pr.html_url && (
+                  <div className="mt-3">
+                    <Link
+                      href={`/preflight?pr_url=${encodeURIComponent(pr.html_url)}`}
+                      data-testid="dashboard-pr-preflight-cta"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-300 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 active:scale-[0.98] transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                      aria-label={`Run pre-flight check for ${pr.title}`}
+                    >
+                      <Sparkles className="h-3 w-3" /> Run Pre-flight Check
+                    </Link>
                   </div>
                 )}
 

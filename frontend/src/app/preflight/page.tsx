@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Header } from "@/components/Header";
@@ -86,7 +86,10 @@ function PreflightContent() {
     : null;
 
   const [repoFullName, setRepoFullName] = useState<string>(() => parseRepoParam(queryRepo));
-  const [prUrl, setPRUrl] = useState("");
+  const [prUrl, setPRUrl] = useState<string>(() => {
+    const raw = searchParams ? searchParams.get("pr_url") : null;
+    return typeof raw === "string" ? raw.trim() : "";
+  });
   const [prTitle, setPRTitle] = useState("");
   const [prDescription, setPRDescription] = useState("");
   const [changedFilesText, setChangedFilesText] = useState("");
@@ -117,7 +120,7 @@ function PreflightContent() {
     }
   }, [searchParams, repoFullName]);
 
-  const fetchPRDetails = async (url: string) => {
+  const fetchPRDetails = useCallback(async (url: string) => {
     setFetchingPR(true);
     setError(null);
     try {
@@ -147,7 +150,21 @@ function PreflightContent() {
     } finally {
       setFetchingPR(false);
     }
-  };
+  }, [repoFullName]);
+
+  // Deep-link support: /preflight?pr_url=<html_url> prefills the PR URL input
+  // and runs the existing auto-fetch flow once (title, description, files).
+  const autoFetchedRef = useRef(false);
+  useEffect(() => {
+    if (autoFetchedRef.current) return;
+    const raw = searchParams ? searchParams.get("pr_url") : null;
+    const url = typeof raw === "string" ? raw.trim() : "";
+    if (!url) return;
+    autoFetchedRef.current = true;
+    if (/github\.com\/.+\/.+\/pull\/\d+/i.test(url)) {
+      void fetchPRDetails(url);
+    }
+  }, [searchParams, fetchPRDetails]);
 
   const performEvaluation = async () => {
     setLoading(true);
