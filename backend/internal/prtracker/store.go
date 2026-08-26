@@ -39,6 +39,13 @@ type PRSnapshot struct {
 	MergedAt        *time.Time `db:"merged_at"`
 	FetchedAt       time.Time  `db:"fetched_at"`
 	SnapshotAt      time.Time  `db:"snapshot_at"`
+	// RequestedReviewers is a JSON array of reviewer logins used by
+	// stall-rescue nudge templates (empty when none observed).
+	RequestedReviewers string `db:"requested_reviewers"`
+	// IsDraft mirrors GitHub's draft flag; ReadyForReviewAt is set once at
+	// the draft->ready transition and carried forward (stall clock anchor).
+	IsDraft          bool       `db:"is_draft"`
+	ReadyForReviewAt *time.Time `db:"ready_for_review_at"`
 }
 
 // Transition is one append-only row of the state-change log (AC8).
@@ -92,8 +99,8 @@ func NewStore(db *sqlx.DB) *Store { return &Store{db: db} }
 func (s *Store) UpsertSnapshot(ctx context.Context, snap PRSnapshot) error {
 	mysql := `
 		INSERT INTO pr_snapshots (pr_id, user_id, repository_id, pr_number, title, html_url, state,
-			pr_created_at, github_updated_at, merged_at, fetched_at, snapshot_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			pr_created_at, github_updated_at, merged_at, fetched_at, snapshot_at, requested_reviewers, is_draft, ready_for_review_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON DUPLICATE KEY UPDATE
 			user_id = VALUES(user_id),
 			repository_id = VALUES(repository_id),
@@ -101,14 +108,16 @@ func (s *Store) UpsertSnapshot(ctx context.Context, snap PRSnapshot) error {
 			title = VALUES(title),
 			html_url = VALUES(html_url),
 			state = VALUES(state),
-			pr_created_at = VALUES(pr_created_at),
 			github_updated_at = VALUES(github_updated_at),
 			merged_at = VALUES(merged_at),
-			fetched_at = VALUES(fetched_at)`
+			fetched_at = VALUES(fetched_at),
+			requested_reviewers = VALUES(requested_reviewers),
+			is_draft = VALUES(is_draft),
+			ready_for_review_at = VALUES(ready_for_review_at)`
 	sqlite := `
 		INSERT INTO pr_snapshots (pr_id, user_id, repository_id, pr_number, title, html_url, state,
-			pr_created_at, github_updated_at, merged_at, fetched_at, snapshot_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			pr_created_at, github_updated_at, merged_at, fetched_at, snapshot_at, requested_reviewers, is_draft, ready_for_review_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(pr_id, snapshot_at) DO UPDATE SET
 			user_id = excluded.user_id,
 			repository_id = excluded.repository_id,
@@ -116,17 +125,20 @@ func (s *Store) UpsertSnapshot(ctx context.Context, snap PRSnapshot) error {
 			title = excluded.title,
 			html_url = excluded.html_url,
 			state = excluded.state,
-			pr_created_at = excluded.pr_created_at,
 			github_updated_at = excluded.github_updated_at,
 			merged_at = excluded.merged_at,
-			fetched_at = excluded.fetched_at`
+			fetched_at = excluded.fetched_at,
+			requested_reviewers = excluded.requested_reviewers,
+			is_draft = excluded.is_draft,
+			ready_for_review_at = excluded.ready_for_review_at`
 	q := mysql
 	if s.db.DriverName() == "sqlite" {
 		q = sqlite
 	}
 	_, err := s.db.ExecContext(ctx, q,
 		snap.PRID, snap.UserID, snap.RepositoryID, snap.PRNumber, snap.Title, snap.HTMLURL, snap.State,
-		snap.PRCreatedAt, snap.GithubUpdatedAt, snap.MergedAt, snap.FetchedAt, snap.SnapshotAt)
+		snap.PRCreatedAt, snap.GithubUpdatedAt, snap.MergedAt, snap.FetchedAt, snap.SnapshotAt,
+		snap.RequestedReviewers, snap.IsDraft, snap.ReadyForReviewAt)
 	return err
 }
 
@@ -185,6 +197,35 @@ func (s *Store) LatestStateByPR(ctx context.Context, userID int64) (map[string]s
 	out := make(map[string]string, len(rows))
 	for _, r := range rows {
 		out[r.PRID] = r.State
+	}
+	return out, nil
+}
+
+// DraftClock is the draft/ready anchor state carried between syncs (AC5).
+type DraftClock struct {
+	Draft    bool
+	ReadyAt  *time.Time // set once at the draft->ready transition, then frozen
+}
+
+// LatestDraftByPR maps pr_id -> the newest snapshot's draft flag and stall-clock
+// ready anchor so SyncUser can detect draft->ready transitions.
+func (s *Store) LatestDraftByPR(ctx context.Context, userID int64) (map[string]DraftClock, error) {
+	rows := []struct {
+		PRID     string     `db:"pr_id"`
+		IsDraft  bool       `db:"is_draft"`
+		ReadyAt  *time.Time `db:"ready_for_review_at"`
+	}{}
+	err := s.db.SelectContext(ctx, &rows, `
+		SELECT ps.pr_id, COALESCE(ps.is_draft,FALSE) AS is_draft, ps.ready_for_review_at FROM pr_snapshots ps
+		JOIN (SELECT pr_id, MAX(snapshot_at) AS ms FROM pr_snapshots WHERE user_id = ? GROUP BY pr_id) t
+		  ON t.pr_id = ps.pr_id AND t.ms = ps.snapshot_at
+		WHERE ps.user_id = ?`, userID, userID)
+	if err != nil {
+		return nil, err
+	}
+	out := make(map[string]DraftClock, len(rows))
+	for _, r := range rows {
+		out[r.PRID] = DraftClock{Draft: r.IsDraft, ReadyAt: r.ReadyAt}
 	}
 	return out, nil
 }
@@ -286,6 +327,34 @@ func (s *Store) ConnectedUserIDs(ctx context.Context) ([]int64, error) {
 	err := s.db.SelectContext(ctx, &ids,
 		`SELECT user_id FROM pr_connections WHERE status != '` + ConnectionReconnectRequired + `'`)
 	return ids, err
+}
+
+// StallAlertStatus is the lifecycle state of a PR's stall-rescue alert (AC3):
+// pending/sent/stale/failed rows stay visible in the dashboard; failed rows
+// await manual or next-cycle reset (AC6).
+type StallAlertStatus struct {
+	Status   string `db:"status" json:"status"`
+	Attempts int    `db:"attempts" json:"attempts"`
+}
+
+// StallAlertStatuses maps pr_id -> newest stall-alert status for the user's PRs.
+func (s *Store) StallAlertStatuses(ctx context.Context, userID int64) (map[string]StallAlertStatus, error) {
+	var rows []struct {
+		PRID     string `db:"pr_id"`
+		Status   string `db:"status"`
+		Attempts int    `db:"attempts"`
+	}
+	err := s.db.SelectContext(ctx, &rows, `
+		SELECT pr_id, status, attempts FROM pr_stall_alerts
+		WHERE id IN (SELECT MAX(id) FROM pr_stall_alerts WHERE user_id = ? GROUP BY pr_id)`, userID)
+	if err != nil {
+		return nil, err
+	}
+	out := make(map[string]StallAlertStatus, len(rows))
+	for _, r := range rows {
+		out[r.PRID] = StallAlertStatus{Status: r.Status, Attempts: r.Attempts}
+	}
+	return out, nil
 }
 
 // ParsePRID splits "owner/repo#123".

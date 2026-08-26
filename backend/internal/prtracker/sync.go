@@ -30,10 +30,10 @@ type SyncResult struct {
 
 // Service wires store, token manager and GitHub client together.
 type Service struct {
-	Store   *Store
-	Tokens  auth.TokenManager
-	GitHub  *GHClient
-	DB      *sqlx.DB
+	Store  *Store
+	Tokens auth.TokenManager
+	GitHub *GHClient
+	DB     *sqlx.DB
 }
 
 func NewService(store *Store, tokens auth.TokenManager, gh *GHClient, db *sqlx.DB) *Service {
@@ -88,10 +88,18 @@ func (s *Service) SyncUser(ctx context.Context, userID int64, login string) (*Sy
 	if err != nil {
 		return res, err
 	}
+	// Draft/ready anchors carried from the previous snapshot (AC5 stall clock).
+	prevDrafts, err := s.Store.LatestDraftByPR(ctx, userID)
+	if err != nil {
+		return res, err
+	}
 
 	now := time.Now().UTC()
 	seen := map[string]bool{}
 	synced := 0
+	// Stall-episode events (AC1): review submissions restart the episode at
+	// their exact instant; draft->ready emits a fresh 'review_requested'.
+	var events []notification.PRReviewEvent
 
 	for _, item := range items {
 		if synced >= MaxTrackedPRs || item.Repository == nil || item.PullRequest == nil {
@@ -102,14 +110,55 @@ func (s *Service) SyncUser(ctx context.Context, userID int64, login string) (*Sy
 
 		state := StateOpen
 		var mergedAt *time.Time
-		if !limited { // review calls are skipped entirely when rate-limited (AC5)
+		var reviewers []string
+		// Draft clock carry-forward: unknown draft state keeps the previous
+		// values so a rate-limited pass never regresses the anchor (AC5).
+		isDraft := prevDrafts[prID].Draft
+		readyAt := prevDrafts[prID].ReadyAt
+		if !limited { // detail calls are skipped entirely when rate-limited (AC5)
 			owner, repo, _ := strings.Cut(item.Repository.FullName, "/")
 			reviews, revRes, rerr := s.GitHub.FetchReviews(ctx, userID, token, owner, repo, item.Number)
 			if rerr == nil && !revRes.Limited {
 				state = DeriveState(nil, reviews)
+				reviewers = reviewerLogins(reviews) // stall-rescue nudge mentions (AC6)
+				for _, rv := range reviews { // AC1: every submission restarts the stall episode
+					if rv.SubmittedAt.IsZero() {
+						continue
+					}
+					events = append(events, notification.PRReviewEvent{
+						PRID:         prID,
+						UserID:       userID,
+						RepositoryID: item.Repository.FullName,
+						EventType:    notification.PRReviewEventSubmitted,
+						EventID:      fmt.Sprintf("%s|%s|%s|%d", prID, rv.User.Login, rv.State, rv.SubmittedAt.Unix()),
+						OccurredAt:   rv.SubmittedAt,
+					})
+				}
 			} else if revRes.Limited {
 				limited = true
 				state = DeriveState(nil, nil)
+			}
+			detail, dres, derr := s.GitHub.FetchPRDetail(ctx, userID, token, owner, repo, item.Number)
+			if derr == nil && dres != nil && !dres.Limited && detail != nil {
+				if detail.Draft && !isDraft {
+					readyAt = nil // re-drafted: reset any stale ready anchor
+				}
+				isDraft = detail.Draft
+				if prevDrafts[prID].Draft && !detail.Draft && readyAt == nil {
+					ts := now // AC5: freeze the draft->ready transition instant
+					readyAt = &ts
+					// AC1: draft->ready emits a fresh 'review_requested'.
+					events = append(events, notification.PRReviewEvent{
+						PRID:         prID,
+						UserID:       userID,
+						RepositoryID: item.Repository.FullName,
+						EventType:    notification.PRReviewEventRequested,
+						EventID:      fmt.Sprintf("%s|ready|%d", prID, ts.Unix()),
+						OccurredAt:   ts,
+					})
+				}
+			} else if dres != nil && dres.Limited {
+				limited = true
 			}
 		}
 		mergedAt = item.PullRequest.MergedAt
@@ -117,18 +166,21 @@ func (s *Service) SyncUser(ctx context.Context, userID int64, login string) (*Sy
 		upd := item.UpdatedAt
 		created := item.CreatedAt
 		err := s.Store.UpsertSnapshot(ctx, PRSnapshot{
-			PRID:            prID,
-			UserID:          userID,
-			RepositoryID:    item.Repository.FullName,
-			PRNumber:        item.Number,
-			Title:           item.Title,
-			HTMLURL:         item.HTMLURL,
-			State:           state,
-			PRCreatedAt:     &created,
-			GithubUpdatedAt: &upd,
-			MergedAt:        mergedAt,
-			FetchedAt:       now,
-			SnapshotAt:      now,
+			PRID:               prID,
+			UserID:             userID,
+			RepositoryID:       item.Repository.FullName,
+			PRNumber:           item.Number,
+			Title:              item.Title,
+			HTMLURL:            item.HTMLURL,
+			State:              state,
+			PRCreatedAt:        &created,
+			GithubUpdatedAt:    &upd,
+			MergedAt:           mergedAt,
+			FetchedAt:          now,
+			SnapshotAt:         now,
+			RequestedReviewers: marshalReviewers(reviewers),
+			IsDraft:            isDraft,
+			ReadyForReviewAt:   readyAt,
 		})
 		if err != nil {
 			continue
@@ -141,6 +193,14 @@ func (s *Service) SyncUser(ctx context.Context, userID int64, login string) (*Sy
 		} else if prev == "" {
 			// First sighting: baseline the log without notifying.
 			_ = s.Store.RecordTransition(ctx, prID, userID, "", state, now)
+		}
+	}
+
+	// AC1/AC2: ingest collected review events (idempotent per (pr_id, event_id);
+	// monotonic vs the PR's current episode start).
+	if len(events) > 0 {
+		if _, err := notification.IngestPRReviewEvents(ctx, s.DB, events); err != nil {
+			slog.Warn("prtracker sync: review event ingest failed", "err", err)
 		}
 	}
 
@@ -184,6 +244,38 @@ func (s *Service) SyncUser(ctx context.Context, userID int64, login string) (*Sy
 	return res, nil
 }
 
+// reviewerLogins extracts distinct review-author logins in submission order
+// (max 5) for stall-rescue nudge mentions (AC6); empty input yields nil.
+func reviewerLogins(reviews []Review) []string {
+	seen := map[string]bool{}
+	out := make([]string, 0, 5)
+	for _, r := range reviews {
+		login := strings.TrimSpace(r.User.Login)
+		if login == "" || seen[strings.ToLower(login)] {
+			continue
+		}
+		seen[strings.ToLower(login)] = true
+		out = append(out, login)
+		if len(out) == 5 {
+			break
+		}
+	}
+	return out
+}
+
+// marshalReviewers encodes reviewer logins as a JSON array; empty input
+// yields ” (column default).
+func marshalReviewers(reviewers []string) string {
+	if len(reviewers) == 0 {
+		return ""
+	}
+	b, err := json.Marshal(reviewers)
+	if err != nil {
+		return ""
+	}
+	return string(b)
+}
+
 // recordAndNotify logs the transition and enqueues a notification honoring AC8
 // dedupe rules, reusing the existing notifier cron queue.
 func (s *Service) recordAndNotify(ctx context.Context, prID string, userID int64, from, to string, at time.Time) {
@@ -197,9 +289,9 @@ func (s *Service) recordAndNotify(ctx context.Context, prID string, userID int64
 		return
 	}
 	payload, _ := json.Marshal(map[string]any{
-		"pr_id":      prID,
-		"from_state": from,
-		"to_state":   to,
+		"pr_id":       prID,
+		"from_state":  from,
+		"to_state":    to,
 		"occurred_at": at.Format(time.RFC3339),
 	})
 	_, _ = s.DB.ExecContext(ctx, `

@@ -27,12 +27,13 @@ type BenchmarkLine struct {
 
 type prItem struct {
 	*prtracker.TrackedPR
-	AgeHours       float64              `json:"age_hours"`
-	Stale          bool                 `json:"stale"`
-	Benchmark      *BenchmarkLine       `json:"benchmark"`
-	Forecast       *prtracker.Forecast  `json:"forecast,omitempty"`
-	ForecastLocked bool                 `json:"forecast_locked"`
-	Outcome        *prtracker.EvalOutcome `json:"outcome,omitempty"` // verified verdict (AC1/AC2)
+	AgeHours       float64                     `json:"age_hours"`
+	Stale          bool                        `json:"stale"`
+	Benchmark      *BenchmarkLine              `json:"benchmark"`
+	Forecast       *prtracker.Forecast         `json:"forecast,omitempty"`
+	ForecastLocked bool                        `json:"forecast_locked"`
+	Outcome        *prtracker.EvalOutcome      `json:"outcome,omitempty"`     // verified verdict (AC1/AC2)
+	StallAlert     *prtracker.StallAlertStatus `json:"stall_alert,omitempty"` // stall-rescue alert lifecycle (AC4)
 }
 
 // GetUserPRsHandler handles GET /api/v1/user/prs.
@@ -93,6 +94,14 @@ func GetUserPRsHandler(svc *prtracker.Service, entRepo repository.EntitlementRep
 			slog.Warn("user/prs: load eval outcomes failed", "err", oerr)
 			outcomes = nil
 		}
+		// Stall-rescue alert lifecycle per PR (AC3/AC6): pending/sent/failed
+		// rows stay visible on the dashboard; failed rows await manual or
+		// next-cycle reset.
+		stallStatuses, serr := svc.Store.StallAlertStatuses(ctx, userID)
+		if serr != nil {
+			slog.Warn("user/prs: load stall alert statuses failed", "err", serr)
+			stallStatuses = nil
+		}
 		items := make([]prItem, 0, len(prs))
 		for i := range prs {
 			p := &prs[i]
@@ -117,6 +126,10 @@ func GetUserPRsHandler(svc *prtracker.Service, entRepo repository.EntitlementRep
 					oc := o
 					item.Outcome = &oc
 				}
+			}
+			if sa, ok := stallStatuses[p.PRID]; ok {
+				status := sa
+				item.StallAlert = &status
 			}
 			items = append(items, item)
 		}
