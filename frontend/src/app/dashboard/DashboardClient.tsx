@@ -7,6 +7,7 @@ import { formatVerdict, formatAccuracy, type PREvalOutcome } from "@/lib/pr-verd
 import { TopMatches } from "@/components/TopMatches";
 import { ForYou } from "@/components/ForYou";
 import { FirstMergeTrack } from "@/components/FirstMergeTrack";
+import { SeasonCard } from "@/components/SeasonCard";
 import { ApiKeysCard } from "./ApiKeysCard";
 import { MergeCelebrationModal } from "./MergeCelebrationModal";
 import {
@@ -306,6 +307,7 @@ export function DashboardClient() {
       {/* One-time merge-moment celebration for verified preflight predictions */}
       <MergeCelebrationModal prs={data?.prs ?? []} />
       <FirstMergeTrack trackedPRs={data?.prs} />
+      <SeasonCard />
       <div className="mb-6">
         <ForYou />
         <TopMatches />

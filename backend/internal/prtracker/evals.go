@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"fmt"
+	"log/slog"
 	"math"
 	"strings"
 	"time"
@@ -262,6 +263,11 @@ func (s *Store) UpdateEvalOutcomes(ctx context.Context) (int, error) {
 	// AC3 badges derive from real data. Terminal hit|miss verdicts stay
 	// untouched (never re-synced).
 	s.touchUnresolvedSynced(ctx, now)
+	// AC1: award XP for every scored eval; UNIQUE(source, eval_id) makes
+	// repeated passes no-ops.
+	if _, err := s.AwardXPs(ctx, nil); err != nil {
+		slog.Warn("prtracker: xp award failed", "err", err)
+	}
 	return changed, nil
 }
 

@@ -5,7 +5,35 @@ import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import { Metadata } from "next";
 import Link from "next/link";
-import { Trophy, ArrowLeft, Star, GitPullRequest, Clock } from "lucide-react";
+import { Trophy, ArrowLeft, Star, GitPullRequest, Clock, Flame, Users } from "lucide-react";
+
+interface ContributorEntry {
+  rank: number;
+  login: string;
+  level: number;
+  streak_weeks: number;
+  season_xp: number;
+  total_xp: number;
+}
+
+interface ContributorBoard {
+  season: string;
+  entries: ContributorEntry[];
+}
+
+async function getContributorLeaderboard(): Promise<ContributorBoard> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/contributor-leaderboard?limit=25`, {
+      next: { revalidate: 600 },
+    });
+    if (!res.ok) return { season: "", entries: [] };
+    const data = await res.json();
+    return { season: typeof data?.season === "string" ? data.season : "", entries: Array.isArray(data?.entries) ? data.entries : [] };
+  } catch (e) {
+    console.error("Failed to fetch contributor leaderboard:", e);
+    return { season: "", entries: [] };
+  }
+}
 
 export const metadata: Metadata = {
   title: "Open Source Welcoming Leaderboard (C-Rank™) - GetMerged",
@@ -36,7 +64,7 @@ async function getLeaderboardRepos(): Promise<Repo[]> {
 }
 
 export default async function LeaderboardPage() {
-  const repos = await getLeaderboardRepos();
+  const [repos, contributors] = await Promise.all([getLeaderboardRepos(), getContributorLeaderboard()]);
 
   const itemListJsonLd = {
     "@context": "https://schema.org",
@@ -125,6 +153,59 @@ export default async function LeaderboardPage() {
             <span>Telemetry updated: {new Date().toUTCString().slice(0, 16)} UTC (Daily Sync)</span>
           </div>
         </div>
+
+        {contributors.entries.length > 0 && (
+          <div className="mb-8 overflow-x-auto rounded-2xl bg-white border border-zinc-200/80 shadow-xs">
+            <div className="flex items-center justify-between gap-3 flex-wrap px-4 pt-5 pb-3 border-b-2 border-black/10">
+              <h2 className="text-sm font-bold text-zinc-900 font-space flex items-center gap-1.5">
+                <Users className="h-4 w-4 text-emerald-600" /> Weekly Contributor Leaderboard
+                {contributors.season && <span className="text-[11px] font-mono text-zinc-400">· {contributors.season}</span>}
+              </h2>
+              <span className="text-[11px] font-mono text-zinc-500">50 XP per merged PR · streaks = consecutive weeks</span>
+            </div>
+            <table className="w-full text-left text-xs text-zinc-600">
+              <thead className="bg-zinc-50 text-zinc-800 border-b border-zinc-200 font-semibold uppercase tracking-wider font-space text-[11px]">
+                <tr>
+                  <th className="py-3 px-4 text-center">Rank</th>
+                  <th className="py-3 px-4">Contributor</th>
+                  <th className="py-3 px-4 text-center">Level</th>
+                  <th className="py-3 px-4 text-right">Streak</th>
+                  <th className="py-3 px-4 text-right">Season XP</th>
+                  <th className="py-3 px-4 text-right">All-time XP</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-100 font-mono">
+                {contributors.entries.map((entry) => (
+                  <tr key={entry.rank} className="hover:bg-zinc-50/60 transition-colors">
+                    <td className="py-3 px-4 text-center font-bold text-zinc-400">#{entry.rank}</td>
+                    <td className="py-3 px-4 font-bold text-zinc-900">
+                      <Link
+                        href={`/u/${encodeURIComponent(entry.login)}`}
+                        title={`View ${entry.login}'s contributor profile and track record`}
+                        className="hover:text-emerald-700 transition-colors font-space text-sm"
+                      >
+                        @{entry.login}
+                      </Link>
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      <span className="inline-flex items-center rounded-lg bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                        LV {entry.level}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <span className="inline-flex items-center gap-1">
+                        <Flame className={`h-3 w-3 ${entry.streak_weeks > 0 ? "text-amber-500" : "text-zinc-300"}`} />
+                        {entry.streak_weeks}wk
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-right font-bold text-zinc-900">{entry.season_xp.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-right text-zinc-500">{entry.total_xp.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         <div className="overflow-x-auto rounded-2xl bg-white border border-zinc-200/80 shadow-xs">
           <table className="w-full text-left text-xs text-zinc-600">

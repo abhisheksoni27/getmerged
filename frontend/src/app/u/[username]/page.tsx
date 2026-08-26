@@ -10,7 +10,7 @@ import {
   isValidUsername,
   type PublicProfile,
 } from "@/lib/public-profile";
-import { GitPullRequest, Target, Merge, ShieldCheck, Calendar, ExternalLink } from "lucide-react";
+import { GitPullRequest, Target, Merge, ShieldCheck, Calendar, ExternalLink, Flame } from "lucide-react";
 
 interface ProfilePageProps {
   params: Promise<{ username: string }>;
@@ -122,6 +122,46 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
             merge outcome on GetMerged.
           </p>
         </div>
+
+        {profile.season && !!profile.level && profile.level > 0 && (
+          <div className="mb-8 rounded-2xl bg-[#FDFBF7] p-5 border-2 border-brand-dark shadow-[4px_4px_0px_#222831]">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
+                <Flame className="h-3.5 w-3.5 text-amber-500" /> Contributor Season · {profile.season}
+              </h2>
+              <Link
+                href="/leaderboard"
+                title="View the weekly contributor leaderboard"
+                className="inline-flex items-center rounded-lg border border-zinc-300 px-2.5 py-1.5 text-[11px] font-semibold text-zinc-700 hover:border-emerald-500 hover:text-emerald-700 bg-white"
+              >
+                Leaderboard →
+              </Link>
+            </div>
+            <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="rounded-lg border-b-4 border-black bg-white px-3 py-2">
+                <div className="text-[10px] font-mono uppercase text-zinc-500">Level</div>
+                <div className="text-2xl font-extrabold font-mono text-zinc-900">{profile.level}</div>
+              </div>
+              <div className="rounded-lg border-b-4 border-black bg-white px-3 py-2">
+                <div className="text-[10px] font-mono uppercase text-zinc-500">Season XP</div>
+                <div className="text-2xl font-extrabold font-mono text-emerald-700">{profile.season_xp ?? 0}</div>
+              </div>
+              <div className="rounded-lg border-b-4 border-black bg-white px-3 py-2">
+                <div className="text-[10px] font-mono uppercase text-zinc-500">Streak</div>
+                <div className="text-2xl font-extrabold font-mono text-zinc-900">
+                  {profile.streak_weeks ?? 0}
+                  <span className="text-xs font-semibold text-zinc-500">wk</span>
+                </div>
+              </div>
+              <div className="rounded-lg border-b-4 border-black bg-white px-3 py-2">
+                <div className="text-[10px] font-mono uppercase text-zinc-500">Season rank</div>
+                <div className="text-2xl font-extrabold font-mono text-violet-700">
+                  {typeof profile.season_rank === "number" ? `#${profile.season_rank}` : "—"}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {!hasEvals ? (
           <div

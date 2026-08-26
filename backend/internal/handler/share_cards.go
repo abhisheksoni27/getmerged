@@ -17,6 +17,7 @@ import (
 	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
+	"github.com/abhisheksoni27/opendoor/internal/prtracker"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
 )
@@ -213,8 +214,14 @@ func lookupShareCard(c *gin.Context, cardRepo repository.ShareCardRepository) (*
 
 // GetShareCardHandler handles GET /api/v1/cards/:id — public, no auth required (AC1).
 // Rate limited 60 req/min/IP; cached 24h in Valkey and purged on revoke (AC2).
-func GetShareCardHandler(cardRepo repository.ShareCardRepository) gin.HandlerFunc {
+// Season-rank cards ("sr…" ids, AC4) are served from live season stats.
+func GetShareCardHandler(cardRepo repository.ShareCardRepository, prStore *prtracker.Store, jwtSecret string) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		id := strings.ToLower(c.Param("id"))
+		if stats, ok := lookupSeasonCard(c, prStore, jwtSecret, id); ok {
+			serveSeasonCardJSON(c, middleware.MustCache(c), id, stats)
+			return
+		}
 		cacheKey := "apicache:card:" + c.Param("id")
 		vk := middleware.MustCache(c)
 		if vk != nil {
@@ -259,8 +266,14 @@ func cardPublicPayload(card *repository.ShareCard) gin.H {
 }
 
 // GetShareCardOGHandler handles GET /api/v1/cards/:id/og.png — public 1200x630 PNG (<5MB).
-func GetShareCardOGHandler(cardRepo repository.ShareCardRepository) gin.HandlerFunc {
+// Season-rank ids render the season card PNG via the same cache path.
+func GetShareCardOGHandler(cardRepo repository.ShareCardRepository, prStore *prtracker.Store, jwtSecret string) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		id := strings.ToLower(c.Param("id"))
+		if stats, ok := lookupSeasonCard(c, prStore, jwtSecret, id); ok {
+			serveSeasonCardPNG(c, middleware.MustCache(c), id, stats)
+			return
+		}
 		cacheKey := "apicache:cardog:" + c.Param("id")
 		vk := middleware.MustCache(c)
 		if vk != nil {

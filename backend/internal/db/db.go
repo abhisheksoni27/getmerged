@@ -762,6 +762,27 @@ func AutoMigrate(db *sqlx.DB) error {
 			user_id INTEGER PRIMARY KEY,
 			last_active_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
+		// Contributor XP seasons (AC1/AC5): one row per awarded source on a
+		// scored eval; idempotent by UNIQUE(source, eval_id) under ON
+		// CONFLICT DO NOTHING. AC2 streak state is derived from events.
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS xp_events (
+			id INTEGER PRIMARY KEY %s,
+			user_id INTEGER NOT NULL,
+			source VARCHAR(32) NOT NULL DEFAULT 'pr_eval',
+			eval_id INTEGER NOT NULL,
+			xp INTEGER NOT NULL DEFAULT 0,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(source, eval_id)
+		);`, autoInc),
+		// Contributor XP season config (AC2): fixed UTC [start_date,end_date)
+		// ranges; season XP/levels/ranks only count events inside the window.
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS seasons (
+			id INTEGER PRIMARY KEY %s,
+			name VARCHAR(64) NOT NULL,
+			start_date DATE NOT NULL,
+			end_date DATE NOT NULL,
+			UNIQUE(start_date, end_date)
+		);`, autoInc),
 	}
 
 	for i, stmt := range statements {
@@ -825,6 +846,10 @@ func AutoMigrate(db *sqlx.DB) error {
 		// Hacktoberfest hub lookups (AC2/AC5).
 		`CREATE INDEX IF NOT EXISTS idx_hb_merges_user_year ON hacktoberfest_merges(user_id, year)`,
 		`CREATE INDEX IF NOT EXISTS idx_hb_activity_recent ON hacktoberfest_activity(last_active_at)`,
+		// Contributor XP lookups (AC1/AC4): per-user totals + the indexed
+		// created_at window behind the weekly leaderboard.
+		`CREATE INDEX IF NOT EXISTS idx_xp_events_user ON xp_events(user_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_xp_events_created_at ON xp_events(created_at)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)
@@ -961,6 +986,9 @@ func AutoMigrate(db *sqlx.DB) error {
 	}
 	_, _ = db.Exec(`UPDATE ghapp_welcomes SET status = 'posted' WHERE status IN ('claimed', 'deleted_remotely') AND comment_id > 0`)
 	_, _ = db.Exec(`UPDATE ghapp_welcomes SET status = 'failed' WHERE status IN ('claimed', 'dropped', 'deleted_remotely') AND comment_id = 0`)
+	// Contributor XP streak state (AC2/AC5): the only users columns added.
+	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN streak_count INTEGER NOT NULL DEFAULT 0`)
+	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN last_active_date DATE`)
 
 	return nil
 }
