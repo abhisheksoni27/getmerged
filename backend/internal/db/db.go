@@ -227,6 +227,42 @@ func AutoMigrate(db *sqlx.DB) error {
 			last_failed_hash VARCHAR(64) DEFAULT '',
 			PRIMARY KEY(user_id, repo_id)
 		);`,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS crank_outbox (
+			id INTEGER PRIMARY KEY %s,
+			user_id INTEGER NOT NULL,
+			repo_id VARCHAR(255) NOT NULL,
+			alert_date DATE NOT NULL,
+			full_name VARCHAR(255) DEFAULT '',
+			prev_tier VARCHAR(10) DEFAULT '',
+			new_tier VARCHAR(10) DEFAULT '',
+			prev_score REAL DEFAULT 0,
+			new_score REAL DEFAULT 0,
+			merge_rate REAL DEFAULT 0,
+			response_hours REAL DEFAULT 0,
+			prev_rank_hash VARCHAR(64) DEFAULT '',
+			new_snap_date VARCHAR(255) DEFAULT '',
+			status VARCHAR(20) NOT NULL DEFAULT 'pending',
+			attempts INTEGER NOT NULL DEFAULT 0,
+			next_attempt_at DATETIME NULL,
+			sent_at DATETIME NULL,
+			last_error TEXT,
+			created_at DATETIME NOT NULL,
+			updated_at DATETIME NOT NULL,
+			UNIQUE(user_id, repo_id, alert_date)
+		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS sent_alerts (
+			id INTEGER PRIMARY KEY %s,
+			run_id VARCHAR(64) NOT NULL,
+			user_id INTEGER NOT NULL,
+			repo_id VARCHAR(255) NOT NULL,
+			created_at DATETIME NOT NULL,
+			UNIQUE(run_id, user_id, repo_id)
+		);`, autoInc),
+		`CREATE TABLE IF NOT EXISTS crank_run_state (
+			id INTEGER NOT NULL PRIMARY KEY,
+			last_rescore_completed_at DATETIME NOT NULL,
+			updated_at DATETIME NOT NULL
+		);`,
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS indexing_queue (
 			id INTEGER PRIMARY KEY %s,
 			full_name VARCHAR(255) UNIQUE NOT NULL,
@@ -842,6 +878,11 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE crank_alert_state ADD COLUMN dead_lettered BOOLEAN NOT NULL DEFAULT FALSE`)
 	_, _ = db.Exec(`ALTER TABLE crank_alert_state ADD COLUMN last_failed_hash VARCHAR(64) DEFAULT ''`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN email_invalid BOOLEAN DEFAULT FALSE`)
+	// AC5 send-then-write ordering: outbox rows carry the diffed-from
+	// baseline hash and the new snapshot date so baselines advance only
+	// after the digest email is accepted.
+	_, _ = db.Exec(`ALTER TABLE crank_outbox ADD COLUMN prev_rank_hash VARCHAR(64) DEFAULT ''`)
+	_, _ = db.Exec(`ALTER TABLE crank_outbox ADD COLUMN new_snap_date VARCHAR(255) DEFAULT ''`)
 	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN persona VARCHAR(64)`)
 	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN stars_pulled_in INTEGER`)
 	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN updated_persona_at DATETIME`)

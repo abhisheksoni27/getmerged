@@ -3,7 +3,6 @@ package handler
 import (
 	"log/slog"
 	"net/http"
-	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/analytics"
 	"github.com/abhisheksoni27/opendoor/internal/config"
@@ -209,17 +208,21 @@ func TriggerWeeklyDigest(cfg *config.Config, telegram *notification.TelegramNoti
 }
 
 // TriggerCRankChangeAlerts handles POST /internal/jobs/crank-change-alerts.
-// Requires header X-Job-Secret matching env JOB_SECRET. Compares each watched
-// repo's two newest snapshots and emails C-Rank change alerts synchronously
-// through the real SMTP mailer, honoring the 24h per-repo-per-watcher cooldown
-// and the existing unsubscribe flow.
+// Requires header X-Job-Secret matching env JOB_SECRET. Diffs each watched
+// repo against its last-alerted baseline, enqueues outbox rows for material
+// shifts (any tier change or |delta| >= ALERT_DROP_THRESHOLD) and drains the
+// outbox synchronously: one batched email per user per night, sent_alerts
+// exactly-once bookkeeping, send-time unsubscribe checks, retries with
+// exponential backoff. Pass ?dry_run=true for a read-only diff report that
+// writes nothing and sends nothing (AC7 baseline verification).
 //
 //	@Summary      Trigger C-Rank change alerts
-//	@Description  Emails watchlist users when a watched repo crosses a C-Rank tier boundary or drops sharply. Synchronous.
+//	@Description  Emails watchlist users when a watched repo crosses a C-Rank tier boundary or shifts by the configured delta. Synchronous.
 //	@Tags         internal
 //	@Produce      json
 //	@Security     ApiKeyAuth
 //	@Param        X-Job-Secret  header    string  true  "Job secret"
+//	@Param        dry_run       query     boolean false "Report would-be alerts without sending"
 //	@Success      200  {object}  notification.CRankAlertSummary
 //	@Failure      403  {object}  map[string]string
 //	@Failure      500  {object}  map[string]string
@@ -237,15 +240,15 @@ func TriggerCRankChangeAlerts(cfg *config.Config) gin.HandlerFunc {
 			return
 		}
 
+		dryRun := c.Query("dry_run") == "true" || c.Query("dry_run") == "1"
 		mailer := notification.NewSMTPMailer(cfg.SMTPHost, cfg.SMTPPort, cfg.SMTPUser, cfg.SMTPPassword, cfg.SMTPFrom)
 		summary, err := notification.RunCRankChangeAlerts(c.Request.Context(), db, notification.CRankAlertConfig{
 			Mailer:    mailer,
 			BaseURL:   cfg.AppBaseURL,
 			JobSecret: cfg.JobSecret,
 
-			DropThresholdPoints: cfg.AlertDropThreshold,
-			Cooldown:            time.Duration(cfg.AlertCooldownHours) * time.Hour,
-			MaxSendFailures:     cfg.MaxSendFailures,
+			DeltaThresholdPoints: cfg.AlertDropThreshold,
+			DryRun:               dryRun,
 		})
 		if err != nil {
 			slog.Error("crank-change-alerts run failed", "err", err)
