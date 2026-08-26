@@ -70,6 +70,18 @@ func RateLimitPerIP(max int, window time.Duration) gin.HandlerFunc {
 	}
 }
 
+// SkipIfAuthenticated runs limiter only for anonymous requests (no user_id in
+// context), so per-IP trial limits never throttle signed-in users.
+func SkipIfAuthenticated(limiter gin.HandlerFunc) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if _, ok := c.Get(UserIDKey); ok {
+			c.Next()
+			return
+		}
+		limiter(c)
+	}
+}
+
 // incrFixedWindow atomically bumps a fixed-window counter: SET NX EX
 // reserves the key with its TTL exactly once, so the INCR that follows is
 // race-safe and the window always expires.

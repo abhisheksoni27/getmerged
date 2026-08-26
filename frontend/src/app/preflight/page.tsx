@@ -99,6 +99,13 @@ function PreflightContent() {
   const [result, setResult] = useState<EvaluationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [upgrade, setUpgrade] = useState<{ message: string; remaining: number } | null>(null);
+  // Anonymous trial state: one free evaluation per IP before GitHub sign-in
+  // (aha-before-auth). Detected via the same non-httpOnly session cookie check
+  // used by Header/HomeClient; falls back safely when document is unavailable.
+  const [signedIn] = useState<boolean>(
+    () => typeof document !== "undefined" && document.cookie.includes("opendoor_token=")
+  );
+  const [trialUsed, setTrialUsed] = useState(false);
 
   useEffect(() => {
     const rawParam = searchParams
@@ -171,6 +178,13 @@ function PreflightContent() {
 
       if (!res.ok) {
         if (res.status === 402 || res.status === 429) {
+          // Anonymous visitors who exhausted their one-per-IP trial get the
+          // sign-in gate instead of the Pro paywall.
+          if (!signedIn) {
+            setResult(null);
+            setTrialUsed(true);
+            return;
+          }
           const errData = await res.json().catch(() => ({}));
           setUpgrade({
             message:
@@ -189,6 +203,7 @@ function PreflightContent() {
       const data = await res.json();
       setResult(data);
       setError(null);
+      if (!signedIn) setTrialUsed(true);
     } catch (err) {
       console.error("Preflight evaluation failed", err);
       setError("Evaluation service is temporarily unavailable. Please verify your inputs and retry.");
@@ -472,12 +487,14 @@ function PreflightContent() {
               <p className="text-sm font-semibold text-zinc-800">{result.summary}</p>
             </div>
             <div className="flex items-center gap-4">
-              <ShareForecastButton
-                repoFullName={repoFullName || "Repository"}
-                overallScore={result.overall_score}
-                readyToMerge={result.ready_to_merge}
-                className="shrink-0"
-              />
+              {signedIn && (
+                <ShareForecastButton
+                  repoFullName={repoFullName || "Repository"}
+                  overallScore={result.overall_score}
+                  readyToMerge={result.ready_to_merge}
+                  className="shrink-0"
+                />
+              )}
               <div className="text-right">
                 <div className="text-2xl font-bold font-mono text-zinc-900">
                   {result.overall_score.toFixed(0)}
@@ -526,6 +543,46 @@ function PreflightContent() {
               </div>
             ))}
           </div>
+
+          {/* Soft gate for the anonymous one-per-IP trial: aha first, auth after */}
+          {!signedIn && (
+            <div
+              data-testid="anon-trial-gate"
+              className="mt-5 rounded-xl bg-emerald-50/60 border border-emerald-200 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+            >
+              <p className="text-sm text-zinc-700 font-sans">
+                <span className="font-semibold text-zinc-900">This is your free trial forecast.</span>{" "}
+                Sign in to save, share, and track this forecast.
+              </p>
+              <a
+                href={`${API_BASE_URL}/api/v1/auth/github`}
+                data-testid="anon-trial-signin"
+                className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+              >
+                Sign in with GitHub
+                <ArrowRight className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Anonymous trial exhausted on this IP/network (no result to show) */}
+      {trialUsed && !result && !signedIn && !error && (
+        <div
+          role="status"
+          className="rounded-2xl bg-emerald-50/60 border border-emerald-200 p-5 sm:p-6 mb-8 font-sans flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+        >
+          <p className="text-sm text-zinc-700">
+            You&apos;ve used your free trial evaluation on this network. Sign in with GitHub to get 3
+            free evaluations every month.
+          </p>
+          <a
+            href={`${API_BASE_URL}/api/v1/auth/github`}
+            className="shrink-0 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+          >
+            Sign in with GitHub
+          </a>
         </div>
       )}
     </>

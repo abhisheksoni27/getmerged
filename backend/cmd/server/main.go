@@ -280,7 +280,13 @@ func main() {
 		api.GET("/users/:slug/achievement.svg", handler.RenderAchievementCardHandler(userRepo))
 		api.GET("/badges/:owner/:name/badge.json", handler.GetRepoBadgeJSON(repoStore))
 		api.GET("/badges/:owner/:name/badge.svg", handler.GetRepoBadgeSVG(repoStore))
-		api.POST("/preflight/evaluate", middleware.RequireProOrQuota(entitlementRepo), handler.EvaluatePreflightHandler(gh))
+		// Instant Anonymous Preflight Trial: logged-out visitors get ONE evaluate
+		// per IP per 24h (aha-before-auth); signed-in users skip the trial
+		// limiter and go through normal quota enforcement.
+		api.POST("/preflight/evaluate",
+			middleware.SkipIfAuthenticated(middleware.RateLimitPerIP(1, 24*time.Hour)),
+			middleware.RequireProOrQuota(entitlementRepo),
+			handler.EvaluatePreflightHandler(gh))
 		api.POST("/preflight/pr-details", handler.FetchPRDetailsHandler(gh))
 		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo))
 		api.POST("/webhooks/github-app", handler.GithubAppWebhookHandler(ghAppSvc))
