@@ -2,6 +2,7 @@ package handler_test
 
 import (
 	"bytes"
+	"context"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
@@ -112,4 +113,70 @@ func TestDodopaymentsWebhookHandler(t *testing.T) {
 			t.Fatalf("expected 401 Unauthorized, got %d", w.Code)
 		}
 	})
+
+	t.Run("one-time pack payment grants credits once and never flips pro", func(t *testing.T) {
+		sendPackWebhook := func(eventID string) {
+			payload := handler.DodopaymentsWebhookPayload{
+				EventID:   eventID,
+				EventType: "payment.succeeded",
+				CreatedAt: time.Now().UTC().Format(time.RFC3339),
+			}
+			payload.Data.PaymentID = "pay_777"
+			payload.Data.ProductCart = []struct {
+				ProductID string `json:"product_id"`
+				Quantity  int    `json:"quantity"`
+			}{{ProductID: "pdt_opendoor_pack10", Quantity: 1}}
+			payload.Data.Customer.Metadata.UserID = "43"
+
+			bodyBytes, _ := json.Marshal(payload)
+			sig := computeSignature(bodyBytes, cfg.DodopaymentsWebhookSecret)
+			req := httptest.NewRequest("POST", "/api/v1/payments/webhook/dodopayments", bytes.NewReader(bodyBytes))
+			req.Header.Set("X-Dodopayments-Signature", sig)
+			w := httptest.NewRecorder()
+			r.ServeHTTP(w, req)
+			if w.Code != http.StatusOK {
+				t.Fatalf("expected 200 OK for %s, got %d", eventID, w.Code)
+			}
+		}
+
+		// Two distinct events replaying the SAME purchase must be a no-op the
+		// second time (ledger unique constraint on purchase_id).
+		sendPackWebhook("evt_pack_a")
+		sendPackWebhook("evt_pack_b")
+
+		ent, err := entRepo.GetEntitlement(reqCtx(), 43)
+		if err != nil {
+			t.Fatalf("failed to load entitlement: %v", err)
+		}
+		if ent.IsPro {
+			t.Fatalf("one-time pack payment must not activate subscription")
+		}
+		if ent.BonusEvals != 10 {
+			t.Fatalf("expected exactly 10 bonus evals after replayed webhook, got %d", ent.BonusEvals)
+		}
+
+		// Non-pack payment.succeeded keeps legacy subscription behavior.
+		payload := handler.DodopaymentsWebhookPayload{
+			EventID:   "evt_sub_pay",
+			EventType: "payment.succeeded",
+			CreatedAt: time.Now().UTC().Format(time.RFC3339),
+		}
+		payload.Data.SubscriptionID = "sub_888"
+		payload.Data.Customer.Metadata.UserID = "44"
+		bodyBytes, _ := json.Marshal(payload)
+		sig := computeSignature(bodyBytes, cfg.DodopaymentsWebhookSecret)
+		req2 := httptest.NewRequest("POST", "/api/v1/payments/webhook/dodopayments", bytes.NewReader(bodyBytes))
+		req2.Header.Set("X-Dodopayments-Signature", sig)
+		w2 := httptest.NewRecorder()
+		r.ServeHTTP(w2, req2)
+		if w2.Code != http.StatusOK {
+			t.Fatalf("expected 200 OK, got %d", w2.Code)
+		}
+		entSub, err := entRepo.GetEntitlement(req2.Context(), 44)
+		if err != nil || !entSub.IsPro {
+			t.Fatalf("expected non-pack payment.succeeded to keep subscription flow, got %v err %v", entSub, err)
+		}
+	})
 }
+
+func reqCtx() context.Context { return context.Background() }

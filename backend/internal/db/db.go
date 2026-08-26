@@ -97,12 +97,34 @@ func AutoMigrate(db *sqlx.DB) error {
 			subscription_updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
-		`CREATE TABLE IF NOT EXISTS payment_webhook_events (
-			event_id VARCHAR(255) PRIMARY KEY,
-			event_type VARCHAR(100) NOT NULL,
-			payload_json TEXT NOT NULL,
-			processed_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-		);`,
+	`CREATE TABLE IF NOT EXISTS payment_webhook_events (
+		event_id VARCHAR(255) PRIMARY KEY,
+		event_type VARCHAR(100) NOT NULL,
+		payload_json TEXT NOT NULL,
+		processed_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+	);`,
+	// One-time preflight credit packs: ledger keyed by unique purchase_id
+	// (DodoPayments payment ID) so webhook/reconcile replays are no-ops and
+	// concurrent grants cannot double-credit at the DB level.
+	fmt.Sprintf(`CREATE TABLE IF NOT EXISTS credit_packs (
+		id INTEGER PRIMARY KEY %s,
+		user_id INTEGER NOT NULL,
+		purchase_id VARCHAR(255) UNIQUE NOT NULL,
+		sku VARCHAR(100) NOT NULL DEFAULT 'preflight_pack_10',
+		credits INTEGER NOT NULL DEFAULT 10,
+		granted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+	);`, autoInc),
+	// Pack purchase orders: created server-side at checkout time so
+	// GET /credits/pack-status can enforce order ownership (AC4). status is
+	// pending | granted | canceled | failed.
+	`CREATE TABLE IF NOT EXISTS credit_pack_orders (
+		order_id VARCHAR(64) PRIMARY KEY,
+		user_id INTEGER NOT NULL,
+		dodo_checkout_id VARCHAR(255) NOT NULL DEFAULT '',
+		status VARCHAR(20) NOT NULL DEFAULT 'pending',
+		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+	);`,
 		`CREATE TABLE IF NOT EXISTS user_watchlists (
 			user_id INTEGER NOT NULL,
 			repo_id VARCHAR(255) NOT NULL,
@@ -850,6 +872,8 @@ func AutoMigrate(db *sqlx.DB) error {
 		// created_at window behind the weekly leaderboard.
 		`CREATE INDEX IF NOT EXISTS idx_xp_events_user ON xp_events(user_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_xp_events_created_at ON xp_events(created_at)`,
+		// Credit-pack order ownership lookups (AC4).
+		`CREATE INDEX IF NOT EXISTS idx_credit_pack_orders_user ON credit_pack_orders(user_id, created_at)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)

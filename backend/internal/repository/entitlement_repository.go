@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rand"
 	"database/sql"
+	"errors"
 	"math/big"
 	"time"
 
@@ -17,6 +18,7 @@ type UserEntitlement struct {
 	SubscriptionExpiresAt *time.Time `db:"subscription_expires_at" json:"subscription_expires_at,omitempty"`
 	BillingCycle          *string    `db:"billing_cycle" json:"billing_cycle,omitempty"`
 	MonthlyEvalCount      int        `db:"monthly_eval_count" json:"monthly_eval_count"`
+	BonusEvals            int        `db:"bonus_evals" json:"bonus_evals"`
 	CurrentPeriodStart    time.Time  `db:"current_period_start" json:"current_period_start"`
 	SubscriptionUpdatedAt time.Time  `db:"subscription_updated_at" json:"subscription_updated_at"`
 	UpdatedAt             time.Time  `db:"updated_at" json:"updated_at"`
@@ -32,6 +34,22 @@ type EntitlementRepository interface {
 	FindUserIDByReferralCode(ctx context.Context, code string) (int64, bool, error)
 	ApplySignupReferral(ctx context.Context, referrerID, newUserID int64) error
 	GetReferralStats(ctx context.Context, userID int64) (invites int64, credits int64, err error)
+	GrantCreditPack(ctx context.Context, userID int64, purchaseID, sku string, credits int) error
+	CreateCreditPackOrder(ctx context.Context, order *CreditPackOrder) error
+	GetCreditPackOrder(ctx context.Context, orderID string) (*CreditPackOrder, error)
+	MarkCreditPackOrder(ctx context.Context, orderID, status string) error
+}
+
+// CreditPackOrder tracks a one-time pack checkout so pack-status can enforce
+// ownership (AC4): the row is written with the purchaser user_id at checkout
+// creation. Status lifecycle: pending -> granted | canceled | failed.
+type CreditPackOrder struct {
+	OrderID        string    `db:"order_id" json:"order_id"`
+	UserID         int64     `db:"user_id" json:"user_id"`
+	DodoCheckoutID string    `db:"dodo_checkout_id" json:"dodo_checkout_id,omitempty"`
+	Status         string    `db:"status" json:"status"`
+	CreatedAt      time.Time `db:"created_at" json:"created_at"`
+	UpdatedAt      time.Time `db:"updated_at" json:"updated_at"`
 }
 
 // Referral bonus constants: one-time grants stacked on the free tier.
@@ -39,6 +57,15 @@ const (
 	referralReferrerBonus = 3
 	referralRefereeBonus  = 1
 	referralLifetimeCap   = 10
+)
+
+// Credit pack constants (AC5): packs stack with referral bonuses, never
+// expire, and are consumed by DeductQuota only after the monthly free quota
+// (the first 3 evals of the period). Sanity cap bounds lifetime packs/user.
+const (
+	CreditPackSKU         = "preflight_pack_10"
+	CreditPackCredits     = 10
+	MaxCreditPacksPerUser = 10
 )
 
 // referralCodeCharset is base62; codes are 16 chars drawn from crypto/rand.
@@ -56,7 +83,7 @@ func (r *sqlxEntitlementRepository) GetEntitlement(ctx context.Context, userID i
 	var ent UserEntitlement
 	err := r.db.GetContext(ctx, &ent, `
 		SELECT user_id, is_pro, subscription_id, subscription_expires_at, billing_cycle,
-		       monthly_eval_count, current_period_start, subscription_updated_at, updated_at
+		       monthly_eval_count, bonus_evals, current_period_start, subscription_updated_at, updated_at
 		FROM user_entitlements
 		WHERE user_id = ?
 	`, userID)
@@ -333,4 +360,103 @@ func (r *sqlxEntitlementRepository) GetReferralStats(ctx context.Context, userID
 	err = r.db.GetContext(ctx, &credits,
 		"SELECT COALESCE(SUM(referrer_bonus), 0) FROM referral_credits WHERE referrer_id = ? AND referrer_bonus > 0", userID)
 	return invites, credits, err
+}
+
+// GrantCreditPack atomically credits a purchased pack (AC2/AC3): the ledger
+// insert keyed by the unique DodoPayments purchase ID and the bonus_evals
+// increment run in one transaction, so replayed webhooks/reconcile polls are
+// no-ops (unique constraint on purchase_id) and concurrent duplicate grants
+// are impossible at the DB level. Packs stack up to MaxCreditPacksPerUser.
+func (r *sqlxEntitlementRepository) GrantCreditPack(ctx context.Context, userID int64, purchaseID, sku string, credits int) error {
+	if userID <= 0 || purchaseID == "" || credits <= 0 {
+		return nil
+	}
+	if sku == "" {
+		sku = CreditPackSKU
+	}
+
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	insertEnt := "INSERT IGNORE INTO user_entitlements (user_id, current_period_start) VALUES (?, CURRENT_TIMESTAMP)"
+	if r.db.DriverName() == "sqlite" {
+		insertEnt = "INSERT OR IGNORE INTO user_entitlements (user_id, current_period_start) VALUES (?, CURRENT_TIMESTAMP)"
+	}
+	if _, err := tx.ExecContext(ctx, insertEnt, userID); err != nil {
+		return err
+	}
+
+	// Idempotent ledger insert: zero rows affected means this purchase was
+	// already granted (replayed webhook or reconcile poll) - commit no-op.
+	insertLedger := "INSERT IGNORE INTO credit_packs (user_id, purchase_id, sku, credits) VALUES (?, ?, ?, ?)"
+	if r.db.DriverName() == "sqlite" {
+		insertLedger = "INSERT OR IGNORE INTO credit_packs (user_id, purchase_id, sku, credits) VALUES (?, ?, ?, ?)"
+	}
+	res, err := tx.ExecContext(ctx, insertLedger, userID, purchaseID, sku, credits)
+	if err != nil {
+		return err
+	}
+	rows, _ := res.RowsAffected()
+	if rows == 0 {
+		return tx.Commit()
+	}
+
+	// Sanity cap: purchases beyond MaxCreditPacksPerUser stay in the ledger
+	// for refund handling but grant nothing.
+	var packs int64
+	if err := tx.QueryRowContext(ctx,
+		"SELECT COUNT(*) FROM credit_packs WHERE user_id = ?", userID).Scan(&packs); err != nil {
+		return err
+	}
+	if packs > MaxCreditPacksPerUser {
+		return tx.Commit()
+	}
+
+	if _, err := tx.ExecContext(ctx,
+		"UPDATE user_entitlements SET bonus_evals = COALESCE(bonus_evals, 0) + ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?",
+		credits, userID); err != nil {
+		return err
+	}
+	return tx.Commit()
+}
+
+// CreateCreditPackOrder persists a new pack order row (purchaser user_id is
+// stamped here, at checkout creation - AC4).
+func (r *sqlxEntitlementRepository) CreateCreditPackOrder(ctx context.Context, order *CreditPackOrder) error {
+	if order == nil || order.OrderID == "" || order.UserID <= 0 {
+		return errors.New("invalid credit pack order")
+	}
+	if order.Status == "" {
+		order.Status = "pending"
+	}
+	_, err := r.db.ExecContext(ctx,
+		"INSERT INTO credit_pack_orders (order_id, user_id, dodo_checkout_id, status) VALUES (?, ?, ?, ?)",
+		order.OrderID, order.UserID, order.DodoCheckoutID, order.Status)
+	return err
+}
+
+// GetCreditPackOrder returns the pack order by ID; sql.ErrNoRows when absent.
+func (r *sqlxEntitlementRepository) GetCreditPackOrder(ctx context.Context, orderID string) (*CreditPackOrder, error) {
+	var order CreditPackOrder
+	err := r.db.GetContext(ctx, &order,
+		"SELECT order_id, user_id, dodo_checkout_id, status, created_at, updated_at FROM credit_pack_orders WHERE order_id = ?",
+		orderID)
+	if err != nil {
+		return nil, err
+	}
+	return &order, nil
+}
+
+// MarkCreditPackOrder transitions an order to granted|canceled|failed.
+func (r *sqlxEntitlementRepository) MarkCreditPackOrder(ctx context.Context, orderID, status string) error {
+	if orderID == "" || status == "" {
+		return nil
+	}
+	_, err := r.db.ExecContext(ctx,
+		"UPDATE credit_pack_orders SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE order_id = ?",
+		status, orderID)
+	return err
 }
