@@ -373,6 +373,8 @@ func AutoMigrate(db *sqlx.DB) error {
 			comments_count INTEGER DEFAULT 0,
 			labels_json TEXT NOT NULL,
 			quality_score INTEGER DEFAULT 0,
+			bounty_amount_usd DOUBLE NULL,
+			bounty_status VARCHAR(20) NOT NULL DEFAULT 'active',
 			created_at DATETIME NOT NULL,
 			synced_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			alert_dedup_key VARCHAR(128) NOT NULL DEFAULT '',
@@ -382,6 +384,33 @@ func AutoMigrate(db *sqlx.DB) error {
 			alert_last_updated_at DATETIME NULL,
 			UNIQUE(repository_id, issue_number)
 		);`, autoInc),
+		// Paid bounty boost entitlements: one row per payment (payment_id is
+		// the idempotency key). Listing queries join live with expires_at >
+		// NOW() so refunds revoke the remaining window at query time.
+		`CREATE TABLE IF NOT EXISTS gfi_bounty_boosts (
+			payment_id VARCHAR(128) PRIMARY KEY,
+			user_id INTEGER NOT NULL,
+			repository_id VARCHAR(255) NOT NULL,
+			issue_number INTEGER NOT NULL,
+			amount_cents INTEGER NOT NULL DEFAULT 0,
+			status VARCHAR(20) NOT NULL DEFAULT 'active',
+			boost_started_at DATETIME NULL,
+			expires_at DATETIME NOT NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
+		// Boost purchase orders tracked from checkout creation to webhook /
+		// poll reconciliation (mirrors credit_pack_orders).
+		`CREATE TABLE IF NOT EXISTS gfi_bounty_boost_orders (
+			order_id VARCHAR(64) PRIMARY KEY,
+			user_id INTEGER NOT NULL,
+			repository_id VARCHAR(255) NOT NULL DEFAULT '',
+			issue_number INTEGER NOT NULL DEFAULT 0,
+			dodo_checkout_id VARCHAR(128) NULL,
+			status VARCHAR(20) NOT NULL DEFAULT 'pending',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
 		`CREATE TABLE IF NOT EXISTS repository_topics (
 			topic VARCHAR(100) NOT NULL,
 			repository_id VARCHAR(255) NOT NULL,
@@ -882,6 +911,8 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_repo_claims_user ON repo_claims(owner_user_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_repo_claims_repo_state ON repo_claims(repo_id, state)`,
 		`CREATE INDEX IF NOT EXISTS idx_gfi_email_queue_pending ON gfi_email_queue(status, created_at)`,
+		// Paid bounty boosts: live listing joins filter on issue + expiry.
+		`CREATE INDEX IF NOT EXISTS idx_gfi_bounty_boosts_issue ON gfi_bounty_boosts(repository_id, issue_number, expires_at)`,
 		`CREATE INDEX IF NOT EXISTS idx_gfi_email_queue_sub ON gfi_email_queue(subscriber_id, repo_id, issue_number)`,
 		`CREATE INDEX IF NOT EXISTS idx_job_locks_expiry ON job_locks(locked_until)`,
 		`CREATE INDEX IF NOT EXISTS idx_gfi_signup_attempts_lookup ON gfi_signup_attempts(ip, email, created_at)`,
@@ -1035,6 +1066,9 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN alert_refresh_fired_at DATETIME NULL`)
 	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN issue_updated_at DATETIME NULL`)
 	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN alert_last_updated_at DATETIME NULL`)
+	// Bounty issue metadata (AC2): store parsed USD amount and lifecycle status
+	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN bounty_amount_usd DOUBLE NULL`)
+	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN bounty_status VARCHAR(20) NOT NULL DEFAULT 'active'`)
 	// GFI prefs opt-out flag set by the stateless unsubscribe flow (AC4).
 	_, _ = db.Exec(`ALTER TABLE gfi_subscribers ADD COLUMN opt_out BOOLEAN NOT NULL DEFAULT FALSE`)
 	// Soft-bounce reputation counter (AC6): decrements deliverability trust

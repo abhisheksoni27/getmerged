@@ -94,7 +94,7 @@ func TestGFIRepository_ListByLanguage_FiltersOlderThan9Months(t *testing.T) {
 	database.MustExec(`INSERT INTO repo_good_first_issues (repository_id, issue_number, title, body_text, url, comments_count, labels_json, quality_score, created_at, synced_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		repoID, 102, "Fresh Issue 102", "body", "url102", 0, "[]", 80, freshDate, now)
 
-	items, err := gfiRepo.ListByLanguage(ctx, "Go", 10)
+	items, err := gfiRepo.ListByLanguage(ctx, "Go", 10, false)
 	if err != nil {
 		t.Fatalf("ListByLanguage failed: %v", err)
 	}
@@ -129,7 +129,7 @@ func TestGFIRepository_ListByRepoID_FiltersOlderThan9Months(t *testing.T) {
 	database.MustExec(`INSERT INTO repo_good_first_issues (repository_id, issue_number, title, body_text, url, comments_count, labels_json, quality_score, created_at, synced_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		repoID, 202, "Fresh Issue 202", "body", "url202", 0, "[]", 85, freshDate, now)
 
-	items, err := gfiRepo.ListByRepoID(ctx, repoID, 10)
+	items, err := gfiRepo.ListByRepoID(ctx, repoID, 10, false)
 	if err != nil {
 		t.Fatalf("ListByRepoID failed: %v", err)
 	}

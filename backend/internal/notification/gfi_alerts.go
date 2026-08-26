@@ -16,6 +16,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/abhisheksoni27/opendoor/internal/bounty"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -694,6 +695,7 @@ type gfiIssueEmailCtx struct {
 	IssueNo                  int     `db:"issue_number"`
 	Title                    string  `db:"title"`
 	URL                      string  `db:"url"`
+	LabelsJSON               string  `db:"labels_json"`
 }
 
 func (c gfiIssueEmailCtx) repoCtx() gfiRepoCtx {
@@ -1010,6 +1012,7 @@ func swapInNextMatch(ctx context.Context, db *sqlx.DB, cfg GFIAlertConfig, subID
 	var candidates []gfiIssueEmailCtx
 	query := `
 		SELECT g.repository_id AS repo_id, g.issue_number, g.title, g.url,
+		       COALESCE(g.labels_json, '') AS labels_json,
 		       r.full_name, COALESCE(r.language,'') AS language,
 		       COALESCE(s.c_rank_tier,'') AS c_rank_tier, COALESCE(s.c_rank_score,0) AS c_rank_score,
 		       COALESCE(s.maintainer_responsiveness,0) AS maintainer_responsiveness,
@@ -1075,6 +1078,7 @@ func getGFIIssueEmailCtx(ctx context.Context, db *sqlx.DB, repoID string, issueN
 	var item gfiIssueEmailCtx
 	err := db.GetContext(ctx, &item, `
 		SELECT g.repository_id AS repo_id, g.issue_number, g.title, g.url,
+		       COALESCE(g.labels_json, '') AS labels_json,
 		       r.full_name, COALESCE(r.language,'') AS language,
 		       COALESCE(s.c_rank_tier,'') AS c_rank_tier, COALESCE(s.c_rank_score,0) AS c_rank_score,
 		       COALESCE(s.maintainer_responsiveness,0) AS maintainer_responsiveness,
@@ -1168,6 +1172,7 @@ type gfiDigestItem struct {
 	IssueNumber int    `db:"issue_number"`
 	Title       string `db:"title"`
 	URL         string `db:"url"`
+	LabelsJSON  string `db:"labels_json"`
 }
 
 var (
@@ -1285,7 +1290,7 @@ func selectDigestMatches(ctx context.Context, db *sqlx.DB, sub gfiSubscriber, wi
 		       COALESCE(s.c_rank_tier,'') AS c_rank_tier, COALESCE(s.c_rank_score,0) AS c_rank_score,
 		       COALESCE(s.maintainer_responsiveness,0) AS maintainer_responsiveness,
 		       COALESCE(s.response_p50_hours,0) AS response_p50_hours,
-		       g.issue_number, g.title, g.url
+		       g.issue_number, g.title, g.url, COALESCE(g.labels_json, '') AS labels_json
 		FROM repo_good_first_issues g
 		JOIN repositories r ON r.id = g.repository_id
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
@@ -1510,8 +1515,8 @@ func claimLinkOr(claimURLs map[string]string, key, baseURL, fullName string) str
 
 // buildGFIBatchAlertEmail renders one instant-alert email listing every issue
 // matched in the subscriber's current 30-min batch window (AC2), with C-Rank
-// responsiveness stats, single-use Claim & Setup links (AC5), unsubscribe and
-// CAN-SPAM footer (AC7).
+// responsiveness stats, single-use Claim & Setup links (AC5), dedicated bounty
+// section when >=1 bounty issue exists (AC7), unsubscribe and CAN-SPAM footer.
 func buildGFIBatchAlertEmail(cfg GFIAlertConfig, subscriberID int64, email string, items []gfiIssueEmailCtx, claimURLs map[string]string) DigestPayload {
 	base := gfiLinks(cfg.BaseURL)
 	allURL := base + "/good-first-issue"
@@ -1520,13 +1525,50 @@ func buildGFIBatchAlertEmail(cfg GFIAlertConfig, subscriberID int64, email strin
 
 	subject := fmt.Sprintf("🎯 %d new good first issue(s) matching your stack", len(items))
 
+	var bountyItems []gfiIssueEmailCtx
+	var normalItems []gfiIssueEmailCtx
+	for _, it := range items {
+		if ok, _ := bounty.Detect(it.LabelsJSON); ok {
+			bountyItems = append(bountyItems, it)
+		} else {
+			normalItems = append(normalItems, it)
+		}
+	}
+
 	var text strings.Builder
 	text.WriteString("Newly opened good first issues matching your stack:\n\n")
 	var htmlB strings.Builder
 	htmlB.WriteString(`<div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#1e293b;">
 <h2 style="color:#0f172a;">🎯 New good first issues for you</h2>`)
 
-	for i, it := range items {
+	if len(bountyItems) > 0 {
+		text.WriteString("💰 Cash-Bounty Issues (Bounty-labeled):\n")
+		htmlB.WriteString(`<div style="margin-bottom:16px;"><h3 style="color:#15803d;margin:0 0 10px 0;font-size:16px;">💰 Cash-Bounty Issues (Bounty-labeled)</h3>`)
+		for i, it := range bountyItems {
+			key := fmt.Sprintf("%s:%d", it.RepoID, it.IssueNo)
+			setupURL := claimLinkOr(claimURLs, key, base, it.FullName)
+			_, amt := bounty.Detect(it.LabelsJSON)
+			badge := "💰 Bounty-labeled"
+			if amt != nil {
+				badge = fmt.Sprintf("💰 $%.2f Bounty-labeled", *amt)
+			}
+			text.WriteString(fmt.Sprintf("%d. %s — #%d %s [%s]\n   %s\n   C-Rank: %.1f (%s tier)\n   %s\n   Claim & Setup: %s\n\n",
+				i+1, it.FullName, it.IssueNo, it.Title, badge, it.URL, it.Score, it.Tier,
+				gfiStatLine(it.repoCtx()), setupURL))
+			htmlB.WriteString(fmt.Sprintf(`<div style="border:1px solid #86efac;border-radius:8px;padding:14px;margin-bottom:10px;background:#f0fdf4;">
+<h3 style="margin:0 0 6px 0;color:#0284c7;"><a href="%s" title="View repository scorecard" style="color:#0284c7;text-decoration:none;">%s</a> <span style="font-size:12px;background:#dcfce7;color:#15803d;padding:2px 6px;border-radius:4px;font-weight:bold;">%s</span> <span style="font-size:12px;background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;">%s Tier</span></h3>
+<p style="margin:4px 0;font-size:13px;color:#475569;"><a href="%s" title="View good first issue on GitHub" style="color:#10b981;font-weight:bold;">#%d %s</a></p>
+<p style="margin:4px 0;font-size:13px;color:#475569;">C-Rank %.1f · %s</p>
+<p style="margin:10px 0 2px 0;"><a href="%s" title="Claim and set up this repository" style="background:#15803d;color:#fff;padding:8px 14px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:13px;">Claim &amp; Setup →</a></p>
+</div>`,
+				html.EscapeString(gfiClaimURL(base, it.FullName)), html.EscapeString(it.FullName), html.EscapeString(badge), html.EscapeString(it.Tier),
+				html.EscapeString(it.URL), it.IssueNo, html.EscapeString(it.Title), it.Score,
+				html.EscapeString(gfiStatLine(it.repoCtx())), html.EscapeString(setupURL)))
+		}
+		htmlB.WriteString(`</div>`)
+	}
+
+	for i, it := range normalItems {
 		key := fmt.Sprintf("%s:%d", it.RepoID, it.IssueNo)
 		setupURL := claimLinkOr(claimURLs, key, base, it.FullName)
 		text.WriteString(fmt.Sprintf("%d. %s — #%d %s\n   %s\n   C-Rank: %.1f (%s tier)\n   %s\n   Claim & Setup: %s\n\n",
@@ -1551,7 +1593,8 @@ func buildGFIBatchAlertEmail(cfg GFIAlertConfig, subscriberID int64, email strin
 }
 
 // buildGFIDigestEmail renders the weekly digest capped at GFIDigestCap items
-// with single-use Claim & Setup links (AC5) and the CAN-SPAM footer (AC7).
+// with single-use Claim & Setup links (AC5), dedicated bounty section when
+// >=1 bounty issue exists (AC7), and CAN-SPAM footer.
 func buildGFIDigestEmail(cfg GFIAlertConfig, subscriberID int64, email string, items []gfiDigestItem, claimURLs map[string]string) DigestPayload {
 	base := gfiLinks(cfg.BaseURL)
 	allURL := base + "/good-first-issue"
@@ -1560,13 +1603,50 @@ func buildGFIDigestEmail(cfg GFIAlertConfig, subscriberID int64, email string, i
 
 	subject := fmt.Sprintf("Your weekly good first issues (%d matches)", len(items))
 
+	var bountyItems []gfiDigestItem
+	var normalItems []gfiDigestItem
+	for _, it := range items {
+		if ok, _ := bounty.Detect(it.LabelsJSON); ok {
+			bountyItems = append(bountyItems, it)
+		} else {
+			normalItems = append(normalItems, it)
+		}
+	}
+
 	var text strings.Builder
 	text.WriteString("Newly opened good first issues matching your stack:\n\n")
 	var htmlB strings.Builder
 	htmlB.WriteString(`<div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#1e293b;">
 <h2 style="color:#0f172a;">Your weekly good first issues</h2>`)
 
-	for i, it := range items {
+	if len(bountyItems) > 0 {
+		text.WriteString("💰 Cash-Bounty Issues (Bounty-labeled):\n")
+		htmlB.WriteString(`<div style="margin-bottom:16px;"><h3 style="color:#15803d;margin:0 0 10px 0;font-size:16px;">💰 Cash-Bounty Issues (Bounty-labeled)</h3>`)
+		for i, it := range bountyItems {
+			key := fmt.Sprintf("%s:%d", it.RepoID, it.IssueNumber)
+			setupURL := claimLinkOr(claimURLs, key, base, it.FullName)
+			_, amt := bounty.Detect(it.LabelsJSON)
+			badge := "💰 Bounty-labeled"
+			if amt != nil {
+				badge = fmt.Sprintf("💰 $%.2f Bounty-labeled", *amt)
+			}
+			text.WriteString(fmt.Sprintf("%d. %s [%s tier | %s] — C-Rank %.1f [%s]\n   #%d %s\n   %s\n   %s\n   Claim & Setup: %s\n\n",
+				i+1, it.FullName, it.Tier, it.Language, it.Score, badge, it.IssueNumber, it.Title, it.URL,
+				gfiStatLine(it.gfiRepoCtx), setupURL))
+			htmlB.WriteString(fmt.Sprintf(`<div style="border:1px solid #86efac;border-radius:8px;padding:14px;margin-bottom:10px;background:#f0fdf4;">
+<h3 style="margin:0 0 6px 0;color:#0284c7;"><a href="%s" title="View repository scorecard" style="color:#0284c7;text-decoration:none;">%s</a> <span style="font-size:12px;background:#dcfce7;color:#15803d;padding:2px 6px;border-radius:4px;font-weight:bold;">%s</span> <span style="font-size:12px;background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;">%s Tier</span></h3>
+<p style="margin:4px 0;font-size:13px;color:#475569;"><a href="%s" title="View good first issue on GitHub" style="color:#10b981;font-weight:bold;">#%d %s</a></p>
+<p style="margin:4px 0;font-size:13px;color:#475569;">C-Rank %.1f · %s</p>
+<p style="margin:10px 0 2px 0;"><a href="%s" title="Claim and set up this repository" style="background:#15803d;color:#fff;padding:8px 14px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:13px;">Claim &amp; Setup →</a></p>
+</div>`,
+				html.EscapeString(gfiClaimURL(base, it.FullName)), html.EscapeString(it.FullName), html.EscapeString(badge), html.EscapeString(it.Tier),
+				html.EscapeString(it.URL), it.IssueNumber, html.EscapeString(it.Title), it.Score,
+				html.EscapeString(gfiStatLine(it.gfiRepoCtx)), html.EscapeString(setupURL)))
+		}
+		htmlB.WriteString(`</div>`)
+	}
+
+	for i, it := range normalItems {
 		key := fmt.Sprintf("%s:%d", it.RepoID, it.IssueNumber)
 		setupURL := claimLinkOr(claimURLs, key, base, it.FullName)
 		text.WriteString(fmt.Sprintf("%d. %s [%s tier | %s] — C-Rank %.1f\n   #%d %s\n   %s\n   %s\n   Claim & Setup: %s\n\n",
