@@ -456,6 +456,16 @@ func EnqueueGFIInstantAlerts(ctx context.Context, db *sqlx.DB, repoID string, is
 					}
 				}
 				stampedNums[num] = true
+
+				// In-App Notification Center: emit alert if subscriber is a registered user
+				var uID int64
+				if err := tx.GetContext(ctx, &uID, `SELECT id FROM users WHERE email = ? LIMIT 1`, sub.Email); err == nil && uID > 0 {
+					notifTitle := fmt.Sprintf("New Good First Issue in %s", repo.FullName)
+					notifMsg := fmt.Sprintf("Issue #%d matched your preferred languages and tech stack.", num)
+					notifLink := fmt.Sprintf("/repos/%s", repoID)
+					notifRepo := NewNotificationCenterRepository(db)
+					_ = EmitNotification(ctx, db, notifRepo, uID, CategoryGFIAlert, notifTitle, notifMsg, notifLink)
+				}
 			}
 		}
 		if matched > 0 {

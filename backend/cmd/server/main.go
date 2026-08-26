@@ -87,6 +87,7 @@ func main() {
 	dnaWorker := pipeline.NewContributorDNAWorker(userRepo, profileRepo, tokenMgr, cfg.GithubToken, nil)
 	repoStore := repository.NewRepoRepository(database)
 	watchlistRepo := repository.NewWatchlistRepository(database)
+	notifRepo := notification.NewNotificationCenterRepository(database)
 	aiRepo := repository.NewAIRepository(database)
 	shareCardRepo := repository.NewShareCardRepository(database)
 	claimRepo := repository.NewClaimRepository(database)
@@ -439,6 +440,24 @@ func main() {
 		userApi.GET("/credits/pack-status",
 			middleware.RateLimitPerUser(10),
 			handler.PackStatusHandler(cfg, entitlementRepo))
+
+		// In-App Notification Center (AC1 - AC4)
+		userApi.GET("/notifications", handler.GetNotificationsHandler(notifRepo))
+		userApi.GET("/notifications/unread-count", middleware.RateLimitPerUser(60), handler.GetUnreadNotificationCountHandler(notifRepo))
+		userApi.POST("/notifications/mark-read", handler.MarkNotificationsReadHandler(notifRepo))
+		userApi.GET("/notifications/preferences", handler.GetNotificationPreferencesHandler(notifRepo))
+		userApi.PUT("/notifications/preferences", handler.UpdateNotificationPreferencesHandler(notifRepo))
+	}
+
+	// Top-level aliases for /api/notifications (AC1 - AC4)
+	apiNotif := r.Group("/api/notifications")
+	apiNotif.Use(middleware.UserAuth(cfg.JWTSecret))
+	{
+		apiNotif.GET("", handler.GetNotificationsHandler(notifRepo))
+		apiNotif.GET("/unread-count", middleware.RateLimitPerUser(60), handler.GetUnreadNotificationCountHandler(notifRepo))
+		apiNotif.POST("/mark-read", handler.MarkNotificationsReadHandler(notifRepo))
+		apiNotif.GET("/preferences", handler.GetNotificationPreferencesHandler(notifRepo))
+		apiNotif.PUT("/preferences", handler.UpdateNotificationPreferencesHandler(notifRepo))
 	}
 
 	// Internal routes - nginx blocks these externally
