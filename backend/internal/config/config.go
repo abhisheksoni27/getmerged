@@ -31,6 +31,7 @@ type Config struct {
 	TelegramBotToken          string
 	TelegramChatID            string
 	DodopaymentsWebhookSecret string
+	DodopaymentsAPIKey        string
 	JobSecret                 string
 	SMTPHost                  string
 	SMTPPort                  string
@@ -70,6 +71,7 @@ func Load() (*Config, error) {
 		TelegramBotToken:          os.Getenv("TELEGRAM_BOT_TOKEN"),
 		TelegramChatID:            os.Getenv("TELEGRAM_CHAT_ID"),
 		DodopaymentsWebhookSecret: os.Getenv("DODOPAYMENTS_WEBHOOK_SECRET"),
+		DodopaymentsAPIKey:        os.Getenv("DODOPAYMENTS_API_KEY"), // optional - enables hourly pack-purchase reconcile
 		GoogleClientID:            os.Getenv("GOOGLE_CLIENT_ID"),
 		GoogleClientSecret:        os.Getenv("GOOGLE_CLIENT_SECRET"),
 		JobSecret:                 os.Getenv("JOB_SECRET"),

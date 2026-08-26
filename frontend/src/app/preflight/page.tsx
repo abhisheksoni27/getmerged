@@ -79,6 +79,11 @@ function PreflightSkeleton() {
   );
 }
 
+const PACK_CHECKOUT_URL = "https://checkout.dodopayments.com/buy/pdt_opendoor_pack10";
+const PACK_PROCESSING_KEY = "preflight_pack_processing";
+
+type PackWatch = "processing" | "granted" | "failed" | "timeout";
+
 function PreflightContent() {
   const searchParams = useSearchParams();
   const queryRepo = searchParams
@@ -109,6 +114,120 @@ function PreflightContent() {
     () => typeof document !== "undefined" && document.cookie.includes("opendoor_token=")
   );
   const [trialUsed, setTrialUsed] = useState(false);
+  // Pay-as-you-go pack: set after returning from the DodoPayments checkout
+  // while the webhook/reconcile pipeline grants the credits (AC4).
+  const [packPending, setPackPending] = useState(false);
+  const [packWatch, setPackWatch] = useState<PackWatch>("processing");
+  const packOrderRef = useRef("");
+
+  useEffect(() => {
+    try {
+      const raw = window.sessionStorage.getItem(PACK_PROCESSING_KEY);
+      if (!raw) return;
+      window.sessionStorage.removeItem(PACK_PROCESSING_KEY);
+      try {
+        const parsed: unknown = JSON.parse(raw);
+        if (
+          parsed &&
+          typeof parsed === "object" &&
+          typeof (parsed as { orderId?: unknown }).orderId === "string"
+        ) {
+          packOrderRef.current = (parsed as { orderId: string }).orderId;
+        }
+      } catch {
+        // Legacy "1" flag or malformed value: banner-only fallback, no poll.
+      }
+      setPackPending(true);
+    } catch {
+      // sessionStorage unavailable (private mode, storage disabled): skip.
+    }
+  }, []);
+
+  // AC6: after checkout success, poll the tracked order's credit grant until
+  // confirmed or a 30s timeout shows the "may take a minute" fallback.
+  useEffect(() => {
+    if (!packPending) return;
+    const orderId = packOrderRef.current;
+    if (!orderId) return;
+    let cancelled = false;
+    const deadline = Date.now() + 30_000;
+    const tick = async () => {
+      while (!cancelled && Date.now() < deadline) {
+        try {
+          const res = await fetch(
+            `${API_BASE_URL}/api/v1/credits/pack-status?orderId=${encodeURIComponent(orderId)}`,
+            { credentials: "include" },
+          );
+          if (res.ok) {
+            const data: unknown = await res.json().catch(() => null);
+            const status =
+              data && typeof data === "object"
+                ? (data as { status?: unknown }).status
+                : null;
+            if (status === "paid") {
+              if (!cancelled) setPackWatch("granted");
+              return;
+            }
+            if (status === "failed") {
+              if (!cancelled) setPackWatch("failed");
+              return;
+            }
+          }
+        } catch {
+          // Network hiccup or auth blip: keep polling until the deadline.
+        }
+        await new Promise((r) => setTimeout(r, 3000));
+      }
+      if (!cancelled) setPackWatch("timeout");
+    };
+    void tick();
+    return () => {
+      cancelled = true;
+    };
+  }, [packPending]);
+
+  const handleBuyPack = async () => {
+    try {
+      window.sessionStorage.setItem(PACK_PROCESSING_KEY, JSON.stringify({ pending: true }));
+    } catch {
+      // Storage unavailable: checkout still proceeds without processing state.
+    }
+    let checkoutURL = PACK_CHECKOUT_URL;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 5000);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/credits/pack-checkout`, {
+        method: "POST",
+        credentials: "include",
+        signal: controller.signal,
+      });
+      if (res.ok) {
+        const data: unknown = await res.json().catch(() => null);
+        if (data && typeof data === "object") {
+          const { checkout_url, order_id } = data as {
+            checkout_url?: unknown;
+            order_id?: unknown;
+          };
+          if (typeof checkout_url === "string" && checkout_url) checkoutURL = checkout_url;
+          if (typeof order_id === "string" && order_id) {
+            try {
+              window.sessionStorage.setItem(
+                PACK_PROCESSING_KEY,
+                JSON.stringify({ orderId: order_id }),
+              );
+            } catch {
+              // Storage unavailable: status poll is skipped on return.
+            }
+          }
+        }
+      }
+    } catch {
+      // Checkout API unreachable/expired session: static hosted page fallback.
+    } finally {
+      clearTimeout(timer);
+    }
+    window.location.href = checkoutURL;
+  };
 
   useEffect(() => {
     const rawParam = searchParams
@@ -266,8 +385,16 @@ function PreflightContent() {
                 href="/pricing"
                 className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all cursor-pointer shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
-                Upgrade to Pro — $9/mo
+                Subscribe — $9/mo
               </Link>
+              <button
+                type="button"
+                onClick={handleBuyPack}
+                data-testid="buy-pack"
+                className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-emerald-600 text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-emerald-700 active:scale-[0.98] transition-all cursor-pointer shadow-[2px_2px_0px_#047857] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+              >
+                Buy 10 credits for $5
+              </button>
               <button
                 type="button"
                 onClick={() => setUpgrade(null)}
@@ -276,7 +403,37 @@ function PreflightContent() {
                 Maybe Later
               </button>
             </div>
+            <p className="mt-3 text-center text-[11px] text-zinc-500 font-sans">
+              One-time purchase. Pack credits never expire and stack on top of your monthly free evaluations.
+            </p>
           </div>
+        </div>
+      )}
+
+      {/* Pack purchase processing state (missed-webhook failure mode, AC4/AC6) */}
+      {packPending && !upgrade && (
+        <div
+          role="status"
+          data-testid="pack-processing"
+          className="rounded-2xl bg-emerald-50/60 border border-emerald-200 p-4 mb-8 font-sans text-sm text-zinc-700"
+        >
+          {packWatch === "granted" ? (
+            <>
+              <span className="font-semibold text-zinc-900">10 credits added.</span> Your pack
+              credits are ready — re-run your evaluation now.
+            </>
+          ) : packWatch === "failed" ? (
+            <>
+              <span className="font-semibold text-zinc-900">Payment not completed.</span> You were
+              not charged for a pack — you can retry the purchase anytime from the paywall.
+            </>
+          ) : (
+            <>
+              <span className="font-semibold text-zinc-900">Payment processing.</span> Credits may
+              take a minute to appear — re-run your evaluation shortly. Not credited within 24
+              hours? Contact support for a refund or manual grant.
+            </>
+          )}
         </div>
       )}
 

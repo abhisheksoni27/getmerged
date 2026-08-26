@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,8 @@ import (
 const (
 	rateLimitMax    = 100
 	rateLimitWindow = 60 * time.Second
+	// userRateWindow is the fixed window for RateLimitPerUser buckets.
+	userRateWindow = time.Minute
 )
 
 // RateLimit enforces 100 requests per minute per IP using a Valkey counter.
@@ -79,6 +82,46 @@ func SkipIfAuthenticated(limiter gin.HandlerFunc) gin.HandlerFunc {
 			return
 		}
 		limiter(c)
+	}
+}
+
+// RateLimitPerUser enforces max requests per authenticated user per minute.
+// Must run behind UserAuth; unauthenticated requests fail closed with 401.
+// In-memory per-instance counters fail open on internal errors so the
+// polling fallback can never brick the checkout flow.
+func RateLimitPerUser(max int) gin.HandlerFunc {
+	var mu sync.Mutex
+	counts := make(map[string]int64) // "userID|windowStart"
+
+	return func(c *gin.Context) {
+		userIDVal, ok := c.Get(UserIDKey)
+		if !ok {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthenticated"})
+			return
+		}
+		userID, _ := userIDVal.(int64)
+
+		window := time.Now().Unix() / int64(userRateWindow/time.Second)
+		key := fmt.Sprintf("%d|%d", userID, window)
+
+		mu.Lock()
+		if len(counts) > 1<<16 {
+			counts = make(map[string]int64) // shed stale windows
+		}
+		counts[key]++
+		count := counts[key]
+		mu.Unlock()
+
+		c.Header("X-RateLimit-Limit", fmt.Sprintf("%d", max))
+		if count > int64(max) {
+			c.Header("Retry-After", fmt.Sprintf("%d", int(userRateWindow.Seconds())))
+			c.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{
+				"error":      "rate limit exceeded",
+				"error_code": "rate_limited",
+			})
+			return
+		}
+		c.Next()
 	}
 }
 

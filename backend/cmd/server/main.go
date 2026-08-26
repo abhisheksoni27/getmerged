@@ -116,6 +116,11 @@ func main() {
 	stopPRTrackerCron := prTrackerSvc.StartCron(15 * time.Minute)
 	defer stopPRTrackerCron()
 
+	// Credit-pack reconcile: hourly DodoPayments poll for paid-but-ungranted
+	// pack purchases (missed-webhook failure mode, AC4). No-ops without an
+	// API key configured.
+	handler.NewPackPurchaseReconciler(cfg, entitlementRepo).Start(context.Background())
+
 	// Hacktoberfest hub: lazy 5-min poll over active viewers only (AC5).
 	hbStore := hacktoberfest.NewStore(database)
 	hbSvc := hacktoberfest.NewService(hbStore, prTrackerStore, tokenMgr, prtracker.NewGHClient(vkClient), cfg.JWTSecret)
@@ -400,6 +405,16 @@ func main() {
 
 		userApi.POST("/user/feedback", handler.CreateFeedback(database, cfg.GithubToken))
 		userApi.DELETE("/user/feedback/:id", handler.DeleteFeedback(database))
+
+		// Pay-as-you-go preflight credit packs (AC1/AC4/AC5): checkout
+		// creation stores the order with the purchaser's user_id; the
+		// pack-status poll enforces ownership and is rate-limited 10/min/user.
+		userApi.POST("/credits/pack-checkout",
+			middleware.RateLimitPerUser(10),
+			handler.CreatePackCheckoutHandler(cfg, entitlementRepo))
+		userApi.GET("/credits/pack-status",
+			middleware.RateLimitPerUser(10),
+			handler.PackStatusHandler(cfg, entitlementRepo))
 	}
 
 	// Internal routes - nginx blocks these externally
