@@ -252,4 +252,39 @@ export interface ClaimInitiateResponse {
   expires_at: string;
 }
 
+export interface RankGapItem {
+  id: string;
+  title: string;
+  status: "insufficient_data" | "gap" | "ok" | string;
+  gap: string;
+  impact_pts: number;
+  fix_guidance?: string;
+}
+
+export interface RepoPlaybookPayload {
+  repo_full_name: string;
+  is_scored: boolean;
+  c_rank_score: number;
+  c_rank_tier: string;
+  score_version: string;
+  valid_metrics: number;
+  locked?: boolean;
+  checklist: RankGapItem[];
+}
+
+export interface RescoreResult {
+  before_score: number;
+  after_score: number;
+  before_tier: string;
+  after_tier: string;
+  outcome: "improved" | "no_change" | "regressed" | string;
+  card_issued: boolean;
+  card_status: string;
+  rate_limited: boolean;
+  next_allowed_at?: string;
+  card_url?: string;
+  card_expires_at?: string;
+  status?: string;
+}
+
 

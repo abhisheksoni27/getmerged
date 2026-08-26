@@ -42,6 +42,7 @@ import { RepoTrendChart } from "@/components/RepoTrendChart";
 import { PRAcceptanceWidget } from "@/components/PRAcceptanceWidget";
 import { OptimalReviewWindow } from "@/components/OptimalReviewWindow";
 import { UnscoredExplainer } from "@/components/UnscoredExplainer";
+import { RaiseYourRank } from "@/components/RaiseYourRank";
 import { MaintainerConsoleModal } from "@/components/MaintainerConsoleModal";
 import { RepoStickyBar, RepoSectionTab } from "@/components/RepoStickyBar";
 import { isRepoScored } from "@/lib/repo-metadata";
@@ -591,6 +592,12 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       {/* Unscored explainer + verified-welcoming alternatives (IDEA-20260820-02 AC2) */}
       {!isRepoScored(repo) && (
         <UnscoredExplainer fullName={fullName} language={repo?.language} />
+      )}
+
+      {/* Raise Your C-Rank playbook: quantified gaps from live telemetry,
+          fed by README badge/link traffic into the claim flow */}
+      {isRepoScored(repo) && (
+        <RaiseYourRank fullName={fullName} onClaimClick={handleClaimClick} />
       )}
 
       {/* AI Insights & Maintainer Review Guidelines - moved up per Issue #80 */}
