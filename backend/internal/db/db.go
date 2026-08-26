@@ -693,6 +693,39 @@ func AutoMigrate(db *sqlx.DB) error {
 			created_at DATETIME NOT NULL,
 			expires_at DATETIME NOT NULL
 		);`),
+		// Hacktoberfest hub: persisted set of qualifying merge IDs (AC2/AC8)
+		// and per-user/year progress with the card_issued CAS flag (AC4).
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS hacktoberfest_merges (
+			id INTEGER PRIMARY KEY %s,
+			user_id INTEGER NOT NULL,
+			year INTEGER NOT NULL,
+			pr_id VARCHAR(255) NOT NULL,
+			repository_id VARCHAR(255) NOT NULL DEFAULT '',
+			pr_number INTEGER NOT NULL DEFAULT 0,
+			title TEXT,
+			html_url TEXT,
+			merged_at DATETIME NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(user_id, year, pr_id)
+		);`, autoInc),
+		`CREATE TABLE IF NOT EXISTS hacktoberfest_progress (
+			user_id INTEGER NOT NULL,
+			year INTEGER NOT NULL,
+			card_issued BOOLEAN NOT NULL DEFAULT FALSE,
+			card_id VARCHAR(64) NOT NULL DEFAULT '',
+			total_qualifying INTEGER NOT NULL DEFAULT -1,
+			last_reconciled_at DATETIME NULL,
+			last_nudge_at DATETIME NULL,
+			backoff_until DATETIME NULL,
+			backoff_attempts INTEGER NOT NULL DEFAULT 0,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY(user_id, year)
+		);`,
+		// AC5 lazy polling: only users with a recently-active page get polled.
+		`CREATE TABLE IF NOT EXISTS hacktoberfest_activity (
+			user_id INTEGER PRIMARY KEY,
+			last_active_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
 	}
 
 	for i, stmt := range statements {
@@ -753,6 +786,9 @@ func AutoMigrate(db *sqlx.DB) error {
 		// AC3: one notification per user/issue regardless of the instant or
 		// digest path; INSERT (OR) IGNORE against this index is the dedup rule.
 		`CREATE UNIQUE INDEX IF NOT EXISTS uq_gfi_notification_log_user_issue ON gfi_notification_log(user_id, issue_key)`,
+		// Hacktoberfest hub lookups (AC2/AC5).
+		`CREATE INDEX IF NOT EXISTS idx_hb_merges_user_year ON hacktoberfest_merges(user_id, year)`,
+		`CREATE INDEX IF NOT EXISTS idx_hb_activity_recent ON hacktoberfest_activity(last_active_at)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)
