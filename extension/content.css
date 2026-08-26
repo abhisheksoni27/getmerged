@@ -111,6 +111,24 @@
   margin: 2px 0;
 }
 
+.gm-chip {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  text-decoration: none !important;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.gm-chip:hover {
+  filter: brightness(1.1);
+}
+
 @media (prefers-color-scheme: dark) {
   .gm-widget {
     border-color: #3d444d;

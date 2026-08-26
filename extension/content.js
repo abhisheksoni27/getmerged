@@ -239,12 +239,262 @@
     }
   }
 
+  // ---------- C-Rank™ chips: repo home, search results, trending/explore ----------
+
+  const CHIP_CLASS = 'gm-chip';
+  const CHIP_ROW_ATTR = 'data-gm-chip-row';
+  const CHIP_HOME_ID = 'gm-home-chip';
+  const CHIP_TTL_MS = 5 * 60 * 1000;
+  const CHIP_MAX_PER_PAGE = 20;
+  const NON_REPO_ROOTS =
+    /^(features|security|premium-support|enterprise|teams|pricing|topics|trending|collections|events|marketplace|sponsors|customer-stories|readme|about|site|orgs|organizations|settings|notifications|inbox|watch|login|join|session|search|issues|pulls|explore|codespaces|copilot|apps|install|new|import|dashboard|account|users|developer|git|contact|gist)$/i;
+  let chipGen = 0;
+
+  function parseTwoSegment(pathname) {
+    try {
+      const m = /^\/([^/]+)\/([^/]+?)\/?$/.exec(String(pathname || ''));
+      if (!m) return null;
+      const owner = decodeURIComponent(m[1]);
+      const repo = decodeURIComponent(m[2]);
+      if (!owner || !repo || NON_REPO_ROOTS.test(owner)) return null;
+      return { owner, repo };
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function parseRepoRef(href) {
+    try {
+      const u = new URL(String(href || ''), location.origin);
+      if (u.hostname !== 'github.com') return null;
+      return parseTwoSegment(u.pathname);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function chipCacheRead(full) {
+    try {
+      const raw = globalThis.localStorage.getItem('gm_chip:' + full.toLowerCase());
+      if (!raw) return '';
+      const obj = JSON.parse(raw);
+      if (!obj || typeof obj.t !== 'number' || typeof obj.tier !== 'string' || !obj.tier) return '';
+      if (Date.now() - obj.t > CHIP_TTL_MS) return '';
+      return obj.tier;
+    } catch (_) {
+      return '';
+    }
+  }
+
+  function chipCacheWrite(full, tier) {
+    try {
+      globalThis.localStorage.setItem(
+        'gm_chip:' + full.toLowerCase(),
+        JSON.stringify({ t: Date.now(), tier })
+      );
+    } catch (_) {}
+  }
+
+  function buildChip(owner, repo, tier) {
+    const chip = el('a', CHIP_CLASS, 'C-Rank™ ' + tier);
+    chip.href = GM_BASE + '/' + encodeURIComponent(owner) + '/' + encodeURIComponent(repo);
+    chip.target = '_blank';
+    chip.rel = 'noopener noreferrer';
+    chip.title = 'C-Rank™ ' + tier + ' · open on GetMerged';
+    chip.style.backgroundColor = TIER_COLORS[tier] || '#6e7781';
+    return chip;
+  }
+
+  function findRepoLink(node, target) {
+    let links = null;
+    try {
+      links = node.querySelectorAll('a[href]');
+    } catch (_) {
+      return null;
+    }
+    for (let i = 0; i < links.length; i++) {
+      const p = parseRepoRef(links[i].getAttribute('href'));
+      if (!p) continue;
+      if (!target) return { anchor: links[i], target: p };
+      if (
+        p.owner.toLowerCase() === target.owner.toLowerCase() &&
+        p.repo.toLowerCase() === target.repo.toLowerCase()
+      ) {
+        return { anchor: links[i], target: p };
+      }
+    }
+    return null;
+  }
+
+  function collectChipRows() {
+    const out = [];
+    try {
+      const scopes = document.querySelectorAll(
+        'article.Box-row, ul .Box-row, [data-testid="results-list"] > div, .repo-list-item'
+      );
+      scopes.forEach((node) => {
+        try {
+          if (!node || node.getAttribute(CHIP_ROW_ATTR)) return;
+          if (node.closest && node.closest('[' + CHIP_ROW_ATTR + ']')) return;
+          const found = findRepoLink(node, null);
+          if (!found) return;
+          node.setAttribute(CHIP_ROW_ATTR, '1');
+          out.push(found);
+        } catch (_) {}
+      });
+    } catch (_) {}
+    return out;
+  }
+
+  function paintChip(anchor, owner, repo, tier) {
+    try {
+      const parent = anchor.parentNode;
+      if (!parent) return;
+      let existing = null;
+      try {
+        existing = parent.querySelector(':scope > .' + CHIP_CLASS);
+      } catch (_) {}
+      if (!tier) {
+        if (existing) existing.remove();
+        return;
+      }
+      if (existing) {
+        existing.textContent = 'C-Rank™ ' + tier;
+        existing.style.backgroundColor = TIER_COLORS[tier] || '#6e7781';
+        return;
+      }
+      const chip = buildChip(owner, repo, tier);
+      try {
+        anchor.insertAdjacentElement('afterend', chip);
+      } catch (_) {}
+    } catch (_) {}
+  }
+
+  function paintRows(rows, scores) {
+    rows.forEach((r) => {
+      try {
+        const s = scores[(r.target.owner + '/' + r.target.repo).toLowerCase()];
+        paintChip(r.anchor, r.target.owner, r.target.repo, s && s.tier ? s.tier : '');
+      } catch (_) {}
+    });
+  }
+
+  function paintHomeChip(home, tier) {
+    try {
+      const old = document.getElementById(CHIP_HOME_ID);
+      if (old) old.remove();
+    } catch (_) {}
+    if (!tier) return;
+    const hosts = [
+      '#repository-container-header strong[itemprop="name"]',
+      '#repository-container-header h1',
+      '[data-testid="app-header"] .AppHeader-context-full',
+      '.AppHeader-context-full'
+    ];
+    for (let i = 0; i < hosts.length; i++) {
+      let host = null;
+      try {
+        host = document.querySelector(hosts[i]);
+      } catch (_) {}
+      if (!host) continue;
+      try {
+        const chip = buildChip(home.owner, home.repo, tier);
+        chip.id = CHIP_HOME_ID;
+        host.appendChild(chip);
+      } catch (_) {}
+      return;
+    }
+  }
+
+  async function requestScores(repos) {
+    try {
+      const resp = await api.runtime.sendMessage({ type: 'gm_repo_scores', repos: repos });
+      if (resp && typeof resp === 'object') return resp;
+    } catch (_) {}
+    return { ok: false };
+  }
+
+  async function refreshChips() {
+    const gen = ++chipGen;
+    let home = null;
+    try {
+      home = parseTwoSegment(location.pathname);
+    } catch (_) {
+      home = null;
+    }
+
+    if (home) {
+      const full = home.owner + '/' + home.repo;
+      const cached = chipCacheRead(full);
+      if (cached) {
+        paintHomeChip(home, cached);
+        return;
+      }
+      paintHomeChip(home, '');
+      const resp = await requestScores([{ owner: home.owner, repo: home.repo }]);
+      if (gen !== chipGen) return;
+      const s = resp && resp.ok && resp.scores ? resp.scores[full] : null;
+      if (s && s.tier) chipCacheWrite(full, s.tier);
+      paintHomeChip(home, s && s.tier ? s.tier : '');
+      return;
+    }
+
+    const rows = collectChipRows();
+    if (!rows.length) return;
+
+    const scores = {};
+    const missing = [];
+    const seen = {};
+    rows.forEach((r) => {
+      try {
+        const full = (r.target.owner + '/' + r.target.repo).toLowerCase();
+        if (seen[full]) return;
+        seen[full] = true;
+        const cached = chipCacheRead(full);
+        if (cached) {
+          scores[full] = { tier: cached };
+        } else if (
+          missing.length < CHIP_MAX_PER_PAGE &&
+          !missing.some((m) => m.full === full)
+        ) {
+          missing.push({
+            full: full,
+            owner: r.target.owner,
+            repo: r.target.repo
+          });
+        }
+      } catch (_) {}
+    });
+
+    paintRows(rows, scores);
+    if (!missing.length) return;
+
+    const resp = await requestScores(
+      missing.map((m) => ({ owner: m.owner, repo: m.repo }))
+    );
+    if (gen !== chipGen || !resp || !resp.ok || !resp.scores) return;
+    Object.keys(resp.scores).forEach((k) => {
+      try {
+        const v = resp.scores[k];
+        const lk = String(k || '').toLowerCase();
+        if (v && v.tier) {
+          chipCacheWrite(lk, v.tier);
+          scores[lk] = { tier: v.tier };
+        }
+      } catch (_) {}
+    });
+    paintRows(rows, scores);
+  }
+
   function schedule() {
     if (pending) return;
     pending = setTimeout(() => {
       pending = 0;
       try {
         refresh().catch(() => {});
+      } catch (_) {}
+      try {
+        refreshChips().catch(() => {});
       } catch (_) {}
     }, 150);
   }
@@ -256,6 +506,14 @@
   });
 
   try {
+    const mo = new MutationObserver(schedule);
+    mo.observe(document.documentElement || document, { childList: true, subtree: true });
+  } catch (_) {}
+
+  try {
     refresh().catch(() => {});
+  } catch (_) {}
+  try {
+    refreshChips().catch(() => {});
   } catch (_) {}
 })();
