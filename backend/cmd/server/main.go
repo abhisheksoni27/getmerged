@@ -27,6 +27,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/notification"
 	"github.com/abhisheksoni27/opendoor/internal/pipeline"
+	"github.com/abhisheksoni27/opendoor/internal/prsim"
 	"github.com/abhisheksoni27/opendoor/internal/prtracker"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
@@ -191,6 +192,16 @@ func main() {
 	evalRL := middleware.RateLimitPerIP(60, time.Minute)
 	r.POST("/api/v1/pr-evals", evalRL, handler.RegisterPREvalHandler(prTrackerStore))
 	r.GET("/api/v1/pr-evals/:id/outcome", evalRL, handler.GetPREvalOutcomeHandler(prTrackerStore))
+
+	// PR Acceptance Simulator (AC1-AC6): public pre-submission scoring.
+	// Static "pr-sim" child under /api/v1 never conflicts with existing
+	// static segments; badge is GET-only and hash-keyed server-side (AC6).
+	prSimStore := prsim.NewStore(database, []byte(cfg.EncryptionKey))
+	simRepoCache := prsim.NewRepoCache(prsim.RepoCacheSize)
+	simRL := middleware.RateLimitPerIP(10, time.Hour)
+	simBadgeRL := middleware.RateLimitPerIP(60, time.Hour)
+	r.POST("/api/v1/pr-sim/score", simRL, handler.ScorePRSimHandler(prSimStore, simRepoCache, vkClient, cfg.GithubToken))
+	r.GET("/api/v1/pr-sim/badge/:hash.svg", simBadgeRL, handler.PRSimBadgeHandler(prSimStore))
 
 	// Public contributor profile (/u/[username]): aggregate PR-forecast track
 	// record. Root-level like /cards to stay outside the API-key group; static

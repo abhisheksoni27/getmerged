@@ -38,7 +38,7 @@ func RateLimitPerIP(max int, window time.Duration) gin.HandlerFunc {
 		key := fmt.Sprintf("rl:%d:%s", max, ip)
 		ctx := context.Background()
 
-		count, err := incrWithExpiry(client, ctx, key, window)
+		count, err := incrFixedWindow(client, ctx, key, window)
 		if err != nil {
 			// On error, fail open.
 			slog.Error("rate limit: valkey error - failing open", "ip", ip, "err", err)
@@ -54,9 +54,15 @@ func RateLimitPerIP(max int, window time.Duration) gin.HandlerFunc {
 		c.Header("X-RateLimit-Remaining", fmt.Sprintf("%d", remaining))
 
 		if count > int64(max) {
+			resetAt := time.Now().Add(window)
 			slog.Warn("rate limit exceeded", "ip", ip, "count", count, "path", c.FullPath())
 			c.Header("Retry-After", fmt.Sprintf("%d", int(window.Seconds())))
-			c.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{"error": "rate limit exceeded"})
+			c.Header("X-RateLimit-Reset", fmt.Sprintf("%d", resetAt.Unix()))
+			c.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{
+				"error":      "rate limit exceeded",
+				"error_code": "rate_limited",
+				"reset_at":   resetAt.Unix(),
+			})
 			return
 		}
 
@@ -64,22 +70,22 @@ func RateLimitPerIP(max int, window time.Duration) gin.HandlerFunc {
 	}
 }
 
-// incrWithExpiry atomically increments the key and sets expiry on first call.
-func incrWithExpiry(client valkey.Client, ctx context.Context, key string, window time.Duration) (int64, error) {
-	incrResp := client.Do(ctx, client.B().Incr().Key(key).Build())
-	if incrResp.Error() != nil {
-		return 0, incrResp.Error()
-	}
-
-	count, err := incrResp.ToInt64()
-	if err != nil {
+// incrFixedWindow atomically bumps a fixed-window counter: SET NX EX
+// reserves the key with its TTL exactly once, so the INCR that follows is
+// race-safe and the window always expires.
+func incrFixedWindow(client valkey.Client, ctx context.Context, key string, window time.Duration) (int64, error) {
+	ok, err := client.Do(ctx, client.B().Set().Key(key).Value("0").Nx().ExSeconds(int64(window.Seconds())).Build()).AsBool()
+	if err != nil && !valkey.IsValkeyNil(err) {
 		return 0, err
 	}
-
-	// Set expiry only on first request to avoid resetting the window.
-	if count == 1 {
-		client.Do(ctx, client.B().Expire().Key(key).Seconds(int64(window.Seconds())).Build())
+	if !ok {
+		// Key already existed inside the current window.
+		resp := client.Do(ctx, client.B().Incr().Key(key).Build())
+		if resp.Error() != nil {
+			return 0, resp.Error()
+		}
+		return resp.ToInt64()
 	}
-
-	return count, nil
+	// Fresh window: this caller holds count=1.
+	return 1, nil
 }

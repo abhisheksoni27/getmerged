@@ -681,6 +681,18 @@ func AutoMigrate(db *sqlx.DB) error {
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			UNIQUE(pr_id)
 		);`, autoInc),
+		// PR simulator submissions (AC5): diff AES-256 encrypted at rest
+		// under a random UUID key; rows auto-delete after 24h. Badges
+		// reference only the UUID, never the raw diff.
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS pr_sim_submissions (
+			id VARCHAR(36) PRIMARY KEY,
+			payload_hash CHAR(64) NOT NULL,
+			repo_full_name VARCHAR(255) NOT NULL DEFAULT '',
+			diff_enc MEDIUMTEXT NOT NULL,
+			result_json TEXT NOT NULL,
+			created_at DATETIME NOT NULL,
+			expires_at DATETIME NOT NULL
+		);`),
 	}
 
 	for i, stmt := range statements {
@@ -698,6 +710,8 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_repositories_stars ON repositories(stars)`,
 		`CREATE INDEX IF NOT EXISTS idx_repos_next_rescan ON repositories(next_rescan_at ASC)`,
 		`CREATE INDEX IF NOT EXISTS idx_indexing_queue_status_priority ON indexing_queue(status, priority, created_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_pr_sim_submissions_hash ON pr_sim_submissions(payload_hash)`,
+		`CREATE INDEX IF NOT EXISTS idx_pr_sim_submissions_expires ON pr_sim_submissions(expires_at)`,
 		`CREATE INDEX IF NOT EXISTS idx_pr_events_repo_at ON repo_pr_events(repository_id, event_at)`,
 		`CREATE INDEX IF NOT EXISTS idx_pr_events_repo_pr ON repo_pr_events(repository_id, pr_number)`,
 		`CREATE INDEX IF NOT EXISTS idx_raw_comments_repo_at ON repo_raw_comments(repository_id, created_at)`,
