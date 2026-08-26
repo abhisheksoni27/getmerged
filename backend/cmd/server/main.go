@@ -212,6 +212,11 @@ func main() {
 	badgeRL := middleware.RateLimitPerIP(60, time.Minute)
 	r.GET("/api/badge/:owner/:repo", badgeRL, handler.GetLiveBadgeSVG(repoStore, cfg.AppBaseURL))
 
+	// Org-level 'Verified Welcoming Org' badge (AC7): distinct static prefix
+	// /api/org-badge never mixes wildcards with /api/badge/:owner/:repo.
+	// Entitlement re-checked on every render; lapsed orgs 404 (AC5).
+	r.GET("/api/org-badge/:org", badgeRL, handler.GetOrgVerifiedBadgeSVG(claimSvc, cfg.AppBaseURL))
+
 	// Public share-card routes: no auth to view (AC1), 30 req/min/IP rate limit
 	// and 24h CDN/Valkey cache with purge-on-revoke (AC2, AC4).
 	cardRL := middleware.RateLimitPerIP(30, time.Minute)
@@ -339,6 +344,10 @@ func main() {
 		userApi.GET("/repos/:id/console", handler.GetMaintainerConsoleHandler(claimSvc))
 		userApi.POST("/repos/:id/claim-dispute", handler.PostClaimDisputeHandler(claimRepo))
 		userApi.GET("/user/claims", handler.GetUserClaimsListHandler(claimRepo))
+
+		// Org-wide paid console (AC1-AC6): static "orgs" child under /api/v1
+		// conflicts with no existing param segment.
+		userApi.GET("/orgs/:org/console", handler.GetOrgConsoleHandler(claimSvc))
 
 		// Top-level aliases for direct paths (AC1)
 		r.POST("/repo/:owner/:name/claim", middleware.UserAuth(cfg.JWTSecret), handler.PostClaimRepoHandler(claimSvc))

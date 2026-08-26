@@ -131,6 +131,64 @@ func GetMaintainerConsoleHandler(claimSvc *claim.Service) gin.HandlerFunc {
 	}
 }
 
+// GetOrgConsoleHandler handles GET /api/v1/orgs/:org/console: org-wide
+// aggregate C-Rank console with anonymous peer benchmarks for paid orgs.
+func GetOrgConsoleHandler(claimSvc *claim.Service) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		claimsVal, exists := c.Get("user_claims")
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "authentication required"})
+			return
+		}
+		userClaims := claimsVal.(*auth.Claims)
+
+		org := c.Param("org")
+		if strings.TrimSpace(org) == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "org required"})
+			return
+		}
+
+		payload, err := claimSvc.GetOrgConsole(c.Request.Context(), org, userClaims.UserID)
+		if err != nil {
+			errStr := err.Error()
+			if strings.Contains(errStr, "403") || strings.Contains(errStr, "unauthorized") {
+				c.JSON(http.StatusForbidden, gin.H{"error": errStr})
+				return
+			}
+			if strings.Contains(errStr, "400:") || strings.Contains(errStr, "required") {
+				c.JSON(http.StatusBadRequest, gin.H{"error": errStr})
+				return
+			}
+			c.JSON(http.StatusInternalServerError, gin.H{"error": errStr})
+			return
+		}
+
+		c.JSON(http.StatusOK, payload)
+	}
+}
+
+// GetOrgVerifiedBadgeSVG handles GET /api/org-badge/:org (AC7): renders the
+// 'Verified Welcoming Org' badge through the existing live-badge renderer for
+// every README in an org whose verified maintainer holds an active pro
+// entitlement; lapsed entitlements 404 within cache TTL max (AC5).
+func GetOrgVerifiedBadgeSVG(claimSvc *claim.Service, appBaseURL string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		org := c.Param("org")
+		if !badgeSegmentRe.MatchString(org) {
+			writeBadgeSVG(c, http.StatusNotFound, "GetMerged", "not verified", badgeTierColors["unranked"], "")
+			return
+		}
+
+		if !claimSvc.IsOrgProActive(c.Request.Context(), org) {
+			writeBadgeSVG(c, http.StatusNotFound, "GetMerged", "not verified", badgeTierColors["unranked"], "")
+			return
+		}
+
+		link := strings.TrimSuffix(appBaseURL, "/") + "/org/" + org
+		writeBadgeSVG(c, http.StatusOK, "GetMerged", "Verified Welcoming Org", badgeTierColors["S"], link)
+	}
+}
+
 // GetPublicClaimStatusHandler handles GET /api/v1/repos/:id/claim-status (AC8)
 func GetPublicClaimStatusHandler(claimRepo repository.ClaimRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
