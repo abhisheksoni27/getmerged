@@ -754,6 +754,26 @@ func AutoMigrate(db *sqlx.DB) error {
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			UNIQUE(pr_id, event_id)
 		);`, autoInc),
+		// In-app notification center tables
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS in_app_notifications (
+			id INTEGER PRIMARY KEY %s,
+			user_id INTEGER NOT NULL,
+			category VARCHAR(64) NOT NULL,
+			title VARCHAR(255) NOT NULL,
+			message TEXT NOT NULL,
+			link_url VARCHAR(512) NOT NULL DEFAULT '',
+			read_at DATETIME NULL,
+			visible_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
+		`CREATE TABLE IF NOT EXISTS user_notification_preferences (
+			user_id INTEGER PRIMARY KEY,
+			watchlist_c_rank_change BOOLEAN NOT NULL DEFAULT TRUE,
+			pr_milestones BOOLEAN NOT NULL DEFAULT TRUE,
+			achievement_unlocks BOOLEAN NOT NULL DEFAULT TRUE,
+			good_first_issues BOOLEAN NOT NULL DEFAULT TRUE,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
 		// Delivery failures (AC7): error + retry_count per stalled PR; one
 		// retry next cycle, then dead-lettered.
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS alerts_failed (
@@ -948,6 +968,9 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_rescore_locks_locked_at ON rescore_locks(locked_at)`,
 		`CREATE INDEX IF NOT EXISTS idx_crank_pb_card_tokens_repo ON crank_playbook_card_tokens(repo_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_crank_pb_card_tokens_expiry ON crank_playbook_card_tokens(expires_at)`,
+		// In-app notification center lookups
+		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_visible ON in_app_notifications(user_id, visible_at, id DESC)`,
+		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_unread ON in_app_notifications(user_id, visible_at, read_at)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)

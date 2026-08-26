@@ -472,6 +472,13 @@ func EvaluatePRStallAlerts(ctx context.Context, db *sqlx.DB, cfg PRStallAlertCon
 		}
 		if n, _ := res.RowsAffected(); n > 0 {
 			summary.Queued++
+
+			// In-App Notification Center: emit PR milestone/stall alert
+			notifTitle := fmt.Sprintf("PR Review Update: %s", f.fire.cand.PRID)
+			notifMsg := fmt.Sprintf("Your pull request %s has crossed the maintainer response threshold.", f.fire.cand.PRID)
+			notifLink := "/dashboard"
+			notifRepo := NewNotificationCenterRepository(db)
+			_ = EmitNotification(ctx, db, notifRepo, f.fire.cand.UserID, CategoryPRMilestone, notifTitle, notifMsg, notifLink)
 		}
 	}
 	// AC3: send only after commit — a crash here leaves clean pending rows.
