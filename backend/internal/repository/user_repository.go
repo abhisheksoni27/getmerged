@@ -93,6 +93,18 @@ type PublicContributorProfile struct {
 	MergedCount  int              `json:"merged_count"`
 	Repos        []PublicRepoTier `json:"repos"`
 	Evals        []PublicEvalItem `json:"evals"`
+	// Contributor XP season (AC2/AC8): level/streak/season rank attached from
+	// the pr-eval store. Level defaults to 0 and season_rank to null (rendered
+	// as a dash) for zero-XP profiles.
+	Season       string   `json:"season,omitempty"`
+	TotalXP      int      `json:"total_xp"`
+	SeasonXP     int      `json:"season_xp"`
+	WeeklyXP     int      `json:"weekly_xp"`
+	Level        int      `json:"level"`
+	XPToNext     int      `json:"xp_to_next_level"`
+	StreakWeeks  int      `json:"streak_weeks"`
+	SeasonRank   *int     `json:"season_rank"`
+	Percentile   *float64 `json:"percentile"`
 	// DNA powers the persona banner + identity-card sections. Nil for
 	// users who haven't opted in to profiling or have no merged PRs yet.
 	DNA *dna.Result `json:"dna,omitempty"`
@@ -580,12 +592,13 @@ func (r *sqlxUserRepository) GetPublicContributorProfileBySlug(ctx context.Conte
 	}
 
 	profile := &PublicContributorProfile{
-		Username:  user.Username,
-		AvatarURL: user.AvatarURL,
+		Username:    user.Username,
+		AvatarURL:   user.AvatarURL,
 		MemberSince: user.CreatedAt,
 		IsPublic:    user.IsPublic,
 		Repos:       []PublicRepoTier{},
 		Evals:       []PublicEvalItem{},
+		// AC5: zero-PR profiles stay Level 0 with 0 XP.
 	}
 	if user.Slug != nil {
 		profile.Slug = *user.Slug

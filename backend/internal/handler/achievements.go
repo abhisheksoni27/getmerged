@@ -3,13 +3,16 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
 )
 
-// RenderAchievementCardHandler handles GET /api/v1/users/:slug/achievement.svg (Story 6.2)
+// RenderAchievementCardHandler handles GET /api/v1/users/:slug/achievement.svg
+// (Story 6.2 + AC6). Optional rank/level/streak query props append a season
+// badge line; omitted props preserve the legacy output exactly.
 func RenderAchievementCardHandler(userRepo repository.UserRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		slug := c.Param("slug")
@@ -50,6 +53,11 @@ func RenderAchievementCardHandler(userRepo repository.UserRepository) gin.Handle
 		`, escapedPersona)
 		}
 
+		// AC6: optional season props (rank/level/streak) render one extra
+		// badge line; any absent or invalid prop is skipped and the default
+		// output is byte-identical to the pre-season card.
+		seasonLine := seasonBadgeLine(c.Query("rank"), c.Query("level"), c.Query("streak"))
+
 		svg := fmt.Sprintf(`<svg width="500" height="260" viewBox="0 0 500 260" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="cardGrad" x1="0" y1="0" x2="500" y2="260" gradientUnits="userSpaceOnUse">
@@ -72,7 +80,7 @@ func RenderAchievementCardHandler(userRepo repository.UserRepository) gin.Handle
 
   <!-- User Handle -->
   <text x="40" y="96" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="800">@%s</text>
-  <text x="40" y="120" fill="#A1A1AA" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="500">%s • %s</text>
+  <text x="40" y="120" fill="#A1A1AA" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="500">%s • %s</text>%s
 
   <!-- Stats Grid -->
   <rect x="40" y="145" width="135" height="65" rx="8" fill="#27272A" fill-opacity="0.7"/>
@@ -90,7 +98,7 @@ func RenderAchievementCardHandler(userRepo repository.UserRepository) gin.Handle
   <!-- URL watermark -->
   <text x="40" y="232" fill="#52525B" font-family="monospace" font-size="10">getmerged.abhishekco.de/u/%s</text>
 </svg>`, personaLine,
-			escapedUsername, escapedSkill, escapedLang,
+			escapedUsername, escapedSkill, escapedLang, seasonLine,
 			mergedCount, escapedLang, escapedUsername,
 		)
 
@@ -107,4 +115,26 @@ func escapeXML(s string) string {
 	s = strings.ReplaceAll(s, "\"", "&quot;")
 	s = strings.ReplaceAll(s, "'", "&apos;")
 	return s
+}
+
+// seasonBadgeLine builds the optional SVG season line from rank/level/streak
+// query props; "" when none are valid. Numeric-only props are clamped so a
+// crafted query can never distort the card.
+func seasonBadgeLine(rank, level, streak string) string {
+	parts := []string{}
+	if v, err := strconv.Atoi(level); err == nil && v >= 0 && v <= 9999 {
+		parts = append(parts, fmt.Sprintf("LV %d", v))
+	}
+	if v, err := strconv.Atoi(streak); err == nil && v >= 0 && v <= 9999 {
+		parts = append(parts, fmt.Sprintf("%d-WEEK STREAK", v))
+	}
+	if v, err := strconv.Atoi(rank); err == nil && v > 0 && v <= 9999 {
+		parts = append(parts, fmt.Sprintf("#%d WEEKLY", v))
+	}
+	if len(parts) == 0 {
+		return ""
+	}
+	return fmt.Sprintf(`
+  <text x="40" y="136" fill="#34D399" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700">%s</text>`,
+		strings.Join(parts, " · "))
 }

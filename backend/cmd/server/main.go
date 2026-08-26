@@ -185,6 +185,10 @@ func main() {
 	stopGhAppCron := startGhAppDailyCron(ghAppSvc)
 	defer stopGhAppCron()
 
+	// Contributor XP seasons: nightly idempotent xp_events derivation (AC1).
+	stopXPDeriveCron := startXPDeriveCron(prTrackerStore)
+	defer stopXPDeriveCron()
+
 	gin.SetMode(cfg.GinMode)
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
@@ -218,18 +222,23 @@ func main() {
 	r.GET("/api/org-badge/:org", badgeRL, handler.GetOrgVerifiedBadgeSVG(claimSvc, cfg.AppBaseURL))
 
 	// Public share-card routes: no auth to view (AC1), 30 req/min/IP rate limit
-	// and 24h CDN/Valkey cache with purge-on-revoke (AC2, AC4).
+	// and 24h CDN/Valkey cache with purge-on-revoke (AC2, AC4). Season-rank
+	// cards ("sr…" ids) resolve through the same pipeline (AC4).
 	cardRL := middleware.RateLimitPerIP(30, time.Minute)
-	r.GET("/api/v1/cards/:id", cardRL, handler.GetShareCardHandler(shareCardRepo))
-	r.GET("/api/v1/cards/:id/og.png", cardRL, handler.GetShareCardOGHandler(shareCardRepo))
-	r.GET("/og/forecast/:id", cardRL, handler.GetShareCardOGHandler(shareCardRepo))
-	r.GET("/api/v1/og/forecast/:id", cardRL, handler.GetShareCardOGHandler(shareCardRepo))
+	r.GET("/api/v1/cards/:id", cardRL, handler.GetShareCardHandler(shareCardRepo, prTrackerStore, cfg.JWTSecret))
+	r.GET("/api/v1/cards/:id/og.png", cardRL, handler.GetShareCardOGHandler(shareCardRepo, prTrackerStore, cfg.JWTSecret))
+	r.GET("/og/forecast/:id", cardRL, handler.GetShareCardOGHandler(shareCardRepo, prTrackerStore, cfg.JWTSecret))
+	r.GET("/api/v1/og/forecast/:id", cardRL, handler.GetShareCardOGHandler(shareCardRepo, prTrackerStore, cfg.JWTSecret))
 
 	// Verified PR-eval outcomes: public registration + verdict lookup
 	// (AC1-AC6). Root-level like /cards to stay outside the API-key group.
 	evalRL := middleware.RateLimitPerIP(60, time.Minute)
 	r.POST("/api/v1/pr-evals", evalRL, handler.RegisterPREvalHandler(prTrackerStore))
 	r.GET("/api/v1/pr-evals/:id/outcome", evalRL, handler.GetPREvalOutcomeHandler(prTrackerStore))
+
+	// Contributor XP seasons (AC2): public weekly leaderboard by merge XP.
+	// Static segment under /api/v1; no wildcard conflicts at this level.
+	r.GET("/api/v1/contributor-leaderboard", evalRL, handler.GetContributorLeaderboardHandler(prTrackerStore))
 
 	// PR Acceptance Simulator (AC1-AC6): public pre-submission scoring.
 	// Static "pr-sim" child under /api/v1 never conflicts with existing
@@ -244,7 +253,7 @@ func main() {
 	// Public contributor profile (/u/[username]): aggregate PR-forecast track
 	// record. Root-level like /cards to stay outside the API-key group; static
 	// "u" child never conflicts with the group's other static segments (AC4).
-	r.GET("/api/v1/u/:username", handler.GetPublicContributorProfileHandler(userRepo))
+	r.GET("/api/v1/u/:username", handler.GetPublicContributorProfileHandler(userRepo, prTrackerStore))
 
 	// Public API
 	api := r.Group("/api/v1")
@@ -380,6 +389,10 @@ func main() {
 		userApi.GET("/user/prs", handler.GetUserPRsHandler(prTrackerSvc, entitlementRepo))
 		userApi.GET("/user/prs/connection", handler.GetPRConnectionHandler(prTrackerSvc))
 		userApi.POST("/user/prs/reconnect", handler.ReconnectPRConnectionHandler(prTrackerSvc))
+
+		// Contributor XP season for the signed-in user: XP/level/streak plus
+		// shareable season-rank card URLs (AC1/AC3/AC4).
+		userApi.GET("/user/season", handler.GetUserSeasonHandler(prTrackerStore, cfg.JWTSecret))
 
 		// Hacktoberfest hub: live "X of 4 merged" progress + stream-hint nudge
 		userApi.GET("/hacktoberfest/progress", handler.GetHacktoberfestProgressHandler(hbSvc))
@@ -597,6 +610,47 @@ func startPRStallAlertCron(cfg *config.Config, database *sqlx.DB) func() {
 			}
 		}
 	}()
+	return func() { close(stop) }
+}
+
+// startXPDeriveCron runs the nightly xp_events award pass (AC1): idempotent
+// INSERT .. ON CONFLICT DO NOTHING keyed by the composite (source, eval_id),
+// so overlapping or repeated runs never double-award XP.
+func startXPDeriveCron(store *prtracker.Store) func() {
+	stop := make(chan struct{})
+	if store == nil {
+		return func() {}
+	}
+	run := func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+		defer cancel()
+		n, err := store.AwardXPs(ctx, nil)
+		if err != nil {
+			slog.Error("nightly xp derivation failed", "err", err)
+			return
+		}
+		slog.Info("nightly xp derivation done", "new_events", n)
+	}
+
+	go func() {
+		ticker := time.NewTicker(24 * time.Hour)
+		defer ticker.Stop()
+		select {
+		case <-stop:
+			return
+		case <-time.After(90 * time.Second):
+			run()
+		}
+		for {
+			select {
+			case <-stop:
+				return
+			case <-ticker.C:
+				run()
+			}
+		}
+	}()
+
 	return func() { close(stop) }
 }
 

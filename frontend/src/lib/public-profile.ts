@@ -54,6 +54,15 @@ export interface PublicProfile {
   accuracy_rate: number | null;
   accuracy_n: number;
   merged_count: number;
+  // Contributor XP season (optional fields degrade to zero-state dashes).
+  season?: string;
+  total_xp?: number;
+  season_xp?: number;
+  level?: number;
+  xp_to_next_level?: number;
+  streak_weeks?: number;
+  season_rank?: number | null;
+  percentile?: number | null;
   repos: PublicProfileRepoTier[];
   evals?: PublicProfileEval[];
   // DNA powers the persona banner. Optional — the API omits it when
