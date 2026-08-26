@@ -9,6 +9,7 @@ export interface PREvalAccuracy {
 }
 
 export interface PREvalOutcome {
+  eval_id?: string;
   state: "hit" | "miss" | "pending" | "unverifiable";
   predicted_score?: number;
   days_to_merge?: number | null;

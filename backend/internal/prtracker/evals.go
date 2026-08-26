@@ -498,6 +498,7 @@ func (s *Store) accuracySnapshotVersion(ctx context.Context, uid int64) string {
 // same verdict field set as share pages and OG images (AC2/AC5).
 func (s *Store) OutcomesForUserPRs(ctx context.Context, userID int64) (map[string]EvalOutcome, error) {
 	rows := []struct {
+		EvalID      string     `db:"eval_id"`
 		Repo        string     `db:"repository_id"`
 		PRNumber    int        `db:"pr_number"`
 		Predicted   int        `db:"predicted_score"`
@@ -507,7 +508,7 @@ func (s *Store) OutcomesForUserPRs(ctx context.Context, userID int64) (map[strin
 		OutcomeHash string     `db:"outcome_hash"`
 	}{}
 	err := s.db.SelectContext(ctx, &rows, `
-		SELECT e.repository_full_name AS repository_id, e.pr_number, e.predicted_score,
+		SELECT e.eval_id, e.repository_full_name AS repository_id, e.pr_number, e.predicted_score,
 		       e.outcome, e.days_to_merge, e.merged_at, e.outcome_hash
 		FROM pr_evaluations e
 		JOIN (SELECT DISTINCT repository_id, pr_number FROM pr_snapshots WHERE user_id = ? AND pr_number IS NOT NULL) t
@@ -519,6 +520,7 @@ func (s *Store) OutcomesForUserPRs(ctx context.Context, userID int64) (map[strin
 	for _, r := range rows {
 		num := r.PRNumber
 		out[fmt.Sprintf("%s#%d", r.Repo, r.PRNumber)] = EvalOutcome{
+			EvalID:      r.EvalID,
 			State:       r.Outcome,
 			Predicted:   r.Predicted,
 			DaysToMerge: r.DaysToMerge,
