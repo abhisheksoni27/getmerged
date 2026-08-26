@@ -35,6 +35,21 @@ func GitHubOAuthRedirect(cfg *config.Config) gin.HandlerFunc {
 				SameSite: http.SameSiteLaxMode,
 			})
 		}
+		// Quiz pre-seed (AC4): remember the visitor's chosen languages in a
+		// short-lived cookie so the callback can write the language snapshot
+		// synchronously BEFORE redirecting to /dashboard (AC5).
+		if quizLangs := NormalizeQuizLanguages(c.Query("quiz_langs"), maxLangSnapshot); len(quizLangs) > 0 {
+			isSecure := cfg.GinMode == "release"
+			http.SetCookie(c.Writer, &http.Cookie{
+				Name:     "opendoor_quiz_langs",
+				Value:    strings.Join(quizLangs, ","),
+				Path:     "/",
+				MaxAge:   600,
+				HttpOnly: true,
+				Secure:   isSecure,
+				SameSite: http.SameSiteLaxMode,
+			})
+		}
 		scheme := "https"
 		if c.Request.TLS == nil && c.GetHeader("X-Forwarded-Proto") != "https" {
 			scheme = "http"
@@ -143,18 +158,24 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository,
 		// successful login (AC1, AC3). Bounded timeouts so login is never
 		// blocked; on failure keep the existing snapshot and surface a
 		// non-blocking banner via a transient cookie (AC4).
-		if err := SyncGithubLanguages(c.Request.Context(), tokenResp.AccessToken, userID, userRepo); err != nil {
-			slog.Warn("github language sync failed during login", "user_id", userID, "err", err)
-			syncSecure := cfg.GinMode == "release"
-			http.SetCookie(c.Writer, &http.Cookie{
-				Name:     "opendoor_sync_failed",
-				Value:    "1",
-				Path:     "/",
-				MaxAge:   600,
-				HttpOnly: false,
-				Secure:   syncSecure,
-				SameSite: http.SameSiteLaxMode,
-			})
+		// Quiz flow: the quiz-chosen languages OVERWRITE the snapshot and the
+		// write completes synchronously BEFORE the redirect to /dashboard
+		// (AC4/AC5) — no GitHub re-sync that would overwrite quiz prefs.
+		quizSeeded := SeedQuizSnapshotFromRequest(c, userRepo, userID)
+		if !quizSeeded {
+			if err := SyncGithubLanguages(c.Request.Context(), tokenResp.AccessToken, userID, userRepo); err != nil {
+				slog.Warn("github language sync failed during login", "user_id", userID, "err", err)
+				syncSecure := cfg.GinMode == "release"
+				http.SetCookie(c.Writer, &http.Cookie{
+					Name:     "opendoor_sync_failed",
+					Value:    "1",
+					Path:     "/",
+					MaxAge:   600,
+					HttpOnly: false,
+					Secure:   syncSecure,
+					SameSite: http.SameSiteLaxMode,
+				})
+			}
 		}
 
 		// Auto-import top public repo languages as skills. Best-effort with its
@@ -209,14 +230,21 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository,
 
 		slog.Info("jwt cookie has been set", "token", signedToken)
 
+		// Quiz flow lands on /dashboard so ForYou is populated from the
+		// freshly committed snapshot (AC5); regular logins go home.
+		redirectTarget := "/"
+		if quizSeeded {
+			redirectTarget = "/dashboard"
+		}
+
 		// if this is localhost, then Frontend is runnning on a different port, so redirect to the frontend URL
 		if strings.Contains(c.Request.Host, "localhost") {
-			c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000")
+			c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000"+redirectTarget)
 			return
 		}
 
 		// Redirect user back to the web UI
-		c.Redirect(http.StatusTemporaryRedirect, "/")
+		c.Redirect(http.StatusTemporaryRedirect, redirectTarget)
 	}
 }
 

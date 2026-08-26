@@ -272,6 +272,11 @@ func main() {
 	// "u" child never conflicts with the group's other static segments (AC4).
 	r.GET("/api/v1/u/:username", handler.GetPublicContributorProfileHandler(userRepo, prTrackerStore))
 
+	// Anonymous language-match quiz (AC1): public GET reusing the ForYou
+	// C-Rank/GFI matching. Static /api/public prefix keeps the route tree
+	// free of wildcard conflicts; rate limit + cache live in the handler.
+	r.GET("/api/public/quiz-match", handler.QuizMatchHandler(repoStore, gfiRepo, database))
+
 	// Public API
 	api := r.Group("/api/v1")
 	// AC2/AC3/AC4: public API keys (Authorization: Bearer odk_...) authenticate
