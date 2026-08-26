@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { OrgClaimButton } from "@/components/OrgClaimButton";
+import { OrgConsoleCard } from "@/components/OrgConsoleCard";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import {
@@ -166,6 +167,9 @@ export default async function OrgPage({ params }: OrgPageProps) {
             </div>
           </div>
         </div>
+
+        {/* Org-wide C-Rank console (paid tier w/ peer benchmarks) */}
+        <OrgConsoleCard org={org} />
 
         {/* Repository Grid */}
         <div className="space-y-4">
