@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Sprout, ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
+import { LanguageMatchQuiz } from "@/components/LanguageMatchQuiz";
 
 export const metadata: Metadata = {
   title: "Find Good First Issues: Top Beginner Repos Ranked by Merge Rate (2026) | GetMerged",
@@ -104,7 +105,9 @@ export default function GoodFirstIssueIndexPage() {
           </p>
         </div>
 
-        <div className="mb-6 flex items-center justify-between border-b border-zinc-200 pb-4">
+        <LanguageMatchQuiz />
+
+        <div className="mb-6 mt-12 flex items-center justify-between border-b border-zinc-200 pb-4">
           <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2 font-space">
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
             Ecosystems with Beginner Issues ({ecosystems.length})
