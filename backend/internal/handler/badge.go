@@ -169,6 +169,11 @@ func GetLiveBadgeSVG(repoStore repository.RepoRepository, appBaseURL string) gin
 		}
 
 		reportURL := strings.TrimSuffix(appBaseURL, "/") + "/" + fullName
+		if tier != "" {
+			// AC2: badge/link traffic lands directly on the repo's Raise Your
+			// C-Rank playbook so unclaimed maintainers hit the claim flow.
+			reportURL += "#raise-your-rank"
+		}
 		writeBadgeSVG(c, http.StatusOK, "GetMerged", message, color, reportURL)
 	}
 }

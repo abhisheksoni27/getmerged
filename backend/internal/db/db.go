@@ -805,6 +805,44 @@ func AutoMigrate(db *sqlx.DB) error {
 			end_date DATE NOT NULL,
 			UNIQUE(start_date, end_date)
 		);`, autoInc),
+		`CREATE TABLE IF NOT EXISTS crank_playbook_cards (
+			repo_id VARCHAR(255) PRIMARY KEY,
+			full_name VARCHAR(255) NOT NULL,
+			before_score DOUBLE NOT NULL,
+			before_tier VARCHAR(10) NOT NULL,
+			after_score DOUBLE NULL,
+			after_tier VARCHAR(10) NULL,
+			status VARCHAR(32) NOT NULL DEFAULT 'no_change',
+			last_card_at DATETIME NULL,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
+		// AC3: score-changed events emitted by every successful
+		// recalculate-history run; playbook cards refresh from these.
+		`CREATE TABLE IF NOT EXISTS score_changed_events (
+			id VARCHAR(64) PRIMARY KEY,
+			repo_id VARCHAR(255) NOT NULL,
+			old_score DOUBLE NOT NULL DEFAULT 0,
+			new_score DOUBLE NOT NULL DEFAULT 0,
+			old_tier VARCHAR(10) NOT NULL DEFAULT '',
+			new_tier VARCHAR(10) NOT NULL DEFAULT '',
+			created_at DATETIME NOT NULL
+		);`,
+		// AC4: atomic single-flight guard for maintainer-triggered re-scores.
+		// Winner INSERTs (ON CONFLICT DO NOTHING); stale locks older than
+		// 15min are deleted before each acquire attempt so crashed runners
+		// cannot wedge a repo forever.
+		`CREATE TABLE IF NOT EXISTS rescore_locks (
+			repo_id VARCHAR(255) PRIMARY KEY,
+			locked_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
+		// AC5: capability tokens for shareable before/after OG card URLs.
+		// 128-bit random token, single-repo scope, 90-day expiry.
+		`CREATE TABLE IF NOT EXISTS crank_playbook_card_tokens (
+			token CHAR(32) PRIMARY KEY,
+			repo_id VARCHAR(255) NOT NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			expires_at DATETIME NOT NULL
+		);`,
 	}
 
 	for i, stmt := range statements {
@@ -847,6 +885,7 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_gfi_email_queue_sub ON gfi_email_queue(subscriber_id, repo_id, issue_number)`,
 		`CREATE INDEX IF NOT EXISTS idx_job_locks_expiry ON job_locks(locked_until)`,
 		`CREATE INDEX IF NOT EXISTS idx_gfi_signup_attempts_lookup ON gfi_signup_attempts(ip, email, created_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_score_events_repo ON score_changed_events(repo_id, created_at DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_gfi_endpoint_rate_limits_lookup ON gfi_endpoint_rate_limits(ip, endpoint, created_at)`,
 		// AC10: indexed match phase — repos joined to prefs per language/tier
 		// bucket instead of per-user scans.
@@ -874,6 +913,10 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_xp_events_created_at ON xp_events(created_at)`,
 		// Credit-pack order ownership lookups (AC4).
 		`CREATE INDEX IF NOT EXISTS idx_credit_pack_orders_user ON credit_pack_orders(user_id, created_at)`,
+		// Rescore single-flight + playbook card token lookups (AC4, AC5).
+		`CREATE INDEX IF NOT EXISTS idx_rescore_locks_locked_at ON rescore_locks(locked_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_crank_pb_card_tokens_repo ON crank_playbook_card_tokens(repo_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_crank_pb_card_tokens_expiry ON crank_playbook_card_tokens(expires_at)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)

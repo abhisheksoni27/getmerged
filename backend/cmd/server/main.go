@@ -235,6 +235,18 @@ func main() {
 	r.GET("/og/forecast/:id", cardRL, handler.GetShareCardOGHandler(shareCardRepo, prTrackerStore, cfg.JWTSecret))
 	r.GET("/api/v1/og/forecast/:id", cardRL, handler.GetShareCardOGHandler(shareCardRepo, prTrackerStore, cfg.JWTSecret))
 
+	// Raise-Your-C-Rank before/after OG card (AC4): deterministic per
+	// (repo, score_version) via a repo_id+score-hash keyed cache served on
+	// repeat hits; static "playbook" sibling of "forecast" under /og so no
+	// wildcard names mix at any level. 10 req/min/IP with stale-cache
+	// fallback inside the handler.
+	playbookRL := middleware.RateLimitPerIP(10, time.Minute)
+	r.GET("/og/playbook/:owner/:name", playbookRL, handler.GetPlaybookCardOGHandler(claimSvc, repoStore))
+	// AC5 tokenized sibling: 128-bit random token scoped to a single repo,
+	// 90-day expiry, validated before any card bytes are rendered. Static
+	// "playbook-card" segment keeps the /og tree free of wildcard mixing.
+	r.GET("/og/playbook-card/:token", playbookRL, handler.GetPlaybookCardByTokenHandler(claimSvc, repoStore))
+
 	// Verified PR-eval outcomes: public registration + verdict lookup
 	// (AC1-AC6). Root-level like /cards to stay outside the API-key group.
 	evalRL := middleware.RateLimitPerIP(60, time.Minute)
@@ -311,6 +323,10 @@ func main() {
 		api.POST("/webhooks/github-app", handler.GithubAppWebhookHandler(ghAppSvc))
 		api.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
 		api.GET("/repos/:id/claim-status", handler.GetPublicClaimStatusHandler(claimRepo))
+		// Public raise-your-C-Rank checklist from stored telemetry (AC1, AC2).
+		// OptionalUserAuth: signed-in maintainers get per-metric detail,
+		// anonymous visitors only repo name + tier (redacted in-handler).
+		api.GET("/repos/:id/playbook", middleware.OptionalUserAuth(cfg.JWTSecret), handler.GetRepoPlaybookHandler(claimSvc))
 
 		// Good First Issue alerts & digest (AC1, AC5, AC6, AC8)
 		api.POST("/gfi-alerts/subscribe", handler.GFISubscribeHandler(cfg))
@@ -356,6 +372,9 @@ func main() {
 		userApi.POST("/repos/:id/claim", handler.PostClaimRepoHandler(claimSvc))
 		userApi.POST("/repos/:id/verify", handler.PostVerifyRepoHandler(claimSvc))
 		userApi.GET("/repos/:id/console", handler.GetMaintainerConsoleHandler(claimSvc))
+		// Event-driven re-score for verified claimants (AC3): refreshes the
+		// score and before/after card state in one transaction.
+		userApi.POST("/repos/:id/rescore", handler.PostRescoreRepoHandler(claimSvc))
 		userApi.POST("/repos/:id/claim-dispute", handler.PostClaimDisputeHandler(claimRepo))
 		userApi.GET("/user/claims", handler.GetUserClaimsListHandler(claimRepo))
 

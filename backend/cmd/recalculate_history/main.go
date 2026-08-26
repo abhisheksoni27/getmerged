@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"runtime"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/abhisheksoni27/opendoor/internal/config"
 	"github.com/abhisheksoni27/opendoor/internal/db"
+	"github.com/abhisheksoni27/opendoor/internal/pipeline"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
@@ -17,9 +19,10 @@ import (
 )
 
 type RepoMeta struct {
-	ID                  string `db:"id"`
-	GoodFirstIssueCount int    `db:"good_first_issue_count"`
-	CRankTier           string `db:"c_rank_tier"`
+	ID                  string  `db:"id"`
+	GoodFirstIssueCount int     `db:"good_first_issue_count"`
+	CRankTier           string  `db:"c_rank_tier"`
+	CRankScore          float64 `db:"c_rank_score"`
 }
 
 type RawPREvent struct {
@@ -66,7 +69,7 @@ func main() {
 	// Step 1: Load all repository metadata
 	var repos []RepoMeta
 	err = database.Select(&repos, `
-		SELECT r.id, COALESCE(s.good_first_issue_count, 0) as good_first_issue_count, COALESCE(s.c_rank_tier, '') as c_rank_tier
+		SELECT r.id, COALESCE(s.good_first_issue_count, 0) as good_first_issue_count, COALESCE(s.c_rank_tier, '') as c_rank_tier, COALESCE(s.c_rank_score, 0) as c_rank_score
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
 	`)
@@ -275,6 +278,10 @@ func main() {
 	const batchSize = 500
 	totalUpdated := 0
 
+	// AC3: score-changed events collected during a successful recalc; emitted
+	// only after the upsert loop completes so failures never emit.
+	var scoreEvents []pipeline.ScoreChangedEvent
+
 	for i := 0; i < len(validRepos); i += batchSize {
 		end := i + batchSize
 		if end > len(validRepos) {
@@ -309,6 +316,16 @@ func main() {
 			staleness := 0
 			if raw.StalenessFlag {
 				staleness = 1
+			}
+
+			if scoring.CompareRescoreOutcome(r.CRankScore, score) != scoring.OutcomeNoChange {
+				scoreEvents = append(scoreEvents, pipeline.ScoreChangedEvent{
+					RepoID:   r.ID,
+					OldScore: r.CRankScore,
+					NewScore: score,
+					OldTier:  r.CRankTier,
+					NewTier:  tier,
+				})
 			}
 
 			if j > 0 {
@@ -353,6 +370,14 @@ func main() {
 	}
 
 	log.Printf("Bulk upsert completed in %v. Total updated: %d", time.Since(upsertStart), totalUpdated)
+
+	// AC3: the recalc succeeded — emit score-changed events so playbook
+	// payloads and before/after cards refresh from this event (no polling).
+	if totalUpdated > 0 && len(scoreEvents) > 0 {
+		if err := pipeline.EmitScoreChangedEvents(context.Background(), database, scoreEvents); err != nil {
+			log.Printf("Warning: score-changed event emission failed: %v", err)
+		}
+	}
 
 	// Step 9: Report final distribution
 	type rankRow struct {

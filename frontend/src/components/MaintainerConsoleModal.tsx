@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import {
   ShieldCheck,
   CheckCircle2,
@@ -12,12 +13,14 @@ import {
   Sparkles,
   ArrowUpRight,
   RefreshCw,
+  TrendingUp,
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 import {
   MaintainerConsolePayload,
   ClaimInitiateResponse,
   MaintainerChecklistItem,
+  RescoreResult,
 } from "@/types/opendoor";
 
 interface MaintainerConsoleModalProps {
@@ -46,6 +49,9 @@ export function MaintainerConsoleModal({
   const [error, setError] = useState<string | null>(null);
   const [claimData, setClaimData] = useState<ClaimInitiateResponse | null>(null);
   const [consoleData, setConsoleData] = useState<MaintainerConsolePayload | null>(null);
+  const [rescoring, setRescoring] = useState(false);
+  const [rescore, setRescore] = useState<RescoreResult | null>(null);
+  const router = useRouter();
 
   const fetchConsole = useCallback(async () => {
     setLoading(true);
@@ -77,7 +83,17 @@ export function MaintainerConsoleModal({
       });
       const data = await res.json();
       if (!res.ok) {
-        if (res.status === 409) setConflict(true);
+        if (res.status === 409) {
+          setConflict(true);
+          // AC5: duplicate claims resolve through the unique constraint —
+          // the second claimant gets the 'already claimed' notice and is
+          // redirected to their owner dashboard.
+          setTimeout(() => {
+            try {
+              router.push("/dashboard");
+            } catch {}
+          }, 2500);
+        }
         throw new Error(data.error || "Failed to initiate claim");
       }
       setClaimData(data);
@@ -112,6 +128,30 @@ export function MaintainerConsoleModal({
       setError(message);
     } finally {
       setDisputing(false);
+    }
+  };
+
+  const runRescore = async () => {
+    setRescoring(true);
+    setError(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/rescore`, {
+        method: "POST",
+        credentials: "include",
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(data?.error || "Re-score failed");
+      if (data && data.status === "already_running") {
+        // AC4: another re-score holds the repo lock; nothing failed.
+        setError("A re-score for this repository is already running — try again in a moment.");
+        return;
+      }
+      setRescore(data as RescoreResult);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Re-score failed";
+      setError(message);
+    } finally {
+      setRescoring(false);
     }
   };
 
@@ -330,6 +370,86 @@ export function MaintainerConsoleModal({
                     <ShieldCheck className="w-4 h-4" /> Verified Maintainer
                   </span>
                 </div>
+              </div>
+
+              {/* Automated re-score + before/after card (AC3, AC4) */}
+              <div className="p-4 bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000]">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <div className="font-bold text-sm text-zinc-900 flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4 text-emerald-600" /> Automated Re-score
+                    </div>
+                    <p className="text-xs text-zinc-600 mt-0.5">
+                      Recompute your C-Rank from the last 180 days of telemetry and issue a
+                      before/after share card on improvement.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={runRescore}
+                    disabled={rescoring}
+                    className="px-4 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed flex items-center gap-2 shrink-0"
+                  >
+                    {rescoring ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" /> Re-scoring...
+                      </>
+                    ) : (
+                      "Re-score now"
+                    )}
+                  </button>
+                </div>
+
+                {rescore && !rescore.rate_limited && (
+                  <div
+                    className={`mt-4 p-4 rounded-xl border-2 ${
+                      rescore.outcome === "improved"
+                        ? "bg-emerald-50 border-emerald-400"
+                        : "bg-zinc-50 border-zinc-300"
+                    }`}
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="font-mono text-sm font-bold text-zinc-900">
+                        <span className="text-zinc-500">before</span> {Math.round(rescore.before_score)}
+                        {rescore.before_tier ? ` (${rescore.before_tier})` : ""}
+                        {" → "}
+                        <span className={rescore.outcome === "improved" ? "text-emerald-700" : ""}>
+                          after {Math.round(rescore.after_score)}
+                        </span>
+                        {rescore.after_tier ? ` (${rescore.after_tier})` : ""}
+                      </div>
+                      <span className="px-2 py-0.5 rounded-lg font-mono text-xs font-bold border border-zinc-300 bg-white text-zinc-700">
+                        {rescore.outcome.replace(/_/g, " ")}
+                      </span>
+                    </div>
+                    {rescore.card_issued && (
+                      <a
+                        href={
+                          rescore.card_url
+                            ? `${API_BASE_URL}${rescore.card_url}`
+                            : `${API_BASE_URL}/og/playbook/${fullName}`
+                        }
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 underline underline-offset-2 cursor-pointer"
+                      >
+                        View shareable before/after OG card <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                    {!rescore.card_issued && rescore.outcome !== "improved" && (
+                      <p className="mt-2 text-xs text-zinc-500">
+                        No improvement yet — close a playbook gap and re-score to earn the
+                        before/after card.
+                      </p>
+                    )}
+                  </div>
+                )}
+                {rescore?.rate_limited && (
+                  <p className="mt-3 text-xs text-zinc-500">
+                    Card cooldown active — next card available at{" "}
+                    {rescore.next_allowed_at ? new Date(rescore.next_allowed_at).toLocaleString() : "later"}.
+                  </p>
+                )}
               </div>
 
               {/* Actionable Checklist (AC6) */}
