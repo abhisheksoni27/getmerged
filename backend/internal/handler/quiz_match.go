@@ -250,7 +250,7 @@ func QuizMatchHandler(repoStore repository.RepoRepository, gfiRepo repository.GF
 			}
 			for _, r := range repos {
 				entry := quizMatchEntry{repoResponse: toRepoResponse(r)}
-				items, issueErr := gfiRepo.ListByRepoID(c.Request.Context(), r.ID, quizMaxIssuesPerRep)
+				items, issueErr := gfiRepo.ListByRepoID(c.Request.Context(), r.ID, quizMaxIssuesPerRep, false)
 				if issueErr != nil {
 					slog.Warn("quiz-match issue query failed", "repo_id", r.ID, "err", issueErr)
 					items = []repository.GoodFirstIssueItem{}

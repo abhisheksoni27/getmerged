@@ -209,7 +209,7 @@ func GetForYouHandler(userRepo repository.UserRepository, repoStore repository.R
 
 		perLang := make([][]repository.GoodFirstIssueItem, len(langs))
 		for i, lang := range langs {
-			items, issueErr := gfiRepo.ListByLanguage(c.Request.Context(), lang, forYouMaxIssues)
+			items, issueErr := gfiRepo.ListByLanguage(c.Request.Context(), lang, forYouMaxIssues, false)
 			if issueErr != nil {
 				slog.Warn("for-you issue query failed", "user_id", userID, "lang", lang, "err", issueErr)
 				continue

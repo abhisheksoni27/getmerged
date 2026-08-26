@@ -29,11 +29,13 @@ type DodopaymentsWebhookPayload struct {
 			} `json:"metadata"`
 			Email string `json:"email"`
 		} `json:"customer"`
-		// Payment-level metadata: set by server-created pack checkout
+		// Payment-level metadata: set by server-created pack/boost checkout
 		// sessions so grants can be attributed and orders marked settled.
 		Metadata struct {
-			UserID  string `json:"user_id"`
-			OrderID string `json:"order_id"`
+			UserID      string `json:"user_id"`
+			OrderID     string `json:"order_id"`
+			RepoID      string `json:"repo_id"`
+			IssueNumber string `json:"issue_number"`
 		} `json:"metadata"`
 		BillingCycle string `json:"billing_cycle"` // "monthly" | "yearly"
 		ExpiresAt    string `json:"expires_at"`

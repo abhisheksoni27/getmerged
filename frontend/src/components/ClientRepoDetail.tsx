@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Repo, AIInsights } from "@/types/opendoor";
+import { Repo, AIInsights, GoodFirstIssueItem } from "@/types/opendoor";
 import {
   ArrowLeft,
   Sparkles,
@@ -82,7 +82,8 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
   const [githubNotFound, setGithubNotFound] = useState(false);
   const [isCheckingGithub, setIsCheckingGithub] = useState(() => !repo);
   const [relatedRepos, setRelatedRepos] = useState<Repo[]>([]);
-  const [gfiList, setGfiList] = useState<Array<{ id: number; issue_number?: number; title: string; url?: string; html_url?: string; body_text?: string; body_snippet?: string; quality_score?: number; created_at?: string; comments_count?: number; repo_full_name?: string }>>([]);
+  const [gfiList, setGfiList] = useState<GoodFirstIssueItem[]>([]);
+  const [gfiTab, setGfiTab] = useState<"all" | "paid">("all");
   const [maintainerRating, setMaintainerRating] = useState(0);
   const [reviewSpeedRating, setReviewSpeedRating] = useState(0);
   const [beginnerRating, setBeginnerRating] = useState(0);
@@ -208,8 +209,21 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       } catch {}
     };
 
-    Promise.allSettled([fetchWatchlist(), fetchInsights(), fetchRelated(), fetchClaimStatus()]);
-  }, [repo?.id, fullName, initialInsights]);
+    const fetchGFI = async () => {
+      if (!targetId) return;
+      try {
+        const bountyParam = gfiTab === "paid" ? "?bounty=1" : "";
+        const res = await fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/good-first-issues${bountyParam}`, { credentials: "include" });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data?.data && Array.isArray(data.data)) {
+          setGfiList(data.data);
+        }
+      } catch {}
+    };
+
+    Promise.allSettled([fetchWatchlist(), fetchInsights(), fetchRelated(), fetchClaimStatus(), fetchGFI()]);
+  }, [repo?.id, fullName, initialInsights, gfiTab]);
 
   const handleWatchToggle = async () => {
     if (!isLoggedIn) {
@@ -815,10 +829,36 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
       >
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-emerald-600" /> Active Good First Issues ({gfiList.length > 0 ? gfiList.length : (repo?.good_first_issue_count ?? 0)})
-          </h3>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-3">
+            <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-emerald-600" /> Active Good First Issues ({gfiList.length > 0 ? gfiList.length : (repo?.good_first_issue_count ?? 0)})
+            </h3>
+            <div className="inline-flex rounded-xl bg-zinc-100 p-0.5 border border-zinc-200 text-xs font-mono">
+              <button
+                type="button"
+                onClick={() => setGfiTab("all")}
+                className={`px-2.5 py-1 rounded-lg transition-colors font-semibold ${
+                  gfiTab === "all"
+                    ? "bg-white text-zinc-900 shadow-2xs"
+                    : "text-zinc-500 hover:text-zinc-900"
+                }`}
+              >
+                All
+              </button>
+              <button
+                type="button"
+                onClick={() => setGfiTab("paid")}
+                className={`px-2.5 py-1 rounded-lg transition-colors font-semibold flex items-center gap-1 ${
+                  gfiTab === "paid"
+                    ? "bg-emerald-600 text-white shadow-2xs"
+                    : "text-zinc-500 hover:text-emerald-700"
+                }`}
+              >
+                <span>💰 Paid</span>
+              </button>
+            </div>
+          </div>
           <a
             href={`https://github.com/${fullName}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2Cgood-first-issue`}
             target="_blank"
@@ -854,6 +894,16 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                           #{issueNumber}
                         </span>
                       )}
+                      {issue.is_bounty && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 border border-emerald-300 text-[11px] font-mono font-bold text-emerald-900">
+                          💰 {issue.bounty_amount ? `$${issue.bounty_amount.toFixed(2)}` : "Bounty"}
+                        </span>
+                      )}
+                      {issue.boosted && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-50 border border-indigo-300 text-[10px] font-mono font-bold text-indigo-800">
+                          🚀 Boosted
+                        </span>
+                      )}
                       <a
                         href={issueUrl}
                         target="_blank"
@@ -865,9 +915,9 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                         <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 text-emerald-600" />
                       </a>
                     </div>
-                    {(issue.body_snippet || issue.body_text) && (
+                    {issue.body_text && (
                       <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">
-                        {issue.body_snippet || issue.body_text}
+                        {issue.body_text}
                       </p>
                     )}
                     <div className="flex items-center gap-3 mt-2 text-[11px] font-mono text-zinc-600 flex-wrap">
@@ -900,7 +950,9 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
         ) : (
           <div className="bg-zinc-50/60 border border-zinc-200/80 rounded-lg p-6 text-center text-zinc-600 font-sans">
             <p className="text-xs text-zinc-600">
-              {repo?.good_first_issue_count ? (
+              {gfiTab === "paid" ? (
+                <>No cash-bounty issues currently open for <strong>{fullName}</strong>.</>
+              ) : repo?.good_first_issue_count ? (
                 <>
                   This repository currently has <strong>{repo.good_first_issue_count}</strong> open{" "}
                   <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700 font-mono">good first issue</code> tickets available for newcomers.

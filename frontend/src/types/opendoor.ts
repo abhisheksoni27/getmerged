@@ -158,6 +158,9 @@ export interface GoodFirstIssueItem {
   quality_score?: number;
   created_at: string;
   synced_at: string;
+  is_bounty?: boolean;
+  bounty_amount?: number | null;
+  boosted?: boolean;
 }
 
 export interface OptimalTimeResult {
