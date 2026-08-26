@@ -127,24 +127,50 @@ func main() {
 	stopStallAlertCron := startPRStallAlertCron(cfg, database)
 	defer stopStallAlertCron()
 
-	// Watchlist C-Rank change alerts: run at the end of every snapshot cycle
-	// with the real SMTP mailer and the existing unsubscribe flow.
+	// Watchlist C-Rank change alerts: chained strictly after every snapshot
+	// cycle's rescore-completion event (never cron-raced) with the real SMTP
+	// mailer and the existing unsubscribe flow. Outbox-backed: 1 batched
+	// email/user/night, sent_alerts exactly-once per run, retries with
+	// backoff, send-time unsubscribe checks, 06:00 UTC watchdog (AC4).
 	pipeline.CRankAlertHook = func(hookDB *sqlx.DB) {
-		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 		defer cancel()
+		if err := notification.MarkCRankRescoreComplete(ctx, hookDB); err != nil {
+			slog.Error("crank rescore completion marker failed", "err", err)
+		}
 		mailer := notification.NewSMTPMailer(cfg.SMTPHost, cfg.SMTPPort, cfg.SMTPUser, cfg.SMTPPassword, cfg.SMTPFrom)
 		if _, err := notification.RunCRankChangeAlerts(ctx, hookDB, notification.CRankAlertConfig{
 			Mailer:    mailer,
 			BaseURL:   cfg.AppBaseURL,
 			JobSecret: cfg.JobSecret,
 
-			DropThresholdPoints: cfg.AlertDropThreshold,
-			Cooldown:            time.Duration(cfg.AlertCooldownHours) * time.Hour,
-			MaxSendFailures:     cfg.MaxSendFailures,
+			DeltaThresholdPoints: cfg.AlertDropThreshold,
+			RequireFreshRescore:  true,
 		}); err != nil {
 			slog.Error("crank change alerts failed", "err", err)
 		}
 	}
+
+	// AC7 clean baseline: seed snapshots for every existing watched repo at
+	// deploy/startup so the first post-deploy dry-run produces zero alerts.
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+		defer cancel()
+		n, err := notification.SeedAllWatchBaselines(ctx, database)
+		if err != nil {
+			slog.Error("watch baseline deploy seed failed", "err", err)
+			return
+		}
+		if n > 0 {
+			slog.Info("watch baselines seeded at startup", "pairs", n)
+		}
+	}()
+
+	// AC4 watchdog: daily 06:00 UTC check that the rescore-completion event
+	// arrived; logs critical and leaves alerts skipped otherwise.
+	watchdogCtx, stopWatchdog := context.WithCancel(context.Background())
+	defer stopWatchdog()
+	notification.StartCRankRescoreWatchdog(watchdogCtx, database)
 
 	// Claim re-verification cron (AC4): weekly lazy + scheduled re-check of
 	// all claims; failures lapse the claim (7-day grace) before release.
@@ -327,6 +353,7 @@ func main() {
 		userApi.POST("/user/watchlist", handler.AddToWatchlist(watchlistRepo))
 		userApi.DELETE("/user/watchlist/:id", handler.RemoveFromWatchlist(watchlistRepo))
 		userApi.GET("/user/watchlist", handler.ListWatchlist(watchlistRepo))
+		userApi.PATCH("/user/watchlist/:id", handler.ToggleWatchlistAlerts(watchlistRepo))
 
 		// Slack/Discord webhook alert channels for watchlist C-Rank changes.
 		webhookRepo := repository.NewWatchlistWebhookRepository(database, []byte(cfg.EncryptionKey))

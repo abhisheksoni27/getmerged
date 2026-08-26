@@ -55,8 +55,6 @@ type Config struct {
 	SnapshotRetentionDays     int
 	CrawlerWorkers            int
 	AlertDropThreshold        float64
-	AlertCooldownHours        int
-	MaxSendFailures           int
 }
 
 // Load reads .env (if present) then validates all required variables are set.
@@ -138,20 +136,17 @@ func Load() (*Config, error) {
 		c.CrawlerWorkers = 10
 	}
 
-	// C-Rank watchlist alert tuning knobs (AC1/AC3/AC4).
-	c.AlertDropThreshold, _ = strconv.ParseFloat(os.Getenv("ALERT_DROP_THRESHOLD"), 64)
+	// C-Rank watchlist alert tuning (AC3): single global env knob for the
+	// alert policy — no per-user config. ALERT_TIER_DELTA is the ±score
+	// delta in points that triggers an alert (default 5); any tier change
+	// alerts regardless of delta. ALERT_DROP_THRESHOLD remains accepted as
+	// a legacy alias.
+	c.AlertDropThreshold, _ = strconv.ParseFloat(os.Getenv("ALERT_TIER_DELTA"), 64)
 	if c.AlertDropThreshold <= 0 {
-		c.AlertDropThreshold = 10
+		c.AlertDropThreshold, _ = strconv.ParseFloat(os.Getenv("ALERT_DROP_THRESHOLD"), 64)
 	}
-
-	c.AlertCooldownHours, _ = strconv.Atoi(os.Getenv("ALERT_COOLDOWN_HOURS"))
-	if c.AlertCooldownHours <= 0 {
-		c.AlertCooldownHours = 24
-	}
-
-	c.MaxSendFailures, _ = strconv.Atoi(os.Getenv("MAX_SEND_FAILURES"))
-	if c.MaxSendFailures <= 0 {
-		c.MaxSendFailures = 5
+	if c.AlertDropThreshold <= 0 {
+		c.AlertDropThreshold = 5
 	}
 
 	required := map[string]*string{

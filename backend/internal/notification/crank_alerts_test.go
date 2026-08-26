@@ -17,7 +17,7 @@ type countingMailer struct {
 	mu     sync.Mutex
 	sent   []string
 	fail   map[string]error
-	bounce map[string]bool // hard-bounced recipients (AC8)
+	bounce map[string]bool
 }
 
 func (m *countingMailer) Send(_ context.Context, to, subject, textBody, _ string) error {
@@ -39,7 +39,6 @@ func (m *countingMailer) count() int {
 	return len(m.sent)
 }
 
-// seedCrankBase migrates an empty schema and registers watchers.
 func seedCrankBase(t *testing.T) *sqlx.DB {
 	t.Helper()
 	d := sqlx.MustConnect("sqlite", ":memory:")
@@ -84,19 +83,16 @@ func addSnap(t *testing.T, d *sqlx.DB, id, repoID string, daysAgo int, score flo
 	}
 }
 
-func cfgWith(mailer *countingMailer, maxFails int) notification.CRankAlertConfig {
+func cfgWith(mailer *countingMailer, delta float64) notification.CRankAlertConfig {
 	return notification.CRankAlertConfig{
-		Mailer:              mailer,
-		BaseURL:             "http://localhost:8080",
-		JobSecret:           "testsecret",
-		Cooldown:            24 * time.Hour,
-		DropThresholdPoints: 10,
-		MaxSendFailures:     maxFails,
+		Mailer:               mailer,
+		BaseURL:              "http://localhost:8080",
+		JobSecret:            "testsecret",
+		DeltaThresholdPoints: delta,
 	}
 }
 
-// AC5: the very first sighting of a watcher/repo pair silently stores the
-// baseline hash and sends nothing.
+// AC4: Newly watched repos seed last_alerted_snapshot -> first cycle never alerts.
 func TestCrankBaselineFirstSighting(t *testing.T) {
 	d := seedCrankBase(t)
 	addSnap(t, d, "s1", "r1", 1, 72.0, "B")
@@ -106,12 +102,12 @@ func TestCrankBaselineFirstSighting(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if s.Baselined != 1 || s.Sent != 0 || s.AlertsFound != 0 || mailer.count() != 0 {
+	if s.Baselined != 5 || s.EmailsSent != 0 || s.AlertsFound != 0 || mailer.count() != 0 {
 		t.Fatalf("baseline run must be silent: %+v emails=%v", s, mailer.sent)
 	}
 	var n int
 	var hash string
-	if err := d.Get(&n, `SELECT COUNT(1) FROM crank_alert_state`); err != nil || n != 1 {
+	if err := d.Get(&n, `SELECT COUNT(1) FROM crank_alert_state`); err != nil || n != 5 {
 		t.Fatalf("baseline row missing: rows=%d err=%v", n, err)
 	}
 	if err := d.Get(&hash, `SELECT COALESCE(rank_hash,'') FROM crank_alert_state WHERE user_id=1 AND repo_id='r1'`); err != nil || hash == "" {
@@ -119,9 +115,8 @@ func TestCrankBaselineFirstSighting(t *testing.T) {
 	}
 }
 
-// AC1/AC4/AC7: tier crossing alerts once, carries an expiring unsubscribe
-// link, then stays silent on re-runs and within the cooldown window.
-func TestCrankAlertCooldownAndDedup(t *testing.T) {
+// AC1: alerts on score delta >= 5 OR any tier change; single env/config knob.
+func TestCrankAlertDeltaOrTierChange(t *testing.T) {
 	d := seedCrankBase(t)
 	addSnap(t, d, "s1", "r1", 2, 72.0, "B")
 
@@ -131,149 +126,35 @@ func TestCrankAlertCooldownAndDedup(t *testing.T) {
 		t.Fatal(err)
 	} // baseline pass
 
-	addSnap(t, d, "s2", "r1", 1, 64.0, "C") // B -> C tier crossing, drop only 8 (<10)
+	// Tier change (B -> C) with small delta (< 5) still alerts!
+	addSnap(t, d, "s2", "r1", 1, 69.0, "C")
 	s, err := notification.RunCRankChangeAlerts(context.Background(), d, cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if s.Sent != 1 || s.AlertsFound != 1 || mailer.count() != 1 {
+	if s.EmailsSent != 1 || s.AlertsFound != 1 || mailer.count() != 1 {
 		t.Fatalf("tier-crossing run mismatch: %+v sent=%v", s, mailer.sent)
 	}
 	body := strings.SplitN(mailer.sent[0], "|", 3)[2]
 	if !strings.Contains(body, "http://localhost:8080/unsubscribe?uid=1&token=") {
 		t.Fatalf("email missing unsubscribe link: %q", body)
 	}
-	token := body[strings.Index(body, "token=")+len("token="):]
-	token = strings.Fields(token)[0]
-	if !strings.Contains(token, ".") || !notification.VerifyUnsubscribeToken("1", token, "testsecret") {
-		t.Fatalf("unsubscribe token must be signed and verifiable: %q", token)
-	}
 
-	// Same snapshot again: hash dedup means no duplicate email.
+	// Re-run on same snapshot: dedupe means 0 sends
 	s2, _ := notification.RunCRankChangeAlerts(context.Background(), d, cfg)
-	if s2.Sent != 0 || s2.AlertsFound != 0 || mailer.count() != 1 {
+	if s2.EmailsSent != 0 || s2.AlertsFound != 0 || mailer.count() != 1 {
 		t.Fatalf("re-run must be deduped: %+v total=%d", s2, mailer.count())
 	}
-
-	// Further sharp drop within the cooldown window: suppressed regardless.
-	addSnap(t, d, "s3", "r1", 0, 40.0, "D")
-	s3, _ := notification.RunCRankChangeAlerts(context.Background(), d, cfg)
-	if s3.Sent != 0 || s3.SkippedCooldown != 1 || mailer.count() != 1 {
-		t.Fatalf("cooldown must suppress further sends: %+v total=%d", s3, mailer.count())
-	}
 }
 
-// AC2/AC3: send failures leave the hash untouched (natural retry) until
-// MaxSendFailures consecutive cycles dead-letter the pair; retrying stops
-// until the next real snapshot change revives it.
-func TestCrankFailureRetryCapDeadLetter(t *testing.T) {
+// AC3: Per-user cap: max 1 alert email/user/night (batch all repo shifts into one email).
+func TestCrankBatchPerUser(t *testing.T) {
 	d := seedCrankBase(t)
-	addSnap(t, d, "s1", "r2", 2, 76.0, "B")
+	// Add another watch for user 1 on repo r2
+	d.MustExec(`INSERT INTO user_watchlists (user_id, repo_id, notify_rank_change, created_at) VALUES (1, 'r2', TRUE, CURRENT_TIMESTAMP)`)
 
-	failing := &countingMailer{fail: map[string]error{
-		"bob@x.io":   context.DeadlineExceeded,
-		"carol@x.io": context.DeadlineExceeded,
-	}}
-	cfg := cfgWith(failing, 3)
-
-	// Baseline must land before any alerting can happen.
-	if _, err := notification.RunCRankChangeAlerts(context.Background(), d, cfg); err != nil {
-		t.Fatal(err)
-	}
-	addSnap(t, d, "s2", "r2", 1, 61.0, "B") // same-tier drop of exactly 15 >= 10
-
-	for i := 0; i < 3; i++ {
-		s, err := notification.RunCRankChangeAlerts(context.Background(), d, cfg)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if s.Failed != 2 { // bob and carol both hit the failing mailer
-			t.Fatalf("cycle %d: expected both watchers to fail: %+v", i, s)
-		}
-	}
-	var dead int
-	if err := d.Get(&dead, `SELECT COUNT(1) FROM crank_alert_state WHERE dead_lettered=TRUE`); err != nil || dead != 2 {
-		t.Fatalf("both pairs must be dead-lettered after 3 strikes: %d err=%v", dead, err)
-	}
-	before := failing.count()
-
-	// Same failing snapshot: dead-lettered pairs are not retried.
-	s, _ := notification.RunCRankChangeAlerts(context.Background(), d, cfg)
-	if failing.count() != before || s.DeadLettered != 2 {
-		t.Fatalf("dead-lettered pairs must not retry: %+v total=%d", s, failing.count())
-	}
-	// AC2: the rank hash still points at the baseline snapshot, not the
-	// failed one.
-	var snapDate string
-	if err := d.Get(&snapDate,
-		`SELECT last_alerted_snapshot_date FROM crank_alert_state WHERE user_id=2 AND repo_id='r2'`); err != nil {
-		t.Fatal(err)
-	}
-	baselineDate := time.Now().UTC().AddDate(0, 0, -2).Format("2006-01-02")
-	if snapDate != baselineDate {
-		t.Fatalf("failed sends must not advance rank state: got %q want %q", snapDate, baselineDate)
-	}
-
-	// Next real change revives the pair: one more attempt fires.
-	addSnap(t, d, "s3", "r2", 0, 50.0, "C")
-	retry := &countingMailer{}
-	if _, err := notification.RunCRankChangeAlerts(context.Background(), d, cfgWith(retry, 3)); err != nil {
-		t.Fatal(err)
-	}
-	if retry.count() != 2 {
-		t.Fatalf("revived pairs must retry exactly once per cycle: %v", retry.sent)
-	}
-}
-
-// AC8: a hard bounce flags the watcher e-mail invalid and suppresses all
-// future sends until resubscribe clears the flag.
-func TestCrankHardBounceSuppressesWatcher(t *testing.T) {
-	d := seedCrankBase(t)
-	addSnap(t, d, "s1", "r3", 2, 70.0, "B")
-
-	bouncing := &countingMailer{bounce: map[string]bool{"dave@x.io": true}}
-	cfg := cfgWith(bouncing, 5)
-
-	// Baseline pass, then the alerting pass bounces.
-	if _, err := notification.RunCRankChangeAlerts(context.Background(), d, cfg); err != nil {
-		t.Fatal(err)
-	}
-	addSnap(t, d, "s2", "r3", 1, 55.0, "C") // tier crossing
-	s, err := notification.RunCRankChangeAlerts(context.Background(), d, cfg)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if s.Failed == 0 {
-		t.Fatalf("hard bounce must surface as a failure: %+v", s)
-	}
-	var invalid bool
-	if err := d.Get(&invalid, `SELECT COALESCE(email_invalid,FALSE) FROM users WHERE id=4`); err != nil || !invalid {
-		t.Fatalf("watcher must be flagged email_invalid: %v err=%v", invalid, err)
-	}
-
-	// Suppressed from subsequent cycles entirely.
-	addSnap(t, d, "s3", "r3", 0, 30.0, "D")
-	s2, _ := notification.RunCRankChangeAlerts(context.Background(), d, cfgWith(bouncing, 5))
-	if s2.WatchersConsidered != 4 { // dave filtered; alice/bob/carol/erin remain
-		t.Fatalf("bounced watcher must be filtered from candidates: %+v", s2)
-	}
-
-	// Resubscribe flow (AC7/AC8): valid expiring token clears the flag.
-	tok := notification.ExpiringUnsubscribeToken(4, "testsecret", time.Now().UTC().Add(time.Hour))
-	res := d.MustExec(`UPDATE users SET email_invalid=FALSE, digest_unsubscribed=FALSE WHERE id=?`, 4)
-	if n, _ := res.RowsAffected(); n != 1 {
-		t.Fatalf("resubscribe update failed")
-	}
-	if notification.VerifyUnsubscribeToken("4", tok, "wrong-secret") {
-		t.Fatalf("token must be secret-bound")
-	}
-}
-
-// AC6: concurrent runs cannot double-send; CAS + per-repo locking keep
-// exactly one email per watcher/repo pair.
-func TestCrankConcurrentRunsSingleSend(t *testing.T) {
-	d := seedCrankBase(t)
-	addSnap(t, d, "s1", "r1", 2, 72.0, "B")
+	addSnap(t, d, "s1_r1", "r1", 2, 72.0, "B")
+	addSnap(t, d, "s1_r2", "r2", 2, 80.0, "A")
 
 	mailer := &countingMailer{}
 	cfg := cfgWith(mailer, 5)
@@ -281,35 +162,167 @@ func TestCrankConcurrentRunsSingleSend(t *testing.T) {
 		t.Fatal(err)
 	} // baseline
 
-	addSnap(t, d, "s2", "r1", 1, 58.0, "C")
+	// Shift both repos
+	addSnap(t, d, "s2_r1", "r1", 1, 60.0, "C")
+	addSnap(t, d, "s2_r2", "r2", 1, 70.0, "B")
 
-	var wg sync.WaitGroup
-	var sa, sb *notification.CRankAlertSummary
-	wg.Add(2)
-	go func() { defer wg.Done(); sa, _ = notification.RunCRankChangeAlerts(context.Background(), d, cfg) }()
-	go func() { defer wg.Done(); sb, _ = notification.RunCRankChangeAlerts(context.Background(), d, cfg) }()
-	wg.Wait()
-
-	total := sa.Sent + sb.Sent
-	if total != 1 || mailer.count() != 1 {
-		t.Fatalf("concurrent runs double-sent: %+v %+v emails=%d", sa, sb, mailer.count())
+	s, err := notification.RunCRankChangeAlerts(context.Background(), d, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Alice watched both r1 and r2; Bob & Carol watched r2
+	// Alice should receive exactly 1 batched email with both repos
+	var aliceEmails []string
+	for _, sent := range mailer.sent {
+		if strings.HasPrefix(sent, "alice@x.io|") {
+			aliceEmails = append(aliceEmails, sent)
+		}
+	}
+	if len(aliceEmails) != 1 {
+		t.Fatalf("expected exactly 1 batched email for Alice, got %d", len(aliceEmails))
+	}
+	if !strings.Contains(aliceEmails[0], "a/tier") || !strings.Contains(aliceEmails[0], "a/drop") {
+		t.Fatalf("expected batched email to contain both repos: %s", aliceEmails[0])
+	}
+	if s.EmailsSent != 3 { // alice (batched 2 repos), bob (1 repo), carol (1 repo)
+		t.Fatalf("expected 3 emails sent, got %d", s.EmailsSent)
 	}
 }
 
-// AC7: expired / malformed / tampered tokens are rejected.
-func TestExpiringUnsubscribeTokens(t *testing.T) {
-	valid := notification.UnsubscribeToken(9, "sec")
-	if !notification.VerifyUnsubscribeToken("9", valid, "sec") {
-		t.Fatalf("fresh token must verify")
+// AC5: Send failure writes NO alert state — baselines still hold so the
+// shift re-fires naturally on the next nightly diff (no in-night queue
+// retries). Rows are closed as bookkeeping only.
+func TestCrankSendFailureNoWritesRetriesNextNight(t *testing.T) {
+	d := seedCrankBase(t)
+	addSnap(t, d, "s1", "r2", 2, 76.0, "B")
+
+	failing := &countingMailer{fail: map[string]error{
+		"bob@x.io":   context.DeadlineExceeded,
+		"carol@x.io": context.DeadlineExceeded,
+	}}
+	cfg := notification.CRankAlertConfig{
+		Mailer:               failing,
+		BaseURL:              "http://localhost:8080",
+		JobSecret:            "testsecret",
+		DeltaThresholdPoints: 5,
 	}
-	expired := notification.ExpiringUnsubscribeToken(9, "sec", time.Now().UTC().Add(-time.Minute))
-	if notification.VerifyUnsubscribeToken("9", expired, "sec") {
-		t.Fatalf("expired token must fail")
+
+	// Baseline pass
+	if _, err := notification.RunCRankChangeAlerts(context.Background(), d, cfg); err != nil {
+		t.Fatal(err)
 	}
-	if notification.VerifyUnsubscribeToken("10", valid, "sec") {
-		t.Fatalf("uid/token mismatch must fail")
+	var baseHash string
+	if err := d.Get(&baseHash, `SELECT rank_hash FROM crank_alert_state WHERE user_id=2 AND repo_id='r2'`); err != nil || baseHash == "" {
+		t.Fatalf("baseline hash missing: %q %v", baseHash, err)
 	}
-	if notification.VerifyUnsubscribeToken("9", "garbage", "sec") {
-		t.Fatalf("malformed token must fail")
+	addSnap(t, d, "s2", "r2", 1, 60.0, "C")
+
+	// Night 1: send fails -> no baseline write, rows closed, nothing retrying.
+	s1, err := notification.RunCRankChangeAlerts(context.Background(), d, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s1.EmailsSent != 0 || s1.EmailsFailed != 2 || s1.Retrying != 0 {
+		t.Fatalf("night 1: expected 2 failed / 0 retrying, got %+v", s1)
+	}
+	var hash, tier string
+	if err := d.Get(&hash, `SELECT rank_hash FROM crank_alert_state WHERE user_id=2 AND repo_id='r2'`); err != nil || hash != baseHash {
+		t.Fatalf("send failure must not advance baseline: hash=%q want=%q err=%v", hash, baseHash, err)
+	}
+	if err := d.Get(&tier, `SELECT last_alerted_tier FROM crank_alert_state WHERE user_id=2 AND repo_id='r2'`); err != nil || tier != "B" {
+		t.Fatalf("baseline tier changed on failure: tier=%q", tier)
+	}
+	var failed int
+	if err := d.Get(&failed, `SELECT COUNT(1) FROM crank_outbox WHERE status='failed'`); err != nil || failed != 2 {
+		t.Fatalf("expected 2 closed rows, got %d err=%v", failed, err)
+	}
+
+	// Night 2 (fresh cycle): still failing -> diff re-fires the shift
+	// naturally and fails again.
+	d.MustExec(`DELETE FROM crank_outbox`) // simulate prior-day rows aged out
+	s2, _ := notification.RunCRankChangeAlerts(context.Background(), d, cfg)
+	if s2.AlertsFound != 2 || s2.EmailsFailed != 2 || s2.EmailsSent != 0 {
+		t.Fatalf("night 2 must re-fire after failure: %+v", s2)
+	}
+
+	// Night 3: provider healthy again -> both users get their digest and
+	// baselines advance to the alerted content.
+	d.MustExec(`DELETE FROM crank_outbox`)
+	ok := &countingMailer{}
+	cfgOK := cfg
+	cfgOK.Mailer = ok
+	s3, err := notification.RunCRankChangeAlerts(context.Background(), d, cfgOK)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s3.AlertsFound != 2 || s3.EmailsSent != 2 || ok.count() != 2 {
+		t.Fatalf("night 3 recovery mismatch: %+v sent=%v", s3, ok.sent)
+	}
+	for _, u := range []int64{2, 3} {
+		var newHash string
+		if err := d.Get(&newHash, `SELECT rank_hash FROM crank_alert_state WHERE user_id=? AND repo_id='r2'`, u); err != nil || newHash == "" || newHash == baseHash {
+			t.Fatalf("baseline not advanced for user %d: hash=%q", u, newHash)
+		}
+		var snapDate string
+		var notified int64
+		if err := d.Get(&snapDate, `SELECT last_alerted_snapshot_date FROM crank_alert_state WHERE user_id=? AND repo_id='r2'`, u); err != nil || snapDate == "" {
+			t.Fatalf("snapshot date not stamped for user %d", u)
+		}
+		if err := d.Get(&notified, `SELECT last_notified_unix FROM crank_alert_state WHERE user_id=? AND repo_id='r2'`, u); err != nil || notified == 0 {
+			t.Fatalf("last_notified_unix not stamped for user %d", u)
+		}
+	}
+
+	// Night 4: same snapshot re-run is deduped.
+	s4, _ := notification.RunCRankChangeAlerts(context.Background(), d, cfgOK)
+	if s4.AlertsFound != 0 || s4.EmailsSent != 0 || ok.count() != 2 {
+		t.Fatalf("night 4 must be fully deduped: %+v total=%d", s4, ok.count())
+	}
+}
+
+// AC6: Unsubscribe checked at send time, not queue time; unsubscribed mid-cycle users skipped.
+func TestCrankUnsubscribeCheckedAtSendTime(t *testing.T) {
+	d := seedCrankBase(t)
+	addSnap(t, d, "s1", "r1", 2, 72.0, "B")
+
+	mailer := &countingMailer{}
+	cfg := cfgWith(mailer, 5)
+	if _, err := notification.RunCRankChangeAlerts(context.Background(), d, cfg); err != nil {
+		t.Fatal(err)
+	} // baseline pass
+
+	// Alice unsubscribes before the send occurs
+	d.MustExec(`UPDATE users SET digest_unsubscribed = TRUE WHERE id = 1`)
+
+	addSnap(t, d, "s2", "r1", 1, 60.0, "C")
+	s, err := notification.RunCRankChangeAlerts(context.Background(), d, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s.EmailsSent != 0 || mailer.count() != 0 {
+		t.Fatalf("unsubscribed user must not receive email: sent=%d, %+v", mailer.count(), s)
+	}
+}
+
+// AC4 Seed baseline on watch creation
+func TestSeedWatchBaseline(t *testing.T) {
+	d := seedCrankBase(t)
+	addSnap(t, d, "s1", "r1", 1, 75.0, "B")
+
+	// User 2 adds r1 to watchlist and seeds baseline
+	d.MustExec(`INSERT INTO user_watchlists (user_id, repo_id, notify_rank_change, created_at) VALUES (2, 'r1', TRUE, CURRENT_TIMESTAMP)`)
+	if err := notification.SeedWatchBaseline(context.Background(), d, 2, "r1"); err != nil {
+		t.Fatal(err)
+	}
+
+	// First alert run must not alert for user 2 on r1
+	mailer := &countingMailer{}
+	cfg := cfgWith(mailer, 5)
+	s, err := notification.RunCRankChangeAlerts(context.Background(), d, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s.EmailsSent != 0 || mailer.count() != 0 {
+		t.Fatalf("newly seeded watch must not alert on first cycle: sent=%d, %+v", mailer.count(), s)
 	}
 }

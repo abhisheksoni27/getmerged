@@ -21,7 +21,10 @@ var ErrHardBounce = errors.New("hard bounce")
 type SendError struct {
 	Permanent   bool
 	RateLimited bool
-	Err         error
+	// RetryAfter is the provider-advised pause (AC5: a 429 honors it for
+	// scheduling while still counting the attempt).
+	RetryAfter time.Duration
+	Err        error
 }
 
 func (e *SendError) Error() string { return e.Err.Error() }
@@ -54,6 +57,28 @@ func IsRateLimited(err error) bool {
 	return errors.As(err, &se) && se.RateLimited
 }
 
+// retryAfterRe extracts "retry-after: 30" style hints from provider errors.
+var retryAfterRe = regexp.MustCompile(`(?i)retry[-_ ]?after\D{0,4}(\d+)`)
+
+// RetryAfterFrom returns the provider-advised retry pause carried by err,
+// or 0 when absent.
+func RetryAfterFrom(err error) time.Duration {
+	var se *SendError
+	if !errors.As(err, &se) {
+		return 0
+	}
+	if se.RetryAfter > 0 || se.Err == nil {
+		return se.RetryAfter
+	}
+	if m := retryAfterRe.FindStringSubmatch(se.Err.Error()); m != nil {
+		var secs int
+		if _, perr := fmt.Sscanf(m[1], "%d", &secs); perr == nil && secs > 0 {
+			return time.Duration(secs) * time.Second
+		}
+	}
+	return 0
+}
+
 // smtpRateLimitCodes are transient throttle replies that pause the queue.
 var smtpRateLimitCodes = map[string]bool{"421": true, "429": true, "450": true, "451": true, "452": true}
 
@@ -68,6 +93,7 @@ func classifySendError(err error) error {
 		return nil
 	}
 	rateLimited := false
+	retryAfter := time.Duration(0)
 	for _, m := range smtpCodeRe.FindAllStringSubmatch(err.Error(), -1) {
 		switch m[1] {
 		case "552", "554":
@@ -83,7 +109,15 @@ func classifySendError(err error) error {
 			}
 		}
 	}
-	return &SendError{RateLimited: rateLimited, Permanent: false, Err: err}
+	if rateLimited {
+		if m := retryAfterRe.FindStringSubmatch(err.Error()); m != nil {
+			var secs int
+			if _, perr := fmt.Sscanf(m[1], "%d", &secs); perr == nil && secs > 0 {
+				retryAfter = time.Duration(secs) * time.Second
+			}
+		}
+	}
+	return &SendError{RateLimited: rateLimited, RetryAfter: retryAfter, Permanent: false, Err: err}
 }
 
 // SMTPMailer delivers email via SMTP (email-only channel for digests).

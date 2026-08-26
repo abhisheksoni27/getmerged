@@ -22,6 +22,8 @@ import {
   Webhook,
   AlertTriangle,
   Trash2,
+  Bell,
+  BellOff,
 } from "lucide-react";
 import posthog from "posthog-js";
 
@@ -152,14 +154,21 @@ function TierDeltaIndicatorChip({ repo, history }: TierDeltaProps) {
 interface WatchedCardProps {
   item: WatchedRepoItem;
   onUnwatch: (repoId: string, fullName: string) => Promise<void>;
+  alertsEnabled: boolean;
+  onToggleAlerts: (repoId: string, enabled: boolean) => Promise<boolean>;
 }
 
-function WatchedRepoCard({ item, onUnwatch }: WatchedCardProps) {
+function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: WatchedCardProps) {
   const router = useRouter();
   const { repo, history } = item;
   const rank = repo.class_rank || repo.c_rank_tier || "A";
   const [ownerPart, namePart] = repo.full_name ? repo.full_name.split("/") : [repo.owner || "", repo.name || ""];
   const [isRemoving, setIsRemoving] = useState(false);
+  const [alertsOn, setAlertsOn] = useState(alertsEnabled);
+
+  useEffect(() => {
+    setAlertsOn(alertsEnabled);
+  }, [alertsEnabled]);
 
   const badgeStyle = getBadgeStyle(rank);
 
@@ -195,6 +204,15 @@ function WatchedRepoCard({ item, onUnwatch }: WatchedCardProps) {
     } catch {
       setIsRemoving(false);
     }
+  };
+
+  const handleToggleAlertsClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const next = !alertsOn;
+    setAlertsOn(next);
+    const ok = await onToggleAlerts(String(repo.id || repo.full_name), next);
+    if (!ok) setAlertsOn(!next);
   };
 
   const handleCompareClick = (e: React.MouseEvent) => {
@@ -259,6 +277,20 @@ function WatchedRepoCard({ item, onUnwatch }: WatchedCardProps) {
 
           {/* Action & Badge Group */}
           <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={handleToggleAlertsClick}
+              aria-label={alertsOn ? `Disable C-Rank alerts for ${repo.full_name}` : `Enable C-Rank alerts for ${repo.full_name}`}
+              title={alertsOn ? "Email alerts on — click to mute" : "Email alerts off — click to enable"}
+              data-testid={`alerts-toggle-${ownerPart}-${namePart}`}
+              className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
+                alertsOn
+                  ? "border-emerald-200 text-emerald-700 bg-emerald-50 hover:bg-emerald-100"
+                  : "border-zinc-200 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-50"
+              }`}
+            >
+              {alertsOn ? <Bell className="h-4 w-4" /> : <BellOff className="h-4 w-4" />}
+            </button>
             <button
               type="button"
               onClick={handleUnwatchClick}
@@ -522,6 +554,19 @@ function WebhookChannels() {
 export function WatchlistClient({ initialItems }: WatchlistClientProps) {
   const [items, setItems] = useState<WatchedRepoItem[]>(initialItems);
   const [loading, setLoading] = useState(false);
+  const [alerts, setAlerts] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    // Sync per-repo alert toggle state (AC3); defaults to on when absent.
+    fetch(`${API_BASE_URL}/api/v1/user/watchlist`, { credentials: "include" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && data.alerts && typeof data.alerts === "object" && !Array.isArray(data.alerts)) {
+          setAlerts(data.alerts as Record<string, boolean>);
+        }
+      })
+      .catch(() => {});
+  }, [items.length]);
 
   useEffect(() => {
     // If initial items was empty or needs client refresh, sync with API
@@ -576,6 +621,24 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
     }
   };
 
+  const handleToggleAlerts = async (repoId: string, enabled: boolean): Promise<boolean> => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/user/watchlist/${encodeURIComponent(repoId)}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notify_rank_change: enabled }),
+      });
+      if (!res.ok) return false;
+      setAlerts((prev) => ({ ...prev, [repoId]: enabled }));
+      posthog.capture("watchlist_alerts_toggled", { repo_id: repoId, enabled });
+      return true;
+    } catch (e) {
+      console.error("Failed to toggle watchlist alerts", e);
+      return false;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#faf9f6] py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -623,6 +686,8 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
                 key={item.repo.id || item.repo.full_name}
                 item={item}
                 onUnwatch={handleUnwatch}
+                alertsEnabled={alerts[String(item.repo.id)] !== false}
+                onToggleAlerts={handleToggleAlerts}
               />
             ))}
           </div>
