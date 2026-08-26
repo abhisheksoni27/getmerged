@@ -9,12 +9,15 @@ import (
 )
 
 // RequireProOrQuota enforces 3 free monthly evaluations for Free users and unlimited evaluations for Pro users (Story 5.3).
+// Anonymous visitors are allowed through as an instant trial (aha-before-auth):
+// the per-IP trial limiter chained before this middleware enforces ONE anonymous
+// evaluation, and the client soft-gates the result behind GitHub sign-in.
 func RequireProOrQuota(entRepo repository.EntitlementRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userIDVal, exists := c.Get(UserIDKey)
 		if !exists {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthenticated"})
-			c.Abort()
+			c.Header("X-Anonymous-Trial", "1")
+			c.Next()
 			return
 		}
 
