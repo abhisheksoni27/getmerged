@@ -51,6 +51,9 @@ export async function generateMetadata({ params }: TopicPageProps): Promise<Meta
     description,
     alternates: {
       canonical: `https://getmerged.abhishekco.de/topics/${topic}`,
+      types: {
+        "application/atom+xml": `https://getmerged.abhishekco.de/feeds/${encodeURIComponent(topic.toLowerCase())}.xml`,
+      },
     },
     openGraph: {
       title,
