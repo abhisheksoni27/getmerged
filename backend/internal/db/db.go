@@ -353,6 +353,9 @@ func AutoMigrate(db *sqlx.DB) error {
 			pr_created_at DATETIME,
 			github_updated_at DATETIME,
 			merged_at DATETIME,
+			requested_reviewers TEXT,
+			is_draft BOOLEAN DEFAULT FALSE,
+			ready_for_review_at DATETIME,
 			fetched_at DATETIME NOT NULL,
 			snapshot_at DATETIME NOT NULL,
 			UNIQUE(pr_id, snapshot_at)
@@ -608,6 +611,76 @@ func AutoMigrate(db *sqlx.DB) error {
 			consumed_at DATETIME NULL,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`, autoInc),
+		// PR stall rescue alerts: stall key = (pr_id, clock-anchor epoch)
+		// stored in the unique (pr_id, stall_epoch_bucket) index, so each
+		// threshold crossing queues exactly one alert (AC3). Lifecycle
+		// pending -> sent | stale | failed with a single 60s-gated retry
+		// before 'failed' (AC6).
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS pr_stall_alerts (
+			id INTEGER PRIMARY KEY %s,
+			pr_id VARCHAR(255) NOT NULL,
+			user_id INTEGER NOT NULL,
+			repository_id VARCHAR(255) NOT NULL DEFAULT '',
+			stall_epoch_bucket INTEGER NOT NULL,
+			status VARCHAR(16) NOT NULL DEFAULT 'pending',
+			attempts INTEGER NOT NULL DEFAULT 0,
+			next_attempt_at DATETIME NULL,
+			payload TEXT NOT NULL,
+			last_error TEXT NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			sent_at DATETIME NULL,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(pr_id, stall_epoch_bucket)
+		);`, autoInc),
+		// Stall-rescue episode gate (AC3): unique (pr_id, last_crossed_at);
+		// INSERT (OR) IGNORE here is the sole permission to send.
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS alerts_sent (
+			id INTEGER PRIMARY KEY %s,
+			pr_id VARCHAR(255) NOT NULL,
+			last_crossed_at DATETIME NOT NULL,
+			user_id INTEGER NOT NULL DEFAULT 0,
+			repository_id VARCHAR(255) NOT NULL DEFAULT '',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(pr_id, last_crossed_at)
+		);`, autoInc),
+		// Stall-rescue episode state (AC1/AC3): episode_start is the most
+		// recent accepted review-event instant; alerted_at pins the last
+		// alert within that episode (one alert per episode).
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS pr_stall_state (
+			pr_id VARCHAR(255) PRIMARY KEY,
+			user_id INTEGER NOT NULL,
+			repository_id VARCHAR(255) NOT NULL DEFAULT '',
+			last_crossed_at DATETIME NULL,
+			below_p50_since DATETIME NULL,
+			episode_start DATETIME NULL,
+			alerted_at DATETIME NULL,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`),
+		// Review-event log (AC1/AC2): idempotent by (pr_id, event_id);
+		// accepted events restart the stall episode at their timestamp.
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS pr_review_events (
+			id INTEGER PRIMARY KEY %s,
+			pr_id VARCHAR(255) NOT NULL,
+			event_id VARCHAR(255) NOT NULL,
+			event_type VARCHAR(32) NOT NULL DEFAULT '',
+			occurred_at DATETIME NOT NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(pr_id, event_id)
+		);`, autoInc),
+		// Delivery failures (AC7): error + retry_count per stalled PR; one
+		// retry next cycle, then dead-lettered.
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS alerts_failed (
+			id INTEGER PRIMARY KEY %s,
+			pr_id VARCHAR(255) NOT NULL,
+			user_id INTEGER NOT NULL DEFAULT 0,
+			channel VARCHAR(32) NOT NULL DEFAULT '',
+			error TEXT NULL,
+			retry_count INTEGER NOT NULL DEFAULT 0,
+			status VARCHAR(16) NOT NULL DEFAULT 'retry',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(pr_id)
+		);`, autoInc),
 	}
 
 	for i, stmt := range statements {
@@ -656,6 +729,13 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_gfi_created_at ON repo_good_first_issues(created_at)`,
 		`CREATE INDEX IF NOT EXISTS idx_gfi_alert_dedup ON repo_good_first_issues(alert_dedup_key)`,
 		`CREATE INDEX IF NOT EXISTS idx_gfi_notification_log_pending ON gfi_notification_log(status, next_attempt_at, user_id)`,
+		// AC3/AC4: pending drain ordering + per-user dashboard lookups.
+		`CREATE INDEX IF NOT EXISTS idx_pr_stall_pending ON pr_stall_alerts(status, created_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_pr_stall_user ON pr_stall_alerts(user_id)`,
+		// AC7: dead-letter/retry triage over failed alert deliveries.
+		`CREATE INDEX IF NOT EXISTS idx_alerts_failed_status ON alerts_failed(status, updated_at)`,
+		// AC2: per-PR event lookups during stall-episode ingestion.
+		`CREATE INDEX IF NOT EXISTS idx_pr_review_events_pr_time ON pr_review_events(pr_id, occurred_at)`,
 		// AC3: one notification per user/issue regardless of the instant or
 		// digest path; INSERT (OR) IGNORE against this index is the dedup rule.
 		`CREATE UNIQUE INDEX IF NOT EXISTS uq_gfi_notification_log_user_issue ON gfi_notification_log(user_id, issue_key)`,
@@ -695,6 +775,16 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN digest_unsubscribed BOOLEAN DEFAULT FALSE`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN referral_code VARCHAR(32) UNIQUE`)
 	_, _ = db.Exec(`ALTER TABLE user_entitlements ADD COLUMN bonus_evals INTEGER DEFAULT 0`)
+	// Stall-rescue nudge mentions (AC1): reviewer logins per snapshot.
+	_, _ = db.Exec(`ALTER TABLE pr_snapshots ADD COLUMN requested_reviewers TEXT`)
+	// Stall clock anchor (AC5): draft flag + frozen draft->ready instant.
+	_, _ = db.Exec(`ALTER TABLE pr_snapshots ADD COLUMN is_draft BOOLEAN DEFAULT FALSE`)
+	_, _ = db.Exec(`ALTER TABLE pr_snapshots ADD COLUMN ready_for_review_at DATETIME`)
+		// Single delivery retry gate (AC6).
+		_, _ = db.Exec(`ALTER TABLE pr_stall_alerts ADD COLUMN next_attempt_at DATETIME NULL`)
+		// Episode-driven stall rescue (AC1/AC2/AC3).
+		_, _ = db.Exec(`ALTER TABLE pr_stall_state ADD COLUMN episode_start DATETIME NULL`)
+		_, _ = db.Exec(`ALTER TABLE pr_stall_state ADD COLUMN alerted_at DATETIME NULL`)
 	// C-Rank alert state: rank hash for CAS writes (AC2/AC6), failure cap and
 	// dead-letter flag (AC3), plus watcher e-mail validity suppression (AC8).
 	_, _ = db.Exec(`ALTER TABLE crank_alert_state ADD COLUMN rank_hash VARCHAR(64) DEFAULT ''`)

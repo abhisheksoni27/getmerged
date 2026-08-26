@@ -114,6 +114,11 @@ func main() {
 	stopPRTrackerCron := prTrackerSvc.StartCron(15 * time.Minute)
 	defer stopPRTrackerCron()
 
+	// Stalled-PR rescue alerts: hourly sweep comparing tracked open PRs
+	// against each repo's merged p75 wait; email + configured Slack/Discord.
+	stopStallAlertCron := startPRStallAlertCron(cfg, database)
+	defer stopStallAlertCron()
+
 	// Watchlist C-Rank change alerts: run at the end of every snapshot cycle
 	// with the real SMTP mailer and the existing unsubscribe flow.
 	pipeline.CRankAlertHook = func(hookDB *sqlx.DB) {
@@ -478,6 +483,54 @@ func startGFIAlertCron(cfg *config.Config, database *sqlx.DB, gh *ghclient.Clien
 	return func() { close(stop) }
 }
 
+// startPRStallAlertCron keeps the stalled-PR rescue pipeline running: the
+// sweep evaluates open tracked PRs against repo merged-p75 waits (sparse
+// history falls back to a 72h global p75), queues deduped alerts keyed
+// (pr_id, clock anchor) and drains them as one digest per user with a
+// 50-row/run cap. Repos with zero merged data points are silent skips.
+func startPRStallAlertCron(cfg *config.Config, database *sqlx.DB) func() {
+	stop := make(chan struct{})
+	run := func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+		defer cancel()
+		s, err := notification.RunPRStallAlerts(ctx, database, notification.PRStallAlertConfig{
+			Mailer:        notification.NewSMTPMailer(cfg.SMTPHost, cfg.SMTPPort, cfg.SMTPUser, cfg.SMTPPassword, cfg.SMTPFrom),
+			BaseURL:       cfg.AppBaseURL,
+			EncryptionKey: []byte(cfg.EncryptionKey),
+			GitHubToken:   cfg.GithubToken,
+		})
+		if err != nil {
+			slog.Error("pr stall alert sweep failed", "err", err)
+			return
+		}
+		if s.Queued > 0 || s.Sent > 0 || s.Failed > 0 || s.Retrying > 0 || s.StaleSkipped > 0 || s.Deferred > 0 {
+			slog.Info("pr stall alert sweep done", "queued", s.Queued, "sent", s.Sent,
+				"retrying", s.Retrying, "failed", s.Failed, "stale_skipped", s.StaleSkipped,
+				"deferred", s.Deferred, "insufficient_samples_repos", s.InsufficientSamples,
+				"draft_skipped", s.DraftSkipped)
+		}
+	}
+	go func() {
+		select {
+		case <-stop:
+			return
+		case <-time.After(2 * time.Minute):
+			run()
+		}
+		ticker := time.NewTicker(time.Hour)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-stop:
+				return
+			case <-ticker.C:
+				run()
+			}
+		}
+	}()
+	return func() { close(stop) }
+}
+
 // startClaimReverifyCron runs the weekly claim re-verification job (AC4):
 // once shortly after boot and then every 7 days. Each run re-checks all
 // claims; failed checks lapse the claim (console locked + grace email) and
@@ -562,4 +615,3 @@ func startGhAppDailyCron(ghAppSvc *ghapp.Service) func() {
 
 	return func() { close(stop) }
 }
-

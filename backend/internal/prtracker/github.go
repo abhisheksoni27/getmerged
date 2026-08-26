@@ -206,12 +206,12 @@ type SearchResponse struct {
 }
 
 type SearchItem struct {
-	Number    int       `json:"number"`
-	Title     string    `json:"title"`
-	State     string    `json:"state"`
-	HTMLURL   string    `json:"html_url"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	Number      int       `json:"number"`
+	Title       string    `json:"title"`
+	State       string    `json:"state"`
+	HTMLURL     string    `json:"html_url"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 	PullRequest *struct {
 		MergedAt *time.Time `json:"merged_at"`
 	} `json:"pull_request,omitempty"`
@@ -245,6 +245,7 @@ type PRDetail struct {
 	State      string     `json:"state"`
 	Merged     bool       `json:"merged"`
 	MergedAt   *time.Time `json:"merged_at"`
+	Draft      bool       `json:"draft"` // stall clock anchor: draft->ready transition (AC5)
 	Additions  int        `json:"additions"`
 	Deletions  int        `json:"deletions"`
 	HtmlURLStr string     `json:"html_url"`
@@ -266,7 +267,7 @@ func (g *GHClient) FetchPRDetail(ctx context.Context, userID int64, token, owner
 
 // Review is one submitted review on a PR.
 type Review struct {
-	State       string `json:"state"`
+	State       string    `json:"state"`
 	SubmittedAt time.Time `json:"submitted_at"`
 	User        struct {
 		Login string `json:"login"`
