@@ -8,6 +8,7 @@ import { TopMatches } from "@/components/TopMatches";
 import { ForYou } from "@/components/ForYou";
 import { FirstMergeTrack } from "@/components/FirstMergeTrack";
 import { ApiKeysCard } from "./ApiKeysCard";
+import { MergeCelebrationModal } from "./MergeCelebrationModal";
 import {
   GitPullRequest,
   Clock,
@@ -302,6 +303,8 @@ export function DashboardClient() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 pb-16">
+      {/* One-time merge-moment celebration for verified preflight predictions */}
+      <MergeCelebrationModal prs={data?.prs ?? []} />
       <FirstMergeTrack trackedPRs={data?.prs} />
       <div className="mb-6">
         <ForYou />
