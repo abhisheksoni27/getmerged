@@ -53,9 +53,17 @@ interface ClientRepoDetailProps {
   repo: Repo | null;
   fullName: string;
   initialInsights?: AIInsights | null;
+  initialRelatedRepos?: Repo[];
+  initialGfiList?: GoodFirstIssueItem[];
 }
 
-export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepoDetailProps) {
+export function ClientRepoDetail({
+  repo,
+  fullName,
+  initialInsights,
+  initialRelatedRepos = [],
+  initialGfiList = [],
+}: ClientRepoDetailProps) {
   const [currentUser, setCurrentUser] = useState<{
     username?: string;
     auth_provider?: string;
@@ -82,8 +90,8 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
   const [isVerifiedContributor, setIsVerifiedContributor] = useState(false);
   const [githubNotFound, setGithubNotFound] = useState(false);
   const [isCheckingGithub, setIsCheckingGithub] = useState(false);
-  const [relatedRepos, setRelatedRepos] = useState<Repo[]>([]);
-  const [gfiList, setGfiList] = useState<GoodFirstIssueItem[]>([]);
+  const [relatedRepos, setRelatedRepos] = useState<Repo[]>(initialRelatedRepos);
+  const [gfiList, setGfiList] = useState<GoodFirstIssueItem[]>(initialGfiList);
   const [gfiTab, setGfiTab] = useState<"all" | "paid">("all");
   const [maintainerRating, setMaintainerRating] = useState(0);
   const [reviewSpeedRating, setReviewSpeedRating] = useState(0);
@@ -190,7 +198,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
     };
 
     const fetchRelated = async () => {
-      if (!targetId) return;
+      if (!targetId || initialRelatedRepos.length > 0) return;
       try {
         const res = await fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/related?limit=3`, { credentials: "include" });
         if (!res.ok) return;
@@ -212,6 +220,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
 
     const fetchGFI = async () => {
       if (!targetId) return;
+      if (initialGfiList.length > 0 && gfiTab === "all") return;
       try {
         const bountyParam = gfiTab === "paid" ? "?bounty=1" : "";
         const res = await fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/good-first-issues${bountyParam}`, { credentials: "include" });
@@ -224,7 +233,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
     };
 
     Promise.allSettled([fetchWatchlist(), fetchInsights(), fetchRelated(), fetchClaimStatus(), fetchGFI()]);
-  }, [repo?.id, fullName, initialInsights, gfiTab]);
+  }, [repo?.id, fullName, initialInsights, initialRelatedRepos.length, initialGfiList.length, gfiTab]);
 
   const handleWatchToggle = async () => {
     if (!isLoggedIn) {
