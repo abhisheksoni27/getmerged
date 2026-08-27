@@ -73,7 +73,7 @@ export function RepoStickyBar({
 
   return (
     <div
-      className={`sticky top-16 z-40 w-full bg-[#faf9f6]/95 backdrop-blur-md border-b-2 border-zinc-900 shadow-sm transition-all duration-300 ${
+      className={`sticky top-16 z-40 w-full bg-[#0f172a]/95 backdrop-blur-md border-b-2 border-zinc-900 shadow-sm transition-all duration-300 ${
         visible ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-3 pointer-events-none"
       }`}
     >

@@ -26,28 +26,28 @@ export function Footer() {
 
   return (
     <motion.footer
-      className="border-t border-zinc-200 bg-white text-zinc-600 font-sans pt-16 pb-12 mt-auto"
+      className="border-t border-slate-800 bg-[#0f172a] text-slate-400 font-sans pt-16 pb-12 mt-auto"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+      transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Top 4-Column Directory Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
           {/* Column 1: Ecosystem Rankings */}
           <div className="space-y-3">
-            <h4 className="font-bold text-zinc-900 text-xs uppercase tracking-wider font-space flex items-center gap-1.5">
-              <Trophy className="h-3.5 w-3.5 text-amber-500" /> Ecosystem Rankings
+            <h4 className="font-semibold text-slate-200 text-xs uppercase tracking-wider font-mono flex items-center gap-1.5">
+              <Trophy className="h-3.5 w-3.5 text-amber-400" /> Ecosystem Rankings
             </h4>
-            <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
+            <ul className="space-y-2 font-mono text-[11px] text-slate-400">
               {rankingLangs.slice(0, 7).map((lang) => (
                 <li key={`rank-${lang.slug}`}>
                   <Link
                     href={`/rankings/${lang.slug}`}
                     prefetch={false}
                     title={`Top Welcoming ${lang.name} Open Source Repositories`}
-                    className="hover:text-zinc-900 transition-colors"
+                    className="hover:text-orange-400 transition-colors"
                   >
                     {`Top ${lang.name} Repos`}
                   </Link>
@@ -58,17 +58,17 @@ export function Footer() {
 
           {/* Column 2: More Ecosystems */}
           <div className="space-y-3">
-            <h4 className="font-bold text-zinc-900 text-xs uppercase tracking-wider font-space flex items-center gap-1.5">
-              <Sparkles className="h-3.5 w-3.5 text-blue-500" /> More Ecosystems
+            <h4 className="font-semibold text-slate-200 text-xs uppercase tracking-wider font-mono flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5 text-blue-400" /> More Ecosystems
             </h4>
-            <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
+            <ul className="space-y-2 font-mono text-[11px] text-slate-400">
               {rankingLangs.slice(7).map((lang) => (
                 <li key={`rank-more-${lang.slug}`}>
                   <Link
                     href={`/rankings/${lang.slug}`}
                     prefetch={false}
                     title={`Top Welcoming ${lang.name} Open Source Repositories`}
-                    className="hover:text-zinc-900 transition-colors"
+                    className="hover:text-orange-400 transition-colors"
                   >
                     {`Top ${lang.name} Repos`}
                   </Link>
@@ -79,17 +79,17 @@ export function Footer() {
 
           {/* Column 3: Good First Issues */}
           <div className="space-y-3">
-            <h4 className="font-bold text-zinc-900 text-xs uppercase tracking-wider font-space flex items-center gap-1.5">
-              <Sprout className="h-3.5 w-3.5 text-emerald-600" /> Good First Issues
+            <h4 className="font-semibold text-slate-200 text-xs uppercase tracking-wider font-mono flex items-center gap-1.5">
+              <Sprout className="h-3.5 w-3.5 text-emerald-400" /> Good First Issues
             </h4>
-            <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
+            <ul className="space-y-2 font-mono text-[11px] text-slate-400">
               {rankingLangs.slice(0, 7).map((lang) => (
                 <li key={`gfi-${lang.slug}`}>
                   <Link
                     href={`/good-first-issue/${lang.slug}`}
                     prefetch={false}
                     title={`Beginner Friendly Good First Issues in ${lang.name}`}
-                    className="hover:text-zinc-900 transition-colors"
+                    className="hover:text-orange-400 transition-colors"
                   >
                     {`${lang.name} Good First Issues`}
                   </Link>
@@ -98,98 +98,56 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Platform & Curated Hubs */}
+          {/* Column 4: Platform & Scoring */}
           <div className="space-y-3">
-            <h4 className="font-bold text-zinc-900 text-xs uppercase tracking-wider font-space flex items-center gap-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-700" /> Curated & Platform
+            <h4 className="font-semibold text-slate-200 text-xs uppercase tracking-wider font-mono flex items-center gap-1.5">
+              <Activity className="h-3.5 w-3.5 text-orange-400" /> Platform & Telemetry
             </h4>
-            <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
+            <ul className="space-y-2 font-mono text-[11px] text-slate-400">
               <li>
-                <Link href="/guides" prefetch={false} title="Open Source Contribution Guides and Best Practices" className="hover:text-zinc-900 transition-colors font-semibold text-zinc-800">
-                  Contribution Guides
+                <Link href="/repos" title="Directory of Scored GitHub Repositories" className="hover:text-orange-400 transition-colors">
+                  All Repositories
                 </Link>
               </li>
               <li>
-                <Link href="/how-c-rank-works" prefetch={false} title="How C-Rank Works - Scoring Algorithm & Formula" className="hover:text-zinc-900 transition-colors font-semibold text-zinc-800">
+                <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm and Methodology" className="hover:text-orange-400 transition-colors">
                   How C-Rank™ Works
                 </Link>
               </li>
               <li>
-                <Link href="/hall-of-fame" prefetch={false} title="Super Welcoming Open Source Repositories" className="hover:text-zinc-900 transition-colors">
-                  Hall of Fame (Super Welcoming)
-                </Link>
-              </li>
-              <li>
-                <Link href="/leaderboard" prefetch={false} title="Top 50 Global Leaderboard" className="hover:text-zinc-900 transition-colors">
-                  Top 50 Global Leaderboard
-                </Link>
-              </li>
-              <li>
-                <Link href="/compare" prefetch={false} title="Compare Open Source Repositories Head-to-Head" className="hover:text-zinc-900 transition-colors">
+                <Link href="/compare" title="Compare GitHub Repositories by Merge Rate" className="hover:text-orange-400 transition-colors">
                   Compare Repositories
                 </Link>
               </li>
               <li>
-                <Link href="/topics" prefetch={false} title="Browse Open Source Repositories by Topic" className="hover:text-zinc-900 transition-colors">
-                  Topics Directory
+                <Link href="/guides" title="Open Source Contribution Best Practices" className="hover:text-orange-400 transition-colors">
+                  Contribution Guides
                 </Link>
               </li>
               <li>
-                <Link href="/status" prefetch={false} title="GetMerged Service & Pipeline Status" className="hover:text-zinc-900 transition-colors flex items-center gap-1.5">
-                  <Activity className="h-3.5 w-3.5 text-emerald-600" /> System Status
+                <Link href="/hacktoberfest" title="Hacktoberfest 2026 Live Hub" className="text-orange-400 hover:underline">
+                  Hacktoberfest Hub
                 </Link>
               </li>
               <li>
-                <a href="/api/v1/health" target="_blank" title="Check GetMerged API health status" className="hover:text-zinc-900 transition-colors">
-                  API Health
-                </a>
-              </li>
-              <li>
-                <Link href="/privacy" prefetch={false} title="GetMerged Privacy Policy" className="hover:text-zinc-900 transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" prefetch={false} title="GetMerged Terms of Service" className="hover:text-zinc-900 transition-colors">
-                  Terms of Service
+                <Link href="/status" title="System Status & Live Indexing Telemetry" className="hover:text-orange-400 transition-colors">
+                  System Status
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Middle Stacked Directory Cloud */}
-        <div className="border-t border-zinc-200 pt-8">
-          <div className="text-xs font-space font-bold text-zinc-900 mb-3">
-            Explore Open Source Repositories by Stack
+        {/* Bottom Metadata Bar */}
+        <div className="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 text-emerald-400" />
+            <span>OpenDoor / GetMerged — Diagnostic Open Source Intelligence</span>
           </div>
-          <div className="flex flex-wrap gap-2 text-xs font-mono">
-            {rankingLangs.map((lang) => (
-              <Link
-                key={`cloud-${lang.slug}`}
-                href={`/good-first-issue/${lang.slug}`}
-                prefetch={false}
-                title={`Good First Issues in ${lang.name}`}
-                className="px-2.5 py-1 rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-600 hover:text-zinc-900 hover:border-zinc-300 transition-all"
-              >
-                {lang.name}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Bottom Copyright Bar */}
-        <div className="border-t border-zinc-200 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
-          <div>
-            © {new Date().getFullYear()} GetMerged, Glassdoor for Open Source Repositories.
-          </div>
-          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-6 gap-y-2">
-            <Link href="/" prefetch={false} title="GetMerged Open Source Explorer Home" className="hover:text-zinc-900 transition-colors">Home</Link>
-            <Link href="/hall-of-fame" prefetch={false} title="Hall of Fame" className="hover:text-zinc-900 transition-colors">Hall of Fame</Link>
-            <Link href="/leaderboard" prefetch={false} title="Leaderboard" className="hover:text-zinc-900 transition-colors">Leaderboard</Link>
-            <Link href="/status" prefetch={false} title="System Status" className="hover:text-zinc-900 transition-colors">Status</Link>
-            <Link href="/privacy" prefetch={false} title="Privacy Policy" className="hover:text-zinc-900 transition-colors">Privacy</Link>
-            <Link href="/terms" prefetch={false} title="Terms of Service" className="hover:text-zinc-900 transition-colors">Terms</Link>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy" title="Privacy Policy" className="hover:text-slate-300 transition-colors">Privacy</Link>
+            <Link href="/terms" title="Terms of Service" className="hover:text-slate-300 transition-colors">Terms</Link>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" title="GitHub" className="hover:text-slate-300 transition-colors">GitHub API</a>
           </div>
         </div>
       </div>

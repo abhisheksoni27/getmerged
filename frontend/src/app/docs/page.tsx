@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function PublicDocsPage() {
   return (
-    <div className="min-h-screen bg-[#faf9f6]">
+    <div className="min-h-screen bg-[#0f172a]">
       <main className="max-w-5xl mx-auto px-4 py-12 pb-24">
         <DocsClient />
       </main>

@@ -24,17 +24,17 @@ export function RelativityCanvas() {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // Lots of tiny gray balls - density scales with viewport area
-    const count = Math.min(400, Math.floor((width * height) / 5000));
+    // Subtle particles - density calibrated for dark slate backdrop
+    const count = Math.min(300, Math.floor((width * height) / 6000));
     const balls: Ball[] = [];
 
     for (let i = 0; i < count; i++) {
       balls.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        r: Math.random() * 1.8 + 0.4,          // 0.4–2.2 px radius
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.25,
+        r: Math.random() * 1.5 + 0.5, // 0.5 to 2.0 px
+        vx: (Math.random() - 0.5) * 0.2,
+        vy: (Math.random() - 0.5) * 0.2,
       });
     }
 
@@ -59,7 +59,7 @@ export function RelativityCanvas() {
 
         ctx.beginPath();
         ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(160, 160, 160, 0.12)";
+        ctx.fillStyle = "rgba(148, 163, 184, 0.08)";
         ctx.fill();
       }
 

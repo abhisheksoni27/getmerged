@@ -309,7 +309,7 @@ export default function HomeClient({
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-[#0f172a] dev-grid-pattern">
       <RelativityCanvas />
       <Header
         searchQuery={searchQuery}
@@ -633,7 +633,7 @@ export default function HomeClient({
 
           {/* Narrative Block 3: Maintainer Persona & Repository Claim Flow */}
           <motion.div
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-[#faf9f6] p-8 sm:p-12 border-2 border-black shadow-[6px_6px_0px_#000]"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-[#0f172a] p-8 sm:p-12 border-2 border-black shadow-[6px_6px_0px_#000]"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -1150,7 +1150,7 @@ export default function HomeClient({
           </div>
 
           {/* Telemetry Architecture Overview */}
-          <div className="rounded-3xl border border-zinc-200 bg-[#faf9f6] p-8 sm:p-12 shadow-xs mb-16">
+          <div className="rounded-3xl border border-zinc-200 bg-[#0f172a] p-8 sm:p-12 shadow-xs mb-16">
             <div className="max-w-3xl mb-10">
               <h3 className="text-2xl sm:text-3xl font-bold font-space text-zinc-900 tracking-tight">
                 How GetMerged Eliminates Ghost-Town Repositories

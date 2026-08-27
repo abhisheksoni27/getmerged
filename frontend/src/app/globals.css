@@ -1,138 +1,128 @@
 @import "tailwindcss";
 
 @theme static {
-  --font-sans: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: var(--font-dm-mono), monospace;
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-dm-mono), Menlo, Monaco, monospace;
   --font-space: var(--font-space-grotesk), sans-serif;
-  --color-brand-cream: #dfd0b8;
-  --color-brand-dark: #222831;
-  --color-nb-ink: #111111;
-  --color-nb-paper: #fffdf6;
-  --color-nb-yellow: #ffd93d;
-  --color-nb-pink: #ffb3c7;
-  --color-nb-blue: #bfdbff;
-  --color-nb-green: #8ce99a;
-  --color-nb-purple: #e5dbff;
-  --color-nb-orange: #ff5722;
+
+  --color-grade-s: #10b981;
+  --color-grade-a: #3b82f6;
+  --color-grade-b: #8b5cf6;
+  --color-grade-c: #f59e0b;
+  --color-grade-d: #ef4444;
+
+  --color-primary: #f97316;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #111827;
+  --color-neutral-950: #0f172a;
 }
 
-@layer base {
-  :root {
-    --background: 40 12% 98%;
-    --foreground: 220 13% 18%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 13% 18%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 13% 18%;
-    --primary: 220 13% 18%;
-    --primary-foreground: 40 12% 98%;
-    --secondary: 40 12% 92%;
-    --secondary-foreground: 220 13% 18%;
-    --muted: 240 3.8% 46.1%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 40 12% 92%;
-    --accent-foreground: 220 13% 18%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 220 13% 18%;
-    --radius: 0.75rem;
-    font-size: 16.5px;
-  }
+:root {
+  --color-grade-s: 16 185 129;
+  --color-grade-a: 59 130 246;
+  --color-grade-b: 139 92 246;
+  --color-grade-c: 245 158 11;
+  --color-grade-d: 239 68 68;
+  --color-primary: 249 115 22;
+  --color-neutral-50: 248 250 252;
+  --color-neutral-200: 226 232 240;
+  --color-neutral-400: 148 163 184;
+  --color-neutral-900: 17 24 39;
+  --color-neutral-950: 15 23 42;
 
-  @media (min-width: 1280px) {
-    :root {
-      font-size: 17px;
-    }
-  }
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 0.75rem;
+  --spacing-lg: 1rem;
+  --spacing-xl: 1.25rem;
+  --spacing-2xl: 1.75rem;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  /* Global dark slate tokens */
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+  --card: 222 47% 11%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222 47% 11%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 24 95% 53%;
+  --primary-foreground: 210 40% 98%;
+  --muted: 215 20% 65%;
+  --muted-foreground: 215 20% 65%;
+  --border: 217 33% 17%;
+  --ring: 24 95% 53%;
 }
 
 body {
-  background-color: #faf9f5;
-  color: #1a1d20;
+  background-color: #0f172a;
+  color: #f8fafc;
   font-family: var(--font-sans);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
 }
 
-/* Devtool Subtle Precision Grid Background */
+/* Subtle particle/grid texture under dark theme */
 .dev-grid-pattern {
   background-image: 
-    radial-gradient(rgba(26, 29, 32, 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(250, 249, 245, 0) 100%);
+    radial-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.95) 100%);
   background-size: 24px 24px, 100% 400px;
   background-repeat: repeat, no-repeat;
 }
 
-/* Subtle Interactive Card Glow (Raycast/Dub style) */
+/* Gauge Card hover lift and diagnostic styling */
 .dev-card-glow {
   position: relative;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 120ms ease-out;
 }
 
 .dev-card-glow:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.06), 0 4px 12px -2px rgba(255, 87, 34, 0.06);
-  border-color: rgba(255, 87, 34, 0.35);
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-color: #94a3b8;
 }
 
-@keyframes shimmer {
-  0% {
-    transform: translateX(-150%);
+/* Accessible focus ring: 2px solid orange-500, offset 2px */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid #f97316 !important;
+  outline-offset: 2px !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUpFadeIn {
+  from { transform: translateY(12px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 200ms ease-out forwards;
+}
+
+.animate-slide-up-fade-in {
+  animation: slideUpFadeIn 120ms ease-out forwards;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-  100% {
-    transform: translateX(250%);
-  }
 }
 
-.animate-shimmer {
-  animation: shimmer 2.5s infinite;
-}
-
-@keyframes fadeSlideUp {
-  0% {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-slide-up {
-  animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Cute Animated Underline Effect for Nav Links */
-.nav-link-hover {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-}
-
-.nav-link-hover::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: #ff5722;
-  border-radius: 9999px;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.nav-link-hover:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-
-/* Custom scrollbar hiding for filter trays */
+/* Custom scrollbar hiding */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -141,23 +131,7 @@ body {
   scrollbar-width: none;
 }
 
-/* Neo-Brutalist Utility Classes & Theme Variables */
-:root {
-  --nb-border-w: 2px;
-  --nb-border-color: var(--color-nb-ink);
-  --nb-shadow-color: var(--color-nb-ink);
-  --nb-shadow-s: 3px 3px 0 0 var(--nb-shadow-color);
-  --nb-shadow-m: 5px 5px 0 0 var(--nb-shadow-color);
-  --nb-shadow-l: 8px 8px 0 0 var(--nb-shadow-color);
-  --nb-radius: 0.75rem;
-}
-
-.nb-pop {
-  background-image: repeating-linear-gradient(-45deg, transparent 0 8px, rgba(17, 17, 17, 0.06) 8px 16px);
-}
-
 ::selection {
-  background-color: var(--color-nb-yellow);
-  color: var(--color-nb-ink);
+  background-color: #f97316;
+  color: #ffffff;
 }
-
