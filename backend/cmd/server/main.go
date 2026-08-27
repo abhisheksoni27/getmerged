@@ -179,6 +179,9 @@ func main() {
 	stopHacktoberfestCron := hbSvc.StartCron(5 * time.Minute)
 	defer stopHacktoberfestCron()
 
+	// Monthly League Service
+	leagueSvc := league.NewService(database)
+
 	// Stalled-PR rescue alerts: hourly sweep comparing tracked open PRs
 	// against each repo's merged p75 wait; email + configured Slack/Discord.
 	stopStallAlertCron := startPRStallAlertCron(cfg, database)
@@ -611,6 +614,10 @@ func main() {
 		// Hacktoberfest hub: live "X of 4 merged" progress + stream-hint nudge
 		userApi.GET("/hacktoberfest/progress", handler.GetHacktoberfestProgressHandler(hbSvc))
 		userApi.POST("/hacktoberfest/nudge", handler.PostHacktoberfestNudgeHandler(hbSvc))
+
+		// Monthly Open-Source League ("Merge Madness")
+		r.GET("/api/v1/league/leaderboard", handler.GetLeagueLeaderboardHandler(leagueSvc))
+		userApi.GET("/league/progress", handler.GetLeagueProgressHandler(leagueSvc))
 
 		userApi.POST("/user/feedback", handler.CreateFeedback(database, cfg.GithubToken))
 		userApi.DELETE("/user/feedback/:id", handler.DeleteFeedback(database))

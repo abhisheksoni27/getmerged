@@ -94,8 +94,9 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             <Link href="/guides" title="Open Source Contribution Guides and Best Practices" className="hover:text-zinc-100 transition-colors">
               Guides
             </Link>
-            <Link href="/hacktoberfest" title="Hacktoberfest 2026 Welcome Hub & Live Merge Tracker" className="text-orange-400 hover:text-orange-300 font-semibold transition-colors">
-              Hacktoberfest
+            <Link href="/league" title="Monthly Open-Source Contributor League & Active Sprints" className="text-orange-400 hover:text-orange-300 font-semibold transition-colors flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+              Monthly League
             </Link>
           </nav>
         </div>
