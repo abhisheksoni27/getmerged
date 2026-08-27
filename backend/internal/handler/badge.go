@@ -51,42 +51,42 @@ type liveBadgeData struct {
 	Link                string
 }
 
-// liveBadgeTemplate renders a shields.io-style flat two-segment badge.
+// liveBadgeTemplate renders a clean, modern flat two-segment badge.
 // Parsed once at init; html/template escapes all dynamic values (AC1).
 var liveBadgeTemplate = template.Must(template.New("liveBadge").Parse(
 	`<svg xmlns="http://www.w3.org/2000/svg" width="{{.Total}}" height="20" role="img" aria-label="{{.Label}}: {{.Message}}">
 <title>{{.Label}}: {{.Message}}</title>
 <defs>
-<linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient>
-<clipPath id="r"><rect width="{{.Total}}" height="20" rx="3" fill="#fff"/></clipPath>
+<linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-opacity=".05"/></linearGradient>
+<clipPath id="r"><rect width="{{.Total}}" height="20" rx="4" fill="#fff"/></clipPath>
 </defs>
 <g clip-path="url(#r)">
-<rect width="{{.Total}}" height="20" fill="#555"/>
+<rect width="{{.Total}}" height="20" fill="#24292f"/>
 <rect x="{{.LabelW}}" width="{{.MsgW}}" height="20" fill="{{.Color}}"/>
 <rect width="{{.Total}}" height="20" fill="url(#s)"/>
 </g>
-<g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11" font-weight="600" text-rendering="geometricPrecision">
+<g fill="#fff" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="600" text-rendering="geometricPrecision">
 <text x="{{.LabelX}}" y="14">{{.Label}}</text>
 <text x="{{.MsgX}}" y="14">{{.Message}}</text>
 </g>
 </svg>`))
 
 // renderLiveBadge executes liveBadgeTemplate. Widths are estimated at ~7px
-// per character (Verdana semibold, 11px).
+// per character.
 func renderLiveBadge(label, message, color, link string) (string, error) {
-	labelW := len([]rune(label))*7 + 18
-	msgW := len([]rune(message))*7 + 18
+	labelW := len([]rune(label))*7 + 16
+	msgW := len([]rune(message))*7 + 16
 	var buf bytes.Buffer
 	err := liveBadgeTemplate.Execute(&buf, liveBadgeData{
-		Total:  labelW + msgW,
-		LabelW: labelW,
-		MsgW:   msgW,
-		LabelX: float64(labelW) / 2,
-		MsgX:   float64(labelW) + float64(msgW)/2,
-		Label:  label,
+		Total:   labelW + msgW,
+		LabelW:  labelW,
+		MsgW:    msgW,
+		LabelX:  float64(labelW) / 2,
+		MsgX:    float64(labelW) + float64(msgW)/2,
+		Label:   label,
 		Message: message,
-		Color:  color,
-		Link:   link,
+		Color:   color,
+		Link:    link,
 	})
 	return buf.String(), err
 }
@@ -97,7 +97,7 @@ func writeBadgeSVG(c *gin.Context, status int, label, message, color, link strin
 	if err != nil {
 		// Template execution must never surface a 500 (AC4): fall back to a
 		// minimal static neutral SVG.
-		svg = `<svg xmlns="http://www.w3.org/2000/svg" width="132" height="20" role="img" aria-label="C-Rank™: unranked"><title>C-Rank™: unranked</title><rect width="132" height="20" fill="#9ca3af"/><text x="66" y="14" fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11" font-weight="600">C-Rank™: unranked</text></svg>`
+		svg = `<svg xmlns="http://www.w3.org/2000/svg" width="132" height="20" role="img" aria-label="C-Rank™: unranked"><title>C-Rank™: unranked</title><rect width="132" height="20" rx="4" fill="#9ca3af"/><text x="66" y="14" fill="#fff" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="600">C-Rank™: unranked</text></svg>`
 	}
 	c.Header("Content-Type", "image/svg+xml")
 	c.Header("Cache-Control", "public, max-age=300, s-maxage=300")
@@ -120,12 +120,7 @@ func formatBadgeHours(hours float64) string {
 }
 
 // GetLiveBadgeSVG handles GET /api/badge/:owner/:repo (AC1): serves a live
-// shields-style SVG showing the verified C-Rank grade and median PR
-// response time directly (no third-party redirect), with a 5-minute CDN
-// cache. Owner/repo are validated and lowercased before a canonical
-// case-insensitive lookup (AC2). Unknown/unscored repos get a neutral gray
-// fallback SVG, never an error page (AC4). Embedded links point at the
-// public report card page.
+// shields-style SVG showing the verified C-Rank verdict and score directly.
 func GetLiveBadgeSVG(repoStore repository.RepoRepository, appBaseURL string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		owner, name := c.Param("owner"), c.Param("repo")
@@ -136,20 +131,12 @@ func GetLiveBadgeSVG(repoStore repository.RepoRepository, appBaseURL string) gin
 		fullName := strings.ToLower(owner) + "/" + strings.ToLower(name)
 
 		tier := ""
-		var respHours float64
+		score := 0.0
 		repo, err := repoStore.FindByIDOrName(c.Request.Context(), fullName)
 		if err == nil && repo != nil && repo.IsScored && repo.CRankTier != "" {
 			tier = repo.CRankTier
-			respHours = repo.ResponseP50Hours
-			if respHours <= 0 {
-				respHours = repo.TimeToFirstResponseHours
-			}
+			score = repo.CRankScore
 			fullName = repo.FullName // canonical case for the report link
-		}
-
-		prLabel := "n/a"
-		if d := formatBadgeHours(respHours); d != "" {
-			prLabel = d
 		}
 
 		message := "unranked"
@@ -162,13 +149,15 @@ func GetLiveBadgeSVG(repoStore repository.RepoRepository, appBaseURL string) gin
 			if verdict == "" {
 				verdict = tier
 			}
-			message = verdict + " · median PR: " + prLabel
+			if score > 0 {
+				message = fmt.Sprintf("%s (%.0f)", verdict, score)
+			} else {
+				message = verdict
+			}
 		}
 
 		reportURL := strings.TrimSuffix(appBaseURL, "/") + "/" + fullName
 		if tier != "" {
-			// AC2: badge/link traffic lands directly on the repo's Raise Your
-			// C-Rank playbook so unclaimed maintainers hit the claim flow.
 			reportURL += "#raise-your-rank"
 		}
 		writeBadgeSVG(c, http.StatusOK, "GetMerged", message, color, reportURL)

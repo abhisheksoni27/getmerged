@@ -24,7 +24,7 @@ func TestLiveBadgeACs(t *testing.T) {
 	r := gin.New()
 	r.GET("/api/badge/:owner/:repo", handler.GetLiveBadgeSVG(store, "https://getmerged.abhishekco.de"))
 
-	// AC1+AC3: graded badge, exact headers, median PR segment
+	// AC1+AC3: graded badge, exact headers, verdict with score segment
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, httptest.NewRequest("GET", "/api/badge/gin-gonic/gin", nil))
 	if w.Code != http.StatusOK {
@@ -37,7 +37,7 @@ func TestLiveBadgeACs(t *testing.T) {
 		t.Fatalf("Cache-Control = %q", cc)
 	}
 	body := w.Body.String()
-	if !strings.Contains(body, "<svg") || !strings.Contains(body, ">very welcoming · median PR: 4.2h<") {
+	if !strings.Contains(body, "<svg") || !strings.Contains(body, ">very welcoming (90)<") {
 		t.Fatalf("badge body wrong: %s", body)
 	}
 	if !strings.Contains(body, `fill="#16a34a"`) {
@@ -47,7 +47,7 @@ func TestLiveBadgeACs(t *testing.T) {
 	// AC2: case-insensitive canonical match + lowercase normalization
 	w2 := httptest.NewRecorder()
 	r.ServeHTTP(w2, httptest.NewRequest("GET", "/api/badge/GIN-GONIC/GIN", nil))
-	if w2.Code != http.StatusOK || !strings.Contains(w2.Body.String(), ">very welcoming · median PR: 4.2h<") {
+	if w2.Code != http.StatusOK || !strings.Contains(w2.Body.String(), ">very welcoming (90)<") {
 		t.Fatalf("case-insensitive lookup failed: %d %s", w2.Code, w2.Body.String())
 	}
 	if !strings.HasPrefix(strings.TrimSpace(w2.Body.String()), "<svg") || strings.Contains(w2.Body.String(), "<a ") {
