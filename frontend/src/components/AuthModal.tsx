@@ -23,6 +23,7 @@ export function AuthModal({
   source = "modal",
 }: AuthModalProps) {
   const [mounted, setMounted] = useState(false);
+  const [refQS, setRefQS] = useState("");
   const [returnToQS, setReturnToQS] = useState("");
 
   useEffect(() => {
