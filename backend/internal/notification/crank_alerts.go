@@ -430,8 +430,7 @@ func enqueueCrankOutboxTx(ctx context.Context, db *sqlx.DB, w crankWatcher, repo
 	notifTitle := fmt.Sprintf("%s C-Rank updated to Tier %s", w.FullName, latest.Snap.Tier)
 	notifMsg := fmt.Sprintf("C-Rank score changed from %.1f (%s) to %.1f (%s).", st.Score, st.Tier, latest.Snap.Score, latest.Snap.Tier)
 	notifLink := fmt.Sprintf("/repos/%s", repoID)
-	notifRepo := NewNotificationCenterRepository(db)
-	_ = EmitNotification(ctx, db, notifRepo, w.UserID, CategoryWatchlistChange, notifTitle, notifMsg, notifLink)
+	go WriteNotification(db, w.UserID, CategoryWatchlist, NotificationPayload{Title: notifTitle, Message: notifMsg, LinkURL: notifLink})
 
 	return 1, nil
 }

@@ -46,7 +46,7 @@ func TestDodopaymentsWebhookHandler(t *testing.T) {
 
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
-	r.POST("/api/v1/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entRepo))
+	r.POST("/api/v1/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entRepo, database))
 
 	t.Run("valid subscription.created upgrades user to pro", func(t *testing.T) {
 		payload := handler.DodopaymentsWebhookPayload{

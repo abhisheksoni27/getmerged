@@ -29,6 +29,10 @@ func AutoMigrate(db *sqlx.DB) error {
 	if db.DriverName() == "sqlite" {
 		autoInc = "AUTOINCREMENT"
 	}
+	jsonType := "JSON"
+	if db.DriverName() == "sqlite" {
+		jsonType = "TEXT"
+	}
 
 	statements := []string{
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS users (
@@ -774,6 +778,55 @@ func AutoMigrate(db *sqlx.DB) error {
 			good_first_issues BOOLEAN NOT NULL DEFAULT TRUE,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
+		// In-App Notification Center: canonical notifications store (AC4).
+		// `read` is the single source of truth for unread; deliver_at gates
+		// delivery by plan (Free delayed, Pro instant). payload is JSONB.
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS notifications (
+			id INTEGER PRIMARY KEY %s,
+			user_id BIGINT NOT NULL,
+			category VARCHAR(32) NOT NULL,
+			payload %s NOT NULL,
+			`+"`read`"+` BOOLEAN NOT NULL DEFAULT FALSE,
+			created_at DATETIME NOT NULL,
+			deliver_at DATETIME NOT NULL
+		);`, autoInc, jsonType),
+		`CREATE INDEX IF NOT EXISTS idx_notif_user_read ON notifications (user_id, `+"`read`"+`);`,
+		`CREATE INDEX IF NOT EXISTS idx_notif_deliver ON notifications (deliver_at);`,
+		`CREATE INDEX IF NOT EXISTS idx_notif_user_created ON notifications (user_id, created_at);`,
+		// Per-user in-app preferences as a JSONB doc {muted:[category]} (AC10).
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS notification_preferences (
+			user_id BIGINT PRIMARY KEY,
+			prefs %s NOT NULL
+		);`, jsonType),
+		// Read-state for the in-app feed (AC5): marks a notification read
+		// independent of the row, supporting backfill + badge recompute.
+		`CREATE TABLE IF NOT EXISTS notification_read_state (
+			user_id INTEGER NOT NULL,
+			notif_id INTEGER NOT NULL,
+			read_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (user_id, notif_id)
+		);`,
+		// Dead-letter queue for failed notification materialization (AC1).
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS notifications_dlq (
+			id INTEGER PRIMARY KEY %s,
+			user_id INTEGER NOT NULL,
+			notif_type VARCHAR(64) NOT NULL,
+			payload_json TEXT NOT NULL,
+			error TEXT NULL,
+			replayed BOOLEAN NOT NULL DEFAULT FALSE,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
+		// Free-tier delayed batch buffer (AC3): materializer buffers non-Pro
+		// notifications here; the scheduler promotes them every 5 minutes.
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS notification_pending (
+			id INTEGER PRIMARY KEY %s,
+			user_id INTEGER NOT NULL,
+			category VARCHAR(64) NOT NULL,
+			title VARCHAR(255) NOT NULL,
+			message TEXT NOT NULL,
+			link_url VARCHAR(512) NOT NULL DEFAULT '',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
 		// Delivery failures (AC7): error + retry_count per stalled PR; one
 		// retry next cycle, then dead-lettered.
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS alerts_failed (

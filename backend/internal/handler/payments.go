@@ -12,8 +12,10 @@ import (
 	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/config"
+	"github.com/abhisheksoni27/opendoor/internal/notification"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
 )
 
 type DodopaymentsWebhookPayload struct {
@@ -63,7 +65,7 @@ func isCreditPackPurchase(p DodopaymentsWebhookPayload) bool {
 }
 
 // DodopaymentsWebhookHandler handles POST /api/v1/payments/webhook/dodopayments (Story 5.2)
-func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.EntitlementRepository) gin.HandlerFunc {
+func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.EntitlementRepository, database *sqlx.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		bodyBytes, err := io.ReadAll(c.Request.Body)
 		if err != nil {
@@ -154,15 +156,30 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 			}
 		case "subscription.created", "subscription.active", "subscription.renewed":
 			_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
+			// AC5: upgrade to Pro promotes any pending (delayed) notifications
+			// to instant delivery via the pending-window sweep.
+			if err := notification.OnPlanChanged(database, userID, true, eventTime); err != nil {
+				slog.Warn("notification plan sweep on upgrade failed", "user_id", userID, "err", err)
+			}
 		case "subscription.cancelled", "subscription.expired":
 			_ = entRepo.UpdateSubscription(c.Request.Context(), userID, false, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
+			// AC5: downgrade re-applies Free delay within the pending window.
+			if err := notification.OnPlanChanged(database, userID, false, eventTime); err != nil {
+				slog.Warn("notification plan sweep on downgrade failed", "user_id", userID, "err", err)
+			}
 		case "payment.failed":
+			isPack := isCreditPackPurchase(payload)
 			_ = entRepo.UpdateSubscription(c.Request.Context(), userID, false, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
 			// A failed one-time pack payment must surface as a failure
 			// state with no credits (AC5).
-			if isCreditPackPurchase(payload) {
+			if isPack {
 				if orderID := payload.Data.Metadata.OrderID; orderID != "" {
 					_ = entRepo.MarkCreditPackOrder(c.Request.Context(), orderID, "failed")
+				}
+			} else {
+				// A failed subscription payment is a downgrade (AC5).
+				if err := notification.OnPlanChanged(database, userID, false, eventTime); err != nil {
+					slog.Warn("notification plan sweep on downgrade failed", "user_id", userID, "err", err)
 				}
 			}
 		default:
