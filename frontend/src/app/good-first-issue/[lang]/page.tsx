@@ -6,6 +6,7 @@ import { Repo, GoodFirstIssueItem } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import { canonicalizeSlug, displayNameFromSlug } from "@/lib/languageSlug";
 import { formatFreshness } from "@/lib/freshness";
+import { LangDigestSignup } from "@/components/LangDigestSignup";
 import { Sparkles, Code2, ArrowLeft, ShieldCheck, Sprout, ExternalLink, MessageSquare, Star, Award } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -426,6 +427,11 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
             </p>
           </div>
         </section>
+
+        {/* Anonymous weekly language digest signup (AC1) */}
+        <div className="mt-12">
+          <LangDigestSignup language={canonicalLang} languageName={languageName} />
+        </div>
       </main>
       <Footer />
     </div>
