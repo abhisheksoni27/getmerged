@@ -1,8 +1,6 @@
 package pipeline
 
 import (
-	"context"
-
 	"testing"
 
 	"github.com/abhisheksoni27/opendoor/internal/ai"
@@ -299,9 +297,9 @@ func TestScoreAndSaveRepo_GeneratesAIInsights(t *testing.T) {
 	aiClient := ai.NewAIClient("")
 	comments := []string{"LGTM! Thanks for your contribution.", "Please add unit test."}
 
-	insightsResp, aiErr := aiClient.GenerateRepoInsights(context.Background(), "gin-gonic/gin", comments, nil)
-	if aiErr != nil || insightsResp == nil {
-		t.Fatalf("GenerateRepoInsights failed: %v", aiErr)
+	insightsResp := aiClient.GenerateLocalZeroCostInsights("gin-gonic/gin", comments, nil)
+	if insightsResp == nil {
+		t.Fatalf("GenerateLocalZeroCostInsights returned nil")
 	}
 
 	// Persist via the repository layer. The AI insights repository uses

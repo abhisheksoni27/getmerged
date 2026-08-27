@@ -17,7 +17,6 @@ import (
 
 const (
 	webhookTimeout        = 10 * time.Second
-	webhookRetryBackoff   = 30 * time.Second
 	webhookMaxRetries     = 3
 	webhookMaxConsecFails = 3
 	// DiscordMaxBodyChars is the hard cap on a Discord webhook POST body (AC5).
@@ -25,6 +24,8 @@ const (
 	// MaxWebhooksPerUser is the per-user channel cap (AC1).
 	MaxWebhooksPerUser = 5
 )
+
+var WebhookRetryBackoff = 30 * time.Second
 
 // retryableError marks transient delivery outcomes (429/5xx/timeout) that
 // warrant bounded retries (AC4). retryAfter, when >0, comes from the
@@ -199,7 +200,7 @@ func deliverWebhook(ctx context.Context, client *http.Client, label, channelURL 
 	var lastErr error
 	for attempt := 0; attempt <= webhookMaxRetries; attempt++ {
 		if attempt > 0 {
-			backoff := webhookRetryBackoff
+			backoff := WebhookRetryBackoff
 			if re, ok := lastErr.(*retryableError); ok && re.retryAfter > 0 {
 				backoff = re.retryAfter
 			}

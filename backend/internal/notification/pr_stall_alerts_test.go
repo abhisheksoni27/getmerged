@@ -712,6 +712,10 @@ func TestPRStallWebhookBestEffortNoRefire(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	oldBackoff := notification.WebhookRetryBackoff
+	notification.WebhookRetryBackoff = time.Millisecond
+	defer func() { notification.WebhookRetryBackoff = oldBackoff }()
+
 	ok := &stallOKMailer{}
 	cfg := notification.PRStallAlertConfig{
 		Mailer:              ok,
