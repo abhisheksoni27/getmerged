@@ -190,7 +190,7 @@ export function TopicDirectoryGrid({
               type="button"
               onClick={() => setQuery("")}
               aria-label="Clear search"
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-none border border-black bg-[#111827] text-zinc-300 hover:bg-[#1e293b] transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-none border border-white/[0.08] bg-[#111827] text-zinc-300 hover:bg-[#1e293b] transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
@@ -234,7 +234,7 @@ export function TopicDirectoryGrid({
                   </span>
                   {starsLabel && (
                     <span
-                      className="px-2 py-0.5 rounded-none bg-amber-950/80 border-amber-800/80 text-amber-300 font-mono text-[11px] font-bold border border-black"
+                      className="px-2 py-0.5 rounded-none bg-amber-950/80 border-amber-800/80 text-amber-300 font-mono text-[11px] font-bold border border-white/[0.08]"
                       title="Average stars per repository"
                     >
                       ★ {starsLabel}
@@ -242,7 +242,7 @@ export function TopicDirectoryGrid({
                   )}
                   {mergeRateLabel(stat.avg_external_pr_merge_rate) && (
                     <span
-                      className="px-2 py-0.5 rounded-none bg-emerald-950/80 border-emerald-800/80 text-emerald-300 font-mono text-[11px] font-bold border border-black"
+                      className="px-2 py-0.5 rounded-none bg-emerald-950/80 border-emerald-800/80 text-emerald-300 font-mono text-[11px] font-bold border border-white/[0.08]"
                       title="Average external PR merge rate"
                     >
                       {mergeRateLabel(stat.avg_external_pr_merge_rate)} merge
@@ -250,7 +250,7 @@ export function TopicDirectoryGrid({
                   )}
                   {responseLabel && (
                     <span
-                      className="px-2 py-0.5 rounded-none bg-[#1e293b] text-zinc-200 font-mono text-[11px] font-bold border border-black"
+                      className="px-2 py-0.5 rounded-none bg-[#1e293b] text-zinc-200 font-mono text-[11px] font-bold border border-white/[0.08]"
                       title="Median time to first review"
                     >
                       {responseLabel} first review

@@ -105,15 +105,15 @@ export function SeasonCard() {
       </div>
 
       <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="rounded-lg border-b border-black bg-[#FDFBF7] px-3 py-2">
+        <div className="rounded-lg border-b border-white/[0.08] bg-[#FDFBF7] px-3 py-2">
           <div className="text-[10px] font-mono uppercase text-zinc-400">Level</div>
           <div className="text-2xl font-extrabold font-mono text-zinc-100">{s.level}</div>
         </div>
-        <div className="rounded-lg border-b border-black bg-[#FDFBF7] px-3 py-2">
+        <div className="rounded-lg border-b border-white/[0.08] bg-[#FDFBF7] px-3 py-2">
           <div className="text-[10px] font-mono uppercase text-zinc-400">Season XP</div>
           <div className="text-2xl font-extrabold font-mono text-emerald-400">{s.season_xp}</div>
         </div>
-        <div className="rounded-lg border-b border-black bg-[#FDFBF7] px-3 py-2">
+        <div className="rounded-lg border-b border-white/[0.08] bg-[#FDFBF7] px-3 py-2">
           <div className="text-[10px] font-mono uppercase text-zinc-400 flex items-center gap-1">
             <Flame className="h-3 w-3 text-amber-500" /> Streak
           </div>
@@ -122,7 +122,7 @@ export function SeasonCard() {
             <span className="text-xs font-semibold text-zinc-400">wk</span>
           </div>
         </div>
-        <div className="rounded-lg border-b border-black bg-[#FDFBF7] px-3 py-2">
+        <div className="rounded-lg border-b border-white/[0.08] bg-[#FDFBF7] px-3 py-2">
           <div className="text-[10px] font-mono uppercase text-zinc-400">This week</div>
           <div className="text-2xl font-extrabold font-mono text-violet-700 flex items-center gap-1">
             <Zap className="h-4 w-4" />

@@ -51,7 +51,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
     return (
       <section
         id="raise-your-rank"
-        className="scroll-mt-36 relative rounded-2xl border-2 border-white/[0.08] bg-gradient-to-br from-amber-50 via-white to-emerald-50 p-5 shadow-sm mb-10"
+        className="scroll-mt-36 relative rounded-2xl border-2 border-white/[0.08] glass-panel p-5 shadow-sm mb-10"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
@@ -86,7 +86,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
   return (
     <section
       id="raise-your-rank"
-      className="scroll-mt-36 relative rounded-2xl border-2 border-white/[0.08] bg-gradient-to-br from-amber-50 via-white to-emerald-50 p-5 sm:p-6 shadow-sm mb-10"
+      className="scroll-mt-36 relative rounded-2xl border-2 border-white/[0.08] glass-panel p-5 sm:p-6 shadow-sm mb-10"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
@@ -142,7 +142,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
                     )}
                   </div>
                 </div>
-                <span className="px-2 py-0.5 bg-[#1e293b] text-yellow-300 font-mono text-xs font-bold rounded-lg shrink-0 border border-black">
+                <span className="px-2 py-0.5 bg-[#1e293b] text-yellow-300 font-mono text-xs font-bold rounded-lg shrink-0 border border-white/[0.08]">
                   +{item.impact_pts} pts
                 </span>
               </div>

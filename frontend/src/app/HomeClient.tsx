@@ -324,7 +324,7 @@ export default function HomeClient({
           transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
           className="text-4xl font-extrabold tracking-tight text-zinc-100 sm:text-6xl font-space leading-tight"
         >
-          Stop wasting weeks on <span className="bg-gradient-to-r from-amber-200/90 via-orange-200/90 to-amber-200/90 text-zinc-50 px-3 py-0.5 rounded-xl border border-orange-300/60 shadow-xs inline-block transform -rotate-1">ignored PRs.</span>
+          Stop wasting weeks on <span className="glass-panel text-zinc-50 px-3 py-0.5 rounded-xl border border-orange-300/60 shadow-xs inline-block transform -rotate-1">ignored PRs.</span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -551,7 +551,7 @@ export default function HomeClient({
                     key={i}
                     className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#111827] p-5 h-[260px] flex flex-col justify-between"
                   >
-                    <div className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-zinc-100 to-transparent animate-shimmer" />
+                    <div className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 glass-panel animate-shimmer" />
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <div className="h-5 w-32 rounded bg-zinc-200" />
@@ -640,7 +640,7 @@ export default function HomeClient({
             transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
           >
             <div className="lg:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-300 bg-[#8ce99a] border border-black px-3 py-1 shadow-sm">
+              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-300 bg-[#8ce99a] border border-white/[0.08] px-3 py-1 shadow-sm">
                 <ShieldCheck className="h-3.5 w-3.5" /> Maintainer Workspace
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold font-space text-zinc-100 tracking-tight leading-tight">

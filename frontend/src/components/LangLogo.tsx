@@ -30,7 +30,7 @@ export function LangLogo({ language, className = "h-4 w-4" }: { language?: strin
 
   return (
     <span
-      className={`${className} inline-flex items-center justify-center font-mono font-bold text-[9px] rounded-xs shrink-0 select-none shadow-2xs border border-black/20`}
+      className={`${className} inline-flex items-center justify-center font-mono font-bold text-[9px] rounded-xs shrink-0 select-none shadow-2xs border border-white/[0.08]/20`}
       style={{ backgroundColor: conf.bg, color: conf.text }}
       title={language}
       aria-label={language}

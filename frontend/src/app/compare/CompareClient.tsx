@@ -286,7 +286,7 @@ export default function CompareClient() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] flex flex-col font-sans">
+    <div className="min-h-screen bg-black text-zinc-100 flex flex-col font-sans">
       <Header />
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-10 sm:py-16">
@@ -304,7 +304,7 @@ export default function CompareClient() {
         </div>
 
         {/* Dual Repo Picker Box */}
-        <div className="bg-[#111827] border border-white/[0.08] rounded-3xl p-6 sm:p-8 shadow-xs mb-14">
+        <div className="glass-panel border border-white/[0.08] rounded-3xl p-6 sm:p-8 shadow-xs mb-14">
           <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
             {/* Slot A */}
             <div className="w-full flex-1" ref={dropdownRefA}>
@@ -313,7 +313,7 @@ export default function CompareClient() {
               </label>
 
               {repoA ? (
-                <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[#1e293b] border border-white/[0.08] shadow-2xs">
+                <div className="flex items-center justify-between p-3.5 rounded-2xl glass-card border border-white/[0.08] shadow-2xs">
                   <div className="flex items-center gap-3 min-w-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img

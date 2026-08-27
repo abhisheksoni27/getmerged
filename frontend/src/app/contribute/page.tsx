@@ -26,10 +26,10 @@ export const metadata: Metadata = {
 const POPULAR_LANGUAGES = [
   { name: "TypeScript", slug: "typescript", color: "bg-blue-950/70 border-blue-800/80 text-blue-700 border-blue-200" },
   { name: "Python", slug: "python", color: "bg-amber-950/70 border-amber-800/80 text-amber-700 border-amber-200" },
-  { name: "Go", slug: "go", color: "bg-cyan-50 text-cyan-700 border-cyan-200" },
+  { name: "Go", slug: "go", color: "bg-cyan-950/40 border border-cyan-500/20 text-cyan-700 border-cyan-200" },
   { name: "Rust", slug: "rust", color: "bg-orange-50 text-orange-700 border-orange-200" },
   { name: "Java", slug: "java", color: "bg-red-50 text-red-700 border-red-200" },
-  { name: "C++", slug: "c-plus-plus", color: "bg-indigo-50 text-indigo-700 border-indigo-200" },
+  { name: "C++", slug: "c-plus-plus", color: "bg-indigo-950/40 border border-indigo-500/20 text-indigo-700 border-indigo-200" },
   { name: "Ruby", slug: "ruby", color: "bg-rose-950/70 border-rose-800/80 text-rose-700 border-rose-200" },
   { name: "Kotlin", slug: "kotlin", color: "bg-purple-950/70 border-purple-800/80 text-purple-700 border-purple-200" },
 ];

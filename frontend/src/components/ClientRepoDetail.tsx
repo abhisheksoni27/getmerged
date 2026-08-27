@@ -396,11 +396,11 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
           </Link>
 
           <div className="rounded-2xl border border-rose-200 bg-rose-950/70 border-rose-800/80/40 p-8 sm:p-10 shadow-sm text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-100 border border-rose-200 text-rose-600 mb-5">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-950/40 border border-rose-500/20 border border-rose-200 text-rose-600 mb-5">
               <AlertCircle className="h-7 w-7" />
             </div>
 
-            <span className="inline-block rounded-full bg-rose-100 px-3 py-1 font-mono text-xs font-bold text-rose-300 mb-3">
+            <span className="inline-block rounded-full bg-rose-950/40 border border-rose-500/20 px-3 py-1 font-mono text-xs font-bold text-rose-300 mb-3">
               Repository Not Found
             </span>
 
@@ -580,7 +580,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                   title={`Scroll to ${tab.label}`}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
                     isActive
-                      ? "bg-white text-zinc-950 shadow-sm"
+                      ? "glass-card text-zinc-100 shadow-sm"
                       : "bg-[#111827] text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
                   }`}
                 >
@@ -921,7 +921,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                         </span>
                       )}
                       {issue.boosted && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-50 border border-indigo-300 text-[10px] font-mono font-bold text-indigo-800">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-950/40 border border-indigo-500/20 border border-indigo-300 text-[10px] font-mono font-bold text-indigo-800">
                           🚀 Boosted
                         </span>
                       )}
@@ -1014,7 +1014,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       {/* Issues #6, #7, #8: Contributor Community Feedback & Verification Module */}
       <motion.section
         id="community-feedback"
-        className="scroll-mt-36 rounded-2xl border-2 border-white/[0.08] bg-gradient-to-br from-orange-100 via-white to-yellow-100 p-5 sm:p-8 shadow-sm mb-10 font-sans"
+        className="scroll-mt-36 rounded-2xl border-2 border-white/[0.08] glass-panel p-5 sm:p-8 shadow-sm mb-10 font-sans"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
@@ -1047,7 +1047,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                 id="auth-provider-badge"
                 data-testid="auth-provider-badge"
                 href={`${API_BASE_URL}/api/v1/auth/github`}
-                className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-amber-950 bg-amber-200 hover:bg-amber-300 px-3.5 py-1.5 rounded-lg border-2 border-white/[0.08] shadow-sm transition-colors shrink-0 cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-amber-300 bg-amber-200 hover:bg-amber-300 px-3.5 py-1.5 rounded-lg border-2 border-white/[0.08] shadow-sm transition-colors shrink-0 cursor-pointer"
                 title="Link GitHub account to verify contributor status"
               >
                 <ShieldCheck className="h-4 w-4 text-amber-700" />
@@ -1082,16 +1082,16 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               {/* Dynamic Theme Gradients & Floating Particles Based on Rating */}
               {submittedScores.avg >= 4.5 ? (
                 // S-TIER / GODLIKE CELEBRATION (Golden/Emerald Rainbow)
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-200 via-yellow-100 to-emerald-200 opacity-90 -z-10" />
+                <div className="absolute inset-0 glass-panel opacity-90 -z-10" />
               ) : submittedScores.avg >= 3.5 ? (
                 // GREAT VIBES (Emerald & Cyan Sparkle)
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 via-teal-50 to-blue-100 opacity-90 -z-10" />
+                <div className="absolute inset-0 glass-panel opacity-90 -z-10" />
               ) : submittedScores.avg >= 2.5 ? (
                 // BALANCED / NEUTRAL (Electric Violet & Amber)
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-100 via-amber-50 to-orange-100 opacity-90 -z-10" />
+                <div className="absolute inset-0 glass-panel opacity-90 -z-10" />
               ) : (
                 // SPICY / CRITICAL (Crimson Warning Pulse)
-                <div className="absolute inset-0 bg-gradient-to-br from-rose-100 via-orange-100 to-amber-100 opacity-90 -z-10" />
+                <div className="absolute inset-0 glass-panel opacity-90 -z-10" />
               )}
 
               {/* Floating Funky Emojis & Particle Burst */}
@@ -1252,7 +1252,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                              className={`rounded-lg border-2 border-white/[0.08] p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center shadow-sm transition-all cursor-pointer ${
                                rating.value >= star
                                  ? "bg-amber-400 text-zinc-50 scale-105"
-                                 : "bg-[#1e293b] text-zinc-400 hover:bg-yellow-100 hover:text-zinc-300"
+                                 : "bg-[#1e293b] text-zinc-400 hover:bg-amber-950/40 border border-amber-500/20 hover:text-zinc-300"
                              }`}
                           >
                             <Star className={`h-4 w-4 ${rating.value >= star ? "fill-current" : ""}`} />

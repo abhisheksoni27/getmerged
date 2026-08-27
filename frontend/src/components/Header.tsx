@@ -64,7 +64,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             className="flex items-center gap-2.5 group shrink-0"
           >
             <motion.div
-              className="h-8 w-8 rounded-xl bg-gradient-to-br from-zinc-800 to-zinc-950 border border-white/[0.15] flex items-center justify-center shadow-inner"
+              className="h-8 w-8 rounded-xl glass-panel border border-white/[0.15] flex items-center justify-center shadow-inner"
               whileHover={reduceMotion ? undefined : { scale: 1.05 }}
               transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
               aria-hidden="true"
@@ -180,7 +180,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   setIsAuthModalOpen(true);
                 }}
                 title="Sign in to GetMerged"
-                className="inline-flex items-center gap-2 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 px-4 py-1.5 text-xs font-semibold shadow-sm active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer shrink-0"
+                className="inline-flex items-center gap-2 rounded-xl glass-card text-zinc-100 hover:bg-zinc-200 px-4 py-1.5 text-xs font-semibold shadow-sm active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer shrink-0"
               >
                 <span>Sign in</span>
               </button>

@@ -121,7 +121,7 @@ export function LanguageMatchQuiz() {
     <section
       aria-label="Language match quiz"
       data-testid="language-match-quiz"
-      className="mx-auto max-w-3xl rounded-2xl border border-emerald-200/70 bg-gradient-to-br from-emerald-50 to-teal-50 p-6 shadow-sm"
+      className="mx-auto max-w-3xl rounded-2xl border border-emerald-200/70 glass-panel p-6 shadow-sm"
     >
       <div className="flex items-center gap-2">
         <Sparkles className="h-5 w-5 text-emerald-600" />

@@ -97,7 +97,7 @@ export function ForYou() {
   const hasSnapshot = data.snapshot.length > 0;
 
   return (
-    <section aria-label="For You" className="rounded-2xl border border-emerald-200/70 bg-gradient-to-br from-emerald-50 to-teal-50 p-6 shadow-sm mb-8">
+    <section aria-label="For You" className="rounded-2xl border border-emerald-200/70 glass-panel p-6 shadow-sm mb-8">
       <div className="flex items-center gap-2 flex-wrap">
         <Sparkles className="h-5 w-5 text-emerald-600" />
         <h2 className="text-lg font-bold tracking-tight text-zinc-100">For You</h2>
