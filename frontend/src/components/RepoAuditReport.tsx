@@ -235,7 +235,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
   if (phase === "unauth") {
     return (
       <AuditShell fullName={fullName}>
-        <div className="rounded-2xl border-2 border-brand-dark bg-[#111827] p-8 shadow-sm text-center">
+        <div className="rounded-2xl border-2 border-white/[0.08] bg-[#111827] p-8 shadow-sm text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-950/80 border-amber-800/80 border border-amber-200 text-amber-600">
             <Lock className="h-7 w-7" />
           </div>
@@ -280,8 +280,8 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
   if (phase === "pay") {
     return (
       <AuditShell fullName={fullName}>
-        <div className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-yellow-100 via-white to-emerald-100 p-8 shadow-sm text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-yellow-200 border-2 border-brand-dark text-zinc-50 -rotate-2">
+        <div className="rounded-2xl border-2 border-white/[0.08] bg-gradient-to-br from-yellow-100 via-white to-emerald-100 p-8 shadow-sm text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-400/20 border-2 border-white/[0.08] text-zinc-50 -rotate-2">
             <FileSearch className="h-7 w-7" />
           </div>
           <span className="inline-block rounded-full bg-yellow-100 px-3 py-1 font-mono text-xs font-bold text-yellow-900 mb-3">
@@ -315,7 +315,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
     <AuditShell fullName={fullName}>
       <div className="space-y-8">
         {/* Summary */}
-        <section className="rounded-2xl border-2 border-brand-dark bg-[#111827] p-6 shadow-sm">
+        <section className="rounded-2xl border-2 border-white/[0.08] bg-[#111827] p-6 shadow-sm">
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div>
               <span className="inline-block rounded-full bg-emerald-950/80 border-emerald-800/80 px-3 py-1 font-mono text-xs font-bold text-emerald-300 mb-2">
@@ -332,7 +332,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
         </section>
 
         {/* Per-factor C-Rank breakdown */}
-        <section className="rounded-2xl border-2 border-brand-dark bg-[#111827] p-6 shadow-sm">
+        <section className="rounded-2xl border-2 border-white/[0.08] bg-[#111827] p-6 shadow-sm">
           <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-zinc-50 mb-4">
             <Sparkles className="h-4 w-4 text-indigo-500" /> Full C-Rank Per-Factor Breakdown
           </h2>
@@ -355,7 +355,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
         </section>
 
         {/* AI-prioritized fixes */}
-        <section className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-6 shadow-sm">
+        <section className="rounded-2xl border-2 border-white/[0.08] glass-panel p-6 shadow-sm">
           <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
             <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-zinc-50">
               <Sparkles className="h-4 w-4 text-emerald-600" /> AI-Prioritized Fixes
@@ -364,7 +364,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
               type="button"
               onClick={regenerate}
               disabled={regenLoading}
-              className="inline-flex items-center gap-1.5 rounded-xl border-2 border-brand-dark bg-[#111827] px-3 py-1.5 text-[11px] font-mono font-bold text-zinc-200 shadow-sm transition-all hover:bg-slate-800 active:scale-[0.99] disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/[0.08] bg-[#111827] px-3 py-1.5 text-[11px] font-mono font-bold text-zinc-200 shadow-sm transition-all hover:bg-slate-800 active:scale-[0.99] disabled:opacity-60"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${regenLoading ? "animate-spin" : ""}`} />
               {regenLoading ? "Regenerating…" : "Regenerate (1/day)"}
@@ -376,7 +376,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
           ) : (
             <ol className="space-y-2">
               {r.prioritized_fixes.map((fix) => (
-                <li key={fix.priority} className="flex items-start gap-2 rounded-xl border border-brand-dark bg-[#111827] p-3">
+                <li key={fix.priority} className="flex items-start gap-2 rounded-xl border border-white/[0.08] bg-[#111827] p-3">
                   <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#0f172a] text-[10px] font-bold text-white">
                     {fix.priority}
                   </span>
@@ -396,9 +396,9 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
           {(r.ai_insights.maintainer_vibe || r.ai_insights.top_dos.length > 0) && (
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               {r.ai_insights.top_dos.length > 0 && (
-                <div className="rounded-xl border-2 border-brand-dark bg-emerald-950/80 border-emerald-800/80 p-4 shadow-sm">
+                <div className="rounded-xl border-2 border-white/[0.08] bg-emerald-950/80 border-emerald-800/80 p-4 shadow-sm">
                   <h4 className="text-xs font-mono font-bold text-emerald-300 uppercase mb-2">Top Do’s</h4>
-                  <ul className="space-y-1 text-xs text-emerald-950">
+                  <ul className="space-y-1 text-xs text-zinc-300">
                     {r.ai_insights.top_dos.map((d, i) => (
                       <li key={i} className="flex items-start gap-2"><span className="text-emerald-600 font-bold">•</span><span>{d}</span></li>
                     ))}
@@ -406,9 +406,9 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
                 </div>
               )}
               {r.ai_insights.top_donts.length > 0 && (
-                <div className="rounded-xl border-2 border-brand-dark bg-rose-100 p-4 shadow-sm">
+                <div className="rounded-xl border-2 border-white/[0.08] bg-rose-100 p-4 shadow-sm">
                   <h4 className="text-xs font-mono font-bold text-rose-300 uppercase mb-2">Top Don’ts</h4>
-                  <ul className="space-y-1 text-xs text-rose-950">
+                  <ul className="space-y-1 text-xs text-zinc-300">
                     {r.ai_insights.top_donts.map((d, i) => (
                       <li key={i} className="flex items-start gap-2"><span className="text-rose-600 font-bold">•</span><span>{d}</span></li>
                     ))}

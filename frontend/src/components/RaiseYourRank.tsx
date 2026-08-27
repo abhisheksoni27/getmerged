@@ -51,11 +51,11 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
     return (
       <section
         id="raise-your-rank"
-        className="scroll-mt-36 relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-amber-50 via-white to-emerald-50 p-5 shadow-sm mb-10"
+        className="scroll-mt-36 relative rounded-2xl border-2 border-white/[0.08] bg-gradient-to-br from-amber-50 via-white to-emerald-50 p-5 shadow-sm mb-10"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-zinc-50 shadow-sm -rotate-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-white/[0.08] bg-amber-400/20 text-zinc-50 shadow-sm -rotate-2">
               <TrendingUp className="h-4 w-4" />
             </div>
             <h2 className="font-space text-base font-extrabold text-zinc-50">Raise Your C-Rank</h2>
@@ -86,11 +86,11 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
   return (
     <section
       id="raise-your-rank"
-      className="scroll-mt-36 relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-amber-50 via-white to-emerald-50 p-5 sm:p-6 shadow-sm mb-10"
+      className="scroll-mt-36 relative rounded-2xl border-2 border-white/[0.08] bg-gradient-to-br from-amber-50 via-white to-emerald-50 p-5 sm:p-6 shadow-sm mb-10"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-zinc-50 shadow-sm -rotate-2">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-white/[0.08] bg-amber-400/20 text-zinc-50 shadow-sm -rotate-2">
             <TrendingUp className="h-4 w-4" />
           </div>
           <h2 className="font-space text-base font-extrabold text-zinc-50">Raise Your C-Rank</h2>
@@ -118,7 +118,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
                   ? "bg-emerald-950/70 border-emerald-800/80/70 border-emerald-300"
                   : item.status === "insufficient_data"
                   ? "bg-[#1e293b] border-white/[0.12]"
-                  : "bg-[#111827] border-brand-dark shadow-sm"
+                  : "bg-[#111827] border-white/[0.08] shadow-sm"
               }`}
             >
               <div className="flex items-start justify-between gap-3">

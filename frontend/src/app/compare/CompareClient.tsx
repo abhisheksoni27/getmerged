@@ -388,7 +388,7 @@ export default function CompareClient() {
                             key={r.id || r.full_name}
                             type="button"
                             onClick={() => handleSelectA(r)}
-                            className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-emerald-950/70 border-emerald-800/80/70 hover:text-emerald-950 flex items-center justify-between gap-3 transition-colors cursor-pointer"
+                            className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-emerald-950/70 border-emerald-800/80/70 hover:text-zinc-300 flex items-center justify-between gap-3 transition-colors cursor-pointer"
                           >
                             <div className="min-w-0">
                               <div className="font-space text-xs font-bold text-zinc-100 truncate">
@@ -509,7 +509,7 @@ export default function CompareClient() {
                             key={r.id || r.full_name}
                             type="button"
                             onClick={() => handleSelectB(r)}
-                            className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-emerald-950/70 border-emerald-800/80/70 hover:text-emerald-950 flex items-center justify-between gap-3 transition-colors cursor-pointer"
+                            className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-emerald-950/70 border-emerald-800/80/70 hover:text-zinc-300 flex items-center justify-between gap-3 transition-colors cursor-pointer"
                           >
                             <div className="min-w-0">
                               <div className="font-space text-xs font-bold text-zinc-100 truncate">

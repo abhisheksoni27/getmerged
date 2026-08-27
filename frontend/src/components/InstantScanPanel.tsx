@@ -169,7 +169,7 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
   return (
     <div
       data-testid="instant-scan-panel"
-      className="rounded-2xl border-2 border-brand-dark bg-slate-800 p-5 shadow-sm mb-6"
+      className="rounded-2xl border-2 border-white/[0.08] bg-slate-800 p-5 shadow-sm mb-6"
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>

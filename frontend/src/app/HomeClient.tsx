@@ -538,7 +538,7 @@ export default function HomeClient({
               <Link
                 href="/hall-of-fame"
                 title="View S-Tier Hall of Fame repositories"
-                className="text-xs font-mono font-bold text-emerald-300 hover:text-emerald-950 inline-flex items-center gap-1 shrink-0"
+                className="text-xs font-mono font-bold text-emerald-300 hover:text-zinc-300 inline-flex items-center gap-1 shrink-0"
               >
                 View S-Tier Hall of Fame <ArrowRight className="h-3 w-3" />
               </Link>
