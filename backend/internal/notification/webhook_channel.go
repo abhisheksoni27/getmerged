@@ -7,8 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log/slog"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -16,20 +18,27 @@ import (
 const (
 	webhookTimeout        = 10 * time.Second
 	webhookRetryBackoff   = 30 * time.Second
+	webhookMaxRetries     = 3
 	webhookMaxConsecFails = 3
+	// DiscordMaxBodyChars is the hard cap on a Discord webhook POST body (AC5).
+	DiscordMaxBodyChars = 2000
 	// MaxWebhooksPerUser is the per-user channel cap (AC1).
 	MaxWebhooksPerUser = 5
 )
 
 // retryableError marks transient delivery outcomes (429/5xx/timeout) that
-// warrant exactly one retry after backoff (AC4).
-type retryableError struct{ msg string }
+// warrant bounded retries (AC4). retryAfter, when >0, comes from the
+// Retry-After header.
+type retryableError struct {
+	msg        string
+	retryAfter time.Duration
+}
 
-func (e retryableError) Error() string { return e.msg }
+func (e *retryableError) Error() string { return e.msg }
 
 var webhookHostAllowlist = map[string]bool{"hooks.slack.com": true}
 
-// ValidateWebhookURL enforces AC2: https-only URLs on approved hosts
+// ValidateWebhookURL enforces AC3: https-only URLs on approved hosts
 // (hooks.slack.com, discord.com/api/webhooks, discordapp.com/api/webhooks).
 func ValidateWebhookURL(raw string) error {
 	u, err := url.Parse(raw)
@@ -50,7 +59,7 @@ func ValidateWebhookURL(raw string) error {
 }
 
 // MaskWebhookURL renders the stored URL as `https://hooks.slack.com/…abcd`
-// for UI/API responses (AC2).
+// for UI/API responses (AC3).
 func MaskWebhookURL(raw string) string {
 	if raw == "" {
 		return ""
@@ -80,53 +89,185 @@ type WebhookMessage struct {
 	Text string
 }
 
-func webhookPayload(label, text string) any {
-	if label == "discord" {
-		return map[string]string{"content": text}
+// BuildSlackPayload builds a Slack incoming-webhook body using both a plain
+// `text` fallback and rich `blocks` (AC2).
+func BuildSlackPayload(text string) any {
+	return map[string]any{
+		"text": text,
+		"blocks": []map[string]any{
+			{
+				"type": "section",
+				"text": map[string]any{
+					"type": "mrkdwn",
+					"text": text,
+				},
+			},
+		},
 	}
-	return map[string]string{"text": text} // Slack incoming-webhook format
+}
+
+// BuildDiscordPayload builds a Discord webhook body using `content` plus an
+// `embeds` entry (AC2). AC5: the body is truncated to stay <=2000 chars; if it
+// cannot be brought under the cap it returns an error so the send aborts.
+func BuildDiscordPayload(text string) (any, error) {
+	content := truncate(text, 80)
+	desc := text
+	for i := 0; i < 8; i++ {
+		desc = truncate(desc, DiscordMaxBodyChars-220-i*200)
+		payload := map[string]any{
+			"content": content,
+			"embeds": []map[string]any{
+				{
+					"title":       "OpenDoor C-Rank Alert",
+					"description": desc,
+					"color":       0x2ecc71,
+				},
+			},
+		}
+		b, err := json.Marshal(payload)
+		if err != nil {
+			return nil, err
+		}
+		if len(b) <= DiscordMaxBodyChars {
+			return payload, nil
+		}
+	}
+	return nil, fmt.Errorf("discord payload exceeds %d char limit after truncation", DiscordMaxBodyChars)
+}
+
+// truncate cuts s to at most max runes, appending an ellipsis when cut (AC5).
+func truncate(s string, max int) string {
+	if max <= 0 {
+		return ""
+	}
+	r := []rune(s)
+	if len(r) <= max {
+		return s
+	}
+	if max <= 3 {
+		return string(r[:max])
+	}
+	return string(r[:max-3]) + "..."
+}
+
+// buildPayload selects the provider-correct payload for label (AC2).
+func buildPayload(label, text string) (any, error) {
+	label = NormalizeWebhookLabel(label)
+	if label == "discord" {
+		return BuildDiscordPayload(text)
+	}
+	return BuildSlackPayload(text), nil
+}
+
+// enforceDiscordSize is the final AC5 backstop: abort if a Discord body is
+// somehow over the hard cap.
+func enforceDiscordSize(body []byte) error {
+	if len(body) > DiscordMaxBodyChars {
+		return fmt.Errorf("discord payload body is %d chars, exceeds hard limit %d", len(body), DiscordMaxBodyChars)
+	}
+	return nil
 }
 
 // deliverWebhook posts one message with AC4 semantics: 10s timeout per
-// attempt; 429/5xx or timeout retried once after a 30s backoff; only a final
-// failure counts as one failure.
+// attempt; 429/5xx or timeout retried up to webhookMaxRetries times honoring
+// the Retry-After header (bounded backoff); only a final failure counts as one
+// failure. AC3: the URL is re-validated (SSRF guard) before every send. AC5:
+// oversize Discord bodies never send.
 func deliverWebhook(ctx context.Context, client *http.Client, label, channelURL string, msg WebhookMessage) error {
-	attempt := func() error {
-		actx, cancel := context.WithTimeout(ctx, webhookTimeout)
-		defer cancel()
-		body, err := json.Marshal(webhookPayload(label, msg.Text))
-		if err != nil {
+	label = NormalizeWebhookLabel(label)
+	if err := ValidateWebhookURL(channelURL); err != nil {
+		slog.Error("webhook send blocked: invalid URL", "label", label, "err", err)
+		return err
+	}
+	payload, err := buildPayload(label, msg.Text)
+	if err != nil {
+		slog.Error("webhook payload build failed", "label", label, "err", err)
+		return err
+	}
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+	if label == "discord" {
+		if err := enforceDiscordSize(body); err != nil {
+			slog.Error("webhook send aborted: payload too large", "label", label, "err", err)
 			return err
 		}
-		req, err := http.NewRequestWithContext(actx, http.MethodPost, channelURL, bytes.NewReader(body))
-		if err != nil {
-			return err
+	}
+
+	var lastErr error
+	for attempt := 0; attempt <= webhookMaxRetries; attempt++ {
+		if attempt > 0 {
+			backoff := webhookRetryBackoff
+			if re, ok := lastErr.(*retryableError); ok && re.retryAfter > 0 {
+				backoff = re.retryAfter
+			}
+			select {
+			case <-time.After(backoff):
+			case <-ctx.Done():
+				return ctx.Err()
+			}
 		}
-		req.Header.Set("Content-Type", "application/json")
-		resp, err := client.Do(req)
-		if err != nil {
-			return retryableError{fmt.Sprintf("request failed: %v", err)}
-		}
-		defer resp.Body.Close()
-		_, _ = io.Copy(io.Discard, resp.Body)
-		switch {
-		case resp.StatusCode >= 200 && resp.StatusCode < 300:
+		err := attemptDeliver(ctx, client, channelURL, body)
+		if err == nil {
 			return nil
-		case resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode >= 500:
-			return retryableError{fmt.Sprintf("status %d", resp.StatusCode)}
-		default:
-			return fmt.Errorf("non-2xx status %d", resp.StatusCode)
+		}
+		lastErr = err
+		var re *retryableError
+		if !errors.As(err, &re) {
+			// Non-retryable (4xx/validation) — surface immediately (AC4).
+			return err
 		}
 	}
-	err := attempt()
-	var re retryableError
-	if errors.As(err, &re) {
-		select {
-		case <-time.After(webhookRetryBackoff):
-		case <-ctx.Done():
-			return ctx.Err()
-		}
-		err = attempt()
+	if lastErr != nil {
+		slog.Error("webhook delivery exhausted retries", "label", label, "err", lastErr)
 	}
-	return err
+	return lastErr
+}
+
+// attemptDeliver performs a single POST and classifies the outcome.
+func attemptDeliver(ctx context.Context, client *http.Client, channelURL string, body []byte) error {
+	actx, cancel := context.WithTimeout(ctx, webhookTimeout)
+	defer cancel()
+	req, err := http.NewRequestWithContext(actx, http.MethodPost, channelURL, bytes.NewReader(body))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := client.Do(req)
+	if err != nil {
+		return &retryableError{msg: fmt.Sprintf("request failed: %v", err)}
+	}
+	defer resp.Body.Close()
+	_, _ = io.Copy(io.Discard, resp.Body)
+	switch {
+	case resp.StatusCode >= 200 && resp.StatusCode < 300:
+		return nil
+	case resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode >= 500:
+		return &retryableError{msg: fmt.Sprintf("status %d", resp.StatusCode), retryAfter: parseRetryAfter(resp.Header.Get("Retry-After"))}
+	default:
+		return fmt.Errorf("non-2xx status %d", resp.StatusCode)
+	}
+}
+
+// parseRetryAfter parses the Retry-After header (seconds or HTTP date),
+// clamped to a sane bound (AC4).
+func parseRetryAfter(v string) time.Duration {
+	v = strings.TrimSpace(v)
+	if v == "" {
+		return 0
+	}
+	if secs, err := strconv.Atoi(v); err == nil && secs > 0 {
+		d := time.Duration(secs) * time.Second
+		if d > 5*time.Minute {
+			d = 5 * time.Minute
+		}
+		return d
+	}
+	if t, err := http.ParseTime(v); err == nil {
+		if d := time.Until(t); d > 0 && d <= 5*time.Minute {
+			return d
+		}
+	}
+	return 0
 }
