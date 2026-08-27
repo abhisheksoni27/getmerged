@@ -283,14 +283,15 @@ func main() {
 	r.GET("/embed/gfi/:owner/:name", embedRL, handler.GetGFIEmbedCard(gh, cfg.AppBaseURL))
 
 	// PR Merge Probability Calculator embed (item: Interactive PR Merge
-	// Probability Calculator). Distinct /embed-pr subtree plus query-param
-	// /badge and /pr routes. No per-client-IP rate limit on /badge (AC6:
-	// GitHub camo proxy shares one egress IP, so per-IP limiting would
-	// throttle every proxied badge). /badge reuses the repo-CRank /badge
-	// static node at a shallower depth, so there is no wildcard conflict.
-	// The /pr page reuses the same computed breakdown as the badge (AC8).
+	// Probability Calculator). Distinct /embed-pr subtree plus the path-based
+	// /badge/:owner/:repo/:pr endpoint and the /pr breakdown page. The /badge
+	// route carries its own combined per-IP (60/min) + global (2000/min)
+	// limiter returning 429+Retry-After (AC4); it reuses the /badge static
+	// node at a shallower depth so there is no wildcard conflict with the
+	// repo-CRank /badge/:owner/:repo route. The /pr page reuses the same
+	// computed breakdown as the badge (AC8).
 	r.GET("/embed-pr", embedRL, handler.GetPRForecastEmbed(cfg))
-	r.GET("/badge", handler.GetPRForecastBadge(cfg))
+	r.GET("/badge/:owner/:repo/:pr", middleware.RateLimitPRBadge(), handler.GetPRForecastBadge(cfg))
 	r.GET("/pr", handler.GetPRForecastPage(cfg))
 
 	// Public share-card routes: no auth to view (AC1), 30 req/min/IP rate limit

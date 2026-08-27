@@ -335,24 +335,25 @@ func pfColor(prob float64, available bool) string {
 // pfMessage renders the badge message text.
 func pfMessage(f prForecast) string {
 	if !f.Available {
-		return "N/A"
+		return "Not analyzed yet"
 	}
 	return strconv.Itoa(int(f.Prob*100)) + "%"
 }
 
-// writePRForecastSVG writes a valid SVG with Cache-Control: no-store (AC5).
-// Always HTTP 200 (AC3). Renders the neutral "N/A" SVG on any failure.
-func writePRForecastSVG(c *gin.Context, f prForecast) {
+// writePRForecastSVG writes a valid SVG with Cache-Control: max-age=300 (AC4).
+// The SVG is wrapped in a link to the PR's OpenDoor breakdown (AC2). Always
+// HTTP 200 (AC3). Renders the neutral "Not analyzed yet" SVG on any failure.
+func writePRForecastSVG(c *gin.Context, f prForecast, link string) {
 	label := "Merge Forecast"
 	message := pfMessage(f)
 	color := pfColor(f.Prob, f.Available)
 
-	svg, err := renderLiveBadge(label, message, color, "")
+	svg, err := renderLiveBadge(label, message, color, link)
 	if err != nil {
-		svg = `<svg xmlns="http://www.w3.org/2000/svg" width="132" height="20" role="img" aria-label="Merge Forecast: N/A"><title>Merge Forecast: N/A</title><rect width="132" height="20" rx="4" fill="#9ca3af"/><text x="66" y="14" fill="#fff" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="600">Merge Forecast: N/A</text></svg>`
+		svg = `<svg xmlns="http://www.w3.org/2000/svg" width="132" height="20" role="img" aria-label="Merge Forecast: Not analyzed yet"><title>Merge Forecast: Not analyzed yet</title><rect width="132" height="20" rx="4" fill="#9ca3af"/><text x="66" y="14" fill="#fff" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="600">Merge Forecast: Not analyzed yet</text></svg>`
 	}
 	c.Header("Content-Type", "image/svg+xml")
-	c.Header("Cache-Control", "no-store")
+	c.Header("Cache-Control", "public, max-age=300, s-maxage=300")
 	c.String(http.StatusOK, "%s", svg)
 }
 
@@ -368,22 +369,27 @@ func validatePRInputs(owner, repo, prStr string) (int, bool) {
 	return pr, true
 }
 
-// GetPRForecastBadge handles GET /badge?owner=&repo=&pr=&v= (AC1..AC7).
+// GetPRForecastBadge handles GET /badge/:owner/:repo/:pr (AC1..AC7).
 // Always returns HTTP 200 with a valid SVG; invalid input or any GitHub error
-// degrades to the neutral N/A SVG (AC3/AC4). v= is a cachebust, ignored.
+// degrades to the neutral "Not analyzed yet" gray SVG (AC3). The badge SVG is
+// wrapped in a link to the PR's OpenDoor breakdown (AC2). Never 404/5xx (AC3).
 func GetPRForecastBadge(cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		owner := c.Query("owner")
-		repo := c.Query("repo")
-		pr, ok := validatePRInputs(owner, repo, c.Query("pr"))
+		owner := c.Param("owner")
+		repo := c.Param("repo")
+		pr, ok := validatePRInputs(owner, repo, c.Param("pr"))
 		if !ok {
-			writePRForecastSVG(c, prForecast{})
+			// AC3: invalid params -> 200 neutral gray "Not analyzed yet".
+			writePRForecastSVG(c, prForecast{}, "")
 			return
 		}
 		// AC6: best-effort OAuth token raises quota / enables private access.
 		token := cfg.GithubToken
 		f, _ := computePRForecast(c.Request.Context(), token, owner, repo, pr)
-		writePRForecastSVG(c, f)
+		// AC2: link the badge to this PR's OpenDoor readiness breakdown.
+		link := prForecastBaseURL + "/pr?owner=" + url.QueryEscape(owner) +
+			"&repo=" + url.QueryEscape(repo) + "&pr=" + strconv.Itoa(pr)
+		writePRForecastSVG(c, f, link)
 	}
 }
 
@@ -434,11 +440,15 @@ label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.04em
 input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid #30363d;background:#010409;color:#e6edf3;font-size:14px}
 .row{display:flex;gap:10px}
 .row>div{flex:1}
+.toggle{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;color:#9da7b3}
+.toggle input{width:auto}
 button{margin-top:16px;width:100%;padding:11px;border:0;border-radius:8px;background:#238636;color:#fff;font-size:14px;font-weight:600;cursor:pointer}
 button:active{transform:translateY(1px)}
-pre{margin-top:16px;padding:14px;border-radius:8px;background:#010409;border:1px solid #30363d;white-space:pre-wrap;word-break:break-all;font-size:13px;line-height:1.5}
+pre{margin-top:16px;padding:14px;border-radius:8px;background:#010409;border:1px solid #30363d;white-space:pre-wrap;word-break:break-all;font-size:13px;line-height:1.5;cursor:text}
 .note{font-size:12px;color:#9da7b3;margin-top:10px}
 .copied{color:#3fb950}
+.privacy{margin-top:18px;padding:12px 14px;border-radius:8px;background:#161b22;border:1px solid #30363d;font-size:12px;color:#9da7b3;line-height:1.5}
+.privacy b{color:#c9d1d9}
 </style></head>
 <body><div class="wrap">
 <h1>PR Merge Probability Calculator</h1>
@@ -446,41 +456,61 @@ pre{margin-top:16px;padding:14px;border-radius:8px;background:#010409;border:1px
 <label for="owner">Owner</label><input id="owner" placeholder="e.g. abhisheksoni27" autocomplete="off">
 <label for="repo">Repo</label><input id="repo" placeholder="e.g. opendoor" autocomplete="off">
 <label for="pr">PR number</label><input id="pr" placeholder="e.g. 123" inputmode="numeric" autocomplete="off">
-<button id="gen" type="button">Generate snippet</button>
-<pre id="out" aria-live="polite">Fill in the fields above and click Generate snippet.</pre>
+<div class="toggle"><input id="priv" type="checkbox"><label for="priv" style="margin:0;text-transform:none;letter-spacing:0">This is a private repo — omit the badge (opt out)</label></div>
+<button id="gen" type="button">Generate &amp; copy snippet</button>
+<pre id="out" aria-live="polite" title="Click to copy">Fill in the fields above and click Generate &amp; copy snippet.</pre>
 <p class="note" id="status"></p>
+<div class="privacy">
+<b>Privacy:</b> GitHub's camo image proxy reveals each viewer's IP address to OpenDoor when the badge loads. The badge path encodes the owner, repo, and PR number. For private-repo PRs, enable the toggle above to omit the badge and only share a link.
+</div>
 <script>
 (function(){
   var base = {{.Base}};
   function val(id){return (document.getElementById(id).value||'').trim();}
+  function esc(s){return encodeURIComponent(s);}
   function build(){
     var o=val('owner'), r=val('repo'), p=val('pr');
     var status=document.getElementById('status');
+    var priv=document.getElementById('priv').checked;
     if(!o||!r||!p||!/^[\w.-]+$/.test(o)||!/^[\w.-]+$/.test(r)||!/^\d{1,6}$/.test(p)){
       status.textContent='Enter a valid owner, repo, and PR number (digits only).';
-      status.className='note'; return;
+      status.className='note'; return null;
     }
-    var ts=Math.floor(Date.now()/1000);
-    var img=base+'/badge?owner='+encodeURIComponent(o)+'&repo='+encodeURIComponent(r)+'&pr='+encodeURIComponent(p)+'&v='+ts;
-    var link=base+'/pr?owner='+encodeURIComponent(o)+'&repo='+encodeURIComponent(r)+'&pr='+encodeURIComponent(p);
-    var md='[![OpenDoor PR Forecast]('+img+')]('+link+')';
-    var out=document.getElementById('out');
-    out.textContent=md;
-    status.textContent='Copy the snippet above into your PR description.';
-    status.className='note';
+    var link=base+'/pr?owner='+esc(o)+'&repo='+esc(r)+'&pr='+esc(p);
+    if(priv){
+      // AC5: private repos opt out of the badge (no owner/repo/pr path exposure).
+      return '[OpenDoor PR Forecast — link hidden for private repo]('+link+')';
+    }
+    var img=base+'/badge/'+esc(o)+'/'+esc(r)+'/'+esc(p);
+    return '[![OpenDoor PR Forecast]('+img+')]('+link+')';
   }
-  function copy(){
-    var out=document.getElementById('out');
+  function show(text){ document.getElementById('out').textContent=text; }
+  function copy(text){
     var status=document.getElementById('status');
-    var text=out.textContent;
-    if(!text || text.indexOf('Fill')===0){ return; }
-    function done(){status.textContent='Copied to clipboard!';status.className='note copied';}
-    function fail(){try{var rg=document.createRange();rg.selectNodeContents(out);var s=getSelection();s.removeAllRanges();s.addRange(rg);document.execCommand('copy');done();}catch(e){status.textContent='Select the text above and press Ctrl/Cmd+C to copy.';status.className='note';}}
+    function ok(){status.textContent='Copied to clipboard!';status.className='note copied';}
+    function manual(){status.textContent='Select the snippet above and press Ctrl/Cmd+C to copy.';status.className='note';}
+    function fallbackTA(){
+      try{
+        var ta=document.createElement('textarea');
+        ta.value=text; ta.setAttribute('readonly','');
+        ta.style.position='fixed'; ta.style.top='-1000px';
+        document.body.appendChild(ta); ta.select();
+        var done=document.execCommand('copy');
+        document.body.removeChild(ta);
+        if(done){ok();}else{manual();}
+      }catch(e){ manual(); }
+    }
     if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(done, fail);
-    }else{fail();}
+      navigator.clipboard.writeText(text).then(ok, fallbackTA);
+    }else{ fallbackTA(); }
   }
-  document.getElementById('gen').addEventListener('click', function(){build();copy();});
+  document.getElementById('gen').addEventListener('click', function(){
+    var md=build();
+    if(md===null) return;
+    show(md);
+    copy(md);
+  });
+  document.getElementById('out').addEventListener('click', function(){ copy(this.textContent); });
 })();
 </script>
 </div></body></html>`))
