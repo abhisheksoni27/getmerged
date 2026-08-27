@@ -54,12 +54,13 @@ type liveBadgeData struct {
 // liveBadgeTemplate renders a clean, modern flat two-segment badge.
 // Parsed once at init; html/template escapes all dynamic values (AC1).
 var liveBadgeTemplate = template.Must(template.New("liveBadge").Parse(
-	`<svg xmlns="http://www.w3.org/2000/svg" width="{{.Total}}" height="20" role="img" aria-label="{{.Label}}: {{.Message}}">
+	`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{.Total}}" height="20" role="img" aria-label="{{.Label}}: {{.Message}}">
 <title>{{.Label}}: {{.Message}}</title>
 <defs>
 <linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-opacity=".05"/></linearGradient>
 <clipPath id="r"><rect width="{{.Total}}" height="20" rx="4" fill="#fff"/></clipPath>
 </defs>
+{{if .Link}}<a xlink:href="{{.Link}}">{{end}}
 <g clip-path="url(#r)">
 <rect width="{{.Total}}" height="20" fill="#24292f"/>
 <rect x="{{.LabelW}}" width="{{.MsgW}}" height="20" fill="{{.Color}}"/>
@@ -69,6 +70,7 @@ var liveBadgeTemplate = template.Must(template.New("liveBadge").Parse(
 <text x="{{.LabelX}}" y="14">{{.Label}}</text>
 <text x="{{.MsgX}}" y="14">{{.Message}}</text>
 </g>
+{{if .Link}}</a>{{end}}
 </svg>`))
 
 // renderLiveBadge executes liveBadgeTemplate. Widths are estimated at ~7px

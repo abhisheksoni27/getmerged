@@ -73,6 +73,66 @@ func RateLimitPerIP(max int, window time.Duration) gin.HandlerFunc {
 	}
 }
 
+// RateLimitPRBadge enforces the public PR-forecast badge limits (AC4):
+// 60 req/min/IP and 2000 req/min global. Breaches abort with HTTP 429 and a
+// Retry-After header. Valkey failures fail open so the badge never 5xx.
+func RateLimitPRBadge() gin.HandlerFunc {
+	return rateLimitCombined(60, 2000, time.Minute)
+}
+
+// rateLimitCombined enforces both a per-IP and a global fixed-window limit on
+// the same request. The global bucket shares one Valkey key across all IPs;
+// the per-IP bucket keys on client IP. A breach of either returns 429 with
+// Retry-After (AC4).
+func rateLimitCombined(perIPMax, globalMax int, window time.Duration) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		client := MustCache(c)
+		if client == nil {
+			c.Next()
+			return
+		}
+		ctx := context.Background()
+		ip := c.ClientIP()
+
+		ipKey := fmt.Sprintf("rl:ip:%d:%s", perIPMax, ip)
+		ipCount, ipErr := incrFixedWindow(client, ctx, ipKey, window)
+		if ipErr != nil {
+			slog.Error("rate limit: valkey ip error - failing open", "ip", ip, "err", ipErr)
+			c.Next()
+			return
+		}
+		globalKey := fmt.Sprintf("rl:global:%d", globalMax)
+		globalCount, gErr := incrFixedWindow(client, ctx, globalKey, window)
+		if gErr != nil {
+			slog.Error("rate limit: valkey global error - failing open", "err", gErr)
+			c.Next()
+			return
+		}
+
+		c.Header("X-RateLimit-Limit", fmt.Sprintf("%d", perIPMax))
+		remaining := perIPMax - int(ipCount)
+		if remaining < 0 {
+			remaining = 0
+		}
+		c.Header("X-RateLimit-Remaining", fmt.Sprintf("%d", remaining))
+
+		if ipCount > int64(perIPMax) || globalCount > int64(globalMax) {
+			resetAt := time.Now().Add(window)
+			slog.Warn("pr badge rate limit exceeded", "ip", ip, "ipCount", ipCount, "globalCount", globalCount, "path", c.FullPath())
+			c.Header("Retry-After", fmt.Sprintf("%d", int(window.Seconds())))
+			c.Header("X-RateLimit-Reset", fmt.Sprintf("%d", resetAt.Unix()))
+			c.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{
+				"error":      "rate limit exceeded",
+				"error_code": "rate_limited",
+				"reset_at":   resetAt.Unix(),
+			})
+			return
+		}
+
+		c.Next()
+	}
+}
+
 // SkipIfAuthenticated runs limiter only for anonymous requests (no user_id in
 // context), so per-IP trial limits never throttle signed-in users.
 func SkipIfAuthenticated(limiter gin.HandlerFunc) gin.HandlerFunc {
