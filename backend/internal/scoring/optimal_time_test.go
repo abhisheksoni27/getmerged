@@ -8,13 +8,18 @@ import (
 )
 
 func TestCalculateOptimalWindow(t *testing.T) {
-	t.Run("empty events returns safe defaults", func(t *testing.T) {
-		res := scoring.CalculateOptimalWindow(nil)
-		if res.ConfidenceScore != 0.0 {
-			t.Errorf("expected 0.0 confidence, got %v", res.ConfidenceScore)
+	t.Run("empty events returns safe defaults with repo-specific baseline", func(t *testing.T) {
+		res1 := scoring.CalculateOptimalWindow(nil, "facebook/react")
+		res2 := scoring.CalculateOptimalWindow(nil, "open-octo/octo-agent")
+		if res1.ConfidenceScore != 0.0 || res2.ConfidenceScore != 0.0 {
+			t.Errorf("expected 0.0 confidence, got %v and %v", res1.ConfidenceScore, res2.ConfidenceScore)
 		}
-		if res.ActiveMaintainerCount != 0 {
-			t.Errorf("expected 0 active maintainers, got %d", res.ActiveMaintainerCount)
+		if res1.ActiveMaintainerCount != 0 || res2.ActiveMaintainerCount != 0 {
+			t.Errorf("expected 0 active maintainers")
+		}
+		// Distinct repos must not produce identical fallback hours
+		if res1.PrimaryStartHourUTC == res2.PrimaryStartHourUTC && res1.PeakHourUTC == res2.PeakHourUTC && res1.RecommendedDayWindow == res2.RecommendedDayWindow {
+			t.Errorf("expected different deterministic windows for distinct repos, got identical: %v", res1)
 		}
 	})
 
