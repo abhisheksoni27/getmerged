@@ -22,27 +22,28 @@ export const metadata: Metadata = {
   },
 };
 
-async function getLeagueLeaderboard(): Promise<{ repos: LeagueRepo[]; monthName: string }> {
+async function getLeagueLeaderboard(): Promise<{ repos: LeagueRepo[]; monthName: string; currentMonth: string }> {
   try {
     const res = await fetch(`${API_BASE_URL}/api/v1/league/leaderboard?limit=50`, {
       next: { revalidate: 300 },
     });
     if (!res.ok) {
-      return { repos: [], monthName: "Active Monthly Sprint" };
+      return { repos: [], monthName: "Active Monthly Sprint", currentMonth: "2026-08" };
     }
     const data = await res.json();
     return {
       repos: data.repos || [],
       monthName: data.month_name || "Active Monthly Sprint",
+      currentMonth: data.month || "2026-08",
     };
   } catch (e) {
     console.error("Failed to fetch league leaderboard:", e);
-    return { repos: [], monthName: "Active Monthly Sprint" };
+    return { repos: [], monthName: "Active Monthly Sprint", currentMonth: "2026-08" };
   }
 }
 
 export default async function MonthlyLeaguePage() {
-  const { repos, monthName } = await getLeagueLeaderboard();
+  const { repos, monthName, currentMonth } = await getLeagueLeaderboard();
 
   const itemListJsonLd = {
     "@context": "https://schema.org",
@@ -88,7 +89,7 @@ export default async function MonthlyLeaguePage() {
       </section>
 
       <main className="flex-1">
-        <LeagueClient initialRepos={repos} monthName={monthName} />
+        <LeagueClient initialRepos={repos} monthName={monthName} currentMonth={currentMonth} />
       </main>
       <Footer />
     </div>
