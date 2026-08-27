@@ -111,7 +111,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
         </div>
 
         {/* Main Result Card */}
-        <div className="rounded-2xl bg-[#111827] p-6 sm:p-8 border-2 border-white/[0.08] shadow-sm mb-8">
+        <div className="rounded-2xl bg-zinc-900/80 p-6 sm:p-8 border-2 border-white/[0.08] shadow-sm mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-white/[0.08]">
             <div>
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-400 block mb-1">
@@ -128,7 +128,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
               )}
             </div>
 
-            <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2 bg-[#1e293b] sm:bg-transparent p-4 sm:p-0 rounded-xl border sm:border-0 border-white/[0.08]">
+            <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2 bg-zinc-900 sm:bg-transparent p-4 sm:p-0 rounded-xl border sm:border-0 border-white/[0.08]">
               <div className="text-3xl sm:text-4xl font-extrabold font-mono text-zinc-100">
                 {Math.round(score)}
                 <span className="text-lg sm:text-xl text-zinc-400 font-normal">/100</span>
@@ -166,7 +166,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
             </p>
 
             {/* Verified Outcome (AC1): live verdict synced from the PR tracker */}
-            <div className="mb-6 p-4 rounded-xl bg-[#1e293b] border border-white/[0.08]" data-testid="verified-outcome">
+            <div className="mb-6 p-4 rounded-xl bg-zinc-900 border border-white/[0.08]" data-testid="verified-outcome">
               <span className="text-xs font-mono font-bold text-zinc-400 uppercase tracking-wider block mb-2">
                 Verified Outcome
               </span>
@@ -186,7 +186,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
                       </span>
                     )}
                     {verdictView.tone === "muted" && (
-                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono bg-[#1e293b] text-zinc-300 border border-white/[0.12]">
+                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono bg-zinc-900 text-zinc-300 border border-white/[0.12]">
                         <Hourglass className="h-4 w-4 text-zinc-400" />
                         {verdictView.text}
                       </span>
@@ -200,7 +200,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
                   </div>
                 </>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono bg-[#1e293b] text-zinc-400 border border-white/[0.12]">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono bg-zinc-900 text-zinc-400 border border-white/[0.12]">
                   Outcome unavailable
                 </span>
               )}
@@ -221,7 +221,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
               <Link
                 href={cRankUrl}
                 data-testid="share-cta-crank"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#111827] border-2 border-white/[0.08] text-zinc-100 font-mono font-bold text-xs uppercase tracking-wider hover:bg-[#1e293b] active:scale-[0.98] transition-all shadow-sm"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-zinc-900/80 border-2 border-white/[0.08] text-zinc-100 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-900 active:scale-[0.98] transition-all shadow-sm"
               >
                 <ShieldCheck className="h-4 w-4 text-emerald-600" />
                 <span>Explore {repoClean} C-Rank</span>

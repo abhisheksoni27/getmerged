@@ -101,7 +101,7 @@ export function ApiKeysCard() {
   const revokedKeys = data?.keys.filter((k) => k.revoked_at) ?? [];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-[#111827] p-5 shadow-sm/5">
+    <div className="rounded-xl border border-white/[0.08] bg-zinc-900/80 p-5 shadow-sm/5">
       <div className="flex items-start justify-between gap-4 mb-3">
         <div>
           <h2 className="text-lg font-bold text-zinc-100 flex items-center gap-2">
@@ -109,14 +109,14 @@ export function ApiKeysCard() {
           </h2>
           <p className="text-xs text-zinc-400 mt-1">
             Build bots, dashboards, and CI checks on C-Rank™ data. Send{" "}
-            <code className="rounded bg-[#1e293b] px-1 py-0.5 text-[11px]">Authorization: Bearer &lt;key&gt;</code> to{" "}
+            <code className="rounded bg-zinc-900 px-1 py-0.5 text-[11px]">Authorization: Bearer &lt;key&gt;</code> to{" "}
             <Link href="/docs" className="text-emerald-400 font-semibold hover:underline">
               /docs endpoints
             </Link>
             . Free tier: 60 req/hour + 10/min burst · Pro: 600 req/hour + 100/min burst.
           </p>
         </div>
-        <span className="shrink-0 rounded-full bg-[#1e293b] px-2 py-0.5 text-[11px] font-semibold text-zinc-400">
+        <span className="shrink-0 rounded-full bg-zinc-900 px-2 py-0.5 text-[11px] font-semibold text-zinc-400">
           {data?.is_pro
             ? `Pro · ${data?.limits.pro_hourly_requests ?? 600}/hour`
             : `Free · ${data?.limits.free_hourly_requests ?? 60}/hour`}
@@ -131,7 +131,7 @@ export function ApiKeysCard() {
             Copy your key now - it will never be shown again.
           </div>
           <div className="flex items-center gap-2">
-            <code className="flex-1 truncate rounded-md bg-[#111827] border border-emerald-200 px-2 py-1.5 text-xs text-zinc-200">
+            <code className="flex-1 truncate rounded-md bg-zinc-900/80 border border-emerald-200 px-2 py-1.5 text-xs text-zinc-200">
               {freshKey}
             </code>
             <button
@@ -194,7 +194,7 @@ export function ApiKeysCard() {
             <button
               onClick={createKey}
               disabled={creating || activeKeys.length >= 5}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#1e293b] px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 cursor-pointer whitespace-nowrap"
             >
               <Plus className="h-3.5 w-3.5" />
               {activeKeys.length >= 5 ? "Key limit reached (5)" : "Generate key"}

@@ -235,7 +235,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
   if (phase === "unauth") {
     return (
       <AuditShell fullName={fullName}>
-        <div className="rounded-2xl border-2 border-white/[0.08] bg-[#111827] p-8 shadow-sm text-center">
+        <div className="rounded-2xl border-2 border-white/[0.08] bg-zinc-900/80 p-8 shadow-sm text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-950/80 border-amber-800/80 border border-amber-200 text-amber-600">
             <Lock className="h-7 w-7" />
           </div>
@@ -245,7 +245,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
           </p>
           <a
             href={`${API_BASE_URL}/api/v1/auth/github`}
-            className="inline-flex items-center gap-2 rounded-full bg-[#1e293b] px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all"
+            className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all"
           >
             <Lock className="h-4 w-4" /> Sign in with GitHub
           </a>
@@ -257,7 +257,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
   if (phase === "notfound") {
     return (
       <AuditShell fullName={fullName}>
-        <div className="rounded-2xl border-2 border-white/[0.08] bg-[#111827] p-8 text-center">
+        <div className="rounded-2xl border-2 border-white/[0.08] bg-zinc-900/80 p-8 text-center">
           <h1 className="text-xl font-bold text-zinc-100">Repository not found</h1>
           <p className="text-sm text-zinc-400 mt-2">This repository is not indexed yet.</p>
         </div>
@@ -315,7 +315,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
     <AuditShell fullName={fullName}>
       <div className="space-y-8">
         {/* Summary */}
-        <section className="rounded-2xl border-2 border-white/[0.08] bg-[#111827] p-6 shadow-sm">
+        <section className="rounded-2xl border-2 border-white/[0.08] bg-zinc-900/80 p-6 shadow-sm">
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div>
               <span className="inline-block rounded-full bg-emerald-950/80 border-emerald-800/80 px-3 py-1 font-mono text-xs font-bold text-emerald-300 mb-2">
@@ -332,7 +332,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
         </section>
 
         {/* Per-factor C-Rank breakdown */}
-        <section className="rounded-2xl border-2 border-white/[0.08] bg-[#111827] p-6 shadow-sm">
+        <section className="rounded-2xl border-2 border-white/[0.08] bg-zinc-900/80 p-6 shadow-sm">
           <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-zinc-50 mb-4">
             <Sparkles className="h-4 w-4 text-indigo-500" /> Full C-Rank Per-Factor Breakdown
           </h2>
@@ -345,7 +345,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
                     raw {fmtNum(f.raw_value)} · peer {f.peer_percentile.toFixed(0)}th · weight {(f.weight * 100).toFixed(1)}%
                   </span>
                 </div>
-                <div className="h-2.5 w-full rounded-full bg-[#1e293b] overflow-hidden">
+                <div className="h-2.5 w-full rounded-full bg-zinc-900 overflow-hidden">
                   <div className="h-full bg-emerald-500" style={{ width: `${Math.max(0, Math.min(100, f.normalized_score))}%` }} />
                 </div>
                 <div className="text-[11px] text-zinc-400 mt-1">contribution to score: {f.contribution.toFixed(1)} pts</div>
@@ -364,7 +364,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
               type="button"
               onClick={regenerate}
               disabled={regenLoading}
-              className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/[0.08] bg-[#111827] px-3 py-1.5 text-[11px] font-mono font-bold text-zinc-200 shadow-sm transition-all hover:bg-slate-800 active:scale-[0.99] disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/[0.08] bg-zinc-900/80 px-3 py-1.5 text-[11px] font-mono font-bold text-zinc-200 shadow-sm transition-all hover:bg-slate-800 active:scale-[0.99] disabled:opacity-60"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${regenLoading ? "animate-spin" : ""}`} />
               {regenLoading ? "Regenerating…" : "Regenerate (1/day)"}
@@ -376,8 +376,8 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
           ) : (
             <ol className="space-y-2">
               {r.prioritized_fixes.map((fix) => (
-                <li key={fix.priority} className="flex items-start gap-2 rounded-xl border border-white/[0.08] bg-[#111827] p-3">
-                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#0f172a] text-[10px] font-bold text-white">
+                <li key={fix.priority} className="flex items-start gap-2 rounded-xl border border-white/[0.08] bg-zinc-900/80 p-3">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-zinc-950 text-[10px] font-bold text-white">
                     {fix.priority}
                   </span>
                   <div className="text-xs text-zinc-200">
@@ -431,7 +431,7 @@ function fmtNum(v: number): string {
 
 function AuditShell({ fullName, children }: { fullName: string; children: React.ReactNode }) {
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-[#0f172a] overflow-x-hidden">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 overflow-x-hidden">
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-6">
         <Link
           href={`/${fullName}`}

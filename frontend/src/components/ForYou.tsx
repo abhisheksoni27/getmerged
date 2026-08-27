@@ -124,14 +124,14 @@ export function ForYou() {
             </p>
             <Link
               href={`/repos?languages=${encodeURIComponent(data.snapshot.map((l) => l.lang).join(","))}`}
-              className="mt-2 inline-block rounded-lg bg-[#1e293b] px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-800"
+              className="mt-2 inline-block rounded-lg bg-zinc-900 px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-800"
             >
               Browse repos with filters →
             </Link>
           </>
         ) : (
           /* AC2: empty state when zero matches */
-          <div className="mt-3 rounded-xl border border-dashed border-white/[0.12] bg-[#111827]/60 p-8 text-center text-sm text-zinc-400">
+          <div className="mt-3 rounded-xl border border-dashed border-white/[0.12] bg-zinc-900/80/60 p-8 text-center text-sm text-zinc-400">
             No personalized matches yet - we couldn&apos;t find S/A ranked repos or good first issues for your GitHub languages.
             <div className="mt-2">
               <Link href="/repos" className="text-emerald-400 font-semibold hover:underline">
@@ -145,18 +145,18 @@ export function ForYou() {
           {data.repos.length > 0 ? (
             <ul className="mt-4 grid gap-4 sm:grid-cols-2" data-testid="foryou-repos">
               {data.repos.map((r) => (
-                <li key={r.id} className="flex flex-col rounded-xl border border-white/[0.08] bg-[#111827] p-4 shadow-sm transition-shadow hover:shadow-md">
+                <li key={r.id} className="flex flex-col rounded-xl border border-white/[0.08] bg-zinc-900/80 p-4 shadow-sm transition-shadow hover:shadow-md">
                   <div className="flex items-start justify-between gap-2">
                     <Link href={`/repo/${r.full_name}`} className="text-sm font-semibold text-zinc-100 hover:text-emerald-400">
                       {r.full_name}
                     </Link>
-                    <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-bold ${tierCls[r.c_rank_tier] ?? "bg-[#1e293b] text-zinc-300 border border-white/[0.12]"}`}>
+                    <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-bold ${tierCls[r.c_rank_tier] ?? "bg-zinc-900 text-zinc-300 border border-white/[0.12]"}`}>
                       {r.c_rank_tier}
                     </span>
                   </div>
                   <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-400">{r.description || "No description available."}</p>
                   <div className="mt-2 flex items-center gap-3 text-[11px] text-zinc-400">
-                    {r.language && <span className="rounded-full bg-[#1e293b] px-2 py-0.5 font-medium capitalize">{r.language}</span>}
+                    {r.language && <span className="rounded-full bg-zinc-900 px-2 py-0.5 font-medium capitalize">{r.language}</span>}
                     <span className="inline-flex items-center gap-1">
                       <Star className="h-3 w-3" /> {r.stars.toLocaleString()}
                     </span>
@@ -174,7 +174,7 @@ export function ForYou() {
               <h3 className="mt-6 text-sm font-bold text-zinc-100">Open good first issues in your stack</h3>
               <ul className="mt-2 space-y-2" data-testid="foryou-issues">
                 {data.issues.map((issue) => (
-                  <li key={issue.id} className="rounded-lg border border-white/[0.08] bg-[#111827] px-4 py-2.5 text-sm">
+                  <li key={issue.id} className="rounded-lg border border-white/[0.08] bg-zinc-900/80 px-4 py-2.5 text-sm">
                     <a href={issue.url} target="_blank" rel="noopener noreferrer" className="font-medium text-zinc-100 hover:text-emerald-400">
                       {issue.title} <ExternalLink className="inline h-3 w-3 text-zinc-400" />
                     </a>
@@ -189,7 +189,7 @@ export function ForYou() {
           )}
 
           {data.repos.length === 0 && data.issues.length === 0 && (
-            <div className="mt-3 rounded-xl border border-dashed border-white/[0.12] bg-[#111827]/60 p-8 text-center text-sm text-zinc-400">
+            <div className="mt-3 rounded-xl border border-dashed border-white/[0.12] bg-zinc-900/80/60 p-8 text-center text-sm text-zinc-400">
               No personalized matches yet - we couldn&apos;t find S/A ranked repos or good first issues for your GitHub languages.
               <div className="mt-2">
                 <Link href="/repos" className="text-emerald-400 font-semibold hover:underline">

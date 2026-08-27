@@ -52,7 +52,7 @@ export function TopMatches() {
           {matches.slice(0, 3).map((m) => (
             <li
               key={m.id}
-              className="flex flex-col rounded-xl border border-white/[0.08] bg-[#111827] p-4 shadow-sm transition-shadow hover:shadow-md"
+              className="flex flex-col rounded-xl border border-white/[0.08] bg-zinc-900/80 p-4 shadow-sm transition-shadow hover:shadow-md"
             >
               <div className="flex items-start justify-between gap-2">
                 <Link

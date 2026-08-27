@@ -416,7 +416,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               <Link
                 href="/"
                 title="Return to GetMerged Explorer Home"
-                className="inline-flex items-center gap-2 rounded-full bg-[#1e293b] px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
+                className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to Explorer
@@ -438,7 +438,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
           Back to Explorer
         </Link>
 
-        <div className="rounded-2xl border border-white/[0.08] bg-[#111827] p-8 sm:p-10 shadow-sm text-center">
+        <div className="rounded-2xl border border-white/[0.08] bg-zinc-900/80 p-8 sm:p-10 shadow-sm text-center">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-950/70 border-amber-800/80 border border-amber-200 text-amber-600 mb-5">
             <Activity className="h-7 w-7" />
           </div>
@@ -460,7 +460,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               <button
                 onClick={handleWatchToggle}
                 disabled={watchLoading}
-                className="inline-flex items-center gap-2 rounded-full bg-[#1e293b] px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
+                className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
               >
                 <Bookmark className="h-4 w-4 text-amber-400" />
                 {isWatching ? "Watching Repo" : "Watch Repo for Updates"}
@@ -473,7 +473,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                   "indexing_watch"
                 )}
                 title="Sign in to get notification updates"
-                className="inline-flex items-center gap-2 rounded-full bg-[#1e293b] px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs cursor-pointer"
               >
                 <Lock className="h-4 w-4 text-amber-400" />
                 Sign in to Get Notified
@@ -485,7 +485,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               target="_blank"
               rel="nofollow noopener noreferrer"
               title={`View ${fullName} on GitHub`}
-              className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-[#111827] px-6 py-3 text-xs font-mono font-medium text-zinc-300 hover:bg-[#1e293b] transition-all"
+              className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-zinc-900/80 px-6 py-3 text-xs font-mono font-medium text-zinc-300 hover:bg-zinc-900 transition-all"
             >
               <GitPullRequest className="h-4 w-4" />
               View on GitHub
@@ -581,7 +581,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
                     isActive
                       ? "glass-card text-zinc-100 shadow-sm"
-                      : "bg-[#111827] text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                      : "bg-zinc-900/80 text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
                   }`}
                 >
                   <Icon className={`h-3.5 w-3.5 ${isActive ? "text-zinc-100" : "text-zinc-400"}`} />
@@ -709,7 +709,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                     : section.body.split(/\n+/).map(s => s.trim()).filter(Boolean);
 
                   return (
-                    <div key={idx} className="rounded-xl border-2 border-white/[0.08] bg-[#111827] p-4 shadow-sm">
+                    <div key={idx} className="rounded-xl border-2 border-white/[0.08] bg-zinc-900/80 p-4 shadow-sm">
                       <h4 className="text-xs font-mono font-bold text-indigo-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
                         <Quote className="h-3.5 w-3.5 text-indigo-500" />
                         {section.title}
@@ -844,7 +844,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       {/* Good First Issues Cards (Story 10.2 & Story 10.3) */}
       <motion.section
         id="good-first-issues"
-        className="scroll-mt-36 rounded-2xl bg-[#111827] p-4 sm:p-5 mb-10 border-2 border-white/[0.08] shadow-sm font-mono"
+        className="scroll-mt-36 rounded-2xl bg-zinc-900/80 p-4 sm:p-5 mb-10 border-2 border-white/[0.08] shadow-sm font-mono"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
@@ -855,13 +855,13 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             <h3 className="text-base font-bold text-zinc-100 flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-emerald-600" /> Active Good First Issues ({gfiList.length > 0 ? gfiList.length : (repo?.good_first_issue_count ?? 0)})
             </h3>
-            <div className="inline-flex rounded-xl bg-[#1e293b] p-0.5 border border-white/[0.08] text-xs font-mono">
+            <div className="inline-flex rounded-xl bg-zinc-900 p-0.5 border border-white/[0.08] text-xs font-mono">
               <button
                 type="button"
                 onClick={() => setGfiTab("all")}
                 className={`px-2.5 py-1 rounded-lg transition-colors font-semibold ${
                   gfiTab === "all"
-                    ? "bg-[#111827] text-zinc-100 shadow-2xs"
+                    ? "bg-zinc-900/80 text-zinc-100 shadow-2xs"
                     : "text-zinc-400 hover:text-zinc-100"
                 }`}
               >
@@ -906,7 +906,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               return (
                 <div
                   key={issue.id}
-                  className="p-4 sm:p-5 rounded-lg border border-white/[0.08] bg-[#111827] hover:border-emerald-500 hover:-translate-y-px hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                  className="p-4 sm:p-5 rounded-lg border border-white/[0.08] bg-zinc-900/80 hover:border-emerald-500 hover:-translate-y-px hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -959,7 +959,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                       target="_blank"
                       rel="noopener noreferrer"
                       title={`Contribute to ${issue.title} on GitHub`}
-                      className="px-3 py-1 rounded-lg bg-[#1e293b] hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1 transition-all active:scale-[0.99]"
+                      className="px-3 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1 transition-all active:scale-[0.99]"
                     >
                       Contribute <ArrowRight className="h-3 w-3" />
                     </a>
@@ -969,7 +969,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             })}
           </div>
         ) : (
-          <div className="bg-[#1e293b]/60 border border-white/[0.08] rounded-lg p-6 text-center text-zinc-400 font-sans">
+          <div className="bg-zinc-900/60 border border-white/[0.08] rounded-lg p-6 text-center text-zinc-400 font-sans">
             <p className="text-xs text-zinc-400">
               {gfiTab === "paid" ? (
                 <>No cash-bounty issues currently open for <strong>{fullName}</strong>.</>
@@ -1066,7 +1066,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                   "feedback_verify"
                 )
               }
-              className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-zinc-100 bg-[#1e293b] hover:bg-zinc-200 px-3.5 py-1.5 rounded-lg border-2 border-white/[0.08] shadow-sm transition-colors cursor-pointer shrink-0"
+              className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-zinc-100 bg-zinc-900 hover:bg-zinc-200 px-3.5 py-1.5 rounded-lg border-2 border-white/[0.08] shadow-sm transition-colors cursor-pointer shrink-0"
               title="Sign in with GitHub to verify contributor status"
             >
               <ShieldCheck className="h-4 w-4 text-zinc-400" />
@@ -1076,7 +1076,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
         </div>
 
         {/* Interactive Contributor Feedback Form / Thank You Widget */}
-        <div className="rounded-2xl border-2 border-white/[0.08] bg-[#111827] p-5 sm:p-6 shadow-sm overflow-hidden relative">
+        <div className="rounded-2xl border-2 border-white/[0.08] bg-zinc-900/80 p-5 sm:p-6 shadow-sm overflow-hidden relative">
           {feedbackSubmitted && submittedScores ? (
             <div className="relative overflow-hidden rounded-xl border-2 border-white/[0.08] p-6 sm:p-8 animate-in zoom-in-95 duration-500 transition-all">
               {/* Dynamic Theme Gradients & Floating Particles Based on Rating */}
@@ -1113,7 +1113,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               {/* Main Badge & Title */}
               <div className="flex flex-col items-center text-center space-y-4 relative z-10">
                 <div className="relative">
-                  <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl border-3 border-white/[0.08] bg-[#111827] shadow-sm flex items-center justify-center -rotate-3 hover:rotate-0 transition-transform">
+                  <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl border-3 border-white/[0.08] bg-zinc-900/80 shadow-sm flex items-center justify-center -rotate-3 hover:rotate-0 transition-transform">
                     {submittedScores.avg >= 4.5 ? (
                       <Flame className="h-9 w-9 sm:h-11 sm:w-11 text-amber-500 animate-pulse fill-amber-400" />
                     ) : submittedScores.avg >= 3.5 ? (
@@ -1132,7 +1132,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                 </div>
 
                 <div className="space-y-1">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-white/[0.08] bg-[#111827] text-[11px] font-mono font-extrabold uppercase tracking-wider shadow-sm">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-white/[0.08] bg-zinc-900/80 text-[11px] font-mono font-extrabold uppercase tracking-wider shadow-sm">
                     {submittedScores.avg >= 4.5
                       ? "🏆 Legendary Maintainer Vibes"
                       : submittedScores.avg >= 3.5
@@ -1155,19 +1155,19 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
 
                 {/* Scorecard Visual Breakdown */}
                 <div className="grid grid-cols-3 gap-2 sm:gap-4 w-full max-w-md pt-2">
-                  <div className="rounded-xl border-2 border-white/[0.08] bg-[#111827]/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-sm">
+                  <div className="rounded-xl border-2 border-white/[0.08] bg-zinc-900/80/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-sm">
                     <span className="text-[10px] font-mono uppercase text-zinc-400 block">Helpfulness</span>
                     <span className="text-base sm:text-lg font-space font-extrabold text-zinc-50 flex items-center justify-center gap-1 mt-0.5">
                       {submittedScores.maintainer} <Star className="h-3 w-3 fill-yellow-400 text-brand-dark inline" />
                     </span>
                   </div>
-                  <div className="rounded-xl border-2 border-white/[0.08] bg-[#111827]/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-sm">
+                  <div className="rounded-xl border-2 border-white/[0.08] bg-zinc-900/80/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-sm">
                     <span className="text-[10px] font-mono uppercase text-zinc-400 block">Speed</span>
                     <span className="text-base sm:text-lg font-space font-extrabold text-zinc-50 flex items-center justify-center gap-1 mt-0.5">
                       {submittedScores.speed} <Star className="h-3 w-3 fill-yellow-400 text-brand-dark inline" />
                     </span>
                   </div>
-                  <div className="rounded-xl border-2 border-white/[0.08] bg-[#111827]/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-sm">
+                  <div className="rounded-xl border-2 border-white/[0.08] bg-zinc-900/80/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-sm">
                     <span className="text-[10px] font-mono uppercase text-zinc-400 block">Beginner</span>
                     <span className="text-base sm:text-lg font-space font-extrabold text-zinc-50 flex items-center justify-center gap-1 mt-0.5">
                       {submittedScores.beginner} <Star className="h-3 w-3 fill-yellow-400 text-brand-dark inline" />
@@ -1177,7 +1177,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
 
                 {/* Optional Comment Display if provided */}
                 {submittedScores.comment && (
-                  <div className="w-full max-w-md rounded-xl border-2 border-white/[0.08] bg-[#111827]/80 p-3 text-left shadow-sm">
+                  <div className="w-full max-w-md rounded-xl border-2 border-white/[0.08] bg-zinc-900/80/80 p-3 text-left shadow-sm">
                     <span className="text-[10px] font-mono uppercase font-bold text-zinc-400 block mb-1">Your review note:</span>
                     <p className="text-xs font-sans text-zinc-200 italic">
                       &quot;{submittedScores.comment}&quot;
@@ -1195,7 +1195,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                       setReviewSpeedRating(submittedScores.speed);
                       setBeginnerRating(submittedScores.beginner);
                     }}
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-white/[0.08] bg-[#111827] px-4 py-2 text-xs font-mono font-bold text-zinc-100 shadow-sm hover:bg-[#1e293b] hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-white/[0.08] bg-zinc-900/80 px-4 py-2 text-xs font-mono font-bold text-zinc-100 shadow-sm hover:bg-zinc-900 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
                   >
                     <RefreshCw className="h-3.5 w-3.5" />
                     Update or Edit Ratings
@@ -1237,7 +1237,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                     setValue: setBeginnerRating,
                   },
                 ].map((rating) => (
-                  <div key={rating.label} className="rounded-xl border-2 border-white/[0.08] bg-[#0f172a] p-3 shadow-sm">
+                  <div key={rating.label} className="rounded-xl border-2 border-white/[0.08] bg-zinc-950 p-3 shadow-sm">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <span className="font-mono text-xs font-bold text-zinc-100">
                         {rating.label}
@@ -1252,7 +1252,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                              className={`rounded-lg border-2 border-white/[0.08] p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center shadow-sm transition-all cursor-pointer ${
                                rating.value >= star
                                  ? "bg-amber-400 text-zinc-50 scale-105"
-                                 : "bg-[#1e293b] text-zinc-400 hover:bg-amber-950/40 border border-amber-500/20 hover:text-zinc-300"
+                                 : "bg-zinc-900 text-zinc-400 hover:bg-amber-950/40 border border-amber-500/20 hover:text-zinc-300"
                              }`}
                           >
                             <Star className={`h-4 w-4 ${rating.value >= star ? "fill-current" : ""}`} />
@@ -1272,7 +1272,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                       id="feedback-comment"
                       rows={3}
                       placeholder={`Anything future contributors should know before opening a PR to ${fullName}?`}
-                      className="w-full text-xs sm:text-sm font-sans rounded-xl border-2 border-white/[0.08] p-3.5 bg-[#0f172a] text-zinc-50 placeholder:text-zinc-400 focus:outline-none focus:ring-0 shadow-sm"
+                      className="w-full text-xs sm:text-sm font-sans rounded-xl border-2 border-white/[0.08] p-3.5 bg-zinc-950 text-zinc-50 placeholder:text-zinc-400 focus:outline-none focus:ring-0 shadow-sm"
                     />
                   </div>
                 )}
@@ -1336,7 +1336,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                       }
                     }}
                     disabled={!allFeedbackRatingsSelected}
-                    className="flex ml-auto items-center justify-center gap-2 rounded-xl border-2 border-white/[0.08] bg-[#0f172a] px-6 py-3 font-mono text-xs font-extrabold text-white shadow-sm hover:-translate-y-0.5 hover:shadow-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-sm transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex ml-auto items-center justify-center gap-2 rounded-xl border-2 border-white/[0.08] bg-zinc-950 px-6 py-3 font-mono text-xs font-extrabold text-white shadow-sm hover:-translate-y-0.5 hover:shadow-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-sm transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Submit Ratings
                   </button>
@@ -1370,7 +1370,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             </span>
             Contributor Compatibility & Review Speed Analysis for {fullName}
           </h2>
-          <div className="rounded-xl border-2 border-white/[0.08] bg-[#111827] p-4 text-zinc-300 leading-relaxed max-w-none space-y-3 font-sans shadow-sm">
+          <div className="rounded-xl border-2 border-white/[0.08] bg-zinc-900/80 p-4 text-zinc-300 leading-relaxed max-w-none space-y-3 font-sans shadow-sm">
             <p>
               When evaluating whether to contribute to <strong className="text-zinc-50">{fullName}</strong>, response velocity and maintainer engagement are crucial. GetMerged continuously tracks pull request trajectories, first-comment latency, and code review rounds to help developers avoid submitting pull requests to backlogged repositories.
             </p>
@@ -1391,7 +1391,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
           </h2>
           <div className="space-y-3.5">
             {/* FAQ 1 */}
-            <div className="rounded-xl border-2 border-white/[0.08] bg-[#111827] p-4 shadow-sm">
+            <div className="rounded-xl border-2 border-white/[0.08] bg-zinc-900/80 p-4 shadow-sm">
               <div className="flex gap-3">
                 <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-white/[0.08] bg-emerald-200 font-mono text-xs font-extrabold text-zinc-300 shadow-sm">
                   01
@@ -1408,7 +1408,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             </div>
 
             {/* FAQ 2 */}
-            <div className="rounded-xl border-2 border-white/[0.08] bg-[#111827] p-4 shadow-sm">
+            <div className="rounded-xl border-2 border-white/[0.08] bg-zinc-900/80 p-4 shadow-sm">
               <div className="flex gap-3">
                 <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-white/[0.08] bg-orange-200 font-mono text-xs font-extrabold text-orange-950 shadow-sm">
                   02
@@ -1425,7 +1425,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             </div>
 
             {/* FAQ 3 */}
-            <div className="rounded-xl border-2 border-white/[0.08] bg-[#111827] p-4 shadow-sm">
+            <div className="rounded-xl border-2 border-white/[0.08] bg-zinc-900/80 p-4 shadow-sm">
               <div className="flex gap-3">
                 <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-white/[0.08] bg-pink-200 font-mono text-xs font-extrabold text-pink-950 shadow-sm">
                   03
@@ -1442,7 +1442,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             </div>
 
             {/* FAQ 4 */}
-            <div className="rounded-xl border-2 border-white/[0.08] bg-[#111827] p-4 shadow-sm">
+            <div className="rounded-xl border-2 border-white/[0.08] bg-zinc-900/80 p-4 shadow-sm">
               <div className="flex gap-3">
                 <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-white/[0.08] bg-amber-400/20 font-mono text-xs font-extrabold text-yellow-950 shadow-sm">
                   04
@@ -1459,7 +1459,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             </div>
 
             {/* FAQ 5 */}
-            <div className="rounded-xl border-2 border-white/[0.08] bg-[#111827] p-4 shadow-sm">
+            <div className="rounded-xl border-2 border-white/[0.08] bg-zinc-900/80 p-4 shadow-sm">
               <div className="flex gap-3">
                 <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-white/[0.08] bg-cyan-200 font-mono text-xs font-extrabold text-cyan-950 shadow-sm">
                   05
@@ -1485,7 +1485,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
           </div>
         </section>
 
-        <section className="rounded-2xl border-2 border-white/[0.08] bg-[#0f172a] p-5 sm:p-6 text-white shadow-sm">
+        <section className="rounded-2xl border-2 border-white/[0.08] bg-zinc-950 p-5 sm:p-6 text-white shadow-sm">
           <h2 className="text-xs font-space font-extrabold text-yellow-200 uppercase tracking-wider mb-2">
             GetMerged C-Rank™ Indexing Standard
           </h2>
@@ -1522,7 +1522,7 @@ function RepoDetailSkeleton() {
         <div className="h-4 w-96 max-w-full bg-zinc-200 animate-pulse rounded" />
       </div>
 
-      <div className="rounded-2xl bg-[#111827] p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10">
+      <div className="rounded-2xl bg-zinc-900/80 p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10">
         <div className="h-4 w-48 bg-zinc-200 animate-pulse rounded mb-6" />
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {[1, 2, 3, 4].map((i) => (
@@ -1535,7 +1535,7 @@ function RepoDetailSkeleton() {
         </div>
       </div>
 
-      <div className="rounded-2xl bg-[#111827] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
+      <div className="rounded-2xl bg-zinc-900/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
         <div className="h-5 w-56 bg-zinc-200 animate-pulse rounded mb-4" />
         <div className="space-y-2">
           <div className="h-4 w-full bg-zinc-200 animate-pulse rounded" />

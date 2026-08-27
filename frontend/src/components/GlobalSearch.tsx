@@ -178,7 +178,7 @@ export function GlobalSearch() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-[#0f172a]/40 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-zinc-950/40 backdrop-blur-sm"
           onClick={closeSearch}
         >
           <motion.div
@@ -191,12 +191,12 @@ export function GlobalSearch() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: -10 }}
             transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="nb-opt-out w-full max-w-2xl bg-[#111827] border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden flex flex-col focus:outline-none"
+            className="nb-opt-out w-full max-w-2xl bg-zinc-900/80 border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden flex flex-col focus:outline-none"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={handleKeyDown}
           >
             {/* Search Input Header */}
-            <div className="relative flex items-center border-b border-white/[0.08] bg-[#1e293b]/50 p-4">
+            <div className="relative flex items-center border-b border-white/[0.08] bg-zinc-900/50 p-4">
               <Search className="absolute left-5 h-5 w-5 text-zinc-400 pointer-events-none" />
               <input
                 ref={inputRef}
@@ -213,14 +213,14 @@ export function GlobalSearch() {
               />
               <div className="absolute right-4 flex items-center gap-2">
                 {loading && <Loader2 className="h-4 w-4 text-zinc-400 animate-spin mr-1" />}
-                <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-white/[0.08] bg-[#111827] px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-400 shadow-2xs">
+                <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-white/[0.08] bg-zinc-900/80 px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-400 shadow-2xs">
                   ESC
                 </kbd>
                 <button
                   type="button"
                   onClick={closeSearch}
                   aria-label="Close search"
-                  className="p-1 rounded-lg text-zinc-400 hover:text-zinc-300 hover:bg-[#1e293b] transition-colors cursor-pointer"
+                  className="p-1 rounded-lg text-zinc-400 hover:text-zinc-300 hover:bg-zinc-900 transition-colors cursor-pointer"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -244,7 +244,7 @@ export function GlobalSearch() {
                       onClick={closeSearch}
                       title={`View ${r.full_name} C-Rank scorecard, PR response time & merge metrics`}
                       className={`flex items-center justify-between p-3 rounded-xl transition-all group cursor-pointer block no-underline text-current pt-3 ${
-                        isSelected ? "bg-[#1e293b] ring-1 ring-zinc-300 font-medium" : "hover:bg-[#1e293b]"
+                        isSelected ? "bg-zinc-900 ring-1 ring-zinc-300 font-medium" : "hover:bg-zinc-900"
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
@@ -252,7 +252,7 @@ export function GlobalSearch() {
                         <img
                           src={`https://github.com/${r.full_name?.split("/")[0]}.png?size=64`}
                           alt={r.full_name}
-                          className="h-8 w-8 rounded-lg border border-white/[0.08] bg-[#111827] shrink-0 object-cover"
+                          className="h-8 w-8 rounded-lg border border-white/[0.08] bg-zinc-900/80 shrink-0 object-cover"
                           onError={(e) => {
                             (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
                           }}
@@ -299,13 +299,13 @@ export function GlobalSearch() {
                 </div>
               ) : (
                 <div className="p-6 text-center text-xs text-zinc-400 font-sans">
-                  Type a repository name to search live rankings, or press <kbd className="font-mono bg-[#1e293b] px-1 py-0.5 rounded border border-white/[0.08] text-zinc-400">ESC</kbd> to exit.
+                  Type a repository name to search live rankings, or press <kbd className="font-mono bg-zinc-900 px-1 py-0.5 rounded border border-white/[0.08] text-zinc-400">ESC</kbd> to exit.
                 </div>
               )}
             </div>
 
             {/* Modal Footer */}
-            <div className="px-5 py-3 bg-[#1e293b] border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-zinc-400">
+            <div className="px-5 py-3 bg-zinc-900 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-zinc-400">
               <div className="flex items-center gap-3">
                 <span className="hidden sm:inline-flex items-center gap-1">
                   <ArrowUpDown className="h-3 w-3" /> Navigate

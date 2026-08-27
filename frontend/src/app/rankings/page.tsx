@@ -66,7 +66,7 @@ export default function RankingsIndexPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#0f172a] dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-zinc-950 dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"
@@ -81,15 +81,15 @@ export default function RankingsIndexPage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111827] border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-5 font-sans shadow-2xs cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-5 font-sans shadow-2xs cursor-pointer"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Section */}
-        <div className="rounded-3xl bg-[#111827] p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-8 border-b border-white/[0.08]">
+        <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-8 border-b border-white/[0.08]">
           <div className="flex items-center gap-2 mb-3">
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-[#1e293b] px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
               <Trophy className="h-3.5 w-3.5 text-amber-400" /> Ecosystem Directory
             </span>
           </div>
@@ -122,12 +122,12 @@ export default function RankingsIndexPage() {
               key={eco.slug}
               href={`/rankings/${eco.slug}`}
               title={`View Top Welcoming ${eco.name} Open Source Repositories`}
-              className="group rounded-2xl bg-[#111827] p-5 sm:p-6 border border-white/[0.08] shadow-xs hover:border-white/[0.12] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between border-b-2 border-b-zinc-900 cursor-pointer"
+              className="group rounded-2xl bg-zinc-900/80 p-5 sm:p-6 border border-white/[0.08] shadow-xs hover:border-white/[0.12] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between border-b-2 border-b-zinc-900 cursor-pointer"
             >
               <div>
                 <div className="flex items-center justify-between gap-3 mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-xl border border-white/[0.08] bg-[#1e293b] flex items-center justify-center shrink-0 shadow-2xs">
+                    <div className="h-10 w-10 rounded-xl border border-white/[0.08] bg-zinc-900 flex items-center justify-center shrink-0 shadow-2xs">
                       <LangLogo language={eco.name} />
                     </div>
                     <div>
@@ -137,7 +137,7 @@ export default function RankingsIndexPage() {
                       <span className="text-[11px] font-mono text-zinc-400">/rankings/{eco.slug}</span>
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono font-semibold bg-[#1e293b] text-zinc-300 px-2 py-0.5 rounded-md border border-white/[0.08]">
+                  <span className="text-[10px] font-mono font-semibold bg-zinc-900 text-zinc-300 px-2 py-0.5 rounded-md border border-white/[0.08]">
                     {eco.tag}
                   </span>
                 </div>

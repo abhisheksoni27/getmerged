@@ -145,7 +145,7 @@ export function TopicDirectoryGrid({
       {!isFiltering && trendingTopics.length > 0 && (
         <section
           aria-label="Trending Topics"
-          className="mb-6 p-4 rounded-none bg-[#111827] border border-white/[0.12] border-b shadow-sm"
+          className="mb-6 p-4 rounded-none bg-zinc-900/80 border border-white/[0.12] border-b shadow-sm"
         >
           <h2 className="text-xs font-mono font-bold text-zinc-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
             <TrendingUp className="h-3.5 w-3.5 text-emerald-600" /> Trending
@@ -158,7 +158,7 @@ export function TopicDirectoryGrid({
                 href={`/topics/${stat.name}`}
                 title={`Explore #${stat.name} repositories and contributor metrics`}
                 aria-label={`Explore trending topic #${stat.name}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-[#111827] hover:bg-emerald-950/70 border-emerald-800/80 text-zinc-100 border border-white/[0.12] font-sans text-xs font-bold transition-colors group"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-zinc-900/80 hover:bg-emerald-950/70 border-emerald-800/80 text-zinc-100 border border-white/[0.12] font-sans text-xs font-bold transition-colors group"
               >
                 #{stat.name}
                 <span className="font-mono text-[10px] text-zinc-400 group-hover:text-emerald-300">
@@ -183,14 +183,14 @@ export function TopicDirectoryGrid({
             onChange={(event) => handleQueryChange(event.target.value)}
             placeholder="Search topics..."
             aria-label="Search topics"
-            className="w-full pl-10 pr-9 py-2.5 rounded-none border border-white/[0.12] bg-[#111827] text-zinc-100 placeholder:text-zinc-400 font-sans font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-shadow shadow-sm"
+            className="w-full pl-10 pr-9 py-2.5 rounded-none border border-white/[0.12] bg-zinc-900/80 text-zinc-100 placeholder:text-zinc-400 font-sans font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-shadow shadow-sm"
           />
           {query && (
             <button
               type="button"
               onClick={() => setQuery("")}
               aria-label="Clear search"
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-none border border-white/[0.08] bg-[#111827] text-zinc-300 hover:bg-[#1e293b] transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-none border border-white/[0.08] bg-zinc-900/80 text-zinc-300 hover:bg-zinc-900 transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
@@ -220,7 +220,7 @@ export function TopicDirectoryGrid({
                 href={`/topics/${stat.name}`}
                 title={`Explore #${stat.name} repositories and contributor metrics`}
                 aria-label={`Explore #${stat.name} topic`}
-                className="group p-4 rounded-none border border-white/[0.12] border-b bg-[#111827] hover:bg-emerald-950/70 border-emerald-800/80 hover:-translate-y-0.5 transition-transform flex flex-col min-w-0"
+                className="group p-4 rounded-none border border-white/[0.12] border-b bg-zinc-900/80 hover:bg-emerald-950/70 border-emerald-800/80 hover:-translate-y-0.5 transition-transform flex flex-col min-w-0"
               >
                 <span className="flex items-start justify-between gap-2 min-w-0">
                   <span className="font-space text-sm sm:text-base font-extrabold text-zinc-100 truncate">
@@ -250,7 +250,7 @@ export function TopicDirectoryGrid({
                   )}
                   {responseLabel && (
                     <span
-                      className="px-2 py-0.5 rounded-none bg-[#1e293b] text-zinc-200 font-mono text-[11px] font-bold border border-white/[0.08]"
+                      className="px-2 py-0.5 rounded-none bg-zinc-900 text-zinc-200 font-mono text-[11px] font-bold border border-white/[0.08]"
                       title="Median time to first review"
                     >
                       {responseLabel} first review
@@ -262,7 +262,7 @@ export function TopicDirectoryGrid({
           })}
         </div>
       ) : (
-        <div className="p-8 text-center bg-[#111827] rounded-none border border-white/[0.12] border-b shadow-sm my-6">
+        <div className="p-8 text-center bg-zinc-900/80 rounded-none border border-white/[0.12] border-b shadow-sm my-6">
           <h3 className="font-space text-base font-bold text-zinc-100 mb-1">
             No topics match &quot;{query.trim()}&quot;
           </h3>
@@ -272,7 +272,7 @@ export function TopicDirectoryGrid({
           <button
             type="button"
             onClick={() => setQuery("")}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border border-white/[0.12] border-b bg-[#111827] text-zinc-100 font-sans text-sm font-bold hover:bg-[#1e293b] active:translate-y-0.5 active:border-b-2 transition-all focus:outline-none cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border border-white/[0.12] border-b bg-zinc-900/80 text-zinc-100 font-sans text-sm font-bold hover:bg-zinc-900 active:translate-y-0.5 active:border-b-2 transition-all focus:outline-none cursor-pointer"
           >
             Clear search
           </button>
@@ -289,7 +289,7 @@ export function TopicDirectoryGrid({
               aria-controls="topics-grid"
               aria-expanded={!hasMore}
               aria-label={`Show more topics, ${remainingCount.toLocaleString()} remaining`}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border border-white/[0.12] border-b bg-[#111827] text-zinc-100 font-sans text-sm font-bold hover:bg-emerald-950/70 border-emerald-800/80 active:translate-y-0.5 active:border-b-2 transition-all focus:outline-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border border-white/[0.12] border-b bg-zinc-900/80 text-zinc-100 font-sans text-sm font-bold hover:bg-emerald-950/70 border-emerald-800/80 active:translate-y-0.5 active:border-b-2 transition-all focus:outline-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {loadingMore ? (
                 <>

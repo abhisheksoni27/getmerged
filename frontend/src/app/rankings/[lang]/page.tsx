@@ -275,7 +275,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#0f172a] dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-zinc-950 dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"
@@ -299,15 +299,15 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
         <Link
           href="/rankings"
           title="Browse All Language Ecosystem Rankings"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111827] border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-6 font-sans shadow-2xs cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-6 font-sans shadow-2xs cursor-pointer"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> All Ecosystems
         </Link>
 
         {/* Hero Section */}
-        <div className="rounded-3xl bg-[#111827] p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-8 border-b border-white/[0.08]">
+        <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-8 border-b border-white/[0.08]">
           <div className="flex flex-wrap items-center gap-2 mb-3.5">
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-[#1e293b] px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
               <Trophy className="h-3.5 w-3.5 text-amber-400" /> Top Welcoming Repositories Index
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-xl bg-blue-950/70 border-blue-800/80 border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-300 font-mono">
@@ -337,7 +337,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             <Link
               href="/compare"
               title="Compare repository maintainer velocity"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#1e293b] border border-white/[0.08] px-4 py-2.5 text-xs font-semibold text-zinc-200 hover:bg-zinc-200 transition-all shadow-2xs cursor-pointer active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 border border-white/[0.08] px-4 py-2.5 text-xs font-semibold text-zinc-200 hover:bg-zinc-200 transition-all shadow-2xs cursor-pointer active:scale-[0.98]"
             >
               <GitPullRequest className="h-3.5 w-3.5 text-zinc-400" />
               Compare Two {languageName} Repos
@@ -347,22 +347,22 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
 
         {/* Ecosystem Live Telemetry Snapshot KPI Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-4 mb-8">
-          <div className="bg-[#111827] p-4 rounded-2xl border border-white/[0.08] shadow-2xs">
+          <div className="bg-zinc-900/80 p-4 rounded-2xl border border-white/[0.08] shadow-2xs">
             <div className="text-[11px] font-mono font-medium text-zinc-400 uppercase tracking-wider">Tracked Repos</div>
             <div className="mt-1 text-2xl font-bold font-space text-zinc-100">{rankedItems.length}</div>
             <div className="text-[11px] text-zinc-400 font-sans mt-0.5">&gt;100 stars verified</div>
           </div>
-          <div className="bg-[#111827] p-4 rounded-2xl border border-white/[0.08] shadow-2xs">
+          <div className="bg-zinc-900/80 p-4 rounded-2xl border border-white/[0.08] shadow-2xs">
             <div className="text-[11px] font-mono font-medium text-zinc-400 uppercase tracking-wider">Avg Merge Rate</div>
             <div className="mt-1 text-2xl font-bold font-space text-emerald-600">{avgMergeRate}%</div>
             <div className="text-[11px] text-zinc-400 font-sans mt-0.5">90-day external PRs</div>
           </div>
-          <div className="bg-[#111827] p-4 rounded-2xl border border-white/[0.08] shadow-2xs">
+          <div className="bg-zinc-900/80 p-4 rounded-2xl border border-white/[0.08] shadow-2xs">
             <div className="text-[11px] font-mono font-medium text-zinc-400 uppercase tracking-wider">Open GFIs</div>
             <div className="mt-1 text-2xl font-bold font-space text-zinc-100">{totalGFIs}</div>
             <div className="text-[11px] text-zinc-400 font-sans mt-0.5">Beginner friendly issues</div>
           </div>
-          <div className="bg-[#111827] p-4 rounded-2xl border border-white/[0.08] shadow-2xs">
+          <div className="bg-zinc-900/80 p-4 rounded-2xl border border-white/[0.08] shadow-2xs">
             <div className="text-[11px] font-mono font-medium text-zinc-400 uppercase tracking-wider">Welcoming Tier</div>
             <div className="mt-1 text-2xl font-bold font-space text-blue-600">{superWelcomingCount}</div>
             <div className="text-[11px] text-zinc-400 font-sans mt-0.5">S & A Tier maintainers</div>
@@ -388,7 +388,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
 
         {/* Repositories Table or Error State */}
         {isDataAbsentOrFailed ? (
-          <div className="rounded-2xl bg-[#111827] p-8 sm:p-12 text-center text-zinc-400 mb-12 border border-dashed border-red-200 shadow-xs">
+          <div className="rounded-2xl bg-zinc-900/80 p-8 sm:p-12 text-center text-zinc-400 mb-12 border border-dashed border-red-200 shadow-xs">
             <div className="mx-auto w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mb-4">
               <AlertTriangle className="h-6 w-6 text-red-500" />
             </div>
@@ -405,15 +405,15 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                 </span>
               )}
             </p>
-            <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 bg-[#1e293b] border border-white/[0.08] px-3 py-1.5 rounded-lg">
+            <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 bg-zinc-900 border border-white/[0.08] px-3 py-1.5 rounded-lg">
               <RefreshCw className="h-3.5 w-3.5 animate-spin text-zinc-400" />
               <span>Please retry in a few moments or run the snapshot pipeline.</span>
             </div>
           </div>
         ) : (
-          <div className="overflow-x-auto rounded-2xl bg-[#111827] border border-white/[0.08] shadow-xs mb-10 border-b-2 border-b-zinc-900">
+          <div className="overflow-x-auto rounded-2xl bg-zinc-900/80 border border-white/[0.08] shadow-xs mb-10 border-b-2 border-b-zinc-900">
             <table className="w-full text-left text-xs text-zinc-400">
-              <thead className="bg-[#1e293b] text-zinc-200 border-b border-white/[0.08] font-semibold uppercase tracking-wider font-space text-[11px]">
+              <thead className="bg-zinc-900 text-zinc-200 border-b border-white/[0.08] font-semibold uppercase tracking-wider font-space text-[11px]">
                 <tr>
                   <th className="py-3.5 px-4 text-center w-16">Rank</th>
                   <th className="py-3.5 px-4">Repository</th>
@@ -434,10 +434,10 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                       ? "bg-blue-950/80 border-blue-800/80 text-blue-300 border-blue-300"
                       : tier === "B"
                       ? "bg-amber-950/80 border-amber-800/80 text-amber-300 border-amber-300"
-                      : "bg-[#1e293b] text-zinc-200 border-white/[0.12]";
+                      : "bg-zinc-900 text-zinc-200 border-white/[0.12]";
 
                   return (
-                    <tr key={item.repo.id} className="hover:bg-[#1e293b]/70 transition-colors">
+                    <tr key={item.repo.id} className="hover:bg-zinc-900/70 transition-colors">
                       <td className="py-3.5 px-4 text-center font-bold text-zinc-400">
                         #{idx + 1}
                       </td>
@@ -501,7 +501,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
 
         {/* Contributing Strategy Guide for this Ecosystem */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-          <div className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs border-b border-white/[0.08]">
+          <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs border-b border-white/[0.08]">
             <h3 className="text-base font-bold text-zinc-100 mb-3 flex items-center gap-2 font-space">
               <Sparkles className="h-4 w-4 text-emerald-600" />
               How to Get Your {languageName} PR Merged
@@ -522,7 +522,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             </div>
           </div>
 
-          <div className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs border-b border-white/[0.08]">
+          <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs border-b border-white/[0.08]">
             <h3 className="text-base font-bold text-zinc-100 mb-3 flex items-center gap-2 font-space">
               <Trophy className="h-4 w-4 text-amber-500" />
               Top {languageName} Frameworks
@@ -531,35 +531,35 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
               <Link
                 href="/topics/android"
                 title="Browse open source Android repositories"
-                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-zinc-900 border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
               >
                 #android
               </Link>
               <Link
                 href="/topics/compose"
                 title="Browse open source Jetpack Compose repositories"
-                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-zinc-900 border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
               >
                 #compose-multiplatform
               </Link>
               <Link
                 href="/topics/ktor"
                 title="Browse open source Ktor repositories"
-                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-zinc-900 border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
               >
                 #ktor
               </Link>
               <Link
                 href="/topics/spring"
                 title="Browse open source Spring repositories"
-                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-zinc-900 border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
               >
                 #spring-boot
               </Link>
               <Link
                 href="/topics/coroutine"
                 title="Browse open source Kotlin Coroutines repositories"
-                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-zinc-900 border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
               >
                 #coroutines
               </Link>
@@ -571,7 +571,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
         </section>
 
         {/* SEO FAQ Section */}
-        <section className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs mb-10">
+        <section className="rounded-3xl bg-zinc-900/80 p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs mb-10">
           <h3 className="text-base font-bold text-zinc-100 mb-4 font-space">
             Frequently Asked Questions about {languageName} Open Source
           </h3>

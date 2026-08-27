@@ -80,7 +80,7 @@ export function LangDigestSignup({ language, languageName }: LangDigestSignupPro
   }
 
   return (
-    <section className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs">
+    <section className="rounded-3xl bg-zinc-900/80 p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs">
       <h3 className="text-base font-bold text-zinc-100 mb-1.5 flex items-center gap-2 font-space">
         <Mail className="h-4 w-4 text-sky-600" />
         Get this week&apos;s top welcoming repos + fresh Good First Issues for {languageName}

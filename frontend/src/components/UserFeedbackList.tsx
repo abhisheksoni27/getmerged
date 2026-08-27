@@ -45,7 +45,7 @@ export function UserFeedbackList({
 
   if (feedback.length === 0) {
     return (
-      <div className="rounded-3xl border border-dashed border-white/[0.12] bg-[#111827]/60 p-8 text-center font-sans">
+      <div className="rounded-3xl border border-dashed border-white/[0.12] bg-zinc-900/80/60 p-8 text-center font-sans">
         <p className="text-sm font-semibold text-zinc-200">No community reviews submitted yet</p>
         <p className="text-xs text-zinc-400 mt-1 max-w-sm mx-auto">
           Reviews left on repositories will appear here with ratings and sentiment telemetry.
@@ -59,7 +59,7 @@ export function UserFeedbackList({
       {feedback.map((item) => (
         <div
           key={item.id}
-          className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5 sm:p-6 shadow-2xs transition-all"
+          className="rounded-2xl border border-white/[0.08] bg-zinc-900/80 p-5 sm:p-6 shadow-2xs transition-all"
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
             <div className="flex items-center gap-2.5 min-w-0">
@@ -103,7 +103,7 @@ export function UserFeedbackList({
           </div>
 
           {/* Ratings Breakdown */}
-          <div className="grid grid-cols-3 gap-2 bg-[#1e293b] border border-white/[0.08] rounded-xl p-3 text-xs mb-3">
+          <div className="grid grid-cols-3 gap-2 bg-zinc-900 border border-white/[0.08] rounded-xl p-3 text-xs mb-3">
             <div>
               <span className="text-zinc-400 text-[11px] block">Maintainer</span>
               <div className="flex items-center gap-1 mt-0.5">
@@ -128,7 +128,7 @@ export function UserFeedbackList({
           </div>
 
           {item.comment && (
-            <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed italic bg-[#111827] border border-white/[0.08] rounded-xl p-3.5">
+            <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed italic bg-zinc-900/80 border border-white/[0.08] rounded-xl p-3.5">
               &ldquo;{item.comment}&rdquo;
             </p>
           )}

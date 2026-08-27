@@ -62,7 +62,7 @@ export default function NotificationPreferencesPage() {
         {saved && <span className="ml-2 text-emerald-600">Saved.</span>}
       </p>
 
-      <div className="mt-6 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#111827]">
+      <div className="mt-6 overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900/80">
         {CATEGORIES.map((cat, i) => {
           const on = isEnabled(prefs, cat);
           return (
@@ -82,10 +82,10 @@ export default function NotificationPreferencesPage() {
                 aria-checked={on}
                 disabled={busy}
                 onClick={() => toggle(cat)}
-                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? "bg-[#1e293b]" : "bg-zinc-300"}`}
+                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? "bg-zinc-900" : "bg-zinc-300"}`}
               >
                 <span
-                  className={`absolute top-0.5 h-5 w-5 rounded-full bg-[#111827] shadow transition-transform ${on ? "translate-x-5" : "translate-x-0.5"}`}
+                  className={`absolute top-0.5 h-5 w-5 rounded-full bg-zinc-900/80 shadow transition-transform ${on ? "translate-x-5" : "translate-x-0.5"}`}
                 />
               </button>
             </div>
