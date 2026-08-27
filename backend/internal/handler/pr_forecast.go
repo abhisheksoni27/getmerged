@@ -492,12 +492,10 @@ func renderPRForecastEmbed() string {
 	return buf.String()
 }
 
-var prForecastPageTemplate = template.Must(func() *template.Template {
-	t := template.New("prPage")
-	template.Must(t.Parse(`<!doctype html>
+var prForecastPageTemplate = template.Must(template.New("prPage").Parse(`<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OpenDoor — PR Merge Forecast</title>
+<title>OpenDoor PR Merge Forecast</title>
 <style>
 :root{color-scheme:light dark}
 *{box-sizing:border-box}
@@ -518,24 +516,15 @@ a{color:#58a6ff}
 .na{padding:40px;text-align:center;color:#9da7b3}
 </style></head>
 <body><div class="wrap">
-{{if .Invalid}}<div class="na"><h1>Invalid request</h1><p>owner, repo, and a PR number (1–999999) are required.</p></div>
+{{if .Invalid}}<div class="na"><h1>Invalid request</h1><p>owner, repo, and a PR number (1-999999) are required.</p></div>
 {{else if not .Available}}<div class="na"><h1>Merge forecast: N/A</h1><p>We couldn't compute a forecast for {{.Owner}}/{{.Repo}}#{{.PR}}. The PR may be private, deleted, or GitHub's rate limit is exhausted. Try again shortly.</p></div>
 {{else}}<h1>Merge Forecast for {{.Owner}}/{{.Repo}}#{{.PR}}</h1>
 <p class="sub">Computed by OpenDoor from the same signals shown below.</p>
 <div class="big" style="color:{{.ProbColor}}">{{.ProbPct}}%</div>
-<div class="rowsc">
-{{template "comp" .CIBlock}}
-{{template "comp" .RevBlock}}
-{{template "comp" .MergeBlock}}
-{{template "comp" .RecencyBlock}}
-{{template "comp" .SizeBlock}}
-</div>
+<div class="rowsc">{{.Components}}</div>
 <p style="margin-top:24px"><a href="{{.BadgeLink}}">Embed this forecast</a> in your PR description.</p>
 {{end}}
 </div></body></html>`))
-	template.Must(t.New("comp").Parse(`<div class="row"><div class="name">{{.Name}} · {{.Weight}}</div><div class="track"><div class="bar"><span style="width:{{.Pct}}%;background:{{.Color}}"></span></div></div><div class="pct">{{.Pct}}%</div><div class="tag">{{.Label}}</div></div>`))
-	return t
-}())
 
 type prForecastComp struct {
 	Name   string

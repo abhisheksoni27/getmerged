@@ -79,7 +79,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             </div>
           </Link>
 
-          <nav className="hidden xl:flex items-center gap-5 text-xs font-sans font-medium text-zinc-600 shrink-0">
+          <nav className="hidden 2xl:flex items-center gap-4 text-xs font-sans font-medium text-zinc-600 shrink-0">
             <Link href="/repos" title="Explore All Open Source Repositories" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Repositories
             </Link>
@@ -89,14 +89,11 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             <Link href="/rankings" title="Browse Top Open Source Repositories by Language Ecosystem" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Ecosystems
             </Link>
-            <Link href="/guides" title="Open Source Contribution Guides and Best Practices" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
-              Guides
-            </Link>
             <Link href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Good First Issues
             </Link>
-            <Link href="/hall-of-fame" title="View Top Super Welcoming Open Source Repositories" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
-              Hall of Fame
+            <Link href="/guides" title="Open Source Contribution Guides and Best Practices" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
+              Guides
             </Link>
             <Link href="/hacktoberfest" title="Hacktoberfest 2026 Welcome Hub & Live Merge Tracker" className="relative text-orange-600 hover:text-orange-700 font-bold transition-colors">
               Hacktoberfest
@@ -106,7 +103,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
 
         {/* Snapped Sticky Search Bar */}
         {isSearchVisible && (
-          <div className="flex-1 min-w-[160px] max-w-xs sm:max-w-sm md:max-w-md mx-1 sm:mx-3">
+          <div className="flex-1 min-w-[140px] max-w-xs sm:max-w-sm mx-1 sm:mx-2">
             <button
               type="button"
               onClick={handleOpenSearch}
