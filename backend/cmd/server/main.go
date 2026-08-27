@@ -241,6 +241,14 @@ func main() {
 	// Entitlement re-checked on every render; lapsed orgs 404 (AC5).
 	r.GET("/api/org-badge/:org", badgeRL, handler.GetOrgVerifiedBadgeSVG(claimSvc, cfg.AppBaseURL))
 
+	// Embeddable live 'Good First Issues' widget (item: embeddable GFI widget).
+	// Distinct /embed/gfi/:owner/:name subtree — never overlaps the static
+	// /badge or /api/badge routes, so no radix/wildcard conflict (AC1). Served
+	// from the gfi_handler live pipeline with a per-instance 300s cache +
+	// single-flight fetch (AC2/AC3).
+	embedRL := middleware.RateLimitPerIP(60, time.Minute)
+	r.GET("/embed/gfi/:owner/:name", embedRL, handler.GetGFIEmbedCard(gh, cfg.AppBaseURL))
+
 	// Public share-card routes: no auth to view (AC1), 30 req/min/IP rate limit
 	// and 24h CDN/Valkey cache with purge-on-revoke (AC2, AC4). Season-rank
 	// cards ("sr…" ids) resolve through the same pipeline (AC4).
