@@ -994,6 +994,31 @@ func AutoMigrate(db *sqlx.DB) error {
 			ip VARCHAR(64) NOT NULL,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`, autoInc),
+		// One-Click GitHub Issue Claiming (AC1-AC9): server-persisted claims
+		// keyed by (user, repo, issue) so a double-click/retry returns the
+		// existing row instead of erroring (AC5). State pending_review ->
+		// active tracks the AC4 'claimed' label confirmation.
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS issue_claims (
+			id INTEGER PRIMARY KEY %s,
+			user_id INTEGER NOT NULL,
+			repo_full_name VARCHAR(255) NOT NULL,
+			issue_number INTEGER NOT NULL,
+			issue_node_id VARCHAR(64) NOT NULL DEFAULT '',
+			github_comment_id BIGINT NOT NULL DEFAULT 0,
+			state VARCHAR(30) NOT NULL DEFAULT 'pending_review',
+			attribution_url VARCHAR(512) NOT NULL DEFAULT '',
+			label_added BOOLEAN NOT NULL DEFAULT FALSE,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(user_id, repo_full_name, issue_number)
+		);`, autoInc),
+		// AC9 abuse-throttle ledger: one row per actually-posted claim comment
+		// (max 10 per user per 10 min, server-side 429).
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS issue_claim_comment_log (
+			id INTEGER PRIMARY KEY %s,
+			user_id INTEGER NOT NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
 	}
 
 	for i, stmt := range statements {
@@ -1075,6 +1100,10 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_lang_digest_unsub ON lang_digest_subscribers(unsubscribed_at)`,
 		`CREATE INDEX IF NOT EXISTS idx_lang_digest_tokens_sub ON lang_digest_tokens(subscriber_id, purpose)`,
 		`CREATE INDEX IF NOT EXISTS idx_lang_digest_rate_limits_ip ON lang_digest_rate_limits(ip, created_at)`,
+		// One-Click Issue Claiming lookups (AC5, AC6, AC9).
+		`CREATE INDEX IF NOT EXISTS idx_issue_claims_user ON issue_claims(user_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_issue_claims_user_state ON issue_claims(user_id, state)`,
+		`CREATE INDEX IF NOT EXISTS idx_issue_claim_log_user_time ON issue_claim_comment_log(user_id, created_at)`,
 		// In-app notification center lookups
 		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_visible ON in_app_notifications(user_id, visible_at, id DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_unread ON in_app_notifications(user_id, visible_at, read_at)`,
