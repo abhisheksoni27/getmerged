@@ -296,7 +296,7 @@ func StripeRepoBoostWebhookHandler(cfg *config.Config, boostRepo repository.Repo
 				return
 			}
 			// AC3: activation only here, idempotent.
-			if err := boostRepo.ActivateRepoBoost(c.Request.Context(), piID, orderID, time.Now().UTC(), time.Duration(cfg.RepoBoostWindowDays)*24*time.Hour); err != nil {
+			if err := boostRepo.ActivateRepoBoost(c.Request.Context(), piID, orderID, time.Now().UTC(), cfg.RepoBoostWindowDays); err != nil {
 				slog.Error("repo boost webhook: activation failed", "pi", piID, "err", err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "activation failed"})
 				return
@@ -304,7 +304,7 @@ func StripeRepoBoostWebhookHandler(cfg *config.Config, boostRepo repository.Repo
 		case "charge.refunded", "payment_intent.canceled":
 			piID := evt.Data.Object.ID
 			if piID != "" {
-				_ = boostRepo.RefundRepoBoost(c.Request.Context(), piID, time.Now().UTC())
+				_, _ = boostRepo.CancelRepoBoost(c.Request.Context(), piID, time.Now().UTC())
 			}
 		default:
 			// AC6: unknown event types -> 200 ack no-op.
