@@ -617,6 +617,7 @@ func main() {
 
 		// Monthly Open-Source League ("Merge Madness")
 		r.GET("/api/v1/league/leaderboard", handler.GetLeagueLeaderboardHandler(leagueSvc))
+		r.GET("/api/badge/league/u/:username", handler.GetLeagueBadgeSVGHandler(leagueSvc))
 		userApi.GET("/league/progress", handler.GetLeagueProgressHandler(leagueSvc))
 
 		userApi.POST("/user/feedback", handler.CreateFeedback(database, cfg.GithubToken))

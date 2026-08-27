@@ -12,14 +12,15 @@ import (
 func GetLeagueLeaderboardHandler(s *league.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		limit, _ := strconv.Atoi(c.DefaultQuery("limit", "50"))
+		monthKey := c.Query("month")
 		repos, err := s.GetWelcomingReposLeaderboard(c.Request.Context(), limit)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch leaderboard"})
 			return
 		}
-		_, _, monthKey, monthName := s.GetActiveMonthRange()
+		_, _, key, monthName := s.GetMonthRange(monthKey)
 		c.JSON(http.StatusOK, gin.H{
-			"month":      monthKey,
+			"month":      key,
 			"month_name": monthName,
 			"repos":      repos,
 		})
@@ -46,5 +47,19 @@ func GetLeagueProgressHandler(s *league.Service) gin.HandlerFunc {
 			return
 		}
 		c.JSON(http.StatusOK, progress)
+	}
+}
+
+// GetLeagueBadgeSVGHandler returns dynamic SVG badge for README embed.
+func GetLeagueBadgeSVGHandler(s *league.Service) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		username := c.Param("username")
+		monthKey := c.DefaultQuery("month", "")
+		level := c.DefaultQuery("level", "Gold")
+
+		svg := s.GenerateSVGMonthlyBadge(username, monthKey, level)
+		c.Header("Content-Type", "image/svg+xml")
+		c.Header("Cache-Control", "public, max-age=3600")
+		c.String(http.StatusOK, svg)
 	}
 }

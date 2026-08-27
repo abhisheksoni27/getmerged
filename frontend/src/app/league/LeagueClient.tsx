@@ -7,8 +7,12 @@ import {
   ExternalLink,
   Flame,
   Share2,
+  Plus,
+  GitPullRequest,
+  Check,
 } from "lucide-react";
 import { CRankBadge } from "@/components/CRankBadge";
+import { API_BASE_URL } from "@/lib/api";
 
 export interface LeagueRepo {
   id: string;
@@ -25,11 +29,15 @@ export interface LeagueRepo {
 interface LeagueClientProps {
   initialRepos: LeagueRepo[];
   monthName: string;
+  currentMonth: string;
 }
 
-export function LeagueClient({ initialRepos, monthName }: LeagueClientProps) {
+export function LeagueClient({ initialRepos, monthName, currentMonth }: LeagueClientProps) {
   const [selectedLang, setSelectedLang] = useState<string>("all");
   const [copiedShare, setCopiedShare] = useState(false);
+  const [prUrl, setPrUrl] = useState("");
+  const [trackingMsg, setTrackingMsg] = useState<{ text: string; type: "success" | "error" } | null>(null);
+  const [trackingLoading, setTrackingLoading] = useState(false);
 
   const languages = useMemo(() => {
     const set = new Set<string>();
@@ -45,11 +53,45 @@ export function LeagueClient({ initialRepos, monthName }: LeagueClientProps) {
   }, [initialRepos, selectedLang]);
 
   const handleShare = () => {
-    const text = `Join the ${monthName} on GetMerged! Rank up on welcoming open-source repositories and earn verified Proof-of-Merge badges: https://getmerged.abhishekco.de/league`;
+    const text = `Join the ${monthName} (${currentMonth}) on GetMerged! Rank up on welcoming open-source repositories and earn verified Proof-of-Merge badges: https://getmerged.abhishekco.de/league`;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text);
       setCopiedShare(true);
       setTimeout(() => setCopiedShare(false), 2000);
+    }
+  };
+
+  const handleTrackPR = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!prUrl.trim()) return;
+    setTrackingLoading(true);
+    setTrackingMsg(null);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/user/prs/track`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ pr_url: prUrl.trim() }),
+      });
+
+      if (res.status === 401) {
+        setTrackingMsg({ text: "Please sign in with GitHub to track PRs toward your monthly sprint.", type: "error" });
+        return;
+      }
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        setTrackingMsg({ text: err.error || "Failed to track pull request.", type: "error" });
+        return;
+      }
+
+      setTrackingMsg({ text: "PR tracked successfully! It will count toward your monthly sprint badge.", type: "success" });
+      setPrUrl("");
+    } catch {
+      setTrackingMsg({ text: "Network error tracking PR.", type: "error" });
+    } finally {
+      setTrackingLoading(false);
     }
   };
 
@@ -112,6 +154,51 @@ export function LeagueClient({ initialRepos, monthName }: LeagueClientProps) {
             <p className="text-xs text-zinc-400 mt-1">Top-tier contributor status with verified Gold badge on your profile.</p>
           </div>
         </div>
+      </div>
+
+      {/* Live PR Quick-Tracker Form */}
+      <div className="glass-panel p-6 sm:p-8 rounded-2xl">
+        <div className="flex items-center gap-2 mb-2">
+          <GitPullRequest className="h-5 w-5 text-orange-400" />
+          <h2 className="text-lg font-bold font-space text-zinc-100">
+            Track PR for {monthName}
+          </h2>
+        </div>
+        <p className="text-xs text-zinc-400 mb-4">
+          Paste any public GitHub PR link to count it toward your monthly contributor sprint goal.
+        </p>
+
+        <form onSubmit={handleTrackPR} className="flex flex-col sm:flex-row gap-3">
+          <input
+            type="url"
+            value={prUrl}
+            onChange={(e) => setPrUrl(e.target.value)}
+            placeholder="https://github.com/facebook/react/pull/12345"
+            required
+            className="flex-1 rounded-xl bg-zinc-900/90 border border-white/[0.08] px-4 py-3 text-xs font-mono text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-white/[0.2]"
+          />
+          <button
+            type="submit"
+            disabled={trackingLoading}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500 hover:bg-orange-600 px-6 py-3 text-xs font-mono font-bold text-white transition-all disabled:opacity-50 cursor-pointer"
+          >
+            <Plus className="h-4 w-4" />
+            <span>{trackingLoading ? "Tracking..." : "Track PR"}</span>
+          </button>
+        </form>
+
+        {trackingMsg && (
+          <div
+            className={`mt-3 text-xs font-mono p-3 rounded-lg flex items-center gap-2 ${
+              trackingMsg.type === "success"
+                ? "bg-emerald-950/40 border border-emerald-500/20 text-emerald-400"
+                : "bg-rose-950/40 border border-rose-500/20 text-rose-400"
+            }`}
+          >
+            {trackingMsg.type === "success" ? <Check className="h-4 w-4" /> : null}
+            <span>{trackingMsg.text}</span>
+          </div>
+        )}
       </div>
 
       {/* Language Filter Bar */}
