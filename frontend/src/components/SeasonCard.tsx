@@ -51,7 +51,7 @@ export function SeasonCard() {
 
   if (loading) {
     return (
-      <div className="rounded-xl border-2 border-brand-dark bg-white p-5 shadow-[4px_4px_0px_#222831] mb-6 flex items-center gap-2 text-sm text-zinc-400 animate-pulse">
+      <div className="rounded-xl border-2 border-brand-dark bg-[#111827] p-5 shadow-sm mb-6 flex items-center gap-2 text-sm text-slate-400 animate-pulse">
         <Loader2 className="h-4 w-4 animate-spin" /> Loading your season…
       </div>
     );
@@ -80,9 +80,9 @@ export function SeasonCard() {
   }
 
   return (
-    <div className="rounded-xl border-2 border-brand-dark bg-white p-5 shadow-[4px_4px_0px_#222831] mb-6">
+    <div className="rounded-xl border-2 border-brand-dark bg-[#111827] p-5 shadow-sm mb-6">
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
+        <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
           <Trophy className="h-3.5 w-3.5 text-amber-500" /> Contributor Season · {s.season}
         </h2>
         <div className="flex items-center gap-2">
@@ -90,14 +90,14 @@ export function SeasonCard() {
             onClick={shareSeason}
             data-testid="share-season"
             title="Share your season-rank card"
-            className="inline-flex items-center gap-1 rounded-lg bg-zinc-900 px-2.5 py-1.5 text-[11px] font-semibold text-white hover:bg-zinc-800 cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-lg bg-[#1e293b] px-2.5 py-1.5 text-[11px] font-semibold text-white hover:bg-zinc-800 cursor-pointer"
           >
             <Share2 className="h-3 w-3" /> Share card
           </button>
           <Link
             href="/leaderboard"
             title="View the weekly contributor leaderboard"
-            className="inline-flex items-center rounded-lg border border-zinc-300 px-2.5 py-1.5 text-[11px] font-semibold text-zinc-700 hover:border-emerald-500 hover:text-emerald-700"
+            className="inline-flex items-center rounded-lg border border-slate-700 px-2.5 py-1.5 text-[11px] font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-400"
           >
             Leaderboard →
           </Link>
@@ -105,25 +105,25 @@ export function SeasonCard() {
       </div>
 
       <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="rounded-lg border-b-4 border-black bg-[#FDFBF7] px-3 py-2">
-          <div className="text-[10px] font-mono uppercase text-zinc-500">Level</div>
-          <div className="text-2xl font-extrabold font-mono text-zinc-900">{s.level}</div>
+        <div className="rounded-lg border-b border-black bg-[#FDFBF7] px-3 py-2">
+          <div className="text-[10px] font-mono uppercase text-slate-400">Level</div>
+          <div className="text-2xl font-extrabold font-mono text-slate-100">{s.level}</div>
         </div>
-        <div className="rounded-lg border-b-4 border-black bg-[#FDFBF7] px-3 py-2">
-          <div className="text-[10px] font-mono uppercase text-zinc-500">Season XP</div>
-          <div className="text-2xl font-extrabold font-mono text-emerald-700">{s.season_xp}</div>
+        <div className="rounded-lg border-b border-black bg-[#FDFBF7] px-3 py-2">
+          <div className="text-[10px] font-mono uppercase text-slate-400">Season XP</div>
+          <div className="text-2xl font-extrabold font-mono text-emerald-400">{s.season_xp}</div>
         </div>
-        <div className="rounded-lg border-b-4 border-black bg-[#FDFBF7] px-3 py-2">
-          <div className="text-[10px] font-mono uppercase text-zinc-500 flex items-center gap-1">
+        <div className="rounded-lg border-b border-black bg-[#FDFBF7] px-3 py-2">
+          <div className="text-[10px] font-mono uppercase text-slate-400 flex items-center gap-1">
             <Flame className="h-3 w-3 text-amber-500" /> Streak
           </div>
-          <div className="text-2xl font-extrabold font-mono text-zinc-900">
+          <div className="text-2xl font-extrabold font-mono text-slate-100">
             {s.streak_weeks}
-            <span className="text-xs font-semibold text-zinc-500">wk</span>
+            <span className="text-xs font-semibold text-slate-400">wk</span>
           </div>
         </div>
-        <div className="rounded-lg border-b-4 border-black bg-[#FDFBF7] px-3 py-2">
-          <div className="text-[10px] font-mono uppercase text-zinc-500">This week</div>
+        <div className="rounded-lg border-b border-black bg-[#FDFBF7] px-3 py-2">
+          <div className="text-[10px] font-mono uppercase text-slate-400">This week</div>
           <div className="text-2xl font-extrabold font-mono text-violet-700 flex items-center gap-1">
             <Zap className="h-4 w-4" />
             {s.weekly_xp}
@@ -131,7 +131,7 @@ export function SeasonCard() {
         </div>
       </div>
 
-      <p className="mt-3 text-xs text-zinc-500 font-mono">
+      <p className="mt-3 text-xs text-slate-400 font-mono">
         {s.level > 0 ? (
           <>
             {s.xp_to_next_level > 0 ? (

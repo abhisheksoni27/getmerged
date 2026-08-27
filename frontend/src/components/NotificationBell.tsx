@@ -90,7 +90,7 @@ export function NotificationBell({ user }: { user: User | null }) {
         title="Notifications"
         aria-label="Open notifications"
         onClick={() => setOpen((o) => !o)}
-        className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200/80 bg-white text-zinc-600 shadow-2xs transition-colors hover:text-zinc-900 hover:bg-zinc-50"
+        className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-800 bg-[#111827] text-slate-400 shadow-2xs transition-colors hover:text-slate-100 hover:bg-[#1e293b]"
       >
         <Bell className="h-4 w-4" />
         {unread > 0 && (
@@ -101,14 +101,14 @@ export function NotificationBell({ user }: { user: User | null }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-2 w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xl">
-          <div className="flex items-center justify-between border-b border-zinc-100 px-4 py-3">
+        <div className="absolute right-0 z-50 mt-2 w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border border-slate-800 bg-[#111827] shadow-xl">
+          <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3">
             <div className="flex items-center gap-2">
-              <span className="font-sans text-sm font-semibold text-zinc-900">
+              <span className="font-sans text-sm font-semibold text-slate-100">
                 Notifications
               </span>
               {live && (
-                <span className="flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-600">
+                <span className="flex items-center gap-1 rounded-full bg-emerald-950/70 border-emerald-800/80 px-2 py-0.5 text-[10px] font-medium text-emerald-600">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> live
                 </span>
               )}
@@ -118,7 +118,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 type="button"
                 title="Notification settings"
                 onClick={() => setShowPrefs((s) => !s)}
-                className="rounded-lg p-1.5 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800"
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-[#1e293b] hover:text-slate-200"
               >
                 <Settings2 className="h-4 w-4" />
               </button>
@@ -126,7 +126,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 type="button"
                 title="Mark all read"
                 onClick={() => void markRead([], true)}
-                className="rounded-lg p-1.5 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800"
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-[#1e293b] hover:text-slate-200"
               >
                 <Check className="h-4 w-4" />
               </button>
@@ -134,7 +134,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 type="button"
                 title="Close"
                 onClick={() => setOpen(false)}
-                className="rounded-lg p-1.5 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800"
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-[#1e293b] hover:text-slate-200"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -142,8 +142,8 @@ export function NotificationBell({ user }: { user: User | null }) {
           </div>
 
           {showPrefs && (
-            <div className="border-b border-zinc-100 bg-zinc-50/60 px-4 py-3">
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
+            <div className="border-b border-slate-800 bg-[#1e293b]/60 px-4 py-3">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
                 In-app notifications
               </p>
               <div className="space-y-1.5">
@@ -152,7 +152,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                   return (
                     <label
                       key={cat}
-                      className="flex cursor-pointer items-center justify-between gap-3 text-xs text-zinc-700"
+                      className="flex cursor-pointer items-center justify-between gap-3 text-xs text-slate-300"
                     >
                       <span>{CATEGORY_LABELS[cat].label}</span>
                       <input
@@ -166,13 +166,13 @@ export function NotificationBell({ user }: { user: User | null }) {
                   );
                 })}
               </div>
-              <p className="mt-2 text-[10px] text-zinc-400">
+              <p className="mt-2 text-[10px] text-slate-400">
                 In-app alerts are independent of email, Slack &amp; Discord.
               </p>
               <Link
                 href="/settings/notifications"
                 onClick={() => setOpen(false)}
-                className="mt-1 inline-block text-[10px] font-medium text-zinc-500 underline hover:text-zinc-800"
+                className="mt-1 inline-block text-[10px] font-medium text-slate-400 underline hover:text-slate-200"
               >
                 Manage all notification settings
               </Link>
@@ -183,7 +183,7 @@ export function NotificationBell({ user }: { user: User | null }) {
             <Link
               href="/pricing"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-2 bg-amber-50 px-4 py-2 text-[11px] font-medium text-amber-700 hover:bg-amber-100"
+              className="flex items-center gap-2 bg-amber-950/70 border-amber-800/80 px-4 py-2 text-[11px] font-medium text-amber-700 hover:bg-amber-950/80 border-amber-800/80"
             >
               <Zap className="h-3.5 w-3.5" />
               Upgrade for instant notifications
@@ -193,18 +193,18 @@ export function NotificationBell({ user }: { user: User | null }) {
           <div className="max-h-[420px] overflow-y-auto">
             {error ? (
               <div className="flex flex-col items-center gap-2 px-4 py-10 text-center">
-                <p className="text-sm text-zinc-500">Couldn&apos;t load notifications.</p>
+                <p className="text-sm text-slate-400">Couldn&apos;t load notifications.</p>
                 <button
                   type="button"
                   onClick={() => void refresh()}
-                  className="rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-800"
+                  className="rounded-lg bg-[#1e293b] px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-800"
                 >
                   Retry
                 </button>
               </div>
             ) : items.length === 0 ? (
               <div className="px-4 py-10 text-center">
-                <p className="text-sm text-zinc-500">No notifications yet</p>
+                <p className="text-sm text-slate-400">No notifications yet</p>
               </div>
             ) : (
               <ul className="divide-y divide-zinc-100">
@@ -214,7 +214,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                       <Link
                         href={n.payload.link_url}
                         onClick={() => onItemClick(n.id, n.payload.link_url || "")}
-                        className="block px-4 py-3 transition-colors hover:bg-zinc-50"
+                        className="block px-4 py-3 transition-colors hover:bg-[#1e293b]"
                       >
                         <NotificationRow n={n} />
                       </Link>
@@ -222,7 +222,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                       <button
                         type="button"
                         onClick={() => onItemClick(n.id, "")}
-                        className="block w-full px-4 py-3 text-left transition-colors hover:bg-zinc-50"
+                        className="block w-full px-4 py-3 text-left transition-colors hover:bg-[#1e293b]"
                       >
                         <NotificationRow n={n} />
                       </button>
@@ -234,12 +234,12 @@ export function NotificationBell({ user }: { user: User | null }) {
           </div>
 
           {hasMore && !error && (
-            <div className="border-t border-zinc-100 px-4 py-2 text-center">
+            <div className="border-t border-slate-800 px-4 py-2 text-center">
               <button
                 type="button"
                 onClick={() => void loadMore()}
                 disabled={loading}
-                className="text-xs font-medium text-zinc-600 hover:text-zinc-900"
+                className="text-xs font-medium text-slate-400 hover:text-slate-100"
               >
                 {loading ? "Loading…" : "Load more"}
               </button>
@@ -258,9 +258,9 @@ function NotificationRow({ n }: { n: { payload: { title: string; message: string
         className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${n.read ? "bg-transparent" : "bg-rose-400"}`}
       />
       <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-zinc-900">{n.payload.title}</p>
-        <p className="line-clamp-2 text-xs text-zinc-500">{n.payload.message}</p>
-        <p className="mt-0.5 text-[10px] text-zinc-400">{timeAgo(n.created_at)}</p>
+        <p className="truncate text-sm font-medium text-slate-100">{n.payload.title}</p>
+        <p className="line-clamp-2 text-xs text-slate-400">{n.payload.message}</p>
+        <p className="mt-0.5 text-[10px] text-slate-400">{timeAgo(n.created_at)}</p>
       </div>
     </div>
   );

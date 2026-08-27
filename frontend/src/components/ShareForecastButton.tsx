@@ -178,14 +178,14 @@ export function ShareForecastButton({
           title="Sharing is disabled for private repositories to protect code confidentiality"
           className={
             variant === "compact"
-              ? `inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed opacity-60 ${className}`
-              : `inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-100 border-2 border-zinc-300 text-zinc-400 font-mono font-bold text-xs uppercase tracking-wider cursor-not-allowed opacity-60 ${className}`
+              ? `inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-[#1e293b] text-slate-400 border border-slate-800 cursor-not-allowed opacity-60 ${className}`
+              : `inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1e293b] border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs uppercase tracking-wider cursor-not-allowed opacity-60 ${className}`
           }
         >
           <Lock className="h-3.5 w-3.5" />
           <span>Share result</span>
         </button>
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-30 w-56 p-2 bg-zinc-900 text-white text-[11px] font-sans rounded-lg shadow-lg text-center">
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-30 w-56 p-2 bg-[#1e293b] text-white text-[11px] font-sans rounded-lg shadow-lg text-center">
           Sharing is disabled for private repositories to protect code confidentiality.
         </div>
       </div>
@@ -202,7 +202,7 @@ export function ShareForecastButton({
           role="status"
           aria-live="polite"
           data-testid="share-toast"
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-zinc-900 text-white text-xs font-mono font-semibold px-4 py-2.5 rounded-xl border border-zinc-700 shadow-xl transition-all animate-bounce"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#1e293b] text-white text-xs font-mono font-semibold px-4 py-2.5 rounded-xl border border-zinc-700 shadow-xl transition-all animate-bounce"
         >
           <Check className="h-4 w-4 text-emerald-400" />
           <span>{toastMessage}</span>
@@ -216,9 +216,9 @@ export function ShareForecastButton({
           data-testid="share-result-btn"
           aria-label={`Share forecast result for ${repoFullName}`}
           title="Share forecast result (X & LinkedIn intents)"
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-zinc-100 text-zinc-800 border border-zinc-300 hover:bg-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 active:scale-[0.98] ${className}`}
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-[#1e293b] text-slate-200 border border-slate-700 hover:bg-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 active:scale-[0.98] ${className}`}
         >
-          {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5 text-zinc-600" />}
+          {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5 text-slate-400" />}
           <span>{copied ? "Copied Link!" : "Share result"}</span>
         </button>
       ) : (
@@ -228,9 +228,9 @@ export function ShareForecastButton({
           data-testid="share-result-btn"
           aria-label={`Share forecast result for ${repoFullName}`}
           title="Share forecast result (X & LinkedIn intents)"
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border-2 border-brand-dark text-zinc-900 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-50 active:scale-[0.98] transition-all shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer ${className}`}
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#111827] border-2 border-brand-dark text-slate-100 font-mono font-bold text-xs uppercase tracking-wider hover:bg-[#1e293b] active:scale-[0.98] transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer ${className}`}
         >
-          {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Share2 className="h-4 w-4 text-zinc-700" />}
+          {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Share2 className="h-4 w-4 text-slate-300" />}
           <span>{copied ? "URL Copied to Clipboard!" : "Share result"}</span>
         </button>
       )}
@@ -242,24 +242,24 @@ export function ShareForecastButton({
           onClick={() => setOpenModal(false)}
         >
           <div
-            className="w-full max-w-md rounded-2xl bg-white border-2 border-brand-dark p-6 shadow-[6px_6px_0px_#222831] font-sans"
+            className="w-full max-w-md rounded-2xl bg-[#111827] border-2 border-brand-dark p-6 shadow-sm font-sans"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-3 border-b border-zinc-100 mb-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
               <div className="flex items-center gap-2">
                 <Share2 className="h-4 w-4 text-emerald-600" />
-                <h3 className="font-space font-bold text-base text-zinc-900">Share PR Evaluation</h3>
+                <h3 className="font-space font-bold text-base text-slate-100">Share PR Evaluation</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setOpenModal(false)}
-                className="text-zinc-400 hover:text-zinc-600 text-sm font-mono font-bold"
+                className="text-slate-400 hover:text-slate-400 text-sm font-mono font-bold"
               >
                 ✕
               </button>
             </div>
 
-            <p className="text-xs text-zinc-600 mb-4 font-sans">
+            <p className="text-xs text-slate-400 mb-4 font-sans">
               Social share card generated with C-Rank attribution and referral credits.
             </p>
 
@@ -269,7 +269,7 @@ export function ShareForecastButton({
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="share-x-intent"
-                className="flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-black text-white text-xs font-mono font-bold transition-all shadow-sm"
+                className="flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-[#1e293b] hover:bg-black text-white text-xs font-mono font-bold transition-all shadow-sm"
               >
                 <span>Share on X (Twitter)</span>
                 <ExternalLink className="h-3.5 w-3.5" />
@@ -287,8 +287,8 @@ export function ShareForecastButton({
               </a>
             </div>
 
-            <div className="pt-3 border-t border-zinc-100">
-              <label className="block text-[11px] font-mono font-bold text-zinc-500 uppercase mb-1">
+            <div className="pt-3 border-t border-slate-800">
+              <label className="block text-[11px] font-mono font-bold text-slate-400 uppercase mb-1">
                 Direct Share Link (with referral attribution)
               </label>
               <div className="flex items-center gap-2">
@@ -296,7 +296,7 @@ export function ShareForecastButton({
                   readOnly
                   value={destinationUrl}
                   onFocus={(e) => e.currentTarget.select()}
-                  className="flex-1 min-w-0 rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs font-mono text-zinc-700"
+                  className="flex-1 min-w-0 rounded-xl border border-slate-700 bg-[#1e293b] px-3 py-2 text-xs font-mono text-slate-300"
                 />
                 <button
                   type="button"
@@ -308,7 +308,7 @@ export function ShareForecastButton({
                       setTimeout(() => setCopied(false), 2000);
                     }
                   }}
-                  className="px-3 py-2 rounded-xl bg-zinc-100 border border-zinc-300 hover:bg-zinc-200 text-xs font-mono font-bold text-zinc-800 flex items-center gap-1 shrink-0"
+                  className="px-3 py-2 rounded-xl bg-[#1e293b] border border-slate-700 hover:bg-zinc-200 text-xs font-mono font-bold text-slate-200 flex items-center gap-1 shrink-0"
                 >
                   {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
                   <span>{copied ? "Copied" : "Copy"}</span>

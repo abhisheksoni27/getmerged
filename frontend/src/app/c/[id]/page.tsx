@@ -90,20 +90,20 @@ export default async function ShareCardPage({ params }: PageProps) {
       <Header />
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         <div className="text-center mb-8">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-semibold font-mono mb-4 shadow-2xs">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border-emerald-800/80 border border-emerald-300 text-emerald-300 text-xs font-semibold font-mono mb-4 shadow-2xs">
             <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
             Verified Hacktoberfest Completion Card
           </span>
-          <h1 className="text-3xl sm:text-4xl font-bold font-space text-zinc-900 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold font-space text-slate-100 tracking-tight">
             {card.repo_full_name}
           </h1>
-          <p className="mt-2 text-sm text-zinc-600 font-sans max-w-xl mx-auto">
+          <p className="mt-2 text-sm text-slate-400 font-sans max-w-xl mx-auto">
             {card.summary || "All 4 Hacktoberfest pull requests merged and verified on GitHub."}
           </p>
         </div>
 
-        <div className="rounded-3xl bg-white p-4 sm:p-8 border border-zinc-200/80 shadow-md mb-8">
-          <div className="relative rounded-2xl overflow-hidden border border-zinc-200 shadow-sm bg-zinc-950 aspect-[1200/630]">
+        <div className="rounded-3xl bg-[#111827] p-4 sm:p-8 border border-slate-800 shadow-md mb-8">
+          <div className="relative rounded-2xl overflow-hidden border border-slate-800 shadow-sm bg-[#0f172a] aspect-[1200/630]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={ogUrl}
@@ -112,8 +112,8 @@ export default async function ShareCardPage({ params }: PageProps) {
             />
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-zinc-100">
-            <div className="flex items-center gap-2 text-xs font-mono text-zinc-500">
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-slate-800">
+            <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
               <CheckCircle2 className="h-4 w-4 text-emerald-600" />
               <span>Verified On-Chain / GitHub Search API</span>
             </div>
@@ -121,7 +121,7 @@ export default async function ShareCardPage({ params }: PageProps) {
             <div className="flex items-center gap-3">
               <Link
                 href="/hacktoberfest"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-zinc-900 text-white text-xs font-semibold hover:bg-zinc-800 transition-colors shadow-xs"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1e293b] text-white text-xs font-semibold hover:bg-zinc-800 transition-colors shadow-xs"
               >
                 Track Your Merges <ArrowRight className="h-3.5 w-3.5" />
               </Link>

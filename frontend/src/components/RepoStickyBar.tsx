@@ -73,7 +73,7 @@ export function RepoStickyBar({
 
   return (
     <div
-      className={`sticky top-16 z-40 w-full bg-[#0f172a]/95 backdrop-blur-md border-b-2 border-zinc-900 shadow-sm transition-all duration-300 ${
+      className={`sticky top-16 z-40 w-full bg-[#0f172a]/95 backdrop-blur-md border-b-2 border-slate-700 shadow-sm transition-all duration-300 ${
         visible ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-3 pointer-events-none"
       }`}
     >
@@ -87,24 +87,24 @@ export function RepoStickyBar({
               alt={owner}
               width={26}
               height={26}
-              className="w-6.5 h-6.5 rounded-lg border border-zinc-300 bg-zinc-100 object-cover shrink-0"
+              className="w-6.5 h-6.5 rounded-lg border border-slate-700 bg-[#1e293b] object-cover shrink-0"
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
               }}
             />
             <div className="flex items-center gap-2 min-w-0">
-              <span className="font-space font-bold text-xs sm:text-sm text-zinc-950 truncate max-w-[200px] sm:max-w-[360px]">
+              <span className="font-space font-bold text-xs sm:text-sm text-slate-50 truncate max-w-[200px] sm:max-w-[360px]">
                 {fullName}
               </span>
               <span
-                className={`inline-flex items-center px-2 py-0.5 font-mono text-[10px] font-bold rounded-md border border-black text-black ${getRankBadgeBg(
+                className={`inline-flex items-center px-2 py-0.5 font-mono text-[10px] font-bold rounded-md border border-black text-slate-100 ${getRankBadgeBg(
                   rank
                 )}`}
               >
                 {rankLabel}
               </span>
               {typeof repo?.stars === "number" && (
-                <span className="inline-flex items-center gap-1 font-mono text-[10px] font-semibold text-zinc-600">
+                <span className="inline-flex items-center gap-1 font-mono text-[10px] font-semibold text-slate-400">
                   <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                   {repo.stars >= 1000 ? `${(repo.stars / 1000).toFixed(1)}k` : repo.stars}
                 </span>
@@ -119,13 +119,13 @@ export function RepoStickyBar({
               onClick={onWatchToggle}
               disabled={watchLoading}
               title={isWatching ? "Watching repository" : "Watch repository"}
-              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all border border-zinc-900 cursor-pointer ${
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all border border-slate-700 cursor-pointer ${
                 isWatching
-                  ? "bg-amber-100 text-amber-900 hover:bg-amber-200"
-                  : "bg-white text-zinc-800 hover:bg-zinc-100"
+                  ? "bg-amber-950/80 border-amber-800/80 text-amber-300 hover:bg-amber-200"
+                  : "bg-[#111827] text-slate-200 hover:bg-[#1e293b]"
               }`}
             >
-              <Bookmark className={`h-3 w-3 ${isWatching ? "fill-amber-500 text-amber-600" : "text-zinc-600"}`} />
+              <Bookmark className={`h-3 w-3 ${isWatching ? "fill-amber-500 text-amber-600" : "text-slate-400"}`} />
               <span className="hidden sm:inline">{isWatching ? "Watching" : "Watch"}</span>
             </button>
             <a
@@ -133,7 +133,7 @@ export function RepoStickyBar({
               target="_blank"
               rel="noopener noreferrer"
               title={`View ${fullName} on GitHub`}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-zinc-950 text-white hover:bg-zinc-800 transition-colors border border-black"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-[#0f172a] text-white hover:bg-zinc-800 transition-colors border border-black"
             >
               <GitPullRequest className="h-3 w-3" />
               <span>GitHub</span>
@@ -158,11 +158,11 @@ export function RepoStickyBar({
                 title={`Jump to ${tab.label}`}
                 className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono transition-all shrink-0 cursor-pointer ${
                   isActive
-                    ? "bg-[#ffd93d] text-zinc-950 font-bold border-2 border-black shadow-[2px_2px_0px_#000]"
-                    : "bg-white text-zinc-700 hover:bg-zinc-100 border border-zinc-300 font-medium hover:text-black"
+                    ? "bg-[#ffd93d] text-slate-50 font-bold border border-slate-700 shadow-sm"
+                    : "bg-[#111827] text-slate-300 hover:bg-[#1e293b] border border-slate-700 font-medium hover:text-slate-100"
                 }`}
               >
-                <Icon className={`h-3 w-3 ${isActive ? "text-black font-bold" : "text-zinc-500"}`} />
+                <Icon className={`h-3 w-3 ${isActive ? "text-slate-100 font-bold" : "text-slate-400"}`} />
                 <span>{tab.label}</span>
               </button>
             );

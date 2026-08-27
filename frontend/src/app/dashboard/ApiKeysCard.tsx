@@ -101,22 +101,22 @@ export function ApiKeysCard() {
   const revokedKeys = data?.keys.filter((k) => k.revoked_at) ?? [];
 
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-[2px_2px_0px_#000]/5">
+    <div className="rounded-xl border border-slate-800 bg-[#111827] p-5 shadow-sm/5">
       <div className="flex items-start justify-between gap-4 mb-3">
         <div>
-          <h2 className="text-lg font-bold text-zinc-900 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
             <KeyRound className="h-5 w-5 text-emerald-600" /> Public API Keys
           </h2>
-          <p className="text-xs text-zinc-500 mt-1">
+          <p className="text-xs text-slate-400 mt-1">
             Build bots, dashboards, and CI checks on C-Rank™ data. Send{" "}
-            <code className="rounded bg-zinc-100 px-1 py-0.5 text-[11px]">Authorization: Bearer &lt;key&gt;</code> to{" "}
-            <Link href="/docs" className="text-emerald-700 font-semibold hover:underline">
+            <code className="rounded bg-[#1e293b] px-1 py-0.5 text-[11px]">Authorization: Bearer &lt;key&gt;</code> to{" "}
+            <Link href="/docs" className="text-emerald-400 font-semibold hover:underline">
               /docs endpoints
             </Link>
             . Free tier: 60 req/hour + 10/min burst · Pro: 600 req/hour + 100/min burst.
           </p>
         </div>
-        <span className="shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-semibold text-zinc-600">
+        <span className="shrink-0 rounded-full bg-[#1e293b] px-2 py-0.5 text-[11px] font-semibold text-slate-400">
           {data?.is_pro
             ? `Pro · ${data?.limits.pro_hourly_requests ?? 600}/hour`
             : `Free · ${data?.limits.free_hourly_requests ?? 60}/hour`}
@@ -125,13 +125,13 @@ export function ApiKeysCard() {
 
       {/* One-time key reveal */}
       {freshKey && (
-        <div className="mb-4 rounded-lg border border-emerald-300 bg-emerald-50 p-3">
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-900 mb-2">
+        <div className="mb-4 rounded-lg border border-emerald-300 bg-emerald-950/70 border-emerald-800/80 p-3">
+          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-300 mb-2">
             <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
             Copy your key now - it will never be shown again.
           </div>
           <div className="flex items-center gap-2">
-            <code className="flex-1 truncate rounded-md bg-white border border-emerald-200 px-2 py-1.5 text-xs text-zinc-800">
+            <code className="flex-1 truncate rounded-md bg-[#111827] border border-emerald-200 px-2 py-1.5 text-xs text-slate-200">
               {freshKey}
             </code>
             <button
@@ -150,7 +150,7 @@ export function ApiKeysCard() {
       )}
 
       {loading ? (
-        <div className="py-4 text-sm text-zinc-400 animate-pulse">Loading keys…</div>
+        <div className="py-4 text-sm text-slate-400 animate-pulse">Loading keys…</div>
       ) : (
         <>
           {activeKeys.length > 0 && (
@@ -158,11 +158,11 @@ export function ApiKeysCard() {
               {activeKeys.map((k) => (
                 <li
                   key={k.id}
-                  className="flex items-center justify-between gap-3 rounded-lg border border-zinc-200 px-3 py-2"
+                  className="flex items-center justify-between gap-3 rounded-lg border border-slate-800 px-3 py-2"
                 >
                   <div className="min-w-0">
-                    <div className="text-sm font-semibold text-zinc-800 truncate">{k.name}</div>
-                    <div className="text-[11px] text-zinc-500">
+                    <div className="text-sm font-semibold text-slate-200 truncate">{k.name}</div>
+                    <div className="text-[11px] text-slate-400">
                       <code>{k.key_prefix}…</code> · created {new Date(k.created_at).toLocaleDateString()}
                       {k.last_used_at && <> · last used {new Date(k.last_used_at).toLocaleDateString()}</>}
                     </div>
@@ -178,7 +178,7 @@ export function ApiKeysCard() {
             </ul>
           )}
           {revokedKeys.length > 0 && (
-            <p className="mb-3 text-[11px] text-zinc-400">
+            <p className="mb-3 text-[11px] text-slate-400">
               {revokedKeys.length} revoked key{revokedKeys.length > 1 ? "s" : ""} hidden.
             </p>
           )}
@@ -189,12 +189,12 @@ export function ApiKeysCard() {
               placeholder={`Key name (e.g. "ci-bot")`}
               maxLength={64}
               disabled={activeKeys.length >= 5}
-              className="flex-1 rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-800 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:opacity-50"
+              className="flex-1 rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:opacity-50"
             />
             <button
               onClick={createKey}
               disabled={creating || activeKeys.length >= 5}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#1e293b] px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 cursor-pointer whitespace-nowrap"
             >
               <Plus className="h-3.5 w-3.5" />
               {activeKeys.length >= 5 ? "Key limit reached (5)" : "Generate key"}

@@ -44,7 +44,7 @@ export default function NotificationPreferencesPage() {
   if (!prefs) {
     return (
       <main className="mx-auto max-w-2xl px-4 py-12">
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-slate-400">
           {error ? "Couldn't load preferences." : "Loading…"}
         </p>
       </main>
@@ -53,28 +53,28 @@ export default function NotificationPreferencesPage() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-12">
-      <h1 className="font-space text-2xl font-bold text-zinc-900">
+      <h1 className="font-space text-2xl font-bold text-slate-100">
         Notification preferences
       </h1>
-      <p className="mt-1 text-sm text-zinc-500">
+      <p className="mt-1 text-sm text-slate-400">
         In-app alerts are independent of email, Slack &amp; Discord. Muted
         categories are excluded from your feed and live stream.
         {saved && <span className="ml-2 text-emerald-600">Saved.</span>}
       </p>
 
-      <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+      <div className="mt-6 overflow-hidden rounded-2xl border border-slate-800 bg-[#111827]">
         {CATEGORIES.map((cat, i) => {
           const on = isEnabled(prefs, cat);
           return (
             <div
               key={cat}
-              className={`flex items-center justify-between gap-4 px-4 py-4 ${i > 0 ? "border-t border-zinc-100" : ""}`}
+              className={`flex items-center justify-between gap-4 px-4 py-4 ${i > 0 ? "border-t border-slate-800" : ""}`}
             >
               <div>
-                <p className="text-sm font-medium text-zinc-900">
+                <p className="text-sm font-medium text-slate-100">
                   {CATEGORY_LABELS[cat].label}
                 </p>
-                <p className="text-xs text-zinc-500">{CATEGORY_LABELS[cat].hint}</p>
+                <p className="text-xs text-slate-400">{CATEGORY_LABELS[cat].hint}</p>
               </div>
               <button
                 type="button"
@@ -82,10 +82,10 @@ export default function NotificationPreferencesPage() {
                 aria-checked={on}
                 disabled={busy}
                 onClick={() => toggle(cat)}
-                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? "bg-zinc-900" : "bg-zinc-300"}`}
+                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? "bg-[#1e293b]" : "bg-zinc-300"}`}
               >
                 <span
-                  className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${on ? "translate-x-5" : "translate-x-0.5"}`}
+                  className={`absolute top-0.5 h-5 w-5 rounded-full bg-[#111827] shadow transition-transform ${on ? "translate-x-5" : "translate-x-0.5"}`}
                 />
               </button>
             </div>

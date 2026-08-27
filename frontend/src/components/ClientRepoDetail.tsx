@@ -389,26 +389,26 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
           <Link
             href="/"
             title="Return to GetMerged Explorer Home"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-zinc-900 transition-colors mb-8"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-slate-400 hover:text-slate-100 transition-colors mb-8"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Back to Explorer
           </Link>
 
-          <div className="rounded-2xl border border-rose-200 bg-rose-50/40 p-8 sm:p-10 shadow-sm text-center">
+          <div className="rounded-2xl border border-rose-200 bg-rose-950/70 border-rose-800/80/40 p-8 sm:p-10 shadow-sm text-center">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-100 border border-rose-200 text-rose-600 mb-5">
               <AlertCircle className="h-7 w-7" />
             </div>
 
-            <span className="inline-block rounded-full bg-rose-100 px-3 py-1 font-mono text-xs font-bold text-rose-800 mb-3">
+            <span className="inline-block rounded-full bg-rose-100 px-3 py-1 font-mono text-xs font-bold text-rose-300 mb-3">
               Repository Not Found
             </span>
 
-            <h1 className="text-2xl sm:text-3xl font-bold font-mono text-zinc-900 mb-3">
+            <h1 className="text-2xl sm:text-3xl font-bold font-mono text-slate-100 mb-3">
               {fullName}
             </h1>
 
-            <p className="text-sm text-zinc-600 max-w-lg mx-auto leading-relaxed mb-8">
+            <p className="text-sm text-slate-400 max-w-lg mx-auto leading-relaxed mb-8">
               This repository does not exist on GitHub or is private. Please verify the owner and repository name.
             </p>
 
@@ -416,7 +416,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               <Link
                 href="/"
                 title="Return to GetMerged Explorer Home"
-                className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
+                className="inline-flex items-center gap-2 rounded-full bg-[#1e293b] px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to Explorer
@@ -432,26 +432,26 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-zinc-900 transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-xs font-mono text-slate-400 hover:text-slate-100 transition-colors mb-8"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Explorer
         </Link>
 
-        <div className="rounded-2xl border border-zinc-200 bg-white p-8 sm:p-10 shadow-sm text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 mb-5">
+        <div className="rounded-2xl border border-slate-800 bg-[#111827] p-8 sm:p-10 shadow-sm text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-950/70 border-amber-800/80 border border-amber-200 text-amber-600 mb-5">
             <Activity className="h-7 w-7" />
           </div>
 
-          <span className="inline-block rounded-full bg-amber-100 px-3 py-1 font-mono text-xs font-bold text-amber-800 mb-3">
+          <span className="inline-block rounded-full bg-amber-950/80 border-amber-800/80 px-3 py-1 font-mono text-xs font-bold text-amber-300 mb-3">
             Indexing in Progress
           </span>
 
-          <h1 className="text-2xl sm:text-3xl font-bold font-mono text-zinc-900 mb-3">
+          <h1 className="text-2xl sm:text-3xl font-bold font-mono text-slate-100 mb-3">
             {fullName}
           </h1>
 
-          <p className="text-sm text-zinc-600 max-w-lg mx-auto leading-relaxed mb-8">
+          <p className="text-sm text-slate-400 max-w-lg mx-auto leading-relaxed mb-8">
             This repository is currently in our indexing queue. Our telemetry engine will analyze maintainer response speeds and PR merge rates in our next processing run.
           </p>
 
@@ -460,7 +460,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               <button
                 onClick={handleWatchToggle}
                 disabled={watchLoading}
-                className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
+                className="inline-flex items-center gap-2 rounded-full bg-[#1e293b] px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
               >
                 <Bookmark className="h-4 w-4 text-amber-400" />
                 {isWatching ? "Watching Repo" : "Watch Repo for Updates"}
@@ -473,7 +473,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                   "indexing_watch"
                 )}
                 title="Sign in to get notification updates"
-                className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-full bg-[#1e293b] px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs cursor-pointer"
               >
                 <Lock className="h-4 w-4 text-amber-400" />
                 Sign in to Get Notified
@@ -485,7 +485,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               target="_blank"
               rel="nofollow noopener noreferrer"
               title={`View ${fullName} on GitHub`}
-              className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-white px-6 py-3 text-xs font-mono font-medium text-zinc-700 hover:bg-zinc-50 transition-all"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-[#111827] px-6 py-3 text-xs font-mono font-medium text-slate-300 hover:bg-[#1e293b] transition-all"
             >
               <GitPullRequest className="h-4 w-4" />
               View on GitHub
@@ -534,7 +534,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 text-xs font-sans text-zinc-500 hover:text-zinc-900 transition-colors mb-4"
+          className="inline-flex items-center gap-1.5 text-xs font-sans text-slate-400 hover:text-slate-100 transition-colors mb-4"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Explorer
@@ -566,7 +566,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
 
           {/* In-Page Quick Navigation Tabs Bar */}
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-2 px-1 mb-2">
-            <span className="text-xs font-mono text-zinc-500 font-bold shrink-0 mr-1 flex items-center gap-1">
+            <span className="text-xs font-mono text-slate-400 font-bold shrink-0 mr-1 flex items-center gap-1">
               Jump to:
             </span>
             {tabs.map((tab) => {
@@ -578,13 +578,13 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                   type="button"
                   onClick={() => scrollToSection(tab.id)}
                   title={`Scroll to ${tab.label}`}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all shrink-0 cursor-pointer border border-slate-700 ${
                     isActive
-                      ? "bg-[#ffd93d] text-zinc-950 shadow-[2px_2px_0px_#000]"
-                      : "bg-white text-zinc-800 hover:bg-[#fff9db] hover:shadow-[2px_2px_0px_#000]"
+                      ? "bg-[#ffd93d] text-slate-50 shadow-sm"
+                      : "bg-[#111827] text-slate-200 hover:bg-slate-800 hover:shadow-sm"
                   }`}
                 >
-                  <Icon className={`h-3.5 w-3.5 ${isActive ? "text-black" : "text-zinc-600"}`} />
+                  <Icon className={`h-3.5 w-3.5 ${isActive ? "text-slate-100" : "text-slate-400"}`} />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -639,24 +639,24 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       {insights && (
         <motion.section
           id="guidelines"
-          className="scroll-mt-36 relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-5 sm:p-6 shadow-[5px_5px_0px_#222831] overflow-hidden mb-10"
+          className="scroll-mt-36 relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-5 sm:p-6 shadow-sm overflow-hidden mb-10"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
         >
           <div className="flex items-center gap-2 mb-4">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-zinc-950 shadow-[2px_2px_0px_#222831] -rotate-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-slate-50 shadow-sm -rotate-2">
               <Sparkles className="h-4 w-4" />
             </div>
-            <h2 className="font-space text-base font-extrabold text-zinc-950">
+            <h2 className="font-space text-base font-extrabold text-slate-50">
               AI Maintainer Review Guidelines
             </h2>
           </div>
 
           <div className="space-y-6 pt-2 font-sans">
             {/* Persona Overview Banner */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border-2 border-brand-dark bg-zinc-950 text-white shadow-[3px_3px_0px_#222831]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border-2 border-brand-dark bg-[#0f172a] text-white shadow-sm">
               <div>
                 <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
                   Review Persona
@@ -668,19 +668,19 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t-2 sm:border-t-0 sm:border-l-2 border-white/30 pt-2 sm:pt-0 sm:pl-4">
                 {insights.warmth_score != null && insights.warmth_score > 0 && (
                   <div>
-                    <div className="text-zinc-400 text-[10px]">Warmth Score</div>
+                    <div className="text-slate-400 text-[10px]">Warmth Score</div>
                     <div className="text-emerald-400 font-bold text-sm">{insights.warmth_score.toFixed(1)}/10</div>
                   </div>
                 )}
                 {insights.patience_score != null && insights.patience_score > 0 && (
                   <div>
-                    <div className="text-zinc-400 text-[10px]">Patience Score</div>
+                    <div className="text-slate-400 text-[10px]">Patience Score</div>
                     <div className="text-blue-400 font-bold text-sm">{insights.patience_score.toFixed(1)}/10</div>
                   </div>
                 )}
                 {insights.nitpick_ratio != null && insights.nitpick_ratio > 0 && (
                   <div>
-                    <div className="text-zinc-400 text-[10px]">Nitpick Rate</div>
+                    <div className="text-slate-400 text-[10px]">Nitpick Rate</div>
                     <div className="text-amber-400 font-bold text-sm">{(insights.nitpick_ratio * 100).toFixed(0)}%</div>
                   </div>
                 )}
@@ -689,8 +689,8 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
 
             {/* Description */}
             {insights.maintainer_vibe && (
-              <div className="p-4 rounded-xl border-2 border-brand-dark bg-white shadow-[2px_2px_0px_#222831]">
-                <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed">
+              <div className="p-4 rounded-xl border-2 border-brand-dark bg-[#111827] shadow-sm">
+                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
                   {insights.maintainer_vibe}
                 </p>
               </div>
@@ -709,13 +709,13 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                     : section.body.split(/\n+/).map(s => s.trim()).filter(Boolean);
 
                   return (
-                    <div key={idx} className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+                    <div key={idx} className="rounded-xl border-2 border-brand-dark bg-[#111827] p-4 shadow-sm">
                       <h4 className="text-xs font-mono font-bold text-indigo-900 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
                         <Quote className="h-3.5 w-3.5 text-indigo-500" />
                         {section.title}
                       </h4>
                       {items.length > 1 ? (
-                        <ul className="space-y-2 text-xs sm:text-sm text-zinc-800 leading-relaxed font-sans">
+                        <ul className="space-y-2 text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
                           {items.map((item, itemIdx) => (
                             <li key={itemIdx} className="flex items-start gap-2">
                               <span className="text-indigo-600 font-bold font-mono shrink-0 select-none">•</span>
@@ -724,7 +724,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                           ))}
                         </ul>
                       ) : (
-                        <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed whitespace-pre-line">
+                        <p className="text-xs sm:text-sm text-slate-200 leading-relaxed whitespace-pre-line">
                           {section.body}
                         </p>
                       )}
@@ -739,8 +739,8 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
                 {/* Do's */}
                 {insights.top_dos && insights.top_dos.length > 0 && (
-                  <div className="rounded-xl border-2 border-brand-dark bg-emerald-100 p-4 shadow-[3px_3px_0px_#222831]">
-                    <h4 className="text-xs font-mono font-bold text-emerald-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <div className="rounded-xl border-2 border-brand-dark bg-emerald-950/80 border-emerald-800/80 p-4 shadow-sm">
+                    <h4 className="text-xs font-mono font-bold text-emerald-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                       <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                       Top PR Submission Do&apos;s
                     </h4>
@@ -757,8 +757,8 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
 
                 {/* Don'ts */}
                 {insights.top_donts && insights.top_donts.length > 0 && (
-                  <div className="rounded-xl border-2 border-brand-dark bg-rose-100 p-4 shadow-[3px_3px_0px_#222831]">
-                    <h4 className="text-xs font-mono font-bold text-rose-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <div className="rounded-xl border-2 border-brand-dark bg-rose-100 p-4 shadow-sm">
+                    <h4 className="text-xs font-mono font-bold text-rose-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                       <AlertCircle className="h-4 w-4 text-rose-600" />
                       Top PR Friction Pitfalls (Don&apos;ts)
                     </h4>
@@ -844,7 +844,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       {/* Good First Issues Cards (Story 10.2 & Story 10.3) */}
       <motion.section
         id="good-first-issues"
-        className="scroll-mt-36 rounded-2xl bg-white p-4 sm:p-5 mb-10 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] font-mono"
+        className="scroll-mt-36 rounded-2xl bg-[#111827] p-4 sm:p-5 mb-10 border-2 border-brand-dark shadow-sm font-mono"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
@@ -852,17 +852,17 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <div className="flex items-center gap-3">
-            <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
+            <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-emerald-600" /> Active Good First Issues ({gfiList.length > 0 ? gfiList.length : (repo?.good_first_issue_count ?? 0)})
             </h3>
-            <div className="inline-flex rounded-xl bg-zinc-100 p-0.5 border border-zinc-200 text-xs font-mono">
+            <div className="inline-flex rounded-xl bg-[#1e293b] p-0.5 border border-slate-800 text-xs font-mono">
               <button
                 type="button"
                 onClick={() => setGfiTab("all")}
                 className={`px-2.5 py-1 rounded-lg transition-colors font-semibold ${
                   gfiTab === "all"
-                    ? "bg-white text-zinc-900 shadow-2xs"
-                    : "text-zinc-500 hover:text-zinc-900"
+                    ? "bg-[#111827] text-slate-100 shadow-2xs"
+                    : "text-slate-400 hover:text-slate-100"
                 }`}
               >
                 All
@@ -873,7 +873,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                 className={`px-2.5 py-1 rounded-lg transition-colors font-semibold flex items-center gap-1 ${
                   gfiTab === "paid"
                     ? "bg-emerald-600 text-white shadow-2xs"
-                    : "text-zinc-500 hover:text-emerald-700"
+                    : "text-slate-400 hover:text-emerald-400"
                 }`}
               >
                 <span>💰 Paid</span>
@@ -885,7 +885,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             target="_blank"
             rel="noopener noreferrer"
             title="View open good first issues on GitHub"
-            className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1"
+            className="text-xs text-emerald-600 hover:text-emerald-400 font-semibold inline-flex items-center gap-1"
           >
             View on GitHub <ArrowRight className="h-3 w-3" />
           </a>
@@ -906,17 +906,17 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               return (
                 <div
                   key={issue.id}
-                  className="p-4 sm:p-5 rounded-lg border border-zinc-200/90 bg-white hover:border-emerald-500 hover:-translate-y-px hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                  className="p-4 sm:p-5 rounded-lg border border-slate-800 bg-[#111827] hover:border-emerald-500 hover:-translate-y-px hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       {issueNumber && (
-                        <span className="font-mono text-xs font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/80">
+                        <span className="font-mono text-xs font-semibold text-emerald-300 bg-emerald-950/70 border-emerald-800/80 px-2 py-0.5 rounded border border-emerald-200/80">
                           #{issueNumber}
                         </span>
                       )}
                       {issue.is_bounty && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 border border-emerald-300 text-[11px] font-mono font-bold text-emerald-900">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-950/80 border-emerald-800/80 border border-emerald-300 text-[11px] font-mono font-bold text-emerald-300">
                           💰 {issue.bounty_amount ? `$${issue.bounty_amount.toFixed(2)}` : "Bounty"}
                         </span>
                       )}
@@ -930,18 +930,18 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                         target="_blank"
                         rel="noopener noreferrer"
                         title={`Open #${issueNumber || ""} ${issue.title} on GitHub`}
-                        className="text-sm sm:text-base font-medium text-zinc-900 group-hover:text-emerald-700 transition-colors line-clamp-2 flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:ring-offset-2 active:scale-[0.99]"
+                        className="text-sm sm:text-base font-medium text-slate-100 group-hover:text-emerald-400 transition-colors line-clamp-2 flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:ring-offset-2 active:scale-[0.99]"
                       >
                         <span>🎯 {issue.title}</span>
                         <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 text-emerald-600" />
                       </a>
                     </div>
                     {issue.body_text && (
-                      <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">
+                      <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
                         {issue.body_text}
                       </p>
                     )}
-                    <div className="flex items-center gap-3 mt-2 text-[11px] font-mono text-zinc-600 flex-wrap">
+                    <div className="flex items-center gap-3 mt-2 text-[11px] font-mono text-slate-400 flex-wrap">
                       {dateStr && <span>📅 Opened {dateStr}</span>}
                       {issue.comments_count !== undefined && (
                         <span>💬 {issue.comments_count} {issue.comments_count === 1 ? "comment" : "comments"}</span>
@@ -950,7 +950,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                   </div>
                   <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
                     {issue.quality_score !== undefined && issue.quality_score > 0 && (
-                      <span className="text-[11px] font-mono font-bold bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-lg border border-emerald-200/80">
+                      <span className="text-[11px] font-mono font-bold bg-emerald-950/70 border-emerald-800/80 text-emerald-300 px-2.5 py-1 rounded-lg border border-emerald-200/80">
                         Quality: {issue.quality_score}/100
                       </span>
                     )}
@@ -959,7 +959,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                       target="_blank"
                       rel="noopener noreferrer"
                       title={`Contribute to ${issue.title} on GitHub`}
-                      className="px-3 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1 transition-all active:scale-[0.99]"
+                      className="px-3 py-1 rounded-lg bg-[#1e293b] hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1 transition-all active:scale-[0.99]"
                     >
                       Contribute <ArrowRight className="h-3 w-3" />
                     </a>
@@ -969,26 +969,26 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             })}
           </div>
         ) : (
-          <div className="bg-zinc-50/60 border border-zinc-200/80 rounded-lg p-6 text-center text-zinc-600 font-sans">
-            <p className="text-xs text-zinc-600">
+          <div className="bg-[#1e293b]/60 border border-slate-800 rounded-lg p-6 text-center text-slate-400 font-sans">
+            <p className="text-xs text-slate-400">
               {gfiTab === "paid" ? (
                 <>No cash-bounty issues currently open for <strong>{fullName}</strong>.</>
               ) : repo?.good_first_issue_count ? (
                 <>
                   This repository currently has <strong>{repo.good_first_issue_count}</strong> open{" "}
-                  <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700 font-mono">good first issue</code> tickets available for newcomers.
+                  <code className="bg-emerald-950/70 border-emerald-800/80 px-1.5 py-0.5 rounded text-emerald-400 font-mono">good first issue</code> tickets available for newcomers.
                 </>
               ) : (
                 <>No cached good first issues currently tracked for <strong>{fullName}</strong>.</>
               )}
             </p>
-            <p className="text-xs text-zinc-500 mt-2">
+            <p className="text-xs text-slate-400 mt-2">
               <a
                 href={`https://github.com/${fullName}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2Cgood-first-issue`}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="View all good first issues directly on GitHub"
-                className="text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1 underline underline-offset-2"
+                className="text-emerald-600 hover:text-emerald-400 font-semibold inline-flex items-center gap-1 underline underline-offset-2"
               >
                 View all good first issues directly on GitHub <ArrowRight className="h-3 w-3 inline" />
               </a>
@@ -997,12 +997,12 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
         )}
 
         {repo?.language && (
-          <div className="pt-3 mt-3 border-t border-zinc-100 flex items-center justify-between font-sans">
-            <span className="text-[11px] text-zinc-500">Looking for more {repo.language} beginner tasks?</span>
+          <div className="pt-3 mt-3 border-t border-slate-800 flex items-center justify-between font-sans">
+            <span className="text-[11px] text-slate-400">Looking for more {repo.language} beginner tasks?</span>
             <Link
               href={`/good-first-issue/${getLanguageSlug(repo.language)}`}
               title={`Explore all ${repo.language} Good First Issues on GetMerged`}
-              className="text-xs font-bold text-emerald-700 hover:text-emerald-800 inline-flex items-center gap-1 hover:underline"
+              className="text-xs font-bold text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1 hover:underline"
             >
               Explore {repo.language} GFI <ArrowRight className="h-3 w-3" />
             </Link>
@@ -1014,7 +1014,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       {/* Issues #6, #7, #8: Contributor Community Feedback & Verification Module */}
       <motion.section
         id="community-feedback"
-        className="scroll-mt-36 rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-orange-100 via-white to-yellow-100 p-5 sm:p-8 shadow-[5px_5px_0px_#222831] mb-10 font-sans"
+        className="scroll-mt-36 rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-orange-100 via-white to-yellow-100 p-5 sm:p-8 shadow-sm mb-10 font-sans"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
@@ -1022,13 +1022,13 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b-2 border-brand-dark pb-5">
           <div>
-            <h2 className="text-xl sm:text-2xl font-extrabold font-space text-zinc-950 flex items-center gap-2.5">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-blue-200 shadow-[2px_2px_0px_#222831] -rotate-2">
+            <h2 className="text-xl sm:text-2xl font-extrabold font-space text-slate-50 flex items-center gap-2.5">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-blue-200 shadow-sm -rotate-2">
                 <Users className="h-5 w-5 text-blue-950 shrink-0" />
               </span>
               Contributor Community Vibe Feedback
             </h2>
-            <p className="text-sm text-zinc-600 mt-1 leading-relaxed">
+            <p className="text-sm text-slate-400 mt-1 leading-relaxed">
               Rate what actually matters after opening a pull request here.
             </p>
           </div>
@@ -1037,9 +1037,9 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               <span
                 id="auth-provider-badge"
                 data-testid="auth-provider-badge"
-                className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-emerald-950 bg-emerald-200 px-3.5 py-1.5 rounded-lg border-2 border-brand-dark shadow-[2px_2px_0px_#222831] shrink-0"
+                className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-emerald-950 bg-emerald-200 px-3.5 py-1.5 rounded-lg border-2 border-brand-dark shadow-sm shrink-0"
               >
-                <ShieldCheck className="h-4 w-4 text-emerald-700" />
+                <ShieldCheck className="h-4 w-4 text-emerald-400" />
                 Signed in with GitHub
               </span>
             ) : (
@@ -1047,7 +1047,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                 id="auth-provider-badge"
                 data-testid="auth-provider-badge"
                 href={`${API_BASE_URL}/api/v1/auth/github`}
-                className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-amber-950 bg-amber-200 hover:bg-amber-300 px-3.5 py-1.5 rounded-lg border-2 border-brand-dark shadow-[2px_2px_0px_#222831] transition-colors shrink-0 cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-amber-950 bg-amber-200 hover:bg-amber-300 px-3.5 py-1.5 rounded-lg border-2 border-brand-dark shadow-sm transition-colors shrink-0 cursor-pointer"
                 title="Link GitHub account to verify contributor status"
               >
                 <ShieldCheck className="h-4 w-4 text-amber-700" />
@@ -1066,17 +1066,17 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                   "feedback_verify"
                 )
               }
-              className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-zinc-900 bg-zinc-100 hover:bg-zinc-200 px-3.5 py-1.5 rounded-lg border-2 border-brand-dark shadow-[2px_2px_0px_#222831] transition-colors cursor-pointer shrink-0"
+              className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-slate-100 bg-[#1e293b] hover:bg-zinc-200 px-3.5 py-1.5 rounded-lg border-2 border-brand-dark shadow-sm transition-colors cursor-pointer shrink-0"
               title="Sign in with GitHub to verify contributor status"
             >
-              <ShieldCheck className="h-4 w-4 text-zinc-600" />
+              <ShieldCheck className="h-4 w-4 text-slate-400" />
               Sign in to verify
             </button>
           )}
         </div>
 
         {/* Interactive Contributor Feedback Form / Thank You Widget */}
-        <div className="rounded-2xl border-2 border-brand-dark bg-white p-5 sm:p-6 shadow-[3px_3px_0px_#222831] overflow-hidden relative">
+        <div className="rounded-2xl border-2 border-brand-dark bg-[#111827] p-5 sm:p-6 shadow-sm overflow-hidden relative">
           {feedbackSubmitted && submittedScores ? (
             <div className="relative overflow-hidden rounded-xl border-2 border-brand-dark p-6 sm:p-8 animate-in zoom-in-95 duration-500 transition-all">
               {/* Dynamic Theme Gradients & Floating Particles Based on Rating */}
@@ -1113,7 +1113,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
               {/* Main Badge & Title */}
               <div className="flex flex-col items-center text-center space-y-4 relative z-10">
                 <div className="relative">
-                  <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl border-3 border-brand-dark bg-white shadow-[4px_4px_0px_#222831] flex items-center justify-center -rotate-3 hover:rotate-0 transition-transform">
+                  <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl border-3 border-brand-dark bg-[#111827] shadow-sm flex items-center justify-center -rotate-3 hover:rotate-0 transition-transform">
                     {submittedScores.avg >= 4.5 ? (
                       <Flame className="h-9 w-9 sm:h-11 sm:w-11 text-amber-500 animate-pulse fill-amber-400" />
                     ) : submittedScores.avg >= 3.5 ? (
@@ -1132,7 +1132,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                 </div>
 
                 <div className="space-y-1">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-brand-dark bg-white text-[11px] font-mono font-extrabold uppercase tracking-wider shadow-[2px_2px_0px_#222831]">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-brand-dark bg-[#111827] text-[11px] font-mono font-extrabold uppercase tracking-wider shadow-sm">
                     {submittedScores.avg >= 4.5
                       ? "🏆 Legendary Maintainer Vibes"
                       : submittedScores.avg >= 3.5
@@ -1142,11 +1142,11 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                       : "🚨 Tough Onboarding Curve"}
                   </div>
 
-                  <h3 className="text-2xl sm:text-3xl font-extrabold font-space text-zinc-950 tracking-tight">
+                  <h3 className="text-2xl sm:text-3xl font-extrabold font-space text-slate-50 tracking-tight">
                     Thank You for Scoring {fullName.split("/")[1] || fullName}!
                   </h3>
 
-                  <p className="text-xs sm:text-sm font-sans text-zinc-700 max-w-md mx-auto leading-relaxed">
+                  <p className="text-xs sm:text-sm font-sans text-slate-300 max-w-md mx-auto leading-relaxed">
                     {isVerifiedContributor
                       ? "Verified Contributor! Your review is confirmed by your public commit history on this repository."
                       : "Thank you! Your ratings have been recorded to help guide future community contributors."}
@@ -1155,21 +1155,21 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
 
                 {/* Scorecard Visual Breakdown */}
                 <div className="grid grid-cols-3 gap-2 sm:gap-4 w-full max-w-md pt-2">
-                  <div className="rounded-xl border-2 border-brand-dark bg-white/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-[2px_2px_0px_#222831]">
-                    <span className="text-[10px] font-mono uppercase text-zinc-500 block">Helpfulness</span>
-                    <span className="text-base sm:text-lg font-space font-extrabold text-zinc-950 flex items-center justify-center gap-1 mt-0.5">
+                  <div className="rounded-xl border-2 border-brand-dark bg-[#111827]/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-sm">
+                    <span className="text-[10px] font-mono uppercase text-slate-400 block">Helpfulness</span>
+                    <span className="text-base sm:text-lg font-space font-extrabold text-slate-50 flex items-center justify-center gap-1 mt-0.5">
                       {submittedScores.maintainer} <Star className="h-3 w-3 fill-yellow-400 text-brand-dark inline" />
                     </span>
                   </div>
-                  <div className="rounded-xl border-2 border-brand-dark bg-white/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-[2px_2px_0px_#222831]">
-                    <span className="text-[10px] font-mono uppercase text-zinc-500 block">Speed</span>
-                    <span className="text-base sm:text-lg font-space font-extrabold text-zinc-950 flex items-center justify-center gap-1 mt-0.5">
+                  <div className="rounded-xl border-2 border-brand-dark bg-[#111827]/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-sm">
+                    <span className="text-[10px] font-mono uppercase text-slate-400 block">Speed</span>
+                    <span className="text-base sm:text-lg font-space font-extrabold text-slate-50 flex items-center justify-center gap-1 mt-0.5">
                       {submittedScores.speed} <Star className="h-3 w-3 fill-yellow-400 text-brand-dark inline" />
                     </span>
                   </div>
-                  <div className="rounded-xl border-2 border-brand-dark bg-white/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-[2px_2px_0px_#222831]">
-                    <span className="text-[10px] font-mono uppercase text-zinc-500 block">Beginner</span>
-                    <span className="text-base sm:text-lg font-space font-extrabold text-zinc-950 flex items-center justify-center gap-1 mt-0.5">
+                  <div className="rounded-xl border-2 border-brand-dark bg-[#111827]/90 backdrop-blur-xs p-2.5 sm:p-3 text-center shadow-sm">
+                    <span className="text-[10px] font-mono uppercase text-slate-400 block">Beginner</span>
+                    <span className="text-base sm:text-lg font-space font-extrabold text-slate-50 flex items-center justify-center gap-1 mt-0.5">
                       {submittedScores.beginner} <Star className="h-3 w-3 fill-yellow-400 text-brand-dark inline" />
                     </span>
                   </div>
@@ -1177,9 +1177,9 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
 
                 {/* Optional Comment Display if provided */}
                 {submittedScores.comment && (
-                  <div className="w-full max-w-md rounded-xl border-2 border-brand-dark bg-white/80 p-3 text-left shadow-[2px_2px_0px_#222831]">
-                    <span className="text-[10px] font-mono uppercase font-bold text-zinc-500 block mb-1">Your review note:</span>
-                    <p className="text-xs font-sans text-zinc-800 italic">
+                  <div className="w-full max-w-md rounded-xl border-2 border-brand-dark bg-[#111827]/80 p-3 text-left shadow-sm">
+                    <span className="text-[10px] font-mono uppercase font-bold text-slate-400 block mb-1">Your review note:</span>
+                    <p className="text-xs font-sans text-slate-200 italic">
                       &quot;{submittedScores.comment}&quot;
                     </p>
                   </div>
@@ -1195,7 +1195,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                       setReviewSpeedRating(submittedScores.speed);
                       setBeginnerRating(submittedScores.beginner);
                     }}
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-dark bg-white px-4 py-2 text-xs font-mono font-bold text-zinc-900 shadow-[2px_2px_0px_#222831] hover:bg-zinc-50 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-dark bg-[#111827] px-4 py-2 text-xs font-mono font-bold text-slate-100 shadow-sm hover:bg-[#1e293b] hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
                   >
                     <RefreshCw className="h-3.5 w-3.5" />
                     Update or Edit Ratings
@@ -1207,14 +1207,14 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
             <>
               <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between mb-5">
                 <div>
-                  <h3 className="font-space text-sm font-extrabold text-zinc-950 uppercase tracking-wider">
+                  <h3 className="font-space text-sm font-extrabold text-slate-50 uppercase tracking-wider">
                     Score this repo
                   </h3>
-                  <p className="text-xs text-zinc-600 mt-1">
+                  <p className="text-xs text-slate-400 mt-1">
                     Three taps.
                   </p>
                 </div>
-                <span className="inline-flex w-fit rounded-lg border-2 border-brand-dark bg-brand-cream px-3 py-1 text-[10px] font-mono font-extrabold text-brand-dark shadow-[2px_2px_0px_#222831]">
+                <span className="inline-flex w-fit rounded-lg border-2 border-brand-dark bg-brand-cream px-3 py-1 text-[10px] font-mono font-extrabold text-brand-dark shadow-sm">
                   {allFeedbackRatingsSelected ? "Ready to submit" : "3 ratings required"}
                 </span>
               </div>
@@ -1237,9 +1237,9 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                     setValue: setBeginnerRating,
                   },
                 ].map((rating) => (
-                  <div key={rating.label} className="rounded-xl border-2 border-brand-dark bg-[#0f172a] p-3 shadow-[2px_2px_0px_#222831]">
+                  <div key={rating.label} className="rounded-xl border-2 border-brand-dark bg-[#0f172a] p-3 shadow-sm">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <span className="font-mono text-xs font-bold text-zinc-900">
+                      <span className="font-mono text-xs font-bold text-slate-100">
                         {rating.label}
                       </span>
                       <div className="flex items-center gap-1.5" role="radiogroup" aria-label={rating.label}>
@@ -1249,10 +1249,10 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                             type="button"
                             onClick={() => rating.setValue(star)}
                             aria-label={`${rating.label}: ${star} star${star === 1 ? "" : "s"}`}
-                             className={`rounded-lg border-2 border-brand-dark p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center shadow-[1px_1px_0px_#222831] transition-all cursor-pointer ${
+                             className={`rounded-lg border-2 border-brand-dark p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center shadow-sm transition-all cursor-pointer ${
                                rating.value >= star
-                                 ? "bg-yellow-300 text-zinc-950 scale-105"
-                                 : "bg-zinc-100 text-zinc-500 hover:bg-yellow-100 hover:text-zinc-700"
+                                 ? "bg-yellow-300 text-slate-50 scale-105"
+                                 : "bg-[#1e293b] text-slate-400 hover:bg-yellow-100 hover:text-slate-300"
                              }`}
                           >
                             <Star className={`h-4 w-4 ${rating.value >= star ? "fill-current" : ""}`} />
@@ -1265,14 +1265,14 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
 
                 {allFeedbackRatingsSelected && (
                   <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                    <label className="block text-xs font-mono font-bold text-zinc-700 uppercase tracking-wider mb-2">
+                    <label className="block text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-2">
                       Optional context
                     </label>
                     <textarea
                       id="feedback-comment"
                       rows={3}
                       placeholder={`Anything future contributors should know before opening a PR to ${fullName}?`}
-                      className="w-full text-xs sm:text-sm font-sans rounded-xl border-2 border-brand-dark p-3.5 bg-[#0f172a] text-zinc-950 placeholder:text-zinc-500 focus:outline-none focus:ring-0 shadow-[2px_2px_0px_#222831]"
+                      className="w-full text-xs sm:text-sm font-sans rounded-xl border-2 border-brand-dark p-3.5 bg-[#0f172a] text-slate-50 placeholder:text-slate-400 focus:outline-none focus:ring-0 shadow-sm"
                     />
                   </div>
                 )}
@@ -1336,7 +1336,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                       }
                     }}
                     disabled={!allFeedbackRatingsSelected}
-                    className="flex ml-auto items-center justify-center gap-2 rounded-xl border-2 border-brand-dark bg-zinc-950 px-6 py-3 font-mono text-xs font-extrabold text-white shadow-[3px_3px_0px_#222831] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#222831] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#222831] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex ml-auto items-center justify-center gap-2 rounded-xl border-2 border-brand-dark bg-[#0f172a] px-6 py-3 font-mono text-xs font-extrabold text-white shadow-sm hover:-translate-y-0.5 hover:shadow-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-sm transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Submit Ratings
                   </button>
@@ -1357,121 +1357,121 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       {/* Content-Heavy SEO Modules for Search Engines & Crawlers */}
       <motion.section
         id="faqs"
-        className="scroll-mt-36 space-y-8 font-sans border-t-2 border-brand-dark pt-8 text-zinc-800"
+        className="scroll-mt-36 space-y-8 font-sans border-t-2 border-brand-dark pt-8 text-slate-200"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
       >
-        <section className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-emerald-100 via-white to-cyan-100 p-5 sm:p-6 shadow-[5px_5px_0px_#222831]">
-          <h2 className="text-base sm:text-lg font-extrabold font-space text-zinc-950 mb-3 flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border-2 border-brand-dark bg-emerald-200 shadow-[2px_2px_0px_#222831] rotate-2">
+        <section className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-emerald-100 via-white to-cyan-100 p-5 sm:p-6 shadow-sm">
+          <h2 className="text-base sm:text-lg font-extrabold font-space text-slate-50 mb-3 flex items-center gap-2">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border-2 border-brand-dark bg-emerald-200 shadow-sm rotate-2">
               <Activity className="h-4 w-4 text-emerald-950 shrink-0" />
             </span>
             Contributor Compatibility & Review Speed Analysis for {fullName}
           </h2>
-          <div className="rounded-xl border-2 border-brand-dark bg-white p-4 text-zinc-700 leading-relaxed max-w-none space-y-3 font-sans shadow-[3px_3px_0px_#222831]">
+          <div className="rounded-xl border-2 border-brand-dark bg-[#111827] p-4 text-slate-300 leading-relaxed max-w-none space-y-3 font-sans shadow-sm">
             <p>
-              When evaluating whether to contribute to <strong className="text-zinc-950">{fullName}</strong>, response velocity and maintainer engagement are crucial. GetMerged continuously tracks pull request trajectories, first-comment latency, and code review rounds to help developers avoid submitting pull requests to backlogged repositories.
+              When evaluating whether to contribute to <strong className="text-slate-50">{fullName}</strong>, response velocity and maintainer engagement are crucial. GetMerged continuously tracks pull request trajectories, first-comment latency, and code review rounds to help developers avoid submitting pull requests to backlogged repositories.
             </p>
             <p>
               Currently, maintainers of {fullName} acknowledge new external contributions in approximately{" "}
-              <strong className="text-zinc-950">{responseTimeStr}</strong>. Out of all submitted pull requests from non-core authors in the last 180-day window,{" "}
-              <strong className="text-zinc-950">{mergeRateStr}</strong> were successfully merged into the primary branch.
+              <strong className="text-slate-50">{responseTimeStr}</strong>. Out of all submitted pull requests from non-core authors in the last 180-day window,{" "}
+              <strong className="text-slate-50">{mergeRateStr}</strong> were successfully merged into the primary branch.
             </p>
           </div>
         </section>
 
-        <section className="rounded-2xl border-2 border-brand-dark bg-[#fff8db] p-5 sm:p-6 shadow-[5px_5px_0px_#222831]">
-          <h2 className="text-base sm:text-lg font-extrabold font-space text-zinc-950 mb-4 flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border-2 border-brand-dark bg-blue-200 shadow-[2px_2px_0px_#222831] -rotate-2">
+        <section className="rounded-2xl border-2 border-brand-dark bg-[#fff8db] p-5 sm:p-6 shadow-sm">
+          <h2 className="text-base sm:text-lg font-extrabold font-space text-slate-50 mb-4 flex items-center gap-2">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border-2 border-brand-dark bg-blue-200 shadow-sm -rotate-2">
               <FileCode2 className="h-4 w-4 text-blue-950 shrink-0" />
             </span>
             Frequently Asked Questions - Contributing to {fullName}
           </h2>
           <div className="space-y-3.5">
             {/* FAQ 1 */}
-            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+            <div className="rounded-xl border-2 border-brand-dark bg-[#111827] p-4 shadow-sm">
               <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-emerald-200 font-mono text-xs font-extrabold text-emerald-950 shadow-[1px_1px_0px_#222831]">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-emerald-200 font-mono text-xs font-extrabold text-emerald-950 shadow-sm">
                   01
                 </span>
                 <div>
-                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                  <h3 className="text-xs sm:text-sm font-extrabold text-slate-50 font-space mb-1.5">
                     Is {fullName} welcoming to first-time open-source contributors?
                   </h3>
-                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
-                    {fullName} has a recorded first-timer success rate of <strong className="text-zinc-950">{firstTimerSuccessStr}</strong>. Repositories ranked {getRankHumanLabel(rank)} typically provide actionable feedback during code reviews and actively nurture new community contributors.
+                  <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                    {fullName} has a recorded first-timer success rate of <strong className="text-slate-50">{firstTimerSuccessStr}</strong>. Repositories ranked {getRankHumanLabel(rank)} typically provide actionable feedback during code reviews and actively nurture new community contributors.
                   </p>
                 </div>
               </div>
             </div>
 
             {/* FAQ 2 */}
-            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+            <div className="rounded-xl border-2 border-brand-dark bg-[#111827] p-4 shadow-sm">
               <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-orange-200 font-mono text-xs font-extrabold text-orange-950 shadow-[1px_1px_0px_#222831]">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-orange-200 font-mono text-xs font-extrabold text-orange-950 shadow-sm">
                   02
                 </span>
                 <div>
-                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                  <h3 className="text-xs sm:text-sm font-extrabold text-slate-50 font-space mb-1.5">
                     How fast can I expect code review feedback on my pull request?
                   </h3>
-                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
-                    The initial maintainer response time averages ~<strong className="text-zinc-950">{responseTimeStr}</strong>. Keeping PRs scoped to single concerns and ensuring CI checks succeed will optimize review turnaround.
+                  <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                    The initial maintainer response time averages ~<strong className="text-slate-50">{responseTimeStr}</strong>. Keeping PRs scoped to single concerns and ensuring CI checks succeed will optimize review turnaround.
                   </p>
                 </div>
               </div>
             </div>
 
             {/* FAQ 3 */}
-            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+            <div className="rounded-xl border-2 border-brand-dark bg-[#111827] p-4 shadow-sm">
               <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-pink-200 font-mono text-xs font-extrabold text-pink-950 shadow-[1px_1px_0px_#222831]">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-pink-200 font-mono text-xs font-extrabold text-pink-950 shadow-sm">
                   03
                 </span>
                 <div>
-                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                  <h3 className="text-xs sm:text-sm font-extrabold text-slate-50 font-space mb-1.5">
                     What does the {score.toFixed(1)} C-Rank™ score represent?
                   </h3>
-                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
-                    The C-Rank™ index scores repositories on a 0 to 100 scale using an objective formula: external PR merge rates, initial response speed, active maintainer count, and first-time contributor retention. A score of {score.toFixed(1)} places {fullName} in the <strong className="text-zinc-950">{getRankHumanLabel(rank)}</strong> tier.
+                  <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                    The C-Rank™ index scores repositories on a 0 to 100 scale using an objective formula: external PR merge rates, initial response speed, active maintainer count, and first-time contributor retention. A score of {score.toFixed(1)} places {fullName} in the <strong className="text-slate-50">{getRankHumanLabel(rank)}</strong> tier.
                   </p>
                 </div>
               </div>
             </div>
 
             {/* FAQ 4 */}
-            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+            <div className="rounded-xl border-2 border-brand-dark bg-[#111827] p-4 shadow-sm">
               <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-yellow-200 font-mono text-xs font-extrabold text-yellow-950 shadow-[1px_1px_0px_#222831]">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-yellow-200 font-mono text-xs font-extrabold text-yellow-950 shadow-sm">
                   04
                 </span>
                 <div>
-                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                  <h3 className="text-xs sm:text-sm font-extrabold text-slate-50 font-space mb-1.5">
                     What is the external contributor pull request merge rate for {fullName}?
                   </h3>
-                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
-                    The external pull request merge rate is <strong className="text-zinc-950">{mergeRateStr}</strong>. GetMerged isolates non-core community contributions so external developers get an accurate benchmark of PR acceptance probability.
+                  <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                    The external pull request merge rate is <strong className="text-slate-50">{mergeRateStr}</strong>. GetMerged isolates non-core community contributions so external developers get an accurate benchmark of PR acceptance probability.
                   </p>
                 </div>
               </div>
             </div>
 
             {/* FAQ 5 */}
-            <div className="rounded-xl border-2 border-brand-dark bg-white p-4 shadow-[3px_3px_0px_#222831]">
+            <div className="rounded-xl border-2 border-brand-dark bg-[#111827] p-4 shadow-sm">
               <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-cyan-200 font-mono text-xs font-extrabold text-cyan-950 shadow-[1px_1px_0px_#222831]">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-brand-dark bg-cyan-200 font-mono text-xs font-extrabold text-cyan-950 shadow-sm">
                   05
                 </span>
                 <div>
-                  <h3 className="text-xs sm:text-sm font-extrabold text-zinc-950 font-space mb-1.5">
+                  <h3 className="text-xs sm:text-sm font-extrabold text-slate-50 font-space mb-1.5">
                     Are there beginner Good First Issues open in {fullName}?
                   </h3>
-                  <p className="text-xs text-zinc-700 leading-relaxed font-sans">
+                  <p className="text-xs text-slate-300 leading-relaxed font-sans">
                     {(repo?.good_first_issue_count || 0) > 0 ? (
                       <>
-                        Yes, {fullName} currently has <strong className="text-zinc-950">{repo?.good_first_issue_count}</strong> active issue(s) tagged with beginner-friendly labels. You can inspect these directly from the repository issues tab.
+                        Yes, {fullName} currently has <strong className="text-slate-50">{repo?.good_first_issue_count}</strong> active issue(s) tagged with beginner-friendly labels. You can inspect these directly from the repository issues tab.
                       </>
                     ) : (
                       <>
@@ -1485,7 +1485,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
           </div>
         </section>
 
-        <section className="rounded-2xl border-2 border-brand-dark bg-zinc-950 p-5 sm:p-6 text-white shadow-[5px_5px_0px_#222831]">
+        <section className="rounded-2xl border-2 border-brand-dark bg-[#0f172a] p-5 sm:p-6 text-white shadow-sm">
           <h2 className="text-xs font-space font-extrabold text-yellow-200 uppercase tracking-wider mb-2">
             GetMerged C-Rank™ Indexing Standard
           </h2>
@@ -1513,7 +1513,7 @@ function RepoDetailSkeleton() {
     <main className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 py-10 sm:py-12 flex-1 w-full overflow-hidden font-sans">
       <div className="h-4 w-28 bg-zinc-200 animate-pulse rounded mb-6" />
 
-      <div className="flex flex-col gap-4 border-b border-zinc-200/40 pb-6 mb-8">
+      <div className="flex flex-col gap-4 border-b border-slate-800/40 pb-6 mb-8">
         <div className="flex gap-2">
           <div className="h-6 w-24 bg-zinc-200 animate-pulse rounded-lg" />
           <div className="h-6 w-32 bg-zinc-200 animate-pulse rounded-lg" />
@@ -1522,7 +1522,7 @@ function RepoDetailSkeleton() {
         <div className="h-4 w-96 max-w-full bg-zinc-200 animate-pulse rounded" />
       </div>
 
-      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10">
+      <div className="rounded-2xl bg-[#111827] p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10">
         <div className="h-4 w-48 bg-zinc-200 animate-pulse rounded mb-6" />
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {[1, 2, 3, 4].map((i) => (
@@ -1535,7 +1535,7 @@ function RepoDetailSkeleton() {
         </div>
       </div>
 
-      <div className="rounded-2xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
+      <div className="rounded-2xl bg-[#111827] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
         <div className="h-5 w-56 bg-zinc-200 animate-pulse rounded mb-4" />
         <div className="space-y-2">
           <div className="h-4 w-full bg-zinc-200 animate-pulse rounded" />
