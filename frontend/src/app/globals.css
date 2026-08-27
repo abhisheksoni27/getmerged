@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme static {
-  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-dm-mono), "SF Mono", Menlo, Monaco, monospace;
   --font-space: var(--font-space-grotesk), -apple-system, BlinkMacSystemFont, sans-serif;
 
@@ -13,14 +13,14 @@
 
   --color-primary: #ff6b00;
   --color-neutral-50: #ffffff;
-  --color-neutral-100: #f4f4f5;
+  --color-neutral-100: #ffffff;
   --color-neutral-200: #e4e4e7;
   --color-neutral-300: #d4d4d8;
   --color-neutral-400: #a1a1aa;
   --color-neutral-500: #71717a;
   --color-neutral-800: #27272a;
   --color-neutral-900: #18181b;
-  --color-neutral-950: #09090b;
+  --color-neutral-950: #000000;
 }
 
 :root {
@@ -29,15 +29,13 @@
   --radius-lg: 16px;
   --radius-xl: 24px;
 
-  /* Apple Pro Deep Pure Black Aesthetic */
+  /* DeepSeek Liquid Crystal Pro Canvas */
   --bg-canvas: #000000;
-  --bg-surface: #0c0c0e;
-  --bg-card: rgba(20, 20, 24, 0.7);
-  --bg-card-hover: rgba(30, 30, 36, 0.85);
-  --border-subtle: rgba(255, 255, 255, 0.1);
-  --border-hover: rgba(255, 255, 255, 0.22);
+  --bg-surface: #0a0a0c;
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --border-hover: rgba(255, 255, 255, 0.28);
   --text-primary: #ffffff;
-  --text-secondary: #d4d4d8;
+  --text-secondary: #e4e4e7;
   --text-tertiary: #a1a1aa;
 }
 
@@ -49,7 +47,7 @@ html {
 
 body {
   background-color: #000000;
-  color: #f4f4f5;
+  color: #ffffff;
   font-family: var(--font-sans);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
@@ -58,29 +56,29 @@ body {
   letter-spacing: -0.01em;
 }
 
-/* Apple Pro Glassmorphism & High Contrast Panels */
+/* DeepSeek Liquid Crystal Translucent Panels & Glass Cards */
 .glass-panel {
-  background: rgba(16, 16, 20, 0.82);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+  background: rgba(14, 14, 18, 0.88);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 40px -4px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.16);
 }
 
 .glass-card {
-  background: rgba(18, 18, 22, 0.65);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  background: rgba(18, 18, 24, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow: 0 6px 24px -2px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
-  background: rgba(26, 26, 32, 0.85);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(28, 28, 36, 0.95);
+  border-color: rgba(255, 255, 255, 0.3);
   transform: translateY(-2px);
-  box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.8), inset 0 1px 0 0 rgba(255, 255, 255, 0.16);
+  box-shadow: 0 20px 48px -4px rgba(0, 0, 0, 0.9), inset 0 1px 0 0 rgba(255, 255, 255, 0.24);
 }
 
 /* Subtle ambient backdrop radial gradient */
@@ -92,8 +90,8 @@ body {
 
 /* Accessible focus ring */
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.4) !important;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12) !important;
+  outline: 2px solid rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15) !important;
   outline-offset: 2px !important;
 }
 
@@ -107,6 +105,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 ::selection {
-  background-color: rgba(255, 107, 0, 0.4);
+  background-color: rgba(255, 107, 0, 0.45);
   color: #ffffff;
 }
