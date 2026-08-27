@@ -122,7 +122,7 @@ function FixActions({ fix }: { fix: Fix }) {
         type="button"
         onClick={handleCopy}
         data-testid={`copy-fix-${fix.type}`}
-        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-zinc-900 text-white font-mono text-[10px] uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1e293b] text-white font-mono text-[10px] uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500"
       >
         {copied ? "Copied" : "Copy"}
       </button>
@@ -142,7 +142,7 @@ function FixActions({ fix }: { fix: Fix }) {
           target="_blank"
           rel="noopener noreferrer"
           data-testid={`apply-fallback-${fix.type}`}
-          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg underline text-emerald-700 font-mono text-[10px] uppercase tracking-wider"
+          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg underline text-emerald-400 font-mono text-[10px] uppercase tracking-wider"
         >
           Open link
         </a>
@@ -157,7 +157,7 @@ function FixActions({ fix }: { fix: Fix }) {
         </span>
       ) : null}
       {fix.apply_method === "clipboard_deeplink" && fix.apply_url ? (
-        <span className="text-[10px] font-mono text-zinc-400">
+        <span className="text-[10px] font-mono text-slate-400">
           Then paste into the PR edit page.
         </span>
       ) : null}
@@ -169,39 +169,39 @@ function PreflightSkeleton() {
   return (
     <div
       data-testid="preflight-suspense-fallback"
-      className="p-6 sm:p-8 bg-white border-2 border-brand-dark rounded-2xl shadow-[4px_4px_0px_#222831] animate-pulse mb-8 font-sans"
+      className="p-6 sm:p-8 bg-[#111827] border-2 border-brand-dark rounded-2xl shadow-sm animate-pulse mb-8 font-sans"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
           <div className="h-3 w-28 bg-zinc-200 rounded mb-2" />
-          <div className="h-10 bg-zinc-100 rounded-xl" />
+          <div className="h-10 bg-[#1e293b] rounded-xl" />
         </div>
         <div>
           <div className="h-3 w-36 bg-zinc-200 rounded mb-2" />
-          <div className="h-10 bg-zinc-100 rounded-xl" />
+          <div className="h-10 bg-[#1e293b] rounded-xl" />
         </div>
       </div>
       <div className="mb-4">
         <div className="h-3 w-32 bg-zinc-200 rounded mb-2" />
-        <div className="h-10 bg-zinc-100 rounded-xl" />
+        <div className="h-10 bg-[#1e293b] rounded-xl" />
       </div>
       <div className="mb-4">
         <div className="h-3 w-44 bg-zinc-200 rounded mb-2" />
-        <div className="h-20 bg-zinc-100 rounded-xl" />
+        <div className="h-20 bg-[#1e293b] rounded-xl" />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
         <div className="sm:col-span-2">
           <div className="h-3 w-36 bg-zinc-200 rounded mb-2" />
-          <div className="h-20 bg-zinc-100 rounded-xl" />
+          <div className="h-20 bg-[#1e293b] rounded-xl" />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-1 gap-2">
           <div>
             <div className="h-3 w-16 bg-zinc-200 rounded mb-1" />
-            <div className="h-9 bg-zinc-100 rounded-xl" />
+            <div className="h-9 bg-[#1e293b] rounded-xl" />
           </div>
           <div>
             <div className="h-3 w-16 bg-zinc-200 rounded mb-1" />
-            <div className="h-9 bg-zinc-100 rounded-xl" />
+            <div className="h-9 bg-[#1e293b] rounded-xl" />
           </div>
         </div>
       </div>
@@ -495,27 +495,27 @@ function PreflightContent() {
           aria-modal="true"
           aria-labelledby="upgrade-modal-title"
         >
-          <div className="w-full max-w-md rounded-2xl bg-white border-2 border-brand-dark shadow-[4px_4px_0px_#222831] p-6 font-sans">
+          <div className="w-full max-w-md rounded-2xl bg-[#111827] border-2 border-brand-dark shadow-sm p-6 font-sans">
             <h2
               id="upgrade-modal-title"
-              className="text-lg font-bold font-space text-zinc-900 tracking-tight mb-2"
+              className="text-lg font-bold font-space text-slate-100 tracking-tight mb-2"
             >
               Free Evaluations Used Up
             </h2>
-            <p className="text-sm text-zinc-600 mb-4">{upgrade.message}</p>
-            <div className="rounded-xl bg-zinc-50 border border-zinc-200 px-4 py-3 mb-5 flex items-center justify-between">
-              <span className="text-xs font-mono uppercase tracking-wider text-zinc-500">
+            <p className="text-sm text-slate-400 mb-4">{upgrade.message}</p>
+            <div className="rounded-xl bg-[#1e293b] border border-slate-800 px-4 py-3 mb-5 flex items-center justify-between">
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-400">
                 Evaluations remaining this month
               </span>
-              <span data-testid="quota-remaining" className="text-xl font-bold font-mono text-zinc-900">
+              <span data-testid="quota-remaining" className="text-xl font-bold font-mono text-slate-100">
                 {upgrade.remaining}
-                <span className="text-sm text-zinc-400">/3</span>
+                <span className="text-sm text-slate-400">/3</span>
               </span>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/pricing"
-                className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all cursor-pointer shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all cursor-pointer shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
                 Subscribe - $9/mo
               </Link>
@@ -523,19 +523,19 @@ function PreflightContent() {
                 type="button"
                 onClick={handleBuyPack}
                 data-testid="buy-pack"
-                className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-emerald-600 text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-emerald-700 active:scale-[0.98] transition-all cursor-pointer shadow-[2px_2px_0px_#047857] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-emerald-600 text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-emerald-700 active:scale-[0.98] transition-all cursor-pointer shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
                 Buy 10 credits for $5
               </button>
               <button
                 type="button"
                 onClick={() => setUpgrade(null)}
-                className="inline-flex items-center justify-center px-4 py-2.5 rounded-xl border border-zinc-300 bg-white text-zinc-700 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-100 active:scale-[0.98] transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="inline-flex items-center justify-center px-4 py-2.5 rounded-xl border border-slate-700 bg-[#111827] text-slate-300 font-mono font-bold text-xs uppercase tracking-wider hover:bg-[#1e293b] active:scale-[0.98] transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
                 Maybe Later
               </button>
             </div>
-            <p className="mt-3 text-center text-[11px] text-zinc-500 font-sans">
+            <p className="mt-3 text-center text-[11px] text-slate-400 font-sans">
               One-time purchase. Pack credits never expire and stack on top of your monthly free evaluations.
             </p>
           </div>
@@ -547,21 +547,21 @@ function PreflightContent() {
         <div
           role="status"
           data-testid="pack-processing"
-          className="rounded-2xl bg-emerald-50/60 border border-emerald-200 p-4 mb-8 font-sans text-sm text-zinc-700"
+          className="rounded-2xl bg-emerald-950/70 border-emerald-800/80/60 border border-emerald-200 p-4 mb-8 font-sans text-sm text-slate-300"
         >
           {packWatch === "granted" ? (
             <>
-              <span className="font-semibold text-zinc-900">10 credits added.</span> Your pack
+              <span className="font-semibold text-slate-100">10 credits added.</span> Your pack
               credits are ready - re-run your evaluation now.
             </>
           ) : packWatch === "failed" ? (
             <>
-              <span className="font-semibold text-zinc-900">Payment not completed.</span> You were
+              <span className="font-semibold text-slate-100">Payment not completed.</span> You were
               not charged for a pack - you can retry the purchase anytime from the paywall.
             </>
           ) : (
             <>
-              <span className="font-semibold text-zinc-900">Payment processing.</span> Credits may
+              <span className="font-semibold text-slate-100">Payment processing.</span> Credits may
               take a minute to appear - re-run your evaluation shortly. Not credited within 24
               hours? Contact support for a refund or manual grant.
             </>
@@ -574,7 +574,7 @@ function PreflightContent() {
         <div
           role="alert"
           aria-live="assertive"
-          className="rounded-2xl bg-[#fef2f2] p-5 sm:p-6 border-2 border-[#fecaca] shadow-[4px_4px_0px_#222831] mb-8 font-sans transition-all duration-150 ease-out"
+          className="rounded-2xl bg-[#fef2f2] p-5 sm:p-6 border-2 border-[#fecaca] shadow-sm mb-8 font-sans transition-all duration-150 ease-out"
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-start gap-3">
@@ -606,12 +606,12 @@ function PreflightContent() {
       {/* Input Form */}
       <form
         onSubmit={handleEvaluate}
-        className="rounded-2xl bg-white p-5 sm:p-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-8 font-sans"
+        className="rounded-2xl bg-[#111827] p-5 sm:p-6 border-2 border-brand-dark shadow-sm mb-8 font-sans"
       >
         <div className="mb-4">
           <label
             htmlFor="pr-url-input"
-            className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1.5 font-mono"
+            className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5 font-mono"
           >
             Pull Request URL (auto-fetch diff & metadata)
           </label>
@@ -628,15 +628,15 @@ function PreflightContent() {
                   fetchPRDetails(val);
                 }
               }}
-              className="flex-1 px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-zinc-50/50 font-mono text-sm text-zinc-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all outline-none"
+              className="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-700 bg-[#1e293b]/50 font-mono text-sm text-slate-100 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-[#111827] transition-all outline-none"
             />
             {fetchingPR && (
-              <span className="inline-flex items-center px-3 py-2 rounded-xl bg-zinc-100 text-zinc-600 text-xs font-mono">
+              <span className="inline-flex items-center px-3 py-2 rounded-xl bg-[#1e293b] text-slate-400 text-xs font-mono">
                 Fetching...
               </span>
             )}
           </div>
-          <p className="text-[11px] text-zinc-500 mt-1 font-sans">
+          <p className="text-[11px] text-slate-400 mt-1 font-sans">
             Paste a GitHub PR link to auto-populate title, diff stats, and changed files.
           </p>
         </div>
@@ -645,7 +645,7 @@ function PreflightContent() {
           <div>
             <label
               htmlFor="target-repo-input"
-              className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1.5 font-mono"
+              className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5 font-mono"
             >
               Target Repository
             </label>
@@ -655,13 +655,13 @@ function PreflightContent() {
               placeholder="e.g. facebook/react"
               value={repoFullName}
               onChange={(e) => setRepoFullName(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-zinc-50/50 font-mono text-sm text-zinc-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-[#1e293b]/50 font-mono text-sm text-slate-100 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-[#111827] transition-all outline-none"
             />
           </div>
           <div>
             <label
               htmlFor="linked-issue-input"
-              className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1.5 font-mono"
+              className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5 font-mono"
             >
               Linked Issue URL (Optional)
             </label>
@@ -671,7 +671,7 @@ function PreflightContent() {
               placeholder="https://github.com/owner/repo/issues/123"
               value={linkedIssueURL}
               onChange={(e) => setLinkedIssueURL(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-zinc-50/50 font-mono text-sm text-zinc-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-[#1e293b]/50 font-mono text-sm text-slate-100 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-[#111827] transition-all outline-none"
             />
           </div>
         </div>
@@ -679,7 +679,7 @@ function PreflightContent() {
         <div className="mb-4">
           <label
             htmlFor="pr-title-input"
-            className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1.5 font-mono"
+            className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5 font-mono"
           >
             Pull Request Title
           </label>
@@ -690,14 +690,14 @@ function PreflightContent() {
             placeholder="e.g. fix(core): resolve null pointer exception in parser"
             value={prTitle}
             onChange={(e) => setPRTitle(e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-zinc-50/50 font-mono text-sm text-zinc-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all outline-none"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-[#1e293b]/50 font-mono text-sm text-slate-100 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-[#111827] transition-all outline-none"
           />
         </div>
 
         <div className="mb-4">
           <label
             htmlFor="pr-description-input"
-            className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1.5 font-mono"
+            className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5 font-mono"
           >
             Pull Request Description / Summary
           </label>
@@ -707,7 +707,7 @@ function PreflightContent() {
             placeholder="Explain what this PR solves, regression testing performed, and upstream bug context..."
             value={prDescription}
             onChange={(e) => setPRDescription(e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-zinc-50/50 font-sans text-sm text-zinc-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all outline-none"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-[#1e293b]/50 font-sans text-sm text-slate-100 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-[#111827] transition-all outline-none"
           />
         </div>
 
@@ -715,7 +715,7 @@ function PreflightContent() {
           <div className="sm:col-span-2">
             <label
               htmlFor="changed-files-input"
-              className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1.5 font-mono"
+              className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5 font-mono"
             >
               Changed Files (One per line)
             </label>
@@ -725,14 +725,14 @@ function PreflightContent() {
               placeholder={"src/parser.ts\nsrc/parser.test.ts"}
               value={changedFilesText}
               onChange={(e) => setChangedFilesText(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-zinc-50/50 font-mono text-xs text-zinc-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-[#1e293b]/50 font-mono text-xs text-slate-100 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-[#111827] transition-all outline-none"
             />
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-1 gap-2">
             <div>
               <label
                 htmlFor="additions-input"
-                className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1 font-mono"
+                className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1 font-mono"
               >
                 + Additions
               </label>
@@ -742,13 +742,13 @@ function PreflightContent() {
                 placeholder="25"
                 value={additions}
                 onChange={(e) => setAdditions(e.target.value === "" ? "" : Number(e.target.value))}
-                className="w-full px-3 py-1.5 text-sm rounded-xl border border-zinc-300 bg-zinc-50/50 font-mono text-zinc-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all outline-none"
+                className="w-full px-3 py-1.5 text-sm rounded-xl border border-slate-700 bg-[#1e293b]/50 font-mono text-slate-100 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-[#111827] transition-all outline-none"
               />
             </div>
             <div>
               <label
                 htmlFor="deletions-input"
-                className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1 font-mono"
+                className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1 font-mono"
               >
                 - Deletions
               </label>
@@ -758,7 +758,7 @@ function PreflightContent() {
                 placeholder="5"
                 value={deletions}
                 onChange={(e) => setDeletions(e.target.value === "" ? "" : Number(e.target.value))}
-                className="w-full px-3 py-1.5 text-sm rounded-xl border border-zinc-300 bg-zinc-50/50 font-mono text-zinc-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all outline-none"
+                className="w-full px-3 py-1.5 text-sm rounded-xl border border-slate-700 bg-[#1e293b]/50 font-mono text-slate-100 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-[#111827] transition-all outline-none"
               />
             </div>
           </div>
@@ -767,7 +767,7 @@ function PreflightContent() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+          className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
         >
           {loading ? "Evaluating PR..." : "Run Pre-Flight Check"}
           <ArrowRight className="h-4 w-4" />
@@ -776,21 +776,21 @@ function PreflightContent() {
 
       {/* Results Section */}
       {result && (
-        <div className="rounded-2xl bg-white p-5 sm:p-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-8 font-sans">
-          <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-zinc-100 mb-5">
+        <div className="rounded-2xl bg-[#111827] p-5 sm:p-6 border-2 border-brand-dark shadow-sm mb-8 font-sans">
+          <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800 mb-5">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 {result.ready_to_merge ? (
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full font-mono">
+                  <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-300 bg-emerald-950/80 border-emerald-800/80 px-2.5 py-0.5 rounded-full font-mono">
                     <CheckCircle2 className="h-3.5 w-3.5" /> PRE-FLIGHT READY
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full font-mono">
+                  <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-300 bg-amber-950/80 border-amber-800/80 px-2.5 py-0.5 rounded-full font-mono">
                     <AlertTriangle className="h-3.5 w-3.5" /> ADJUSTMENTS RECOMMENDED
                   </span>
                 )}
               </div>
-              <p className="text-sm font-semibold text-zinc-800">{result.summary}</p>
+              <p className="text-sm font-semibold text-slate-200">{result.summary}</p>
             </div>
             <div className="flex items-center gap-4">
               {signedIn && (
@@ -802,11 +802,11 @@ function PreflightContent() {
                 />
               )}
               <div className="text-right">
-                <div className="text-2xl font-bold font-mono text-zinc-900">
+                <div className="text-2xl font-bold font-mono text-slate-100">
                   {result.overall_score.toFixed(0)}
-                  <span className="text-sm text-zinc-400">/100</span>
+                  <span className="text-sm text-slate-400">/100</span>
                 </div>
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">
+                <div className="text-[10px] text-slate-400 uppercase tracking-wider font-mono">
                   Pre-flight Score
                 </div>
               </div>
@@ -819,10 +819,10 @@ function PreflightContent() {
                 key={c.key}
                 className={`p-3.5 rounded-xl border flex items-start gap-3 ${
                   c.passed
-                    ? "bg-emerald-50/40 border-emerald-200"
+                    ? "bg-emerald-950/70 border-emerald-800/80/40 border-emerald-200"
                     : c.severity === "error"
-                    ? "bg-rose-50/40 border-rose-200"
-                    : "bg-amber-50/40 border-amber-200"
+                    ? "bg-rose-950/70 border-rose-800/80/40 border-rose-200"
+                    : "bg-amber-950/70 border-amber-800/80/40 border-amber-200"
                 }`}
               >
                 <div className="mt-0.5">
@@ -836,31 +836,31 @@ function PreflightContent() {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-xs font-bold text-zinc-900 font-mono">{c.title}</h4>
-                    <span className="text-[10px] font-mono uppercase text-zinc-500">
+                    <h4 className="text-xs font-bold text-slate-100 font-mono">{c.title}</h4>
+                    <span className="text-[10px] font-mono uppercase text-slate-400">
                       {c.passed ? "Pass" : c.severity}
                     </span>
                   </div>
-                  <p className="text-xs text-zinc-600 mt-0.5">{c.description}</p>
-                  <p className="text-xs text-zinc-700 font-medium mt-1 bg-white/70 p-2 rounded-lg border border-zinc-200/60 font-mono">
+                  <p className="text-xs text-slate-400 mt-0.5">{c.description}</p>
+                  <p className="text-xs text-slate-300 font-medium mt-1 bg-[#111827]/70 p-2 rounded-lg border border-slate-800/60 font-mono">
                     💡 {c.suggestion}
                   </p>
                   {!c.passed && c.fixes && c.fixes.length > 0 ? (
                     <div className="mt-2">
-                      <p className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 mb-1">
+                      <p className="text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1">
                         One-click fixes
                       </p>
                       <div className="space-y-2">
                         {c.fixes.map((fix, i) => (
                           <div
                             key={`${fix.type}-${i}`}
-                            className="rounded-lg border border-zinc-200 bg-white/70 p-2"
+                            className="rounded-lg border border-slate-800 bg-[#111827]/70 p-2"
                             data-testid={`fix-${fix.type}`}
                           >
-                            <p className="text-[11px] font-semibold text-zinc-800 font-mono">
+                            <p className="text-[11px] font-semibold text-slate-200 font-mono">
                               {fix.label}
                             </p>
-                            <pre className="text-[10px] text-zinc-600 whitespace-pre-wrap break-words mt-1 font-mono max-h-28 overflow-auto">
+                            <pre className="text-[10px] text-slate-400 whitespace-pre-wrap break-words mt-1 font-mono max-h-28 overflow-auto">
                               {fix.payload}
                             </pre>
                             <FixActions fix={fix} />
@@ -878,16 +878,16 @@ function PreflightContent() {
           {!signedIn && (
             <div
               data-testid="anon-trial-gate"
-              className="mt-5 rounded-xl bg-emerald-50/60 border border-emerald-200 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+              className="mt-5 rounded-xl bg-emerald-950/70 border-emerald-800/80/60 border border-emerald-200 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
             >
-              <p className="text-sm text-zinc-700 font-sans">
-                <span className="font-semibold text-zinc-900">This is your free trial forecast.</span>{" "}
+              <p className="text-sm text-slate-300 font-sans">
+                <span className="font-semibold text-slate-100">This is your free trial forecast.</span>{" "}
                 Sign in to save, share, and track this forecast.
               </p>
               <a
                 href={`${API_BASE_URL}/api/v1/auth/github`}
                 data-testid="anon-trial-signin"
-                className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
                 Sign in with GitHub
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -901,15 +901,15 @@ function PreflightContent() {
       {trialUsed && !result && !signedIn && !error && (
         <div
           role="status"
-          className="rounded-2xl bg-emerald-50/60 border border-emerald-200 p-5 sm:p-6 mb-8 font-sans flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+          className="rounded-2xl bg-emerald-950/70 border-emerald-800/80/60 border border-emerald-200 p-5 sm:p-6 mb-8 font-sans flex flex-col sm:flex-row sm:items-center justify-between gap-4"
         >
-          <p className="text-sm text-zinc-700">
+          <p className="text-sm text-slate-300">
             You&apos;ve used your free trial evaluation on this network. Sign in with GitHub to get 3
             free evaluations every month.
           </p>
           <a
             href={`${API_BASE_URL}/api/v1/auth/github`}
-            className="shrink-0 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+            className="shrink-0 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
           >
             Sign in with GitHub
           </a>
@@ -921,20 +921,20 @@ function PreflightContent() {
 
 export default function PreflightPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-zinc-900">
+    <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-slate-100">
       <Header />
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Hero Section */}
         <div className="mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/70 border-emerald-800/80 border border-emerald-200 text-emerald-300 text-xs font-semibold mb-3">
             <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
             <span>Static Heuristic PR Pre-Flight Checklist</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-space text-zinc-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold font-space text-slate-100 tracking-tight">
             PR Acceptance Pre-Flight Evaluator
           </h1>
-          <p className="text-sm text-zinc-600 font-sans mt-2 max-w-2xl">
+          <p className="text-sm text-slate-400 font-sans mt-2 max-w-2xl">
             Test your pull request against repository conventions, test coverage heuristics, and
             size limits before opening it upstream.
           </p>

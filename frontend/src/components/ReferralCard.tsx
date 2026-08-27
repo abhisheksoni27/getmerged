@@ -37,13 +37,13 @@ export function ReferralCard() {
   return (
     <section
       id="referrals"
-      className="max-w-4xl mx-auto px-4 mb-8 rounded-2xl bg-white border-2 border-brand-dark shadow-[4px_4px_0px_#222831] p-5 sm:p-6 font-sans"
+      className="max-w-4xl mx-auto px-4 mb-8 rounded-2xl bg-[#111827] border-2 border-brand-dark shadow-sm p-5 sm:p-6 font-sans"
     >
       <div className="flex items-center gap-2 mb-1.5">
         <Gift className="h-4 w-4 text-emerald-600" />
-        <h2 className="text-sm font-bold font-space text-zinc-900">Invite Friends, Earn Preflight Credits</h2>
+        <h2 className="text-sm font-bold font-space text-slate-100">Invite Friends, Earn Preflight Credits</h2>
       </div>
-      <p className="text-xs text-zinc-600 mb-4">
+      <p className="text-xs text-slate-400 mb-4">
         Share your link: when a friend signs up with GitHub through it, you get <strong>+3</strong> and they get{" "}
         <strong>+1</strong> bonus preflight-evaluation credit (up to 10 extra).
       </p>
@@ -53,12 +53,12 @@ export function ReferralCard() {
           value={link}
           onFocus={(e) => e.currentTarget.select()}
           aria-label="Your referral link"
-          className="flex-1 min-w-0 rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs font-mono text-zinc-700"
+          className="flex-1 min-w-0 rounded-xl border border-slate-700 bg-[#1e293b] px-3 py-2 text-xs font-mono text-slate-300"
         />
         <button
           onClick={copy}
           title="Copy referral link"
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white px-4 py-2 text-xs font-semibold cursor-pointer transition-all active:scale-[0.98]"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#1e293b] hover:bg-zinc-800 text-white px-4 py-2 text-xs font-semibold cursor-pointer transition-all active:scale-[0.98]"
         >
           {copied ? (
             <>
@@ -72,7 +72,7 @@ export function ReferralCard() {
         </button>
       </div>
       {data.successful_invites > 0 && (
-        <p className="mt-3 text-[11px] text-emerald-700 font-semibold">
+        <p className="mt-3 text-[11px] text-emerald-400 font-semibold">
           {data.successful_invites} friend{data.successful_invites === 1 ? "" : "s"} joined · +{data.credits_earned} evaluation credits earned
         </p>
       )}

@@ -122,8 +122,8 @@ export default function ShareCardButton({ slug, username }: ShareCardButtonProps
             toast.kind === "error"
               ? "border-red-300 bg-red-50 text-red-800"
               : toast.kind === "info"
-                ? "border-zinc-300 bg-white text-zinc-800"
-                : "border-emerald-300 bg-emerald-50 text-emerald-800"
+                ? "border-slate-700 bg-[#111827] text-slate-200"
+                : "border-emerald-300 bg-emerald-950/70 border-emerald-800/80 text-emerald-300"
           }`}
         >
           {toast.msg}

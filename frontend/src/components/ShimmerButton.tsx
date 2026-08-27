@@ -23,7 +23,7 @@ export function ShimmerButton({
   return (
     <button
       onClick={onClick}
-      className={`group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-zinc-800 px-5 py-2.5 font-mono text-xs font-medium text-white transition-all hover:scale-105 active:scale-95 shadow-md ${className}`}
+      className={`group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-slate-800 px-5 py-2.5 font-mono text-xs font-medium text-white transition-all hover:scale-105 active:scale-95 shadow-md ${className}`}
       style={{ background }}
     >
       {/* Shimmer sweep animation ray */}

@@ -57,7 +57,7 @@ export default function CompareHubPage() {
       />
       <Suspense
         fallback={
-          <div className="min-h-screen bg-[#fafafa] flex items-center justify-center font-mono text-sm text-zinc-500">
+          <div className="min-h-screen bg-[#fafafa] flex items-center justify-center font-mono text-sm text-slate-400">
             Loading comparison hub...
           </div>
         }

@@ -73,11 +73,11 @@ export default function OpenToOpportunitiesToggle({ slug }: OpenToOpportunitiesT
   }
 
   return (
-    <div className="mb-6 rounded-2xl border-2 border-brand-dark bg-white p-5 shadow-[4px_4px_0px_#222831]">
+    <div className="mb-6 rounded-2xl border-2 border-brand-dark bg-[#111827] p-5 shadow-sm">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2">
           <Briefcase className="h-4 w-4 text-emerald-600" />
-          <span className="text-sm font-bold text-zinc-900">Open to Opportunities</span>
+          <span className="text-sm font-bold text-slate-100">Open to Opportunities</span>
         </div>
         <label className="relative inline-flex cursor-pointer items-center">
           <input
@@ -89,10 +89,10 @@ export default function OpenToOpportunitiesToggle({ slug }: OpenToOpportunitiesT
             aria-label="Open to Opportunities"
           />
           <div className="h-6 w-11 rounded-full bg-zinc-300 peer-checked:bg-emerald-600 peer-disabled:opacity-60 transition-colors" />
-          <div className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform peer-checked:translate-x-5" />
+          <div className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-[#111827] transition-transform peer-checked:translate-x-5" />
         </label>
       </div>
-      <p className="mt-2 text-xs text-zinc-500">
+      <p className="mt-2 text-xs text-slate-400">
         Let recruiters with a Recruiter Pass discover you in search by your languages, skill level,
         contribution style, and verified S/A-tier merges.
       </p>

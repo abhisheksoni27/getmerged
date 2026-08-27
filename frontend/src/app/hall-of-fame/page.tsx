@@ -89,40 +89,40 @@ export default async function HallOfFamePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-800">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-slate-200">
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-600 hover:text-zinc-900 transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111827] border border-slate-800 text-xs text-slate-400 hover:text-slate-100 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        <div className="rounded-3xl bg-white p-6 sm:p-10 border border-zinc-200/80 shadow-xs mb-10">
+        <div className="rounded-3xl bg-[#111827] p-6 sm:p-10 border border-slate-800 shadow-xs mb-10">
           <div className="flex items-center gap-2 mb-3.5">
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-900 font-mono">
-              <Trophy className="h-3.5 w-3.5 text-emerald-700" /> S-Tier Showcase
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-950/70 border-emerald-800/80 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-300 font-mono">
+              <Trophy className="h-3.5 w-3.5 text-emerald-400" /> S-Tier Showcase
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-zinc-900 tracking-tight font-space">
+          <h1 className="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight font-space">
             Open Source Hall of Fame
           </h1>
-          <p className="mt-3 text-xs sm:text-sm text-zinc-600 max-w-3xl leading-relaxed font-sans">
+          <p className="mt-3 text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed font-sans">
             These elite repositories have earned an <strong>S-Tier C-Rank™</strong> score. Maintainers in the Hall of Fame merge external PRs rapidly, communicate constructively, and provide standard-setting onboarding for new contributors.
           </p>
-          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-zinc-500">
+          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-slate-400">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
             <span>Telemetry updated: {new Date().toUTCString().slice(0, 16)} UTC (Daily Sync)</span>
           </div>
         </div>
 
-        <div className="mb-6 flex items-center justify-between border-b border-zinc-200 pb-4">
-          <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2 font-space">
+        <div className="mb-6 flex items-center justify-between border-b border-slate-800 pb-4">
+          <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-space">
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
             S-Tier Repositories ({repos.length})
           </h2>
-          <span className="text-xs text-zinc-500 font-mono">Updated Daily</span>
+          <span className="text-xs text-slate-400 font-mono">Updated Daily</span>
         </div>
 
         {repos.length > 0 ? (
@@ -132,7 +132,7 @@ export default async function HallOfFamePage() {
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl bg-white p-12 text-center text-zinc-500 text-xs mb-12 border border-dashed border-zinc-300 font-sans">
+          <div className="rounded-2xl bg-[#111827] p-12 text-center text-slate-400 text-xs mb-12 border border-dashed border-slate-700 font-sans">
             No S-Tier repositories indexed yet.
           </div>
         )}

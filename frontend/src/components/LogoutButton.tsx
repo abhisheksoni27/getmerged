@@ -15,7 +15,7 @@ export function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-zinc-200/80 bg-white text-xs font-sans font-medium text-zinc-600 hover:text-zinc-900 hover:border-zinc-300 transition-colors cursor-pointer"
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-800 bg-[#111827] text-xs font-sans font-medium text-slate-400 hover:text-slate-100 hover:border-slate-700 transition-colors cursor-pointer"
       title="Sign Out of GetMerged"
     >
       <LogOut className="h-3.5 w-3.5" />

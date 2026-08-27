@@ -60,7 +60,7 @@ export default function GuidesHubPage() {
   };
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-[#0f172a] text-zinc-900 font-sans">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-[#0f172a] text-slate-100 font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -71,25 +71,25 @@ export default function GuidesHubPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
+      <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-black border-b-4 text-xs text-black hover:bg-zinc-100 transition-colors mb-6 font-bold shadow-[2px_2px_0px_#000]"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#111827] border border-slate-700 text-xs text-slate-200 hover:text-white hover:bg-slate-800 rounded transition-colors mb-6 font-semibold shadow-sm"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Banner */}
-        <div className="border-2 border-black bg-white p-8 sm:p-10 shadow-[6px_6px_0px_#000] mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#8ce99a] border-2 border-black font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-[2px_2px_0px_#000]">
-            <Sparkles className="w-3.5 h-3.5" />
+        <div className="border border-slate-800 bg-[#111827] p-8 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-950/80 border border-emerald-700 text-emerald-300 rounded font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
             Empirical Developer Guides &middot; Zero Speculation
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight font-space mb-4">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight font-sans text-slate-50 mb-4">
             Open Source Contribution Playbooks
           </h1>
-          <p className="text-zinc-700 text-sm sm:text-base leading-relaxed max-w-3xl">
+          <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl">
             Stop guessing whether maintainers will review your pull requests. Our engineering guides use real GitHub GraphQL telemetry from 53,000+ indexed repositories to help you pick responsive targets and get your code merged into main.
           </p>
         </div>
@@ -101,42 +101,42 @@ export default function GuidesHubPage() {
               key={guide.slug}
               href={`/guides/${guide.slug}`}
               title={`Read guide: ${guide.title}`}
-              className="border-2 border-black bg-white p-6 shadow-[4px_4px_0px_#000] hover:shadow-[6px_6px_0px_#000] hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+              className="border border-slate-800 bg-[#111827] p-6 rounded-md border-t-2 border-t-slate-700 shadow-sm hover:border-slate-500 hover:scale-[1.01] transition-all flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-100 border border-black font-mono text-[11px] font-bold">
-                    <BookOpen className="w-3 h-3 text-amber-800" /> {guide.section}
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-950/80 border border-amber-700 text-amber-300 rounded font-mono text-xs font-semibold">
+                    <BookOpen className="w-3.5 h-3.5 text-amber-400" /> {guide.section}
                   </span>
-                  <span className="flex items-center gap-1 font-mono text-[11px] text-zinc-500">
-                    <Clock className="w-3 h-3" /> {guide.readingTime}
+                  <span className="flex items-center gap-1 font-mono text-xs text-slate-400">
+                    <Clock className="w-3.5 h-3.5" /> {guide.readingTime}
                   </span>
                 </div>
 
-                <div className="mb-4 overflow-hidden border-2 border-black bg-zinc-100 shadow-[2px_2px_0px_#000]">
+                <div className="mb-4 overflow-hidden rounded border border-slate-800 bg-slate-800 shadow-sm">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`/images/guides/${guide.slug}.jpg`}
                     alt={guide.title}
                     width={600}
                     height={315}
-                    className="w-full h-40 object-cover hover:scale-105 transition-transform duration-300"
+                    className="w-full h-44 object-cover hover:scale-105 transition-transform duration-300"
                   />
                 </div>
 
-                <h2 className="text-xl font-bold font-space tracking-tight text-zinc-900 mb-2.5 leading-snug">
+                <h2 className="text-xl font-bold font-sans tracking-tight text-slate-100 mb-2.5 leading-snug">
                   {guide.title}
                 </h2>
-                <p className="text-xs sm:text-sm text-zinc-600 font-sans leading-relaxed mb-6 line-clamp-2">
+                <p className="text-sm text-slate-400 font-sans leading-relaxed mb-6 line-clamp-2">
                   {guide.description}
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-zinc-200 flex items-center justify-between">
-                <span className="font-mono text-[11px] text-zinc-500">
+              <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+                <span className="font-mono text-xs text-slate-400">
                   By {guide.author} &middot; {guide.lastUpdated}
                 </span>
-                <span className="inline-flex items-center gap-1 font-mono text-xs font-bold text-black group-hover:text-emerald-700">
+                <span className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-orange-400 hover:text-orange-300">
                   Read Guide <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
@@ -145,13 +145,16 @@ export default function GuidesHubPage() {
         </div>
 
         {/* C-Rank Extractable Definition Box */}
-        <div className="border-2 border-black bg-zinc-900 text-white p-6 sm:p-8 shadow-[6px_6px_0px_#000]">
+        <div className="border border-slate-800 bg-[#111827] text-slate-100 p-6 sm:p-8 rounded-md border-t-2 border-t-orange-500 shadow-sm">
           <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs font-bold uppercase tracking-wider mb-2">
             <ShieldCheck className="w-4 h-4" />
-            C-Rank™ Official Definition
+            Empirical C-Rank Benchmark Standard
           </div>
-          <p className="text-zinc-200 text-sm sm:text-base leading-relaxed">
-            <strong className="text-white">C-Rank™</strong> is an objective 0–100 percentile score and tier rating (S through D) assigned to public GitHub repositories based on external pull request merge rates (27.5%), maintainer first-response latency (15%), 180-day activity pulse (15%), and first-timer newcomer acceptance (10%).
+          <h3 className="text-xl font-bold font-sans text-white mb-2">
+            How OpenDoor Benchmarks Repository Openness
+          </h3>
+          <p className="text-slate-300 text-sm leading-relaxed">
+            Every repository in these guides is continuously audited across PR turnaround latency, first-time contributor conversion rates, maintainer bus factor, and external PR merge velocity.
           </p>
         </div>
       </main>

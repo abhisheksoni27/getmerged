@@ -146,7 +146,7 @@ export default function PrReadinessPage() {
         ? { label: "Promising - polish a few items", color: "text-amber-600", bar: "bg-amber-500" }
         : score > 0
           ? { label: "Needs work before opening", color: "text-orange-600", bar: "bg-orange-500" }
-          : { label: "Start filling in details", color: "text-zinc-500", bar: "bg-zinc-400" };
+          : { label: "Start filling in details", color: "text-slate-400", bar: "bg-zinc-400" };
 
   const issue = parseIssueLink(issueLink);
 
@@ -158,12 +158,12 @@ export default function PrReadinessPage() {
           <Gauge className="w-8 h-8 text-brand-dark" aria-hidden />
           PR Readiness Simulator
         </h1>
-        <p className="mt-2 text-zinc-600">
+        <p className="mt-2 text-slate-400">
           Paste your PR title, diff size, summary, or issue link - get an instant acceptance score
           and a tailored checklist before you open the PR.
         </p>
 
-        <section className="mt-6 p-6 bg-white border-2 border-brand-dark rounded-2xl shadow-[4px_4px_0px_#222831] space-y-4">
+        <section className="mt-6 p-6 bg-[#111827] border-2 border-brand-dark rounded-2xl shadow-sm space-y-4">
           <div>
             <label htmlFor="pr-title" className="flex items-center gap-1.5 text-sm font-semibold text-brand-dark mb-1">
               <Type className="w-4 h-4" aria-hidden /> PR title
@@ -248,7 +248,7 @@ export default function PrReadinessPage() {
           </div>
         </section>
 
-        <section className="mt-6 p-6 bg-white border-2 border-brand-dark rounded-2xl shadow-[4px_4px_0px_#222831]" aria-live="polite">
+        <section className="mt-6 p-6 bg-[#111827] border-2 border-brand-dark rounded-2xl shadow-sm" aria-live="polite">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-lg font-bold text-brand-dark flex items-center gap-2">
               <Zap className="w-5 h-5 text-amber-500" aria-hidden /> Acceptance score
@@ -266,7 +266,7 @@ export default function PrReadinessPage() {
           </div>
           <p className={`mt-2 text-sm font-semibold ${probability.color}`}>{probability.label}</p>
 
-          <h3 className="mt-5 mb-2 text-sm font-bold uppercase tracking-wide text-zinc-500">
+          <h3 className="mt-5 mb-2 text-sm font-bold uppercase tracking-wide text-slate-400">
             Tailored checklist
           </h3>
           <ul className="space-y-2">
@@ -275,11 +275,11 @@ export default function PrReadinessPage() {
                 {item.done ? (
                   <CheckCircle2 className="w-5 h-5 mt-0.5 text-emerald-600 shrink-0" aria-label="done" />
                 ) : (
-                  <Circle className="w-5 h-5 mt-0.5 text-zinc-400 shrink-0" aria-label="todo" />
+                  <Circle className="w-5 h-5 mt-0.5 text-slate-400 shrink-0" aria-label="todo" />
                 )}
                 <span>
-                  <span className={item.done ? "text-zinc-800 font-medium" : "text-zinc-600"}>{item.label}</span>
-                  {!item.done && <span className="block text-xs text-zinc-500">{item.hint}</span>}
+                  <span className={item.done ? "text-slate-200 font-medium" : "text-slate-400"}>{item.label}</span>
+                  {!item.done && <span className="block text-xs text-slate-400">{item.hint}</span>}
                 </span>
               </li>
             ))}

@@ -67,18 +67,18 @@ export function CRankBadge({ rank = "A", size = "md", showLabel = false, classNa
   const normalizedRank = rank?.toUpperCase() || "A";
 
   const sizeClasses = {
-    sm: "px-2 py-0.5 text-[10px]",
-    md: "px-2.5 py-1 text-xs",
-    lg: "px-3 py-1.5 text-sm",
+    sm: "px-2.5 py-1 text-xs",
+    md: "px-3.5 py-1.5 text-sm",
+    lg: "px-4 py-2 text-base",
   }[size];
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded font-mono font-semibold tracking-wider uppercase text-white shadow-xs ${grade.bgClass} ${sizeClasses} ${className}`}
+      className={`inline-flex items-center gap-2 rounded-md font-mono font-bold tracking-wider uppercase text-white shadow-sm ${grade.bgClass} ${sizeClasses} ${className}`}
       title={`C-Rank Grade ${normalizedRank} (${grade.label})`}
     >
-      <span>{normalizedRank}</span>
-      {showLabel && <span className="opacity-90 font-sans font-medium text-[11px]">· {grade.label}</span>}
+      <span className="font-extrabold">{normalizedRank}</span>
+      {showLabel && <span className="opacity-95 font-sans font-medium text-xs">· {grade.label}</span>}
     </span>
   );
 }
