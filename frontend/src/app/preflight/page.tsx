@@ -169,7 +169,7 @@ function PreflightSkeleton() {
   return (
     <div
       data-testid="preflight-suspense-fallback"
-      className="p-6 sm:p-8 bg-[#111827] border-2 border-brand-dark rounded-2xl shadow-sm animate-pulse mb-8 font-sans"
+      className="p-6 sm:p-8 bg-[#111827] border-2 border-white/[0.08] rounded-2xl shadow-sm animate-pulse mb-8 font-sans"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
@@ -495,7 +495,7 @@ function PreflightContent() {
           aria-modal="true"
           aria-labelledby="upgrade-modal-title"
         >
-          <div className="w-full max-w-md rounded-2xl bg-[#111827] border-2 border-brand-dark shadow-sm p-6 font-sans">
+          <div className="w-full max-w-md rounded-2xl bg-[#111827] border-2 border-white/[0.08] shadow-sm p-6 font-sans">
             <h2
               id="upgrade-modal-title"
               className="text-lg font-bold font-space text-zinc-100 tracking-tight mb-2"
@@ -606,7 +606,7 @@ function PreflightContent() {
       {/* Input Form */}
       <form
         onSubmit={handleEvaluate}
-        className="rounded-2xl bg-[#111827] p-5 sm:p-6 border-2 border-brand-dark shadow-sm mb-8 font-sans"
+        className="rounded-2xl bg-[#111827] p-5 sm:p-6 border-2 border-white/[0.08] shadow-sm mb-8 font-sans"
       >
         <div className="mb-4">
           <label
@@ -776,7 +776,7 @@ function PreflightContent() {
 
       {/* Results Section */}
       {result && (
-        <div className="rounded-2xl bg-[#111827] p-5 sm:p-6 border-2 border-brand-dark shadow-sm mb-8 font-sans">
+        <div className="rounded-2xl bg-[#111827] p-5 sm:p-6 border-2 border-white/[0.08] shadow-sm mb-8 font-sans">
           <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/[0.08] mb-5">
             <div>
               <div className="flex items-center gap-2 mb-1">

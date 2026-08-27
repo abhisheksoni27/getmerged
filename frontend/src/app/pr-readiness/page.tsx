@@ -163,7 +163,7 @@ export default function PrReadinessPage() {
           and a tailored checklist before you open the PR.
         </p>
 
-        <section className="mt-6 p-6 bg-[#111827] border-2 border-brand-dark rounded-2xl shadow-sm space-y-4">
+        <section className="mt-6 p-6 bg-[#111827] border-2 border-white/[0.08] rounded-2xl shadow-sm space-y-4">
           <div>
             <label htmlFor="pr-title" className="flex items-center gap-1.5 text-sm font-semibold text-brand-dark mb-1">
               <Type className="w-4 h-4" aria-hidden /> PR title
@@ -173,7 +173,7 @@ export default function PrReadinessPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="feat: add retry logic to webhook delivery"
-              className="w-full px-3 py-2 rounded-xl border-2 border-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-dark"
+              className="w-full px-3 py-2 rounded-xl border-2 border-white/[0.08] focus:outline-none focus:ring-2 focus:ring-brand-dark"
             />
           </div>
 
@@ -189,7 +189,7 @@ export default function PrReadinessPage() {
                 value={files}
                 onChange={(e) => setFiles(e.target.value)}
                 placeholder="e.g. 3"
-                className="w-full px-3 py-2 rounded-xl border-2 border-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-dark"
+                className="w-full px-3 py-2 rounded-xl border-2 border-white/[0.08] focus:outline-none focus:ring-2 focus:ring-brand-dark"
               />
             </div>
             <div>
@@ -203,7 +203,7 @@ export default function PrReadinessPage() {
                 value={lines}
                 onChange={(e) => setLines(e.target.value)}
                 placeholder="e.g. 120"
-                className="w-full px-3 py-2 rounded-xl border-2 border-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-dark"
+                className="w-full px-3 py-2 rounded-xl border-2 border-white/[0.08] focus:outline-none focus:ring-2 focus:ring-brand-dark"
               />
             </div>
           </div>
@@ -218,7 +218,7 @@ export default function PrReadinessPage() {
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               placeholder="What changed, why, and how it was tested…"
-              className="w-full px-3 py-2 rounded-xl border-2 border-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-dark"
+              className="w-full px-3 py-2 rounded-xl border-2 border-white/[0.08] focus:outline-none focus:ring-2 focus:ring-brand-dark"
             />
           </div>
 
@@ -232,7 +232,7 @@ export default function PrReadinessPage() {
               onChange={(e) => setIssueLink(e.target.value)}
               placeholder="https://github.com/owner/repo/issues/123"
               className={`w-full px-3 py-2 rounded-xl border-2 focus:outline-none focus:ring-2 focus:ring-brand-dark ${
-                issueLink && !issue.valid ? "border-red-500" : "border-brand-dark"
+                issueLink && !issue.valid ? "border-red-500" : "border-white/[0.08]"
               }`}
             />
             {issueLink && !issue.valid && (
@@ -248,7 +248,7 @@ export default function PrReadinessPage() {
           </div>
         </section>
 
-        <section className="mt-6 p-6 bg-[#111827] border-2 border-brand-dark rounded-2xl shadow-sm" aria-live="polite">
+        <section className="mt-6 p-6 bg-[#111827] border-2 border-white/[0.08] rounded-2xl shadow-sm" aria-live="polite">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-lg font-bold text-brand-dark flex items-center gap-2">
               <Zap className="w-5 h-5 text-amber-500" aria-hidden /> Acceptance score
@@ -257,7 +257,7 @@ export default function PrReadinessPage() {
               {score}%
             </span>
           </div>
-          <div className="w-full h-4 rounded-full bg-zinc-200 overflow-hidden border border-brand-dark">
+          <div className="w-full h-4 rounded-full bg-zinc-200 overflow-hidden border border-white/[0.08]">
             <div
               data-testid="score-bar"
               className={`h-full ${probability.bar} transition-all duration-300`}

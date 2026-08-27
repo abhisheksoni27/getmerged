@@ -1139,7 +1139,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
             {fitRadar && (
               <div className="mt-3 rounded-lg border border-emerald-100 bg-emerald-950/70 border-emerald-800/80/40 p-3 text-xs flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-emerald-950">Fit Radar:</span>
+                  <span className="font-semibold text-zinc-300">Fit Radar:</span>
                   <span className="text-zinc-400">
                     Onboarding: {fitRadar.onboarding_quality}% · First-timer: {fitRadar.first_timer_receptivity}% · Merge prob: {fitRadar.merge_probability}%
                   </span>
@@ -1296,7 +1296,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
               )}
               {!needsGitHubAuth && claimState.result && (
                 <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-950/70 border-emerald-800/80 p-3 text-xs text-emerald-300">
-                  <div className="flex items-center gap-1.5 font-semibold text-emerald-950">
+                  <div className="flex items-center gap-1.5 font-semibold text-zinc-300">
                     <Check className="h-4 w-4 text-emerald-600 shrink-0" />
                     {claimState.result.message}
                   </div>
@@ -1363,7 +1363,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
             {/* CTA to open preflight evaluation page or manual register */}
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <div className="rounded-xl border border-emerald-200 bg-emerald-950/70 border-emerald-800/80/50 p-4">
-                <h4 className="text-xs font-bold text-emerald-950">Preflight Evaluator</h4>
+                <h4 className="text-xs font-bold text-zinc-300">Preflight Evaluator</h4>
                 <p className="mt-1 text-[11px] text-emerald-300 leading-relaxed">
                   Run automated heuristics on test coverage, description length, and file diff size for your branch.
                 </p>
@@ -1586,7 +1586,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                 </div>
               </div>
             ) : (
-              <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-950/70 border-emerald-800/80/40 p-4 text-xs text-emerald-950">
+              <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-950/70 border-emerald-800/80/40 p-4 text-xs text-zinc-300">
                 <div className="flex items-center justify-between gap-2">
                   <div className="font-semibold">PR Tracking Active</div>
                   <span className="rounded-full bg-emerald-950/80 border-emerald-800/80 px-2 py-0.5 text-[11px] font-bold text-emerald-300">

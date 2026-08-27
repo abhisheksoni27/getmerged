@@ -37,7 +37,7 @@ export function ReferralCard() {
   return (
     <section
       id="referrals"
-      className="max-w-4xl mx-auto px-4 mb-8 rounded-2xl bg-[#111827] border-2 border-brand-dark shadow-sm p-5 sm:p-6 font-sans"
+      className="max-w-4xl mx-auto px-4 mb-8 rounded-2xl bg-[#111827] border-2 border-white/[0.08] shadow-sm p-5 sm:p-6 font-sans"
     >
       <div className="flex items-center gap-2 mb-1.5">
         <Gift className="h-4 w-4 text-emerald-600" />

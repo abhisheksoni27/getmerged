@@ -15,13 +15,9 @@ interface RepoAuditCTAProps {
 
 type AuditStatus = "loading" | "none" | "pending" | "paid" | "refunded" | "disputed" | "unauthenticated";
 
-// RepoAuditCTA implements AC2/AC5: the "Get Full Audit" CTA is shown only when
-// the repo exists (isScored) and the user has not purchased this repo. When
-// unauthenticated, clicking forces signup/login (requireLogin); signed-in users
-// are sent to the audit page which triggers checkout + polls for activation.
 export function RepoAuditCTA({ fullName, isScored, isLoggedIn, requireLogin }: RepoAuditCTAProps) {
   const router = useRouter();
-  const [status, setStatus] = useState<AuditStatus>("loading");
+  const [status, setStatus] = useState<AuditStatus>("none");
 
   const repoKey = fullName.toLowerCase();
 
@@ -64,13 +60,12 @@ export function RepoAuditCTA({ fullName, isScored, isLoggedIn, requireLogin }: R
     router.push(`/${fullName}/audit`);
   };
 
-  // AC2: hide the purchase CTA once the user has purchased this repo.
   if (status === "paid") {
     return (
       <Link
         href={`/${fullName}/audit`}
         title="View your full deep-audit report"
-        className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-dark bg-emerald-950/80 border-emerald-800/80 px-4 py-2 text-xs font-mono font-bold text-emerald-950 shadow-sm transition-all hover:bg-emerald-200 cursor-pointer"
+        className="inline-flex items-center gap-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 text-xs font-mono font-medium text-emerald-400 shadow-sm transition-all hover:bg-emerald-500/20 cursor-pointer"
       >
         <FileSearch className="h-4 w-4" />
         View Full Audit Report
@@ -88,11 +83,11 @@ export function RepoAuditCTA({ fullName, isScored, isLoggedIn, requireLogin }: R
       type="button"
       onClick={goToAudit}
       title={isLoggedIn ? "Unlock the full C-Rank deep-audit" : "Sign in to unlock the full deep-audit"}
-      className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-dark bg-[#ffd93d] px-4 py-2 text-xs font-mono font-bold text-zinc-50 shadow-sm transition-all hover:bg-[#ffdf5c] active:scale-[0.99] cursor-pointer"
+      className="inline-flex items-center gap-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] px-4 py-2 text-xs font-mono font-medium text-zinc-300 hover:text-white shadow-sm transition-all active:scale-[0.99] cursor-pointer"
     >
-      {!isLoggedIn && <Lock className="h-4 w-4" />}
-      <FileSearch className="h-4 w-4" />
-      {status === "loading" ? "Audit…" : label}
+      {!isLoggedIn && <Lock className="h-3.5 w-3.5 text-zinc-400" />}
+      <FileSearch className="h-3.5 w-3.5 text-orange-400" />
+      <span>{label}</span>
     </button>
   );
 }

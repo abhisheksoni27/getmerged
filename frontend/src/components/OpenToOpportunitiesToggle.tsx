@@ -73,7 +73,7 @@ export default function OpenToOpportunitiesToggle({ slug }: OpenToOpportunitiesT
   }
 
   return (
-    <div className="mb-6 rounded-2xl border-2 border-brand-dark bg-[#111827] p-5 shadow-sm">
+    <div className="mb-6 rounded-2xl border-2 border-white/[0.08] bg-[#111827] p-5 shadow-sm">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2">
           <Briefcase className="h-4 w-4 text-emerald-600" />

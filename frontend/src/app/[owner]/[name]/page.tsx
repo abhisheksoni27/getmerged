@@ -9,7 +9,6 @@ import { InstantScanPanel } from "@/components/InstantScanPanel";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { buildRepoMetadata, buildRepoFaqList } from "@/lib/repo-metadata";
 import { getGradeColor } from "@/components/CRankBadge";
-import { GitMerge, Clock, ShieldCheck, HelpCircle } from "lucide-react";
 
 const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
 
@@ -252,76 +251,26 @@ export default async function RepoDetailPage({ params }: PageProps) {
       <link rel="alternate" type="text/markdown" href={`/${owner}/${name}/raw`} />
 
       {/* Semantic Server-Rendered Content for Search Engine Bots */}
-      <noscript>
-        <section className="mx-auto max-w-5xl px-4 py-8">
-          <h1>{fullName} - Open Source PR Review Scorecard</h1>
-          <p>{repo.description}</p>
-          <p>C-Rank Grade: {rank} ({rankInfo.label}) - {score}/100</p>
-          <p>External PR Merge Rate: {mergeRate}</p>
-          <p>Response Time: {responseTime}</p>
-          <p>First Timer Success: {firstTimerRate}</p>
-        </section>
-      </noscript>
+      <section className="sr-only" aria-label="Repository Telemetry Overview">
+        <h1>{fullName} - Open Source PR Review Scorecard</h1>
+        <p>{repo.description}</p>
+        <p>C-Rank Grade: {rank} ({rankInfo.label}) - {score}/100</p>
+        <p>External PR Merge Rate: {mergeRate}</p>
+        <p>Response Time: {responseTime}</p>
+        <p>First Timer Success: {firstTimerRate}</p>
+        <div>
+          <h2>Frequently Asked Questions</h2>
+          {faqList.map((faq, i) => (
+            <article key={i}>
+              <h3>{faq.q}</h3>
+              <p>{faq.a}</p>
+            </article>
+          ))}
+        </div>
+      </section>
 
       {/* Main Interactive React Surface */}
       <ClientRepoDetail repo={repo} fullName={fullName} initialInsights={insights} />
-      
-      {/* Static Semantic SEO Floor: Direct Server-Rendered HTML markup */}
-      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 w-full border-t border-white/[0.08] mt-8 font-sans">
-        <div className="mb-6">
-          <h2 className="text-xl font-bold font-space text-zinc-100 flex items-center gap-2">
-            <HelpCircle className="h-5 w-5 text-orange-400" />
-            Everything You Need to Know Before Contributing to {fullName}
-          </h2>
-          <p className="text-sm text-zinc-400 mt-1">
-            Empirical pull request review statistics, community acceptance rates, and maintainer responsiveness data for {fullName}.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="p-4 rounded-xl glass-card">
-            <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-1">
-              <GitMerge className="h-4 w-4 text-emerald-400" /> External PR Merge Rate
-            </div>
-            <div className="text-2xl font-bold font-mono text-zinc-100">{mergeRate}</div>
-            <div className="text-xs text-zinc-400 mt-1">Of pull requests submitted by outside contributors are merged.</div>
-          </div>
-
-          <div className="p-4 rounded-xl glass-card">
-            <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-1">
-              <Clock className="h-4 w-4 text-blue-400" /> Average Response Time
-            </div>
-            <div className="text-2xl font-bold font-mono text-zinc-100">{responseTime}</div>
-            <div className="text-xs text-zinc-400 mt-1">Typical turnaround for a maintainer code review comment.</div>
-          </div>
-
-          <div className="p-4 rounded-xl glass-card">
-            <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-1">
-              <ShieldCheck className="h-4 w-4 text-purple-400" /> First-Timer Success
-            </div>
-            <div className="text-2xl font-bold font-mono text-zinc-100">{firstTimerRate}</div>
-            <div className="text-xs text-zinc-400 mt-1">Conversion rate for developers submitting their first PR.</div>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <h3 className="text-base font-bold font-space text-zinc-200">
-            Frequently Asked Questions
-          </h3>
-          <div className="space-y-3">
-            {faqList.map((faq, idx) => (
-              <div key={idx} className="p-4 rounded-xl glass-card border border-white/[0.06]">
-                <h4 className="text-sm font-semibold text-zinc-100 mb-1.5 font-sans">
-                  {faq.q}
-                </h4>
-                <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-sans">
-                  {faq.a}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </div>

@@ -43,7 +43,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
 
   if (loading) {
     return (
-      <div className="rounded-2xl bg-[#111827] p-5 border-2 border-brand-dark shadow-sm mb-6 animate-pulse">
+      <div className="rounded-2xl bg-[#111827] p-5 border-2 border-white/[0.08] shadow-sm mb-6 animate-pulse">
         <div className="flex items-center justify-between mb-4">
           <div className="h-5 bg-zinc-200 rounded w-1/3"></div>
           <div className="h-4 bg-zinc-200 rounded w-24"></div>
@@ -76,11 +76,11 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
   const localWindow = isMounted ? formatUTCRangeToLocal(primaryStart, primaryEnd) : `${padZero(primaryStart)}:00 - ${padZero(primaryEnd)}:00 UTC`;
 
   return (
-    <div className="rounded-2xl bg-[#111827] p-5 sm:p-6 border-2 border-brand-dark shadow-sm mb-6 font-mono">
+    <div className="rounded-2xl bg-[#111827] p-5 sm:p-6 border-2 border-white/[0.08] shadow-sm mb-6 font-mono">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-brand-dark bg-emerald-950/80 border-emerald-800/80 text-emerald-300 shadow-sm">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-white/[0.08] bg-emerald-950/80 border-emerald-800/80 text-emerald-300 shadow-sm">
             <Clock className="h-4 w-4 text-emerald-400" />
           </div>
           <div>
