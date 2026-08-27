@@ -42,12 +42,7 @@ type Config struct {
 	RepoBoostWindowDays    int
 	RepoBoostMaxActive     int
 	RepoBoostDailySpendCap int64
-	// Featured Placement (Repo Boost: paid featured placement in contributor
-	// discovery, AC1-AC10). Synchronous-capture model with idempotency lock.
-	FeaturedPriceCents int64
-	FeaturedWindowDays int
-	FeaturedMaxPerDay  int
-	JobSecret          string
+	JobSecret              string
 	SMTPHost                  string
 	SMTPPort                  string
 	SMTPUser                  string
@@ -203,20 +198,6 @@ func Load() (*Config, error) {
 	c.RepoBoostDailySpendCap, _ = strconv.ParseInt(os.Getenv("REPO_BOOST_DAILY_SPEND_CAP_CENTS"), 10, 64)
 	if c.RepoBoostDailySpendCap <= 0 {
 		c.RepoBoostDailySpendCap = 3000
-	}
-	// Featured Placement (AC2): canonical price is server-validated; the client
-	// cannot influence it. Default $9 for a 7-day featured slot.
-	c.FeaturedPriceCents, _ = strconv.ParseInt(os.Getenv("FEATURED_PRICE_CENTS"), 10, 64)
-	if c.FeaturedPriceCents <= 0 {
-		c.FeaturedPriceCents = 900
-	}
-	c.FeaturedWindowDays, _ = strconv.Atoi(os.Getenv("FEATURED_WINDOW_DAYS"))
-	if c.FeaturedWindowDays <= 0 {
-		c.FeaturedWindowDays = 7
-	}
-	c.FeaturedMaxPerDay, _ = strconv.Atoi(os.Getenv("FEATURED_MAX_PER_DAY"))
-	if c.FeaturedMaxPerDay <= 0 {
-		c.FeaturedMaxPerDay = 5
 	}
 
 	required := map[string]*string{
