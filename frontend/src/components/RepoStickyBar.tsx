@@ -77,34 +77,34 @@ export function RepoStickyBar({
         visible ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-3 pointer-events-none"
       }`}
     >
-      <div className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 py-2.5">
-        <div className="flex items-center justify-between gap-4">
-          {/* Left: Mini Repo identity */}
-          <div className="flex items-center gap-3 min-w-0 shrink-0">
+      <div className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 py-2">
+        {/* Row 1: Repo identity, rank, stars on the left; Watch and GitHub on the right */}
+        <div className="flex items-center justify-between gap-3 mb-1.5">
+          <div className="flex items-center gap-2.5 min-w-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={ownerAvatarUrl}
               alt={owner}
-              width={28}
-              height={28}
-              className="w-7 h-7 rounded-lg border border-zinc-300 bg-zinc-100 object-cover shrink-0"
+              width={26}
+              height={26}
+              className="w-6.5 h-6.5 rounded-lg border border-zinc-300 bg-zinc-100 object-cover shrink-0"
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
               }}
             />
             <div className="flex items-center gap-2 min-w-0">
-              <span className="font-space font-bold text-xs sm:text-sm text-zinc-950 truncate max-w-[140px] sm:max-w-[220px]">
+              <span className="font-space font-bold text-xs sm:text-sm text-zinc-950 truncate max-w-[200px] sm:max-w-[360px]">
                 {fullName}
               </span>
               <span
-                className={`hidden sm:inline-flex items-center px-2 py-0.5 font-mono text-[10px] font-bold rounded-md border border-black text-black ${getRankBadgeBg(
+                className={`inline-flex items-center px-2 py-0.5 font-mono text-[10px] font-bold rounded-md border border-black text-black ${getRankBadgeBg(
                   rank
                 )}`}
               >
                 {rankLabel}
               </span>
               {typeof repo?.stars === "number" && (
-                <span className="hidden md:inline-flex items-center gap-1 font-mono text-[10px] font-semibold text-zinc-600">
+                <span className="inline-flex items-center gap-1 font-mono text-[10px] font-semibold text-zinc-600">
                   <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                   {repo.stars >= 1000 ? `${(repo.stars / 1000).toFixed(1)}k` : repo.stars}
                 </span>
@@ -112,36 +112,8 @@ export function RepoStickyBar({
             </div>
           </div>
 
-          {/* Center/Right: Tabbed Section Chips */}
-          <div
-            ref={tabsScrollRef}
-            className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5 px-1 min-w-0"
-          >
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeSection === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  data-section-tab={tab.id}
-                  onClick={() => onSectionClick(tab.id)}
-                  title={`Jump to ${tab.label}`}
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono transition-all shrink-0 cursor-pointer ${
-                    isActive
-                      ? "bg-[#ffd93d] text-zinc-950 font-bold border-2 border-black shadow-[2px_2px_0px_#000]"
-                      : "bg-white text-zinc-700 hover:bg-zinc-100 border border-zinc-300 font-medium hover:text-black"
-                  }`}
-                >
-                  <Icon className={`h-3 w-3 ${isActive ? "text-black font-bold" : "text-zinc-500"}`} />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </div>
-
           {/* Right Action buttons */}
-          <div className="hidden lg:flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={onWatchToggle}
@@ -154,7 +126,7 @@ export function RepoStickyBar({
               }`}
             >
               <Bookmark className={`h-3 w-3 ${isWatching ? "fill-amber-500 text-amber-600" : "text-zinc-600"}`} />
-              <span>{isWatching ? "Watching" : "Watch"}</span>
+              <span className="hidden sm:inline">{isWatching ? "Watching" : "Watch"}</span>
             </button>
             <a
               href={`https://github.com/${fullName}`}
@@ -167,6 +139,34 @@ export function RepoStickyBar({
               <span>GitHub</span>
             </a>
           </div>
+        </div>
+
+        {/* Row 2: Full horizontal navbar of section tabs */}
+        <div
+          ref={tabsScrollRef}
+          className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-1 min-w-0"
+        >
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeSection === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                data-section-tab={tab.id}
+                onClick={() => onSectionClick(tab.id)}
+                title={`Jump to ${tab.label}`}
+                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono transition-all shrink-0 cursor-pointer ${
+                  isActive
+                    ? "bg-[#ffd93d] text-zinc-950 font-bold border-2 border-black shadow-[2px_2px_0px_#000]"
+                    : "bg-white text-zinc-700 hover:bg-zinc-100 border border-zinc-300 font-medium hover:text-black"
+                }`}
+              >
+                <Icon className={`h-3 w-3 ${isActive ? "text-black font-bold" : "text-zinc-500"}`} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
