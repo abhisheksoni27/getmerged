@@ -103,23 +103,23 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
       <Header />
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 sm:py-10">
-        {/* Section 1: Executive Contributor Header & Hireability Status */}
+        {/* Section 1: Executive Contributor Header */}
         <div className="mb-6 rounded-3xl bg-white p-6 sm:p-8 border border-zinc-200 shadow-xs border-b-4 border-b-zinc-900">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-            <div className="flex items-start gap-4 sm:gap-5">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="flex items-start gap-4 sm:gap-5 flex-1 min-w-0">
               {profile.avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={profile.avatar_url}
                   alt={profile.username}
-                  className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl border-2 border-zinc-200 shadow-2xs object-cover"
+                  className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl border-2 border-zinc-200 shadow-2xs object-cover shrink-0"
                 />
               ) : (
-                <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-zinc-900 text-white flex items-center justify-center font-space font-bold text-2xl">
+                <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-zinc-900 text-white flex items-center justify-center font-space font-bold text-2xl shrink-0">
                   {profile.username.slice(0, 2).toUpperCase()}
                 </div>
               )}
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <h1 className="text-2xl sm:text-3xl font-extrabold font-space text-zinc-950 truncate">
                     {profile.username}
@@ -144,19 +144,21 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
                   })}
                 </p>
 
-                <p className="mt-2.5 text-xs sm:text-sm text-zinc-600 leading-relaxed font-sans max-w-xl">
+                <p className="mt-2.5 text-xs sm:text-sm text-zinc-600 leading-relaxed font-sans">
                   {dna?.persona_verdict ||
                     "Verified open-source track record: every pull request and maintainer interaction is benchmarked via public GitHub telemetry."}
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col items-start sm:items-end gap-3 shrink-0 w-full sm:w-auto">
+            <div className="shrink-0 flex items-center gap-3">
               <ShareCardButton slug={profile.slug} username={profile.username} />
-              <OpenToOpportunitiesToggle slug={profile.slug} />
             </div>
           </div>
         </div>
+
+        {/* Talent Pass Toggle (Isolated in own container for owner) */}
+        <OpenToOpportunitiesToggle slug={profile.slug} />
 
         {/* Section 2: Core Telemetry KPI Quad */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 mb-8">
@@ -185,7 +187,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
               <Star className="h-3.5 w-3.5 text-amber-500" /> Stars Impacted
             </div>
             <div className="mt-2 text-2xl sm:text-3xl font-extrabold font-space text-zinc-950">
-              {dna?.stars_pulled_in ? `${(dna.stars_pulled_in / 1000).toFixed(1)}k` : `${profile.repos.length * 2}k+`}
+              {dna?.stars_pulled_in ? `${(dna.stars_pulled_in / 1000).toFixed(1)}k` : profile.repos.length > 0 ? `${profile.repos.length * 2}k+` : "0"}
             </div>
             <div className="text-[10px] text-zinc-500 font-sans mt-0.5">Combined repo reach</div>
           </div>
@@ -195,7 +197,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
               <Zap className="h-3.5 w-3.5 text-purple-600" /> Skill Level
             </div>
             <div className="mt-2 text-xl sm:text-2xl font-extrabold font-space text-zinc-950 truncate">
-              {dna?.skill_level || "Active"}
+              {dna?.skill_level || (profile.merged_count > 0 ? "Active" : "Novice")}
             </div>
             <div className="text-[10px] text-zinc-500 font-sans mt-0.5">{dna?.pr_size_preference || "Standard"} PR scope</div>
           </div>
@@ -384,43 +386,67 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
         )}
 
         {/* Section 8: Contributor Badges & Endorsements */}
-        <div className="mb-8 rounded-3xl bg-white p-5 sm:p-7 border border-zinc-200 shadow-xs border-b-4 border-b-zinc-900">
-          <h2 className="text-sm font-bold font-space text-zinc-950 mb-3 flex items-center gap-2">
-            <Award className="h-4 w-4 text-amber-500" />
-            Earned Contributor Badges
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            <div className="p-3 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-center gap-2.5">
-              <div className="h-8 w-8 rounded-xl bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-800 shrink-0 font-bold font-mono text-xs">
-                S
-              </div>
-              <div>
-                <div className="font-space font-bold text-xs text-zinc-900">Tier S Merged</div>
-                <div className="text-[10px] text-zinc-500 font-sans">Strict review acceptance</div>
-              </div>
-            </div>
+        {(() => {
+          const hasSTier = profile.repos.some((r) => r.c_rank_tier === "S");
+          const hasFastShip = (profile.merged_count >= 5) || (accuracyPct !== null && accuracyPct >= 80);
+          const hasPolyglot = languages.length >= 3;
+          const totalBadges = [hasSTier, hasFastShip, hasPolyglot].filter(Boolean).length;
 
-            <div className="p-3 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-center gap-2.5">
-              <div className="h-8 w-8 rounded-xl bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-800 shrink-0 font-bold font-mono text-xs">
-                ⚡
+          return (
+            <div className="mb-8 rounded-3xl bg-white p-5 sm:p-7 border border-zinc-200 shadow-xs border-b-4 border-b-zinc-900">
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <h2 className="text-sm font-bold font-space text-zinc-950 flex items-center gap-2">
+                  <Award className="h-4 w-4 text-amber-500" />
+                  Earned Contributor Badges ({totalBadges}/3)
+                </h2>
               </div>
-              <div>
-                <div className="font-space font-bold text-xs text-zinc-900">Fast Shipper</div>
-                <div className="text-[10px] text-zinc-500 font-sans">Active turnaround cycle</div>
-              </div>
-            </div>
 
-            <div className="p-3 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-center gap-2.5">
-              <div className="h-8 w-8 rounded-xl bg-purple-100 border border-purple-200 flex items-center justify-center text-purple-800 shrink-0 font-bold font-mono text-xs">
-                🌐
-              </div>
-              <div>
-                <div className="font-space font-bold text-xs text-zinc-900">Ecosystem Polyglot</div>
-                <div className="text-[10px] text-zinc-500 font-sans">Multi-language merges</div>
-              </div>
+              {totalBadges === 0 ? (
+                <div className="rounded-2xl border border-dashed border-zinc-200 p-6 text-center text-xs text-zinc-500 font-sans">
+                  No badges unlocked yet. Merge PRs into S-Tier repos or across multiple languages to earn verified badges.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {hasSTier && (
+                    <div className="p-3 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-center gap-2.5">
+                      <div className="h-8 w-8 rounded-xl bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-800 shrink-0 font-bold font-mono text-xs">
+                        S
+                      </div>
+                      <div>
+                        <div className="font-space font-bold text-xs text-zinc-900">Tier S Merged</div>
+                        <div className="text-[10px] text-zinc-500 font-sans">Strict review acceptance</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {hasFastShip && (
+                    <div className="p-3 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-center gap-2.5">
+                      <div className="h-8 w-8 rounded-xl bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-800 shrink-0 font-bold font-mono text-xs">
+                        ⚡
+                      </div>
+                      <div>
+                        <div className="font-space font-bold text-xs text-zinc-900">Fast Shipper</div>
+                        <div className="text-[10px] text-zinc-500 font-sans">High accuracy & merge count</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {hasPolyglot && (
+                    <div className="p-3 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-center gap-2.5">
+                      <div className="h-8 w-8 rounded-xl bg-purple-100 border border-purple-200 flex items-center justify-center text-purple-800 shrink-0 font-bold font-mono text-xs">
+                        🌐
+                      </div>
+                      <div>
+                        <div className="font-space font-bold text-xs text-zinc-900">Ecosystem Polyglot</div>
+                        <div className="text-[10px] text-zinc-500 font-sans">3+ language PRs</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-          </div>
-        </div>
+          );
+        })()}
 
         {/* Section 9: Embeddable Resume Markdown Badge */}
         <div className="mb-8 rounded-3xl bg-white p-5 sm:p-7 border border-zinc-200 shadow-xs border-b-4 border-b-zinc-900">
