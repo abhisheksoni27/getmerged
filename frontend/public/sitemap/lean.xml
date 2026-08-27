@@ -55,6 +55,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/digama0/mm0</loc>
+    <lastmod>2026-08-27T09:36:16Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/leanprover-community/aesop</loc>
     <lastmod>2026-08-21T15:09:49Z</lastmod>
     <changefreq>daily</changefreq>
@@ -67,8 +73,32 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/leanprover-community/NNG4</loc>
+    <lastmod>2026-08-27T09:36:16Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/AlexKontorovich/PrimeNumberTheoremAnd</loc>
+    <lastmod>2026-08-27T09:36:16Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/Verified-zkEVM/ArkLib</loc>
     <lastmod>2026-08-21T15:09:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ufmg-smite/lean-smt</loc>
+    <lastmod>2026-08-27T09:36:16Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/facebookresearch/atlas-lean</loc>
+    <lastmod>2026-08-27T09:36:16Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -79,8 +109,20 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/FormalizedFormalLogic/Foundation</loc>
+    <lastmod>2026-08-27T09:36:16Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/dwrensha/compfiles</loc>
     <lastmod>2026-08-21T15:09:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/trishullab/PutnamBench</loc>
+    <lastmod>2026-08-27T09:36:16Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

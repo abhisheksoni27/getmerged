@@ -67,6 +67,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/picolisp/pil21</loc>
+    <lastmod>2026-08-27T02:35:41Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/arm/arm-toolchain</loc>
     <lastmod>2026-08-21T15:06:49Z</lastmod>
     <changefreq>daily</changefreq>
@@ -87,6 +93,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/schism-dev/schism</loc>
     <lastmod>2026-08-21T15:06:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/pgarba/SiMBA-</loc>
+    <lastmod>2026-08-27T08:41:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

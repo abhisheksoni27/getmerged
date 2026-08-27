@@ -7,8 +7,20 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/OpenMoonRay/openmoonray</loc>
+    <lastmod>2026-08-27T01:35:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/WebAssembly/wasi-sdk</loc>
     <lastmod>2026-08-25T08:45:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/libbpf/libbpf-bootstrap</loc>
+    <lastmod>2026-08-27T01:35:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
