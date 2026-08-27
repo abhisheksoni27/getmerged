@@ -6,10 +6,10 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"log/slog"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -293,31 +293,29 @@ func GetRepo(repoStore repository.RepoRepository) gin.HandlerFunc {
 	}
 }
 
-// badgeTierNames maps C-Rank tiers to the human-readable labels shown on the badge.
-var badgeTierNames = map[string]string{
-	"S": "Super Welcoming",
-	"A": "Welcoming",
-	"B": "Moderate",
-	"C": "Slow Review",
-	"D": "Scored",
-}
+// cRankReportBaseURL is the single source-of-truth deep-dive report link
+// constant (AC4). Every badge renders an anchor to
+// cRankReportBaseURL + "/" + owner + "/" + repo.
+const cRankReportBaseURL = "https://opendoor.app/r"
 
-// badgeColors is the hardcoded palette selectable via the ?color= query param.
-var badgeColors = map[string]string{
-	"emerald": "#059669",
-	"green":   "#16a34a",
-	"blue":    "#2563eb",
-	"purple":  "#7c3aed",
-	"pink":    "#db2777",
-	"amber":   "#d97706",
-	"orange":  "#ea580c",
-	"red":     "#dc2626",
-	"cyan":    "#0891b2",
-	"slate":   "#334155",
-	"zinc":    "#52525b",
-}
+// badgeSlugRe validates owner/repo path segments before any store access or
+// URL building (AC5). Matches ^[A-Za-z0-9_.-]+$ with a 2-39 char length bound.
+var badgeSlugRe = regexp.MustCompile(`^[A-Za-z0-9_.-]{2,39}$`)
 
-// GetBadgeSVG handles GET /badge/:owner/:repo.svg (F1)
+// GetBadgeSVG handles GET /badge/:owner/:repo (AC1..AC9).
+// GetBadgeSVG handles GET /badge/:owner/:repo (AC1..AC9). It serves a
+// shields.io-style SVG badge showing the live C-Rank grade and welcoming
+// score. The owner/repo slug is validated before any store access or URL
+// building (AC5/AC8). Unknown or not-yet-computed repos return a styled 404
+// 'C-Rank: unknown' SVG (AC2); a down/timed-out C-Rank store degrades to a
+// 'C-Rank: N/A' SVG with HTTP 200 and gray fill, never a 5xx (AC3). The
+// embedded badge link points at the public deep-dive report and is built only
+// from the validated, RFC3986-encoded slug (AC4).
+//
+// NOTE (AC9): GitHub camo proxies and caches this SVG for ~24h by design. To
+// force a refresh, maintainers append ?v=<crank_version_hash>, which changes
+// the requested URL (and therefore camo's cache key) without altering
+// rendering. This route makes no no-store auto-refresh claim.
 func GetBadgeSVG(repoStore repository.RepoRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		owner := c.Param("owner")
@@ -325,82 +323,41 @@ func GetBadgeSVG(repoStore repository.RepoRepository) gin.HandlerFunc {
 		if before, ok := strings.CutSuffix(name, ".svg"); ok {
 			name = before
 		}
-		fullName := owner + "/" + name
 
-		repo, err := repoStore.FindByIDOrName(c.Request.Context(), fullName)
-		tier := "D"
-		score := "0.0"
-		if err == nil && repo != nil {
-			tier = repo.CRankTier
-			if repo.CRankScore > 0 {
-				score = strconv.FormatFloat(repo.CRankScore, 'f', 1, 64)
-			}
+		// AC5: reject malformed slugs up-front with 400 + the styled 404 SVG.
+		if !badgeSlugRe.MatchString(owner) || !badgeSlugRe.MatchString(name) {
+			writeBadgeSVG(c, http.StatusBadRequest, "C-Rank", "unknown", badgeTierColors["unranked"], "")
+			return
+		}
+		slug := strings.ToLower(owner) + "/" + strings.ToLower(name)
+
+		// AC3: bound the store call so a hung C-Rank store degrades to N/A < 2s.
+		ctx, cancel := context.WithTimeout(c.Request.Context(), 2*time.Second)
+		defer cancel()
+
+		repo, err := repoStore.FindByIDOrName(ctx, slug)
+		if err != nil && err != sql.ErrNoRows {
+			// AC3: store down/timeout -> degraded gray N/A SVG, HTTP 200.
+			writeBadgeSVG(c, http.StatusOK, "C-Rank", "N/A", badgeTierColors["unranked"], "")
+			return
 		}
 
-		tierName := badgeTierNames[tier]
-		if tierName == "" {
-			tierName = badgeTierNames["D"]
+		// AC2: unknown repo or null/not-yet-computed C-Rank -> 404 SVG.
+		if repo == nil || !repo.IsScored {
+			writeBadgeSVG(c, http.StatusNotFound, "C-Rank", "unknown", badgeTierColors["unranked"], "")
+			return
 		}
 
-		color := "#52525b"
-		switch tier {
-		case "S":
-			color = "#059669"
-		case "A":
-			color = "#2563eb"
-		case "B":
-			color = "#d97706"
-		case "C":
-			color = "#dc2626"
+		color := badgeTierColors[repo.CRankTier]
+		if color == "" {
+			color = badgeTierColors["unranked"]
 		}
-		if chosen, ok := badgeColors[c.Query("color")]; ok {
-			color = chosen
-		}
+		scoreStr := strconv.FormatFloat(repo.CRankScore, 'f', 0, 64)
+		message := repo.CRankTier + " " + scoreStr // e.g. "A 87" (AC1)
 
-		// Points (score) are optional and controlled via ?points=1|true.
-		showPoints := c.Query("points") == "1" || c.Query("points") == "true"
-		rightText := tierName
-		if showPoints {
-			rightText = fmt.Sprintf("%s (%s)", tierName, score)
-		}
-
-		badgeWidth := 220
-		rightWidth := 135
-		rightTextX := 152.5
-		if showPoints {
-			badgeWidth = 260
-			rightWidth = 175
-			rightTextX = 85 + float64(rightWidth)/2
-		}
-
-		// Modern high-fidelity badge design (Issue #57)
-		svg := fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="28" role="img" aria-label="Opendoor C-Rank: %s">
-  <title>Opendoor C-Rank: %s</title>
-  <defs>
-    <linearGradient id="b" x2="0" y2="100%%">
-      <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
-      <stop offset="1" stop-opacity=".1"/>
-    </linearGradient>
-    <clipPath id="r">
-      <rect width="%d" height="28" rx="6" fill="#fff"/>
-    </clipPath>
-  </defs>
-  <g clip-path="url(#r)">
-    <rect width="85" height="28" fill="#18181b"/>
-    <rect x="85" width="%d" height="28" fill="%s"/>
-    <rect width="%d" height="28" fill="url(#b)"/>
-  </g>
-  <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="11">
-    <text x="42.5" y="18" font-weight="700" fill="#000" opacity="0.3">opendoor</text>
-    <text x="42.5" y="17" font-weight="700" fill="#fff">opendoor</text>
-    <text x="%.1f" y="18" font-weight="700" fill="#000" opacity="0.3">%s</text>
-    <text x="%.1f" y="17" font-weight="700" fill="#fff">%s</text>
-  </g>
-</svg>`, badgeWidth, rightText, rightText, badgeWidth, rightWidth, color, badgeWidth, rightTextX, rightText, rightTextX, rightText)
-
-		c.Header("Content-Type", "image/svg+xml")
-		c.Header("Cache-Control", "public, max-age=3600, s-maxage=86400")
-		c.String(http.StatusOK, svg)
+		// AC4: deep-dive link built only from the validated, encoded slug.
+		reportURL := cRankReportBaseURL + "/" + url.PathEscape(strings.ToLower(owner)) + "/" + url.PathEscape(strings.ToLower(name))
+		writeBadgeSVG(c, http.StatusOK, "C-Rank", message, color, reportURL)
 	}
 }
 

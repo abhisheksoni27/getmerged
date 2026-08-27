@@ -24,8 +24,8 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/ghapp"
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/hacktoberfest"
-	"github.com/abhisheksoni27/opendoor/internal/issueclaim"
 	"github.com/abhisheksoni27/opendoor/internal/handler"
+	"github.com/abhisheksoni27/opendoor/internal/issueclaim"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/notification"
 	"github.com/abhisheksoni27/opendoor/internal/pipeline"
@@ -235,16 +235,18 @@ func main() {
 	r.GET("/unsubscribe", handler.Unsubscribe(cfg))
 	r.GET("/resubscribe", handler.Resubscribe(cfg))
 
-	// Public SVG Badge Route (F1)
-	r.GET("/badge/:owner/:repo", handler.GetBadgeSVG(repoStore))
+	// Public SVG Badge Route (AC1..AC9). Unauthenticated, so rate-limited
+	// (60 req/min/IP) to prevent enumeration/DoS (AC7). Never proxies to any
+	// external URL — only the internal C-Rank store is consulted (SSRF-safe).
+	badgeRL := middleware.RateLimitPerIP(60, time.Minute)
+	r.GET("/badge/:owner/:repo", badgeRL, handler.GetBadgeSVG(repoStore))
 
 	// Live embeddable badge: shields-style SVG with C-Rank grade + median PR
 	// response time, 5-min CDN cache, neutral fallback for unscored repos.
 	// Public (no auth) so it works in README <img> tags. Root level like /cards
 	// to avoid the API-key group; static /api/badge prefix never conflicts
 	// with the static /api/v1 group (no wildcard mixing).
-	// AC4: 60 req/min per IP, 429 when exceeded.
-	badgeRL := middleware.RateLimitPerIP(60, time.Minute)
+	// AC7: reuses the badgeRL (60 req/min/IP) defined above.
 	r.GET("/api/badge/:owner/:repo", badgeRL, handler.GetLiveBadgeSVG(repoStore, cfg.AppBaseURL))
 
 	// Org-level 'Verified Welcoming Org' badge (AC7): distinct static prefix
