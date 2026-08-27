@@ -23,16 +23,31 @@ export function AuthModal({
   source = "modal",
 }: AuthModalProps) {
   const [mounted, setMounted] = useState(false);
-  const [refQS, setRefQS] = useState("");
+  const [returnToQS, setReturnToQS] = useState("");
 
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== "undefined") {
+      const currentPath = window.location.pathname + window.location.search + window.location.hash;
+      if (currentPath && currentPath !== "/") {
+        setReturnToQS(`return_to=${encodeURIComponent(currentPath)}`);
+      }
+    }
   }, []);
 
   useEffect(() => {
     if (isOpen) {
       const ref = getReferralCode();
-      setRefQS(ref ? `?ref=${encodeURIComponent(ref)}` : "");
+      const params = new URLSearchParams();
+      if (ref) params.set("ref", ref);
+      if (typeof window !== "undefined") {
+        const currentPath = window.location.pathname + window.location.search + window.location.hash;
+        if (currentPath && currentPath !== "/") {
+          params.set("return_to", currentPath);
+        }
+      }
+      const qs = params.toString();
+      setRefQS(qs ? `?${qs}` : "");
     }
   }, [isOpen]);
 
@@ -123,7 +138,7 @@ export function AuthModal({
 
             {/* Google OAuth Button */}
             <a
-              href={`${API_BASE_URL}/api/v1/auth/google`}
+              href={`${API_BASE_URL}/api/v1/auth/google${returnToQS ? `?${returnToQS}` : ""}`}
               onClick={() => posthog.capture("google_sign_in_clicked", { source })}
               title="Sign in with Google account"
               className="flex w-full items-center justify-center gap-3 rounded-2xl bg-white border border-zinc-300 px-5 py-3.5 text-xs sm:text-sm font-semibold text-zinc-800 shadow-2xs hover:bg-zinc-50 hover:border-zinc-400 active:scale-[0.98] transition-all cursor-pointer no-underline group"

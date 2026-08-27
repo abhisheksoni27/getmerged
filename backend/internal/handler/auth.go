@@ -22,6 +22,23 @@ import (
 // GitHubOAuthRedirect handles GET /api/v1/auth/github
 func GitHubOAuthRedirect(cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Persist return_to destination so user remains on their current page after login
+		returnTo := c.Query("return_to")
+		if returnTo == "" {
+			returnTo = c.Query("redirect")
+		}
+		if returnTo != "" && strings.HasPrefix(returnTo, "/") && !strings.HasPrefix(returnTo, "//") {
+			isSecure := cfg.GinMode == "release"
+			http.SetCookie(c.Writer, &http.Cookie{
+				Name:     "opendoor_return_to",
+				Value:    returnTo,
+				Path:     "/",
+				MaxAge:   600,
+				HttpOnly: true,
+				Secure:   isSecure,
+				SameSite: http.SameSiteLaxMode,
+			})
+		}
 		// Persist referral attribution for 30 days (AC1).
 		if ref := c.Query("ref"); ref != "" && len(ref) <= 64 {
 			isSecure := cfg.GinMode == "release"
@@ -232,10 +249,19 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository,
 
 		slog.Info("jwt cookie has been set", "token", signedToken)
 
-		// Quiz flow lands on /dashboard so ForYou is populated from the
-		// freshly committed snapshot (AC5); regular logins go home.
+		// Check if user should return to their current page before login
 		redirectTarget := "/"
-		if quizSeeded {
+		if returnCookie, err := c.Cookie("opendoor_return_to"); err == nil && returnCookie != "" && strings.HasPrefix(returnCookie, "/") && !strings.HasPrefix(returnCookie, "//") {
+			redirectTarget = returnCookie
+			http.SetCookie(c.Writer, &http.Cookie{
+				Name:     "opendoor_return_to",
+				Value:    "",
+				Path:     "/",
+				MaxAge:   -1,
+				Secure:   isSecure,
+				SameSite: http.SameSiteLaxMode,
+			})
+		} else if quizSeeded {
 			redirectTarget = "/dashboard"
 		}
 
@@ -256,6 +282,23 @@ func GoogleOAuthRedirect(cfg *config.Config) gin.HandlerFunc {
 		if cfg.GoogleClientID == "" {
 			c.JSON(http.StatusNotImplemented, gin.H{"error": "Google OAuth is not configured on this server"})
 			return
+		}
+		// Persist return_to destination so user remains on their current page after login
+		returnTo := c.Query("return_to")
+		if returnTo == "" {
+			returnTo = c.Query("redirect")
+		}
+		if returnTo != "" && strings.HasPrefix(returnTo, "/") && !strings.HasPrefix(returnTo, "//") {
+			isSecure := cfg.GinMode == "release"
+			http.SetCookie(c.Writer, &http.Cookie{
+				Name:     "opendoor_return_to",
+				Value:    returnTo,
+				Path:     "/",
+				MaxAge:   600,
+				HttpOnly: true,
+				Secure:   isSecure,
+				SameSite: http.SameSiteLaxMode,
+			})
 		}
 		scheme := "https"
 		if c.Request.TLS == nil && c.GetHeader("X-Forwarded-Proto") != "https" {
@@ -372,12 +415,25 @@ func GoogleOAuthCallback(cfg *config.Config, userRepo repository.UserRepository)
 			SameSite: http.SameSiteLaxMode,
 		})
 
+		redirectTarget := "/"
+		if returnCookie, err := c.Cookie("opendoor_return_to"); err == nil && returnCookie != "" && strings.HasPrefix(returnCookie, "/") && !strings.HasPrefix(returnCookie, "//") {
+			redirectTarget = returnCookie
+			http.SetCookie(c.Writer, &http.Cookie{
+				Name:     "opendoor_return_to",
+				Value:    "",
+				Path:     "/",
+				MaxAge:   -1,
+				Secure:   isSecure,
+				SameSite: http.SameSiteLaxMode,
+			})
+		}
+
 		if strings.Contains(c.Request.Host, "localhost") {
-			c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000")
+			c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000"+redirectTarget)
 			return
 		}
 
-		c.Redirect(http.StatusTemporaryRedirect, "/")
+		c.Redirect(http.StatusTemporaryRedirect, redirectTarget)
 	}
 }
 
