@@ -24,7 +24,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
   const mergeRateVal = repo.external_pr_merge_rate !== undefined && repo.external_pr_merge_rate > 0
     ? Math.round(repo.external_pr_merge_rate)
     : null;
-  const mergeRateStr = mergeRateVal !== null ? `${mergeRateVal}%` : "—";
+  const mergeRateStr = mergeRateVal !== null ? `${mergeRateVal}%` : " - ";
 
   const firstResponseHours = repo.time_to_first_response_hours;
   const firstResponseStr =
@@ -34,7 +34,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
         : firstResponseHours < 24
         ? `${Math.round(firstResponseHours)}h`
         : `${Math.round(firstResponseHours / 24)}d`
-      : "—";
+      : " - ";
 
   const responsePercentage = firstResponseHours
     ? Math.max(0, Math.min(100, Math.round(100 - (firstResponseHours / 72) * 80)))
@@ -43,7 +43,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
   const firstTimerRateVal = repo.first_timer_success_rate !== undefined && repo.first_timer_success_rate >= 0
     ? Math.round(repo.first_timer_success_rate)
     : null;
-  const firstTimerStr = firstTimerRateVal !== null ? `${firstTimerRateVal}%` : "—";
+  const firstTimerStr = firstTimerRateVal !== null ? `${firstTimerRateVal}%` : " - ";
 
   const gfiCount = repo.good_first_issue_count ?? 0;
   const gfiLabel = gfiCount === 1 ? "1 good first issue" : `${gfiCount} good first issues`;
