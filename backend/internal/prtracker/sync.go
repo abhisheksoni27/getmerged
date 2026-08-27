@@ -34,10 +34,36 @@ type Service struct {
 	Tokens auth.TokenManager
 	GitHub *GHClient
 	DB     *sqlx.DB
+	// Sink generates the "Merged via OpenDoor" proof card on merge (AC6).
+	// Nil => merge artifacts are skipped (safe default).
+	Sink MergeArtifactSink
 }
 
 func NewService(store *Store, tokens auth.TokenManager, gh *GHClient, db *sqlx.DB) *Service {
 	return &Service{Store: store, Tokens: tokens, GitHub: gh, DB: db}
+}
+
+// SetSink installs the merge-artifact generator used by the sync loop (AC6).
+func (s *Service) SetSink(sink MergeArtifactSink) { s.Sink = sink }
+
+// ensureMergeArtifact generates the proof card for a merged tracked PR exactly
+// once (idempotent: unique pr_id lock via pr_merge_artifacts PK).
+func (s *Service) ensureMergeArtifact(ctx context.Context, userID int64, tp TrackedPRRow, detail *PRDetail, mergedAt *time.Time) {
+	if cardID, ok, _ := s.Store.GetMergeArtifact(ctx, tp.PRID); ok && cardID != "" {
+		return
+	}
+	if s.Sink == nil {
+		return
+	}
+	cardID, err := s.Sink.OnMerged(ctx, userID, tp.Owner, tp.Repo, tp.Number, tp.PRID, tp.Title, detail.HtmlURLStr, derefTime(mergedAt))
+	if err != nil {
+		slog.Warn("prtracker: merge artifact generation failed", "err", err, "pr_id", tp.PRID)
+		return
+	}
+	if cardID == "" {
+		return
+	}
+	_ = s.Store.InsertMergeArtifact(ctx, tp.PRID, userID, tp.Owner+"/"+tp.Repo, tp.Number, cardID, mergedAt)
 }
 
 // SyncUserThrottled enforces AC2: page-load refresh at most 1x/5min/user.
@@ -201,6 +227,42 @@ func (s *Service) SyncUser(ctx context.Context, userID int64, login string) (*Sy
 	if len(events) > 0 {
 		if _, err := notification.IngestPRReviewEvents(ctx, s.DB, events); err != nil {
 			slog.Warn("prtracker sync: review event ingest failed", "err", err)
+		}
+	}
+
+	// AC3/AC6: explicitly tracked PRs may be merged (absent from the open-PR
+	// search), so fetch each by number, keep the snapshot fresh, and on merge
+	// generate the verifiable "Merged via OpenDoor" proof card.
+	if !limited {
+		tracked, terr := s.Store.ListTrackedPRs(ctx, userID)
+		if terr == nil {
+			for _, tp := range tracked {
+				detail, dres, derr := s.GitHub.FetchPRDetail(ctx, userID, token, tp.Owner, tp.Repo, tp.Number)
+				if derr != nil || dres == nil || dres.Limited || detail == nil {
+					continue
+				}
+				state := DeriveState(detail, nil)
+				if detail.Merged || (detail.State == "closed" && detail.MergedAt != nil) {
+					state = StateMerged
+				}
+				nowT := time.Now().UTC()
+				_ = s.Store.UpsertSnapshot(ctx, PRSnapshot{
+					PRID:            tp.PRID,
+					UserID:          userID,
+					RepositoryID:    tp.Owner + "/" + tp.Repo,
+					PRNumber:        tp.Number,
+					Title:           tp.Title,
+					HTMLURL:         detail.HtmlURLStr,
+					State:           state,
+					GithubUpdatedAt: &nowT,
+					MergedAt:        detail.MergedAt,
+					FetchedAt:       nowT,
+					SnapshotAt:      nowT,
+				})
+				if state == StateMerged {
+					s.ensureMergeArtifact(ctx, userID, tp, detail, detail.MergedAt)
+				}
+			}
 		}
 	}
 

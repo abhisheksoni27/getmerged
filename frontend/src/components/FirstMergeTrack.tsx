@@ -329,6 +329,19 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
   const [serverClaimedKeys, setServerClaimedKeys] = useState<Set<string>>(new Set());
   const [migrationStatus, setMigrationStatus] = useState<string | null>(null);
 
+  // PR Merge Tracker: paste-a-URL tracking (AC1-AC9).
+  const [prUrl, setPrUrl] = useState("");
+  const [trackLoading, setTrackLoading] = useState(false);
+  const [trackError, setTrackError] = useState<string | null>(null);
+  const [trackNeedsAuth, setTrackNeedsAuth] = useState(false);
+  const [upgradeRequired, setUpgradeRequired] = useState(false);
+  const [trackedStatus, setTrackedStatus] = useState<Array<{
+    pr_id: string; owner: string; repo: string; pr_number: number;
+    state: string; title: string; html_url: string; fetched_at: string;
+    has_artifact: boolean; card_id: string; share_url: string; og_image_url: string;
+  }>>([]);
+  const [importUrl, setImportUrl] = useState<string | null>(null);
+
   // Multi-tab sync & state persistence (AC3)
   useEffect(() => {
     setMounted(true);
@@ -789,6 +802,138 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
       };
     });
     queueTrackEvent("first_merge_step_restarted", { step: stepToRestart });
+  };
+
+  // AC5: poll the server's cached PR status every 60s (server owns the loop).
+  useEffect(() => {
+    if (!mounted || !isLoggedIn) return;
+    let cancelled = false;
+    const loadStatus = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/user/pr-status`, { credentials: "include" });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (cancelled) return;
+        if (Array.isArray(data?.prs)) setTrackedStatus(data.prs);
+      } catch {
+        // non-blocking; keep last known state
+      }
+    };
+    loadStatus();
+    const iv = setInterval(loadStatus, 60000);
+    return () => {
+      cancelled = true;
+      clearInterval(iv);
+    };
+  }, [mounted, isLoggedIn]);
+
+  // AC9: lazily offer to import a PR saved in localStorage by the legacy flow.
+  useEffect(() => {
+    if (!mounted || !isLoggedIn) return;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const st = JSON.parse(raw);
+      const url = st?.trackedPR?.htmlUrl || st?.trackedPR?.htmlUrlString;
+      if (!url) return;
+      if (!trackedStatus.some((p) => p.html_url === url)) {
+        setImportUrl(url);
+      }
+    } catch {
+      // ignore
+    }
+  }, [mounted, isLoggedIn, trackedStatus]);
+
+  // Advance to step 4 when the server reports a tracked PR as merged.
+  useEffect(() => {
+    if (!mounted) return;
+    if (trackedStatus.some((p) => p.state === "merged")) {
+      updateTrackState((prev) => ({ ...prev, step: Math.max(prev.step, 4) as 1 | 2 | 3 | 4 }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, trackedStatus]);
+
+  // AC7: copy with navigator.clipboard + execCommand fallback; never throws.
+  const copyShareLink = (url: string) => {
+    try {
+      if (
+        typeof navigator !== "undefined" &&
+        navigator.clipboard &&
+        typeof navigator.clipboard.writeText === "function"
+      ) {
+        navigator.clipboard.writeText(url).catch(() => fallbackCopy(url));
+        return;
+      }
+    } catch {
+      // fall through
+    }
+    fallbackCopy(url);
+  };
+  const fallbackCopy = (url: string) => {
+    try {
+      if (typeof document === "undefined") return;
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    } catch {
+      // best-effort only
+    }
+  };
+
+  // AC2/AC3/AC8: validate + track a pasted GitHub PR URL.
+  const handleTrackPR = async () => {
+    const url = prUrl.trim();
+    if (!url) {
+      setTrackError("Paste a GitHub pull request URL to track.");
+      return;
+    }
+    setTrackLoading(true);
+    setTrackError(null);
+    setTrackNeedsAuth(false);
+    setUpgradeRequired(false);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/user/prs/track`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pr_url: url }),
+      });
+      const data = await res.json().catch(() => ({} as Record<string, unknown>));
+      if (res.status === 401 || data?.needs_github_auth) {
+        setTrackNeedsAuth(true);
+        setTrackError(typeof data?.error === "string" ? data.error : "Connect your GitHub account to track a PR.");
+        return;
+      }
+      if (res.status === 402 || data?.upgrade_required) {
+        setUpgradeRequired(true);
+        setTrackError(typeof data?.error === "string" ? data.error : "Upgrade to track more than 1 active PR.");
+        return;
+      }
+      if (res.status === 409) {
+        setTrackError(typeof data?.error === "string" ? data.error : "That PR is closed without being merged.");
+        return;
+      }
+      if (res.status === 400) {
+        setTrackError(typeof data?.error === "string" ? data.error : "Invalid PR URL.");
+        return;
+      }
+      if (!res.ok) {
+        setTrackError(typeof data?.error === "string" ? data.error : "Could not track this PR.");
+        return;
+      }
+      setImportUrl(null);
+      setPrUrl("");
+    } catch {
+      setTrackError("Network error while tracking PR. Please try again.");
+    } finally {
+      setTrackLoading(false);
+    }
   };
 
   if (!mounted) return null;
@@ -1273,6 +1418,126 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
               >
                 Start New Track
               </button>
+            </div>
+
+            {/* PR Merge Tracker: paste a PR URL to track & monitor (AC2-AC9) */}
+            <div className="mt-4 rounded-xl border border-zinc-200 bg-zinc-50/60 p-4">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-emerald-600" />
+                <h4 className="text-sm font-bold text-zinc-900">Track a Pull Request</h4>
+                <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
+                  Live status every 60s
+                </span>
+              </div>
+              <p className="mt-1 text-xs text-zinc-500">
+                Paste a GitHub PR URL to monitor review &amp; merge status. On merge we mint a verifiable
+                &ldquo;Merged via OpenDoor&rdquo; share card.
+              </p>
+
+              {/* AC9: lazy import of a locally-saved PR */}
+              {importUrl && (
+                <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-indigo-100 bg-indigo-50/50 p-3 text-xs text-indigo-900">
+                  <span>Found a PR you were tracking locally: {importUrl}</span>
+                  <button
+                    onClick={() => { setPrUrl(importUrl); setImportUrl(null); }}
+                    className="rounded-md bg-indigo-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-indigo-700"
+                  >
+                    Import &amp; Track
+                  </button>
+                  <button
+                    onClick={() => setImportUrl(null)}
+                    className="rounded-md border border-indigo-300 bg-white px-2.5 py-1 text-xs font-semibold text-indigo-900 hover:bg-indigo-50"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              )}
+
+              <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                <input
+                  type="url"
+                  value={prUrl}
+                  onChange={(e) => setPrUrl(e.target.value)}
+                  placeholder="https://github.com/owner/repo/pull/123"
+                  className="w-full flex-1 rounded-md border border-zinc-300 bg-white px-3 py-2 text-xs text-zinc-900 outline-none focus:border-emerald-500"
+                />
+                <button
+                  onClick={handleTrackPR}
+                  disabled={trackLoading}
+                  className="shrink-0 rounded-md bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+                >
+                  {trackLoading ? "Tracking…" : "Track PR"}
+                </button>
+              </div>
+
+              {trackError && (
+                <div className="mt-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs text-red-700">{trackError}</div>
+              )}
+
+              {trackNeedsAuth && (
+                <a
+                  href={`${API_BASE_URL}/api/v1/auth/github`}
+                  className="mt-2 inline-flex items-center gap-1 rounded-md bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
+                >
+                  Connect GitHub to track
+                </a>
+              )}
+              {upgradeRequired && (
+                <Link
+                  href="/pricing"
+                  className="mt-2 inline-flex items-center gap-1 rounded-md bg-amber-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-amber-700"
+                >
+                  Upgrade for unlimited tracked PRs
+                </Link>
+              )}
+
+              {/* Live tracked PR list */}
+              {trackedStatus.length > 0 && (
+                <ul className="mt-3 space-y-2">
+                  {trackedStatus.map((p) => (
+                    <li
+                      key={p.pr_id}
+                      className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-zinc-200 bg-white p-3"
+                    >
+                      <div className="min-w-0">
+                        <a
+                          href={p.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="truncate block text-xs font-semibold text-zinc-900 hover:text-emerald-700"
+                        >
+                          {p.owner}/{p.repo}#{p.pr_number}
+                        </a>
+                        <span className="mt-0.5 inline-block rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold uppercase text-zinc-700">
+                          {p.state}
+                        </span>
+                      </div>
+                      {p.state === "merged" && p.has_artifact ? (
+                        <div className="flex items-center gap-2">
+                          <a
+                            href={p.share_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 rounded-md bg-violet-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-violet-800"
+                          >
+                            <ExternalLink className="h-3 w-3" /> Merged via OpenDoor card
+                          </a>
+                          <button
+                            onClick={() => copyShareLink(`${window.location.origin}${p.share_url}`)}
+                            className="rounded-md border border-violet-300 bg-white px-3 py-1.5 text-xs font-semibold text-violet-900 hover:bg-violet-50"
+                          >
+                            Copy link
+                          </button>
+                        </div>
+                      ) : (
+                        <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800">
+                          Awaiting Merge
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             {/* Edge Case: Terminal failure UI (issue taken / PR closed unmerged) (AC4) */}

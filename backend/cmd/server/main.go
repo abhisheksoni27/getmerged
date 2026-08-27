@@ -123,6 +123,8 @@ func main() {
 	// PR Tracker: 15-min poll cron reusing the existing notifier queue (AC2, AC8).
 	prTrackerStore := prtracker.NewStore(database)
 	prTrackerSvc := prtracker.NewService(prTrackerStore, tokenMgr, prtracker.NewGHClient(vkClient), database)
+	// AC6: wire the "Merged via OpenDoor" proof-card generator into the sync loop.
+	prTrackerSvc.SetSink(handler.NewMergeCardSink(shareCardRepo, cfg.JWTSecret))
 	stopPRTrackerCron := prTrackerSvc.StartCron(15 * time.Minute)
 	defer stopPRTrackerCron()
 
@@ -465,6 +467,13 @@ func main() {
 		userApi.GET("/user/prs", handler.GetUserPRsHandler(prTrackerSvc, entitlementRepo))
 		userApi.GET("/user/prs/connection", handler.GetPRConnectionHandler(prTrackerSvc))
 		userApi.POST("/user/prs/reconnect", handler.ReconnectPRConnectionHandler(prTrackerSvc))
+		// AC2/AC3/AC8: paste a PR URL to explicitly track it (server-validated).
+		userApi.POST("/user/prs/track", handler.TrackPRHandler(prTrackerSvc, entitlementRepo, cfg.JWTSecret))
+		// AC5: client reads cached state here; the server owns the polling loop.
+		userApi.GET("/user/pr-status", handler.PRStatusHandler(prTrackerSvc))
+		// AC6: public Hall of Fame + per-profile merge proof cards.
+		userApi.GET("/hall-of-fame", handler.GetHallOfFameHandler(prTrackerStore))
+		r.GET("/api/v1/u/:username/merges", handler.GetUserMergesHandler(userRepo, prTrackerStore))
 
 		// Contributor XP season for the signed-in user: XP/level/streak plus
 		// shareable season-rank card URLs (AC1/AC3/AC4).
