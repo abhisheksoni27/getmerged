@@ -1409,5 +1409,36 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN streak_count INTEGER NOT NULL DEFAULT 0`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN last_active_date DATE`)
 
+	// Repo Boost (AC1/AC5/AC6): repo-level featured-placement expiry column on
+	// repositories. Query-time ranking reads boost_expires_at > now() so no cron
+	// is needed to expire a boost.
+	_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN boost_expires_at DATETIME NULL`)
+	_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_repositories_boost_expires ON repositories(boost_expires_at)`)
+	// AC4: per-(user,boost) per-24h dedup of impressions/clicks. The UNIQUE key
+	// makes a refresh/dup delivery a no-op (fraud + double-count safe).
+	if db.DriverName() == "sqlite" {
+		_, _ = db.Exec(`CREATE TABLE IF NOT EXISTS repo_boost_metrics (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			boost_payment_intent_id VARCHAR(255) NOT NULL,
+			user_id BIGINT NOT NULL,
+			repo_id VARCHAR(255) NOT NULL,
+			event_type VARCHAR(16) NOT NULL,
+			bucket_date VARCHAR(10) NOT NULL DEFAULT '1970-01-01',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(user_id, boost_payment_intent_id, event_type, bucket_date)
+		)`)
+	} else {
+		_, _ = db.Exec(`CREATE TABLE IF NOT EXISTS repo_boost_metrics (
+			id BIGINT PRIMARY KEY AUTO_INCREMENT,
+			boost_payment_intent_id VARCHAR(255) NOT NULL,
+			user_id BIGINT NOT NULL,
+			repo_id VARCHAR(255) NOT NULL,
+			event_type VARCHAR(16) NOT NULL,
+			bucket_date VARCHAR(10) NOT NULL DEFAULT '1970-01-01',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE KEY uq_boost_metric_user (user_id, boost_payment_intent_id, event_type, bucket_date)
+		)`)
+	}
+
 	return nil
 }
