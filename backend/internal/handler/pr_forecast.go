@@ -130,7 +130,7 @@ func githubRESTWithBackoff(token, apiURL string) ([]byte, int, error) {
 // --- GitHub payload shapes (minimal) --------------------------------------
 
 type ghPR struct {
-	Mergeable      *bool `json:"mergeable"`
+	Mergeable      *bool  `json:"mergeable"`
 	MergeableState string `json:"mergeable_state"`
 	State          string `json:"state"`
 	Draft          bool   `json:"draft"`
@@ -161,21 +161,21 @@ type ghReview struct {
 // prForecast is the computed merge-probability breakdown shared by the badge
 // (AC2) and the deep-dive readiness page (AC8).
 type prForecast struct {
-	Available bool // false => render N/A
-	Owner     string
-	Repo      string
-	PR        int
-	Prob      float64 // 0..1
-	CI        float64
-	Reviews   float64
-	Mergeable float64
-	Recency   float64
-	Size      float64
+	Available    bool // false => render N/A
+	Owner        string
+	Repo         string
+	PR           int
+	Prob         float64 // 0..1
+	CI           float64
+	Reviews      float64
+	Mergeable    float64
+	Recency      float64
+	Size         float64
 	CILabel      string
 	ReviewsLabel string
-	MergeLabel    string
-	RecencyLabel  string
-	SizeLabel     string
+	MergeLabel   string
+	RecencyLabel string
+	SizeLabel    string
 }
 
 // weights per AC2 (sums to 1.0).
