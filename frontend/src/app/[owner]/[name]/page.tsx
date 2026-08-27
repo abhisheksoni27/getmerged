@@ -5,11 +5,15 @@ import { Repo, AIInsights } from "@/types/opendoor";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { ClientRepoDetail } from "@/components/ClientRepoDetail";
+import { InstantScanPanel } from "@/components/InstantScanPanel";
 import { getLanguageSlug } from "@/lib/languageSlug";
 
 import { buildRepoMetadata, buildRepoFaqList } from "@/lib/repo-metadata";
 
 const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
+
+// Owner/name shapes GitHub itself allows; anything else stays a hard 404.
+const VALID_SLUG_RE = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$/;
 
 interface PageProps {
   params: Promise<{ owner: string; name: string }>;
@@ -61,11 +65,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!repo) {
     return {
-      title: "Repository Not Found | GetMerged",
-      description: "The requested repository is not indexed in GetMerged.",
+      title: `Scan ${fullName} — Instant C-Rank Check | GetMerged`,
+      description: `${fullName} is not indexed yet. Run an instant C-Rank check to see merge rates, review turnaround and maintainer responsiveness before you PR.`,
       robots: {
         index: false,
         follow: true,
+      },
+      openGraph: {
+        title: `Instant C-Rank check: ${fullName}`,
+        description: `Score ${fullName} on demand from GitHub's public pull-request history.`,
+        type: "website",
+        url: `https://getmerged.abhishekco.de/${fullName}`,
+        siteName: "GetMerged",
+        images: [
+          {
+            url: `${INTERNAL_API_URL}/og/scan/${encodeURIComponent(owner)}/${encodeURIComponent(name)}`,
+            width: 1200,
+            height: 630,
+            alt: `${fullName} C-Rank verdict card`,
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `Instant C-Rank check: ${fullName}`,
+        description: `Score ${fullName} on demand from GitHub's public pull-request history.`,
+        images: [`${INTERNAL_API_URL}/og/scan/${encodeURIComponent(owner)}/${encodeURIComponent(name)}`],
       },
     };
   }
@@ -109,7 +134,27 @@ export default async function RepoDetailPage({ params }: PageProps) {
   // Server-Side Data Fetching -> Pure SSR
   const repo = await getRepoData(fullName);
   if (!repo) {
-    notFound();
+    // Instant Repo Check: any well-formed public owner/repo can be scored on
+    // demand instead of hitting a 404 dead-end. Malformed slugs still 404.
+    if (!VALID_SLUG_RE.test(owner) || !VALID_SLUG_RE.test(name)) {
+      notFound();
+    }
+    return (
+      <div className="min-h-screen dev-grid-pattern flex flex-col bg-[#faf9f6] overflow-x-hidden">
+        <Header />
+        <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-6">
+          <h1 className="font-space text-2xl font-extrabold text-zinc-950">
+            {fullName} is not scored yet
+          </h1>
+          <p className="mt-2 mb-6 font-sans text-sm text-zinc-700">
+            Run an on-demand C-Rank check to get the full verdict — merge rate, review turnaround,
+            first-timer success and maintainer responsiveness — before you open a PR.
+          </p>
+          <InstantScanPanel fullName={fullName} />
+        </main>
+        <Footer />
+      </div>
+    );
   }
 
   // Enforce canonical casing redirect (e.g., /Torvalds/Linux -> /torvalds/linux or exact casing)
