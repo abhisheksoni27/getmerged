@@ -32,6 +32,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/prsim"
 	"github.com/abhisheksoni27/opendoor/internal/prtracker"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
+	"github.com/abhisheksoni27/opendoor/internal/scan"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	swaggerFiles "github.com/swaggo/files"
@@ -293,6 +294,22 @@ func main() {
 	simBadgeRL := middleware.RateLimitPerIP(60, time.Hour)
 	r.POST("/api/v1/pr-sim/score", simRL, handler.ScorePRSimHandler(prSimStore, simRepoCache, vkClient, cfg.GithubToken))
 	r.GET("/api/v1/pr-sim/badge/:hash.svg", simBadgeRL, handler.PRSimBadgeHandler(prSimStore))
+
+	// Instant Repo Check: on-demand C-Rank for ANY public GitHub URL.
+	// Public (root-level, outside the API-key group) like /pr-sim. Static
+	// "scan" children under /api/v1 and /og keep the radix tree free of
+	// wildcard-name mixing: /api/v1/scan/status/:owner/:name and
+	// /og/scan/:owner/:name both use :owner/:name consistently, matching the
+	// existing /og/playbook/:owner/:name naming.
+	scanSvc := scan.NewService(vkClient, gh, repoStore, database, cfg.AppBaseURL)
+	scanRL := middleware.RateLimitPerIP(20, time.Minute)
+	scanPollRL := middleware.RateLimitPerIP(120, time.Minute)
+	r.POST("/api/v1/scan", scanRL, handler.StartScanHandler(scanSvc))
+	r.GET("/api/v1/scan/status/:owner/:name", scanPollRL, handler.GetScanStatusHandler(scanSvc))
+	r.GET("/og/scan/:owner/:name", cardRL, handler.GetScanOGCardHandler(scanSvc))
+	// Signature-verified push webhook: invalidates the 24h verdict cache and
+	// re-scores asynchronously (AC5).
+	r.POST("/api/v1/webhooks/github-push", handler.GithubPushWebhookHandler(scanSvc, cfg.GithubAppWebhookSecret))
 
 	// Public contributor profile (/u/[username]): aggregate PR-forecast track
 	// record. Root-level like /cards to stay outside the API-key group; static
