@@ -33,7 +33,7 @@ export default function PublicDocsPage() {
       />
       {/* Semantic Crawl Floor */}
       <section className="sr-only" aria-label="API Documentation Overview">
-        <h1>GetMerged Public REST API Documentation</h1>
+        <h2>GetMerged Public REST API Documentation</h2>
         <p>
           Automate repository insights, fetch C-Rank scores, query ecosystem rankings, and simulate PR acceptance probabilities programmatically.
         </p>

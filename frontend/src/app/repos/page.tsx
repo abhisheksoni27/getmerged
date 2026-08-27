@@ -246,7 +246,7 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
 
       {/* Semantic Server-Rendered Content Crawl Floor */}
       <section className="sr-only" aria-label="Scored Open Source Repositories Index">
-        <h1>All Scored Open Source GitHub Repositories</h1>
+        <h2>All Scored Open Source GitHub Repositories</h2>
         <p>Browse {initialTotal.toLocaleString()} repositories benchmarked with C-Rank™ review metrics.</p>
         <ul>
           {initialRepos.map((r) => (

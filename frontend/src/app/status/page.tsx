@@ -20,7 +20,7 @@ export default function StatusPage() {
   return (
     <>
       <section className="sr-only" aria-label="System Status Overview">
-        <h1>GetMerged Live System Status & Health Metrics</h1>
+        <h2>GetMerged Live System Status & Health Metrics</h2>
         <p>Operational health of GetMerged GraphQL indexing pipelines, database cluster, API endpoints, and caching servers.</p>
       </section>
       <StatusClient />

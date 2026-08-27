@@ -58,7 +58,7 @@ export default function CompareHubPage() {
       
       {/* Semantic Crawl Floor */}
       <section className="sr-only" aria-label="Compare Open Source Repositories">
-        <h1>Compare Open Source Repositories Side-by-Side</h1>
+        <h2>Compare Open Source Repositories Side-by-Side</h2>
         <p>
           Evaluate two repositories against each other on PR merge rates, code review turnaround time, maintainer responsiveness, and first-time contributor success rates.
         </p>

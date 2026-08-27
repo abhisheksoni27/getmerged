@@ -83,7 +83,7 @@ export default function PricingPage() {
       />
       {/* Semantic SSR Crawl Floor */}
       <section className="sr-only" aria-label="Pro Contributor Plans & Pricing">
-        <h1>GetMerged Pro Contributor Plans & Pricing</h1>
+        <h2>GetMerged Pro Contributor Plans & Pricing</h2>
         <p>Choose between free community access and Pro Contributor memberships with unlimited PR acceptance forecasts, maintainer vibe checks, and pre-flight reviews.</p>
       </section>
 
