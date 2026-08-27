@@ -28,7 +28,7 @@ interface SeasonResponse {
 
 // Contributor XP season widget (AC3): level/streak surfaced on the dashboard
 // with a link to the shareable season-rank card. Hides itself entirely when
-// the API fails or the user is signed out — never blocks tracker data.
+// the API fails or the user is signed out - never blocks tracker data.
 export function SeasonCard() {
   const [data, setData] = useState<SeasonResponse | null>(null);
   const [loading, setLoading] = useState(true);

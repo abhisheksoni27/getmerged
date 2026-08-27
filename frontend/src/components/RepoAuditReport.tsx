@@ -217,7 +217,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
       }
       // AC7: on limit hit serve the cached report with no error / no new cost.
       if (data.reason === "rate_limited") {
-        setRegenNote("AI insights regenerate is limited to once per day — showing your cached report.");
+        setRegenNote("AI insights regenerate is limited to once per day - showing your cached report.");
       } else if (data.regenerated) {
         setRegenNote("AI insights regenerated.");
       }
@@ -287,9 +287,9 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
           <span className="inline-block rounded-full bg-yellow-100 px-3 py-1 font-mono text-xs font-bold text-yellow-900 mb-3">
             One-Time Purchase
           </span>
-          <h1 className="text-2xl font-bold font-mono text-zinc-950 mb-2">Full Repo Deep-Audit — $19</h1>
+          <h1 className="text-2xl font-bold font-mono text-zinc-950 mb-2">Full Repo Deep-Audit - $19</h1>
           <p className="text-sm text-zinc-700 mb-6 max-w-md mx-auto">
-            Get the complete per-factor C-Rank breakdown, percentile vs peer repos, and AI-prioritized fixes to raise your rank — no subscription required.
+            Get the complete per-factor C-Rank breakdown, percentile vs peer repos, and AI-prioritized fixes to raise your rank - no subscription required.
           </p>
           {errorMsg && <p className="text-xs text-rose-600 mb-3">{errorMsg}</p>}
           <button
@@ -299,7 +299,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
             className="inline-flex items-center gap-2 rounded-full bg-[#ffd93d] px-6 py-3 text-xs font-mono font-bold text-zinc-950 shadow-[2px_2px_0px_#000] transition-all hover:bg-[#ffdf5c] active:scale-[0.99] disabled:opacity-60"
           >
             <FileSearch className="h-4 w-4" />
-            {checkoutLoading ? "Redirecting to checkout…" : "Get Full Audit — $19"}
+            {checkoutLoading ? "Redirecting to checkout…" : "Get Full Audit - $19"}
           </button>
           <p className="text-[11px] text-zinc-500 mt-4">
             Verifying payment… we’ll unlock the report automatically once confirmed.
@@ -372,7 +372,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
           </div>
           {regenNote && <p className="text-[11px] text-zinc-600 mb-3">{regenNote}</p>}
           {r.prioritized_fixes.length === 0 ? (
-            <p className="text-xs text-zinc-600">No prioritized fixes available yet — run “Regenerate” to analyze the latest discussions.</p>
+            <p className="text-xs text-zinc-600">No prioritized fixes available yet - run “Regenerate” to analyze the latest discussions.</p>
           ) : (
             <ol className="space-y-2">
               {r.prioritized_fixes.map((fix) => (

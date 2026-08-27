@@ -95,13 +95,13 @@ export function DocsClient() {
         </pre>
         <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <div className="rounded-lg border border-zinc-200 px-3 py-2">
-            <span className="font-bold">Free tier</span> — 60 requests/hour + 10 requests/min burst per key. Exceeding a
+            <span className="font-bold">Free tier</span> - 60 requests/hour + 10 requests/min burst per key. Exceeding a
             limit returns <code className="rounded bg-zinc-100 px-1">429</code> with{" "}
             <code className="rounded bg-zinc-100 px-1">X-RateLimit-*</code> and{" "}
             <code className="rounded bg-zinc-100 px-1">Retry-After</code> headers.
           </div>
           <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-emerald-900">
-            <span className="font-bold">Pro</span> — 600 requests/hour + 100 requests/min burst.{" "}
+            <span className="font-bold">Pro</span> - 600 requests/hour + 100 requests/min burst.{" "}
             <Link href="/pricing" className="font-semibold underline inline-flex items-center gap-0.5">
               Upgrade <ExternalLink className="h-3 w-3" />
             </Link>
@@ -114,7 +114,7 @@ export function DocsClient() {
                 Security scheme <code className="rounded bg-zinc-100 px-1 font-semibold">{scheme}</code>: apiKey in{" "}
                 <code className="rounded bg-zinc-100 px-1">{def.in}</code> header{" "}
                 <code className="rounded bg-zinc-100 px-1">{def.name}</code>
-                {def.description ? ` — ${def.description}` : ""}
+                {def.description ? ` - ${def.description}` : ""}
               </p>
             ))}
           </div>
@@ -141,7 +141,7 @@ export function DocsClient() {
             <tr className="border-b border-zinc-50">
               <td className="py-1.5 pr-3 font-mono">401</td>
               <td className="py-1.5 pr-3 font-mono">ERR_INVALID_API_KEY</td>
-              <td className="py-1">Key unknown or revoked — revocation takes effect immediately.</td>
+              <td className="py-1">Key unknown or revoked - revocation takes effect immediately.</td>
             </tr>
             <tr className="border-b border-zinc-50">
               <td className="py-1.5 pr-3 font-mono">429</td>

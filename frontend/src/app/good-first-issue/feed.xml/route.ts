@@ -23,7 +23,7 @@ function issueContent(issue: {
   return `<p>${truncateText(issue.body_text ?? "", 500)}</p><p>${meta}</p>${labelsHtml}`;
 }
 
-// /good-first-issue/feed.xml — latest beginner-friendly issues across all
+// /good-first-issue/feed.xml - latest beginner-friendly issues across all
 // languages, ranked by issue quality and repository C-Rank.
 export async function GET(): Promise<Response> {
   const issues = await fetchGoodFirstIssues("", 50);
@@ -39,7 +39,7 @@ export async function GET(): Promise<Response> {
   return atomResponse(
     buildAtomFeed({
       selfPath: "/good-first-issue/feed.xml",
-      title: "GetMerged — Good First Issues",
+      title: "GetMerged - Good First Issues",
       entries,
     })
   );

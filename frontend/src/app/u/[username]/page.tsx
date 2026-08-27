@@ -163,7 +163,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
               <div className="rounded-lg border-b-4 border-black bg-white px-3 py-2">
                 <div className="text-[10px] font-mono uppercase text-zinc-500">Season rank</div>
                 <div className="text-2xl font-extrabold font-mono text-violet-700">
-                  {typeof profile.season_rank === "number" ? `#${profile.season_rank}` : "—"}
+                  {typeof profile.season_rank === "number" ? `#${profile.season_rank}` : " - "}
                 </div>
               </div>
             </div>
@@ -193,7 +193,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
               <StatTile
                 icon={<Target className="h-3.5 w-3.5" />}
                 label="Forecast accuracy"
-                value={accuracyPct !== null ? `${accuracyPct}%` : "—"}
+                value={accuracyPct !== null ? `${accuracyPct}%` : " - "}
               />
               <StatTile
                 icon={<Merge className="h-3.5 w-3.5" />}

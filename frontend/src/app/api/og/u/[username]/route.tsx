@@ -12,7 +12,7 @@ const CARD_HEIGHT = 630;
 // exists for is_public flips.
 const NO_STORE_HEADERS = { "Cache-Control": "private, no-store" } as const;
 
-// AC5: the OG endpoint requires the target user.isPublic=true — anything else
+// AC5: the OG endpoint requires the target user.isPublic=true - anything else
 // returns a 404 with no image, so private data is never rendered.
 export async function GET(
   req: NextRequest,

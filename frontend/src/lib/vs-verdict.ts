@@ -134,7 +134,7 @@ export function computeVsVerdict(
 }
 
 export function formatMetricValue(value: number | null, format: VsMetric["format"]): string {
-  if (value === null) return "—";
+  if (value === null) return " - ";
   switch (format) {
     case "pct":
       return `${value.toFixed(1)}%`;

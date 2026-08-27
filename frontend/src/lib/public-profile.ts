@@ -65,7 +65,7 @@ export interface PublicProfile {
   percentile?: number | null;
   repos: PublicProfileRepoTier[];
   evals?: PublicProfileEval[];
-  // DNA powers the persona banner. Optional — the API omits it when
+  // DNA powers the persona banner. Optional - the API omits it when
   // the user hasn't consented to profiling or has no completed analysis.
   dna?: import("@/types/opendoor").ContributorDNA;
 }

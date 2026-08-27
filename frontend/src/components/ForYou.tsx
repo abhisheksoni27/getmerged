@@ -132,7 +132,7 @@ export function ForYou() {
         ) : (
           /* AC2: empty state when zero matches */
           <div className="mt-3 rounded-xl border border-dashed border-zinc-300 bg-white/60 p-8 text-center text-sm text-zinc-500">
-            No personalized matches yet — we couldn&apos;t find S/A ranked repos or good first issues for your GitHub languages.
+            No personalized matches yet - we couldn&apos;t find S/A ranked repos or good first issues for your GitHub languages.
             <div className="mt-2">
               <Link href="/repos" className="text-emerald-700 font-semibold hover:underline">
                 Browse all repos manually →
@@ -190,7 +190,7 @@ export function ForYou() {
 
           {data.repos.length === 0 && data.issues.length === 0 && (
             <div className="mt-3 rounded-xl border border-dashed border-zinc-300 bg-white/60 p-8 text-center text-sm text-zinc-500">
-              No personalized matches yet — we couldn&apos;t find S/A ranked repos or good first issues for your GitHub languages.
+              No personalized matches yet - we couldn&apos;t find S/A ranked repos or good first issues for your GitHub languages.
               <div className="mt-2">
                 <Link href="/repos" className="text-emerald-700 font-semibold hover:underline">
                   Browse all repos manually →
@@ -201,7 +201,7 @@ export function ForYou() {
         </>
       )}
 
-      {/* AC5: Pro paywall boundary — locked rows with upgrade CTA */}
+      {/* AC5: Pro paywall boundary - locked rows with upgrade CTA */}
       {data.locked_languages > 0 && (
         <div className="mt-4 rounded-xl border border-dashed border-amber-300 bg-amber-50/70 p-4" data-testid="foryou-locked">
           <ul className="space-y-1.5">
@@ -217,7 +217,7 @@ export function ForYou() {
             href="/pricing"
             className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-xs font-semibold text-white hover:bg-amber-600"
           >
-            <Lock className="h-3 w-3" /> Unlock all {data.snapshot.length + data.locked_languages} languages with Pro — $9/mo
+            <Lock className="h-3 w-3" /> Unlock all {data.snapshot.length + data.locked_languages} languages with Pro - $9/mo
           </Link>
         </div>
       )}

@@ -59,7 +59,7 @@ export default function ShareCardButton({ slug, username }: ShareCardButtonProps
   const onShare = useCallback(async () => {
     const url = shareUrl(slug);
     const title = `${username} on GetMerged`;
-    const text = `Check out my verified open-source contributor report card on GetMerged — every merge proven. ${url}`;
+    const text = `Check out my verified open-source contributor report card on GetMerged - every merge proven. ${url}`;
 
     // Tier 1: Web Share API when available.
     try {
@@ -93,7 +93,7 @@ export default function ShareCardButton({ slug, username }: ShareCardButtonProps
     if (ok) {
       showToast({ kind: "success", msg: "Card link copied to clipboard." });
     } else {
-      showToast({ kind: "error", msg: "Couldn't share — copy this link: " + url });
+      showToast({ kind: "error", msg: "Couldn't share - copy this link: " + url });
     }
   }, [slug, username, showToast]);
 

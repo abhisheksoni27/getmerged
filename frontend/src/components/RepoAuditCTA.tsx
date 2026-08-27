@@ -80,8 +80,8 @@ export function RepoAuditCTA({ fullName, isScored, isLoggedIn, requireLogin }: R
 
   const label =
     status === "refunded" || status === "disputed"
-      ? "Reactivate Full Audit — $19"
-      : "Get Full Audit — $19";
+      ? "Reactivate Full Audit - $19"
+      : "Get Full Audit - $19";
 
   return (
     <button

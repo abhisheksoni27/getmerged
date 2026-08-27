@@ -41,7 +41,7 @@ export async function GET(_request: Request, { params }: RouteProps): Promise<Re
     const [owner, name] = repo.full_name.split("/");
     return {
       id: `https://getmerged.abhishekco.de/repos/${repo.id}`,
-      title: `${repo.full_name} — C-Rank ${repo.c_rank_tier ?? "-"} (${Math.round(repo.c_rank_score ?? 0)})`,
+      title: `${repo.full_name} - C-Rank ${repo.c_rank_tier ?? "-"} (${Math.round(repo.c_rank_score ?? 0)})`,
       link: `https://getmerged.abhishekco.de/${owner}/${name}`,
       updated: repo.updated_at || new Date().toISOString(),
       contentHtml: `<p>${escapeXml(repo.description)}</p><p>${kind === "language" ? "Language" : "Topic"}: ${escapeXml(
@@ -57,8 +57,8 @@ export async function GET(_request: Request, { params }: RouteProps): Promise<Re
       selfPath: `/feeds/${slug}.xml`,
       title:
         kind === "language"
-          ? `GetMerged — Top ${filterLabel} Repositories for Contributors`
-          : `GetMerged — Top "${filterLabel}" Topic Repositories for Contributors`,
+          ? `GetMerged - Top ${filterLabel} Repositories for Contributors`
+          : `GetMerged - Top "${filterLabel}" Topic Repositories for Contributors`,
       entries,
     })
   );

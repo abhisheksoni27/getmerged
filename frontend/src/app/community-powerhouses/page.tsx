@@ -11,7 +11,7 @@ const MIN_MAINTAINERS = 5;
 
 export const metadata: Metadata = {
   title: "Community Powerhouses: Open-Source Repos with Many Maintainers | GetMerged",
-  description: `A special collection of open-source repositories powered by ${MIN_MAINTAINERS}+ active maintainers — healthy bus factors, fast reviews, and resilient communities.`,
+  description: `A special collection of open-source repositories powered by ${MIN_MAINTAINERS}+ active maintainers - healthy bus factors, fast reviews, and resilient communities.`,
   alternates: {
     canonical: "https://getmerged.abhishekco.de/community-powerhouses",
   },
@@ -104,7 +104,7 @@ export default async function CommunityPowerhousesPage() {
           </h1>
           <p className="mt-3 text-xs sm:text-sm text-zinc-600 max-w-3xl leading-relaxed font-sans">
             Repositories sustained by many hands. Each project here is reviewed by{" "}
-            {MIN_MAINTAINERS}+ distinct active maintainers — no single-person bottleneck,
+            {MIN_MAINTAINERS}+ distinct active maintainers - no single-person bottleneck,
             faster reviews, and a healthier contribution experience.
           </p>
           <p data-testid="collection-repo-count" className="mt-4 text-sm font-mono font-bold text-zinc-900">

@@ -28,7 +28,7 @@ export async function GET(
   const repoDisplay = truncateRepoName(repoRaw, 24);
 
   const rawScore = stored?.score !== undefined ? stored.score : (searchParams.get("score") ? parseFloat(searchParams.get("score")!) : null);
-  const scoreDisplay = rawScore !== null && !isNaN(rawScore) ? `${Math.round(rawScore)}` : "—";
+  const scoreDisplay = rawScore !== null && !isNaN(rawScore) ? `${Math.round(rawScore)}` : " - ";
 
   const verdict = stored?.verdict || searchParams.get("verdict") || (rawScore !== null && rawScore >= 70 ? "PRE-FLIGHT READY" : "ADJUSTMENTS RECOMMENDED");
   const isReady = verdict.toUpperCase().includes("READY");
@@ -118,7 +118,7 @@ export async function GET(
               </div>
             </div>
 
-            {/* Verified Outcome pill (AC1) — e.g. 'Predicted 82% → Merged in 4 days ✓' */}
+            {/* Verified Outcome pill (AC1) - e.g. 'Predicted 82% → Merged in 4 days ✓' */}
             {outcomeView && os && (
               <div style={{ display: "flex", alignItems: "center", marginTop: "12px" }}>
                 <div
@@ -159,7 +159,7 @@ export async function GET(
               <span style={{ color: "#fdfbf7", fontSize: "72px", fontWeight: 800, lineHeight: 1 }}>
                 {scoreDisplay}
               </span>
-              {scoreDisplay !== "—" && (
+              {scoreDisplay !== " - " && (
                 <span style={{ color: "#9ca3af", fontSize: "28px", fontWeight: 600, marginLeft: "4px" }}>
                   /100
                 </span>

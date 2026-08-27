@@ -125,7 +125,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
       const headline = `Predicted ${pct}% → MERGED in ${days} ${days === 1 ? "day" : "days"}`;
       const shareText = `Prediction verified: ${headline} for ${repo}#${
         celebrating.pr_number
-      } — my @GetMerged pre-flight forecast was right${oc.state === "hit" ? "" : " (well, almost)"}. See my verified track record:`;
+      } - my @GetMerged pre-flight forecast was right${oc.state === "hit" ? "" : " (well, almost)"}. See my verified track record:`;
 
       return {
         destinationUrl,
@@ -182,7 +182,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
           </p>
           <p className="text-xs text-zinc-500 mb-4">
             {celebrating.full_name}#{celebrating.pr_number} merged. Your pre-flight call is now a
-            publicly verifiable fact — brag about it.
+            publicly verifiable fact - brag about it.
           </p>
 
           {/* Auto-generated share card via the existing OG endpoint */}

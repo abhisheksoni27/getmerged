@@ -62,7 +62,7 @@ export function formatVerdict(outcome: PREvalOutcome | null): VerdictView | null
 
 // AC3: 'X/Y verified' over settled (merged-or-closed) evals only; open and
 // stale/unverifiable PRs are excluded. Null when nothing has settled yet so
-// callers render '—'.
+// callers render ' - '.
 export function formatAccuracy(outcome: PREvalOutcome | null): { label: string } | null {
   if (!outcome?.accuracy || !outcome.accuracy.n) return null;
   const correct =

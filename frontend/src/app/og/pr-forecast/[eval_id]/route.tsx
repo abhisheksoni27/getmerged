@@ -102,8 +102,8 @@ export async function GET(
   const status = cached?.status || queryStatus;
   const isPendingOrFailed = status === "pending" || status === "failed";
 
-  // Score display: missing score shows '—' (AC4)
-  let scoreDisplay = "—";
+  // Score display: missing score shows ' - ' (AC4)
+  let scoreDisplay = " - ";
   const rawScore = cached?.overall_score !== undefined ? cached.overall_score : (queryScore !== null ? parseFloat(queryScore) : null);
   if (rawScore !== null && !isNaN(rawScore)) {
     scoreDisplay = `${Math.round(rawScore)}`;
@@ -218,7 +218,7 @@ export async function GET(
               <span style={{ color: "#fdfbf7", fontSize: "72px", fontWeight: 800, lineHeight: 1 }}>
                 {scoreDisplay}
               </span>
-              {scoreDisplay !== "—" && (
+              {scoreDisplay !== " - " && (
                 <span style={{ color: "#9ca3af", fontSize: "28px", fontWeight: 600, marginLeft: "4px" }}>
                   /100
                 </span>

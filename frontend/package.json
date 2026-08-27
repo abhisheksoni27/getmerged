@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "NEXT_PUBLIC_API_URL=http://localhost:10000 next dev",
+    "clean:em-dash": "node scripts/clean-em-dash.js",
+    "prebuild": "node scripts/clean-em-dash.js",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
