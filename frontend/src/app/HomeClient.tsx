@@ -407,7 +407,11 @@ export default function HomeClient({
         </motion.div>
 
         {/* Personalized matches from GitHub-imported skills (hidden when signed out or empty) */}
-        {isLoggedIn && <TopMatches />}
+        {isLoggedIn && (
+          <div className="mt-10">
+            <TopMatches />
+          </div>
+        )}
 
         {/* Macro Telemetry Grid */}
         <motion.div

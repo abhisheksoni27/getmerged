@@ -39,7 +39,7 @@ export function TopMatches() {
   if (!matches || matches.length === 0) return null;
 
   return (
-    <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8" aria-label="Top matches for you">
+    <section className="w-full max-w-3xl mx-auto" aria-label="Top matches for you">
       <div className="rounded-2xl border border-amber-200/70 bg-gradient-to-br from-amber-50 to-orange-50 p-6 shadow-sm">
         <div className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-amber-500" />
