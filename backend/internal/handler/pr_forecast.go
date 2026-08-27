@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"io"
 	"net/http"
@@ -482,7 +483,7 @@ pre{margin-top:16px;padding:14px;border-radius:8px;background:#010409;border:1px
   document.getElementById('gen').addEventListener('click', function(){build();copy();});
 })();
 </script>
-</div></body></html>`)
+</div></body></html>`))
 
 type prForecastEmbedData struct{ Base string }
 
@@ -535,19 +536,15 @@ type prForecastComp struct {
 }
 
 type prForecastPageData struct {
-	Invalid     bool
-	Available   bool
-	Owner       string
-	Repo        string
-	PR          int
-	ProbPct     int
-	ProbColor   string
-	BadgeLink   string
-	CIBlock     prForecastComp
-	RevBlock    prForecastComp
-	MergeBlock  prForecastComp
-	RecencyBlock prForecastComp
-	SizeBlock   prForecastComp
+	Invalid    bool
+	Available  bool
+	Owner      string
+	Repo       string
+	PR         int
+	ProbPct    int
+	ProbColor  string
+	BadgeLink  string
+	Components template.HTML
 }
 
 func compBlock(name, weight string, score float64, label string) prForecastComp {
@@ -558,6 +555,13 @@ func compBlock(name, weight string, score float64, label string) prForecastComp 
 		Color:  pfColor(score, true),
 		Label:  label,
 	}
+}
+
+func compRow(c prForecastComp) string {
+	return fmt.Sprintf(
+		`<div class="row"><div class="name">%s &middot; %s</div><div class="track"><div class="bar"><span style="width:%d%%;background:%s"></span></div></div><div class="pct">%d%%</div><div class="tag">%s</div></div>`,
+		c.Name, c.Weight, c.Pct, c.Color, c.Pct, c.Label,
+	)
 }
 
 func renderPRForecastPage(f prForecast, available, invalid bool) string {
@@ -573,19 +577,20 @@ func renderPRForecastPage(f prForecast, available, invalid bool) string {
 		})
 		return buf.String()
 	}
+	rows := compRow(compBlock("CI status", "25%", f.CI, f.CILabel)) +
+		compRow(compBlock("Review approvals", "25%", f.Reviews, f.ReviewsLabel)) +
+		compRow(compBlock("Mergeable", "20%", f.Mergeable, f.MergeLabel)) +
+		compRow(compBlock("Recency", "15%", f.Recency, f.RecencyLabel)) +
+		compRow(compBlock("Size / diff", "15%", f.Size, f.SizeLabel))
 	data := prForecastPageData{
-		Available: true,
-		Owner:     f.Owner,
-		Repo:      f.Repo,
-		PR:        f.PR,
-		ProbPct:   int(f.Prob * 100),
-		ProbColor: pfColor(f.Prob, true),
-		BadgeLink: prForecastBaseURL + "/embed-pr",
-		CIBlock:     compBlock("CI status", "25%", f.CI, f.CILabel),
-		RevBlock:    compBlock("Review approvals", "25%", f.Reviews, f.ReviewsLabel),
-		MergeBlock:  compBlock("Mergeable", "20%", f.Mergeable, f.MergeLabel),
-		RecencyBlock: compBlock("Recency", "15%", f.Recency, f.RecencyLabel),
-		SizeBlock:   compBlock("Size / diff", "15%", f.Size, f.SizeLabel),
+		Available:  true,
+		Owner:      f.Owner,
+		Repo:       f.Repo,
+		PR:         f.PR,
+		ProbPct:    int(f.Prob * 100),
+		ProbColor:  pfColor(f.Prob, true),
+		BadgeLink:  prForecastBaseURL + "/embed-pr",
+		Components: template.HTML(rows),
 	}
 	var buf bytes.Buffer
 	_ = prForecastPageTemplate.Execute(&buf, data)
