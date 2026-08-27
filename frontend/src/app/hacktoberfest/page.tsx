@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { API_BASE_URL } from "@/lib/api";
 import { HacktoberfestClient, LeaderboardRepo } from "./HacktoberfestClient";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Hacktoberfest 2026 Welcome Hub: Ranked Leaderboard & Live Merge Tracker - GetMerged",
@@ -58,13 +59,30 @@ export default async function HacktoberfestPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0f172a] dev-grid-pattern">
+    <div className="flex min-h-screen flex-col bg-black text-zinc-100 font-sans">
       <Header />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
       />
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      {/* Semantic SSR Crawl Floor */}
+      <section className="sr-only" aria-label="Hacktoberfest Welcoming Leaderboard">
+        <h1>Hacktoberfest 2026 Welcoming Repositories & Live Merge Tracker</h1>
+        <p>
+          Discover beginner-friendly GitHub repositories actively participating in Hacktoberfest 2026 with high PR merge acceptance rates and responsive maintainers.
+        </p>
+        <ul>
+          {initialRepos.map((r) => (
+            <li key={r.full_name}>
+              <Link href={`/${r.full_name}`} title={`View ${r.full_name} Hacktoberfest metrics`}>
+                {r.full_name} ({r.language || "Code"}) - Tier {r.c_rank_tier || "A"} ({r.first_timer_success_rate ? `${Math.round(r.first_timer_success_rate)}% first-timer success` : ""})
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <main className="flex-1">
         <HacktoberfestClient initialRepos={initialRepos} />
       </main>
       <Footer />
