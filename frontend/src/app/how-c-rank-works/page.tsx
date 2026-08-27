@@ -114,35 +114,35 @@ export default function HowCRankWorksPage() {
     {
       tier: "S",
       label: "Super Welcoming",
-      badgeClass: "bg-emerald-600 text-white border border-slate-700 font-bold shadow-sm",
+      badgeClass: "bg-emerald-600 text-white border border-white/[0.12] font-bold shadow-sm",
       indicatorColor: "bg-emerald-600",
       desc: "The open doors. Pull requests receive active review within 24 hours, maintainers provide friendly guidance, and new contributor merge rates exceed 80%.",
     },
     {
       tier: "A",
       label: "Welcoming",
-      badgeClass: "bg-blue-600 text-white border border-slate-700 font-bold shadow-sm",
+      badgeClass: "bg-blue-600 text-white border border-white/[0.12] font-bold shadow-sm",
       indicatorColor: "bg-blue-600",
       desc: "Reliable, healthy repositories with dependable review cadences. Consistent feedback and positive contributor culture.",
     },
     {
       tier: "B",
       label: "Moderate",
-      badgeClass: "bg-amber-600 text-white border border-slate-700 font-bold shadow-sm",
+      badgeClass: "bg-amber-600 text-white border border-white/[0.12] font-bold shadow-sm",
       indicatorColor: "bg-amber-600",
       desc: "Active maintainers who face periodic review bottlenecks around major release sprints. Review cycles typically take 3 to 7 days.",
     },
     {
       tier: "C",
       label: "Slow Review",
-      badgeClass: "bg-violet-600 text-white border border-slate-700 font-bold shadow-sm",
+      badgeClass: "bg-violet-600 text-white border border-white/[0.12] font-bold shadow-sm",
       indicatorColor: "bg-purple-600",
       desc: "Selective code acceptance or backlogged maintainers. Best suited for seasoned developers who don't mind long turnaround delays.",
     },
     {
       tier: "D",
       label: "Unmaintained",
-      badgeClass: "bg-rose-600 text-white border border-slate-700 font-bold shadow-sm",
+      badgeClass: "bg-rose-600 text-white border border-white/[0.12] font-bold shadow-sm",
       indicatorColor: "bg-rose-600",
       desc: "Stale repositories or abandoned pull request queues. Avoid submitting PRs here unless actively requested by current maintainers.",
     },
@@ -204,74 +204,74 @@ export default function HowCRankWorksPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full font-sans text-slate-200">
+      <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full font-sans text-zinc-200">
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111827] border border-slate-800 text-xs text-slate-400 hover:text-slate-100 transition-colors mb-8 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111827] border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-8 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Narrative Opener: The Contributor's Dilemma */}
-        <div className="rounded-3xl bg-[#111827] p-8 sm:p-12 border border-slate-800 shadow-xs mb-12">
+        <div className="rounded-3xl bg-[#111827] p-8 sm:p-12 border border-white/[0.08] shadow-xs mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-[#1e293b] text-white font-mono text-xs font-semibold mb-4">
             <DoorOpen className="h-3.5 w-3.5 text-amber-400" /> The Science of Open Source Hospitality
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold font-space text-slate-100 tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-5xl font-bold font-space text-zinc-100 tracking-tight leading-tight">
             Why Millions of Pull Requests Become Zombie PRs
           </h1>
-          <p className="mt-4 text-base sm:text-lg text-slate-400 max-w-3xl leading-relaxed font-sans">
+          <p className="mt-4 text-base sm:text-lg text-zinc-400 max-w-3xl leading-relaxed font-sans">
             Every day, thousands of enthusiastic developers clone a famous GitHub repository, spend late nights reading documentation, write comprehensive unit tests, and submit a pristine pull request.
           </p>
-          <p className="mt-3 text-base text-slate-300 max-w-3xl leading-relaxed font-sans font-medium">
+          <p className="mt-3 text-base text-zinc-300 max-w-3xl leading-relaxed font-sans font-medium">
             And then... silence. Weeks turn into months. The PR sits untouched until a merge conflict breaks it forever.
           </p>
         </div>
 
         {/* The Open Source Reality Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 font-sans">
-          <div className="rounded-3xl bg-[#111827] p-7 border border-slate-800 shadow-xs flex flex-col justify-between">
+          <div className="rounded-3xl bg-[#111827] p-7 border border-white/[0.08] shadow-xs flex flex-col justify-between">
             <div>
               <div className="h-10 w-10 rounded-xl bg-rose-950/70 border-rose-800/80 border border-rose-200 flex items-center justify-center text-rose-600 mb-4">
                 <HeartCrack className="h-5 w-5" />
               </div>
-              <div className="font-space text-2xl font-bold text-slate-100 mb-1">60% Burnout Rate</div>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <div className="font-space text-2xl font-bold text-zinc-100 mb-1">60% Burnout Rate</div>
+              <p className="text-xs text-zinc-400 leading-relaxed">
                 Over 60% of open-source maintainers perform their work entirely unpaid and report overwhelming burnout from incoming backlog fatigue.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-slate-800 font-mono text-[11px] text-slate-400">
+            <div className="mt-4 pt-3 border-t border-white/[0.08] font-mono text-[11px] text-zinc-400">
               Source: Maintainer Sustainability Surveys
             </div>
           </div>
 
-          <div className="rounded-3xl bg-[#111827] p-7 border border-slate-800 shadow-xs flex flex-col justify-between">
+          <div className="rounded-3xl bg-[#111827] p-7 border border-white/[0.08] shadow-xs flex flex-col justify-between">
             <div>
               <div className="h-10 w-10 rounded-xl bg-amber-950/70 border-amber-800/80 border border-amber-200 flex items-center justify-center text-amber-600 mb-4">
                 <Ghost className="h-5 w-5" />
               </div>
-              <div className="font-space text-2xl font-bold text-slate-100 mb-1">The Star Illusion</div>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <div className="font-space text-2xl font-bold text-zinc-100 mb-1">The Star Illusion</div>
+              <p className="text-xs text-zinc-400 leading-relaxed">
                 GitHub stars accumulate forever like museum plaques. A 40,000-star project could easily be an unmaintained ghost town today.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-slate-800 font-mono text-[11px] text-slate-400">
+            <div className="mt-4 pt-3 border-t border-white/[0.08] font-mono text-[11px] text-zinc-400">
               Legacy stars vs. real maintainer pulse
             </div>
           </div>
 
-          <div className="rounded-3xl bg-[#111827] p-7 border border-slate-800 shadow-xs flex flex-col justify-between">
+          <div className="rounded-3xl bg-[#111827] p-7 border border-white/[0.08] shadow-xs flex flex-col justify-between">
             <div>
               <div className="h-10 w-10 rounded-xl bg-emerald-950/70 border-emerald-800/80 border border-emerald-200 flex items-center justify-center text-emerald-600 mb-4">
                 <Sparkles className="h-5 w-5" />
               </div>
-              <div className="font-space text-2xl font-bold text-slate-100 mb-1">The GetMerged Fix</div>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <div className="font-space text-2xl font-bold text-zinc-100 mb-1">The GetMerged Fix</div>
+              <p className="text-xs text-zinc-400 leading-relaxed">
                 We analyze live GraphQL event streams to pinpoint repos where maintainers are active, responsive, and genuinely excited to merge community code.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-slate-800 font-mono text-[11px] text-slate-400">
+            <div className="mt-4 pt-3 border-t border-white/[0.08] font-mono text-[11px] text-zinc-400">
               Objective maintainer telemetry
             </div>
           </div>
@@ -279,11 +279,11 @@ export default function HowCRankWorksPage() {
 
         {/* The 9 Macro Signals */}
         <div className="space-y-6 mb-16">
-          <div className="border-b border-slate-800 pb-4">
-            <h2 className="text-2xl font-bold font-space text-slate-100">
+          <div className="border-b border-white/[0.08] pb-4">
+            <h2 className="text-2xl font-bold font-space text-zinc-100">
               The 9 Telemetry Signals We Monitor
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-sans mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-1">
               Every repository is continuously benchmarked against peer projects in the same programming ecosystem.
             </p>
           </div>
@@ -294,7 +294,7 @@ export default function HowCRankWorksPage() {
               return (
                 <div
                   key={item.name}
-                  className="rounded-2xl bg-[#111827] p-6 sm:p-7 border border-slate-800 shadow-xs hover:border-slate-700 transition-all flex flex-col sm:flex-row sm:items-start justify-between gap-5"
+                  className="rounded-2xl bg-[#111827] p-6 sm:p-7 border border-white/[0.08] shadow-xs hover:border-white/[0.12] transition-all flex flex-col sm:flex-row sm:items-start justify-between gap-5"
                 >
                   <div className="flex items-start gap-4 flex-1">
                     <div className={`h-11 w-11 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs ${item.color}`}>
@@ -302,22 +302,22 @@ export default function HowCRankWorksPage() {
                     </div>
                     <div>
                       <div className="flex flex-wrap items-center gap-2 mb-1">
-                        <span className="font-mono text-xs font-bold text-slate-400">0{idx + 1}</span>
-                        <h3 className="font-space text-lg font-bold text-slate-100">
+                        <span className="font-mono text-xs font-bold text-zinc-400">0{idx + 1}</span>
+                        <h3 className="font-space text-lg font-bold text-zinc-100">
                           {item.name}
                         </h3>
                       </div>
-                      <p className="text-sm font-semibold text-slate-200 font-sans mb-1.5">
+                      <p className="text-sm font-semibold text-zinc-200 font-sans mb-1.5">
                         {item.headline}
                       </p>
-                      <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-sans">
+                      <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-sans">
                         {item.desc}
                       </p>
                     </div>
                   </div>
 
                   <div className="sm:text-right shrink-0 font-mono pl-15 sm:pl-0">
-                    <span className="inline-block px-2.5 py-1 rounded-lg bg-[#1e293b] border border-slate-800 text-slate-300 text-xs font-semibold">
+                    <span className="inline-block px-2.5 py-1 rounded-lg bg-[#1e293b] border border-white/[0.08] text-zinc-300 text-xs font-semibold">
                       {item.priority}
                     </span>
                   </div>
@@ -329,18 +329,18 @@ export default function HowCRankWorksPage() {
 
         {/* C-Rank Multi-Factor Telemetry Signals Table */}
         <div className="space-y-6 mb-16">
-          <div className="border-b border-slate-800 pb-4">
-            <h2 className="text-2xl font-bold font-space text-slate-100">
+          <div className="border-b border-white/[0.08] pb-4">
+            <h2 className="text-2xl font-bold font-space text-zinc-100">
               C-Rank™ Multi-Factor Telemetry Model
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-sans mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-1">
               Deterministic, continuous scoring calculated from multi-dimensional GitHub GraphQL telemetry.
             </p>
           </div>
 
-          <div className="overflow-x-auto rounded-2xl bg-[#111827] border border-slate-800 shadow-xs">
-            <table className="w-full text-left text-xs text-slate-300 font-sans">
-              <thead className="bg-[#1e293b] text-slate-100 border-b border-slate-800 font-semibold font-space uppercase tracking-wider text-[11px]">
+          <div className="overflow-x-auto rounded-2xl bg-[#111827] border border-white/[0.08] shadow-xs">
+            <table className="w-full text-left text-xs text-zinc-300 font-sans">
+              <thead className="bg-[#1e293b] text-zinc-100 border-b border-white/[0.08] font-semibold font-space uppercase tracking-wider text-[11px]">
                 <tr>
                   <th className="py-3.5 px-5">Telemetry Factor</th>
                   <th className="py-3.5 px-4 text-center font-mono">Impact Priority</th>
@@ -350,58 +350,58 @@ export default function HowCRankWorksPage() {
               </thead>
               <tbody className="divide-y divide-zinc-100 font-sans">
                 <tr className="hover:bg-[#1e293b]/60 transition-colors">
-                  <td className="py-3.5 px-5 font-bold text-slate-100 font-space">1. External PR Merge Velocity</td>
+                  <td className="py-3.5 px-5 font-bold text-zinc-100 font-space">1. External PR Merge Velocity</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-emerald-300 bg-emerald-950/70 border-emerald-800/80/50">Primary</td>
-                  <td className="py-3.5 px-4 font-mono text-slate-400">180-Day Rolling</td>
-                  <td className="py-3.5 px-5 text-slate-400">Ratio of merged vs. abandoned external (non-bot) community pull requests.</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-400">180-Day Rolling</td>
+                  <td className="py-3.5 px-5 text-zinc-400">Ratio of merged vs. abandoned external (non-bot) community pull requests.</td>
                 </tr>
                 <tr className="hover:bg-[#1e293b]/60 transition-colors">
-                  <td className="py-3.5 px-5 font-bold text-slate-100 font-space">2. Initial Review Response Turnaround</td>
+                  <td className="py-3.5 px-5 font-bold text-zinc-100 font-space">2. Initial Review Response Turnaround</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-blue-300 bg-blue-950/70 border-blue-800/80/50">High Impact</td>
-                  <td className="py-3.5 px-4 font-mono text-slate-400">Recent PRs</td>
-                  <td className="py-3.5 px-5 text-slate-400">Median hours before a human maintainer posts an actionable, constructive review.</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-400">Recent PRs</td>
+                  <td className="py-3.5 px-5 text-zinc-400">Median hours before a human maintainer posts an actionable, constructive review.</td>
                 </tr>
                 <tr className="hover:bg-[#1e293b]/60 transition-colors">
-                  <td className="py-3.5 px-5 font-bold text-slate-100 font-space">3. Maintainer Commit &amp; Merge Recency</td>
+                  <td className="py-3.5 px-5 font-bold text-zinc-100 font-space">3. Maintainer Commit &amp; Merge Recency</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-purple-300 bg-purple-950/70 border-purple-800/80/50">High Impact</td>
-                  <td className="py-3.5 px-4 font-mono text-slate-400">Rolling Pulse</td>
-                  <td className="py-3.5 px-5 text-slate-400">Continuous commit rhythm and recency of active maintainer participation.</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-400">Rolling Pulse</td>
+                  <td className="py-3.5 px-5 text-zinc-400">Continuous commit rhythm and recency of active maintainer participation.</td>
                 </tr>
                 <tr className="hover:bg-[#1e293b]/60 transition-colors">
-                  <td className="py-3.5 px-5 font-bold text-slate-100 font-space">4. First-Timer Contributor Success</td>
+                  <td className="py-3.5 px-5 font-bold text-zinc-100 font-space">4. First-Timer Contributor Success</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-amber-300 bg-amber-950/70 border-amber-800/80/50">Core Hospitality</td>
-                  <td className="py-3.5 px-4 font-mono text-slate-400">New Authors</td>
-                  <td className="py-3.5 px-5 text-slate-400">Acceptance rate and onboarding assistance for authors opening their first PR.</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-400">New Authors</td>
+                  <td className="py-3.5 px-5 text-zinc-400">Acceptance rate and onboarding assistance for authors opening their first PR.</td>
                 </tr>
                 <tr className="hover:bg-[#1e293b]/60 transition-colors">
-                  <td className="py-3.5 px-5 font-bold text-slate-100 font-space">5. Resolution &amp; Land Velocity</td>
+                  <td className="py-3.5 px-5 font-bold text-zinc-100 font-space">5. Resolution &amp; Land Velocity</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-indigo-800 bg-indigo-50/50">Core Velocity</td>
-                  <td className="py-3.5 px-4 font-mono text-slate-400">Merged PRs</td>
-                  <td className="py-3.5 px-5 text-slate-400">Total cycle duration from initial PR opening to final main-branch merge.</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-400">Merged PRs</td>
+                  <td className="py-3.5 px-5 text-zinc-400">Total cycle duration from initial PR opening to final main-branch merge.</td>
                 </tr>
                 <tr className="hover:bg-[#1e293b]/60 transition-colors">
-                  <td className="py-3.5 px-5 font-bold text-slate-100 font-space">6. Repeat Contributor Retention</td>
+                  <td className="py-3.5 px-5 font-bold text-zinc-100 font-space">6. Repeat Contributor Retention</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-cyan-800 bg-cyan-50/50">Culture Signal</td>
-                  <td className="py-3.5 px-4 font-mono text-slate-400">Cohorts</td>
-                  <td className="py-3.5 px-5 text-slate-400">Percentage of outside developers returning for subsequent contributions.</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-400">Cohorts</td>
+                  <td className="py-3.5 px-5 text-zinc-400">Percentage of outside developers returning for subsequent contributions.</td>
                 </tr>
                 <tr className="hover:bg-[#1e293b]/60 transition-colors">
-                  <td className="py-3.5 px-5 font-bold text-slate-100 font-space">7. Review Friction &amp; Cycle Density</td>
+                  <td className="py-3.5 px-5 font-bold text-zinc-100 font-space">7. Review Friction &amp; Cycle Density</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-orange-800 bg-orange-50/50">Friction Factor</td>
-                  <td className="py-3.5 px-4 font-mono text-slate-400">Per PR</td>
-                  <td className="py-3.5 px-5 text-slate-400">Efficient feedback rounds without multi-week fragmented review delays.</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-400">Per PR</td>
+                  <td className="py-3.5 px-5 text-zinc-400">Efficient feedback rounds without multi-week fragmented review delays.</td>
                 </tr>
                 <tr className="hover:bg-[#1e293b]/60 transition-colors">
-                  <td className="py-3.5 px-5 font-bold text-slate-100 font-space">8. Maintainer Breadth &amp; Bus Factor</td>
+                  <td className="py-3.5 px-5 font-bold text-zinc-100 font-space">8. Maintainer Breadth &amp; Bus Factor</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-rose-300 bg-rose-950/70 border-rose-800/80/50">Safety Gate</td>
-                  <td className="py-3.5 px-4 font-mono text-slate-400">90-Day Active</td>
-                  <td className="py-3.5 px-5 text-slate-400">Multi-maintainer bench depth; single-maintainer bottlenecks cap score.</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-400">90-Day Active</td>
+                  <td className="py-3.5 px-5 text-zinc-400">Multi-maintainer bench depth; single-maintainer bottlenecks cap score.</td>
                 </tr>
                 <tr className="hover:bg-[#1e293b]/60 transition-colors">
-                  <td className="py-3.5 px-5 font-bold text-slate-100 font-space">9. Issue &amp; Discussion Triage</td>
+                  <td className="py-3.5 px-5 font-bold text-zinc-100 font-space">9. Issue &amp; Discussion Triage</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-emerald-300 bg-emerald-950/70 border-emerald-800/80/50">Community Support</td>
-                  <td className="py-3.5 px-4 font-mono text-slate-400">Issues</td>
-                  <td className="py-3.5 px-5 text-slate-400">Promptness and clarity when triaging prospective contributor questions.</td>
+                  <td className="py-3.5 px-4 font-mono text-zinc-400">Issues</td>
+                  <td className="py-3.5 px-5 text-zinc-400">Promptness and clarity when triaging prospective contributor questions.</td>
                 </tr>
               </tbody>
             </table>
@@ -410,11 +410,11 @@ export default function HowCRankWorksPage() {
 
         {/* Tier Classification Hierarchy */}
         <div className="space-y-6 mb-16">
-          <div className="border-b border-slate-800 pb-4">
-            <h2 className="text-2xl font-bold font-space text-slate-100">
+          <div className="border-b border-white/[0.08] pb-4">
+            <h2 className="text-2xl font-bold font-space text-zinc-100">
               The C-Rank™ Hospitality Ladder
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-sans mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-1">
               Know what to expect before you write a single line of code.
             </p>
           </div>
@@ -423,14 +423,14 @@ export default function HowCRankWorksPage() {
             {tiers.map((t) => (
               <div
                 key={t.tier}
-                className="rounded-2xl bg-[#111827] p-6 border border-slate-800 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                className="rounded-2xl bg-[#111827] p-6 border border-white/[0.08] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
               >
                 <div className="flex items-start sm:items-center gap-4 flex-1">
                   <div className={`px-3 py-1.5 rounded-xl font-mono text-sm font-bold border shrink-0 flex items-center gap-2 ${t.badgeClass}`}>
                     <span className={`h-2 w-2 rounded-full ${t.indicatorColor}`} />
                     <span>{t.label} ({t.tier})</span>
                   </div>
-                  <p className="text-xs sm:text-sm text-slate-400 font-sans leading-relaxed">
+                  <p className="text-xs sm:text-sm text-zinc-400 font-sans leading-relaxed">
                     {t.desc}
                   </p>
                 </div>
@@ -445,14 +445,14 @@ export default function HowCRankWorksPage() {
             <h3 className="text-2xl sm:text-3xl font-bold font-space">
               Find your next open door today
             </h3>
-            <p className="text-xs sm:text-sm text-slate-400 mt-2 font-sans">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-2 font-sans">
               Stop guessing which repos will merge your PRs. Browse repositories with verified maintainer pulse.
             </p>
           </div>
           <Link
             href="/"
             title="Explore Open Source Repositories on GetMerged"
-            className="inline-flex items-center gap-2 rounded-xl bg-[#111827] px-6 py-3 font-sans text-xs font-bold text-slate-100 hover:bg-[#1e293b] active:scale-95 transition-all shadow-xs shrink-0"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#111827] px-6 py-3 font-sans text-xs font-bold text-zinc-100 hover:bg-[#1e293b] active:scale-95 transition-all shadow-xs shrink-0"
           >
             <span>Explore Welcoming Repos</span>
             <ArrowRight className="h-4 w-4" />

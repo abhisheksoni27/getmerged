@@ -71,7 +71,7 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-slate-100">
+    <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-zinc-100">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}

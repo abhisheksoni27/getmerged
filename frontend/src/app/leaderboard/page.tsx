@@ -106,11 +106,11 @@ export default async function LeaderboardPage() {
 
   const getBadgeStyle = (tier: string) => {
     switch (tier?.toUpperCase()) {
-      case "S": return "bg-emerald-600 text-white border border-slate-700 font-bold shadow-sm";
-      case "A": return "bg-blue-600 text-white border border-slate-700 font-bold shadow-sm";
-      case "B": return "bg-amber-600 text-white border border-slate-700 font-bold shadow-sm";
-      case "C": return "bg-violet-600 text-white border border-slate-700 font-bold shadow-sm";
-      default: return "bg-rose-600 text-white border border-slate-700 font-bold shadow-sm";
+      case "S": return "bg-emerald-600 text-white border border-white/[0.12] font-bold shadow-sm";
+      case "A": return "bg-blue-600 text-white border border-white/[0.12] font-bold shadow-sm";
+      case "B": return "bg-amber-600 text-white border border-white/[0.12] font-bold shadow-sm";
+      case "C": return "bg-violet-600 text-white border border-white/[0.12] font-bold shadow-sm";
+      default: return "bg-rose-600 text-white border border-white/[0.12] font-bold shadow-sm";
     }
   };
 
@@ -126,45 +126,45 @@ export default async function LeaderboardPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-slate-200 font-sans">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-200 font-sans">
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111827] border border-slate-800 text-xs text-slate-400 hover:text-slate-100 transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111827] border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        <div className="rounded-3xl bg-[#111827] p-6 sm:p-10 border border-slate-800 shadow-xs mb-8">
+        <div className="rounded-3xl bg-[#111827] p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-8">
           <div className="flex items-center gap-2 mb-3.5">
             <span className="inline-flex items-center gap-1.5 rounded-xl bg-[#1e293b] px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
               <Trophy className="h-3.5 w-3.5 text-amber-400" /> C-Rank™ Global Leaderboard
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight font-space">
+          <h1 className="text-3xl sm:text-4xl font-bold text-zinc-100 tracking-tight font-space">
             Top 50 Open-Source Repositories
           </h1>
-          <p className="mt-3 text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed font-sans">
+          <p className="mt-3 text-xs sm:text-sm text-zinc-400 max-w-3xl leading-relaxed font-sans">
             Ranked by overall <strong>C-Rank™</strong> score. Evaluates PR merge rates, maintainer response times, first-timer success rates, and active maintainer breadth.
           </p>
-          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-slate-400">
+          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-zinc-400">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
             <span>Telemetry updated: {new Date().toUTCString().slice(0, 16)} UTC (Daily Sync)</span>
           </div>
         </div>
 
         {contributors.entries.length > 0 && (
-          <div className="mb-8 overflow-x-auto rounded-2xl bg-[#111827] border border-slate-800 shadow-xs">
-            <div className="flex items-center justify-between gap-3 flex-wrap px-4 pt-5 pb-3 border-b border-slate-800/10">
-              <h2 className="text-sm font-bold text-slate-100 font-space flex items-center gap-1.5">
+          <div className="mb-8 overflow-x-auto rounded-2xl bg-[#111827] border border-white/[0.08] shadow-xs">
+            <div className="flex items-center justify-between gap-3 flex-wrap px-4 pt-5 pb-3 border-b border-white/[0.08]/10">
+              <h2 className="text-sm font-bold text-zinc-100 font-space flex items-center gap-1.5">
                 <Users className="h-4 w-4 text-emerald-600" /> Weekly Contributor Leaderboard
-                {contributors.season && <span className="text-[11px] font-mono text-slate-400">· {contributors.season}</span>}
+                {contributors.season && <span className="text-[11px] font-mono text-zinc-400">· {contributors.season}</span>}
               </h2>
-              <span className="text-[11px] font-mono text-slate-400">50 XP per merged PR · streaks = consecutive weeks</span>
+              <span className="text-[11px] font-mono text-zinc-400">50 XP per merged PR · streaks = consecutive weeks</span>
             </div>
-            <table className="w-full text-left text-xs text-slate-400">
-              <thead className="bg-[#1e293b] text-slate-200 border-b border-slate-800 font-semibold uppercase tracking-wider font-space text-[11px]">
+            <table className="w-full text-left text-xs text-zinc-400">
+              <thead className="bg-[#1e293b] text-zinc-200 border-b border-white/[0.08] font-semibold uppercase tracking-wider font-space text-[11px]">
                 <tr>
                   <th className="py-3 px-4 text-center">Rank</th>
                   <th className="py-3 px-4">Contributor</th>
@@ -177,8 +177,8 @@ export default async function LeaderboardPage() {
               <tbody className="divide-y divide-zinc-100 font-mono">
                 {contributors.entries.map((entry) => (
                   <tr key={entry.rank} className="hover:bg-[#1e293b]/60 transition-colors">
-                    <td className="py-3 px-4 text-center font-bold text-slate-400">#{entry.rank}</td>
-                    <td className="py-3 px-4 font-bold text-slate-100">
+                    <td className="py-3 px-4 text-center font-bold text-zinc-400">#{entry.rank}</td>
+                    <td className="py-3 px-4 font-bold text-zinc-100">
                       <Link
                         href={`/u/${encodeURIComponent(entry.login)}`}
                         title={`View ${entry.login}'s contributor profile and track record`}
@@ -198,8 +198,8 @@ export default async function LeaderboardPage() {
                         {entry.streak_weeks}wk
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-right font-bold text-slate-100">{entry.season_xp.toLocaleString()}</td>
-                    <td className="py-3 px-4 text-right text-slate-400">{entry.total_xp.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-right font-bold text-zinc-100">{entry.season_xp.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-right text-zinc-400">{entry.total_xp.toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
@@ -207,9 +207,9 @@ export default async function LeaderboardPage() {
           </div>
         )}
 
-        <div className="overflow-x-auto rounded-2xl bg-[#111827] border border-slate-800 shadow-xs">
-          <table className="w-full text-left text-xs text-slate-400">
-            <thead className="bg-[#1e293b] text-slate-200 border-b border-slate-800 font-semibold uppercase tracking-wider font-space text-[11px]">
+        <div className="overflow-x-auto rounded-2xl bg-[#111827] border border-white/[0.08] shadow-xs">
+          <table className="w-full text-left text-xs text-zinc-400">
+            <thead className="bg-[#1e293b] text-zinc-200 border-b border-white/[0.08] font-semibold uppercase tracking-wider font-space text-[11px]">
               <tr>
                 <th className="py-3.5 px-4 text-center">Rank</th>
                 <th className="py-3.5 px-4">Repository</th>
@@ -225,18 +225,18 @@ export default async function LeaderboardPage() {
                 const [owner, name] = repo.full_name.split("/");
                 return (
                   <tr key={repo.id} className="hover:bg-[#1e293b]/60 transition-colors">
-                    <td className="py-3.5 px-4 text-center font-bold text-slate-400">
+                    <td className="py-3.5 px-4 text-center font-bold text-zinc-400">
                       #{idx + 1}
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-slate-100">
+                    <td className="py-3.5 px-4 font-bold text-zinc-100">
                       <Link
                         href={`/${owner}/${name}`}
                         title={`View ${repo.full_name} C-Rank details and merge telemetry`}
-                        className="hover:text-slate-300 transition-colors font-space text-sm"
+                        className="hover:text-zinc-300 transition-colors font-space text-sm"
                       >
                         {repo.full_name}
                       </Link>
-                      <div className="text-[11px] font-normal text-slate-400 font-sans truncate max-w-md mt-0.5">
+                      <div className="text-[11px] font-normal text-zinc-400 font-sans truncate max-w-md mt-0.5">
                         {repo.description}
                       </div>
                     </td>
@@ -245,22 +245,22 @@ export default async function LeaderboardPage() {
                         {repo.c_rank_tier || "D"} Rank
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-right font-bold text-slate-100">
+                    <td className="py-3.5 px-4 text-right font-bold text-zinc-100">
                       {repo.c_rank_score?.toFixed(1)}
                     </td>
-                    <td className="py-3.5 px-4 text-right text-slate-400">
+                    <td className="py-3.5 px-4 text-right text-zinc-400">
                       <span className="inline-flex items-center gap-1">
                         <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                         {repo.stars?.toLocaleString()}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-right text-slate-400">
+                    <td className="py-3.5 px-4 text-right text-zinc-400">
                       <span className="inline-flex items-center gap-1">
                         <GitPullRequest className="h-3 w-3 text-emerald-600" />
                         {(repo.external_pr_merge_rate || 0).toFixed(1)}%
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-right text-slate-400">
+                    <td className="py-3.5 px-4 text-right text-zinc-400">
                       <span className="inline-flex items-center gap-1">
                         <Clock className="h-3 w-3 text-blue-500" />
                         {(repo.time_to_first_response_hours || 0).toFixed(1)}h

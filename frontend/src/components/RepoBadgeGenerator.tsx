@@ -96,18 +96,18 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
   };
 
   return (
-    <div className="rounded-3xl border border-slate-800 bg-[#111827] p-6 sm:p-8 shadow-xs mb-8">
+    <div className="rounded-3xl border border-white/[0.08] bg-[#111827] p-6 sm:p-8 shadow-xs mb-8">
       <div className="mb-4">
-        <h3 className="font-space text-lg font-bold text-slate-100">
+        <h3 className="font-space text-lg font-bold text-zinc-100">
           Embed C-Rank Badge
         </h3>
-        <p className="text-xs sm:text-sm text-slate-400 font-sans mt-0.5">
+        <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-0.5">
           Show contributors that your repository actively reviews and merges external pull requests.
         </p>
       </div>
 
       {/* Live badge preview */}
-      <div className="flex items-center min-h-10 p-4 bg-[#1e293b] border border-slate-800 rounded-2xl shadow-2xs mb-5">
+      <div className="flex items-center min-h-10 p-4 bg-[#1e293b] border border-white/[0.08] rounded-2xl shadow-2xs mb-5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={badgeSvgUrl}
@@ -130,7 +130,7 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
             className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
               activeTab === tab
                 ? "bg-[#1e293b] text-white shadow-xs"
-                : "bg-[#1e293b] text-slate-400 hover:bg-zinc-200"
+                : "bg-[#1e293b] text-zinc-400 hover:bg-zinc-200"
             }`}
           >
             {tab === "markdown" ? "Markdown" : "HTML"}
@@ -139,8 +139,8 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
       </div>
 
       {/* Snippet + copy action */}
-      <div className="p-4 bg-[#1e293b] border border-slate-800 rounded-2xl shadow-2xs">
-        <pre className="text-xs font-mono text-slate-300 whitespace-pre-wrap break-all mb-4 select-all">{snippet}</pre>
+      <div className="p-4 bg-[#1e293b] border border-white/[0.08] rounded-2xl shadow-2xs">
+        <pre className="text-xs font-mono text-zinc-300 whitespace-pre-wrap break-all mb-4 select-all">{snippet}</pre>
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={handleCopy}
@@ -172,7 +172,7 @@ Why:
               copyText(prompt, "badge_prompt_copied", { repo_full_name: fullName });
             }}
             title="Copy AI prompt to add GetMerged badge to your repo README via Cursor, Copilot, or Claude"
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#111827] hover:bg-[#1e293b] active:scale-95 text-slate-100 border border-slate-800 font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-2xs inline-flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#111827] hover:bg-[#1e293b] active:scale-95 text-zinc-100 border border-white/[0.08] font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-2xs inline-flex items-center justify-center gap-2"
           >
             <span className="inline-flex items-center gap-1.5">
               <Copy className="h-3.5 w-3.5" /> Copy AI Prompt (for LLMs)

@@ -24,17 +24,17 @@ export function RelativityCanvas() {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // Subtle particles - density calibrated for dark slate backdrop
-    const count = Math.min(300, Math.floor((width * height) / 6000));
+    // Microscopic ambient star dust (ultra low-contrast Apple aesthetic)
+    const count = Math.min(150, Math.floor((width * height) / 12000));
     const balls: Ball[] = [];
 
     for (let i = 0; i < count; i++) {
       balls.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        r: Math.random() * 1.5 + 0.5, // 0.5 to 2.0 px
-        vx: (Math.random() - 0.5) * 0.2,
-        vy: (Math.random() - 0.5) * 0.2,
+        r: Math.random() * 1.2 + 0.3,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
       });
     }
 
@@ -51,7 +51,6 @@ export function RelativityCanvas() {
         b.x += b.vx;
         b.y += b.vy;
 
-        // Wrap around edges
         if (b.x < 0) b.x = width;
         if (b.x > width) b.x = 0;
         if (b.y < 0) b.y = height;
@@ -59,7 +58,7 @@ export function RelativityCanvas() {
 
         ctx.beginPath();
         ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(148, 163, 184, 0.08)";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.04)";
         ctx.fill();
       }
 
@@ -77,7 +76,7 @@ export function RelativityCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-0 h-full w-full"
+      className="pointer-events-none fixed inset-0 z-0 h-full w-full opacity-60"
     />
   );
 }

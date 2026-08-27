@@ -294,18 +294,18 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full text-slate-200 font-sans">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full text-zinc-200 font-sans">
         {/* Navigation Breadcrumb */}
         <Link
           href="/rankings"
           title="Browse All Language Ecosystem Rankings"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111827] border border-slate-800 text-xs text-slate-400 hover:text-slate-100 transition-colors mb-6 font-sans shadow-2xs cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111827] border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-6 font-sans shadow-2xs cursor-pointer"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> All Ecosystems
         </Link>
 
         {/* Hero Section */}
-        <div className="rounded-3xl bg-[#111827] p-6 sm:p-10 border border-slate-800 shadow-xs mb-8 border-b border-slate-800">
+        <div className="rounded-3xl bg-[#111827] p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-8 border-b border-white/[0.08]">
           <div className="flex flex-wrap items-center gap-2 mb-3.5">
             <span className="inline-flex items-center gap-1.5 rounded-xl bg-[#1e293b] px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
               <Trophy className="h-3.5 w-3.5 text-amber-400" /> Top Welcoming Repositories Index
@@ -315,13 +315,13 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight font-space">
+          <h1 className="text-3xl sm:text-4xl font-bold text-zinc-100 tracking-tight font-space">
             Top Welcoming Open-Source {languageName} Repositories
           </h1>
-          <p className="mt-3 text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed font-sans">
+          <p className="mt-3 text-xs sm:text-sm text-zinc-400 max-w-3xl leading-relaxed font-sans">
             Empirical C-Rank™ telemetry for {languageName} projects. Scored from 90-day external PR merge rates, maintainer response velocity, first-timer success rates, and onboarding documentation.
           </p>
-          <div className="mt-2.5 flex items-center gap-2 text-[11px] font-mono text-slate-400">
+          <div className="mt-2.5 flex items-center gap-2 text-[11px] font-mono text-zinc-400">
             <RefreshCw className="w-3 h-3 text-emerald-600" />
             <span>Telemetry verified daily • {latestSnapshotDate ? latestSnapshotDate.toUTCString().slice(0, 16) : "Live"} UTC</span>
           </div>
@@ -337,9 +337,9 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             <Link
               href="/compare"
               title="Compare repository maintainer velocity"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#1e293b] border border-slate-800 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:bg-zinc-200 transition-all shadow-2xs cursor-pointer active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#1e293b] border border-white/[0.08] px-4 py-2.5 text-xs font-semibold text-zinc-200 hover:bg-zinc-200 transition-all shadow-2xs cursor-pointer active:scale-[0.98]"
             >
-              <GitPullRequest className="h-3.5 w-3.5 text-slate-400" />
+              <GitPullRequest className="h-3.5 w-3.5 text-zinc-400" />
               Compare Two {languageName} Repos
             </Link>
           </div>
@@ -347,73 +347,73 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
 
         {/* Ecosystem Live Telemetry Snapshot KPI Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-4 mb-8">
-          <div className="bg-[#111827] p-4 rounded-2xl border border-slate-800 shadow-2xs">
-            <div className="text-[11px] font-mono font-medium text-slate-400 uppercase tracking-wider">Tracked Repos</div>
-            <div className="mt-1 text-2xl font-bold font-space text-slate-100">{rankedItems.length}</div>
-            <div className="text-[11px] text-slate-400 font-sans mt-0.5">&gt;100 stars verified</div>
+          <div className="bg-[#111827] p-4 rounded-2xl border border-white/[0.08] shadow-2xs">
+            <div className="text-[11px] font-mono font-medium text-zinc-400 uppercase tracking-wider">Tracked Repos</div>
+            <div className="mt-1 text-2xl font-bold font-space text-zinc-100">{rankedItems.length}</div>
+            <div className="text-[11px] text-zinc-400 font-sans mt-0.5">&gt;100 stars verified</div>
           </div>
-          <div className="bg-[#111827] p-4 rounded-2xl border border-slate-800 shadow-2xs">
-            <div className="text-[11px] font-mono font-medium text-slate-400 uppercase tracking-wider">Avg Merge Rate</div>
+          <div className="bg-[#111827] p-4 rounded-2xl border border-white/[0.08] shadow-2xs">
+            <div className="text-[11px] font-mono font-medium text-zinc-400 uppercase tracking-wider">Avg Merge Rate</div>
             <div className="mt-1 text-2xl font-bold font-space text-emerald-600">{avgMergeRate}%</div>
-            <div className="text-[11px] text-slate-400 font-sans mt-0.5">90-day external PRs</div>
+            <div className="text-[11px] text-zinc-400 font-sans mt-0.5">90-day external PRs</div>
           </div>
-          <div className="bg-[#111827] p-4 rounded-2xl border border-slate-800 shadow-2xs">
-            <div className="text-[11px] font-mono font-medium text-slate-400 uppercase tracking-wider">Open GFIs</div>
-            <div className="mt-1 text-2xl font-bold font-space text-slate-100">{totalGFIs}</div>
-            <div className="text-[11px] text-slate-400 font-sans mt-0.5">Beginner friendly issues</div>
+          <div className="bg-[#111827] p-4 rounded-2xl border border-white/[0.08] shadow-2xs">
+            <div className="text-[11px] font-mono font-medium text-zinc-400 uppercase tracking-wider">Open GFIs</div>
+            <div className="mt-1 text-2xl font-bold font-space text-zinc-100">{totalGFIs}</div>
+            <div className="text-[11px] text-zinc-400 font-sans mt-0.5">Beginner friendly issues</div>
           </div>
-          <div className="bg-[#111827] p-4 rounded-2xl border border-slate-800 shadow-2xs">
-            <div className="text-[11px] font-mono font-medium text-slate-400 uppercase tracking-wider">Welcoming Tier</div>
+          <div className="bg-[#111827] p-4 rounded-2xl border border-white/[0.08] shadow-2xs">
+            <div className="text-[11px] font-mono font-medium text-zinc-400 uppercase tracking-wider">Welcoming Tier</div>
             <div className="mt-1 text-2xl font-bold font-space text-blue-600">{superWelcomingCount}</div>
-            <div className="text-[11px] text-slate-400 font-sans mt-0.5">S & A Tier maintainers</div>
+            <div className="text-[11px] text-zinc-400 font-sans mt-0.5">S & A Tier maintainers</div>
           </div>
         </div>
 
         {/* Repositories Header with count note */}
-        <div className="mb-4 flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="mb-4 flex items-center justify-between border-b border-white/[0.08] pb-3">
           <div>
-            <h2 className="text-base font-bold text-slate-100 flex items-center gap-2 font-space">
+            <h2 className="text-base font-bold text-zinc-100 flex items-center gap-2 font-space">
               Ranked {languageName} Repositories
             </h2>
             {rankedItems.length > 0 && (
-              <p className="text-xs text-slate-400 font-sans mt-0.5">
+              <p className="text-xs text-zinc-400 font-sans mt-0.5">
                 {rankedItems.length < 50
                   ? `Showing ${rankedItems.length} of 50 qualifying projects`
                   : `Showing top 50 ranked repositories`}
               </p>
             )}
           </div>
-          <span className="text-[11px] text-slate-400 font-mono hidden sm:inline">Telemetry Updated Daily</span>
+          <span className="text-[11px] text-zinc-400 font-mono hidden sm:inline">Telemetry Updated Daily</span>
         </div>
 
         {/* Repositories Table or Error State */}
         {isDataAbsentOrFailed ? (
-          <div className="rounded-2xl bg-[#111827] p-8 sm:p-12 text-center text-slate-400 mb-12 border border-dashed border-red-200 shadow-xs">
+          <div className="rounded-2xl bg-[#111827] p-8 sm:p-12 text-center text-zinc-400 mb-12 border border-dashed border-red-200 shadow-xs">
             <div className="mx-auto w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mb-4">
               <AlertTriangle className="h-6 w-6 text-red-500" />
             </div>
-            <h3 className="text-base font-bold text-slate-100 mb-2 font-space">
+            <h3 className="text-base font-bold text-zinc-100 mb-2 font-space">
               Unable to load {languageName} rankings snapshot
             </h3>
-            <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto mb-4 font-sans leading-relaxed">
+            <p className="text-xs sm:text-sm text-zinc-400 max-w-md mx-auto mb-4 font-sans leading-relaxed">
               {isDataStale
                 ? `Snapshot data is stale (>7 days old).`
                 : `No snapshot data currently available for ${languageName}.`}
               {latestSnapshotDate && (
-                <span className="block mt-1 text-slate-400 font-mono text-xs">
+                <span className="block mt-1 text-zinc-400 font-mono text-xs">
                   Last successful snapshot: {latestSnapshotDate.toUTCString()}
                 </span>
               )}
             </p>
-            <div className="inline-flex items-center gap-2 text-xs font-mono text-slate-400 bg-[#1e293b] border border-slate-800 px-3 py-1.5 rounded-lg">
-              <RefreshCw className="h-3.5 w-3.5 animate-spin text-slate-400" />
+            <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 bg-[#1e293b] border border-white/[0.08] px-3 py-1.5 rounded-lg">
+              <RefreshCw className="h-3.5 w-3.5 animate-spin text-zinc-400" />
               <span>Please retry in a few moments or run the snapshot pipeline.</span>
             </div>
           </div>
         ) : (
-          <div className="overflow-x-auto rounded-2xl bg-[#111827] border border-slate-800 shadow-xs mb-10 border-b-2 border-b-zinc-900">
-            <table className="w-full text-left text-xs text-slate-400">
-              <thead className="bg-[#1e293b] text-slate-200 border-b border-slate-800 font-semibold uppercase tracking-wider font-space text-[11px]">
+          <div className="overflow-x-auto rounded-2xl bg-[#111827] border border-white/[0.08] shadow-xs mb-10 border-b-2 border-b-zinc-900">
+            <table className="w-full text-left text-xs text-zinc-400">
+              <thead className="bg-[#1e293b] text-zinc-200 border-b border-white/[0.08] font-semibold uppercase tracking-wider font-space text-[11px]">
                 <tr>
                   <th className="py-3.5 px-4 text-center w-16">Rank</th>
                   <th className="py-3.5 px-4">Repository</th>
@@ -434,14 +434,14 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                       ? "bg-blue-950/80 border-blue-800/80 text-blue-300 border-blue-300"
                       : tier === "B"
                       ? "bg-amber-950/80 border-amber-800/80 text-amber-300 border-amber-300"
-                      : "bg-[#1e293b] text-slate-200 border-slate-700";
+                      : "bg-[#1e293b] text-zinc-200 border-white/[0.12]";
 
                   return (
                     <tr key={item.repo.id} className="hover:bg-[#1e293b]/70 transition-colors">
-                      <td className="py-3.5 px-4 text-center font-bold text-slate-400">
+                      <td className="py-3.5 px-4 text-center font-bold text-zinc-400">
                         #{idx + 1}
                       </td>
-                      <td className="py-3.5 px-4 font-bold text-slate-100 font-sans">
+                      <td className="py-3.5 px-4 font-bold text-zinc-100 font-sans">
                         <div className="flex items-center gap-2">
                           <Link
                             href={`/${owner}/${name}`}
@@ -451,14 +451,14 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                             {item.repo.full_name}
                           </Link>
                           {item.repo.stars !== undefined && (
-                            <span className="inline-flex items-center gap-0.5 text-[11px] font-mono font-normal text-slate-400">
+                            <span className="inline-flex items-center gap-0.5 text-[11px] font-mono font-normal text-zinc-400">
                               <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                               {item.repo.stars.toLocaleString()}
                             </span>
                           )}
                         </div>
                         {item.repo.description && (
-                          <div className="text-[11px] font-normal text-slate-400 font-sans truncate max-w-lg mt-0.5">
+                          <div className="text-[11px] font-normal text-zinc-400 font-sans truncate max-w-lg mt-0.5">
                             {item.repo.description}
                           </div>
                         )}
@@ -468,16 +468,16 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                           Tier {tier}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-right font-bold text-slate-100 text-sm">
+                      <td className="py-3.5 px-4 text-right font-bold text-zinc-100 text-sm">
                         {item.score.toFixed(1)}
                       </td>
-                      <td className="py-3.5 px-4 text-right text-slate-300">
+                      <td className="py-3.5 px-4 text-right text-zinc-300">
                         <span className="inline-flex items-center gap-1">
                           <GitPullRequest className="h-3.5 w-3.5 text-emerald-600" />
                           {item.mergeRate.toFixed(1)}%
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-right text-slate-300">
+                      <td className="py-3.5 px-4 text-right text-zinc-300">
                         {item.goodFirstIssues > 0 ? (
                           <Link
                             href={`/${owner}/${name}#good-first-issues`}
@@ -488,7 +488,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                             {item.goodFirstIssues}
                           </Link>
                         ) : (
-                          <span className="text-slate-400">-</span>
+                          <span className="text-zinc-400">-</span>
                         )}
                       </td>
                     </tr>
@@ -501,12 +501,12 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
 
         {/* Contributing Strategy Guide for this Ecosystem */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-          <div className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-slate-800 font-sans shadow-xs border-b border-slate-800">
-            <h3 className="text-base font-bold text-slate-100 mb-3 flex items-center gap-2 font-space">
+          <div className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs border-b border-white/[0.08]">
+            <h3 className="text-base font-bold text-zinc-100 mb-3 flex items-center gap-2 font-space">
               <Sparkles className="h-4 w-4 text-emerald-600" />
               How to Get Your {languageName} PR Merged
             </h3>
-            <div className="space-y-3 text-xs sm:text-sm text-slate-400 leading-relaxed font-sans">
+            <div className="space-y-3 text-xs sm:text-sm text-zinc-400 leading-relaxed font-sans">
               <div className="flex items-start gap-2.5">
                 <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-950/80 border-emerald-800/80 text-[11px] font-bold text-emerald-300 font-mono mt-0.5">1</div>
                 <div><strong>Check C-Rank™ First:</strong> Pick projects with S or A tiers to avoid maintainer ghosts and slow review cycles.</div>
@@ -522,8 +522,8 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             </div>
           </div>
 
-          <div className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-slate-800 font-sans shadow-xs border-b border-slate-800">
-            <h3 className="text-base font-bold text-slate-100 mb-3 flex items-center gap-2 font-space">
+          <div className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs border-b border-white/[0.08]">
+            <h3 className="text-base font-bold text-zinc-100 mb-3 flex items-center gap-2 font-space">
               <Trophy className="h-4 w-4 text-amber-500" />
               Top {languageName} Frameworks
             </h3>
@@ -531,75 +531,75 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
               <Link
                 href="/topics/android"
                 title="Browse open source Android repositories"
-                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-slate-800 text-slate-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
               >
                 #android
               </Link>
               <Link
                 href="/topics/compose"
                 title="Browse open source Jetpack Compose repositories"
-                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-slate-800 text-slate-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
               >
                 #compose-multiplatform
               </Link>
               <Link
                 href="/topics/ktor"
                 title="Browse open source Ktor repositories"
-                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-slate-800 text-slate-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
               >
                 #ktor
               </Link>
               <Link
                 href="/topics/spring"
                 title="Browse open source Spring repositories"
-                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-slate-800 text-slate-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
               >
                 #spring-boot
               </Link>
               <Link
                 href="/topics/coroutine"
                 title="Browse open source Kotlin Coroutines repositories"
-                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-slate-800 text-slate-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-300 hover:bg-emerald-950/70 border-emerald-800/80 hover:text-emerald-300 hover:border-emerald-200 transition-colors font-mono cursor-pointer"
               >
                 #coroutines
               </Link>
             </div>
-            <p className="mt-4 text-xs text-slate-400 leading-relaxed font-sans">
+            <p className="mt-4 text-xs text-zinc-400 leading-relaxed font-sans">
               Looking for specific sub-ecosystems? Filter repositories by tag to find modern UI components, coroutines, and backend architectures.
             </p>
           </div>
         </section>
 
         {/* SEO FAQ Section */}
-        <section className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-slate-800 font-sans shadow-xs mb-10">
-          <h3 className="text-base font-bold text-slate-100 mb-4 font-space">
+        <section className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs mb-10">
+          <h3 className="text-base font-bold text-zinc-100 mb-4 font-space">
             Frequently Asked Questions about {languageName} Open Source
           </h3>
-          <div className="space-y-4 text-xs sm:text-sm text-slate-400 font-sans">
-            <details className="group border-b border-slate-800 pb-3 cursor-pointer">
-              <summary className="font-semibold text-slate-100 flex justify-between items-center select-none">
+          <div className="space-y-4 text-xs sm:text-sm text-zinc-400 font-sans">
+            <details className="group border-b border-white/[0.08] pb-3 cursor-pointer">
+              <summary className="font-semibold text-zinc-100 flex justify-between items-center select-none">
                 How does GetMerged calculate the best {languageName} projects to contribute to?
-                <span className="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+                <span className="text-zinc-400 group-open:rotate-180 transition-transform">▼</span>
               </summary>
-              <p className="mt-2 text-slate-400 leading-relaxed">
+              <p className="mt-2 text-zinc-400 leading-relaxed">
                 GetMerged analyzes 90-day external pull request merge rates, maintainer response velocity, first-timer success rates, and open Good First Issues. Repositories with responsive maintainers and documented onboarding rank highest.
               </p>
             </details>
-            <details className="group border-b border-slate-800 pb-3 cursor-pointer">
-              <summary className="font-semibold text-slate-100 flex justify-between items-center select-none">
+            <details className="group border-b border-white/[0.08] pb-3 cursor-pointer">
+              <summary className="font-semibold text-zinc-100 flex justify-between items-center select-none">
                 Where can beginners find Good First Issues in {languageName}?
-                <span className="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+                <span className="text-zinc-400 group-open:rotate-180 transition-transform">▼</span>
               </summary>
-              <p className="mt-2 text-slate-400 leading-relaxed">
+              <p className="mt-2 text-zinc-400 leading-relaxed">
                 You can browse verified <Link href={`/good-first-issue/${canonicalLang}`} title={`Browse ${languageName} Good First Issues`} className="text-emerald-400 underline font-medium">open {languageName} Good First Issues</Link> directly on GetMerged, linking straight to repositories that actively review newcomer pull requests.
               </p>
             </details>
             <details className="group pb-1 cursor-pointer">
-              <summary className="font-semibold text-slate-100 flex justify-between items-center select-none">
+              <summary className="font-semibold text-zinc-100 flex justify-between items-center select-none">
                 What makes a {languageName} project &quot;Super Welcoming&quot;?
-                <span className="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+                <span className="text-zinc-400 group-open:rotate-180 transition-transform">▼</span>
               </summary>
-              <p className="mt-2 text-slate-400 leading-relaxed">
+              <p className="mt-2 text-zinc-400 leading-relaxed">
                 A &quot;Super Welcoming&quot; (S-Tier) {languageName} repository maintains an external PR merge rate over 80%, responds to new PRs within 24 - 48 hours, and provides welcoming, constructive feedback to first-time contributors.
               </p>
             </details>

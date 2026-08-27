@@ -177,10 +177,10 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
         </div>
 
         <div className="p-5">
-          <p className="text-lg font-bold text-slate-100 mb-1">
+          <p className="text-lg font-bold text-zinc-100 mb-1">
             {links.headline} 🎉
           </p>
-          <p className="text-xs text-slate-400 mb-4">
+          <p className="text-xs text-zinc-400 mb-4">
             {celebrating.full_name}#{celebrating.pr_number} merged. Your pre-flight call is now a
             publicly verifiable fact - brag about it.
           </p>
@@ -191,7 +191,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
               src={links.ogCardUrl}
               alt={`Share card: ${links.headline} for ${celebrating.full_name}`}
               onError={() => setCardFailed(true)}
-              className="w-full rounded-xl border border-slate-800 mb-4"
+              className="w-full rounded-xl border border-white/[0.08] mb-4"
               data-testid="merge-celebration-card"
             />
           )}
@@ -227,8 +227,8 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
             </a>
           </div>
 
-          <div className="pt-3 border-t border-slate-800">
-            <label className="block text-[11px] font-mono font-bold text-slate-400 uppercase mb-1">
+          <div className="pt-3 border-t border-white/[0.08]">
+            <label className="block text-[11px] font-mono font-bold text-zinc-400 uppercase mb-1">
               Share link (with your referral credit)
             </label>
             <div className="flex items-center gap-2">
@@ -236,7 +236,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
                 readOnly
                 value={links.destinationUrl}
                 onFocus={(e) => e.currentTarget.select()}
-                className="flex-1 min-w-0 rounded-xl border border-slate-700 bg-[#1e293b] px-3 py-2 text-xs font-mono text-slate-300"
+                className="flex-1 min-w-0 rounded-xl border border-white/[0.12] bg-[#1e293b] px-3 py-2 text-xs font-mono text-zinc-300"
               />
               <button
                 type="button"
@@ -248,7 +248,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
                     setTimeout(() => setCopied(false), 2000);
                   }
                 }}
-                className="px-3 py-2 rounded-xl bg-[#1e293b] border border-slate-700 hover:bg-zinc-200 text-xs font-mono font-bold text-slate-200 flex items-center gap-1 shrink-0 cursor-pointer"
+                className="px-3 py-2 rounded-xl bg-[#1e293b] border border-white/[0.12] hover:bg-zinc-200 text-xs font-mono font-bold text-zinc-200 flex items-center gap-1 shrink-0 cursor-pointer"
               >
                 {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
                 <span>{copied ? "Copied" : "Copy"}</span>

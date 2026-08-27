@@ -117,7 +117,7 @@ function fmtHours(h: number | null | undefined): string {
 }
 
 const STATE_META: Record<string, { label: string; icon: React.ReactNode; cls: string }> = {
-  open: { label: "Open", icon: <CircleDashed className="h-3.5 w-3.5" />, cls: "bg-[#1e293b] text-slate-300 border border-slate-700" },
+  open: { label: "Open", icon: <CircleDashed className="h-3.5 w-3.5" />, cls: "bg-[#1e293b] text-zinc-300 border border-white/[0.12]" },
   changes_requested: { label: "Changes requested", icon: <MessageSquareWarning className="h-3.5 w-3.5" />, cls: "bg-amber-950/80 border-amber-800/80 text-amber-300 border border-amber-300" },
   approved: { label: "Approved", icon: <CheckCircle2 className="h-3.5 w-3.5" />, cls: "bg-emerald-950/80 border-emerald-800/80 text-emerald-300 border border-emerald-300" },
   merged: { label: "Merged", icon: <Merge className="h-3.5 w-3.5" />, cls: "bg-violet-100 text-violet-800 border border-violet-300" },
@@ -285,7 +285,7 @@ export function DashboardClient() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-16 text-sm text-slate-400 animate-pulse">
+      <div className="max-w-4xl mx-auto px-4 py-16 text-sm text-zinc-400 animate-pulse">
         Loading your pull requests…
       </div>
     );
@@ -318,10 +318,10 @@ export function DashboardClient() {
       </div>
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-zinc-100 flex items-center gap-2">
             <GitPullRequest className="h-6 w-6 text-emerald-600" /> My PR Tracker
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-zinc-400 mt-1">
             Your open pull requests to C+ ranked repos, with live review benchmarks.
           </p>
         </div>
@@ -330,7 +330,7 @@ export function DashboardClient() {
             <>
               {/* AC1: profile is private by default; explicit opt-in toggle */}
               <label
-                className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-[#111827] px-2.5 py-2 text-xs font-semibold text-slate-300 cursor-pointer select-none"
+                className="flex items-center gap-1.5 rounded-lg border border-white/[0.12] bg-[#111827] px-2.5 py-2 text-xs font-semibold text-zinc-300 cursor-pointer select-none"
                 title="Anyone with your /u link can see your track record"
               >
                 <input
@@ -412,7 +412,7 @@ export function DashboardClient() {
       )}
 
       {!data || data.prs.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-slate-700 p-10 text-center text-sm text-slate-400">
+        <div className="rounded-xl border border-dashed border-white/[0.12] p-10 text-center text-sm text-zinc-400">
           No open pull requests to C+ ranked repositories found yet.
           <div className="mt-2">
             <Link href="/repos" className="text-emerald-400 font-semibold hover:underline">
@@ -432,9 +432,9 @@ export function DashboardClient() {
                 ? "bg-emerald-950/80 border-emerald-800/80 text-emerald-300 border border-emerald-300"
                 : verdictView?.tone === "bad"
                   ? "bg-red-100 text-red-700 border border-red-300"
-                  : "bg-[#1e293b] text-slate-400 border border-slate-700";
+                  : "bg-[#1e293b] text-zinc-400 border border-white/[0.12]";
             return (
-              <li key={pr.pr_id} className="rounded-xl border border-slate-800 bg-[#111827] p-4 shadow-sm/5">
+              <li key={pr.pr_id} className="rounded-xl border border-white/[0.08] bg-[#111827] p-4 shadow-sm/5">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -452,22 +452,22 @@ export function DashboardClient() {
                       href={pr.html_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block truncate font-semibold text-sm text-slate-100 hover:text-emerald-400"
+                      className="block truncate font-semibold text-sm text-zinc-100 hover:text-emerald-400"
                     >
-                      {pr.title} <ExternalLink className="inline h-3 w-3 text-slate-400" />
+                      {pr.title} <ExternalLink className="inline h-3 w-3 text-zinc-400" />
                     </a>
-                    <div className="text-xs text-slate-400 mt-0.5">
+                    <div className="text-xs text-zinc-400 mt-0.5">
                       {pr.full_name}#{pr.pr_number}
                     </div>
                   </div>
-                  <div className="text-right text-xs text-slate-400 shrink-0 flex items-center gap-1">
+                  <div className="text-right text-xs text-zinc-400 shrink-0 flex items-center gap-1">
                     <Clock className="h-3 w-3" /> open {fmtHours(pr.age_hours)}
                   </div>
                 </div>
 
                 {/* AC3: benchmark line from /api/v1/pr-likelihood medians */}
-                <div className="mt-3 rounded-lg bg-[#1e293b] border border-slate-800 px-3 py-2 text-xs text-slate-400">
-                  <span className="font-semibold text-slate-300">Repo review pace:</span>{" "}
+                <div className="mt-3 rounded-lg bg-[#1e293b] border border-white/[0.08] px-3 py-2 text-xs text-zinc-400">
+                  <span className="font-semibold text-zinc-300">Repo review pace:</span>{" "}
                   p50 {fmtHours(pr.benchmark?.response_p50_hours)} · p90 {fmtHours(pr.benchmark?.response_p90_hours)} · merge{" "}
                   {fmtHours(pr.benchmark?.median_time_to_merge_hours)}
                 </div>
@@ -479,7 +479,7 @@ export function DashboardClient() {
                       {verdictView.text}
                     </span>
                     {accuracyView && (
-                      <span className="text-[11px] font-mono text-slate-400">{accuracyView.label}</span>
+                      <span className="text-[11px] font-mono text-zinc-400">{accuracyView.label}</span>
                     )}
                   </div>
                 )}
@@ -501,20 +501,20 @@ export function DashboardClient() {
                 {/* AC4: Pro-gated transparent rule-based forecast */}
                 <div className="mt-2">
                   {pr.forecast ? (
-                    <div className="text-xs text-slate-400">
+                    <div className="text-xs text-zinc-400">
                       <span className="font-semibold">Acceptance outlook:</span>{" "}
                       <span className="font-bold capitalize">{pr.forecast.label}</span> ({pr.forecast.score}/100)
-                      <ul className="list-disc ml-5 mt-1 space-y-0.5 text-slate-400">
+                      <ul className="list-disc ml-5 mt-1 space-y-0.5 text-zinc-400">
                         {pr.forecast.reasons.map((r, i) => (
                           <li key={i}>{r}</li>
                         ))}
                       </ul>
-                      <div className="mt-1 text-slate-400 italic">{pr.forecast.basis}</div>
+                      <div className="mt-1 text-zinc-400 italic">{pr.forecast.basis}</div>
                     </div>
                   ) : pr.forecast_locked ? (
                     <Link
                       href="/pricing"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-emerald-400"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-300 hover:text-emerald-400"
                     >
                       <Lock className="h-3 w-3" /> Acceptance forecast - unlock with Pro
                     </Link>
@@ -526,7 +526,7 @@ export function DashboardClient() {
         </ul>
       )}
 
-      <p className="mt-6 text-center text-[11px] text-slate-400">
+      <p className="mt-6 text-center text-[11px] text-zinc-400">
         Newest {data?.prs.length ?? 0} tracked PRs · live refresh at most once per 5 minutes · cron poll every 15 minutes ·
         entries older than {data?.stale_after_min ?? 30} min are flagged stale.
       </p>

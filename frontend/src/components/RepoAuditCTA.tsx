@@ -88,7 +88,7 @@ export function RepoAuditCTA({ fullName, isScored, isLoggedIn, requireLogin }: R
       type="button"
       onClick={goToAudit}
       title={isLoggedIn ? "Unlock the full C-Rank deep-audit" : "Sign in to unlock the full deep-audit"}
-      className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-dark bg-[#ffd93d] px-4 py-2 text-xs font-mono font-bold text-slate-50 shadow-sm transition-all hover:bg-[#ffdf5c] active:scale-[0.99] cursor-pointer"
+      className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-dark bg-[#ffd93d] px-4 py-2 text-xs font-mono font-bold text-zinc-50 shadow-sm transition-all hover:bg-[#ffdf5c] active:scale-[0.99] cursor-pointer"
     >
       {!isLoggedIn && <Lock className="h-4 w-4" />}
       <FileSearch className="h-4 w-4" />

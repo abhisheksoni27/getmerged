@@ -100,14 +100,14 @@ export function CompareShareBar({ repoA, repoB }: CompareShareBarProps) {
     <div
       role="region"
       aria-label="Repository comparison sharing and export tools"
-      className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-[#111827] border border-slate-800 shadow-xs mb-8"
+      className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-[#111827] border border-white/[0.08] shadow-xs mb-8"
     >
-      <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-        <span className="font-semibold text-slate-100 font-sans text-sm">
+      <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
+        <span className="font-semibold text-zinc-100 font-sans text-sm">
           Export & Share
         </span>
-        <span className="hidden sm:inline text-slate-400">•</span>
-        <span className="hidden sm:inline text-slate-400">
+        <span className="hidden sm:inline text-zinc-400">•</span>
+        <span className="hidden sm:inline text-zinc-400">
           Share head-to-head metrics on GitHub or social media
         </span>
       </div>
@@ -143,11 +143,11 @@ export function CompareShareBar({ repoA, repoB }: CompareShareBarProps) {
           onClick={handleShare}
           title="Share repository comparison on X or external platforms"
           aria-label="Share comparison on social media or external platforms"
-          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[#1e293b] text-slate-200 hover:bg-zinc-200 border border-slate-800/60 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 cursor-pointer shadow-2xs"
+          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[#1e293b] text-zinc-200 hover:bg-zinc-200 border border-white/[0.08]/60 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 cursor-pointer shadow-2xs"
         >
-          <Share2 className="h-3.5 w-3.5 text-slate-400" />
+          <Share2 className="h-3.5 w-3.5 text-zinc-400" />
           <span>Share Comparison</span>
-          <ExternalLink className="h-3 w-3 text-slate-400" />
+          <ExternalLink className="h-3 w-3 text-zinc-400" />
         </button>
       </div>
     </div>

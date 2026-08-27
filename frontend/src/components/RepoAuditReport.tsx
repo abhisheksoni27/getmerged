@@ -229,7 +229,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
   }, [owner, name, report]);
 
   if (phase === "checking") {
-    return <AuditShell fullName={fullName}><p className="text-sm text-slate-400">Loading your audit…</p></AuditShell>;
+    return <AuditShell fullName={fullName}><p className="text-sm text-zinc-400">Loading your audit…</p></AuditShell>;
   }
 
   if (phase === "unauth") {
@@ -239,8 +239,8 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-950/80 border-amber-800/80 border border-amber-200 text-amber-600">
             <Lock className="h-7 w-7" />
           </div>
-          <h1 className="text-xl font-bold font-mono text-slate-100 mb-2">Sign in to view the Full Audit</h1>
-          <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">
+          <h1 className="text-xl font-bold font-mono text-zinc-100 mb-2">Sign in to view the Full Audit</h1>
+          <p className="text-sm text-zinc-400 mb-6 max-w-md mx-auto">
             The deep-audit report is tied to your account. Sign in to unlock the full C-Rank breakdown, peer percentiles and AI-prioritized fixes.
           </p>
           <a
@@ -257,9 +257,9 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
   if (phase === "notfound") {
     return (
       <AuditShell fullName={fullName}>
-        <div className="rounded-2xl border-2 border-slate-800 bg-[#111827] p-8 text-center">
-          <h1 className="text-xl font-bold text-slate-100">Repository not found</h1>
-          <p className="text-sm text-slate-400 mt-2">This repository is not indexed yet.</p>
+        <div className="rounded-2xl border-2 border-white/[0.08] bg-[#111827] p-8 text-center">
+          <h1 className="text-xl font-bold text-zinc-100">Repository not found</h1>
+          <p className="text-sm text-zinc-400 mt-2">This repository is not indexed yet.</p>
         </div>
       </AuditShell>
     );
@@ -270,8 +270,8 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
       <AuditShell fullName={fullName}>
         <div className="rounded-2xl border-2 border-rose-200 bg-rose-950/70 border-rose-800/80 p-8 text-center">
           <AlertCircle className="h-7 w-7 mx-auto text-rose-600 mb-3" />
-          <h1 className="text-xl font-bold text-slate-100">Something went wrong</h1>
-          <p className="text-sm text-slate-400 mt-2">{errorMsg}</p>
+          <h1 className="text-xl font-bold text-zinc-100">Something went wrong</h1>
+          <p className="text-sm text-zinc-400 mt-2">{errorMsg}</p>
         </div>
       </AuditShell>
     );
@@ -281,14 +281,14 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
     return (
       <AuditShell fullName={fullName}>
         <div className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-yellow-100 via-white to-emerald-100 p-8 shadow-sm text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-yellow-200 border-2 border-brand-dark text-slate-50 -rotate-2">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-yellow-200 border-2 border-brand-dark text-zinc-50 -rotate-2">
             <FileSearch className="h-7 w-7" />
           </div>
           <span className="inline-block rounded-full bg-yellow-100 px-3 py-1 font-mono text-xs font-bold text-yellow-900 mb-3">
             One-Time Purchase
           </span>
-          <h1 className="text-2xl font-bold font-mono text-slate-50 mb-2">Full Repo Deep-Audit - $19</h1>
-          <p className="text-sm text-slate-300 mb-6 max-w-md mx-auto">
+          <h1 className="text-2xl font-bold font-mono text-zinc-50 mb-2">Full Repo Deep-Audit - $19</h1>
+          <p className="text-sm text-zinc-300 mb-6 max-w-md mx-auto">
             Get the complete per-factor C-Rank breakdown, percentile vs peer repos, and AI-prioritized fixes to raise your rank - no subscription required.
           </p>
           {errorMsg && <p className="text-xs text-rose-600 mb-3">{errorMsg}</p>}
@@ -296,12 +296,12 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
             type="button"
             onClick={startCheckout}
             disabled={checkoutLoading}
-            className="inline-flex items-center gap-2 rounded-full bg-[#ffd93d] px-6 py-3 text-xs font-mono font-bold text-slate-50 shadow-sm transition-all hover:bg-[#ffdf5c] active:scale-[0.99] disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-full bg-[#ffd93d] px-6 py-3 text-xs font-mono font-bold text-zinc-50 shadow-sm transition-all hover:bg-[#ffdf5c] active:scale-[0.99] disabled:opacity-60"
           >
             <FileSearch className="h-4 w-4" />
             {checkoutLoading ? "Redirecting to checkout…" : "Get Full Audit - $19"}
           </button>
-          <p className="text-[11px] text-slate-400 mt-4">
+          <p className="text-[11px] text-zinc-400 mt-4">
             Verifying payment… we’ll unlock the report automatically once confirmed.
           </p>
         </div>
@@ -321,34 +321,34 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
               <span className="inline-block rounded-full bg-emerald-950/80 border-emerald-800/80 px-3 py-1 font-mono text-xs font-bold text-emerald-300 mb-2">
                 Deep-Audit Unlocked
               </span>
-              <h1 className="text-2xl font-bold font-mono text-slate-50">{r.repo.full_name}</h1>
-              {r.repo.description && <p className="text-sm text-slate-400 mt-1 max-w-2xl">{r.repo.description}</p>}
+              <h1 className="text-2xl font-bold font-mono text-zinc-50">{r.repo.full_name}</h1>
+              {r.repo.description && <p className="text-sm text-zinc-400 mt-1 max-w-2xl">{r.repo.description}</p>}
             </div>
             <div className="text-right">
-              <div className="text-3xl font-extrabold font-mono text-slate-50">{r.overall.score.toFixed(1)}</div>
-              <div className="text-xs font-mono text-slate-400">C-Rank · Tier {r.overall.tier}</div>
+              <div className="text-3xl font-extrabold font-mono text-zinc-50">{r.overall.score.toFixed(1)}</div>
+              <div className="text-xs font-mono text-zinc-400">C-Rank · Tier {r.overall.tier}</div>
             </div>
           </div>
         </section>
 
         {/* Per-factor C-Rank breakdown */}
         <section className="rounded-2xl border-2 border-brand-dark bg-[#111827] p-6 shadow-sm">
-          <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-slate-50 mb-4">
+          <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-zinc-50 mb-4">
             <Sparkles className="h-4 w-4 text-indigo-500" /> Full C-Rank Per-Factor Breakdown
           </h2>
           <div className="space-y-3">
             {r.factors.map((f) => (
-              <div key={f.key} className="rounded-xl border border-slate-800 p-3">
+              <div key={f.key} className="rounded-xl border border-white/[0.08] p-3">
                 <div className="flex items-center justify-between text-xs font-mono mb-1">
-                  <span className="font-bold text-slate-200">{f.label}</span>
-                  <span className="text-slate-400">
+                  <span className="font-bold text-zinc-200">{f.label}</span>
+                  <span className="text-zinc-400">
                     raw {fmtNum(f.raw_value)} · peer {f.peer_percentile.toFixed(0)}th · weight {(f.weight * 100).toFixed(1)}%
                   </span>
                 </div>
                 <div className="h-2.5 w-full rounded-full bg-[#1e293b] overflow-hidden">
                   <div className="h-full bg-emerald-500" style={{ width: `${Math.max(0, Math.min(100, f.normalized_score))}%` }} />
                 </div>
-                <div className="text-[11px] text-slate-400 mt-1">contribution to score: {f.contribution.toFixed(1)} pts</div>
+                <div className="text-[11px] text-zinc-400 mt-1">contribution to score: {f.contribution.toFixed(1)} pts</div>
               </div>
             ))}
           </div>
@@ -357,22 +357,22 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
         {/* AI-prioritized fixes */}
         <section className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-6 shadow-sm">
           <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
-            <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-slate-50">
+            <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-zinc-50">
               <Sparkles className="h-4 w-4 text-emerald-600" /> AI-Prioritized Fixes
             </h2>
             <button
               type="button"
               onClick={regenerate}
               disabled={regenLoading}
-              className="inline-flex items-center gap-1.5 rounded-xl border-2 border-brand-dark bg-[#111827] px-3 py-1.5 text-[11px] font-mono font-bold text-slate-200 shadow-sm transition-all hover:bg-slate-800 active:scale-[0.99] disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 rounded-xl border-2 border-brand-dark bg-[#111827] px-3 py-1.5 text-[11px] font-mono font-bold text-zinc-200 shadow-sm transition-all hover:bg-slate-800 active:scale-[0.99] disabled:opacity-60"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${regenLoading ? "animate-spin" : ""}`} />
               {regenLoading ? "Regenerating…" : "Regenerate (1/day)"}
             </button>
           </div>
-          {regenNote && <p className="text-[11px] text-slate-400 mb-3">{regenNote}</p>}
+          {regenNote && <p className="text-[11px] text-zinc-400 mb-3">{regenNote}</p>}
           {r.prioritized_fixes.length === 0 ? (
-            <p className="text-xs text-slate-400">No prioritized fixes available yet - run “Regenerate” to analyze the latest discussions.</p>
+            <p className="text-xs text-zinc-400">No prioritized fixes available yet - run “Regenerate” to analyze the latest discussions.</p>
           ) : (
             <ol className="space-y-2">
               {r.prioritized_fixes.map((fix) => (
@@ -380,7 +380,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
                   <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#0f172a] text-[10px] font-bold text-white">
                     {fix.priority}
                   </span>
-                  <div className="text-xs text-slate-200">
+                  <div className="text-xs text-zinc-200">
                     {fix.type === "avoid" ? (
                       <span className="inline-flex items-center gap-1 text-rose-700"><XCircle className="h-3.5 w-3.5" /> Avoid:</span>
                     ) : (
@@ -436,7 +436,7 @@ function AuditShell({ fullName, children }: { fullName: string; children: React.
         <Link
           href={`/${fullName}`}
           title="Back to repository"
-          className="inline-flex items-center gap-1.5 text-xs font-mono text-slate-400 hover:text-slate-100 transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-400 hover:text-zinc-100 transition-colors mb-6"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to {fullName}

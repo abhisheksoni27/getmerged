@@ -305,42 +305,42 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
   }, [page, totalPages]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0f172a] dev-grid-pattern text-slate-100 overflow-x-hidden font-sans">
+    <div className="min-h-screen flex flex-col bg-[#0f172a] dev-grid-pattern text-zinc-100 overflow-x-hidden font-sans">
       <Header />
 
       <main className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1">
         {/* Breadcrumb Navigation */}
-        <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-slate-400">
-          <Link href="/" title="Back to GetMerged Home" className="hover:text-slate-100 transition-colors">
+        <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-zinc-400">
+          <Link href="/" title="Back to GetMerged Home" className="hover:text-zinc-100 transition-colors">
             Home
           </Link>
           <span>/</span>
-          <span className="text-slate-100 font-semibold">Repository Directory</span>
+          <span className="text-zinc-100 font-semibold">Repository Directory</span>
         </nav>
 
         {/* Header Hero Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-slate-800 pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-white/[0.08] pb-8">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-200/60 text-xs font-mono text-orange-950 font-semibold mb-3">
               <Sparkles className="h-3.5 w-3.5 text-orange-600" />
               <span>C-Rank™ Scored Repositories</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold font-space text-slate-50 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-extrabold font-space text-zinc-50 tracking-tight">
               Open-Source Repository Explorer
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 font-sans mt-2 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-2 max-w-2xl leading-relaxed">
               Browse public GitHub repositories scored on merge velocity, maintainer responsiveness, and first-time PR welcome rates.
             </p>
           </div>
 
           {/* Quick Counter Badge */}
-          <div className="flex items-center gap-3 bg-[#111827] border border-slate-800 rounded-2xl px-5 py-3 shadow-2xs shrink-0 self-start md:self-auto">
+          <div className="flex items-center gap-3 bg-[#111827] border border-white/[0.08] rounded-2xl px-5 py-3 shadow-2xs shrink-0 self-start md:self-auto">
             <ShieldCheck className="h-5 w-5 text-emerald-600" />
             <div>
-              <span className="block text-[11px] font-mono text-slate-400 uppercase tracking-wider">
+              <span className="block text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
                 Total Repositories
               </span>
-              <span className="text-xl font-bold font-mono text-slate-50">
+              <span className="text-xl font-bold font-mono text-zinc-50">
                 {totalCount.toLocaleString()}
               </span>
             </div>
@@ -348,11 +348,11 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
         </div>
 
         {/* Filter Controls Bar */}
-        <section className="bg-[#111827] border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xs mb-8">
+        <section className="bg-[#111827] border border-white/[0.08] rounded-3xl p-4 sm:p-5 shadow-xs mb-8">
           <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
             {/* Search Input */}
             <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
               <input
                 type="text"
                 value={searchQuery}
@@ -361,14 +361,14 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   setPage(1);
                 }}
                 placeholder="Search by repo name (e.g. facebook/react, fastapi)..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-[#1e293b] border border-slate-800 text-xs sm:text-sm text-slate-100 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-zinc-900 focus:bg-[#111827] transition-all font-sans"
+                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-[#1e293b] border border-white/[0.08] text-xs sm:text-sm text-zinc-100 placeholder:text-zinc-400 focus:outline-hidden focus:ring-2 focus:ring-zinc-900 focus:bg-[#111827] transition-all font-sans"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
                   title="Clear search"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-zinc-300"
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>
@@ -385,7 +385,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   setPage(1);
                 }}
                 aria-label="Filter by language"
-                className="px-3 py-2.5 rounded-xl bg-[#1e293b] border border-slate-800 text-slate-200 font-medium focus:ring-2 focus:ring-zinc-900 cursor-pointer"
+                className="px-3 py-2.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-200 font-medium focus:ring-2 focus:ring-zinc-900 cursor-pointer"
               >
                 {LANGUAGES.map((l) => (
                   <option key={l} value={l}>
@@ -402,7 +402,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   setPage(1);
                 }}
                 aria-label="Filter by C-Rank tier"
-                className="px-3 py-2.5 rounded-xl bg-[#1e293b] border border-slate-800 text-slate-200 font-medium focus:ring-2 focus:ring-zinc-900 cursor-pointer"
+                className="px-3 py-2.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-200 font-medium focus:ring-2 focus:ring-zinc-900 cursor-pointer"
               >
                 <option value="All">All Tiers (S–D)</option>
                 <option value="S">Tier S (Top Welcoming)</option>
@@ -420,7 +420,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   setPage(1);
                 }}
                 aria-label="Filter by stars"
-                className="px-3 py-2.5 rounded-xl bg-[#1e293b] border border-slate-800 text-slate-200 font-medium focus:ring-2 focus:ring-zinc-900 cursor-pointer"
+                className="px-3 py-2.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-200 font-medium focus:ring-2 focus:ring-zinc-900 cursor-pointer"
               >
                 {STAR_BUCKETS.map((b) => (
                   <option key={b.value} value={b.value}>
@@ -436,10 +436,10 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   setTrendingOnly((prev) => !prev);
                   setPage(1);
                 }}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-700 transition-all cursor-pointer font-bold ${
+                className={`inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-white/[0.12] transition-all cursor-pointer font-bold ${
                   trendingOnly
                     ? "bg-amber-600 text-white shadow-sm"
-                    : "bg-[#111827] text-slate-200 hover:bg-slate-800 hover:shadow-sm"
+                    : "bg-[#111827] text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
                 }`}
               >
                 <Flame className={`h-3.5 w-3.5 ${trendingOnly ? "text-amber-600 fill-amber-500" : "text-amber-500"}`} />
@@ -452,7 +452,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   type="button"
                   onClick={resetFilters}
                   title="Reset all filters"
-                  className="p-2.5 rounded-xl border border-slate-700 bg-[#111827] text-slate-200 hover:bg-[#1e293b] hover:shadow-sm transition-all cursor-pointer"
+                  className="p-2.5 rounded-xl border border-white/[0.12] bg-[#111827] text-zinc-200 hover:bg-[#1e293b] hover:shadow-sm transition-all cursor-pointer"
                 >
                   <RotateCcw className="h-4 w-4" />
                 </button>
@@ -460,7 +460,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
             </div>
 
             {/* Mobile Filter Sheet Trigger Button */}
-            <div className="flex lg:hidden items-center justify-between gap-2 pt-2 border-t border-slate-800">
+            <div className="flex lg:hidden items-center justify-between gap-2 pt-2 border-t border-white/[0.08]">
               <button
                 type="button"
                 onClick={() => setIsFilterSheetOpen(true)}
@@ -475,7 +475,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   type="button"
                   onClick={resetFilters}
                   title="Reset all filters"
-                  className="p-2.5 rounded-xl border border-slate-800 bg-[#111827] text-slate-400 text-xs font-semibold cursor-pointer"
+                  className="p-2.5 rounded-xl border border-white/[0.08] bg-[#111827] text-zinc-400 text-xs font-semibold cursor-pointer"
                 >
                   <RotateCcw className="h-4 w-4" />
                 </button>
@@ -484,8 +484,8 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
           </div>
 
           {/* Quick Language Chips Carousel */}
-          <div className="mt-4 pt-4 border-t border-slate-800 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
-            <span className="text-slate-400 font-mono shrink-0 pl-1">Quick:</span>
+          <div className="mt-4 pt-4 border-t border-white/[0.08] flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+            <span className="text-zinc-400 font-mono shrink-0 pl-1">Quick:</span>
             {LANGUAGES.map((lang) => {
               const active = selectedLang === lang;
               return (
@@ -499,7 +499,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs whitespace-nowrap transition-all cursor-pointer font-sans shrink-0 ${
                     active
                       ? "bg-[#1e293b] text-white font-bold shadow-2xs"
-                      : "bg-[#1e293b] border border-slate-800 text-slate-300 hover:bg-[#1e293b] font-medium"
+                      : "bg-[#1e293b] border border-white/[0.08] text-zinc-300 hover:bg-[#1e293b] font-medium"
                   }`}
                 >
                   {lang !== "All" && <LangLogo language={lang} />}
@@ -515,7 +515,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-56 rounded-3xl bg-[#111827] border border-slate-800 p-6 animate-pulse" />
+                <div key={i} className="h-56 rounded-3xl bg-[#111827] border border-white/[0.08] p-6 animate-pulse" />
               ))}
             </div>
           ) : repos.length > 0 ? (
@@ -525,10 +525,10 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
               ))}
             </div>
           ) : (
-            <div className="rounded-3xl border border-dashed border-slate-700 bg-[#111827]/70 p-12 text-center">
+            <div className="rounded-3xl border border-dashed border-white/[0.12] bg-[#111827]/70 p-12 text-center">
               <Search className="h-10 w-10 text-zinc-300 mx-auto mb-3" />
-              <h3 className="text-base font-bold font-space text-slate-100">No repositories found</h3>
-              <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto font-sans">
+              <h3 className="text-base font-bold font-space text-zinc-100">No repositories found</h3>
+              <p className="text-xs text-zinc-400 mt-1 max-w-sm mx-auto font-sans">
                 No open-source repositories matched your filter criteria. Try adjusting the language or star parameters.
               </p>
               <button
@@ -544,13 +544,13 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
 
         {/* Crawlable Pagination Controls (<a> Links) */}
         {totalPages > 1 && (
-          <nav aria-label="Pagination" className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-800 pt-8">
+          <nav aria-label="Pagination" className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/[0.08] pt-8">
             {/* Previous Page Link */}
             <Link
               href={getPageUrl(Math.max(1, page - 1))}
               onClick={(e) => handlePageClick(e, Math.max(1, page - 1))}
               title={`Go to previous page ${Math.max(1, page - 1)}`}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-slate-800 bg-[#111827] text-xs font-semibold text-slate-300 hover:bg-[#1e293b] shadow-2xs transition-all ${
+              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-white/[0.08] bg-[#111827] text-xs font-semibold text-zinc-300 hover:bg-[#1e293b] shadow-2xs transition-all ${
                 page <= 1 ? "pointer-events-none opacity-40" : "cursor-pointer"
               }`}
             >
@@ -562,7 +562,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
               {paginationRange.map((p, idx) => {
                 if (p < 0) {
                   return (
-                    <span key={`ellipsis-${idx}`} className="px-1.5 text-slate-400 select-none">
+                    <span key={`ellipsis-${idx}`} className="px-1.5 text-zinc-400 select-none">
                       …
                     </span>
                   );
@@ -578,7 +578,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                     className={`h-9 w-9 flex items-center justify-center rounded-xl font-bold transition-all ${
                       isCurrent
                         ? "bg-[#0f172a] text-white shadow-xs"
-                        : "bg-[#111827] border border-slate-800 text-slate-300 hover:bg-[#1e293b] cursor-pointer"
+                        : "bg-[#111827] border border-white/[0.08] text-zinc-300 hover:bg-[#1e293b] cursor-pointer"
                     }`}
                   >
                     {p}
@@ -592,7 +592,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
               href={getPageUrl(Math.min(totalPages, page + 1))}
               onClick={(e) => handlePageClick(e, Math.min(totalPages, page + 1))}
               title={`Go to next page ${Math.min(totalPages, page + 1)}`}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-slate-800 bg-[#111827] text-xs font-semibold text-slate-300 hover:bg-[#1e293b] shadow-2xs transition-all ${
+              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-white/[0.08] bg-[#111827] text-xs font-semibold text-zinc-300 hover:bg-[#1e293b] shadow-2xs transition-all ${
                 page >= totalPages ? "pointer-events-none opacity-40" : "cursor-pointer"
               }`}
             >
@@ -602,16 +602,16 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
         )}
 
         {/* FAQs Section */}
-        <section className="mt-16 sm:mt-24 pt-12 border-t border-slate-800">
+        <section className="mt-16 sm:mt-24 pt-12 border-t border-white/[0.08]">
           <div className="max-w-3xl mb-8">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-950/70 border-blue-800/80 border border-blue-200/60 text-xs font-mono text-blue-300 font-semibold mb-2">
               <HelpCircle className="h-3.5 w-3.5 text-blue-600" />
               <span>Frequently Asked Questions</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-space text-slate-50 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold font-space text-zinc-50 tracking-tight">
               Repository Indexing & C-Rank™ FAQs
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-sans mt-1 leading-relaxed">
+            <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-1 leading-relaxed">
               Common questions about our real-time open-source discovery engine and contributor scores.
             </p>
           </div>
@@ -620,12 +620,12 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
             {FAQS.map((faq, idx) => (
               <div
                 key={idx}
-                className="rounded-3xl bg-[#111827] border border-slate-800 p-6 sm:p-7 shadow-xs hover:border-slate-700 transition-colors"
+                className="rounded-3xl bg-[#111827] border border-white/[0.08] p-6 sm:p-7 shadow-xs hover:border-white/[0.12] transition-colors"
               >
-                <h3 className="text-sm sm:text-base font-bold font-space text-slate-100 mb-2 leading-snug">
+                <h3 className="text-sm sm:text-base font-bold font-space text-zinc-100 mb-2 leading-snug">
                   {faq.q}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-400 font-sans leading-relaxed">
+                <p className="text-xs sm:text-sm text-zinc-400 font-sans leading-relaxed">
                   {faq.a}
                 </p>
               </div>
@@ -650,16 +650,16 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
             onClick={(e) => e.stopPropagation()}
           >
             {/* Sheet Header */}
-            <div className="p-4 border-b border-slate-800 flex items-center justify-between shrink-0">
+            <div className="p-4 border-b border-white/[0.08] flex items-center justify-between shrink-0">
               <div>
-                <h3 className="font-space font-bold text-base text-slate-100">Filters</h3>
-                <p className="text-[11px] text-slate-400 font-sans">Fine-tune open source discovery criteria</p>
+                <h3 className="font-space font-bold text-base text-zinc-100">Filters</h3>
+                <p className="text-[11px] text-zinc-400 font-sans">Fine-tune open source discovery criteria</p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsFilterSheetOpen(false)}
                 title="Close filter modal"
-                className="p-1.5 rounded-full hover:bg-[#1e293b] text-slate-400"
+                className="p-1.5 rounded-full hover:bg-[#1e293b] text-zinc-400"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -669,7 +669,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
             <div className="p-5 overflow-y-auto space-y-6 flex-1 text-xs font-sans">
               {/* Language Section */}
               <div>
-                <label className="block font-bold text-slate-100 mb-2">Language</label>
+                <label className="block font-bold text-zinc-100 mb-2">Language</label>
                 <div className="grid grid-cols-3 gap-2">
                   {LANGUAGES.map((lang) => {
                     const selected = selectedLang === lang;
@@ -680,8 +680,8 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                         onClick={() => setSelectedLang(lang)}
                         className={`p-2 rounded-xl border text-center font-medium transition-all ${
                           selected
-                            ? "bg-[#1e293b] text-white border-slate-700 font-bold"
-                            : "bg-[#1e293b] border-slate-800 text-slate-300"
+                            ? "bg-[#1e293b] text-white border-white/[0.12] font-bold"
+                            : "bg-[#1e293b] border-white/[0.08] text-zinc-300"
                         }`}
                       >
                         {lang}
@@ -693,7 +693,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
 
               {/* C-Rank Tier Section */}
               <div>
-                <label className="block font-bold text-slate-100 mb-2">C-Rank™ Quality Tier</label>
+                <label className="block font-bold text-zinc-100 mb-2">C-Rank™ Quality Tier</label>
                 <div className="grid grid-cols-3 gap-2">
                   {TIERS.map((tier) => {
                     const selected = selectedTier === tier;
@@ -704,8 +704,8 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                         onClick={() => setSelectedTier(tier)}
                         className={`p-2 rounded-xl border text-center font-medium transition-all ${
                           selected
-                            ? "bg-[#1e293b] text-white border-slate-700 font-bold"
-                            : "bg-[#1e293b] border-slate-800 text-slate-300"
+                            ? "bg-[#1e293b] text-white border-white/[0.12] font-bold"
+                            : "bg-[#1e293b] border-white/[0.08] text-zinc-300"
                         }`}
                       >
                         {tier === "All" ? "All Tiers" : `Tier ${tier}`}
@@ -717,7 +717,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
 
               {/* Star Volume Section */}
               <div>
-                <label className="block font-bold text-slate-100 mb-2">GitHub Star Count</label>
+                <label className="block font-bold text-zinc-100 mb-2">GitHub Star Count</label>
                 <div className="grid grid-cols-2 gap-2">
                   {STAR_BUCKETS.map((bucket) => {
                     const selected = selectedStarBucket === bucket.value;
@@ -728,8 +728,8 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                         onClick={() => setSelectedStarBucket(bucket.value)}
                         className={`p-2.5 rounded-xl border text-left flex items-center justify-between font-medium ${
                           selected
-                            ? "bg-[#1e293b] text-white border-slate-700 font-bold"
-                            : "bg-[#1e293b] border-slate-800 text-slate-300"
+                            ? "bg-[#1e293b] text-white border-white/[0.12] font-bold"
+                            : "bg-[#1e293b] border-white/[0.08] text-zinc-300"
                         }`}
                       >
                         <span>{bucket.label}</span>
@@ -742,7 +742,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
 
               {/* Merge Rate Section */}
               <div>
-                <label className="block font-bold text-slate-100 mb-2">Minimum Merge Rate</label>
+                <label className="block font-bold text-zinc-100 mb-2">Minimum Merge Rate</label>
                 <div className="grid grid-cols-2 gap-2">
                   {MERGE_RATE_BUCKETS.map((b) => {
                     const selected = selectedMergeRate === b.value;
@@ -753,8 +753,8 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                         onClick={() => setSelectedMergeRate(b.value)}
                         className={`p-2.5 rounded-xl border text-left flex items-center justify-between font-medium ${
                           selected
-                            ? "bg-[#1e293b] text-white border-slate-700 font-bold"
-                            : "bg-[#1e293b] border-slate-800 text-slate-300"
+                            ? "bg-[#1e293b] text-white border-white/[0.12] font-bold"
+                            : "bg-[#1e293b] border-white/[0.08] text-zinc-300"
                         }`}
                       >
                         <span>{b.label}</span>
@@ -767,7 +767,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
 
               {/* First Timer Success Section */}
               <div>
-                <label className="block font-bold text-slate-100 mb-2">First-Timer Acceptance Rate</label>
+                <label className="block font-bold text-zinc-100 mb-2">First-Timer Acceptance Rate</label>
                 <div className="grid grid-cols-2 gap-2">
                   {FIRST_TIMER_BUCKETS.map((b) => {
                     const selected = selectedFirstTimer === b.value;
@@ -778,8 +778,8 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                         onClick={() => setSelectedFirstTimer(b.value)}
                         className={`p-2.5 rounded-xl border text-left flex items-center justify-between font-medium ${
                           selected
-                            ? "bg-[#1e293b] text-white border-slate-700 font-bold"
-                            : "bg-[#1e293b] border-slate-800 text-slate-300"
+                            ? "bg-[#1e293b] text-white border-white/[0.12] font-bold"
+                            : "bg-[#1e293b] border-white/[0.08] text-zinc-300"
                         }`}
                       >
                         <span>{b.label}</span>
@@ -792,11 +792,11 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
             </div>
 
             {/* Sheet Footer Controls */}
-            <div className="p-4 border-t border-slate-800 flex items-center gap-3 shrink-0 bg-[#111827]">
+            <div className="p-4 border-t border-white/[0.08] flex items-center gap-3 shrink-0 bg-[#111827]">
               <button
                 type="button"
                 onClick={resetFilters}
-                className="py-3 px-4 rounded-xl border border-slate-800 text-slate-300 font-semibold text-xs hover:bg-[#1e293b] cursor-pointer"
+                className="py-3 px-4 rounded-xl border border-white/[0.08] text-zinc-300 font-semibold text-xs hover:bg-[#1e293b] cursor-pointer"
               >
                 Clear All
               </button>

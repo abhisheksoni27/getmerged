@@ -94,16 +94,16 @@ export default async function ShareCardPage({ params }: PageProps) {
             <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
             Verified Hacktoberfest Completion Card
           </span>
-          <h1 className="text-3xl sm:text-4xl font-bold font-space text-slate-100 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold font-space text-zinc-100 tracking-tight">
             {card.repo_full_name}
           </h1>
-          <p className="mt-2 text-sm text-slate-400 font-sans max-w-xl mx-auto">
+          <p className="mt-2 text-sm text-zinc-400 font-sans max-w-xl mx-auto">
             {card.summary || "All 4 Hacktoberfest pull requests merged and verified on GitHub."}
           </p>
         </div>
 
-        <div className="rounded-3xl bg-[#111827] p-4 sm:p-8 border border-slate-800 shadow-md mb-8">
-          <div className="relative rounded-2xl overflow-hidden border border-slate-800 shadow-sm bg-[#0f172a] aspect-[1200/630]">
+        <div className="rounded-3xl bg-[#111827] p-4 sm:p-8 border border-white/[0.08] shadow-md mb-8">
+          <div className="relative rounded-2xl overflow-hidden border border-white/[0.08] shadow-sm bg-[#0f172a] aspect-[1200/630]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={ogUrl}
@@ -112,8 +112,8 @@ export default async function ShareCardPage({ params }: PageProps) {
             />
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-slate-800">
-            <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-white/[0.08]">
+            <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
               <CheckCircle2 className="h-4 w-4 text-emerald-600" />
               <span>Verified On-Chain / GitHub Search API</span>
             </div>

@@ -84,10 +84,10 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
             <Clock className="h-4 w-4 text-emerald-400" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-100 font-space">
+            <h3 className="text-base font-bold text-zinc-100 font-space">
               Optimal PR Submission Window
             </h3>
-            <p className="text-[11px] font-sans text-slate-400">
+            <p className="text-[11px] font-sans text-zinc-400">
               Maintainer review activity heatmap & prime window prediction
             </p>
           </div>
@@ -115,12 +115,12 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5 font-sans">
-        <div className="bg-[#1e293b] border border-slate-800 rounded-xl p-3">
-          <div className="text-xs text-slate-400 flex items-center gap-1 mb-1">
+        <div className="bg-[#1e293b] border border-white/[0.08] rounded-xl p-3">
+          <div className="text-xs text-zinc-400 flex items-center gap-1 mb-1">
             <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
             <span>Peak Review Hour</span>
           </div>
-          <div data-testid="peak-hour-metric" className="text-lg font-bold font-mono text-slate-100">
+          <div data-testid="peak-hour-metric" className="text-lg font-bold font-mono text-zinc-100">
             {padZero(peakHour)}:00 UTC
           </div>
           <p className="text-[11px] font-mono text-emerald-400 mt-0.5">
@@ -128,12 +128,12 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
           </p>
         </div>
 
-        <div className="bg-[#1e293b] border border-slate-800 rounded-xl p-3">
-          <div className="text-xs text-slate-400 flex items-center gap-1 mb-1">
+        <div className="bg-[#1e293b] border border-white/[0.08] rounded-xl p-3">
+          <div className="text-xs text-zinc-400 flex items-center gap-1 mb-1">
             <Clock className="h-3.5 w-3.5 text-blue-600" />
             <span>Primary Window</span>
           </div>
-          <div className="text-lg font-bold font-mono text-slate-100">
+          <div className="text-lg font-bold font-mono text-zinc-100">
             {padZero(primaryStart)}:00 - {padZero(primaryEnd)}:00 UTC
           </div>
           <p className="text-[11px] font-mono text-blue-700 mt-0.5">
@@ -141,15 +141,15 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
           </p>
         </div>
 
-        <div className="bg-[#1e293b] border border-slate-800 rounded-xl p-3">
-          <div className="text-xs text-slate-400 flex items-center gap-1 mb-1">
+        <div className="bg-[#1e293b] border border-white/[0.08] rounded-xl p-3">
+          <div className="text-xs text-zinc-400 flex items-center gap-1 mb-1">
             <Globe className="h-3.5 w-3.5 text-indigo-600" />
             <span>Active Maintainers</span>
           </div>
-          <div className="text-lg font-bold font-mono text-slate-100">
+          <div className="text-lg font-bold font-mono text-zinc-100">
             {data.active_maintainer_count > 0 ? `${data.active_maintainer_count} Tracked` : "Heuristic Estimate"}
           </div>
-          <p className="text-[11px] text-slate-400 mt-0.5 truncate" title={userTimezone}>
+          <p className="text-[11px] text-zinc-400 mt-0.5 truncate" title={userTimezone}>
             Detected: {userTimezone}
           </p>
         </div>
@@ -157,7 +157,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
 
       {/* 24-Hour Activity Bar Heatmap */}
       <div className="mb-4">
-        <div className="flex items-center justify-between text-xs text-slate-400 mb-2 font-sans">
+        <div className="flex items-center justify-between text-xs text-zinc-400 mb-2 font-sans">
           <span>24-Hour Maintainer Activity Heatmap (UTC)</span>
           <div className="flex items-center gap-1 text-[10px] font-mono">
             <span>Low</span>
@@ -169,7 +169,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
           </div>
         </div>
 
-        <div className="bg-[#1e293b] border border-slate-800 rounded-xl p-3 sm:p-4">
+        <div className="bg-[#1e293b] border border-white/[0.08] rounded-xl p-3 sm:p-4">
           <div className="flex items-end gap-1 sm:gap-1.5 h-24 w-full">
             {heatmap.map((val, h) => {
               const isPeak = h === peakHour;
@@ -199,7 +199,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
           </div>
 
           {/* Hour Labels */}
-          <div className="flex justify-between text-[10px] font-mono text-slate-400 mt-2 px-0.5">
+          <div className="flex justify-between text-[10px] font-mono text-zinc-400 mt-2 px-0.5">
             <span>00:00</span>
             <span>06:00</span>
             <span>12:00</span>
@@ -212,7 +212,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
       {/* Explanatory Copy & Timezone Notice */}
       <div
         data-testid="optimal-time-explanation"
-        className="rounded-xl bg-[#1e293b] border border-slate-800 p-3 text-xs font-sans text-slate-300 space-y-1.5"
+        className="rounded-xl bg-[#1e293b] border border-white/[0.08] p-3 text-xs font-sans text-zinc-300 space-y-1.5"
       >
         <p className="flex items-start gap-1.5">
           <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
@@ -224,7 +224,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
           </span>
         </p>
         {isLowConfidence && (
-          <p className="flex items-center gap-1.5 text-amber-300 text-[11px] pt-1 border-t border-slate-800">
+          <p className="flex items-center gap-1.5 text-amber-300 text-[11px] pt-1 border-t border-white/[0.08]">
             <AlertCircle className="h-3.5 w-3.5 text-amber-600 shrink-0" />
             <span>
               Limited recent maintainer review activity recorded for this repository. Prediction based on heuristic baseline.
