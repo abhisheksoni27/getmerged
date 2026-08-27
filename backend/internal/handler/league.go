@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetLeagueLeaderboardHandler returns the top welcoming repos for the monthly sprint.
+// GetLeagueLeaderboardHandler returns the top welcoming repos and contributor MVPs for the monthly sprint.
 func GetLeagueLeaderboardHandler(s *league.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		limit, _ := strconv.Atoi(c.DefaultQuery("limit", "50"))
@@ -18,11 +18,13 @@ func GetLeagueLeaderboardHandler(s *league.Service) gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch leaderboard"})
 			return
 		}
+		contributors, _ := s.GetTopContributorsLeaderboard(c.Request.Context(), monthKey, 10)
 		_, _, key, monthName := s.GetMonthRange(monthKey)
 		c.JSON(http.StatusOK, gin.H{
-			"month":      key,
-			"month_name": monthName,
-			"repos":      repos,
+			"month":        key,
+			"month_name":   monthName,
+			"repos":        repos,
+			"contributors": contributors,
 		})
 	}
 }
