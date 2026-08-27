@@ -19,7 +19,14 @@ interface RepoCardProps {
 export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
   const router = useRouter();
   const rank = repo.class_rank || repo.c_rank_tier || "A";
-  const [ownerPart, namePart] = repo.full_name ? repo.full_name.split("/") : [repo.owner || "", repo.name || ""];
+  
+  // Extract owner and repository name cleanly
+  const fullName = repo.full_name || (repo.owner && repo.name ? `${repo.owner}/${repo.name}` : repo.name || "");
+  const [ownerPart, namePart] = fullName.includes("/")
+    ? fullName.split("/")
+    : [repo.owner || "", repo.name || fullName];
+
+  const displayName = repo.name && repo.name !== fullName ? repo.name : namePart || fullName;
 
   const mergeRateVal = repo.external_pr_merge_rate !== undefined && repo.external_pr_merge_rate > 0
     ? Math.round(repo.external_pr_merge_rate)
@@ -47,11 +54,11 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
 
   const gfiCount = repo.good_first_issue_count ?? 0;
   const gfiLabel = gfiCount === 1 ? "1 good first issue" : `${gfiCount} good first issues`;
-  const gfiIssuesUrl = `https://github.com/${repo.full_name}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22`;
+  const gfiIssuesUrl = `https://github.com/${fullName}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22`;
 
   const handleGfiClick = () => {
     posthog.capture("gfi_badge_clicked", {
-      repo_full_name: repo.full_name,
+      repo_full_name: fullName,
       source: "repo_card",
     });
     window.open(gfiIssuesUrl, "_blank", "noopener,noreferrer");
@@ -70,7 +77,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
     e.stopPropagation();
     posthog.capture("repo_card_topic_clicked", {
       topic,
-      repo_full_name: repo.full_name,
+      repo_full_name: fullName,
     });
     router.push(`/topics/${encodeURIComponent(topic)}`);
   };
@@ -81,7 +88,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       e.stopPropagation();
       posthog.capture("repo_card_topic_clicked", {
         topic,
-        repo_full_name: repo.full_name,
+        repo_full_name: fullName,
       });
       router.push(`/topics/${encodeURIComponent(topic)}`);
     }
@@ -92,9 +99,9 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
     e.stopPropagation();
     posthog.capture("compare_mode_opened", {
       source: "repo_card",
-      primary_repo: repo.full_name,
+      primary_repo: fullName,
     });
-    router.push(`/compare/${repo.full_name}`);
+    router.push(`/compare/${fullName}`);
   };
 
   const handleCompareKeyDown = (e: React.KeyboardEvent) => {
@@ -103,16 +110,16 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       e.stopPropagation();
       posthog.capture("compare_mode_opened", {
         source: "repo_card",
-        primary_repo: repo.full_name,
+        primary_repo: fullName,
       });
-      router.push(`/compare/${repo.full_name}`);
+      router.push(`/compare/${fullName}`);
     }
   };
 
   const handleClick = (e: React.MouseEvent) => {
     if (!e.defaultPrevented) {
       posthog.capture("repo_clicked", {
-        repo_name: repo.full_name,
+        repo_name: fullName,
         rank: repo.class_rank || repo.c_rank_tier || "unranked",
         stars: repo.stars,
         language: repo.language,
@@ -126,9 +133,9 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
 
   return (
     <a
-      href={`/${ownerPart}/${namePart}`}
+      href={`/${fullName}`}
       onClick={handleClick}
-      title={`View ${repo.full_name} C-Rank scorecard, PR response time & merge metrics`}
+      title={`View ${fullName} C-Rank scorecard, PR response time & merge metrics`}
       className={`group glass-panel relative flex h-full flex-col justify-between rounded-3xl p-6 sm:p-7 transition-all duration-300 block text-current no-underline cursor-pointer border border-white/[0.12] hover:border-white/[0.28] hover:shadow-[0_12px_40px_rgba(0,0,0,0.8)] ${
         isSpotlight
           ? "ring-1 ring-orange-500/50 shadow-[0_0_28px_rgba(255,107,0,0.15)]"
@@ -142,7 +149,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
             <div className="h-12 w-12 rounded-2xl border border-white/[0.14] bg-black/60 overflow-hidden shrink-0 group-hover:border-white/[0.35] transition-colors shadow-md">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`https://github.com/${ownerPart}.png?size=96`}
+                src={`https://github.com/${ownerPart || "github"}.png?size=96`}
                 alt={ownerPart}
                 width={48}
                 height={48}
@@ -154,12 +161,12 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
               />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="font-space text-lg sm:text-xl font-bold text-white group-hover:text-orange-400 transition-colors flex items-center gap-1.5 min-w-0 tracking-tight" title={repo.full_name}>
-                <span className="truncate">{repo.name}</span>
+              <div className="font-space text-lg sm:text-xl font-black text-white group-hover:text-orange-400 transition-colors flex items-center gap-1.5 min-w-0 tracking-tight" title={fullName}>
+                <span className="truncate">{displayName}</span>
                 <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity text-orange-400 shrink-0" />
               </div>
               <div className="text-xs font-mono text-zinc-300 truncate mt-0.5 font-medium">
-                {repo.full_name}
+                {fullName}
               </div>
             </div>
           </div>
@@ -215,7 +222,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
         </div>
 
         {/* Telemetry Precision Well */}
-        <div className="grid grid-cols-3 gap-3 p-2.5 rounded-2xl bg-black/60 border border-white/[0.1] mb-5 shadow-inner">
+        <div className="grid grid-cols-3 gap-2.5 sm:gap-3 p-2.5 rounded-2xl bg-black/60 border border-white/[0.1] mb-5 shadow-inner">
           <MetricGauge
             label="Merge Rate"
             value={mergeRateStr}
@@ -245,8 +252,8 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
               role="button"
               tabIndex={0}
               data-testid="gfi-badge"
-              aria-label={`View ${gfiLabel} on ${repo.full_name}`}
-              title={`View open good first issues on ${repo.full_name}`}
+              aria-label={`View ${gfiLabel} on ${fullName}`}
+              title={`View open good first issues on ${fullName}`}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -272,8 +279,8 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
           <button
             type="button"
             data-testid="compare-btn"
-            aria-label={`Compare ${repo.full_name} against another repo`}
-            title={`Compare ${repo.full_name} with other repos`}
+            aria-label={`Compare ${fullName} against another repo`}
+            title={`Compare ${fullName} with other repos`}
             onClick={handleCompareClick}
             onKeyDown={handleCompareKeyDown}
             className="inline-flex items-center gap-1.5 text-zinc-300 hover:text-white px-2.5 py-1 rounded-lg hover:bg-white/[0.1] transition-colors cursor-pointer text-xs font-semibold"
