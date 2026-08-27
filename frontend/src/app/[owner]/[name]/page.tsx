@@ -1,7 +1,7 @@
 import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Repo, AIInsights } from "@/types/opendoor";
+import { Repo, AIInsights, GoodFirstIssueItem } from "@/types/opendoor";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { ClientRepoDetail } from "@/components/ClientRepoDetail";
@@ -35,6 +35,42 @@ async function getRepoInsights(targetIdOrName: string | number): Promise<AIInsig
     console.error("SSR fetch failed for repo insights:", targetIdOrName, e);
   }
   return null;
+}
+
+async function getRelatedRepos(targetIdOrName: string | number): Promise<Repo[]> {
+  try {
+    const target = String(targetIdOrName);
+    const res = await fetch(
+      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(target)}/related?limit=3`,
+      {
+        next: { revalidate: 3600 },
+      }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data?.related || [];
+  } catch (e) {
+    console.error("SSR fetch failed for related repos:", targetIdOrName, e);
+  }
+  return [];
+}
+
+async function getGoodFirstIssues(targetIdOrName: string | number): Promise<GoodFirstIssueItem[]> {
+  try {
+    const target = String(targetIdOrName);
+    const res = await fetch(
+      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(target)}/good-first-issues`,
+      {
+        next: { revalidate: 3600 },
+      }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data?.data || [];
+  } catch (e) {
+    console.error("SSR fetch failed for good first issues:", targetIdOrName, e);
+  }
+  return [];
 }
 
 async function getRepoData(fullName: string): Promise<Repo | null> {
@@ -160,7 +196,13 @@ export default async function RepoDetailPage({ params }: PageProps) {
   }
 
   const targetInsightKey = repo?.id ? String(repo.id) : repo.full_name;
-  const insights = await getRepoInsights(targetInsightKey);
+  
+  // Parallel Server Fetch: insights, related repos, and good first issues
+  const [insights, relatedRepos, gfiList] = await Promise.all([
+    getRepoInsights(targetInsightKey),
+    getRelatedRepos(targetInsightKey),
+    getGoodFirstIssues(targetInsightKey),
+  ]);
 
   // Schema.org JSON-LD Structured Data
   const jsonLd = {
@@ -270,7 +312,13 @@ export default async function RepoDetailPage({ params }: PageProps) {
       </section>
 
       {/* Main Interactive React Surface */}
-      <ClientRepoDetail repo={repo} fullName={fullName} initialInsights={insights} />
+      <ClientRepoDetail
+        repo={repo}
+        fullName={fullName}
+        initialInsights={insights}
+        initialRelatedRepos={relatedRepos}
+        initialGfiList={gfiList}
+      />
 
       <Footer />
     </div>
