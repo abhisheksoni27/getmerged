@@ -23,6 +23,13 @@ func RequireProOrQuota(entRepo repository.EntitlementRepository) gin.HandlerFunc
 
 		userID := userIDVal.(int64)
 
+		// Pro tier gets unlimited preflight runs: skip the quota check and
+		// deduction entirely (AC7).
+		if ent, e := entRepo.GetEntitlement(c.Request.Context(), userID); e == nil && ent != nil && ent.IsPro {
+			c.Next()
+			return
+		}
+
 		// 1. Atomic Check-and-Deduct
 		allowed, err := entRepo.DeductQuota(c.Request.Context(), userID)
 		if err != nil {
@@ -33,10 +40,20 @@ func RequireProOrQuota(entRepo repository.EntitlementRepository) gin.HandlerFunc
 		}
 
 		if !allowed {
+			// Pro users are never deducted (DeductQuota is a no-op for is_pro),
+			// so reaching here means a free-tier user hit the 3-eval monthly
+			// cap. Report the consumed count for accurate UI (AC4).
+			evalsUsed := 3
+			if ent, e := entRepo.GetEntitlement(c.Request.Context(), userID); e == nil && ent != nil {
+				evalsUsed = ent.MonthlyEvalCount
+				if evalsUsed < 3 {
+					evalsUsed = 3
+				}
+			}
 			c.JSON(http.StatusPaymentRequired, gin.H{
-				"error":                 "Monthly free evaluation quota exceeded (3/3). Upgrade to Pro for unlimited evaluations.",
-				"upgrade_url":           "/pricing",
-				"evaluations_remaining": 0,
+				"error":       "quota_exceeded",
+				"evals_used":  evalsUsed,
+				"upgrade_url": "/pricing",
 			})
 			c.Abort()
 			return

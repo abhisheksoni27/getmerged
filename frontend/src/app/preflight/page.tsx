@@ -16,6 +16,17 @@ interface CheckItem {
   description: string;
   severity: "error" | "warning" | "info";
   suggestion: string;
+  fixes?: Fix[];
+}
+
+// Fix is a concrete, one-click repair suggestion returned by the backend for
+// failed/warn checks (AC1-AC3).
+interface Fix {
+  type: "issue_link" | "pr_title_body" | "conventional_commit" | "missing_tests";
+  label: string;
+  payload: string;
+  apply_url?: string;
+  apply_method: "deep_link" | "clipboard_deeplink" | "clipboard";
 }
 
 interface EvaluationResult {
@@ -32,6 +43,126 @@ function parseRepoParam(param: string | null): string {
   } catch {
     return param.trim();
   }
+}
+
+// copyToClipboard writes text with a navigator.clipboard primary path and an
+// execCommand('copy') fallback (AC6). Returns true on success.
+async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    if (typeof navigator !== "undefined" && navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    /* fall through to legacy path */
+  }
+  try {
+    if (typeof document === "undefined") return false;
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    ta.style.pointerEvents = "none";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
+// FixActions renders Copy/Apply controls for one backend fix (AC6). 'Apply'
+// opens the GitHub deep link via window.open, falling back to a visible anchor
+// when a popup blocker suppresses the new window. 'Copy' shows a transient
+// "Copied" state and surfaces an error if the clipboard write fails.
+function FixActions({ fix }: { fix: Fix }) {
+  const [copied, setCopied] = React.useState(false);
+  const [copyError, setCopyError] = React.useState(false);
+  const [applyBlocked, setApplyBlocked] = React.useState(false);
+
+  const handleCopy = async () => {
+    setCopyError(false);
+    const ok = await copyToClipboard(fix.payload);
+    if (ok) {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } else {
+      setCopyError(true);
+    }
+  };
+
+  const handleApply = () => {
+    setApplyBlocked(false);
+    if (!fix.apply_url) {
+      void handleCopy();
+      return;
+    }
+    let win: Window | null = null;
+    try {
+      win = window.open(fix.apply_url, "_blank", "noopener,noreferrer");
+    } catch {
+      win = null;
+    }
+    if (!win) {
+      // Popup blocker (or no window.open): surface a clickable fallback link.
+      setApplyBlocked(true);
+      return;
+    }
+    if (fix.apply_method === "clipboard_deeplink") {
+      void handleCopy();
+    }
+  };
+
+  return (
+    <div className="mt-2 flex flex-wrap items-center gap-2">
+      <button
+        type="button"
+        onClick={handleCopy}
+        data-testid={`copy-fix-${fix.type}`}
+        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-zinc-900 text-white font-mono text-[10px] uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500"
+      >
+        {copied ? "Copied" : "Copy"}
+      </button>
+      {fix.apply_url ? (
+        <button
+          type="button"
+          onClick={handleApply}
+          data-testid={`apply-fix-${fix.type}`}
+          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-mono text-[10px] uppercase tracking-wider hover:bg-emerald-700 active:scale-[0.98] transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        >
+          Apply
+        </button>
+      ) : null}
+      {applyBlocked && fix.apply_url ? (
+        <a
+          href={fix.apply_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid={`apply-fallback-${fix.type}`}
+          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg underline text-emerald-700 font-mono text-[10px] uppercase tracking-wider"
+        >
+          Open link
+        </a>
+      ) : null}
+      {copyError ? (
+        <span
+          role="alert"
+          data-testid={`copy-error-${fix.type}`}
+          className="text-[10px] font-mono text-rose-600"
+        >
+          Copy failed — select the text manually.
+        </span>
+      ) : null}
+      {fix.apply_method === "clipboard_deeplink" && fix.apply_url ? (
+        <span className="text-[10px] font-mono text-zinc-400">
+          Then paste into the PR edit page.
+        </span>
+      ) : null}
+    </div>
+  );
 }
 
 function PreflightSkeleton() {
@@ -322,14 +453,15 @@ function PreflightContent() {
             return;
           }
           const errData = await res.json().catch(() => ({}));
+          const evalsUsed =
+            typeof errData?.evals_used === "number" ? errData.evals_used : 3;
           setUpgrade({
             message:
-              errData?.error ||
-              "Monthly free evaluation quota exceeded (3/3). Upgrade to Pro for unlimited evaluations.",
-            remaining:
-              typeof errData?.evaluations_remaining === "number"
-                ? errData.evaluations_remaining
-                : 0,
+              errData?.error === "quota_exceeded"
+                ? "Monthly free evaluation limit reached (3/3). Upgrade to Pro for unlimited evaluations."
+                : errData?.error ||
+                  "Monthly free evaluation quota exceeded (3/3). Upgrade to Pro for unlimited evaluations.",
+            remaining: Math.max(0, 3 - evalsUsed),
           });
           return;
         }
@@ -713,6 +845,30 @@ function PreflightContent() {
                   <p className="text-xs text-zinc-700 font-medium mt-1 bg-white/70 p-2 rounded-lg border border-zinc-200/60 font-mono">
                     💡 {c.suggestion}
                   </p>
+                  {!c.passed && c.fixes && c.fixes.length > 0 ? (
+                    <div className="mt-2">
+                      <p className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 mb-1">
+                        One-click fixes
+                      </p>
+                      <div className="space-y-2">
+                        {c.fixes.map((fix, i) => (
+                          <div
+                            key={`${fix.type}-${i}`}
+                            className="rounded-lg border border-zinc-200 bg-white/70 p-2"
+                            data-testid={`fix-${fix.type}`}
+                          >
+                            <p className="text-[11px] font-semibold text-zinc-800 font-mono">
+                              {fix.label}
+                            </p>
+                            <pre className="text-[10px] text-zinc-600 whitespace-pre-wrap break-words mt-1 font-mono max-h-28 overflow-auto">
+                              {fix.payload}
+                            </pre>
+                            <FixActions fix={fix} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             ))}

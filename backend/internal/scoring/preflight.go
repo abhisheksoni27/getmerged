@@ -23,6 +23,7 @@ type PreflightCheckItem struct {
 	Description string `json:"description"`
 	Severity    string `json:"severity"` // "error" | "warning" | "info"
 	Suggestion  string `json:"suggestion"`
+	Fixes       []Fix  `json:"fixes,omitempty"` // >=1 concrete repair per failed/warn check
 }
 
 type PreflightEvaluationResult struct {
@@ -196,6 +197,14 @@ func EvaluatePreflight(input PreflightInput) PreflightEvaluationResult {
 	summary := "Your PR is in great shape and well-prepared for rapid maintainer review!"
 	if !ready {
 		summary = "A few pre-flight adjustments recommended to maximize your acceptance odds before submitting."
+	}
+
+	// Attach >=1 concrete, one-click fix to every failed/warn check so the
+	// evaluation doubles as a repair kit (AC1). Passing checks need none.
+	for i := range checks {
+		if !checks[i].Passed {
+			checks[i].Fixes = FixForCheck(checks[i], input)
+		}
 	}
 
 	return PreflightEvaluationResult{
