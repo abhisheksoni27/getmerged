@@ -1,11 +1,19 @@
 'use strict';
 
-(() => {
-  const GM_BASE = 'https://getmerged.abhishekco.de';
-  const WIDGET_ID = 'gm-pr-widget';
-  const api = globalThis.chrome || globalThis.browser;
-  if (!api || !api.runtime || !api.runtime.id) return;
+// OpenDoor Contribution Readiness — Content Script (GitHub)
+// AC1: injects badges into repo header + PR pages via MutationObserver with
+// resilient [data-selector] fallbacks; retries up to 3x, then skips silently.
+// AC3: sends { type:'GET_TELEMETRY', repo } and renders { TELEMETRY_RESULT }.
+// AC5: null metric fields render as 'N/A'.
+// AC6: badge deep-links to https://opendoor.dev/repo/{owner}/{name}.
 
+(() => {
+  const api = globalThis.browser || globalThis.chrome;
+  if (!api || !api.runtime) return;
+
+  const DEEP_BASE = 'https://opendoor.dev';
+  const WIDGET_ID = 'od-readiness';
+  const MAX_ATTEMPTS = 3;
   const TIER_COLORS = {
     S: '#059669',
     A: '#16a34a',
@@ -15,505 +23,205 @@
   };
 
   let lastKey = '';
-  let pending = 0;
+  let attempts = 0;
+  let scheduled = false;
 
-  function parsePRPath(pathname) {
+  // Resilient anchor resolution: prefer data-* attributes, fall back to stable
+  // class/role hooks that GitHub uses across redesigns.
+  const HEADER_SELECTORS = [
+    '[data-testid="repository-heading"]',
+    '#repository-container-header',
+    'h1 strong[itemprop="name"]',
+    '.repohead h1',
+    '.AppHeader-context-full',
+    'main h1',
+    '#repo-title'
+  ];
+
+  function parseRepo() {
     try {
-      const m = /^\/([^/]+)\/([^/]+)\/pull\/(\d+)\/?$/.exec(String(pathname || ''));
-      if (!m) return null;
-      const number = parseInt(m[3], 10);
-      if (!number || m[1] === 'pulls' || !m[1] || !m[2]) return null;
-      return { owner: m[1], repo: m[2], number };
-    } catch (_) {
-      return null;
-    }
-  }
-
-  function currentTarget() {
-    let target = null;
-    try {
-      const canon = document.querySelector('link[rel="canonical"]');
-      if (canon && canon.href && canon.href.indexOf('https://github.com/') === 0) {
-        target = parsePRPath(new URL(canon.href).pathname);
-      }
-    } catch (_) {}
-    return target || parsePRPath(location.pathname);
-  }
-
-  function removeWidget() {
-    try {
-      const existing = document.getElementById(WIDGET_ID);
-      if (existing) existing.remove();
-    } catch (_) {}
-  }
-
-  function el(tag, className, text) {
-    const node = document.createElement(tag);
-    if (className) node.className = className;
-    if (text != null) node.textContent = text;
-    return node;
-  }
-
-  function fmtHours(h) {
-    const v = Number(h);
-    if (!isFinite(v) || v <= 0) return null;
-    if (v < 1) return Math.round(v * 60) + 'm';
-    if (v < 48) return v.toFixed(1).replace(/\.0$/, '') + 'h';
-    return (v / 24).toFixed(1).replace(/\.0$/, '') + 'd';
-  }
-
-  function fmtPct(v) {
-    const n = Number(v);
-    if (!isFinite(n) || n <= 0) return null;
-    return Math.round(n) + '%';
-  }
-
-  function buildShell(target, prUrl) {
-    const root = el('div', 'gm-widget');
-    root.id = WIDGET_ID;
-    root.dataset.gmOwner = target.owner;
-    root.dataset.gmRepo = target.repo;
-    root.dataset.gmNumber = String(target.number);
-
-    const head = el('div', 'gm-head');
-    const brand = el('a', 'gm-brand', 'GetMerged');
-    brand.href = GM_BASE;
-    brand.target = '_blank';
-    brand.rel = 'noopener noreferrer';
-    head.appendChild(brand);
-
-    const btn = el('a', 'gm-analyze-btn', 'Analyze this PR');
-    btn.href =
-      GM_BASE + '/preflight?pr_url=' + encodeURIComponent(prUrl);
-    btn.target = '_blank';
-    btn.rel = 'noopener noreferrer';
-    head.appendChild(btn);
-    root.appendChild(head);
-
-    const body = el('div', 'gm-body');
-    root.appendChild(body);
-    return { root, body };
-  }
-
-  function statRow(label, value, valueClass) {
-    const row = el('div', 'gm-row');
-    row.appendChild(el('span', 'gm-label', label));
-    row.appendChild(el('span', 'gm-value' + (valueClass ? ' ' + valueClass : ''), value));
-    return row;
-  }
-
-  function renderLoading(target, prUrl) {
-    const shell = mount(target, prUrl);
-    if (!shell) return;
-    shell.body.appendChild(el('div', 'gm-status gm-muted', 'Checking C-Rank™…'));
-  }
-
-  function renderUnavailable(target, prUrl) {
-    const shell = mount(target, prUrl);
-    if (!shell) return;
-    shell.body.appendChild(
-      el('div', 'gm-status gm-muted', 'GetMerged data unavailable for this repo right now.')
-    );
-  }
-
-  function renderData(target, prUrl, data) {
-    const shell = mount(target, prUrl);
-    if (!shell) return;
-
-    const tier = typeof data.c_rank_tier === 'string' ? data.c_rank_tier.toUpperCase() : '';
-    const odds = fmtPct(data.overall_acceptance_rate);
-    const speed = fmtHours(data.response_time_p50_hours);
-    const merge = fmtHours(data.median_time_to_merge_hours);
-
-    if (!tier && !odds && !speed) {
-      renderUnavailable(target, prUrl);
-      return;
-    }
-
-    const top = el('div', 'gm-top');
-    const badge = el('span', 'gm-badge');
-    badge.textContent = tier ? 'C-Rank™ ' + tier : 'C-Rank™ unranked';
-    badge.style.backgroundColor = TIER_COLORS[tier] || '#9ca3af';
-    top.appendChild(badge);
-    if (odds) {
-      top.appendChild(el('span', 'gm-odds', odds + ' acceptance'));
-    }
-    shell.body.appendChild(top);
-
-    if (speed) shell.body.appendChild(statRow('First review (p50)', '~' + speed));
-    if (merge) shell.body.appendChild(statRow('Median time to merge', '~' + merge));
-    const firstTimer = fmtPct(data.first_timer_acceptance_rate);
-    if (firstTimer) {
-      shell.body.appendChild(statRow('First-timer merge rate', firstTimer));
-    }
-    if (data.staleness_flag) {
-      shell.body.appendChild(
-        el('div', 'gm-note', 'Telemetry for this repo may be stale.')
-      );
-    }
-
-    const list = el('ul', 'gm-checklist');
-    [
-      'Read CONTRIBUTING.md and recent merged PRs',
-      'Link the related issue in the description',
-      'Include/adjust tests for your change',
-      'Keep the diff small and focused'
-    ].forEach((item) => {
-      const li = el('li', 'gm-check-item', item);
-      list.appendChild(li);
-    });
-    shell.body.appendChild(list);
-  }
-
-  function mount(target, prUrl) {
-    removeWidget();
-    try {
-      const anchors = [
-        document.querySelector('#partial-discussion-header .gh-header-meta'),
-        document.querySelector('.gh-header-meta'),
-        document.querySelector('#partial-discussion-header'),
-        document.querySelector('.gh-header')
-      ];
-      for (let i = 0; i < anchors.length; i++) {
-        const anchor = anchors[i];
-        if (anchor && anchor.parentNode) {
-          const shell = buildShell(target, prUrl);
-          try {
-            anchor.parentNode.insertBefore(shell.root, anchor.nextSibling);
-          } catch (_) {
-            continue;
-          }
-          return shell;
-        }
-      }
-    } catch (_) {}
-
-    try {
-      const shell = buildShell(target, prUrl);
-      shell.root.classList.add('gm-fallback');
-      document.body.appendChild(shell.root);
-      return shell;
-    } catch (_) {
-      return null;
-    }
-  }
-
-  async function getData(target) {
-    try {
-      const resp = await api.runtime.sendMessage({
-        type: 'gm_pr_data',
-        owner: target.owner,
-        repo: target.repo,
-        number: target.number
-      });
-      if (resp && typeof resp === 'object') return resp;
-    } catch (_) {}
-    return { ok: false, reason: 'unavailable' };
-  }
-
-  async function refresh() {
-    let target = null;
-    try {
-      target = currentTarget();
-    } catch (_) {
-      target = null;
-    }
-    if (!target) {
-      lastKey = '';
-      removeWidget();
-      return;
-    }
-    const prUrl =
-      'https://github.com/' + target.owner + '/' + target.repo + '/pull/' + target.number;
-    const key = target.owner + '/' + target.repo + '#' + target.number;
-    if (key === lastKey) return;
-    lastKey = key;
-
-    renderLoading(target, prUrl);
-    const resp = await getData(target);
-    if (lastKey !== key) return;
-    if (resp && resp.ok && resp.data) {
-      renderData(target, prUrl, resp.data);
-    } else {
-      renderUnavailable(target, prUrl);
-    }
-  }
-
-  // ---------- C-Rank™ chips: repo home, search results, trending/explore ----------
-
-  const CHIP_CLASS = 'gm-chip';
-  const CHIP_ROW_ATTR = 'data-gm-chip-row';
-  const CHIP_HOME_ID = 'gm-home-chip';
-  const CHIP_TTL_MS = 5 * 60 * 1000;
-  const CHIP_MAX_PER_PAGE = 20;
-  const NON_REPO_ROOTS =
-    /^(features|security|premium-support|enterprise|teams|pricing|topics|trending|collections|events|marketplace|sponsors|customer-stories|readme|about|site|orgs|organizations|settings|notifications|inbox|watch|login|join|session|search|issues|pulls|explore|codespaces|copilot|apps|install|new|import|dashboard|account|users|developer|git|contact|gist)$/i;
-  let chipGen = 0;
-
-  function parseTwoSegment(pathname) {
-    try {
-      const m = /^\/([^/]+)\/([^/]+?)\/?$/.exec(String(pathname || ''));
+      const m = /^\/([^/]+)\/([^/]+)/.exec(location.pathname || '');
       if (!m) return null;
       const owner = decodeURIComponent(m[1]);
       const repo = decodeURIComponent(m[2]);
-      if (!owner || !repo || NON_REPO_ROOTS.test(owner)) return null;
+      if (!owner || !repo) return null;
+      if (
+        /^(pulls|issues|orgs|settings|notifications|search|explore|topics|sponsors|marketplace|login|join|about|contact|gist|users|dashboard|new|import|codespaces|copilot|apps|session|watch|enterprise|features|security|pricing|collections|events|customer-stories|readme|site|organizations|account|developer|git|trending)$/i.test(
+          owner
+        )
+      ) {
+        return null;
+      }
       return { owner, repo };
     } catch (_) {
       return null;
     }
   }
 
-  function parseRepoRef(href) {
-    try {
-      const u = new URL(String(href || ''), location.origin);
-      if (u.hostname !== 'github.com') return null;
-      return parseTwoSegment(u.pathname);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  function chipCacheRead(full) {
-    try {
-      const raw = globalThis.localStorage.getItem('gm_chip:' + full.toLowerCase());
-      if (!raw) return '';
-      const obj = JSON.parse(raw);
-      if (!obj || typeof obj.t !== 'number' || typeof obj.tier !== 'string' || !obj.tier) return '';
-      if (Date.now() - obj.t > CHIP_TTL_MS) return '';
-      return obj.tier;
-    } catch (_) {
-      return '';
-    }
-  }
-
-  function chipCacheWrite(full, tier) {
-    try {
-      globalThis.localStorage.setItem(
-        'gm_chip:' + full.toLowerCase(),
-        JSON.stringify({ t: Date.now(), tier })
-      );
-    } catch (_) {}
-  }
-
-  function buildChip(owner, repo, tier) {
-    const chip = el('a', CHIP_CLASS, 'C-Rank™ ' + tier);
-    chip.href = GM_BASE + '/' + encodeURIComponent(owner) + '/' + encodeURIComponent(repo);
-    chip.target = '_blank';
-    chip.rel = 'noopener noreferrer';
-    chip.title = 'C-Rank™ ' + tier + ' · open on GetMerged';
-    chip.style.backgroundColor = TIER_COLORS[tier] || '#6e7781';
-    return chip;
-  }
-
-  function findRepoLink(node, target) {
-    let links = null;
-    try {
-      links = node.querySelectorAll('a[href]');
-    } catch (_) {
-      return null;
-    }
-    for (let i = 0; i < links.length; i++) {
-      const p = parseRepoRef(links[i].getAttribute('href'));
-      if (!p) continue;
-      if (!target) return { anchor: links[i], target: p };
-      if (
-        p.owner.toLowerCase() === target.owner.toLowerCase() &&
-        p.repo.toLowerCase() === target.repo.toLowerCase()
-      ) {
-        return { anchor: links[i], target: p };
-      }
+  function findAnchor() {
+    for (let i = 0; i < HEADER_SELECTORS.length; i++) {
+      try {
+        const node = document.querySelector(HEADER_SELECTORS[i]);
+        if (node) return node;
+      } catch (_) {}
     }
     return null;
   }
 
-  function collectChipRows() {
-    const out = [];
+  function removeWidget() {
     try {
-      const scopes = document.querySelectorAll(
-        'article.Box-row, ul .Box-row, [data-testid="results-list"] > div, .repo-list-item'
-      );
-      scopes.forEach((node) => {
-        try {
-          if (!node || node.getAttribute(CHIP_ROW_ATTR)) return;
-          if (node.closest && node.closest('[' + CHIP_ROW_ATTR + ']')) return;
-          const found = findRepoLink(node, null);
-          if (!found) return;
-          node.setAttribute(CHIP_ROW_ATTR, '1');
-          out.push(found);
-        } catch (_) {}
-      });
-    } catch (_) {}
-    return out;
-  }
-
-  function paintChip(anchor, owner, repo, tier) {
-    try {
-      const parent = anchor.parentNode;
-      if (!parent) return;
-      let existing = null;
-      try {
-        existing = parent.querySelector(':scope > .' + CHIP_CLASS);
-      } catch (_) {}
-      if (!tier) {
-        if (existing) existing.remove();
-        return;
-      }
-      if (existing) {
-        existing.textContent = 'C-Rank™ ' + tier;
-        existing.style.backgroundColor = TIER_COLORS[tier] || '#6e7781';
-        return;
-      }
-      const chip = buildChip(owner, repo, tier);
-      try {
-        anchor.insertAdjacentElement('afterend', chip);
-      } catch (_) {}
+      const w = document.getElementById(WIDGET_ID);
+      if (w) w.remove();
     } catch (_) {}
   }
 
-  function paintRows(rows, scores) {
-    rows.forEach((r) => {
-      try {
-        const s = scores[(r.target.owner + '/' + r.target.repo).toLowerCase()];
-        paintChip(r.anchor, r.target.owner, r.target.repo, s && s.tier ? s.tier : '');
-      } catch (_) {}
-    });
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
   }
 
-  function paintHomeChip(home, tier) {
-    try {
-      const old = document.getElementById(CHIP_HOME_ID);
-      if (old) old.remove();
-    } catch (_) {}
-    if (!tier) return;
-    const hosts = [
-      '#repository-container-header strong[itemprop="name"]',
-      '#repository-container-header h1',
-      '[data-testid="app-header"] .AppHeader-context-full',
-      '.AppHeader-context-full'
-    ];
-    for (let i = 0; i < hosts.length; i++) {
-      let host = null;
-      try {
-        host = document.querySelector(hosts[i]);
-      } catch (_) {}
-      if (!host) continue;
-      try {
-        const chip = buildChip(home.owner, home.repo, tier);
-        chip.id = CHIP_HOME_ID;
-        host.appendChild(chip);
-      } catch (_) {}
-      return;
-    }
+  function pct(v) {
+    if (typeof v !== 'number' || !isFinite(v)) return 'N/A';
+    return Math.round(v * 100) + '%';
+  }
+  function days(v) {
+    if (typeof v !== 'number' || !isFinite(v)) return 'N/A';
+    return Math.round(v * 10) / 10 + 'd';
+  }
+  function na(v) {
+    return v == null ? 'N/A' : String(v);
+  }
+  function metric(label, value) {
+    const s = el('span', 'od-m');
+    s.appendChild(el('span', 'od-ml', label));
+    s.appendChild(el('span', 'od-mv', na(value)));
+    return s;
   }
 
-  async function requestScores(repos) {
-    try {
-      const resp = await api.runtime.sendMessage({ type: 'gm_repo_scores', repos: repos });
-      if (resp && typeof resp === 'object') return resp;
-    } catch (_) {}
-    return { ok: false };
-  }
+  function render(target, metrics) {
+    removeWidget();
+    const anchor = findAnchor();
+    if (!anchor || !anchor.parentNode) return false;
 
-  async function refreshChips() {
-    const gen = ++chipGen;
-    let home = null;
-    try {
-      home = parseTwoSegment(location.pathname);
-    } catch (_) {
-      home = null;
-    }
+    const cRank =
+      metrics && typeof metrics.cRank === 'string'
+        ? metrics.cRank.toUpperCase()
+        : null;
 
-    if (home) {
-      const full = home.owner + '/' + home.repo;
-      const cached = chipCacheRead(full);
-      if (cached) {
-        paintHomeChip(home, cached);
-        return;
-      }
-      paintHomeChip(home, '');
-      const resp = await requestScores([{ owner: home.owner, repo: home.repo }]);
-      if (gen !== chipGen) return;
-      const s = resp && resp.ok && resp.scores ? resp.scores[full] : null;
-      if (s && s.tier) chipCacheWrite(full, s.tier);
-      paintHomeChip(home, s && s.tier ? s.tier : '');
-      return;
-    }
+    const root = el('div', 'od-badge');
+    root.id = WIDGET_ID;
+    root.dataset.odOwner = target.owner;
+    root.dataset.odRepo = target.repo;
 
-    const rows = collectChipRows();
-    if (!rows.length) return;
+    const badge = el('span', 'od-crank', cRank ? 'C-Rank ' + cRank : 'C-Rank N/A');
+    badge.style.backgroundColor = (cRank && TIER_COLORS[cRank]) || '#6e7781';
+    root.appendChild(badge);
 
-    const scores = {};
-    const missing = [];
-    const seen = {};
-    rows.forEach((r) => {
-      try {
-        const full = (r.target.owner + '/' + r.target.repo).toLowerCase();
-        if (seen[full]) return;
-        seen[full] = true;
-        const cached = chipCacheRead(full);
-        if (cached) {
-          scores[full] = { tier: cached };
-        } else if (
-          missing.length < CHIP_MAX_PER_PAGE &&
-          !missing.some((m) => m.full === full)
-        ) {
-          missing.push({
-            full: full,
-            owner: r.target.owner,
-            repo: r.target.repo
-          });
-        }
-      } catch (_) {}
-    });
-
-    paintRows(rows, scores);
-    if (!missing.length) return;
-
-    const resp = await requestScores(
-      missing.map((m) => ({ owner: m.owner, repo: m.repo }))
+    const vals = el('span', 'od-metrics');
+    vals.appendChild(metric('Merge', metrics ? pct(metrics.mergeRate) : null));
+    vals.appendChild(metric('Ghost', metrics ? pct(metrics.ghostRate) : null));
+    vals.appendChild(metric('Review', metrics ? days(metrics.reviewVelocityDays) : null));
+    vals.appendChild(
+      metric('GFI', metrics && typeof metrics.goodFirstIssues === 'number' ? metrics.goodFirstIssues : null)
     );
-    if (gen !== chipGen || !resp || !resp.ok || !resp.scores) return;
-    Object.keys(resp.scores).forEach((k) => {
+    root.appendChild(vals);
+
+    const link = el('a', 'od-link', 'OpenDoor');
+    link.href =
+      DEEP_BASE +
+      '/repo/' +
+      encodeURIComponent(target.owner) +
+      '/' +
+      encodeURIComponent(target.repo);
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    root.appendChild(link);
+
+    try {
+      anchor.parentNode.insertBefore(root, anchor.nextSibling);
+    } catch (_) {
       try {
-        const v = resp.scores[k];
-        const lk = String(k || '').toLowerCase();
-        if (v && v.tier) {
-          chipCacheWrite(lk, v.tier);
-          scores[lk] = { tier: v.tier };
-        }
-      } catch (_) {}
-    });
-    paintRows(rows, scores);
+        anchor.appendChild(root);
+      } catch (_) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  async function run() {
+    scheduled = false;
+    let target = null;
+    try {
+      target = parseRepo();
+    } catch (_) {}
+    if (!target) {
+      lastKey = '';
+      attempts = 0;
+      removeWidget();
+      return;
+    }
+    const key = target.owner + '/' + target.repo;
+    if (key !== lastKey) {
+      lastKey = key;
+      attempts = 0;
+      removeWidget();
+    }
+
+    const anchor = findAnchor();
+    if (!anchor) {
+      if (attempts < MAX_ATTEMPTS) {
+        attempts++;
+        schedule(); // retry 3x, then skip silently
+      }
+      return;
+    }
+    if (document.getElementById(WIDGET_ID)) return; // already injected
+
+    let metrics = null;
+    try {
+      const resp = await api.runtime.sendMessage({
+        type: 'GET_TELEMETRY',
+        repo: key
+      });
+      if (resp && typeof resp === 'object' && resp.type === 'TELEMETRY_RESULT') {
+        metrics = resp.payload || null;
+      }
+    } catch (_) {
+      metrics = null;
+    }
+    render(target, metrics); // never hangs; shows N/A empty state if no payload
   }
 
   function schedule() {
-    if (pending) return;
-    pending = setTimeout(() => {
-      pending = 0;
+    if (scheduled) return;
+    scheduled = true;
+    setTimeout(() => {
       try {
-        refresh().catch(() => {});
+        run();
       } catch (_) {}
-      try {
-        refreshChips().catch(() => {});
-      } catch (_) {}
-    }, 150);
+    }, 120);
   }
 
-  ['turbo:load', 'turbo:render', 'pjax:end', 'popstate'].forEach((evtName) => {
-    try {
-      addEventListener(evtName, schedule, true);
-    } catch (_) {}
-  });
+  ['turbo:load', 'turbo:render', 'pjax:end', 'popstate', 'hashchange'].forEach(
+    (ev) => {
+      try {
+        addEventListener(ev, schedule, true);
+      } catch (_) {}
+    }
+  );
 
   try {
     const mo = new MutationObserver(schedule);
-    mo.observe(document.documentElement || document, { childList: true, subtree: true });
+    mo.observe(document.documentElement || document, {
+      childList: true,
+      subtree: true
+    });
   } catch (_) {}
 
   try {
-    refresh().catch(() => {});
-  } catch (_) {}
-  try {
-    refreshChips().catch(() => {});
+    run();
   } catch (_) {}
 })();

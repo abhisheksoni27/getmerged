@@ -1,0 +1,31 @@
+name: extension-smoke
+
+on:
+  push:
+    paths:
+      - 'extension/**'
+  pull_request:
+    paths:
+      - 'extension/**'
+
+jobs:
+  build:
+    name: Smoke build (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [chrome, firefox]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Smoke build ${{ matrix.target }}
+        working-directory: extension
+        run: bash build.sh
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: opendoor-extension-${{ matrix.target }}
+          path: extension/dist/${{ matrix.target }}/*.zip
