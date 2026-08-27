@@ -140,7 +140,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
       notFound();
     }
     return (
-      <div className="relative min-h-screen dev-grid-pattern flex flex-col bg-[#faf9f6]">
+      <div className="relative min-h-screen flex flex-col bg-[#FCFCFD]">
         <Header />
         <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-6">
           <h1 className="font-space text-2xl font-extrabold text-zinc-950">
@@ -225,7 +225,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
   };
 
   return (
-    <div className="relative min-h-screen dev-grid-pattern flex flex-col bg-[#faf9f6]">
+    <div className="relative min-h-screen flex flex-col bg-[#FCFCFD]">
       <Header />
       <script
         type="application/ld+json"

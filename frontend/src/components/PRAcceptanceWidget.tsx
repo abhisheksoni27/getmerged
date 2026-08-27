@@ -52,7 +52,7 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
 
   if (loading) {
     return (
-      <div className="rounded-2xl bg-white p-5 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-6 animate-pulse">
+      <div className="rounded-2xl bg-white p-5 border-2 border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-6 animate-pulse">
         <div className="h-5 bg-zinc-200 rounded w-1/3 mb-4"></div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="h-16 bg-zinc-100 rounded-xl"></div>
@@ -67,7 +67,7 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
   if (!data) return null;
 
   return (
-    <div className="rounded-2xl bg-white p-5 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-6 font-mono">
+    <div className="rounded-2xl bg-white p-5 border-2 border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-6 font-mono">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-emerald-600" />

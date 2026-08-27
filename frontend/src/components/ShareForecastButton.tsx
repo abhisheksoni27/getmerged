@@ -228,7 +228,7 @@ export function ShareForecastButton({
           data-testid="share-result-btn"
           aria-label={`Share forecast result for ${repoFullName}`}
           title="Share forecast result (X & LinkedIn intents)"
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border-2 border-brand-dark text-zinc-900 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-50 active:scale-[0.98] transition-all shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer ${className}`}
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border-2 border-zinc-200/60 text-zinc-900 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-50 active:scale-[0.98] transition-all  focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer ${className}`}
         >
           {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Share2 className="h-4 w-4 text-zinc-700" />}
           <span>{copied ? "URL Copied to Clipboard!" : "Share result"}</span>
@@ -242,7 +242,7 @@ export function ShareForecastButton({
           onClick={() => setOpenModal(false)}
         >
           <div
-            className="w-full max-w-md rounded-2xl bg-white border-2 border-brand-dark p-6 shadow-[6px_6px_0px_#222831] font-sans"
+            className="w-full max-w-md rounded-2xl bg-white border-2 border-zinc-200/60 p-6 shadow-[6px_6px_0px_#222831] font-sans"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-3 border-b border-zinc-100 mb-4">

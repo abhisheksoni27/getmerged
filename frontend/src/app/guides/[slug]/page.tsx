@@ -95,7 +95,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
   }
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-[#faf9f6] text-zinc-900 font-sans">
+    <div className="min-h-screen flex flex-col bg-[#FCFCFD] text-zinc-900 font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -113,7 +113,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
         </div>
 
         {/* Header Title Box */}
-        <div className="border-2 border-black bg-white p-6 sm:p-10 shadow-[6px_6px_0px_#000] mb-8">
+        <div className="border border-zinc-200/60 bg-white p-6 sm:p-10 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-8">
           <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-zinc-600 mb-4">
             <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-100 border border-black font-bold text-amber-900">
               {guide.section}
@@ -136,7 +136,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
             {guide.description}
           </p>
 
-          <div className="overflow-hidden border-2 border-black bg-zinc-100 shadow-[4px_4px_0px_#000]">
+          <div className="overflow-hidden border border-zinc-200/60 bg-zinc-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`/images/guides/${guide.slug}.jpg`}
@@ -149,7 +149,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
         </div>
 
         {/* Content Body */}
-        <article className="border-2 border-black bg-white p-6 sm:p-10 shadow-[6px_6px_0px_#000] mb-10 text-zinc-900">
+        <article className="border border-zinc-200/60 bg-white p-6 sm:p-10 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-10 text-zinc-900">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -176,12 +176,12 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
                 <li className="leading-relaxed" {...props} />
               ),
               blockquote: ({ node, ...props }) => (
-                <div className="border-2 border-black bg-amber-50 p-5 my-6 shadow-[3px_3px_0px_#000] text-zinc-900">
+                <div className="border border-zinc-200/60 bg-amber-50 p-5 my-6  text-zinc-900">
                   <blockquote className="space-y-2 text-sm sm:text-base italic" {...props} />
                 </div>
               ),
               table: ({ node, ...props }) => (
-                <div className="my-6 overflow-x-auto border-2 border-black shadow-[4px_4px_0px_#000]">
+                <div className="my-6 overflow-x-auto border border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                   <table className="w-full text-left text-xs sm:text-sm font-sans divide-y-2 divide-black bg-white" {...props} />
                 </div>
               ),
@@ -207,7 +207,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
                     {children}
                   </code>
                 ) : (
-                  <pre className="p-4 my-4 overflow-x-auto rounded-none border-2 border-black bg-zinc-900 text-emerald-400 font-mono text-xs shadow-[3px_3px_0px_#000]">
+                  <pre className="p-4 my-4 overflow-x-auto rounded-none border border-zinc-200/60 bg-zinc-900 text-emerald-400 font-mono text-xs ">
                     <code className={className} {...props}>
                       {children}
                     </code>
@@ -249,7 +249,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
         </article>
 
         {/* CTA Footer Card */}
-        <div className="border-2 border-black bg-[#8ce99a] p-6 sm:p-8 shadow-[6px_6px_0px_#000] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="border border-zinc-200/60 bg-[#8ce99a] p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider mb-1">
               <ShieldCheck className="w-4 h-4" /> Ready to find welcoming codebases?
@@ -261,7 +261,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
           <Link
             href="/repos"
             title="Explore Welcoming Repositories on GetMerged"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white font-bold text-xs border-2 border-black shadow-[3px_3px_0px_#fff] hover:bg-zinc-800 transition-all shrink-0"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white font-bold text-xs border border-zinc-200/60  hover:bg-zinc-800 transition-all shrink-0"
           >
             Explore Repositories <ArrowRight className="w-3.5 h-3.5" />
           </Link>

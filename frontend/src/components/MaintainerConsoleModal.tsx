@@ -225,11 +225,11 @@ export function MaintainerConsoleModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl max-h-[90vh] bg-white rounded-3xl border-2 border-black shadow-[8px_8px_0px_#000] flex flex-col overflow-hidden">
+      <div className="relative w-full max-w-2xl max-h-[90vh] bg-white rounded-3xl border border-zinc-200/60 shadow-[8px_8px_0px_#000] flex flex-col overflow-hidden">
         {/* Modal Header */}
-        <div className="p-6 border-b-2 border-black bg-gradient-to-r from-amber-50 to-orange-50 flex items-center justify-between">
+        <div className="p-6 border-b border-zinc-100 bg-gradient-to-r from-amber-50 to-orange-50 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-black text-amber-400 rounded-2xl border-2 border-black shadow-[2px_2px_0px_#000]">
+            <div className="p-2.5 bg-black text-amber-400 rounded-2xl border border-zinc-200/60 ">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
@@ -290,7 +290,7 @@ export function MaintainerConsoleModal({
                 </div>
               ) : claimData?.file_instructions ? (
                 <div className="space-y-4">
-                  <div className="border-2 border-black rounded-2xl p-4 bg-amber-50/60 shadow-[3px_3px_0px_#000]">
+                  <div className="border border-zinc-200/60 rounded-2xl p-4 bg-amber-50/60 ">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-700 flex items-center gap-1.5">
                         <FileCode className="w-4 h-4 text-amber-600" /> Method 1: Proof File (Recommended)
@@ -322,7 +322,7 @@ export function MaintainerConsoleModal({
                   <button
                     onClick={handleVerify}
                     disabled={verifying}
-                    className="w-full py-3.5 px-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000] hover:shadow-[2px_2px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full py-3.5 px-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm rounded-2xl border border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover: hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
                     {verifying ? (
                       <>
@@ -342,7 +342,7 @@ export function MaintainerConsoleModal({
           {activeTab === "console" && consoleData && (
             <div className="space-y-6 animate-in fade-in duration-300">
               {/* Score Header Banner */}
-              <div className="p-5 bg-zinc-900 text-white rounded-3xl border-2 border-black shadow-[4px_4px_0px_#000] flex flex-wrap items-center justify-between gap-4">
+              <div className="p-5 bg-zinc-900 text-white rounded-3xl border border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <span className="text-xs font-mono uppercase tracking-wider text-zinc-400">Current Health Score</span>
                   <div className="flex items-baseline gap-2 mt-1">
@@ -350,11 +350,11 @@ export function MaintainerConsoleModal({
                     <span className="text-zinc-400 text-sm">/100</span>
                     <span className={`ml-2 px-2.5 py-0.5 rounded-lg text-xs font-bold font-mono border text-black ${
                       consoleData.c_rank_tier === "S"
-                        ? "bg-[#8ce99a] border-emerald-500"
+                        ? "bg-emerald-500/10 border-emerald-500"
                         : consoleData.c_rank_tier === "A"
                         ? "bg-[#bfdbff] border-blue-400"
                         : consoleData.c_rank_tier === "B"
-                        ? "bg-[#ffd93d] border-amber-400"
+                        ? "bg-amber-500/10 border-amber-400"
                         : consoleData.c_rank_tier === "C"
                         ? "bg-[#e5dbff] border-purple-400"
                         : "bg-[#ffb3c7] border-rose-400"
@@ -372,7 +372,7 @@ export function MaintainerConsoleModal({
               </div>
 
               {/* Automated re-score + before/after card (AC3, AC4) */}
-              <div className="p-4 bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000]">
+              <div className="p-4 bg-white border border-zinc-200/60 rounded-2xl ">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <div className="font-bold text-sm text-zinc-900 flex items-center gap-2">
@@ -387,7 +387,7 @@ export function MaintainerConsoleModal({
                     type="button"
                     onClick={runRescore}
                     disabled={rescoring}
-                    className="px-4 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed flex items-center gap-2 shrink-0"
+                    className="px-4 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs rounded-2xl border border-zinc-200/60/60  disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed flex items-center gap-2 shrink-0"
                   >
                     {rescoring ? (
                       <>
@@ -465,7 +465,7 @@ export function MaintainerConsoleModal({
                     consoleData.checklist.map((item: MaintainerChecklistItem) => (
                       <div
                         key={item.id}
-                        className="p-4 bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] hover:border-zinc-800 transition-all"
+                        className="p-4 bg-white border border-zinc-200/60 rounded-2xl  hover:border-zinc-800 transition-all"
                       >
                         <div className="flex items-start justify-between gap-3 mb-1.5">
                           <div className="font-bold text-sm text-zinc-900">{item.title}</div>

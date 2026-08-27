@@ -235,7 +235,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
   if (phase === "unauth") {
     return (
       <AuditShell fullName={fullName}>
-        <div className="rounded-2xl border-2 border-brand-dark bg-white p-8 shadow-[4px_4px_0px_#222831] text-center">
+        <div className="rounded-2xl border-2 border-zinc-200/60 bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-100 border border-amber-200 text-amber-600">
             <Lock className="h-7 w-7" />
           </div>
@@ -280,8 +280,8 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
   if (phase === "pay") {
     return (
       <AuditShell fullName={fullName}>
-        <div className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-yellow-100 via-white to-emerald-100 p-8 shadow-[4px_4px_0px_#222831] text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-yellow-200 border-2 border-brand-dark text-zinc-950 -rotate-2">
+        <div className="rounded-2xl border-2 border-zinc-200/60 bg-gradient-to-br from-yellow-100 via-white to-emerald-100 p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-yellow-200 border-2 border-zinc-200/60 text-zinc-950 -rotate-2">
             <FileSearch className="h-7 w-7" />
           </div>
           <span className="inline-block rounded-full bg-yellow-100 px-3 py-1 font-mono text-xs font-bold text-yellow-900 mb-3">
@@ -296,7 +296,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
             type="button"
             onClick={startCheckout}
             disabled={checkoutLoading}
-            className="inline-flex items-center gap-2 rounded-full bg-[#ffd93d] px-6 py-3 text-xs font-mono font-bold text-zinc-950 shadow-[2px_2px_0px_#000] transition-all hover:bg-[#ffdf5c] active:scale-[0.99] disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-full bg-amber-500/10 px-6 py-3 text-xs font-mono font-bold text-zinc-950  transition-all hover:bg-[#ffdf5c] active:scale-[0.99] disabled:opacity-60"
           >
             <FileSearch className="h-4 w-4" />
             {checkoutLoading ? "Redirecting to checkout…" : "Get Full Audit - $19"}
@@ -315,7 +315,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
     <AuditShell fullName={fullName}>
       <div className="space-y-8">
         {/* Summary */}
-        <section className="rounded-2xl border-2 border-brand-dark bg-white p-6 shadow-[4px_4px_0px_#222831]">
+        <section className="rounded-2xl border-2 border-zinc-200/60 bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div>
               <span className="inline-block rounded-full bg-emerald-100 px-3 py-1 font-mono text-xs font-bold text-emerald-900 mb-2">
@@ -332,13 +332,13 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
         </section>
 
         {/* Per-factor C-Rank breakdown */}
-        <section className="rounded-2xl border-2 border-brand-dark bg-white p-6 shadow-[4px_4px_0px_#222831]">
+        <section className="rounded-2xl border-2 border-zinc-200/60 bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
           <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-zinc-950 mb-4">
             <Sparkles className="h-4 w-4 text-indigo-500" /> Full C-Rank Per-Factor Breakdown
           </h2>
           <div className="space-y-3">
             {r.factors.map((f) => (
-              <div key={f.key} className="rounded-xl border border-zinc-200 p-3">
+              <div key={f.key} className="rounded-2xl border border-zinc-200/60 p-3">
                 <div className="flex items-center justify-between text-xs font-mono mb-1">
                   <span className="font-bold text-zinc-800">{f.label}</span>
                   <span className="text-zinc-500">
@@ -355,7 +355,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
         </section>
 
         {/* AI-prioritized fixes */}
-        <section className="rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-6 shadow-[4px_4px_0px_#222831]">
+        <section className="rounded-2xl border-2 border-zinc-200/60 bg-gradient-to-br from-cyan-100 via-white to-emerald-100 p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
           <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
             <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-zinc-950">
               <Sparkles className="h-4 w-4 text-emerald-600" /> AI-Prioritized Fixes
@@ -364,7 +364,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
               type="button"
               onClick={regenerate}
               disabled={regenLoading}
-              className="inline-flex items-center gap-1.5 rounded-xl border-2 border-brand-dark bg-white px-3 py-1.5 text-[11px] font-mono font-bold text-zinc-800 shadow-[2px_2px_0px_#222831] transition-all hover:bg-[#fff9db] active:scale-[0.99] disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 rounded-xl border-2 border-zinc-200/60 bg-white px-3 py-1.5 text-[11px] font-mono font-bold text-zinc-800 shadow-[2px_2px_0px_#222831] transition-all hover:bg-[#fff9db] active:scale-[0.99] disabled:opacity-60"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${regenLoading ? "animate-spin" : ""}`} />
               {regenLoading ? "Regenerating…" : "Regenerate (1/day)"}
@@ -376,7 +376,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
           ) : (
             <ol className="space-y-2">
               {r.prioritized_fixes.map((fix) => (
-                <li key={fix.priority} className="flex items-start gap-2 rounded-xl border border-brand-dark bg-white p-3">
+                <li key={fix.priority} className="flex items-start gap-2 rounded-2xl border border-zinc-200/60/60 bg-white p-3">
                   <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-zinc-950 text-[10px] font-bold text-white">
                     {fix.priority}
                   </span>
@@ -396,7 +396,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
           {(r.ai_insights.maintainer_vibe || r.ai_insights.top_dos.length > 0) && (
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               {r.ai_insights.top_dos.length > 0 && (
-                <div className="rounded-xl border-2 border-brand-dark bg-emerald-100 p-4 shadow-[3px_3px_0px_#222831]">
+                <div className="rounded-xl border-2 border-zinc-200/60 bg-emerald-100 p-4 shadow-[3px_3px_0px_#222831]">
                   <h4 className="text-xs font-mono font-bold text-emerald-900 uppercase mb-2">Top Do’s</h4>
                   <ul className="space-y-1 text-xs text-emerald-950">
                     {r.ai_insights.top_dos.map((d, i) => (
@@ -406,7 +406,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
                 </div>
               )}
               {r.ai_insights.top_donts.length > 0 && (
-                <div className="rounded-xl border-2 border-brand-dark bg-rose-100 p-4 shadow-[3px_3px_0px_#222831]">
+                <div className="rounded-xl border-2 border-zinc-200/60 bg-rose-100 p-4 shadow-[3px_3px_0px_#222831]">
                   <h4 className="text-xs font-mono font-bold text-rose-900 uppercase mb-2">Top Don’ts</h4>
                   <ul className="space-y-1 text-xs text-rose-950">
                     {r.ai_insights.top_donts.map((d, i) => (
@@ -431,7 +431,7 @@ function fmtNum(v: number): string {
 
 function AuditShell({ fullName, children }: { fullName: string; children: React.ReactNode }) {
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-[#faf9f6] overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-[#FCFCFD] overflow-x-hidden">
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-6">
         <Link
           href={`/${fullName}`}

@@ -37,11 +37,11 @@ export function ReferralCard() {
   return (
     <section
       id="referrals"
-      className="max-w-4xl mx-auto px-4 mb-8 rounded-2xl bg-white border-2 border-brand-dark shadow-[4px_4px_0px_#222831] p-5 sm:p-6 font-sans"
+      className="max-w-4xl mx-auto px-4 mb-8 rounded-2xl bg-white border-2 border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] p-5 sm:p-6 font-sans"
     >
       <div className="flex items-center gap-2 mb-1.5">
         <Gift className="h-4 w-4 text-emerald-600" />
-        <h2 className="text-sm font-bold font-space text-zinc-900">Invite Friends, Earn Preflight Credits</h2>
+        <h2 className="text-sm font-semibold text-zinc-900">Invite Friends, Earn Preflight Credits</h2>
       </div>
       <p className="text-xs text-zinc-600 mb-4">
         Share your link: when a friend signs up with GitHub through it, you get <strong>+3</strong> and they get{" "}
