@@ -346,13 +346,13 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                     <div className="glass-card p-2 rounded-lg">
                       <div className="text-[10px] font-mono text-zinc-500 uppercase">1st-Timer</div>
                       <div className="text-xs font-mono font-bold text-emerald-400 mt-0.5">
-                        {repo.first_timer_success_rate ? `${Math.round(repo.first_timer_success_rate)}%` : "—"}
+                        {repo.first_timer_success_rate ? `${Math.round(repo.first_timer_success_rate)}%` : " - "}
                       </div>
                     </div>
                     <div className="glass-card p-2 rounded-lg">
                       <div className="text-[10px] font-mono text-zinc-500 uppercase">Issues</div>
                       <div className="text-xs font-mono font-bold text-amber-400 mt-0.5">
-                        {repo.gfi_count || "—"}
+                        {repo.gfi_count || " - "}
                       </div>
                     </div>
                   </div>
