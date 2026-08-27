@@ -3,6 +3,7 @@ package pipeline
 import (
 	"database/sql"
 	"fmt"
+	"os"
 	"sort"
 	"testing"
 	"time"
@@ -21,8 +22,8 @@ type dryRepoInfo struct {
 }
 
 func TestDryRunRescore(t *testing.T) {
-	if testing.Short() {
-		t.Skip("skipping dry run rescore test against production MySQL database in short mode")
+	if os.Getenv("OPENDOOR_RUN_DRYRUN_TEST") == "" {
+		t.Skip("skipping heavy MySQL production dry-run test (set OPENDOOR_RUN_DRYRUN_TEST=1 to run)")
 	}
 	db, err := sqlx.Connect("mysql", "opendoor_user:opendoor_pass@tcp(127.0.0.1:3306)/opendoor?parseTime=true")
 	if err != nil {
