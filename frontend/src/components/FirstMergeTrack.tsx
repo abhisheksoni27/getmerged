@@ -953,7 +953,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
   return (
     <section
       data-testid="first-merge-track"
-      className="mb-8 rounded-2xl border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-50/50 via-white to-teal-50/30 p-5 sm:p-6 shadow-sm"
+      className="mb-8 rounded-2xl border-2 border-emerald-500/30 glass-panel p-5 sm:p-6 shadow-sm"
       aria-label="First-Merge Track"
     >
       {/* Header */}
@@ -1152,7 +1152,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
 
             {/* AC7: localStorage -> server migration status */}
             {migrationStatus && (
-              <div className="mt-3 rounded-lg border border-indigo-100 bg-indigo-50/50 p-3 text-xs text-indigo-900">
+              <div className="mt-3 rounded-lg border border-indigo-100 bg-indigo-950/40 border border-indigo-500/20/50 p-3 text-xs text-indigo-300">
                 <div className="flex items-center gap-1.5">
                   <RefreshCw className="h-3.5 w-3.5 text-indigo-600 shrink-0" />
                   {migrationStatus}
@@ -1175,7 +1175,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
               </div>
             ) : issuesError ? (
               <div className="mt-4 rounded-lg border border-amber-200 bg-amber-950/70 border-amber-800/80 p-4 text-xs text-amber-300">
-                <div className="flex items-center gap-1.5 font-semibold text-amber-950">
+                <div className="flex items-center gap-1.5 font-semibold text-amber-300">
                   <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
                   {issuesError}
                 </div>
@@ -1274,7 +1274,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
               {/* Per-click claim status / auth prompt (AC1, AC8, AC9) */}
               {needsGitHubAuth && (
                 <div className="mt-3 rounded-lg border border-amber-200 bg-amber-950/70 border-amber-800/80 p-3 text-xs text-amber-300">
-                  <div className="flex items-center gap-1.5 font-semibold text-amber-950">
+                  <div className="flex items-center gap-1.5 font-semibold text-amber-300">
                     <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
                     Sign in with GitHub to post your claim comment.
                   </div>
@@ -1436,7 +1436,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
 
               {/* AC9: lazy import of a locally-saved PR */}
               {importUrl && (
-                <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-indigo-100 bg-indigo-50/50 p-3 text-xs text-indigo-900">
+                <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-indigo-100 bg-indigo-950/40 border border-indigo-500/20/50 p-3 text-xs text-indigo-300">
                   <span>Found a PR you were tracking locally: {importUrl}</span>
                   <button
                     onClick={() => { setPrUrl(importUrl); setImportUrl(null); }}
@@ -1446,7 +1446,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                   </button>
                   <button
                     onClick={() => setImportUrl(null)}
-                    className="rounded-md border border-indigo-300 bg-[#111827] px-2.5 py-1 text-xs font-semibold text-indigo-900 hover:bg-indigo-50"
+                    className="rounded-md border border-indigo-300 bg-[#111827] px-2.5 py-1 text-xs font-semibold text-indigo-300 hover:bg-indigo-950/40 border border-indigo-500/20"
                   >
                     Dismiss
                   </button>

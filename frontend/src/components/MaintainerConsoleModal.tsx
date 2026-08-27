@@ -227,7 +227,7 @@ export function MaintainerConsoleModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#111827] rounded-3xl border border-white/[0.12] shadow-sm flex flex-col overflow-hidden">
         {/* Modal Header */}
-        <div className="p-6 border-b border-white/[0.08] bg-gradient-to-r from-amber-50 to-orange-50 flex items-center justify-between">
+        <div className="p-6 border-b border-white/[0.08] glass-panel flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-black text-amber-400 rounded-2xl border border-white/[0.12] shadow-sm">
               <ShieldCheck className="w-6 h-6" />
@@ -241,7 +241,7 @@ export function MaintainerConsoleModal({
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-zinc-400 hover:text-zinc-100 hover:bg-[#1e293b] rounded-xl transition-colors border border-transparent hover:border-black cursor-pointer"
+            className="p-2 text-zinc-400 hover:text-zinc-100 hover:bg-[#1e293b] rounded-xl transition-colors border border-transparent hover:border-white/[0.08] cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -302,7 +302,7 @@ export function MaintainerConsoleModal({
                     <p className="text-xs text-zinc-400 mb-3">
                       Create a file named <code className="px-1.5 py-0.5 bg-[#111827] border border-white/[0.12] rounded font-mono font-bold text-zinc-100">{claimData.file_instructions.file_name}</code> in your repository root with this exact content:
                     </p>
-                    <div className="relative bg-[#1e293b] text-emerald-400 p-3.5 rounded-xl font-mono text-xs break-all flex items-center justify-between border border-black">
+                    <div className="relative bg-[#1e293b] text-emerald-400 p-3.5 rounded-xl font-mono text-xs break-all flex items-center justify-between border border-white/[0.08]">
                       <code>{claimData.file_instructions.file_content}</code>
                       <button
                         onClick={copyNonce}
@@ -534,7 +534,7 @@ export function MaintainerConsoleModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 border-t-2 border-black bg-[#1e293b] flex items-center justify-between text-xs text-zinc-400">
+        <div className="p-4 border-t-2 border-white/[0.08] bg-[#1e293b] flex items-center justify-between text-xs text-zinc-400">
           <span>Weekly rank-change reports sent automatically via email</span>
           <button
             onClick={onClose}

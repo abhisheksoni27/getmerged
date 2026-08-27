@@ -97,7 +97,7 @@ export function RepoStickyBar({
                 {fullName}
               </span>
               <span
-                className={`inline-flex items-center px-2 py-0.5 font-mono text-[10px] font-bold rounded-md border border-black text-zinc-100 ${getRankBadgeBg(
+                className={`inline-flex items-center px-2 py-0.5 font-mono text-[10px] font-bold rounded-md border border-white/[0.08] text-zinc-100 ${getRankBadgeBg(
                   rank
                 )}`}
               >
@@ -133,7 +133,7 @@ export function RepoStickyBar({
               target="_blank"
               rel="noopener noreferrer"
               title={`View ${fullName} on GitHub`}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-[#0f172a] text-white hover:bg-zinc-800 transition-colors border border-black"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-[#0f172a] text-white hover:bg-zinc-800 transition-colors border border-white/[0.08]"
             >
               <GitPullRequest className="h-3 w-3" />
               <span>GitHub</span>

@@ -313,7 +313,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
 
                         {/* Boosted listing badge (AC4) */}
                         {iss.boosted && (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 border border-indigo-300 text-[10px] sm:text-[11px] font-mono font-bold text-indigo-800">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-950/40 border border-indigo-500/20 border border-indigo-300 text-[10px] sm:text-[11px] font-mono font-bold text-indigo-800">
                             🚀 Boosted
                           </span>
                         )}

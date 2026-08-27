@@ -27,7 +27,7 @@ export function ShimmerButton({
       style={{ background }}
     >
       {/* Shimmer sweep animation ray */}
-      <div className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-shimmer" />
+      <div className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 glass-panel group-hover:animate-shimmer" />
       
       <span className="relative z-10 flex items-center gap-2">
         <Sparkles className="h-3.5 w-3.5 text-emerald-400 animate-pulse" />

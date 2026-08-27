@@ -13,6 +13,7 @@ import {
 import OpenToOpportunitiesToggle from "@/components/OpenToOpportunitiesToggle";
 import ShareCardButton from "@/components/ShareCardButton";
 import { CRankBadge } from "@/components/CRankBadge";
+import { CopyBadgeButton } from "@/components/CopyBadgeButton";
 import {
   GitPullRequest,
   Target,
@@ -445,8 +446,9 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
           <p className="text-xs text-zinc-400 font-sans mb-3">
             Copy the markdown badge below to showcase your verified GetMerged contributor score directly in your GitHub profile README.
           </p>
-          <div className="flex items-center gap-2 bg-slate-900 border border-white/[0.08] text-zinc-200 p-3.5 rounded font-mono text-xs overflow-x-auto">
-            <code className="flex-1 whitespace-nowrap text-orange-400">{badgeMarkdown}</code>
+          <div className="flex items-center gap-3 bg-zinc-950/80 border border-white/[0.08] text-zinc-200 p-3 sm:p-4 rounded-xl font-mono text-xs overflow-hidden">
+            <code className="flex-1 overflow-x-auto whitespace-nowrap text-amber-400 scrollbar-none py-1">{badgeMarkdown}</code>
+            <CopyBadgeButton text={badgeMarkdown} />
           </div>
         </div>
 

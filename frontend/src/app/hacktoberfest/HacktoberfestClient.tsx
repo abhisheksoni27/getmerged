@@ -189,11 +189,11 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
   const getBadgeStyle = (tier: string) => {
     switch (tier?.toUpperCase()) {
       case "S":
-        return "bg-emerald-600 text-white border border-black font-bold";
+        return "bg-emerald-600 text-white border border-white/[0.08] font-bold";
       case "A":
-        return "bg-blue-600 text-white border border-black font-bold";
+        return "bg-blue-600 text-white border border-white/[0.08] font-bold";
       case "B":
-        return "bg-amber-600 text-white border border-black font-bold";
+        return "bg-amber-600 text-white border border-white/[0.08] font-bold";
       default:
         return "bg-[#1e293b] text-zinc-200 border border-white/[0.12]";
     }
@@ -363,7 +363,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
               {/* Progress Track */}
               <div className="w-full bg-zinc-200 h-3 rounded-full overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-orange-500 to-emerald-500 h-full transition-all duration-500 ease-out"
+                  className="glass-panel h-full transition-all duration-500 ease-out"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>

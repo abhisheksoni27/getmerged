@@ -133,7 +133,7 @@ export function RepoDetailHero({
               type="button"
               onClick={onGithubClick}
               title={`View ${fullName} on GitHub`}
-              className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-mono font-semibold rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 transition-all shadow-sm cursor-pointer"
+              className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-mono font-semibold rounded-xl glass-card text-zinc-100 hover:bg-zinc-200 transition-all shadow-sm cursor-pointer"
             >
               <GitPullRequest className="h-3.5 w-3.5" />
               <span>GitHub</span>

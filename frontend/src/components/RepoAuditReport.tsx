@@ -280,11 +280,11 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
   if (phase === "pay") {
     return (
       <AuditShell fullName={fullName}>
-        <div className="rounded-2xl border-2 border-white/[0.08] bg-gradient-to-br from-yellow-100 via-white to-emerald-100 p-8 shadow-sm text-center">
+        <div className="rounded-2xl border-2 border-white/[0.08] glass-panel p-8 shadow-sm text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-400/20 border-2 border-white/[0.08] text-zinc-50 -rotate-2">
             <FileSearch className="h-7 w-7" />
           </div>
-          <span className="inline-block rounded-full bg-yellow-100 px-3 py-1 font-mono text-xs font-bold text-yellow-900 mb-3">
+          <span className="inline-block rounded-full bg-amber-950/40 border border-amber-500/20 px-3 py-1 font-mono text-xs font-bold text-yellow-900 mb-3">
             One-Time Purchase
           </span>
           <h1 className="text-2xl font-bold font-mono text-zinc-50 mb-2">Full Repo Deep-Audit - $19</h1>
@@ -406,7 +406,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
                 </div>
               )}
               {r.ai_insights.top_donts.length > 0 && (
-                <div className="rounded-xl border-2 border-white/[0.08] bg-rose-100 p-4 shadow-sm">
+                <div className="rounded-xl border-2 border-white/[0.08] bg-rose-950/40 border border-rose-500/20 p-4 shadow-sm">
                   <h4 className="text-xs font-mono font-bold text-rose-300 uppercase mb-2">Top Don’ts</h4>
                   <ul className="space-y-1 text-xs text-zinc-300">
                     {r.ai_insights.top_donts.map((d, i) => (

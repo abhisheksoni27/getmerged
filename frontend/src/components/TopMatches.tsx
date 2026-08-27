@@ -40,7 +40,7 @@ export function TopMatches() {
 
   return (
     <section className="w-full max-w-3xl mx-auto" aria-label="Top matches for you">
-      <div className="rounded-2xl border border-amber-200/70 bg-gradient-to-br from-amber-50 to-orange-50 p-6 shadow-sm">
+      <div className="rounded-2xl border border-amber-200/70 glass-panel p-6 shadow-sm">
         <div className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-amber-500" />
           <h2 className="text-lg font-bold tracking-tight text-zinc-100">Top matches for you</h2>

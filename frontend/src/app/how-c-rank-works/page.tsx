@@ -72,7 +72,7 @@ export default function HowCRankWorksPage() {
       name: "Resolution & Land Velocity",
       priority: "Velocity Metric",
       icon: Zap,
-      color: "text-indigo-700 bg-indigo-50 border-indigo-200",
+      color: "text-indigo-700 bg-indigo-950/40 border border-indigo-500/20 border-indigo-200",
       headline: "Speed to final merge without infinite rebasing",
       desc: "Tracks total hours from initial opening to merged commit, preventing the dreaded weeks-long cycle of repeated merge-conflict resolution.",
     },
@@ -80,7 +80,7 @@ export default function HowCRankWorksPage() {
       name: "Repeat Contributor Retention",
       priority: "Culture Signal",
       icon: Repeat,
-      color: "text-cyan-700 bg-cyan-50 border-cyan-200",
+      color: "text-cyan-700 bg-cyan-950/40 border border-cyan-500/20 border-cyan-200",
       headline: "Do contributors return for PR #2 and #3?",
       desc: "Measures whether outside developers enjoy their first experience enough to stay and contribute regularly. The ultimate proof of healthy maintainer empathy.",
     },
@@ -375,13 +375,13 @@ export default function HowCRankWorksPage() {
                 </tr>
                 <tr className="hover:bg-[#1e293b]/60 transition-colors">
                   <td className="py-3.5 px-5 font-bold text-zinc-100 font-space">5. Resolution &amp; Land Velocity</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-indigo-800 bg-indigo-50/50">Core Velocity</td>
+                  <td className="py-3.5 px-4 text-center font-mono font-bold text-indigo-800 bg-indigo-950/40 border border-indigo-500/20/50">Core Velocity</td>
                   <td className="py-3.5 px-4 font-mono text-zinc-400">Merged PRs</td>
                   <td className="py-3.5 px-5 text-zinc-400">Total cycle duration from initial PR opening to final main-branch merge.</td>
                 </tr>
                 <tr className="hover:bg-[#1e293b]/60 transition-colors">
                   <td className="py-3.5 px-5 font-bold text-zinc-100 font-space">6. Repeat Contributor Retention</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-cyan-800 bg-cyan-50/50">Culture Signal</td>
+                  <td className="py-3.5 px-4 text-center font-mono font-bold text-cyan-800 bg-cyan-950/40 border border-cyan-500/20/50">Culture Signal</td>
                   <td className="py-3.5 px-4 font-mono text-zinc-400">Cohorts</td>
                   <td className="py-3.5 px-5 text-zinc-400">Percentage of outside developers returning for subsequent contributions.</td>
                 </tr>
