@@ -5,7 +5,6 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
@@ -31,11 +30,9 @@ func ListGoodFirstIssues(gfiRepo repository.GFIRepository, boostRepo repository.
 			return
 		}
 
-		if boostRepo != nil && !bountyOnly {
-			if sponsored, serr := boostRepo.ListSponsoredIssues(c.Request.Context(), language, limit, time.Now().UTC()); serr == nil {
-				issues = prependSponsored(issues, sponsored)
-			}
-		}
+		// Repo Boost (AC1/AC5): sponsored issues are already flagged + ordered
+		// first by the single listing query (no UNION/prepend needed). The
+		// boostRepo is still used by the impression/click metric endpoints.
 
 		c.JSON(http.StatusOK, gin.H{
 			"data":  issues,

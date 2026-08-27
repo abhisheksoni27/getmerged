@@ -35,8 +35,11 @@ type GoodFirstIssueItem struct {
 	// Boosted reports an active paid boost entitlement at query time (AC4).
 	Boosted bool `db:"boosted" json:"boosted"`
 	// Sponsored reports a paid featured-placement (Repo Boost) at query time
-	// (Repo Boost AC4/AC7). Set in Go, not scanned from SQL.
+	// (Repo Boost AC1/AC5/AC7). Derived in Go from the repo's boost_expires_at.
 	Sponsored bool `db:"-" json:"sponsored"`
+	// RepoBoostExpiresAt is scanned from repositories.boost_expires_at and used
+	// to compute Sponsored + the boosted-first ordering (AC5).
+	RepoBoostExpiresAt *time.Time `db:"repo_boost_expires_at" json:"-"`
 }
 
 type GFIRepository interface {
@@ -143,7 +146,8 @@ const gfiListSelect = `
 		g.labels_json, COALESCE(g.quality_score, 0) as quality_score,
 		g.bounty_amount_usd, COALESCE(g.bounty_status, 'active') as bounty_status,
 		g.created_at, g.synced_at,
-		CASE WHEN b.payment_id IS NOT NULL THEN TRUE ELSE FALSE END as boosted
+		CASE WHEN b.payment_id IS NOT NULL THEN TRUE ELSE FALSE END as boosted,
+		rep.boost_expires_at as repo_boost_expires_at
 	FROM repo_good_first_issues g
 	INNER JOIN repositories rep ON g.repository_id = rep.id
 	LEFT JOIN latest_snapshots s ON rep.id = s.repository_id
@@ -174,7 +178,8 @@ func (r *sqlxGFIRepository) ListByLanguage(ctx context.Context, language string,
 
 	query := gfiListSelect + `
 		WHERE ` + whereClause + `
-		ORDER BY boosted DESC,
+		ORDER BY (rep.boost_expires_at > CURRENT_TIMESTAMP) DESC, rep.boost_expires_at ASC,
+			boosted DESC,
 			g.created_at DESC,
 			g.id DESC
 		LIMIT ?
@@ -200,7 +205,8 @@ func (r *sqlxGFIRepository) ListByRepoID(ctx context.Context, repoID string, lim
 	}
 	query := gfiListSelect + `
 		WHERE g.repository_id = ? AND g.created_at >= ?
-		ORDER BY boosted DESC,
+		ORDER BY (rep.boost_expires_at > CURRENT_TIMESTAMP) DESC, rep.boost_expires_at ASC,
+			boosted DESC,
 			g.created_at DESC,
 			g.id DESC
 		LIMIT ?
@@ -246,7 +252,8 @@ func (r *sqlxGFIRepository) ListFeed(ctx context.Context, filter GFIFeedFilter, 
 
 	query := gfiListSelect + `
 		WHERE ` + where + `
-		ORDER BY g.created_at DESC, g.id DESC
+		ORDER BY (rep.boost_expires_at > CURRENT_TIMESTAMP) DESC, rep.boost_expires_at ASC,
+			g.created_at DESC, g.id DESC
 		LIMIT ?
 	`
 
@@ -280,6 +287,11 @@ func (r *sqlxGFIRepository) selectAndEnrich(ctx context.Context, query string, a
 		ok, amount := bounty.Detect(items[i].LabelsJSON)
 		items[i].IsBounty = ok
 		items[i].BountyAmount = amount
+		// Repo Boost (AC1/AC5): a repo with boost_expires_at in the future
+		// sponsors ALL its open good-first-issues at query time.
+		if items[i].RepoBoostExpiresAt != nil && items[i].RepoBoostExpiresAt.After(time.Now().UTC()) {
+			items[i].Sponsored = true
+		}
 	}
 	return items, nil
 }
