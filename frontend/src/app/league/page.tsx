@@ -74,7 +74,7 @@ export default async function MonthlyLeaguePage() {
       />
       {/* Semantic SSR Crawl Floor */}
       <section className="sr-only" aria-label="Monthly League Overview">
-        <h1>{monthName} - Monthly Open-Source Contributor League</h1>
+        <h2>{monthName} - Monthly Open-Source Contributor League</h2>
         <p>
           Discover beginner-friendly GitHub repositories with high PR merge acceptance rates, active maintainer review teams, and open issues during the {monthName}.
         </p>

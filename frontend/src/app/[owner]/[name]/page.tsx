@@ -252,7 +252,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
 
       {/* Semantic Server-Rendered Content for Search Engine Bots */}
       <section className="sr-only" aria-label="Repository Telemetry Overview">
-        <h1>{fullName} - Open Source PR Review Scorecard</h1>
+        <h2>{fullName} - Open Source PR Review Scorecard</h2>
         <p>{repo.description}</p>
         <p>C-Rank Grade: {rank} ({rankInfo.label}) - {score}/100</p>
         <p>External PR Merge Rate: {mergeRate}</p>

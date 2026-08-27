@@ -67,7 +67,7 @@ export default async function HacktoberfestPage() {
       />
       {/* Semantic SSR Crawl Floor */}
       <section className="sr-only" aria-label="Hacktoberfest Welcoming Leaderboard">
-        <h1>Hacktoberfest 2026 Welcoming Repositories & Live Merge Tracker</h1>
+        <h2>Hacktoberfest 2026 Welcoming Repositories & Live Merge Tracker</h2>
         <p>
           Discover beginner-friendly GitHub repositories actively participating in Hacktoberfest 2026 with high PR merge acceptance rates and responsive maintainers.
         </p>
