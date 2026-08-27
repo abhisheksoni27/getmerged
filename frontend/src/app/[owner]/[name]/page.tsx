@@ -223,15 +223,15 @@ export default async function RepoDetailPage({ params }: PageProps) {
   const rank = repo.class_rank || repo.c_rank_tier || "A";
   const rankInfo = getGradeColor(rank);
   const score = Math.round(repo.c_rank_score || repo.score || 0);
-  const mergeRate = repo.external_pr_merge_rate ? `${Math.round(repo.external_pr_merge_rate)}%` : "—";
+  const mergeRate = repo.external_pr_merge_rate ? `${Math.round(repo.external_pr_merge_rate)}%` : " - ";
   const responseTime = repo.time_to_first_response_hours
     ? repo.time_to_first_response_hours < 1
       ? "<1h"
       : repo.time_to_first_response_hours < 24
       ? `${Math.round(repo.time_to_first_response_hours)}h`
       : `${Math.round(repo.time_to_first_response_hours / 24)}d`
-    : "—";
-  const firstTimerRate = repo.first_timer_success_rate ? `${Math.round(repo.first_timer_success_rate)}%` : "—";
+    : " - ";
+  const firstTimerRate = repo.first_timer_success_rate ? `${Math.round(repo.first_timer_success_rate)}%` : " - ";
 
   return (
     <div className="relative min-h-screen dev-grid-pattern flex flex-col bg-black text-zinc-100 font-sans">
