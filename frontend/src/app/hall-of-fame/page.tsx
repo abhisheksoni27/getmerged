@@ -78,7 +78,7 @@ export default async function HallOfFamePage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#FCFCFD]">
+    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"

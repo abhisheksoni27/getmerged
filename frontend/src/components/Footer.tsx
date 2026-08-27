@@ -26,7 +26,7 @@ export function Footer() {
 
   return (
     <motion.footer
-      className="border-t border-zinc-100 bg-[#FCFCFD] text-zinc-600 font-sans pt-16 pb-12 mt-auto"
+      className="border-t border-zinc-200 bg-white text-zinc-600 font-sans pt-16 pb-12 mt-auto"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-60px" }}
@@ -37,7 +37,7 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
           {/* Column 1: Ecosystem Rankings */}
           <div className="space-y-3">
-            <h4 className="text-xs font-mono font-semibold uppercase tracking-widest text-zinc-400">
+            <h4 className="font-bold text-zinc-900 text-xs uppercase tracking-wider font-space flex items-center gap-1.5">
               <Trophy className="h-3.5 w-3.5 text-amber-500" /> Ecosystem Rankings
             </h4>
             <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
@@ -58,7 +58,7 @@ export function Footer() {
 
           {/* Column 2: More Ecosystems */}
           <div className="space-y-3">
-            <h4 className="text-xs font-mono font-semibold uppercase tracking-widest text-zinc-400">
+            <h4 className="font-bold text-zinc-900 text-xs uppercase tracking-wider font-space flex items-center gap-1.5">
               <Sparkles className="h-3.5 w-3.5 text-blue-500" /> More Ecosystems
             </h4>
             <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
@@ -79,7 +79,7 @@ export function Footer() {
 
           {/* Column 3: Good First Issues */}
           <div className="space-y-3">
-            <h4 className="text-xs font-mono font-semibold uppercase tracking-widest text-zinc-400">
+            <h4 className="font-bold text-zinc-900 text-xs uppercase tracking-wider font-space flex items-center gap-1.5">
               <Sprout className="h-3.5 w-3.5 text-emerald-600" /> Good First Issues
             </h4>
             <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
@@ -100,7 +100,7 @@ export function Footer() {
 
           {/* Column 4: Platform & Curated Hubs */}
           <div className="space-y-3">
-            <h4 className="text-xs font-mono font-semibold uppercase tracking-widest text-zinc-400">
+            <h4 className="font-bold text-zinc-900 text-xs uppercase tracking-wider font-space flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-emerald-700" /> Curated & Platform
             </h4>
             <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
@@ -170,7 +170,7 @@ export function Footer() {
                 href={`/good-first-issue/${lang.slug}`}
                 prefetch={false}
                 title={`Good First Issues in ${lang.name}`}
-                className="rounded-full px-3 py-1 bg-zinc-100 text-zinc-600 hover:bg-zinc-900 hover:text-white transition-all"
+                className="px-2.5 py-1 rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-600 hover:text-zinc-900 hover:border-zinc-300 transition-all"
               >
                 {lang.name}
               </Link>

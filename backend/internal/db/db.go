@@ -114,16 +114,16 @@ func AutoMigrate(db *sqlx.DB) error {
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			expires_at DATETIME NULL
 		);`,
-		`CREATE TABLE IF NOT EXISTS payment_webhook_events (
+	`CREATE TABLE IF NOT EXISTS payment_webhook_events (
 		event_id VARCHAR(255) PRIMARY KEY,
 		event_type VARCHAR(100) NOT NULL,
 		payload_json TEXT NOT NULL,
 		processed_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 	);`,
-		// One-time preflight credit packs: ledger keyed by unique purchase_id
-		// (DodoPayments payment ID) so webhook/reconcile replays are no-ops and
-		// concurrent grants cannot double-credit at the DB level.
-		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS credit_packs (
+	// One-time preflight credit packs: ledger keyed by unique purchase_id
+	// (DodoPayments payment ID) so webhook/reconcile replays are no-ops and
+	// concurrent grants cannot double-credit at the DB level.
+	fmt.Sprintf(`CREATE TABLE IF NOT EXISTS credit_packs (
 		id INTEGER PRIMARY KEY %s,
 		user_id INTEGER NOT NULL,
 		purchase_id VARCHAR(255) UNIQUE NOT NULL,
@@ -131,10 +131,10 @@ func AutoMigrate(db *sqlx.DB) error {
 		credits INTEGER NOT NULL DEFAULT 10,
 		granted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 	);`, autoInc),
-		// Pack purchase orders: created server-side at checkout time so
-		// GET /credits/pack-status can enforce order ownership (AC4). status is
-		// pending | granted | canceled | failed.
-		`CREATE TABLE IF NOT EXISTS credit_pack_orders (
+	// Pack purchase orders: created server-side at checkout time so
+	// GET /credits/pack-status can enforce order ownership (AC4). status is
+	// pending | granted | canceled | failed.
+	`CREATE TABLE IF NOT EXISTS credit_pack_orders (
 		order_id VARCHAR(64) PRIMARY KEY,
 		user_id INTEGER NOT NULL,
 		dodo_checkout_id VARCHAR(255) NOT NULL DEFAULT '',
@@ -1181,7 +1181,6 @@ func AutoMigrate(db *sqlx.DB) error {
 			count INTEGER NOT NULL DEFAULT 0,
 			PRIMARY KEY(user_id, day)
 		);`,
-	}
 
 	for i, stmt := range statements {
 		if _, err := db.Exec(stmt); err != nil {
@@ -1278,7 +1277,7 @@ func AutoMigrate(db *sqlx.DB) error {
 		// In-app notification center lookups
 		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_visible ON in_app_notifications(user_id, visible_at, id DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_unread ON in_app_notifications(user_id, visible_at, read_at)`,
-		`CREATE INDEX IF NOT EXISTS idx_notif_user_read ON notifications (user_id, ` + "`read`" + `)`,
+		`CREATE INDEX IF NOT EXISTS idx_notif_user_read ON notifications (user_id, `+"`read`"+`)`,
 		`CREATE INDEX IF NOT EXISTS idx_notif_deliver ON notifications (deliver_at)`,
 		`CREATE INDEX IF NOT EXISTS idx_notif_user_created ON notifications (user_id, created_at)`,
 		// Maintainer SLA claim lookups (AC1-AC7).
@@ -1334,11 +1333,11 @@ func AutoMigrate(db *sqlx.DB) error {
 	// Stall clock anchor (AC5): draft flag + frozen draft->ready instant.
 	_, _ = db.Exec(`ALTER TABLE pr_snapshots ADD COLUMN is_draft BOOLEAN DEFAULT FALSE`)
 	_, _ = db.Exec(`ALTER TABLE pr_snapshots ADD COLUMN ready_for_review_at DATETIME`)
-	// Single delivery retry gate (AC6).
-	_, _ = db.Exec(`ALTER TABLE pr_stall_alerts ADD COLUMN next_attempt_at DATETIME NULL`)
-	// Episode-driven stall rescue (AC1/AC2/AC3).
-	_, _ = db.Exec(`ALTER TABLE pr_stall_state ADD COLUMN episode_start DATETIME NULL`)
-	_, _ = db.Exec(`ALTER TABLE pr_stall_state ADD COLUMN alerted_at DATETIME NULL`)
+		// Single delivery retry gate (AC6).
+		_, _ = db.Exec(`ALTER TABLE pr_stall_alerts ADD COLUMN next_attempt_at DATETIME NULL`)
+		// Episode-driven stall rescue (AC1/AC2/AC3).
+		_, _ = db.Exec(`ALTER TABLE pr_stall_state ADD COLUMN episode_start DATETIME NULL`)
+		_, _ = db.Exec(`ALTER TABLE pr_stall_state ADD COLUMN alerted_at DATETIME NULL`)
 	// C-Rank alert state: rank hash for CAS writes (AC2/AC6), failure cap and
 	// dead-letter flag (AC3), plus watcher e-mail validity suppression (AC8).
 	_, _ = db.Exec(`ALTER TABLE crank_alert_state ADD COLUMN rank_hash VARCHAR(64) DEFAULT ''`)

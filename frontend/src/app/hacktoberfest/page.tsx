@@ -58,7 +58,7 @@ export default async function HacktoberfestPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FCFCFD]">
+    <div className="min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"

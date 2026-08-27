@@ -106,16 +106,16 @@ export default async function LeaderboardPage() {
 
   const getBadgeStyle = (tier: string) => {
     switch (tier?.toUpperCase()) {
-      case "S": return "bg-[#8ce99a] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]";
-      case "A": return "bg-[#bfdbff] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]";
-      case "B": return "bg-[#ffd93d] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]";
-      case "C": return "bg-[#e5dbff] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]";
-      default: return "bg-[#ffb3c7] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]";
+      case "S": return "bg-[#8ce99a] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]";
+      case "A": return "bg-[#bfdbff] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]";
+      case "B": return "bg-[#ffd93d] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]";
+      case "C": return "bg-[#e5dbff] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]";
+      default: return "bg-[#ffb3c7] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]";
     }
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#FCFCFD]">
+    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"

@@ -51,7 +51,7 @@ export function SeasonCard() {
 
   if (loading) {
     return (
-      <div className="rounded-xl border-2 border-zinc-200/60 bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-6 flex items-center gap-2 text-sm text-zinc-400 animate-pulse">
+      <div className="rounded-xl border-2 border-brand-dark bg-white p-5 shadow-[4px_4px_0px_#222831] mb-6 flex items-center gap-2 text-sm text-zinc-400 animate-pulse">
         <Loader2 className="h-4 w-4 animate-spin" /> Loading your season…
       </div>
     );
@@ -80,7 +80,7 @@ export function SeasonCard() {
   }
 
   return (
-    <div className="rounded-xl border-2 border-zinc-200/60 bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-6">
+    <div className="rounded-xl border-2 border-brand-dark bg-white p-5 shadow-[4px_4px_0px_#222831] mb-6">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
           <Trophy className="h-3.5 w-3.5 text-amber-500" /> Contributor Season · {s.season}

@@ -305,7 +305,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
   }, [page, totalPages]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FCFCFD] text-zinc-900 overflow-x-hidden font-sans">
+    <div className="min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern text-zinc-900 overflow-x-hidden font-sans">
       <Header />
 
       <main className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1">
@@ -436,9 +436,9 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   setTrendingOnly((prev) => !prev);
                   setPage(1);
                 }}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-zinc-200/60 transition-all cursor-pointer font-bold ${
+                className={`inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border-2 border-black transition-all cursor-pointer font-bold ${
                   trendingOnly
-                    ? "bg-[#ffd93d] text-black "
+                    ? "bg-[#ffd93d] text-black shadow-[3px_3px_0px_#000]"
                     : "bg-white text-zinc-800 hover:bg-[#fff9db] hover:shadow-[2px_2px_0px_#000]"
                 }`}
               >
@@ -452,7 +452,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   type="button"
                   onClick={resetFilters}
                   title="Reset all filters"
-                  className="p-2.5 rounded-xl border border-zinc-200/60 bg-white text-zinc-800 hover:bg-zinc-100 hover:shadow-[2px_2px_0px_#000] transition-all cursor-pointer"
+                  className="p-2.5 rounded-xl border-2 border-black bg-white text-zinc-800 hover:bg-zinc-100 hover:shadow-[2px_2px_0px_#000] transition-all cursor-pointer"
                 >
                   <RotateCcw className="h-4 w-4" />
                 </button>

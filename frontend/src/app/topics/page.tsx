@@ -119,7 +119,7 @@ export default async function TopicsIndexPage({ searchParams }: TopicsPageProps)
   };
 
   return (
-    <div className="min-h-screen bg-[#FCFCFD] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#faf9f6] dev-grid-pattern flex flex-col font-sans">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
@@ -135,14 +135,14 @@ export default async function TopicsIndexPage({ searchParams }: TopicsPageProps)
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-white border border-zinc-200/60 border-b-4 text-xs text-black hover:bg-zinc-100 transition-colors mb-6 font-sans font-bold"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-white border-2 border-black border-b-4 text-xs text-black hover:bg-zinc-100 transition-colors mb-6 font-sans font-bold"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Header Section */}
-        <div className="mb-8 p-6 sm:p-8 rounded-none bg-white border border-zinc-200/60 border-b-4 shadow-[4px_4px_0px_0px_#000]">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-emerald-100 border border-zinc-200/60 text-black text-xs font-mono font-bold mb-3">
+        <div className="mb-8 p-6 sm:p-8 rounded-none bg-white border-2 border-black border-b-4 shadow-[4px_4px_0px_0px_#000]">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-emerald-100 border-2 border-black text-black text-xs font-mono font-bold mb-3">
             <Tag className="h-3.5 w-3.5" /> Topic Directory
           </div>
           <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight">
@@ -160,8 +160,8 @@ export default async function TopicsIndexPage({ searchParams }: TopicsPageProps)
 
         {/* Empty State */}
         {topics.length === 0 ? (
-          <div className="p-8 sm:p-12 text-center bg-white rounded-none border border-zinc-200/60 border-b-4 shadow-[4px_4px_0px_0px_#000] max-w-lg mx-auto my-8">
-            <div className="h-12 w-12 rounded-none bg-zinc-100 text-black border border-zinc-200/60 flex items-center justify-center mx-auto mb-4">
+          <div className="p-8 sm:p-12 text-center bg-white rounded-none border-2 border-black border-b-4 shadow-[4px_4px_0px_0px_#000] max-w-lg mx-auto my-8">
+            <div className="h-12 w-12 rounded-none bg-zinc-100 text-black border-2 border-black flex items-center justify-center mx-auto mb-4">
               <Compass className="h-6 w-6" />
             </div>
             <h2 className="font-space text-lg font-bold text-zinc-900 mb-2">
@@ -173,7 +173,7 @@ export default async function TopicsIndexPage({ searchParams }: TopicsPageProps)
             <Link
               href="/"
               title="Return to home page"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-none bg-black hover:bg-zinc-800 text-white border border-zinc-200/60 border-b-4 font-bold text-xs transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-none bg-black hover:bg-zinc-800 text-white border-2 border-black border-b-4 font-bold text-xs transition-all"
             >
               Explore Repositories <ArrowRight className="h-3.5 w-3.5" />
             </Link>

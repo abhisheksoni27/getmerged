@@ -169,7 +169,7 @@ function PreflightSkeleton() {
   return (
     <div
       data-testid="preflight-suspense-fallback"
-      className="p-6 sm:p-8 bg-white border-2 border-zinc-200/60 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] animate-pulse mb-8 font-sans"
+      className="p-6 sm:p-8 bg-white border-2 border-brand-dark rounded-2xl shadow-[4px_4px_0px_#222831] animate-pulse mb-8 font-sans"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
@@ -495,7 +495,7 @@ function PreflightContent() {
           aria-modal="true"
           aria-labelledby="upgrade-modal-title"
         >
-          <div className="w-full max-w-md rounded-2xl bg-white border-2 border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] p-6 font-sans">
+          <div className="w-full max-w-md rounded-2xl bg-white border-2 border-brand-dark shadow-[4px_4px_0px_#222831] p-6 font-sans">
             <h2
               id="upgrade-modal-title"
               className="text-lg font-bold font-space text-zinc-900 tracking-tight mb-2"
@@ -574,7 +574,7 @@ function PreflightContent() {
         <div
           role="alert"
           aria-live="assertive"
-          className="rounded-2xl bg-[#fef2f2] p-5 sm:p-6 border-2 border-[#fecaca] shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-8 font-sans transition-all duration-150 ease-out"
+          className="rounded-2xl bg-[#fef2f2] p-5 sm:p-6 border-2 border-[#fecaca] shadow-[4px_4px_0px_#222831] mb-8 font-sans transition-all duration-150 ease-out"
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-start gap-3">
@@ -606,7 +606,7 @@ function PreflightContent() {
       {/* Input Form */}
       <form
         onSubmit={handleEvaluate}
-        className="rounded-2xl bg-white p-5 sm:p-6 border-2 border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-8 font-sans"
+        className="rounded-2xl bg-white p-5 sm:p-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-8 font-sans"
       >
         <div className="mb-4">
           <label
@@ -776,7 +776,7 @@ function PreflightContent() {
 
       {/* Results Section */}
       {result && (
-        <div className="rounded-2xl bg-white p-5 sm:p-6 border-2 border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-8 font-sans">
+        <div className="rounded-2xl bg-white p-5 sm:p-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-8 font-sans">
           <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-zinc-100 mb-5">
             <div>
               <div className="flex items-center gap-2 mb-1">

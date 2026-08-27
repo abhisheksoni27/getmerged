@@ -114,35 +114,35 @@ export default function HowCRankWorksPage() {
     {
       tier: "S",
       label: "Super Welcoming",
-      badgeClass: "bg-[#8ce99a] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+      badgeClass: "bg-[#8ce99a] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
       indicatorColor: "bg-emerald-600",
       desc: "The open doors. Pull requests receive active review within 24 hours, maintainers provide friendly guidance, and new contributor merge rates exceed 80%.",
     },
     {
       tier: "A",
       label: "Welcoming",
-      badgeClass: "bg-[#bfdbff] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+      badgeClass: "bg-[#bfdbff] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
       indicatorColor: "bg-blue-600",
       desc: "Reliable, healthy repositories with dependable review cadences. Consistent feedback and positive contributor culture.",
     },
     {
       tier: "B",
       label: "Moderate",
-      badgeClass: "bg-[#ffd93d] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+      badgeClass: "bg-[#ffd93d] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
       indicatorColor: "bg-amber-600",
       desc: "Active maintainers who face periodic review bottlenecks around major release sprints. Review cycles typically take 3 to 7 days.",
     },
     {
       tier: "C",
       label: "Slow Review",
-      badgeClass: "bg-[#e5dbff] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+      badgeClass: "bg-[#e5dbff] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
       indicatorColor: "bg-purple-600",
       desc: "Selective code acceptance or backlogged maintainers. Best suited for seasoned developers who don't mind long turnaround delays.",
     },
     {
       tier: "D",
       label: "Unmaintained",
-      badgeClass: "bg-[#ffb3c7] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+      badgeClass: "bg-[#ffb3c7] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
       indicatorColor: "bg-rose-600",
       desc: "Stale repositories or abandoned pull request queues. Avoid submitting PRs here unless actively requested by current maintainers.",
     },
@@ -193,7 +193,7 @@ export default function HowCRankWorksPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#FCFCFD]">
+    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"

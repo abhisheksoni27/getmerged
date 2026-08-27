@@ -23,9 +23,9 @@ interface TopicReposExplorerProps {
 }
 
 const chipClass = (active: boolean): string =>
-  `inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border border-zinc-200/60 cursor-pointer ${
+  `inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border-2 border-black cursor-pointer ${
     active
-      ? "bg-[#ffd93d] text-black "
+      ? "bg-[#ffd93d] text-black shadow-[3px_3px_0px_#000]"
       : "bg-white text-zinc-800 hover:bg-[#fff9db] hover:shadow-[2px_2px_0px_#000]"
   }`;
 

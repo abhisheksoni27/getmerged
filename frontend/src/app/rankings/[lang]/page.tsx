@@ -275,7 +275,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#FCFCFD]">
+    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"
@@ -305,7 +305,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
         </Link>
 
         {/* Hero Section */}
-        <div className="rounded-3xl bg-white p-6 sm:p-10 border border-zinc-200/80 shadow-xs mb-8 ">
+        <div className="rounded-3xl bg-white p-6 sm:p-10 border border-zinc-200/80 shadow-xs mb-8 border-b-4 border-b-zinc-900">
           <div className="flex flex-wrap items-center gap-2 mb-3.5">
             <span className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
               <Trophy className="h-3.5 w-3.5 text-amber-400" /> Top Welcoming Repositories Index
@@ -501,7 +501,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
 
         {/* Contributing Strategy Guide for this Ecosystem */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-          <div className="rounded-3xl bg-white p-6 sm:p-8 border border-zinc-200 font-sans shadow-xs ">
+          <div className="rounded-3xl bg-white p-6 sm:p-8 border border-zinc-200 font-sans shadow-xs border-b-4 border-b-zinc-900">
             <h3 className="text-base font-bold text-zinc-900 mb-3 flex items-center gap-2 font-space">
               <Sparkles className="h-4 w-4 text-emerald-600" />
               How to Get Your {languageName} PR Merged
@@ -522,7 +522,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             </div>
           </div>
 
-          <div className="rounded-3xl bg-white p-6 sm:p-8 border border-zinc-200 font-sans shadow-xs ">
+          <div className="rounded-3xl bg-white p-6 sm:p-8 border border-zinc-200 font-sans shadow-xs border-b-4 border-b-zinc-900">
             <h3 className="text-base font-bold text-zinc-900 mb-3 flex items-center gap-2 font-space">
               <Trophy className="h-4 w-4 text-amber-500" />
               Top {languageName} Frameworks
