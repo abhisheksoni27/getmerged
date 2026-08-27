@@ -463,7 +463,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                             <span>{item.goodFirstIssues}</span>
                           </Link>
                         ) : (
-                          <span className="text-zinc-400 text-sm font-mono">—</span>
+                          <span className="text-zinc-400 text-sm font-mono"> - </span>
                         )}
                       </td>
                     </tr>
