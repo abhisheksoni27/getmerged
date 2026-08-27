@@ -45,9 +45,15 @@ type UserNotificationPreferences struct {
 	GoodFirstIssues      bool  `db:"good_first_issues" json:"good_first_issues"`
 }
 
+// NotificationCursor holds pagination state for in-app notifications.
+type NotificationCursor struct {
+	CreatedAt time.Time
+	ID        int64
+}
+
 // NotificationCenterRepository interface defines methods for in-app alerts and preferences.
 type NotificationCenterRepository interface {
-	GetNotifications(ctx context.Context, userID int64, cursor int64, limit int) ([]InAppNotification, int64, bool, error)
+	GetNotifications(ctx context.Context, userID int64, cursor *NotificationCursor, limit int, requestCutoff *time.Time) ([]InAppNotification, *NotificationCursor, bool, error)
 	GetUnreadCount(ctx context.Context, userID int64) (int, string, error)
 	MarkRead(ctx context.Context, userID int64, ids []int64, markAll bool) error
 	GetPreferences(ctx context.Context, userID int64) (*UserNotificationPreferences, error)
@@ -134,15 +140,18 @@ func (r *sqlxNotificationCenterRepo) IsCategoryEnabled(ctx context.Context, user
 	}
 }
 
-// GetNotifications returns cursor-paginated alerts filtered by visible_at <= NOW() and user category preferences.
-func (r *sqlxNotificationCenterRepo) GetNotifications(ctx context.Context, userID int64, cursor int64, limit int) ([]InAppNotification, int64, bool, error) {
-	if limit <= 0 || limit > 100 {
+// GetNotifications returns cursor-paginated results (default limit 20, max 50) based on (created_at, id) with 30-day TTL.
+// For Free tier, results filter strictly where created_at <= request_cutoff (e.g. NOW() - 1h) to eliminate boundary-skipping race conditions.
+func (r *sqlxNotificationCenterRepo) GetNotifications(ctx context.Context, userID int64, cursor *NotificationCursor, limit int, requestCutoff *time.Time) ([]InAppNotification, *NotificationCursor, bool, error) {
+	if limit <= 0 {
 		limit = 20
+	} else if limit > 50 {
+		limit = 50
 	}
 
 	prefs, err := r.GetPreferences(ctx, userID)
 	if err != nil {
-		return nil, 0, false, err
+		return nil, nil, false, err
 	}
 
 	var allowedCategories []string
@@ -160,34 +169,41 @@ func (r *sqlxNotificationCenterRepo) GetNotifications(ctx context.Context, userI
 	}
 
 	if len(allowedCategories) == 0 {
-		return []InAppNotification{}, 0, false, nil
+		return []InAppNotification{}, nil, false, nil
 	}
 
 	now := time.Now().UTC()
+	ttlThreshold := now.Add(-30 * 24 * time.Hour) // 30-day TTL
+
 	queryStr := `
 		SELECT id, user_id, category, title, message, link_url, read_at, visible_at, created_at
 		FROM in_app_notifications
-		WHERE user_id = ? AND visible_at <= ? AND category IN (?)
+		WHERE user_id = ? AND visible_at <= ? AND created_at >= ? AND category IN (?)
 	`
-	args := []interface{}{userID, now, allowedCategories}
+	args := []interface{}{userID, now, ttlThreshold, allowedCategories}
 
-	if cursor > 0 {
-		queryStr += ` AND id < ?`
-		args = append(args, cursor)
+	if requestCutoff != nil && !requestCutoff.IsZero() {
+		queryStr += ` AND created_at <= ?`
+		args = append(args, *requestCutoff)
 	}
 
-	queryStr += ` ORDER BY id DESC LIMIT ?`
+	if cursor != nil && !cursor.CreatedAt.IsZero() && cursor.ID > 0 {
+		queryStr += ` AND (created_at < ? OR (created_at = ? AND id < ?))`
+		args = append(args, cursor.CreatedAt, cursor.CreatedAt, cursor.ID)
+	}
+
+	queryStr += ` ORDER BY created_at DESC, id DESC LIMIT ?`
 	args = append(args, limit+1)
 
 	query, inArgs, err := sqlx.In(queryStr, args...)
 	if err != nil {
-		return nil, 0, false, err
+		return nil, nil, false, err
 	}
 	query = r.db.Rebind(query)
 
 	var notifications []InAppNotification
 	if err := r.db.SelectContext(ctx, &notifications, query, inArgs...); err != nil {
-		return nil, 0, false, err
+		return nil, nil, false, err
 	}
 
 	hasMore := false
@@ -196,9 +212,13 @@ func (r *sqlxNotificationCenterRepo) GetNotifications(ctx context.Context, userI
 		notifications = notifications[:limit]
 	}
 
-	var nextCursor int64 = 0
+	var nextCursor *NotificationCursor
 	if len(notifications) > 0 {
-		nextCursor = notifications[len(notifications)-1].ID
+		last := notifications[len(notifications)-1]
+		nextCursor = &NotificationCursor{
+			CreatedAt: last.CreatedAt,
+			ID:        last.ID,
+		}
 	}
 
 	return notifications, nextCursor, hasMore, nil
