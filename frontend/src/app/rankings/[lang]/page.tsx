@@ -349,22 +349,22 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-4 mb-8">
           <div className="bg-white p-4 rounded-2xl border border-zinc-200/80 shadow-2xs">
             <div className="text-[11px] font-mono font-medium text-zinc-500 uppercase tracking-wider">Tracked Repos</div>
-            <div className="mt-1 text-2xl font-bold font-space text-zinc-900">{rankedItems.length}</div>
+            <div className="mt-1 text-2xl font-semibold text-zinc-900">{rankedItems.length}</div>
             <div className="text-[11px] text-zinc-500 font-sans mt-0.5">&gt;100 stars verified</div>
           </div>
           <div className="bg-white p-4 rounded-2xl border border-zinc-200/80 shadow-2xs">
             <div className="text-[11px] font-mono font-medium text-zinc-500 uppercase tracking-wider">Avg Merge Rate</div>
-            <div className="mt-1 text-2xl font-bold font-space text-emerald-600">{avgMergeRate}%</div>
+            <div className="mt-1 text-2xl font-semibold text-emerald-600">{avgMergeRate}%</div>
             <div className="text-[11px] text-zinc-500 font-sans mt-0.5">90-day external PRs</div>
           </div>
           <div className="bg-white p-4 rounded-2xl border border-zinc-200/80 shadow-2xs">
             <div className="text-[11px] font-mono font-medium text-zinc-500 uppercase tracking-wider">Open GFIs</div>
-            <div className="mt-1 text-2xl font-bold font-space text-zinc-900">{totalGFIs}</div>
+            <div className="mt-1 text-2xl font-semibold text-zinc-900">{totalGFIs}</div>
             <div className="text-[11px] text-zinc-500 font-sans mt-0.5">Beginner friendly issues</div>
           </div>
           <div className="bg-white p-4 rounded-2xl border border-zinc-200/80 shadow-2xs">
             <div className="text-[11px] font-mono font-medium text-zinc-500 uppercase tracking-wider">Welcoming Tier</div>
-            <div className="mt-1 text-2xl font-bold font-space text-blue-600">{superWelcomingCount}</div>
+            <div className="mt-1 text-2xl font-semibold text-blue-600">{superWelcomingCount}</div>
             <div className="text-[11px] text-zinc-500 font-sans mt-0.5">S & A Tier maintainers</div>
           </div>
         </div>

@@ -45,7 +45,7 @@ export default function AboutPage() {
       <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 w-full">
         {/* Header Title */}
         <div className="border border-zinc-200/60 bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#8ce99a] border border-zinc-200/60 font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-[2px_2px_0px_#000]">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-zinc-200/60 font-mono text-xs font-bold uppercase tracking-wider mb-4 ">
             <Sparkles className="w-3.5 h-3.5" />
             Empirical Telemetry &middot; Zero Speculation
           </div>
@@ -60,7 +60,7 @@ export default function AboutPage() {
         {/* Mission & Methodology Pillars */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           <div className="border border-zinc-200/60 bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-            <div className="w-10 h-10 bg-[#bfdbff] border border-zinc-200/60 flex items-center justify-center mb-4 shadow-[2px_2px_0px_#000]">
+            <div className="w-10 h-10 bg-[#bfdbff] border border-zinc-200/60 flex items-center justify-center mb-4 ">
               <GitMerge className="w-5 h-5 text-black" />
             </div>
             <h2 className="text-lg font-bold mb-2">Our Mission</h2>
@@ -70,7 +70,7 @@ export default function AboutPage() {
           </div>
 
           <div className="border border-zinc-200/60 bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-            <div className="w-10 h-10 bg-[#ffd93d] border border-zinc-200/60 flex items-center justify-center mb-4 shadow-[2px_2px_0px_#000]">
+            <div className="w-10 h-10 bg-[#ffd93d] border border-zinc-200/60 flex items-center justify-center mb-4 ">
               <Award className="w-5 h-5 text-black" />
             </div>
             <h2 className="text-lg font-bold mb-2">C-Rank™ Scoring</h2>
@@ -104,7 +104,7 @@ export default function AboutPage() {
             <a
               href="mailto:hi@abhishekco.de"
               title="Contact GetMerged Engineering"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#8ce99a] text-black font-mono text-xs font-bold border border-zinc-200/60  hover:bg-[#72d482] transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-500/10 text-black font-mono text-xs font-bold border border-zinc-200/60  hover:bg-[#72d482] transition-colors"
             >
               <Mail className="w-4 h-4" />
               hi@abhishekco.de

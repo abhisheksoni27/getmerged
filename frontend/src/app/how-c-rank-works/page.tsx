@@ -114,35 +114,35 @@ export default function HowCRankWorksPage() {
     {
       tier: "S",
       label: "Super Welcoming",
-      badgeClass: "bg-[#8ce99a] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+      badgeClass: "bg-emerald-500/10 text-black border border-zinc-200/60 font-bold ",
       indicatorColor: "bg-emerald-600",
       desc: "The open doors. Pull requests receive active review within 24 hours, maintainers provide friendly guidance, and new contributor merge rates exceed 80%.",
     },
     {
       tier: "A",
       label: "Welcoming",
-      badgeClass: "bg-[#bfdbff] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+      badgeClass: "bg-[#bfdbff] text-black border border-zinc-200/60 font-bold ",
       indicatorColor: "bg-blue-600",
       desc: "Reliable, healthy repositories with dependable review cadences. Consistent feedback and positive contributor culture.",
     },
     {
       tier: "B",
       label: "Moderate",
-      badgeClass: "bg-[#ffd93d] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+      badgeClass: "bg-[#ffd93d] text-black border border-zinc-200/60 font-bold ",
       indicatorColor: "bg-amber-600",
       desc: "Active maintainers who face periodic review bottlenecks around major release sprints. Review cycles typically take 3 to 7 days.",
     },
     {
       tier: "C",
       label: "Slow Review",
-      badgeClass: "bg-[#e5dbff] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+      badgeClass: "bg-[#e5dbff] text-black border border-zinc-200/60 font-bold ",
       indicatorColor: "bg-purple-600",
       desc: "Selective code acceptance or backlogged maintainers. Best suited for seasoned developers who don't mind long turnaround delays.",
     },
     {
       tier: "D",
       label: "Unmaintained",
-      badgeClass: "bg-[#ffb3c7] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+      badgeClass: "bg-[#ffb3c7] text-black border border-zinc-200/60 font-bold ",
       indicatorColor: "bg-rose-600",
       desc: "Stale repositories or abandoned pull request queues. Avoid submitting PRs here unless actively requested by current maintainers.",
     },
@@ -218,7 +218,7 @@ export default function HowCRankWorksPage() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-zinc-900 text-white font-mono text-xs font-semibold mb-4">
             <DoorOpen className="h-3.5 w-3.5 text-amber-400" /> The Science of Open Source Hospitality
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold font-space text-zinc-900 tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-5xl font-semibold text-zinc-900 tracking-tight leading-tight">
             Why Millions of Pull Requests Become Zombie PRs
           </h1>
           <p className="mt-4 text-base sm:text-lg text-zinc-600 max-w-3xl leading-relaxed font-sans">
@@ -280,7 +280,7 @@ export default function HowCRankWorksPage() {
         {/* The 9 Macro Signals */}
         <div className="space-y-6 mb-16">
           <div className="border-b border-zinc-200 pb-4">
-            <h2 className="text-2xl font-bold font-space text-zinc-900">
+            <h2 className="text-2xl font-semibold text-zinc-900">
               The 9 Telemetry Signals We Monitor
             </h2>
             <p className="text-xs sm:text-sm text-zinc-500 font-sans mt-1">
@@ -330,7 +330,7 @@ export default function HowCRankWorksPage() {
         {/* C-Rank Multi-Factor Telemetry Signals Table */}
         <div className="space-y-6 mb-16">
           <div className="border-b border-zinc-200 pb-4">
-            <h2 className="text-2xl font-bold font-space text-zinc-900">
+            <h2 className="text-2xl font-semibold text-zinc-900">
               C-Rank™ Multi-Factor Telemetry Model
             </h2>
             <p className="text-xs sm:text-sm text-zinc-500 font-sans mt-1">
@@ -411,7 +411,7 @@ export default function HowCRankWorksPage() {
         {/* Tier Classification Hierarchy */}
         <div className="space-y-6 mb-16">
           <div className="border-b border-zinc-200 pb-4">
-            <h2 className="text-2xl font-bold font-space text-zinc-900">
+            <h2 className="text-2xl font-semibold text-zinc-900">
               The C-Rank™ Hospitality Ladder
             </h2>
             <p className="text-xs sm:text-sm text-zinc-500 font-sans mt-1">
@@ -442,7 +442,7 @@ export default function HowCRankWorksPage() {
         {/* CTA Section */}
         <div className="rounded-3xl bg-zinc-900 text-white p-8 sm:p-12 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
-            <h3 className="text-2xl sm:text-3xl font-bold font-space">
+            <h3 className="text-2xl sm:text-3xl font-semibold">
               Find your next open door today
             </h3>
             <p className="text-xs sm:text-sm text-zinc-400 mt-2 font-sans">

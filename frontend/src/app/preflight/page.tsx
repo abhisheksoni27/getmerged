@@ -498,7 +498,7 @@ function PreflightContent() {
           <div className="w-full max-w-md rounded-2xl bg-white border-2 border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] p-6 font-sans">
             <h2
               id="upgrade-modal-title"
-              className="text-lg font-bold font-space text-zinc-900 tracking-tight mb-2"
+              className="text-lg font-semibold text-zinc-900 tracking-tight mb-2"
             >
               Free Evaluations Used Up
             </h2>
@@ -515,7 +515,7 @@ function PreflightContent() {
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/pricing"
-                className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all cursor-pointer shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all cursor-pointer  focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
                 Subscribe - $9/mo
               </Link>
@@ -767,7 +767,7 @@ function PreflightContent() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+          className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer  focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
         >
           {loading ? "Evaluating PR..." : "Run Pre-Flight Check"}
           <ArrowRight className="h-4 w-4" />
@@ -887,7 +887,7 @@ function PreflightContent() {
               <a
                 href={`${API_BASE_URL}/api/v1/auth/github`}
                 data-testid="anon-trial-signin"
-                className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all  focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
                 Sign in with GitHub
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -909,7 +909,7 @@ function PreflightContent() {
           </p>
           <a
             href={`${API_BASE_URL}/api/v1/auth/github`}
-            className="shrink-0 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+            className="shrink-0 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all  focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
           >
             Sign in with GitHub
           </a>
@@ -931,7 +931,7 @@ export default function PreflightPage() {
             <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
             <span>Static Heuristic PR Pre-Flight Checklist</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-space text-zinc-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-zinc-900 tracking-tight">
             PR Acceptance Pre-Flight Evaluator
           </h1>
           <p className="text-sm text-zinc-600 font-sans mt-2 max-w-2xl">

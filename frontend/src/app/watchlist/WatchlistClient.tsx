@@ -50,37 +50,37 @@ function getBadgeStyle(rank?: string) {
   switch (rank) {
     case "S":
       return {
-        badgeClass: "bg-[#8ce99a] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+        badgeClass: "bg-emerald-500/10 text-black border border-zinc-200/60 font-bold ",
         label: "Super Welcoming",
         indicatorColor: "bg-emerald-600",
       };
     case "A":
       return {
-        badgeClass: "bg-[#bfdbff] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+        badgeClass: "bg-[#bfdbff] text-black border border-zinc-200/60 font-bold ",
         label: "Welcoming",
         indicatorColor: "bg-blue-600",
       };
     case "B":
       return {
-        badgeClass: "bg-[#ffd93d] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+        badgeClass: "bg-[#ffd93d] text-black border border-zinc-200/60 font-bold ",
         label: "Moderate",
         indicatorColor: "bg-amber-600",
       };
     case "C":
       return {
-        badgeClass: "bg-[#e5dbff] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+        badgeClass: "bg-[#e5dbff] text-black border border-zinc-200/60 font-bold ",
         label: "Slow Review",
         indicatorColor: "bg-purple-600",
       };
     case "D":
       return {
-        badgeClass: "bg-[#ffb3c7] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+        badgeClass: "bg-[#ffb3c7] text-black border border-zinc-200/60 font-bold ",
         label: "Unmaintained",
         indicatorColor: "bg-rose-600",
       };
     default:
       return {
-        badgeClass: "bg-[#FCFCFD] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+        badgeClass: "bg-[#FCFCFD] text-black border border-zinc-200/60 font-bold ",
         label: "Scored",
         indicatorColor: "bg-zinc-600",
       };

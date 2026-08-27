@@ -155,13 +155,13 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
             /* eslint-disable @typescript-eslint/no-unused-vars */
             components={{
               h1: ({ node, ...props }) => (
-                <h1 className="text-2xl sm:text-3xl font-extrabold font-space text-zinc-950 mt-8 mb-4 leading-tight border-b-2 border-black pb-3" {...props} />
+                <h1 className="text-2xl sm:text-3xl font-semibold text-zinc-950 mt-8 mb-4 leading-tight border-b border-zinc-100 pb-3" {...props} />
               ),
               h2: ({ node, ...props }) => (
-                <h2 className="text-xl sm:text-2xl font-bold font-space text-zinc-950 mt-10 mb-4 leading-snug border-b-2 border-zinc-200 pb-2 flex items-center gap-2" {...props} />
+                <h2 className="text-xl sm:text-2xl font-semibold text-zinc-950 mt-10 mb-4 leading-snug border-b-2 border-zinc-200 pb-2 flex items-center gap-2" {...props} />
               ),
               h3: ({ node, ...props }) => (
-                <h3 className="text-lg sm:text-xl font-bold font-space text-zinc-900 mt-6 mb-3" {...props} />
+                <h3 className="text-lg sm:text-xl font-semibold text-zinc-900 mt-6 mb-3" {...props} />
               ),
               p: ({ node, ...props }) => (
                 <p className="text-sm sm:text-base leading-relaxed text-zinc-800 my-4 font-sans" {...props} />
@@ -186,7 +186,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
                 </div>
               ),
               thead: ({ node, ...props }) => (
-                <thead className="bg-[#8ce99a] text-black font-space font-bold uppercase tracking-wider text-xs border-b-2 border-black" {...props} />
+                <thead className="bg-emerald-500/10 text-black font-space font-bold uppercase tracking-wider text-xs border-b border-zinc-100" {...props} />
               ),
               tbody: ({ node, ...props }) => (
                 <tbody className="divide-y divide-zinc-200" {...props} />
@@ -249,7 +249,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
         </article>
 
         {/* CTA Footer Card */}
-        <div className="border border-zinc-200/60 bg-[#8ce99a] p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="border border-zinc-200/60 bg-emerald-500/10 p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider mb-1">
               <ShieldCheck className="w-4 h-4" /> Ready to find welcoming codebases?

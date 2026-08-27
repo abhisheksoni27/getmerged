@@ -75,14 +75,14 @@ export default function GuidesHubPage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-zinc-200/60 border-b-4 text-xs text-black hover:bg-zinc-100 transition-colors mb-6 font-bold shadow-[2px_2px_0px_#000]"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-zinc-200/60 border-b-4 text-xs text-black hover:bg-zinc-100 transition-colors mb-6 font-bold "
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Banner */}
         <div className="border border-zinc-200/60 bg-white p-8 sm:p-10 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#8ce99a] border border-zinc-200/60 font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-[2px_2px_0px_#000]">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-zinc-200/60 font-mono text-xs font-bold uppercase tracking-wider mb-4 ">
             <Sparkles className="w-3.5 h-3.5" />
             Empirical Developer Guides &middot; Zero Speculation
           </div>
@@ -113,7 +113,7 @@ export default function GuidesHubPage() {
                   </span>
                 </div>
 
-                <div className="mb-4 overflow-hidden border border-zinc-200/60 bg-zinc-100 shadow-[2px_2px_0px_#000]">
+                <div className="mb-4 overflow-hidden border border-zinc-200/60 bg-zinc-100 ">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`/images/guides/${guide.slug}.jpg`}
@@ -124,7 +124,7 @@ export default function GuidesHubPage() {
                   />
                 </div>
 
-                <h2 className="text-xl font-bold font-space tracking-tight text-zinc-900 mb-2.5 leading-snug">
+                <h2 className="text-xl font-semibold tracking-tight text-zinc-900 mb-2.5 leading-snug">
                   {guide.title}
                 </h2>
                 <p className="text-xs sm:text-sm text-zinc-600 font-sans leading-relaxed mb-6 line-clamp-2">
