@@ -22,7 +22,7 @@ export function RecruiterContactSection({ username }: RecruiterContactSectionPro
             <h3 className="text-xl sm:text-2xl font-bold font-sans text-white">
               Interested in hiring or sponsoring @{username}?
             </h3>
-            <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-1.5 max-w-lg">
+            <p className="text-xs sm:text-sm text-zinc-300 font-sans mt-1.5 max-w-lg">
               Register verified hiring interest directly on GetMerged. We facilitate high-signal developer introductions.
             </p>
           </div>

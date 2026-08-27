@@ -60,7 +60,7 @@ export default function GuidesHubPage() {
   };
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 text-zinc-100 font-sans">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 text-white font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -86,7 +86,7 @@ export default function GuidesHubPage() {
             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
             Empirical Developer Guides &middot; Zero Speculation
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight font-sans text-zinc-50 mb-4">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight font-sans text-white mb-4">
             Open Source Contribution Playbooks
           </h1>
           <p className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-3xl">
@@ -108,7 +108,7 @@ export default function GuidesHubPage() {
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-950/80 border border-amber-700 text-amber-300 rounded font-mono text-xs font-semibold">
                     <BookOpen className="w-3.5 h-3.5 text-amber-400" /> {guide.section}
                   </span>
-                  <span className="flex items-center gap-1 font-mono text-xs text-zinc-400">
+                  <span className="flex items-center gap-1 font-mono text-xs text-zinc-300">
                     <Clock className="w-3.5 h-3.5" /> {guide.readingTime}
                   </span>
                 </div>
@@ -124,16 +124,16 @@ export default function GuidesHubPage() {
                   />
                 </div>
 
-                <h2 className="text-xl font-bold font-sans tracking-tight text-zinc-100 mb-2.5 leading-snug">
+                <h2 className="text-xl font-bold font-sans tracking-tight text-white mb-2.5 leading-snug">
                   {guide.title}
                 </h2>
-                <p className="text-sm text-zinc-400 font-sans leading-relaxed mb-6 line-clamp-2">
+                <p className="text-sm text-zinc-300 font-sans leading-relaxed mb-6 line-clamp-2">
                   {guide.description}
                 </p>
               </div>
 
               <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between">
-                <span className="font-mono text-xs text-zinc-400">
+                <span className="font-mono text-xs text-zinc-300">
                   By {guide.author} &middot; {guide.lastUpdated}
                 </span>
                 <span className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-orange-400 hover:text-orange-300">
@@ -145,7 +145,7 @@ export default function GuidesHubPage() {
         </div>
 
         {/* C-Rank Extractable Definition Box */}
-        <div className="border border-white/[0.08] bg-zinc-900/80 text-zinc-100 p-6 sm:p-8 rounded-md border-t-2 border-t-orange-500 shadow-sm">
+        <div className="border border-white/[0.08] bg-zinc-900/80 text-white p-6 sm:p-8 rounded-md border-t-2 border-t-orange-500 shadow-sm">
           <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs font-bold uppercase tracking-wider mb-2">
             <ShieldCheck className="w-4 h-4" />
             Empirical C-Rank Benchmark Standard

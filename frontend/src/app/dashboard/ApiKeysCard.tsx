@@ -104,10 +104,10 @@ export function ApiKeysCard() {
     <div className="rounded-xl border border-white/[0.08] bg-zinc-900/80 p-5 shadow-sm/5">
       <div className="flex items-start justify-between gap-4 mb-3">
         <div>
-          <h2 className="text-lg font-bold text-zinc-100 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-white flex items-center gap-2">
             <KeyRound className="h-5 w-5 text-emerald-600" /> Public API Keys
           </h2>
-          <p className="text-xs text-zinc-400 mt-1">
+          <p className="text-xs text-zinc-300 mt-1">
             Build bots, dashboards, and CI checks on C-Rank™ data. Send{" "}
             <code className="rounded bg-zinc-900 px-1 py-0.5 text-[11px]">Authorization: Bearer &lt;key&gt;</code> to{" "}
             <Link href="/docs" className="text-emerald-400 font-semibold hover:underline">
@@ -116,7 +116,7 @@ export function ApiKeysCard() {
             . Free tier: 60 req/hour + 10/min burst · Pro: 600 req/hour + 100/min burst.
           </p>
         </div>
-        <span className="shrink-0 rounded-full bg-zinc-900 px-2 py-0.5 text-[11px] font-semibold text-zinc-400">
+        <span className="shrink-0 rounded-full bg-zinc-900 px-2 py-0.5 text-[11px] font-semibold text-zinc-300">
           {data?.is_pro
             ? `Pro · ${data?.limits.pro_hourly_requests ?? 600}/hour`
             : `Free · ${data?.limits.free_hourly_requests ?? 60}/hour`}
@@ -150,7 +150,7 @@ export function ApiKeysCard() {
       )}
 
       {loading ? (
-        <div className="py-4 text-sm text-zinc-400 animate-pulse">Loading keys…</div>
+        <div className="py-4 text-sm text-zinc-300 animate-pulse">Loading keys…</div>
       ) : (
         <>
           {activeKeys.length > 0 && (
@@ -162,7 +162,7 @@ export function ApiKeysCard() {
                 >
                   <div className="min-w-0">
                     <div className="text-sm font-semibold text-zinc-200 truncate">{k.name}</div>
-                    <div className="text-[11px] text-zinc-400">
+                    <div className="text-[11px] text-zinc-300">
                       <code>{k.key_prefix}…</code> · created {new Date(k.created_at).toLocaleDateString()}
                       {k.last_used_at && <> · last used {new Date(k.last_used_at).toLocaleDateString()}</>}
                     </div>
@@ -178,7 +178,7 @@ export function ApiKeysCard() {
             </ul>
           )}
           {revokedKeys.length > 0 && (
-            <p className="mb-3 text-[11px] text-zinc-400">
+            <p className="mb-3 text-[11px] text-zinc-300">
               {revokedKeys.length} revoked key{revokedKeys.length > 1 ? "s" : ""} hidden.
             </p>
           )}
@@ -189,7 +189,7 @@ export function ApiKeysCard() {
               placeholder={`Key name (e.g. "ci-bot")`}
               maxLength={64}
               disabled={activeKeys.length >= 5}
-              className="flex-1 rounded-lg border border-white/[0.12] px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:opacity-50"
+              className="flex-1 rounded-lg border border-white/[0.12] px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:opacity-50"
             />
             <button
               onClick={createKey}

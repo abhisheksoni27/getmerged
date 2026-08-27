@@ -43,8 +43,8 @@ export function TopMatches() {
       <div className="rounded-2xl border border-amber-200/70 glass-panel p-6 shadow-sm">
         <div className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-amber-500" />
-          <h2 className="text-lg font-bold tracking-tight text-zinc-100">Top matches for you</h2>
-          <span className="ml-auto text-xs font-mono text-zinc-400">
+          <h2 className="text-lg font-bold tracking-tight text-white">Top matches for you</h2>
+          <span className="ml-auto text-xs font-mono text-zinc-300">
             based on your GitHub languages
           </span>
         </div>
@@ -57,7 +57,7 @@ export function TopMatches() {
               <div className="flex items-start justify-between gap-2">
                 <Link
                   href={`/repo/${m.full_name}`}
-                  className="text-sm font-semibold text-zinc-100 hover:text-orange-600"
+                  className="text-sm font-semibold text-white hover:text-orange-600"
                 >
                   {m.full_name}
                 </Link>
@@ -65,13 +65,13 @@ export function TopMatches() {
                   {Math.round(m.match_score)}
                 </span>
               </div>
-              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-400">
+              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-300">
                 {m.description || "No description available."}
               </p>
               {m.reasons.length > 0 && (
                 <ul className="mt-2 space-y-1">
                   {m.reasons.slice(0, 2).map((reason) => (
-                    <li key={reason} className="flex items-start gap-1 text-[11px] text-zinc-400">
+                    <li key={reason} className="flex items-start gap-1 text-[11px] text-zinc-300">
                       <span className="mt-0.5 h-1 w-1 shrink-0 rounded-full bg-emerald-400" />
                       {reason}
                     </li>

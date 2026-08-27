@@ -160,13 +160,13 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Header */}
         <div className="mb-6 border-b border-white/[0.08] pb-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/70 border-emerald-800/80 border border-emerald-200/80 text-emerald-300 text-xs font-mono font-bold mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300/80 text-emerald-300 text-xs font-mono font-bold mb-3">
             <Compass className="h-3.5 w-3.5" /> Contributor Matchmaker
           </div>
-          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-zinc-100 tracking-tight">
+          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Best {canonicalLang} Repos to Contribute To
           </h1>
-          <p className="text-sm text-zinc-400 font-sans mt-2 max-w-2xl">
+          <p className="text-sm text-zinc-300 font-sans mt-2 max-w-2xl">
             Matched to your experience level using real merge rates, maintainer response times, and first-PR success data.
           </p>
         </div>
@@ -194,7 +194,7 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
           {visibleRepos.map((repo) => (
             <div
               key={repo.id}
-              className="p-5 rounded-2xl border border-b-2 border-b-zinc-900/10 border-white/[0.08] bg-zinc-900/80 hover:border-emerald-500/80 hover:border-b-emerald-700 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+              className="p-5 rounded-2xl border border-b border-white/[0.1]/10 border-white/[0.08] bg-zinc-900/80 hover:border-emerald-500/80 hover:border-b-emerald-700 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-1.5 flex-wrap">
@@ -212,7 +212,7 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
                     </span>
                   )}
                 </div>
-                <h2 className="font-space text-lg font-bold text-zinc-100 group-hover:text-emerald-400 transition-colors">
+                <h2 className="font-space text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
                   <Link
                     href={`/${repo.full_name}`}
                     title={`View contributor metrics for ${repo.full_name}`}
@@ -223,14 +223,14 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
                   </Link>
                 </h2>
                 {repo.description && (
-                  <p className="text-xs text-zinc-400 mt-1 line-clamp-2 leading-relaxed">{repo.description}</p>
+                  <p className="text-xs text-zinc-300 mt-1 line-clamp-2 leading-relaxed">{repo.description}</p>
                 )}
 
                 {/* Why this repo matches you */}
                 {repo.reasons && repo.reasons.length > 0 && (
                   <ul className="mt-2 space-y-1">
                     {repo.reasons.slice(0, 3).map((reason) => (
-                      <li key={reason} className="text-xs text-zinc-400 flex items-start gap-1.5">
+                      <li key={reason} className="text-xs text-zinc-300 flex items-start gap-1.5">
                         <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0 mt-px" />
                         {reason}
                       </li>
@@ -263,10 +263,10 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
         {gatedCount > 0 && (
           <div className="rounded-3xl border-2 border-dashed border-emerald-300 bg-emerald-950/70 border-emerald-800/80/50 p-6 text-center mb-8">
             <Lock className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
-            <h3 className="font-space text-lg font-bold text-zinc-100">
+            <h3 className="font-space text-lg font-bold text-white">
               Unlock {gatedCount}+ More {displayNameFromSlug(canonicalLang)} Opportunities
             </h3>
-            <p className="text-xs text-zinc-400 font-sans mt-1 max-w-md mx-auto">
+            <p className="text-xs text-zinc-300 font-sans mt-1 max-w-md mx-auto">
               Sign in with GitHub to view personalized matches, your Contributor Fit Radar, and weekly digest alerts.
             </p>
             <div className="mt-4">

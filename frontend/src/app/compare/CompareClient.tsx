@@ -286,19 +286,19 @@ export default function CompareClient() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-zinc-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-black text-white flex flex-col font-sans">
       <Header />
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-10 sm:py-16">
         {/* Header Hero */}
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/70 border-emerald-800/80 border border-emerald-200/80 text-emerald-300 text-xs font-mono font-bold mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300/80 text-emerald-300 text-xs font-mono font-bold mb-4">
             <Scale className="h-3.5 w-3.5" /> Repository Head-to-Head Picker
           </div>
-          <h1 className="font-space text-3xl sm:text-5xl font-black text-zinc-100 tracking-tight leading-tight">
+          <h1 className="font-space text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
             Compare Open Source Repositories
           </h1>
-          <p className="mt-3 text-sm sm:text-base text-zinc-400 font-sans leading-relaxed">
+          <p className="mt-3 text-sm sm:text-base text-zinc-300 font-sans leading-relaxed">
             Benchmark two projects side-by-side across pull request turnaround, maintainer responsiveness, 90-day bus factor, and newcomer merge likelihood.
           </p>
         </div>
@@ -308,7 +308,7 @@ export default function CompareClient() {
           <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
             {/* Slot A */}
             <div className="w-full flex-1" ref={dropdownRefA}>
-              <label className="block text-xs font-mono font-bold text-zinc-400 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider mb-2">
                 Repository A
               </label>
 
@@ -325,10 +325,10 @@ export default function CompareClient() {
                       }}
                     />
                     <div className="min-w-0">
-                      <div className="font-space text-sm font-bold text-zinc-100 truncate">
+                      <div className="font-space text-sm font-bold text-white truncate">
                         {repoA.full_name}
                       </div>
-                      <div className="flex items-center gap-2 mt-0.5 font-mono text-[11px] text-zinc-400">
+                      <div className="flex items-center gap-2 mt-0.5 font-mono text-[11px] text-zinc-300">
                         {typeof repoA.stars === "number" && (
                           <span className="flex items-center gap-1 font-semibold text-zinc-300">
                             <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
@@ -338,7 +338,7 @@ export default function CompareClient() {
                         <span>•</span>
                         {repoA.language && (
                           <>
-                            <span className="flex items-center gap-1 text-zinc-400">
+                            <span className="flex items-center gap-1 text-zinc-300">
                               <LangLogo language={repoA.language} />
                               <span>{repoA.language}</span>
                             </span>
@@ -353,7 +353,7 @@ export default function CompareClient() {
                     type="button"
                     onClick={() => setRepoA(null)}
                     aria-label="Clear Repository A"
-                    className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-300 hover:bg-zinc-200/60 transition-colors"
+                    className="p-1.5 rounded-lg text-zinc-300 hover:text-zinc-300 hover:bg-zinc-200/60 transition-colors"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -361,7 +361,7 @@ export default function CompareClient() {
               ) : (
                 <div className="relative">
                   <div className="relative flex items-center">
-                    <Search className="absolute left-3.5 h-4 w-4 text-zinc-400 pointer-events-none" />
+                    <Search className="absolute left-3.5 h-4 w-4 text-zinc-300 pointer-events-none" />
                     <input
                       type="text"
                       data-testid="repo-picker-a"
@@ -372,10 +372,10 @@ export default function CompareClient() {
                         setOpenDropdownA(true);
                       }}
                       onFocus={() => setOpenDropdownA(true)}
-                      className="w-full pl-10 pr-10 py-3 rounded-2xl bg-zinc-900/80 border border-white/[0.08] text-sm text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1 transition-all"
+                      className="w-full pl-10 pr-10 py-3 rounded-2xl bg-zinc-900/80 border border-white/[0.08] text-sm text-white placeholder:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1 transition-all"
                     />
                     {loadingA && (
-                      <Loader2 className="absolute right-3.5 h-4 w-4 animate-spin text-zinc-400" />
+                      <Loader2 className="absolute right-3.5 h-4 w-4 animate-spin text-zinc-300" />
                     )}
                   </div>
 
@@ -391,15 +391,15 @@ export default function CompareClient() {
                             className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-emerald-950/70 border-emerald-800/80/70 hover:text-zinc-300 flex items-center justify-between gap-3 transition-colors cursor-pointer"
                           >
                             <div className="min-w-0">
-                              <div className="font-space text-xs font-bold text-zinc-100 truncate">
+                              <div className="font-space text-xs font-bold text-white truncate">
                                 {r.full_name}
                               </div>
-                              <div className="text-[11px] text-zinc-400 line-clamp-1">
+                              <div className="text-[11px] text-zinc-300 line-clamp-1">
                                 {r.description || "No description"}
                               </div>
                             </div>
                             <div className="flex items-center gap-2 shrink-0 font-mono text-[11px]">
-                              <span className="flex items-center gap-0.5 text-zinc-400 font-semibold">
+                              <span className="flex items-center gap-0.5 text-zinc-300 font-semibold">
                                 <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                                 {r.stars >= 1000 ? `${(r.stars / 1000).toFixed(1)}k` : r.stars}
                               </span>
@@ -410,7 +410,7 @@ export default function CompareClient() {
                           </button>
                         ))
                       ) : !loadingA ? (
-                        <div className="p-3 text-center text-xs text-zinc-400 font-mono">
+                        <div className="p-3 text-center text-xs text-zinc-300 font-mono">
                           No repositories found for &ldquo;{queryA}&rdquo;
                         </div>
                       ) : null}
@@ -422,14 +422,14 @@ export default function CompareClient() {
 
             {/* VS Badge */}
             <div className="shrink-0 flex items-center justify-center">
-              <div className="h-10 w-10 rounded-full bg-zinc-900 border border-white/[0.08] flex items-center justify-center font-mono text-xs font-black text-zinc-400 uppercase shadow-2xs">
+              <div className="h-10 w-10 rounded-full bg-zinc-900 border border-white/[0.08] flex items-center justify-center font-mono text-xs font-black text-zinc-300 uppercase shadow-2xs">
                 VS
               </div>
             </div>
 
             {/* Slot B */}
             <div className="w-full flex-1" ref={dropdownRefB}>
-              <label className="block text-xs font-mono font-bold text-zinc-400 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider mb-2">
                 Repository B
               </label>
 
@@ -446,10 +446,10 @@ export default function CompareClient() {
                       }}
                     />
                     <div className="min-w-0">
-                      <div className="font-space text-sm font-bold text-zinc-100 truncate">
+                      <div className="font-space text-sm font-bold text-white truncate">
                         {repoB.full_name}
                       </div>
-                      <div className="flex items-center gap-2 mt-0.5 font-mono text-[11px] text-zinc-400">
+                      <div className="flex items-center gap-2 mt-0.5 font-mono text-[11px] text-zinc-300">
                         {typeof repoB.stars === "number" && (
                           <span className="flex items-center gap-1 font-semibold text-zinc-300">
                             <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
@@ -459,7 +459,7 @@ export default function CompareClient() {
                         <span>•</span>
                         {repoB.language && (
                           <>
-                            <span className="flex items-center gap-1 text-zinc-400">
+                            <span className="flex items-center gap-1 text-zinc-300">
                               <LangLogo language={repoB.language} />
                               <span>{repoB.language}</span>
                             </span>
@@ -474,7 +474,7 @@ export default function CompareClient() {
                     type="button"
                     onClick={() => setRepoB(null)}
                     aria-label="Clear Repository B"
-                    className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-300 hover:bg-zinc-200/60 transition-colors"
+                    className="p-1.5 rounded-lg text-zinc-300 hover:text-zinc-300 hover:bg-zinc-200/60 transition-colors"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -482,7 +482,7 @@ export default function CompareClient() {
               ) : (
                 <div className="relative">
                   <div className="relative flex items-center">
-                    <Search className="absolute left-3.5 h-4 w-4 text-zinc-400 pointer-events-none" />
+                    <Search className="absolute left-3.5 h-4 w-4 text-zinc-300 pointer-events-none" />
                     <input
                       type="text"
                       data-testid="repo-picker-b"
@@ -493,10 +493,10 @@ export default function CompareClient() {
                         setOpenDropdownB(true);
                       }}
                       onFocus={() => setOpenDropdownB(true)}
-                      className="w-full pl-10 pr-10 py-3 rounded-2xl bg-zinc-900/80 border border-white/[0.08] text-sm text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1 transition-all"
+                      className="w-full pl-10 pr-10 py-3 rounded-2xl bg-zinc-900/80 border border-white/[0.08] text-sm text-white placeholder:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1 transition-all"
                     />
                     {loadingB && (
-                      <Loader2 className="absolute right-3.5 h-4 w-4 animate-spin text-zinc-400" />
+                      <Loader2 className="absolute right-3.5 h-4 w-4 animate-spin text-zinc-300" />
                     )}
                   </div>
 
@@ -512,15 +512,15 @@ export default function CompareClient() {
                             className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-emerald-950/70 border-emerald-800/80/70 hover:text-zinc-300 flex items-center justify-between gap-3 transition-colors cursor-pointer"
                           >
                             <div className="min-w-0">
-                              <div className="font-space text-xs font-bold text-zinc-100 truncate">
+                              <div className="font-space text-xs font-bold text-white truncate">
                                 {r.full_name}
                               </div>
-                              <div className="text-[11px] text-zinc-400 line-clamp-1">
+                              <div className="text-[11px] text-zinc-300 line-clamp-1">
                                 {r.description || "No description"}
                               </div>
                             </div>
                             <div className="flex items-center gap-2 shrink-0 font-mono text-[11px]">
-                              <span className="flex items-center gap-0.5 text-zinc-400 font-semibold">
+                              <span className="flex items-center gap-0.5 text-zinc-300 font-semibold">
                                 <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                                 {r.stars >= 1000 ? `${(r.stars / 1000).toFixed(1)}k` : r.stars}
                               </span>
@@ -531,7 +531,7 @@ export default function CompareClient() {
                           </button>
                         ))
                       ) : !loadingB ? (
-                        <div className="p-3 text-center text-xs text-zinc-400 font-mono">
+                        <div className="p-3 text-center text-xs text-zinc-300 font-mono">
                           No repositories found for &ldquo;{queryB}&rdquo;
                         </div>
                       ) : null}
@@ -544,7 +544,7 @@ export default function CompareClient() {
 
           {/* Action Row */}
           <div className="mt-8 pt-6 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs font-mono text-zinc-400 text-center sm:text-left">
+            <div className="text-xs font-mono text-zinc-300 text-center sm:text-left">
               {repoA && repoB ? (
                 <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
                   <CheckCircle2 className="h-3.5 w-3.5" /> Ready to compare {repoA.full_name} vs {repoB.full_name}
@@ -561,7 +561,7 @@ export default function CompareClient() {
               className={`w-full sm:w-auto px-6 py-3 rounded-2xl font-bold font-sans text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
                 repoA && repoB
                   ? "bg-zinc-900 hover:bg-zinc-800 text-white shadow-md active:scale-[0.98]"
-                  : "bg-zinc-900 text-zinc-400 cursor-not-allowed border border-white/[0.08]/60"
+                  : "bg-zinc-900 text-zinc-300 cursor-not-allowed border border-white/[0.08]/60"
               }`}
             >
               <Scale className="h-4 w-4" />
@@ -575,10 +575,10 @@ export default function CompareClient() {
         <div>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="font-space text-lg sm:text-xl font-bold text-zinc-100">
+              <h2 className="font-space text-lg sm:text-xl font-bold text-white">
                 Popular Head-to-Head Comparisons
               </h2>
-              <p className="text-xs text-zinc-400 font-sans mt-0.5">
+              <p className="text-xs text-zinc-300 font-sans mt-0.5">
                 Explore frequently referenced open-source benchmark pairings
               </p>
             </div>
@@ -593,19 +593,19 @@ export default function CompareClient() {
                 className="group p-5 rounded-2xl bg-zinc-900/80 border border-white/[0.08] shadow-2xs hover:shadow-md hover:border-white/[0.12] hover:-translate-y-0.5 transition-all duration-150 flex flex-col justify-between"
               >
                 <div>
-                  <div className="text-[11px] font-mono text-zinc-400 font-semibold mb-2">
+                  <div className="text-[11px] font-mono text-zinc-300 font-semibold mb-2">
                     {item.category}
                   </div>
-                  <div className="font-space text-sm font-bold text-zinc-100 group-hover:text-emerald-400 transition-colors flex items-center gap-2">
+                  <div className="font-space text-sm font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-2">
                     <span>{item.repoA}</span>
-                    <span className="text-zinc-400 font-normal text-xs">vs</span>
+                    <span className="text-zinc-300 font-normal text-xs">vs</span>
                     <span>{item.repoB}</span>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-400">
+                <div className="mt-4 pt-3 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-300">
                   <span className="text-[11px]">Compare scorecard</span>
-                  <ArrowRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-300 group-hover:translate-x-0.5 transition-all" />
+                  <ArrowRight className="h-3.5 w-3.5 text-zinc-300 group-hover:text-zinc-300 group-hover:translate-x-0.5 transition-all" />
                 </div>
               </Link>
             ))}

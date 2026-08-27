@@ -36,7 +36,7 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 text-white">
       <Header />
       <script
         type="application/ld+json"
@@ -61,20 +61,20 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           <div className="border border-white/[0.12] bg-zinc-900/80 p-6 shadow-sm">
             <div className="w-10 h-10 bg-[#bfdbff] border border-white/[0.12] flex items-center justify-center mb-4 shadow-sm">
-              <GitMerge className="w-5 h-5 text-zinc-100" />
+              <GitMerge className="w-5 h-5 text-white" />
             </div>
             <h2 className="text-lg font-bold mb-2">Our Mission</h2>
-            <p className="text-sm text-zinc-400 leading-relaxed">
+            <p className="text-sm text-zinc-300 leading-relaxed">
               Eliminate contributor friction and protect newcomers from burnout by making repository hospitality transparent, measurable, and auditable.
             </p>
           </div>
 
           <div className="border border-white/[0.12] bg-zinc-900/80 p-6 shadow-sm">
             <div className="w-10 h-10 bg-[#ffd93d] border border-white/[0.12] flex items-center justify-center mb-4 shadow-sm">
-              <Award className="w-5 h-5 text-zinc-100" />
+              <Award className="w-5 h-5 text-white" />
             </div>
             <h2 className="text-lg font-bold mb-2">C-Rank™ Scoring</h2>
-            <p className="text-sm text-zinc-400 leading-relaxed">
+            <p className="text-sm text-zinc-300 leading-relaxed">
               A balanced mathematical blend: 40% Merge Rate, 25% Time-to-First-Response, 20% First-Timer Merge Success, and 15% Review Depth &amp; Onboarding Docs.
             </p>
           </div>
@@ -83,7 +83,7 @@ export default function AboutPage() {
         {/* Team & Contact Section */}
         <div className="border border-white/[0.12] bg-zinc-900/80 p-8 shadow-sm space-y-6">
           <h2 className="text-2xl font-bold tracking-tight">Engineering &amp; Contact</h2>
-          <p className="text-sm sm:text-base text-zinc-400 leading-relaxed">
+          <p className="text-sm sm:text-base text-zinc-300 leading-relaxed">
             GetMerged is built and maintained by independent open-source engineers with automated nightly recalculation pipelines indexing real GitHub GraphQL telemetry.
           </p>
 

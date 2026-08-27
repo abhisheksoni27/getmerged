@@ -24,12 +24,12 @@ export function UnscoredExplainer({ fullName, language }: UnscoredExplainerProps
         className="rounded-3xl bg-zinc-900/70 p-6 sm:p-7 border border-white/[0.08] shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-5"
       >
         <div className="flex items-start gap-3.5 max-w-3xl">
-          <Info className="h-5 w-5 text-zinc-400 shrink-0 mt-0.5" />
+          <Info className="h-5 w-5 text-zinc-300 shrink-0 mt-0.5" />
           <div>
-            <h2 id={titleId} className="font-space text-base font-bold text-zinc-100 tracking-tight">
+            <h2 id={titleId} className="font-space text-base font-bold text-white tracking-tight">
               {fullName} is currently Unscored
             </h2>
-            <p className="text-sm text-zinc-400 font-sans mt-1 leading-relaxed">
+            <p className="text-sm text-zinc-300 font-sans mt-1 leading-relaxed">
               This repository has no indexed public pull request reviews or maintainer telemetry on
               GitHub. Some large projects conduct code reviews via external tooling (e.g. Gerrit,
               Phabricator) or internal monorepos. As soon as public PR review activity is recorded,

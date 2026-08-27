@@ -66,7 +66,7 @@ export default function CompareHubPage() {
 
       <Suspense
         fallback={
-          <div className="min-h-screen bg-black flex items-center justify-center font-mono text-sm text-zinc-400">
+          <div className="min-h-screen bg-black flex items-center justify-center font-mono text-sm text-zinc-300">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-orange-500 animate-ping" />
               Loading Compare Tool...

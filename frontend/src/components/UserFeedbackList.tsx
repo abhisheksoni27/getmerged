@@ -47,7 +47,7 @@ export function UserFeedbackList({
     return (
       <div className="rounded-3xl border border-dashed border-white/[0.12] bg-zinc-900/80/60 p-8 text-center font-sans">
         <p className="text-sm font-semibold text-zinc-200">No community reviews submitted yet</p>
-        <p className="text-xs text-zinc-400 mt-1 max-w-sm mx-auto">
+        <p className="text-xs text-zinc-300 mt-1 max-w-sm mx-auto">
           Reviews left on repositories will appear here with ratings and sentiment telemetry.
         </p>
       </div>
@@ -67,7 +67,7 @@ export function UserFeedbackList({
               <Link
                 href={`/${item.repo_full_name}`}
                 title={`View ${item.repo_full_name} C-Rank scorecard`}
-                className="text-sm font-space font-bold text-zinc-100 hover:text-orange-600 transition-colors truncate"
+                className="text-sm font-space font-bold text-white hover:text-orange-600 transition-colors truncate"
               >
                 {item.repo_full_name}
               </Link>
@@ -75,12 +75,12 @@ export function UserFeedbackList({
 
             <div className="flex items-center gap-2.5 shrink-0">
               {item.verified_contributor && (
-                <span className="inline-flex items-center gap-1 rounded-xl bg-emerald-950/70 border-emerald-800/80 border border-emerald-200 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-300">
+                <span className="inline-flex items-center gap-1 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-300">
                   <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
                   <span>Verified Contributor</span>
                 </span>
               )}
-              <span className="text-[11px] font-mono text-zinc-400">
+              <span className="text-[11px] font-mono text-zinc-300">
                 {new Date(item.created_at).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
@@ -94,7 +94,7 @@ export function UserFeedbackList({
                   onClick={() => handleDelete(item.id)}
                   disabled={deletingId === item.id}
                   title="Delete this review"
-                  className="rounded-lg p-1 text-zinc-400 hover:bg-rose-950/70 border-rose-800/80 hover:text-rose-600 transition-colors cursor-pointer disabled:opacity-50"
+                  className="rounded-lg p-1 text-zinc-300 hover:bg-rose-950/70 border-rose-800/80 hover:text-rose-600 transition-colors cursor-pointer disabled:opacity-50"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -105,24 +105,24 @@ export function UserFeedbackList({
           {/* Ratings Breakdown */}
           <div className="grid grid-cols-3 gap-2 bg-zinc-900 border border-white/[0.08] rounded-xl p-3 text-xs mb-3">
             <div>
-              <span className="text-zinc-400 text-[11px] block">Maintainer</span>
+              <span className="text-zinc-300 text-[11px] block">Maintainer</span>
               <div className="flex items-center gap-1 mt-0.5">
                 <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
-                <strong className="text-zinc-100 font-mono">{item.maintainer_rating}/5</strong>
+                <strong className="text-white font-mono">{item.maintainer_rating}/5</strong>
               </div>
             </div>
             <div>
-              <span className="text-zinc-400 text-[11px] block">Review Speed</span>
+              <span className="text-zinc-300 text-[11px] block">Review Speed</span>
               <div className="flex items-center gap-1 mt-0.5">
                 <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
-                <strong className="text-zinc-100 font-mono">{item.review_speed_rating}/5</strong>
+                <strong className="text-white font-mono">{item.review_speed_rating}/5</strong>
               </div>
             </div>
             <div>
-              <span className="text-zinc-400 text-[11px] block">Beginner Friendly</span>
+              <span className="text-zinc-300 text-[11px] block">Beginner Friendly</span>
               <div className="flex items-center gap-1 mt-0.5">
                 <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
-                <strong className="text-zinc-100 font-mono">{item.beginner_rating}/5</strong>
+                <strong className="text-white font-mono">{item.beginner_rating}/5</strong>
               </div>
             </div>
           </div>

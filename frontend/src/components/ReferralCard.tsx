@@ -41,9 +41,9 @@ export function ReferralCard() {
     >
       <div className="flex items-center gap-2 mb-1.5">
         <Gift className="h-4 w-4 text-emerald-600" />
-        <h2 className="text-sm font-bold font-space text-zinc-100">Invite Friends, Earn Preflight Credits</h2>
+        <h2 className="text-sm font-bold font-space text-white">Invite Friends, Earn Preflight Credits</h2>
       </div>
-      <p className="text-xs text-zinc-400 mb-4">
+      <p className="text-xs text-zinc-300 mb-4">
         Share your link: when a friend signs up with GitHub through it, you get <strong>+3</strong> and they get{" "}
         <strong>+1</strong> bonus preflight-evaluation credit (up to 10 extra).
       </p>

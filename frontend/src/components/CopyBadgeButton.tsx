@@ -47,7 +47,7 @@ export function CopyBadgeButton({ text }: CopyBadgeButtonProps) {
         </>
       ) : (
         <>
-          <Copy className="h-3.5 w-3.5 text-zinc-400" />
+          <Copy className="h-3.5 w-3.5 text-zinc-300" />
           <span>Copy</span>
         </>
       )}

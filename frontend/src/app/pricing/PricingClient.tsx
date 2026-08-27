@@ -15,14 +15,14 @@ export default function PricingClient() {
     <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-12 sm:py-16">
       {/* Title */}
       <div className="text-center max-w-2xl mx-auto mb-10">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/70 border-emerald-800/80 border border-emerald-200 text-emerald-300 text-xs font-semibold mb-4">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-emerald-300 text-xs font-semibold mb-4">
           <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
           <span>Built for High-Velocity Open Source Contributors</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold font-space text-zinc-100 tracking-tight mb-3">
+        <h1 className="text-3xl sm:text-4xl font-bold font-space text-white tracking-tight mb-3">
           Stop Guessing. Get Your Pull Requests Merged.
         </h1>
-        <p className="text-sm sm:text-base text-zinc-400 font-sans">
+        <p className="text-sm sm:text-base text-zinc-300 font-sans">
           Unlimited repository acceptance forecasts, live maintainer vibe checks, and automated pre-flight reviews.
         </p>
 
@@ -31,7 +31,7 @@ export default function PricingClient() {
           <button
             onClick={() => setBillingCycle("monthly")}
             className={`px-4 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-              billingCycle === "monthly" ? "bg-zinc-900/80 text-zinc-100 shadow-sm" : "text-zinc-400 hover:text-zinc-100"
+              billingCycle === "monthly" ? "bg-zinc-900/80 text-white shadow-sm" : "text-zinc-300 hover:text-white"
             }`}
           >
             Monthly Billing
@@ -39,7 +39,7 @@ export default function PricingClient() {
           <button
             onClick={() => setBillingCycle("yearly")}
             className={`px-4 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-              billingCycle === "yearly" ? "bg-zinc-900/80 text-zinc-100 shadow-sm" : "text-zinc-400 hover:text-zinc-100"
+              billingCycle === "yearly" ? "bg-zinc-900/80 text-white shadow-sm" : "text-zinc-300 hover:text-white"
             }`}
           >
             Annual Billing
@@ -56,15 +56,15 @@ export default function PricingClient() {
         <div className="rounded-2xl bg-zinc-900/80 p-6 sm:p-8 border-2 border-white/[0.08] shadow-sm flex flex-col justify-between font-sans">
           <div>
             <div className="flex items-center justify-between mb-2 font-mono">
-              <h2 className="text-lg font-bold text-zinc-100">Community Free</h2>
-              <span className="text-xs text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded">Forever</span>
+              <h2 className="text-lg font-bold text-white">Community Free</h2>
+              <span className="text-xs text-zinc-300 bg-zinc-900 px-2 py-0.5 rounded">Forever</span>
             </div>
-            <p className="text-xs text-zinc-400 mb-6">
+            <p className="text-xs text-zinc-300 mb-6">
               Essential tools for exploring repository maintainer responsiveness and finding beginner issues.
             </p>
 
-            <div className="text-3xl font-bold font-mono text-zinc-100 mb-6">
-              $0 <span className="text-xs font-normal font-sans text-zinc-400">/ month</span>
+            <div className="text-3xl font-bold font-mono text-white mb-6">
+              $0 <span className="text-xs font-normal font-sans text-zinc-300">/ month</span>
             </div>
 
             <ul className="space-y-3 text-xs text-zinc-300 mb-8">
@@ -89,7 +89,7 @@ export default function PricingClient() {
 
           <button
             disabled
-            className="w-full py-2.5 rounded-xl bg-zinc-900 text-zinc-400 font-mono font-bold text-xs uppercase tracking-wider text-center"
+            className="w-full py-2.5 rounded-xl bg-zinc-900 text-zinc-300 font-mono font-bold text-xs uppercase tracking-wider text-center"
           >
             Current Plan
           </button>
@@ -103,29 +103,29 @@ export default function PricingClient() {
 
           <div>
             <div className="flex items-center justify-between mb-2 font-mono">
-              <h2 className="text-lg font-bold text-zinc-100 flex items-center gap-1.5">
+              <h2 className="text-lg font-bold text-white flex items-center gap-1.5">
                 <Zap className="h-4 w-4 text-emerald-600 fill-emerald-600" /> Pro Contributor
               </h2>
             </div>
-            <p className="text-xs text-zinc-400 mb-6">
+            <p className="text-xs text-zinc-300 mb-6">
               Supercharge your open-source journey with unlimited signals and maintainer intelligence.
             </p>
 
             <div className="flex items-baseline gap-1 mb-6">
-              <span className="text-4xl font-bold font-mono text-zinc-100">
+              <span className="text-4xl font-bold font-mono text-white">
                 {billingCycle === "yearly" ? "$79" : "$9"}
               </span>
-              <span className="text-xs font-sans text-zinc-400">
+              <span className="text-xs font-sans text-zinc-300">
                 {billingCycle === "yearly" ? "/ year ($6.58/mo)" : "/ month"}
               </span>
             </div>
 
             <ul className="space-y-3 text-xs text-zinc-300 mb-8">
-              <li className="flex items-center gap-2.5 font-medium text-zinc-100">
+              <li className="flex items-center gap-2.5 font-medium text-white">
                 <Check className="h-4 w-4 text-emerald-600 flex-shrink-0" />
                 <span>Unlimited PR Acceptance & Latency Forecasts</span>
               </li>
-              <li className="flex items-center gap-2.5 font-medium text-zinc-100">
+              <li className="flex items-center gap-2.5 font-medium text-white">
                 <Check className="h-4 w-4 text-emerald-600 flex-shrink-0" />
                 <span>Maintainer Vibe Check & Uncensored PR Guidelines</span>
               </li>
@@ -150,7 +150,7 @@ export default function PricingClient() {
           >
             Upgrade to Pro Now <ArrowRight className="h-4 w-4" />
           </button>
-          <p className="mt-3 text-center text-[11px] text-zinc-400 font-sans">
+          <p className="mt-3 text-center text-[11px] text-zinc-300 font-sans">
             Out of free evaluations?{" "}
             <Link href="/watchlist" title="Invite friends to earn bonus evaluation credits" className="text-emerald-400 font-semibold hover:underline">
               or invite friends
@@ -166,7 +166,7 @@ export default function PricingClient() {
           <ShieldCheck className="h-4 w-4 text-emerald-600" />
           <span>100% Risk-Free 7-Day Money-Back Guarantee</span>
         </div>
-        <p className="text-[11px] text-zinc-400">
+        <p className="text-[11px] text-zinc-300">
           If GetMerged does not help you get your pull requests accepted faster within 7 days, email us for an instant full refund.
         </p>
       </div>

@@ -70,8 +70,8 @@ function humanHours(h: number): string {
 
 function scoreColor(score: number): string {
   if (score >= 80) return "bg-emerald-500 text-white";
-  if (score >= 60) return "bg-lime-400 text-zinc-100";
-  if (score >= 40) return "bg-amber-400 text-zinc-100";
+  if (score >= 60) return "bg-lime-400 text-white";
+  if (score >= 40) return "bg-amber-400 text-white";
   return "bg-red-500 text-white";
 }
 
@@ -159,10 +159,10 @@ export default function PRSimulatorPage() {
     <div className="min-h-screen bg-[#f4f1ea] font-mono">
       <Header />
       <main className="max-w-3xl mx-auto px-4 py-10">
-        <h1 className="text-3xl md:text-4xl font-space font-black tracking-tight text-zinc-100 mb-2">
+        <h1 className="text-3xl md:text-4xl font-space font-black tracking-tight text-white mb-2">
           PR Acceptance Simulator
         </h1>
-        <p className="text-sm text-zinc-400 mb-8">
+        <p className="text-sm text-zinc-300 mb-8">
           Paste a draft diff before opening your PR and see its simulated merge odds, predicted review turnaround,
           and what to fix first.
         </p>
@@ -172,7 +172,7 @@ export default function PRSimulatorPage() {
           className="rounded-2xl bg-zinc-900/80 p-6 border-2 border-white/[0.08] shadow-sm space-y-5"
         >
           <div>
-            <label htmlFor="sim-repo" className="block text-xs font-bold uppercase tracking-wide text-zinc-400 mb-1">
+            <label htmlFor="sim-repo" className="block text-xs font-bold uppercase tracking-wide text-zinc-300 mb-1">
               Target repository
             </label>
             <input
@@ -187,7 +187,7 @@ export default function PRSimulatorPage() {
             />
           </div>
           <div>
-            <label htmlFor="sim-title" className="block text-xs font-bold uppercase tracking-wide text-zinc-400 mb-1">
+            <label htmlFor="sim-title" className="block text-xs font-bold uppercase tracking-wide text-zinc-300 mb-1">
               Draft PR title
             </label>
             <input
@@ -202,7 +202,7 @@ export default function PRSimulatorPage() {
             />
           </div>
           <div>
-            <label htmlFor="sim-desc" className="block text-xs font-bold uppercase tracking-wide text-zinc-400 mb-1">
+            <label htmlFor="sim-desc" className="block text-xs font-bold uppercase tracking-wide text-zinc-300 mb-1">
               Description
             </label>
             <textarea
@@ -216,7 +216,7 @@ export default function PRSimulatorPage() {
             />
           </div>
           <div>
-            <label htmlFor="sim-diff" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-zinc-400 mb-1">
+            <label htmlFor="sim-diff" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-zinc-300 mb-1">
               <FileDiff className="h-3.5 w-3.5" aria-hidden="true" />
               Unified diff (git diff output, max 1MB)
             </label>
@@ -230,7 +230,7 @@ export default function PRSimulatorPage() {
               required
               className="w-full rounded-lg border border-white/[0.12] px-3 py-2 text-xs leading-relaxed bg-zinc-900 focus:border-white/[0.08] focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
             />
-            <p className="mt-1 text-[11px] text-zinc-400">
+            <p className="mt-1 text-[11px] text-zinc-300">
               Encrypted at rest, auto-deleted after 24 hours, never shown publicly.
             </p>
           </div>
@@ -272,7 +272,7 @@ export default function PRSimulatorPage() {
                   <span>
                     Median review turnaround:{" "}
                     <strong className="font-mono">{humanHours(result.turnaround.median_hours)}</strong>
-                    <span className="text-zinc-400 text-xs ml-1">({result.turnaround.samples} merged PRs)</span>
+                    <span className="text-zinc-300 text-xs ml-1">({result.turnaround.samples} merged PRs)</span>
                   </span>
                 ) : (
                   <span>Insufficient history.</span>
@@ -298,14 +298,14 @@ export default function PRSimulatorPage() {
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <p className="hidden group-hover:block mt-1 text-[11px] text-zinc-400">{w.hint}</p>
+                    <p className="hidden group-hover:block mt-1 text-[11px] text-zinc-300">{w.hint}</p>
                   </li>
                 );
               })}
             </ul>
 
             {result.suggestions && result.suggestions.length > 0 && (
-              <div className="mb-5 rounded-xl bg-amber-950/70 border-amber-800/80 border border-amber-200 p-4">
+              <div className="mb-5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 p-4">
                 <div className="flex items-center gap-1.5 text-sm font-bold text-amber-300 mb-2">
                   <Lightbulb className="h-4 w-4" aria-hidden="true" /> Improve merge odds
                 </div>
@@ -354,7 +354,7 @@ export default function PRSimulatorPage() {
                   </button>
                 )}
                 {copied === "failed" && (
-                  <p className="mt-1 text-[11px] text-zinc-400">Automatic copy unavailable - select the text above and copy manually.</p>
+                  <p className="mt-1 text-[11px] text-zinc-300">Automatic copy unavailable - select the text above and copy manually.</p>
                 )}
               </div>
             )}

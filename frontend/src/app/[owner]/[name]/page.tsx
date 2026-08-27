@@ -138,10 +138,10 @@ export default async function RepoDetailPage({ params }: PageProps) {
       notFound();
     }
     return (
-      <div className="relative min-h-screen dev-grid-pattern flex flex-col bg-black text-zinc-100 font-sans">
+      <div className="relative min-h-screen dev-grid-pattern flex flex-col bg-black text-white font-sans">
         <Header />
         <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-6">
-          <h1 className="font-space text-2xl font-extrabold text-zinc-50">
+          <h1 className="font-space text-2xl font-extrabold text-white">
             {fullName} is not scored yet
           </h1>
           <p className="mt-2 mb-6 font-sans text-sm text-zinc-300">
@@ -234,7 +234,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
   const firstTimerRate = repo.first_timer_success_rate ? `${Math.round(repo.first_timer_success_rate)}%` : " - ";
 
   return (
-    <div className="relative min-h-screen dev-grid-pattern flex flex-col bg-black text-zinc-100 font-sans">
+    <div className="relative min-h-screen dev-grid-pattern flex flex-col bg-black text-white font-sans">
       <Header />
       <script
         type="application/ld+json"

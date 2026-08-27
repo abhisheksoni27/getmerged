@@ -216,10 +216,10 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
           </span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl font-bold text-zinc-100 tracking-tight font-space">
+        <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight font-space">
           Hacktoberfest 2026 Welcome Hub
         </h1>
-        <p className="mt-3 text-xs sm:text-sm text-zinc-400 max-w-3xl leading-relaxed font-sans">
+        <p className="mt-3 text-xs sm:text-sm text-zinc-300 max-w-3xl leading-relaxed font-sans">
           Discover verified newcomer-welcoming repositories with responsive maintainers and track your live{" "}
           <strong>4 pull request merges</strong> in real time.
         </p>
@@ -252,11 +252,11 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
           <div>
             <div className="flex items-center gap-2">
               <GitPullRequest className="h-5 w-5 text-orange-600" />
-              <h2 className="text-lg sm:text-xl font-bold text-zinc-100 font-space">
+              <h2 className="text-lg sm:text-xl font-bold text-white font-space">
                 Live Merge Progress Tracker
               </h2>
             </div>
-            <p className="text-xs text-zinc-400 mt-1">
+            <p className="text-xs text-zinc-300 mt-1">
               Validates pull requests to public repositories merged between Oct 1–31 UTC (no spam/invalid labels).
             </p>
           </div>
@@ -290,8 +290,8 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
             <div className="inline-flex p-3 rounded-2xl bg-orange-50 text-orange-600 mb-3">
               <Zap className="h-6 w-6" />
             </div>
-            <h3 className="text-base font-bold text-zinc-100 font-space">Track Your 4 Hacktoberfest PRs</h3>
-            <p className="text-xs text-zinc-400 max-w-md mx-auto mt-1 mb-4">
+            <h3 className="text-base font-bold text-white font-space">Track Your 4 Hacktoberfest PRs</h3>
+            <p className="text-xs text-zinc-300 max-w-md mx-auto mt-1 mb-4">
               Sign in with your GitHub account to automatically monitor your merged PRs and unlock your verified completion badge.
             </p>
             <button
@@ -311,10 +311,10 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                 <div>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl sm:text-4xl font-bold font-space text-zinc-100">
+                    <span className="text-3xl sm:text-4xl font-bold font-space text-white">
                       {mergedCount}
                     </span>
-                    <span className="text-lg font-bold text-zinc-400 font-space">
+                    <span className="text-lg font-bold text-zinc-300 font-space">
                       of {target} PRs Merged
                     </span>
                     {progress?.total_qualifying && progress.total_qualifying > 4 ? (
@@ -323,7 +323,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                       </span>
                     ) : null}
                   </div>
-                  <div className="text-[11px] font-mono text-zinc-400 mt-1 flex items-center gap-2">
+                  <div className="text-[11px] font-mono text-zinc-300 mt-1 flex items-center gap-2">
                     <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
                     <span>
                       {progress?.updated_ago_min !== undefined
@@ -378,7 +378,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                       className={`py-2 px-1 rounded-xl border flex flex-col items-center gap-1 transition-all ${
                         isDone
                           ? "bg-emerald-950/70 border-emerald-800/80 border-emerald-300 text-emerald-300 font-bold"
-                          : "bg-zinc-900/80 border-white/[0.08] text-zinc-400"
+                          : "bg-zinc-900/80 border-white/[0.08] text-zinc-300"
                       }`}
                     >
                       <div className="flex items-center gap-1">
@@ -403,7 +403,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
             {/* Merged PR List */}
             {progress?.merges && progress.merges.length > 0 && (
               <div>
-                <h4 className="text-xs font-mono uppercase font-semibold text-zinc-400 mb-3 tracking-wider">
+                <h4 className="text-xs font-mono uppercase font-semibold text-zinc-300 mb-3 tracking-wider">
                   Verified Qualifying Merges
                 </h4>
                 <div className="divide-y divide-zinc-100 rounded-2xl border border-white/[0.08] overflow-hidden bg-zinc-900/80">
@@ -415,11 +415,11 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                          <span className="font-space text-xs sm:text-sm font-bold text-zinc-100 truncate">
+                          <span className="font-space text-xs sm:text-sm font-bold text-white truncate">
                             {merge.title || merge.pr_id}
                           </span>
                         </div>
-                        <div className="text-[11px] font-mono text-zinc-400 mt-1 flex items-center gap-2">
+                        <div className="text-[11px] font-mono text-zinc-300 mt-1 flex items-center gap-2">
                           <span>{merge.repository_id}</span>
                           <span>•</span>
                           <span>PR #{merge.pr_number}</span>
@@ -437,7 +437,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                           href={merge.html_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs font-mono text-zinc-400 hover:text-zinc-100 transition-colors shrink-0"
+                          className="inline-flex items-center gap-1 text-xs font-mono text-zinc-300 hover:text-white transition-colors shrink-0"
                         >
                           <span>GitHub</span>
                           <ExternalLink className="h-3 w-3" />
@@ -458,18 +458,18 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
           <div>
             <div className="flex items-center gap-2">
               <Trophy className="h-5 w-5 text-amber-500" />
-              <h2 className="text-lg sm:text-xl font-bold text-zinc-100 font-space">
+              <h2 className="text-lg sm:text-xl font-bold text-white font-space">
                 Top Welcoming Repositories
               </h2>
             </div>
-            <p className="text-xs text-zinc-400 mt-1">
+            <p className="text-xs text-zinc-300 mt-1">
               Ranked by <strong>C-Rank™ (S/A/B)</strong> and <strong>Good First Issue quality</strong>. Repositories with &gt;60% first-timer merge rates are highlighted with the Welcoming badge.
             </p>
           </div>
         </div>
 
         <div className="overflow-x-auto rounded-2xl border border-white/[0.08] shadow-xs">
-          <table className="w-full text-left text-xs text-zinc-400">
+          <table className="w-full text-left text-xs text-zinc-300">
             <thead className="bg-zinc-900 text-zinc-200 border-b border-white/[0.08] font-semibold uppercase tracking-wider font-space text-[11px]">
               <tr>
                 <th className="py-3.5 px-4 text-center">Rank</th>
@@ -486,14 +486,14 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                 const [owner, name] = repo.full_name.split("/");
                 return (
                   <tr key={repo.id} className="hover:bg-zinc-900/60 transition-colors">
-                    <td className="py-3.5 px-4 text-center font-bold text-zinc-400">
+                    <td className="py-3.5 px-4 text-center font-bold text-zinc-300">
                       #{idx + 1}
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2 flex-wrap">
                         <Link
                           href={`/${owner}/${name}`}
-                          className="hover:text-orange-600 transition-colors font-space text-sm font-bold text-zinc-100"
+                          className="hover:text-orange-600 transition-colors font-space text-sm font-bold text-white"
                         >
                           {repo.full_name}
                         </Link>
@@ -505,7 +505,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                         )}
                       </div>
                       {repo.description && (
-                        <div className="text-[11px] font-normal text-zinc-400 font-sans truncate max-w-md mt-0.5">
+                        <div className="text-[11px] font-normal text-zinc-300 font-sans truncate max-w-md mt-0.5">
                           {repo.description}
                         </div>
                       )}
@@ -515,7 +515,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                         {repo.c_rank_tier} Rank
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-right font-bold text-zinc-100">
+                    <td className="py-3.5 px-4 text-right font-bold text-white">
                       <span className="inline-flex items-center gap-1">
                         <Sparkles className="h-3 w-3 text-amber-500" />
                         {repo.gfi_quality_score ? `${repo.gfi_quality_score}/100` : "N/A"}
@@ -524,7 +524,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                     <td className="py-3.5 px-4 text-right text-zinc-300">
                       {repo.first_timer_success_rate ? `${repo.first_timer_success_rate.toFixed(1)}%` : "0.0%"}
                     </td>
-                    <td className="py-3.5 px-4 text-right text-zinc-400">
+                    <td className="py-3.5 px-4 text-right text-zinc-300">
                       <span className="inline-flex items-center gap-1">
                         <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                         {repo.stars.toLocaleString()}

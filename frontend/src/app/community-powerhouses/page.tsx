@@ -78,7 +78,7 @@ export default async function CommunityPowerhousesPage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
@@ -87,27 +87,27 @@ export default async function CommunityPowerhousesPage() {
           <div className="flex items-center gap-2 mb-3.5">
             <span
               data-testid="powerhouse-badge"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-amber-950/70 border-amber-800/80 border border-amber-200 px-3 py-1 text-xs font-semibold text-amber-300 font-mono"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 px-3 py-1 text-xs font-semibold text-amber-300 font-mono"
             >
               <Crown className="h-3.5 w-3.5 text-amber-600" /> Community Powerhouses
             </span>
             <span
               data-testid="maintainer-threshold-badge"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-950/70 border-emerald-800/80 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-300 font-mono"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1 text-xs font-semibold text-emerald-300 font-mono"
             >
               <Users className="h-3.5 w-3.5 text-emerald-400" /> {MIN_MAINTAINERS}+ Maintainers
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-zinc-100 tracking-tight font-space">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight font-space">
             Community Powerhouses
           </h1>
-          <p className="mt-3 text-xs sm:text-sm text-zinc-400 max-w-3xl leading-relaxed font-sans">
+          <p className="mt-3 text-xs sm:text-sm text-zinc-300 max-w-3xl leading-relaxed font-sans">
             Repositories sustained by many hands. Each project here is reviewed by{" "}
             {MIN_MAINTAINERS}+ distinct active maintainers - no single-person bottleneck,
             faster reviews, and a healthier contribution experience.
           </p>
-          <p data-testid="collection-repo-count" className="mt-4 text-sm font-mono font-bold text-zinc-100">
+          <p data-testid="collection-repo-count" className="mt-4 text-sm font-mono font-bold text-white">
             {total} repositories in this collection
           </p>
         </div>
@@ -115,7 +115,7 @@ export default async function CommunityPowerhousesPage() {
         {repos.length === 0 ? (
           <div className="rounded-2xl bg-zinc-900/80 p-10 border border-white/[0.08] shadow-xs text-center">
             <Users className="h-8 w-8 mx-auto text-zinc-300 mb-3" />
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-zinc-300">
               No repositories currently meet the {MIN_MAINTAINERS}+ maintainer threshold. Check back after the next scoring snapshot.
             </p>
           </div>
@@ -136,21 +136,21 @@ export default async function CommunityPowerhousesPage() {
                         <LangLogo language={repo.language} />
                       </div>
                       <div className="min-w-0">
-                        <h3 className="font-space text-base font-bold text-zinc-100 group-hover:text-zinc-300 transition-colors truncate">
+                        <h3 className="font-space text-base font-bold text-white group-hover:text-zinc-300 transition-colors truncate">
                           {ownerPart}/{namePart}
                         </h3>
-                        <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-950/70 border-emerald-800/80 border border-emerald-200 px-2 py-0.5 text-[11px] font-mono font-semibold text-emerald-300">
+                        <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-2 py-0.5 text-[11px] font-mono font-semibold text-emerald-300">
                           <Users className="h-3 w-3" />
                           {Math.round(repo.bus_factor)} maintainers
                         </span>
                       </div>
                     </div>
-                    <p className="text-xs text-zinc-400 leading-relaxed font-sans line-clamp-2">
+                    <p className="text-xs text-zinc-300 leading-relaxed font-sans line-clamp-2">
                       {repo.description || "No description available."}
                     </p>
                   </div>
 
-                  <div className="pt-4 mt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono font-semibold text-zinc-100 group-hover:text-zinc-300">
+                  <div className="pt-4 mt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono font-semibold text-white group-hover:text-zinc-300">
                     <span className="inline-flex items-center gap-1">
                       <Star className="h-3.5 w-3.5" /> {repo.stars.toLocaleString()}
                     </span>

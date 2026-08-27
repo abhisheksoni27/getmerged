@@ -90,20 +90,20 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
   const preflightCtaUrl = `/preflight?repo=${encodeURIComponent(repoClean)}${validatedReferrerId ? `&ref=${encodeURIComponent(validatedReferrerId)}` : ""}`;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-zinc-100 font-sans">
+    <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-white font-sans">
       <Header />
 
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Breadcrumb / Top tag */}
         <div className="mb-6 flex items-center justify-between gap-4 flex-wrap">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/70 border-emerald-800/80 border border-emerald-200 text-emerald-300 text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-emerald-300 text-xs font-semibold">
             <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
             <span>Public PR Pre-Flight Verification</span>
           </div>
 
           <Link
             href={cRankUrl}
-            className="text-xs font-mono font-bold text-zinc-400 hover:text-emerald-400 flex items-center gap-1 transition-colors"
+            className="text-xs font-mono font-bold text-zinc-300 hover:text-emerald-400 flex items-center gap-1 transition-colors"
           >
             <span>View {repoClean} C-Rank</span>
             <ExternalLink className="h-3 w-3" />
@@ -114,14 +114,14 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
         <div className="rounded-2xl bg-zinc-900/80 p-6 sm:p-8 border-2 border-white/[0.08] shadow-sm mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-white/[0.08]">
             <div>
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-400 block mb-1">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300 block mb-1">
                 Target Repository
               </span>
-              <h1 className="text-2xl sm:text-3xl font-black font-space text-zinc-100 break-words">
+              <h1 className="text-2xl sm:text-3xl font-black font-space text-white break-words">
                 {repoClean}
               </h1>
               {prNumber && (
-                <div className="flex items-center gap-1.5 mt-2 text-xs font-mono text-zinc-400">
+                <div className="flex items-center gap-1.5 mt-2 text-xs font-mono text-zinc-300">
                   <GitPullRequest className="h-3.5 w-3.5 text-emerald-600" />
                   <span>Pull Request #{prNumber}</span>
                 </div>
@@ -129,11 +129,11 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
             </div>
 
             <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2 bg-zinc-900 sm:bg-transparent p-4 sm:p-0 rounded-xl border sm:border-0 border-white/[0.08]">
-              <div className="text-3xl sm:text-4xl font-extrabold font-mono text-zinc-100">
+              <div className="text-3xl sm:text-4xl font-extrabold font-mono text-white">
                 {Math.round(score)}
-                <span className="text-lg sm:text-xl text-zinc-400 font-normal">/100</span>
+                <span className="text-lg sm:text-xl text-zinc-300 font-normal">/100</span>
               </div>
-              <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">
+              <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-300">
                 Pre-Flight Score
               </div>
             </div>
@@ -141,7 +141,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
 
           <div className="pt-6">
             <div className="mb-4">
-              <span className="text-xs font-mono font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
+              <span className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider block mb-1.5">
                 Evaluation Verdict
               </span>
               <div className="inline-flex items-center gap-2">
@@ -167,7 +167,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
 
             {/* Verified Outcome (AC1): live verdict synced from the PR tracker */}
             <div className="mb-6 p-4 rounded-xl bg-zinc-900 border border-white/[0.08]" data-testid="verified-outcome">
-              <span className="text-xs font-mono font-bold text-zinc-400 uppercase tracking-wider block mb-2">
+              <span className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider block mb-2">
                 Verified Outcome
               </span>
               {verdictView ? (
@@ -187,12 +187,12 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
                     )}
                     {verdictView.tone === "muted" && (
                       <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono bg-zinc-900 text-zinc-300 border border-white/[0.12]">
-                        <Hourglass className="h-4 w-4 text-zinc-400" />
+                        <Hourglass className="h-4 w-4 text-zinc-300" />
                         {verdictView.text}
                       </span>
                     )}
                   </div>
-                  <div className="mt-2 text-[11px] font-mono text-zinc-400">
+                  <div className="mt-2 text-[11px] font-mono text-zinc-300">
                     {outcome?.creator_login && (
                       <span className="mr-2">@{outcome.creator_login}</span>
                     )}
@@ -200,7 +200,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
                   </div>
                 </>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono bg-zinc-900 text-zinc-400 border border-white/[0.12]">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono bg-zinc-900 text-zinc-300 border border-white/[0.12]">
                   Outcome unavailable
                 </span>
               )}
@@ -221,7 +221,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
               <Link
                 href={cRankUrl}
                 data-testid="share-cta-crank"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-zinc-900/80 border-2 border-white/[0.08] text-zinc-100 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-900 active:scale-[0.98] transition-all shadow-sm"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-zinc-900/80 border-2 border-white/[0.08] text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-900 active:scale-[0.98] transition-all shadow-sm"
               >
                 <ShieldCheck className="h-4 w-4 text-emerald-600" />
                 <span>Explore {repoClean} C-Rank</span>

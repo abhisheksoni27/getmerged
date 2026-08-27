@@ -135,25 +135,25 @@ export default async function TopicsIndexPage({ searchParams }: TopicsPageProps)
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-zinc-900/80 border border-white/[0.12] border-b text-xs text-zinc-100 hover:bg-zinc-900 transition-colors mb-6 font-sans font-bold"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-zinc-900/80 border border-white/[0.12] border-b text-xs text-white hover:bg-zinc-900 transition-colors mb-6 font-sans font-bold"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Header Section */}
         <div className="mb-8 p-6 sm:p-8 rounded-none bg-zinc-900/80 border border-white/[0.12] border-b shadow-sm">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-emerald-950/80 border-emerald-800/80 border border-white/[0.12] text-zinc-100 text-xs font-mono font-bold mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-emerald-950/80 border-emerald-800/80 border border-white/[0.12] text-white text-xs font-mono font-bold mb-3">
             <Tag className="h-3.5 w-3.5" /> Topic Directory
           </div>
-          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-zinc-100 tracking-tight">
+          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Explore Repositories by Topic{" "}
             {topics.length > 0 && (
-              <span className="text-zinc-400 font-normal text-xl sm:text-2xl">
+              <span className="text-zinc-300 font-normal text-xl sm:text-2xl">
                 ({topics.length.toLocaleString()} Topics)
               </span>
             )}
           </h1>
-          <p className="text-sm text-zinc-400 font-sans mt-2 max-w-2xl">
+          <p className="text-sm text-zinc-300 font-sans mt-2 max-w-2xl">
             Browse developer-curated tags and open-source topics. Discover high-velocity projects with responsive maintainers and Good First Issues.
           </p>
         </div>
@@ -161,13 +161,13 @@ export default async function TopicsIndexPage({ searchParams }: TopicsPageProps)
         {/* Empty State */}
         {topics.length === 0 ? (
           <div className="p-8 sm:p-12 text-center bg-zinc-900/80 rounded-none border border-white/[0.12] border-b shadow-sm max-w-lg mx-auto my-8">
-            <div className="h-12 w-12 rounded-none bg-zinc-900 text-zinc-100 border border-white/[0.12] flex items-center justify-center mx-auto mb-4">
+            <div className="h-12 w-12 rounded-none bg-zinc-900 text-white border border-white/[0.12] flex items-center justify-center mx-auto mb-4">
               <Compass className="h-6 w-6" />
             </div>
-            <h2 className="font-space text-lg font-bold text-zinc-100 mb-2">
+            <h2 className="font-space text-lg font-bold text-white mb-2">
               No Indexed Topics Found
             </h2>
-            <p className="text-xs sm:text-sm text-zinc-400 font-sans leading-relaxed mb-6">
+            <p className="text-xs sm:text-sm text-zinc-300 font-sans leading-relaxed mb-6">
               No indexed topics are available at this time. Check back soon as new open-source repositories are crawled and indexed.
             </p>
             <Link

@@ -93,18 +93,18 @@ export function RepoStickyBar({
               }}
             />
             <div className="flex items-center gap-2 min-w-0">
-              <span className="font-space font-bold text-xs sm:text-sm text-zinc-50 truncate max-w-[200px] sm:max-w-[360px]">
+              <span className="font-space font-bold text-xs sm:text-sm text-white truncate max-w-[200px] sm:max-w-[360px]">
                 {fullName}
               </span>
               <span
-                className={`inline-flex items-center px-2 py-0.5 font-mono text-[10px] font-bold rounded-md border border-white/[0.08] text-zinc-100 ${getRankBadgeBg(
+                className={`inline-flex items-center px-2 py-0.5 font-mono text-[10px] font-bold rounded-md border border-white/[0.08] text-white ${getRankBadgeBg(
                   rank
                 )}`}
               >
                 {rankLabel}
               </span>
               {typeof repo?.stars === "number" && (
-                <span className="inline-flex items-center gap-1 font-mono text-[10px] font-semibold text-zinc-400">
+                <span className="inline-flex items-center gap-1 font-mono text-[10px] font-semibold text-zinc-300">
                   <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                   {repo.stars >= 1000 ? `${(repo.stars / 1000).toFixed(1)}k` : repo.stars}
                 </span>
@@ -125,7 +125,7 @@ export function RepoStickyBar({
                   : "bg-zinc-900/80 text-zinc-200 hover:bg-zinc-900"
               }`}
             >
-              <Bookmark className={`h-3 w-3 ${isWatching ? "fill-amber-500 text-amber-600" : "text-zinc-400"}`} />
+              <Bookmark className={`h-3 w-3 ${isWatching ? "fill-amber-500 text-amber-600" : "text-zinc-300"}`} />
               <span className="hidden sm:inline">{isWatching ? "Watching" : "Watch"}</span>
             </button>
             <a
@@ -158,11 +158,11 @@ export function RepoStickyBar({
                 title={`Jump to ${tab.label}`}
                 className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono transition-all shrink-0 cursor-pointer ${
                   isActive
-                    ? "bg-[#ffd93d] text-zinc-50 font-bold border border-white/[0.12] shadow-sm"
-                    : "bg-zinc-900/80 text-zinc-300 hover:bg-zinc-900 border border-white/[0.12] font-medium hover:text-zinc-100"
+                    ? "bg-[#ffd93d] text-white font-bold border border-white/[0.12] shadow-sm"
+                    : "bg-zinc-900/80 text-zinc-300 hover:bg-zinc-900 border border-white/[0.12] font-medium hover:text-white"
                 }`}
               >
-                <Icon className={`h-3 w-3 ${isActive ? "text-zinc-100 font-bold" : "text-zinc-400"}`} />
+                <Icon className={`h-3 w-3 ${isActive ? "text-white font-bold" : "text-zinc-300"}`} />
                 <span>{tab.label}</span>
               </button>
             );
