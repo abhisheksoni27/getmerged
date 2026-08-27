@@ -510,6 +510,29 @@ func AutoMigrate(db *sqlx.DB) error {
 			last_error TEXT,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
+		// AC3/AC8: explicitly user-pasted PRs to track, independent of the
+		// open-PR search. UNIQUE(user_id, pr_id) makes re-track idempotent; the
+		// free-tier "1 active PR" cap is enforced in TrackPR's transaction.
+		`CREATE TABLE IF NOT EXISTS pr_tracked (
+			user_id INTEGER NOT NULL,
+			pr_id VARCHAR(255) NOT NULL,
+			owner VARCHAR(255) NOT NULL,
+			repo VARCHAR(255) NOT NULL,
+			pr_number INTEGER NOT NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (user_id, pr_id)
+		);`,
+		// AC6: idempotent record of the "Merged via OpenDoor" proof card per PR.
+		// PRIMARY KEY(pr_id) makes re-polls unable to duplicate the artifact.
+		`CREATE TABLE IF NOT EXISTS pr_merge_artifacts (
+			pr_id VARCHAR(255) PRIMARY KEY,
+			user_id INTEGER NOT NULL,
+			repo_full_name VARCHAR(255) NOT NULL,
+			pr_number INTEGER NOT NULL,
+			card_id VARCHAR(64) NOT NULL,
+			merged_at DATETIME,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS share_cards (
 			id VARCHAR(64) PRIMARY KEY,
 			user_id INTEGER NOT NULL,

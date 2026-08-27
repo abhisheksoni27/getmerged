@@ -242,6 +242,7 @@ func (g *GHClient) SearchOpenPRs(ctx context.Context, userID int64, token, login
 
 // PRDetail is the subset of GET /repos/{o}/{r}/pulls/{n} we consume.
 type PRDetail struct {
+	Title      string     `json:"title"`
 	State      string     `json:"state"`
 	Merged     bool       `json:"merged"`
 	MergedAt   *time.Time `json:"merged_at"`
