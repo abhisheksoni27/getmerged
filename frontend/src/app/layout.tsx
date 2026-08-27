@@ -87,7 +87,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${dmMono.variable} h-full antialiased dark`}>
-      <body className="min-h-full flex flex-col bg-[#0f172a] text-slate-100 selection:bg-orange-500 selection:text-white">
+      <body className="min-h-full flex flex-col bg-black text-zinc-100 selection:bg-orange-500/30 selection:text-orange-200">
         <PostHogInit />
         <SearchProvider>
           {children}

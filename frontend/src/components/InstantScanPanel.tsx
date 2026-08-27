@@ -173,11 +173,11 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h3 className="font-space text-sm font-extrabold text-slate-50 flex items-center gap-2">
+          <h3 className="font-space text-sm font-extrabold text-zinc-50 flex items-center gap-2">
             <Zap className="h-4 w-4 text-amber-600" />
             Run an instant C-Rank check on {fullName}
           </h3>
-          <p className="text-xs font-sans text-slate-300 mt-1 leading-relaxed max-w-2xl">
+          <p className="text-xs font-sans text-zinc-300 mt-1 leading-relaxed max-w-2xl">
             We score this repo live from GitHub&apos;s public pull-request history - usually in under
             30 seconds. Results are cached for 24 hours and refreshed when new commits land.
           </p>
@@ -188,7 +188,7 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
             onClick={startScan}
             disabled={busy}
             data-testid="instant-scan-start"
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-[#ffd93d] px-4 py-2 text-xs font-mono font-bold text-slate-50 shadow-sm transition-all hover:bg-amber-300 disabled:opacity-60 disabled:cursor-not-allowed shrink-0"
+            className="inline-flex items-center gap-2 rounded-xl border border-white/[0.12] bg-[#ffd93d] px-4 py-2 text-xs font-mono font-bold text-zinc-50 shadow-sm transition-all hover:bg-amber-300 disabled:opacity-60 disabled:cursor-not-allowed shrink-0"
           >
             {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Zap className="h-3.5 w-3.5" />}
             {busy ? "Scoring…" : "Scan this repo now"}
@@ -198,20 +198,20 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
 
       {busy && !timedOut && (
         <div className="mt-4" role="status" aria-live="polite">
-          <div className="h-2 w-full rounded-full border border-slate-700 bg-[#111827] overflow-hidden">
+          <div className="h-2 w-full rounded-full border border-white/[0.12] bg-[#111827] overflow-hidden">
             <div
               className="h-full bg-emerald-500 transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="text-[11px] font-mono text-slate-300 mt-1.5">
+          <p className="text-[11px] font-mono text-zinc-300 mt-1.5">
             {status?.message || "Fetching pull-request history…"} ({progress}%)
           </p>
         </div>
       )}
 
       {status?.state === "queued" && (
-        <div className="mt-4 flex items-start gap-2 text-xs font-mono text-slate-200" role="status">
+        <div className="mt-4 flex items-start gap-2 text-xs font-mono text-zinc-200" role="status">
           <Clock className="h-4 w-4 shrink-0 text-amber-700" />
           <span>
             {status.message ||
@@ -230,7 +230,7 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
             type="button"
             onClick={startScan}
             data-testid="instant-scan-retry"
-            className="inline-flex items-center gap-1 rounded-lg border border-slate-700 bg-[#111827] px-3 py-1 font-bold text-slate-100 shadow-sm hover:bg-[#1e293b] w-fit"
+            className="inline-flex items-center gap-1 rounded-lg border border-white/[0.12] bg-[#111827] px-3 py-1 font-bold text-zinc-100 shadow-sm hover:bg-[#1e293b] w-fit"
           >
             Retry scan
           </button>
@@ -239,14 +239,14 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
 
       {verdict && (
         <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <p className="text-xs font-mono font-bold text-slate-100">
+          <p className="text-xs font-mono font-bold text-zinc-100">
             {verdict.headline || `${verdict.tier}-tier · C-Rank ${Math.round(verdict.score)}/100`}
           </p>
           <button
             type="button"
             onClick={handleShare}
             data-testid="instant-scan-share"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-[#111827] px-3 py-1.5 text-xs font-mono font-bold text-slate-100 shadow-sm hover:bg-[#1e293b] w-fit"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-white/[0.12] bg-[#111827] px-3 py-1.5 text-xs font-mono font-bold text-zinc-100 shadow-sm hover:bg-[#1e293b] w-fit"
           >
             <Share2 className="h-3.5 w-3.5" />
             {copied ? "Link copied" : "Share verdict"}

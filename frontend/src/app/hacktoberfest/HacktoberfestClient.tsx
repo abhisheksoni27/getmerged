@@ -195,7 +195,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
       case "B":
         return "bg-amber-600 text-white border border-black font-bold";
       default:
-        return "bg-[#1e293b] text-slate-200 border border-slate-700";
+        return "bg-[#1e293b] text-zinc-200 border border-white/[0.12]";
     }
   };
 
@@ -206,7 +206,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
   return (
     <div className="space-y-10">
       {/* Hero Header */}
-      <div className="rounded-3xl bg-[#111827] p-6 sm:p-10 border border-slate-800 shadow-xs">
+      <div className="rounded-3xl bg-[#111827] p-6 sm:p-10 border border-white/[0.08] shadow-xs">
         <div className="flex flex-wrap items-center gap-2 mb-3.5">
           <span className="inline-flex items-center gap-1.5 rounded-xl bg-orange-600 px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
             <Flame className="h-3.5 w-3.5" /> Hacktoberfest 2026 Welcome Hub
@@ -216,10 +216,10 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
           </span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight font-space">
+        <h1 className="text-3xl sm:text-4xl font-bold text-zinc-100 tracking-tight font-space">
           Hacktoberfest 2026 Welcome Hub
         </h1>
-        <p className="mt-3 text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed font-sans">
+        <p className="mt-3 text-xs sm:text-sm text-zinc-400 max-w-3xl leading-relaxed font-sans">
           Discover verified newcomer-welcoming repositories with responsive maintainers and track your live{" "}
           <strong>4 pull request merges</strong> in real time.
         </p>
@@ -247,16 +247,16 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
       )}
 
       {/* Live Merge Progress Tracker (AC1-AC6, AC8) */}
-      <div className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-slate-800 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+      <div className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-white/[0.08] shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
           <div>
             <div className="flex items-center gap-2">
               <GitPullRequest className="h-5 w-5 text-orange-600" />
-              <h2 className="text-lg sm:text-xl font-bold text-slate-100 font-space">
+              <h2 className="text-lg sm:text-xl font-bold text-zinc-100 font-space">
                 Live Merge Progress Tracker
               </h2>
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-zinc-400 mt-1">
               Validates pull requests to public repositories merged between Oct 1–31 UTC (no spam/invalid labels).
             </p>
           </div>
@@ -267,7 +267,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                 type="button"
                 onClick={() => triggerNudge()}
                 disabled={isNudging}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-800 text-xs font-mono text-slate-300 hover:bg-[#1e293b] disabled:opacity-50 transition-all cursor-pointer shadow-2xs"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/[0.08] text-xs font-mono text-zinc-300 hover:bg-[#1e293b] disabled:opacity-50 transition-all cursor-pointer shadow-2xs"
                 title="Force refresh against GitHub search API (throttled to 1/min)"
               >
                 <RefreshCw className={`h-3.5 w-3.5 ${isNudging ? "animate-spin text-orange-600" : ""}`} />
@@ -290,8 +290,8 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
             <div className="inline-flex p-3 rounded-2xl bg-orange-50 text-orange-600 mb-3">
               <Zap className="h-6 w-6" />
             </div>
-            <h3 className="text-base font-bold text-slate-100 font-space">Track Your 4 Hacktoberfest PRs</h3>
-            <p className="text-xs text-slate-400 max-w-md mx-auto mt-1 mb-4">
+            <h3 className="text-base font-bold text-zinc-100 font-space">Track Your 4 Hacktoberfest PRs</h3>
+            <p className="text-xs text-zinc-400 max-w-md mx-auto mt-1 mb-4">
               Sign in with your GitHub account to automatically monitor your merged PRs and unlock your verified completion badge.
             </p>
             <button
@@ -307,14 +307,14 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
         {isAuthenticated && (
           <div className="mt-6 space-y-6">
             {/* Progress Bar and Big Counter */}
-            <div className="bg-[#1e293b] rounded-2xl p-6 border border-slate-800/60">
+            <div className="bg-[#1e293b] rounded-2xl p-6 border border-white/[0.08]/60">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                 <div>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl sm:text-4xl font-bold font-space text-slate-100">
+                    <span className="text-3xl sm:text-4xl font-bold font-space text-zinc-100">
                       {mergedCount}
                     </span>
-                    <span className="text-lg font-bold text-slate-400 font-space">
+                    <span className="text-lg font-bold text-zinc-400 font-space">
                       of {target} PRs Merged
                     </span>
                     {progress?.total_qualifying && progress.total_qualifying > 4 ? (
@@ -323,7 +323,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                       </span>
                     ) : null}
                   </div>
-                  <div className="text-[11px] font-mono text-slate-400 mt-1 flex items-center gap-2">
+                  <div className="text-[11px] font-mono text-zinc-400 mt-1 flex items-center gap-2">
                     <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
                     <span>
                       {progress?.updated_ago_min !== undefined
@@ -350,7 +350,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                     <button
                       type="button"
                       onClick={() => handleCopyShareLink(progress.card!.share_url)}
-                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#111827] border border-slate-800 text-xs font-mono text-slate-300 hover:bg-[#1e293b] transition-colors shadow-2xs cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#111827] border border-white/[0.08] text-xs font-mono text-zinc-300 hover:bg-[#1e293b] transition-colors shadow-2xs cursor-pointer"
                       title="Copy Share Link"
                     >
                       <Share2 className="h-3.5 w-3.5" />
@@ -378,14 +378,14 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                       className={`py-2 px-1 rounded-xl border flex flex-col items-center gap-1 transition-all ${
                         isDone
                           ? "bg-emerald-950/70 border-emerald-800/80 border-emerald-300 text-emerald-300 font-bold"
-                          : "bg-[#111827] border-slate-800 text-slate-400"
+                          : "bg-[#111827] border-white/[0.08] text-zinc-400"
                       }`}
                     >
                       <div className="flex items-center gap-1">
                         {isDone ? (
                           <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
                         ) : (
-                          <div className="h-3.5 w-3.5 rounded-full border border-slate-700 flex items-center justify-center text-[9px]">
+                          <div className="h-3.5 w-3.5 rounded-full border border-white/[0.12] flex items-center justify-center text-[9px]">
                             {step}
                           </div>
                         )}
@@ -403,10 +403,10 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
             {/* Merged PR List */}
             {progress?.merges && progress.merges.length > 0 && (
               <div>
-                <h4 className="text-xs font-mono uppercase font-semibold text-slate-400 mb-3 tracking-wider">
+                <h4 className="text-xs font-mono uppercase font-semibold text-zinc-400 mb-3 tracking-wider">
                   Verified Qualifying Merges
                 </h4>
-                <div className="divide-y divide-zinc-100 rounded-2xl border border-slate-800 overflow-hidden bg-[#111827]">
+                <div className="divide-y divide-zinc-100 rounded-2xl border border-white/[0.08] overflow-hidden bg-[#111827]">
                   {progress.merges.map((merge) => (
                     <div
                       key={merge.pr_id}
@@ -415,11 +415,11 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                          <span className="font-space text-xs sm:text-sm font-bold text-slate-100 truncate">
+                          <span className="font-space text-xs sm:text-sm font-bold text-zinc-100 truncate">
                             {merge.title || merge.pr_id}
                           </span>
                         </div>
-                        <div className="text-[11px] font-mono text-slate-400 mt-1 flex items-center gap-2">
+                        <div className="text-[11px] font-mono text-zinc-400 mt-1 flex items-center gap-2">
                           <span>{merge.repository_id}</span>
                           <span>•</span>
                           <span>PR #{merge.pr_number}</span>
@@ -437,7 +437,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                           href={merge.html_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs font-mono text-slate-400 hover:text-slate-100 transition-colors shrink-0"
+                          className="inline-flex items-center gap-1 text-xs font-mono text-zinc-400 hover:text-zinc-100 transition-colors shrink-0"
                         >
                           <span>GitHub</span>
                           <ExternalLink className="h-3 w-3" />
@@ -453,24 +453,24 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
       </div>
 
       {/* Welcoming Repo Leaderboard (AC7) */}
-      <div className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-slate-800 shadow-xs">
+      <div className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-white/[0.08] shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <div className="flex items-center gap-2">
               <Trophy className="h-5 w-5 text-amber-500" />
-              <h2 className="text-lg sm:text-xl font-bold text-slate-100 font-space">
+              <h2 className="text-lg sm:text-xl font-bold text-zinc-100 font-space">
                 Top Welcoming Repositories
               </h2>
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-zinc-400 mt-1">
               Ranked by <strong>C-Rank™ (S/A/B)</strong> and <strong>Good First Issue quality</strong>. Repositories with &gt;60% first-timer merge rates are highlighted with the Welcoming badge.
             </p>
           </div>
         </div>
 
-        <div className="overflow-x-auto rounded-2xl border border-slate-800 shadow-xs">
-          <table className="w-full text-left text-xs text-slate-400">
-            <thead className="bg-[#1e293b] text-slate-200 border-b border-slate-800 font-semibold uppercase tracking-wider font-space text-[11px]">
+        <div className="overflow-x-auto rounded-2xl border border-white/[0.08] shadow-xs">
+          <table className="w-full text-left text-xs text-zinc-400">
+            <thead className="bg-[#1e293b] text-zinc-200 border-b border-white/[0.08] font-semibold uppercase tracking-wider font-space text-[11px]">
               <tr>
                 <th className="py-3.5 px-4 text-center">Rank</th>
                 <th className="py-3.5 px-4">Repository</th>
@@ -486,14 +486,14 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                 const [owner, name] = repo.full_name.split("/");
                 return (
                   <tr key={repo.id} className="hover:bg-[#1e293b]/60 transition-colors">
-                    <td className="py-3.5 px-4 text-center font-bold text-slate-400">
+                    <td className="py-3.5 px-4 text-center font-bold text-zinc-400">
                       #{idx + 1}
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2 flex-wrap">
                         <Link
                           href={`/${owner}/${name}`}
-                          className="hover:text-orange-600 transition-colors font-space text-sm font-bold text-slate-100"
+                          className="hover:text-orange-600 transition-colors font-space text-sm font-bold text-zinc-100"
                         >
                           {repo.full_name}
                         </Link>
@@ -505,7 +505,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                         )}
                       </div>
                       {repo.description && (
-                        <div className="text-[11px] font-normal text-slate-400 font-sans truncate max-w-md mt-0.5">
+                        <div className="text-[11px] font-normal text-zinc-400 font-sans truncate max-w-md mt-0.5">
                           {repo.description}
                         </div>
                       )}
@@ -515,16 +515,16 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                         {repo.c_rank_tier} Rank
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-right font-bold text-slate-100">
+                    <td className="py-3.5 px-4 text-right font-bold text-zinc-100">
                       <span className="inline-flex items-center gap-1">
                         <Sparkles className="h-3 w-3 text-amber-500" />
                         {repo.gfi_quality_score ? `${repo.gfi_quality_score}/100` : "N/A"}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-right text-slate-300">
+                    <td className="py-3.5 px-4 text-right text-zinc-300">
                       {repo.first_timer_success_rate ? `${repo.first_timer_success_rate.toFixed(1)}%` : "0.0%"}
                     </td>
-                    <td className="py-3.5 px-4 text-right text-slate-400">
+                    <td className="py-3.5 px-4 text-right text-zinc-400">
                       <span className="inline-flex items-center gap-1">
                         <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                         {repo.stars.toLocaleString()}
@@ -533,7 +533,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                     <td className="py-3.5 px-4 text-center">
                       <Link
                         href={`/${owner}/${name}`}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1e293b] hover:bg-zinc-200 text-slate-200 text-[11px] font-semibold transition-colors"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1e293b] hover:bg-zinc-200 text-zinc-200 text-[11px] font-semibold transition-colors"
                       >
                         <span>View Issues</span>
                       </Link>

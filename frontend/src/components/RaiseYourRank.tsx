@@ -13,7 +13,7 @@ interface RaiseYourRankProps {
 const statusStyle: Record<string, { icon: React.ElementType; ring: string }> = {
   gap: { icon: AlertCircle, ring: "text-amber-600 bg-amber-950/80 border-amber-800/80 border-amber-400" },
   ok: { icon: CheckCircle2, ring: "text-emerald-400 bg-emerald-950/80 border-emerald-800/80 border-emerald-400" },
-  insufficient_data: { icon: MinusCircle, ring: "text-slate-400 bg-[#1e293b] border-slate-700" },
+  insufficient_data: { icon: MinusCircle, ring: "text-zinc-400 bg-[#1e293b] border-white/[0.12]" },
 };
 
 export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
@@ -55,23 +55,23 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-slate-50 shadow-sm -rotate-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-zinc-50 shadow-sm -rotate-2">
               <TrendingUp className="h-4 w-4" />
             </div>
-            <h2 className="font-space text-base font-extrabold text-slate-50">Raise Your C-Rank</h2>
+            <h2 className="font-space text-base font-extrabold text-zinc-50">Raise Your C-Rank</h2>
           </div>
-          <span className="px-3 py-1 rounded-lg border border-slate-700 bg-[#111827] font-mono text-xs font-bold text-slate-200 shadow-sm">
+          <span className="px-3 py-1 rounded-lg border border-white/[0.12] bg-[#111827] font-mono text-xs font-bold text-zinc-200 shadow-sm">
             {playbook.repo_full_name} · tier {tier}
           </span>
         </div>
-        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3">
+        <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed mt-3">
           Sign in and verify ownership to unlock your full prioritized checklist,
           automated re-scores, and a before/after share card.
         </p>
         <button
           type="button"
           onClick={onClaimClick}
-          className="mt-4 inline-flex items-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-100 font-bold text-sm rounded-2xl border border-slate-700 shadow-sm hover:shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer"
+          className="mt-4 inline-flex items-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-zinc-100 font-bold text-sm rounded-2xl border border-white/[0.12] shadow-sm hover:shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer"
         >
           <ShieldCheck className="w-4 h-4" /> Verify ownership &amp; unlock the playbook
         </button>
@@ -90,17 +90,17 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
     >
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-slate-50 shadow-sm -rotate-2">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-zinc-50 shadow-sm -rotate-2">
             <TrendingUp className="h-4 w-4" />
           </div>
-          <h2 className="font-space text-base font-extrabold text-slate-50">Raise Your C-Rank</h2>
+          <h2 className="font-space text-base font-extrabold text-zinc-50">Raise Your C-Rank</h2>
         </div>
-        <span className="px-3 py-1 rounded-lg border border-slate-700 bg-[#111827] font-mono text-xs font-bold text-slate-200 shadow-sm">
+        <span className="px-3 py-1 rounded-lg border border-white/[0.12] bg-[#111827] font-mono text-xs font-bold text-zinc-200 shadow-sm">
           score {Math.round(playbook.c_rank_score)} · tier {tier}
         </span>
       </div>
 
-      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
+      <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed mb-4">
         Quantified gaps from live telemetry - each row shows your current value against the
         S-tier target and the one fix that closes it. Maintainers can verify ownership to unlock
         automated re-scores and a before/after share card.
@@ -117,7 +117,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
                 item.status === "ok"
                   ? "bg-emerald-950/70 border-emerald-800/80/70 border-emerald-300"
                   : item.status === "insufficient_data"
-                  ? "bg-[#1e293b] border-slate-700"
+                  ? "bg-[#1e293b] border-white/[0.12]"
                   : "bg-[#111827] border-brand-dark shadow-sm"
               }`}
             >
@@ -127,10 +127,10 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
                     <Icon className="w-4 h-4" />
                   </span>
                   <div className="min-w-0">
-                    <div className="font-bold text-sm text-slate-100">{item.title}</div>
+                    <div className="font-bold text-sm text-zinc-100">{item.title}</div>
                     <div
                       className={`text-xs mt-1 font-mono break-words ${
-                        item.status === "ok" ? "text-emerald-400" : "text-slate-300"
+                        item.status === "ok" ? "text-emerald-400" : "text-zinc-300"
                       }`}
                     >
                       {item.gap}
@@ -154,7 +154,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
       <button
         type="button"
         onClick={onClaimClick}
-        className="mt-5 inline-flex items-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-100 font-bold text-sm rounded-2xl border border-slate-700 shadow-sm hover:shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer"
+        className="mt-5 inline-flex items-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-zinc-100 font-bold text-sm rounded-2xl border border-white/[0.12] shadow-sm hover:shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer"
       >
         <ShieldCheck className="w-4 h-4" /> Verify ownership &amp; unlock automated re-scores
       </button>

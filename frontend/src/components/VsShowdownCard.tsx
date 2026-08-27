@@ -109,7 +109,7 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
   return (
     <section
       aria-label="Repo vs Repo showdown verdict"
-      className="rounded-3xl border border-slate-800 bg-[#111827] p-6 shadow-xs mb-12"
+      className="rounded-3xl border border-white/[0.08] bg-[#111827] p-6 shadow-xs mb-12"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-950/70 border-amber-800/80 border border-amber-200/80 text-amber-300 text-xs font-mono font-bold">
@@ -119,7 +119,7 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
           data-testid="vs-verdict-badge"
           className={
             verdict.isTie
-              ? "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-[#1e293b] text-slate-300 border border-slate-700"
+              ? "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-[#1e293b] text-zinc-300 border border-white/[0.12]"
               : "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border border-emerald-300"
           }
         >
@@ -137,16 +137,16 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
           return (
             <div
               key={m.key}
-              className="rounded-2xl bg-[#1e293b] border border-slate-800 p-4 font-mono text-xs"
+              className="rounded-2xl bg-[#1e293b] border border-white/[0.08] p-4 font-mono text-xs"
             >
-              <p className="text-slate-400 font-sans font-semibold mb-2">{m.label}</p>
+              <p className="text-zinc-400 font-sans font-semibold mb-2">{m.label}</p>
               <div className="flex items-center justify-between gap-2">
-                <span className={decided && aWins ? "text-emerald-400 font-bold" : "text-slate-100"}>
+                <span className={decided && aWins ? "text-emerald-400 font-bold" : "text-zinc-100"}>
                   {formatMetricValue(m.valueA, m.format)}
                 </span>
-                <span className="text-slate-400">vs</span>
+                <span className="text-zinc-400">vs</span>
                 <span
-                  className={decided && !aWins ? "text-emerald-400 font-bold" : "text-slate-100"}
+                  className={decided && !aWins ? "text-emerald-400 font-bold" : "text-zinc-100"}
                 >
                   {formatMetricValue(m.valueB, m.format)}
                 </span>
@@ -157,7 +157,7 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
       </div>
 
       {/* Share actions */}
-      <div className="flex flex-wrap items-center gap-2.5 pt-4 border-t border-slate-800">
+      <div className="flex flex-wrap items-center gap-2.5 pt-4 border-t border-white/[0.08]">
         <button
           type="button"
           data-testid="vs-copy-button"
@@ -179,9 +179,9 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
           )}
         </button>
 
-        <button type="button" onClick={() => openShare("x")} title="Share verdict on X" className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[#1e293b] text-slate-200 hover:bg-zinc-200 border border-slate-800/60 active:scale-[0.98] transition-all cursor-pointer shadow-2xs">X</button>
-        <button type="button" onClick={() => openShare("linkedin")} title="Share verdict on LinkedIn" className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[#1e293b] text-slate-200 hover:bg-zinc-200 border border-slate-800/60 active:scale-[0.98] transition-all cursor-pointer shadow-2xs">LinkedIn</button>
-        <button type="button" onClick={() => openShare("reddit")} title="Share verdict on Reddit" className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[#1e293b] text-slate-200 hover:bg-zinc-200 border border-slate-800/60 active:scale-[0.98] transition-all cursor-pointer shadow-2xs">Reddit</button>
+        <button type="button" onClick={() => openShare("x")} title="Share verdict on X" className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[#1e293b] text-zinc-200 hover:bg-zinc-200 border border-white/[0.08]/60 active:scale-[0.98] transition-all cursor-pointer shadow-2xs">X</button>
+        <button type="button" onClick={() => openShare("linkedin")} title="Share verdict on LinkedIn" className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[#1e293b] text-zinc-200 hover:bg-zinc-200 border border-white/[0.08]/60 active:scale-[0.98] transition-all cursor-pointer shadow-2xs">LinkedIn</button>
+        <button type="button" onClick={() => openShare("reddit")} title="Share verdict on Reddit" className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[#1e293b] text-zinc-200 hover:bg-zinc-200 border border-white/[0.08]/60 active:scale-[0.98] transition-all cursor-pointer shadow-2xs">Reddit</button>
       </div>
 
       {copyFailed && (
@@ -192,11 +192,11 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
           value={shareUrl}
           onFocus={(e) => e.target.select()}
           aria-label="Comparison share link - select and copy manually"
-          className="mt-3 w-full rounded-xl border border-slate-800 bg-[#1e293b] px-3 py-2 font-mono text-xs text-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="mt-3 w-full rounded-xl border border-white/[0.08] bg-[#1e293b] px-3 py-2 font-mono text-xs text-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
         />
       )}
 
-      <p className="mt-4 text-xs text-slate-400">
+      <p className="mt-4 text-xs text-zinc-400">
         Verdict computed from external PR merge rate, median review latency, and 90-day bus factor; ties broken by recent commit (PR) velocity.{" "}
         <a href={`/api/og/vs?a=${encodeURIComponent(repoA.full_name)}&b=${encodeURIComponent(repoB.full_name)}`} className="text-emerald-400 hover:underline font-mono">
           View share card image

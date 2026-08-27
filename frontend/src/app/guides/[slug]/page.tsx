@@ -110,7 +110,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
   }
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-[#0f172a] text-slate-100 font-sans">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-[#0f172a] text-zinc-100 font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -119,17 +119,17 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
         {/* Navigation Breadcrumb */}
-        <div className="flex items-center gap-2 text-xs font-mono text-slate-400 mb-6">
-          <Link href="/" title="GetMerged Home" className="hover:text-slate-100 font-bold">Home</Link>
+        <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-6">
+          <Link href="/" title="GetMerged Home" className="hover:text-zinc-100 font-bold">Home</Link>
           <span>/</span>
-          <Link href="/guides" title="GetMerged Guides Directory" className="hover:text-slate-100 font-bold">Guides</Link>
+          <Link href="/guides" title="GetMerged Guides Directory" className="hover:text-zinc-100 font-bold">Guides</Link>
           <span>/</span>
-          <span className="text-slate-200 font-bold truncate">{guide.title}</span>
+          <span className="text-zinc-200 font-bold truncate">{guide.title}</span>
         </div>
 
         {/* Header Title Box */}
-        <div className="border border-slate-800 bg-[#111827] p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-8">
-          <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-slate-400 mb-4">
+        <div className="border border-white/[0.08] bg-[#111827] p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-8">
+          <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-zinc-400 mb-4">
             <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-950/80 border border-amber-700 font-bold text-amber-300 rounded">
               {guide.section}
             </span>
@@ -144,14 +144,14 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight font-sans text-slate-50 mb-4 leading-tight">
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight font-sans text-zinc-50 mb-4 leading-tight">
             {guide.title}
           </h1>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
+          <p className="text-zinc-300 text-sm sm:text-base leading-relaxed mb-6">
             {guide.description}
           </p>
 
-          <div className="overflow-hidden rounded border border-slate-800 bg-slate-800 shadow-sm">
+          <div className="overflow-hidden rounded border border-white/[0.08] bg-slate-800 shadow-sm">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`/images/guides/${guide.slug}.jpg`}
@@ -164,44 +164,44 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
         </div>
 
         {/* Content Body */}
-        <article className="border border-slate-800 bg-[#111827] p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-10 text-slate-200">
+        <article className="border border-white/[0.08] bg-[#111827] p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-10 text-zinc-200">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             /* eslint-disable @typescript-eslint/no-unused-vars */
             components={{
               h1: ({ node, ...props }) => (
-                <h1 className="text-2xl sm:text-3xl font-bold font-sans text-slate-50 mt-8 mb-4 leading-tight border-b border-slate-800 pb-3" {...props} />
+                <h1 className="text-2xl sm:text-3xl font-bold font-sans text-zinc-50 mt-8 mb-4 leading-tight border-b border-white/[0.08] pb-3" {...props} />
               ),
               h2: ({ node, ...props }) => (
-                <h2 className="text-xl sm:text-2xl font-bold font-sans text-slate-50 mt-10 mb-4 leading-snug border-b border-slate-800 pb-2 flex items-center gap-2" {...props} />
+                <h2 className="text-xl sm:text-2xl font-bold font-sans text-zinc-50 mt-10 mb-4 leading-snug border-b border-white/[0.08] pb-2 flex items-center gap-2" {...props} />
               ),
               h3: ({ node, ...props }) => (
-                <h3 className="text-lg sm:text-xl font-bold font-sans text-slate-100 mt-6 mb-3" {...props} />
+                <h3 className="text-lg sm:text-xl font-bold font-sans text-zinc-100 mt-6 mb-3" {...props} />
               ),
               p: ({ node, ...props }) => (
-                <p className="text-sm sm:text-base leading-relaxed text-slate-300 my-4 font-sans" {...props} />
+                <p className="text-sm sm:text-base leading-relaxed text-zinc-300 my-4 font-sans" {...props} />
               ),
               ul: ({ node, ...props }) => (
-                <ul className="list-disc list-outside ml-6 my-4 space-y-2 text-sm sm:text-base text-slate-300" {...props} />
+                <ul className="list-disc list-outside ml-6 my-4 space-y-2 text-sm sm:text-base text-zinc-300" {...props} />
               ),
               ol: ({ node, ...props }) => (
-                <ol className="list-decimal list-outside ml-6 my-4 space-y-2 text-sm sm:text-base text-slate-300" {...props} />
+                <ol className="list-decimal list-outside ml-6 my-4 space-y-2 text-sm sm:text-base text-zinc-300" {...props} />
               ),
               li: ({ node, ...props }) => (
                 <li className="leading-relaxed" {...props} />
               ),
               blockquote: ({ node, ...props }) => (
-                <div className="border-l-4 border-l-orange-500 bg-slate-800/80 p-5 my-6 rounded-r text-slate-200">
+                <div className="border-l-4 border-l-orange-500 bg-slate-800/80 p-5 my-6 rounded-r text-zinc-200">
                   <blockquote className="space-y-2 text-sm sm:text-base italic" {...props} />
                 </div>
               ),
               table: ({ node, ...props }) => (
-                <div className="my-6 overflow-x-auto border border-slate-800 rounded">
+                <div className="my-6 overflow-x-auto border border-white/[0.08] rounded">
                   <table className="w-full text-left text-xs sm:text-sm font-sans divide-y divide-slate-800 bg-[#111827]" {...props} />
                 </div>
               ),
               thead: ({ node, ...props }) => (
-                <thead className="bg-slate-800 text-slate-200 font-mono font-bold uppercase tracking-wider text-xs border-b border-slate-700" {...props} />
+                <thead className="bg-slate-800 text-zinc-200 font-mono font-bold uppercase tracking-wider text-xs border-b border-white/[0.12]" {...props} />
               ),
               tbody: ({ node, ...props }) => (
                 <tbody className="divide-y divide-slate-800" {...props} />
@@ -210,19 +210,19 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
                 <tr className="hover:bg-slate-800/60 transition-colors" {...props} />
               ),
               th: ({ node, ...props }) => (
-                <th className="py-3 px-4 font-bold border-r border-slate-800 last:border-r-0" {...props} />
+                <th className="py-3 px-4 font-bold border-r border-white/[0.08] last:border-r-0" {...props} />
               ),
               td: ({ node, ...props }) => (
-                <td className="py-3 px-4 text-slate-300 border-r border-slate-800 last:border-r-0" {...props} />
+                <td className="py-3 px-4 text-zinc-300 border-r border-white/[0.08] last:border-r-0" {...props} />
               ),
               code: ({ node, className, children, ...props }) => {
                 const isInline = !className;
                 return isInline ? (
-                  <code className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 font-mono text-xs font-bold text-orange-400" {...props}>
+                  <code className="px-1.5 py-0.5 rounded bg-slate-800 border border-white/[0.12] font-mono text-xs font-bold text-orange-400" {...props}>
                     {children}
                   </code>
                 ) : (
-                  <pre className="p-4 my-4 overflow-x-auto rounded border border-slate-800 bg-slate-900 text-emerald-400 font-mono text-xs shadow-sm">
+                  <pre className="p-4 my-4 overflow-x-auto rounded border border-white/[0.08] bg-slate-900 text-emerald-400 font-mono text-xs shadow-sm">
                     <code className={className} {...props}>
                       {children}
                     </code>
@@ -264,11 +264,11 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
         </article>
 
         {/* Read Next Section */}
-        <div className="border border-slate-800 bg-[#111827] p-6 sm:p-8 rounded-md border-t-2 border-t-slate-700 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="border border-white/[0.08] bg-[#111827] p-6 sm:p-8 rounded-md border-t-2 border-t-slate-700 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
           <Link
             href="/guides"
             title="Browse all GetMerged engineering guides"
-            className="inline-flex items-center gap-2 font-mono text-xs font-bold text-slate-300 hover:text-white"
+            className="inline-flex items-center gap-2 font-mono text-xs font-bold text-zinc-300 hover:text-white"
           >
             <ArrowLeft className="w-4 h-4" /> All Playbooks & Guides
           </Link>

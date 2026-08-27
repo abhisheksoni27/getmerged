@@ -101,13 +101,13 @@ export function ApiKeysCard() {
   const revokedKeys = data?.keys.filter((k) => k.revoked_at) ?? [];
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-[#111827] p-5 shadow-sm/5">
+    <div className="rounded-xl border border-white/[0.08] bg-[#111827] p-5 shadow-sm/5">
       <div className="flex items-start justify-between gap-4 mb-3">
         <div>
-          <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-zinc-100 flex items-center gap-2">
             <KeyRound className="h-5 w-5 text-emerald-600" /> Public API Keys
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-zinc-400 mt-1">
             Build bots, dashboards, and CI checks on C-Rank™ data. Send{" "}
             <code className="rounded bg-[#1e293b] px-1 py-0.5 text-[11px]">Authorization: Bearer &lt;key&gt;</code> to{" "}
             <Link href="/docs" className="text-emerald-400 font-semibold hover:underline">
@@ -116,7 +116,7 @@ export function ApiKeysCard() {
             . Free tier: 60 req/hour + 10/min burst · Pro: 600 req/hour + 100/min burst.
           </p>
         </div>
-        <span className="shrink-0 rounded-full bg-[#1e293b] px-2 py-0.5 text-[11px] font-semibold text-slate-400">
+        <span className="shrink-0 rounded-full bg-[#1e293b] px-2 py-0.5 text-[11px] font-semibold text-zinc-400">
           {data?.is_pro
             ? `Pro · ${data?.limits.pro_hourly_requests ?? 600}/hour`
             : `Free · ${data?.limits.free_hourly_requests ?? 60}/hour`}
@@ -131,7 +131,7 @@ export function ApiKeysCard() {
             Copy your key now - it will never be shown again.
           </div>
           <div className="flex items-center gap-2">
-            <code className="flex-1 truncate rounded-md bg-[#111827] border border-emerald-200 px-2 py-1.5 text-xs text-slate-200">
+            <code className="flex-1 truncate rounded-md bg-[#111827] border border-emerald-200 px-2 py-1.5 text-xs text-zinc-200">
               {freshKey}
             </code>
             <button
@@ -150,7 +150,7 @@ export function ApiKeysCard() {
       )}
 
       {loading ? (
-        <div className="py-4 text-sm text-slate-400 animate-pulse">Loading keys…</div>
+        <div className="py-4 text-sm text-zinc-400 animate-pulse">Loading keys…</div>
       ) : (
         <>
           {activeKeys.length > 0 && (
@@ -158,11 +158,11 @@ export function ApiKeysCard() {
               {activeKeys.map((k) => (
                 <li
                   key={k.id}
-                  className="flex items-center justify-between gap-3 rounded-lg border border-slate-800 px-3 py-2"
+                  className="flex items-center justify-between gap-3 rounded-lg border border-white/[0.08] px-3 py-2"
                 >
                   <div className="min-w-0">
-                    <div className="text-sm font-semibold text-slate-200 truncate">{k.name}</div>
-                    <div className="text-[11px] text-slate-400">
+                    <div className="text-sm font-semibold text-zinc-200 truncate">{k.name}</div>
+                    <div className="text-[11px] text-zinc-400">
                       <code>{k.key_prefix}…</code> · created {new Date(k.created_at).toLocaleDateString()}
                       {k.last_used_at && <> · last used {new Date(k.last_used_at).toLocaleDateString()}</>}
                     </div>
@@ -178,7 +178,7 @@ export function ApiKeysCard() {
             </ul>
           )}
           {revokedKeys.length > 0 && (
-            <p className="mb-3 text-[11px] text-slate-400">
+            <p className="mb-3 text-[11px] text-zinc-400">
               {revokedKeys.length} revoked key{revokedKeys.length > 1 ? "s" : ""} hidden.
             </p>
           )}
@@ -189,7 +189,7 @@ export function ApiKeysCard() {
               placeholder={`Key name (e.g. "ci-bot")`}
               maxLength={64}
               disabled={activeKeys.length >= 5}
-              className="flex-1 rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:opacity-50"
+              className="flex-1 rounded-lg border border-white/[0.12] px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:opacity-50"
             />
             <button
               onClick={createKey}

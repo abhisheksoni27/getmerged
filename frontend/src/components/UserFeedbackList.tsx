@@ -45,9 +45,9 @@ export function UserFeedbackList({
 
   if (feedback.length === 0) {
     return (
-      <div className="rounded-3xl border border-dashed border-slate-700 bg-[#111827]/60 p-8 text-center font-sans">
-        <p className="text-sm font-semibold text-slate-200">No community reviews submitted yet</p>
-        <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+      <div className="rounded-3xl border border-dashed border-white/[0.12] bg-[#111827]/60 p-8 text-center font-sans">
+        <p className="text-sm font-semibold text-zinc-200">No community reviews submitted yet</p>
+        <p className="text-xs text-zinc-400 mt-1 max-w-sm mx-auto">
           Reviews left on repositories will appear here with ratings and sentiment telemetry.
         </p>
       </div>
@@ -59,7 +59,7 @@ export function UserFeedbackList({
       {feedback.map((item) => (
         <div
           key={item.id}
-          className="rounded-2xl border border-slate-800 bg-[#111827] p-5 sm:p-6 shadow-2xs transition-all"
+          className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5 sm:p-6 shadow-2xs transition-all"
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
             <div className="flex items-center gap-2.5 min-w-0">
@@ -67,7 +67,7 @@ export function UserFeedbackList({
               <Link
                 href={`/${item.repo_full_name}`}
                 title={`View ${item.repo_full_name} C-Rank scorecard`}
-                className="text-sm font-space font-bold text-slate-100 hover:text-orange-600 transition-colors truncate"
+                className="text-sm font-space font-bold text-zinc-100 hover:text-orange-600 transition-colors truncate"
               >
                 {item.repo_full_name}
               </Link>
@@ -80,7 +80,7 @@ export function UserFeedbackList({
                   <span>Verified Contributor</span>
                 </span>
               )}
-              <span className="text-[11px] font-mono text-slate-400">
+              <span className="text-[11px] font-mono text-zinc-400">
                 {new Date(item.created_at).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
@@ -94,7 +94,7 @@ export function UserFeedbackList({
                   onClick={() => handleDelete(item.id)}
                   disabled={deletingId === item.id}
                   title="Delete this review"
-                  className="rounded-lg p-1 text-slate-400 hover:bg-rose-950/70 border-rose-800/80 hover:text-rose-600 transition-colors cursor-pointer disabled:opacity-50"
+                  className="rounded-lg p-1 text-zinc-400 hover:bg-rose-950/70 border-rose-800/80 hover:text-rose-600 transition-colors cursor-pointer disabled:opacity-50"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -103,32 +103,32 @@ export function UserFeedbackList({
           </div>
 
           {/* Ratings Breakdown */}
-          <div className="grid grid-cols-3 gap-2 bg-[#1e293b] border border-slate-800 rounded-xl p-3 text-xs mb-3">
+          <div className="grid grid-cols-3 gap-2 bg-[#1e293b] border border-white/[0.08] rounded-xl p-3 text-xs mb-3">
             <div>
-              <span className="text-slate-400 text-[11px] block">Maintainer</span>
+              <span className="text-zinc-400 text-[11px] block">Maintainer</span>
               <div className="flex items-center gap-1 mt-0.5">
                 <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
-                <strong className="text-slate-100 font-mono">{item.maintainer_rating}/5</strong>
+                <strong className="text-zinc-100 font-mono">{item.maintainer_rating}/5</strong>
               </div>
             </div>
             <div>
-              <span className="text-slate-400 text-[11px] block">Review Speed</span>
+              <span className="text-zinc-400 text-[11px] block">Review Speed</span>
               <div className="flex items-center gap-1 mt-0.5">
                 <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
-                <strong className="text-slate-100 font-mono">{item.review_speed_rating}/5</strong>
+                <strong className="text-zinc-100 font-mono">{item.review_speed_rating}/5</strong>
               </div>
             </div>
             <div>
-              <span className="text-slate-400 text-[11px] block">Beginner Friendly</span>
+              <span className="text-zinc-400 text-[11px] block">Beginner Friendly</span>
               <div className="flex items-center gap-1 mt-0.5">
                 <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
-                <strong className="text-slate-100 font-mono">{item.beginner_rating}/5</strong>
+                <strong className="text-zinc-100 font-mono">{item.beginner_rating}/5</strong>
               </div>
             </div>
           </div>
 
           {item.comment && (
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed italic bg-[#111827] border border-slate-800 rounded-xl p-3.5">
+            <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed italic bg-[#111827] border border-white/[0.08] rounded-xl p-3.5">
               &ldquo;{item.comment}&rdquo;
             </p>
           )}

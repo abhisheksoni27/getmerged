@@ -41,9 +41,9 @@ export function ReferralCard() {
     >
       <div className="flex items-center gap-2 mb-1.5">
         <Gift className="h-4 w-4 text-emerald-600" />
-        <h2 className="text-sm font-bold font-space text-slate-100">Invite Friends, Earn Preflight Credits</h2>
+        <h2 className="text-sm font-bold font-space text-zinc-100">Invite Friends, Earn Preflight Credits</h2>
       </div>
-      <p className="text-xs text-slate-400 mb-4">
+      <p className="text-xs text-zinc-400 mb-4">
         Share your link: when a friend signs up with GitHub through it, you get <strong>+3</strong> and they get{" "}
         <strong>+1</strong> bonus preflight-evaluation credit (up to 10 extra).
       </p>
@@ -53,7 +53,7 @@ export function ReferralCard() {
           value={link}
           onFocus={(e) => e.currentTarget.select()}
           aria-label="Your referral link"
-          className="flex-1 min-w-0 rounded-xl border border-slate-700 bg-[#1e293b] px-3 py-2 text-xs font-mono text-slate-300"
+          className="flex-1 min-w-0 rounded-xl border border-white/[0.12] bg-[#1e293b] px-3 py-2 text-xs font-mono text-zinc-300"
         />
         <button
           onClick={copy}

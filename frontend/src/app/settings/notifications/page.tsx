@@ -44,7 +44,7 @@ export default function NotificationPreferencesPage() {
   if (!prefs) {
     return (
       <main className="mx-auto max-w-2xl px-4 py-12">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-zinc-400">
           {error ? "Couldn't load preferences." : "Loading…"}
         </p>
       </main>
@@ -53,28 +53,28 @@ export default function NotificationPreferencesPage() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-12">
-      <h1 className="font-space text-2xl font-bold text-slate-100">
+      <h1 className="font-space text-2xl font-bold text-zinc-100">
         Notification preferences
       </h1>
-      <p className="mt-1 text-sm text-slate-400">
+      <p className="mt-1 text-sm text-zinc-400">
         In-app alerts are independent of email, Slack &amp; Discord. Muted
         categories are excluded from your feed and live stream.
         {saved && <span className="ml-2 text-emerald-600">Saved.</span>}
       </p>
 
-      <div className="mt-6 overflow-hidden rounded-2xl border border-slate-800 bg-[#111827]">
+      <div className="mt-6 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#111827]">
         {CATEGORIES.map((cat, i) => {
           const on = isEnabled(prefs, cat);
           return (
             <div
               key={cat}
-              className={`flex items-center justify-between gap-4 px-4 py-4 ${i > 0 ? "border-t border-slate-800" : ""}`}
+              className={`flex items-center justify-between gap-4 px-4 py-4 ${i > 0 ? "border-t border-white/[0.08]" : ""}`}
             >
               <div>
-                <p className="text-sm font-medium text-slate-100">
+                <p className="text-sm font-medium text-zinc-100">
                   {CATEGORY_LABELS[cat].label}
                 </p>
-                <p className="text-xs text-slate-400">{CATEGORY_LABELS[cat].hint}</p>
+                <p className="text-xs text-zinc-400">{CATEGORY_LABELS[cat].hint}</p>
               </div>
               <button
                 type="button"

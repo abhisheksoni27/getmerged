@@ -70,8 +70,8 @@ function humanHours(h: number): string {
 
 function scoreColor(score: number): string {
   if (score >= 80) return "bg-emerald-500 text-white";
-  if (score >= 60) return "bg-lime-400 text-slate-100";
-  if (score >= 40) return "bg-amber-400 text-slate-100";
+  if (score >= 60) return "bg-lime-400 text-zinc-100";
+  if (score >= 40) return "bg-amber-400 text-zinc-100";
   return "bg-red-500 text-white";
 }
 
@@ -159,10 +159,10 @@ export default function PRSimulatorPage() {
     <div className="min-h-screen bg-[#f4f1ea] font-mono">
       <Header />
       <main className="max-w-3xl mx-auto px-4 py-10">
-        <h1 className="text-3xl md:text-4xl font-space font-black tracking-tight text-slate-100 mb-2">
+        <h1 className="text-3xl md:text-4xl font-space font-black tracking-tight text-zinc-100 mb-2">
           PR Acceptance Simulator
         </h1>
-        <p className="text-sm text-slate-400 mb-8">
+        <p className="text-sm text-zinc-400 mb-8">
           Paste a draft diff before opening your PR and see its simulated merge odds, predicted review turnaround,
           and what to fix first.
         </p>
@@ -172,7 +172,7 @@ export default function PRSimulatorPage() {
           className="rounded-2xl bg-[#111827] p-6 border-2 border-brand-dark shadow-sm space-y-5"
         >
           <div>
-            <label htmlFor="sim-repo" className="block text-xs font-bold uppercase tracking-wide text-slate-400 mb-1">
+            <label htmlFor="sim-repo" className="block text-xs font-bold uppercase tracking-wide text-zinc-400 mb-1">
               Target repository
             </label>
             <input
@@ -183,11 +183,11 @@ export default function PRSimulatorPage() {
               placeholder="owner/repo or https://github.com/owner/repo"
               required
               maxLength={255}
-              className="w-full rounded-lg border border-slate-700 px-3 py-2 text-sm focus:border-brand-dark focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+              className="w-full rounded-lg border border-white/[0.12] px-3 py-2 text-sm focus:border-brand-dark focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
             />
           </div>
           <div>
-            <label htmlFor="sim-title" className="block text-xs font-bold uppercase tracking-wide text-slate-400 mb-1">
+            <label htmlFor="sim-title" className="block text-xs font-bold uppercase tracking-wide text-zinc-400 mb-1">
               Draft PR title
             </label>
             <input
@@ -198,11 +198,11 @@ export default function PRSimulatorPage() {
               placeholder='feat: add streaming ingest'
               required
               maxLength={200}
-              className="w-full rounded-lg border border-slate-700 px-3 py-2 text-sm focus:border-brand-dark focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+              className="w-full rounded-lg border border-white/[0.12] px-3 py-2 text-sm focus:border-brand-dark focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
             />
           </div>
           <div>
-            <label htmlFor="sim-desc" className="block text-xs font-bold uppercase tracking-wide text-slate-400 mb-1">
+            <label htmlFor="sim-desc" className="block text-xs font-bold uppercase tracking-wide text-zinc-400 mb-1">
               Description
             </label>
             <textarea
@@ -212,11 +212,11 @@ export default function PRSimulatorPage() {
               rows={3}
               maxLength={10000}
               placeholder={"What does this change do? (>50 characters earns full points)"}
-              className="w-full rounded-lg border border-slate-700 px-3 py-2 text-sm focus:border-brand-dark focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+              className="w-full rounded-lg border border-white/[0.12] px-3 py-2 text-sm focus:border-brand-dark focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
             />
           </div>
           <div>
-            <label htmlFor="sim-diff" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-slate-400 mb-1">
+            <label htmlFor="sim-diff" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-zinc-400 mb-1">
               <FileDiff className="h-3.5 w-3.5" aria-hidden="true" />
               Unified diff (git diff output, max 1MB)
             </label>
@@ -228,9 +228,9 @@ export default function PRSimulatorPage() {
               spellCheck={false}
               placeholder={"diff --git a/src/app.ts b/src/app.ts\n--- a/src/app.ts\n+++ b/src/app.ts\n@@ ..."}
               required
-              className="w-full rounded-lg border border-slate-700 px-3 py-2 text-xs leading-relaxed bg-[#1e293b] focus:border-brand-dark focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+              className="w-full rounded-lg border border-white/[0.12] px-3 py-2 text-xs leading-relaxed bg-[#1e293b] focus:border-brand-dark focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
             />
-            <p className="mt-1 text-[11px] text-slate-400">
+            <p className="mt-1 text-[11px] text-zinc-400">
               Encrypted at rest, auto-deleted after 24 hours, never shown publicly.
             </p>
           </div>
@@ -262,7 +262,7 @@ export default function PRSimulatorPage() {
                 <div className="text-3xl font-space font-black">{result.score}/100</div>
                 <div className="text-[11px] uppercase tracking-wide opacity-80">Simulated acceptance score</div>
               </div>
-              <div className="flex items-center gap-2 text-sm text-slate-300">
+              <div className="flex items-center gap-2 text-sm text-zinc-300">
                 <Clock className="h-4 w-4 text-blue-600" aria-hidden="true" />
                 {result.turnaround == null ? (
                   <span>Turnaround unavailable for this repo.</span>
@@ -272,7 +272,7 @@ export default function PRSimulatorPage() {
                   <span>
                     Median review turnaround:{" "}
                     <strong className="font-mono">{humanHours(result.turnaround.median_hours)}</strong>
-                    <span className="text-slate-400 text-xs ml-1">({result.turnaround.samples} merged PRs)</span>
+                    <span className="text-zinc-400 text-xs ml-1">({result.turnaround.samples} merged PRs)</span>
                   </span>
                 ) : (
                   <span>Insufficient history.</span>
@@ -286,19 +286,19 @@ export default function PRSimulatorPage() {
                 const pct = Math.max(0, Math.min(100, (pts / w.max) * 100));
                 return (
                   <li key={w.key} title={w.hint} className="group">
-                    <div className="flex items-center justify-between text-xs font-bold text-slate-300 mb-1 cursor-help">
+                    <div className="flex items-center justify-between text-xs font-bold text-zinc-300 mb-1 cursor-help">
                       <span>{w.label}</span>
                       <span className="font-mono">
                         {pts}/{w.max}
                       </span>
                     </div>
-                    <div className="h-2.5 rounded-full bg-[#1e293b] border border-slate-800 overflow-hidden">
+                    <div className="h-2.5 rounded-full bg-[#1e293b] border border-white/[0.08] overflow-hidden">
                       <div
                         className="h-full rounded-full bg-emerald-500 transition-all duration-500"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <p className="hidden group-hover:block mt-1 text-[11px] text-slate-400">{w.hint}</p>
+                    <p className="hidden group-hover:block mt-1 text-[11px] text-zinc-400">{w.hint}</p>
                   </li>
                 );
               })}
@@ -333,14 +333,14 @@ export default function PRSimulatorPage() {
                     value={shareText}
                     onFocus={(e) => e.currentTarget.select()}
                     aria-label="Badge URL - select and copy manually"
-                    className="w-full rounded-lg border border-slate-700 bg-[#1e293b] px-3 py-2 text-xs text-slate-300 select-all"
+                    className="w-full rounded-lg border border-white/[0.12] bg-[#1e293b] px-3 py-2 text-xs text-zinc-300 select-all"
                   />
                 ) : (
                   <button
                     type="button"
                     onClick={copyShare}
                     data-testid="pr-sim-copy"
-                    className="inline-flex items-center gap-2 rounded-lg border-2 border-brand-dark bg-[#1e293b] px-3 py-1.5 text-xs font-bold text-slate-200 hover:bg-[#1e293b]"
+                    className="inline-flex items-center gap-2 rounded-lg border-2 border-brand-dark bg-[#1e293b] px-3 py-1.5 text-xs font-bold text-zinc-200 hover:bg-[#1e293b]"
                   >
                     {copied === "ok" ? (
                       <>
@@ -354,7 +354,7 @@ export default function PRSimulatorPage() {
                   </button>
                 )}
                 {copied === "failed" && (
-                  <p className="mt-1 text-[11px] text-slate-400">Automatic copy unavailable - select the text above and copy manually.</p>
+                  <p className="mt-1 text-[11px] text-zinc-400">Automatic copy unavailable - select the text above and copy manually.</p>
                 )}
               </div>
             )}

@@ -125,14 +125,14 @@ export function LanguageMatchQuiz() {
     >
       <div className="flex items-center gap-2">
         <Sparkles className="h-5 w-5 text-emerald-600" />
-        <h2 className="text-lg font-bold tracking-tight text-slate-100 font-space">
+        <h2 className="text-lg font-bold tracking-tight text-zinc-100 font-space">
           Find your first issue in 10 seconds
         </h2>
       </div>
 
       {!data && !error && (
         <>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-zinc-400">
             Pick 2-3 languages you know - we&apos;ll instantly match you with top-ranked,
             beginner-welcoming repositories and live good first issues.
           </p>
@@ -149,7 +149,7 @@ export function LanguageMatchQuiz() {
                   className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
                     active
                       ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                      : "border border-slate-700 bg-[#111827] text-slate-300 hover:border-emerald-400 hover:text-emerald-400"
+                      : "border border-white/[0.12] bg-[#111827] text-zinc-300 hover:border-emerald-400 hover:text-emerald-400"
                   }`}
                 >
                   {displayNameFromSlug(lang)}
@@ -157,7 +157,7 @@ export function LanguageMatchQuiz() {
               );
             })}
           </div>
-          <p className="mt-1.5 text-[11px] font-mono text-slate-400">
+          <p className="mt-1.5 text-[11px] font-mono text-zinc-400">
             {selected.length}/3 selected (pick at least 2)
           </p>
 
@@ -171,7 +171,7 @@ export function LanguageMatchQuiz() {
                 className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
                   level === l.value
                     ? "bg-[#1e293b] text-white"
-                    : "border border-slate-700 bg-[#111827] text-slate-400 hover:border-slate-600"
+                    : "border border-white/[0.12] bg-[#111827] text-zinc-400 hover:border-white/[0.18]"
                 }`}
               >
                 {l.label}
@@ -198,7 +198,7 @@ export function LanguageMatchQuiz() {
       {/* Fetch/network failure fallback - never crashes, always offers a path */}
       {error && (
         <div className="mt-4 rounded-xl border border-dashed border-amber-300 bg-[#111827]/70 p-6 text-center">
-          <p className="text-sm text-slate-400">Matching is unavailable right now.</p>
+          <p className="text-sm text-zinc-400">Matching is unavailable right now.</p>
           <div className="mt-3 flex flex-wrap justify-center gap-3">
             <button
               type="button"
@@ -207,7 +207,7 @@ export function LanguageMatchQuiz() {
             >
               Try again
             </button>
-            <Link href="/repos" className="rounded-lg border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-300 hover:border-slate-600">
+            <Link href="/repos" className="rounded-lg border border-white/[0.12] px-3 py-2 text-xs font-semibold text-zinc-300 hover:border-white/[0.18]">
               Browse all repos →
             </Link>
           </div>
@@ -217,8 +217,8 @@ export function LanguageMatchQuiz() {
       {data && (
         <>
           {data.matches.length === 0 ? (
-            <div className="mt-4 rounded-xl border border-dashed border-slate-700 bg-[#111827]/60 p-8 text-center" data-testid="quiz-empty">
-              <p className="text-sm text-slate-400">{data.message || "No strong matches yet."}</p>
+            <div className="mt-4 rounded-xl border border-dashed border-white/[0.12] bg-[#111827]/60 p-8 text-center" data-testid="quiz-empty">
+              <p className="text-sm text-zinc-400">{data.message || "No strong matches yet."}</p>
               <a
                 href={githubAuthUrl(selected)}
                 className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-[#1e293b] px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-800"
@@ -233,22 +233,22 @@ export function LanguageMatchQuiz() {
             <>
               <ul className="mt-4 space-y-3" data-testid="quiz-matches">
                 {data.matches.map((m) => (
-                  <li key={m.full_name} className="rounded-xl border border-slate-800 bg-[#111827] p-4 shadow-sm">
+                  <li key={m.full_name} className="rounded-xl border border-white/[0.08] bg-[#111827] p-4 shadow-sm">
                     <div className="flex items-start justify-between gap-2">
                       <a
                         href={`/repo/${m.full_name}`}
-                        className="text-sm font-semibold text-slate-100 hover:text-emerald-400"
+                        className="text-sm font-semibold text-zinc-100 hover:text-emerald-400"
                       >
                         {m.full_name}
                       </a>
-                      <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-bold ${tierCls[m.c_rank_tier] ?? "bg-[#1e293b] text-slate-300 border border-slate-700"}`}>
+                      <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-bold ${tierCls[m.c_rank_tier] ?? "bg-[#1e293b] text-zinc-300 border border-white/[0.12]"}`}>
                         {m.c_rank_tier}
                       </span>
                     </div>
-                    <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-400">
+                    <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-400">
                       {m.description || "No description available."}
                     </p>
-                    <div className="mt-2 flex items-center gap-3 text-[11px] text-slate-400">
+                    <div className="mt-2 flex items-center gap-3 text-[11px] text-zinc-400">
                       {m.language && <span className="rounded-full bg-[#1e293b] px-2 py-0.5 font-medium capitalize">{m.language}</span>}
                       <span className="inline-flex items-center gap-1">
                         <Star className="h-3 w-3" /> {(m.stars || 0).toLocaleString()}
@@ -256,11 +256,11 @@ export function LanguageMatchQuiz() {
                       <span className="ml-auto font-mono">C-Rank {Math.round(m.c_rank_score)}</span>
                     </div>
                     {m.issues.length > 0 && (
-                      <ul className="mt-3 space-y-1.5 border-t border-slate-800 pt-3">
+                      <ul className="mt-3 space-y-1.5 border-t border-white/[0.08] pt-3">
                         {m.issues.map((issue) => (
                           <li key={issue.id} className="text-xs">
-                            <a href={issue.url} target="_blank" rel="noopener noreferrer" className="font-medium text-slate-200 hover:text-emerald-400">
-                              {issue.title} <ExternalLink className="inline h-3 w-3 text-slate-400" />
+                            <a href={issue.url} target="_blank" rel="noopener noreferrer" className="font-medium text-zinc-200 hover:text-emerald-400">
+                              {issue.title} <ExternalLink className="inline h-3 w-3 text-zinc-400" />
                             </a>
                           </li>
                         ))}
@@ -271,8 +271,8 @@ export function LanguageMatchQuiz() {
               </ul>
 
               <div className="mt-5 rounded-xl border border-dashed border-emerald-400 bg-[#111827]/70 p-4">
-                <p className="text-sm font-semibold text-slate-100">Save these matches &amp; unlock new-issue alerts</p>
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="text-sm font-semibold text-zinc-100">Save these matches &amp; unlock new-issue alerts</p>
+                <p className="mt-1 text-xs text-zinc-400">
                   One-click GitHub auth pre-fills your language profile so your dashboard feed is ready immediately.
                 </p>
                 <div className="mt-3 flex flex-wrap items-center gap-3">

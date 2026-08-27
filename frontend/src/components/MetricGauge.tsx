@@ -11,33 +11,34 @@ interface MetricGaugeProps {
 
 export function MetricGauge({ label, value, percentage = 0, tier = "A", className = "" }: MetricGaugeProps) {
   const grade = getGradeColor(tier);
-  // Total 5 dots
-  const totalDots = 5;
+  const totalSegments = 5;
   const scoreOutOf5 = Math.min(5, Math.max(0, (percentage / 100) * 5));
 
   return (
-    <div className={`flex flex-col items-center justify-center p-2.5 rounded-md ${className}`}>
-      <div className="font-mono text-base font-bold text-slate-50 mb-1.5">{value}</div>
-      {/* 5-Dot gauge */}
-      <div className="flex items-center gap-1.5 my-1.5" aria-label={`${label}: ${percentage}%`}>
-        {Array.from({ length: totalDots }).map((_, i) => {
-          const filled = i < Math.floor(scoreOutOf5);
-          const isHalf = !filled && i < scoreOutOf5;
+    <div className={`flex flex-col items-center justify-center p-2.5 rounded-lg ${className}`}>
+      <div className="font-mono text-sm font-semibold tracking-tight text-zinc-100 mb-1.5">{value}</div>
+      
+      {/* Sleek Segmented Indicator (Apple Watch/HUD style) */}
+      <div className="flex items-center gap-1 my-1" aria-label={`${label}: ${percentage}%`}>
+        {Array.from({ length: totalSegments }).map((_, i) => {
+          const isFilled = i < Math.floor(scoreOutOf5);
+          const isPartial = !isFilled && i < scoreOutOf5;
           return (
             <span
               key={i}
-              className={`h-2.5 w-2.5 rounded-full transition-colors ${
-                filled
-                  ? grade.bgClass
-                  : isHalf
-                  ? `${grade.bgClass} opacity-60`
-                  : "bg-slate-700"
+              className={`h-1.5 w-3 rounded-full transition-all duration-300 ${
+                isFilled
+                  ? `${grade.dotClass} shadow-[0_0_8px_rgba(255,255,255,0.2)]`
+                  : isPartial
+                  ? `${grade.dotClass} opacity-40`
+                  : "bg-zinc-800"
               }`}
             />
           );
         })}
       </div>
-      <div className="text-xs font-mono text-slate-400 font-semibold uppercase tracking-wider">{label}</div>
+      
+      <div className="text-[11px] font-mono text-zinc-400 font-medium tracking-wide">{label}</div>
     </div>
   );
 }

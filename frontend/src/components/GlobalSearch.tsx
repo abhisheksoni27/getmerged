@@ -191,13 +191,13 @@ export function GlobalSearch() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: -10 }}
             transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="nb-opt-out w-full max-w-2xl bg-[#111827] border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col focus:outline-none"
+            className="nb-opt-out w-full max-w-2xl bg-[#111827] border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden flex flex-col focus:outline-none"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={handleKeyDown}
           >
             {/* Search Input Header */}
-            <div className="relative flex items-center border-b border-slate-800 bg-[#1e293b]/50 p-4">
-              <Search className="absolute left-5 h-5 w-5 text-slate-400 pointer-events-none" />
+            <div className="relative flex items-center border-b border-white/[0.08] bg-[#1e293b]/50 p-4">
+              <Search className="absolute left-5 h-5 w-5 text-zinc-400 pointer-events-none" />
               <input
                 ref={inputRef}
                 type="text"
@@ -208,19 +208,19 @@ export function GlobalSearch() {
                   selectedIndexRef.current = -1;
                   setSelectedIndex(-1);
                 }}
-                className="w-full pl-10 pr-24 py-1.5 text-base font-sans text-slate-100 placeholder-zinc-400 focus:outline-none bg-transparent"
+                className="w-full pl-10 pr-24 py-1.5 text-base font-sans text-zinc-100 placeholder-zinc-400 focus:outline-none bg-transparent"
                 autoFocus
               />
               <div className="absolute right-4 flex items-center gap-2">
-                {loading && <Loader2 className="h-4 w-4 text-slate-400 animate-spin mr-1" />}
-                <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-slate-800 bg-[#111827] px-2 py-0.5 font-mono text-[10px] font-semibold text-slate-400 shadow-2xs">
+                {loading && <Loader2 className="h-4 w-4 text-zinc-400 animate-spin mr-1" />}
+                <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-white/[0.08] bg-[#111827] px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-400 shadow-2xs">
                   ESC
                 </kbd>
                 <button
                   type="button"
                   onClick={closeSearch}
                   aria-label="Close search"
-                  className="p-1 rounded-lg text-slate-400 hover:text-slate-300 hover:bg-[#1e293b] transition-colors cursor-pointer"
+                  className="p-1 rounded-lg text-zinc-400 hover:text-zinc-300 hover:bg-[#1e293b] transition-colors cursor-pointer"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -252,27 +252,27 @@ export function GlobalSearch() {
                         <img
                           src={`https://github.com/${r.full_name?.split("/")[0]}.png?size=64`}
                           alt={r.full_name}
-                          className="h-8 w-8 rounded-lg border border-slate-800 bg-[#111827] shrink-0 object-cover"
+                          className="h-8 w-8 rounded-lg border border-white/[0.08] bg-[#111827] shrink-0 object-cover"
                           onError={(e) => {
                             (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
                           }}
                         />
                         <div className="min-w-0">
-                          <div className="font-space text-sm font-bold text-slate-100 group-hover:text-slate-300 transition-colors truncate">
+                          <div className="font-space text-sm font-bold text-zinc-100 group-hover:text-zinc-300 transition-colors truncate">
                             {r.full_name}
                           </div>
-                          <div className="text-xs text-slate-400 truncate font-sans">
+                          <div className="text-xs text-zinc-400 truncate font-sans">
                             {r.description || "No description provided."}
                           </div>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-3 shrink-0 ml-3">
-                        <span className="text-xs font-mono text-slate-400 font-medium">
+                        <span className="text-xs font-mono text-zinc-400 font-medium">
                           {r.language || "Other"}
                         </span>
                         <span
-                          className={`px-2 py-0.5 text-[10px] font-bold font-mono border border-slate-700 rounded-lg shadow-sm text-slate-100 ${
+                          className={`px-2 py-0.5 text-[10px] font-bold font-mono border border-white/[0.12] rounded-lg shadow-sm text-zinc-100 ${
                             rankTier === "S"
                               ? "bg-[#8ce99a]"
                               : rankTier === "A"
@@ -287,38 +287,38 @@ export function GlobalSearch() {
                           {rankTier} Rank
                         </span>
                         {isSelected && (
-                          <CornerDownLeft className="h-3.5 w-3.5 text-slate-400 hidden sm:block" />
+                          <CornerDownLeft className="h-3.5 w-3.5 text-zinc-400 hidden sm:block" />
                         )}
                       </div>
                     </Link>
                   );
                 })
               ) : searchQuery.trim() ? (
-                <div className="p-8 text-center text-xs text-slate-400 font-mono">
+                <div className="p-8 text-center text-xs text-zinc-400 font-mono">
                   {loading ? "Searching repositories..." : `No repositories found matching "${searchQuery}".`}
                 </div>
               ) : (
-                <div className="p-6 text-center text-xs text-slate-400 font-sans">
-                  Type a repository name to search live rankings, or press <kbd className="font-mono bg-[#1e293b] px-1 py-0.5 rounded border border-slate-800 text-slate-400">ESC</kbd> to exit.
+                <div className="p-6 text-center text-xs text-zinc-400 font-sans">
+                  Type a repository name to search live rankings, or press <kbd className="font-mono bg-[#1e293b] px-1 py-0.5 rounded border border-white/[0.08] text-zinc-400">ESC</kbd> to exit.
                 </div>
               )}
             </div>
 
             {/* Modal Footer */}
-            <div className="px-5 py-3 bg-[#1e293b] border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+            <div className="px-5 py-3 bg-[#1e293b] border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-zinc-400">
               <div className="flex items-center gap-3">
                 <span className="hidden sm:inline-flex items-center gap-1">
                   <ArrowUpDown className="h-3 w-3" /> Navigate
                 </span>
                 <span>
-                  Press <kbd className="bg-zinc-200 px-1 py-0.5 rounded text-slate-300 font-medium">ESC</kbd> to close
+                  Press <kbd className="bg-zinc-200 px-1 py-0.5 rounded text-zinc-300 font-medium">ESC</kbd> to close
                 </span>
               </div>
               <Link
                 href="/repos"
                 onClick={closeSearch}
                 title="View all repository search results in the repository explorer"
-                className="text-slate-100 font-semibold hover:underline cursor-pointer font-sans"
+                className="text-zinc-100 font-semibold hover:underline cursor-pointer font-sans"
               >
                 View all explorer results →
               </Link>
