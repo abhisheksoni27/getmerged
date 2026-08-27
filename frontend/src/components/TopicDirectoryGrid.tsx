@@ -145,7 +145,7 @@ export function TopicDirectoryGrid({
       {!isFiltering && trendingTopics.length > 0 && (
         <section
           aria-label="Trending Topics"
-          className="mb-6 p-4 rounded-3xl bg-white border border-zinc-200/60"
+          className="mb-6 p-4 rounded-none bg-white border border-zinc-200/60 border-b-4 shadow-[4px_4px_0px_0px_#000]"
         >
           <h2 className="text-xs font-mono font-bold text-zinc-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
             <TrendingUp className="h-3.5 w-3.5 text-emerald-600" /> Trending

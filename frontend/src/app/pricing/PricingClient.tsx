@@ -19,7 +19,7 @@ export default function PricingClient() {
           <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
           <span>Built for High-Velocity Open Source Contributors</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-semibold text-zinc-900 tracking-tight mb-3">
+        <h1 className="text-3xl sm:text-4xl font-bold font-space text-zinc-900 tracking-tight mb-3">
           Stop Guessing. Get Your Pull Requests Merged.
         </h1>
         <p className="text-sm sm:text-base text-zinc-600 font-sans">

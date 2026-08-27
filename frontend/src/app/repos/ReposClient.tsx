@@ -325,7 +325,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
               <Sparkles className="h-3.5 w-3.5 text-orange-600" />
               <span>C-Rank™ Scored Repositories</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-semibold text-zinc-950 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-extrabold font-space text-zinc-950 tracking-tight">
               Open-Source Repository Explorer
             </h1>
             <p className="text-xs sm:text-sm text-zinc-600 font-sans mt-2 max-w-2xl leading-relaxed">
@@ -439,7 +439,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                 className={`inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-zinc-200/60 transition-all cursor-pointer font-bold ${
                   trendingOnly
                     ? "bg-[#ffd93d] text-black "
-                    : "bg-white text-zinc-800 hover:bg-[#fff9db] hover:"
+                    : "bg-white text-zinc-800 hover:bg-[#fff9db] hover:shadow-[2px_2px_0px_#000]"
                 }`}
               >
                 <Flame className={`h-3.5 w-3.5 ${trendingOnly ? "text-amber-600 fill-amber-500" : "text-amber-500"}`} />
@@ -452,7 +452,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   type="button"
                   onClick={resetFilters}
                   title="Reset all filters"
-                  className="p-2.5 rounded-xl border border-zinc-200/60 bg-white text-zinc-800 hover:bg-zinc-100 hover: transition-all cursor-pointer"
+                  className="p-2.5 rounded-xl border border-zinc-200/60 bg-white text-zinc-800 hover:bg-zinc-100 hover:shadow-[2px_2px_0px_#000] transition-all cursor-pointer"
                 >
                   <RotateCcw className="h-4 w-4" />
                 </button>
@@ -527,7 +527,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
           ) : (
             <div className="rounded-3xl border border-dashed border-zinc-300 bg-white/70 p-12 text-center">
               <Search className="h-10 w-10 text-zinc-300 mx-auto mb-3" />
-              <h3 className="text-base font-semibold text-zinc-900">No repositories found</h3>
+              <h3 className="text-base font-bold font-space text-zinc-900">No repositories found</h3>
               <p className="text-xs text-zinc-500 mt-1 max-w-sm mx-auto font-sans">
                 No open-source repositories matched your filter criteria. Try adjusting the language or star parameters.
               </p>
@@ -608,7 +608,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
               <HelpCircle className="h-3.5 w-3.5 text-blue-600" />
               <span>Frequently Asked Questions</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-semibold text-zinc-950 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold font-space text-zinc-950 tracking-tight">
               Repository Indexing & C-Rank™ FAQs
             </h2>
             <p className="text-xs sm:text-sm text-zinc-600 font-sans mt-1 leading-relaxed">
@@ -622,7 +622,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                 key={idx}
                 className="rounded-3xl bg-white border border-zinc-200/90 p-6 sm:p-7 shadow-xs hover:border-zinc-300 transition-colors"
               >
-                <h3 className="text-sm sm:text-base font-semibold text-zinc-900 mb-2 leading-snug">
+                <h3 className="text-sm sm:text-base font-bold font-space text-zinc-900 mb-2 leading-snug">
                   {faq.q}
                 </h3>
                 <p className="text-xs sm:text-sm text-zinc-600 font-sans leading-relaxed">

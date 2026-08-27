@@ -49,17 +49,21 @@
 }
 
 body {
-  background-color: #FCFCFD;
-  color: #09090b;
+  background-color: #faf9f5;
+  color: #1a1d20;
   font-family: var(--font-sans);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
 }
 
-/* Kept for backward compat but no longer applied */
+/* Devtool Subtle Precision Grid Background */
 .dev-grid-pattern {
-  background: transparent;
+  background-image: 
+    radial-gradient(rgba(26, 29, 32, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(250, 249, 245, 0) 100%);
+  background-size: 24px 24px, 100% 400px;
+  background-repeat: repeat, no-repeat;
 }
 
 /* Subtle Interactive Card Glow (Raycast/Dub style) */

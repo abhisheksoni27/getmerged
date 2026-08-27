@@ -94,7 +94,7 @@ export default async function ShareCardPage({ params }: PageProps) {
             <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
             Verified Hacktoberfest Completion Card
           </span>
-          <h1 className="text-3xl sm:text-4xl font-semibold text-zinc-900 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold font-space text-zinc-900 tracking-tight">
             {card.repo_full_name}
           </h1>
           <p className="mt-2 text-sm text-zinc-600 font-sans max-w-xl mx-auto">
