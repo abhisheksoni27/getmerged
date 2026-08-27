@@ -26,7 +26,7 @@ export function Footer() {
 
   return (
     <motion.footer
-      className="border-t border-white/[0.08] bg-black text-zinc-400 font-sans pt-16 pb-12 mt-auto"
+      className="border-t border-white/[0.08] bg-black text-zinc-300 font-sans pt-16 pb-12 mt-auto"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-60px" }}
@@ -40,7 +40,7 @@ export function Footer() {
             <h4 className="font-semibold text-zinc-200 text-xs uppercase tracking-wider font-mono flex items-center gap-1.5">
               <Trophy className="h-3.5 w-3.5 text-amber-400" /> Ecosystem Rankings
             </h4>
-            <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
+            <ul className="space-y-2 font-mono text-[11px] text-zinc-400">
               {rankingLangs.slice(0, 7).map((lang) => (
                 <li key={`rank-${lang.slug}`}>
                   <Link
@@ -61,7 +61,7 @@ export function Footer() {
             <h4 className="font-semibold text-zinc-200 text-xs uppercase tracking-wider font-mono flex items-center gap-1.5">
               <Sparkles className="h-3.5 w-3.5 text-blue-400" /> More Ecosystems
             </h4>
-            <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
+            <ul className="space-y-2 font-mono text-[11px] text-zinc-400">
               {rankingLangs.slice(7).map((lang) => (
                 <li key={`rank-more-${lang.slug}`}>
                   <Link
@@ -82,7 +82,7 @@ export function Footer() {
             <h4 className="font-semibold text-zinc-200 text-xs uppercase tracking-wider font-mono flex items-center gap-1.5">
               <Sprout className="h-3.5 w-3.5 text-emerald-400" /> Good First Issues
             </h4>
-            <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
+            <ul className="space-y-2 font-mono text-[11px] text-zinc-400">
               {rankingLangs.slice(0, 7).map((lang) => (
                 <li key={`gfi-${lang.slug}`}>
                   <Link
@@ -103,7 +103,7 @@ export function Footer() {
             <h4 className="font-semibold text-zinc-200 text-xs uppercase tracking-wider font-mono flex items-center gap-1.5">
               <Activity className="h-3.5 w-3.5 text-orange-400" /> Platform & Telemetry
             </h4>
-            <ul className="space-y-2 font-mono text-[11px] text-zinc-500">
+            <ul className="space-y-2 font-mono text-[11px] text-zinc-400">
               <li>
                 <Link href="/repos" title="Directory of Scored GitHub Repositories" className="hover:text-zinc-200 transition-colors">
                   All Repositories
@@ -139,7 +139,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Metadata Bar */}
-        <div className="border-t border-white/[0.08] pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
+        <div className="border-t border-white/[0.08] pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-400">
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-emerald-400" />
 <span>OpenDoor / GetMerged &middot; Precision Diagnostic Telemetry</span>

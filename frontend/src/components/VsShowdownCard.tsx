@@ -112,7 +112,7 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
       className="rounded-3xl border border-white/[0.08] bg-zinc-900/80 p-6 shadow-xs mb-12"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-950/70 border-amber-800/80 border border-amber-200/80 text-amber-300 text-xs font-mono font-bold">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300/80 text-amber-300 text-xs font-mono font-bold">
           <Trophy className="h-3.5 w-3.5" /> Should I Contribute? Showdown Verdict
         </div>
         <span
@@ -139,14 +139,14 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
               key={m.key}
               className="rounded-2xl bg-zinc-900 border border-white/[0.08] p-4 font-mono text-xs"
             >
-              <p className="text-zinc-400 font-sans font-semibold mb-2">{m.label}</p>
+              <p className="text-zinc-300 font-sans font-semibold mb-2">{m.label}</p>
               <div className="flex items-center justify-between gap-2">
-                <span className={decided && aWins ? "text-emerald-400 font-bold" : "text-zinc-100"}>
+                <span className={decided && aWins ? "text-emerald-400 font-bold" : "text-white"}>
                   {formatMetricValue(m.valueA, m.format)}
                 </span>
-                <span className="text-zinc-400">vs</span>
+                <span className="text-zinc-300">vs</span>
                 <span
-                  className={decided && !aWins ? "text-emerald-400 font-bold" : "text-zinc-100"}
+                  className={decided && !aWins ? "text-emerald-400 font-bold" : "text-white"}
                 >
                   {formatMetricValue(m.valueB, m.format)}
                 </span>
@@ -196,7 +196,7 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
         />
       )}
 
-      <p className="mt-4 text-xs text-zinc-400">
+      <p className="mt-4 text-xs text-zinc-300">
         Verdict computed from external PR merge rate, median review latency, and 90-day bus factor; ties broken by recent commit (PR) velocity.{" "}
         <a href={`/api/og/vs?a=${encodeURIComponent(repoA.full_name)}&b=${encodeURIComponent(repoB.full_name)}`} className="text-emerald-400 hover:underline font-mono">
           View share card image

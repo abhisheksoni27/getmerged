@@ -272,17 +272,17 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
   }, [page, totalPages]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-black dev-grid-pattern text-zinc-100 overflow-x-hidden font-sans">
+    <div className="min-h-screen flex flex-col bg-black dev-grid-pattern text-white overflow-x-hidden font-sans">
       <Header />
 
       <main className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex-1">
         {/* Breadcrumb Navigation */}
-        <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-zinc-400">
-          <Link href="/" title="Back to GetMerged Home" className="hover:text-zinc-100 transition-colors">
+        <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-zinc-300">
+          <Link href="/" title="Back to GetMerged Home" className="hover:text-white transition-colors">
             Home
           </Link>
           <span>/</span>
-          <span className="text-zinc-100 font-semibold">Repository Directory</span>
+          <span className="text-white font-semibold">Repository Directory</span>
         </nav>
 
         {/* Header Hero Section */}
@@ -304,7 +304,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
           <div className="flex items-center gap-3.5 glass-panel rounded-2xl px-6 py-4 shadow-lg shrink-0 self-start md:self-auto">
             <ShieldCheck className="h-6 w-6 text-emerald-400" />
             <div>
-              <span className="block text-[11px] font-mono text-zinc-400 uppercase tracking-wider font-semibold">
+              <span className="block text-[11px] font-mono text-zinc-300 uppercase tracking-wider font-semibold">
                 Total Repositories
               </span>
               <span className="text-2xl font-bold font-mono text-white">
@@ -319,7 +319,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
           <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
             {/* Search Input */}
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-300" />
               <input
                 type="text"
                 value={searchQuery}
@@ -328,14 +328,14 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
                   setPage(1);
                 }}
                 placeholder="Search by repo name (e.g. facebook/react, fastapi)..."
-                className="w-full pl-11 pr-10 py-3 rounded-2xl bg-black/70 border border-white/[0.12] text-sm text-white placeholder:text-zinc-500 focus:outline-hidden focus:border-white/[0.3] transition-all font-sans"
+                className="w-full pl-11 pr-10 py-3 rounded-2xl bg-black/70 border border-white/[0.12] text-sm text-white placeholder:text-zinc-400 focus:outline-hidden focus:border-white/[0.3] transition-all font-sans"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
                   title="Clear search"
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-white"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-zinc-300 hover:text-white"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -409,7 +409,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
                     : "bg-black/70 border-white/[0.12] text-zinc-300 hover:text-white"
                 }`}
               >
-                <Flame className={`h-4 w-4 ${trendingOnly ? "text-amber-400 fill-amber-400" : "text-zinc-400"}`} />
+                <Flame className={`h-4 w-4 ${trendingOnly ? "text-amber-400 fill-amber-400" : "text-zinc-300"}`} />
                 <span>Trending</span>
               </button>
 
@@ -452,7 +452,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
 
           {/* Quick Language Chips Carousel */}
           <div className="mt-4 pt-4 border-t border-white/[0.08] flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
-            <span className="text-zinc-400 font-mono shrink-0 pl-1">Quick:</span>
+            <span className="text-zinc-300 font-mono shrink-0 pl-1">Quick:</span>
             {LANGUAGES.map((lang) => {
               const active = selectedLang === lang;
               return (
@@ -493,13 +493,13 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
             </div>
           ) : (
             <div className="text-center py-16 px-4 rounded-3xl glass-panel border border-white/[0.08] max-w-lg mx-auto">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 border border-white/[0.1] text-zinc-400 mb-4">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 border border-white/[0.1] text-zinc-300 mb-4">
                 <Search className="h-6 w-6" />
               </div>
               <h3 className="text-lg font-bold font-space text-white mb-1">
                 No matching repositories found
               </h3>
-              <p className="text-xs text-zinc-400 font-sans max-w-sm mx-auto mb-6">
+              <p className="text-xs text-zinc-300 font-sans max-w-sm mx-auto mb-6">
                 Try adjusting your search query, language filters, or star count parameters to explore more results.
               </p>
               <button
@@ -517,7 +517,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
         {/* Pagination Bar */}
         {!loading && totalPages > 1 && (
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/[0.08] pt-8">
-            <div className="text-xs font-mono text-zinc-400">
+            <div className="text-xs font-mono text-zinc-300">
               Showing page <span className="text-white font-bold">{page}</span> of{" "}
               <span className="text-white font-bold">{totalPages}</span> ({totalCount.toLocaleString()} total repos)
             </div>
@@ -540,7 +540,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
                 {pageNumbers.map((num, idx) => {
                   if (num < 0) {
                     return (
-                      <span key={`ellipsis-${idx}`} className="px-2 text-zinc-500 text-xs">
+                      <span key={`ellipsis-${idx}`} className="px-2 text-zinc-400 text-xs">
                         ...
                       </span>
                     );
@@ -557,7 +557,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
                       className={`min-w-[36px] h-9 px-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                         isCurrent
                           ? "bg-white text-zinc-950 shadow-sm"
-                          : "bg-black/60 border border-white/[0.08] text-zinc-400 hover:text-white hover:border-white/[0.2]"
+                          : "bg-black/60 border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2]"
                       }`}
                     >
                       {num}
@@ -588,7 +588,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
             <h2 className="text-xl sm:text-2xl font-bold font-space text-white">
               Frequently Asked Questions About Open-Source Rankings
             </h2>
-            <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-1">
+            <p className="text-xs sm:text-sm text-zinc-300 font-sans mt-1">
               Everything you need to know about how C-Rank™ benchmarks repository maintainer availability.
             </p>
           </div>
@@ -596,11 +596,11 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {FAQS.map((faq, idx) => (
               <div key={idx} className="glass-panel p-6 rounded-2xl space-y-2">
-                <h3 className="text-sm font-bold font-space text-zinc-100 flex items-start gap-2">
+                <h3 className="text-sm font-bold font-space text-white flex items-start gap-2">
                   <HelpCircle className="h-4 w-4 text-orange-400 shrink-0 mt-0.5" />
                   <span>{faq.q}</span>
                 </h3>
-                <p className="text-xs text-zinc-400 leading-relaxed font-sans pl-6">
+                <p className="text-xs text-zinc-300 leading-relaxed font-sans pl-6">
                   {faq.a}
                 </p>
               </div>

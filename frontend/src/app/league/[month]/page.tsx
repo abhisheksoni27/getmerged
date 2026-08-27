@@ -80,7 +80,7 @@ export default async function MonthlyLeagueArchivePage({ params }: PageProps) {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-black text-zinc-100 font-sans">
+    <div className="flex min-h-screen flex-col bg-black text-white font-sans">
       <Header />
       <script
         type="application/ld+json"

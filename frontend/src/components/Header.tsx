@@ -72,26 +72,26 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <span className="font-space text-xs font-bold text-white tracking-tight">GM</span>
             </motion.div>
             <div className="flex flex-col">
-              <span className="font-sans text-sm font-semibold tracking-tight text-zinc-100 group-hover:text-white transition-colors">
+              <span className="font-sans text-sm font-semibold tracking-tight text-white group-hover:text-white transition-colors">
                 GetMerged
               </span>
             </div>
           </Link>
 
-          <nav className="hidden xl:flex items-center gap-6 text-xs font-sans font-medium text-zinc-400 shrink-0">
-            <Link href="/repos" title="Explore All Open Source Repositories" className="hover:text-zinc-100 transition-colors">
+          <nav className="hidden xl:flex items-center gap-6 text-xs font-sans font-medium text-zinc-300 shrink-0">
+            <Link href="/repos" title="Explore All Open Source Repositories" className="hover:text-white transition-colors">
               Repositories
             </Link>
-            <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm and Methodology" className="hover:text-zinc-100 transition-colors">
+            <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm and Methodology" className="hover:text-white transition-colors">
               How C-Rank™ Works
             </Link>
-            <Link href="/rankings" title="Browse Top Open Source Repositories by Language Ecosystem" className="hover:text-zinc-100 transition-colors">
+            <Link href="/rankings" title="Browse Top Open Source Repositories by Language Ecosystem" className="hover:text-white transition-colors">
               Ecosystems
             </Link>
-            <Link href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="hover:text-zinc-100 transition-colors">
+            <Link href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="hover:text-white transition-colors">
               Good First Issues
             </Link>
-            <Link href="/guides" title="Open Source Contribution Guides and Best Practices" className="hover:text-zinc-100 transition-colors">
+            <Link href="/guides" title="Open Source Contribution Guides and Best Practices" className="hover:text-white transition-colors">
               Guides
             </Link>
             <Link href="/league" title="Monthly Open-Source Contributor League & Active Sprints" className="text-orange-400 hover:text-orange-300 font-semibold transition-colors flex items-center gap-1.5">
@@ -111,12 +111,12 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               className="w-full relative flex items-center justify-between h-9 rounded-xl border border-white/[0.08] bg-zinc-900/60 hover:bg-zinc-900/90 hover:border-white/[0.15] px-3 shadow-inner focus-visible:ring-2 focus-visible:ring-orange-500 transition-all cursor-pointer group text-left"
             >
               <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">
-                <Search className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-200 shrink-0 transition-colors" />
-                <span className="text-xs text-zinc-400 group-hover:text-zinc-300 truncate font-sans block">
+                <Search className="h-3.5 w-3.5 text-zinc-300 group-hover:text-zinc-200 shrink-0 transition-colors" />
+                <span className="text-xs text-zinc-300 group-hover:text-zinc-300 truncate font-sans block">
                   {displayQuery || placeholderText || "Search repositories..."}
                 </span>
               </div>
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-md border border-white/[0.1] bg-white/[0.05] px-1.5 py-0.5 font-mono text-[10px] font-medium text-zinc-400 shrink-0">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-md border border-white/[0.1] bg-white/[0.05] px-1.5 py-0.5 font-mono text-[10px] font-medium text-zinc-300 shrink-0">
                 <span>⌘</span>K
               </kbd>
             </button>
@@ -166,9 +166,9 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <Link
                 href="/watchlist"
                 title="My Watchlist"
-                className="flex items-center gap-1.5 px-2 py-0.5 text-xs font-sans font-medium text-zinc-400 hover:text-zinc-100 rounded-lg transition-colors border-l border-white/[0.08] pl-2.5 shrink-0"
+                className="flex items-center gap-1.5 px-2 py-0.5 text-xs font-sans font-medium text-zinc-300 hover:text-white rounded-lg transition-colors border-l border-white/[0.08] pl-2.5 shrink-0"
               >
-                <Bookmark className="h-3.5 w-3.5 text-zinc-400" />
+                <Bookmark className="h-3.5 w-3.5 text-zinc-300" />
                 <span className="hidden md:inline">Watchlist</span>
               </Link>
             </div>
@@ -181,7 +181,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   setIsAuthModalOpen(true);
                 }}
                 title="Sign in to GetMerged"
-                className="inline-flex items-center gap-2 rounded-xl glass-card text-zinc-100 hover:bg-zinc-200 px-4 py-1.5 text-xs font-semibold shadow-sm active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer shrink-0"
+                className="inline-flex items-center gap-2 rounded-xl glass-card text-white hover:bg-zinc-200 px-4 py-1.5 text-xs font-semibold shadow-sm active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer shrink-0"
               >
                 <span>Sign in</span>
               </button>

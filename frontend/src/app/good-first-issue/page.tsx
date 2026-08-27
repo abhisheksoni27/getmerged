@@ -85,22 +85,22 @@ export default function GoodFirstIssueIndexPage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-10">
           <div className="flex items-center gap-2 mb-3.5">
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-950/70 border-emerald-800/80 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-300 font-mono">
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1 text-xs font-semibold text-emerald-300 font-mono">
               <Sprout className="h-3.5 w-3.5 text-emerald-400" /> Beginner Contributor Hub
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-zinc-100 tracking-tight font-space">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight font-space">
             Good First Issues by Stack
           </h1>
-          <p className="mt-3 text-xs sm:text-sm text-zinc-400 max-w-3xl leading-relaxed font-sans">
+          <p className="mt-3 text-xs sm:text-sm text-zinc-300 max-w-3xl leading-relaxed font-sans">
             Find welcoming repositories with labeled beginner issues, fast maintainer review response times, and high first-timer pull request success rates.
           </p>
         </div>
@@ -108,11 +108,11 @@ export default function GoodFirstIssueIndexPage() {
         <LanguageMatchQuiz />
 
         <div className="mb-6 mt-12 flex items-center justify-between border-b border-white/[0.08] pb-4">
-          <h2 className="text-sm font-bold text-zinc-100 flex items-center gap-2 font-space">
+          <h2 className="text-sm font-bold text-white flex items-center gap-2 font-space">
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
             Ecosystems with Beginner Issues ({ecosystems.length})
           </h2>
-          <span className="text-xs text-zinc-400 font-mono">Live Issues Directory</span>
+          <span className="text-xs text-zinc-300 font-mono">Live Issues Directory</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
@@ -129,18 +129,18 @@ export default function GoodFirstIssueIndexPage() {
                     <LangLogo language={eco.name} />
                   </div>
                   <div>
-                    <h3 className="font-space text-lg font-bold text-zinc-100 group-hover:text-zinc-300 transition-colors">
+                    <h3 className="font-space text-lg font-bold text-white group-hover:text-zinc-300 transition-colors">
                       {eco.name}
                     </h3>
-                    <span className="text-[11px] font-mono text-zinc-400">/good-first-issue/{eco.slug}</span>
+                    <span className="text-[11px] font-mono text-zinc-300">/good-first-issue/{eco.slug}</span>
                   </div>
                 </div>
-                <p className="text-xs text-zinc-400 leading-relaxed font-sans">
+                <p className="text-xs text-zinc-300 leading-relaxed font-sans">
                   {eco.desc}
                 </p>
               </div>
 
-              <div className="pt-4 mt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono font-semibold text-zinc-100 group-hover:text-zinc-300">
+              <div className="pt-4 mt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono font-semibold text-white group-hover:text-zinc-300">
                 <span>Browse beginner issues</span>
                 <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
               </div>

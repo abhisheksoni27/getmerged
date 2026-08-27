@@ -146,7 +146,7 @@ export default function PrReadinessPage() {
         ? { label: "Promising - polish a few items", color: "text-amber-600", bar: "bg-amber-500" }
         : score > 0
           ? { label: "Needs work before opening", color: "text-orange-600", bar: "bg-orange-500" }
-          : { label: "Start filling in details", color: "text-zinc-400", bar: "bg-zinc-400" };
+          : { label: "Start filling in details", color: "text-zinc-300", bar: "bg-zinc-400" };
 
   const issue = parseIssueLink(issueLink);
 
@@ -158,7 +158,7 @@ export default function PrReadinessPage() {
           <Gauge className="w-8 h-8 text-brand-dark" aria-hidden />
           PR Readiness Simulator
         </h1>
-        <p className="mt-2 text-zinc-400">
+        <p className="mt-2 text-zinc-300">
           Paste your PR title, diff size, summary, or issue link - get an instant acceptance score
           and a tailored checklist before you open the PR.
         </p>
@@ -266,7 +266,7 @@ export default function PrReadinessPage() {
           </div>
           <p className={`mt-2 text-sm font-semibold ${probability.color}`}>{probability.label}</p>
 
-          <h3 className="mt-5 mb-2 text-sm font-bold uppercase tracking-wide text-zinc-400">
+          <h3 className="mt-5 mb-2 text-sm font-bold uppercase tracking-wide text-zinc-300">
             Tailored checklist
           </h3>
           <ul className="space-y-2">
@@ -275,11 +275,11 @@ export default function PrReadinessPage() {
                 {item.done ? (
                   <CheckCircle2 className="w-5 h-5 mt-0.5 text-emerald-600 shrink-0" aria-label="done" />
                 ) : (
-                  <Circle className="w-5 h-5 mt-0.5 text-zinc-400 shrink-0" aria-label="todo" />
+                  <Circle className="w-5 h-5 mt-0.5 text-zinc-300 shrink-0" aria-label="todo" />
                 )}
                 <span>
-                  <span className={item.done ? "text-zinc-200 font-medium" : "text-zinc-400"}>{item.label}</span>
-                  {!item.done && <span className="block text-xs text-zinc-400">{item.hint}</span>}
+                  <span className={item.done ? "text-zinc-200 font-medium" : "text-zinc-300"}>{item.label}</span>
+                  {!item.done && <span className="block text-xs text-zinc-300">{item.hint}</span>}
                 </span>
               </li>
             ))}

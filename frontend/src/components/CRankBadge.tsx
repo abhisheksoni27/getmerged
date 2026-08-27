@@ -100,7 +100,7 @@ export function CRankBadge({ rank = "A", size = "md", showLabel = true, classNam
       <span className={`h-2 w-2 rounded-full animate-pulse ${grade.dotClass}`} />
       <span className="font-extrabold tracking-tight">{normalizedRank}</span>
       {showLabel && (
-        <span className="font-sans font-semibold tracking-normal text-zinc-100">
+        <span className="font-sans font-semibold tracking-normal text-white">
           • {grade.label}
         </span>
       )}

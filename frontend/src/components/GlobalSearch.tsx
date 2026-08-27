@@ -197,7 +197,7 @@ export function GlobalSearch() {
           >
             {/* Search Input Header */}
             <div className="relative flex items-center border-b border-white/[0.08] bg-zinc-900/50 p-4">
-              <Search className="absolute left-5 h-5 w-5 text-zinc-400 pointer-events-none" />
+              <Search className="absolute left-5 h-5 w-5 text-zinc-300 pointer-events-none" />
               <input
                 ref={inputRef}
                 type="text"
@@ -208,19 +208,19 @@ export function GlobalSearch() {
                   selectedIndexRef.current = -1;
                   setSelectedIndex(-1);
                 }}
-                className="w-full pl-10 pr-24 py-1.5 text-base font-sans text-zinc-100 placeholder-zinc-400 focus:outline-none bg-transparent"
+                className="w-full pl-10 pr-24 py-1.5 text-base font-sans text-white placeholder-zinc-400 focus:outline-none bg-transparent"
                 autoFocus
               />
               <div className="absolute right-4 flex items-center gap-2">
-                {loading && <Loader2 className="h-4 w-4 text-zinc-400 animate-spin mr-1" />}
-                <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-white/[0.08] bg-zinc-900/80 px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-400 shadow-2xs">
+                {loading && <Loader2 className="h-4 w-4 text-zinc-300 animate-spin mr-1" />}
+                <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-white/[0.08] bg-zinc-900/80 px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-300 shadow-2xs">
                   ESC
                 </kbd>
                 <button
                   type="button"
                   onClick={closeSearch}
                   aria-label="Close search"
-                  className="p-1 rounded-lg text-zinc-400 hover:text-zinc-300 hover:bg-zinc-900 transition-colors cursor-pointer"
+                  className="p-1 rounded-lg text-zinc-300 hover:text-zinc-300 hover:bg-zinc-900 transition-colors cursor-pointer"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -258,21 +258,21 @@ export function GlobalSearch() {
                           }}
                         />
                         <div className="min-w-0">
-                          <div className="font-space text-sm font-bold text-zinc-100 group-hover:text-zinc-300 transition-colors truncate">
+                          <div className="font-space text-sm font-bold text-white group-hover:text-zinc-300 transition-colors truncate">
                             {r.full_name}
                           </div>
-                          <div className="text-xs text-zinc-400 truncate font-sans">
+                          <div className="text-xs text-zinc-300 truncate font-sans">
                             {r.description || "No description provided."}
                           </div>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-3 shrink-0 ml-3">
-                        <span className="text-xs font-mono text-zinc-400 font-medium">
+                        <span className="text-xs font-mono text-zinc-300 font-medium">
                           {r.language || "Other"}
                         </span>
                         <span
-                          className={`px-2 py-0.5 text-[10px] font-bold font-mono border border-white/[0.12] rounded-lg shadow-sm text-zinc-100 ${
+                          className={`px-2 py-0.5 text-[10px] font-bold font-mono border border-white/[0.12] rounded-lg shadow-sm text-white ${
                             rankTier === "S"
                               ? "bg-[#8ce99a]"
                               : rankTier === "A"
@@ -287,25 +287,25 @@ export function GlobalSearch() {
                           {rankTier} Rank
                         </span>
                         {isSelected && (
-                          <CornerDownLeft className="h-3.5 w-3.5 text-zinc-400 hidden sm:block" />
+                          <CornerDownLeft className="h-3.5 w-3.5 text-zinc-300 hidden sm:block" />
                         )}
                       </div>
                     </Link>
                   );
                 })
               ) : searchQuery.trim() ? (
-                <div className="p-8 text-center text-xs text-zinc-400 font-mono">
+                <div className="p-8 text-center text-xs text-zinc-300 font-mono">
                   {loading ? "Searching repositories..." : `No repositories found matching "${searchQuery}".`}
                 </div>
               ) : (
-                <div className="p-6 text-center text-xs text-zinc-400 font-sans">
-                  Type a repository name to search live rankings, or press <kbd className="font-mono bg-zinc-900 px-1 py-0.5 rounded border border-white/[0.08] text-zinc-400">ESC</kbd> to exit.
+                <div className="p-6 text-center text-xs text-zinc-300 font-sans">
+                  Type a repository name to search live rankings, or press <kbd className="font-mono bg-zinc-900 px-1 py-0.5 rounded border border-white/[0.08] text-zinc-300">ESC</kbd> to exit.
                 </div>
               )}
             </div>
 
             {/* Modal Footer */}
-            <div className="px-5 py-3 bg-zinc-900 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-zinc-400">
+            <div className="px-5 py-3 bg-zinc-900 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-zinc-300">
               <div className="flex items-center gap-3">
                 <span className="hidden sm:inline-flex items-center gap-1">
                   <ArrowUpDown className="h-3 w-3" /> Navigate
@@ -318,7 +318,7 @@ export function GlobalSearch() {
                 href="/repos"
                 onClick={closeSearch}
                 title="View all repository search results in the repository explorer"
-                className="text-zinc-100 font-semibold hover:underline cursor-pointer font-sans"
+                className="text-white font-semibold hover:underline cursor-pointer font-sans"
               >
                 View all explorer results →
               </Link>

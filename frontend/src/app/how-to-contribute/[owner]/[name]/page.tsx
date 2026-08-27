@@ -173,10 +173,10 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
 
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 py-8 sm:py-12">
         <div className="mb-8 border-b border-white/[0.08] pb-6">
-          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-zinc-100 tracking-tight">
+          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             How to Contribute to {fullName}
           </h1>
-          <p className="text-sm text-zinc-400 font-sans mt-2">
+          <p className="text-sm text-zinc-300 font-sans mt-2">
             A practical guide backed by {fullName}&apos;s real pull-request history - not guesswork.
           </p>
         </div>
@@ -189,26 +189,26 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
             { label: "First-timer success", value: firstTimer > 0 ? `${firstTimer}%` : " - " },
             { label: "C-Rank", value: `${repo.c_rank_tier ?? "?"} Tier` },
           ].map((stat) => (
-            <div key={stat.label} className="rounded-xl border border-b-2 border-b-zinc-900/20 border-white/[0.08] bg-zinc-900/80 p-3 text-center">
-              <div className="font-space text-lg font-extrabold text-zinc-100">{stat.value}</div>
-              <div className="text-[10px] font-mono uppercase tracking-wide text-zinc-400 mt-0.5">{stat.label}</div>
+            <div key={stat.label} className="rounded-xl border border-b border-white/[0.1]/20 border-white/[0.08] bg-zinc-900/80 p-3 text-center">
+              <div className="font-space text-lg font-extrabold text-white">{stat.value}</div>
+              <div className="text-[10px] font-mono uppercase tracking-wide text-zinc-300 mt-0.5">{stat.label}</div>
             </div>
           ))}
         </div>
 
         {/* Steps */}
         <section className="space-y-6 mb-12">
-          <h2 className="font-space text-xl font-bold text-zinc-100">Your game plan</h2>
+          <h2 className="font-space text-xl font-bold text-white">Your game plan</h2>
           {steps.map((step, i) => (
             <div key={step.title} className="flex gap-4">
               <div className="shrink-0 w-9 h-9 rounded-xl bg-zinc-900 text-white font-space font-bold flex items-center justify-center text-sm">
                 {i + 1}
               </div>
               <div>
-                <h3 className="font-bold text-zinc-100 text-sm flex items-center gap-1.5">
+                <h3 className="font-bold text-white text-sm flex items-center gap-1.5">
                   <step.icon className="h-4 w-4 text-emerald-400" /> {step.title}
                 </h3>
-                <p className="text-sm text-zinc-400 mt-1 leading-relaxed">{step.body}</p>
+                <p className="text-sm text-zinc-300 mt-1 leading-relaxed">{step.body}</p>
               </div>
             </div>
           ))}
@@ -217,7 +217,7 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
         {/* Open good first issues */}
         {issues.length > 0 && (
           <section className="mb-12">
-            <h2 className="font-space text-xl font-bold text-zinc-100 mb-4">Open good first issues</h2>
+            <h2 className="font-space text-xl font-bold text-white mb-4">Open good first issues</h2>
             <div className="space-y-3">
               {issues.slice(0, 5).map((issue) => (
                 <a
@@ -226,15 +226,15 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
                   title={`View good first issue #${issue.issue_number} on GitHub`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-4 rounded-xl border border-b-2 border-b-zinc-900/10 border-white/[0.08] bg-zinc-900/80 hover:border-emerald-500 hover:border-b-emerald-700 transition-all group"
+                  className="block p-4 rounded-xl border border-b border-white/[0.1]/10 border-white/[0.08] bg-zinc-900/80 hover:border-emerald-500 hover:border-b-emerald-700 transition-all group"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <span className="text-sm font-medium text-zinc-200 group-hover:text-emerald-300 line-clamp-1">
                       {issue.title}
                     </span>
-                    <ExternalLink className="h-3.5 w-3.5 shrink-0 text-zinc-400 group-hover:text-emerald-600" />
+                    <ExternalLink className="h-3.5 w-3.5 shrink-0 text-zinc-300 group-hover:text-emerald-600" />
                   </div>
-                  <span className="text-xs font-mono text-zinc-400 mt-1 block">#{issue.issue_number}</span>
+                  <span className="text-xs font-mono text-zinc-300 mt-1 block">#{issue.issue_number}</span>
                 </a>
               ))}
             </div>
@@ -262,7 +262,7 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
         </section>
 
         {langSlug && (
-          <p className="mt-8 text-xs text-zinc-400">
+          <p className="mt-8 text-xs text-zinc-300">
             Looking for more? See{" "}
             <Link
               href={`/contribute/${langSlug}?level=beginner`}

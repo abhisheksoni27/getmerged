@@ -52,7 +52,7 @@ export function RepoDetailHero({
           <div className="min-w-0 flex-1">
             {/* Repo Title & Stars */}
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-2xl sm:text-3xl font-bold font-sans text-zinc-100 tracking-tight leading-tight break-all">
+              <h1 className="text-2xl sm:text-3xl font-bold font-sans text-white tracking-tight leading-tight break-all">
                 {fullName}
               </h1>
               {typeof repo?.stars === "number" && repo.stars >= 0 && (
@@ -73,14 +73,14 @@ export function RepoDetailHero({
                   <CRankBadge rank={rank} size="md" showLabel={true} />
                   {roundedScore > 0 && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs font-semibold rounded-full bg-white/[0.05] text-zinc-200 border border-white/[0.08]">
-                      <span className="text-zinc-400">Score:</span>
+                      <span className="text-zinc-300">Score:</span>
                       <span className="text-emerald-400 font-bold">{roundedScore}</span>
-                      <span className="text-zinc-500 font-normal">/100</span>
+                      <span className="text-zinc-400 font-normal">/100</span>
                     </span>
                   )}
                 </>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] text-zinc-400 border border-white/[0.06] font-mono text-xs">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] text-zinc-300 border border-white/[0.06] font-mono text-xs">
                   Unscored
                 </span>
               )}
@@ -105,7 +105,7 @@ export function RepoDetailHero({
             </div>
 
             {/* Description */}
-            <p className="mt-3 text-sm text-zinc-400 leading-relaxed font-sans max-w-3xl">
+            <p className="mt-3 text-sm text-zinc-300 leading-relaxed font-sans max-w-3xl">
               {repo?.description || "Open-source repository analyzed with precision C-Rank telemetry."}
             </p>
           </div>
@@ -133,14 +133,14 @@ export function RepoDetailHero({
               type="button"
               onClick={onGithubClick}
               title={`View ${fullName} on GitHub`}
-              className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-mono font-semibold rounded-xl glass-card text-zinc-100 hover:bg-zinc-200 transition-all shadow-sm cursor-pointer"
+              className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-mono font-semibold rounded-xl glass-card text-white hover:bg-zinc-200 transition-all shadow-sm cursor-pointer"
             >
               <GitPullRequest className="h-3.5 w-3.5" />
               <span>GitHub</span>
             </button>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono text-zinc-500">
+          <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
             <Link
               href={`/compare?a=${encodeURIComponent(fullName)}`}
               title={`Compare ${fullName} against another repository`}

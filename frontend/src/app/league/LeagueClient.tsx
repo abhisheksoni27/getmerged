@@ -131,15 +131,15 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                 <span>Active Monthly Sprint</span>
               </div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-zinc-300 font-mono text-xs">
-                <Clock className="h-3.5 w-3.5 text-zinc-400" />
+                <Clock className="h-3.5 w-3.5 text-zinc-300" />
                 <span>{daysRemaining} Days Remaining</span>
               </div>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-black font-space text-zinc-100 tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-5xl font-black font-space text-white tracking-tight leading-tight">
               {monthName}
             </h1>
-            <p className="text-sm sm:text-base text-zinc-400 leading-relaxed font-sans">
+            <p className="text-sm sm:text-base text-zinc-300 leading-relaxed font-sans">
               Merge pull requests into top-ranked, welcoming open-source repositories this month. Level up from Bronze to Gold and earn verified Proof-of-Merge resume badges.
             </p>
           </div>
@@ -161,28 +161,28 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
           <div className="glass-card p-4 rounded-xl">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold text-amber-500 uppercase">Bronze Milestone</span>
-              <span className="text-xs font-mono text-zinc-400">1 Merged PR</span>
+              <span className="text-xs font-mono text-zinc-300">1 Merged PR</span>
             </div>
-            <div className="text-lg font-bold font-space text-zinc-100 mt-1">Contributor Debut</div>
-            <p className="text-xs text-zinc-400 mt-1">Get your first pull request merged into any indexed repository.</p>
+            <div className="text-lg font-bold font-space text-white mt-1">Contributor Debut</div>
+            <p className="text-xs text-zinc-300 mt-1">Get your first pull request merged into any indexed repository.</p>
           </div>
 
           <div className="glass-card p-4 rounded-xl">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold text-zinc-300 uppercase">Silver Milestone</span>
-              <span className="text-xs font-mono text-zinc-400">3 Merged PRs</span>
+              <span className="text-xs font-mono text-zinc-300">3 Merged PRs</span>
             </div>
-            <div className="text-lg font-bold font-space text-zinc-100 mt-1">Active Builder</div>
-            <p className="text-xs text-zinc-400 mt-1">Deliver 3 quality pull requests across active open-source codebases.</p>
+            <div className="text-lg font-bold font-space text-white mt-1">Active Builder</div>
+            <p className="text-xs text-zinc-300 mt-1">Deliver 3 quality pull requests across active open-source codebases.</p>
           </div>
 
           <div className="glass-card p-4 rounded-xl">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold text-amber-400 uppercase">Gold Milestone</span>
-              <span className="text-xs font-mono text-zinc-400">5+ Merged PRs</span>
+              <span className="text-xs font-mono text-zinc-300">5+ Merged PRs</span>
             </div>
-            <div className="text-lg font-bold font-space text-zinc-100 mt-1">Monthly Champion</div>
-            <p className="text-xs text-zinc-400 mt-1">Top-tier contributor status with verified Gold badge on your profile.</p>
+            <div className="text-lg font-bold font-space text-white mt-1">Monthly Champion</div>
+            <p className="text-xs text-zinc-300 mt-1">Top-tier contributor status with verified Gold badge on your profile.</p>
           </div>
         </div>
       </div>
@@ -191,11 +191,11 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
       <div className="glass-panel p-6 sm:p-8 rounded-2xl">
         <div className="flex items-center gap-2 mb-2">
           <GitPullRequest className="h-5 w-5 text-orange-400" />
-          <h2 className="text-lg font-bold font-space text-zinc-100">
+          <h2 className="text-lg font-bold font-space text-white">
             Track PR for {monthName}
           </h2>
         </div>
-        <p className="text-xs text-zinc-400 mb-4">
+        <p className="text-xs text-zinc-300 mb-4">
           Paste any public GitHub PR link to count it toward your monthly contributor sprint goal.
         </p>
 
@@ -206,7 +206,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
             onChange={(e) => setPrUrl(e.target.value)}
             placeholder="https://github.com/facebook/react/pull/12345"
             required
-            className="flex-1 rounded-xl bg-zinc-900/90 border border-white/[0.08] px-4 py-3 text-xs font-mono text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-white/[0.2]"
+            className="flex-1 rounded-xl bg-zinc-900/90 border border-white/[0.08] px-4 py-3 text-xs font-mono text-white placeholder:text-zinc-400 focus:outline-none focus:border-white/[0.2]"
           />
           <button
             type="submit"
@@ -240,7 +240,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
             activeTab === "repos"
               ? "bg-white text-zinc-950 shadow-sm"
-              : "glass-card text-zinc-400 hover:text-white"
+              : "glass-card text-zinc-300 hover:text-white"
           }`}
         >
           <Trophy className="h-4 w-4" />
@@ -252,7 +252,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
             activeTab === "mvps"
               ? "bg-white text-zinc-950 shadow-sm"
-              : "glass-card text-zinc-400 hover:text-white"
+              : "glass-card text-zinc-300 hover:text-white"
           }`}
         >
           <Users className="h-4 w-4" />
@@ -270,11 +270,11 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
           {/* Language Filter Bar */}
           <div className="flex items-center justify-between gap-4 flex-wrap pb-2">
             <div>
-              <h2 className="text-xl font-bold font-space text-zinc-100 flex items-center gap-2">
+              <h2 className="text-xl font-bold font-space text-white flex items-center gap-2">
                 <Trophy className="h-5 w-5 text-amber-400" />
                 Ranked Repositories for {monthName}
               </h2>
-              <p className="text-xs text-zinc-400 font-sans mt-0.5">
+              <p className="text-xs text-zinc-300 font-sans mt-0.5">
                 Ranked by PR merge acceptance velocity, first-timer hospitality, and open issues.
               </p>
             </div>
@@ -286,7 +286,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                 className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
                   selectedLang === "all"
                     ? "bg-white text-zinc-950 shadow-sm"
-                    : "bg-white/[0.04] text-zinc-400 hover:text-white"
+                    : "bg-white/[0.04] text-zinc-300 hover:text-white"
                 }`}
               >
                 All Languages
@@ -299,7 +299,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                   className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer whitespace-nowrap ${
                     selectedLang === lang
                       ? "bg-white text-zinc-950 shadow-sm"
-                      : "bg-white/[0.04] text-zinc-400 hover:text-white"
+                      : "bg-white/[0.04] text-zinc-300 hover:text-white"
                   }`}
                 >
                   {lang}
@@ -318,11 +318,11 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="font-mono text-xs text-zinc-500 font-bold">#{idx + 1}</span>
+                      <span className="font-mono text-xs text-zinc-400 font-bold">#{idx + 1}</span>
                       <Link
                         href={`/${repo.full_name}`}
                         title={`View ${repo.full_name} scorecard`}
-                        className="font-space font-bold text-sm text-zinc-100 hover:text-orange-400 transition-colors truncate"
+                        className="font-space font-bold text-sm text-white hover:text-orange-400 transition-colors truncate"
                       >
                         {repo.full_name}
                       </Link>
@@ -330,7 +330,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                     <CRankBadge rank={repo.c_rank_tier || "A"} size="sm" />
                   </div>
 
-                  <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed mb-4">
+                  <p className="text-xs text-zinc-300 line-clamp-2 leading-relaxed mb-4">
                     {repo.description || "Active open-source repository indexed by GetMerged."}
                   </p>
                 </div>
@@ -338,19 +338,19 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                 <div className="space-y-3 pt-3 border-t border-white/[0.06]">
                   <div className="grid grid-cols-3 gap-2 text-center">
                     <div className="glass-card p-2 rounded-lg">
-                      <div className="text-[10px] font-mono text-zinc-500 uppercase">Stars</div>
+                      <div className="text-[10px] font-mono text-zinc-400 uppercase">Stars</div>
                       <div className="text-xs font-mono font-bold text-zinc-200 mt-0.5">
                         {repo.stars >= 1000 ? `${(repo.stars / 1000).toFixed(1)}k` : repo.stars}
                       </div>
                     </div>
                     <div className="glass-card p-2 rounded-lg">
-                      <div className="text-[10px] font-mono text-zinc-500 uppercase">1st-Timer</div>
+                      <div className="text-[10px] font-mono text-zinc-400 uppercase">1st-Timer</div>
                       <div className="text-xs font-mono font-bold text-emerald-400 mt-0.5">
                         {repo.first_timer_success_rate ? `${Math.round(repo.first_timer_success_rate)}%` : " - "}
                       </div>
                     </div>
                     <div className="glass-card p-2 rounded-lg">
-                      <div className="text-[10px] font-mono text-zinc-500 uppercase">Issues</div>
+                      <div className="text-[10px] font-mono text-zinc-400 uppercase">Issues</div>
                       <div className="text-xs font-mono font-bold text-amber-400 mt-0.5">
                         {repo.gfi_count || " - "}
                       </div>
@@ -358,7 +358,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                   </div>
 
                   <div className="flex items-center justify-between pt-1">
-                    <span className="text-[11px] font-mono text-zinc-400">
+                    <span className="text-[11px] font-mono text-zinc-300">
                       {repo.language || "Code"}
                     </span>
                     <Link
@@ -379,11 +379,11 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
         /* Contributor MVPs Section */
         <div className="space-y-4">
           <div>
-            <h2 className="text-xl font-bold font-space text-zinc-100 flex items-center gap-2">
+            <h2 className="text-xl font-bold font-space text-white flex items-center gap-2">
               <Award className="h-5 w-5 text-orange-400" />
               Top Contributor MVPs for {monthName}
             </h2>
-            <p className="text-xs text-zinc-400 font-sans mt-0.5">
+            <p className="text-xs text-zinc-300 font-sans mt-0.5">
               Ranked by verified quality pull request points merged into C-Rank scored repositories.
             </p>
           </div>
@@ -407,11 +407,11 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                     <Link
                       href={`/u/${c.slug}`}
                       title={`View ${c.username} profile`}
-                      className="font-space font-bold text-sm text-zinc-100 hover:text-orange-400 transition-colors truncate block"
+                      className="font-space font-bold text-sm text-white hover:text-orange-400 transition-colors truncate block"
                     >
                       @{c.username}
                     </Link>
-                    <div className="flex items-center gap-2 mt-0.5 text-xs font-mono text-zinc-400">
+                    <div className="flex items-center gap-2 mt-0.5 text-xs font-mono text-zinc-300">
                       <span>{c.merged_count} PRs</span>
                       <span>•</span>
                       <span className="text-amber-400">{c.monthly_points} pts</span>

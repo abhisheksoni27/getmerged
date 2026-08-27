@@ -177,10 +177,10 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
         </div>
 
         <div className="p-5">
-          <p className="text-lg font-bold text-zinc-100 mb-1">
+          <p className="text-lg font-bold text-white mb-1">
             {links.headline} 🎉
           </p>
-          <p className="text-xs text-zinc-400 mb-4">
+          <p className="text-xs text-zinc-300 mb-4">
             {celebrating.full_name}#{celebrating.pr_number} merged. Your pre-flight call is now a
             publicly verifiable fact - brag about it.
           </p>
@@ -228,7 +228,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
           </div>
 
           <div className="pt-3 border-t border-white/[0.08]">
-            <label className="block text-[11px] font-mono font-bold text-zinc-400 uppercase mb-1">
+            <label className="block text-[11px] font-mono font-bold text-zinc-300 uppercase mb-1">
               Share link (with your referral credit)
             </label>
             <div className="flex items-center gap-2">

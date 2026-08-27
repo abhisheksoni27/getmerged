@@ -60,7 +60,7 @@ export function OrgConsoleCard({ org }: { org: string }) {
   if (!data.has_data && data.repo_count === 0) {
     return (
       <div className="mb-8 p-6 rounded-2xl border border-dashed border-white/[0.12] bg-zinc-900/80 text-center">
-        <p className="text-sm text-zinc-400 font-sans">No repositories tracked for <strong>{org}</strong> yet.</p>
+        <p className="text-sm text-zinc-300 font-sans">No repositories tracked for <strong>{org}</strong> yet.</p>
         <Link
           href="/repos"
           className="mt-3 inline-flex px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs items-center gap-1.5"
@@ -75,7 +75,7 @@ export function OrgConsoleCard({ org }: { org: string }) {
   if (!data.has_data) {
     return (
       <div className="mb-8 p-6 rounded-2xl border border-white/[0.08] bg-zinc-900/80 text-center">
-        <p className="text-sm text-zinc-400 font-sans">No data - metrics are not available for any {org} repository yet.</p>
+        <p className="text-sm text-zinc-300 font-sans">No data - metrics are not available for any {org} repository yet.</p>
       </div>
     );
   }
@@ -96,45 +96,45 @@ export function OrgConsoleCard({ org }: { org: string }) {
         <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-md ${tierColor}`}>
           Aggregate Tier {data.c_rank_tier} ({Math.round(data.c_rank_score)})
         </span>
-        <span className="text-xs font-mono text-zinc-400">
+        <span className="text-xs font-mono text-zinc-300">
           {data.scored_repo_count}/{data.repo_count} repos scored
         </span>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-3 rounded-xl bg-zinc-900 border border-white/[0.08]/60">
-          <span className="text-[10px] font-mono text-zinc-400 flex items-center gap-1"><Clock className="h-3 w-3 text-amber-500" /> Response P50</span>
-          <p className="font-space text-base font-bold text-zinc-100 mt-0.5">{data.response_p50_hours > 0 ? `${data.response_p50_hours.toFixed(1)}h` : "N/A"}</p>
+          <span className="text-[10px] font-mono text-zinc-300 flex items-center gap-1"><Clock className="h-3 w-3 text-amber-500" /> Response P50</span>
+          <p className="font-space text-base font-bold text-white mt-0.5">{data.response_p50_hours > 0 ? `${data.response_p50_hours.toFixed(1)}h` : "N/A"}</p>
           {data.peer_benchmarks && <p className="text-[10px] font-mono text-emerald-400 mt-0.5">{percentileLabel(data.peer_benchmarks.response_p50_percentile)} of peers</p>}
         </div>
         <div className="p-3 rounded-xl bg-zinc-900 border border-white/[0.08]/60">
-          <span className="text-[10px] font-mono text-zinc-400 flex items-center gap-1"><Clock className="h-3 w-3 text-amber-500" /> Response P90</span>
-          <p className="font-space text-base font-bold text-zinc-100 mt-0.5">{data.response_p90_hours > 0 ? `${data.response_p90_hours.toFixed(1)}h` : "N/A"}</p>
+          <span className="text-[10px] font-mono text-zinc-300 flex items-center gap-1"><Clock className="h-3 w-3 text-amber-500" /> Response P90</span>
+          <p className="font-space text-base font-bold text-white mt-0.5">{data.response_p90_hours > 0 ? `${data.response_p90_hours.toFixed(1)}h` : "N/A"}</p>
           {data.peer_benchmarks && <p className="text-[10px] font-mono text-emerald-400 mt-0.5">{percentileLabel(data.peer_benchmarks.response_p90_percentile)} of peers</p>}
         </div>
         <div className="p-3 rounded-xl bg-zinc-900 border border-white/[0.08]/60">
-          <span className="text-[10px] font-mono text-zinc-400 flex items-center gap-1"><Sparkles className="h-3 w-3 text-purple-500" /> First-Timer Success</span>
-          <p className="font-space text-base font-bold text-zinc-100 mt-0.5">{data.first_timer_success_rate.toFixed(0)}%</p>
+          <span className="text-[10px] font-mono text-zinc-300 flex items-center gap-1"><Sparkles className="h-3 w-3 text-purple-500" /> First-Timer Success</span>
+          <p className="font-space text-base font-bold text-white mt-0.5">{data.first_timer_success_rate.toFixed(0)}%</p>
           {data.peer_benchmarks && <p className="text-[10px] font-mono text-emerald-400 mt-0.5">{percentileLabel(data.peer_benchmarks.first_timer_percentile)} of peers</p>}
         </div>
         <div className="p-3 rounded-xl bg-zinc-900 border border-white/[0.08]/60">
-          <span className="text-[10px] font-mono text-zinc-400 flex items-center gap-1"><Users className="h-3 w-3 text-blue-500" /> Bus Factor</span>
-          <p className="font-space text-base font-bold text-zinc-100 mt-0.5">{data.bus_factor} maintainers</p>
+          <span className="text-[10px] font-mono text-zinc-300 flex items-center gap-1"><Users className="h-3 w-3 text-blue-500" /> Bus Factor</span>
+          <p className="font-space text-base font-bold text-white mt-0.5">{data.bus_factor} maintainers</p>
           {data.peer_benchmarks && <p className="text-[10px] font-mono text-emerald-400 mt-0.5">{percentileLabel(data.peer_benchmarks.bus_factor_percentile)} of peers</p>}
         </div>
       </div>
 
       {data.entitled && data.peer_benchmarks && (
-        <p className="mt-4 text-xs font-mono text-zinc-400">
+        <p className="mt-4 text-xs font-mono text-zinc-300">
           Peer benchmark vs {data.peer_benchmarks.cohort_size} orgs · overall{" "}
           <strong className="text-emerald-400">{percentileLabel(data.peer_benchmarks.score_percentile)}</strong>
         </p>
       )}
       {data.entitled && !data.peer_benchmarks && (
-        <p className="mt-4 text-xs font-mono text-zinc-400">Not enough peers yet - benchmarks unlock at 10+ ranked orgs.</p>
+        <p className="mt-4 text-xs font-mono text-zinc-300">Not enough peers yet - benchmarks unlock at 10+ ranked orgs.</p>
       )}
       {!data.entitled && (
-        <p className="mt-4 text-xs font-mono text-zinc-400">
+        <p className="mt-4 text-xs font-mono text-zinc-300">
           Peer benchmarks are part of Maintainer Pro.{" "}
           <Link href="/pricing" className="font-bold text-emerald-400 underline underline-offset-2">Upgrade</Link>{" "}
           to compare {org} against every ranked org and earn the Verified Welcoming Org badge.

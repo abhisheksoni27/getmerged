@@ -16,12 +16,12 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 text-white">
       <Header />
       <main className="flex-1 flex items-center justify-center px-4 py-16 sm:py-24">
         <div className="max-w-xl w-full bg-zinc-900/80 border border-white/[0.12] p-8 sm:p-10 shadow-sm text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-[#ffb3c7] border border-white/[0.12] shadow-sm mb-6">
-            <ShieldAlert className="w-8 h-8 text-zinc-100" />
+            <ShieldAlert className="w-8 h-8 text-white" />
           </div>
 
           <div className="inline-block px-3 py-1 bg-[#ffd93d] border border-white/[0.12] font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
@@ -32,7 +32,7 @@ export default function NotFound() {
             Repository Not Found
           </h1>
 
-          <p className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-8">
+          <p className="text-zinc-300 text-sm sm:text-base leading-relaxed mb-8">
             This repository has not been indexed or does not meet the minimum public contribution telemetry thresholds on GitHub.
           </p>
 

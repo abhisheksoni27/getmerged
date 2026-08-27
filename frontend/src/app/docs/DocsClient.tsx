@@ -69,28 +69,28 @@ export function DocsClient() {
     <div>
       <div className="flex items-center gap-2 mb-2">
         <BookOpen className="h-6 w-6 text-emerald-600" />
-        <h1 className="text-3xl font-bold text-zinc-100">
+        <h1 className="text-3xl font-bold text-white">
           {spec?.info?.title ?? "Public API"} Docs
         </h1>
       </div>
-      <p className="text-sm text-zinc-400 max-w-3xl">
+      <p className="text-sm text-zinc-300 max-w-3xl">
         {spec?.info?.description ??
           "Programmatic access to C-Rank™ scored repositories, rankings, and PR acceptance forecasts."}
       </p>
 
       {/* Authentication */}
       <section className="mt-8 rounded-xl border border-white/[0.08] bg-zinc-900/80 p-5">
-        <h2 className="text-lg font-bold text-zinc-100 flex items-center gap-2 mb-2">
+        <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-2">
           <KeyRound className="h-4 w-4 text-emerald-600" /> Authentication
         </h2>
-        <p className="text-sm text-zinc-400">
+        <p className="text-sm text-zinc-300">
           Generate an API key in your{" "}
           <Link href="/dashboard" className="text-emerald-400 font-semibold hover:underline">
             dashboard
           </Link>{" "}
           and pass it as a Bearer token on every request:
         </p>
-        <pre className="mt-3 rounded-lg bg-zinc-900 text-zinc-100 text-xs p-3 overflow-x-auto">
+        <pre className="mt-3 rounded-lg bg-zinc-900 text-white text-xs p-3 overflow-x-auto">
           curl -H &quot;Authorization: Bearer odk_yourkey&quot; {API_BASE_URL}/api/v1/repos?language=Go
         </pre>
         <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -110,7 +110,7 @@ export function DocsClient() {
         {spec?.securityDefinitions && Object.keys(spec.securityDefinitions).length > 0 && (
           <div className="mt-3 space-y-1.5">
             {Object.entries(spec.securityDefinitions).map(([scheme, def]) => (
-              <p key={scheme} className="text-xs text-zinc-400" data-testid="security-scheme">
+              <p key={scheme} className="text-xs text-zinc-300" data-testid="security-scheme">
                 Security scheme <code className="rounded bg-zinc-900 px-1 font-semibold">{scheme}</code>: apiKey in{" "}
                 <code className="rounded bg-zinc-900 px-1">{def.in}</code> header{" "}
                 <code className="rounded bg-zinc-900 px-1">{def.name}</code>
@@ -123,8 +123,8 @@ export function DocsClient() {
 
       {/* Error codes */}
       <section className="mt-8 rounded-xl border border-white/[0.08] bg-zinc-900/80 p-5">
-        <h2 className="text-lg font-bold text-zinc-100 mb-2">Error codes</h2>
-        <table className="w-full text-left text-xs text-zinc-400">
+        <h2 className="text-lg font-bold text-white mb-2">Error codes</h2>
+        <table className="w-full text-left text-xs text-zinc-300">
           <thead>
             <tr className="border-b border-white/[0.08]">
               <th className="py-1 pr-3 font-semibold">HTTP</th>
@@ -157,12 +157,12 @@ export function DocsClient() {
 
       {/* Endpoints */}
       <section className="mt-8">
-        <h2 className="text-lg font-bold text-zinc-100 mb-3">Endpoints</h2>
+        <h2 className="text-lg font-bold text-white mb-3">Endpoints</h2>
         {error && (
           <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div>
         )}
         {!spec && !error && (
-          <div className="text-sm text-zinc-400 animate-pulse">Loading API specification…</div>
+          <div className="text-sm text-zinc-300 animate-pulse">Loading API specification…</div>
         )}
         <ul className="space-y-3">
           {endpoints.map(({ path, method, op }) => (
@@ -175,12 +175,12 @@ export function DocsClient() {
                 >
                   {method}
                 </span>
-                <code className="text-sm font-semibold text-zinc-100">{path}</code>
+                <code className="text-sm font-semibold text-white">{path}</code>
               </div>
               {op.summary && <p className="mt-1 text-sm font-medium text-zinc-300">{op.summary}</p>}
-              {op.description && <p className="mt-1 text-xs text-zinc-400">{op.description}</p>}
+              {op.description && <p className="mt-1 text-xs text-zinc-300">{op.description}</p>}
               {op.parameters && op.parameters.length > 0 && (
-                <table className="mt-2 w-full text-left text-[11px] text-zinc-400">
+                <table className="mt-2 w-full text-left text-[11px] text-zinc-300">
                   <thead>
                     <tr className="border-b border-white/[0.08]">
                       <th className="py-1 pr-3 font-semibold">Parameter</th>
@@ -206,7 +206,7 @@ export function DocsClient() {
         </ul>
       </section>
 
-      <p className="mt-10 text-center text-[11px] text-zinc-400">
+      <p className="mt-10 text-center text-[11px] text-zinc-300">
         Auto-generated from the OpenAPI 2.0 spec ({spec?.info?.version ?? "1.0"}).
       </p>
     </div>

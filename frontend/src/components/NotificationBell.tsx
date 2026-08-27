@@ -90,7 +90,7 @@ export function NotificationBell({ user }: { user: User | null }) {
         title="Notifications"
         aria-label="Open notifications"
         onClick={() => setOpen((o) => !o)}
-        className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.08] bg-zinc-900/80 text-zinc-400 shadow-2xs transition-colors hover:text-zinc-100 hover:bg-zinc-900"
+        className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.08] bg-zinc-900/80 text-zinc-300 shadow-2xs transition-colors hover:text-white hover:bg-zinc-900"
       >
         <Bell className="h-4 w-4" />
         {unread > 0 && (
@@ -104,7 +104,7 @@ export function NotificationBell({ user }: { user: User | null }) {
         <div className="absolute right-0 z-50 mt-2 w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900/80 shadow-xl">
           <div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-3">
             <div className="flex items-center gap-2">
-              <span className="font-sans text-sm font-semibold text-zinc-100">
+              <span className="font-sans text-sm font-semibold text-white">
                 Notifications
               </span>
               {live && (
@@ -118,7 +118,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 type="button"
                 title="Notification settings"
                 onClick={() => setShowPrefs((s) => !s)}
-                className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200"
+                className="rounded-lg p-1.5 text-zinc-300 hover:bg-zinc-900 hover:text-zinc-200"
               >
                 <Settings2 className="h-4 w-4" />
               </button>
@@ -126,7 +126,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 type="button"
                 title="Mark all read"
                 onClick={() => void markRead([], true)}
-                className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200"
+                className="rounded-lg p-1.5 text-zinc-300 hover:bg-zinc-900 hover:text-zinc-200"
               >
                 <Check className="h-4 w-4" />
               </button>
@@ -134,7 +134,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 type="button"
                 title="Close"
                 onClick={() => setOpen(false)}
-                className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200"
+                className="rounded-lg p-1.5 text-zinc-300 hover:bg-zinc-900 hover:text-zinc-200"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -143,7 +143,7 @@ export function NotificationBell({ user }: { user: User | null }) {
 
           {showPrefs && (
             <div className="border-b border-white/[0.08] bg-zinc-900/60 px-4 py-3">
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-zinc-300">
                 In-app notifications
               </p>
               <div className="space-y-1.5">
@@ -166,13 +166,13 @@ export function NotificationBell({ user }: { user: User | null }) {
                   );
                 })}
               </div>
-              <p className="mt-2 text-[10px] text-zinc-400">
+              <p className="mt-2 text-[10px] text-zinc-300">
                 In-app alerts are independent of email, Slack &amp; Discord.
               </p>
               <Link
                 href="/settings/notifications"
                 onClick={() => setOpen(false)}
-                className="mt-1 inline-block text-[10px] font-medium text-zinc-400 underline hover:text-zinc-200"
+                className="mt-1 inline-block text-[10px] font-medium text-zinc-300 underline hover:text-zinc-200"
               >
                 Manage all notification settings
               </Link>
@@ -193,7 +193,7 @@ export function NotificationBell({ user }: { user: User | null }) {
           <div className="max-h-[420px] overflow-y-auto">
             {error ? (
               <div className="flex flex-col items-center gap-2 px-4 py-10 text-center">
-                <p className="text-sm text-zinc-400">Couldn&apos;t load notifications.</p>
+                <p className="text-sm text-zinc-300">Couldn&apos;t load notifications.</p>
                 <button
                   type="button"
                   onClick={() => void refresh()}
@@ -204,7 +204,7 @@ export function NotificationBell({ user }: { user: User | null }) {
               </div>
             ) : items.length === 0 ? (
               <div className="px-4 py-10 text-center">
-                <p className="text-sm text-zinc-400">No notifications yet</p>
+                <p className="text-sm text-zinc-300">No notifications yet</p>
               </div>
             ) : (
               <ul className="divide-y divide-zinc-100">
@@ -239,7 +239,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 type="button"
                 onClick={() => void loadMore()}
                 disabled={loading}
-                className="text-xs font-medium text-zinc-400 hover:text-zinc-100"
+                className="text-xs font-medium text-zinc-300 hover:text-white"
               >
                 {loading ? "Loading…" : "Load more"}
               </button>
@@ -258,9 +258,9 @@ function NotificationRow({ n }: { n: { payload: { title: string; message: string
         className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${n.read ? "bg-transparent" : "bg-rose-400"}`}
       />
       <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-zinc-100">{n.payload.title}</p>
-        <p className="line-clamp-2 text-xs text-zinc-400">{n.payload.message}</p>
-        <p className="mt-0.5 text-[10px] text-zinc-400">{timeAgo(n.created_at)}</p>
+        <p className="truncate text-sm font-medium text-white">{n.payload.title}</p>
+        <p className="line-clamp-2 text-xs text-zinc-300">{n.payload.message}</p>
+        <p className="mt-0.5 text-[10px] text-zinc-300">{timeAgo(n.created_at)}</p>
       </div>
     </div>
   );

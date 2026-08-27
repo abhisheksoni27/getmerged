@@ -110,7 +110,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
   }
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 text-zinc-100 font-sans">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 text-white font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -119,17 +119,17 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
         {/* Navigation Breadcrumb */}
-        <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-6">
-          <Link href="/" title="GetMerged Home" className="hover:text-zinc-100 font-bold">Home</Link>
+        <div className="flex items-center gap-2 text-xs font-mono text-zinc-300 mb-6">
+          <Link href="/" title="GetMerged Home" className="hover:text-white font-bold">Home</Link>
           <span>/</span>
-          <Link href="/guides" title="GetMerged Guides Directory" className="hover:text-zinc-100 font-bold">Guides</Link>
+          <Link href="/guides" title="GetMerged Guides Directory" className="hover:text-white font-bold">Guides</Link>
           <span>/</span>
           <span className="text-zinc-200 font-bold truncate">{guide.title}</span>
         </div>
 
         {/* Header Title Box */}
         <div className="border border-white/[0.08] bg-zinc-900/80 p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-8">
-          <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-zinc-400 mb-4">
+          <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-zinc-300 mb-4">
             <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-950/80 border border-amber-700 font-bold text-amber-300 rounded">
               {guide.section}
             </span>
@@ -144,7 +144,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight font-sans text-zinc-50 mb-4 leading-tight">
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight font-sans text-white mb-4 leading-tight">
             {guide.title}
           </h1>
           <p className="text-zinc-300 text-sm sm:text-base leading-relaxed mb-6">
@@ -170,13 +170,13 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
             /* eslint-disable @typescript-eslint/no-unused-vars */
             components={{
               h1: ({ node, ...props }) => (
-                <h1 className="text-2xl sm:text-3xl font-bold font-sans text-zinc-50 mt-8 mb-4 leading-tight border-b border-white/[0.08] pb-3" {...props} />
+                <h1 className="text-2xl sm:text-3xl font-bold font-sans text-white mt-8 mb-4 leading-tight border-b border-white/[0.08] pb-3" {...props} />
               ),
               h2: ({ node, ...props }) => (
-                <h2 className="text-xl sm:text-2xl font-bold font-sans text-zinc-50 mt-10 mb-4 leading-snug border-b border-white/[0.08] pb-2 flex items-center gap-2" {...props} />
+                <h2 className="text-xl sm:text-2xl font-bold font-sans text-white mt-10 mb-4 leading-snug border-b border-white/[0.08] pb-2 flex items-center gap-2" {...props} />
               ),
               h3: ({ node, ...props }) => (
-                <h3 className="text-lg sm:text-xl font-bold font-sans text-zinc-100 mt-6 mb-3" {...props} />
+                <h3 className="text-lg sm:text-xl font-bold font-sans text-white mt-6 mb-3" {...props} />
               ),
               p: ({ node, ...props }) => (
                 <p className="text-sm sm:text-base leading-relaxed text-zinc-300 my-4 font-sans" {...props} />

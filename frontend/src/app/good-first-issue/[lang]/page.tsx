@@ -202,7 +202,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
@@ -210,21 +210,21 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
         {/* Hero Section */}
         <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-10">
           <div className="flex flex-wrap items-center gap-2 mb-3.5">
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-950/70 border-emerald-800/80 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-300 font-mono">
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1 text-xs font-semibold text-emerald-300 font-mono">
               <Sprout className="h-3.5 w-3.5 text-emerald-400" /> Beginner Friendly Open-Source
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-blue-950/70 border-blue-800/80 border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-300 font-mono">
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-sky-500/10 border border-sky-500/30 text-sky-300 px-3 py-1 text-xs font-semibold text-blue-300 font-mono">
               <Code2 className="h-3.5 w-3.5 text-blue-700" /> {languageName}
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-zinc-100 tracking-tight font-space">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight font-space">
             Good First Issues in {languageName}
           </h1>
-          <p className="mt-3 text-xs sm:text-sm text-zinc-400 max-w-3xl leading-relaxed font-sans">
+          <p className="mt-3 text-xs sm:text-sm text-zinc-300 max-w-3xl leading-relaxed font-sans">
             Explore curated starter issues in high-scoring <strong>{languageName}</strong> repositories. Every listed issue belongs to a welcoming repository scored by C-Rank™ on PR merge rates, review responsiveness, and first-timer acceptance.
           </p>
-          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-zinc-400">
+          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-zinc-300">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
             <span>Telemetry updated: {new Date().toUTCString().slice(0, 16)} UTC (Continuous Sync)</span>
           </div>
@@ -234,7 +234,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
         <div>
           <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
             <div className="flex items-center gap-3">
-              <h2 className="text-sm font-bold text-zinc-100 flex items-center gap-2 font-space">
+              <h2 className="text-sm font-bold text-white flex items-center gap-2 font-space">
                 <Sprout className="h-4 w-4 text-emerald-600" />
                 Live Good First Issues ({issues.length})
               </h2>
@@ -244,8 +244,8 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
                   href={`/good-first-issue/${canonicalLang}`}
                   className={`px-3 py-1 rounded-lg transition-colors font-semibold ${
                     currentTab === "all"
-                      ? "bg-zinc-900/80 text-zinc-100 shadow-2xs"
-                      : "text-zinc-400 hover:text-zinc-100"
+                      ? "bg-zinc-900/80 text-white shadow-2xs"
+                      : "text-zinc-300 hover:text-white"
                   }`}
                 >
                   All Issues
@@ -255,14 +255,14 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
                   className={`px-3 py-1 rounded-lg transition-colors font-semibold flex items-center gap-1 ${
                     currentTab === "paid"
                       ? "bg-emerald-600 text-white shadow-2xs"
-                      : "text-zinc-400 hover:text-emerald-400"
+                      : "text-zinc-300 hover:text-emerald-400"
                   }`}
                 >
                   <span>💰 Paid Bounties</span>
                 </Link>
               </div>
             </div>
-            <span className="text-xs text-zinc-400 font-mono">Real-Time Open GitHub Issues</span>
+            <span className="text-xs text-zinc-300 font-mono">Real-Time Open GitHub Issues</span>
           </div>
 
           {issues.length > 0 ? (
@@ -319,7 +319,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
                         )}
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2 text-[11px] font-mono text-zinc-400">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2 text-[11px] font-mono text-zinc-300">
                         <span>#{iss.issue_number}</span>
                         <span
                           data-freshness
@@ -335,13 +335,13 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
                         target="_blank"
                         rel="noopener noreferrer"
                         title={`Open issue #${iss.issue_number} on GitHub: ${iss.title}`}
-                        className="font-space text-base sm:text-lg font-bold text-zinc-100 hover:text-blue-700 transition-colors line-clamp-2"
+                        className="font-space text-base sm:text-lg font-bold text-white hover:text-blue-700 transition-colors line-clamp-2"
                       >
                         {iss.title}
                       </a>
 
                       {iss.body_text && (
-                        <p className="mt-2.5 text-xs sm:text-sm text-zinc-400 line-clamp-2 leading-relaxed font-sans">
+                        <p className="mt-2.5 text-xs sm:text-sm text-zinc-300 line-clamp-2 leading-relaxed font-sans">
                           {iss.body_text}
                         </p>
                       )}
@@ -362,7 +362,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
 
                     <div className="flex items-center gap-3 shrink-0 self-end md:self-auto border-t md:border-t-0 pt-4 md:pt-0 w-full md:w-auto justify-between md:justify-end">
                       {iss.comments_count > 0 && (
-                        <span className="inline-flex items-center gap-1 text-xs font-mono text-zinc-400">
+                        <span className="inline-flex items-center gap-1 text-xs font-mono text-zinc-300">
                           <MessageSquare className="h-3.5 w-3.5" /> {iss.comments_count}
                         </span>
                       )}
@@ -383,7 +383,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
               })}
             </div>
           ) : (
-            <div className="rounded-2xl bg-zinc-900/80 p-8 text-center text-zinc-400 text-xs mb-10 border border-dashed border-white/[0.12] font-sans">
+            <div className="rounded-2xl bg-zinc-900/80 p-8 text-center text-zinc-300 text-xs mb-10 border border-dashed border-white/[0.12] font-sans">
               {currentTab === "paid"
                 ? `No cash-bounty issues currently open for ${languageName}. Check back soon!`
                 : `No active good first issues found for ${languageName}.`}
@@ -393,11 +393,11 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
 
         {/* Repositories Grid Header */}
         <div className="mb-6 flex items-center justify-between border-b border-white/[0.08] pb-4">
-          <h2 className="text-sm font-bold text-zinc-100 flex items-center gap-2 font-space">
+          <h2 className="text-sm font-bold text-white flex items-center gap-2 font-space">
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
             Top {languageName} Repositories with Beginner Issues ({repos.length})
           </h2>
-          <span className="text-xs text-zinc-400 font-mono">Updated Daily via GitHub GraphQL</span>
+          <span className="text-xs text-zinc-300 font-mono">Updated Daily via GitHub GraphQL</span>
         </div>
 
         {repos.length > 0 ? (
@@ -407,18 +407,18 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl bg-zinc-900/80 p-12 text-center text-zinc-400 text-xs mb-12 border border-dashed border-white/[0.12] font-sans">
+          <div className="rounded-2xl bg-zinc-900/80 p-12 text-center text-zinc-300 text-xs mb-12 border border-dashed border-white/[0.12] font-sans">
             No {languageName} repositories indexed yet. Check back soon!
           </div>
         )}
 
         {/* Informational Section */}
         <section className="rounded-3xl bg-zinc-900/80 p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs">
-          <h3 className="text-base font-bold text-zinc-100 mb-3 flex items-center gap-2 font-space">
+          <h3 className="text-base font-bold text-white mb-3 flex items-center gap-2 font-space">
             <Sparkles className="h-4 w-4 text-emerald-600" />
             How to make your first {languageName} open-source pull request
           </h3>
-          <div className="prose prose-sm text-zinc-400 leading-relaxed max-w-none space-y-3 text-xs sm:text-sm font-sans">
+          <div className="prose prose-sm text-zinc-300 leading-relaxed max-w-none space-y-3 text-xs sm:text-sm font-sans">
             <p>
               Finding approachable <strong>Good First Issues in {languageName}</strong> allows you to build real-world software engineering experience. Instead of submitting PRs to abandoned repositories, GetMerged verifies maintainer review speeds and first-timer acceptance rates before you write a single line of code.
             </p>

@@ -144,13 +144,13 @@ export default async function ComparePage({ params }: ComparePageProps) {
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Header */}
         <div className="mb-8 text-center sm:text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/70 border-emerald-800/80 border border-emerald-200/80 text-emerald-300 text-xs font-mono font-bold mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300/80 text-emerald-300 text-xs font-mono font-bold mb-3">
             <Scale className="h-3.5 w-3.5" /> Repository Head-to-Head
           </div>
-          <h1 className="font-space text-2xl sm:text-4xl font-extrabold text-zinc-100 tracking-tight">
-            {repoA.full_name} <span className="text-zinc-400 font-normal">vs</span> {repoB.full_name}
+          <h1 className="font-space text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+            {repoA.full_name} <span className="text-zinc-300 font-normal">vs</span> {repoB.full_name}
           </h1>
-          <p className="text-sm text-zinc-400 font-sans mt-2 max-w-2xl">
+          <p className="text-sm text-zinc-300 font-sans mt-2 max-w-2xl">
             Objective C-Rank™ telemetry comparison benchmarked across PR merge rates, reviewer latency, maintainer breadth, and newcomer hospitality.
           </p>
         </div>
@@ -174,7 +174,7 @@ export default async function ComparePage({ params }: ComparePageProps) {
                   {repoA.c_rank_tier || repoA.class_rank || "A"} Tier ({(repoA.c_rank_score || 0).toFixed(0)}%)
                 </span>
               </div>
-              <h2 className="font-space text-xl font-bold text-zinc-100 mb-1">
+              <h2 className="font-space text-xl font-bold text-white mb-1">
                 <Link
                   href={`/${repoA.full_name}`}
                   title={`View full scorecard for ${repoA.full_name}`}
@@ -183,24 +183,24 @@ export default async function ComparePage({ params }: ComparePageProps) {
                   {repoA.full_name}
                 </Link>
               </h2>
-              <p className="text-xs text-zinc-400 line-clamp-2 mb-6">{repoA.description || "No description provided."}</p>
+              <p className="text-xs text-zinc-300 line-clamp-2 mb-6">{repoA.description || "No description provided."}</p>
 
               <div className="space-y-3 font-mono text-xs">
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900 border border-white/[0.08]">
-                  <span className="text-zinc-400 flex items-center gap-1.5"><GitPullRequest className="h-3.5 w-3.5 text-blue-500" /> External PR Merge Rate</span>
-                  <strong className="text-zinc-100 font-bold">{(repoA.external_pr_merge_rate || 0).toFixed(1)}%</strong>
+                  <span className="text-zinc-300 flex items-center gap-1.5"><GitPullRequest className="h-3.5 w-3.5 text-blue-500" /> External PR Merge Rate</span>
+                  <strong className="text-white font-bold">{(repoA.external_pr_merge_rate || 0).toFixed(1)}%</strong>
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900 border border-white/[0.08]">
-                  <span className="text-zinc-400 flex items-center gap-1.5"><Clock className="h-3.5 w-3.5 text-amber-500" /> Review Latency (p50)</span>
-                  <strong className="text-zinc-100 font-bold">{(repoA.response_p50_hours || 0).toFixed(1)}h</strong>
+                  <span className="text-zinc-300 flex items-center gap-1.5"><Clock className="h-3.5 w-3.5 text-amber-500" /> Review Latency (p50)</span>
+                  <strong className="text-white font-bold">{(repoA.response_p50_hours || 0).toFixed(1)}h</strong>
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900 border border-white/[0.08]">
-                  <span className="text-zinc-400 flex items-center gap-1.5"><Users className="h-3.5 w-3.5 text-purple-500" /> 90-Day Bus Factor</span>
-                  <strong className="text-zinc-100 font-bold">{repoA.bus_factor ?? 0} Maintainers</strong>
+                  <span className="text-zinc-300 flex items-center gap-1.5"><Users className="h-3.5 w-3.5 text-purple-500" /> 90-Day Bus Factor</span>
+                  <strong className="text-white font-bold">{repoA.bus_factor ?? 0} Maintainers</strong>
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900 border border-white/[0.08]">
-                  <span className="text-zinc-400 flex items-center gap-1.5"><FileText className="h-3.5 w-3.5 text-emerald-500" /> Onboarding Readiness</span>
-                  <strong className="text-zinc-100 font-bold">{repoA.onboarding_score || 0}/100</strong>
+                  <span className="text-zinc-300 flex items-center gap-1.5"><FileText className="h-3.5 w-3.5 text-emerald-500" /> Onboarding Readiness</span>
+                  <strong className="text-white font-bold">{repoA.onboarding_score || 0}/100</strong>
                 </div>
               </div>
             </div>
@@ -227,7 +227,7 @@ export default async function ComparePage({ params }: ComparePageProps) {
                   {repoB.c_rank_tier || repoB.class_rank || "A"} Tier ({(repoB.c_rank_score || 0).toFixed(0)}%)
                 </span>
               </div>
-              <h2 className="font-space text-xl font-bold text-zinc-100 mb-1">
+              <h2 className="font-space text-xl font-bold text-white mb-1">
                 <Link
                   href={`/${repoB.full_name}`}
                   title={`View full scorecard for ${repoB.full_name}`}
@@ -236,24 +236,24 @@ export default async function ComparePage({ params }: ComparePageProps) {
                   {repoB.full_name}
                 </Link>
               </h2>
-              <p className="text-xs text-zinc-400 line-clamp-2 mb-6">{repoB.description || "No description provided."}</p>
+              <p className="text-xs text-zinc-300 line-clamp-2 mb-6">{repoB.description || "No description provided."}</p>
 
               <div className="space-y-3 font-mono text-xs">
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900 border border-white/[0.08]">
-                  <span className="text-zinc-400 flex items-center gap-1.5"><GitPullRequest className="h-3.5 w-3.5 text-blue-500" /> External PR Merge Rate</span>
-                  <strong className="text-zinc-100 font-bold">{(repoB.external_pr_merge_rate || 0).toFixed(1)}%</strong>
+                  <span className="text-zinc-300 flex items-center gap-1.5"><GitPullRequest className="h-3.5 w-3.5 text-blue-500" /> External PR Merge Rate</span>
+                  <strong className="text-white font-bold">{(repoB.external_pr_merge_rate || 0).toFixed(1)}%</strong>
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900 border border-white/[0.08]">
-                  <span className="text-zinc-400 flex items-center gap-1.5"><Clock className="h-3.5 w-3.5 text-amber-500" /> Review Latency (p50)</span>
-                  <strong className="text-zinc-100 font-bold">{(repoB.response_p50_hours || 0).toFixed(1)}h</strong>
+                  <span className="text-zinc-300 flex items-center gap-1.5"><Clock className="h-3.5 w-3.5 text-amber-500" /> Review Latency (p50)</span>
+                  <strong className="text-white font-bold">{(repoB.response_p50_hours || 0).toFixed(1)}h</strong>
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900 border border-white/[0.08]">
-                  <span className="text-zinc-400 flex items-center gap-1.5"><Users className="h-3.5 w-3.5 text-purple-500" /> 90-Day Bus Factor</span>
-                  <strong className="text-zinc-100 font-bold">{repoB.bus_factor ?? 0} Maintainers</strong>
+                  <span className="text-zinc-300 flex items-center gap-1.5"><Users className="h-3.5 w-3.5 text-purple-500" /> 90-Day Bus Factor</span>
+                  <strong className="text-white font-bold">{repoB.bus_factor ?? 0} Maintainers</strong>
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900 border border-white/[0.08]">
-                  <span className="text-zinc-400 flex items-center gap-1.5"><FileText className="h-3.5 w-3.5 text-emerald-500" /> Onboarding Readiness</span>
-                  <strong className="text-zinc-100 font-bold">{repoB.onboarding_score || 0}/100</strong>
+                  <span className="text-zinc-300 flex items-center gap-1.5"><FileText className="h-3.5 w-3.5 text-emerald-500" /> Onboarding Readiness</span>
+                  <strong className="text-white font-bold">{repoB.onboarding_score || 0}/100</strong>
                 </div>
               </div>
             </div>

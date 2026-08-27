@@ -98,10 +98,10 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
   return (
     <div className="rounded-3xl border border-white/[0.08] bg-zinc-900/80 p-6 sm:p-8 shadow-xs mb-8">
       <div className="mb-4">
-        <h3 className="font-space text-lg font-bold text-zinc-100">
+        <h3 className="font-space text-lg font-bold text-white">
           Embed C-Rank Badge
         </h3>
-        <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-0.5">
+        <p className="text-xs sm:text-sm text-zinc-300 font-sans mt-0.5">
           Show contributors that your repository actively reviews and merges external pull requests.
         </p>
       </div>
@@ -130,7 +130,7 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
             className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
               activeTab === tab
                 ? "bg-zinc-900 text-white shadow-xs"
-                : "bg-zinc-900 text-zinc-400 hover:bg-zinc-200"
+                : "bg-zinc-900 text-zinc-300 hover:bg-zinc-200"
             }`}
           >
             {tab === "markdown" ? "Markdown" : "HTML"}
@@ -172,7 +172,7 @@ Why:
               copyText(prompt, "badge_prompt_copied", { repo_full_name: fullName });
             }}
             title="Copy AI prompt to add GetMerged badge to your repo README via Cursor, Copilot, or Claude"
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-zinc-900/80 hover:bg-zinc-900 active:scale-95 text-zinc-100 border border-white/[0.08] font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-2xs inline-flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-zinc-900/80 hover:bg-zinc-900 active:scale-95 text-white border border-white/[0.08] font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-2xs inline-flex items-center justify-center gap-2"
           >
             <span className="inline-flex items-center gap-1.5">
               <Copy className="h-3.5 w-3.5" /> Copy AI Prompt (for LLMs)

@@ -178,8 +178,8 @@ export function ShareForecastButton({
           title="Sharing is disabled for private repositories to protect code confidentiality"
           className={
             variant === "compact"
-              ? `inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-zinc-900 text-zinc-400 border border-white/[0.08] cursor-not-allowed opacity-60 ${className}`
-              : `inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 border-2 border-white/[0.12] text-zinc-400 font-mono font-bold text-xs uppercase tracking-wider cursor-not-allowed opacity-60 ${className}`
+              ? `inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-zinc-900 text-zinc-300 border border-white/[0.08] cursor-not-allowed opacity-60 ${className}`
+              : `inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 border-2 border-white/[0.12] text-zinc-300 font-mono font-bold text-xs uppercase tracking-wider cursor-not-allowed opacity-60 ${className}`
           }
         >
           <Lock className="h-3.5 w-3.5" />
@@ -218,7 +218,7 @@ export function ShareForecastButton({
           title="Share forecast result (X & LinkedIn intents)"
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-zinc-900 text-zinc-200 border border-white/[0.12] hover:bg-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 active:scale-[0.98] ${className}`}
         >
-          {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5 text-zinc-400" />}
+          {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5 text-zinc-300" />}
           <span>{copied ? "Copied Link!" : "Share result"}</span>
         </button>
       ) : (
@@ -228,7 +228,7 @@ export function ShareForecastButton({
           data-testid="share-result-btn"
           aria-label={`Share forecast result for ${repoFullName}`}
           title="Share forecast result (X & LinkedIn intents)"
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/80 border-2 border-white/[0.08] text-zinc-100 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-900 active:scale-[0.98] transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer ${className}`}
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/80 border-2 border-white/[0.08] text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-900 active:scale-[0.98] transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer ${className}`}
         >
           {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Share2 className="h-4 w-4 text-zinc-300" />}
           <span>{copied ? "URL Copied to Clipboard!" : "Share result"}</span>
@@ -248,18 +248,18 @@ export function ShareForecastButton({
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08] mb-4">
               <div className="flex items-center gap-2">
                 <Share2 className="h-4 w-4 text-emerald-600" />
-                <h3 className="font-space font-bold text-base text-zinc-100">Share PR Evaluation</h3>
+                <h3 className="font-space font-bold text-base text-white">Share PR Evaluation</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setOpenModal(false)}
-                className="text-zinc-400 hover:text-zinc-400 text-sm font-mono font-bold"
+                className="text-zinc-300 hover:text-zinc-300 text-sm font-mono font-bold"
               >
                 ✕
               </button>
             </div>
 
-            <p className="text-xs text-zinc-400 mb-4 font-sans">
+            <p className="text-xs text-zinc-300 mb-4 font-sans">
               Social share card generated with C-Rank attribution and referral credits.
             </p>
 
@@ -288,7 +288,7 @@ export function ShareForecastButton({
             </div>
 
             <div className="pt-3 border-t border-white/[0.08]">
-              <label className="block text-[11px] font-mono font-bold text-zinc-400 uppercase mb-1">
+              <label className="block text-[11px] font-mono font-bold text-zinc-300 uppercase mb-1">
                 Direct Share Link (with referral attribution)
               </label>
               <div className="flex items-center gap-2">

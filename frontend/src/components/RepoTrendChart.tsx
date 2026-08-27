@@ -69,7 +69,7 @@ export function RepoTrendChart({ repoId }: { repoId: string }) {
   return (
     <section className="rounded-2xl border border-white/[0.08] bg-zinc-900/80 p-5 shadow-xs" aria-label="C-Rank score trend">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-space text-sm font-bold text-zinc-100">C-Rank Trend</h3>
+        <h3 className="font-space text-sm font-bold text-white">C-Rank Trend</h3>
         <span
           className={`font-mono text-xs font-bold ${delta >= 0 ? "text-emerald-600" : "text-red-500"}`}
           title={`Score changed by ${delta.toFixed(1)} over the shown period`}
@@ -82,7 +82,7 @@ export function RepoTrendChart({ repoId }: { repoId: string }) {
         <path d={linePath} fill="none" stroke={strokeColor} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
         <circle cx={points[points.length - 1].x} cy={points[points.length - 1].y} r="4" fill={strokeColor} />
       </svg>
-      <div className="flex items-center justify-between mt-2 font-mono text-[10px] text-zinc-400">
+      <div className="flex items-center justify-between mt-2 font-mono text-[10px] text-zinc-300">
         <span>{trend[0].snapshot_date}</span>
         <span>
           {min.toFixed(0)}–{max.toFixed(0)} score

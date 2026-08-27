@@ -30,7 +30,7 @@ export function CookieBanner() {
   return (
     <div className="fixed bottom-0 inset-x-0 z-[60] animate-fade-slide-up">
       <div className="mx-auto mb-4 px-4 max-w-7xl">
-        <div className="rounded-2xl bg-zinc-900/95 backdrop-blur border border-zinc-700 text-zinc-100 p-5 sm:p-6 shadow-lg">
+        <div className="rounded-2xl bg-zinc-900/95 backdrop-blur border border-zinc-700 text-white p-5 sm:p-6 shadow-lg">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="flex items-start gap-3 flex-1">
               <Cookie className="h-5 w-5 text-[#dfd0b8] shrink-0 mt-0.5" />
@@ -60,7 +60,7 @@ export function CookieBanner() {
               <button
                 type="button"
                 onClick={accept}
-                className="rounded-xl bg-[#dfd0b8] px-4 py-2 text-xs font-bold text-zinc-100 hover:bg-[#efe6d4] transition-colors cursor-pointer"
+                className="rounded-xl bg-[#dfd0b8] px-4 py-2 text-xs font-bold text-white hover:bg-[#efe6d4] transition-colors cursor-pointer"
               >
                 Accept
               </button>

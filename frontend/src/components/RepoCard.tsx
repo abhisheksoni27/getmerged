@@ -154,11 +154,11 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
               />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="font-space text-base sm:text-lg font-bold text-zinc-100 group-hover:text-orange-400 transition-colors flex items-center gap-1.5 min-w-0 tracking-tight" title={repo.full_name}>
+              <div className="font-space text-base sm:text-lg font-bold text-white group-hover:text-orange-400 transition-colors flex items-center gap-1.5 min-w-0 tracking-tight" title={repo.full_name}>
                 <span className="truncate">{repo.name}</span>
                 <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity text-orange-400 shrink-0" />
               </div>
-              <div className="text-xs font-mono text-zinc-400 truncate mt-0.5">
+              <div className="text-xs font-mono text-zinc-300 truncate mt-0.5">
                 {repo.full_name}
               </div>
             </div>
@@ -171,7 +171,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
 
         {/* Sub-meta: Stars & Language */}
         <div className="flex items-center gap-3 mb-4 font-mono text-xs text-zinc-300">
-          <span className="flex items-center gap-1.5 font-bold text-zinc-100 bg-white/[0.06] px-2.5 py-1 rounded-lg border border-white/[0.08]">
+          <span className="flex items-center gap-1.5 font-bold text-white bg-white/[0.06] px-2.5 py-1 rounded-lg border border-white/[0.08]">
             <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
             {repo.stars >= 1_000 ? `${(repo.stars / 1_000).toFixed(1)}k` : repo.stars}
           </span>
@@ -206,7 +206,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
           ))}
           {topicOverflow > 0 && (
             <span
-              className="inline-flex items-center px-2 py-0.5 rounded-lg bg-white/[0.04] text-zinc-400 border border-white/[0.06] font-mono text-[11px] font-medium shrink-0"
+              className="inline-flex items-center px-2 py-0.5 rounded-lg bg-white/[0.04] text-zinc-300 border border-white/[0.06] font-mono text-[11px] font-medium shrink-0"
               aria-hidden="true"
             >
               +{topicOverflow}
@@ -264,7 +264,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
               <span>Trending</span>
             </span>
           ) : (
-            <span className="text-zinc-500 text-xs font-medium">Telemetry Tracked</span>
+            <span className="text-zinc-400 text-xs font-medium">Telemetry Tracked</span>
           )}
         </div>
 
@@ -278,7 +278,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
             onKeyDown={handleCompareKeyDown}
             className="inline-flex items-center gap-1.5 text-zinc-300 hover:text-white px-2.5 py-1 rounded-lg hover:bg-white/[0.08] transition-colors cursor-pointer text-xs font-semibold"
           >
-            <Scale className="h-3.5 w-3.5 text-zinc-400" />
+            <Scale className="h-3.5 w-3.5 text-zinc-300" />
             <span>Compare</span>
           </button>
           <span className="inline-flex items-center gap-1 text-orange-400 font-bold hover:text-orange-300 transition-colors text-xs">

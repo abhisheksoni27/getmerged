@@ -25,7 +25,7 @@ export default function PublicDocsPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-black text-zinc-100 font-sans">
+    <div className="min-h-screen flex flex-col bg-black text-white font-sans">
       <Header />
       <script
         type="application/ld+json"

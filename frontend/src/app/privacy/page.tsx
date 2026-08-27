@@ -53,26 +53,26 @@ export default function PrivacyPolicyPage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-8">
-          <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-emerald-300 bg-emerald-950/70 border-emerald-800/80 border border-emerald-200 px-3 py-1 rounded-xl mb-3">
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1 rounded-xl mb-3">
             <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /> Privacy & Security Compliance
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold font-space text-zinc-100 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold font-space text-white tracking-tight">
             Privacy Policy
           </h1>
-          <p className="mt-2 text-xs sm:text-sm text-zinc-400 font-sans">
+          <p className="mt-2 text-xs sm:text-sm text-zinc-300 font-sans">
             Last Updated: August 15, 2026
           </p>
         </div>
 
-        <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs prose prose-sm leading-relaxed text-zinc-400 max-w-none space-y-8 font-sans">
+        <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs prose prose-sm leading-relaxed text-zinc-300 max-w-none space-y-8 font-sans">
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">1. Introduction & Scope</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">1. Introduction & Scope</h2>
             <p>
               GetMerged (&quot;we&quot;, &quot;our&quot;, or &quot;the Platform&quot;) helps open-source contributors
               discover GitHub repositories where pull requests are actually welcomed and merged. This Privacy Policy
@@ -92,13 +92,13 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">2. Information We Collect</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">2. Information We Collect</h2>
             <p>
               We practice data minimization: we collect only what is needed to provide the service. Personal data is
               divided into the categories below.
             </p>
 
-            <h3 className="mt-4 text-sm font-bold font-space text-zinc-100 mb-2">a) Account Information (via OAuth)</h3>
+            <h3 className="mt-4 text-sm font-bold font-space text-white mb-2">a) Account Information (via OAuth)</h3>
             <p>
               When you sign in with <strong>GitHub</strong> or <strong>Google</strong>, we receive the following from
               the identity provider, scoped to the minimum needed:
@@ -112,21 +112,21 @@ export default function PrivacyPolicyPage() {
               before it is stored.
             </p>
 
-            <h3 className="mt-4 text-sm font-bold font-space text-zinc-100 mb-2">b) Content You Submit</h3>
+            <h3 className="mt-4 text-sm font-bold font-space text-white mb-2">b) Content You Submit</h3>
             <ul className="list-disc pl-5 space-y-2 mt-2">
               <li><strong>Watchlist:</strong> the list of repositories you choose to track for C-Rank™ changes.</li>
               <li><strong>Contributor feedback:</strong> when you rate a repository&apos;s maintainer responsiveness, review speed, and beginner-friendliness (1–5 scales), add a free-text comment, and your status as a verified contributor.</li>
               <li><strong>Indexing requests:</strong> if you request that a repository be indexed, your user ID is recorded with the request.</li>
             </ul>
 
-            <h3 className="mt-4 text-sm font-bold font-space text-zinc-100 mb-2">c) Data Collected Automatically</h3>
+            <h3 className="mt-4 text-sm font-bold font-space text-white mb-2">c) Data Collected Automatically</h3>
             <ul className="list-disc pl-5 space-y-2 mt-2">
               <li><strong>Analytics events:</strong> with your consent, we collect anonymized product usage events (page views, searches, filters, sign-in clicks) via PostHog. See Section 7 for details.</li>
               <li><strong>Session and preference data:</strong> a short-lived authentication cookie and, in some pages, a temporary scroll position stored in your browser&apos;s session storage.</li>
               <li><strong>Server logs and cache:</strong> standard technical metadata (IP address, request path, timestamps) necessary for security, rate limiting, and debugging. This data is kept in our infrastructure and cache layers.</li>
             </ul>
 
-            <h3 className="mt-4 text-sm font-bold font-space text-zinc-100 mb-2">d) Public GitHub Data</h3>
+            <h3 className="mt-4 text-sm font-bold font-space text-white mb-2">d) Public GitHub Data</h3>
             <p>
               We collect <strong>public</strong> GitHub data - repository metadata, pull request and issue comment text,
               merge rates, and response times - to compute C-Rank™ scores. This data is publicly available on GitHub and
@@ -136,7 +136,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">3. How We Use Your Information</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">3. How We Use Your Information</h2>
             <ul className="list-disc pl-5 space-y-2 mt-2">
               <li>To authenticate your sessions and keep you signed in across visits.</li>
               <li>To display and sync your watchlist, including notifications of C-Rank™ changes.</li>
@@ -152,7 +152,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">4. Legal Bases for Processing (GDPR)</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">4. Legal Bases for Processing (GDPR)</h2>
             <p>
               If you are located in the European Economic Area (EEA), the United Kingdom, or Switzerland, we process
               personal data on the following legal bases under the GDPR:
@@ -166,7 +166,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">5. Sharing & Third-Party Processors</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">5. Sharing & Third-Party Processors</h2>
             <p>
               We share personal data only with service providers that process it on our behalf under contractual
               obligations to keep it confidential and secure. The sub-processors we currently use:
@@ -175,9 +175,9 @@ export default function PrivacyPolicyPage() {
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
                   <tr className="border-b border-white/[0.08]">
-                    <th className="py-2 pr-3 font-bold text-zinc-100">Provider</th>
-                    <th className="py-2 pr-3 font-bold text-zinc-100">Purpose</th>
-                    <th className="py-2 font-bold text-zinc-100">Data</th>
+                    <th className="py-2 pr-3 font-bold text-white">Provider</th>
+                    <th className="py-2 pr-3 font-bold text-white">Purpose</th>
+                    <th className="py-2 font-bold text-white">Data</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-100">
@@ -216,7 +216,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">6. International Data Transfers</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">6. International Data Transfers</h2>
             <p>
               Your personal data is stored on servers operated by our infrastructure providers, and some sub-processors
               (such as PostHog and the OpenCode AI API) operate outside the EEA/UK, including in the United States.
@@ -231,15 +231,15 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">7. Cookies, Consent & Analytics</h2>
-            <h3 className="mt-4 text-sm font-bold font-space text-zinc-100 mb-2">Essential cookies</h3>
+            <h2 className="text-lg font-bold font-space text-white mb-3">7. Cookies, Consent & Analytics</h2>
+            <h3 className="mt-4 text-sm font-bold font-space text-white mb-2">Essential cookies</h3>
             <ul className="list-disc pl-5 space-y-2 mt-2">
               <li><strong><code>opendoor_token</code></strong> - a session cookie that keeps you signed in (7-day lifetime). This is strictly necessary for authentication.</li>
               <li><strong><code>opendoor_consent</code></strong> - records your analytics choice (accepted: 1 year; rejected: 90 days) so we can honor it across visits.</li>
               <li><strong>Session storage</strong> - a temporary scroll-position value used only during a session.</li>
             </ul>
 
-            <h3 className="mt-4 text-sm font-bold font-space text-zinc-100 mb-2">Analytics & consent</h3>
+            <h3 className="mt-4 text-sm font-bold font-space text-white mb-2">Analytics & consent</h3>
             <p>
               We use PostHog for anonymized product analytics. PostHog is initialized in memory-only mode and
               <strong> begins capturing events only after you accept</strong> via the cookie banner. You can:
@@ -255,7 +255,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">8. Data Retention</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">8. Data Retention</h2>
             <p>We retain personal data only as long as necessary for the purposes described in this policy:</p>
             <ul className="list-disc pl-5 space-y-2 mt-2">
               <li><strong>Account data:</strong> retained while your account is active and for a reasonable period afterward to allow you to sign back in without losing your watchlist.</li>
@@ -267,7 +267,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">9. Data Security</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">9. Data Security</h2>
             <p>
               We implement reasonable technical and organizational safeguards, including:
             </p>
@@ -285,7 +285,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">10. Your Rights & Choices</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">10. Your Rights & Choices</h2>
             <p>Depending on your location, you may have the following rights:</p>
             <ul className="list-disc pl-5 space-y-2 mt-2">
               <li><strong>Right of access:</strong> request a copy of the personal data we hold about you.</li>
@@ -311,7 +311,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">11. Children&apos;s Privacy</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">11. Children&apos;s Privacy</h2>
             <p>
               The Platform is not directed to children under the age of 16, and we do not knowingly collect personal
               data from children. If you believe a child has provided us personal data, please contact us and we will
@@ -320,7 +320,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">12. Third-Party Links</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">12. Third-Party Links</h2>
             <p>
               The Platform contains links to external sites (including GitHub). We are not responsible for the privacy
               practices or content of those sites. We encourage you to review the privacy policies of any external
@@ -329,7 +329,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">13. Business Transfers</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">13. Business Transfers</h2>
             <p>
               If GetMerged is involved in a merger, acquisition, reorganization, or sale of assets, your personal data
               may be transferred as part of that transaction. We will notify you and take steps to ensure it continues
@@ -338,7 +338,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">14. Changes to This Policy</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">14. Changes to This Policy</h2>
             <p>
               We may update this Privacy Policy from time to time to reflect changes in our practices, features, or
               legal requirements. Material changes will be posted on this page with an updated &quot;Last Updated&quot;
@@ -348,26 +348,26 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-zinc-100 mb-3">15. Contact Us</h2>
+            <h2 className="text-lg font-bold font-space text-white mb-3">15. Contact Us</h2>
             <p>
               If you have questions, concerns, or requests about this Privacy Policy or your personal data, please reach
               out to our maintainers:
             </p>
             <ul className="list-disc pl-5 space-y-2 mt-2">
               <li>Open an issue or DM the maintainers on our official{" "}
-                <a href="https://github.com/GetMergedApp" target="_blank" rel="noreferrer" title="View GetMergedApp on GitHub" className="text-zinc-100 underline font-semibold">
+                <a href="https://github.com/GetMergedApp" target="_blank" rel="noreferrer" title="View GetMergedApp on GitHub" className="text-white underline font-semibold">
                   GitHub Organization
                 </a>
                 .
               </li>
               <li>Email us directly at{" "}
-                <a href="mailto:hi@abhishekco.de" title="Email GetMerged support" className="text-zinc-100 underline font-semibold">
+                <a href="mailto:hi@abhishekco.de" title="Email GetMerged support" className="text-white underline font-semibold">
                   hi@abhishekco.de
                 </a>
                 .
               </li>
               <li>Review the terms in our{" "}
-                <Link href="/terms" title="View GetMerged Terms of Service" className="text-zinc-100 underline font-semibold">
+                <Link href="/terms" title="View GetMerged Terms of Service" className="text-white underline font-semibold">
                   Terms of Service
                 </Link>.
               </li>

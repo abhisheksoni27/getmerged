@@ -71,7 +71,7 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-emerald-600" />
-          <h3 className="text-base font-bold text-zinc-100 font-space">
+          <h3 className="text-base font-bold text-white font-space">
             PR Acceptance & Review Speed Forecast
           </h3>
         </div>
@@ -93,7 +93,7 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
             <span>Run Pre-flight PR Check</span>
             <ArrowRight className="h-3 w-3 text-white" aria-hidden="true" />
           </Link>
-          <span className="text-[11px] font-sans text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded-full">
+          <span className="text-[11px] font-sans text-zinc-300 bg-zinc-900 px-2 py-0.5 rounded-full">
             Precomputed via Live PR Events
           </span>
         </div>
@@ -102,64 +102,64 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 font-sans">
         {/* Overall Acceptance Rate */}
         <div className="bg-zinc-900 border border-white/[0.08] rounded-xl p-3">
-          <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
+          <div className="flex items-center gap-1 text-xs text-zinc-300 mb-1">
             <Percent className="h-3.5 w-3.5 text-emerald-600" />
             <span>Overall Merge Odds</span>
           </div>
-          <div className="text-xl font-bold font-mono text-zinc-100">
+          <div className="text-xl font-bold font-mono text-white">
             {data.overall_acceptance_rate !== null ? `${data.overall_acceptance_rate.toFixed(1)}%` : "N/A"}
           </div>
-          <p className="text-[10px] text-zinc-400 mt-0.5">External PR acceptance</p>
+          <p className="text-[10px] text-zinc-300 mt-0.5">External PR acceptance</p>
         </div>
 
         {/* First-Timer Acceptance Rate */}
         <div className="bg-zinc-900 border border-white/[0.08] rounded-xl p-3">
-          <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
+          <div className="flex items-center gap-1 text-xs text-zinc-300 mb-1">
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
             <span>First-Timer Rate</span>
           </div>
-          <div className="text-xl font-bold font-mono text-zinc-100">
+          <div className="text-xl font-bold font-mono text-white">
             {data.first_timer_acceptance_rate !== null ? `${data.first_timer_acceptance_rate.toFixed(1)}%` : "N/A"}
           </div>
-          <p className="text-[10px] text-zinc-400 mt-0.5">First PR success rate</p>
+          <p className="text-[10px] text-zinc-300 mt-0.5">First PR success rate</p>
         </div>
 
         {/* Median Response Time (p50) */}
         <div className="bg-zinc-900 border border-white/[0.08] rounded-xl p-3">
-          <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
+          <div className="flex items-center gap-1 text-xs text-zinc-300 mb-1">
             <Clock className="h-3.5 w-3.5 text-blue-600" />
             <span>Median Response (p50)</span>
           </div>
-          <div className="text-xl font-bold font-mono text-zinc-100">
+          <div className="text-xl font-bold font-mono text-white">
             {data.response_time_p50_hours !== null
               ? data.response_time_p50_hours < 1
                 ? "<1h"
                 : `${Math.round(data.response_time_p50_hours)}h`
               : "N/A"}
           </div>
-          <p className="text-[10px] text-zinc-400 mt-0.5">50% receive response in</p>
+          <p className="text-[10px] text-zinc-300 mt-0.5">50% receive response in</p>
         </div>
 
         {/* Long-tail Response Time (p90) */}
         <div className="bg-zinc-900 border border-white/[0.08] rounded-xl p-3">
-          <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
+          <div className="flex items-center gap-1 text-xs text-zinc-300 mb-1">
             <Clock className="h-3.5 w-3.5 text-amber-600" />
             <span>Tail Latency (p90)</span>
           </div>
-          <div className="text-xl font-bold font-mono text-zinc-100">
+          <div className="text-xl font-bold font-mono text-white">
             {data.response_time_p90_hours !== null
               ? data.response_time_p90_hours < 24
                 ? `${Math.round(data.response_time_p90_hours)}h`
                 : `${Math.round(data.response_time_p90_hours / 24)}d`
               : "N/A"}
           </div>
-          <p className="text-[10px] text-zinc-400 mt-0.5">90% receive response in</p>
+          <p className="text-[10px] text-zinc-300 mt-0.5">90% receive response in</p>
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between text-[11px] font-sans text-zinc-400 pt-2 border-t border-white/[0.08]">
+      <div className="flex flex-wrap items-center justify-between text-[11px] font-sans text-zinc-300 pt-2 border-t border-white/[0.08]">
         <span className="flex items-center gap-1.5">
-          <Users className="h-3.5 w-3.5 text-zinc-400" /> Active Maintainers:{" "}
+          <Users className="h-3.5 w-3.5 text-zinc-300" /> Active Maintainers:{" "}
           <strong className="font-mono text-zinc-200">{data.bus_factor}</strong>
         </span>
         {data.staleness_flag && (

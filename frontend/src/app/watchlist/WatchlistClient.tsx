@@ -80,7 +80,7 @@ function getBadgeStyle(rank?: string) {
       };
     default:
       return {
-        badgeClass: "bg-zinc-950 text-zinc-100 border border-white/[0.12] font-bold shadow-sm",
+        badgeClass: "bg-zinc-950 text-white border border-white/[0.12] font-bold shadow-sm",
         label: "Scored",
         indicatorColor: "bg-zinc-600",
       };
@@ -141,10 +141,10 @@ function TierDeltaIndicatorChip({ repo, history }: TierDeltaProps) {
   return (
     <span
       data-testid={`tier-delta-chip-${repoSlug}`}
-      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-zinc-900 text-zinc-400 border border-white/[0.08] font-mono text-xs font-medium"
+      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-zinc-900 text-zinc-300 border border-white/[0.08] font-mono text-xs font-medium"
       title={`Tier ${currentTier} stable (no recent changes)`}
     >
-      <Minus className="h-3 w-3 text-zinc-400" />
+      <Minus className="h-3 w-3 text-zinc-300" />
       <span>Tier {currentTier} · Stable</span>
       <span className="sr-only">Tier unchanged ({currentTier})</span>
     </span>
@@ -256,18 +256,18 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
               <Link
                 href={`/${ownerPart}/${namePart}`}
                 title={`View ${repo.full_name} scorecard`}
-                className="font-space text-base font-bold text-zinc-100 group-hover:text-emerald-400 transition-colors flex items-center gap-1 min-w-0 no-underline"
+                className="font-space text-base font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-1 min-w-0 no-underline"
               >
                 <h3 className="truncate text-base font-bold">{repo.full_name}</h3>
-                <ArrowUpRight className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-zinc-400 shrink-0" />
+                <ArrowUpRight className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-zinc-300 shrink-0" />
               </Link>
-              <div className="flex items-center gap-2 mt-0.5 font-mono text-[11px] text-zinc-400">
+              <div className="flex items-center gap-2 mt-0.5 font-mono text-[11px] text-zinc-300">
                 <span className="flex items-center gap-1 font-semibold text-zinc-300">
                   <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                   {repo.stars >= 1_000 ? `${(repo.stars / 1_000).toFixed(1)}k` : repo.stars}
                 </span>
                 <span>•</span>
-                <span className="flex items-center gap-1 truncate text-zinc-400">
+                <span className="flex items-center gap-1 truncate text-zinc-300">
                   <LangLogo language={repo.language} />
                   <span className="truncate">{repo.language || "Code"}</span>
                 </span>
@@ -286,7 +286,7 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
               className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
                 alertsOn
                   ? "border-emerald-200 text-emerald-400 bg-emerald-950/70 border-emerald-800/80 hover:bg-emerald-950/80 border-emerald-800/80"
-                  : "border-white/[0.08] text-zinc-400 hover:text-zinc-300 hover:bg-zinc-900"
+                  : "border-white/[0.08] text-zinc-300 hover:text-zinc-300 hover:bg-zinc-900"
               }`}
             >
               {alertsOn ? <Bell className="h-4 w-4" /> : <BellOff className="h-4 w-4" />}
@@ -296,7 +296,7 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
               onClick={handleUnwatchClick}
               aria-label={`Unwatch ${repo.full_name}`}
               title={`Remove ${repo.full_name} from watchlist`}
-              className="p-1.5 rounded-lg border border-white/[0.08] text-zinc-400 hover:text-red-600 hover:border-red-200 hover:bg-red-50 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg border border-white/[0.08] text-zinc-300 hover:text-red-600 hover:border-red-200 hover:bg-red-50 transition-colors cursor-pointer"
             >
               <BookmarkX className="h-4 w-4" />
             </button>
@@ -311,8 +311,8 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
           >
             <span className={`h-1.5 w-1.5 rounded-full ${badgeStyle.indicatorColor}`} />
             <span>Tier {rank}</span>
-            <span className="text-zinc-400 font-normal">|</span>
-            <span className="text-zinc-100 font-extrabold">{scoreDisplay}</span>
+            <span className="text-zinc-300 font-normal">|</span>
+            <span className="text-white font-extrabold">{scoreDisplay}</span>
           </div>
 
           {/* Delta Indicator Chip */}
@@ -320,29 +320,29 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
         </div>
 
         {/* Description */}
-        <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed font-sans font-normal mb-4 min-h-[2.5rem]">
+        <p className="text-xs text-zinc-300 line-clamp-2 leading-relaxed font-sans font-normal mb-4 min-h-[2.5rem]">
           {repo.description || "No repository description available."}
         </p>
 
         {/* Telemetry Metrics Scorecard */}
         <div className="grid grid-cols-3 gap-3 py-3 px-3.5 bg-zinc-900/80 rounded-xl border border-white/[0.08]/90 my-auto text-center font-mono">
           <div className="pr-1">
-            <div className="text-xs font-bold text-zinc-100">{mergeRate}</div>
-            <div className="text-[10px] text-zinc-400 font-medium whitespace-nowrap mt-0.5">Merge Rate</div>
+            <div className="text-xs font-bold text-white">{mergeRate}</div>
+            <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5">Merge Rate</div>
           </div>
           <div className="border-x border-white/[0.08] px-1">
-            <div className="text-xs font-bold text-zinc-100">{firstResponse}</div>
-            <div className="text-[10px] text-zinc-400 font-medium whitespace-nowrap mt-0.5">First Review</div>
+            <div className="text-xs font-bold text-white">{firstResponse}</div>
+            <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5">First Review</div>
           </div>
           <div className="pl-1">
-            <div className="text-xs font-bold text-zinc-100">{firstTimerRate}</div>
-            <div className="text-[10px] text-zinc-400 font-medium whitespace-nowrap mt-0.5">1st-Timers</div>
+            <div className="text-xs font-bold text-white">{firstTimerRate}</div>
+            <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5">1st-Timers</div>
           </div>
         </div>
       </div>
 
       {/* Footer Row */}
-      <div className="pt-3 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-400">
+      <div className="pt-3 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-300">
         <div className="flex items-center gap-2">
           {gfiCount > 0 ? (
             <span className="inline-flex items-center gap-1 text-emerald-400 bg-emerald-950/70 border-emerald-800/80 px-2 py-0.5 rounded border border-emerald-200/60 font-medium text-[10px]">
@@ -368,7 +368,7 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
             title={`Compare ${repo.full_name} with another repository`}
             aria-label={`Compare ${repo.full_name}`}
             onClick={handleCompareClick}
-            className="inline-flex items-center gap-1 text-xs font-medium text-zinc-400 hover:text-emerald-400 bg-zinc-900/70 hover:bg-emerald-950/70 border-emerald-800/80 px-2 py-1 rounded-md border border-white/[0.08]/60 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1 text-xs font-medium text-zinc-300 hover:text-emerald-400 bg-zinc-900/70 hover:bg-emerald-950/70 border-emerald-800/80 px-2 py-1 rounded-md border border-white/[0.08]/60 transition-colors cursor-pointer"
           >
             <Scale className="h-3 w-3" />
             <span>Compare</span>
@@ -376,7 +376,7 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
           <Link
             href={`/${ownerPart}/${namePart}`}
             title={`View ${repo.full_name} details and C-Rank breakdown`}
-            className="font-semibold text-zinc-100 hover:text-emerald-400 transition-colors flex items-center gap-0.5 no-underline"
+            className="font-semibold text-white hover:text-emerald-400 transition-colors flex items-center gap-0.5 no-underline"
           >
             View details →
           </Link>
@@ -389,11 +389,11 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
 function WatchlistEmptyState() {
   return (
     <div className="p-10 text-center bg-zinc-900/80 rounded-3xl border border-white/[0.08] shadow-2xs my-8 max-w-xl mx-auto flex flex-col items-center animate-fade-in">
-      <div className="h-14 w-14 rounded-2xl bg-zinc-900 flex items-center justify-center mb-4 text-zinc-400">
+      <div className="h-14 w-14 rounded-2xl bg-zinc-900 flex items-center justify-center mb-4 text-zinc-300">
         <Bookmark className="h-8 w-8" />
       </div>
-      <h2 className="font-space text-xl font-bold text-zinc-100 mb-2">Your Watchlist is Empty</h2>
-      <p className="text-sm text-zinc-400 font-sans mb-6 max-w-sm leading-relaxed">
+      <h2 className="font-space text-xl font-bold text-white mb-2">Your Watchlist is Empty</h2>
+      <p className="text-sm text-zinc-300 font-sans mb-6 max-w-sm leading-relaxed">
         Save repositories to track live C-Rank™ tier shifts, maintainer response velocity, and telemetry changes in one place.
       </p>
 
@@ -409,7 +409,7 @@ function WatchlistEmptyState() {
         <Link
           href="/good-first-issue"
           title="Explore beginner friendly good first issues"
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-zinc-300 hover:text-zinc-100 font-sans text-sm font-medium hover:bg-zinc-900 transition-colors no-underline"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-zinc-300 hover:text-white font-sans text-sm font-medium hover:bg-zinc-900 transition-colors no-underline"
         >
           <span>Explore Good First Issues</span>
           <ArrowRight className="h-4 w-4" />
@@ -483,8 +483,8 @@ function WebhookChannels() {
     <div className="mb-8 p-5 rounded-2xl border border-white/[0.08] bg-zinc-900/80">
       <div className="flex items-center gap-2 mb-3">
         <Webhook className="h-4 w-4 text-emerald-400" />
-        <h2 className="font-space text-base font-bold text-zinc-100">Webhook Alerts</h2>
-        <span className="text-xs text-zinc-400 font-sans">Slack &amp; Discord pings when a watched repo crosses a tier or jumps 10+ C-Rank points</span>
+        <h2 className="font-space text-base font-bold text-white">Webhook Alerts</h2>
+        <span className="text-xs text-zinc-300 font-sans">Slack &amp; Discord pings when a watched repo crosses a tier or jumps 10+ C-Rank points</span>
       </div>
 
       {webhooks.length > 0 && (
@@ -509,7 +509,7 @@ function WebhookChannels() {
                 onClick={() => handleRemove(wh.id)}
                 aria-label={`Remove ${wh.label} webhook`}
                 title="Remove webhook"
-                className="p-1.5 rounded-lg border border-white/[0.08] text-zinc-400 hover:text-red-600 hover:border-red-200 hover:bg-red-50 transition-colors cursor-pointer shrink-0"
+                className="p-1.5 rounded-lg border border-white/[0.08] text-zinc-300 hover:text-red-600 hover:border-red-200 hover:bg-red-50 transition-colors cursor-pointer shrink-0"
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </button>
@@ -535,7 +535,7 @@ function WebhookChannels() {
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://hooks.slack.com/services/..."
           aria-label="Webhook URL"
-          className="flex-1 px-3 py-2 rounded-xl border border-white/[0.08] bg-zinc-900/80 text-sm font-sans text-zinc-200 placeholder:text-zinc-400 focus:outline-none focus:border-emerald-500"
+          className="flex-1 px-3 py-2 rounded-xl border border-white/[0.08] bg-zinc-900/80 text-sm font-sans text-zinc-200 placeholder:text-zinc-300 focus:outline-none focus:border-emerald-500"
         />
         <button
           type="submit"
@@ -646,7 +646,7 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
         <div className="mb-8 border-b border-white/[0.08] pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-zinc-100 tracking-tight">
+              <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
                 My Watchlist
               </h1>
               <span className="bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border border-emerald-200/80 text-xs font-mono font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
@@ -654,7 +654,7 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
                 <span>{items.length} saved</span>
               </span>
             </div>
-            <p className="text-sm text-zinc-400 font-sans mt-2 max-w-2xl">
+            <p className="text-sm text-zinc-300 font-sans mt-2 max-w-2xl">
               Track live C-Rank™ tier shifts, maintainer response velocity, and telemetry changes for your saved open-source repositories.
             </p>
           </div>
@@ -665,7 +665,7 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
               title="Explore all indexed open source repositories"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-zinc-200 hover:bg-zinc-900 hover:border-white/[0.12] font-sans text-xs font-semibold shadow-2xs transition-all no-underline"
             >
-              <Compass className="h-3.5 w-3.5 text-zinc-400" />
+              <Compass className="h-3.5 w-3.5 text-zinc-300" />
               <span>Explore More Repos</span>
             </Link>
           </div>
