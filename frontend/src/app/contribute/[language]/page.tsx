@@ -180,8 +180,8 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
               title={`Show best ${canonicalLang} repositories for ${lv.label.toLowerCase()}s`}
               className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
                 lv.value === level
-                  ? "bg-[#1e293b] text-white border-white/[0.12]"
-                  : "bg-[#111827] text-zinc-300 border-white/[0.08] hover:border-white/[0.18]"
+                  ? "bg-zinc-900 text-white border-white/[0.12]"
+                  : "bg-zinc-900/80 text-zinc-300 border-white/[0.08] hover:border-white/[0.18]"
               }`}
             >
               {lv.label}
@@ -194,12 +194,12 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
           {visibleRepos.map((repo) => (
             <div
               key={repo.id}
-              className="p-5 rounded-2xl border border-b-2 border-b-zinc-900/10 border-white/[0.08] bg-[#111827] hover:border-emerald-500/80 hover:border-b-emerald-700 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+              className="p-5 rounded-2xl border border-b-2 border-b-zinc-900/10 border-white/[0.08] bg-zinc-900/80 hover:border-emerald-500/80 hover:border-b-emerald-700 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                   {typeof repo.match_score === "number" && (
-                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-[#1e293b] text-white">
+                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-zinc-900 text-white">
                       {Math.round(repo.match_score)}% match
                     </span>
                   )}
@@ -243,7 +243,7 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
                 <Link
                   href={`/${repo.full_name}`}
                   title={`Open full scorecard for ${repo.full_name}`}
-                  className="px-4 py-2 rounded-xl bg-[#1e293b] hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
+                  className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
                 >
                   View Scorecard <ArrowRight className="h-3.5 w-3.5" />
                 </Link>

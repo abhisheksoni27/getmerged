@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RepoCard } from "@/components/RepoCard";
@@ -18,7 +18,6 @@ import {
   ChevronRight,
   ShieldCheck,
   RotateCcw,
-  Check,
   HelpCircle,
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
@@ -40,27 +39,12 @@ const LANGUAGES = [
   "Swift",
 ];
 
-const TIERS = ["All", "S", "A", "B", "C", "D"];
-
 const STAR_BUCKETS = [
   { label: "All Stars", value: "All" },
   { label: "< 5k ★", value: "<5k" },
   { label: "5k - 20k ★", value: "5k-20k" },
   { label: "20k - 50k ★", value: "20k-50k" },
   { label: "50k+ ★", value: "50k+" },
-];
-
-const MERGE_RATE_BUCKETS = [
-  { label: "All Rates", value: "All" },
-  { label: "High (≥ 60%)", value: "60" },
-  { label: "Moderate (≥ 40%)", value: "40" },
-  { label: "Active (≥ 20%)", value: "20" },
-];
-
-const FIRST_TIMER_BUCKETS = [
-  { label: "Any Acceptance", value: "All" },
-  { label: "High (> 50%)", value: "50" },
-  { label: "Moderate (> 25%)", value: "25" },
 ];
 
 const FAQS = [
@@ -98,102 +82,54 @@ const FAQS = [
   },
   {
     q: "Can I request my repository to be indexed or re-scored?",
-    a: "Yes! Any public GitHub repository can be submitted directly through the search bar on the homepage or via our fast-track indexing queue.",
+    a: "Yes! Submit your repository via our search bar on the homepage. If it is public on GitHub, it will be automatically queued and indexed in our daily evaluation cycle.",
   },
 ];
 
 interface ReposClientProps {
-  initialRepos?: Repo[];
-  initialTotal?: number;
+  initialRepos: Repo[];
+  initialTotal: number;
 }
 
-export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClientProps) {
-  const router = useRouter();
+export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
   const searchParams = useSearchParams();
 
-  // Read initial page from URL query parameter
-  const urlPage = parseInt(searchParams.get("page") || "1", 10);
-  const initialPage = isNaN(urlPage) || urlPage < 1 ? 1 : urlPage;
-
-  const [repos, setRepos] = useState<Repo[]>(initialRepos);
-  const [loading, setLoading] = useState<boolean>(initialRepos.length === 0);
-  const [searchQuery, setSearchQuery] = useState<string>(searchParams.get("q") || "");
-  const [selectedLang, setSelectedLang] = useState<string>(searchParams.get("lang") || "All");
+  // Search & Filter State from URL
+  const [searchQuery, setSearchQuery] = useState<string>(searchParams.get("name") || "");
+  const [selectedLang, setSelectedLang] = useState<string>(searchParams.get("language") || "All");
   const [selectedTier, setSelectedTier] = useState<string>(searchParams.get("tier") || "All");
-  const [selectedStarBucket, setSelectedStarBucket] = useState<string>(searchParams.get("stars") || "All");
-  const [selectedMergeRate, setSelectedMergeRate] = useState<string>(searchParams.get("merge_rate") || "All");
-  const [selectedFirstTimer, setSelectedFirstTimer] = useState<string>(searchParams.get("first_timer") || "All");
+  const [selectedStarBucket, setSelectedStarBucket] = useState<string>(searchParams.get("star_bucket") || "All");
+  const [selectedMergeRate, setSelectedMergeRate] = useState<string>(searchParams.get("min_merge_rate") || "All");
+  const [selectedFirstTimer, setSelectedFirstTimer] = useState<string>(searchParams.get("min_first_timer") || "All");
   const [trendingOnly, setTrendingOnly] = useState<boolean>(searchParams.get("trending") === "true");
 
-  // Pagination
-  const [page, setPage] = useState<number>(initialPage);
+  // Pagination State
+  const [page, setPage] = useState<number>(() => {
+    const p = parseInt(searchParams.get("page") || "1", 10);
+    return isNaN(p) || p < 1 ? 1 : p;
+  });
+  const perPage = 18;
+
+  // Data State
+  const [repos, setRepos] = useState<Repo[]>(initialRepos);
   const [totalCount, setTotalCount] = useState<number>(initialTotal);
-  const perPage = 24;
-
-  const isInitialMount = React.useRef(true);
-
-  // Mobile Bottom Sheet Modal State
+  const [loading, setLoading] = useState<boolean>(false);
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState<boolean>(false);
 
   // Auth Modal State
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalConfig, setAuthModalConfig] = useState<{ title?: string; description?: string; source?: string }>({});
 
-  const openAuthModal = (title?: string, description?: string, source = "modal") => {
+  const openAuthModal = (title?: string, description?: string, source = "repos_page") => {
     setAuthModalConfig({ title, description, source });
     setIsAuthModalOpen(true);
   };
 
-  const [isLoggedIn] = useState<boolean>(() => {
+  const isLoggedIn = useMemo(() => {
     return typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
-  });
+  }, []);
 
-  // Sync page state if URL changes
-  useEffect(() => {
-    const p = parseInt(searchParams.get("page") || "1", 10);
-    if (!isNaN(p) && p > 0 && p !== page) {
-      setPage(p);
-    }
-  }, [searchParams, page]);
-
-  const activeFilterCount = useMemo(() => {
-    let count = 0;
-    if (selectedLang !== "All") count++;
-    if (selectedTier !== "All") count++;
-    if (selectedStarBucket !== "All") count++;
-    if (selectedMergeRate !== "All") count++;
-    if (selectedFirstTimer !== "All") count++;
-    if (trendingOnly) count++;
-    return count;
-  }, [selectedLang, selectedTier, selectedStarBucket, selectedMergeRate, selectedFirstTimer, trendingOnly]);
-
-  const resetFilters = () => {
-    setSelectedLang("All");
-    setSelectedTier("All");
-    setSelectedStarBucket("All");
-    setSelectedMergeRate("All");
-    setSelectedFirstTimer("All");
-    setTrendingOnly(false);
-    setSearchQuery("");
-    setPage(1);
-    router.push("/repos");
-  };
-
-  const getStarBounds = (bucket: string) => {
-    switch (bucket) {
-      case "<5k":
-        return { max: "5000" };
-      case "5k-20k":
-        return { min: "5000", max: "20000" };
-      case "20k-50k":
-        return { min: "20000", max: "50000" };
-      case "50k+":
-        return { min: "50000" };
-      default:
-        return {};
-    }
-  };
-
+  // Fetch Repos Function
   const fetchRepos = useCallback(async () => {
     setLoading(true);
     const params = new URLSearchParams();
@@ -206,98 +142,129 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
     if (selectedLang !== "All") params.set("language", selectedLang);
     if (selectedTier !== "All") params.set("tier", selectedTier);
     if (trendingOnly) params.set("trending", "true");
-    if (selectedMergeRate !== "All") params.set("min_merge_rate", selectedMergeRate);
-    if (selectedFirstTimer !== "All") params.set("min_first_timer_success_rate", selectedFirstTimer);
 
-    const bounds = getStarBounds(selectedStarBucket);
-    if (bounds.min) params.set("min_stars", bounds.min);
-    if (bounds.max) params.set("max_stars", bounds.max);
+    if (selectedStarBucket === "<5k") {
+      params.set("max_stars", "5000");
+    } else if (selectedStarBucket === "5k-20k") {
+      params.set("min_stars", "5000");
+      params.set("max_stars", "20000");
+    } else if (selectedStarBucket === "20k-50k") {
+      params.set("min_stars", "20000");
+      params.set("max_stars", "50000");
+    } else if (selectedStarBucket === "50k+") {
+      params.set("min_stars", "50000");
+    }
+
+    if (selectedMergeRate !== "All") {
+      params.set("min_merge_rate", selectedMergeRate);
+    }
+
+    if (selectedFirstTimer !== "All") {
+      params.set("min_first_timer_success_rate", selectedFirstTimer);
+    }
+
+    // Sync state with URL without hard refresh
+    const newUrl = `/repos?${params.toString()}`;
+    window.history.replaceState({ ...window.history.state, as: newUrl, url: newUrl }, "", newUrl);
 
     try {
       const res = await fetch(`${API_BASE_URL}/api/v1/repos?${params.toString()}`);
-      if (!res.ok) throw new Error("Fetch failed");
+      if (!res.ok) throw new Error("Failed to fetch repositories");
       const data = await res.json();
       const rawList = data.data || data.repos || [];
-      const total = data.meta?.total ?? data.total ?? (Array.isArray(rawList) ? rawList.length : 0);
 
-      if (Array.isArray(rawList)) {
-        const mappedList: Repo[] = rawList.map((r: Record<string, unknown>) => ({
-          ...(r as unknown as Repo),
-          c_rank_tier: (r.c_rank_tier as string) || (r.class_rank as string) || "A",
-          first_timer_success_rate:
-            (r.first_timer_success_rate as number) !== undefined
-              ? (r.first_timer_success_rate as number)
-              : (r.first_timer_rate as number),
-        }));
-        setRepos(mappedList);
-        setTotalCount(total);
-      } else {
-        setRepos([]);
-        setTotalCount(0);
+      const mapped = rawList.map((r: Record<string, unknown>) => ({
+        ...(r as unknown as Repo),
+        c_rank_tier: (r.c_rank_tier as string) || (r.class_rank as string) || "A",
+        class_rank: (r.class_rank as string) || (r.c_rank_tier as string) || "A",
+        first_timer_success_rate:
+          (r.first_timer_success_rate as number) !== undefined
+            ? (r.first_timer_success_rate as number)
+            : (r.first_timer_rate as number),
+      }));
+
+      setRepos(mapped);
+      if (data.total !== undefined) {
+        setTotalCount(data.total);
+      } else if (data.pagination?.total !== undefined) {
+        setTotalCount(data.pagination.total);
       }
-    } catch {
-      setRepos([]);
-      setTotalCount(0);
+    } catch (err) {
+      console.error("Failed to load repos:", err);
     } finally {
       setLoading(false);
     }
-  }, [page, searchQuery, selectedLang, selectedTier, selectedStarBucket, selectedMergeRate, selectedFirstTimer, trendingOnly]);
+  }, [
+    page,
+    searchQuery,
+    selectedLang,
+    selectedTier,
+    selectedStarBucket,
+    selectedMergeRate,
+    selectedFirstTimer,
+    trendingOnly,
+    perPage,
+  ]);
 
+  // Debounced Search & Trigger
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      if (initialRepos.length > 0) return;
-    }
-    fetchRepos();
-  }, [fetchRepos, initialRepos.length]);
+    const timer = setTimeout(() => {
+      fetchRepos();
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [fetchRepos]);
+
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (selectedLang !== "All") count++;
+    if (selectedTier !== "All") count++;
+    if (selectedStarBucket !== "All") count++;
+    if (selectedMergeRate !== "All") count++;
+    if (selectedFirstTimer !== "All") count++;
+    if (trendingOnly) count++;
+    if (searchQuery.trim()) count++;
+    return count;
+  }, [
+    selectedLang,
+    selectedTier,
+    selectedStarBucket,
+    selectedMergeRate,
+    selectedFirstTimer,
+    trendingOnly,
+    searchQuery,
+  ]);
+
+  const resetFilters = () => {
+    setSearchQuery("");
+    setSelectedLang("All");
+    setSelectedTier("All");
+    setSelectedStarBucket("All");
+    setSelectedMergeRate("All");
+    setSelectedFirstTimer("All");
+    setTrendingOnly(false);
+    setPage(1);
+  };
 
   const totalPages = Math.max(1, Math.ceil(totalCount / perPage));
 
-  const getPageUrl = (p: number) => {
-    const params = new URLSearchParams();
-    if (p > 1) params.set("page", p.toString());
-    if (selectedLang !== "All") params.set("lang", selectedLang);
-    if (selectedTier !== "All") params.set("tier", selectedTier);
-    if (selectedStarBucket !== "All") params.set("stars", selectedStarBucket);
-    if (selectedMergeRate !== "All") params.set("merge_rate", selectedMergeRate);
-    if (selectedFirstTimer !== "All") params.set("first_timer", selectedFirstTimer);
-    if (trendingOnly) params.set("trending", "true");
-    if (searchQuery.trim()) params.set("q", searchQuery.trim());
-    const qs = params.toString();
-    return qs ? `/repos?${qs}` : "/repos";
-  };
-
-  const handlePageClick = (e: React.MouseEvent, p: number) => {
-    if (p > 1 && !isLoggedIn) {
-      e.preventDefault();
-      openAuthModal(
-        "Sign In to Access Full Directory",
-        "Create a free account to browse page 2+ across all 1,400+ repositories and track custom watchlists.",
-        "pagination"
-      );
-      return;
-    }
-    setPage(p);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  // Generate sliding pagination window (e.g. 1 2 3 4 5)
-  const paginationRange = useMemo(() => {
-    const current = page;
-    const total = totalPages;
+  const pageNumbers = useMemo(() => {
     const delta = 2;
-    const range: number[] = [];
+    const range = [];
+    const total = totalPages;
 
-    for (let i = Math.max(1, current - delta); i <= Math.min(total, current + delta); i++) {
+    for (let i = Math.max(2, page - delta); i <= Math.min(total - 1, page + delta); i++) {
       range.push(i);
     }
 
-    if (range.length > 0 && range[0] > 1) {
-      if (range[0] > 2) range.unshift(-1); // indicator for ellipsis
-      range.unshift(1);
+    if (page - delta > 2) {
+      range.unshift(-1); // indicator for ellipsis
     }
-    if (range.length > 0 && range[range.length - 1] < total) {
-      if (range[range.length - 1] < total - 1) range.push(-2); // indicator for ellipsis
+    range.unshift(1);
+
+    if (page + delta < total - 1) {
+      range.push(-2); // indicator for ellipsis
+    }
+    if (total > 1) {
       range.push(total);
     }
 
@@ -305,10 +272,10 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
   }, [page, totalPages]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0f172a] dev-grid-pattern text-zinc-100 overflow-x-hidden font-sans">
+    <div className="min-h-screen flex flex-col bg-black dev-grid-pattern text-zinc-100 overflow-x-hidden font-sans">
       <Header />
 
-      <main className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1">
+      <main className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex-1">
         {/* Breadcrumb Navigation */}
         <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-zinc-400">
           <Link href="/" title="Back to GetMerged Home" className="hover:text-zinc-100 transition-colors">
@@ -319,28 +286,28 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
         </nav>
 
         {/* Header Hero Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-white/[0.08] pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-white/[0.08] pb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-200/60 text-xs font-mono text-orange-950 font-semibold mb-3">
-              <Sparkles className="h-3.5 w-3.5 text-orange-600" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-mono text-orange-400 font-bold mb-3">
+              <Sparkles className="h-3.5 w-3.5" />
               <span>C-Rank™ Scored Repositories</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold font-space text-zinc-50 tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-black font-space text-white tracking-tight leading-tight">
               Open-Source Repository Explorer
             </h1>
-            <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-2 max-w-2xl leading-relaxed">
+            <p className="text-sm sm:text-base text-zinc-300 font-sans mt-3 max-w-2xl leading-relaxed">
               Browse public GitHub repositories scored on merge velocity, maintainer responsiveness, and first-time PR welcome rates.
             </p>
           </div>
 
           {/* Quick Counter Badge */}
-          <div className="flex items-center gap-3 bg-[#111827] border border-white/[0.08] rounded-2xl px-5 py-3 shadow-2xs shrink-0 self-start md:self-auto">
-            <ShieldCheck className="h-5 w-5 text-emerald-600" />
+          <div className="flex items-center gap-3.5 glass-panel rounded-2xl px-6 py-4 shadow-lg shrink-0 self-start md:self-auto">
+            <ShieldCheck className="h-6 w-6 text-emerald-400" />
             <div>
-              <span className="block text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
+              <span className="block text-[11px] font-mono text-zinc-400 uppercase tracking-wider font-semibold">
                 Total Repositories
               </span>
-              <span className="text-xl font-bold font-mono text-zinc-50">
+              <span className="text-2xl font-bold font-mono text-white">
                 {totalCount.toLocaleString()}
               </span>
             </div>
@@ -348,11 +315,11 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
         </div>
 
         {/* Filter Controls Bar */}
-        <section className="bg-[#111827] border border-white/[0.08] rounded-3xl p-4 sm:p-5 shadow-xs mb-8">
-          <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
+        <section className="glass-panel rounded-3xl p-5 sm:p-6 shadow-xl mb-10">
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
             {/* Search Input */}
             <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
               <input
                 type="text"
                 value={searchQuery}
@@ -361,22 +328,22 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   setPage(1);
                 }}
                 placeholder="Search by repo name (e.g. facebook/react, fastapi)..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-[#1e293b] border border-white/[0.08] text-xs sm:text-sm text-zinc-100 placeholder:text-zinc-400 focus:outline-hidden focus:ring-2 focus:ring-zinc-900 focus:bg-[#111827] transition-all font-sans"
+                className="w-full pl-11 pr-10 py-3 rounded-2xl bg-black/70 border border-white/[0.12] text-sm text-white placeholder:text-zinc-500 focus:outline-hidden focus:border-white/[0.3] transition-all font-sans"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
                   title="Clear search"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-zinc-300"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-white"
                 >
-                  <X className="h-3.5 w-3.5" />
+                  <X className="h-4 w-4" />
                 </button>
               )}
             </div>
 
-            {/* Desktop Filter Pills */}
-            <div className="hidden lg:flex items-center gap-2.5 shrink-0 font-sans text-xs">
+            {/* Desktop Filters Row */}
+            <div className="hidden lg:flex items-center gap-3 text-xs">
               {/* Language Select */}
               <select
                 value={selectedLang}
@@ -385,10 +352,10 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   setPage(1);
                 }}
                 aria-label="Filter by language"
-                className="px-3 py-2.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-200 font-medium focus:ring-2 focus:ring-zinc-900 cursor-pointer"
+                className="px-3.5 py-3 rounded-xl bg-black/70 border border-white/[0.12] text-zinc-200 font-semibold focus:border-white/[0.3] cursor-pointer"
               >
                 {LANGUAGES.map((l) => (
-                  <option key={l} value={l}>
+                  <option key={l} value={l} className="bg-zinc-900 text-white">
                     {l === "All" ? "All Languages" : l}
                   </option>
                 ))}
@@ -402,14 +369,14 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   setPage(1);
                 }}
                 aria-label="Filter by C-Rank tier"
-                className="px-3 py-2.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-200 font-medium focus:ring-2 focus:ring-zinc-900 cursor-pointer"
+                className="px-3.5 py-3 rounded-xl bg-black/70 border border-white/[0.12] text-zinc-200 font-semibold focus:border-white/[0.3] cursor-pointer"
               >
-                <option value="All">All Tiers (S–D)</option>
-                <option value="S">Tier S (Top Welcoming)</option>
-                <option value="A">Tier A (Welcoming)</option>
-                <option value="B">Tier B (Standard)</option>
-                <option value="C">Tier C (Selective)</option>
-                <option value="D">Tier D (Slow / Stale)</option>
+                <option value="All" className="bg-zinc-900 text-white">All Tiers (S–D)</option>
+                <option value="S" className="bg-zinc-900 text-white">Tier S (Elite)</option>
+                <option value="A" className="bg-zinc-900 text-white">Tier A (Welcoming)</option>
+                <option value="B" className="bg-zinc-900 text-white">Tier B (Solid)</option>
+                <option value="C" className="bg-zinc-900 text-white">Tier C (Moderate)</option>
+                <option value="D" className="bg-zinc-900 text-white">Tier D (Risky)</option>
               </select>
 
               {/* Star Volume Select */}
@@ -420,10 +387,10 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   setPage(1);
                 }}
                 aria-label="Filter by stars"
-                className="px-3 py-2.5 rounded-xl bg-[#1e293b] border border-white/[0.08] text-zinc-200 font-medium focus:ring-2 focus:ring-zinc-900 cursor-pointer"
+                className="px-3.5 py-3 rounded-xl bg-black/70 border border-white/[0.12] text-zinc-200 font-semibold focus:border-white/[0.3] cursor-pointer"
               >
                 {STAR_BUCKETS.map((b) => (
-                  <option key={b.value} value={b.value}>
+                  <option key={b.value} value={b.value} className="bg-zinc-900 text-white">
                     {b.label}
                   </option>
                 ))}
@@ -436,13 +403,13 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   setTrendingOnly((prev) => !prev);
                   setPage(1);
                 }}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-white/[0.12] transition-all cursor-pointer font-bold ${
+                className={`inline-flex items-center gap-2 px-4 py-3 rounded-xl border transition-all cursor-pointer font-bold ${
                   trendingOnly
-                    ? "bg-amber-600 text-white shadow-sm"
-                    : "bg-[#111827] text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                    ? "bg-amber-500/20 border-amber-500/40 text-amber-300 shadow-sm"
+                    : "bg-black/70 border-white/[0.12] text-zinc-300 hover:text-white"
                 }`}
               >
-                <Flame className={`h-3.5 w-3.5 ${trendingOnly ? "text-amber-600 fill-amber-500" : "text-amber-500"}`} />
+                <Flame className={`h-4 w-4 ${trendingOnly ? "text-amber-400 fill-amber-400" : "text-zinc-400"}`} />
                 <span>Trending</span>
               </button>
 
@@ -452,7 +419,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   type="button"
                   onClick={resetFilters}
                   title="Reset all filters"
-                  className="p-2.5 rounded-xl border border-white/[0.12] bg-[#111827] text-zinc-200 hover:bg-[#1e293b] hover:shadow-sm transition-all cursor-pointer"
+                  className="p-3 rounded-xl border border-white/[0.12] bg-black/70 text-zinc-300 hover:text-white transition-all cursor-pointer"
                 >
                   <RotateCcw className="h-4 w-4" />
                 </button>
@@ -464,7 +431,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
               <button
                 type="button"
                 onClick={() => setIsFilterSheetOpen(true)}
-                className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#1e293b] text-white font-sans text-xs font-semibold shadow-2xs cursor-pointer active:scale-98 transition-transform"
+                className="flex-1 inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-white/[0.1] text-white font-sans text-xs font-bold shadow-sm cursor-pointer active:scale-98 transition-transform"
               >
                 <SlidersHorizontal className="h-4 w-4" />
                 <span>Filters {activeFilterCount > 0 ? `(${activeFilterCount})` : ""}</span>
@@ -475,7 +442,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                   type="button"
                   onClick={resetFilters}
                   title="Reset all filters"
-                  className="p-2.5 rounded-xl border border-white/[0.08] bg-[#111827] text-zinc-400 text-xs font-semibold cursor-pointer"
+                  className="p-3 rounded-xl border border-white/[0.12] bg-black/70 text-zinc-300 text-xs font-semibold cursor-pointer"
                 >
                   <RotateCcw className="h-4 w-4" />
                 </button>
@@ -496,10 +463,10 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
                     setSelectedLang(lang);
                     setPage(1);
                   }}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs whitespace-nowrap transition-all cursor-pointer font-sans shrink-0 ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs whitespace-nowrap transition-all cursor-pointer font-sans shrink-0 ${
                     active
-                      ? "bg-[#1e293b] text-white font-bold shadow-2xs"
-                      : "bg-[#1e293b] border border-white/[0.08] text-zinc-300 hover:bg-[#1e293b] font-medium"
+                      ? "bg-white text-zinc-950 font-bold shadow-sm"
+                      : "bg-black/60 border border-white/[0.08] text-zinc-300 hover:text-white font-medium"
                   }`}
                 >
                   {lang !== "All" && <LangLogo language={lang} />}
@@ -513,119 +480,127 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
         {/* Repositories Grid */}
         <section aria-live="polite">
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-56 rounded-3xl bg-[#111827] border border-white/[0.08] p-6 animate-pulse" />
+                <div key={i} className="h-64 rounded-3xl glass-card border border-white/[0.08] p-6 animate-pulse" />
               ))}
             </div>
           ) : repos.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {repos.map((repo) => (
                 <RepoCard key={repo.id || repo.full_name} repo={repo} isLoggedIn={isLoggedIn} />
               ))}
             </div>
           ) : (
-            <div className="rounded-3xl border border-dashed border-white/[0.12] bg-[#111827]/70 p-12 text-center">
-              <Search className="h-10 w-10 text-zinc-300 mx-auto mb-3" />
-              <h3 className="text-base font-bold font-space text-zinc-100">No repositories found</h3>
-              <p className="text-xs text-zinc-400 mt-1 max-w-sm mx-auto font-sans">
-                No open-source repositories matched your filter criteria. Try adjusting the language or star parameters.
+            <div className="text-center py-16 px-4 rounded-3xl glass-panel border border-white/[0.08] max-w-lg mx-auto">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 border border-white/[0.1] text-zinc-400 mb-4">
+                <Search className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold font-space text-white mb-1">
+                No matching repositories found
+              </h3>
+              <p className="text-xs text-zinc-400 font-sans max-w-sm mx-auto mb-6">
+                Try adjusting your search query, language filters, or star count parameters to explore more results.
               </p>
               <button
                 type="button"
                 onClick={resetFilters}
-                className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1e293b] text-white text-xs font-semibold shadow-2xs cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-white px-5 py-2.5 text-xs font-bold font-mono transition-all cursor-pointer"
               >
-                Reset All Filters
+                <RotateCcw className="h-3.5 w-3.5" />
+                <span>Reset All Filters</span>
               </button>
             </div>
           )}
         </section>
 
-        {/* Crawlable Pagination Controls (<a> Links) */}
-        {totalPages > 1 && (
-          <nav aria-label="Pagination" className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/[0.08] pt-8">
-            {/* Previous Page Link */}
-            <Link
-              href={getPageUrl(Math.max(1, page - 1))}
-              onClick={(e) => handlePageClick(e, Math.max(1, page - 1))}
-              title={`Go to previous page ${Math.max(1, page - 1)}`}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-white/[0.08] bg-[#111827] text-xs font-semibold text-zinc-300 hover:bg-[#1e293b] shadow-2xs transition-all ${
-                page <= 1 ? "pointer-events-none opacity-40" : "cursor-pointer"
-              }`}
-            >
-              <ChevronLeft className="h-4 w-4" /> Previous
-            </Link>
-
-            {/* Numeric Page Links 1 2 3 4 5 */}
-            <div className="flex items-center gap-1.5 font-mono text-xs">
-              {paginationRange.map((p, idx) => {
-                if (p < 0) {
-                  return (
-                    <span key={`ellipsis-${idx}`} className="px-1.5 text-zinc-400 select-none">
-                      …
-                    </span>
-                  );
-                }
-                const isCurrent = p === page;
-                return (
-                  <Link
-                    key={p}
-                    href={getPageUrl(p)}
-                    onClick={(e) => handlePageClick(e, p)}
-                    title={`Go to repository directory page ${p}`}
-                    aria-current={isCurrent ? "page" : undefined}
-                    className={`h-9 w-9 flex items-center justify-center rounded-xl font-bold transition-all ${
-                      isCurrent
-                        ? "bg-[#0f172a] text-white shadow-xs"
-                        : "bg-[#111827] border border-white/[0.08] text-zinc-300 hover:bg-[#1e293b] cursor-pointer"
-                    }`}
-                  >
-                    {p}
-                  </Link>
-                );
-              })}
+        {/* Pagination Bar */}
+        {!loading && totalPages > 1 && (
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/[0.08] pt-8">
+            <div className="text-xs font-mono text-zinc-400">
+              Showing page <span className="text-white font-bold">{page}</span> of{" "}
+              <span className="text-white font-bold">{totalPages}</span> ({totalCount.toLocaleString()} total repos)
             </div>
 
-            {/* Next Page Link */}
-            <Link
-              href={getPageUrl(Math.min(totalPages, page + 1))}
-              onClick={(e) => handlePageClick(e, Math.min(totalPages, page + 1))}
-              title={`Go to next page ${Math.min(totalPages, page + 1)}`}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-white/[0.08] bg-[#111827] text-xs font-semibold text-zinc-300 hover:bg-[#1e293b] shadow-2xs transition-all ${
-                page >= totalPages ? "pointer-events-none opacity-40" : "cursor-pointer"
-              }`}
-            >
-              Next <ChevronRight className="h-4 w-4" />
-            </Link>
-          </nav>
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                disabled={page <= 1}
+                onClick={() => {
+                  setPage((p) => Math.max(1, p - 1));
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="p-2 rounded-xl border border-white/[0.08] bg-black/60 text-zinc-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                aria-label="Previous Page"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+
+              <div className="flex items-center gap-1">
+                {pageNumbers.map((num, idx) => {
+                  if (num < 0) {
+                    return (
+                      <span key={`ellipsis-${idx}`} className="px-2 text-zinc-500 text-xs">
+                        ...
+                      </span>
+                    );
+                  }
+                  const isCurrent = num === page;
+                  return (
+                    <button
+                      key={num}
+                      type="button"
+                      onClick={() => {
+                        setPage(num);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className={`min-w-[36px] h-9 px-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                        isCurrent
+                          ? "bg-white text-zinc-950 shadow-sm"
+                          : "bg-black/60 border border-white/[0.08] text-zinc-400 hover:text-white hover:border-white/[0.2]"
+                      }`}
+                    >
+                      {num}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                type="button"
+                disabled={page >= totalPages}
+                onClick={() => {
+                  setPage((p) => Math.min(totalPages, p + 1));
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="p-2 rounded-xl border border-white/[0.08] bg-black/60 text-zinc-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                aria-label="Next Page"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
         )}
 
-        {/* FAQs Section */}
-        <section className="mt-16 sm:mt-24 pt-12 border-t border-white/[0.08]">
-          <div className="max-w-3xl mb-8">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-950/70 border-blue-800/80 border border-blue-200/60 text-xs font-mono text-blue-300 font-semibold mb-2">
-              <HelpCircle className="h-3.5 w-3.5 text-blue-600" />
-              <span>Frequently Asked Questions</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-space text-zinc-50 tracking-tight">
-              Repository Indexing & C-Rank™ FAQs
+        {/* Directory FAQ Section */}
+        <section className="mt-16 pt-12 border-t border-white/[0.08]">
+          <div className="mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold font-space text-white">
+              Frequently Asked Questions About Open-Source Rankings
             </h2>
-            <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-1 leading-relaxed">
-              Common questions about our real-time open-source discovery engine and contributor scores.
+            <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-1">
+              Everything you need to know about how C-Rank™ benchmarks repository maintainer availability.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {FAQS.map((faq, idx) => (
-              <div
-                key={idx}
-                className="rounded-3xl bg-[#111827] border border-white/[0.08] p-6 sm:p-7 shadow-xs hover:border-white/[0.12] transition-colors"
-              >
-                <h3 className="text-sm sm:text-base font-bold font-space text-zinc-100 mb-2 leading-snug">
-                  {faq.q}
+              <div key={idx} className="glass-panel p-6 rounded-2xl space-y-2">
+                <h3 className="text-sm font-bold font-space text-zinc-100 flex items-start gap-2">
+                  <HelpCircle className="h-4 w-4 text-orange-400 shrink-0 mt-0.5" />
+                  <span>{faq.q}</span>
                 </h3>
-                <p className="text-xs sm:text-sm text-zinc-400 font-sans leading-relaxed">
+                <p className="text-xs text-zinc-400 leading-relaxed font-sans pl-6">
                   {faq.a}
                 </p>
               </div>
@@ -634,188 +609,15 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
         </section>
       </main>
 
+      <Footer />
+
+      {/* Auth Modal */}
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         title={authModalConfig.title}
         description={authModalConfig.description}
-        source={authModalConfig.source}
       />
-
-      {/* Mobile Zomato/Airbnb Style Slide-up Bottom Sheet Modal */}
-      {isFilterSheetOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#0f172a]/60 backdrop-blur-xs lg:hidden animate-in fade-in duration-200">
-          <div
-            className="w-full max-h-[85vh] bg-[#111827] rounded-t-3xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-300"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Sheet Header */}
-            <div className="p-4 border-b border-white/[0.08] flex items-center justify-between shrink-0">
-              <div>
-                <h3 className="font-space font-bold text-base text-zinc-100">Filters</h3>
-                <p className="text-[11px] text-zinc-400 font-sans">Fine-tune open source discovery criteria</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsFilterSheetOpen(false)}
-                title="Close filter modal"
-                className="p-1.5 rounded-full hover:bg-[#1e293b] text-zinc-400"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            {/* Scrollable Filters Content */}
-            <div className="p-5 overflow-y-auto space-y-6 flex-1 text-xs font-sans">
-              {/* Language Section */}
-              <div>
-                <label className="block font-bold text-zinc-100 mb-2">Language</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {LANGUAGES.map((lang) => {
-                    const selected = selectedLang === lang;
-                    return (
-                      <button
-                        key={lang}
-                        type="button"
-                        onClick={() => setSelectedLang(lang)}
-                        className={`p-2 rounded-xl border text-center font-medium transition-all ${
-                          selected
-                            ? "bg-[#1e293b] text-white border-white/[0.12] font-bold"
-                            : "bg-[#1e293b] border-white/[0.08] text-zinc-300"
-                        }`}
-                      >
-                        {lang}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* C-Rank Tier Section */}
-              <div>
-                <label className="block font-bold text-zinc-100 mb-2">C-Rank™ Quality Tier</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {TIERS.map((tier) => {
-                    const selected = selectedTier === tier;
-                    return (
-                      <button
-                        key={tier}
-                        type="button"
-                        onClick={() => setSelectedTier(tier)}
-                        className={`p-2 rounded-xl border text-center font-medium transition-all ${
-                          selected
-                            ? "bg-[#1e293b] text-white border-white/[0.12] font-bold"
-                            : "bg-[#1e293b] border-white/[0.08] text-zinc-300"
-                        }`}
-                      >
-                        {tier === "All" ? "All Tiers" : `Tier ${tier}`}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Star Volume Section */}
-              <div>
-                <label className="block font-bold text-zinc-100 mb-2">GitHub Star Count</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {STAR_BUCKETS.map((bucket) => {
-                    const selected = selectedStarBucket === bucket.value;
-                    return (
-                      <button
-                        key={bucket.value}
-                        type="button"
-                        onClick={() => setSelectedStarBucket(bucket.value)}
-                        className={`p-2.5 rounded-xl border text-left flex items-center justify-between font-medium ${
-                          selected
-                            ? "bg-[#1e293b] text-white border-white/[0.12] font-bold"
-                            : "bg-[#1e293b] border-white/[0.08] text-zinc-300"
-                        }`}
-                      >
-                        <span>{bucket.label}</span>
-                        {selected && <Check className="h-3.5 w-3.5 text-white" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Merge Rate Section */}
-              <div>
-                <label className="block font-bold text-zinc-100 mb-2">Minimum Merge Rate</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {MERGE_RATE_BUCKETS.map((b) => {
-                    const selected = selectedMergeRate === b.value;
-                    return (
-                      <button
-                        key={b.value}
-                        type="button"
-                        onClick={() => setSelectedMergeRate(b.value)}
-                        className={`p-2.5 rounded-xl border text-left flex items-center justify-between font-medium ${
-                          selected
-                            ? "bg-[#1e293b] text-white border-white/[0.12] font-bold"
-                            : "bg-[#1e293b] border-white/[0.08] text-zinc-300"
-                        }`}
-                      >
-                        <span>{b.label}</span>
-                        {selected && <Check className="h-3.5 w-3.5 text-white" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* First Timer Success Section */}
-              <div>
-                <label className="block font-bold text-zinc-100 mb-2">First-Timer Acceptance Rate</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {FIRST_TIMER_BUCKETS.map((b) => {
-                    const selected = selectedFirstTimer === b.value;
-                    return (
-                      <button
-                        key={b.value}
-                        type="button"
-                        onClick={() => setSelectedFirstTimer(b.value)}
-                        className={`p-2.5 rounded-xl border text-left flex items-center justify-between font-medium ${
-                          selected
-                            ? "bg-[#1e293b] text-white border-white/[0.12] font-bold"
-                            : "bg-[#1e293b] border-white/[0.08] text-zinc-300"
-                        }`}
-                      >
-                        <span>{b.label}</span>
-                        {selected && <Check className="h-3.5 w-3.5 text-white" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* Sheet Footer Controls */}
-            <div className="p-4 border-t border-white/[0.08] flex items-center gap-3 shrink-0 bg-[#111827]">
-              <button
-                type="button"
-                onClick={resetFilters}
-                className="py-3 px-4 rounded-xl border border-white/[0.08] text-zinc-300 font-semibold text-xs hover:bg-[#1e293b] cursor-pointer"
-              >
-                Clear All
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setPage(1);
-                  setIsFilterSheetOpen(false);
-                }}
-                className="flex-1 py-3 px-4 rounded-xl bg-[#1e293b] text-white font-semibold text-xs shadow-xs text-center cursor-pointer"
-              >
-                Apply Filters
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <Footer />
     </div>
   );
 }

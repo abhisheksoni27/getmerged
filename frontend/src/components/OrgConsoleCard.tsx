@@ -59,11 +59,11 @@ export function OrgConsoleCard({ org }: { org: string }) {
   // Zero-repo org: empty state with claim CTA (AC4).
   if (!data.has_data && data.repo_count === 0) {
     return (
-      <div className="mb-8 p-6 rounded-2xl border border-dashed border-white/[0.12] bg-[#111827] text-center">
+      <div className="mb-8 p-6 rounded-2xl border border-dashed border-white/[0.12] bg-zinc-900/80 text-center">
         <p className="text-sm text-zinc-400 font-sans">No repositories tracked for <strong>{org}</strong> yet.</p>
         <Link
           href="/repos"
-          className="mt-3 inline-flex px-4 py-2 rounded-xl bg-[#1e293b] hover:bg-zinc-800 text-white font-bold text-xs items-center gap-1.5"
+          className="mt-3 inline-flex px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs items-center gap-1.5"
         >
           <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /> Claim a repository
         </Link>
@@ -74,7 +74,7 @@ export function OrgConsoleCard({ org }: { org: string }) {
   // Repos exist but none have usable metrics yet (AC4).
   if (!data.has_data) {
     return (
-      <div className="mb-8 p-6 rounded-2xl border border-white/[0.08] bg-[#111827] text-center">
+      <div className="mb-8 p-6 rounded-2xl border border-white/[0.08] bg-zinc-900/80 text-center">
         <p className="text-sm text-zinc-400 font-sans">No data - metrics are not available for any {org} repository yet.</p>
       </div>
     );
@@ -88,9 +88,9 @@ export function OrgConsoleCard({ org }: { org: string }) {
         : "bg-orange-100 text-orange-800";
 
   return (
-    <div className="mb-8 p-5 sm:p-6 rounded-2xl border border-white/[0.08] bg-[#111827] shadow-xs">
+    <div className="mb-8 p-5 sm:p-6 rounded-2xl border border-white/[0.08] bg-zinc-900/80 shadow-xs">
       <div className="flex flex-wrap items-center gap-2 mb-4">
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1e293b] text-white text-xs font-mono font-bold">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900 text-white text-xs font-mono font-bold">
           <TrendingUp className="h-3.5 w-3.5 text-emerald-400" /> Org C-Rank™ Console
         </span>
         <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-md ${tierColor}`}>
@@ -102,22 +102,22 @@ export function OrgConsoleCard({ org }: { org: string }) {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3 rounded-xl bg-[#1e293b] border border-white/[0.08]/60">
+        <div className="p-3 rounded-xl bg-zinc-900 border border-white/[0.08]/60">
           <span className="text-[10px] font-mono text-zinc-400 flex items-center gap-1"><Clock className="h-3 w-3 text-amber-500" /> Response P50</span>
           <p className="font-space text-base font-bold text-zinc-100 mt-0.5">{data.response_p50_hours > 0 ? `${data.response_p50_hours.toFixed(1)}h` : "N/A"}</p>
           {data.peer_benchmarks && <p className="text-[10px] font-mono text-emerald-400 mt-0.5">{percentileLabel(data.peer_benchmarks.response_p50_percentile)} of peers</p>}
         </div>
-        <div className="p-3 rounded-xl bg-[#1e293b] border border-white/[0.08]/60">
+        <div className="p-3 rounded-xl bg-zinc-900 border border-white/[0.08]/60">
           <span className="text-[10px] font-mono text-zinc-400 flex items-center gap-1"><Clock className="h-3 w-3 text-amber-500" /> Response P90</span>
           <p className="font-space text-base font-bold text-zinc-100 mt-0.5">{data.response_p90_hours > 0 ? `${data.response_p90_hours.toFixed(1)}h` : "N/A"}</p>
           {data.peer_benchmarks && <p className="text-[10px] font-mono text-emerald-400 mt-0.5">{percentileLabel(data.peer_benchmarks.response_p90_percentile)} of peers</p>}
         </div>
-        <div className="p-3 rounded-xl bg-[#1e293b] border border-white/[0.08]/60">
+        <div className="p-3 rounded-xl bg-zinc-900 border border-white/[0.08]/60">
           <span className="text-[10px] font-mono text-zinc-400 flex items-center gap-1"><Sparkles className="h-3 w-3 text-purple-500" /> First-Timer Success</span>
           <p className="font-space text-base font-bold text-zinc-100 mt-0.5">{data.first_timer_success_rate.toFixed(0)}%</p>
           {data.peer_benchmarks && <p className="text-[10px] font-mono text-emerald-400 mt-0.5">{percentileLabel(data.peer_benchmarks.first_timer_percentile)} of peers</p>}
         </div>
-        <div className="p-3 rounded-xl bg-[#1e293b] border border-white/[0.08]/60">
+        <div className="p-3 rounded-xl bg-zinc-900 border border-white/[0.08]/60">
           <span className="text-[10px] font-mono text-zinc-400 flex items-center gap-1"><Users className="h-3 w-3 text-blue-500" /> Bus Factor</span>
           <p className="font-space text-base font-bold text-zinc-100 mt-0.5">{data.bus_factor} maintainers</p>
           {data.peer_benchmarks && <p className="text-[10px] font-mono text-emerald-400 mt-0.5">{percentileLabel(data.peer_benchmarks.bus_factor_percentile)} of peers</p>}

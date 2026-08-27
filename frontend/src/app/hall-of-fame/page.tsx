@@ -78,7 +78,7 @@ export default async function HallOfFamePage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#0f172a] dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-zinc-950 dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"
@@ -93,12 +93,12 @@ export default async function HallOfFamePage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111827] border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        <div className="rounded-3xl bg-[#111827] p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-10">
+        <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-10">
           <div className="flex items-center gap-2 mb-3.5">
             <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-950/70 border-emerald-800/80 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-300 font-mono">
               <Trophy className="h-3.5 w-3.5 text-emerald-400" /> S-Tier Showcase
@@ -132,7 +132,7 @@ export default async function HallOfFamePage() {
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl bg-[#111827] p-12 text-center text-zinc-400 text-xs mb-12 border border-dashed border-white/[0.12] font-sans">
+          <div className="rounded-2xl bg-zinc-900/80 p-12 text-center text-zinc-400 text-xs mb-12 border border-dashed border-white/[0.12] font-sans">
             No S-Tier repositories indexed yet.
           </div>
         )}

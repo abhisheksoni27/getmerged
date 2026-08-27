@@ -110,7 +110,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
   }
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-[#0f172a] text-zinc-100 font-sans">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 text-zinc-100 font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -128,7 +128,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
         </div>
 
         {/* Header Title Box */}
-        <div className="border border-white/[0.08] bg-[#111827] p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-8">
+        <div className="border border-white/[0.08] bg-zinc-900/80 p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-8">
           <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-zinc-400 mb-4">
             <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-950/80 border border-amber-700 font-bold text-amber-300 rounded">
               {guide.section}
@@ -164,7 +164,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
         </div>
 
         {/* Content Body */}
-        <article className="border border-white/[0.08] bg-[#111827] p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-10 text-zinc-200">
+        <article className="border border-white/[0.08] bg-zinc-900/80 p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-10 text-zinc-200">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -197,7 +197,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
               ),
               table: ({ node, ...props }) => (
                 <div className="my-6 overflow-x-auto border border-white/[0.08] rounded">
-                  <table className="w-full text-left text-xs sm:text-sm font-sans divide-y divide-slate-800 bg-[#111827]" {...props} />
+                  <table className="w-full text-left text-xs sm:text-sm font-sans divide-y divide-slate-800 bg-zinc-900/80" {...props} />
                 </div>
               ),
               thead: ({ node, ...props }) => (
@@ -222,7 +222,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
                     {children}
                   </code>
                 ) : (
-                  <pre className="p-4 my-4 overflow-x-auto rounded border border-white/[0.08] bg-slate-900 text-emerald-400 font-mono text-xs shadow-sm">
+                  <pre className="p-4 my-4 overflow-x-auto rounded border border-white/[0.08] bg-zinc-900 text-emerald-400 font-mono text-xs shadow-sm">
                     <code className={className} {...props}>
                       {children}
                     </code>
@@ -264,7 +264,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
         </article>
 
         {/* Read Next Section */}
-        <div className="border border-white/[0.08] bg-[#111827] p-6 sm:p-8 rounded-md border-t-2 border-t-slate-700 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="border border-white/[0.08] bg-zinc-900/80 p-6 sm:p-8 rounded-md border-t-2 border-t-slate-700 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
           <Link
             href="/guides"
             title="Browse all GetMerged engineering guides"

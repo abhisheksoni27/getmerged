@@ -24,7 +24,7 @@ const TIER_CHIP_STYLES: Record<string, string> = {
   C: "bg-purple-950/70 border-purple-800/80 text-purple-300 border-purple-300",
   D: "bg-rose-950/70 border-rose-800/80 text-rose-300 border-rose-300",
 };
-const DEFAULT_TIER_CHIP_STYLE = "bg-[#1e293b] text-zinc-300 border-white/[0.08]";
+const DEFAULT_TIER_CHIP_STYLE = "bg-zinc-900 text-zinc-300 border-white/[0.08]";
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang } = await params;
@@ -186,7 +186,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#0f172a] dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-zinc-950 dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"
@@ -202,13 +202,13 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111827] border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-100 transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Section */}
-        <div className="rounded-3xl bg-[#111827] p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-10">
+        <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-10">
           <div className="flex flex-wrap items-center gap-2 mb-3.5">
             <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-950/70 border-emerald-800/80 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-300 font-mono">
               <Sprout className="h-3.5 w-3.5 text-emerald-400" /> Beginner Friendly Open-Source
@@ -239,12 +239,12 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
                 Live Good First Issues ({issues.length})
               </h2>
               {/* Paid / All filter tabs (AC3) */}
-              <div className="inline-flex rounded-xl bg-[#1e293b] p-0.5 border border-white/[0.08] text-xs font-mono">
+              <div className="inline-flex rounded-xl bg-zinc-900 p-0.5 border border-white/[0.08] text-xs font-mono">
                 <Link
                   href={`/good-first-issue/${canonicalLang}`}
                   className={`px-3 py-1 rounded-lg transition-colors font-semibold ${
                     currentTab === "all"
-                      ? "bg-[#111827] text-zinc-100 shadow-2xs"
+                      ? "bg-zinc-900/80 text-zinc-100 shadow-2xs"
                       : "text-zinc-400 hover:text-zinc-100"
                   }`}
                 >
@@ -280,7 +280,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
                   <div
                     key={`${iss.repository_id}-${iss.issue_number}`}
                     data-created-at={iss.created_at}
-                    className="group rounded-2xl bg-[#111827] p-5 sm:p-7 border border-white/[0.08] shadow-xs hover:shadow-md hover:border-white/[0.12] hover:-translate-y-0.5 transition-all flex flex-col justify-between gap-5"
+                    className="group rounded-2xl bg-zinc-900/80 p-5 sm:p-7 border border-white/[0.08] shadow-xs hover:shadow-md hover:border-white/[0.12] hover:-translate-y-0.5 transition-all flex flex-col justify-between gap-5"
                   >
                     <div>
                       {/* Prominent meta badges: repo, stars, level rank, bounty, boosted */}
@@ -288,7 +288,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
                         <Link
                           href={`/${iss.repo_full_name}`}
                           title={`View ${iss.repo_full_name} contributor score breakdown`}
-                          className="inline-flex items-center px-3 py-1 rounded-full bg-[#1e293b] text-white text-[11px] sm:text-xs font-mono font-bold hover:bg-emerald-700 transition-colors"
+                          className="inline-flex items-center px-3 py-1 rounded-full bg-zinc-900 text-white text-[11px] sm:text-xs font-mono font-bold hover:bg-emerald-700 transition-colors"
                         >
                           {iss.repo_full_name}
                         </Link>
@@ -351,7 +351,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
                           {parsedLabels.slice(0, 4).map((l, idx) => (
                             <span
                               key={idx}
-                              className="px-2.5 py-1 rounded-md text-[10px] sm:text-[11px] font-mono font-medium border border-white/[0.08] bg-[#1e293b] text-zinc-300"
+                              className="px-2.5 py-1 rounded-md text-[10px] sm:text-[11px] font-mono font-medium border border-white/[0.08] bg-zinc-900 text-zinc-300"
                             >
                               {l.name}
                             </span>
@@ -372,7 +372,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
                         target="_blank"
                         rel="noopener noreferrer"
                         title={`Claim issue #${iss.issue_number} on GitHub`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1e293b] text-white text-xs font-mono font-semibold hover:bg-zinc-800 shadow-2xs transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 text-white text-xs font-mono font-semibold hover:bg-zinc-800 shadow-2xs transition-colors"
                       >
                         <span>Claim on GitHub</span>
                         <ExternalLink className="h-3 w-3" />
@@ -383,7 +383,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
               })}
             </div>
           ) : (
-            <div className="rounded-2xl bg-[#111827] p-8 text-center text-zinc-400 text-xs mb-10 border border-dashed border-white/[0.12] font-sans">
+            <div className="rounded-2xl bg-zinc-900/80 p-8 text-center text-zinc-400 text-xs mb-10 border border-dashed border-white/[0.12] font-sans">
               {currentTab === "paid"
                 ? `No cash-bounty issues currently open for ${languageName}. Check back soon!`
                 : `No active good first issues found for ${languageName}.`}
@@ -407,13 +407,13 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl bg-[#111827] p-12 text-center text-zinc-400 text-xs mb-12 border border-dashed border-white/[0.12] font-sans">
+          <div className="rounded-2xl bg-zinc-900/80 p-12 text-center text-zinc-400 text-xs mb-12 border border-dashed border-white/[0.12] font-sans">
             No {languageName} repositories indexed yet. Check back soon!
           </div>
         )}
 
         {/* Informational Section */}
-        <section className="rounded-3xl bg-[#111827] p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs">
+        <section className="rounded-3xl bg-zinc-900/80 p-6 sm:p-8 border border-white/[0.08] font-sans shadow-xs">
           <h3 className="text-base font-bold text-zinc-100 mb-3 flex items-center gap-2 font-space">
             <Sparkles className="h-4 w-4 text-emerald-600" />
             How to make your first {languageName} open-source pull request

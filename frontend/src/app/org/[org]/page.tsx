@@ -147,19 +147,19 @@ export default async function OrgPage({ params }: OrgPageProps) {
 
           {/* Org Aggregated Macro Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
-            <div className="p-4 rounded-2xl bg-[#111827] border border-white/[0.08] shadow-xs">
+            <div className="p-4 rounded-2xl bg-zinc-900/80 border border-white/[0.08] shadow-xs">
               <span className="text-xs font-mono text-zinc-400 flex items-center gap-1.5">
                 <GitPullRequest className="h-3.5 w-3.5 text-blue-500" /> Avg Merge Rate
               </span>
               <p className="font-space text-xl font-bold text-zinc-100 mt-1">{avgMergeRate.toFixed(1)}%</p>
             </div>
-            <div className="p-4 rounded-2xl bg-[#111827] border border-white/[0.08] shadow-xs">
+            <div className="p-4 rounded-2xl bg-zinc-900/80 border border-white/[0.08] shadow-xs">
               <span className="text-xs font-mono text-zinc-400 flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5 text-amber-500" /> Avg Response Velocity
               </span>
               <p className="font-space text-xl font-bold text-zinc-100 mt-1">{avgResponseHours.toFixed(1)}h</p>
             </div>
-            <div className="p-4 rounded-2xl bg-[#111827] border border-white/[0.08] shadow-xs">
+            <div className="p-4 rounded-2xl bg-zinc-900/80 border border-white/[0.08] shadow-xs">
               <span className="text-xs font-mono text-zinc-400 flex items-center gap-1.5">
                 <Users className="h-3.5 w-3.5 text-purple-500" /> Total GitHub Stars
               </span>
@@ -176,14 +176,14 @@ export default async function OrgPage({ params }: OrgPageProps) {
           {repos.map((repo) => (
             <div
               key={repo.id}
-              className="p-5 rounded-2xl border border-white/[0.08] bg-[#111827] hover:border-emerald-500/80 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+              className="p-5 rounded-2xl border border-white/[0.08] bg-zinc-900/80 hover:border-emerald-500/80 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                   <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-950/80 border-emerald-800/80 text-emerald-300">
                     {repo.c_rank_tier || repo.class_rank || "A"} Tier
                   </span>
-                  <span className="text-xs font-mono bg-[#1e293b] text-zinc-300 px-2 py-0.5 rounded-md font-medium">
+                  <span className="text-xs font-mono bg-zinc-900 text-zinc-300 px-2 py-0.5 rounded-md font-medium">
                     {repo.language || "Multi-language"}
                   </span>
                   {(repo.good_first_issue_count ?? 0) > 0 && (
@@ -218,7 +218,7 @@ export default async function OrgPage({ params }: OrgPageProps) {
                 <Link
                   href={`/${repo.full_name}`}
                   title={`Open full scorecard for ${repo.full_name}`}
-                  className="px-4 py-2 rounded-xl bg-[#1e293b] hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
+                  className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
                 >
                   View Scorecard <ArrowRight className="h-3.5 w-3.5" />
                 </Link>

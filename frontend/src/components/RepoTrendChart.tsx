@@ -38,7 +38,7 @@ export function RepoTrendChart({ repoId }: { repoId: string }) {
   if (error) return null;
   if (trend === null) {
     return (
-      <div className="h-32 rounded-2xl border border-white/[0.08] bg-[#1e293b] animate-pulse" aria-busy="true" />
+      <div className="h-32 rounded-2xl border border-white/[0.08] bg-zinc-900 animate-pulse" aria-busy="true" />
     );
   }
   if (trend.length < 2) {
@@ -67,7 +67,7 @@ export function RepoTrendChart({ repoId }: { repoId: string }) {
   const delta = last - first;
 
   return (
-    <section className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5 shadow-xs" aria-label="C-Rank score trend">
+    <section className="rounded-2xl border border-white/[0.08] bg-zinc-900/80 p-5 shadow-xs" aria-label="C-Rank score trend">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-space text-sm font-bold text-zinc-100">C-Rank Trend</h3>
         <span

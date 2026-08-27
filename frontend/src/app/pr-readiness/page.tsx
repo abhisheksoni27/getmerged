@@ -163,7 +163,7 @@ export default function PrReadinessPage() {
           and a tailored checklist before you open the PR.
         </p>
 
-        <section className="mt-6 p-6 bg-[#111827] border-2 border-white/[0.08] rounded-2xl shadow-sm space-y-4">
+        <section className="mt-6 p-6 bg-zinc-900/80 border-2 border-white/[0.08] rounded-2xl shadow-sm space-y-4">
           <div>
             <label htmlFor="pr-title" className="flex items-center gap-1.5 text-sm font-semibold text-brand-dark mb-1">
               <Type className="w-4 h-4" aria-hidden /> PR title
@@ -248,7 +248,7 @@ export default function PrReadinessPage() {
           </div>
         </section>
 
-        <section className="mt-6 p-6 bg-[#111827] border-2 border-white/[0.08] rounded-2xl shadow-sm" aria-live="polite">
+        <section className="mt-6 p-6 bg-zinc-900/80 border-2 border-white/[0.08] rounded-2xl shadow-sm" aria-live="polite">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-lg font-bold text-brand-dark flex items-center gap-2">
               <Zap className="w-5 h-5 text-amber-500" aria-hidden /> Acceptance score

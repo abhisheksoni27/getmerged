@@ -120,7 +120,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f172a] dev-grid-pattern flex flex-col font-sans">
+    <div className="min-h-screen bg-zinc-950 dev-grid-pattern flex flex-col font-sans">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
@@ -136,13 +136,13 @@ export default async function TopicPage({ params }: TopicPageProps) {
         <Link
           href="/topics"
           title="Return to Topics Directory"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-[#111827] border border-white/[0.12] border-b text-xs text-zinc-100 hover:bg-[#1e293b] transition-colors mb-6 font-sans font-bold"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-zinc-900/80 border border-white/[0.12] border-b text-xs text-zinc-100 hover:bg-zinc-900 transition-colors mb-6 font-sans font-bold"
         >
           <Tag className="h-3.5 w-3.5" /> Back to Topics Directory
         </Link>
 
         {/* Header Section */}
-        <div className="mb-8 p-6 sm:p-8 rounded-none bg-[#111827] border border-white/[0.12] border-b shadow-sm">
+        <div className="mb-8 p-6 sm:p-8 rounded-none bg-zinc-900/80 border border-white/[0.12] border-b shadow-sm">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-emerald-950/80 border-emerald-800/80 border border-white/[0.12] text-zinc-100 text-xs font-mono font-bold mb-3">
             <Tag className="h-3.5 w-3.5" /> Topic Hub
           </div>
@@ -155,13 +155,13 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
           {/* Topic Aggregated Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
-            <div className="p-4 rounded-none bg-[#111827] border border-white/[0.12] border-b">
+            <div className="p-4 rounded-none bg-zinc-900/80 border border-white/[0.12] border-b">
               <span className="text-xs font-mono text-zinc-400 flex items-center gap-1.5">
                 <GitPullRequest className="h-3.5 w-3.5 text-blue-600" /> Topic Avg Merge Rate
               </span>
               <p className="font-space text-xl font-extrabold text-zinc-100 mt-1">{avgMergeRate.toFixed(1)}%</p>
             </div>
-            <div className="p-4 rounded-none bg-[#111827] border border-white/[0.12] border-b">
+            <div className="p-4 rounded-none bg-zinc-900/80 border border-white/[0.12] border-b">
               <span className="text-xs font-mono text-zinc-400 flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5 text-amber-500" /> Avg Review Latency
               </span>

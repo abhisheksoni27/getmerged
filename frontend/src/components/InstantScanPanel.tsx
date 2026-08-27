@@ -198,7 +198,7 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
 
       {busy && !timedOut && (
         <div className="mt-4" role="status" aria-live="polite">
-          <div className="h-2 w-full rounded-full border border-white/[0.12] bg-[#111827] overflow-hidden">
+          <div className="h-2 w-full rounded-full border border-white/[0.12] bg-zinc-900/80 overflow-hidden">
             <div
               className="h-full bg-emerald-500 transition-all duration-500"
               style={{ width: `${progress}%` }}
@@ -230,7 +230,7 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
             type="button"
             onClick={startScan}
             data-testid="instant-scan-retry"
-            className="inline-flex items-center gap-1 rounded-lg border border-white/[0.12] bg-[#111827] px-3 py-1 font-bold text-zinc-100 shadow-sm hover:bg-[#1e293b] w-fit"
+            className="inline-flex items-center gap-1 rounded-lg border border-white/[0.12] bg-zinc-900/80 px-3 py-1 font-bold text-zinc-100 shadow-sm hover:bg-zinc-900 w-fit"
           >
             Retry scan
           </button>
@@ -246,7 +246,7 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
             type="button"
             onClick={handleShare}
             data-testid="instant-scan-share"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-white/[0.12] bg-[#111827] px-3 py-1.5 text-xs font-mono font-bold text-zinc-100 shadow-sm hover:bg-[#1e293b] w-fit"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-white/[0.12] bg-zinc-900/80 px-3 py-1.5 text-xs font-mono font-bold text-zinc-100 shadow-sm hover:bg-zinc-900 w-fit"
           >
             <Share2 className="h-3.5 w-3.5" />
             {copied ? "Link copied" : "Share verdict"}

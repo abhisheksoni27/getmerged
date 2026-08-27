@@ -119,7 +119,7 @@ export default async function TopicsIndexPage({ searchParams }: TopicsPageProps)
   };
 
   return (
-    <div className="min-h-screen bg-[#0f172a] dev-grid-pattern flex flex-col font-sans">
+    <div className="min-h-screen bg-zinc-950 dev-grid-pattern flex flex-col font-sans">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
@@ -135,13 +135,13 @@ export default async function TopicsIndexPage({ searchParams }: TopicsPageProps)
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-[#111827] border border-white/[0.12] border-b text-xs text-zinc-100 hover:bg-[#1e293b] transition-colors mb-6 font-sans font-bold"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-zinc-900/80 border border-white/[0.12] border-b text-xs text-zinc-100 hover:bg-zinc-900 transition-colors mb-6 font-sans font-bold"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Header Section */}
-        <div className="mb-8 p-6 sm:p-8 rounded-none bg-[#111827] border border-white/[0.12] border-b shadow-sm">
+        <div className="mb-8 p-6 sm:p-8 rounded-none bg-zinc-900/80 border border-white/[0.12] border-b shadow-sm">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-emerald-950/80 border-emerald-800/80 border border-white/[0.12] text-zinc-100 text-xs font-mono font-bold mb-3">
             <Tag className="h-3.5 w-3.5" /> Topic Directory
           </div>
@@ -160,8 +160,8 @@ export default async function TopicsIndexPage({ searchParams }: TopicsPageProps)
 
         {/* Empty State */}
         {topics.length === 0 ? (
-          <div className="p-8 sm:p-12 text-center bg-[#111827] rounded-none border border-white/[0.12] border-b shadow-sm max-w-lg mx-auto my-8">
-            <div className="h-12 w-12 rounded-none bg-[#1e293b] text-zinc-100 border border-white/[0.12] flex items-center justify-center mx-auto mb-4">
+          <div className="p-8 sm:p-12 text-center bg-zinc-900/80 rounded-none border border-white/[0.12] border-b shadow-sm max-w-lg mx-auto my-8">
+            <div className="h-12 w-12 rounded-none bg-zinc-900 text-zinc-100 border border-white/[0.12] flex items-center justify-center mx-auto mb-4">
               <Compass className="h-6 w-6" />
             </div>
             <h2 className="font-space text-lg font-bold text-zinc-100 mb-2">

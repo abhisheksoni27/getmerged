@@ -13,7 +13,7 @@ interface RaiseYourRankProps {
 const statusStyle: Record<string, { icon: React.ElementType; ring: string }> = {
   gap: { icon: AlertCircle, ring: "text-amber-600 bg-amber-950/80 border-amber-800/80 border-amber-400" },
   ok: { icon: CheckCircle2, ring: "text-emerald-400 bg-emerald-950/80 border-emerald-800/80 border-emerald-400" },
-  insufficient_data: { icon: MinusCircle, ring: "text-zinc-400 bg-[#1e293b] border-white/[0.12]" },
+  insufficient_data: { icon: MinusCircle, ring: "text-zinc-400 bg-zinc-900 border-white/[0.12]" },
 };
 
 export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
@@ -60,7 +60,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
             </div>
             <h2 className="font-space text-base font-extrabold text-zinc-50">Raise Your C-Rank</h2>
           </div>
-          <span className="px-3 py-1 rounded-lg border border-white/[0.12] bg-[#111827] font-mono text-xs font-bold text-zinc-200 shadow-sm">
+          <span className="px-3 py-1 rounded-lg border border-white/[0.12] bg-zinc-900/80 font-mono text-xs font-bold text-zinc-200 shadow-sm">
             {playbook.repo_full_name} · tier {tier}
           </span>
         </div>
@@ -95,7 +95,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
           </div>
           <h2 className="font-space text-base font-extrabold text-zinc-50">Raise Your C-Rank</h2>
         </div>
-        <span className="px-3 py-1 rounded-lg border border-white/[0.12] bg-[#111827] font-mono text-xs font-bold text-zinc-200 shadow-sm">
+        <span className="px-3 py-1 rounded-lg border border-white/[0.12] bg-zinc-900/80 font-mono text-xs font-bold text-zinc-200 shadow-sm">
           score {Math.round(playbook.c_rank_score)} · tier {tier}
         </span>
       </div>
@@ -117,8 +117,8 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
                 item.status === "ok"
                   ? "bg-emerald-950/70 border-emerald-800/80/70 border-emerald-300"
                   : item.status === "insufficient_data"
-                  ? "bg-[#1e293b] border-white/[0.12]"
-                  : "bg-[#111827] border-white/[0.08] shadow-sm"
+                  ? "bg-zinc-900 border-white/[0.12]"
+                  : "bg-zinc-900/80 border-white/[0.08] shadow-sm"
               }`}
             >
               <div className="flex items-start justify-between gap-3">
@@ -142,7 +142,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
                     )}
                   </div>
                 </div>
-                <span className="px-2 py-0.5 bg-[#1e293b] text-yellow-300 font-mono text-xs font-bold rounded-lg shrink-0 border border-white/[0.08]">
+                <span className="px-2 py-0.5 bg-zinc-900 text-yellow-300 font-mono text-xs font-bold rounded-lg shrink-0 border border-white/[0.08]">
                   +{item.impact_pts} pts
                 </span>
               </div>

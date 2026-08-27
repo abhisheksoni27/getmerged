@@ -122,7 +122,7 @@ export default function ShareCardButton({ slug, username }: ShareCardButtonProps
             toast.kind === "error"
               ? "border-red-300 bg-red-50 text-red-800"
               : toast.kind === "info"
-                ? "border-white/[0.12] bg-[#111827] text-zinc-200"
+                ? "border-white/[0.12] bg-zinc-900/80 text-zinc-200"
                 : "border-emerald-300 bg-emerald-950/70 border-emerald-800/80 text-emerald-300"
           }`}
         >

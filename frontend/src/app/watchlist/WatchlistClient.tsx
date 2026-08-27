@@ -80,7 +80,7 @@ function getBadgeStyle(rank?: string) {
       };
     default:
       return {
-        badgeClass: "bg-[#0f172a] text-zinc-100 border border-white/[0.12] font-bold shadow-sm",
+        badgeClass: "bg-zinc-950 text-zinc-100 border border-white/[0.12] font-bold shadow-sm",
         label: "Scored",
         indicatorColor: "bg-zinc-600",
       };
@@ -141,7 +141,7 @@ function TierDeltaIndicatorChip({ repo, history }: TierDeltaProps) {
   return (
     <span
       data-testid={`tier-delta-chip-${repoSlug}`}
-      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#1e293b] text-zinc-400 border border-white/[0.08] font-mono text-xs font-medium"
+      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-zinc-900 text-zinc-400 border border-white/[0.08] font-mono text-xs font-medium"
       title={`Tier ${currentTier} stable (no recent changes)`}
     >
       <Minus className="h-3 w-3 text-zinc-400" />
@@ -232,7 +232,7 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
 
   return (
     <div
-      className={`group p-5 rounded-2xl border border-white/[0.08] bg-[#111827] hover:border-emerald-500/80 hover:shadow-xs transition-all flex flex-col justify-between gap-4 ${
+      className={`group p-5 rounded-2xl border border-white/[0.08] bg-zinc-900/80 hover:border-emerald-500/80 hover:shadow-xs transition-all flex flex-col justify-between gap-4 ${
         isRemoving ? "opacity-40 pointer-events-none scale-[0.98]" : ""
       }`}
     >
@@ -240,7 +240,7 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
         {/* Header Row */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3 min-w-0 flex-1">
-            <div className="h-10 w-10 rounded-xl border border-white/[0.08] bg-[#1e293b] overflow-hidden shrink-0 shadow-2xs group-hover:border-white/[0.12] transition-colors">
+            <div className="h-10 w-10 rounded-xl border border-white/[0.08] bg-zinc-900 overflow-hidden shrink-0 shadow-2xs group-hover:border-white/[0.12] transition-colors">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`https://github.com/${ownerPart}.png?size=64`}
@@ -286,7 +286,7 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
               className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
                 alertsOn
                   ? "border-emerald-200 text-emerald-400 bg-emerald-950/70 border-emerald-800/80 hover:bg-emerald-950/80 border-emerald-800/80"
-                  : "border-white/[0.08] text-zinc-400 hover:text-zinc-300 hover:bg-[#1e293b]"
+                  : "border-white/[0.08] text-zinc-400 hover:text-zinc-300 hover:bg-zinc-900"
               }`}
             >
               {alertsOn ? <Bell className="h-4 w-4" /> : <BellOff className="h-4 w-4" />}
@@ -325,7 +325,7 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
         </p>
 
         {/* Telemetry Metrics Scorecard */}
-        <div className="grid grid-cols-3 gap-3 py-3 px-3.5 bg-[#1e293b]/80 rounded-xl border border-white/[0.08]/90 my-auto text-center font-mono">
+        <div className="grid grid-cols-3 gap-3 py-3 px-3.5 bg-zinc-900/80 rounded-xl border border-white/[0.08]/90 my-auto text-center font-mono">
           <div className="pr-1">
             <div className="text-xs font-bold text-zinc-100">{mergeRate}</div>
             <div className="text-[10px] text-zinc-400 font-medium whitespace-nowrap mt-0.5">Merge Rate</div>
@@ -368,7 +368,7 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
             title={`Compare ${repo.full_name} with another repository`}
             aria-label={`Compare ${repo.full_name}`}
             onClick={handleCompareClick}
-            className="inline-flex items-center gap-1 text-xs font-medium text-zinc-400 hover:text-emerald-400 bg-[#1e293b]/70 hover:bg-emerald-950/70 border-emerald-800/80 px-2 py-1 rounded-md border border-white/[0.08]/60 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1 text-xs font-medium text-zinc-400 hover:text-emerald-400 bg-zinc-900/70 hover:bg-emerald-950/70 border-emerald-800/80 px-2 py-1 rounded-md border border-white/[0.08]/60 transition-colors cursor-pointer"
           >
             <Scale className="h-3 w-3" />
             <span>Compare</span>
@@ -388,8 +388,8 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
 
 function WatchlistEmptyState() {
   return (
-    <div className="p-10 text-center bg-[#111827] rounded-3xl border border-white/[0.08] shadow-2xs my-8 max-w-xl mx-auto flex flex-col items-center animate-fade-in">
-      <div className="h-14 w-14 rounded-2xl bg-[#1e293b] flex items-center justify-center mb-4 text-zinc-400">
+    <div className="p-10 text-center bg-zinc-900/80 rounded-3xl border border-white/[0.08] shadow-2xs my-8 max-w-xl mx-auto flex flex-col items-center animate-fade-in">
+      <div className="h-14 w-14 rounded-2xl bg-zinc-900 flex items-center justify-center mb-4 text-zinc-400">
         <Bookmark className="h-8 w-8" />
       </div>
       <h2 className="font-space text-xl font-bold text-zinc-100 mb-2">Your Watchlist is Empty</h2>
@@ -401,7 +401,7 @@ function WatchlistEmptyState() {
         <Link
           href="/repos"
           title="Browse all indexed open source repositories"
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#1e293b] text-white font-sans text-sm font-semibold hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs no-underline"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900 text-white font-sans text-sm font-semibold hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs no-underline"
         >
           <Compass className="h-4 w-4" />
           <span>Browse Repositories</span>
@@ -409,7 +409,7 @@ function WatchlistEmptyState() {
         <Link
           href="/good-first-issue"
           title="Explore beginner friendly good first issues"
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-zinc-300 hover:text-zinc-100 font-sans text-sm font-medium hover:bg-[#1e293b] transition-colors no-underline"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-zinc-300 hover:text-zinc-100 font-sans text-sm font-medium hover:bg-zinc-900 transition-colors no-underline"
         >
           <span>Explore Good First Issues</span>
           <ArrowRight className="h-4 w-4" />
@@ -480,7 +480,7 @@ function WebhookChannels() {
   };
 
   return (
-    <div className="mb-8 p-5 rounded-2xl border border-white/[0.08] bg-[#111827]">
+    <div className="mb-8 p-5 rounded-2xl border border-white/[0.08] bg-zinc-900/80">
       <div className="flex items-center gap-2 mb-3">
         <Webhook className="h-4 w-4 text-emerald-400" />
         <h2 className="font-space text-base font-bold text-zinc-100">Webhook Alerts</h2>
@@ -490,9 +490,9 @@ function WebhookChannels() {
       {webhooks.length > 0 && (
         <ul className="flex flex-col gap-2 mb-4">
           {webhooks.map((wh) => (
-            <li key={wh.id} className="flex items-center justify-between gap-3 px-3 py-2 rounded-xl border border-white/[0.08] bg-[#1e293b]/60">
+            <li key={wh.id} className="flex items-center justify-between gap-3 px-3 py-2 rounded-xl border border-white/[0.08] bg-zinc-900/60">
               <div className="flex items-center gap-2 min-w-0">
-                <span className="px-2 py-0.5 rounded-md bg-[#1e293b] text-white text-[10px] font-mono font-bold uppercase shrink-0">{wh.label}</span>
+                <span className="px-2 py-0.5 rounded-md bg-zinc-900 text-white text-[10px] font-mono font-bold uppercase shrink-0">{wh.label}</span>
                 <span className="font-mono text-xs text-zinc-300 truncate">{wh.url}</span>
                 {!wh.enabled && (
                   <span
@@ -523,7 +523,7 @@ function WebhookChannels() {
           value={label}
           onChange={(e) => setLabel(e.target.value as "slack" | "discord")}
           aria-label="Webhook type"
-          className="px-3 py-2 rounded-xl border border-white/[0.08] bg-[#111827] text-sm font-sans text-zinc-200 focus:outline-none focus:border-emerald-500"
+          className="px-3 py-2 rounded-xl border border-white/[0.08] bg-zinc-900/80 text-sm font-sans text-zinc-200 focus:outline-none focus:border-emerald-500"
         >
           <option value="slack">Slack</option>
           <option value="discord">Discord</option>
@@ -535,13 +535,13 @@ function WebhookChannels() {
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://hooks.slack.com/services/..."
           aria-label="Webhook URL"
-          className="flex-1 px-3 py-2 rounded-xl border border-white/[0.08] bg-[#111827] text-sm font-sans text-zinc-200 placeholder:text-zinc-400 focus:outline-none focus:border-emerald-500"
+          className="flex-1 px-3 py-2 rounded-xl border border-white/[0.08] bg-zinc-900/80 text-sm font-sans text-zinc-200 placeholder:text-zinc-400 focus:outline-none focus:border-emerald-500"
         />
         <button
           type="submit"
           disabled={busy || webhooks.length >= 5}
           title={webhooks.length >= 5 ? "Webhook limit reached (max 5)" : "Add webhook"}
-          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#1e293b] text-white text-sm font-sans font-semibold hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs disabled:opacity-40 disabled:pointer-events-none"
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-zinc-900 text-white text-sm font-sans font-semibold hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs disabled:opacity-40 disabled:pointer-events-none"
         >
           {busy ? "Adding…" : "Add Webhook"}
         </button>
@@ -640,7 +640,7 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f172a] py-10">
+    <div className="min-h-screen bg-zinc-950 py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Watchlist Hero Header */}
         <div className="mb-8 border-b border-white/[0.08] pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -663,7 +663,7 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
             <Link
               href="/repos"
               title="Explore all indexed open source repositories"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#111827] border border-white/[0.08] text-zinc-200 hover:bg-[#1e293b] hover:border-white/[0.12] font-sans text-xs font-semibold shadow-2xs transition-all no-underline"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-zinc-200 hover:bg-zinc-900 hover:border-white/[0.12] font-sans text-xs font-semibold shadow-2xs transition-all no-underline"
             >
               <Compass className="h-3.5 w-3.5 text-zinc-400" />
               <span>Explore More Repos</span>
