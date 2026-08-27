@@ -52,12 +52,9 @@ type liveBadgeData struct {
 }
 
 // liveBadgeTemplate renders a shields.io-style flat two-segment badge.
-// When Link is non-empty the SVG is wrapped in an anchor pointing at the
-// public report card. Parsed once at init; html/template escapes all
-// dynamic values (AC1).
+// Parsed once at init; html/template escapes all dynamic values (AC1).
 var liveBadgeTemplate = template.Must(template.New("liveBadge").Parse(
-	`{{if .Link}}<a href="{{.Link}}" target="_blank" rel="noopener">{{end}}` +
-		`<svg xmlns="http://www.w3.org/2000/svg" width="{{.Total}}" height="20" role="img" aria-label="{{.Label}}: {{.Message}}">
+	`<svg xmlns="http://www.w3.org/2000/svg" width="{{.Total}}" height="20" role="img" aria-label="{{.Label}}: {{.Message}}">
 <title>{{.Label}}: {{.Message}}</title>
 <defs>
 <linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient>
@@ -72,7 +69,7 @@ var liveBadgeTemplate = template.Must(template.New("liveBadge").Parse(
 <text x="{{.LabelX}}" y="14">{{.Label}}</text>
 <text x="{{.MsgX}}" y="14">{{.Message}}</text>
 </g>
-</svg>{{if .Link}}</a>{{end}}`))
+</svg>`))
 
 // renderLiveBadge executes liveBadgeTemplate. Widths are estimated at ~7px
 // per character (Verdana semibold, 11px).

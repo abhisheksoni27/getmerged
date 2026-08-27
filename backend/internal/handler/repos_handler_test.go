@@ -239,9 +239,6 @@ func TestGetBadgeSVG(t *testing.T) {
 	if !strings.Contains(body, "S 99") {
 		t.Fatalf("expected grade+score 'S 99', got: %s", body)
 	}
-	if !strings.Contains(body, `href="https://opendoor.app/r/gin-gonic/gin"`) {
-		t.Fatalf("expected deep-dive report link, got: %s", body)
-	}
 
 	// AC9: ?v cache-bust query is accepted and does not break rendering.
 	wv := httptest.NewRecorder()

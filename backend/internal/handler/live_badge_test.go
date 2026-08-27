@@ -50,8 +50,8 @@ func TestLiveBadgeACs(t *testing.T) {
 	if w2.Code != http.StatusOK || !strings.Contains(w2.Body.String(), ">very welcoming · median PR: 4.2h<") {
 		t.Fatalf("case-insensitive lookup failed: %d %s", w2.Code, w2.Body.String())
 	}
-	if !strings.Contains(w2.Body.String(), "href=\"https://getmerged.abhishekco.de/Gin-Gonic/Gin#raise-your-rank\"") {
-		t.Fatalf("canonical playbook link missing: %s", w2.Body.String())
+	if !strings.HasPrefix(strings.TrimSpace(w2.Body.String()), "<svg") || strings.Contains(w2.Body.String(), "<a ") {
+		t.Fatalf("badge must be pure SVG without HTML anchor wrapping: %s", w2.Body.String())
 	}
 
 	// AC2: invalid segments -> rejected (%2F decodes to '/' and cannot even
