@@ -529,12 +529,12 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
         visible={showSticky}
       />
 
-      <main className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 py-8 sm:py-10 flex-1 w-full overflow-hidden">
+      <main className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 w-full overflow-hidden">
         {/* Navigation Breadcrumb */}
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 text-xs font-sans text-zinc-500 hover:text-zinc-900 transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 text-xs font-sans text-zinc-500 hover:text-zinc-900 transition-colors mb-4"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Explorer
@@ -543,7 +543,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
         {/* Section 1: Overview & Hero */}
         <motion.section
           id="overview"
-          className="scroll-mt-36 mb-8"
+          className="scroll-mt-36 mb-6"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
