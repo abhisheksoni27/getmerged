@@ -11,9 +11,10 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-// RepoBoost is one paid featured-placement entitlement keyed by the Stripe
-// PaymentIntent id (AC3). Activation happens only via the verified
-// payment_intent.succeeded webhook; a duplicate delivery is a no-op.
+// RepoBoost is one paid featured-placement entitlement at the REPO level (AC1).
+// Activation happens only via the verified payment_intent.succeeded webhook or
+// manual reconcile; a duplicate delivery is a no-op. status:
+// pending | active | cancelled | stale.
 type RepoBoost struct {
 	PaymentIntentID string     `db:"payment_intent_id" json:"payment_intent_id"`
 	UserID          int64      `db:"user_id" json:"user_id"`
@@ -27,7 +28,9 @@ type RepoBoost struct {
 	UpdatedAt       *time.Time `db:"updated_at" json:"updated_at"`
 }
 
-// RepoBoostIssue is a single featured good-first-issue within a boost.
+// RepoBoostIssue is retained for backward compatibility; repo-level boosts no
+// longer require enumerating issues (AC1: ALL open good-first-issues of the
+// repo are sponsored via repositories.boost_expires_at).
 type RepoBoostIssue struct {
 	PaymentIntentID string `db:"payment_intent_id"`
 	RepositoryID    string `db:"repository_id"`
@@ -37,29 +40,46 @@ type RepoBoostIssue struct {
 // RepoBoostOrder tracks a boost checkout from creation to webhook settlement.
 // status: pending | granted | failed.
 type RepoBoostOrder struct {
-	OrderID          string    `db:"order_id"`
-	UserID           int64     `db:"user_id"`
-	RepositoryID     string    `db:"repository_id"`
-	IssueNumbers     string    `db:"issue_numbers"` // comma-separated
-	AmountCents      int64     `db:"amount_cents"`
-	Currency         string    `db:"currency"`
-	PaymentIntentID  string    `db:"payment_intent_id"`
-	StripeClientSecret string  `db:"stripe_client_secret"`
-	Status           string    `db:"status"`
-	CreatedAt        time.Time `db:"created_at"`
-	UpdatedAt        *time.Time `db:"updated_at"`
+	OrderID            string     `db:"order_id"`
+	UserID             int64      `db:"user_id"`
+	RepositoryID       string     `db:"repository_id"`
+	IssueNumbers       string     `db:"issue_numbers"` // comma-separated (legacy, optional)
+	AmountCents        int64      `db:"amount_cents"`
+	Currency           string     `db:"currency"`
+	PaymentIntentID    string     `db:"payment_intent_id"`
+	StripeClientSecret string     `db:"stripe_client_secret"`
+	Status             string     `db:"status"`
+	CreatedAt          time.Time  `db:"created_at"`
+	UpdatedAt          *time.Time `db:"updated_at"`
 }
 
 type RepoBoostRepository interface {
 	CreateRepoBoostOrder(ctx context.Context, tx *sqlx.Tx, order *RepoBoostOrder, issueNumbers []int) error
 	GetRepoBoostOrder(ctx context.Context, orderID string) (*RepoBoostOrder, error)
 	MarkRepoBoostOrder(ctx context.Context, orderID, status string) error
-	// CheckoutGuard enforces AC5: max active boosts + daily spend cap inside a
-	// transaction with a row lock so concurrent checkouts cannot both pass. It
-	// inserts the pending order (reserving a slot) on success.
+	// CheckoutGuard enforces AC7: one active boost per repo + user max-active +
+	// daily-spend cap inside a transaction with a row lock so concurrent
+	// checkouts cannot both pass. On success it inserts the pending order
+	// (reserving the slot); the caller commits.
 	CheckoutGuard(ctx context.Context, tx *sqlx.Tx, order *RepoBoostOrder, issueNumbers []int, now, dayStart, dayEnd time.Time, maxActive int, dailyCapCents int64) (bool, error)
-	ActivateRepoBoost(ctx context.Context, paymentIntentID, orderID string, now time.Time, window time.Duration) error
-	RefundRepoBoost(ctx context.Context, paymentIntentID string, now time.Time) error
+	// ActivateRepoBoost is idempotent (AC2/AC6): it writes the boost row
+	// (extending the existing active boost for the repo when present) and
+	// performs the conditional UPDATE of repositories.boost_expires_at guarded
+	// by the WHERE clause so concurrent activations/revokes cannot race.
+	ActivateRepoBoost(ctx context.Context, paymentIntentID, orderID string, now time.Time, windowDays int) error
+	// CancelRepoBoost cancels a boost by PaymentIntent (user cancel / webhook).
+	// Returns within24h=true when the cancellation falls inside the 24h refund
+	// window (AC3) so the caller can issue the provider refund. The DB changes
+	// are always applied (idempotent on already-cancelled).
+	CancelRepoBoost(ctx context.Context, paymentIntentID string, now time.Time) (within24h bool, err error)
+	// RevokeRepoBoostByRepo cancels every active boost for a repo (claim lost).
+	// Returns within24h true if any cancelled boost was inside the 24h window.
+	RevokeRepoBoostByRepo(ctx context.Context, repositoryID string, now time.Time) (within24h bool, err error)
+	// RecordBoostMetric dedups impressions/clicks per (user,boost) per 24h (AC4).
+	RecordBoostMetric(ctx context.Context, paymentIntentID string, userID int64, repoID string, eventType string, now time.Time) error
+	// ManualReconcile re-checks a pending order and activates it if the provider
+	// confirms payment (AC8). Idempotent on order id.
+	ManualReconcile(ctx context.Context, orderID string, now time.Time, windowDays int) error
 	RecordWebhookEvent(ctx context.Context, eventID string, now time.Time) (isNew bool, err error)
 	IsRepoClaimed(ctx context.Context, repositoryID string) (bool, error)
 	ListSponsoredIssues(ctx context.Context, language string, limit int, now time.Time) ([]GoodFirstIssueItem, error)
@@ -110,7 +130,12 @@ func (r *sqlxRepoBoostRepository) insertOrder(ctx context.Context, db sqlx.Exece
 	if _, err := r.exec(ctx, db, q, order.OrderID, order.UserID, order.RepositoryID, order.IssueNumbers, order.AmountCents, order.Currency, order.PaymentIntentID, order.StripeClientSecret); err != nil {
 		return err
 	}
-	return r.insertIssues(ctx, db, order.PaymentIntentID, order.RepositoryID, issueNumbers)
+	if len(issueNumbers) > 0 {
+		if err := r.insertIssues(ctx, db, order.PaymentIntentID, order.RepositoryID, issueNumbers); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (r *sqlxRepoBoostRepository) insertIssues(ctx context.Context, db sqlx.ExecerContext, paymentIntentID, repositoryID string, issueNumbers []int) error {
@@ -146,12 +171,12 @@ func (r *sqlxRepoBoostRepository) MarkRepoBoostOrder(ctx context.Context, orderI
 	return err
 }
 
-// CheckoutGuard implements AC5: counts occupied slots (active boosts + pending
-// orders) and projected daily spend for the user, locking the user's row so
-// two concurrent checkouts cannot both pass. On success it inserts the pending
-// order (reserving the slot); the caller commits.
+// CheckoutGuard implements AC7: counts occupied slots (active boosts for this
+// repo + the user's other active boosts + pending orders) and projected daily
+// spend, locking the user's row so two concurrent checkouts cannot both pass.
+// On success it inserts the pending order (reserving the slot); the caller
+// commits.
 func (r *sqlxRepoBoostRepository) CheckoutGuard(ctx context.Context, tx *sqlx.Tx, order *RepoBoostOrder, issueNumbers []int, now, dayStart, dayEnd time.Time, maxActive int, dailyCapCents int64) (bool, error) {
-	// Ensure a lock row exists, then take a row lock via UPDATE.
 	if _, err := tx.ExecContext(ctx, `INSERT OR IGNORE INTO repo_boost_locks (user_id) VALUES (?)`, order.UserID); err != nil {
 		return false, err
 	}
@@ -192,10 +217,29 @@ func (r *sqlxRepoBoostRepository) CheckoutGuard(ctx context.Context, tx *sqlx.Tx
 	return true, nil
 }
 
-// ActivateRepoBoost is idempotent (AC3): re-delivery of the same
+// clampBoostWindow enforces AC7: max single boost 30d; a re-purchase while
+// active extends by at most +14d.
+func clampBoostWindow(windowDays int) (freshDays, extendDays int) {
+	if windowDays <= 0 {
+		windowDays = 7
+	}
+	freshDays = windowDays
+	if freshDays > 30 {
+		freshDays = 30
+	}
+	extendDays = windowDays
+	if extendDays > 14 {
+		extendDays = 14
+	}
+	return
+}
+
+// ActivateRepoBoost is idempotent (AC2/AC6): re-delivery of the same
 // payment_intent_id is a no-op that never extends the window. A duplicate/already
-// active boost is a no-op state transition.
-func (r *sqlxRepoBoostRepository) ActivateRepoBoost(ctx context.Context, paymentIntentID, orderID string, now time.Time, window time.Duration) error {
+// active boost is a no-op state transition. When an active boost already exists
+// for the repo, the new payment EXTENDS that boost (one active boost per repo,
+// AC7) rather than creating a second.
+func (r *sqlxRepoBoostRepository) ActivateRepoBoost(ctx context.Context, paymentIntentID, orderID string, now time.Time, windowDays int) error {
 	if paymentIntentID == "" {
 		return errors.New("repo boost activate: empty payment intent id")
 	}
@@ -205,9 +249,6 @@ func (r *sqlxRepoBoostRepository) ActivateRepoBoost(ctx context.Context, payment
 	}
 	if existing != nil {
 		// Already active (or cancelled): idempotent no-op.
-		if existing.Status == "cancelled" {
-			return nil
-		}
 		return nil
 	}
 
@@ -218,36 +259,156 @@ func (r *sqlxRepoBoostRepository) ActivateRepoBoost(ctx context.Context, payment
 	if order == nil {
 		return errors.New("repo boost activate: unknown order")
 	}
-	if order.Status == "failed" {
+	if order.Status == "failed" || order.Status == "granted" {
 		return nil
 	}
 
-	start := now.UTC()
-	expiry := start.Add(window)
-	q := `INSERT INTO repo_boosts (payment_intent_id, user_id, repository_id, amount_cents, currency, status, created_at, activated_at, expires_at)
-	      VALUES (?, ?, ?, ?, ?, 'active', ?, ?, ?)`
-	if r.db.DriverName() == "sqlite" {
-		q = `INSERT OR IGNORE INTO repo_boosts (payment_intent_id, user_id, repository_id, amount_cents, currency, status, created_at, activated_at, expires_at)
-		     VALUES (?, ?, ?, ?, ?, 'active', ?, ?, ?)`
+	freshDays, extendDays := clampBoostWindow(windowDays)
+	active, aerr := r.getActiveBoostByRepo(ctx, order.RepositoryID, now)
+	if aerr != nil {
+		return aerr
 	}
-	if _, err := r.db.ExecContext(ctx, q, paymentIntentID, order.UserID, order.RepositoryID, order.AmountCents, order.Currency, start, start, expiry); err != nil {
+
+	var newExpiry time.Time
+	if active != nil {
+		base := active.ExpiresAt
+		if base.Before(now) {
+			base = now
+		}
+		newExpiry = base.AddDate(0, 0, extendDays)
+		if err := r.db.ExecContext(ctx,
+			`UPDATE repo_boosts SET expires_at = ?, updated_at = CURRENT_TIMESTAMP WHERE payment_intent_id = ? AND status = 'active'`,
+			newExpiry, active.PaymentIntentID); err != nil {
+			return err
+		}
+		_ = r.MarkRepoBoostOrder(ctx, orderID, "granted")
+	} else {
+		newExpiry = now.AddDate(0, 0, freshDays)
+		start := now.UTC()
+		q := `INSERT INTO repo_boosts (payment_intent_id, user_id, repository_id, amount_cents, currency, status, created_at, activated_at, expires_at)
+		      VALUES (?, ?, ?, ?, ?, 'active', ?, ?, ?)`
+		if r.db.DriverName() == "sqlite" {
+			q = `INSERT OR IGNORE INTO repo_boosts (payment_intent_id, user_id, repository_id, amount_cents, currency, status, created_at, activated_at, expires_at)
+			     VALUES (?, ?, ?, ?, ?, 'active', ?, ?, ?)`
+		}
+		if _, err := r.db.ExecContext(ctx, q, paymentIntentID, order.UserID, order.RepositoryID, order.AmountCents, order.Currency, start, start, newExpiry); err != nil {
+			return err
+		}
+		_ = r.MarkRepoBoostOrder(ctx, orderID, "granted")
+	}
+
+	// AC6: conditional UPDATE of the repo-level ranking column. The WHERE clause
+	// guarantees no last-write-wins race with a concurrent extend/revoke; query
+	// time (boost_expires_at > now) is the only expiry signal (no cron writes).
+	if _, err := r.db.ExecContext(ctx,
+		`UPDATE repositories SET boost_expires_at = ? WHERE id = ? AND (boost_expires_at IS NULL OR boost_expires_at < ?)`,
+		newExpiry, order.RepositoryID, newExpiry); err != nil {
 		return err
 	}
-	_ = r.MarkRepoBoostOrder(ctx, orderID, "granted")
 	return nil
 }
 
-// RefundRepoBoost revokes the remaining window immediately (AC best-effort):
-// the live read-time filter (expires_at > now) hides it.
-func (r *sqlxRepoBoostRepository) RefundRepoBoost(ctx context.Context, paymentIntentID string, now time.Time) error {
+// CancelRepoBoost cancels a boost by PaymentIntent (user cancel / provider
+// webhook). It flips the boost row to 'cancelled', expires it immediately, and
+// conditionally clears repositories.boost_expires_at (only when it still belongs
+// to this boost, so a newer extension is not clobbered). Returns within24h for
+// the AC3 refund window. Idempotent on already-cancelled boosts.
+func (r *sqlxRepoBoostRepository) CancelRepoBoost(ctx context.Context, paymentIntentID string, now time.Time) (bool, error) {
 	if paymentIntentID == "" {
+		return false, nil
+	}
+	boost, err := r.getBoost(ctx, paymentIntentID)
+	if err != nil {
+		return false, err
+	}
+	if boost == nil {
+		return false, nil
+	}
+	if boost.Status == "cancelled" {
+		// Idempotent: already cancelled, no refund due.
+		return false, nil
+	}
+	within24h := false
+	if boost.ActivatedAt != nil {
+		within24h = now.Sub(*boost.ActivatedAt) < 24*time.Hour
+	}
+	if _, err := r.db.ExecContext(ctx,
+		`UPDATE repo_boosts SET status = 'cancelled', expires_at = ?, updated_at = CURRENT_TIMESTAMP WHERE payment_intent_id = ? AND status = 'active'`,
+		now, paymentIntentID); err != nil {
+		return false, err
+	}
+	// AC6: clear the repo ranking column only if it still matches this boost's
+	// expiry window (a later extension would have a later expiry).
+	if _, err := r.db.ExecContext(ctx,
+		`UPDATE repositories SET boost_expires_at = NULL WHERE id = ? AND (boost_expires_at IS NULL OR boost_expires_at <= ?)`,
+		boost.RepositoryID, boost.ExpiresAt); err != nil {
+		return within24h, err
+	}
+	return within24h, nil
+}
+
+// RevokeRepoBoostByRepo cancels every active boost for a repo (claim lost,
+// AC3). Returns true if any cancelled boost was inside the 24h refund window.
+func (r *sqlxRepoBoostRepository) RevokeRepoBoostByRepo(ctx context.Context, repositoryID string, now time.Time) (bool, error) {
+	if repositoryID == "" {
+		return false, nil
+	}
+	var boosts []RepoBoost
+	if err := r.db.SelectContext(ctx, &boosts,
+		`SELECT payment_intent_id, user_id, repository_id, status, activated_at, expires_at FROM repo_boosts WHERE repository_id = ? AND status = 'active'`,
+		repositoryID); err != nil {
+		return false, err
+	}
+	anyWithin := false
+	for _, b := range boosts {
+		w, err := r.CancelRepoBoost(ctx, b.PaymentIntentID, now)
+		if err != nil {
+			return anyWithin, err
+		}
+		if w {
+			anyWithin = true
+		}
+	}
+	return anyWithin, nil
+}
+
+// RecordBoostMetric dedups impressions/clicks per (user, boost) per 24h (AC4).
+// The UNIQUE key (user_id, boost_payment_intent_id, event_type, bucket_date)
+// makes a refresh/dup delivery a no-op; counting distinct rows yields the
+// de-fraudulated metric.
+func (r *sqlxRepoBoostRepository) RecordBoostMetric(ctx context.Context, paymentIntentID string, userID int64, repoID string, eventType string, now time.Time) error {
+	if paymentIntentID == "" || userID <= 0 || repoID == "" {
 		return nil
 	}
-	now = now.UTC()
-	_, err := r.db.ExecContext(ctx,
-		`UPDATE repo_boosts SET status = 'cancelled', expires_at = ?, updated_at = CURRENT_TIMESTAMP WHERE payment_intent_id = ? AND status = 'active'`,
-		now, paymentIntentID)
+	if eventType != "impression" && eventType != "click" {
+		return nil
+	}
+	bucket := now.UTC().Format("2006-01-02")
+	q := `INSERT INTO repo_boost_metrics (boost_payment_intent_id, user_id, repo_id, event_type, bucket_date, created_at)
+	      VALUES (?, ?, ?, ?, ?, ?)`
+	if r.db.DriverName() == "sqlite" {
+		q = `INSERT OR IGNORE INTO repo_boost_metrics (boost_payment_intent_id, user_id, repo_id, event_type, bucket_date, created_at)
+		     VALUES (?, ?, ?, ?, ?, ?)`
+	}
+	_, err := r.db.ExecContext(ctx, q, paymentIntentID, userID, repoID, eventType, bucket, now.UTC())
 	return err
+}
+
+// ManualReconcile re-checks a pending order and activates it if a PaymentIntent
+// succeeded (AC8). The provider lookup is performed by the caller, which passes
+// paid=true when confirmed; this method is idempotent on order id.
+func (r *sqlxRepoBoostRepository) ManualReconcile(ctx context.Context, orderID string, now time.Time, windowDays int) error {
+	order, err := r.GetRepoBoostOrder(ctx, orderID)
+	if err != nil {
+		return err
+	}
+	if order == nil || order.Status != "pending" {
+		return nil
+	}
+	if order.PaymentIntentID == "" {
+		return errors.New("repo boost reconcile: order has no payment intent")
+	}
+	return r.ActivateRepoBoost(ctx, order.PaymentIntentID, orderID, now, windowDays)
 }
 
 func (r *sqlxRepoBoostRepository) getBoost(ctx context.Context, paymentIntentID string) (*RepoBoost, error) {
@@ -255,6 +416,21 @@ func (r *sqlxRepoBoostRepository) getBoost(ctx context.Context, paymentIntentID 
 	err := r.db.GetContext(ctx, &b,
 		`SELECT payment_intent_id, user_id, repository_id, amount_cents, currency, status, created_at, activated_at, expires_at
 		 FROM repo_boosts WHERE payment_intent_id = ?`, paymentIntentID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &b, nil
+}
+
+func (r *sqlxRepoBoostRepository) getActiveBoostByRepo(ctx context.Context, repositoryID string, now time.Time) (*RepoBoost, error) {
+	var b RepoBoost
+	err := r.db.GetContext(ctx, &b,
+		`SELECT payment_intent_id, user_id, repository_id, amount_cents, currency, status, created_at, activated_at, expires_at
+		 FROM repo_boosts WHERE repository_id = ? AND status = 'active' AND expires_at > ? ORDER BY expires_at ASC LIMIT 1`,
+		repositoryID, now)
 	if errors.Is(err, sql.ErrNoRows) {
 		return nil, nil
 	}
@@ -301,9 +477,9 @@ func (r *sqlxRepoBoostRepository) IsRepoClaimed(ctx context.Context, repositoryI
 	return cnt > 0, nil
 }
 
-// ListSponsoredIssues returns the featured good-first-issues that pass the
-// read-time validity check (AC4/AC7): boost active, not expired, repo claimed,
-// and each issue still open. Results are ordered newest-boost first.
+// ListSponsoredIssues returns the featured good-first-issues at the REPO level
+// (AC1): every open issue of a repo whose boost_expires_at is in the future is
+// sponsored. Results are ordered earliest-expiring-boost first (AC7).
 func (r *sqlxRepoBoostRepository) ListSponsoredIssues(ctx context.Context, language string, limit int, now time.Time) ([]GoodFirstIssueItem, error) {
 	if limit <= 0 {
 		limit = 10
@@ -314,20 +490,17 @@ func (r *sqlxRepoBoostRepository) ListSponsoredIssues(ctx context.Context, langu
 		g.labels_json, COALESCE(g.quality_score, 0) as quality_score,
 		g.bounty_amount_usd, COALESCE(g.bounty_status, 'active') as bounty_status,
 		g.created_at, g.synced_at`
-	q := `SELECT ` + cols + `, TRUE as boosted
+	q := `SELECT ` + cols + `, TRUE as boosted, rep.boost_expires_at as repo_boost_expires_at
 		FROM repo_good_first_issues g
 		INNER JOIN repositories rep ON g.repository_id = rep.id
 		LEFT JOIN latest_snapshots s ON rep.id = s.repository_id
-		INNER JOIN repo_boost_issues bi ON bi.repository_id = g.repository_id AND bi.issue_number = g.issue_number
-		INNER JOIN repo_boosts b ON b.payment_intent_id = bi.payment_intent_id AND b.status = 'active' AND b.expires_at > ?
-		INNER JOIN repo_claims rc ON rc.repo_id = g.repository_id AND rc.state = 'verified'
-		WHERE g.is_open = 1`
+		WHERE g.is_open = 1 AND rep.boost_expires_at IS NOT NULL AND rep.boost_expires_at > ?`
 	args := []interface{}{now}
 	if language != "" && strings.ToLower(language) != "all" {
 		q += " AND LOWER(rep.language) = LOWER(?)"
 		args = append(args, language)
 	}
-	q += " ORDER BY b.created_at DESC, g.created_at DESC LIMIT ?"
+	q += " ORDER BY rep.boost_expires_at ASC, g.created_at DESC LIMIT ?"
 	args = append(args, limit)
 
 	var items []GoodFirstIssueItem
@@ -354,12 +527,13 @@ func (r *sqlxRepoBoostRepository) ListUserBoosts(ctx context.Context, userID int
 	}
 	return bs, nil
 }
-// placement, and the cron sweep).
+
+// ListActiveBoosts returns all currently-active boosts (for the cron sweep).
 func (r *sqlxRepoBoostRepository) ListActiveBoosts(ctx context.Context, now time.Time) ([]RepoBoost, error) {
 	var bs []RepoBoost
 	err := r.db.SelectContext(ctx, &bs,
 		`SELECT payment_intent_id, user_id, repository_id, amount_cents, currency, status, created_at, activated_at, expires_at
-		 FROM repo_boosts WHERE status = 'active' AND expires_at > ? ORDER BY created_at DESC`, now)
+		 FROM repo_boosts WHERE status = 'active' AND expires_at > ? ORDER BY expires_at ASC`, now)
 	if err != nil {
 		return nil, err
 	}
@@ -367,25 +541,21 @@ func (r *sqlxRepoBoostRepository) ListActiveBoosts(ctx context.Context, now time
 }
 
 // MarkStaleRepoBoosts flips boosts to 'stale' when their repo is no longer
-// claimed or any featured issue is closed, for cron best-effort cleanup (AC7).
+// claimed (AC3/AC7) and clears the repo ranking column so the boost stops
+// rendering. Revocation of the remaining window happens via RevokeRepoBoostByRepo.
 func (r *sqlxRepoBoostRepository) MarkStaleRepoBoosts(ctx context.Context, now time.Time) (int64, error) {
 	q := `UPDATE repo_boosts SET status = 'stale', updated_at = CURRENT_TIMESTAMP
 		WHERE status = 'active'
-		  AND (
-		    NOT EXISTS (SELECT 1 FROM repo_claims rc WHERE rc.repo_id = repo_boosts.repository_id AND rc.state = 'verified')
-		    OR EXISTS (
-		      SELECT 1 FROM repo_boost_issues bi
-		      WHERE bi.payment_intent_id = repo_boosts.payment_intent_id
-		        AND NOT EXISTS (
-		          SELECT 1 FROM repo_good_first_issues g
-		          WHERE g.repository_id = bi.repository_id AND g.issue_number = bi.issue_number AND g.is_open = 1
-		        )
-		    )
-		  )`
+		  AND NOT EXISTS (SELECT 1 FROM repo_claims rc WHERE rc.repo_id = repo_boosts.repository_id AND rc.state = 'verified')`
 	res, err := r.db.ExecContext(ctx, q)
 	if err != nil {
 		return 0, err
 	}
 	n, _ := res.RowsAffected()
+	// Clear ranking column for any repo whose active boost is now stale.
+	_, _ = r.db.ExecContext(ctx,
+		`UPDATE repositories SET boost_expires_at = NULL WHERE boost_expires_at IS NOT NULL
+		 AND NOT EXISTS (SELECT 1 FROM repo_boosts b WHERE b.repository_id = repositories.id AND b.status = 'active' AND b.expires_at > ?)`,
+		now)
 	return n, nil
 }
