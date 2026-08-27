@@ -282,6 +282,17 @@ func main() {
 	embedRL := middleware.RateLimitPerIP(60, time.Minute)
 	r.GET("/embed/gfi/:owner/:name", embedRL, handler.GetGFIEmbedCard(gh, cfg.AppBaseURL))
 
+	// PR Merge Probability Calculator embed (item: Interactive PR Merge
+	// Probability Calculator). Distinct /embed-pr subtree plus query-param
+	// /badge and /pr routes. No per-client-IP rate limit on /badge (AC6:
+	// GitHub camo proxy shares one egress IP, so per-IP limiting would
+	// throttle every proxied badge). /badge reuses the repo-CRank /badge
+	// static node at a shallower depth, so there is no wildcard conflict.
+	// The /pr page reuses the same computed breakdown as the badge (AC8).
+	r.GET("/embed-pr", embedRL, handler.GetPRForecastEmbed(cfg))
+	r.GET("/badge", handler.GetPRForecastBadge(cfg))
+	r.GET("/pr", handler.GetPRForecastPage(cfg))
+
 	// Public share-card routes: no auth to view (AC1), 30 req/min/IP rate limit
 	// and 24h CDN/Valkey cache with purge-on-revoke (AC2, AC4). Season-rank
 	// cards ("sr…" ids) resolve through the same pipeline (AC4).

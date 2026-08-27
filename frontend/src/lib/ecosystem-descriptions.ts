@@ -54,6 +54,24 @@ const ECOSYSTEM_METADATA: Record<string, EcosystemMetadata> = {
     headline: "Ruby Ecosystem",
     tagline: "Rails gems, web frameworks, and developer productivity tools that embrace open-source newcomers.",
   },
+  kotlin: {
+    title: "Best Kotlin Open Source Repositories to Contribute | GetMerged",
+    description: "Discover top welcoming Kotlin open-source repositories for Android, Compose Multiplatform, and Ktor. Ranked by real PR merge rates, review turnarounds, and open good first issues.",
+    headline: "Kotlin & Android Ecosystem",
+    tagline: "Android apps, Compose Multiplatform libraries, and backend microservices welcoming first-time contributors.",
+  },
+  swift: {
+    title: "Best Swift Open Source Repositories | GetMerged",
+    description: "Discover top Swift and Apple ecosystem open-source repositories with fast review response times and active maintainers.",
+    headline: "Swift & Apple Ecosystem",
+    tagline: "iOS, macOS, and server-side Swift packages actively merging community pull requests.",
+  },
+  php: {
+    title: "Best PHP & Laravel Open Source Repositories | GetMerged",
+    description: "Find high-velocity PHP and Laravel repositories with high merge rates and active maintainer feedback.",
+    headline: "PHP & Laravel Ecosystem",
+    tagline: "Laravel packages, Symfony bundles, and modern PHP libraries welcoming new contributors.",
+  },
 };
 
 export function getEcosystemMetadata(lang: string): EcosystemMetadata {
