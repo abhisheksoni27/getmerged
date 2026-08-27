@@ -73,7 +73,7 @@ export default function OpenToOpportunitiesToggle({ slug }: OpenToOpportunitiesT
   }
 
   return (
-    <div className="mb-6 rounded-2xl border-2 border-white/[0.08] bg-zinc-900/80 p-5 shadow-sm">
+    <div className="mb-6 rounded-2xl border-2 border-white/[0.1] glass-panel p-5 shadow-sm">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2">
           <Briefcase className="h-4 w-4 text-emerald-600" />
@@ -89,7 +89,7 @@ export default function OpenToOpportunitiesToggle({ slug }: OpenToOpportunitiesT
             aria-label="Open to Opportunities"
           />
           <div className="h-6 w-11 rounded-full bg-zinc-300 peer-checked:bg-emerald-600 peer-disabled:opacity-60 transition-colors" />
-          <div className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-zinc-900/80 transition-transform peer-checked:translate-x-5" />
+          <div className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full glass-panel transition-transform peer-checked:translate-x-5" />
         </label>
       </div>
       <p className="mt-2 text-xs text-zinc-300">

@@ -122,7 +122,7 @@ function FixActions({ fix }: { fix: Fix }) {
         type="button"
         onClick={handleCopy}
         data-testid={`copy-fix-${fix.type}`}
-        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-zinc-900 text-white font-mono text-[10px] uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg glass-card text-white font-mono text-[10px] uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500"
       >
         {copied ? "Copied" : "Copy"}
       </button>
@@ -169,39 +169,39 @@ function PreflightSkeleton() {
   return (
     <div
       data-testid="preflight-suspense-fallback"
-      className="p-6 sm:p-8 bg-zinc-900/80 border-2 border-white/[0.08] rounded-2xl shadow-sm animate-pulse mb-8 font-sans"
+      className="p-6 sm:p-8 glass-panel border-2 border-white/[0.1] rounded-2xl shadow-sm animate-pulse mb-8 font-sans"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
           <div className="h-3 w-28 bg-zinc-200 rounded mb-2" />
-          <div className="h-10 bg-zinc-900 rounded-xl" />
+          <div className="h-10 glass-card rounded-xl" />
         </div>
         <div>
           <div className="h-3 w-36 bg-zinc-200 rounded mb-2" />
-          <div className="h-10 bg-zinc-900 rounded-xl" />
+          <div className="h-10 glass-card rounded-xl" />
         </div>
       </div>
       <div className="mb-4">
         <div className="h-3 w-32 bg-zinc-200 rounded mb-2" />
-        <div className="h-10 bg-zinc-900 rounded-xl" />
+        <div className="h-10 glass-card rounded-xl" />
       </div>
       <div className="mb-4">
         <div className="h-3 w-44 bg-zinc-200 rounded mb-2" />
-        <div className="h-20 bg-zinc-900 rounded-xl" />
+        <div className="h-20 glass-card rounded-xl" />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
         <div className="sm:col-span-2">
           <div className="h-3 w-36 bg-zinc-200 rounded mb-2" />
-          <div className="h-20 bg-zinc-900 rounded-xl" />
+          <div className="h-20 glass-card rounded-xl" />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-1 gap-2">
           <div>
             <div className="h-3 w-16 bg-zinc-200 rounded mb-1" />
-            <div className="h-9 bg-zinc-900 rounded-xl" />
+            <div className="h-9 glass-card rounded-xl" />
           </div>
           <div>
             <div className="h-3 w-16 bg-zinc-200 rounded mb-1" />
-            <div className="h-9 bg-zinc-900 rounded-xl" />
+            <div className="h-9 glass-card rounded-xl" />
           </div>
         </div>
       </div>
@@ -495,7 +495,7 @@ function PreflightContent() {
           aria-modal="true"
           aria-labelledby="upgrade-modal-title"
         >
-          <div className="w-full max-w-md rounded-2xl bg-zinc-900/80 border-2 border-white/[0.08] shadow-sm p-6 font-sans">
+          <div className="w-full max-w-md rounded-2xl glass-panel border-2 border-white/[0.1] shadow-sm p-6 font-sans">
             <h2
               id="upgrade-modal-title"
               className="text-lg font-bold font-space text-white tracking-tight mb-2"
@@ -503,7 +503,7 @@ function PreflightContent() {
               Free Evaluations Used Up
             </h2>
             <p className="text-sm text-zinc-300 mb-4">{upgrade.message}</p>
-            <div className="rounded-xl bg-zinc-900 border border-white/[0.08] px-4 py-3 mb-5 flex items-center justify-between">
+            <div className="rounded-xl glass-card border border-white/[0.1] px-4 py-3 mb-5 flex items-center justify-between">
               <span className="text-xs font-mono uppercase tracking-wider text-zinc-300">
                 Evaluations remaining this month
               </span>
@@ -530,7 +530,7 @@ function PreflightContent() {
               <button
                 type="button"
                 onClick={() => setUpgrade(null)}
-                className="inline-flex items-center justify-center px-4 py-2.5 rounded-xl border border-white/[0.12] bg-zinc-900/80 text-zinc-300 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-900 active:scale-[0.98] transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="inline-flex items-center justify-center px-4 py-2.5 rounded-xl border border-white/[0.12] glass-panel text-zinc-300 font-mono font-bold text-xs uppercase tracking-wider hover:glass-card active:scale-[0.98] transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
                 Maybe Later
               </button>
@@ -606,7 +606,7 @@ function PreflightContent() {
       {/* Input Form */}
       <form
         onSubmit={handleEvaluate}
-        className="rounded-2xl bg-zinc-900/80 p-5 sm:p-6 border-2 border-white/[0.08] shadow-sm mb-8 font-sans"
+        className="rounded-2xl glass-panel p-5 sm:p-6 border-2 border-white/[0.1] shadow-sm mb-8 font-sans"
       >
         <div className="mb-4">
           <label
@@ -628,10 +628,10 @@ function PreflightContent() {
                   fetchPRDetails(val);
                 }
               }}
-              className="flex-1 px-3.5 py-2.5 rounded-xl border border-white/[0.12] bg-zinc-900/50 font-mono text-sm text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-zinc-900/80 transition-all outline-none"
+              className="flex-1 px-3.5 py-2.5 rounded-xl border border-white/[0.12] glass-card/50 font-mono text-sm text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:glass-panel transition-all outline-none"
             />
             {fetchingPR && (
-              <span className="inline-flex items-center px-3 py-2 rounded-xl bg-zinc-900 text-zinc-300 text-xs font-mono">
+              <span className="inline-flex items-center px-3 py-2 rounded-xl glass-card text-zinc-300 text-xs font-mono">
                 Fetching...
               </span>
             )}
@@ -655,7 +655,7 @@ function PreflightContent() {
               placeholder="e.g. facebook/react"
               value={repoFullName}
               onChange={(e) => setRepoFullName(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-white/[0.12] bg-zinc-900/50 font-mono text-sm text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-zinc-900/80 transition-all outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-white/[0.12] glass-card/50 font-mono text-sm text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:glass-panel transition-all outline-none"
             />
           </div>
           <div>
@@ -671,7 +671,7 @@ function PreflightContent() {
               placeholder="https://github.com/owner/repo/issues/123"
               value={linkedIssueURL}
               onChange={(e) => setLinkedIssueURL(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-white/[0.12] bg-zinc-900/50 font-mono text-sm text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-zinc-900/80 transition-all outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-white/[0.12] glass-card/50 font-mono text-sm text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:glass-panel transition-all outline-none"
             />
           </div>
         </div>
@@ -690,7 +690,7 @@ function PreflightContent() {
             placeholder="e.g. fix(core): resolve null pointer exception in parser"
             value={prTitle}
             onChange={(e) => setPRTitle(e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-white/[0.12] bg-zinc-900/50 font-mono text-sm text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-zinc-900/80 transition-all outline-none"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-white/[0.12] glass-card/50 font-mono text-sm text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:glass-panel transition-all outline-none"
           />
         </div>
 
@@ -707,7 +707,7 @@ function PreflightContent() {
             placeholder="Explain what this PR solves, regression testing performed, and upstream bug context..."
             value={prDescription}
             onChange={(e) => setPRDescription(e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-white/[0.12] bg-zinc-900/50 font-sans text-sm text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-zinc-900/80 transition-all outline-none"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-white/[0.12] glass-card/50 font-sans text-sm text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:glass-panel transition-all outline-none"
           />
         </div>
 
@@ -725,7 +725,7 @@ function PreflightContent() {
               placeholder={"src/parser.ts\nsrc/parser.test.ts"}
               value={changedFilesText}
               onChange={(e) => setChangedFilesText(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-white/[0.12] bg-zinc-900/50 font-mono text-xs text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-zinc-900/80 transition-all outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-white/[0.12] glass-card/50 font-mono text-xs text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:glass-panel transition-all outline-none"
             />
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-1 gap-2">
@@ -742,7 +742,7 @@ function PreflightContent() {
                 placeholder="25"
                 value={additions}
                 onChange={(e) => setAdditions(e.target.value === "" ? "" : Number(e.target.value))}
-                className="w-full px-3 py-1.5 text-sm rounded-xl border border-white/[0.12] bg-zinc-900/50 font-mono text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-zinc-900/80 transition-all outline-none"
+                className="w-full px-3 py-1.5 text-sm rounded-xl border border-white/[0.12] glass-card/50 font-mono text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:glass-panel transition-all outline-none"
               />
             </div>
             <div>
@@ -758,7 +758,7 @@ function PreflightContent() {
                 placeholder="5"
                 value={deletions}
                 onChange={(e) => setDeletions(e.target.value === "" ? "" : Number(e.target.value))}
-                className="w-full px-3 py-1.5 text-sm rounded-xl border border-white/[0.12] bg-zinc-900/50 font-mono text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:bg-zinc-900/80 transition-all outline-none"
+                className="w-full px-3 py-1.5 text-sm rounded-xl border border-white/[0.12] glass-card/50 font-mono text-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 focus:glass-panel transition-all outline-none"
               />
             </div>
           </div>
@@ -776,8 +776,8 @@ function PreflightContent() {
 
       {/* Results Section */}
       {result && (
-        <div className="rounded-2xl bg-zinc-900/80 p-5 sm:p-6 border-2 border-white/[0.08] shadow-sm mb-8 font-sans">
-          <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/[0.08] mb-5">
+        <div className="rounded-2xl glass-panel p-5 sm:p-6 border-2 border-white/[0.1] shadow-sm mb-8 font-sans">
+          <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/[0.1] mb-5">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 {result.ready_to_merge ? (
@@ -842,7 +842,7 @@ function PreflightContent() {
                     </span>
                   </div>
                   <p className="text-xs text-zinc-300 mt-0.5">{c.description}</p>
-                  <p className="text-xs text-zinc-300 font-medium mt-1 bg-zinc-900/80/70 p-2 rounded-lg border border-white/[0.08]/60 font-mono">
+                  <p className="text-xs text-zinc-300 font-medium mt-1 glass-panel/70 p-2 rounded-lg border border-white/[0.1]/60 font-mono">
                     💡 {c.suggestion}
                   </p>
                   {!c.passed && c.fixes && c.fixes.length > 0 ? (
@@ -854,7 +854,7 @@ function PreflightContent() {
                         {c.fixes.map((fix, i) => (
                           <div
                             key={`${fix.type}-${i}`}
-                            className="rounded-lg border border-white/[0.08] bg-zinc-900/80/70 p-2"
+                            className="rounded-lg border border-white/[0.1] glass-panel/70 p-2"
                             data-testid={`fix-${fix.type}`}
                           >
                             <p className="text-[11px] font-semibold text-zinc-200 font-mono">

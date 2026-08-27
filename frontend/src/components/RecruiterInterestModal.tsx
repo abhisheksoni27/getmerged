@@ -103,7 +103,7 @@ export function RecruiterInterestModal({ username, isOpen, onClose }: RecruiterI
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="recruiter@company.com"
-                  className="w-full rounded-xl bg-zinc-900/90 border border-white/[0.08] px-3.5 py-2.5 text-xs text-white placeholder:text-zinc-400 focus:outline-none focus:border-orange-500"
+                  className="w-full rounded-xl glass-panel border border-white/[0.1] px-3.5 py-2.5 text-xs text-white placeholder:text-zinc-300 focus:outline-none focus:border-orange-500"
                 />
               </div>
 
@@ -115,7 +115,7 @@ export function RecruiterInterestModal({ username, isOpen, onClose }: RecruiterI
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
                   placeholder="e.g. Acme Corp / Vercel"
-                  className="w-full rounded-xl bg-zinc-900/90 border border-white/[0.08] px-3.5 py-2.5 text-xs text-white placeholder:text-zinc-400 focus:outline-none focus:border-orange-500"
+                  className="w-full rounded-xl glass-panel border border-white/[0.1] px-3.5 py-2.5 text-xs text-white placeholder:text-zinc-300 focus:outline-none focus:border-orange-500"
                 />
               </div>
 
@@ -126,7 +126,7 @@ export function RecruiterInterestModal({ username, isOpen, onClose }: RecruiterI
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Tell @username about the role, tech stack, or open-source sponsorship..."
-                  className="w-full rounded-xl bg-zinc-900/90 border border-white/[0.08] px-3.5 py-2.5 text-xs text-white placeholder:text-zinc-400 focus:outline-none focus:border-orange-500 resize-none"
+                  className="w-full rounded-xl glass-panel border border-white/[0.1] px-3.5 py-2.5 text-xs text-white placeholder:text-zinc-300 focus:outline-none focus:border-orange-500 resize-none"
                 />
               </div>
             </div>

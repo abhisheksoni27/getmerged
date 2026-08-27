@@ -47,7 +47,7 @@ export function RepoDetailHero({
           <img
             src={ownerAvatarUrl}
             alt={owner}
-            className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border border-white/[0.1] bg-zinc-900 shrink-0 object-cover shadow-inner mt-1"
+            className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border border-white/[0.1] glass-card shrink-0 object-cover shadow-inner mt-1"
           />
           <div className="min-w-0 flex-1">
             {/* Repo Title & Stars */}
@@ -58,7 +58,7 @@ export function RepoDetailHero({
               {typeof repo?.stars === "number" && repo.stars >= 0 && (
                 <span
                   title={`${repo.stars.toLocaleString()} GitHub stars`}
-                  className="inline-flex items-center gap-1.5 border border-white/[0.08] bg-white/[0.04] px-2.5 py-1 font-mono text-xs font-medium rounded-full text-zinc-300 shadow-xs shrink-0"
+                  className="inline-flex items-center gap-1.5 border border-white/[0.1] bg-white/[0.04] px-2.5 py-1 font-mono text-xs font-medium rounded-full text-zinc-300 shadow-xs shrink-0"
                 >
                   <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
                   <span>{repo.stars >= 1000 ? `${(repo.stars / 1000).toFixed(1)}k` : repo.stars}</span>
@@ -72,15 +72,15 @@ export function RepoDetailHero({
                 <>
                   <CRankBadge rank={rank} size="md" showLabel={true} />
                   {roundedScore > 0 && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs font-semibold rounded-full bg-white/[0.05] text-zinc-200 border border-white/[0.08]">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs font-semibold rounded-full bg-white/[0.05] text-zinc-200 border border-white/[0.1]">
                       <span className="text-zinc-300">Score:</span>
                       <span className="text-emerald-400 font-bold">{roundedScore}</span>
-                      <span className="text-zinc-400 font-normal">/100</span>
+                      <span className="text-zinc-300 font-normal">/100</span>
                     </span>
                   )}
                 </>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] text-zinc-300 border border-white/[0.06] font-mono text-xs">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] text-zinc-300 border border-white/[0.09] font-mono text-xs">
                   Unscored
                 </span>
               )}
@@ -89,7 +89,7 @@ export function RepoDetailHero({
                 <Link
                   href={`/rankings/${getLanguageSlug(repo.language)}`}
                   title={`View top ranked ${repo.language} repositories`}
-                  className="inline-flex items-center gap-1.5 border border-white/[0.08] bg-white/[0.04] px-3 py-1 font-mono text-xs font-medium rounded-full text-zinc-300 hover:text-white hover:bg-white/[0.08] transition-colors shrink-0"
+                  className="inline-flex items-center gap-1.5 border border-white/[0.1] bg-white/[0.04] px-3 py-1 font-mono text-xs font-medium rounded-full text-zinc-300 hover:text-white hover:bg-white/[0.08] transition-colors shrink-0"
                 >
                   <LangLogo language={repo.language} />
                   <span>{repo.language}</span>
@@ -122,7 +122,7 @@ export function RepoDetailHero({
               className={`flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-mono font-semibold rounded-xl border transition-all cursor-pointer ${
                 isWatching
                   ? "bg-orange-500/15 text-orange-400 border-orange-500/30 hover:bg-orange-500/25"
-                  : "bg-white/[0.04] text-zinc-300 border-white/[0.08] hover:text-white hover:bg-white/[0.08]"
+                  : "bg-white/[0.04] text-zinc-300 border-white/[0.1] hover:text-white hover:bg-white/[0.08]"
               }`}
             >
               <Bookmark className={`h-3.5 w-3.5 ${isWatching ? "fill-orange-400 text-orange-400" : ""}`} />
@@ -140,7 +140,7 @@ export function RepoDetailHero({
             </button>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
+          <div className="flex items-center gap-2 text-xs font-mono text-zinc-300">
             <Link
               href={`/compare?a=${encodeURIComponent(fullName)}`}
               title={`Compare ${fullName} against another repository`}

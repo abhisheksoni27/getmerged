@@ -169,7 +169,7 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
   return (
     <div
       data-testid="instant-scan-panel"
-      className="rounded-2xl border-2 border-white/[0.08] bg-slate-800 p-5 shadow-sm mb-6"
+      className="rounded-2xl border-2 border-white/[0.1] bg-slate-800 p-5 shadow-sm mb-6"
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -198,7 +198,7 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
 
       {busy && !timedOut && (
         <div className="mt-4" role="status" aria-live="polite">
-          <div className="h-2 w-full rounded-full border border-white/[0.12] bg-zinc-900/80 overflow-hidden">
+          <div className="h-2 w-full rounded-full border border-white/[0.12] glass-panel overflow-hidden">
             <div
               className="h-full bg-emerald-500 transition-all duration-500"
               style={{ width: `${progress}%` }}
@@ -230,7 +230,7 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
             type="button"
             onClick={startScan}
             data-testid="instant-scan-retry"
-            className="inline-flex items-center gap-1 rounded-lg border border-white/[0.12] bg-zinc-900/80 px-3 py-1 font-bold text-white shadow-sm hover:bg-zinc-900 w-fit"
+            className="inline-flex items-center gap-1 rounded-lg border border-white/[0.12] glass-panel px-3 py-1 font-bold text-white shadow-sm hover:glass-card w-fit"
           >
             Retry scan
           </button>
@@ -246,7 +246,7 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
             type="button"
             onClick={handleShare}
             data-testid="instant-scan-share"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-white/[0.12] bg-zinc-900/80 px-3 py-1.5 text-xs font-mono font-bold text-white shadow-sm hover:bg-zinc-900 w-fit"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-white/[0.12] glass-panel px-3 py-1.5 text-xs font-mono font-bold text-white shadow-sm hover:glass-card w-fit"
           >
             <Share2 className="h-3.5 w-3.5" />
             {copied ? "Link copied" : "Share verdict"}

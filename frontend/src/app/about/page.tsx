@@ -36,7 +36,7 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 text-white">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-black text-white">
       <Header />
       <script
         type="application/ld+json"
@@ -44,7 +44,7 @@ export default function AboutPage() {
       />
       <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 w-full">
         {/* Header Title */}
-        <div className="border border-white/[0.12] bg-zinc-900/80 p-8 shadow-sm mb-12">
+        <div className="border border-white/[0.12] glass-panel p-8 shadow-sm mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#8ce99a] border border-white/[0.12] font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
             <Sparkles className="w-3.5 h-3.5" />
             Empirical Telemetry &middot; Zero Speculation
@@ -59,7 +59,7 @@ export default function AboutPage() {
 
         {/* Mission & Methodology Pillars */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          <div className="border border-white/[0.12] bg-zinc-900/80 p-6 shadow-sm">
+          <div className="border border-white/[0.12] glass-panel p-6 shadow-sm">
             <div className="w-10 h-10 bg-[#bfdbff] border border-white/[0.12] flex items-center justify-center mb-4 shadow-sm">
               <GitMerge className="w-5 h-5 text-white" />
             </div>
@@ -69,7 +69,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="border border-white/[0.12] bg-zinc-900/80 p-6 shadow-sm">
+          <div className="border border-white/[0.12] glass-panel p-6 shadow-sm">
             <div className="w-10 h-10 bg-[#ffd93d] border border-white/[0.12] flex items-center justify-center mb-4 shadow-sm">
               <Award className="w-5 h-5 text-white" />
             </div>
@@ -81,13 +81,13 @@ export default function AboutPage() {
         </div>
 
         {/* Team & Contact Section */}
-        <div className="border border-white/[0.12] bg-zinc-900/80 p-8 shadow-sm space-y-6">
+        <div className="border border-white/[0.12] glass-panel p-8 shadow-sm space-y-6">
           <h2 className="text-2xl font-bold tracking-tight">Engineering &amp; Contact</h2>
           <p className="text-sm sm:text-base text-zinc-300 leading-relaxed">
             GetMerged is built and maintained by independent open-source engineers with automated nightly recalculation pipelines indexing real GitHub GraphQL telemetry.
           </p>
 
-          <div className="pt-4 flex flex-wrap gap-4 border-t-2 border-white/[0.08]">
+          <div className="pt-4 flex flex-wrap gap-4 border-t-2 border-white/[0.1]">
             <a
               href="https://github.com/GetMergedApp"
               target="_blank"

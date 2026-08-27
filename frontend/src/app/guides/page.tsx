@@ -60,7 +60,7 @@ export default function GuidesHubPage() {
   };
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 text-white font-sans">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-black text-white font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -75,13 +75,13 @@ export default function GuidesHubPage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900/80 border border-white/[0.12] text-xs text-zinc-200 hover:text-white hover:bg-slate-800 rounded transition-colors mb-6 font-semibold shadow-sm"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 glass-panel border border-white/[0.12] text-xs text-zinc-200 hover:text-white hover:bg-slate-800 rounded transition-colors mb-6 font-semibold shadow-sm"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Banner */}
-        <div className="border border-white/[0.08] bg-zinc-900/80 p-8 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-10">
+        <div className="border border-white/[0.1] glass-panel p-8 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-950/80 border border-emerald-700 text-emerald-300 rounded font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
             Empirical Developer Guides &middot; Zero Speculation
@@ -101,7 +101,7 @@ export default function GuidesHubPage() {
               key={guide.slug}
               href={`/guides/${guide.slug}`}
               title={`Read guide: ${guide.title}`}
-              className="border border-white/[0.08] bg-zinc-900/80 p-6 rounded-md border-t-2 border-t-slate-700 shadow-sm hover:border-slate-500 hover:scale-[1.01] transition-all flex flex-col justify-between"
+              className="border border-white/[0.1] glass-panel p-6 rounded-md border-t-2 border-t-slate-700 shadow-sm hover:border-slate-500 hover:scale-[1.01] transition-all flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
@@ -113,7 +113,7 @@ export default function GuidesHubPage() {
                   </span>
                 </div>
 
-                <div className="mb-4 overflow-hidden rounded border border-white/[0.08] bg-slate-800 shadow-sm">
+                <div className="mb-4 overflow-hidden rounded border border-white/[0.1] bg-slate-800 shadow-sm">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`/images/guides/${guide.slug}.jpg`}
@@ -132,7 +132,7 @@ export default function GuidesHubPage() {
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between">
+              <div className="pt-4 border-t border-white/[0.1] flex items-center justify-between">
                 <span className="font-mono text-xs text-zinc-300">
                   By {guide.author} &middot; {guide.lastUpdated}
                 </span>
@@ -145,7 +145,7 @@ export default function GuidesHubPage() {
         </div>
 
         {/* C-Rank Extractable Definition Box */}
-        <div className="border border-white/[0.08] bg-zinc-900/80 text-white p-6 sm:p-8 rounded-md border-t-2 border-t-orange-500 shadow-sm">
+        <div className="border border-white/[0.1] glass-panel text-white p-6 sm:p-8 rounded-md border-t-2 border-t-orange-500 shadow-sm">
           <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs font-bold uppercase tracking-wider mb-2">
             <ShieldCheck className="w-4 h-4" />
             Empirical C-Rank Benchmark Standard

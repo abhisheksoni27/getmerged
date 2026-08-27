@@ -70,7 +70,7 @@ export default function GoodFirstIssueIndexPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-zinc-950 dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-black dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"
@@ -85,12 +85,12 @@ export default function GoodFirstIssueIndexPage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-10">
+        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-white/[0.1] shadow-xs mb-10">
           <div className="flex items-center gap-2 mb-3.5">
             <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1 text-xs font-semibold text-emerald-300 font-mono">
               <Sprout className="h-3.5 w-3.5 text-emerald-400" /> Beginner Contributor Hub
@@ -107,7 +107,7 @@ export default function GoodFirstIssueIndexPage() {
 
         <LanguageMatchQuiz />
 
-        <div className="mb-6 mt-12 flex items-center justify-between border-b border-white/[0.08] pb-4">
+        <div className="mb-6 mt-12 flex items-center justify-between border-b border-white/[0.1] pb-4">
           <h2 className="text-sm font-bold text-white flex items-center gap-2 font-space">
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
             Ecosystems with Beginner Issues ({ecosystems.length})
@@ -121,11 +121,11 @@ export default function GoodFirstIssueIndexPage() {
               key={eco.slug}
               href={`/good-first-issue/${eco.slug}`}
               title={`View ${eco.name} Good First Issues and beginner tickets`}
-              className="group rounded-2xl bg-zinc-900/80 p-6 border border-white/[0.08] shadow-xs hover:border-white/[0.12] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+              className="group rounded-2xl glass-panel p-6 border border-white/[0.1] shadow-xs hover:border-white/[0.12] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="h-10 w-10 rounded-xl border border-white/[0.08] bg-zinc-900 flex items-center justify-center shrink-0">
+                  <div className="h-10 w-10 rounded-xl border border-white/[0.1] glass-card flex items-center justify-center shrink-0">
                     <LangLogo language={eco.name} />
                   </div>
                   <div>
@@ -140,7 +140,7 @@ export default function GoodFirstIssueIndexPage() {
                 </p>
               </div>
 
-              <div className="pt-4 mt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono font-semibold text-white group-hover:text-zinc-300">
+              <div className="pt-4 mt-4 border-t border-white/[0.1] flex items-center justify-between text-xs font-mono font-semibold text-white group-hover:text-zinc-300">
                 <span>Browse beginner issues</span>
                 <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
               </div>

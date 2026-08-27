@@ -42,7 +42,7 @@ export default function PrivacyPolicyPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-zinc-950 dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-black dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"
@@ -53,12 +53,12 @@ export default function PrivacyPolicyPage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-8">
+        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-white/[0.1] shadow-xs mb-8">
           <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1 rounded-xl mb-3">
             <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /> Privacy & Security Compliance
           </div>
@@ -70,7 +70,7 @@ export default function PrivacyPolicyPage() {
           </p>
         </div>
 
-        <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs prose prose-sm leading-relaxed text-zinc-300 max-w-none space-y-8 font-sans">
+        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-white/[0.1] shadow-xs prose prose-sm leading-relaxed text-zinc-300 max-w-none space-y-8 font-sans">
           <section>
             <h2 className="text-lg font-bold font-space text-white mb-3">1. Introduction & Scope</h2>
             <p>
@@ -174,7 +174,7 @@ export default function PrivacyPolicyPage() {
             <div className="overflow-x-auto mt-4">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-white/[0.08]">
+                  <tr className="border-b border-white/[0.1]">
                     <th className="py-2 pr-3 font-bold text-white">Provider</th>
                     <th className="py-2 pr-3 font-bold text-white">Purpose</th>
                     <th className="py-2 font-bold text-white">Data</th>

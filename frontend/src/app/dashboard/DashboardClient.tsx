@@ -117,9 +117,9 @@ function fmtHours(h: number | null | undefined): string {
 }
 
 const STATE_META: Record<string, { label: string; icon: React.ReactNode; cls: string }> = {
-  open: { label: "Open", icon: <CircleDashed className="h-3.5 w-3.5" />, cls: "bg-zinc-900 text-zinc-300 border border-white/[0.12]" },
-  changes_requested: { label: "Changes requested", icon: <MessageSquareWarning className="h-3.5 w-3.5" />, cls: "bg-amber-950/80 border-amber-800/80 text-amber-300 border border-amber-300" },
-  approved: { label: "Approved", icon: <CheckCircle2 className="h-3.5 w-3.5" />, cls: "bg-emerald-950/80 border-emerald-800/80 text-emerald-300 border border-emerald-300" },
+  open: { label: "Open", icon: <CircleDashed className="h-3.5 w-3.5" />, cls: "glass-card text-zinc-300 border border-white/[0.12]" },
+  changes_requested: { label: "Changes requested", icon: <MessageSquareWarning className="h-3.5 w-3.5" />, cls: "bg-amber-500/15 border border-amber-500/30 text-amber-300 border border-amber-300" },
+  approved: { label: "Approved", icon: <CheckCircle2 className="h-3.5 w-3.5" />, cls: "bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 border border-emerald-300" },
   merged: { label: "Merged", icon: <Merge className="h-3.5 w-3.5" />, cls: "bg-violet-100 text-violet-800 border border-violet-300" },
   closed: { label: "Closed", icon: <XCircle className="h-3.5 w-3.5" />, cls: "bg-red-100 text-red-700 border border-red-300" },
 };
@@ -330,7 +330,7 @@ export function DashboardClient() {
             <>
               {/* AC1: profile is private by default; explicit opt-in toggle */}
               <label
-                className="flex items-center gap-1.5 rounded-lg border border-white/[0.12] bg-zinc-900/80 px-2.5 py-2 text-xs font-semibold text-zinc-300 cursor-pointer select-none"
+                className="flex items-center gap-1.5 rounded-lg border border-white/[0.12] glass-panel px-2.5 py-2 text-xs font-semibold text-zinc-300 cursor-pointer select-none"
                 title="Anyone with your /u link can see your track record"
               >
                 <input
@@ -358,7 +358,7 @@ export function DashboardClient() {
           <button
             onClick={() => load(true)}
             disabled={refreshing}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 cursor-pointer whitespace-nowrap"
+            className="inline-flex items-center gap-1.5 rounded-lg glass-card px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 cursor-pointer whitespace-nowrap"
             title="Live refresh is rate-limited to once every 5 minutes per user"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
@@ -429,12 +429,12 @@ export function DashboardClient() {
             const accuracyView = formatAccuracy(pr.outcome ?? null);
             const verdictCls =
               verdictView?.tone === "good"
-                ? "bg-emerald-950/80 border-emerald-800/80 text-emerald-300 border border-emerald-300"
+                ? "bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 border border-emerald-300"
                 : verdictView?.tone === "bad"
                   ? "bg-red-100 text-red-700 border border-red-300"
-                  : "bg-zinc-900 text-zinc-300 border border-white/[0.12]";
+                  : "glass-card text-zinc-300 border border-white/[0.12]";
             return (
-              <li key={pr.pr_id} className="rounded-xl border border-white/[0.08] bg-zinc-900/80 p-4 shadow-sm/5">
+              <li key={pr.pr_id} className="rounded-xl border border-white/[0.1] glass-panel p-4 shadow-sm/5">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -446,7 +446,7 @@ export function DashboardClient() {
                           stale
                         </span>
                       )}
-                      <span className="rounded-full bg-zinc-900 text-white px-1.5 py-0.5 text-[10px] font-bold">{pr.c_rank_tier}</span>
+                      <span className="rounded-full glass-card text-white px-1.5 py-0.5 text-[10px] font-bold">{pr.c_rank_tier}</span>
                     </div>
                     <a
                       href={pr.html_url}
@@ -466,7 +466,7 @@ export function DashboardClient() {
                 </div>
 
                 {/* AC3: benchmark line from /api/v1/pr-likelihood medians */}
-                <div className="mt-3 rounded-lg bg-zinc-900 border border-white/[0.08] px-3 py-2 text-xs text-zinc-300">
+                <div className="mt-3 rounded-lg glass-card border border-white/[0.1] px-3 py-2 text-xs text-zinc-300">
                   <span className="font-semibold text-zinc-300">Repo review pace:</span>{" "}
                   p50 {fmtHours(pr.benchmark?.response_p50_hours)} · p90 {fmtHours(pr.benchmark?.response_p90_hours)} · merge{" "}
                   {fmtHours(pr.benchmark?.median_time_to_merge_hours)}

@@ -159,7 +159,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
       data-testid="merge-celebration-modal"
     >
       <div
-        className="w-full max-w-lg rounded-2xl bg-zinc-900/80 border-2 border-violet-400 shadow-sm overflow-hidden max-h-[92vh] overflow-y-auto"
+        className="w-full max-w-lg rounded-2xl glass-panel border-2 border-violet-400 shadow-sm overflow-hidden max-h-[92vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-5 py-3 bg-violet-600 text-white">
@@ -191,7 +191,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
               src={links.ogCardUrl}
               alt={`Share card: ${links.headline} for ${celebrating.full_name}`}
               onError={() => setCardFailed(true)}
-              className="w-full rounded-xl border border-white/[0.08] mb-4"
+              className="w-full rounded-xl border border-white/[0.1] mb-4"
               data-testid="merge-celebration-card"
             />
           )}
@@ -209,7 +209,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
               rel="noopener noreferrer"
               onClick={shareAndClose}
               data-testid="merge-celebration-x"
-              className="flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-black text-white text-xs font-mono font-bold transition-all"
+              className="flex items-center justify-between w-full px-4 py-2.5 rounded-xl glass-card hover:bg-black text-white text-xs font-mono font-bold transition-all"
             >
               <span>Post to X</span>
               <ExternalLink className="h-3.5 w-3.5" />
@@ -227,7 +227,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
             </a>
           </div>
 
-          <div className="pt-3 border-t border-white/[0.08]">
+          <div className="pt-3 border-t border-white/[0.1]">
             <label className="block text-[11px] font-mono font-bold text-zinc-300 uppercase mb-1">
               Share link (with your referral credit)
             </label>
@@ -236,7 +236,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
                 readOnly
                 value={links.destinationUrl}
                 onFocus={(e) => e.currentTarget.select()}
-                className="flex-1 min-w-0 rounded-xl border border-white/[0.12] bg-zinc-900 px-3 py-2 text-xs font-mono text-zinc-300"
+                className="flex-1 min-w-0 rounded-xl border border-white/[0.12] glass-card px-3 py-2 text-xs font-mono text-zinc-300"
               />
               <button
                 type="button"
@@ -248,7 +248,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
                     setTimeout(() => setCopied(false), 2000);
                   }
                 }}
-                className="px-3 py-2 rounded-xl bg-zinc-900 border border-white/[0.12] hover:bg-zinc-200 text-xs font-mono font-bold text-zinc-200 flex items-center gap-1 shrink-0 cursor-pointer"
+                className="px-3 py-2 rounded-xl glass-card border border-white/[0.12] hover:bg-zinc-200 text-xs font-mono font-bold text-zinc-200 flex items-center gap-1 shrink-0 cursor-pointer"
               >
                 {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
                 <span>{copied ? "Copied" : "Copy"}</span>

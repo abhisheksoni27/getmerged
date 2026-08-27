@@ -15,7 +15,7 @@ export function MetricGauge({ label, value, percentage = 0, tier = "A", classNam
   const scoreOutOf5 = Math.min(5, Math.max(0, (percentage / 100) * 5));
 
   return (
-    <div className={`flex flex-col items-center justify-center p-3 rounded-xl bg-zinc-900/60 border border-white/[0.06] shadow-sm ${className}`}>
+    <div className={`flex flex-col items-center justify-center p-3 rounded-xl glass-card/60 border border-white/[0.09] shadow-sm ${className}`}>
       <div className="font-space text-base sm:text-lg font-bold tracking-tight text-white mb-1.5">{value}</div>
       
       {/* Sleek Segmented Indicator with glow */}

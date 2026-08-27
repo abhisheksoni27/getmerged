@@ -159,7 +159,7 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Header */}
-        <div className="mb-6 border-b border-white/[0.08] pb-6">
+        <div className="mb-6 border-b border-white/[0.1] pb-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300/80 text-emerald-300 text-xs font-mono font-bold mb-3">
             <Compass className="h-3.5 w-3.5" /> Contributor Matchmaker
           </div>
@@ -180,8 +180,8 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
               title={`Show best ${canonicalLang} repositories for ${lv.label.toLowerCase()}s`}
               className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
                 lv.value === level
-                  ? "bg-zinc-900 text-white border-white/[0.12]"
-                  : "bg-zinc-900/80 text-zinc-300 border-white/[0.08] hover:border-white/[0.18]"
+                  ? "glass-card text-white border-white/[0.12]"
+                  : "glass-panel text-zinc-300 border-white/[0.1] hover:border-white/[0.18]"
               }`}
             >
               {lv.label}
@@ -194,16 +194,16 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
           {visibleRepos.map((repo) => (
             <div
               key={repo.id}
-              className="p-5 rounded-2xl border border-b border-white/[0.1]/10 border-white/[0.08] bg-zinc-900/80 hover:border-emerald-500/80 hover:border-b-emerald-700 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+              className="p-5 rounded-2xl border border-b border-white/[0.1]/10 border-white/[0.1] glass-panel hover:border-emerald-500/80 hover:border-b-emerald-700 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                   {typeof repo.match_score === "number" && (
-                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-zinc-900 text-white">
+                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md glass-card text-white">
                       {Math.round(repo.match_score)}% match
                     </span>
                   )}
-                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-950/80 border-emerald-800/80 text-emerald-300">
+                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
                     {repo.c_rank_tier || repo.class_rank || "A"} Tier
                   </span>
                   {(repo.good_first_issue_count ?? 0) > 0 && (
@@ -243,7 +243,7 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
                 <Link
                   href={`/${repo.full_name}`}
                   title={`Open full scorecard for ${repo.full_name}`}
-                  className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
+                  className="px-4 py-2 rounded-xl glass-card hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
                 >
                   View Scorecard <ArrowRight className="h-3.5 w-3.5" />
                 </Link>

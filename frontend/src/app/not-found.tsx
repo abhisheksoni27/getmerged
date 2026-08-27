@@ -16,10 +16,10 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 text-white">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-black text-white">
       <Header />
       <main className="flex-1 flex items-center justify-center px-4 py-16 sm:py-24">
-        <div className="max-w-xl w-full bg-zinc-900/80 border border-white/[0.12] p-8 sm:p-10 shadow-sm text-center">
+        <div className="max-w-xl w-full glass-panel border border-white/[0.12] p-8 sm:p-10 shadow-sm text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-[#ffb3c7] border border-white/[0.12] shadow-sm mb-6">
             <ShieldAlert className="w-8 h-8 text-white" />
           </div>

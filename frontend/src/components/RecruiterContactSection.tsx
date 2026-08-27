@@ -13,7 +13,7 @@ export function RecruiterContactSection({ username }: RecruiterContactSectionPro
 
   return (
     <>
-      <div className="rounded-2xl glass-panel text-white p-6 sm:p-8 shadow-sm border border-white/[0.08]">
+      <div className="rounded-2xl glass-panel text-white p-6 sm:p-8 shadow-sm border border-white/[0.1]">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs font-bold mb-2">

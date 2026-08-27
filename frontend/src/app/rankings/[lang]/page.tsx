@@ -279,7 +279,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex-1 w-full text-zinc-100 font-sans">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex-1 w-full text-white font-sans">
         {/* Navigation Breadcrumb */}
         <Link
           href="/rankings"
@@ -306,7 +306,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
           <p className="mt-3 text-sm sm:text-base text-zinc-300 max-w-3xl leading-relaxed font-sans">
             Empirical C-Rank™ telemetry for {languageName} projects. Scored from 90-day external PR merge rates, maintainer response velocity, first-timer success rates, and onboarding documentation.
           </p>
-          <div className="mt-3 flex items-center gap-2 text-xs font-mono text-zinc-400">
+          <div className="mt-3 flex items-center gap-2 text-xs font-mono text-zinc-300">
             <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />
             <span>Telemetry verified daily • {latestSnapshotDate ? latestSnapshotDate.toUTCString().slice(0, 16) : "Live"} UTC</span>
           </div>
@@ -333,42 +333,42 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
         {/* Ecosystem Live Telemetry Snapshot KPI Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5 mb-10">
           <div className="glass-panel p-5 rounded-2xl shadow-md">
-            <div className="text-[11px] font-mono font-semibold text-zinc-400 uppercase tracking-wider">Tracked Repos</div>
+            <div className="text-[11px] font-mono font-semibold text-zinc-300 uppercase tracking-wider">Tracked Repos</div>
             <div className="mt-1.5 text-2xl sm:text-3xl font-extrabold font-space text-white">{rankedItems.length}</div>
-            <div className="text-xs text-zinc-400 font-sans mt-0.5">&gt;100 stars verified</div>
+            <div className="text-xs text-zinc-300 font-sans mt-0.5">&gt;100 stars verified</div>
           </div>
           <div className="glass-panel p-5 rounded-2xl shadow-md">
-            <div className="text-[11px] font-mono font-semibold text-zinc-400 uppercase tracking-wider">Avg Merge Rate</div>
+            <div className="text-[11px] font-mono font-semibold text-zinc-300 uppercase tracking-wider">Avg Merge Rate</div>
             <div className="mt-1.5 text-2xl sm:text-3xl font-extrabold font-space text-emerald-400">{avgMergeRate}%</div>
-            <div className="text-xs text-zinc-400 font-sans mt-0.5">90-day external PRs</div>
+            <div className="text-xs text-zinc-300 font-sans mt-0.5">90-day external PRs</div>
           </div>
           <div className="glass-panel p-5 rounded-2xl shadow-md">
-            <div className="text-[11px] font-mono font-semibold text-zinc-400 uppercase tracking-wider">Open GFIs</div>
+            <div className="text-[11px] font-mono font-semibold text-zinc-300 uppercase tracking-wider">Open GFIs</div>
             <div className="mt-1.5 text-2xl sm:text-3xl font-extrabold font-space text-amber-400">{totalGFIs}</div>
-            <div className="text-xs text-zinc-400 font-sans mt-0.5">Beginner friendly issues</div>
+            <div className="text-xs text-zinc-300 font-sans mt-0.5">Beginner friendly issues</div>
           </div>
           <div className="glass-panel p-5 rounded-2xl shadow-md">
-            <div className="text-[11px] font-mono font-semibold text-zinc-400 uppercase tracking-wider">Welcoming Tier</div>
+            <div className="text-[11px] font-mono font-semibold text-zinc-300 uppercase tracking-wider">Welcoming Tier</div>
             <div className="mt-1.5 text-2xl sm:text-3xl font-extrabold font-space text-sky-400">{superWelcomingCount}</div>
-            <div className="text-xs text-zinc-400 font-sans mt-0.5">S & A Tier maintainers</div>
+            <div className="text-xs text-zinc-300 font-sans mt-0.5">S & A Tier maintainers</div>
           </div>
         </div>
 
         {/* Repositories Header with count note */}
-        <div className="mb-5 flex items-center justify-between border-b border-white/[0.08] pb-4">
+        <div className="mb-5 flex items-center justify-between border-b border-white/[0.1] pb-4">
           <div>
             <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2 font-space">
               Ranked {languageName} Repositories
             </h2>
             {rankedItems.length > 0 && (
-              <p className="text-xs text-zinc-400 font-sans mt-0.5">
+              <p className="text-xs text-zinc-300 font-sans mt-0.5">
                 {rankedItems.length < 50
                   ? `Showing ${rankedItems.length} of 50 qualifying projects`
                   : `Showing top 50 ranked repositories`}
               </p>
             )}
           </div>
-          <span className="text-xs text-zinc-400 font-mono hidden sm:inline">Telemetry Updated Daily</span>
+          <span className="text-xs text-zinc-300 font-mono hidden sm:inline">Telemetry Updated Daily</span>
         </div>
 
         {/* Repositories Table or Error State */}
@@ -385,20 +385,20 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                 ? `Snapshot data is stale (>7 days old).`
                 : `No snapshot data currently available for ${languageName}.`}
               {latestSnapshotDate && (
-                <span className="block mt-1 text-zinc-400 font-mono text-xs">
+                <span className="block mt-1 text-zinc-300 font-mono text-xs">
                   Last successful snapshot: {latestSnapshotDate.toUTCString()}
                 </span>
               )}
             </p>
-            <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-300 bg-zinc-900 border border-white/[0.08] px-3 py-1.5 rounded-lg">
-              <RefreshCw className="h-3.5 w-3.5 animate-spin text-zinc-400" />
+            <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-300 glass-card border border-white/[0.1] px-3 py-1.5 rounded-lg">
+              <RefreshCw className="h-3.5 w-3.5 animate-spin text-zinc-300" />
               <span>Please retry in a few moments or run the snapshot pipeline.</span>
             </div>
           </div>
         ) : (
           <div className="overflow-x-auto rounded-3xl glass-panel shadow-xl mb-12 border border-white/[0.1]">
             <table className="w-full text-left text-xs text-zinc-300">
-              <thead className="bg-white/[0.04] text-zinc-200 border-b border-white/[0.08] font-semibold uppercase tracking-wider font-space text-[11px]">
+              <thead className="bg-white/[0.04] text-zinc-200 border-b border-white/[0.1] font-semibold uppercase tracking-wider font-space text-[11px]">
                 <tr>
                   <th className="py-4 px-5 text-center w-16">Rank</th>
                   <th className="py-4 px-5">Repository</th>
@@ -415,7 +415,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
 
                   return (
                     <tr key={item.repo.id} className="hover:bg-white/[0.03] transition-colors">
-                      <td className="py-4 px-5 text-center font-bold text-zinc-400 text-sm">
+                      <td className="py-4 px-5 text-center font-bold text-zinc-300 text-sm">
                         #{idx + 1}
                       </td>
                       <td className="py-4 px-5 font-bold text-white font-sans">
@@ -428,7 +428,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                             {item.repo.full_name}
                           </Link>
                           {item.repo.stars !== undefined && (
-                            <span className="inline-flex items-center gap-1 text-xs font-mono font-bold text-zinc-300 bg-white/[0.06] px-2 py-0.5 rounded-md border border-white/[0.08]">
+                            <span className="inline-flex items-center gap-1 text-xs font-mono font-bold text-zinc-300 bg-white/[0.06] px-2 py-0.5 rounded-md border border-white/[0.1]">
                               <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                               {item.repo.stars.toLocaleString()}
                             </span>
@@ -463,7 +463,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                             <span>{item.goodFirstIssues}</span>
                           </Link>
                         ) : (
-                          <span className="text-zinc-500 text-sm font-mono">—</span>
+                          <span className="text-zinc-400 text-sm font-mono">—</span>
                         )}
                       </td>
                     </tr>
@@ -556,7 +556,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                   : `Visit GetMerged to view the latest ranked ${languageName} repositories.`}
               </p>
             </div>
-            <div className="border-t border-white/[0.08] pt-6">
+            <div className="border-t border-white/[0.1] pt-6">
               <h4 className="font-bold text-white font-space text-base mb-1.5">
                 How can I find good first issues in {languageName}?
               </h4>
@@ -572,7 +572,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                 .
               </p>
             </div>
-            <div className="border-t border-white/[0.08] pt-6">
+            <div className="border-t border-white/[0.1] pt-6">
               <h4 className="font-bold text-white font-space text-base mb-1.5">
                 What makes a {languageName} repository &lsquo;Super Welcoming&rsquo; on GetMerged?
               </h4>

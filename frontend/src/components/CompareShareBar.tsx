@@ -100,7 +100,7 @@ export function CompareShareBar({ repoA, repoB }: CompareShareBarProps) {
     <div
       role="region"
       aria-label="Repository comparison sharing and export tools"
-      className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-zinc-900/80 border border-white/[0.08] shadow-xs mb-8"
+      className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl glass-panel border border-white/[0.1] shadow-xs mb-8"
     >
       <div className="flex items-center gap-2 text-xs font-mono text-zinc-300">
         <span className="font-semibold text-white font-sans text-sm">
@@ -121,7 +121,7 @@ export function CompareShareBar({ repoA, repoB }: CompareShareBarProps) {
           className={
             copied
               ? "inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border border-emerald-300 transition-all duration-150 cursor-pointer shadow-2xs"
-              : "inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-zinc-900 text-white hover:bg-zinc-800 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2 cursor-pointer shadow-xs"
+              : "inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl glass-card text-white hover:bg-zinc-800 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2 cursor-pointer shadow-xs"
           }
         >
           {copied ? (
@@ -143,7 +143,7 @@ export function CompareShareBar({ repoA, repoB }: CompareShareBarProps) {
           onClick={handleShare}
           title="Share repository comparison on X or external platforms"
           aria-label="Share comparison on social media or external platforms"
-          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-zinc-900 text-zinc-200 hover:bg-zinc-200 border border-white/[0.08]/60 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 cursor-pointer shadow-2xs"
+          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl glass-card text-zinc-200 hover:bg-zinc-200 border border-white/[0.1]/60 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 cursor-pointer shadow-2xs"
         >
           <Share2 className="h-3.5 w-3.5 text-zinc-300" />
           <span>Share Comparison</span>

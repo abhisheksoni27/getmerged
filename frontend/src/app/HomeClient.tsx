@@ -346,7 +346,7 @@ export default function HomeClient({
         >
           <div
             onClick={() => openSearch(searchQuery)}
-            className="nb-opt-out relative flex items-center rounded-2xl border border-white/[0.12] bg-zinc-900/80 px-4 py-3.5 shadow-sm hover:border-white/[0.18] hover:shadow-md transition-all cursor-pointer group"
+            className="nb-opt-out relative flex items-center rounded-2xl border border-white/[0.12] glass-panel px-4 py-3.5 shadow-sm hover:border-white/[0.18] hover:shadow-md transition-all cursor-pointer group"
           >
             <Search className="h-5 w-5 text-zinc-300 group-hover:text-zinc-300 shrink-0 transition-colors" />
             <input
@@ -371,7 +371,7 @@ export default function HomeClient({
                   Clear
                 </button>
               ) : null}
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-white/[0.08] bg-zinc-900 px-2 py-0.5 font-mono text-[11px] font-semibold text-zinc-300">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-white/[0.1] glass-card px-2 py-0.5 font-mono text-[11px] font-semibold text-zinc-300">
                 <span>⌘</span>K
               </kbd>
             </div>
@@ -398,7 +398,7 @@ export default function HomeClient({
                     gridEl.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="rounded-lg border border-white/[0.08] bg-zinc-900/80 px-2.5 py-1 font-mono text-zinc-300 hover:border-white/[0.12] hover:text-white shadow-2xs cursor-pointer transition-colors"
+                className="rounded-lg border border-white/[0.1] glass-panel px-2.5 py-1 font-mono text-zinc-300 hover:border-white/[0.12] hover:text-white shadow-2xs cursor-pointer transition-colors"
               >
                 {term}
               </motion.button>
@@ -415,7 +415,7 @@ export default function HomeClient({
 
         {/* Macro Telemetry Grid */}
         <motion.div
-          className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-3xl mx-auto rounded-2xl bg-zinc-900/80 p-4 sm:p-5 border border-white/[0.08] shadow-xs items-center text-center"
+          className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-3xl mx-auto rounded-2xl glass-panel p-4 sm:p-5 border border-white/[0.1] shadow-xs items-center text-center"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
@@ -423,7 +423,7 @@ export default function HomeClient({
         >
           <div>
             <div className="text-xl sm:text-2xl font-bold font-mono text-white">
-              {stats?.avg_response_hours ? "82%" : <div className="h-6 w-12 bg-zinc-900 rounded animate-pulse mx-auto" />}
+              {stats?.avg_response_hours ? "82%" : <div className="h-6 w-12 glass-card rounded animate-pulse mx-auto" />}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-300 font-mono">Avg Merge Rate</div>
           </div>
@@ -436,7 +436,7 @@ export default function HomeClient({
                   ? `${Math.floor(stats.avg_response_hours)}h`
                   : `${Math.floor(stats.avg_response_hours / 24)}d+`
               ) : (
-                <div className="h-6 w-12 bg-zinc-900 rounded animate-pulse mx-auto" />
+                <div className="h-6 w-12 glass-card rounded animate-pulse mx-auto" />
               )}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-300 font-mono">Avg First Review</div>
@@ -446,7 +446,7 @@ export default function HomeClient({
               {stats?.s_class_count !== undefined ? (
                 <CountUp value={stats.s_class_count} />
               ) : (
-                <div className="h-6 w-12 bg-zinc-900 rounded animate-pulse mx-auto" />
+                <div className="h-6 w-12 glass-card rounded animate-pulse mx-auto" />
               )}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-300 font-mono">Welcoming Repos</div>
@@ -456,7 +456,7 @@ export default function HomeClient({
               {stats?.total_repos ? (
                 <CountUp value={stats.total_repos} />
               ) : (
-                <div className="h-6 w-12 bg-zinc-900 rounded animate-pulse mx-auto" />
+                <div className="h-6 w-12 glass-card rounded animate-pulse mx-auto" />
               )}
             </div>
             <div className="text-[11px] sm:text-xs text-zinc-300 font-mono">Repos Scored</div>
@@ -467,7 +467,7 @@ export default function HomeClient({
         <div className="my-16 space-y-16 text-left">
           {/* Narrative Block 1: Left Copy, Right Visual (The Star Paradox & Zombie PRs) */}
           <motion.div
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-2xl glass-panel p-8 sm:p-12 border border-white/[0.08] shadow-xs"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-2xl glass-panel p-8 sm:p-12 border border-white/[0.1] shadow-xs"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -498,13 +498,13 @@ export default function HomeClient({
               </div>
             </div>
 
-            <div className="lg:col-span-5 bg-zinc-900 border border-white/[0.08] rounded-2xl p-6 space-y-4 font-mono text-xs shadow-2xs">
-              <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+            <div className="lg:col-span-5 glass-card border border-white/[0.1] rounded-2xl p-6 space-y-4 font-mono text-xs shadow-2xs">
+              <div className="flex items-center justify-between border-b border-white/[0.1] pb-3">
                 <span className="text-zinc-300">Live Telemetry Contrast</span>
                 <span className="text-emerald-400 font-bold">Real-time</span>
               </div>
               <div className="space-y-3">
-                <div className="p-3.5 rounded-xl bg-zinc-900/80 border border-rose-200/70">
+                <div className="p-3.5 rounded-xl glass-panel border border-rose-200/70">
                   <div className="flex justify-between text-zinc-200 font-bold mb-1">
                     <span>Famous Ghost Town</span>
                     <span className="text-rose-600 font-semibold">45k ★</span>
@@ -513,7 +513,7 @@ export default function HomeClient({
                     Median PR review wait: <strong className="text-rose-700">140+ days</strong> (C-Rank: Unmaintained)
                   </div>
                 </div>
-                <div className="p-3.5 rounded-xl bg-zinc-900/80 border border-emerald-200">
+                <div className="p-3.5 rounded-xl glass-panel border border-emerald-200">
                   <div className="flex justify-between text-zinc-200 font-bold mb-1">
                     <span>Welcoming Open Door</span>
                     <span className="text-emerald-400 font-semibold">1.8k ★</span>
@@ -528,7 +528,7 @@ export default function HomeClient({
 
           {/* Today's Top Welcoming Repositories (Interspersed Live Demonstration) */}
           <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/[0.08] pb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/[0.1] pb-3">
               <div>
                 <h2 className="text-xl sm:text-2xl font-space font-bold text-white flex items-center gap-2">
                   <Flame className="h-5 w-5 text-orange-500 fill-orange-500" /> Today&apos;s Open Doors (High Review Velocity)
@@ -549,7 +549,7 @@ export default function HomeClient({
                 [1, 2, 3].map((i) => (
                   <div
                     key={i}
-                    className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900/80 p-5 h-[260px] flex flex-col justify-between"
+                    className="relative overflow-hidden rounded-2xl border border-white/[0.1] glass-panel p-5 h-[260px] flex flex-col justify-between"
                   >
                     <div className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 glass-panel animate-shimmer" />
                     <div>
@@ -559,9 +559,9 @@ export default function HomeClient({
                       </div>
                       <div className="h-3 w-full rounded bg-zinc-200 mb-2" />
                       <div className="h-3 w-3/4 rounded bg-zinc-200 mb-5" />
-                      <div className="h-10 w-full rounded bg-zinc-900 border border-white/[0.08] mb-4" />
+                      <div className="h-10 w-full rounded glass-card border border-white/[0.1] mb-4" />
                     </div>
-                    <div className="flex items-center justify-between pt-3 border-t border-white/[0.08]">
+                    <div className="flex items-center justify-between pt-3 border-t border-white/[0.1]">
                       <div className="h-4 w-20 rounded bg-zinc-200" />
                       <div className="h-4 w-16 rounded bg-zinc-200" />
                     </div>
@@ -577,31 +577,31 @@ export default function HomeClient({
 
           {/* Narrative Block 2: Left Visual (9-Factor Radar), Right Copy */}
           <motion.div
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-2xl glass-panel p-8 sm:p-12 border border-white/[0.08] shadow-xs"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-2xl glass-panel p-8 sm:p-12 border border-white/[0.1] shadow-xs"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
           >
-            <div className="lg:col-span-5 bg-zinc-900 text-white rounded-2xl p-6 space-y-3 font-mono text-xs shadow-md">
-              <div className="flex justify-between items-center text-zinc-300 border-b border-white/[0.08] pb-2">
+            <div className="lg:col-span-5 glass-card text-white rounded-2xl p-6 space-y-3 font-mono text-xs shadow-md">
+              <div className="flex justify-between items-center text-zinc-300 border-b border-white/[0.1] pb-2">
                 <span>C-Rank™ Multi-Factor Telemetry</span>
                 <span className="text-emerald-400 font-bold">Continuous Index</span>
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between items-center bg-black ambient-glow p-2.5 rounded-xl border border-white/[0.08]">
+                <div className="flex justify-between items-center bg-black ambient-glow p-2.5 rounded-xl border border-white/[0.1]">
                   <span className="text-zinc-300">External Merge Rate</span>
                   <span className="text-emerald-400 font-bold">Primary</span>
                 </div>
-                <div className="flex justify-between items-center bg-black ambient-glow p-2.5 rounded-xl border border-white/[0.08]">
+                <div className="flex justify-between items-center bg-black ambient-glow p-2.5 rounded-xl border border-white/[0.1]">
                   <span className="text-zinc-300">Review Turnaround Latency</span>
                   <span className="text-blue-400 font-bold">Core Factor</span>
                 </div>
-                <div className="flex justify-between items-center bg-black ambient-glow p-2.5 rounded-xl border border-white/[0.08]">
+                <div className="flex justify-between items-center bg-black ambient-glow p-2.5 rounded-xl border border-white/[0.1]">
                   <span className="text-zinc-300">Commit Pulse & Recency</span>
                   <span className="text-purple-400 font-bold">Core Factor</span>
                 </div>
-                <div className="flex justify-between items-center bg-black ambient-glow p-2.5 rounded-xl border border-white/[0.08]">
+                <div className="flex justify-between items-center bg-black ambient-glow p-2.5 rounded-xl border border-white/[0.1]">
                   <span className="text-zinc-300">First-Timer PR Conversion</span>
                   <span className="text-amber-400 font-bold">Hospitality</span>
                 </div>
@@ -622,7 +622,7 @@ export default function HomeClient({
                 <Link
                   href="/how-c-rank-works"
                   title="Explore the C-Rank scoring methodology"
-                  className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-5 py-2.5 font-sans text-xs font-semibold text-white hover:bg-zinc-800 transition-all shadow-xs"
+                  className="inline-flex items-center gap-2 rounded-xl glass-card px-5 py-2.5 font-sans text-xs font-semibold text-white hover:bg-zinc-800 transition-all shadow-xs"
                 >
                   <span>Explore the scoring methodology</span>
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -640,7 +640,7 @@ export default function HomeClient({
             transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
           >
             <div className="lg:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-300 bg-[#8ce99a] border border-white/[0.08] px-3 py-1 shadow-sm">
+              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-300 bg-[#8ce99a] border border-white/[0.1] px-3 py-1 shadow-sm">
                 <ShieldCheck className="h-3.5 w-3.5" /> Maintainer Workspace
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold font-space text-white tracking-tight leading-tight">
@@ -660,15 +660,15 @@ export default function HomeClient({
                 <Link
                   href="/guides/how-to-know-if-maintainer-will-review"
                   title="Maintainer Hospitality Best Practices"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-zinc-900/80 text-white font-mono text-xs font-bold border border-white/[0.12] shadow-sm hover:bg-zinc-900"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 glass-panel text-white font-mono text-xs font-bold border border-white/[0.12] shadow-sm hover:glass-card"
                 >
                   Read Reviewer Playbook <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
             </div>
 
-            <div className="lg:col-span-5 bg-zinc-900/80 border border-white/[0.12] p-6 space-y-3 font-mono text-xs shadow-sm">
-              <div className="font-bold text-white border-b border-white/[0.08] pb-2 flex items-center justify-between">
+            <div className="lg:col-span-5 glass-panel border border-white/[0.12] p-6 space-y-3 font-mono text-xs shadow-sm">
+              <div className="font-bold text-white border-b border-white/[0.1] pb-2 flex items-center justify-between">
                 <span>Maintainer Health Check</span>
                 <span className="text-emerald-400">Live Telemetry</span>
               </div>
@@ -698,7 +698,7 @@ export default function HomeClient({
       {/* Main Curated Showroom Section */}
       <main id="leaderboard-grid" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex-1 w-full pt-4">
         {/* Streamlined Category Switcher Bar */}
-        <div className="mb-8 rounded-2xl glass-panel p-5 sm:p-6 border border-white/[0.08] shadow-xs space-y-4">
+        <div className="mb-8 rounded-2xl glass-panel p-5 sm:p-6 border border-white/[0.1] shadow-xs space-y-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-zinc-300 mb-1">
@@ -739,7 +739,7 @@ export default function HomeClient({
               className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
                 selectedTier === "S" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All"
                   ? "bg-amber-600 text-white shadow-sm"
-                  : "bg-zinc-900/80 text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                  : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
               }`}
             >
               👑 Hall of Fame
@@ -762,7 +762,7 @@ export default function HomeClient({
               className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
                 selectedTier === "A"
                   ? "bg-emerald-600 text-white shadow-sm"
-                  : "bg-zinc-900/80 text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                  : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
               }`}
             >
               ⚡ Welcoming
@@ -785,7 +785,7 @@ export default function HomeClient({
               className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
                 selectedBucket === "50k+"
                   ? "bg-violet-600 text-white shadow-sm"
-                  : "bg-zinc-900/80 text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                  : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
               }`}
             >
               ⭐ Star Giants
@@ -808,7 +808,7 @@ export default function HomeClient({
               className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
                 selectedFirstTimerBucket === "has_gfi"
                   ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-zinc-900/80 text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                  : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
               }`}
             >
               🌱 Has Good First Issue
@@ -831,7 +831,7 @@ export default function HomeClient({
               className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
                 selectedMinMergeRate === "60%"
                   ? "bg-rose-600 text-white shadow-sm"
-                  : "bg-zinc-900/80 text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                  : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
               }`}
             >
               🚀 High Merge Rate
@@ -854,7 +854,7 @@ export default function HomeClient({
               className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
                 selectedFirstTimerBucket === "60-80%"
                   ? "bg-rose-600 text-white shadow-sm"
-                  : "bg-zinc-900/80 text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                  : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
               }`}
             >
               🎯 First Timer Awesome
@@ -868,7 +868,7 @@ export default function HomeClient({
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
-                className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-zinc-900/80 p-6 h-[260px] animate-pulse"
+                className="relative overflow-hidden rounded-3xl border border-white/[0.1] glass-panel p-6 h-[260px] animate-pulse"
               />
             ))}
           </div>
@@ -889,7 +889,7 @@ export default function HomeClient({
             </div>
 
             {/* Bottom Callout Banner */}
-            <div className="my-8 rounded-3xl bg-zinc-900 text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+            <div className="my-8 rounded-3xl glass-card text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
               <div>
                 <h3 className="text-lg sm:text-xl font-bold font-space">
                   Looking for custom languages, merge rates, or response times?
@@ -902,7 +902,7 @@ export default function HomeClient({
               <Link
                 href="/repos"
                 title="Browse full repository database with all filters"
-                className="inline-flex items-center gap-2 rounded-2xl bg-zinc-900/80 text-white hover:bg-zinc-900 px-6 py-3 text-xs font-bold font-sans shrink-0 shadow-2xs transition-transform active:scale-98"
+                className="inline-flex items-center gap-2 rounded-2xl glass-panel text-white hover:glass-card px-6 py-3 text-xs font-bold font-sans shrink-0 shadow-2xs transition-transform active:scale-98"
               >
                 <span>Open /repos Explorer</span>
                 <ArrowRight className="h-4 w-4" />
@@ -914,9 +914,9 @@ export default function HomeClient({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="rounded-3xl border border-dashed border-white/[0.12] p-12 text-center bg-zinc-900/80 shadow-2xs my-4"
+            className="rounded-3xl border border-dashed border-white/[0.12] p-12 text-center glass-panel shadow-2xs my-4"
           >
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-900 text-zinc-300 mb-3">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl glass-card text-zinc-300 mb-3">
               <Search className="h-5 w-5" />
             </div>
             <h3 className="text-base font-space font-bold text-white">No open doors found</h3>
@@ -933,7 +933,7 @@ export default function HomeClient({
                 setPage(1);
                 setLoading(true);
               }}
-              className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-mono font-semibold text-white hover:bg-zinc-800 active:scale-95 transition-all shadow-xs cursor-pointer"
+              className="mt-4 inline-flex items-center gap-1.5 rounded-xl glass-card px-4 py-2 text-xs font-mono font-semibold text-white hover:bg-zinc-800 active:scale-95 transition-all shadow-xs cursor-pointer"
             >
               Reset all filters →
             </button>
@@ -942,7 +942,7 @@ export default function HomeClient({
       </main>
 
       {/* SEO & Telemetry Intelligence Section */}
-      <section className="border-t border-white/[0.08] bg-zinc-900/80 py-16 sm:py-20">
+      <section className="border-t border-white/[0.1] glass-panel py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center mb-12 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl font-bold font-space text-white lg:text-4xl">
@@ -956,8 +956,8 @@ export default function HomeClient({
 
           {/* Ecosystem Leaderboard Section */}
           <div className="grid grid-cols-1 gap-6 mb-16 font-mono">
-            <div className="rounded-2xl glass-panel p-6 sm:p-10 border border-white/[0.08] shadow-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-white/[0.08] pb-6 mb-8 gap-4">
+            <div className="rounded-2xl glass-panel p-6 sm:p-10 border border-white/[0.1] shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-white/[0.1] pb-6 mb-8 gap-4">
                 <div>
                   <h3 className="text-2xl font-bold text-white font-space tracking-tight">
                     Top Welcoming Ecosystems
@@ -977,7 +977,7 @@ export default function HomeClient({
                     rel="noopener noreferrer"
                     title="Share GetMerged rankings on Twitter / X"
                     onClick={() => posthog.capture("rankings_shared", { platform: "twitter" })}
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-zinc-900/80 px-3.5 py-2 text-xs font-bold text-white hover:bg-zinc-900 transition-all font-sans cursor-pointer shadow-2xs"
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] glass-panel px-3.5 py-2 text-xs font-bold text-white hover:glass-card transition-all font-sans cursor-pointer shadow-2xs"
                   >
                     <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -992,7 +992,7 @@ export default function HomeClient({
                     rel="noopener noreferrer"
                     title="Share GetMerged on Reddit"
                     onClick={() => posthog.capture("rankings_shared", { platform: "reddit" })}
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-zinc-900/80 px-3.5 py-2 text-xs font-bold text-white hover:bg-zinc-900 transition-all font-sans cursor-pointer shadow-2xs"
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] glass-panel px-3.5 py-2 text-xs font-bold text-white hover:glass-card transition-all font-sans cursor-pointer shadow-2xs"
                   >
                     <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
                       <path d="M24 11.5c0-1.65-1.35-3-3-3-.96 0-1.86.48-2.42 1.24-1.64-1-3.85-1.64-6.24-1.72l1.37-4.31 3.8 1.19c.14.78.8 1.38 1.63 1.38 1.05 0 1.9-.85 1.9-1.9s-.85-1.9-1.9-1.9c-.83 0-1.5.59-1.63 1.38l-4.14-1.3c-.2-.06-.41.04-.48.24l-1.52 4.8C5.9 7.82 3.69 8.46 2.05 9.46 1.48 8.7 0.58 8.22-.38 8.22c-1.65 0-3 1.35-3 3 0 1.21.72 2.26 1.77 2.73C-1.6 14.54-1.6 15.14-1.6 15.5c0 3.59 5.37 6.5 12 6.5s12-2.91 12-6.5c0-.36 0-.96-.02-1.53 1.05-.47 1.77-1.52 1.77-2.73z" />
@@ -1061,7 +1061,7 @@ export default function HomeClient({
                         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                           <div className="flex items-center gap-3">
                             <span className="font-mono text-sm font-bold text-zinc-300 w-6">#{rankMedal}</span>
-                            <div className="h-10 w-10 rounded-xl border border-white/[0.08] bg-zinc-900 flex items-center justify-center shrink-0">
+                            <div className="h-10 w-10 rounded-xl border border-white/[0.1] glass-card flex items-center justify-center shrink-0">
                               <LangLogo language={item.language} />
                             </div>
                             <div>
@@ -1089,7 +1089,7 @@ export default function HomeClient({
                                 <span className="font-mono text-[10px] text-zinc-300">{item.grandTotal} repos</span>
                               </div>
                               <div
-                                className="h-2.5 w-full rounded-full bg-zinc-900 p-0.5 flex overflow-hidden border border-white/[0.08] shadow-2xs"
+                                className="h-2.5 w-full rounded-full glass-card p-0.5 flex overflow-hidden border border-white/[0.1] shadow-2xs"
                                 title={`S-Tier: ${item.sCount} (${item.sPct.toFixed(1)}%), A-Tier: ${item.aCount} (${item.aPct.toFixed(1)}%), B-Tier: ${item.bCount} (${item.bPct.toFixed(1)}%), C/D-Tier: ${item.cCount + item.dCount}`}
                               >
                                 {item.sPct > 0 && (
@@ -1135,7 +1135,7 @@ export default function HomeClient({
                               </div>
                               <div>
                                 <div className="text-[11px] text-zinc-300 font-sans">Score</div>
-                                <div className="inline-block px-2.5 py-1 rounded-lg bg-zinc-900 border border-white/[0.08] text-white font-bold text-xs">
+                                <div className="inline-block px-2.5 py-1 rounded-lg glass-card border border-white/[0.1] text-white font-bold text-xs">
                                   {item.weightedScore.toFixed(1)} pts
                                 </div>
                               </div>
@@ -1150,7 +1150,7 @@ export default function HomeClient({
           </div>
 
           {/* Telemetry Architecture Overview */}
-          <div className="rounded-3xl border border-white/[0.08] bg-black ambient-glow p-8 sm:p-12 shadow-xs mb-16">
+          <div className="rounded-3xl border border-white/[0.1] bg-black ambient-glow p-8 sm:p-12 shadow-xs mb-16">
             <div className="max-w-3xl mb-10">
               <h3 className="text-2xl sm:text-3xl font-bold font-space text-white tracking-tight">
                 How GetMerged Eliminates Ghost-Town Repositories
@@ -1160,9 +1160,9 @@ export default function HomeClient({
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6 border-t border-white/[0.08] font-sans">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6 border-t border-white/[0.1] font-sans">
               <div className="space-y-2.5">
-                <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-white font-mono font-bold text-xs">
+                <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg glass-card text-white font-mono font-bold text-xs">
                   01
                 </div>
                 <h4 className="font-space text-base font-bold text-white">GraphQL Telemetry Engine</h4>
@@ -1172,7 +1172,7 @@ export default function HomeClient({
               </div>
 
               <div className="space-y-2.5">
-                <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-white font-mono font-bold text-xs">
+                <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg glass-card text-white font-mono font-bold text-xs">
                   02
                 </div>
                 <h4 className="font-space text-lg font-bold text-white">First-Timer Conversion Rate</h4>
@@ -1182,7 +1182,7 @@ export default function HomeClient({
               </div>
 
               <div className="space-y-2.5">
-                <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-white font-mono font-bold text-xs">
+                <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg glass-card text-white font-mono font-bold text-xs">
                   03
                 </div>
                 <h4 className="font-space text-lg font-bold text-white">Verified Contributor Badges</h4>
@@ -1194,7 +1194,7 @@ export default function HomeClient({
           </div>
 
           {/* GitHub Sign-In / Contributor Action Banner */}
-          <div className="rounded-3xl border border-white/[0.08] bg-zinc-900/80 p-8 sm:p-12 text-white shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+          <div className="rounded-3xl border border-white/[0.1] glass-panel p-8 sm:p-12 text-white shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
             <div className="max-w-xl">
               <h3 className="text-2xl sm:text-3xl font-bold font-space tracking-tight leading-tight">
                 Ready to find your next welcoming open-source contribution?
@@ -1213,7 +1213,7 @@ export default function HomeClient({
                     gridEl.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="inline-flex items-center gap-2.5 rounded-xl bg-zinc-900 px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs shrink-0 cursor-pointer"
+                className="inline-flex items-center gap-2.5 rounded-xl glass-card px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs shrink-0 cursor-pointer"
               >
                 <span>Explore Welcoming Repos</span>
                 <ArrowRight className="h-4 w-4" />
@@ -1222,7 +1222,7 @@ export default function HomeClient({
               <button
                 onClick={() => openAuthModal("Sign in to GetMerged", "Sign in to access daily trending repositories, page 2+ pagination, and contributor insights.", "homepage_cta_banner")}
                 title="Sign in to GetMerged"
-                className="inline-flex items-center gap-2.5 rounded-xl bg-zinc-900 px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs shrink-0 cursor-pointer"
+                className="inline-flex items-center gap-2.5 rounded-xl glass-card px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs shrink-0 cursor-pointer"
               >
                 <span>Sign in to GetMerged</span>
                 <ArrowRight className="h-4 w-4" />

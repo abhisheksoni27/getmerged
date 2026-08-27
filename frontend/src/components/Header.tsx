@@ -54,7 +54,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-black/75 backdrop-blur-xl transition-all">
+    <header className="sticky top-0 z-50 w-full border-b border-white/[0.1] bg-black/75 backdrop-blur-xl transition-all">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Brand Logo & Navigation */}
         <div className="flex items-center gap-8 min-w-0 shrink-0">
@@ -108,7 +108,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               type="button"
               onClick={handleOpenSearch}
               aria-label="Search repositories"
-              className="w-full relative flex items-center justify-between h-9 rounded-xl border border-white/[0.08] bg-zinc-900/60 hover:bg-zinc-900/90 hover:border-white/[0.15] px-3 shadow-inner focus-visible:ring-2 focus-visible:ring-orange-500 transition-all cursor-pointer group text-left"
+              className="w-full relative flex items-center justify-between h-9 rounded-xl border border-white/[0.1] glass-card/60 hover:glass-panel hover:border-white/[0.15] px-3 shadow-inner focus-visible:ring-2 focus-visible:ring-orange-500 transition-all cursor-pointer group text-left"
             >
               <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">
                 <Search className="h-3.5 w-3.5 text-zinc-300 group-hover:text-zinc-200 shrink-0 transition-colors" />
@@ -126,9 +126,9 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
         {/* Right Actions */}
         <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
           {authLoading ? (
-            <div className="h-8 w-20 rounded-xl bg-zinc-900 animate-pulse border border-white/[0.05]" />
+            <div className="h-8 w-20 rounded-xl glass-card animate-pulse border border-white/[0.05]" />
           ) : user ? (
-            <div className="flex items-center gap-2.5 bg-zinc-900/80 border border-white/[0.08] rounded-xl px-3 py-1.5 shadow-sm shrink-0 backdrop-blur-md">
+            <div className="flex items-center gap-2.5 glass-panel border border-white/[0.1] rounded-xl px-3 py-1.5 shadow-sm shrink-0 backdrop-blur-md">
               {user.slug ? (
                 <Link
                   href={`/${user.slug}`}
@@ -166,7 +166,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <Link
                 href="/watchlist"
                 title="My Watchlist"
-                className="flex items-center gap-1.5 px-2 py-0.5 text-xs font-sans font-medium text-zinc-300 hover:text-white rounded-lg transition-colors border-l border-white/[0.08] pl-2.5 shrink-0"
+                className="flex items-center gap-1.5 px-2 py-0.5 text-xs font-sans font-medium text-zinc-300 hover:text-white rounded-lg transition-colors border-l border-white/[0.1] pl-2.5 shrink-0"
               >
                 <Bookmark className="h-3.5 w-3.5 text-zinc-300" />
                 <span className="hidden md:inline">Watchlist</span>

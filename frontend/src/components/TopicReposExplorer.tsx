@@ -26,7 +26,7 @@ const chipClass = (active: boolean): string =>
   `inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border border-white/[0.12] cursor-pointer ${
     active
       ? "bg-amber-600 text-white shadow-sm"
-      : "bg-zinc-900/80 text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+      : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
   }`;
 
 export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
@@ -128,14 +128,14 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
           return (
             <div
               key={repo.id}
-              className="dev-card-glow p-5 sm:p-6 rounded-2xl border border-white/[0.08] bg-zinc-900/80 shadow-xs hover:border-white/[0.12] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-5 group"
+              className="dev-card-glow p-5 sm:p-6 rounded-2xl border border-white/[0.1] glass-panel shadow-xs hover:border-white/[0.12] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-5 group"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-2 flex-wrap">
-                  <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-zinc-900 text-white shadow-2xs">
+                  <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md glass-card text-white shadow-2xs">
                     {rank} Tier
                   </span>
-                  <span className="text-xs font-mono bg-zinc-900 text-zinc-300 px-2.5 py-0.5 rounded-md font-medium border border-white/[0.08]/60 flex items-center gap-1.5">
+                  <span className="text-xs font-mono glass-card text-zinc-300 px-2.5 py-0.5 rounded-md font-medium border border-white/[0.1]/60 flex items-center gap-1.5">
                     <LangLogo language={repo.language} />
                     {repo.language || "Multi-language"}
                   </span>
@@ -167,26 +167,26 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
                 )}
 
                 {/* Scorecard telemetry grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 py-2.5 px-3 bg-zinc-900/90 rounded-xl border border-white/[0.08] mt-3 text-center font-mono">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 py-2.5 px-3 glass-panel rounded-xl border border-white/[0.1] mt-3 text-center font-mono">
                   <div>
                     <div className="text-xs font-bold text-white">{(repo.external_pr_merge_rate || 0).toFixed(1)}%</div>
                     <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5 flex items-center justify-center gap-1">
                       <GitPullRequest className="h-2.5 w-2.5 text-blue-500" /> Merge Rate
                     </div>
                   </div>
-                  <div className="border-l border-white/[0.08] pl-2">
+                  <div className="border-l border-white/[0.1] pl-2">
                     <div className="text-xs font-bold text-white">{responseFormatted}</div>
                     <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5 flex items-center justify-center gap-1">
                       <Clock className="h-2.5 w-2.5 text-amber-500" /> First Review
                     </div>
                   </div>
-                  <div className="border-l border-white/[0.08] pl-2">
+                  <div className="border-l border-white/[0.1] pl-2">
                     <div className="text-xs font-bold text-white">{firstTimerRate || "-"}</div>
                     <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5 flex items-center justify-center gap-1">
                       <Sparkles className="h-2.5 w-2.5 text-emerald-500" /> 1st-Timers
                     </div>
                   </div>
-                  <div className="border-l border-white/[0.08] pl-2">
+                  <div className="border-l border-white/[0.1] pl-2">
                     <div className="text-xs font-bold text-white">{repo.bus_factor ?? 0}</div>
                     <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5 flex items-center justify-center gap-1">
                       <Users className="h-2.5 w-2.5 text-purple-500" /> Maintainers
@@ -199,7 +199,7 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
                 <Link
                   href={`/${repo.full_name}`}
                   title={`Open full scorecard for ${repo.full_name}`}
-                  className="px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1.5 transition-all shadow-2xs hover:shadow-xs"
+                  className="px-4 py-2.5 rounded-xl glass-card hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1.5 transition-all shadow-2xs hover:shadow-xs"
                 >
                   View Scorecard <ArrowRight className="h-3.5 w-3.5" />
                 </Link>

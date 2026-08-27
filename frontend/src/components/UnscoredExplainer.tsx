@@ -21,7 +21,7 @@ export function UnscoredExplainer({ fullName, language }: UnscoredExplainerProps
         data-testid="unscored-explainer"
         role="region"
         aria-labelledby={titleId}
-        className="rounded-3xl bg-zinc-900/70 p-6 sm:p-7 border border-white/[0.08] shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-5"
+        className="rounded-3xl glass-card/70 p-6 sm:p-7 border border-white/[0.1] shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-5"
       >
         <div className="flex items-start gap-3.5 max-w-3xl">
           <Info className="h-5 w-5 text-zinc-300 shrink-0 mt-0.5" />
