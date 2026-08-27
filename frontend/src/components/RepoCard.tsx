@@ -255,8 +255,8 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       </div>
 
       {/* Card Footer */}
-      <div className="pt-3 border-t border-zinc-100 flex items-center justify-between gap-2 text-[11px] font-mono text-zinc-500 min-h-[36px]">
-        <div className="flex items-center gap-2 min-w-0">
+      <div className="pt-3 border-t border-zinc-100 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-zinc-500">
+        <div className="flex items-center gap-1.5 min-w-0">
           {gfiCount > 0 ? (
             <span
               role="button"
@@ -273,18 +273,18 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
               className="inline-flex items-center gap-1 text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/80 font-medium text-[10px] sm:text-[11px] hover:bg-emerald-100 transition-colors cursor-pointer shrink-0 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40"
             >
               <ShieldCheck className="h-3 w-3 shrink-0 text-emerald-600" />
-              <span>{gfiLabel}</span>
+              <span>{gfiCount} GFI</span>
             </span>
           ) : repo.is_trending ? (
-            <span className="inline-flex items-center gap-1 text-orange-700 font-medium shrink-0 whitespace-nowrap">
+            <span className="inline-flex items-center gap-1 text-orange-700 font-medium shrink-0 whitespace-nowrap text-[11px]">
               <Flame className="h-3 w-3 fill-orange-500 shrink-0" />
               <span>Trending</span>
             </span>
           ) : (
-            <span className="text-zinc-500 shrink-0 whitespace-nowrap">Telemetry active</span>
+            <span className="text-zinc-400 shrink-0 whitespace-nowrap text-[10px]">Tracked</span>
           )}
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 shrink-0 ml-auto">
           <span
             role="button"
             tabIndex={0}
@@ -293,13 +293,13 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
             aria-label={`Compare ${repo.full_name}`}
             onClick={handleCompareClick}
             onKeyDown={handleCompareKeyDown}
-            className="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-600 hover:text-emerald-700 bg-zinc-100/80 hover:bg-emerald-50 px-2 py-0.5 rounded-md border border-zinc-200/80 transition-colors cursor-pointer shrink-0 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40"
+            className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-medium text-zinc-600 hover:text-emerald-700 bg-zinc-100 hover:bg-emerald-50 px-2 py-0.5 rounded-md border border-zinc-200/80 transition-colors cursor-pointer shrink-0 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40"
           >
             <Scale className="h-3 w-3 shrink-0" />
             <span>Compare</span>
           </span>
-          <span className="font-semibold text-zinc-900 group-hover:text-emerald-600 flex items-center gap-0.5 text-[11px] shrink-0 whitespace-nowrap transition-colors">
-            View details →
+          <span className="font-semibold text-zinc-900 group-hover:text-emerald-600 flex items-center gap-0.5 text-[10px] sm:text-[11px] shrink-0 whitespace-nowrap transition-colors">
+            Details →
           </span>
         </div>
       </div>
