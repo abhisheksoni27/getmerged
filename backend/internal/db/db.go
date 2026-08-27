@@ -392,6 +392,7 @@ func AutoMigrate(db *sqlx.DB) error {
 			quality_score INTEGER DEFAULT 0,
 			bounty_amount_usd DOUBLE NULL,
 			bounty_status VARCHAR(20) NOT NULL DEFAULT 'active',
+			is_open INTEGER NOT NULL DEFAULT 1,
 			created_at DATETIME NOT NULL,
 			synced_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			alert_dedup_key VARCHAR(128) NOT NULL DEFAULT '',
@@ -1101,6 +1102,51 @@ func AutoMigrate(db *sqlx.DB) error {
 			cnt INTEGER NOT NULL DEFAULT 0,
 			PRIMARY KEY(user_id, day)
 		);`,
+		// Repo Boost: paid featured placement (AC1-AC8). One row per Stripe
+		// PaymentIntent; activation happens only on the verified
+		// payment_intent.succeeded webhook. status: pending | active | cancelled | stale.
+		`CREATE TABLE IF NOT EXISTS repo_boosts (
+			payment_intent_id VARCHAR(255) PRIMARY KEY,
+			user_id BIGINT NOT NULL,
+			repository_id VARCHAR(255) NOT NULL,
+			amount_cents BIGINT NOT NULL DEFAULT 0,
+			currency VARCHAR(8) NOT NULL DEFAULT 'usd',
+			status VARCHAR(20) NOT NULL DEFAULT 'pending',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			activated_at DATETIME NULL,
+			expires_at DATETIME NOT NULL,
+			updated_at DATETIME NULL
+		);`,
+		`CREATE TABLE IF NOT EXISTS repo_boost_issues (
+			payment_intent_id VARCHAR(255) NOT NULL,
+			repository_id VARCHAR(255) NOT NULL,
+			issue_number INTEGER NOT NULL,
+			PRIMARY KEY(payment_intent_id, issue_number)
+		);`,
+		`CREATE TABLE IF NOT EXISTS repo_boost_orders (
+			order_id VARCHAR(64) PRIMARY KEY,
+			user_id BIGINT NOT NULL,
+			repository_id VARCHAR(255) NOT NULL,
+			issue_numbers TEXT NULL,
+			amount_cents BIGINT NOT NULL DEFAULT 0,
+			currency VARCHAR(8) NOT NULL DEFAULT 'usd',
+			payment_intent_id VARCHAR(255) NULL,
+			stripe_client_secret VARCHAR(255) NULL,
+			status VARCHAR(20) NOT NULL DEFAULT 'pending',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NULL
+		);`,
+		// Webhook event-id cache (AC2): replay rejection within the 24h window.
+		`CREATE TABLE IF NOT EXISTS repo_boost_events (
+			event_id VARCHAR(255) PRIMARY KEY,
+			received_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
+		// Per-user serialization lock backing the checkout guard (AC5). The row
+		// is write-locked (SELECT...FOR UPDATE / UPDATE) so two concurrent
+		// checkouts cannot both pass the max-active + daily-spend guard.
+		`CREATE TABLE IF NOT EXISTS repo_boost_locks (
+			user_id BIGINT PRIMARY KEY
+		);`,
 	}
 
 	for i, stmt := range statements {
@@ -1201,6 +1247,14 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_maintainer_claims_user ON maintainer_sla_claims(user_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_maintainer_claims_active ON maintainer_sla_claims(revoked, verified)`,
 		`CREATE INDEX IF NOT EXISTS idx_maintainer_interest_repo ON maintainer_repo_interest_events(repo_full_name, created_at)`,
+		// Repo Boost lookups (AC4/AC5/AC7): active boosts by user + expiry, and
+		// the per-issue join used by the read-time sponsored filter.
+		`CREATE INDEX IF NOT EXISTS idx_repo_boosts_user ON repo_boosts(user_id, expires_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_repo_boosts_expiry ON repo_boosts(status, expires_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_repo_boost_issues_repo ON repo_boost_issues(repository_id, issue_number)`,
+		`CREATE INDEX IF NOT EXISTS idx_repo_boost_orders_user ON repo_boost_orders(user_id, status, created_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_repo_boost_locks_user ON repo_boost_locks(user_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_gfi_open ON repo_good_first_issues(repository_id, issue_number, is_open)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)

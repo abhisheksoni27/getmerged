@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -32,7 +33,16 @@ type Config struct {
 	TelegramChatID            string
 	DodopaymentsWebhookSecret string
 	DodopaymentsAPIKey        string
-	JobSecret                 string
+	// Stripe (Repo Boost — paid featured placement, AC1-AC8).
+	StripeSecretKey        string
+	StripeWebhookSecret    string
+	StripePublishableKey   string
+	StripeBaseURL          string
+	RepoBoostPriceCents    int64
+	RepoBoostWindowDays    int
+	RepoBoostMaxActive     int
+	RepoBoostDailySpendCap int64
+	JobSecret              string
 	SMTPHost                  string
 	SMTPPort                  string
 	SMTPUser                  string
@@ -80,6 +90,10 @@ func Load() (*Config, error) {
 		TelegramChatID:            os.Getenv("TELEGRAM_CHAT_ID"),
 		DodopaymentsWebhookSecret: os.Getenv("DODOPAYMENTS_WEBHOOK_SECRET"),
 		DodopaymentsAPIKey:        os.Getenv("DODOPAYMENTS_API_KEY"), // optional - enables hourly pack-purchase reconcile
+		StripeSecretKey:           os.Getenv("STRIPE_SECRET_KEY"),
+		StripeWebhookSecret:       os.Getenv("STRIPE_WEBHOOK_SECRET"),
+		StripePublishableKey:      os.Getenv("STRIPE_PUBLISHABLE_KEY"),
+		StripeBaseURL:             os.Getenv("STRIPE_BASE_URL"),
 		GoogleClientID:            os.Getenv("GOOGLE_CLIENT_ID"),
 		GoogleClientSecret:        os.Getenv("GOOGLE_CLIENT_SECRET"),
 		JobSecret:                 os.Getenv("JOB_SECRET"),
@@ -161,6 +175,29 @@ func Load() (*Config, error) {
 	}
 	if c.AlertDropThreshold <= 0 {
 		c.AlertDropThreshold = 5
+	}
+
+	// Repo Boost monetization defaults (AC5/AC8): $9 one-time for 7 days of
+	// featured placement, max 3 concurrent active boosts, $30/day spend cap.
+	c.StripeBaseURL = strings.TrimRight(c.StripeBaseURL, "/")
+	if c.StripeBaseURL == "" {
+		c.StripeBaseURL = "https://api.stripe.com"
+	}
+	c.RepoBoostPriceCents, _ = strconv.ParseInt(os.Getenv("REPO_BOOST_PRICE_CENTS"), 10, 64)
+	if c.RepoBoostPriceCents <= 0 {
+		c.RepoBoostPriceCents = 900
+	}
+	c.RepoBoostWindowDays, _ = strconv.Atoi(os.Getenv("REPO_BOOST_WINDOW_DAYS"))
+	if c.RepoBoostWindowDays <= 0 {
+		c.RepoBoostWindowDays = 7
+	}
+	c.RepoBoostMaxActive, _ = strconv.Atoi(os.Getenv("REPO_BOOST_MAX_ACTIVE"))
+	if c.RepoBoostMaxActive <= 0 {
+		c.RepoBoostMaxActive = 3
+	}
+	c.RepoBoostDailySpendCap, _ = strconv.ParseInt(os.Getenv("REPO_BOOST_DAILY_SPEND_CAP_CENTS"), 10, 64)
+	if c.RepoBoostDailySpendCap <= 0 {
+		c.RepoBoostDailySpendCap = 3000
 	}
 
 	required := map[string]*string{

@@ -9,6 +9,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/auth"
@@ -170,10 +171,15 @@ func (w *contributorDNAWorker) AnalyzeUser(ctx context.Context, userID int64) er
 		return errors.New("profiling consent not granted")
 	}
 
-	// 2. Claim pending job
+	// 2. Claim pending job (or mark processing if invoked directly)
 	claimed, err := w.profileRepo.ClaimPendingJob(ctx, userID)
-	if err != nil || !claimed {
-		return nil // Already processing or not pending
+	if err != nil {
+		return err
+	}
+	if !claimed {
+		// If not pending, request/initialize a run
+		_, _ = w.profileRepo.RequestRefresh(ctx, userID)
+		claimed, _ = w.profileRepo.ClaimPendingJob(ctx, userID)
 	}
 
 	// 3. Resolve GitHub token (User decrypted token -> Fallback to App Global Token)
@@ -188,6 +194,30 @@ func (w *contributorDNAWorker) AnalyzeUser(ctx context.Context, userID int64) er
 	}
 
 	login := user.Username
+	// Resolve GitHub login handle if user token is valid
+	if token != "" {
+		ghUserReq, err := http.NewRequestWithContext(ctx, "GET", "https://api.github.com/user", nil)
+		if err == nil {
+			ghUserReq.Header.Set("Authorization", "Bearer "+token)
+			ghUserReq.Header.Set("User-Agent", "opendoor-dna-worker")
+			ghUserResp, err := w.httpClient.Do(ghUserReq)
+			if err == nil && ghUserResp.StatusCode == http.StatusOK {
+				var uData struct {
+					Login string `json:"login"`
+				}
+				if json.NewDecoder(ghUserResp.Body).Decode(&uData) == nil && uData.Login != "" {
+					login = uData.Login
+				}
+				ghUserResp.Body.Close()
+			}
+		}
+	}
+	if login == "" || strings.Contains(login, " ") {
+		if user.Slug != nil && *user.Slug != "" {
+			login = *user.Slug
+		}
+	}
+
 	searchQuery := fmt.Sprintf("author:%s type:pr is:merged", login)
 
 	reqPayload := map[string]interface{}{
