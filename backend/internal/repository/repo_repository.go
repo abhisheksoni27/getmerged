@@ -12,25 +12,25 @@ import (
 )
 
 type RepoRecord struct {
-	ID                       string  `db:"id" json:"id"`
-	FullName                 string  `db:"full_name" json:"full_name"`
-	Language                 string  `db:"language" json:"language"`
-	Stars                    int     `db:"stars" json:"stars"`
-	Description              string  `db:"description" json:"description"`
-	GithubURL                string  `db:"github_url" json:"github_url"`
-	CRankTier                string  `db:"c_rank_tier" json:"c_rank_tier"`
-	CRankScore               float64 `db:"c_rank_score" json:"c_rank_score"`
-	ScoreSource              string  `db:"score_source" json:"score_source"`
-	ExternalPRMergeRate      float64 `db:"external_pr_merge_rate" json:"external_pr_merge_rate"`
-	TimeToFirstResponseHours float64 `db:"time_to_first_response_hours" json:"time_to_first_response_hours"`
-	TimeToMergeHours         float64 `db:"time_to_merge_hours" json:"time_to_merge_hours"`
-	FirstTimerSuccessRate    float64 `db:"first_timer_success_rate" json:"first_timer_success_rate"`
-	RepeatContributorRate    float64 `db:"repeat_contributor_rate" json:"repeat_contributor_rate"`
-	MaintainerResponsiveness float64 `db:"maintainer_responsiveness" json:"maintainer_responsiveness"`
-	LastActivityDays         float64 `db:"last_activity_days" json:"last_activity_days"`
-	ReviewRounds             float64 `db:"review_rounds" json:"review_rounds"`
-	DistinctMaintainerCount  float64 `db:"distinct_maintainer_count" json:"distinct_maintainer_count"`
-	BusFactor                int     `db:"bus_factor" json:"bus_factor"`
+	ID                       string    `db:"id" json:"id"`
+	FullName                 string    `db:"full_name" json:"full_name"`
+	Language                 string    `db:"language" json:"language"`
+	Stars                    int       `db:"stars" json:"stars"`
+	Description              string    `db:"description" json:"description"`
+	GithubURL                string    `db:"github_url" json:"github_url"`
+	CRankTier                string    `db:"c_rank_tier" json:"c_rank_tier"`
+	CRankScore               float64   `db:"c_rank_score" json:"c_rank_score"`
+	ScoreSource              string    `db:"score_source" json:"score_source"`
+	ExternalPRMergeRate      float64   `db:"external_pr_merge_rate" json:"external_pr_merge_rate"`
+	TimeToFirstResponseHours float64   `db:"time_to_first_response_hours" json:"time_to_first_response_hours"`
+	TimeToMergeHours         float64   `db:"time_to_merge_hours" json:"time_to_merge_hours"`
+	FirstTimerSuccessRate    float64   `db:"first_timer_success_rate" json:"first_timer_success_rate"`
+	RepeatContributorRate    float64   `db:"repeat_contributor_rate" json:"repeat_contributor_rate"`
+	MaintainerResponsiveness float64   `db:"maintainer_responsiveness" json:"maintainer_responsiveness"`
+	LastActivityDays         float64   `db:"last_activity_days" json:"last_activity_days"`
+	ReviewRounds             float64   `db:"review_rounds" json:"review_rounds"`
+	DistinctMaintainerCount  float64   `db:"distinct_maintainer_count" json:"distinct_maintainer_count"`
+	BusFactor                int       `db:"bus_factor" json:"bus_factor"`
 	StalenessFlag            bool      `db:"staleness_flag" json:"staleness_flag"`
 	SnapshotDate             string    `db:"snapshot_date" json:"snapshot_date"`
 	GoodFirstIssueCount      int       `db:"good_first_issue_count" json:"good_first_issue_count"`
@@ -98,6 +98,7 @@ type RepoRepository interface {
 	UpsertTopics(ctx context.Context, repoID string, topics []string) error
 	GetTopicsByRepoID(ctx context.Context, repoID string) ([]string, error)
 	GetAllDistinctTopics(ctx context.Context) ([]string, error)
+	TopicExists(ctx context.Context, topic string) (bool, error)
 	GetAllTopicStats(ctx context.Context) ([]TopicStat, error)
 	GetMaintainerEvents(ctx context.Context, repoID string) ([]scoring.MaintainerEvent, error)
 }
@@ -395,6 +396,18 @@ func (r *sqlxRepoRepository) GetAllDistinctTopics(ctx context.Context) ([]string
 		ORDER BY COUNT(t.repository_id) DESC, t.topic ASC
 	`)
 	return topics, err
+}
+
+// TopicExists reports whether the given topic is present in the GFI topic
+// taxonomy (repository_topics). Used to validate feed filters (AC4) so that
+// unknown topics fall back to "no filter" instead of returning an empty set.
+func (r *sqlxRepoRepository) TopicExists(ctx context.Context, topic string) (bool, error) {
+	var n int
+	err := r.db.GetContext(ctx, &n, `SELECT COUNT(1) FROM repository_topics WHERE topic = ?`, topic)
+	if err != nil {
+		return false, err
+	}
+	return n > 0, nil
 }
 
 // GetAllTopicStats returns distinct topics with repository count and average merge rate, ordered by popularity.

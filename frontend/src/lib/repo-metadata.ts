@@ -24,11 +24,19 @@ export function buildRepoMetadata(fullName: string, repo: Repo | null): RepoMeta
 
   const score = repo.c_rank_score !== undefined ? repo.c_rank_score.toFixed(1) : "0.0";
   const tier = repo.c_rank_tier || "D";
+  const mergeRate = (repo.external_pr_merge_rate || 0).toFixed(1);
+  const respHours = (repo.response_p50_hours && repo.response_p50_hours > 0 ? repo.response_p50_hours : (repo.time_to_first_response_hours || 0)).toFixed(1);
+  const firstTimerRate = (repo.first_timer_success_rate || 0).toFixed(1);
+  const busFactor = repo.bus_factor || 1;
+  const gfiCount = repo.good_first_issue_count || 0;
 
   const title = `${fullName} Contributor Review & C-Rank™: ${score}/100 (${tier} Tier) | GetMerged`;
+  
+  const metricsSnippet = `scored ${score}/100 (${tier} Tier) on C-Rank™ with ${mergeRate}% PR merge rate, ${respHours}h review response, ${firstTimerRate}% first-timer acceptance, bus factor of ${busFactor}${gfiCount > 0 ? `, and ${gfiCount} open good-first-issues` : ""}.`;
+  
   const description = repo.description
-    ? `${fullName} scored ${score}/100 (${tier} Tier) on C-Rank™. Maintainer response time: ${(repo.time_to_first_response_hours || 0).toFixed(1)}h, PR merge rate: ${(repo.external_pr_merge_rate || 0).toFixed(1)}%. ${repo.description}`
-    : `Contributor reviews and open source health metrics for ${fullName}. View maintainer response times, PR merge rates, and first-timer success on GetMerged.`;
+    ? `${fullName} ${metricsSnippet} ${repo.description.trim()}`
+    : `${fullName} contributor review: ${metricsSnippet} View maintainer responsiveness, review turnaround, and acceptance probability on GetMerged.`;
 
   return { title, description };
 }
