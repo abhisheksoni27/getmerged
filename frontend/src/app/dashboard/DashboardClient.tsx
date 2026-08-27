@@ -110,7 +110,7 @@ interface DashboardData {
 }
 
 function fmtHours(h: number | null | undefined): string {
-  if (h === null || h === undefined) return "—";
+  if (h === null || h === undefined) return " - ";
   if (h < 1) return `${Math.round(h * 60)}m`;
   if (h < 48) return `${h.toFixed(1)}h`;
   return `${(h / 24).toFixed(1)}d`;
@@ -157,7 +157,7 @@ export function DashboardClient() {
     };
   }, []);
 
-  // AC2: Share profile flow — prompt to go public first when needed, then
+  // AC2: Share profile flow - prompt to go public first when needed, then
   // share/copy /u/<username>. Copy failure surfaces a visible URL (AC4).
   async function setProfileVisibility(isPublic: boolean): Promise<void> {
     setUpdatingVisibility(true);
@@ -217,7 +217,7 @@ export function DashboardClient() {
     if (sharing) return;
     const slug = me?.slug || (me?.username ? me.username.toLowerCase() : "");
     if (!slug) {
-      setToast({ kind: "error", msg: "Profile unavailable — try reloading the page." });
+      setToast({ kind: "error", msg: "Profile unavailable - try reloading the page." });
       return;
     }
     setSharing(true);
@@ -236,7 +236,7 @@ export function DashboardClient() {
       } else if (result === "copied") {
         setToast({ kind: "success", msg: "Profile link copied to clipboard" });
       } else {
-        setToast({ kind: "error", msg: `Copy failed — your link: ${url}` });
+        setToast({ kind: "error", msg: `Copy failed - your link: ${url}` });
       }
     } catch (e) {
       setToast({ kind: "error", msg: e instanceof Error ? e.message : "Could not share profile link" });
@@ -392,7 +392,7 @@ export function DashboardClient() {
         <div className="mb-4 rounded-xl border border-amber-300 bg-amber-50 p-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-sm text-amber-900">
             <WifiOff className="h-4 w-4 shrink-0" />
-            GitHub connection expired — background syncing paused.
+            GitHub connection expired - background syncing paused.
           </div>
           <button
             onClick={reconnect}
@@ -407,7 +407,7 @@ export function DashboardClient() {
       {conn?.limited && (
         <div className="mb-4 rounded-xl border border-sky-200 bg-sky-50 p-3 text-xs text-sky-800 flex items-center gap-2">
           <Clock className="h-3.5 w-3.5 shrink-0" />
-          GitHub API rate limit hit — showing cached data. Live sync resumes automatically.
+          GitHub API rate limit hit - showing cached data. Live sync resumes automatically.
         </div>
       )}
 
@@ -516,7 +516,7 @@ export function DashboardClient() {
                       href="/pricing"
                       className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-700 hover:text-emerald-700"
                     >
-                      <Lock className="h-3 w-3" /> Acceptance forecast — unlock with Pro
+                      <Lock className="h-3 w-3" /> Acceptance forecast - unlock with Pro
                     </Link>
                   ) : null}
                 </div>

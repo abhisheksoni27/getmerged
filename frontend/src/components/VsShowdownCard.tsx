@@ -191,7 +191,7 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
           readOnly
           value={shareUrl}
           onFocus={(e) => e.target.select()}
-          aria-label="Comparison share link — select and copy manually"
+          aria-label="Comparison share link - select and copy manually"
           className="mt-3 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 font-mono text-xs text-zinc-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
         />
       )}

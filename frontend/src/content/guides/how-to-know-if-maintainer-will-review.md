@@ -16,7 +16,7 @@ jsonld: |
         "@type": "Article",
         "@id": "https://getmerged.abhishekco.de/guides/how-to-know-if-maintainer-will-review#article",
         "headline": "GitHub Maintainer Response Time: 5 Signals That Predict Whether Your PR Gets Reviewed",
-        "description": "Five measurable signals — p50 latency, activity pulse, review density, discussion triage, maintainer breadth — that predict PR review before you write code.",
+        "description": "Five measurable signals - p50 latency, activity pulse, review density, discussion triage, maintainer breadth - that predict PR review before you write code.",
         "author": { "@type": "Person", "name": "Abhishek Soni" },
         "publisher": { "@type": "Organization", "name": "GetMerged" },
         "datePublished": "2026-08-23",

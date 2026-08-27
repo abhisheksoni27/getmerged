@@ -43,9 +43,9 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
 
   if (failed || !playbook) return null;
 
-  const tier = playbook.c_rank_tier || "—";
+  const tier = playbook.c_rank_tier || " - ";
 
-  // AC2: unauthenticated visitors get only repo name + C-Rank tier — no
+  // AC2: unauthenticated visitors get only repo name + C-Rank tier - no
   // per-metric detail. A compact locked card still converts badge traffic.
   if (playbook.locked) {
     return (
@@ -101,7 +101,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
       </div>
 
       <p className="text-xs sm:text-sm text-zinc-700 leading-relaxed mb-4">
-        Quantified gaps from live telemetry — each row shows your current value against the
+        Quantified gaps from live telemetry - each row shows your current value against the
         S-tier target and the one fix that closes it. Maintainers can verify ownership to unlock
         automated re-scores and a before/after share card.
       </p>

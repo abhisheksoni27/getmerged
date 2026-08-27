@@ -80,7 +80,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
   const isReady = verdict.toUpperCase().includes("READY");
 
   // Verified outcome (AC1-AC4): null degrades to the static snapshot with
-  // 'Outcome unavailable' — no crash, no wrong data.
+  // 'Outcome unavailable' - no crash, no wrong data.
   const outcome = await getEvalOutcome(id);
   const verdictView = formatVerdict(outcome);
   const accuracyView = formatAccuracy(outcome);
@@ -196,7 +196,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
                     {outcome?.creator_login && (
                       <span className="mr-2">@{outcome.creator_login}</span>
                     )}
-                    {accuracyView ? accuracyView.label : "—"}
+                    {accuracyView ? accuracyView.label : " - "}
                   </div>
                 </>
               ) : (

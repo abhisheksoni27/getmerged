@@ -30,7 +30,7 @@ interface OrgConsolePayload {
 }
 
 function percentileLabel(pct: number | undefined): string {
-  if (typeof pct !== "number" || Number.isNaN(pct)) return "—";
+  if (typeof pct !== "number" || Number.isNaN(pct)) return " - ";
   return `Top ${Math.max(1, Math.round(100 - pct))}%`;
 }
 
@@ -75,7 +75,7 @@ export function OrgConsoleCard({ org }: { org: string }) {
   if (!data.has_data) {
     return (
       <div className="mb-8 p-6 rounded-2xl border border-zinc-200/80 bg-white text-center">
-        <p className="text-sm text-zinc-600 font-sans">No data — metrics are not available for any {org} repository yet.</p>
+        <p className="text-sm text-zinc-600 font-sans">No data - metrics are not available for any {org} repository yet.</p>
       </div>
     );
   }
@@ -131,7 +131,7 @@ export function OrgConsoleCard({ org }: { org: string }) {
         </p>
       )}
       {data.entitled && !data.peer_benchmarks && (
-        <p className="mt-4 text-xs font-mono text-zinc-500">Not enough peers yet — benchmarks unlock at 10+ ranked orgs.</p>
+        <p className="mt-4 text-xs font-mono text-zinc-500">Not enough peers yet - benchmarks unlock at 10+ ranked orgs.</p>
       )}
       {!data.entitled && (
         <p className="mt-4 text-xs font-mono text-zinc-600">

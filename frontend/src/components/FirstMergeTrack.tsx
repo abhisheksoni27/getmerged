@@ -635,7 +635,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
         const e = err as Error & { rateLimited?: boolean; needsAuth?: boolean };
         if (e.rateLimited) {
           // 429 backoff: wait 60s then retry the same item.
-          setMigrationStatus("Rate limited — backing off before retrying…");
+          setMigrationStatus("Rate limited - backing off before retrying…");
           await new Promise((r) => setTimeout(r, 60000));
           continue;
         }
@@ -744,7 +744,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
       if (e.rateLimited) {
         setClaimState({
           posting: false,
-          error: "Too many claim comments — please wait a few minutes and try again.",
+          error: "Too many claim comments - please wait a few minutes and try again.",
           result: null,
         });
         return;
@@ -1548,7 +1548,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                   PR was closed without merging
                 </div>
                 <p className="mt-1 text-red-700 leading-relaxed">
-                  Don&apos;t worry — open source contributions often take multiple tries. You can pick another issue or repo and try again with Preflight checks.
+                  Don&apos;t worry - open source contributions often take multiple tries. You can pick another issue or repo and try again with Preflight checks.
                 </p>
                 <div className="mt-3">
                   <button

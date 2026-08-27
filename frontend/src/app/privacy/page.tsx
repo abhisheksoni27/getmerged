@@ -104,7 +104,7 @@ export default function PrivacyPolicyPage() {
               the identity provider, scoped to the minimum needed:
             </p>
             <ul className="list-disc pl-5 space-y-2 mt-2">
-              <li><strong>GitHub sign-in:</strong> your public GitHub profile ID, username, email address, and avatar URL. We request the <code>user:email</code> scope only — no access to your private repositories.</li>
+              <li><strong>GitHub sign-in:</strong> your public GitHub profile ID, username, email address, and avatar URL. We request the <code>user:email</code> scope only - no access to your private repositories.</li>
               <li><strong>Google sign-in:</strong> your Google account ID, name, email address, and profile picture, via the <code>openid email profile</code> scopes.</li>
             </ul>
             <p className="mt-2">
@@ -128,8 +128,8 @@ export default function PrivacyPolicyPage() {
 
             <h3 className="mt-4 text-sm font-bold font-space text-zinc-900 mb-2">d) Public GitHub Data</h3>
             <p>
-              We collect <strong>public</strong> GitHub data — repository metadata, pull request and issue comment text,
-              merge rates, and response times — to compute C-Rank™ scores. This data is publicly available on GitHub and
+              We collect <strong>public</strong> GitHub data - repository metadata, pull request and issue comment text,
+              merge rates, and response times - to compute C-Rank™ scores. This data is publicly available on GitHub and
               is processed for scoring and AI-generated insights. Public comment text may include the usernames of
               comment authors.
             </p>
@@ -234,9 +234,9 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-lg font-bold font-space text-zinc-900 mb-3">7. Cookies, Consent & Analytics</h2>
             <h3 className="mt-4 text-sm font-bold font-space text-zinc-900 mb-2">Essential cookies</h3>
             <ul className="list-disc pl-5 space-y-2 mt-2">
-              <li><strong><code>opendoor_token</code></strong> — a session cookie that keeps you signed in (7-day lifetime). This is strictly necessary for authentication.</li>
-              <li><strong><code>opendoor_consent</code></strong> — records your analytics choice (accepted: 1 year; rejected: 90 days) so we can honor it across visits.</li>
-              <li><strong>Session storage</strong> — a temporary scroll-position value used only during a session.</li>
+              <li><strong><code>opendoor_token</code></strong> - a session cookie that keeps you signed in (7-day lifetime). This is strictly necessary for authentication.</li>
+              <li><strong><code>opendoor_consent</code></strong> - records your analytics choice (accepted: 1 year; rejected: 90 days) so we can honor it across visits.</li>
+              <li><strong>Session storage</strong> - a temporary scroll-position value used only during a session.</li>
             </ul>
 
             <h3 className="mt-4 text-sm font-bold font-space text-zinc-900 mb-2">Analytics & consent</h3>
@@ -245,8 +245,8 @@ export default function PrivacyPolicyPage() {
               <strong> begins capturing events only after you accept</strong> via the cookie banner. You can:
             </p>
             <ul className="list-disc pl-5 space-y-2 mt-2">
-              <li><strong>Accept</strong> — analytics run to help us improve the Platform.</li>
-              <li><strong>Reject</strong> — no analytics events are captured; core functionality, including sign-in and watchlists, is unaffected.</li>
+              <li><strong>Accept</strong> - analytics run to help us improve the Platform.</li>
+              <li><strong>Reject</strong> - no analytics events are captured; core functionality, including sign-in and watchlists, is unaffected.</li>
               <li>Change your choice at any time by clearing the <code>opendoor_consent</code> cookie (the banner will reappear) or blocking the <code>/ingest</code> endpoint.</li>
             </ul>
             <p className="mt-2">

@@ -48,7 +48,7 @@ export function LangDigestSignup({ language, languageName }: LangDigestSignupPro
       if (res.ok) {
         setStatus("success");
         setMessage(
-          "Check your inbox — we sent a confirmation link. Click it to start receiving the weekly digest."
+          "Check your inbox - we sent a confirmation link. Click it to start receiving the weekly digest."
         );
         setEmail("");
       } else {
@@ -86,7 +86,7 @@ export function LangDigestSignup({ language, languageName }: LangDigestSignupPro
         Get this week&apos;s top welcoming repos + fresh Good First Issues for {languageName}
       </h3>
       <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed mb-4 font-sans">
-        Free weekly email, scoped to {languageName}. No account needed — confirm once and
+        Free weekly email, scoped to {languageName}. No account needed - confirm once and
         unsubscribe anytime.
       </p>
       <form onSubmit={handleSubmit} noValidate className="flex flex-col sm:flex-row gap-2.5">

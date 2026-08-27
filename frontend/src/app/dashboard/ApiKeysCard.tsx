@@ -128,7 +128,7 @@ export function ApiKeysCard() {
         <div className="mb-4 rounded-lg border border-emerald-300 bg-emerald-50 p-3">
           <div className="flex items-center gap-2 text-xs font-semibold text-emerald-900 mb-2">
             <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-            Copy your key now — it will never be shown again.
+            Copy your key now - it will never be shown again.
           </div>
           <div className="flex items-center gap-2">
             <code className="flex-1 truncate rounded-md bg-white border border-emerald-200 px-2 py-1.5 text-xs text-zinc-800">

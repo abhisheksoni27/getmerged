@@ -148,8 +148,8 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
 
   const handleShare = useCallback(async () => {
     const text = verdict?.headline
-      ? `${verdict.headline} — ${shareURL}`
-      : `C-Rank verdict for ${fullName} — ${shareURL}`;
+      ? `${verdict.headline} - ${shareURL}`
+      : `C-Rank verdict for ${fullName} - ${shareURL}`;
     try {
       const nav = typeof navigator !== "undefined" ? navigator : undefined;
       if (nav && typeof nav.share === "function") {
@@ -178,7 +178,7 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
             Run an instant C-Rank check on {fullName}
           </h3>
           <p className="text-xs font-sans text-zinc-700 mt-1 leading-relaxed max-w-2xl">
-            We score this repo live from GitHub&apos;s public pull-request history — usually in under
+            We score this repo live from GitHub&apos;s public pull-request history - usually in under
             30 seconds. Results are cached for 24 hours and refreshed when new commits land.
           </p>
         </div>
@@ -215,7 +215,7 @@ export function InstantScanPanel({ fullName }: InstantScanPanelProps) {
           <Clock className="h-4 w-4 shrink-0 text-amber-700" />
           <span>
             {status.message ||
-              "Scoring queued — GitHub API quota is saturated. This repo will be scored automatically."}
+              "Scoring queued - GitHub API quota is saturated. This repo will be scored automatically."}
           </span>
         </div>
       )}

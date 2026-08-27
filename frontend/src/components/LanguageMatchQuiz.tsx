@@ -133,7 +133,7 @@ export function LanguageMatchQuiz() {
       {!data && !error && (
         <>
           <p className="mt-2 text-sm text-zinc-600">
-            Pick 2-3 languages you know — we&apos;ll instantly match you with top-ranked,
+            Pick 2-3 languages you know - we&apos;ll instantly match you with top-ranked,
             beginner-welcoming repositories and live good first issues.
           </p>
 
@@ -195,7 +195,7 @@ export function LanguageMatchQuiz() {
         </>
       )}
 
-      {/* Fetch/network failure fallback — never crashes, always offers a path */}
+      {/* Fetch/network failure fallback - never crashes, always offers a path */}
       {error && (
         <div className="mt-4 rounded-xl border border-dashed border-amber-300 bg-white/70 p-6 text-center">
           <p className="text-sm text-zinc-600">Matching is unavailable right now.</p>

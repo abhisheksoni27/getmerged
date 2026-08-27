@@ -153,7 +153,7 @@ function FixActions({ fix }: { fix: Fix }) {
           data-testid={`copy-error-${fix.type}`}
           className="text-[10px] font-mono text-rose-600"
         >
-          Copy failed — select the text manually.
+          Copy failed - select the text manually.
         </span>
       ) : null}
       {fix.apply_method === "clipboard_deeplink" && fix.apply_url ? (
@@ -517,7 +517,7 @@ function PreflightContent() {
                 href="/pricing"
                 className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all cursor-pointer shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
-                Subscribe — $9/mo
+                Subscribe - $9/mo
               </Link>
               <button
                 type="button"
@@ -552,17 +552,17 @@ function PreflightContent() {
           {packWatch === "granted" ? (
             <>
               <span className="font-semibold text-zinc-900">10 credits added.</span> Your pack
-              credits are ready — re-run your evaluation now.
+              credits are ready - re-run your evaluation now.
             </>
           ) : packWatch === "failed" ? (
             <>
               <span className="font-semibold text-zinc-900">Payment not completed.</span> You were
-              not charged for a pack — you can retry the purchase anytime from the paywall.
+              not charged for a pack - you can retry the purchase anytime from the paywall.
             </>
           ) : (
             <>
               <span className="font-semibold text-zinc-900">Payment processing.</span> Credits may
-              take a minute to appear — re-run your evaluation shortly. Not credited within 24
+              take a minute to appear - re-run your evaluation shortly. Not credited within 24
               hours? Contact support for a refund or manual grant.
             </>
           )}

@@ -281,7 +281,7 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
               type="button"
               onClick={handleToggleAlertsClick}
               aria-label={alertsOn ? `Disable C-Rank alerts for ${repo.full_name}` : `Enable C-Rank alerts for ${repo.full_name}`}
-              title={alertsOn ? "Email alerts on — click to mute" : "Email alerts off — click to enable"}
+              title={alertsOn ? "Email alerts on - click to mute" : "Email alerts off - click to enable"}
               data-testid={`alerts-toggle-${ownerPart}-${namePart}`}
               className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
                 alertsOn
@@ -497,7 +497,7 @@ function WebhookChannels() {
                 {!wh.enabled && (
                   <span
                     className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-50 text-red-800 border border-red-200/90 font-mono text-[10px] font-semibold shrink-0"
-                    title="Auto-disabled after repeated delivery failures — re-add it to resume alerts"
+                    title="Auto-disabled after repeated delivery failures - re-add it to resume alerts"
                   >
                     <AlertTriangle className="h-3 w-3" />
                     Disabled

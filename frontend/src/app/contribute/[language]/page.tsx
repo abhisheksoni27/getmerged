@@ -55,7 +55,7 @@ function buildMetadata(language: string, level: string): Metadata {
   const audience =
     level === "experienced" ? "Experienced Developers" : "Beginners";
   const title = `Best ${canonicalLang} Open Source Repositories for ${audience} | GetMerged`;
-  const description = `Hand-picked ${canonicalLang} GitHub repositories matched to ${level === "experienced" ? "experienced" : "first-time"} contributors — ranked by real merge rates, maintainer response times, and first-PR success.`;
+  const description = `Hand-picked ${canonicalLang} GitHub repositories matched to ${level === "experienced" ? "experienced" : "first-time"} contributors - ranked by real merge rates, maintainer response times, and first-PR success.`;
 
   return {
     title,

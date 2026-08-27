@@ -72,7 +72,7 @@ function buildChecklist(title: string, files: string, lines: string, summary: st
         t.length === 0
           ? "Add a descriptive title."
           : t.length < 10
-            ? "Title is too short — describe what changes and why."
+            ? "Title is too short - describe what changes and why."
             : "Trim the title to under 70 characters.",
       weight: 15,
     },
@@ -143,7 +143,7 @@ export default function PrReadinessPage() {
     score >= 80
       ? { label: "Very likely accepted", color: "text-emerald-600", bar: "bg-emerald-500" }
       : score >= 55
-        ? { label: "Promising — polish a few items", color: "text-amber-600", bar: "bg-amber-500" }
+        ? { label: "Promising - polish a few items", color: "text-amber-600", bar: "bg-amber-500" }
         : score > 0
           ? { label: "Needs work before opening", color: "text-orange-600", bar: "bg-orange-500" }
           : { label: "Start filling in details", color: "text-zinc-500", bar: "bg-zinc-400" };
@@ -159,7 +159,7 @@ export default function PrReadinessPage() {
           PR Readiness Simulator
         </h1>
         <p className="mt-2 text-zinc-600">
-          Paste your PR title, diff size, summary, or issue link — get an instant acceptance score
+          Paste your PR title, diff size, summary, or issue link - get an instant acceptance score
           and a tailored checklist before you open the PR.
         </p>
 

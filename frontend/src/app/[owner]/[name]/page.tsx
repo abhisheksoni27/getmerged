@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!repo) {
     return {
-      title: `Scan ${fullName} — Instant C-Rank Check | GetMerged`,
+      title: `Scan ${fullName} - Instant C-Rank Check | GetMerged`,
       description: `${fullName} is not indexed yet. Run an instant C-Rank check to see merge rates, review turnaround and maintainer responsiveness before you PR.`,
       robots: {
         index: false,
@@ -147,8 +147,8 @@ export default async function RepoDetailPage({ params }: PageProps) {
             {fullName} is not scored yet
           </h1>
           <p className="mt-2 mb-6 font-sans text-sm text-zinc-700">
-            Run an on-demand C-Rank check to get the full verdict — merge rate, review turnaround,
-            first-timer success and maintainer responsiveness — before you open a PR.
+            Run an on-demand C-Rank check to get the full verdict - merge rate, review turnaround,
+            first-timer success and maintainer responsiveness - before you open a PR.
           </p>
           <InstantScanPanel fullName={fullName} />
         </main>

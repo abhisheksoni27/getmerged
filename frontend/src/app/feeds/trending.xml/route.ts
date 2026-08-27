@@ -2,7 +2,7 @@ import { atomResponse, buildAtomFeed, escapeXml, fetchTrendingMovers, AtomEntry 
 
 export const dynamic = "force-dynamic";
 
-// /feeds/trending.xml — repositories with the largest C-Rank gains over the
+// /feeds/trending.xml - repositories with the largest C-Rank gains over the
 // last 14 days ("trending movers"), sourced from the per-repo trend API.
 export async function GET(): Promise<Response> {
   const movers = await fetchTrendingMovers(20);
@@ -23,7 +23,7 @@ export async function GET(): Promise<Response> {
   return atomResponse(
     buildAtomFeed({
       selfPath: "/feeds/trending.xml",
-      title: "GetMerged — Trending Repository Movers",
+      title: "GetMerged - Trending Repository Movers",
       entries,
     })
   );

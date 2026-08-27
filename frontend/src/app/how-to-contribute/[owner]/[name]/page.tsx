@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: GuidePageProps): Promise<Meta
   const { owner, name } = await params;
   const fullName = `${owner}/${name}`;
   const title = `How to Contribute to ${fullName}: A Data-Backed Beginner's Guide | GetMerged`;
-  const description = `Real contribution data for ${fullName}: PR merge rate, maintainer response times, first-timer success, and open good first issues — so your first pull request lands.`;
+  const description = `Real contribution data for ${fullName}: PR merge rate, maintainer response times, first-timer success, and open good first issues - so your first pull request lands.`;
 
   return {
     title,
@@ -132,7 +132,7 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
               name: `Does ${fullName} have good first issues?`,
               acceptedAnswer: {
                 "@type": "Answer",
-                text: `Yes — ${gfiCount} good first issues are currently open on ${fullName}.`,
+                text: `Yes - ${gfiCount} good first issues are currently open on ${fullName}.`,
               },
             },
           ]
@@ -145,7 +145,7 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
       title: "Pick a starter issue",
       body:
         gfiCount > 0
-          ? `${fullName} currently labels ${gfiCount} open issues as "good first issue". Start there — maintainers expect newcomers on those.`
+          ? `${fullName} currently labels ${gfiCount} open issues as "good first issue". Start there - maintainers expect newcomers on those.`
           : `Browse ${fullName}'s issue tracker for docs or small bug fixes. No labeled starter issues right now, so pick something small and self-contained.`,
       icon: Sparkles,
     },
@@ -161,7 +161,7 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
     },
     {
       title: "Engage with review feedback",
-      body: `${maintainers > 0 ? `${maintainers} active maintainer${maintainers === 1 ? "" : "s"}` : "The maintainers"} review contributions here. Respond to comments promptly — responsiveness is the strongest predictor of getting merged.`,
+      body: `${maintainers > 0 ? `${maintainers} active maintainer${maintainers === 1 ? "" : "s"}` : "The maintainers"} review contributions here. Respond to comments promptly - responsiveness is the strongest predictor of getting merged.`,
       icon: Users,
     },
   ];
@@ -177,7 +177,7 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
             How to Contribute to {fullName}
           </h1>
           <p className="text-sm text-zinc-600 font-sans mt-2">
-            A practical guide backed by {fullName}&apos;s real pull-request history — not guesswork.
+            A practical guide backed by {fullName}&apos;s real pull-request history - not guesswork.
           </p>
         </div>
 
@@ -186,7 +186,7 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
           {[
             { label: "PR merge rate", value: `${mergeRate}%` },
             { label: "First review", value: hoursLabel(responseH) },
-            { label: "First-timer success", value: firstTimer > 0 ? `${firstTimer}%` : "—" },
+            { label: "First-timer success", value: firstTimer > 0 ? `${firstTimer}%` : " - " },
             { label: "C-Rank", value: `${repo.c_rank_tier ?? "?"} Tier` },
           ].map((stat) => (
             <div key={stat.label} className="rounded-xl border border-b-2 border-b-zinc-900/20 border-zinc-200 bg-white p-3 text-center">

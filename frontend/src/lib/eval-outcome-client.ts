@@ -21,7 +21,7 @@ export function backendBase(): string {
 /**
  * Fetches the verified outcome for an eval with a small in-process cache.
  * Returns null on any failure (unknown eval, backend down, timeout) so callers
- * degrade to the static snapshot with 'Outcome unavailable' — never crash,
+ * degrade to the static snapshot with 'Outcome unavailable' - never crash,
  * never show wrong data (AC4).
  */
 export async function getEvalOutcome(id: string): Promise<PREvalOutcome | null> {

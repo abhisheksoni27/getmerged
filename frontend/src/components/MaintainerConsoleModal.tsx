@@ -85,8 +85,7 @@ export function MaintainerConsoleModal({
       if (!res.ok) {
         if (res.status === 409) {
           setConflict(true);
-          // AC5: duplicate claims resolve through the unique constraint —
-          // the second claimant gets the 'already claimed' notice and is
+          // AC5: duplicate claims resolve through the unique constraint - // the second claimant gets the 'already claimed' notice and is
           // redirected to their owner dashboard.
           setTimeout(() => {
             try {
@@ -143,7 +142,7 @@ export function MaintainerConsoleModal({
       if (!res.ok) throw new Error(data?.error || "Re-score failed");
       if (data && data.status === "already_running") {
         // AC4: another re-score holds the repo lock; nothing failed.
-        setError("A re-score for this repository is already running — try again in a moment.");
+        setError("A re-score for this repository is already running - try again in a moment.");
         return;
       }
       setRescore(data as RescoreResult);
@@ -265,7 +264,7 @@ export function MaintainerConsoleModal({
                     >
                       {disputing ? "Submitting..." : "Report a dispute"}
                     </button>{" "}
-                    for admin review — ownership is never transferred automatically.
+                    for admin review - ownership is never transferred automatically.
                   </div>
                 )}
               </div>
@@ -438,7 +437,7 @@ export function MaintainerConsoleModal({
                     )}
                     {!rescore.card_issued && rescore.outcome !== "improved" && (
                       <p className="mt-2 text-xs text-zinc-500">
-                        No improvement yet — close a playbook gap and re-score to earn the
+                        No improvement yet - close a playbook gap and re-score to earn the
                         before/after card.
                       </p>
                     )}
@@ -446,7 +445,7 @@ export function MaintainerConsoleModal({
                 )}
                 {rescore?.rate_limited && (
                   <p className="mt-3 text-xs text-zinc-500">
-                    Card cooldown active — next card available at{" "}
+                    Card cooldown active - next card available at{" "}
                     {rescore.next_allowed_at ? new Date(rescore.next_allowed_at).toLocaleString() : "later"}.
                   </p>
                 )}

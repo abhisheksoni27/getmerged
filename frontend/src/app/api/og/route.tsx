@@ -32,14 +32,14 @@ const CACHE_HEADERS = {
 } as const;
 
 function truncate(name: string, maxLen = 26): string {
-  if (!name) return "—";
+  if (!name) return " - ";
   return name.length <= maxLen ? name : name.slice(0, maxLen) + "…";
 }
 
 function fmtDate(iso: string | null): string {
-  if (!iso) return "—";
+  if (!iso) return " - ";
   const d = new Date(iso);
-  if (isNaN(d.getTime())) return "—";
+  if (isNaN(d.getTime())) return " - ";
   return d.toLocaleDateString("en-US", { year: "numeric", month: "short" });
 }
 
@@ -139,7 +139,7 @@ function reportCard(card: ReportCard, etag?: string) {
             )}
           </div>
 
-          {/* C-Rank tiers (omitted entirely when zero merges — no div-by-zero) */}
+          {/* C-Rank tiers (omitted entirely when zero merges - no div-by-zero) */}
           {!zero && tiers.length > 0 && (
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", backgroundColor: "#2c333e", border: "2px solid #3f4a59", borderRadius: "24px", padding: "24px 32px" }}>
               <span style={{ color: "#9ca3af", fontSize: "14px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px" }}>C-Rank tiers</span>
