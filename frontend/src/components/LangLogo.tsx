@@ -17,7 +17,7 @@ const LANG_COLOR_MAP: Record<string, { bg: string; text: string; label: string }
   ruby: { bg: "#CC342D", text: "#FFFFFF", label: "Rb" },
   dart: { bg: "#0175C2", text: "#FFFFFF", label: "Dart" },
   kotlin: { bg: "#7F52FF", text: "#FFFFFF", label: "Kt" },
-  swift: { bg: "#F05138", text: "#FFFFFF", label: "Swift" },
+  swift: { bg: "#F05138", text: "#FFFFFF", label: "Sw" },
   elixir: { bg: "#4B275F", text: "#FFFFFF", label: "Ex" },
   zig: { bg: "#EC915C", text: "#000000", label: "Zig" },
 };
