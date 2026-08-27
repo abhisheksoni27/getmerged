@@ -168,8 +168,13 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
             <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-zinc-400">
               <Target className="h-4 w-4 text-blue-400" /> Accuracy
             </div>
+<<<<<<< HEAD
             <div className="mt-2 text-2xl sm:text-3xl font-bold font-mono text-zinc-50">
               {accuracyPct !== null ? `${accuracyPct}%` : "—"}
+=======
+            <div className="mt-2 text-2xl sm:text-3xl font-bold font-mono text-slate-50">
+              {accuracyPct !== null ? `${accuracyPct}%` : " - "}
+>>>>>>> ee45fb5 (well well well)
             </div>
             <div className="text-xs text-zinc-400 font-sans mt-1">Over settled PR evals</div>
           </div>
@@ -229,7 +234,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
               <div className="rounded border border-white/[0.12] bg-slate-800/80 px-4 py-3">
                 <div className="text-xs font-mono uppercase text-zinc-400">Global Rank</div>
                 <div className="text-xl font-bold font-mono text-purple-400 mt-1">
-                  {typeof profile.season_rank === "number" ? `#${profile.season_rank}` : "—"}
+                  {typeof profile.season_rank === "number" ? `#${profile.season_rank}` : " - "}
                 </div>
               </div>
             </div>
