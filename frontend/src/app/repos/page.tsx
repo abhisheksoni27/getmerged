@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { ReposClient } from "./ReposClient";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
+import Link from "next/link";
 
 interface ReposPageProps {
   searchParams: Promise<{
@@ -58,9 +59,9 @@ async function getReposSSR(paramsObj: {
   if (paramsObj.merge_rate && paramsObj.merge_rate !== "All") params.set("min_merge_rate", paramsObj.merge_rate);
   if (paramsObj.first_timer && paramsObj.first_timer !== "All") params.set("min_first_timer_success_rate", paramsObj.first_timer);
 
-  const bounds = getStarBounds(paramsObj.stars);
-  if (bounds.min) params.set("min_stars", bounds.min);
-  if (bounds.max) params.set("max_stars", bounds.max);
+  const starBounds = getStarBounds(paramsObj.stars);
+  if (starBounds.min) params.set("min_stars", starBounds.min);
+  if (starBounds.max) params.set("max_stars", starBounds.max);
 
   try {
     const res = await fetch(`${API_BASE_URL}/api/v1/repos?${params.toString()}`, {
@@ -68,71 +69,77 @@ async function getReposSSR(paramsObj: {
     });
     if (!res.ok) return { repos: [], total: 0 };
     const data = await res.json();
-    const rawList = data.data || data.repos || [];
-    const total = data.meta?.total ?? data.total ?? (Array.isArray(rawList) ? rawList.length : 0);
-
-    if (Array.isArray(rawList)) {
-      const mappedList: Repo[] = rawList.map((r: Record<string, unknown>) => ({
-        ...(r as unknown as Repo),
-        c_rank_tier: (r.c_rank_tier as string) || (r.class_rank as string) || "A",
-        first_timer_success_rate:
-          (r.first_timer_success_rate as number) !== undefined
-            ? (r.first_timer_success_rate as number)
-            : (r.first_timer_rate as number),
-      }));
-      return { repos: mappedList, total };
-    }
-    return { repos: [], total: 0 };
-  } catch (e) {
-    console.error("SSR fetch failed for /repos", e);
+    return {
+      repos: data.data || data.repos || [],
+      total: data.meta?.total ?? data.total ?? 0,
+    };
+  } catch (err) {
+    console.error("SSR repo directory fetch failed:", err);
     return { repos: [], total: 0 };
   }
 }
 
 export async function generateMetadata({ searchParams }: ReposPageProps): Promise<Metadata> {
   const resolvedParams = await searchParams;
-  const pageNum = parseInt(resolvedParams.page || "1", 10);
-  const isPaged = !isNaN(pageNum) && pageNum > 1;
+  const { lang, tier, trending, q } = resolvedParams;
 
-  const canonicalUrl = isPaged
-    ? `https://getmerged.abhishekco.de/repos?page=${pageNum}`
-    : "https://getmerged.abhishekco.de/repos";
+  let title = "Open Source Repository Directory & C-Rank™ Explorer | GetMerged";
+  let description =
+    "Explore 53,000+ open-source GitHub repositories ranked by objective C-Rank™ telemetry: pull request merge rates, maintainer response time, and first-timer success rates.";
 
-  const title = isPaged
-    ? `Open-Source Repositories Directory - Page ${pageNum} | GetMerged`
-    : "Open-Source Repositories Directory & Filter Index | GetMerged";
+  if (lang && lang !== "All") {
+    title = `Top Welcoming ${lang} Repositories & Good First Issues | GetMerged`;
+    description = `Discover high-acceptance ${lang} GitHub projects with fast maintainer response velocity, high PR merge rates, and beginner-friendly issues.`;
+  } else if (tier && tier !== "All") {
+    title = `Tier ${tier} Welcoming Repositories | GetMerged Open Source Index`;
+    description = `Browse Tier ${tier} open-source repositories verified for contributor friendliness and maintainer responsiveness.`;
+  } else if (trending === "true") {
+    title = "Trending Welcoming Open Source Repositories | GetMerged";
+    description =
+      "Trending GitHub repositories that are actively accepting and merging pull requests from community contributors today.";
+  } else if (q?.trim()) {
+    title = `Search Results for "${q.trim()}" | GetMerged Repository Directory`;
+    description = `Compare maintainer response rates and PR merge metrics for "${q.trim()}" on GetMerged.`;
+  }
 
-  const description = isPaged
-    ? `Explore page ${pageNum} of 1,400+ public GitHub repositories evaluated by C-Rank™ on PR merge rate, maintainer response speed, and first-time contributor friendliness.`
-    : "Explore 1,400+ public GitHub repositories evaluated by C-Rank™ on PR merge rate, maintainer response speed, and first-time contributor friendliness.";
+  const canonicalUrl = "https://getmerged.abhishekco.de/repos";
 
   return {
     title,
     description,
     keywords: [
-      "open source repositories",
-      "github repository list",
-      "open source contributor projects",
-      "c-rank repositories",
-      "good first issue repositories",
-      "high merge rate github projects",
-      "fast maintainer response time",
+      "open source repository directory",
+      "contributor friendly repos",
+      "c-rank",
+      "pull request merge rate",
+      "maintainer response time",
+      "good first issue",
+      "developer portfolio",
+      "github open source",
     ],
-    robots: isPaged ? { index: false, follow: true } : { index: true, follow: true },
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
       title,
       description,
-      type: "website",
       url: canonicalUrl,
       siteName: "GetMerged",
+      type: "website",
+      images: [
+        {
+          url: "https://getmerged.abhishekco.de/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: "GetMerged Open Source Repository Directory",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: ["https://getmerged.abhishekco.de/opengraph-image"],
     },
   };
 }
@@ -154,37 +161,32 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
       {
         "@type": "ListItem",
         position: 2,
-        name: "Repositories Directory",
+        name: "Repositories",
         item: "https://getmerged.abhishekco.de/repos",
       },
     ],
   };
 
-  const itemListJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "Indexed Open-Source Repositories",
-    description: "Curated open-source repositories scored by PR merge velocity and maintainer responsiveness.",
-    itemListElement: initialRepos.slice(0, 24).map((r, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      name: r.full_name,
-      url: `https://getmerged.abhishekco.de/${r.full_name}`,
-    })),
-  };
-
   const collectionJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Open-Source Repository Explorer & Directory",
+    name: "Open Source Repository Directory",
+    description: "Explore 53,000+ open-source GitHub repositories scored on objective contributor friendliness telemetry.",
     url: "https://getmerged.abhishekco.de/repos",
-    description:
-      "Comprehensive directory of open-source repositories scored by PR merge velocity and maintainer responsiveness.",
-    mainEntity: itemListJsonLd,
-    isPartOf: {
-      "@type": "WebSite",
+    publisher: {
+      "@type": "Organization",
       name: "GetMerged",
       url: "https://getmerged.abhishekco.de",
+    },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: initialRepos.slice(0, 24).map((repo, idx) => ({
+        "@type": "ListItem",
+        position: idx + 1,
+        name: repo.full_name,
+        url: `https://getmerged.abhishekco.de/${repo.full_name}`,
+        description: repo.description || undefined,
+      })),
     },
   };
 
@@ -194,47 +196,7 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
     mainEntity: [
       {
         "@type": "Question",
-        name: "Are these open-source metrics and rankings 100% free to access?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes, completely free. GetMerged is built for the global developer and contributor community to make open-source contribution transparent and frictionless. You can browse, filter, inspect maintainer turnaround velocity, and track repository health without paywalls.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "How does GetMerged help first-time open-source contributors?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "We measure the First-Timer PR Acceptance Rate and scan for active beginner-friendly issues (good first issue, help wanted). This allows new contributors to identify projects where maintainers actively review and mentor external submissions rather than leaving PRs untouched.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Why should I use C-Rank™ instead of just sorting by GitHub stars?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "GitHub stars reflect historical popularity rather than current maintainer availability. Many famous 50k+ star repositories suffer from maintainer burnout with massive unreviewed PR backlogs. C-Rank™ measures live reviewer responsiveness, external merge rates, and review turnaround times.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "How many welcoming repositories do you index across different languages?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "We actively evaluate over 1,400+ repositories across 20+ programming ecosystems. Our S-Tier (Super Welcoming) and A-Tier (Welcoming) catalog includes 350+ JavaScript & TypeScript projects, 280+ Python repos, 190+ Go tools, 120+ Rust systems, alongside high-velocity repositories in Java, C++, PHP, Kotlin, Swift, and more.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Does GetMerged track private code or require repository write access?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "No. All telemetry is calculated strictly from public GitHub GraphQL events and public pull request activity without requesting code access or write permissions.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "How are repositories evaluated in this directory?",
+        name: "How are open-source repositories scored on GetMerged?",
         acceptedAnswer: {
           "@type": "Answer",
           text: "Every repository is benchmarked continuously using our proprietary C-Rank™ telemetry algorithm. We track real maintainer PR response turnaround, external merge rates, first-timer acceptance rates, and review friction across thousands of GitHub projects.",
@@ -281,9 +243,26 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+
+      {/* Semantic Server-Rendered Content Crawl Floor */}
+      <section className="sr-only" aria-label="Scored Open Source Repositories Index">
+        <h1>All Scored Open Source GitHub Repositories</h1>
+        <p>Browse {initialTotal.toLocaleString()} repositories benchmarked with C-Rank™ review metrics.</p>
+        <ul>
+          {initialRepos.map((r) => (
+            <li key={r.full_name}>
+              <Link href={`/${r.full_name}`} title={`View ${r.full_name} C-Rank scorecard`}>
+                {r.full_name} ({r.language || "Code"}) - Tier {r.class_rank || r.c_rank_tier || "A"} ({r.external_pr_merge_rate ? `${Math.round(r.external_pr_merge_rate)}% merge rate` : ""})
+              </Link>
+              <p>{r.description}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <React.Suspense
         fallback={
-          <div className="min-h-screen bg-[#0f172a] flex items-center justify-center">
+          <div className="min-h-screen bg-black flex items-center justify-center">
             <div className="h-8 w-8 rounded-full border-2 border-white/[0.12] border-t-transparent animate-spin" />
           </div>
         }

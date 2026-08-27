@@ -1,6 +1,7 @@
 import React from "react";
 import HomeClient from "./HomeClient";
 import type { MacroStats, Repo } from "@/types/opendoor";
+import Link from "next/link";
 
 async function getMacroStats(): Promise<MacroStats | null> {
   try {
@@ -142,6 +143,27 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd) }}
       />
+      {/* Semantic Crawl Floor directly in Initial SSR HTML */}
+      <section className="sr-only" aria-label="Open Source Intelligence Summary">
+        <h1>GetMerged - Objective C-Rank™ Telemetry for GitHub Repositories</h1>
+        <p>
+          Find welcoming open-source repositories ranked by empirical PR merge rates, maintainer response velocity, and first-timer success.
+        </p>
+        <div>
+          <h2>Top Welcoming Repositories</h2>
+          <ul>
+            {initialRepos.map((repo) => (
+              <li key={repo.full_name}>
+                <Link href={`/${repo.full_name}`} title={`View ${repo.full_name} C-Rank metrics`}>
+                  {repo.full_name} ({repo.language || "Code"}) - C-Rank Tier {repo.c_rank_tier || "A"} ({repo.external_pr_merge_rate ? `${Math.round(repo.external_pr_merge_rate)}% merge rate` : ""})
+                </Link>
+                <p>{repo.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       <HomeClient
         initialStats={initialStats}
         initialRepos={initialRepos}
