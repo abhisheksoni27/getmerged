@@ -94,6 +94,12 @@ type Store struct {
 
 func NewStore(db *sqlx.DB) *Store { return &Store{db: db} }
 
+// ReportCardStats returns the merged-PR aggregate for the report-card OG image
+// (see GetReportCardStats for the AC4 column mapping).
+func (s *Store) ReportCardStats(ctx context.Context, userID int64) (*ReportCardStats, error) {
+	return GetReportCardStats(ctx, s.db, userID)
+}
+
 // UpsertSnapshot performs an idempotent last-write-wins upsert keyed
 // (pr_id, snapshot_at) so concurrent page-load and cron writers are safe (AC7).
 func (s *Store) UpsertSnapshot(ctx context.Context, snap PRSnapshot) error {

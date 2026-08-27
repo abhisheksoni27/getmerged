@@ -11,6 +11,7 @@ import {
   type PublicProfile,
 } from "@/lib/public-profile";
 import OpenToOpportunitiesToggle from "@/components/OpenToOpportunitiesToggle";
+import ShareCardButton from "@/components/ShareCardButton";
 import { GitPullRequest, Target, Merge, ShieldCheck, Calendar, ExternalLink, Flame } from "lucide-react";
 
 interface ProfilePageProps {
@@ -117,6 +118,9 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
                   month: "short",
                 })}
               </p>
+            </div>
+            <div className="ml-auto shrink-0">
+              <ShareCardButton slug={profile.slug} username={profile.username} />
             </div>
           </div>
 
