@@ -92,6 +92,33 @@ func main() {
 	apiKeyRepo := repository.NewAPIKeyRepository(database)
 	tokenMgr := auth.NewTokenManager(oauthTokenRepo, cfg, nil)
 	dnaWorker := pipeline.NewContributorDNAWorker(userRepo, profileRepo, tokenMgr, cfg.GithubToken, nil)
+	// Contributor DNA background poller: processes pending profiles
+	go func() {
+		poll := func() {
+			var pendingUserIDs []int64
+			if err := database.Select(&pendingUserIDs, "SELECT user_id FROM contributor_profiles WHERE profiling_status = 'pending' LIMIT 10"); err != nil {
+				slog.Error("failed to query pending contributor profiles", "err", err)
+				return
+			}
+			for _, uid := range pendingUserIDs {
+				slog.Info("processing contributor DNA profiling", "user_id", uid)
+				ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+				if err := dnaWorker.AnalyzeUser(ctx, uid); err != nil {
+					slog.Warn("background dna worker failed", "user_id", uid, "err", err)
+				} else {
+					slog.Info("successfully completed contributor DNA profiling", "user_id", uid)
+				}
+				cancel()
+			}
+		}
+
+		poll() // run immediately on startup
+		ticker := time.NewTicker(15 * time.Second)
+		defer ticker.Stop()
+		for range ticker.C {
+			poll()
+		}
+	}()
 	repoStore := repository.NewRepoRepository(database)
 	watchlistRepo := repository.NewWatchlistRepository(database)
 	auditRepo := repository.NewAuditPurchaseRepository(database)
@@ -113,6 +140,7 @@ func main() {
 
 	// Start continuous background crawler worker loop
 	gfiRepo := repository.NewGFIRepository(database)
+	repoBoostRepo := repository.NewRepoBoostRepository(database)
 
 	if cfg.GinMode == "release" {
 		crawler := pipeline.NewBackgroundCrawler(database, gh, telegramNotifier)
@@ -405,7 +433,7 @@ func main() {
 		api.GET("/fit-radar", handler.GetFitRadarHandler(repoStore, profileRepo))
 		api.GET("/repos/:id/related", handler.GetRelatedReposHandler(repoStore))
 		api.GET("/repos/:id/good-first-issues", handler.GetRepoGoodFirstIssues(gfiRepo, repoStore))
-		api.GET("/issues/good-first", handler.ListGoodFirstIssues(gfiRepo))
+		api.GET("/issues/good-first", handler.ListGoodFirstIssues(gfiRepo, repoBoostRepo))
 		api.GET("/history/:id", handler.GetRepoHistory(repoStore))
 		api.GET("/repos/:id/trend", handler.GetRepoTrend(repoStore))
 		api.POST("/repos/queue", handler.RequestRepoIndexing(database))
@@ -433,6 +461,8 @@ func main() {
 			handler.EvaluatePreflightHandler(gh))
 		api.POST("/preflight/pr-details", handler.FetchPRDetailsHandler(gh))
 		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo, database, recruiterRepo, auditRepo))
+		// Repo Boost (Stripe): featured placement webhook (AC2/AC3/AC6).
+		api.POST("/payments/webhook/stripe", handler.StripeRepoBoostWebhookHandler(cfg, repoBoostRepo))
 		api.POST("/webhooks/github-app", handler.GithubAppWebhookHandler(ghAppSvc))
 		api.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
 		api.GET("/repos/:id/claim-status", handler.GetPublicClaimStatusHandler(claimRepo))
@@ -460,7 +490,7 @@ func main() {
 		authGroup := api.Group("/auth")
 		{
 			authGroup.GET("/github", handler.GitHubOAuthRedirect(cfg))
-			authGroup.GET("/github/callback", handler.GitHubOAuthCallback(cfg, userRepo, tokenMgr, entitlementRepo))
+			authGroup.GET("/github/callback", handler.GitHubOAuthCallback(cfg, userRepo, tokenMgr, entitlementRepo, dnaWorker))
 			authGroup.GET("/google", handler.GoogleOAuthRedirect(cfg))
 			authGroup.GET("/google/callback", handler.GoogleOAuthCallback(cfg, userRepo))
 		}
@@ -492,6 +522,12 @@ func main() {
 		userApi.POST("/repos/:id/claim", handler.PostClaimRepoHandler(claimSvc))
 		userApi.POST("/repos/:id/verify", handler.PostVerifyRepoHandler(claimSvc))
 		userApi.GET("/repos/:id/console", handler.GetMaintainerConsoleHandler(claimSvc))
+		// Repo Boost: paid featured placement (AC1/AC5/AC8). Auth-scoped so
+		// maintainers (who already claim repos via the C-Rank console) can buy
+		// contributor attention for their good-first-issues.
+		userApi.POST("/repos/:id/boost-checkout", handler.CreateRepoBoostCheckoutHandler(cfg, repoBoostRepo))
+		userApi.GET("/repos/:id/boost-status", handler.RepoBoostStatusHandler(cfg, repoBoostRepo))
+		userApi.GET("/user/repo-boosts", handler.ListUserRepoBoostsHandler(cfg, repoBoostRepo))
 		// Event-driven re-score for verified claimants (AC3): refreshes the
 		// score and before/after card state in one transaction.
 		userApi.POST("/repos/:id/rescore", handler.PostRescoreRepoHandler(claimSvc))

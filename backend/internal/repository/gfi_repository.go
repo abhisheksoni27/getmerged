@@ -34,6 +34,9 @@ type GoodFirstIssueItem struct {
 	BountyAmount *float64 `db:"-" json:"bounty_amount,omitempty"`
 	// Boosted reports an active paid boost entitlement at query time (AC4).
 	Boosted bool `db:"boosted" json:"boosted"`
+	// Sponsored reports a paid featured-placement (Repo Boost) at query time
+	// (Repo Boost AC4/AC7). Set in Go, not scanned from SQL.
+	Sponsored bool `db:"-" json:"sponsored"`
 }
 
 type GFIRepository interface {
@@ -87,8 +90,8 @@ func (r *sqlxGFIRepository) UpsertIssues(ctx context.Context, repoID string, iss
 
 		query := `
 			INSERT INTO repo_good_first_issues (
-				repository_id, issue_number, title, body_text, url, comments_count, labels_json, quality_score, bounty_amount_usd, bounty_status, created_at, synced_at
-			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+				repository_id, issue_number, title, body_text, url, comments_count, labels_json, quality_score, bounty_amount_usd, bounty_status, is_open, created_at, synced_at
+			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, CURRENT_TIMESTAMP)
 			ON DUPLICATE KEY UPDATE
 				title = VALUES(title),
 				body_text = VALUES(body_text),
@@ -98,13 +101,14 @@ func (r *sqlxGFIRepository) UpsertIssues(ctx context.Context, repoID string, iss
 				quality_score = VALUES(quality_score),
 				bounty_amount_usd = VALUES(bounty_amount_usd),
 				bounty_status = VALUES(bounty_status),
+				is_open = 1,
 				synced_at = CURRENT_TIMESTAMP
 		`
 		if r.db.DriverName() == "sqlite" {
 			query = `
 				INSERT INTO repo_good_first_issues (
-					repository_id, issue_number, title, body_text, url, comments_count, labels_json, quality_score, bounty_amount_usd, bounty_status, created_at, synced_at
-				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+					repository_id, issue_number, title, body_text, url, comments_count, labels_json, quality_score, bounty_amount_usd, bounty_status, is_open, created_at, synced_at
+				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, CURRENT_TIMESTAMP)
 				ON CONFLICT(repository_id, issue_number) DO UPDATE SET
 					title = excluded.title,
 					body_text = excluded.body_text,
@@ -113,6 +117,7 @@ func (r *sqlxGFIRepository) UpsertIssues(ctx context.Context, repoID string, iss
 					labels_json = excluded.labels_json,
 					bounty_amount_usd = excluded.bounty_amount_usd,
 					bounty_status = excluded.bounty_status,
+					is_open = 1,
 					synced_at = CURRENT_TIMESTAMP
 			`
 		}

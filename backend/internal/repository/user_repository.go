@@ -655,6 +655,22 @@ func (r *sqlxUserRepository) GetPublicContributorProfileBySlug(ctx context.Conte
 		var parsed dna.Result
 		if err := json.Unmarshal([]byte(dnaRaw.String), &parsed); err == nil {
 			profile.DNA = &parsed
+
+			// If no evaluated PRs yet, populate Repos list from verified DNA top_repos
+			if len(profile.Repos) == 0 && len(parsed.TopRepos) > 0 {
+				for _, tr := range parsed.TopRepos {
+					tier := "A"
+					if tr.StargazerCount > 10000 {
+						tier = "S"
+					} else if tr.StargazerCount < 1000 {
+						tier = "B"
+					}
+					profile.Repos = append(profile.Repos, PublicRepoTier{
+						FullName:  tr.NameWithOwner,
+						CRankTier: tier,
+					})
+				}
+			}
 		}
 	}
 

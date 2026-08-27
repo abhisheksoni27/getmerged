@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
@@ -12,7 +13,9 @@ import (
 
 // ListGoodFirstIssues handles GET /api/v1/issues/good-first?language=Go&limit=25&bounty=1
 // The bounty flag filters to bounty-labeled (self-reported) issues only (AC3).
-func ListGoodFirstIssues(gfiRepo repository.GFIRepository) gin.HandlerFunc {
+// Paid featured placements (Repo Boost) are prepended as 'sponsored' items when
+// they pass the read-time validity check (AC4/AC7).
+func ListGoodFirstIssues(gfiRepo repository.GFIRepository, boostRepo repository.RepoBoostRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		language := c.Query("language")
 		limitStr := c.DefaultQuery("limit", "25")
@@ -26,6 +29,12 @@ func ListGoodFirstIssues(gfiRepo repository.GFIRepository) gin.HandlerFunc {
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch good first issues"})
 			return
+		}
+
+		if boostRepo != nil && !bountyOnly {
+			if sponsored, serr := boostRepo.ListSponsoredIssues(c.Request.Context(), language, limit, time.Now().UTC()); serr == nil {
+				issues = prependSponsored(issues, sponsored)
+			}
 		}
 
 		c.JSON(http.StatusOK, gin.H{
@@ -65,4 +74,29 @@ func GetRepoGoodFirstIssues(gfiRepo repository.GFIRepository, repoStore reposito
 			"count": len(issues),
 		})
 	}
+}
+
+// prependSponsored places paid featured placements (Repo Boost) at the top of the
+// feed, de-duplicating by issue id and preserving the original result count cap.
+func prependSponsored(issues, sponsored []repository.GoodFirstIssueItem) []repository.GoodFirstIssueItem {
+	if len(sponsored) == 0 {
+		return issues
+	}
+	seen := make(map[int64]bool, len(issues)+len(sponsored))
+	out := make([]repository.GoodFirstIssueItem, 0, len(issues)+len(sponsored))
+	for _, s := range sponsored {
+		if seen[s.ID] {
+			continue
+		}
+		seen[s.ID] = true
+		out = append(out, s)
+	}
+	for _, it := range issues {
+		if seen[it.ID] {
+			continue
+		}
+		seen[it.ID] = true
+		out = append(out, it)
+	}
+	return out
 }

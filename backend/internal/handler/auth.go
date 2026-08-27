@@ -82,7 +82,7 @@ func GitHubOAuthRedirect(cfg *config.Config) gin.HandlerFunc {
 var httpClient = &http.Client{Timeout: 10 * time.Second}
 
 // GitHubOAuthCallback handles GET /api/v1/auth/github/callback
-func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository, tokenMgr auth.TokenManager, entRepo repository.EntitlementRepository) gin.HandlerFunc {
+func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository, tokenMgr auth.TokenManager, entRepo repository.EntitlementRepository, dnaWorker pipeline.ContributorDNAWorker) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		code := c.Query("code")
 		if code == "" {
@@ -194,6 +194,17 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository,
 		// Auto-import top public repo languages as skills. Best-effort with its
 		// own 2s per-request timeout; runs async so sign-in is never blocked.
 		go ImportGithubSkills(context.Background(), tokenResp.AccessToken, userID, userRepo)
+
+		// Analyze Contributor DNA & Merged PRs history in background via user's GitHub token.
+		if dnaWorker != nil {
+			go func(uid int64) {
+				ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+				defer cancel()
+				if err := dnaWorker.AnalyzeUser(ctx, uid); err != nil {
+					slog.Warn("background contributor DNA analysis failed", "user_id", uid, "err", err)
+				}
+			}(userID)
+		}
 
 		// One-time referral credit for first GitHub OAuth signup via referral link.
 		if isNewUser && entRepo != nil {
