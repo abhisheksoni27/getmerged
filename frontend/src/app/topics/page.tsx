@@ -141,7 +141,7 @@ export default async function TopicsIndexPage({ searchParams }: TopicsPageProps)
         </Link>
 
         {/* Hero Header Section */}
-        <div className="mb-8 p-6 sm:p-8 rounded-none bg-white border border-zinc-200/60 border-b-4 shadow-[4px_4px_0px_0px_#000]">
+        <div className="mb-8 p-6 sm:p-8 rounded-3xl bg-white border border-zinc-200/60">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-emerald-100 border border-zinc-200/60 text-black text-xs font-mono font-bold mb-3">
             <Tag className="h-3.5 w-3.5" /> Topic Directory
           </div>

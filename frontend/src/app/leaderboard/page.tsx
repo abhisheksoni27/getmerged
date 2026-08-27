@@ -106,11 +106,11 @@ export default async function LeaderboardPage() {
 
   const getBadgeStyle = (tier: string) => {
     switch (tier?.toUpperCase()) {
-      case "S": return "bg-[#8ce99a] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]";
-      case "A": return "bg-[#bfdbff] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]";
-      case "B": return "bg-[#ffd93d] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]";
-      case "C": return "bg-[#e5dbff] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]";
-      default: return "bg-[#ffb3c7] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]";
+      case "S": return "bg-emerald-500/10 text-black border border-zinc-200/60 font-bold ";
+      case "A": return "bg-[#bfdbff] text-black border border-zinc-200/60 font-bold ";
+      case "B": return "bg-[#ffd93d] text-black border border-zinc-200/60 font-bold ";
+      case "C": return "bg-[#e5dbff] text-black border border-zinc-200/60 font-bold ";
+      default: return "bg-[#ffb3c7] text-black border border-zinc-200/60 font-bold ";
     }
   };
 
@@ -156,7 +156,7 @@ export default async function LeaderboardPage() {
 
         {contributors.entries.length > 0 && (
           <div className="mb-8 overflow-x-auto rounded-2xl bg-white border border-zinc-200/80 shadow-xs">
-            <div className="flex items-center justify-between gap-3 flex-wrap px-4 pt-5 pb-3 border-b-2 border-black/10">
+            <div className="flex items-center justify-between gap-3 flex-wrap px-4 pt-5 pb-3 border-b border-zinc-100/10">
               <h2 className="text-sm font-bold text-zinc-900 font-space flex items-center gap-1.5">
                 <Users className="h-4 w-4 text-emerald-600" /> Weekly Contributor Leaderboard
                 {contributors.season && <span className="text-[11px] font-mono text-zinc-400">· {contributors.season}</span>}

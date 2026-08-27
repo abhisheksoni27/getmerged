@@ -24,7 +24,7 @@ export default function NotFound() {
             <ShieldAlert className="w-8 h-8 text-black" />
           </div>
 
-          <div className="inline-block px-3 py-1 bg-[#ffd93d] border border-zinc-200/60 font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-[2px_2px_0px_#000]">
+          <div className="inline-block px-3 py-1 bg-[#ffd93d] border border-zinc-200/60 font-mono text-xs font-bold uppercase tracking-wider mb-4 ">
             HTTP 404 &middot; Not Indexed
           </div>
 
