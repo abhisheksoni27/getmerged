@@ -14,6 +14,7 @@ import OpenToOpportunitiesToggle from "@/components/OpenToOpportunitiesToggle";
 import ShareCardButton from "@/components/ShareCardButton";
 import { CRankBadge } from "@/components/CRankBadge";
 import { CopyBadgeButton } from "@/components/CopyBadgeButton";
+import { RecruiterContactSection } from "@/components/RecruiterContactSection";
 import {
   GitPullRequest,
   Target,
@@ -28,8 +29,7 @@ import {
   Star,
   Copy,
   Clock,
-  Briefcase,
-  Award,
+    Award,
 } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 
@@ -452,32 +452,8 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
           </div>
         </div>
 
-        {/* Section 10: Recruiter & Opportunities Contact CTA */}
-        <div className="rounded-md bg-slate-900 text-white p-6 sm:p-8 shadow-sm border border-white/[0.08] border-t-2 border-t-orange-500">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-            <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-emerald-950/80 border border-emerald-800 text-emerald-400 font-mono text-xs font-bold mb-2">
-                <Briefcase className="h-3.5 w-3.5" /> Recruiter Verified
-              </div>
-              <h3 className="text-xl sm:text-2xl font-bold font-sans text-white">
-                Interested in working with {profile.username}?
-              </h3>
-              <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-1.5 max-w-lg">
-                View this contributor&apos;s verified public repositories, code style, and telemetry history above.
-              </p>
-            </div>
-            <a
-              href={`https://github.com/${profile.username}`}
-              target="_blank"
-              rel="nofollow noopener noreferrer"
-              title={`View ${profile.username} on GitHub`}
-              className="inline-flex items-center gap-2 rounded bg-orange-500 hover:bg-orange-600 px-5 py-2.5 text-xs font-bold font-sans text-white transition-all shadow-sm shrink-0 cursor-pointer active:scale-[0.98]"
-            >
-              <ExternalLink className="h-4 w-4" />
-              GitHub Profile
-            </a>
-          </div>
-        </div>
+        {/* Section 10: Recruiter & Opportunities Direct Signal on GetMerged */}
+        <RecruiterContactSection username={profile.username} />
       </main>
 
       <Footer />
