@@ -57,7 +57,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
     <header className="sticky top-0 z-50 w-full border-b border-zinc-200/80 bg-[#faf9f6]/90 backdrop-blur-md transition-all">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 sm:gap-4 px-3 sm:px-6 lg:px-8">
         {/* Brand Logo & Main Nav */}
-        <div className="flex items-center gap-4 lg:gap-6 min-w-0">
+        <div className="flex items-center gap-4 lg:gap-6 min-w-0 shrink-0">
           <Link
             href="/"
             title="GetMerged - Find Welcoming Open Source Repositories"
@@ -79,7 +79,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             </div>
           </Link>
 
-          <nav className="hidden 2xl:flex items-center gap-4 text-xs font-sans font-medium text-zinc-600 shrink-0">
+          <nav className="hidden xl:flex items-center gap-4 text-xs font-sans font-medium text-zinc-600 shrink-0">
             <Link href="/repos" title="Explore All Open Source Repositories" className="relative text-zinc-700 hover:text-zinc-950 font-semibold transition-colors">
               Repositories
             </Link>
