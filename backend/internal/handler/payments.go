@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/abhisheksoni27/opendoor/internal/config"
@@ -38,6 +39,12 @@ type DodopaymentsWebhookPayload struct {
 			OrderID     string `json:"order_id"`
 			RepoID      string `json:"repo_id"`
 			IssueNumber string `json:"issue_number"`
+			// Audit deep-purchase metadata (AC5): identifies the one-time
+			// $19 repo deep-audit checkout so the webhook can reactivate the
+			// (user_id, repo_key) purchase idempotently.
+			RepoKey   string `json:"repo_key"`
+			Product   string `json:"product"`
+			SessionID string `json:"session_id"`
 		} `json:"metadata"`
 		BillingCycle string `json:"billing_cycle"` // "monthly" | "yearly"
 		ExpiresAt    string `json:"expires_at"`
@@ -78,8 +85,26 @@ func isRecruiterPassPurchase(p DodopaymentsWebhookPayload) bool {
 	return false
 }
 
+// isAuditPurchase reports whether a payload is the one-time $19 repo deep-audit
+// purchase (AC5): matched by product id, by product metadata, or by a repo_key
+// in the payment metadata.
+func isAuditPurchase(p DodopaymentsWebhookPayload) bool {
+	for _, item := range p.Data.ProductCart {
+		if item.ProductID == repoAuditDodoProductID {
+			return true
+		}
+	}
+	if p.Data.Metadata.Product == "audit" {
+		return true
+	}
+	if p.Data.Metadata.RepoKey != "" {
+		return true
+	}
+	return false
+}
+
 // DodopaymentsWebhookHandler handles POST /api/v1/payments/webhook/dodopayments (Story 5.2)
-func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.EntitlementRepository, database *sqlx.DB, recruiterRepo repository.RecruiterRepository) gin.HandlerFunc {
+func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.EntitlementRepository, database *sqlx.DB, recruiterRepo repository.RecruiterRepository, auditRepo repository.AuditPurchaseRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		bodyBytes, err := io.ReadAll(c.Request.Body)
 		if err != nil {
@@ -150,6 +175,7 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 		// talent-pass entitlement; everything else keeps the existing
 		// subscription entitlement flow.
 		isRecruiter := isRecruiterPassPurchase(payload)
+		isAudit := isAuditPurchase(payload)
 		switch payload.EventType {
 		case "payment.succeeded":
 			if isCreditPackPurchase(payload) {
@@ -174,6 +200,28 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 					slog.Error("failed to activate recruiter pass", "user_id", userID, "err", err)
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to activate recruiter pass"})
 					return
+				}
+			} else if isAudit {
+				// AC5/AC8: one-time $19 deep-audit payment reactivates the
+				// (user_id, repo_key) purchase to 'paid' idempotently. The
+				// unique (user_id, repo_key) key makes replayed webhooks and
+				// the reconcile cron no-ops; a repurchase after refund/dispute
+				// simply flips status back to 'paid'.
+				repoKey := strings.ToLower(strings.TrimSpace(payload.Data.Metadata.RepoKey))
+				sessionID := payload.Data.Metadata.SessionID
+				if repoKey == "" && sessionID != "" {
+					if p, lerr := auditRepo.GetBySession(c.Request.Context(), sessionID); lerr == nil && p != nil {
+						repoKey = p.RepoKey
+					}
+				}
+				if repoKey != "" {
+					paymentID := payload.Data.PaymentID
+					if paymentID == "" {
+						paymentID = payload.EventID
+					}
+					if err := auditRepo.MarkPaid(c.Request.Context(), userID, repoKey, sessionID, paymentID); err != nil {
+						slog.Error("failed to mark audit purchase paid", "user_id", userID, "repo_key", repoKey, "err", err)
+					}
 				}
 			} else {
 				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
@@ -205,8 +253,43 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 					slog.Warn("notification plan sweep on downgrade failed", "user_id", userID, "err", err)
 				}
 			}
-		case "payment.failed":
+		case "payment.refunded":
+			if isAudit {
+				repoKey := strings.ToLower(strings.TrimSpace(payload.Data.Metadata.RepoKey))
+				if repoKey == "" && payload.Data.Metadata.SessionID != "" {
+					if p, lerr := auditRepo.GetBySession(c.Request.Context(), payload.Data.Metadata.SessionID); lerr == nil && p != nil {
+						repoKey = p.RepoKey
+					}
+				}
+				if repoKey != "" {
+					// AC8: refund flips the purchase to 'refunded'; the report
+					// 403s until a repurchase reactivates it.
+					if err := auditRepo.MarkRefunded(c.Request.Context(), userID, repoKey); err != nil {
+						slog.Warn("audit refund mark failed", "user_id", userID, "repo_key", repoKey, "err", err)
+					}
+				}
+			}
+		case "payment.dispute", "payment.dispute.opened", "payment.dispute.lost":
+			if isAudit {
+				repoKey := strings.ToLower(strings.TrimSpace(payload.Data.Metadata.RepoKey))
+				if repoKey == "" && payload.Data.Metadata.SessionID != "" {
+					if p, lerr := auditRepo.GetBySession(c.Request.Context(), payload.Data.Metadata.SessionID); lerr == nil && p != nil {
+						repoKey = p.RepoKey
+					}
+				}
+				if repoKey != "" {
+					// AC8: dispute flips the purchase to 'disputed'.
+					if err := auditRepo.MarkDisputed(c.Request.Context(), userID, repoKey); err != nil {
+						slog.Warn("audit dispute mark failed", "user_id", userID, "repo_key", repoKey, "err", err)
+					}
+				}
+			}
 			isPack := isCreditPackPurchase(payload)
+			if isAudit {
+				// AC8: a failed audit checkout keeps the purchase 'pending' so
+				// the CTA remains and the user can retry — never touches Pro.
+				break
+			}
 			if isRecruiter {
 				// AC6: failed Recruiter Pass payment leaves the entitlement
 				// pending (or reverts an active one); never touches Pro.

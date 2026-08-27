@@ -45,6 +45,7 @@ import { UnscoredExplainer } from "@/components/UnscoredExplainer";
 import { RaiseYourRank } from "@/components/RaiseYourRank";
 import { MaintainerConsoleModal } from "@/components/MaintainerConsoleModal";
 import { RepoStickyBar, RepoSectionTab } from "@/components/RepoStickyBar";
+import { RepoAuditCTA } from "@/components/RepoAuditCTA";
 import { isRepoScored } from "@/lib/repo-metadata";
 
 
@@ -606,6 +607,26 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
       {/* Unscored explainer + verified-welcoming alternatives (IDEA-20260820-02 AC2) */}
       {!isRepoScored(repo) && (
         <UnscoredExplainer fullName={fullName} language={repo?.language} />
+      )}
+
+      {/* One-Time $19 Repo Deep-Audit CTA (AC2/AC5): shown only for scored repos
+          the viewer has not yet purchased; hidden once paid. Unauthenticated
+          clicks force signup/login, then the audit page drives checkout. */}
+      {isRepoScored(repo) && (
+        <div className="mb-8">
+          <RepoAuditCTA
+            fullName={fullName}
+            isScored={isRepoScored(repo)}
+            isLoggedIn={isLoggedIn}
+            requireLogin={() =>
+              openAuthModal(
+                "Unlock the Full Deep-Audit",
+                "Sign in to purchase the one-time $19 repo deep-audit with the full C-Rank breakdown, peer percentiles and AI-prioritized fixes.",
+                "audit"
+              )
+            }
+          />
+        </div>
       )}
 
       {/* Raise Your C-Rank playbook: quantified gaps from live telemetry,
