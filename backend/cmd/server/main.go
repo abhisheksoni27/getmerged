@@ -24,6 +24,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/ghapp"
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/hacktoberfest"
+	"github.com/abhisheksoni27/opendoor/internal/issueclaim"
 	"github.com/abhisheksoni27/opendoor/internal/handler"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/notification"
@@ -100,6 +101,7 @@ func main() {
 	claimRepo := repository.NewClaimRepository(database)
 	claimSvc := claim.NewService(database, claimRepo, repoStore, tokenMgr, gh, cfg)
 	ghAppSvc := ghapp.NewService(database, cfg, userRepo, claimRepo, repoStore, aiRepo)
+	issueClaimSvc := issueclaim.NewService(database, gh, tokenMgr, repoStore, cfg)
 	defer ghAppSvc.Stop()
 
 	// Start continuous background crawler worker loop
@@ -421,6 +423,12 @@ func main() {
 		userApi.POST("/repos/:id/rescore", handler.PostRescoreRepoHandler(claimSvc))
 		userApi.POST("/repos/:id/claim-dispute", handler.PostClaimDisputeHandler(claimRepo))
 		userApi.GET("/user/claims", handler.GetUserClaimsListHandler(claimRepo))
+
+		// One-Click GitHub Issue Claiming (AC1-AC9): authenticated claim flow
+		// that posts a templated comment via the user's GitHub token and
+		// persists the claim server-side (dashboard-synced).
+		userApi.POST("/issues/:owner/:name/:number/claim", handler.PostClaimIssueHandler(issueClaimSvc))
+		userApi.GET("/user/issue-claims", handler.GetUserIssueClaimsHandler(issueClaimSvc))
 
 		// Org-wide paid console (AC1-AC6): static "orgs" child under /api/v1
 		// conflicts with no existing param segment.

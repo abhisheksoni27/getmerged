@@ -22,6 +22,90 @@ const STORAGE_KEY = "opendoor_first_merge_track_v1";
 const EVENT_QUEUE_KEY = "opendoor_first_merge_events_v1";
 const MAX_QUEUE_SIZE = 50;
 
+// AC7: localStorage -> server migration queue for legacy (pre-server) claims.
+const MIGRATION_QUEUE_KEY = "opendoor_issue_claims_migrate_v1";
+const MIGRATION_DONE_KEY = "opendoor_issue_claims_migrated_v1";
+
+// Server claim result shape (matches backend issueclaim.ClaimResult).
+interface IssueClaimResponse {
+  claim: {
+    id: number;
+    user_id: number;
+    repo_full_name: string;
+    issue_number: number;
+    state: string;
+    attribution_url: string;
+    label_added: boolean;
+  };
+  comment_posted: boolean;
+  label_added: boolean;
+  skipped_existing: boolean;
+  message: string;
+}
+
+interface MigrationItem {
+  fullName: string;
+  issueNumber: number;
+  title: string;
+  url: string;
+}
+
+function loadMigrationQueue(): MigrationItem[] {
+  try {
+    if (typeof window === "undefined") return [];
+    const raw = localStorage.getItem(MIGRATION_QUEUE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveMigrationQueue(items: MigrationItem[]) {
+  try {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(MIGRATION_QUEUE_KEY, JSON.stringify(items));
+    }
+  } catch {
+    // ignore
+  }
+}
+
+// AC7: seed the migration queue from the legacy single-claim localStorage state.
+function seedMigrationFromLegacy() {
+  try {
+    if (typeof window === "undefined") return;
+    if (localStorage.getItem(MIGRATION_DONE_KEY)) return;
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      localStorage.setItem(MIGRATION_DONE_KEY, "1");
+      return;
+    }
+    const state = JSON.parse(raw);
+    const fullName = state?.selectedRepo?.fullName;
+    const issueNumber = Number(state?.claimedIssue?.issueNumber ?? state?.claimedIssue?.id ?? 0);
+    if (fullName && issueNumber > 0) {
+      const queue = loadMigrationQueue();
+      const exists = queue.some(
+        (q) => q.fullName === fullName && q.issueNumber === issueNumber
+      );
+      if (!exists) {
+        queue.push({
+          fullName,
+          issueNumber,
+          title: state.claimedIssue?.title || "",
+          url: state.claimedIssue?.url || "",
+        });
+        saveMigrationQueue(queue);
+      }
+    }
+    localStorage.setItem(MIGRATION_DONE_KEY, "1");
+  } catch {
+    // ignore
+  }
+}
+
 export interface FirstMergeTrackState {
   step: 1 | 2 | 3 | 4; // 1: Pick Repo, 2: Claim GFI, 3: Preflight, 4: Merged PR
   selectedRepo: {
@@ -229,8 +313,21 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
   const [issuesError, setIssuesError] = useState<string | null>(null);
 
   // Polling backoff reference
-  const pollAttemptRef = useRef(0);
+  const pollAttemptRef = useRef<number>(0);
   const pollTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // AC1-AC9: one-click issue claiming state
+  const [isLoggedIn] = useState<boolean>(() =>
+    typeof document !== "undefined" && document.cookie.includes("opendoor_token=")
+  );
+  const [claimState, setClaimState] = useState<{
+    posting: boolean;
+    error: string | null;
+    result: IssueClaimResponse | null;
+  }>({ posting: false, error: null, result: null });
+  const [needsGitHubAuth, setNeedsGitHubAuth] = useState(false);
+  const [serverClaimedKeys, setServerClaimedKeys] = useState<Set<string>>(new Set());
+  const [migrationStatus, setMigrationStatus] = useState<string | null>(null);
 
   // Multi-tab sync & state persistence (AC3)
   useEffect(() => {
@@ -429,6 +526,134 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
     }
   }, [trackState.step, trackState.selectedRepo, fetchIssues]);
 
+  // AC1: post a templated claim comment via the user's GitHub token and persist
+  // the claim server-side. Returns the parsed server response (or throws).
+  const postIssueClaim = useCallback(
+    async (fullName: string, issueNumber: number): Promise<IssueClaimResponse> => {
+      const [owner, name] = fullName.split("/");
+      const res = await fetch(
+        `${API_BASE_URL}/api/v1/issues/${encodeURIComponent(owner)}/${encodeURIComponent(
+          name
+        )}/${issueNumber}/claim`,
+        { method: "POST", credentials: "include" }
+      );
+      let data: Record<string, unknown> = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = {};
+      }
+      if (res.status === 401 || data.needs_github_auth) {
+        const err = new Error(data.error ? String(data.error) : "github auth required") as Error & {
+          needsAuth?: boolean;
+        };
+        err.needsAuth = true;
+        throw err;
+      }
+      if (res.status === 429) {
+        const err = new Error(data.error ? String(data.error) : "Rate limited") as Error & {
+          rateLimited?: boolean;
+        };
+        err.rateLimited = true;
+        throw err;
+      }
+      if (res.status >= 400) {
+        throw new Error(data.error ? String(data.error) : `claim failed (${res.status})`);
+      }
+      return data as unknown as IssueClaimResponse;
+    },
+    []
+  );
+
+  // Load existing server claims (AC6) so already-claimed issues are reflected.
+  const loadUserIssueClaims = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/user/issue-claims`, {
+        credentials: "include",
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      const claims = Array.isArray(data?.claims) ? data.claims : [];
+      const keys = new Set<string>();
+      for (const c of claims) {
+        if (c?.repo_full_name && c?.issue_number) {
+          keys.add(`${c.repo_full_name}#${c.issue_number}`);
+        }
+      }
+      setServerClaimedKeys(keys);
+    } catch {
+      // non-blocking
+    }
+  }, []);
+
+  // AC7: rate-limited (1 per 4s, max 15/min, 429 backoff) batch migration of
+  // legacy localStorage claims. Each item re-runs the server AC3 pre-check.
+  const migrateLocalClaims = useCallback(async () => {
+    seedMigrationFromLegacy();
+    let queue = loadMigrationQueue();
+    if (queue.length === 0) {
+      setMigrationStatus(null);
+      return;
+    }
+    setMigrationStatus(`Migrating ${queue.length} saved claim(s)…`);
+    const startedAt = Date.now();
+    let sentThisMinute = 0;
+    let lastSentAt = 0;
+    while (queue.length > 0) {
+      // Respect max 15/min.
+      if (sentThisMinute >= 15 && Date.now() - startedAt < 60000) {
+        await new Promise((r) => setTimeout(r, 4000));
+        continue;
+      }
+      // Space requests >= 4s apart.
+      const sinceLast = Date.now() - lastSentAt;
+      if (sinceLast < 4000) {
+        await new Promise((r) => setTimeout(r, 4000 - sinceLast));
+      }
+      const item = queue[0];
+      try {
+        await postIssueClaim(item.fullName, item.issueNumber);
+        queue = queue.slice(1);
+        saveMigrationQueue(queue);
+        sentThisMinute += 1;
+        lastSentAt = Date.now();
+        setMigrationStatus(queue.length > 0 ? `Migrating ${queue.length} saved claim(s)…` : "Claims synced.");
+      } catch (err) {
+        const e = err as Error & { rateLimited?: boolean; needsAuth?: boolean };
+        if (e.rateLimited) {
+          // 429 backoff: wait 60s then retry the same item.
+          setMigrationStatus("Rate limited — backing off before retrying…");
+          await new Promise((r) => setTimeout(r, 60000));
+          continue;
+        }
+        if (e.needsAuth) {
+          setMigrationStatus("Sign in with GitHub to finish syncing saved claims.");
+          setNeedsGitHubAuth(true);
+          break;
+        }
+        // Other failure: drop the item to avoid a stuck queue.
+        queue = queue.slice(1);
+        saveMigrationQueue(queue);
+      }
+    }
+    if (queue.length === 0) {
+      setMigrationStatus("Saved claims synced to your account.");
+      try {
+        if (typeof window !== "undefined") localStorage.removeItem(MIGRATION_QUEUE_KEY);
+      } catch {
+        // ignore
+      }
+    }
+  }, [postIssueClaim]);
+
+  // On mount (logged-in): load existing claims + run localStorage migration.
+  useEffect(() => {
+    if (!mounted || !isLoggedIn) return;
+    loadUserIssueClaims();
+    migrateLocalClaims();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, isLoggedIn]);
+
   // Handlers for steps
   const handleSelectRepo = (repo: MatchRepoItem) => {
     updateTrackState((prev) => ({
@@ -448,22 +673,75 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
     });
   };
 
-  const handleClaimIssue = (issue: GoodFirstIssueItem) => {
-    updateTrackState((prev) => ({
-      ...prev,
-      claimedIssue: {
-        id: issue.id,
-        title: issue.title,
-        url: issue.html_url,
-        issueNumber: issue.number,
-      },
-      step: Math.max(prev.step, 3) as 1 | 2 | 3 | 4,
-    }));
-    queueTrackEvent("first_merge_issue_claimed", {
-      repo: trackState.selectedRepo?.fullName,
-      issue_id: issue.id,
-      issue_url: issue.html_url,
-    });
+  const handleClaimIssue = async (issue: GoodFirstIssueItem) => {
+    const fullName = trackState.selectedRepo?.fullName || "";
+    const issueNumber = Number(issue.number ?? issue.id);
+    if (!fullName || !issueNumber) {
+      setClaimState({ posting: false, error: "Missing repo or issue info.", result: null });
+      return;
+    }
+    setClaimState({ posting: true, error: null, result: null });
+    setNeedsGitHubAuth(false);
+    try {
+      const data = await postIssueClaim(fullName, issueNumber);
+      // Server-synced: reflect claimed state & clear any legacy local claim.
+      setServerClaimedKeys((prev) => new Set(prev).add(`${fullName}#${issueNumber}`));
+      setClaimState({ posting: false, error: null, result: data });
+      updateTrackState((prev) => ({
+        ...prev,
+        claimedIssue: {
+          id: issue.id,
+          title: issue.title,
+          url: issue.html_url,
+          issueNumber: issue.number,
+        },
+        step: Math.max(prev.step, 3) as 1 | 2 | 3 | 4,
+      }));
+      try {
+        if (typeof window !== "undefined" && window.localStorage) {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const state = JSON.parse(raw);
+            if (
+              state?.selectedRepo?.fullName === fullName &&
+              Number(state?.claimedIssue?.issueNumber ?? state?.claimedIssue?.id ?? 0) === issueNumber
+            ) {
+              delete state.claimedIssue;
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            }
+          }
+        }
+      } catch {
+        // ignore
+      }
+      queueTrackEvent("first_merge_issue_claimed", {
+        repo: fullName,
+        issue_id: issue.id,
+        issue_url: issue.html_url,
+        server_synced: true,
+        comment_posted: data.comment_posted,
+      });
+    } catch (err) {
+      const e = err as Error & { needsAuth?: boolean; rateLimited?: boolean };
+      if (e.needsAuth) {
+        setNeedsGitHubAuth(true);
+        setClaimState({ posting: false, error: null, result: null });
+        return;
+      }
+      if (e.rateLimited) {
+        setClaimState({
+          posting: false,
+          error: "Too many claim comments — please wait a few minutes and try again.",
+          result: null,
+        });
+        return;
+      }
+      setClaimState({
+        posting: false,
+        error: e.message || "Could not post claim comment. Try again.",
+        result: null,
+      });
+    }
   };
 
   const handleManualAdvance = (targetStep: 1 | 2 | 3 | 4) => {
@@ -727,6 +1005,24 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
               </div>
             )}
 
+            {/* AC7: localStorage -> server migration status */}
+            {migrationStatus && (
+              <div className="mt-3 rounded-lg border border-indigo-100 bg-indigo-50/50 p-3 text-xs text-indigo-900">
+                <div className="flex items-center gap-1.5">
+                  <RefreshCw className="h-3.5 w-3.5 text-indigo-600 shrink-0" />
+                  {migrationStatus}
+                </div>
+                {needsGitHubAuth && (
+                  <a
+                    href={`${API_BASE_URL}/api/v1/auth/github`}
+                    className="mt-2 inline-flex items-center gap-1 rounded-md bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
+                  >
+                    Sign in with GitHub to finish syncing
+                  </a>
+                )}
+              </div>
+            )}
+
             {/* Issues List */}
             {loadingIssues ? (
               <div className="mt-4 py-8 text-center text-xs text-zinc-400 animate-pulse">
@@ -775,35 +1071,103 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                 </div>
               </div>
             ) : (
+              <>
               <ul className="mt-4 space-y-2">
-                {issues.map((issue) => (
-                  <li
-                    key={issue.id}
-                    className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-zinc-50/50 p-3 hover:bg-white hover:border-emerald-400 transition-all"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <a
-                        href={issue.html_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="truncate block text-xs font-semibold text-zinc-900 hover:text-emerald-700"
-                      >
-                        {issue.title} <ExternalLink className="inline h-3 w-3 text-zinc-400" />
-                      </a>
-                      <span className="text-[11px] text-zinc-400">
-                        #{issue.number || issue.id}
-                      </span>
-                    </div>
-
-                    <button
-                      onClick={() => handleClaimIssue(issue)}
-                      className="rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 shrink-0 cursor-pointer"
+                {issues.map((issue) => {
+                  const issueNumber = Number(issue.number ?? issue.id);
+                  const fullName = trackState.selectedRepo?.fullName || "";
+                  const claimedKey = `${fullName}#${issueNumber}`;
+                  const serverClaimed = serverClaimedKeys.has(claimedKey);
+                  const thisResult =
+                    claimState.result && claimState.result.claim?.repo_full_name === fullName && claimState.result.claim?.issue_number === issueNumber
+                      ? claimState.result
+                      : null;
+                  const isPostingThis =
+                    claimState.posting && !serverClaimed && !thisResult;
+                  return (
+                    <li
+                      key={issue.id}
+                      className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-zinc-50/50 p-3 hover:bg-white hover:border-emerald-400 transition-all"
                     >
-                      Claim Issue & Run Preflight →
-                    </button>
-                  </li>
-                ))}
+                      <div className="min-w-0 flex-1">
+                        <a
+                          href={issue.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="truncate block text-xs font-semibold text-zinc-900 hover:text-emerald-700"
+                        >
+                          {issue.title} <ExternalLink className="inline h-3 w-3 text-zinc-400" />
+                        </a>
+                        <span className="text-[11px] text-zinc-400">
+                          #{issueNumber}
+                        </span>
+                        {serverClaimed && (
+                          <span className="ml-2 rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-800">
+                            Claimed (synced)
+                          </span>
+                        )}
+                      </div>
+
+                      {serverClaimed || thisResult ? (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-emerald-100 px-3 py-1.5 text-xs font-semibold text-emerald-800 shrink-0">
+                          <Check className="h-3 w-3" /> Claimed
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => handleClaimIssue(issue)}
+                          disabled={isPostingThis}
+                          className="rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 shrink-0 cursor-pointer disabled:opacity-60"
+                        >
+                          {isPostingThis ? "Posting…" : "Claim Issue & Run Preflight →"}
+                        </button>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
+
+              {/* Per-click claim status / auth prompt (AC1, AC8, AC9) */}
+              {needsGitHubAuth && (
+                <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
+                  <div className="flex items-center gap-1.5 font-semibold text-amber-950">
+                    <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
+                    Sign in with GitHub to post your claim comment.
+                  </div>
+                  <p className="mt-1 text-amber-800">
+                    One-click claiming posts a comment on the issue using your GitHub account.
+                  </p>
+                  <a
+                    href={`${API_BASE_URL}/api/v1/auth/github`}
+                    className="mt-2 inline-flex items-center gap-1 rounded-md bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
+                  >
+                    Sign in with GitHub
+                  </a>
+                </div>
+              )}
+              {!needsGitHubAuth && claimState.error && (
+                <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-800">
+                  {claimState.error}
+                </div>
+              )}
+              {!needsGitHubAuth && claimState.result && (
+                <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-900">
+                  <div className="flex items-center gap-1.5 font-semibold text-emerald-950">
+                    <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+                    {claimState.result.message}
+                  </div>
+                  {claimState.result.claim?.attribution_url && (
+                    <a
+                      href={claimState.result.claim.attribution_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-flex items-center gap-1 underline hover:text-emerald-700"
+                    >
+                      View repository scorecard <ExternalLink className="inline h-3 w-3" />
+                    </a>
+                  )}
+                </div>
+              )}
+              </>
             )}
           </div>
         )}

@@ -55,7 +55,9 @@ func GitHubOAuthRedirect(cfg *config.Config) gin.HandlerFunc {
 			scheme = "http"
 		}
 		redirectURI := scheme + "://" + c.Request.Host + "/api/v1/auth/github/callback"
-		redirectURL := "https://github.com/login/oauth/authorize?client_id=" + cfg.GithubClientID + "&redirect_uri=" + url.QueryEscape(redirectURI) + "&scope=user:email"
+		// AC1: request issues:write so signed-in users can post a templated
+		// claim comment directly on a Good First Issue.
+		redirectURL := "https://github.com/login/oauth/authorize?client_id=" + cfg.GithubClientID + "&redirect_uri=" + url.QueryEscape(redirectURI) + "&scope=" + url.QueryEscape("user:email issues:write")
 		c.Redirect(http.StatusTemporaryRedirect, redirectURL)
 	}
 }
