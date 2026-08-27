@@ -276,7 +276,7 @@ func (r *sqlxRepoBoostRepository) ActivateRepoBoost(ctx context.Context, payment
 			base = now
 		}
 		newExpiry = base.AddDate(0, 0, extendDays)
-		if err := r.db.ExecContext(ctx,
+		if _, err := r.db.ExecContext(ctx,
 			`UPDATE repo_boosts SET expires_at = ?, updated_at = CURRENT_TIMESTAMP WHERE payment_intent_id = ? AND status = 'active'`,
 			newExpiry, active.PaymentIntentID); err != nil {
 			return err
