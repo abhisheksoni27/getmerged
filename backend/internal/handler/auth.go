@@ -182,19 +182,13 @@ func GitHubOAuthCallback(cfg *config.Config, userRepo repository.UserRepository,
 		// (AC4/AC5) — no GitHub re-sync that would overwrite quiz prefs.
 		quizSeeded := SeedQuizSnapshotFromRequest(c, userRepo, userID)
 		if !quizSeeded {
-			if err := SyncGithubLanguages(c.Request.Context(), tokenResp.AccessToken, userID, userRepo); err != nil {
-				slog.Warn("github language sync failed during login", "user_id", userID, "err", err)
-				syncSecure := cfg.GinMode == "release"
-				http.SetCookie(c.Writer, &http.Cookie{
-					Name:     "opendoor_sync_failed",
-					Value:    "1",
-					Path:     "/",
-					MaxAge:   600,
-					HttpOnly: false,
-					Secure:   syncSecure,
-					SameSite: http.SameSiteLaxMode,
-				})
-			}
+			go func(token string, uid int64) {
+				ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+				defer cancel()
+				if err := SyncGithubLanguages(ctx, token, uid, userRepo); err != nil {
+					slog.Warn("github language sync failed in background", "user_id", uid, "err", err)
+				}
+			}(tokenResp.AccessToken, userID)
 		}
 
 		// Auto-import top public repo languages as skills. Best-effort with its
