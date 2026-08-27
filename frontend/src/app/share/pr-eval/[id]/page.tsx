@@ -111,7 +111,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
         </div>
 
         {/* Main Result Card */}
-        <div className="rounded-2xl bg-white p-6 sm:p-8 border-2 border-zinc-200/60 shadow-[6px_6px_0px_#222831] mb-8">
+        <div className="rounded-2xl bg-white p-6 sm:p-8 border-2 border-brand-dark shadow-[6px_6px_0px_#222831] mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-zinc-100">
             <div>
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 block mb-1">
@@ -221,7 +221,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
               <Link
                 href={cRankUrl}
                 data-testid="share-cta-crank"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white border-2 border-zinc-200/60 text-zinc-900 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-50 active:scale-[0.98] transition-all shadow-[2px_2px_0px_#000]"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white border-2 border-brand-dark text-zinc-900 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-50 active:scale-[0.98] transition-all shadow-[2px_2px_0px_#000]"
               >
                 <ShieldCheck className="h-4 w-4 text-emerald-600" />
                 <span>Explore {repoClean} C-Rank</span>

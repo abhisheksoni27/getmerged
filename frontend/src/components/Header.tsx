@@ -54,7 +54,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-zinc-200/80 bg-[#FCFCFD]/95 backdrop-blur-md transition-all">
+    <header className="sticky top-0 z-50 w-full border-b border-zinc-200/80 bg-[#faf9f6]/90 backdrop-blur-md transition-all">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 sm:gap-4 px-3 sm:px-6 lg:px-8">
         {/* Brand Logo & Main Nav */}
         <div className="flex items-center gap-4 lg:gap-6 min-w-0">
@@ -108,7 +108,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               type="button"
               onClick={handleOpenSearch}
               aria-label="Search repositories"
-              className="w-full relative flex items-center justify-between h-9 sm:h-10 rounded-xl border border-zinc-200 bg-white px-3 py-1.5 sm:py-2 shadow-xs hover:border-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:outline-none transition-all active:scale-[0.99] cursor-pointer group text-left"
+              className="nb-opt-out w-full relative flex items-center justify-between h-9 sm:h-10 rounded-xl border border-zinc-200 bg-white px-3 py-1.5 sm:py-2 shadow-xs hover:border-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:outline-none transition-all active:scale-[0.99] cursor-pointer group text-left"
             >
               <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-1.5">
                 <Search className="h-4 w-4 text-zinc-400 group-hover:text-zinc-600 shrink-0 transition-colors" />
@@ -128,7 +128,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
           {authLoading ? (
             <div className="h-9 w-24 sm:w-28 rounded-xl bg-zinc-200/60 animate-pulse" />
           ) : user ? (
-            <div className="flex items-center gap-2 sm:gap-2.5 bg-white border border-zinc-200/60 rounded-full px-3 py-1.5 gap-2 shrink-0">
+            <div className="flex items-center gap-2 sm:gap-2.5 bg-white border border-zinc-200/80 rounded-xl px-2.5 sm:px-3 py-1.5 shadow-2xs shrink-0">
               {user.slug ? (
                 <Link
                   href={`/${user.slug}`}
@@ -181,7 +181,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   setIsAuthModalOpen(true);
                 }}
                 title="Sign in to GetMerged"
-                className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800 transition-all active:scale-[0.98] active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer shrink-0"
+                className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-3.5 sm:px-4 py-2 text-xs font-semibold text-white shadow-xs hover:bg-zinc-800 active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer shrink-0"
               >
                 <span>Sign in</span>
               </button>

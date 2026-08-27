@@ -50,37 +50,37 @@ function getBadgeStyle(rank?: string) {
   switch (rank) {
     case "S":
       return {
-        badgeClass: "bg-[#8ce99a] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+        badgeClass: "bg-[#8ce99a] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
         label: "Super Welcoming",
         indicatorColor: "bg-emerald-600",
       };
     case "A":
       return {
-        badgeClass: "bg-[#bfdbff] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+        badgeClass: "bg-[#bfdbff] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
         label: "Welcoming",
         indicatorColor: "bg-blue-600",
       };
     case "B":
       return {
-        badgeClass: "bg-[#ffd93d] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+        badgeClass: "bg-[#ffd93d] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
         label: "Moderate",
         indicatorColor: "bg-amber-600",
       };
     case "C":
       return {
-        badgeClass: "bg-[#e5dbff] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+        badgeClass: "bg-[#e5dbff] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
         label: "Slow Review",
         indicatorColor: "bg-purple-600",
       };
     case "D":
       return {
-        badgeClass: "bg-[#ffb3c7] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+        badgeClass: "bg-[#ffb3c7] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
         label: "Unmaintained",
         indicatorColor: "bg-rose-600",
       };
     default:
       return {
-        badgeClass: "bg-[#FCFCFD] text-black border border-zinc-200/60 font-bold shadow-[2px_2px_0px_#000]",
+        badgeClass: "bg-[#faf9f6] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
         label: "Scored",
         indicatorColor: "bg-zinc-600",
       };
@@ -640,7 +640,7 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FCFCFD] py-10">
+    <div className="min-h-screen bg-[#faf9f6] py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Watchlist Hero Header */}
         <div className="mb-8 border-b border-zinc-200/80 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -677,7 +677,7 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
         {/* Loading Spinner */}
         {loading && items.length === 0 ? (
           <div className="py-20 flex justify-center items-center">
-            <div className="h-8 w-8 rounded-full border border-zinc-200/60 border-t-transparent animate-spin" />
+            <div className="h-8 w-8 rounded-full border-2 border-zinc-900 border-t-transparent animate-spin" />
           </div>
         ) : items.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">

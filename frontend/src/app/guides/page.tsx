@@ -60,7 +60,7 @@ export default function GuidesHubPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FCFCFD] text-zinc-900 font-sans">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-[#faf9f6] text-zinc-900 font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -75,14 +75,14 @@ export default function GuidesHubPage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-zinc-200/60 border-b-4 text-xs text-black hover:bg-zinc-100 transition-colors mb-6 font-bold shadow-[2px_2px_0px_#000]"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-black border-b-4 text-xs text-black hover:bg-zinc-100 transition-colors mb-6 font-bold shadow-[2px_2px_0px_#000]"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Banner */}
-        <div className="border border-zinc-200/60 bg-white p-8 sm:p-10 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#8ce99a] border border-zinc-200/60 font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-[2px_2px_0px_#000]">
+        <div className="border-2 border-black bg-white p-8 sm:p-10 shadow-[6px_6px_0px_#000] mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#8ce99a] border-2 border-black font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-[2px_2px_0px_#000]">
             <Sparkles className="w-3.5 h-3.5" />
             Empirical Developer Guides &middot; Zero Speculation
           </div>
@@ -101,7 +101,7 @@ export default function GuidesHubPage() {
               key={guide.slug}
               href={`/guides/${guide.slug}`}
               title={`Read guide: ${guide.title}`}
-              className="border border-zinc-200/60 bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+              className="border-2 border-black bg-white p-6 shadow-[4px_4px_0px_#000] hover:shadow-[6px_6px_0px_#000] hover:-translate-y-0.5 transition-all flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
@@ -113,7 +113,7 @@ export default function GuidesHubPage() {
                   </span>
                 </div>
 
-                <div className="mb-4 overflow-hidden border border-zinc-200/60 bg-zinc-100 shadow-[2px_2px_0px_#000]">
+                <div className="mb-4 overflow-hidden border-2 border-black bg-zinc-100 shadow-[2px_2px_0px_#000]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`/images/guides/${guide.slug}.jpg`}
@@ -145,7 +145,7 @@ export default function GuidesHubPage() {
         </div>
 
         {/* C-Rank Extractable Definition Box */}
-        <div className="border border-zinc-200/60 bg-zinc-900 text-white p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+        <div className="border-2 border-black bg-zinc-900 text-white p-6 sm:p-8 shadow-[6px_6px_0px_#000]">
           <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs font-bold uppercase tracking-wider mb-2">
             <ShieldCheck className="w-4 h-4" />
             C-Rank™ Official Definition

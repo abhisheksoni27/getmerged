@@ -36,7 +36,7 @@ export function OrgClaimButton({ fullName }: OrgClaimButtonProps) {
       <button
         onClick={() => setIsOpen(true)}
         title={`Verify maintainer ownership of ${fullName}`}
-        className="px-4 py-2 rounded-xl bg-white hover:bg-emerald-50 text-zinc-900 font-bold text-xs inline-flex items-center gap-1.5 transition-all border border-zinc-200/60  cursor-pointer"
+        className="px-4 py-2 rounded-xl bg-white hover:bg-emerald-50 text-zinc-900 font-bold text-xs inline-flex items-center gap-1.5 transition-all border-2 border-zinc-900 shadow-[3px_3px_0px_#000] cursor-pointer"
       >
         <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
         Claim this repo

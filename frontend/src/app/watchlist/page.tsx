@@ -80,7 +80,7 @@ export default async function WatchlistPage() {
   const initialItems = await getWatchlistData(token);
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FCFCFD]">
+    <div className="flex min-h-screen flex-col bg-[#faf9f6]">
       <Header />
       <main className="flex-1 pt-8">
         <ReferralCard />

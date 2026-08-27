@@ -141,7 +141,6 @@ func main() {
 	// Start continuous background crawler worker loop
 	gfiRepo := repository.NewGFIRepository(database)
 	repoBoostRepo := repository.NewRepoBoostRepository(database)
-	featuredRepo := repository.NewFeaturedRepository(database)
 
 	if cfg.GinMode == "release" {
 		crawler := pipeline.NewBackgroundCrawler(database, gh, telegramNotifier)
@@ -570,12 +569,6 @@ func main() {
 		// AC6 client poll: /api/audit/status?repo_key=... (distinct static
 		// prefix from /api/v1 so no wildcard mixing at the API-root level).
 		r.GET("/api/audit/status", middleware.UserAuth(cfg.JWTSecret), handler.GetRepoAuditStatusHandler(auditRepo, cfg))
-
-		// Featured Placement: paid featured placement in contributor discovery
-		// (AC1-AC10). POST requires auth + ownership; GET is the public live
-		// query powering /good-first-issue, /contribute/[lang], and the digest.
-		r.POST("/api/featured/create", middleware.UserAuth(cfg.JWTSecret), handler.FeaturedCreateHandler(cfg, database, featuredRepo))
-		r.GET("/api/featured", handler.FeaturedListHandler(featuredRepo))
 
 		// AC6: one-click unsubscribe /u/{userId}?sig=HMAC(secret, userId+expiry30d)
 		r.GET("/u/:userid", handler.GFIUnsubscribeShortHandler(cfg))

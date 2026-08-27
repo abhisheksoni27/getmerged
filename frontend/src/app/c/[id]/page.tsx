@@ -86,7 +86,7 @@ export default async function ShareCardPage({ params }: PageProps) {
   const ogUrl = `${API_BASE_URL}/api/v1/cards/${encodeURIComponent(id)}/og.png`;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FCFCFD]">
+    <div className="min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
       <Header />
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         <div className="text-center mb-8">

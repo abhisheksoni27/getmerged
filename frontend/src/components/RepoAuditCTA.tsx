@@ -70,7 +70,7 @@ export function RepoAuditCTA({ fullName, isScored, isLoggedIn, requireLogin }: R
       <Link
         href={`/${fullName}/audit`}
         title="View your full deep-audit report"
-        className="inline-flex items-center gap-2 rounded-xl border-2 border-zinc-200/60 bg-emerald-100 px-4 py-2 text-xs font-mono font-bold text-emerald-950 shadow-[2px_2px_0px_#222831] transition-all hover:bg-emerald-200 cursor-pointer"
+        className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-dark bg-emerald-100 px-4 py-2 text-xs font-mono font-bold text-emerald-950 shadow-[2px_2px_0px_#222831] transition-all hover:bg-emerald-200 cursor-pointer"
       >
         <FileSearch className="h-4 w-4" />
         View Full Audit Report
@@ -88,7 +88,7 @@ export function RepoAuditCTA({ fullName, isScored, isLoggedIn, requireLogin }: R
       type="button"
       onClick={goToAudit}
       title={isLoggedIn ? "Unlock the full C-Rank deep-audit" : "Sign in to unlock the full deep-audit"}
-      className="inline-flex items-center gap-2 rounded-xl border-2 border-zinc-200/60 bg-amber-500/10 px-4 py-2 text-xs font-mono font-bold text-zinc-950 shadow-[2px_2px_0px_#222831] transition-all hover:bg-[#ffdf5c] active:scale-[0.99] cursor-pointer"
+      className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-dark bg-[#ffd93d] px-4 py-2 text-xs font-mono font-bold text-zinc-950 shadow-[2px_2px_0px_#222831] transition-all hover:bg-[#ffdf5c] active:scale-[0.99] cursor-pointer"
     >
       {!isLoggedIn && <Lock className="h-4 w-4" />}
       <FileSearch className="h-4 w-4" />

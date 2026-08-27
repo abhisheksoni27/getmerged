@@ -16,15 +16,15 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#FCFCFD] text-zinc-900">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-[#faf9f6] text-zinc-900">
       <Header />
       <main className="flex-1 flex items-center justify-center px-4 py-16 sm:py-24">
-        <div className="max-w-xl w-full bg-white border border-zinc-200/60 p-8 sm:p-10 shadow-[0_1px_3px_rgba(0,0,0,0.04)] text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#ffb3c7] border border-zinc-200/60  mb-6">
+        <div className="max-w-xl w-full bg-white border-2 border-black p-8 sm:p-10 shadow-[6px_6px_0px_#000] text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#ffb3c7] border-2 border-black shadow-[3px_3px_0px_#000] mb-6">
             <ShieldAlert className="w-8 h-8 text-black" />
           </div>
 
-          <div className="inline-block px-3 py-1 bg-[#ffd93d] border border-zinc-200/60 font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-[2px_2px_0px_#000]">
+          <div className="inline-block px-3 py-1 bg-[#ffd93d] border-2 border-black font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-[2px_2px_0px_#000]">
             HTTP 404 &middot; Not Indexed
           </div>
 
@@ -40,7 +40,7 @@ export default function NotFound() {
             <Link
               href="/"
               title="Return to GetMerged Home"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-black text-white font-mono text-sm font-bold border border-zinc-200/60  hover:bg-zinc-800 transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-black text-white font-mono text-sm font-bold border-2 border-black shadow-[3px_3px_0px_#000] hover:bg-zinc-800 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Explore Welcoming Repos
@@ -49,7 +49,7 @@ export default function NotFound() {
             <Link
               href="/repos"
               title="Search all indexed repositories"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#bfdbff] text-black font-mono text-sm font-bold border border-zinc-200/60  hover:bg-[#a6cbff] transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#bfdbff] text-black font-mono text-sm font-bold border-2 border-black shadow-[3px_3px_0px_#000] hover:bg-[#a6cbff] transition-colors"
             >
               <Search className="w-4 h-4" />
               Browse Repository Directory

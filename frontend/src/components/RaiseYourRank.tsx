@@ -51,16 +51,16 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
     return (
       <section
         id="raise-your-rank"
-        className="scroll-mt-36 relative rounded-2xl border-2 border-zinc-200/60 bg-gradient-to-br from-amber-50 via-white to-emerald-50 p-5 shadow-[5px_5px_0px_#222831] mb-10"
+        className="scroll-mt-36 relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-amber-50 via-white to-emerald-50 p-5 shadow-[5px_5px_0px_#222831] mb-10"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-zinc-200/60 bg-yellow-200 text-zinc-950 shadow-[2px_2px_0px_#222831] -rotate-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-zinc-950 shadow-[2px_2px_0px_#222831] -rotate-2">
               <TrendingUp className="h-4 w-4" />
             </div>
             <h2 className="font-space text-base font-extrabold text-zinc-950">Raise Your C-Rank</h2>
           </div>
-          <span className="px-3 py-1 rounded-lg border border-zinc-200/60 bg-white font-mono text-xs font-bold text-zinc-800 ">
+          <span className="px-3 py-1 rounded-lg border-2 border-black bg-white font-mono text-xs font-bold text-zinc-800 shadow-[2px_2px_0px_#000]">
             {playbook.repo_full_name} · tier {tier}
           </span>
         </div>
@@ -71,7 +71,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
         <button
           type="button"
           onClick={onClaimClick}
-          className="mt-4 inline-flex items-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm rounded-2xl border border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover: hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer"
+          className="mt-4 inline-flex items-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000] hover:shadow-[2px_2px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer"
         >
           <ShieldCheck className="w-4 h-4" /> Verify ownership &amp; unlock the playbook
         </button>
@@ -86,16 +86,16 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
   return (
     <section
       id="raise-your-rank"
-      className="scroll-mt-36 relative rounded-2xl border-2 border-zinc-200/60 bg-gradient-to-br from-amber-50 via-white to-emerald-50 p-5 sm:p-6 shadow-[5px_5px_0px_#222831] mb-10"
+      className="scroll-mt-36 relative rounded-2xl border-2 border-brand-dark bg-gradient-to-br from-amber-50 via-white to-emerald-50 p-5 sm:p-6 shadow-[5px_5px_0px_#222831] mb-10"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-zinc-200/60 bg-yellow-200 text-zinc-950 shadow-[2px_2px_0px_#222831] -rotate-2">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-brand-dark bg-yellow-200 text-zinc-950 shadow-[2px_2px_0px_#222831] -rotate-2">
             <TrendingUp className="h-4 w-4" />
           </div>
           <h2 className="font-space text-base font-extrabold text-zinc-950">Raise Your C-Rank</h2>
         </div>
-        <span className="px-3 py-1 rounded-lg border border-zinc-200/60 bg-white font-mono text-xs font-bold text-zinc-800 ">
+        <span className="px-3 py-1 rounded-lg border-2 border-black bg-white font-mono text-xs font-bold text-zinc-800 shadow-[2px_2px_0px_#000]">
           score {Math.round(playbook.c_rank_score)} · tier {tier}
         </span>
       </div>
@@ -118,7 +118,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
                   ? "bg-emerald-50/70 border-emerald-300"
                   : item.status === "insufficient_data"
                   ? "bg-zinc-50 border-zinc-300"
-                  : "bg-white border-zinc-200/60 shadow-[3px_3px_0px_#222831]"
+                  : "bg-white border-brand-dark shadow-[3px_3px_0px_#222831]"
               }`}
             >
               <div className="flex items-start justify-between gap-3">
@@ -154,7 +154,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
       <button
         type="button"
         onClick={onClaimClick}
-        className="mt-5 inline-flex items-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm rounded-2xl border border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover: hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer"
+        className="mt-5 inline-flex items-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000] hover:shadow-[2px_2px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer"
       >
         <ShieldCheck className="w-4 h-4" /> Verify ownership &amp; unlock automated re-scores
       </button>
