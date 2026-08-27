@@ -169,7 +169,7 @@ export default function PRSimulatorPage() {
 
         <form
           onSubmit={submit}
-          className="rounded-2xl bg-zinc-900/80 p-6 border-2 border-white/[0.08] shadow-sm space-y-5"
+          className="rounded-2xl glass-panel p-6 border-2 border-white/[0.1] shadow-sm space-y-5"
         >
           <div>
             <label htmlFor="sim-repo" className="block text-xs font-bold uppercase tracking-wide text-zinc-300 mb-1">
@@ -183,7 +183,7 @@ export default function PRSimulatorPage() {
               placeholder="owner/repo or https://github.com/owner/repo"
               required
               maxLength={255}
-              className="w-full rounded-lg border border-white/[0.12] px-3 py-2 text-sm focus:border-white/[0.08] focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+              className="w-full rounded-lg border border-white/[0.12] px-3 py-2 text-sm focus:border-white/[0.1] focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
             />
           </div>
           <div>
@@ -198,7 +198,7 @@ export default function PRSimulatorPage() {
               placeholder='feat: add streaming ingest'
               required
               maxLength={200}
-              className="w-full rounded-lg border border-white/[0.12] px-3 py-2 text-sm focus:border-white/[0.08] focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+              className="w-full rounded-lg border border-white/[0.12] px-3 py-2 text-sm focus:border-white/[0.1] focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
             />
           </div>
           <div>
@@ -212,7 +212,7 @@ export default function PRSimulatorPage() {
               rows={3}
               maxLength={10000}
               placeholder={"What does this change do? (>50 characters earns full points)"}
-              className="w-full rounded-lg border border-white/[0.12] px-3 py-2 text-sm focus:border-white/[0.08] focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+              className="w-full rounded-lg border border-white/[0.12] px-3 py-2 text-sm focus:border-white/[0.1] focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
             />
           </div>
           <div>
@@ -228,7 +228,7 @@ export default function PRSimulatorPage() {
               spellCheck={false}
               placeholder={"diff --git a/src/app.ts b/src/app.ts\n--- a/src/app.ts\n+++ b/src/app.ts\n@@ ..."}
               required
-              className="w-full rounded-lg border border-white/[0.12] px-3 py-2 text-xs leading-relaxed bg-zinc-900 focus:border-white/[0.08] focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+              className="w-full rounded-lg border border-white/[0.12] px-3 py-2 text-xs leading-relaxed glass-card focus:border-white/[0.1] focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
             />
             <p className="mt-1 text-[11px] text-zinc-300">
               Encrypted at rest, auto-deleted after 24 hours, never shown publicly.
@@ -255,7 +255,7 @@ export default function PRSimulatorPage() {
         {result && (
           <section
             data-testid="pr-sim-result"
-            className="mt-8 rounded-2xl bg-zinc-900/80 p-6 border-2 border-white/[0.08] shadow-sm"
+            className="mt-8 rounded-2xl glass-panel p-6 border-2 border-white/[0.1] shadow-sm"
           >
             <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
               <div className={`rounded-2xl px-6 py-4 ${scoreColor(result.score)}`}>
@@ -292,7 +292,7 @@ export default function PRSimulatorPage() {
                         {pts}/{w.max}
                       </span>
                     </div>
-                    <div className="h-2.5 rounded-full bg-zinc-900 border border-white/[0.08] overflow-hidden">
+                    <div className="h-2.5 rounded-full glass-card border border-white/[0.1] overflow-hidden">
                       <div
                         className="h-full rounded-full bg-emerald-500 transition-all duration-500"
                         style={{ width: `${pct}%` }}
@@ -333,14 +333,14 @@ export default function PRSimulatorPage() {
                     value={shareText}
                     onFocus={(e) => e.currentTarget.select()}
                     aria-label="Badge URL - select and copy manually"
-                    className="w-full rounded-lg border border-white/[0.12] bg-zinc-900 px-3 py-2 text-xs text-zinc-300 select-all"
+                    className="w-full rounded-lg border border-white/[0.12] glass-card px-3 py-2 text-xs text-zinc-300 select-all"
                   />
                 ) : (
                   <button
                     type="button"
                     onClick={copyShare}
                     data-testid="pr-sim-copy"
-                    className="inline-flex items-center gap-2 rounded-lg border-2 border-white/[0.08] bg-zinc-900 px-3 py-1.5 text-xs font-bold text-zinc-200 hover:bg-zinc-900"
+                    className="inline-flex items-center gap-2 rounded-lg border-2 border-white/[0.1] glass-card px-3 py-1.5 text-xs font-bold text-zinc-200 hover:glass-card"
                   >
                     {copied === "ok" ? (
                       <>

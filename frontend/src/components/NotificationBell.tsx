@@ -90,7 +90,7 @@ export function NotificationBell({ user }: { user: User | null }) {
         title="Notifications"
         aria-label="Open notifications"
         onClick={() => setOpen((o) => !o)}
-        className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.08] bg-zinc-900/80 text-zinc-300 shadow-2xs transition-colors hover:text-white hover:bg-zinc-900"
+        className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.1] glass-panel text-zinc-300 shadow-2xs transition-colors hover:text-white hover:glass-card"
       >
         <Bell className="h-4 w-4" />
         {unread > 0 && (
@@ -101,8 +101,8 @@ export function NotificationBell({ user }: { user: User | null }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-2 w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900/80 shadow-xl">
-          <div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-3">
+        <div className="absolute right-0 z-50 mt-2 w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border border-white/[0.1] glass-panel shadow-xl">
+          <div className="flex items-center justify-between border-b border-white/[0.1] px-4 py-3">
             <div className="flex items-center gap-2">
               <span className="font-sans text-sm font-semibold text-white">
                 Notifications
@@ -118,7 +118,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 type="button"
                 title="Notification settings"
                 onClick={() => setShowPrefs((s) => !s)}
-                className="rounded-lg p-1.5 text-zinc-300 hover:bg-zinc-900 hover:text-zinc-200"
+                className="rounded-lg p-1.5 text-zinc-300 hover:glass-card hover:text-zinc-200"
               >
                 <Settings2 className="h-4 w-4" />
               </button>
@@ -126,7 +126,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 type="button"
                 title="Mark all read"
                 onClick={() => void markRead([], true)}
-                className="rounded-lg p-1.5 text-zinc-300 hover:bg-zinc-900 hover:text-zinc-200"
+                className="rounded-lg p-1.5 text-zinc-300 hover:glass-card hover:text-zinc-200"
               >
                 <Check className="h-4 w-4" />
               </button>
@@ -134,7 +134,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 type="button"
                 title="Close"
                 onClick={() => setOpen(false)}
-                className="rounded-lg p-1.5 text-zinc-300 hover:bg-zinc-900 hover:text-zinc-200"
+                className="rounded-lg p-1.5 text-zinc-300 hover:glass-card hover:text-zinc-200"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -142,7 +142,7 @@ export function NotificationBell({ user }: { user: User | null }) {
           </div>
 
           {showPrefs && (
-            <div className="border-b border-white/[0.08] bg-zinc-900/60 px-4 py-3">
+            <div className="border-b border-white/[0.1] glass-card/60 px-4 py-3">
               <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-zinc-300">
                 In-app notifications
               </p>
@@ -197,7 +197,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 <button
                   type="button"
                   onClick={() => void refresh()}
-                  className="rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-800"
+                  className="rounded-lg glass-card px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-800"
                 >
                   Retry
                 </button>
@@ -214,7 +214,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                       <Link
                         href={n.payload.link_url}
                         onClick={() => onItemClick(n.id, n.payload.link_url || "")}
-                        className="block px-4 py-3 transition-colors hover:bg-zinc-900"
+                        className="block px-4 py-3 transition-colors hover:glass-card"
                       >
                         <NotificationRow n={n} />
                       </Link>
@@ -222,7 +222,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                       <button
                         type="button"
                         onClick={() => onItemClick(n.id, "")}
-                        className="block w-full px-4 py-3 text-left transition-colors hover:bg-zinc-900"
+                        className="block w-full px-4 py-3 text-left transition-colors hover:glass-card"
                       >
                         <NotificationRow n={n} />
                       </button>
@@ -234,7 +234,7 @@ export function NotificationBell({ user }: { user: User | null }) {
           </div>
 
           {hasMore && !error && (
-            <div className="border-t border-white/[0.08] px-4 py-2 text-center">
+            <div className="border-t border-white/[0.1] px-4 py-2 text-center">
               <button
                 type="button"
                 onClick={() => void loadMore()}

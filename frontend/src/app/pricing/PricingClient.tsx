@@ -31,7 +31,7 @@ export default function PricingClient() {
           <button
             onClick={() => setBillingCycle("monthly")}
             className={`px-4 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-              billingCycle === "monthly" ? "bg-zinc-900/80 text-white shadow-sm" : "text-zinc-300 hover:text-white"
+              billingCycle === "monthly" ? "glass-panel text-white shadow-sm" : "text-zinc-300 hover:text-white"
             }`}
           >
             Monthly Billing
@@ -39,11 +39,11 @@ export default function PricingClient() {
           <button
             onClick={() => setBillingCycle("yearly")}
             className={`px-4 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-              billingCycle === "yearly" ? "bg-zinc-900/80 text-white shadow-sm" : "text-zinc-300 hover:text-white"
+              billingCycle === "yearly" ? "glass-panel text-white shadow-sm" : "text-zinc-300 hover:text-white"
             }`}
           >
             Annual Billing
-            <span className="bg-emerald-950/80 border-emerald-800/80 text-emerald-300 text-[10px] px-1.5 py-0.2 rounded-full font-sans font-bold">
+            <span className="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] px-1.5 py-0.2 rounded-full font-sans font-bold">
               Save 27%
             </span>
           </button>
@@ -53,11 +53,11 @@ export default function PricingClient() {
       {/* Pricing Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
         {/* Free Tier Card */}
-        <div className="rounded-2xl bg-zinc-900/80 p-6 sm:p-8 border-2 border-white/[0.08] shadow-sm flex flex-col justify-between font-sans">
+        <div className="rounded-2xl glass-panel p-6 sm:p-8 border-2 border-white/[0.1] shadow-sm flex flex-col justify-between font-sans">
           <div>
             <div className="flex items-center justify-between mb-2 font-mono">
               <h2 className="text-lg font-bold text-white">Community Free</h2>
-              <span className="text-xs text-zinc-300 bg-zinc-900 px-2 py-0.5 rounded">Forever</span>
+              <span className="text-xs text-zinc-300 glass-card px-2 py-0.5 rounded">Forever</span>
             </div>
             <p className="text-xs text-zinc-300 mb-6">
               Essential tools for exploring repository maintainer responsiveness and finding beginner issues.
@@ -89,14 +89,14 @@ export default function PricingClient() {
 
           <button
             disabled
-            className="w-full py-2.5 rounded-xl bg-zinc-900 text-zinc-300 font-mono font-bold text-xs uppercase tracking-wider text-center"
+            className="w-full py-2.5 rounded-xl glass-card text-zinc-300 font-mono font-bold text-xs uppercase tracking-wider text-center"
           >
             Current Plan
           </button>
         </div>
 
         {/* Pro Tier Card */}
-        <div className="rounded-2xl bg-zinc-900/80 p-6 sm:p-8 border-2 border-emerald-600 shadow-sm flex flex-col justify-between relative font-sans">
+        <div className="rounded-2xl glass-panel p-6 sm:p-8 border-2 border-emerald-600 shadow-sm flex flex-col justify-between relative font-sans">
           <div className="absolute -top-3 right-6 bg-emerald-600 text-white text-[11px] font-bold font-mono uppercase px-3 py-0.5 rounded-full shadow-sm">
             Most Popular
           </div>
@@ -161,7 +161,7 @@ export default function PricingClient() {
       </div>
 
       {/* Guarantee Banner */}
-      <div className="max-w-2xl mx-auto rounded-2xl bg-zinc-900 border border-white/[0.08] p-4 text-center font-sans">
+      <div className="max-w-2xl mx-auto rounded-2xl glass-card border border-white/[0.1] p-4 text-center font-sans">
         <div className="flex items-center justify-center gap-2 text-xs font-bold text-zinc-200 mb-1">
           <ShieldCheck className="h-4 w-4 text-emerald-600" />
           <span>100% Risk-Free 7-Day Money-Back Guarantee</span>

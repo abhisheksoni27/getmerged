@@ -193,7 +193,7 @@ export default function HowCRankWorksPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-zinc-950 dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-black dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"
@@ -208,14 +208,14 @@ export default function HowCRankWorksPage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition-colors mb-8 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-8 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Narrative Opener: The Contributor's Dilemma */}
-        <div className="rounded-3xl bg-zinc-900/80 p-8 sm:p-12 border border-white/[0.08] shadow-xs mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-zinc-900 text-white font-mono text-xs font-semibold mb-4">
+        <div className="rounded-3xl glass-panel p-8 sm:p-12 border border-white/[0.1] shadow-xs mb-12">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl glass-card text-white font-mono text-xs font-semibold mb-4">
             <DoorOpen className="h-3.5 w-3.5 text-amber-400" /> The Science of Open Source Hospitality
           </div>
           <h1 className="text-3xl sm:text-5xl font-bold font-space text-white tracking-tight leading-tight">
@@ -231,7 +231,7 @@ export default function HowCRankWorksPage() {
 
         {/* The Open Source Reality Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 font-sans">
-          <div className="rounded-3xl bg-zinc-900/80 p-7 border border-white/[0.08] shadow-xs flex flex-col justify-between">
+          <div className="rounded-3xl glass-panel p-7 border border-white/[0.1] shadow-xs flex flex-col justify-between">
             <div>
               <div className="h-10 w-10 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 flex items-center justify-center text-rose-600 mb-4">
                 <HeartCrack className="h-5 w-5" />
@@ -241,12 +241,12 @@ export default function HowCRankWorksPage() {
                 Over 60% of open-source maintainers perform their work entirely unpaid and report overwhelming burnout from incoming backlog fatigue.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-white/[0.08] font-mono text-[11px] text-zinc-300">
+            <div className="mt-4 pt-3 border-t border-white/[0.1] font-mono text-[11px] text-zinc-300">
               Source: Maintainer Sustainability Surveys
             </div>
           </div>
 
-          <div className="rounded-3xl bg-zinc-900/80 p-7 border border-white/[0.08] shadow-xs flex flex-col justify-between">
+          <div className="rounded-3xl glass-panel p-7 border border-white/[0.1] shadow-xs flex flex-col justify-between">
             <div>
               <div className="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 flex items-center justify-center text-amber-600 mb-4">
                 <Ghost className="h-5 w-5" />
@@ -256,12 +256,12 @@ export default function HowCRankWorksPage() {
                 GitHub stars accumulate forever like museum plaques. A 40,000-star project could easily be an unmaintained ghost town today.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-white/[0.08] font-mono text-[11px] text-zinc-300">
+            <div className="mt-4 pt-3 border-t border-white/[0.1] font-mono text-[11px] text-zinc-300">
               Legacy stars vs. real maintainer pulse
             </div>
           </div>
 
-          <div className="rounded-3xl bg-zinc-900/80 p-7 border border-white/[0.08] shadow-xs flex flex-col justify-between">
+          <div className="rounded-3xl glass-panel p-7 border border-white/[0.1] shadow-xs flex flex-col justify-between">
             <div>
               <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-center justify-center text-emerald-600 mb-4">
                 <Sparkles className="h-5 w-5" />
@@ -271,7 +271,7 @@ export default function HowCRankWorksPage() {
                 We analyze live GraphQL event streams to pinpoint repos where maintainers are active, responsive, and genuinely excited to merge community code.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-white/[0.08] font-mono text-[11px] text-zinc-300">
+            <div className="mt-4 pt-3 border-t border-white/[0.1] font-mono text-[11px] text-zinc-300">
               Objective maintainer telemetry
             </div>
           </div>
@@ -279,7 +279,7 @@ export default function HowCRankWorksPage() {
 
         {/* The 9 Macro Signals */}
         <div className="space-y-6 mb-16">
-          <div className="border-b border-white/[0.08] pb-4">
+          <div className="border-b border-white/[0.1] pb-4">
             <h2 className="text-2xl font-bold font-space text-white">
               The 9 Telemetry Signals We Monitor
             </h2>
@@ -294,7 +294,7 @@ export default function HowCRankWorksPage() {
               return (
                 <div
                   key={item.name}
-                  className="rounded-2xl bg-zinc-900/80 p-6 sm:p-7 border border-white/[0.08] shadow-xs hover:border-white/[0.12] transition-all flex flex-col sm:flex-row sm:items-start justify-between gap-5"
+                  className="rounded-2xl glass-panel p-6 sm:p-7 border border-white/[0.1] shadow-xs hover:border-white/[0.12] transition-all flex flex-col sm:flex-row sm:items-start justify-between gap-5"
                 >
                   <div className="flex items-start gap-4 flex-1">
                     <div className={`h-11 w-11 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs ${item.color}`}>
@@ -317,7 +317,7 @@ export default function HowCRankWorksPage() {
                   </div>
 
                   <div className="sm:text-right shrink-0 font-mono pl-15 sm:pl-0">
-                    <span className="inline-block px-2.5 py-1 rounded-lg bg-zinc-900 border border-white/[0.08] text-zinc-300 text-xs font-semibold">
+                    <span className="inline-block px-2.5 py-1 rounded-lg glass-card border border-white/[0.1] text-zinc-300 text-xs font-semibold">
                       {item.priority}
                     </span>
                   </div>
@@ -329,7 +329,7 @@ export default function HowCRankWorksPage() {
 
         {/* C-Rank Multi-Factor Telemetry Signals Table */}
         <div className="space-y-6 mb-16">
-          <div className="border-b border-white/[0.08] pb-4">
+          <div className="border-b border-white/[0.1] pb-4">
             <h2 className="text-2xl font-bold font-space text-white">
               C-Rank™ Multi-Factor Telemetry Model
             </h2>
@@ -338,9 +338,9 @@ export default function HowCRankWorksPage() {
             </p>
           </div>
 
-          <div className="overflow-x-auto rounded-2xl bg-zinc-900/80 border border-white/[0.08] shadow-xs">
+          <div className="overflow-x-auto rounded-2xl glass-panel border border-white/[0.1] shadow-xs">
             <table className="w-full text-left text-xs text-zinc-300 font-sans">
-              <thead className="bg-zinc-900 text-white border-b border-white/[0.08] font-semibold font-space uppercase tracking-wider text-[11px]">
+              <thead className="glass-card text-white border-b border-white/[0.1] font-semibold font-space uppercase tracking-wider text-[11px]">
                 <tr>
                   <th className="py-3.5 px-5">Telemetry Factor</th>
                   <th className="py-3.5 px-4 text-center font-mono">Impact Priority</th>
@@ -349,55 +349,55 @@ export default function HowCRankWorksPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100 font-sans">
-                <tr className="hover:bg-zinc-900/60 transition-colors">
+                <tr className="hover:glass-card/60 transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">1. External PR Merge Velocity</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-emerald-300 bg-emerald-950/70 border-emerald-800/80/50">Primary</td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">180-Day Rolling</td>
                   <td className="py-3.5 px-5 text-zinc-300">Ratio of merged vs. abandoned external (non-bot) community pull requests.</td>
                 </tr>
-                <tr className="hover:bg-zinc-900/60 transition-colors">
+                <tr className="hover:glass-card/60 transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">2. Initial Review Response Turnaround</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-blue-300 bg-blue-950/70 border-blue-800/80/50">High Impact</td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">Recent PRs</td>
                   <td className="py-3.5 px-5 text-zinc-300">Median hours before a human maintainer posts an actionable, constructive review.</td>
                 </tr>
-                <tr className="hover:bg-zinc-900/60 transition-colors">
+                <tr className="hover:glass-card/60 transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">3. Maintainer Commit &amp; Merge Recency</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-purple-300 bg-purple-950/70 border-purple-800/80/50">High Impact</td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">Rolling Pulse</td>
                   <td className="py-3.5 px-5 text-zinc-300">Continuous commit rhythm and recency of active maintainer participation.</td>
                 </tr>
-                <tr className="hover:bg-zinc-900/60 transition-colors">
+                <tr className="hover:glass-card/60 transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">4. First-Timer Contributor Success</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-amber-300 bg-amber-950/70 border-amber-800/80/50">Core Hospitality</td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">New Authors</td>
                   <td className="py-3.5 px-5 text-zinc-300">Acceptance rate and onboarding assistance for authors opening their first PR.</td>
                 </tr>
-                <tr className="hover:bg-zinc-900/60 transition-colors">
+                <tr className="hover:glass-card/60 transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">5. Resolution &amp; Land Velocity</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-indigo-800 bg-indigo-950/40 border border-indigo-500/20/50">Core Velocity</td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">Merged PRs</td>
                   <td className="py-3.5 px-5 text-zinc-300">Total cycle duration from initial PR opening to final main-branch merge.</td>
                 </tr>
-                <tr className="hover:bg-zinc-900/60 transition-colors">
+                <tr className="hover:glass-card/60 transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">6. Repeat Contributor Retention</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-cyan-800 bg-cyan-950/40 border border-cyan-500/20/50">Culture Signal</td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">Cohorts</td>
                   <td className="py-3.5 px-5 text-zinc-300">Percentage of outside developers returning for subsequent contributions.</td>
                 </tr>
-                <tr className="hover:bg-zinc-900/60 transition-colors">
+                <tr className="hover:glass-card/60 transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">7. Review Friction &amp; Cycle Density</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-orange-800 bg-orange-50/50">Friction Factor</td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">Per PR</td>
                   <td className="py-3.5 px-5 text-zinc-300">Efficient feedback rounds without multi-week fragmented review delays.</td>
                 </tr>
-                <tr className="hover:bg-zinc-900/60 transition-colors">
+                <tr className="hover:glass-card/60 transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">8. Maintainer Breadth &amp; Bus Factor</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-rose-300 bg-rose-950/70 border-rose-800/80/50">Safety Gate</td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">90-Day Active</td>
                   <td className="py-3.5 px-5 text-zinc-300">Multi-maintainer bench depth; single-maintainer bottlenecks cap score.</td>
                 </tr>
-                <tr className="hover:bg-zinc-900/60 transition-colors">
+                <tr className="hover:glass-card/60 transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">9. Issue &amp; Discussion Triage</td>
                   <td className="py-3.5 px-4 text-center font-mono font-bold text-emerald-300 bg-emerald-950/70 border-emerald-800/80/50">Community Support</td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">Issues</td>
@@ -410,7 +410,7 @@ export default function HowCRankWorksPage() {
 
         {/* Tier Classification Hierarchy */}
         <div className="space-y-6 mb-16">
-          <div className="border-b border-white/[0.08] pb-4">
+          <div className="border-b border-white/[0.1] pb-4">
             <h2 className="text-2xl font-bold font-space text-white">
               The C-Rank™ Hospitality Ladder
             </h2>
@@ -423,7 +423,7 @@ export default function HowCRankWorksPage() {
             {tiers.map((t) => (
               <div
                 key={t.tier}
-                className="rounded-2xl bg-zinc-900/80 p-6 border border-white/[0.08] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                className="rounded-2xl glass-panel p-6 border border-white/[0.1] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
               >
                 <div className="flex items-start sm:items-center gap-4 flex-1">
                   <div className={`px-3 py-1.5 rounded-xl font-mono text-sm font-bold border shrink-0 flex items-center gap-2 ${t.badgeClass}`}>
@@ -440,7 +440,7 @@ export default function HowCRankWorksPage() {
         </div>
 
         {/* CTA Section */}
-        <div className="rounded-3xl bg-zinc-900 text-white p-8 sm:p-12 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="rounded-3xl glass-card text-white p-8 sm:p-12 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
             <h3 className="text-2xl sm:text-3xl font-bold font-space">
               Find your next open door today
@@ -452,7 +452,7 @@ export default function HowCRankWorksPage() {
           <Link
             href="/"
             title="Explore Open Source Repositories on GetMerged"
-            className="inline-flex items-center gap-2 rounded-xl bg-zinc-900/80 px-6 py-3 font-sans text-xs font-bold text-white hover:bg-zinc-900 active:scale-95 transition-all shadow-xs shrink-0"
+            className="inline-flex items-center gap-2 rounded-xl glass-panel px-6 py-3 font-sans text-xs font-bold text-white hover:glass-card active:scale-95 transition-all shadow-xs shrink-0"
           >
             <span>Explore Welcoming Repos</span>
             <ArrowRight className="h-4 w-4" />

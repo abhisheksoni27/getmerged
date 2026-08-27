@@ -48,7 +48,7 @@ export function RepoScorecards({
           </div>
           <div className="text-3xl font-bold text-white font-mono tracking-tight">{responseTimeStr}</div>
           <div className="text-xs text-zinc-300 mt-1 font-sans leading-relaxed">{responseCommentary}</div>
-          <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-zinc-900/95 backdrop-blur-md text-zinc-200 text-xs rounded-xl border border-white/[0.1] opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none shadow-xl">
+          <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 glass-card/95 backdrop-blur-md text-zinc-200 text-xs rounded-xl border border-white/[0.1] opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none shadow-xl">
             <p className="font-semibold text-white mb-1">Average Response Latency</p>
             <p className="text-zinc-300">Tracks hours until a maintainer leaves a review, comment, or PR response.</p>
           </div>
@@ -65,7 +65,7 @@ export function RepoScorecards({
           </div>
           <div className="text-3xl font-bold text-white font-mono tracking-tight">{mergeRateStr}</div>
           <div className="text-xs text-zinc-300 mt-1 font-sans leading-relaxed">{mergeCommentary}</div>
-          <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-zinc-900/95 backdrop-blur-md text-zinc-200 text-xs rounded-xl border border-white/[0.1] opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none shadow-xl">
+          <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 glass-card/95 backdrop-blur-md text-zinc-200 text-xs rounded-xl border border-white/[0.1] opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none shadow-xl">
             <p className="font-semibold text-white mb-1">External Acceptance Rate</p>
             <p className="text-zinc-300">Percentage of community pull requests successfully merged into main.</p>
           </div>
@@ -82,7 +82,7 @@ export function RepoScorecards({
           </div>
           <div className="text-3xl font-bold text-white font-mono tracking-tight">{firstTimerSuccessStr}</div>
           <div className="text-xs text-zinc-300 mt-1 font-sans leading-relaxed">{firstTimerCommentary}</div>
-          <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-zinc-900/95 backdrop-blur-md text-zinc-200 text-xs rounded-xl border border-white/[0.1] opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none shadow-xl">
+          <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 glass-card/95 backdrop-blur-md text-zinc-200 text-xs rounded-xl border border-white/[0.1] opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none shadow-xl">
             <p className="font-semibold text-white mb-1">First PR Conversion</p>
             <p className="text-zinc-300">Rate at which developers submitting their first repository PR succeed.</p>
           </div>
@@ -120,7 +120,7 @@ export function RepoScorecards({
           </div>
         </div>
 
-        <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-300">
+        <div className="pt-4 border-t border-white/[0.1] flex items-center justify-between text-xs font-mono text-zinc-300">
           <span>Community Vibe</span>
           <span className="font-bold text-zinc-200">{vibeScore}/100</span>
         </div>

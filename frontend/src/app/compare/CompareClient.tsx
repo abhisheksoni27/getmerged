@@ -304,7 +304,7 @@ export default function CompareClient() {
         </div>
 
         {/* Dual Repo Picker Box */}
-        <div className="glass-panel border border-white/[0.08] rounded-3xl p-6 sm:p-8 shadow-xs mb-14">
+        <div className="glass-panel border border-white/[0.1] rounded-3xl p-6 sm:p-8 shadow-xs mb-14">
           <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
             {/* Slot A */}
             <div className="w-full flex-1" ref={dropdownRefA}>
@@ -313,13 +313,13 @@ export default function CompareClient() {
               </label>
 
               {repoA ? (
-                <div className="flex items-center justify-between p-3.5 rounded-2xl glass-card border border-white/[0.08] shadow-2xs">
+                <div className="flex items-center justify-between p-3.5 rounded-2xl glass-card border border-white/[0.1] shadow-2xs">
                   <div className="flex items-center gap-3 min-w-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={`https://github.com/${repoA.owner}.png?size=64`}
                       alt={repoA.owner}
-                      className="h-9 w-9 rounded-xl border border-white/[0.08] bg-zinc-900/80 object-cover shrink-0"
+                      className="h-9 w-9 rounded-xl border border-white/[0.1] glass-panel object-cover shrink-0"
                       onError={(e) => {
                         (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
                       }}
@@ -372,7 +372,7 @@ export default function CompareClient() {
                         setOpenDropdownA(true);
                       }}
                       onFocus={() => setOpenDropdownA(true)}
-                      className="w-full pl-10 pr-10 py-3 rounded-2xl bg-zinc-900/80 border border-white/[0.08] text-sm text-white placeholder:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1 transition-all"
+                      className="w-full pl-10 pr-10 py-3 rounded-2xl glass-panel border border-white/[0.1] text-sm text-white placeholder:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1 transition-all"
                     />
                     {loadingA && (
                       <Loader2 className="absolute right-3.5 h-4 w-4 animate-spin text-zinc-300" />
@@ -381,7 +381,7 @@ export default function CompareClient() {
 
                   {/* Dropdown A */}
                   {openDropdownA && queryA.trim().length > 0 && (
-                    <div className="absolute z-20 top-full left-0 right-0 mt-2 bg-zinc-900/80 border border-white/[0.08] rounded-2xl shadow-lg max-h-64 overflow-y-auto p-1.5">
+                    <div className="absolute z-20 top-full left-0 right-0 mt-2 glass-panel border border-white/[0.1] rounded-2xl shadow-lg max-h-64 overflow-y-auto p-1.5">
                       {resultsA.length > 0 ? (
                         resultsA.map((r) => (
                           <button
@@ -403,7 +403,7 @@ export default function CompareClient() {
                                 <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                                 {r.stars >= 1000 ? `${(r.stars / 1000).toFixed(1)}k` : r.stars}
                               </span>
-                              <span className="px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300 font-bold">
+                              <span className="px-1.5 py-0.5 rounded glass-card text-zinc-300 font-bold">
                                 {r.c_rank_tier || r.class_rank || "A"}
                               </span>
                             </div>
@@ -422,7 +422,7 @@ export default function CompareClient() {
 
             {/* VS Badge */}
             <div className="shrink-0 flex items-center justify-center">
-              <div className="h-10 w-10 rounded-full bg-zinc-900 border border-white/[0.08] flex items-center justify-center font-mono text-xs font-black text-zinc-300 uppercase shadow-2xs">
+              <div className="h-10 w-10 rounded-full glass-card border border-white/[0.1] flex items-center justify-center font-mono text-xs font-black text-zinc-300 uppercase shadow-2xs">
                 VS
               </div>
             </div>
@@ -434,13 +434,13 @@ export default function CompareClient() {
               </label>
 
               {repoB ? (
-                <div className="flex items-center justify-between p-3.5 rounded-2xl bg-zinc-900 border border-white/[0.08] shadow-2xs">
+                <div className="flex items-center justify-between p-3.5 rounded-2xl glass-card border border-white/[0.1] shadow-2xs">
                   <div className="flex items-center gap-3 min-w-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={`https://github.com/${repoB.owner}.png?size=64`}
                       alt={repoB.owner}
-                      className="h-9 w-9 rounded-xl border border-white/[0.08] bg-zinc-900/80 object-cover shrink-0"
+                      className="h-9 w-9 rounded-xl border border-white/[0.1] glass-panel object-cover shrink-0"
                       onError={(e) => {
                         (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
                       }}
@@ -493,7 +493,7 @@ export default function CompareClient() {
                         setOpenDropdownB(true);
                       }}
                       onFocus={() => setOpenDropdownB(true)}
-                      className="w-full pl-10 pr-10 py-3 rounded-2xl bg-zinc-900/80 border border-white/[0.08] text-sm text-white placeholder:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1 transition-all"
+                      className="w-full pl-10 pr-10 py-3 rounded-2xl glass-panel border border-white/[0.1] text-sm text-white placeholder:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1 transition-all"
                     />
                     {loadingB && (
                       <Loader2 className="absolute right-3.5 h-4 w-4 animate-spin text-zinc-300" />
@@ -502,7 +502,7 @@ export default function CompareClient() {
 
                   {/* Dropdown B */}
                   {openDropdownB && queryB.trim().length > 0 && (
-                    <div className="absolute z-20 top-full left-0 right-0 mt-2 bg-zinc-900/80 border border-white/[0.08] rounded-2xl shadow-lg max-h-64 overflow-y-auto p-1.5">
+                    <div className="absolute z-20 top-full left-0 right-0 mt-2 glass-panel border border-white/[0.1] rounded-2xl shadow-lg max-h-64 overflow-y-auto p-1.5">
                       {resultsB.length > 0 ? (
                         resultsB.map((r) => (
                           <button
@@ -524,7 +524,7 @@ export default function CompareClient() {
                                 <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                                 {r.stars >= 1000 ? `${(r.stars / 1000).toFixed(1)}k` : r.stars}
                               </span>
-                              <span className="px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300 font-bold">
+                              <span className="px-1.5 py-0.5 rounded glass-card text-zinc-300 font-bold">
                                 {r.c_rank_tier || r.class_rank || "A"}
                               </span>
                             </div>
@@ -543,7 +543,7 @@ export default function CompareClient() {
           </div>
 
           {/* Action Row */}
-          <div className="mt-8 pt-6 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="mt-8 pt-6 border-t border-white/[0.1] flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-xs font-mono text-zinc-300 text-center sm:text-left">
               {repoA && repoB ? (
                 <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
@@ -560,8 +560,8 @@ export default function CompareClient() {
               onClick={handleCompare}
               className={`w-full sm:w-auto px-6 py-3 rounded-2xl font-bold font-sans text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
                 repoA && repoB
-                  ? "bg-zinc-900 hover:bg-zinc-800 text-white shadow-md active:scale-[0.98]"
-                  : "bg-zinc-900 text-zinc-300 cursor-not-allowed border border-white/[0.08]/60"
+                  ? "glass-card hover:bg-zinc-800 text-white shadow-md active:scale-[0.98]"
+                  : "glass-card text-zinc-300 cursor-not-allowed border border-white/[0.1]/60"
               }`}
             >
               <Scale className="h-4 w-4" />
@@ -590,7 +590,7 @@ export default function CompareClient() {
                 key={`${item.repoA}-vs-${item.repoB}`}
                 href={`/compare/${item.repoA}/vs/${item.repoB}`}
                 title={`Compare ${item.repoA} vs ${item.repoB} maintainer review metrics`}
-                className="group p-5 rounded-2xl bg-zinc-900/80 border border-white/[0.08] shadow-2xs hover:shadow-md hover:border-white/[0.12] hover:-translate-y-0.5 transition-all duration-150 flex flex-col justify-between"
+                className="group p-5 rounded-2xl glass-panel border border-white/[0.1] shadow-2xs hover:shadow-md hover:border-white/[0.12] hover:-translate-y-0.5 transition-all duration-150 flex flex-col justify-between"
               >
                 <div>
                   <div className="text-[11px] font-mono text-zinc-300 font-semibold mb-2">
@@ -603,7 +603,7 @@ export default function CompareClient() {
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-300">
+                <div className="mt-4 pt-3 border-t border-white/[0.1] flex items-center justify-between text-xs font-mono text-zinc-300">
                   <span className="text-[11px]">Compare scorecard</span>
                   <ArrowRight className="h-3.5 w-3.5 text-zinc-300 group-hover:text-zinc-300 group-hover:translate-x-0.5 transition-all" />
                 </div>

@@ -52,13 +52,13 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
 
   if (loading) {
     return (
-      <div className="rounded-2xl bg-zinc-900/80 p-5 border-2 border-white/[0.08] shadow-sm mb-6 animate-pulse">
+      <div className="rounded-2xl glass-panel p-5 border-2 border-white/[0.1] shadow-sm mb-6 animate-pulse">
         <div className="h-5 bg-zinc-200 rounded w-1/3 mb-4"></div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="h-16 bg-zinc-900 rounded-xl"></div>
-          <div className="h-16 bg-zinc-900 rounded-xl"></div>
-          <div className="h-16 bg-zinc-900 rounded-xl"></div>
-          <div className="h-16 bg-zinc-900 rounded-xl"></div>
+          <div className="h-16 glass-card rounded-xl"></div>
+          <div className="h-16 glass-card rounded-xl"></div>
+          <div className="h-16 glass-card rounded-xl"></div>
+          <div className="h-16 glass-card rounded-xl"></div>
         </div>
       </div>
     );
@@ -67,7 +67,7 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
   if (!data) return null;
 
   return (
-    <div className="rounded-2xl bg-zinc-900/80 p-5 border-2 border-white/[0.08] shadow-sm mb-6 font-mono">
+    <div className="rounded-2xl glass-panel p-5 border-2 border-white/[0.1] shadow-sm mb-6 font-mono">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-emerald-600" />
@@ -93,7 +93,7 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
             <span>Run Pre-flight PR Check</span>
             <ArrowRight className="h-3 w-3 text-white" aria-hidden="true" />
           </Link>
-          <span className="text-[11px] font-sans text-zinc-300 bg-zinc-900 px-2 py-0.5 rounded-full">
+          <span className="text-[11px] font-sans text-zinc-300 glass-card px-2 py-0.5 rounded-full">
             Precomputed via Live PR Events
           </span>
         </div>
@@ -101,7 +101,7 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 font-sans">
         {/* Overall Acceptance Rate */}
-        <div className="bg-zinc-900 border border-white/[0.08] rounded-xl p-3">
+        <div className="glass-card border border-white/[0.1] rounded-xl p-3">
           <div className="flex items-center gap-1 text-xs text-zinc-300 mb-1">
             <Percent className="h-3.5 w-3.5 text-emerald-600" />
             <span>Overall Merge Odds</span>
@@ -113,7 +113,7 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
         </div>
 
         {/* First-Timer Acceptance Rate */}
-        <div className="bg-zinc-900 border border-white/[0.08] rounded-xl p-3">
+        <div className="glass-card border border-white/[0.1] rounded-xl p-3">
           <div className="flex items-center gap-1 text-xs text-zinc-300 mb-1">
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
             <span>First-Timer Rate</span>
@@ -125,7 +125,7 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
         </div>
 
         {/* Median Response Time (p50) */}
-        <div className="bg-zinc-900 border border-white/[0.08] rounded-xl p-3">
+        <div className="glass-card border border-white/[0.1] rounded-xl p-3">
           <div className="flex items-center gap-1 text-xs text-zinc-300 mb-1">
             <Clock className="h-3.5 w-3.5 text-blue-600" />
             <span>Median Response (p50)</span>
@@ -141,7 +141,7 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
         </div>
 
         {/* Long-tail Response Time (p90) */}
-        <div className="bg-zinc-900 border border-white/[0.08] rounded-xl p-3">
+        <div className="glass-card border border-white/[0.1] rounded-xl p-3">
           <div className="flex items-center gap-1 text-xs text-zinc-300 mb-1">
             <Clock className="h-3.5 w-3.5 text-amber-600" />
             <span>Tail Latency (p90)</span>
@@ -157,7 +157,7 @@ export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between text-[11px] font-sans text-zinc-300 pt-2 border-t border-white/[0.08]">
+      <div className="flex flex-wrap items-center justify-between text-[11px] font-sans text-zinc-300 pt-2 border-t border-white/[0.1]">
         <span className="flex items-center gap-1.5">
           <Users className="h-3.5 w-3.5 text-zinc-300" /> Active Maintainers:{" "}
           <strong className="font-mono text-zinc-200">{data.bus_factor}</strong>

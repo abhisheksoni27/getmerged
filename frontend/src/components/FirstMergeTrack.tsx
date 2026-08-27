@@ -982,8 +982,8 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
               onClick={() => handleManualAdvance(s as 1 | 2 | 3 | 4)}
               className={`h-6 w-6 rounded-md text-xs font-bold transition-colors ${
                 currentStep === s
-                  ? "bg-zinc-900 text-white"
-                  : "bg-zinc-900 text-zinc-300 hover:bg-zinc-200"
+                  ? "glass-card text-white"
+                  : "glass-card text-zinc-300 hover:bg-zinc-200"
               }`}
               title={`Step ${s}`}
             >
@@ -1005,10 +1005,10 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
               onClick={() => handleManualAdvance(s.num as 1 | 2 | 3 | 4)}
               className={`cursor-pointer rounded-xl border p-3 transition-all ${
                 isCurrent
-                  ? "border-emerald-500 bg-zinc-900/80 shadow-sm ring-1 ring-emerald-500"
+                  ? "border-emerald-500 glass-panel shadow-sm ring-1 ring-emerald-500"
                   : isDone
                   ? "border-emerald-200 bg-emerald-950/70 border-emerald-800/80/70 text-emerald-300"
-                  : "border-white/[0.08] bg-zinc-900/60 opacity-60 hover:opacity-100"
+                  : "border-white/[0.1] glass-card/60 opacity-60 hover:opacity-100"
               }`}
             >
               <div className="flex items-center gap-2">
@@ -1030,7 +1030,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
       </div>
 
       {/* Step Contents */}
-      <div className="mt-5 rounded-xl border border-white/[0.08] bg-zinc-900/80 p-4 sm:p-5 shadow-xs">
+      <div className="mt-5 rounded-xl border border-white/[0.1] glass-panel p-4 sm:p-5 shadow-xs">
         {/* STEP 1: Repo Match + Fit Radar */}
         {currentStep === 1 && (
           <div>
@@ -1056,12 +1056,12 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                 Finding highest-fit repositories for you…
               </div>
             ) : matches.length === 0 ? (
-              <div className="mt-4 rounded-lg border border-dashed border-white/[0.08] p-6 text-center text-xs text-zinc-300">
+              <div className="mt-4 rounded-lg border border-dashed border-white/[0.1] p-6 text-center text-xs text-zinc-300">
                 No recommendations found yet. Search any welcoming repository to get started.
                 <div className="mt-2">
                   <Link
                     href="/repos"
-                    className="inline-flex items-center gap-1 rounded-md bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
+                    className="inline-flex items-center gap-1 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
                   >
                     <Search className="h-3.5 w-3.5" /> Explore Repositories
                   </Link>
@@ -1072,7 +1072,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                 {matches.slice(0, 3).map((m) => (
                   <div
                     key={m.id || m.full_name}
-                    className="flex flex-col justify-between rounded-lg border border-white/[0.08] bg-zinc-900/50 p-3.5 hover:border-emerald-400 hover:bg-zinc-900/80 transition-all"
+                    className="flex flex-col justify-between rounded-lg border border-white/[0.1] glass-card/50 p-3.5 hover:border-emerald-400 hover:glass-panel transition-all"
                   >
                     <div>
                       <div className="flex items-start justify-between gap-1">
@@ -1080,7 +1080,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                           {m.full_name}
                         </span>
                         {m.c_rank_tier && (
-                          <span className="shrink-0 rounded bg-zinc-900 px-1.5 py-0.2 text-[10px] font-bold text-white">
+                          <span className="shrink-0 rounded glass-card px-1.5 py-0.2 text-[10px] font-bold text-white">
                             {m.c_rank_tier}
                           </span>
                         )}
@@ -1118,7 +1118,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                     <Compass className="h-4 w-4 text-emerald-600" /> Step 2: Claim a Good First Issue
                   </h3>
                   {trackState.selectedRepo && (
-                    <span className="rounded-full bg-zinc-900 px-2 py-0.5 text-xs font-mono font-semibold text-zinc-200">
+                    <span className="rounded-full glass-card px-2 py-0.5 text-xs font-mono font-semibold text-zinc-200">
                       {trackState.selectedRepo.fullName}
                     </span>
                   )}
@@ -1160,7 +1160,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                 {needsGitHubAuth && (
                   <a
                     href={`${API_BASE_URL}/api/v1/auth/github`}
-                    className="mt-2 inline-flex items-center gap-1 rounded-md bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
+                    className="mt-2 inline-flex items-center gap-1 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
                   >
                     Sign in with GitHub to finish syncing
                   </a>
@@ -1191,25 +1191,25 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                   </button>
                   <button
                     onClick={() => handleManualAdvance(3)}
-                    className="rounded-md border border-amber-300 bg-zinc-900/80 px-3 py-1 text-xs font-semibold text-amber-300 hover:bg-amber-950/70 border-amber-800/80"
+                    className="rounded-md border border-amber-300 glass-panel px-3 py-1 text-xs font-semibold text-amber-300 hover:bg-amber-950/70 border-amber-800/80"
                   >
                     Proceed to Preflight Check →
                   </button>
                 </div>
               </div>
             ) : issues.length === 0 ? (
-              <div className="mt-4 rounded-lg border border-dashed border-white/[0.08] p-6 text-center text-xs text-zinc-300">
+              <div className="mt-4 rounded-lg border border-dashed border-white/[0.1] p-6 text-center text-xs text-zinc-300">
                 No good-first-issues returned.
                 <div className="mt-2 flex justify-center gap-2">
                   <button
                     onClick={() => handleRestartStep(1)}
-                    className="rounded-md bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
+                    className="rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
                   >
                     Choose Another Repo
                   </button>
                   <button
                     onClick={() => handleManualAdvance(3)}
-                    className="rounded-md border border-white/[0.12] px-3 py-1.5 text-xs font-semibold text-zinc-300 hover:bg-zinc-900"
+                    className="rounded-md border border-white/[0.12] px-3 py-1.5 text-xs font-semibold text-zinc-300 hover:glass-card"
                   >
                     Skip to Preflight →
                   </button>
@@ -1232,7 +1232,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                   return (
                     <li
                       key={issue.id}
-                      className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-white/[0.08] bg-zinc-900/50 p-3 hover:bg-zinc-900/80 hover:border-emerald-400 transition-all"
+                      className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-white/[0.1] glass-card/50 p-3 hover:glass-panel hover:border-emerald-400 transition-all"
                     >
                       <div className="min-w-0 flex-1">
                         <a
@@ -1283,7 +1283,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                   </p>
                   <a
                     href={`${API_BASE_URL}/api/v1/auth/github`}
-                    className="mt-2 inline-flex items-center gap-1 rounded-md bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
+                    className="mt-2 inline-flex items-center gap-1 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
                   >
                     Sign in with GitHub
                   </a>
@@ -1338,7 +1338,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
             </div>
 
             {/* Context bar */}
-            <div className="mt-3 rounded-lg border border-white/[0.08] bg-zinc-900 p-3 text-xs text-zinc-300 flex flex-wrap items-center justify-between gap-2">
+            <div className="mt-3 rounded-lg border border-white/[0.1] glass-card p-3 text-xs text-zinc-300 flex flex-wrap items-center justify-between gap-2">
               <div>
                 <span className="font-semibold">Target:</span>{" "}
                 <span className="font-mono text-white font-bold">
@@ -1382,7 +1382,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-white/[0.08] bg-zinc-900 p-4">
+              <div className="rounded-xl border border-white/[0.1] glass-card p-4">
                 <h4 className="text-xs font-bold text-white">Submitted your PR?</h4>
                 <p className="mt-1 text-[11px] text-zinc-300 leading-relaxed">
                   Once your PR is created on GitHub, advance to monitor review benchmarks and merge tracking.
@@ -1390,7 +1390,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                 <div className="mt-3">
                   <button
                     onClick={() => handleManualAdvance(4)}
-                    className="inline-flex items-center gap-1.5 rounded-md bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800 cursor-pointer"
                   >
                     Track PR to Merge →
                   </button>
@@ -1421,11 +1421,11 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
             </div>
 
             {/* PR Merge Tracker: paste a PR URL to track & monitor (AC2-AC9) */}
-            <div className="mt-4 rounded-xl border border-white/[0.08] bg-zinc-900/60 p-4">
+            <div className="mt-4 rounded-xl border border-white/[0.1] glass-card/60 p-4">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-emerald-600" />
                 <h4 className="text-sm font-bold text-white">Track a Pull Request</h4>
-                <span className="rounded-full bg-zinc-900 px-2 py-0.5 text-[11px] font-semibold text-zinc-300">
+                <span className="rounded-full glass-card px-2 py-0.5 text-[11px] font-semibold text-zinc-300">
                   Live status every 60s
                 </span>
               </div>
@@ -1446,7 +1446,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                   </button>
                   <button
                     onClick={() => setImportUrl(null)}
-                    className="rounded-md border border-indigo-300 bg-zinc-900/80 px-2.5 py-1 text-xs font-semibold text-indigo-300 hover:bg-indigo-950/40 border border-indigo-500/20"
+                    className="rounded-md border border-indigo-300 glass-panel px-2.5 py-1 text-xs font-semibold text-indigo-300 hover:bg-indigo-950/40 border border-indigo-500/20"
                   >
                     Dismiss
                   </button>
@@ -1459,7 +1459,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                   value={prUrl}
                   onChange={(e) => setPrUrl(e.target.value)}
                   placeholder="https://github.com/owner/repo/pull/123"
-                  className="w-full flex-1 rounded-md border border-white/[0.12] bg-zinc-900/80 px-3 py-2 text-xs text-white outline-none focus:border-emerald-500"
+                  className="w-full flex-1 rounded-md border border-white/[0.12] glass-panel px-3 py-2 text-xs text-white outline-none focus:border-emerald-500"
                 />
                 <button
                   onClick={handleTrackPR}
@@ -1477,7 +1477,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
               {trackNeedsAuth && (
                 <a
                   href={`${API_BASE_URL}/api/v1/auth/github`}
-                  className="mt-2 inline-flex items-center gap-1 rounded-md bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
+                  className="mt-2 inline-flex items-center gap-1 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
                 >
                   Connect GitHub to track
                 </a>
@@ -1497,7 +1497,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                   {trackedStatus.map((p) => (
                     <li
                       key={p.pr_id}
-                      className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-white/[0.08] bg-zinc-900/80 p-3"
+                      className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-white/[0.1] glass-panel p-3"
                     >
                       <div className="min-w-0">
                         <a
@@ -1508,7 +1508,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                         >
                           {p.owner}/{p.repo}#{p.pr_number}
                         </a>
-                        <span className="mt-0.5 inline-block rounded-full bg-zinc-900 px-2 py-0.5 text-[10px] font-semibold uppercase text-zinc-300">
+                        <span className="mt-0.5 inline-block rounded-full glass-card px-2 py-0.5 text-[10px] font-semibold uppercase text-zinc-300">
                           {p.state}
                         </span>
                       </div>
@@ -1524,7 +1524,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                           </a>
                           <button
                             onClick={() => copyShareLink(`${window.location.origin}${p.share_url}`)}
-                            className="rounded-md border border-violet-300 bg-zinc-900/80 px-3 py-1.5 text-xs font-semibold text-violet-900 hover:bg-violet-50"
+                            className="rounded-md border border-violet-300 glass-panel px-3 py-1.5 text-xs font-semibold text-violet-900 hover:bg-violet-50"
                           >
                             Copy link
                           </button>
@@ -1579,7 +1579,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                   </a>
                   <button
                     onClick={() => handleRestartStep(1)}
-                    className="rounded-md border border-violet-300 bg-zinc-900/80 px-3 py-1.5 text-xs font-semibold text-violet-900 hover:bg-violet-50"
+                    className="rounded-md border border-violet-300 glass-panel px-3 py-1.5 text-xs font-semibold text-violet-900 hover:bg-violet-50"
                   >
                     Start Another Contribution
                   </button>

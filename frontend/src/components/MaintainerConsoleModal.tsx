@@ -225,9 +225,9 @@ export function MaintainerConsoleModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl max-h-[90vh] bg-zinc-900/80 rounded-3xl border border-white/[0.12] shadow-sm flex flex-col overflow-hidden">
+      <div className="relative w-full max-w-2xl max-h-[90vh] glass-panel rounded-3xl border border-white/[0.12] shadow-sm flex flex-col overflow-hidden">
         {/* Modal Header */}
-        <div className="p-6 border-b border-white/[0.08] glass-panel flex items-center justify-between">
+        <div className="p-6 border-b border-white/[0.1] glass-panel flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-black text-amber-400 rounded-2xl border border-white/[0.12] shadow-sm">
               <ShieldCheck className="w-6 h-6" />
@@ -241,7 +241,7 @@ export function MaintainerConsoleModal({
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-zinc-300 hover:text-white hover:bg-zinc-900 rounded-xl transition-colors border border-transparent hover:border-white/[0.08] cursor-pointer"
+            className="p-2 text-zinc-300 hover:text-white hover:glass-card rounded-xl transition-colors border border-transparent hover:border-white/[0.1] cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -273,7 +273,7 @@ export function MaintainerConsoleModal({
 
           {activeTab === "claim" && (
             <div className="space-y-6">
-              <div className="bg-zinc-900 p-5 rounded-2xl border border-white/[0.08] text-sm text-zinc-300 leading-relaxed">
+              <div className="glass-card p-5 rounded-2xl border border-white/[0.1] text-sm text-zinc-300 leading-relaxed">
                 <p className="font-semibold text-white mb-1">
                   Verify ownership of <span className="font-mono text-blue-600">{fullName}</span>
                 </p>
@@ -295,14 +295,14 @@ export function MaintainerConsoleModal({
                       <span className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
                         <FileCode className="w-4 h-4 text-amber-600" /> Method 1: Proof File (Recommended)
                       </span>
-                      <span className="text-[11px] font-mono text-zinc-300 bg-zinc-900/80 px-2 py-0.5 rounded-md border border-white/[0.08]">
+                      <span className="text-[11px] font-mono text-zinc-300 glass-panel px-2 py-0.5 rounded-md border border-white/[0.1]">
                         Expires in 24 hours
                       </span>
                     </div>
                     <p className="text-xs text-zinc-300 mb-3">
-                      Create a file named <code className="px-1.5 py-0.5 bg-zinc-900/80 border border-white/[0.12] rounded font-mono font-bold text-white">{claimData.file_instructions.file_name}</code> in your repository root with this exact content:
+                      Create a file named <code className="px-1.5 py-0.5 glass-panel border border-white/[0.12] rounded font-mono font-bold text-white">{claimData.file_instructions.file_name}</code> in your repository root with this exact content:
                     </p>
-                    <div className="relative bg-zinc-900 text-emerald-400 p-3.5 rounded-xl font-mono text-xs break-all flex items-center justify-between border border-white/[0.08]">
+                    <div className="relative glass-card text-emerald-400 p-3.5 rounded-xl font-mono text-xs break-all flex items-center justify-between border border-white/[0.1]">
                       <code>{claimData.file_instructions.file_content}</code>
                       <button
                         onClick={copyNonce}
@@ -314,7 +314,7 @@ export function MaintainerConsoleModal({
                     </div>
                   </div>
 
-                  <div className="border border-white/[0.08] rounded-2xl p-4 bg-zinc-900 flex items-center justify-between text-xs text-zinc-300">
+                  <div className="border border-white/[0.1] rounded-2xl p-4 glass-card flex items-center justify-between text-xs text-zinc-300">
                     <span>Or verify automatically if your GitHub account has push/admin permission on this repository.</span>
                     <span className="font-mono font-bold text-white">Automatic on GitHub Login</span>
                   </div>
@@ -342,7 +342,7 @@ export function MaintainerConsoleModal({
           {activeTab === "console" && consoleData && (
             <div className="space-y-6 animate-in fade-in duration-300">
               {/* Score Header Banner */}
-              <div className="p-5 bg-zinc-900 text-white rounded-3xl border border-white/[0.12] shadow-sm flex flex-wrap items-center justify-between gap-4">
+              <div className="p-5 glass-card text-white rounded-3xl border border-white/[0.12] shadow-sm flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <span className="text-xs font-mono uppercase tracking-wider text-zinc-300">Current Health Score</span>
                   <div className="flex items-baseline gap-2 mt-1">
@@ -372,7 +372,7 @@ export function MaintainerConsoleModal({
               </div>
 
               {/* Automated re-score + before/after card (AC3, AC4) */}
-              <div className="p-4 bg-zinc-900/80 border border-white/[0.12] rounded-2xl shadow-sm">
+              <div className="p-4 glass-panel border border-white/[0.12] rounded-2xl shadow-sm">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <div className="font-bold text-sm text-white flex items-center gap-2">
@@ -387,7 +387,7 @@ export function MaintainerConsoleModal({
                     type="button"
                     onClick={runRescore}
                     disabled={rescoring}
-                    className="px-4 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs rounded-xl border border-white/[0.12] shadow-sm disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed flex items-center gap-2 shrink-0"
+                    className="px-4 py-2.5 glass-card hover:bg-zinc-800 text-white font-bold text-xs rounded-xl border border-white/[0.12] shadow-sm disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed flex items-center gap-2 shrink-0"
                   >
                     {rescoring ? (
                       <>
@@ -404,7 +404,7 @@ export function MaintainerConsoleModal({
                     className={`mt-4 p-4 rounded-xl border-2 ${
                       rescore.outcome === "improved"
                         ? "bg-emerald-950/70 border-emerald-800/80 border-emerald-400"
-                        : "bg-zinc-900 border-white/[0.12]"
+                        : "glass-card border-white/[0.12]"
                     }`}
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2">
@@ -417,7 +417,7 @@ export function MaintainerConsoleModal({
                         </span>
                         {rescore.after_tier ? ` (${rescore.after_tier})` : ""}
                       </div>
-                      <span className="px-2 py-0.5 rounded-lg font-mono text-xs font-bold border border-white/[0.12] bg-zinc-900/80 text-zinc-300">
+                      <span className="px-2 py-0.5 rounded-lg font-mono text-xs font-bold border border-white/[0.12] glass-panel text-zinc-300">
                         {rescore.outcome.replace(/_/g, " ")}
                       </span>
                     </div>
@@ -465,17 +465,17 @@ export function MaintainerConsoleModal({
                     consoleData.checklist.map((item: MaintainerChecklistItem) => (
                       <div
                         key={item.id}
-                        className="p-4 bg-zinc-900/80 border border-white/[0.12] rounded-2xl shadow-sm hover:border-white/[0.08] transition-all"
+                        className="p-4 glass-panel border border-white/[0.12] rounded-2xl shadow-sm hover:border-white/[0.1] transition-all"
                       >
                         <div className="flex items-start justify-between gap-3 mb-1.5">
                           <div className="font-bold text-sm text-white">{item.title}</div>
-                          <span className="px-2.5 py-0.5 bg-emerald-950/80 border-emerald-800/80 text-emerald-300 font-mono text-xs font-bold rounded-lg border border-emerald-300 shrink-0">
+                          <span className="px-2.5 py-0.5 bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono text-xs font-bold rounded-lg border border-emerald-300 shrink-0">
                             +{item.impact_pts} pts
                           </span>
                         </div>
                         <p className="text-xs text-zinc-300 mb-2 leading-relaxed">{item.description}</p>
-                        <div className="flex items-center justify-between text-xs pt-2 border-t border-white/[0.08]">
-                          <span className="text-zinc-300 font-mono text-[11px] bg-zinc-900 px-2 py-0.5 rounded">
+                        <div className="flex items-center justify-between text-xs pt-2 border-t border-white/[0.1]">
+                          <span className="text-zinc-300 font-mono text-[11px] glass-card px-2 py-0.5 rounded">
                             {item.fix_guidance}
                           </span>
                           {item.link_url && (
@@ -503,27 +503,27 @@ export function MaintainerConsoleModal({
               <div>
                 <h3 className="text-sm font-bold text-white mb-3">Live Telemetry Breakdown</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 font-mono text-xs">
-                  <div className="p-3 bg-zinc-900 border border-white/[0.08] rounded-xl">
+                  <div className="p-3 glass-card border border-white/[0.1] rounded-xl">
                     <span className="text-zinc-300 block text-[10px] uppercase">Review Latency p50</span>
                     <span className="font-bold text-white text-sm">{consoleData.breakdown.response_p50_hours ? `${consoleData.breakdown.response_p50_hours.toFixed(1)}h` : "N/A"}</span>
                   </div>
-                  <div className="p-3 bg-zinc-900 border border-white/[0.08] rounded-xl">
+                  <div className="p-3 glass-card border border-white/[0.1] rounded-xl">
                     <span className="text-zinc-300 block text-[10px] uppercase">First-PR Merge Rate</span>
                     <span className="font-bold text-white text-sm">{consoleData.breakdown.first_timer_success_rate ? `${consoleData.breakdown.first_timer_success_rate.toFixed(0)}%` : "0%"}</span>
                   </div>
-                  <div className="p-3 bg-zinc-900 border border-white/[0.08] rounded-xl">
+                  <div className="p-3 glass-card border border-white/[0.1] rounded-xl">
                     <span className="text-zinc-300 block text-[10px] uppercase">Overall PR Merge Rate</span>
                     <span className="font-bold text-white text-sm">{consoleData.breakdown.external_pr_merge_rate ? `${consoleData.breakdown.external_pr_merge_rate.toFixed(0)}%` : "0%"}</span>
                   </div>
-                  <div className="p-3 bg-zinc-900 border border-white/[0.08] rounded-xl">
+                  <div className="p-3 glass-card border border-white/[0.1] rounded-xl">
                     <span className="text-zinc-300 block text-[10px] uppercase">Good First Issues</span>
                     <span className="font-bold text-white text-sm">{consoleData.breakdown.good_first_issue_count}</span>
                   </div>
-                  <div className="p-3 bg-zinc-900 border border-white/[0.08] rounded-xl">
+                  <div className="p-3 glass-card border border-white/[0.1] rounded-xl">
                     <span className="text-zinc-300 block text-[10px] uppercase">Onboarding Docs</span>
                     <span className="font-bold text-white text-sm">{consoleData.breakdown.onboarding_score}/100</span>
                   </div>
-                  <div className="p-3 bg-zinc-900 border border-white/[0.08] rounded-xl">
+                  <div className="p-3 glass-card border border-white/[0.1] rounded-xl">
                     <span className="text-zinc-300 block text-[10px] uppercase">90-Day Bus Factor</span>
                     <span className="font-bold text-white text-sm">{consoleData.breakdown.bus_factor}</span>
                   </div>
@@ -534,11 +534,11 @@ export function MaintainerConsoleModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 border-t-2 border-white/[0.08] bg-zinc-900 flex items-center justify-between text-xs text-zinc-300">
+        <div className="p-4 border-t-2 border-white/[0.1] glass-card flex items-center justify-between text-xs text-zinc-300">
           <span>Weekly rank-change reports sent automatically via email</span>
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-zinc-900 text-white rounded-xl font-bold hover:bg-zinc-800 transition-colors cursor-pointer"
+            className="px-4 py-2 glass-card text-white rounded-xl font-bold hover:bg-zinc-800 transition-colors cursor-pointer"
           >
             Done
           </button>

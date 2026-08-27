@@ -110,7 +110,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
   }
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-zinc-950 text-white font-sans">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-black text-white font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -128,7 +128,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
         </div>
 
         {/* Header Title Box */}
-        <div className="border border-white/[0.08] bg-zinc-900/80 p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-8">
+        <div className="border border-white/[0.1] glass-panel p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-8">
           <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-zinc-300 mb-4">
             <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-950/80 border border-amber-700 font-bold text-amber-300 rounded">
               {guide.section}
@@ -151,7 +151,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
             {guide.description}
           </p>
 
-          <div className="overflow-hidden rounded border border-white/[0.08] bg-slate-800 shadow-sm">
+          <div className="overflow-hidden rounded border border-white/[0.1] bg-slate-800 shadow-sm">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`/images/guides/${guide.slug}.jpg`}
@@ -164,16 +164,16 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
         </div>
 
         {/* Content Body */}
-        <article className="border border-white/[0.08] bg-zinc-900/80 p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-10 text-zinc-200">
+        <article className="border border-white/[0.1] glass-panel p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-10 text-zinc-200">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             /* eslint-disable @typescript-eslint/no-unused-vars */
             components={{
               h1: ({ node, ...props }) => (
-                <h1 className="text-2xl sm:text-3xl font-bold font-sans text-white mt-8 mb-4 leading-tight border-b border-white/[0.08] pb-3" {...props} />
+                <h1 className="text-2xl sm:text-3xl font-bold font-sans text-white mt-8 mb-4 leading-tight border-b border-white/[0.1] pb-3" {...props} />
               ),
               h2: ({ node, ...props }) => (
-                <h2 className="text-xl sm:text-2xl font-bold font-sans text-white mt-10 mb-4 leading-snug border-b border-white/[0.08] pb-2 flex items-center gap-2" {...props} />
+                <h2 className="text-xl sm:text-2xl font-bold font-sans text-white mt-10 mb-4 leading-snug border-b border-white/[0.1] pb-2 flex items-center gap-2" {...props} />
               ),
               h3: ({ node, ...props }) => (
                 <h3 className="text-lg sm:text-xl font-bold font-sans text-white mt-6 mb-3" {...props} />
@@ -196,8 +196,8 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
                 </div>
               ),
               table: ({ node, ...props }) => (
-                <div className="my-6 overflow-x-auto border border-white/[0.08] rounded">
-                  <table className="w-full text-left text-xs sm:text-sm font-sans divide-y divide-slate-800 bg-zinc-900/80" {...props} />
+                <div className="my-6 overflow-x-auto border border-white/[0.1] rounded">
+                  <table className="w-full text-left text-xs sm:text-sm font-sans divide-y divide-slate-800 glass-panel" {...props} />
                 </div>
               ),
               thead: ({ node, ...props }) => (
@@ -210,10 +210,10 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
                 <tr className="hover:bg-slate-800/60 transition-colors" {...props} />
               ),
               th: ({ node, ...props }) => (
-                <th className="py-3 px-4 font-bold border-r border-white/[0.08] last:border-r-0" {...props} />
+                <th className="py-3 px-4 font-bold border-r border-white/[0.1] last:border-r-0" {...props} />
               ),
               td: ({ node, ...props }) => (
-                <td className="py-3 px-4 text-zinc-300 border-r border-white/[0.08] last:border-r-0" {...props} />
+                <td className="py-3 px-4 text-zinc-300 border-r border-white/[0.1] last:border-r-0" {...props} />
               ),
               code: ({ node, className, children, ...props }) => {
                 const isInline = !className;
@@ -222,7 +222,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
                     {children}
                   </code>
                 ) : (
-                  <pre className="p-4 my-4 overflow-x-auto rounded border border-white/[0.08] bg-zinc-900 text-emerald-400 font-mono text-xs shadow-sm">
+                  <pre className="p-4 my-4 overflow-x-auto rounded border border-white/[0.1] glass-card text-emerald-400 font-mono text-xs shadow-sm">
                     <code className={className} {...props}>
                       {children}
                     </code>
@@ -264,7 +264,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
         </article>
 
         {/* Read Next Section */}
-        <div className="border border-white/[0.08] bg-zinc-900/80 p-6 sm:p-8 rounded-md border-t-2 border-t-slate-700 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="border border-white/[0.1] glass-panel p-6 sm:p-8 rounded-md border-t-2 border-t-slate-700 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
           <Link
             href="/guides"
             title="Browse all GetMerged engineering guides"

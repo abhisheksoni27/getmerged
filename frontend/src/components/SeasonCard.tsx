@@ -51,7 +51,7 @@ export function SeasonCard() {
 
   if (loading) {
     return (
-      <div className="rounded-xl border-2 border-white/[0.08] bg-zinc-900/80 p-5 shadow-sm mb-6 flex items-center gap-2 text-sm text-zinc-300 animate-pulse">
+      <div className="rounded-xl border-2 border-white/[0.1] glass-panel p-5 shadow-sm mb-6 flex items-center gap-2 text-sm text-zinc-300 animate-pulse">
         <Loader2 className="h-4 w-4 animate-spin" /> Loading your season…
       </div>
     );
@@ -80,7 +80,7 @@ export function SeasonCard() {
   }
 
   return (
-    <div className="rounded-xl border-2 border-white/[0.08] bg-zinc-900/80 p-5 shadow-sm mb-6">
+    <div className="rounded-xl border-2 border-white/[0.1] glass-panel p-5 shadow-sm mb-6">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
           <Trophy className="h-3.5 w-3.5 text-amber-500" /> Contributor Season · {s.season}
@@ -90,7 +90,7 @@ export function SeasonCard() {
             onClick={shareSeason}
             data-testid="share-season"
             title="Share your season-rank card"
-            className="inline-flex items-center gap-1 rounded-lg bg-zinc-900 px-2.5 py-1.5 text-[11px] font-semibold text-white hover:bg-zinc-800 cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-lg glass-card px-2.5 py-1.5 text-[11px] font-semibold text-white hover:bg-zinc-800 cursor-pointer"
           >
             <Share2 className="h-3 w-3" /> Share card
           </button>
@@ -105,15 +105,15 @@ export function SeasonCard() {
       </div>
 
       <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="rounded-lg border-b border-white/[0.08] bg-[#FDFBF7] px-3 py-2">
+        <div className="rounded-lg border-b border-white/[0.1] bg-[#FDFBF7] px-3 py-2">
           <div className="text-[10px] font-mono uppercase text-zinc-300">Level</div>
           <div className="text-2xl font-extrabold font-mono text-white">{s.level}</div>
         </div>
-        <div className="rounded-lg border-b border-white/[0.08] bg-[#FDFBF7] px-3 py-2">
+        <div className="rounded-lg border-b border-white/[0.1] bg-[#FDFBF7] px-3 py-2">
           <div className="text-[10px] font-mono uppercase text-zinc-300">Season XP</div>
           <div className="text-2xl font-extrabold font-mono text-emerald-400">{s.season_xp}</div>
         </div>
-        <div className="rounded-lg border-b border-white/[0.08] bg-[#FDFBF7] px-3 py-2">
+        <div className="rounded-lg border-b border-white/[0.1] bg-[#FDFBF7] px-3 py-2">
           <div className="text-[10px] font-mono uppercase text-zinc-300 flex items-center gap-1">
             <Flame className="h-3 w-3 text-amber-500" /> Streak
           </div>
@@ -122,7 +122,7 @@ export function SeasonCard() {
             <span className="text-xs font-semibold text-zinc-300">wk</span>
           </div>
         </div>
-        <div className="rounded-lg border-b border-white/[0.08] bg-[#FDFBF7] px-3 py-2">
+        <div className="rounded-lg border-b border-white/[0.1] bg-[#FDFBF7] px-3 py-2">
           <div className="text-[10px] font-mono uppercase text-zinc-300">This week</div>
           <div className="text-2xl font-extrabold font-mono text-violet-700 flex items-center gap-1">
             <Zap className="h-4 w-4" />

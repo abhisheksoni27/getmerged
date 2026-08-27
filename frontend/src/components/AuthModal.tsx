@@ -74,17 +74,17 @@ export function AuthModal({
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 min-h-screen w-screen overflow-y-auto">
       {/* Blurred Backdrop Overlay */}
       <div
-        className="fixed inset-0 bg-zinc-950/70 backdrop-blur-md transition-opacity animate-fade-in cursor-pointer w-screen h-screen"
+        className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity animate-fade-in cursor-pointer w-screen h-screen"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Modal Dialog Card */}
-      <div className="relative w-full max-w-md my-auto rounded-3xl bg-zinc-900/80 p-7 sm:p-9 shadow-2xl border border-white/[0.08] z-10 animate-scale-up">
+      <div className="relative w-full max-w-md my-auto rounded-3xl glass-panel p-7 sm:p-9 shadow-2xl border border-white/[0.1] z-10 animate-scale-up">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute right-5 top-5 rounded-full p-1.5 text-zinc-300 hover:bg-zinc-900 hover:text-zinc-300 transition-colors cursor-pointer"
+          className="absolute right-5 top-5 rounded-full p-1.5 text-zinc-300 hover:glass-card hover:text-zinc-300 transition-colors cursor-pointer"
           title="Close sign in dialog"
           aria-label="Close sign in dialog"
         >
@@ -106,7 +106,7 @@ export function AuthModal({
           </p>
 
           {/* Benefits Bullet Points */}
-          <div className="mt-5 w-full space-y-2 text-left bg-zinc-900 rounded-2xl p-4 border border-white/[0.08] font-sans text-xs">
+          <div className="mt-5 w-full space-y-2 text-left glass-card rounded-2xl p-4 border border-white/[0.1] font-sans text-xs">
             <div className="flex items-center gap-2.5 text-zinc-200">
               <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
               <span>Full Leaderboard & Page 2+ Pagination</span>
@@ -128,7 +128,7 @@ export function AuthModal({
               href={`${API_BASE_URL}/api/v1/auth/github${refQS}`}
               onClick={() => posthog.capture("github_sign_in_clicked", { source })}
               title="Sign in with GitHub account"
-              className="flex w-full items-center justify-center gap-3 rounded-2xl bg-zinc-900 px-5 py-3.5 text-xs sm:text-sm font-semibold text-white shadow-xs hover:bg-zinc-800 active:scale-[0.98] transition-all cursor-pointer no-underline group"
+              className="flex w-full items-center justify-center gap-3 rounded-2xl glass-card px-5 py-3.5 text-xs sm:text-sm font-semibold text-white shadow-xs hover:bg-zinc-800 active:scale-[0.98] transition-all cursor-pointer no-underline group"
             >
               <svg className="h-4 w-4 fill-current shrink-0" viewBox="0 0 24 24">
                 <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -142,7 +142,7 @@ export function AuthModal({
               href={`${API_BASE_URL}/api/v1/auth/google${returnToQS ? `?${returnToQS}` : ""}`}
               onClick={() => posthog.capture("google_sign_in_clicked", { source })}
               title="Sign in with Google account"
-              className="flex w-full items-center justify-center gap-3 rounded-2xl bg-zinc-900/80 border border-white/[0.12] px-5 py-3.5 text-xs sm:text-sm font-semibold text-zinc-200 shadow-2xs hover:bg-zinc-900 hover:border-white/[0.18] active:scale-[0.98] transition-all cursor-pointer no-underline group"
+              className="flex w-full items-center justify-center gap-3 rounded-2xl glass-panel border border-white/[0.12] px-5 py-3.5 text-xs sm:text-sm font-semibold text-zinc-200 shadow-2xs hover:glass-card hover:border-white/[0.18] active:scale-[0.98] transition-all cursor-pointer no-underline group"
             >
               <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
                 <path

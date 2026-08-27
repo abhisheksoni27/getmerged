@@ -92,12 +92,12 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
   const badgeMarkdown = `[![GetMerged Verified Contributor](https://getmerged.abhishekco.de/api/badge/u/${profile.slug})](https://getmerged.abhishekco.de/u/${profile.slug})`;
 
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-950 text-white font-sans dev-grid-pattern">
+    <div className="min-h-screen flex flex-col bg-black text-white font-sans dev-grid-pattern">
       <Header />
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 sm:py-10">
         {/* Section 1: Executive Contributor Header */}
-        <div className="mb-8 rounded-lg bg-zinc-900/80 p-6 sm:p-8 border border-white/[0.08] border-t-2 border-t-slate-700 shadow-sm">
+        <div className="mb-8 rounded-lg glass-panel p-6 sm:p-8 border border-white/[0.1] border-t-2 border-t-slate-700 shadow-sm">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="flex items-start gap-5 flex-1 min-w-0">
               {profile.avatar_url ? (
@@ -155,7 +155,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
 
         {/* Section 2: Core Telemetry KPI Quad */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          <div className="rounded-md border border-white/[0.08] bg-zinc-900/80 p-5 shadow-sm border-t-2 border-t-emerald-500">
+          <div className="rounded-md border border-white/[0.1] glass-panel p-5 shadow-sm border-t-2 border-t-emerald-500">
             <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-zinc-300">
               <Merge className="h-4 w-4 text-emerald-400" /> Merged PRs
             </div>
@@ -165,7 +165,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
             <div className="text-xs text-zinc-300 font-sans mt-1">Verified public merges</div>
           </div>
 
-          <div className="rounded-md border border-white/[0.08] bg-zinc-900/80 p-5 shadow-sm border-t-2 border-t-blue-500">
+          <div className="rounded-md border border-white/[0.1] glass-panel p-5 shadow-sm border-t-2 border-t-blue-500">
             <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-zinc-300">
               <Target className="h-4 w-4 text-blue-400" /> Accuracy
             </div>
@@ -175,7 +175,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
             <div className="text-xs text-zinc-300 font-sans mt-1">Over settled PR evals</div>
           </div>
 
-          <div className="rounded-md border border-white/[0.08] bg-zinc-900/80 p-5 shadow-sm border-t-2 border-t-amber-500">
+          <div className="rounded-md border border-white/[0.1] glass-panel p-5 shadow-sm border-t-2 border-t-amber-500">
             <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-zinc-300">
               <Star className="h-4 w-4 text-amber-400" /> Stars Impacted
             </div>
@@ -185,7 +185,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
             <div className="text-xs text-zinc-300 font-sans mt-1">Combined repo reach</div>
           </div>
 
-          <div className="rounded-md border border-white/[0.08] bg-zinc-900/80 p-5 shadow-sm border-t-2 border-t-purple-500">
+          <div className="rounded-md border border-white/[0.1] glass-panel p-5 shadow-sm border-t-2 border-t-purple-500">
             <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-zinc-300">
               <Zap className="h-4 w-4 text-purple-400" /> Skill Level
             </div>
@@ -198,7 +198,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
 
         {/* Section 3: Contributor Season & Streak Momentum */}
         {profile.season && !!profile.level && profile.level > 0 && (
-          <div className="mb-8 rounded-md bg-zinc-900/80 p-6 border border-white/[0.08] shadow-sm border-t-2 border-t-slate-700">
+          <div className="mb-8 rounded-md glass-panel p-6 border border-white/[0.1] shadow-sm border-t-2 border-t-slate-700">
             <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
               <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
                 <Flame className="h-4 w-4 text-amber-400" /> Contributor Season · {profile.season}
@@ -239,7 +239,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
 
         {/* Section 4: Ecosystem & Language Proficiency Radar */}
         {languages.length > 0 && (
-          <div className="mb-8 rounded-md bg-zinc-900/80 p-6 border border-white/[0.08] shadow-sm border-t-2 border-t-slate-700">
+          <div className="mb-8 rounded-md glass-panel p-6 border border-white/[0.1] shadow-sm border-t-2 border-t-slate-700">
             <h2 className="text-base font-bold font-sans text-white mb-4 flex items-center gap-2">
               <Code2 className="h-4 w-4 text-blue-400" />
               Ecosystem & Language Proficiency
@@ -266,7 +266,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
         )}
 
         {/* Section 5: Elite Repositories Merged Into */}
-        <div className="mb-8 rounded-md bg-zinc-900/80 p-6 border border-white/[0.08] shadow-sm border-t-2 border-t-slate-700">
+        <div className="mb-8 rounded-md glass-panel p-6 border border-white/[0.1] shadow-sm border-t-2 border-t-slate-700">
           <div className="flex items-center justify-between gap-3 mb-4">
             <h2 className="text-base font-bold font-sans text-white flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-emerald-400" />
@@ -276,7 +276,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
           </div>
 
           {profile.repos.length === 0 ? (
-            <div className="rounded border border-dashed border-white/[0.08] p-8 text-center text-xs text-zinc-300 font-sans">
+            <div className="rounded border border-dashed border-white/[0.1] p-8 text-center text-xs text-zinc-300 font-sans">
               No merged repository records logged yet.
             </div>
           ) : (
@@ -284,7 +284,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
               {profile.repos.map((repo) => (
                 <div
                   key={repo.full_name}
-                  className="flex items-center justify-between gap-3 rounded border border-white/[0.08] bg-slate-800/60 p-3.5 hover:bg-slate-800 hover:border-white/[0.12] transition-colors"
+                  className="flex items-center justify-between gap-3 rounded border border-white/[0.1] bg-slate-800/60 p-3.5 hover:bg-slate-800 hover:border-white/[0.12] transition-colors"
                 >
                   <Link
                     href={`/${repo.full_name}`}
@@ -305,23 +305,23 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
 
         {/* Section 6: Contributor Work Rhythm & Temporal Focus */}
         {dna?.temporal && (
-          <div className="mb-8 rounded-md bg-zinc-900/80 p-6 border border-white/[0.08] shadow-sm border-t-2 border-t-slate-700">
+          <div className="mb-8 rounded-md glass-panel p-6 border border-white/[0.1] shadow-sm border-t-2 border-t-slate-700">
             <h2 className="text-base font-bold font-sans text-white mb-4 flex items-center gap-2">
               <Clock className="h-4 w-4 text-amber-400" />
               Contribution Rhythm & Code Review Dynamics
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-sans">
-              <div className="p-4 rounded border border-white/[0.08] bg-slate-800/80">
+              <div className="p-4 rounded border border-white/[0.1] bg-slate-800/80">
                 <div className="text-xs font-mono text-zinc-300 font-bold uppercase">Active Window</div>
                 <div className="text-base font-bold text-white mt-1">{dna.temporal.label}</div>
                 <div className="text-xs text-zinc-300 mt-1">Peak hour: {dna.temporal.peak_hour_utc}:00 UTC</div>
               </div>
-              <div className="p-4 rounded border border-white/[0.08] bg-slate-800/80">
+              <div className="p-4 rounded border border-white/[0.1] bg-slate-800/80">
                 <div className="text-xs font-mono text-zinc-300 font-bold uppercase">Avg PR Scope</div>
                 <div className="text-base font-bold text-white mt-1">+{Math.round(dna.avg_additions)} / -{Math.round(dna.avg_deletions)}</div>
                 <div className="text-xs text-zinc-300 mt-1">{dna.avg_changed_files.toFixed(1)} files changed avg</div>
               </div>
-              <div className="p-4 rounded border border-white/[0.08] bg-slate-800/80">
+              <div className="p-4 rounded border border-white/[0.1] bg-slate-800/80">
                 <div className="text-xs font-mono text-zinc-300 font-bold uppercase">Review Feedback</div>
                 <div className="text-base font-bold text-white mt-1">{dna.review_engagement}</div>
                 <div className="text-xs text-zinc-300 mt-1">Maintainer discussion depth</div>
@@ -332,7 +332,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
 
         {/* Section 7: Verified Pull Request History */}
         {hasEvals && evalFeed.length > 0 && (
-          <div className="mb-8 rounded-md bg-zinc-900/80 p-6 border border-white/[0.08] shadow-sm border-t-2 border-t-slate-700">
+          <div className="mb-8 rounded-md glass-panel p-6 border border-white/[0.1] shadow-sm border-t-2 border-t-slate-700">
             <h2 className="text-base font-bold font-sans text-white mb-4 flex items-center gap-2">
               <GitPullRequest className="h-4 w-4 text-emerald-400" />
               Latest Verified PR Forecasts & Outcomes
@@ -382,7 +382,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
           const totalBadges = [hasSTier, hasFastShip, hasPolyglot].filter(Boolean).length;
 
           return (
-            <div className="mb-8 rounded-md bg-zinc-900/80 p-6 border border-white/[0.08] shadow-sm border-t-2 border-t-slate-700">
+            <div className="mb-8 rounded-md glass-panel p-6 border border-white/[0.1] shadow-sm border-t-2 border-t-slate-700">
               <div className="flex items-center justify-between gap-3 mb-4">
                 <h2 className="text-base font-bold font-sans text-white flex items-center gap-2">
                   <Award className="h-4 w-4 text-amber-400" />
@@ -391,13 +391,13 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
               </div>
 
               {totalBadges === 0 ? (
-                <div className="rounded border border-dashed border-white/[0.08] p-6 text-center text-xs text-zinc-300 font-sans">
+                <div className="rounded border border-dashed border-white/[0.1] p-6 text-center text-xs text-zinc-300 font-sans">
                   No badges unlocked yet. Merge PRs into S-Tier repos or across multiple languages to earn verified badges.
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {hasSTier && (
-                    <div className="p-3.5 rounded border border-white/[0.08] bg-slate-800/80 flex items-center gap-3">
+                    <div className="p-3.5 rounded border border-white/[0.1] bg-slate-800/80 flex items-center gap-3">
                       <div className="h-9 w-9 rounded bg-emerald-950 border border-emerald-800 flex items-center justify-center text-emerald-400 shrink-0 font-bold font-mono text-sm">
                         S
                       </div>
@@ -409,7 +409,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
                   )}
 
                   {hasFastShip && (
-                    <div className="p-3.5 rounded border border-white/[0.08] bg-slate-800/80 flex items-center gap-3">
+                    <div className="p-3.5 rounded border border-white/[0.1] bg-slate-800/80 flex items-center gap-3">
                       <div className="h-9 w-9 rounded bg-blue-950 border border-blue-800 flex items-center justify-center text-blue-400 shrink-0 font-bold font-mono text-sm">
                         ⚡
                       </div>
@@ -421,7 +421,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
                   )}
 
                   {hasPolyglot && (
-                    <div className="p-3.5 rounded border border-white/[0.08] bg-slate-800/80 flex items-center gap-3">
+                    <div className="p-3.5 rounded border border-white/[0.1] bg-slate-800/80 flex items-center gap-3">
                       <div className="h-9 w-9 rounded bg-purple-950 border border-purple-800 flex items-center justify-center text-purple-400 shrink-0 font-bold font-mono text-sm">
                         🌐
                       </div>
@@ -438,7 +438,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
         })()}
 
         {/* Section 9: Embeddable Resume Markdown Badge */}
-        <div className="mb-8 rounded-md bg-zinc-900/80 p-6 border border-white/[0.08] shadow-sm border-t-2 border-t-slate-700">
+        <div className="mb-8 rounded-md glass-panel p-6 border border-white/[0.1] shadow-sm border-t-2 border-t-slate-700">
           <h2 className="text-base font-bold font-sans text-white mb-2 flex items-center gap-2">
             <Copy className="h-4 w-4 text-zinc-300" />
             Embed on GitHub README or Resume
@@ -446,7 +446,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
           <p className="text-xs text-zinc-300 font-sans mb-3">
             Copy the markdown badge below to showcase your verified GetMerged contributor score directly in your GitHub profile README.
           </p>
-          <div className="flex items-center gap-3 bg-zinc-950/80 border border-white/[0.08] text-zinc-200 p-3 sm:p-4 rounded-xl font-mono text-xs overflow-hidden">
+          <div className="flex items-center gap-3 bg-black/80 border border-white/[0.1] text-zinc-200 p-3 sm:p-4 rounded-xl font-mono text-xs overflow-hidden">
             <code className="flex-1 overflow-x-auto whitespace-nowrap text-amber-400 scrollbar-none py-1">{badgeMarkdown}</code>
             <CopyBadgeButton text={badgeMarkdown} />
           </div>

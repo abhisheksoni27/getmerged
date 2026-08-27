@@ -130,7 +130,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                 <Flame className="h-3.5 w-3.5" />
                 <span>Active Monthly Sprint</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-zinc-300 font-mono text-xs">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-card border border-white/[0.1] text-zinc-300 font-mono text-xs">
                 <Clock className="h-3.5 w-3.5 text-zinc-300" />
                 <span>{daysRemaining} Days Remaining</span>
               </div>
@@ -157,7 +157,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
         </div>
 
         {/* Milestone Targets Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 pt-8 border-t border-white/[0.08]">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 pt-8 border-t border-white/[0.1]">
           <div className="glass-card p-4 rounded-xl">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold text-amber-500 uppercase">Bronze Milestone</span>
@@ -206,7 +206,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
             onChange={(e) => setPrUrl(e.target.value)}
             placeholder="https://github.com/facebook/react/pull/12345"
             required
-            className="flex-1 rounded-xl bg-zinc-900/90 border border-white/[0.08] px-4 py-3 text-xs font-mono text-white placeholder:text-zinc-400 focus:outline-none focus:border-white/[0.2]"
+            className="flex-1 rounded-xl glass-panel border border-white/[0.1] px-4 py-3 text-xs font-mono text-white placeholder:text-zinc-300 focus:outline-none focus:border-white/[0.2]"
           />
           <button
             type="submit"
@@ -233,7 +233,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
       </div>
 
       {/* Dual Tab Navigation (Welcoming Repos vs Contributor MVPs) */}
-      <div className="flex items-center gap-3 border-b border-white/[0.08] pb-4">
+      <div className="flex items-center gap-3 border-b border-white/[0.1] pb-4">
         <button
           type="button"
           onClick={() => setActiveTab("repos")}
@@ -318,7 +318,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="font-mono text-xs text-zinc-400 font-bold">#{idx + 1}</span>
+                      <span className="font-mono text-xs text-zinc-300 font-bold">#{idx + 1}</span>
                       <Link
                         href={`/${repo.full_name}`}
                         title={`View ${repo.full_name} scorecard`}
@@ -335,22 +335,22 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                   </p>
                 </div>
 
-                <div className="space-y-3 pt-3 border-t border-white/[0.06]">
+                <div className="space-y-3 pt-3 border-t border-white/[0.09]">
                   <div className="grid grid-cols-3 gap-2 text-center">
                     <div className="glass-card p-2 rounded-lg">
-                      <div className="text-[10px] font-mono text-zinc-400 uppercase">Stars</div>
+                      <div className="text-[10px] font-mono text-zinc-300 uppercase">Stars</div>
                       <div className="text-xs font-mono font-bold text-zinc-200 mt-0.5">
                         {repo.stars >= 1000 ? `${(repo.stars / 1000).toFixed(1)}k` : repo.stars}
                       </div>
                     </div>
                     <div className="glass-card p-2 rounded-lg">
-                      <div className="text-[10px] font-mono text-zinc-400 uppercase">1st-Timer</div>
+                      <div className="text-[10px] font-mono text-zinc-300 uppercase">1st-Timer</div>
                       <div className="text-xs font-mono font-bold text-emerald-400 mt-0.5">
                         {repo.first_timer_success_rate ? `${Math.round(repo.first_timer_success_rate)}%` : " - "}
                       </div>
                     </div>
                     <div className="glass-card p-2 rounded-lg">
-                      <div className="text-[10px] font-mono text-zinc-400 uppercase">Issues</div>
+                      <div className="text-[10px] font-mono text-zinc-300 uppercase">Issues</div>
                       <div className="text-xs font-mono font-bold text-amber-400 mt-0.5">
                         {repo.gfi_count || " - "}
                       </div>
@@ -397,9 +397,9 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                     <img
                       src={c.avatar_url}
                       alt={c.username}
-                      className="w-12 h-12 rounded-xl border border-white/[0.08] object-cover bg-zinc-900"
+                      className="w-12 h-12 rounded-xl border border-white/[0.1] object-cover glass-card"
                     />
-                    <span className="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full bg-zinc-900 border border-white/[0.12] flex items-center justify-center font-mono text-[10px] font-bold text-zinc-200">
+                    <span className="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full glass-card border border-white/[0.12] flex items-center justify-center font-mono text-[10px] font-bold text-zinc-200">
                       #{c.rank}
                     </span>
                   </div>

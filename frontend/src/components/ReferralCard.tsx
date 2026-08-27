@@ -37,7 +37,7 @@ export function ReferralCard() {
   return (
     <section
       id="referrals"
-      className="max-w-4xl mx-auto px-4 mb-8 rounded-2xl bg-zinc-900/80 border-2 border-white/[0.08] shadow-sm p-5 sm:p-6 font-sans"
+      className="max-w-4xl mx-auto px-4 mb-8 rounded-2xl glass-panel border-2 border-white/[0.1] shadow-sm p-5 sm:p-6 font-sans"
     >
       <div className="flex items-center gap-2 mb-1.5">
         <Gift className="h-4 w-4 text-emerald-600" />
@@ -53,12 +53,12 @@ export function ReferralCard() {
           value={link}
           onFocus={(e) => e.currentTarget.select()}
           aria-label="Your referral link"
-          className="flex-1 min-w-0 rounded-xl border border-white/[0.12] bg-zinc-900 px-3 py-2 text-xs font-mono text-zinc-300"
+          className="flex-1 min-w-0 rounded-xl border border-white/[0.12] glass-card px-3 py-2 text-xs font-mono text-zinc-300"
         />
         <button
           onClick={copy}
           title="Copy referral link"
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white px-4 py-2 text-xs font-semibold cursor-pointer transition-all active:scale-[0.98]"
+          className="inline-flex items-center justify-center gap-2 rounded-xl glass-card hover:bg-zinc-800 text-white px-4 py-2 text-xs font-semibold cursor-pointer transition-all active:scale-[0.98]"
         >
           {copied ? (
             <>

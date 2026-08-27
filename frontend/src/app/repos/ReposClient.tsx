@@ -286,7 +286,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
         </nav>
 
         {/* Header Hero Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-white/[0.08] pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-white/[0.1] pb-8">
           <div>
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-mono text-orange-400 font-bold mb-3">
               <Sparkles className="h-3.5 w-3.5" />
@@ -328,7 +328,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
                   setPage(1);
                 }}
                 placeholder="Search by repo name (e.g. facebook/react, fastapi)..."
-                className="w-full pl-11 pr-10 py-3 rounded-2xl bg-black/70 border border-white/[0.12] text-sm text-white placeholder:text-zinc-400 focus:outline-hidden focus:border-white/[0.3] transition-all font-sans"
+                className="w-full pl-11 pr-10 py-3 rounded-2xl bg-black/70 border border-white/[0.12] text-sm text-white placeholder:text-zinc-300 focus:outline-hidden focus:border-white/[0.3] transition-all font-sans"
               />
               {searchQuery && (
                 <button
@@ -355,7 +355,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
                 className="px-3.5 py-3 rounded-xl bg-black/70 border border-white/[0.12] text-zinc-200 font-semibold focus:border-white/[0.3] cursor-pointer"
               >
                 {LANGUAGES.map((l) => (
-                  <option key={l} value={l} className="bg-zinc-900 text-white">
+                  <option key={l} value={l} className="glass-card text-white">
                     {l === "All" ? "All Languages" : l}
                   </option>
                 ))}
@@ -371,12 +371,12 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
                 aria-label="Filter by C-Rank tier"
                 className="px-3.5 py-3 rounded-xl bg-black/70 border border-white/[0.12] text-zinc-200 font-semibold focus:border-white/[0.3] cursor-pointer"
               >
-                <option value="All" className="bg-zinc-900 text-white">All Tiers (S–D)</option>
-                <option value="S" className="bg-zinc-900 text-white">Tier S (Elite)</option>
-                <option value="A" className="bg-zinc-900 text-white">Tier A (Welcoming)</option>
-                <option value="B" className="bg-zinc-900 text-white">Tier B (Solid)</option>
-                <option value="C" className="bg-zinc-900 text-white">Tier C (Moderate)</option>
-                <option value="D" className="bg-zinc-900 text-white">Tier D (Risky)</option>
+                <option value="All" className="glass-card text-white">All Tiers (S–D)</option>
+                <option value="S" className="glass-card text-white">Tier S (Elite)</option>
+                <option value="A" className="glass-card text-white">Tier A (Welcoming)</option>
+                <option value="B" className="glass-card text-white">Tier B (Solid)</option>
+                <option value="C" className="glass-card text-white">Tier C (Moderate)</option>
+                <option value="D" className="glass-card text-white">Tier D (Risky)</option>
               </select>
 
               {/* Star Volume Select */}
@@ -390,7 +390,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
                 className="px-3.5 py-3 rounded-xl bg-black/70 border border-white/[0.12] text-zinc-200 font-semibold focus:border-white/[0.3] cursor-pointer"
               >
                 {STAR_BUCKETS.map((b) => (
-                  <option key={b.value} value={b.value} className="bg-zinc-900 text-white">
+                  <option key={b.value} value={b.value} className="glass-card text-white">
                     {b.label}
                   </option>
                 ))}
@@ -427,7 +427,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
             </div>
 
             {/* Mobile Filter Sheet Trigger Button */}
-            <div className="flex lg:hidden items-center justify-between gap-2 pt-2 border-t border-white/[0.08]">
+            <div className="flex lg:hidden items-center justify-between gap-2 pt-2 border-t border-white/[0.1]">
               <button
                 type="button"
                 onClick={() => setIsFilterSheetOpen(true)}
@@ -451,7 +451,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
           </div>
 
           {/* Quick Language Chips Carousel */}
-          <div className="mt-4 pt-4 border-t border-white/[0.08] flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+          <div className="mt-4 pt-4 border-t border-white/[0.1] flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
             <span className="text-zinc-300 font-mono shrink-0 pl-1">Quick:</span>
             {LANGUAGES.map((lang) => {
               const active = selectedLang === lang;
@@ -466,7 +466,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs whitespace-nowrap transition-all cursor-pointer font-sans shrink-0 ${
                     active
                       ? "bg-white text-zinc-950 font-bold shadow-sm"
-                      : "bg-black/60 border border-white/[0.08] text-zinc-300 hover:text-white font-medium"
+                      : "bg-black/60 border border-white/[0.1] text-zinc-300 hover:text-white font-medium"
                   }`}
                 >
                   {lang !== "All" && <LangLogo language={lang} />}
@@ -482,7 +482,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-64 rounded-3xl glass-card border border-white/[0.08] p-6 animate-pulse" />
+                <div key={i} className="h-64 rounded-3xl glass-card border border-white/[0.1] p-6 animate-pulse" />
               ))}
             </div>
           ) : repos.length > 0 ? (
@@ -492,8 +492,8 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16 px-4 rounded-3xl glass-panel border border-white/[0.08] max-w-lg mx-auto">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 border border-white/[0.1] text-zinc-300 mb-4">
+            <div className="text-center py-16 px-4 rounded-3xl glass-panel border border-white/[0.1] max-w-lg mx-auto">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl glass-card border border-white/[0.1] text-zinc-300 mb-4">
                 <Search className="h-6 w-6" />
               </div>
               <h3 className="text-lg font-bold font-space text-white mb-1">
@@ -516,7 +516,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
 
         {/* Pagination Bar */}
         {!loading && totalPages > 1 && (
-          <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/[0.08] pt-8">
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/[0.1] pt-8">
             <div className="text-xs font-mono text-zinc-300">
               Showing page <span className="text-white font-bold">{page}</span> of{" "}
               <span className="text-white font-bold">{totalPages}</span> ({totalCount.toLocaleString()} total repos)
@@ -530,7 +530,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
                   setPage((p) => Math.max(1, p - 1));
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="p-2 rounded-xl border border-white/[0.08] bg-black/60 text-zinc-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                className="p-2 rounded-xl border border-white/[0.1] bg-black/60 text-zinc-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                 aria-label="Previous Page"
               >
                 <ChevronLeft className="h-4 w-4" />
@@ -540,7 +540,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
                 {pageNumbers.map((num, idx) => {
                   if (num < 0) {
                     return (
-                      <span key={`ellipsis-${idx}`} className="px-2 text-zinc-400 text-xs">
+                      <span key={`ellipsis-${idx}`} className="px-2 text-zinc-300 text-xs">
                         ...
                       </span>
                     );
@@ -557,7 +557,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
                       className={`min-w-[36px] h-9 px-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                         isCurrent
                           ? "bg-white text-zinc-950 shadow-sm"
-                          : "bg-black/60 border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2]"
+                          : "bg-black/60 border border-white/[0.1] text-zinc-300 hover:text-white hover:border-white/[0.2]"
                       }`}
                     >
                       {num}
@@ -573,7 +573,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
                   setPage((p) => Math.min(totalPages, p + 1));
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="p-2 rounded-xl border border-white/[0.08] bg-black/60 text-zinc-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                className="p-2 rounded-xl border border-white/[0.1] bg-black/60 text-zinc-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                 aria-label="Next Page"
               >
                 <ChevronRight className="h-4 w-4" />
@@ -583,7 +583,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
         )}
 
         {/* Directory FAQ Section */}
-        <section className="mt-16 pt-12 border-t border-white/[0.08]">
+        <section className="mt-16 pt-12 border-t border-white/[0.1]">
           <div className="mb-8">
             <h2 className="text-xl sm:text-2xl font-bold font-space text-white">
               Frequently Asked Questions About Open-Source Rankings

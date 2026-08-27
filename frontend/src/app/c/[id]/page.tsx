@@ -86,7 +86,7 @@ export default async function ShareCardPage({ params }: PageProps) {
   const ogUrl = `${API_BASE_URL}/api/v1/cards/${encodeURIComponent(id)}/og.png`;
 
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-950 dev-grid-pattern">
+    <div className="min-h-screen flex flex-col bg-black dev-grid-pattern">
       <Header />
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         <div className="text-center mb-8">
@@ -102,8 +102,8 @@ export default async function ShareCardPage({ params }: PageProps) {
           </p>
         </div>
 
-        <div className="rounded-3xl bg-zinc-900/80 p-4 sm:p-8 border border-white/[0.08] shadow-md mb-8">
-          <div className="relative rounded-2xl overflow-hidden border border-white/[0.08] shadow-sm bg-zinc-950 aspect-[1200/630]">
+        <div className="rounded-3xl glass-panel p-4 sm:p-8 border border-white/[0.1] shadow-md mb-8">
+          <div className="relative rounded-2xl overflow-hidden border border-white/[0.1] shadow-sm bg-black aspect-[1200/630]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={ogUrl}
@@ -112,7 +112,7 @@ export default async function ShareCardPage({ params }: PageProps) {
             />
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-white/[0.08]">
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-white/[0.1]">
             <div className="flex items-center gap-2 text-xs font-mono text-zinc-300">
               <CheckCircle2 className="h-4 w-4 text-emerald-600" />
               <span>Verified On-Chain / GitHub Search API</span>
@@ -121,7 +121,7 @@ export default async function ShareCardPage({ params }: PageProps) {
             <div className="flex items-center gap-3">
               <Link
                 href="/hacktoberfest"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-zinc-900 text-white text-xs font-semibold hover:bg-zinc-800 transition-colors shadow-xs"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl glass-card text-white text-xs font-semibold hover:bg-zinc-800 transition-colors shadow-xs"
               >
                 Track Your Merges <ArrowRight className="h-3.5 w-3.5" />
               </Link>

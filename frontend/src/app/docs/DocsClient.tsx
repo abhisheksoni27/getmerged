@@ -29,10 +29,10 @@ interface SwaggerSpec {
 }
 
 const METHOD_STYLES: Record<string, string> = {
-  get: "bg-emerald-950/80 border-emerald-800/80 text-emerald-300 border-emerald-300",
+  get: "bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 border-emerald-300",
   post: "bg-sky-100 text-sky-800 border-sky-300",
-  put: "bg-amber-950/80 border-amber-800/80 text-amber-300 border-amber-300",
-  patch: "bg-amber-950/80 border-amber-800/80 text-amber-300 border-amber-300",
+  put: "bg-amber-500/15 border border-amber-500/30 text-amber-300 border-amber-300",
+  patch: "bg-amber-500/15 border border-amber-500/30 text-amber-300 border-amber-300",
   delete: "bg-red-100 text-red-700 border-red-300",
 };
 
@@ -79,7 +79,7 @@ export function DocsClient() {
       </p>
 
       {/* Authentication */}
-      <section className="mt-8 rounded-xl border border-white/[0.08] bg-zinc-900/80 p-5">
+      <section className="mt-8 rounded-xl border border-white/[0.1] glass-panel p-5">
         <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-2">
           <KeyRound className="h-4 w-4 text-emerald-600" /> Authentication
         </h2>
@@ -90,15 +90,15 @@ export function DocsClient() {
           </Link>{" "}
           and pass it as a Bearer token on every request:
         </p>
-        <pre className="mt-3 rounded-lg bg-zinc-900 text-white text-xs p-3 overflow-x-auto">
+        <pre className="mt-3 rounded-lg glass-card text-white text-xs p-3 overflow-x-auto">
           curl -H &quot;Authorization: Bearer odk_yourkey&quot; {API_BASE_URL}/api/v1/repos?language=Go
         </pre>
         <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div className="rounded-lg border border-white/[0.08] px-3 py-2">
+          <div className="rounded-lg border border-white/[0.1] px-3 py-2">
             <span className="font-bold">Free tier</span> - 60 requests/hour + 10 requests/min burst per key. Exceeding a
-            limit returns <code className="rounded bg-zinc-900 px-1">429</code> with{" "}
-            <code className="rounded bg-zinc-900 px-1">X-RateLimit-*</code> and{" "}
-            <code className="rounded bg-zinc-900 px-1">Retry-After</code> headers.
+            limit returns <code className="rounded glass-card px-1">429</code> with{" "}
+            <code className="rounded glass-card px-1">X-RateLimit-*</code> and{" "}
+            <code className="rounded glass-card px-1">Retry-After</code> headers.
           </div>
           <div className="rounded-lg border border-emerald-200 bg-emerald-950/70 border-emerald-800/80 px-3 py-2 text-emerald-300">
             <span className="font-bold">Pro</span> - 600 requests/hour + 100 requests/min burst.{" "}
@@ -111,9 +111,9 @@ export function DocsClient() {
           <div className="mt-3 space-y-1.5">
             {Object.entries(spec.securityDefinitions).map(([scheme, def]) => (
               <p key={scheme} className="text-xs text-zinc-300" data-testid="security-scheme">
-                Security scheme <code className="rounded bg-zinc-900 px-1 font-semibold">{scheme}</code>: apiKey in{" "}
-                <code className="rounded bg-zinc-900 px-1">{def.in}</code> header{" "}
-                <code className="rounded bg-zinc-900 px-1">{def.name}</code>
+                Security scheme <code className="rounded glass-card px-1 font-semibold">{scheme}</code>: apiKey in{" "}
+                <code className="rounded glass-card px-1">{def.in}</code> header{" "}
+                <code className="rounded glass-card px-1">{def.name}</code>
                 {def.description ? ` - ${def.description}` : ""}
               </p>
             ))}
@@ -122,11 +122,11 @@ export function DocsClient() {
       </section>
 
       {/* Error codes */}
-      <section className="mt-8 rounded-xl border border-white/[0.08] bg-zinc-900/80 p-5">
+      <section className="mt-8 rounded-xl border border-white/[0.1] glass-panel p-5">
         <h2 className="text-lg font-bold text-white mb-2">Error codes</h2>
         <table className="w-full text-left text-xs text-zinc-300">
           <thead>
-            <tr className="border-b border-white/[0.08]">
+            <tr className="border-b border-white/[0.1]">
               <th className="py-1 pr-3 font-semibold">HTTP</th>
               <th className="py-1 pr-3 font-semibold">Code</th>
               <th className="py-1 font-semibold">Meaning</th>
@@ -147,7 +147,7 @@ export function DocsClient() {
               <td className="py-1.5 pr-3 font-mono">429</td>
               <td className="py-1.5 pr-3 font-mono">ERR_RATE_LIMITED</td>
               <td className="py-1">
-                Hourly or per-minute burst cap hit; wait for the <code className="rounded bg-zinc-900 px-1">Retry-After</code>{" "}
+                Hourly or per-minute burst cap hit; wait for the <code className="rounded glass-card px-1">Retry-After</code>{" "}
                 seconds before retrying.
               </td>
             </tr>
@@ -166,11 +166,11 @@ export function DocsClient() {
         )}
         <ul className="space-y-3">
           {endpoints.map(({ path, method, op }) => (
-            <li key={`${method}-${path}`} className="rounded-xl border border-white/[0.08] bg-zinc-900/80 p-4">
+            <li key={`${method}-${path}`} className="rounded-xl border border-white/[0.1] glass-panel p-4">
               <div className="flex items-center gap-2 flex-wrap">
                 <span
                   className={`inline-block rounded-md border px-2 py-0.5 text-[11px] font-bold uppercase ${
-                    METHOD_STYLES[method] ?? "bg-zinc-900 text-zinc-300 border-white/[0.12]"
+                    METHOD_STYLES[method] ?? "glass-card text-zinc-300 border-white/[0.12]"
                   }`}
                 >
                   {method}
@@ -182,7 +182,7 @@ export function DocsClient() {
               {op.parameters && op.parameters.length > 0 && (
                 <table className="mt-2 w-full text-left text-[11px] text-zinc-300">
                   <thead>
-                    <tr className="border-b border-white/[0.08]">
+                    <tr className="border-b border-white/[0.1]">
                       <th className="py-1 pr-3 font-semibold">Parameter</th>
                       <th className="py-1 pr-3 font-semibold">In</th>
                       <th className="py-1 pr-3 font-semibold">Type</th>

@@ -43,12 +43,12 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
 
   if (loading) {
     return (
-      <div className="rounded-2xl bg-zinc-900/80 p-5 border-2 border-white/[0.08] shadow-sm mb-6 animate-pulse">
+      <div className="rounded-2xl glass-panel p-5 border-2 border-white/[0.1] shadow-sm mb-6 animate-pulse">
         <div className="flex items-center justify-between mb-4">
           <div className="h-5 bg-zinc-200 rounded w-1/3"></div>
           <div className="h-4 bg-zinc-200 rounded w-24"></div>
         </div>
-        <div className="h-24 bg-zinc-900 rounded-xl mb-4"></div>
+        <div className="h-24 glass-card rounded-xl mb-4"></div>
         <div className="h-4 bg-zinc-200 rounded w-1/2"></div>
       </div>
     );
@@ -68,7 +68,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
     if (val > 0.6) return "bg-emerald-500 hover:bg-emerald-600";
     if (val > 0.25) return "bg-emerald-300 hover:bg-emerald-400";
     if (val > 0.05) return "bg-emerald-950/80 border-emerald-800/80 hover:bg-emerald-200";
-    return "bg-zinc-900 hover:bg-zinc-200";
+    return "glass-card hover:bg-zinc-200";
   };
 
   const userTimezone = isMounted ? getUserTimeZone() : "UTC";
@@ -76,11 +76,11 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
   const localWindow = isMounted ? formatUTCRangeToLocal(primaryStart, primaryEnd) : `${padZero(primaryStart)}:00 - ${padZero(primaryEnd)}:00 UTC`;
 
   return (
-    <div className="rounded-2xl bg-zinc-900/80 p-5 sm:p-6 border-2 border-white/[0.08] shadow-sm mb-6 font-mono">
+    <div className="rounded-2xl glass-panel p-5 sm:p-6 border-2 border-white/[0.1] shadow-sm mb-6 font-mono">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-white/[0.08] bg-emerald-950/80 border-emerald-800/80 text-emerald-300 shadow-sm">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-white/[0.1] bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 shadow-sm">
             <Clock className="h-4 w-4 text-emerald-400" />
           </div>
           <div>
@@ -115,7 +115,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5 font-sans">
-        <div className="bg-zinc-900 border border-white/[0.08] rounded-xl p-3">
+        <div className="glass-card border border-white/[0.1] rounded-xl p-3">
           <div className="text-xs text-zinc-300 flex items-center gap-1 mb-1">
             <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
             <span>Peak Review Hour</span>
@@ -128,7 +128,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
           </p>
         </div>
 
-        <div className="bg-zinc-900 border border-white/[0.08] rounded-xl p-3">
+        <div className="glass-card border border-white/[0.1] rounded-xl p-3">
           <div className="text-xs text-zinc-300 flex items-center gap-1 mb-1">
             <Clock className="h-3.5 w-3.5 text-blue-600" />
             <span>Primary Window</span>
@@ -141,7 +141,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
           </p>
         </div>
 
-        <div className="bg-zinc-900 border border-white/[0.08] rounded-xl p-3">
+        <div className="glass-card border border-white/[0.1] rounded-xl p-3">
           <div className="text-xs text-zinc-300 flex items-center gap-1 mb-1">
             <Globe className="h-3.5 w-3.5 text-indigo-600" />
             <span>Active Maintainers</span>
@@ -169,7 +169,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
           </div>
         </div>
 
-        <div className="bg-zinc-900 border border-white/[0.08] rounded-xl p-3 sm:p-4">
+        <div className="glass-card border border-white/[0.1] rounded-xl p-3 sm:p-4">
           <div className="flex items-end gap-1 sm:gap-1.5 h-24 w-full">
             {heatmap.map((val, h) => {
               const isPeak = h === peakHour;
@@ -212,7 +212,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
       {/* Explanatory Copy & Timezone Notice */}
       <div
         data-testid="optimal-time-explanation"
-        className="rounded-xl bg-zinc-900 border border-white/[0.08] p-3 text-xs font-sans text-zinc-300 space-y-1.5"
+        className="rounded-xl glass-card border border-white/[0.1] p-3 text-xs font-sans text-zinc-300 space-y-1.5"
       >
         <p className="flex items-start gap-1.5">
           <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
@@ -224,7 +224,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
           </span>
         </p>
         {isLowConfidence && (
-          <p className="flex items-center gap-1.5 text-amber-300 text-[11px] pt-1 border-t border-white/[0.08]">
+          <p className="flex items-center gap-1.5 text-amber-300 text-[11px] pt-1 border-t border-white/[0.1]">
             <AlertCircle className="h-3.5 w-3.5 text-amber-600 shrink-0" />
             <span>
               Limited recent maintainer review activity recorded for this repository. Prediction based on heuristic baseline.

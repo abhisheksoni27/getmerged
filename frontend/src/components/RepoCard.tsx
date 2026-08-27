@@ -139,7 +139,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
         {/* Top Bar: Identity & Grade Badge */}
         <div className="flex items-start justify-between gap-4 mb-4">
           <div className="flex items-center gap-3.5 min-w-0 flex-1">
-            <div className="h-11 w-11 rounded-2xl border border-white/[0.12] bg-zinc-900 overflow-hidden shrink-0 group-hover:border-white/[0.3] transition-colors shadow-md">
+            <div className="h-11 w-11 rounded-2xl border border-white/[0.12] glass-card overflow-hidden shrink-0 group-hover:border-white/[0.3] transition-colors shadow-md">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`https://github.com/${ownerPart}.png?size=80`}
@@ -171,12 +171,12 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
 
         {/* Sub-meta: Stars & Language */}
         <div className="flex items-center gap-3 mb-4 font-mono text-xs text-zinc-300">
-          <span className="flex items-center gap-1.5 font-bold text-white bg-white/[0.06] px-2.5 py-1 rounded-lg border border-white/[0.08]">
+          <span className="flex items-center gap-1.5 font-bold text-white bg-white/[0.06] px-2.5 py-1 rounded-lg border border-white/[0.1]">
             <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
             {repo.stars >= 1_000 ? `${(repo.stars / 1_000).toFixed(1)}k` : repo.stars}
           </span>
           <span className="text-zinc-600">•</span>
-          <span className="flex items-center gap-1.5 truncate text-zinc-200 bg-white/[0.06] px-2.5 py-1 rounded-lg border border-white/[0.08]">
+          <span className="flex items-center gap-1.5 truncate text-zinc-200 bg-white/[0.06] px-2.5 py-1 rounded-lg border border-white/[0.1]">
             <LangLogo language={repo.language} />
             <span className="truncate font-semibold">{repo.language || "Code"}</span>
           </span>
@@ -199,14 +199,14 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
               title={`Explore ${topic} repositories`}
               onClick={(e) => handleTopicChipClick(e, topic)}
               onKeyDown={(e) => handleTopicChipKeyDown(e, topic)}
-              className="inline-flex items-center px-2.5 py-1 rounded-lg bg-white/[0.06] text-zinc-300 border border-white/[0.08] font-mono text-[11px] font-semibold hover:bg-white/[0.12] hover:text-white hover:border-white/[0.2] transition-colors cursor-pointer shrink-0 whitespace-nowrap"
+              className="inline-flex items-center px-2.5 py-1 rounded-lg bg-white/[0.06] text-zinc-300 border border-white/[0.1] font-mono text-[11px] font-semibold hover:bg-white/[0.12] hover:text-white hover:border-white/[0.2] transition-colors cursor-pointer shrink-0 whitespace-nowrap"
             >
               #{topic}
             </span>
           ))}
           {topicOverflow > 0 && (
             <span
-              className="inline-flex items-center px-2 py-0.5 rounded-lg bg-white/[0.04] text-zinc-300 border border-white/[0.06] font-mono text-[11px] font-medium shrink-0"
+              className="inline-flex items-center px-2 py-0.5 rounded-lg bg-white/[0.04] text-zinc-300 border border-white/[0.09] font-mono text-[11px] font-medium shrink-0"
               aria-hidden="true"
             >
               +{topicOverflow}
@@ -215,7 +215,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
         </div>
 
         {/* Telemetry Precision Well */}
-        <div className="grid grid-cols-3 gap-2.5 p-2 rounded-2xl bg-black/60 border border-white/[0.08] mb-5 shadow-inner">
+        <div className="grid grid-cols-3 gap-2.5 p-2 rounded-2xl bg-black/60 border border-white/[0.1] mb-5 shadow-inner">
           <MetricGauge
             label="Merge Rate"
             value={mergeRateStr}
@@ -238,7 +238,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       </div>
 
       {/* Card Footer */}
-      <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-zinc-300">
+      <div className="pt-4 border-t border-white/[0.1] flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-zinc-300">
         <div className="flex items-center gap-2 min-w-0">
           {gfiCount > 0 ? (
             <span
@@ -264,7 +264,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
               <span>Trending</span>
             </span>
           ) : (
-            <span className="text-zinc-400 text-xs font-medium">Telemetry Tracked</span>
+            <span className="text-zinc-300 text-xs font-medium">Telemetry Tracked</span>
           )}
         </div>
 

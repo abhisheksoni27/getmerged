@@ -66,7 +66,7 @@ export default function RankingsIndexPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-zinc-950 dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-black dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"
@@ -81,15 +81,15 @@ export default function RankingsIndexPage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition-colors mb-5 font-sans shadow-2xs cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-5 font-sans shadow-2xs cursor-pointer"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Section */}
-        <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-8 border-b border-white/[0.08]">
+        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-white/[0.1] shadow-xs mb-8 border-b border-white/[0.1]">
           <div className="flex items-center gap-2 mb-3">
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
+            <span className="inline-flex items-center gap-1.5 rounded-xl glass-card px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
               <Trophy className="h-3.5 w-3.5 text-amber-400" /> Ecosystem Directory
             </span>
           </div>
@@ -107,7 +107,7 @@ export default function RankingsIndexPage() {
         </div>
 
         {/* Directory Section Header */}
-        <div className="mb-6 flex items-center justify-between border-b border-white/[0.08] pb-3">
+        <div className="mb-6 flex items-center justify-between border-b border-white/[0.1] pb-3">
           <h2 className="text-base font-bold text-white flex items-center gap-2 font-space">
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
             Browse by Ecosystem ({ecosystems.length})
@@ -122,12 +122,12 @@ export default function RankingsIndexPage() {
               key={eco.slug}
               href={`/rankings/${eco.slug}`}
               title={`View Top Welcoming ${eco.name} Open Source Repositories`}
-              className="group rounded-2xl bg-zinc-900/80 p-5 sm:p-6 border border-white/[0.08] shadow-xs hover:border-white/[0.12] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between border-b border-white/[0.1] cursor-pointer"
+              className="group rounded-2xl glass-panel p-5 sm:p-6 border border-white/[0.1] shadow-xs hover:border-white/[0.12] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between border-b border-white/[0.1] cursor-pointer"
             >
               <div>
                 <div className="flex items-center justify-between gap-3 mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-xl border border-white/[0.08] bg-zinc-900 flex items-center justify-center shrink-0 shadow-2xs">
+                    <div className="h-10 w-10 rounded-xl border border-white/[0.1] glass-card flex items-center justify-center shrink-0 shadow-2xs">
                       <LangLogo language={eco.name} />
                     </div>
                     <div>
@@ -137,7 +137,7 @@ export default function RankingsIndexPage() {
                       <span className="text-[11px] font-mono text-zinc-300">/rankings/{eco.slug}</span>
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono font-semibold bg-zinc-900 text-zinc-300 px-2 py-0.5 rounded-md border border-white/[0.08]">
+                  <span className="text-[10px] font-mono font-semibold glass-card text-zinc-300 px-2 py-0.5 rounded-md border border-white/[0.1]">
                     {eco.tag}
                   </span>
                 </div>
@@ -146,7 +146,7 @@ export default function RankingsIndexPage() {
                 </p>
               </div>
 
-              <div className="pt-4 mt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono font-semibold text-white group-hover:text-emerald-400">
+              <div className="pt-4 mt-4 border-t border-white/[0.1] flex items-center justify-between text-xs font-mono font-semibold text-white group-hover:text-emerald-400">
                 <span className="text-[11px] text-zinc-300 font-normal">{eco.count}</span>
                 <div className="flex items-center gap-1">
                   <span>View Rankings</span>

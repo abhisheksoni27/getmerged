@@ -77,7 +77,7 @@ export default function ContributeHubPage() {
                 key={lang.slug}
                 href={`/contribute/${lang.slug}`}
                 title={`Explore ${lang.name} open source contribution opportunities`}
-                className={`p-4 rounded-2xl border bg-zinc-900/80 hover:border-emerald-500 hover:shadow-xs transition-all flex flex-col items-center justify-center text-center group`}
+                className={`p-4 rounded-2xl border glass-panel hover:border-emerald-500 hover:shadow-xs transition-all flex flex-col items-center justify-center text-center group`}
               >
                 <Code2 className="h-5 w-5 mb-2 text-zinc-300 group-hover:text-emerald-600 transition-colors" />
                 <span className="font-space font-bold text-sm text-white group-hover:text-emerald-400 transition-colors">
@@ -92,18 +92,18 @@ export default function ContributeHubPage() {
         </div>
 
         {/* How C-Rank Guarantees Value */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-white/[0.08]">
-          <div className="p-4 rounded-2xl bg-zinc-900/80 border border-white/[0.08] shadow-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-white/[0.1]">
+          <div className="p-4 rounded-2xl glass-panel border border-white/[0.1] shadow-xs">
             <Zap className="h-5 w-5 text-amber-500 mb-2" />
             <h3 className="font-space text-sm font-bold text-white">Sub-24h Reviews</h3>
             <p className="text-xs text-zinc-300 font-sans mt-1">We filter out ghosted projects so your PRs receive real human feedback within hours.</p>
           </div>
-          <div className="p-4 rounded-2xl bg-zinc-900/80 border border-white/[0.08] shadow-xs">
+          <div className="p-4 rounded-2xl glass-panel border border-white/[0.1] shadow-xs">
             <ShieldCheck className="h-5 w-5 text-emerald-500 mb-2" />
             <h3 className="font-space text-sm font-bold text-white">High Merge Odds</h3>
             <p className="text-xs text-zinc-300 font-sans mt-1">Ranked repositories maintain proven 80%+ external pull request acceptance rates.</p>
           </div>
-          <div className="p-4 rounded-2xl bg-zinc-900/80 border border-white/[0.08] shadow-xs">
+          <div className="p-4 rounded-2xl glass-panel border border-white/[0.1] shadow-xs">
             <Sparkles className="h-5 w-5 text-purple-500 mb-2" />
             <h3 className="font-space text-sm font-bold text-white">Vetted GFIs</h3>
             <p className="text-xs text-zinc-300 font-sans mt-1">Directly view scored Good First Issues with verified mentor and maintainer guidance.</p>

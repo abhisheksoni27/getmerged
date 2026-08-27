@@ -62,13 +62,13 @@ export default function NotificationPreferencesPage() {
         {saved && <span className="ml-2 text-emerald-600">Saved.</span>}
       </p>
 
-      <div className="mt-6 overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900/80">
+      <div className="mt-6 overflow-hidden rounded-2xl border border-white/[0.1] glass-panel">
         {CATEGORIES.map((cat, i) => {
           const on = isEnabled(prefs, cat);
           return (
             <div
               key={cat}
-              className={`flex items-center justify-between gap-4 px-4 py-4 ${i > 0 ? "border-t border-white/[0.08]" : ""}`}
+              className={`flex items-center justify-between gap-4 px-4 py-4 ${i > 0 ? "border-t border-white/[0.1]" : ""}`}
             >
               <div>
                 <p className="text-sm font-medium text-white">
@@ -82,10 +82,10 @@ export default function NotificationPreferencesPage() {
                 aria-checked={on}
                 disabled={busy}
                 onClick={() => toggle(cat)}
-                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? "bg-zinc-900" : "bg-zinc-300"}`}
+                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? "glass-card" : "bg-zinc-300"}`}
               >
                 <span
-                  className={`absolute top-0.5 h-5 w-5 rounded-full bg-zinc-900/80 shadow transition-transform ${on ? "translate-x-5" : "translate-x-0.5"}`}
+                  className={`absolute top-0.5 h-5 w-5 rounded-full glass-panel shadow transition-transform ${on ? "translate-x-5" : "translate-x-0.5"}`}
                 />
               </button>
             </div>

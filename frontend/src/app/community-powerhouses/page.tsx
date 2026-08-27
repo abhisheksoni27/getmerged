@@ -67,7 +67,7 @@ export default async function CommunityPowerhousesPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-zinc-950 dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-black dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"
@@ -78,12 +78,12 @@ export default async function CommunityPowerhousesPage() {
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        <div className="rounded-3xl bg-zinc-900/80 p-6 sm:p-10 border border-white/[0.08] shadow-xs mb-10">
+        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-white/[0.1] shadow-xs mb-10">
           <div className="flex items-center gap-2 mb-3.5">
             <span
               data-testid="powerhouse-badge"
@@ -113,7 +113,7 @@ export default async function CommunityPowerhousesPage() {
         </div>
 
         {repos.length === 0 ? (
-          <div className="rounded-2xl bg-zinc-900/80 p-10 border border-white/[0.08] shadow-xs text-center">
+          <div className="rounded-2xl glass-panel p-10 border border-white/[0.1] shadow-xs text-center">
             <Users className="h-8 w-8 mx-auto text-zinc-300 mb-3" />
             <p className="text-sm text-zinc-300">
               No repositories currently meet the {MIN_MAINTAINERS}+ maintainer threshold. Check back after the next scoring snapshot.
@@ -128,11 +128,11 @@ export default async function CommunityPowerhousesPage() {
                   key={repo.id}
                   href={`/${repo.full_name}`}
                   title={`View ${repo.full_name} on GetMerged`}
-                  className="group rounded-2xl bg-zinc-900/80 p-6 border border-white/[0.08] shadow-xs hover:border-white/[0.12] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+                  className="group rounded-2xl glass-panel p-6 border border-white/[0.1] shadow-xs hover:border-white/[0.12] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="h-10 w-10 rounded-xl border border-white/[0.08] bg-zinc-900 flex items-center justify-center shrink-0">
+                      <div className="h-10 w-10 rounded-xl border border-white/[0.1] glass-card flex items-center justify-center shrink-0">
                         <LangLogo language={repo.language} />
                       </div>
                       <div className="min-w-0">
@@ -150,7 +150,7 @@ export default async function CommunityPowerhousesPage() {
                     </p>
                   </div>
 
-                  <div className="pt-4 mt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono font-semibold text-white group-hover:text-zinc-300">
+                  <div className="pt-4 mt-4 border-t border-white/[0.1] flex items-center justify-between text-xs font-mono font-semibold text-white group-hover:text-zinc-300">
                     <span className="inline-flex items-center gap-1">
                       <Star className="h-3.5 w-3.5" /> {repo.stars.toLocaleString()}
                     </span>
