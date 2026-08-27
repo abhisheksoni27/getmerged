@@ -826,9 +826,6 @@ func AutoMigrate(db *sqlx.DB) error {
 			created_at DATETIME NOT NULL,
 			deliver_at DATETIME NOT NULL
 		);`, autoInc, jsonType),
-		`CREATE INDEX IF NOT EXISTS idx_notif_user_read ON notifications (user_id, `+"`read`"+`);`,
-		`CREATE INDEX IF NOT EXISTS idx_notif_deliver ON notifications (deliver_at);`,
-		`CREATE INDEX IF NOT EXISTS idx_notif_user_created ON notifications (user_id, created_at);`,
 		// Per-user in-app preferences as a JSONB doc {muted:[category]} (AC10).
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS notification_preferences (
 			user_id BIGINT PRIMARY KEY,
@@ -1003,14 +1000,14 @@ func AutoMigrate(db *sqlx.DB) error {
 		// Single-use token ledger (AC5/AC7): every issued confirm/unsub/gdpr
 		// token is hashed here; verification rejects consumed or expired rows,
 		// giving true replay protection beyond the HMAC expiry.
-		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS lang_digest_tokens (
+		`CREATE TABLE IF NOT EXISTS lang_digest_tokens (
 			token_hash CHAR(64) PRIMARY KEY,
 			subscriber_id INTEGER NOT NULL,
 			purpose VARCHAR(16) NOT NULL,
 			expires_at INTEGER NOT NULL,
 			consumed_at DATETIME NULL,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-		);`, autoInc),
+		);`,
 		// Per-IP rate-limit ledger (AC3): 5 requests/minute per real client IP.
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS lang_digest_rate_limits (
 			id INTEGER PRIMARY KEY %s,
@@ -1061,12 +1058,49 @@ func AutoMigrate(db *sqlx.DB) error {
 			PRIMARY KEY(user_id, repo_key)
 		);`,
 		// AI-insights regen rate-limit ledger (AC7): 1/day per (user_id, repo_key).
-		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS repo_audit_regen_log (
+		`CREATE TABLE IF NOT EXISTS repo_audit_regen_log (
 			user_id INTEGER NOT NULL,
 			repo_key VARCHAR(255) NOT NULL,
 			last_regen_at DATETIME NULL,
 			PRIMARY KEY(user_id, repo_key)
+		);`,
+		// Maintainer Claim & Fast-Track SLA badging (AC1-AC7): verified
+		// ownership claim with a pledged review-turnaround SLA. Badge =
+		// verified AND sla_met. revoke_reason documents AC5 revocations.
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS maintainer_sla_claims (
+			id INTEGER PRIMARY KEY %s,
+			repo_full_name VARCHAR(255) NOT NULL,
+			owner VARCHAR(255) NOT NULL,
+			name VARCHAR(255) NOT NULL,
+			user_id INTEGER NOT NULL,
+			onboarding_guidance TEXT NULL,
+			sla_hours INTEGER NOT NULL DEFAULT 48,
+			verified BOOLEAN NOT NULL DEFAULT FALSE,
+			sla_met BOOLEAN NOT NULL DEFAULT FALSE,
+			consecutive_broken_weeks INTEGER NOT NULL DEFAULT 0,
+			revoked BOOLEAN NOT NULL DEFAULT FALSE,
+			revoke_reason VARCHAR(255) NOT NULL DEFAULT '',
+			last_sla_computed_at DATETIME NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(repo_full_name)
 		);`, autoInc),
+		// Inbound contributor-interest event log (clicks/views on repo page)
+		// used to compute weekly maintainer digest counts (AC7).
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS maintainer_repo_interest_events (
+			id INTEGER PRIMARY KEY %s,
+			repo_full_name VARCHAR(255) NOT NULL,
+			event_type VARCHAR(32) NOT NULL DEFAULT 'view',
+			ip VARCHAR(64) NOT NULL DEFAULT '',
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
+		// Per-user per-day claim attempt ledger enforcing the 20/day/user cap (AC6).
+		`CREATE TABLE IF NOT EXISTS maintainer_claim_daily (
+			user_id INTEGER NOT NULL,
+			day VARCHAR(10) NOT NULL,
+			cnt INTEGER NOT NULL DEFAULT 0,
+			PRIMARY KEY(user_id, day)
+		);`,
 	}
 
 	for i, stmt := range statements {
@@ -1160,6 +1194,13 @@ func AutoMigrate(db *sqlx.DB) error {
 		// In-app notification center lookups
 		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_visible ON in_app_notifications(user_id, visible_at, id DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_unread ON in_app_notifications(user_id, visible_at, read_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_notif_user_read ON notifications (user_id, `+"`read`"+`)`,
+		`CREATE INDEX IF NOT EXISTS idx_notif_deliver ON notifications (deliver_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_notif_user_created ON notifications (user_id, created_at)`,
+		// Maintainer SLA claim lookups (AC1-AC7).
+		`CREATE INDEX IF NOT EXISTS idx_maintainer_claims_user ON maintainer_sla_claims(user_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_maintainer_claims_active ON maintainer_sla_claims(revoked, verified)`,
+		`CREATE INDEX IF NOT EXISTS idx_maintainer_interest_repo ON maintainer_repo_interest_events(repo_full_name, created_at)`,
 	}
 	for _, idx := range indexes {
 		_, _ = db.Exec(idx)

@@ -1286,6 +1286,85 @@ func (c *Client) FetchPRDetails(owner, name string, number int) (*PRDetails, err
 	return details, nil
 }
 
+// restGet performs a GET against the GitHub REST API using the supplied
+// access token, retrying on HTTP 403 (secondary rate limit / abuse) with a
+// sleep + backoff so batched callers (e.g. the SLA re-compute cron) degrade
+// gracefully instead of failing fast (AC4).
+func restGetWithBackoff(token, url string) ([]byte, int, error) {
+	var lastBody []byte
+	for attempt := 0; attempt < 4; attempt++ {
+		req, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, 0, err
+		}
+		req.Header.Set("Authorization", "Bearer "+token)
+		req.Header.Set("Accept", "application/vnd.github+json")
+		res, err := (&http.Client{Timeout: 30 * time.Second}).Do(req)
+		if err != nil {
+			return nil, 0, err
+		}
+		raw, _ := io.ReadAll(res.Body)
+		res.Body.Close()
+		lastBody = raw
+		if res.StatusCode == http.StatusForbidden {
+			// Secondary rate limit / abuse detection: sleep then retry.
+			resetSleep := time.Duration(attempt+1) * 3 * time.Second
+			slog.Warn("github: REST 403, backing off", "url", url, "sleep", resetSleep.String(), "attempt", attempt)
+			time.Sleep(resetSleep)
+			continue
+		}
+		return raw, res.StatusCode, nil
+	}
+	return lastBody, http.StatusForbidden, nil
+}
+
+// GetViewerLogin returns the GitHub login for the supplied access token.
+func GetViewerLogin(accessToken string) (string, error) {
+	raw, status, err := restGetWithBackoff(accessToken, "https://api.github.com/user")
+	if err != nil {
+		return "", err
+	}
+	if status != http.StatusOK {
+		return "", fmt.Errorf("github user lookup returned %d", status)
+	}
+	var u struct {
+		Login string `json:"login"`
+	}
+	if err := json.Unmarshal(raw, &u); err != nil {
+		return "", err
+	}
+	if u.Login == "" {
+		return "", fmt.Errorf("github user lookup returned empty login")
+	}
+	return u.Login, nil
+}
+
+// CheckCollaboratorPermission verifies a user's permission level on a repo via
+// GET /repos/{owner}/{repo}/collaborators/{user}/permission. Returns the
+// permission string (e.g. "admin"). Used for read-only ownership verification
+// under the repo scope (AC1).
+func CheckCollaboratorPermission(accessToken, owner, repo, user string) (string, error) {
+	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/collaborators/%s/permission", owner, repo, user)
+	raw, status, err := restGetWithBackoff(accessToken, url)
+	if err != nil {
+		return "", err
+	}
+	if status == http.StatusNotFound {
+		// Not a collaborator at all.
+		return "", nil
+	}
+	if status != http.StatusOK {
+		return "", fmt.Errorf("github collaborator permission returned %d", status)
+	}
+	var p struct {
+		Permission string `json:"permission"`
+	}
+	if err := json.Unmarshal(raw, &p); err != nil {
+		return "", err
+	}
+	return p.Permission, nil
+}
+
 // ParsePRURL extracts owner, repo name, and PR number from a GitHub pull request URL.
 func ParsePRURL(prURL string) (owner, name string, number int, ok bool) {
 	matches := prURLRegex.FindStringSubmatch(strings.TrimSpace(prURL))

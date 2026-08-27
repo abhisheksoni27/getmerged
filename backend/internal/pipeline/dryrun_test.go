@@ -21,6 +21,9 @@ type dryRepoInfo struct {
 }
 
 func TestDryRunRescore(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping dry run rescore test against production MySQL database in short mode")
+	}
 	db, err := sqlx.Connect("mysql", "opendoor_user:opendoor_pass@tcp(127.0.0.1:3306)/opendoor?parseTime=true")
 	if err != nil {
 		t.Fatal(err)

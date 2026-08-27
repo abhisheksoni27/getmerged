@@ -26,6 +26,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/hacktoberfest"
 	"github.com/abhisheksoni27/opendoor/internal/handler"
 	"github.com/abhisheksoni27/opendoor/internal/issueclaim"
+	"github.com/abhisheksoni27/opendoor/internal/maintainerclaim"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/notification"
 	"github.com/abhisheksoni27/opendoor/internal/pipeline"
@@ -104,6 +105,10 @@ func main() {
 	claimSvc := claim.NewService(database, claimRepo, repoStore, tokenMgr, gh, cfg)
 	ghAppSvc := ghapp.NewService(database, cfg, userRepo, claimRepo, repoStore, aiRepo)
 	issueClaimSvc := issueclaim.NewService(database, gh, tokenMgr, repoStore, cfg)
+	// Maintainer Claim & Fast-Track SLA badging (AC1-AC7).
+	maintainerClaimRepo := maintainerclaim.NewRepository(database)
+	maintainerClaimMailer := notification.NewSMTPMailer(cfg.SMTPHost, cfg.SMTPPort, cfg.SMTPUser, cfg.SMTPPassword, cfg.SMTPFrom)
+	maintainerClaimSvc := maintainerclaim.NewService(database, maintainerClaimRepo, oauthTokenRepo, userRepo, cfg, maintainerClaimMailer)
 	defer ghAppSvc.Stop()
 
 	// Start continuous background crawler worker loop
@@ -201,6 +206,10 @@ func main() {
 	stopClaimCron := startClaimReverifyCron(claimSvc)
 	defer stopClaimCron()
 
+	// Maintainer Claim weekly SLA recompute + digest fanout (AC3, AC4, AC5, AC7).
+	stopMCSLACron := startMaintainerSLACron(maintainerClaimSvc)
+	defer stopMCSLACron()
+
 	// GFI alert outbox drain every 5 min + weekly digest Mondays 09:00 UTC.
 	stopGFIAlertCron := startGFIAlertCron(cfg, database, gh)
 	defer stopGFIAlertCron()
@@ -253,6 +262,17 @@ func main() {
 	// /api/org-badge never mixes wildcards with /api/badge/:owner/:repo.
 	// Entitlement re-checked on every render; lapsed orgs 404 (AC5).
 	r.GET("/api/org-badge/:org", badgeRL, handler.GetOrgVerifiedBadgeSVG(claimSvc, cfg.AppBaseURL))
+
+	// Maintainer Claim & Fast-Track SLA badging — public, unauthenticated
+	// surfaces (AC1-AC7). Param routes live under the static "/repo" child so
+	// they never mix wildcards with the static "oauth" callback sibling under
+	// /api/v1/maintainer-claims. /api/v1/maintainer-sla-badge/:owner/:name is
+	// on its own static node, so it stays conflict-free.
+	mcPublicRL := middleware.RateLimitPerIP(30, time.Minute)
+	r.GET("/api/v1/maintainer-claims/repo/:owner/:name", mcPublicRL, handler.MaintainerGetClaimHandler(maintainerClaimSvc))
+	r.POST("/api/v1/maintainer-claims/repo/:owner/:name/interest", mcPublicRL, handler.MaintainerInterestHandler(maintainerClaimSvc))
+	r.GET("/api/v1/maintainer-sla-badge/:owner/:name", badgeRL, handler.MaintainerSLABadgeHandler(maintainerClaimSvc, cfg.AppBaseURL))
+	r.GET("/api/v1/maintainer-claims/oauth/github/callback", handler.MaintainerOAuthCallbackHandler(maintainerClaimSvc, cfg, oauthTokenRepo))
 
 	// Embeddable live 'Good First Issues' widget (item: embeddable GFI widget).
 	// Distinct /embed/gfi/:owner/:name subtree — never overlaps the static
@@ -455,6 +475,16 @@ func main() {
 		userApi.POST("/repos/:id/rescore", handler.PostRescoreRepoHandler(claimSvc))
 		userApi.POST("/repos/:id/claim-dispute", handler.PostClaimDisputeHandler(claimRepo))
 		userApi.GET("/user/claims", handler.GetUserClaimsListHandler(claimRepo))
+
+		// Maintainer Claim & Fast-Track SLA Badging (AC1-AC7): rate-limited
+		// 5/min/IP (the 20/day/user cap is enforced in the handler via a daily
+		// ledger). Claim ownership is verified through the repo scope, never
+		// org membership. Duplicate claims return the existing record.
+		mcClaimRL := middleware.RateLimitPerIP(5, time.Minute)
+		userApi.POST("/maintainer-claims", mcClaimRL, handler.MaintainerClaimHandler(maintainerClaimSvc, maintainerClaimRepo))
+		userApi.PATCH("/maintainer-claims/repo/:owner/:name/onboarding", handler.MaintainerSetOnboardingHandler(maintainerClaimSvc))
+		userApi.GET("/maintainer-claims/me", handler.MaintainerListMyClaimsHandler(maintainerClaimSvc))
+		userApi.GET("/maintainer-claims/oauth/github", handler.MaintainerOAuthStartHandler(cfg))
 
 		// One-Click GitHub Issue Claiming (AC1-AC9): authenticated claim flow
 		// that posts a templated comment via the user's GitHub token and
@@ -899,6 +929,49 @@ func startClaimReverifyCron(claimSvc *claim.Service) func() {
 		case <-stop:
 			return
 		case <-time.After(time.Minute):
+			run()
+		}
+		for {
+			select {
+			case <-stop:
+				return
+			case <-ticker.C:
+				run()
+			}
+		}
+	}()
+
+	return func() { close(stop) }
+}
+
+// startMaintainerSLACron runs the weekly SLA recompute + badge revoke sweep and
+// the weekly maintainer digest fanout (AC3, AC4, AC5, AC7).
+func startMaintainerSLACron(svc *maintainerclaim.Service) func() {
+	stop := make(chan struct{})
+	run := func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+		defer cancel()
+		recomputed, revoked, err := svc.RunWeeklySLA(ctx)
+		if err != nil {
+			slog.Error("weekly maintainer SLA recompute failed", "err", err)
+		} else if recomputed > 0 || revoked > 0 {
+			slog.Info("weekly maintainer SLA recompute done", "recomputed", recomputed, "revoked", revoked)
+		}
+		sent, failed, derr := svc.RunWeeklyDigest(ctx)
+		if derr != nil {
+			slog.Error("weekly maintainer digest failed", "err", derr)
+		} else if sent > 0 || failed > 0 {
+			slog.Info("weekly maintainer digest done", "sent", sent, "failed", failed)
+		}
+	}
+
+	go func() {
+		ticker := time.NewTicker(7 * 24 * time.Hour)
+		defer ticker.Stop()
+		select {
+		case <-stop:
+			return
+		case <-time.After(3 * time.Minute):
 			run()
 		}
 		for {
