@@ -47,7 +47,7 @@ async function getInitialSpotlightRepos(): Promise<Repo[]> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
     const res = await fetch(
-      `${baseUrl}/api/v1/repos?scored_today=true&max_last_activity_days=7&exclude_stale=true&exclude_fallback=true&min_tier=B&sort=c_rank_score&order=desc&per_page=30`,
+      `${baseUrl}/api/v1/repos?scored_today=true&max_last_activity_days=7&exclude_stale=true&exclude_fallback=true&min_tier=B&min_stars=500&sort=c_rank_score&order=desc&per_page=30`,
       { next: { revalidate: 3600 } }
     );
     if (!res.ok) return [];
