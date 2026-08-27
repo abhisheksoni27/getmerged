@@ -55,10 +55,22 @@ export default function CompareHubPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      
+      {/* Semantic Crawl Floor */}
+      <section className="sr-only" aria-label="Compare Open Source Repositories">
+        <h1>Compare Open Source Repositories Side-by-Side</h1>
+        <p>
+          Evaluate two repositories against each other on PR merge rates, code review turnaround time, maintainer responsiveness, and first-time contributor success rates.
+        </p>
+      </section>
+
       <Suspense
         fallback={
-          <div className="min-h-screen bg-[#fafafa] flex items-center justify-center font-mono text-sm text-zinc-400">
-            Loading comparison hub...
+          <div className="min-h-screen bg-black flex items-center justify-center font-mono text-sm text-zinc-400">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-orange-500 animate-ping" />
+              Loading Compare Tool...
+            </div>
           </div>
         }
       >
