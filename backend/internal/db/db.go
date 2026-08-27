@@ -101,6 +101,19 @@ func AutoMigrate(db *sqlx.DB) error {
 			subscription_updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
+		// Recruiter Pass entitlement (Talent Pass): paid Dodo subscription that
+		// unlocks /api/v1/recruiter/search. Status lifecycle mirrors the
+		// order->webhook race: 'pending' on checkout, 'active' only after the
+		// Dodo webhook confirms payment (AC6).
+		`CREATE TABLE IF NOT EXISTS recruiter_pass_entitlements (
+			user_id INTEGER PRIMARY KEY,
+			status VARCHAR(20) NOT NULL DEFAULT 'pending',
+			dodo_subscription_id VARCHAR(255),
+			dodo_checkout_id VARCHAR(255),
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			expires_at DATETIME NULL
+		);`,
 	`CREATE TABLE IF NOT EXISTS payment_webhook_events (
 		event_id VARCHAR(255) PRIMARY KEY,
 		event_type VARCHAR(100) NOT NULL,
@@ -1086,6 +1099,17 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN stars_pulled_in INTEGER`)
 	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN updated_persona_at DATETIME`)
 	_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_contributor_profiles_persona ON contributor_profiles(persona)`)
+	// Talent Pass (Recruiter Search): opt-in + denormalized recruiter-search
+	// columns kept fresh by the async indexer (AC1, AC8). open_to_opportunities
+	// defaults off; the rest are refreshed on every contributor_profiles mutation.
+	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN open_to_opportunities BOOLEAN DEFAULT FALSE`)
+	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN primary_languages_csv TEXT`)
+	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN skill_level VARCHAR(64)`)
+	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN contribution_style VARCHAR(64)`)
+	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN verified_sa_merges INTEGER DEFAULT 0`)
+	_, _ = db.Exec(`ALTER TABLE contributor_profiles ADD COLUMN recruiter_indexed_at DATETIME`)
+	_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_contributor_profiles_open_to_opp ON contributor_profiles(open_to_opportunities)`)
+	_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_recruiter_pass_status ON recruiter_pass_entitlements(status)`)
 	_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_referral_credits_new_user ON referral_credits(new_user_id)`)
 	_, _ = db.Exec(`ALTER TABLE contributor_feedback ADD UNIQUE KEY uq_cf_user_repo (user_id, repository_id)`)
 	_, _ = db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_cf_user_repo ON contributor_feedback(user_id, repository_id)`)

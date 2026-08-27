@@ -3,8 +3,11 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
+	"strings"
 	"time"
 
+	"github.com/abhisheksoni27/opendoor/internal/dna"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -26,6 +29,15 @@ type ContributorProfileRepository interface {
 	SaveSuccess(ctx context.Context, userID int64, dnaJSON string, totalMerged int) error
 	SaveSuccessWithPersona(ctx context.Context, userID int64, dnaJSON string, totalMerged int, persona string, starsPulledIn int) error
 	SaveFailure(ctx context.Context, userID int64, status string, errMsg string) error
+	// SetOpenToOpportunities toggles the Talent Pass opt-in (AC1).
+	SetOpenToOpportunities(ctx context.Context, userID int64, val bool) error
+	// GetOpenToOpportunities reads the current opt-in value (default false).
+	GetOpenToOpportunities(ctx context.Context, userID int64) (bool, error)
+	// ReindexRecruiterColumns refreshes the denormalized recruiter-search
+	// columns (primary_languages/skill_level/contribution_style/verified_sa_merges)
+	// from the stored DNA JSON + S/A-tier merge history. Called on every
+	// contributor_profiles mutation via the async indexer (AC8).
+	ReindexRecruiterColumns(ctx context.Context, userID int64) error
 }
 
 type sqlxContributorProfileRepository struct {
@@ -142,5 +154,75 @@ func (r *sqlxContributorProfileRepository) SaveFailure(ctx context.Context, user
 		    updated_at = CURRENT_TIMESTAMP
 		WHERE user_id = ?
 	`, status, errMsg, userID)
+	return err
+}
+
+func (r *sqlxContributorProfileRepository) SetOpenToOpportunities(ctx context.Context, userID int64, val bool) error {
+	_, err := r.db.ExecContext(ctx, `
+		UPDATE contributor_profiles
+		SET open_to_opportunities = ?,
+		    updated_at = CURRENT_TIMESTAMP
+		WHERE user_id = ?
+	`, val, userID)
+	return err
+}
+
+func (r *sqlxContributorProfileRepository) GetOpenToOpportunities(ctx context.Context, userID int64) (bool, error) {
+	var open bool
+	err := r.db.GetContext(ctx, &open, `SELECT COALESCE(open_to_opportunities, FALSE) FROM contributor_profiles WHERE user_id = ?`, userID)
+	if err == sql.ErrNoRows {
+		return false, nil
+	}
+	if err != nil {
+		return false, err
+	}
+	return open, nil
+}
+
+// ReindexRecruiterColumns recomputes the recruiter-search denormalized columns
+// from the stored DNA payload and the contributor's verified merges into S/A-tier
+// repos (AC8). It is safe to call repeatedly (idempotent) and never fails the
+// caller's transaction on a partial miss — missing data degrades to empties/0.
+func (r *sqlxContributorProfileRepository) ReindexRecruiterColumns(ctx context.Context, userID int64) error {
+	var dnaJSON *string
+	if err := r.db.GetContext(ctx, &dnaJSON, `SELECT dna_json FROM contributor_profiles WHERE user_id = ?`, userID); err != nil {
+		if err == sql.ErrNoRows {
+			return nil
+		}
+		return err
+	}
+
+	langsCSV, skill, style := "", "", ""
+	if dnaJSON != nil && *dnaJSON != "" {
+		var res dna.Result
+		if err := json.Unmarshal([]byte(*dnaJSON), &res); err == nil {
+			langsCSV = strings.Join(res.PrimaryLanguages, ",")
+			skill = res.SkillLevel
+			style = res.Persona
+		}
+	}
+
+	var verifiedSA int
+	// Verified merges into S/A-tier repos: the contributor owns the evaluated
+	// repo (pr_evaluations.owner_user_id) and the outcome settled as a hit
+	// against a repo currently graded S or A by C-Rank (latest_snapshots).
+	_ = r.db.GetContext(ctx, &verifiedSA, `
+		SELECT COUNT(*) FROM pr_evaluations pe
+		JOIN latest_snapshots ls ON ls.repository_id = pe.repository_full_name
+		WHERE pe.owner_user_id = ?
+		  AND pe.outcome = 'hit'
+		  AND ls.c_rank_tier IN ('S','A')
+	`, userID)
+
+	_, err := r.db.ExecContext(ctx, `
+		UPDATE contributor_profiles
+		SET primary_languages_csv = ?,
+		    skill_level = ?,
+		    contribution_style = ?,
+		    verified_sa_merges = ?,
+		    recruiter_indexed_at = CURRENT_TIMESTAMP,
+		    updated_at = CURRENT_TIMESTAMP
+		WHERE user_id = ?
+	`, langsCSV, skill, style, verifiedSA, userID)
 	return err
 }

@@ -275,5 +275,12 @@ func (w *contributorDNAWorker) AnalyzeUser(ctx context.Context, userID int64) er
 		return err
 	}
 
+	// AC8: every contributor_profiles mutation refreshes the recruiter-search
+	// index (primary_languages/skill_level/contribution_style/verified_sa_merges)
+	// so opt-in profiles stay searchable within the freshness budget.
+	if err := w.profileRepo.ReindexRecruiterColumns(ctx, userID); err != nil {
+		slog.Warn("recruiter reindex after DNA save failed", "user_id", userID, "err", err)
+	}
+
 	return nil
 }

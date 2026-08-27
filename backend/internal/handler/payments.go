@@ -52,6 +52,10 @@ type DodopaymentsWebhookPayload struct {
 // $5 "10 preflight evaluations" pack sold from the quota-exceeded modal.
 const creditPackDodoProductID = "pdt_opendoor_pack10"
 
+// recruiterPassDodoProductID is the DodoPayments product ID for the monthly
+// Recruiter Pass (Talent Pass) that unlocks /api/v1/recruiter/search.
+const recruiterPassDodoProductID = "pdt_opendoor_recruiter_pass"
+
 // isCreditPackPurchase reports whether a payment.succeeded payload is a
 // one-time pack purchase (vs a subscription invoice) by matching SKU in the
 // product cart.
@@ -64,8 +68,18 @@ func isCreditPackPurchase(p DodopaymentsWebhookPayload) bool {
 	return false
 }
 
+// isRecruiterPassPurchase reports whether a payload is for the Recruiter Pass.
+func isRecruiterPassPurchase(p DodopaymentsWebhookPayload) bool {
+	for _, item := range p.Data.ProductCart {
+		if item.ProductID == recruiterPassDodoProductID {
+			return true
+		}
+	}
+	return false
+}
+
 // DodopaymentsWebhookHandler handles POST /api/v1/payments/webhook/dodopayments (Story 5.2)
-func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.EntitlementRepository, database *sqlx.DB) gin.HandlerFunc {
+func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.EntitlementRepository, database *sqlx.DB, recruiterRepo repository.RecruiterRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		bodyBytes, err := io.ReadAll(c.Request.Body)
 		if err != nil {
@@ -132,8 +146,10 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 		}
 
 		// 4. State Transitions - branch on event type + SKU (AC2): one-time
-		// pack payments grant ledger credits; everything else keeps the
-		// existing subscription entitlement flow.
+		// pack payments grant ledger credits; the Recruiter Pass activates the
+		// talent-pass entitlement; everything else keeps the existing
+		// subscription entitlement flow.
+		isRecruiter := isRecruiterPassPurchase(payload)
 		switch payload.EventType {
 		case "payment.succeeded":
 			if isCreditPackPurchase(payload) {
@@ -151,24 +167,53 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 				if orderID := payload.Data.Metadata.OrderID; orderID != "" {
 					_ = entRepo.MarkCreditPackOrder(c.Request.Context(), orderID, "granted")
 				}
+			} else if isRecruiter {
+				// AC2/AC6: Recruiter Pass flips from 'pending' (checkout) to
+				// 'active' only here, after the Dodo payment confirms.
+				if err := recruiterRepo.ActivateRecruiterPass(c.Request.Context(), userID, payload.Data.SubscriptionID); err != nil {
+					slog.Error("failed to activate recruiter pass", "user_id", userID, "err", err)
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to activate recruiter pass"})
+					return
+				}
 			} else {
 				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
 			}
 		case "subscription.created", "subscription.active", "subscription.renewed":
-			_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
-			// AC5: upgrade to Pro promotes any pending (delayed) notifications
-			// to instant delivery via the pending-window sweep.
-			if err := notification.OnPlanChanged(database, userID, true, eventTime); err != nil {
-				slog.Warn("notification plan sweep on upgrade failed", "user_id", userID, "err", err)
+			if isRecruiter {
+				if err := recruiterRepo.ActivateRecruiterPass(c.Request.Context(), userID, payload.Data.SubscriptionID); err != nil {
+					slog.Error("failed to activate recruiter pass", "user_id", userID, "err", err)
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to activate recruiter pass"})
+					return
+				}
+			} else {
+				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
+				// AC5: upgrade to Pro promotes any pending (delayed) notifications
+				// to instant delivery via the pending-window sweep.
+				if err := notification.OnPlanChanged(database, userID, true, eventTime); err != nil {
+					slog.Warn("notification plan sweep on upgrade failed", "user_id", userID, "err", err)
+				}
 			}
 		case "subscription.cancelled", "subscription.expired":
-			_ = entRepo.UpdateSubscription(c.Request.Context(), userID, false, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
-			// AC5: downgrade re-applies Free delay within the pending window.
-			if err := notification.OnPlanChanged(database, userID, false, eventTime); err != nil {
-				slog.Warn("notification plan sweep on downgrade failed", "user_id", userID, "err", err)
+			if isRecruiter {
+				if err := recruiterRepo.DeactivateRecruiterPass(c.Request.Context(), userID); err != nil {
+					slog.Warn("failed to deactivate recruiter pass", "user_id", userID, "err", err)
+				}
+			} else {
+				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, false, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
+				// AC5: downgrade re-applies Free delay within the pending window.
+				if err := notification.OnPlanChanged(database, userID, false, eventTime); err != nil {
+					slog.Warn("notification plan sweep on downgrade failed", "user_id", userID, "err", err)
+				}
 			}
 		case "payment.failed":
 			isPack := isCreditPackPurchase(payload)
+			if isRecruiter {
+				// AC6: failed Recruiter Pass payment leaves the entitlement
+				// pending (or reverts an active one); never touches Pro.
+				if err := recruiterRepo.DeactivateRecruiterPass(c.Request.Context(), userID); err != nil {
+					slog.Warn("failed to deactivate recruiter pass on payment failure", "user_id", userID, "err", err)
+				}
+			}
 			_ = entRepo.UpdateSubscription(c.Request.Context(), userID, false, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
 			// A failed one-time pack payment must surface as a failure
 			// state with no credits (AC5).

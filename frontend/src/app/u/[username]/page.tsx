@@ -10,6 +10,7 @@ import {
   isValidUsername,
   type PublicProfile,
 } from "@/lib/public-profile";
+import OpenToOpportunitiesToggle from "@/components/OpenToOpportunitiesToggle";
 import { GitPullRequest, Target, Merge, ShieldCheck, Calendar, ExternalLink, Flame } from "lucide-react";
 
 interface ProfilePageProps {
@@ -91,8 +92,10 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-zinc-900 font-sans">
       <Header />
 
-      <main className="flex-1 max-w-3xl w-full mx-auto px-4 py-8 sm:py-12">
-        <div className="mb-8 rounded-2xl bg-white p-6 sm:p-8 border-2 border-brand-dark shadow-[6px_6px_0px_#222831]">
+        <main className="flex-1 max-w-3xl w-full mx-auto px-4 py-8 sm:py-12">
+          <OpenToOpportunitiesToggle slug={profile.slug} />
+
+          <div className="mb-8 rounded-2xl bg-white p-6 sm:p-8 border-2 border-brand-dark shadow-[6px_6px_0px_#222831]">
           <div className="flex items-center gap-4">
             {profile.avatar_url && (
               // eslint-disable-next-line @next/next/no-img-element
