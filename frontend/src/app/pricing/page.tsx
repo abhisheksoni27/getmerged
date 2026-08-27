@@ -63,7 +63,7 @@ export default function PricingPage() {
       {
         "@type": "Offer",
         name: "Pro Contributor (Annual)",
-        price: "79.00",
+        price: "90.00",
         priceCurrency: "USD",
         availability: "https://schema.org/InStock",
       },
@@ -71,7 +71,8 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-zinc-100">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-black text-zinc-100 font-sans">
+      <Header />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
@@ -80,8 +81,15 @@ export default function PricingPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <Header />
-      <PricingClient />
+      {/* Semantic SSR Crawl Floor */}
+      <section className="sr-only" aria-label="Pro Contributor Plans & Pricing">
+        <h1>GetMerged Pro Contributor Plans & Pricing</h1>
+        <p>Choose between free community access and Pro Contributor memberships with unlimited PR acceptance forecasts, maintainer vibe checks, and pre-flight reviews.</p>
+      </section>
+
+      <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
+        <PricingClient />
+      </main>
       <Footer />
     </div>
   );
