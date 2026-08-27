@@ -73,13 +73,20 @@ export default function OpenToOpportunitiesToggle({ slug }: OpenToOpportunitiesT
   }
 
   return (
-    <div className="mb-6 rounded-2xl border-2 border-brand-dark bg-white p-5 shadow-[4px_4px_0px_#222831]">
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-2">
-          <Briefcase className="h-4 w-4 text-emerald-600" />
-          <span className="text-sm font-bold text-zinc-900">Open to Opportunities</span>
+    <div className="rounded-3xl border border-zinc-200/60 bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex items-center gap-2.5">
+          <div className="h-8 w-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-700">
+            <Briefcase className="h-4 w-4" />
+          </div>
+          <div>
+            <span className="text-sm font-semibold text-zinc-950">Open to Opportunities</span>
+            <p className="text-xs text-zinc-400 mt-0.5">
+              Let recruiters discover you in talent search by verified merges and skill level.
+            </p>
+          </div>
         </div>
-        <label className="relative inline-flex cursor-pointer items-center">
+        <label className="relative inline-flex cursor-pointer items-center shrink-0">
           <input
             type="checkbox"
             className="peer sr-only"
@@ -88,15 +95,11 @@ export default function OpenToOpportunitiesToggle({ slug }: OpenToOpportunitiesT
             onChange={(e) => onToggle(e.target.checked)}
             aria-label="Open to Opportunities"
           />
-          <div className="h-6 w-11 rounded-full bg-zinc-300 peer-checked:bg-emerald-600 peer-disabled:opacity-60 transition-colors" />
-          <div className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform peer-checked:translate-x-5" />
+          <div className="h-6 w-11 rounded-full bg-zinc-200 peer-checked:bg-emerald-600 peer-disabled:opacity-50 transition-colors" />
+          <div className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform peer-checked:translate-x-5 shadow-xs" />
         </label>
       </div>
-      <p className="mt-2 text-xs text-zinc-500">
-        Let recruiters with a Recruiter Pass discover you in search by your languages, skill level,
-        contribution style, and verified S/A-tier merges.
-      </p>
-      {error && <p className="mt-2 text-xs font-semibold text-red-600">{error}</p>}
+      {error && <p className="mt-2 text-xs font-medium text-red-600">{error}</p>}
     </div>
   );
 }
