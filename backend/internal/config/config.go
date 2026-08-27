@@ -47,6 +47,14 @@ type Config struct {
 	EmailTokenKeyOld  string
 	UnsubscribeKey    string
 	UnsubscribeKeyOld string
+	// AC4: server-side CAPTCHA verification (Cloudflare Turnstile-style).
+	// When CaptchaSecret is empty the check is disabled (dev/test). A
+	// CaptchaTestToken, when set, is always accepted so automated sanity
+	// flows can pass without a real provider challenge.
+	CaptchaSecret    string
+	CaptchaSiteKey   string
+	CaptchaVerifyURL string
+	CaptchaTestToken string
 	GithubAppID                string
 	GithubAppPrivateKey        string
 	GithubAppWebhookSecret     string
@@ -87,6 +95,10 @@ func Load() (*Config, error) {
 		EmailTokenKeyOld:          os.Getenv("EMAIL_TOKEN_HMAC_KEY_OLD"),
 		UnsubscribeKey:            os.Getenv("UNSUBSCRIBE_HMAC_KEY"),
 		UnsubscribeKeyOld:         os.Getenv("UNSUBSCRIBE_HMAC_KEY_OLD"),
+		CaptchaSecret:             os.Getenv("CAPTCHA_SECRET"),
+		CaptchaSiteKey:            os.Getenv("CAPTCHA_SITE_KEY"),
+		CaptchaVerifyURL:          os.Getenv("CAPTCHA_VERIFY_URL"),
+		CaptchaTestToken:          os.Getenv("CAPTCHA_TEST_TOKEN"),
 		GithubAppID:               os.Getenv("GITHUB_APP_ID"),
 		GithubAppPrivateKey:       os.Getenv("GITHUB_APP_PRIVATE_KEY"),
 		GithubAppWebhookSecret:    os.Getenv("GITHUB_APP_WEBHOOK_SECRET"),

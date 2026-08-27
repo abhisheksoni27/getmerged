@@ -5,6 +5,7 @@ import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import { canonicalizeSlug, displayNameFromSlug } from "@/lib/languageSlug";
 import { getEcosystemMetadata } from "@/lib/ecosystem-descriptions";
+import { LangDigestSignup } from "@/components/LangDigestSignup";
 import { Sparkles, Code2, ArrowLeft, Trophy, Sprout, Star, GitPullRequest, AlertTriangle, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -415,6 +416,11 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             </p>
           </div>
         </section>
+
+        {/* Anonymous weekly language digest signup (AC1) */}
+        <div className="mt-12">
+          <LangDigestSignup language={canonicalLang} languageName={languageName} />
+        </div>
       </main>
       <Footer />
     </div>

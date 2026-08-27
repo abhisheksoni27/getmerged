@@ -194,6 +194,13 @@ func main() {
 	stopGFIAlertCron := startGFIAlertCron(cfg, database, gh)
 	defer stopGFIAlertCron()
 
+	// Anonymous weekly language digest fanout (AC9): reuses the same SMTP
+	// mailer + digest pipeline, keyed by each subscriber's language. Per-IP
+	// rate limits on subscribe; the fanout itself continues past individual
+	// send failures and retries the failed batch once.
+	stopLangDigestCron := startLangDigestCron(cfg, database)
+	defer stopLangDigestCron()
+
 	// GitHub App daily org claim re-verification (AC3) & nightly sweep (AC2)
 	stopGhAppCron := startGhAppDailyCron(ghAppSvc)
 	defer stopGhAppCron()
@@ -284,6 +291,15 @@ func main() {
 	// C-Rank/GFI matching. Static /api/public prefix keeps the route tree
 	// free of wildcard conflicts; rate limit + cache live in the handler.
 	r.GET("/api/public/quiz-match", handler.QuizMatchHandler(repoStore, gfiRepo, database))
+
+	// Anonymous Weekly Language Digest signup (AC1-AC11): double opt-in email
+	// capture embedded on every /rankings/[lang] and /good-first-issue/[lang]
+	// SEO page. All four endpoints are static /api segments, so they never
+	// mix wildcard names at any level of the existing radix tree (AC10).
+	r.POST("/api/subscribe", handler.LangDigestSubscribeHandler(cfg))
+	r.GET("/api/confirm", handler.LangDigestConfirmHandler(cfg))
+	r.GET("/api/unsubscribe", handler.LangDigestUnsubscribeHandler(cfg))
+	r.GET("/api/gdpr-delete", handler.LangDigestGDPRDeleteHandler(cfg))
 
 	// Public API
 	api := r.Group("/api/v1")
@@ -646,6 +662,61 @@ func startGFIAlertCron(cfg *config.Config, database *sqlx.DB, gh *ghclient.Clien
 		}
 	}()
 
+	return func() { close(stop) }
+}
+
+// nextMondayNineUTC returns the duration until the next Monday 09:00 UTC, used
+// by the anonymous language digest cron (AC9). Declared package-level so the
+// digest cron and any other weekly timer can share it.
+func nextMondayNineUTC() time.Duration {
+	now := time.Now().UTC()
+	t := time.Date(now.Year(), now.Month(), now.Day(), 9, 0, 0, 0, time.UTC)
+	t = t.AddDate(0, 0, (int(time.Monday)-int(t.Weekday())+7)%7)
+	if !t.After(now) {
+		t = t.AddDate(0, 0, 7)
+	}
+	return t.Sub(now)
+}
+
+// startLangDigestCron fires the anonymous weekly language digest fanout
+// (AC9) every Monday 09:00 UTC, reusing the existing SMTP mailer. The fanout
+// loops subscribers, continues past single send failures, and retries the
+// failed batch exactly once — partial failure never aborts the run.
+func startLangDigestCron(cfg *config.Config, database *sqlx.DB) func() {
+	stop := make(chan struct{})
+	run := func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+		defer cancel()
+		mailer := notification.NewSMTPMailer(cfg.SMTPHost, cfg.SMTPPort, cfg.SMTPUser, cfg.SMTPPassword, cfg.SMTPFrom)
+		digCfg := notification.LangDigestMailerConfig{
+			Mailer:          mailer,
+			BaseURL:         cfg.AppBaseURL,
+			PhysicalAddress: cfg.SMTPPhysicalAddress,
+		}
+		secrets := cfg.EmailTokenKeys()
+		summary, err := notification.RunLangDigestFanout(ctx, database, digCfg, secrets[0])
+		if err != nil {
+			slog.Error("lang-digest fanout failed", "err", err)
+			return
+		}
+		if summary.Sent > 0 || summary.Failed > 0 || summary.Skipped > 0 {
+			slog.Info("lang-digest weekly fanout done", "sent", summary.Sent,
+				"retried_ok", summary.RetriedSuccess, "failed", summary.Failed, "skipped", summary.Skipped)
+		}
+	}
+	go func() {
+		t := time.NewTimer(nextMondayNineUTC())
+		defer t.Stop()
+		select {
+		case <-stop:
+			return
+		case <-time.After(2 * time.Minute):
+			run()
+		case <-t.C:
+			run()
+			t.Reset(nextMondayNineUTC())
+		}
+	}()
 	return func() { close(stop) }
 }
 

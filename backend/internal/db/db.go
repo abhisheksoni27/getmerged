@@ -958,6 +958,42 @@ func AutoMigrate(db *sqlx.DB) error {
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			expires_at DATETIME NOT NULL
 		);`,
+		// AC1-AC11: anonymous weekly language digest signup. Double opt-in:
+		// subscribers start 'pending' and only become 'active' after a single-
+		// use confirm link. Email stored normalized (trim+lowercase) so the
+		// UNIQUE key dedupes case-insensitively. unsubscribed_at + active flag
+		// implement soft-delete (AC7); consent_retained_until holds the GDPR
+		// lawful-basis window (AC8) for 30 days post-unsubscribe.
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS lang_digest_subscribers (
+			id INTEGER PRIMARY KEY %s,
+			email VARCHAR(255) NOT NULL,
+			language VARCHAR(100) NOT NULL DEFAULT '',
+			status VARCHAR(16) NOT NULL DEFAULT 'pending',
+			confirmed_at DATETIME NULL,
+			unsubscribed_at DATETIME NULL,
+			active BOOLEAN NOT NULL DEFAULT FALSE,
+			consent_retained_until DATETIME NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(email)
+		);`, autoInc),
+		// Single-use token ledger (AC5/AC7): every issued confirm/unsub/gdpr
+		// token is hashed here; verification rejects consumed or expired rows,
+		// giving true replay protection beyond the HMAC expiry.
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS lang_digest_tokens (
+			token_hash CHAR(64) PRIMARY KEY,
+			subscriber_id INTEGER NOT NULL,
+			purpose VARCHAR(16) NOT NULL,
+			expires_at INTEGER NOT NULL,
+			consumed_at DATETIME NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
+		// Per-IP rate-limit ledger (AC3): 5 requests/minute per real client IP.
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS lang_digest_rate_limits (
+			id INTEGER PRIMARY KEY %s,
+			ip VARCHAR(64) NOT NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
 	}
 
 	for i, stmt := range statements {
@@ -1034,6 +1070,11 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_rescore_locks_locked_at ON rescore_locks(locked_at)`,
 		`CREATE INDEX IF NOT EXISTS idx_crank_pb_card_tokens_repo ON crank_playbook_card_tokens(repo_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_crank_pb_card_tokens_expiry ON crank_playbook_card_tokens(expires_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_lang_digest_email ON lang_digest_subscribers(email)`,
+		`CREATE INDEX IF NOT EXISTS idx_lang_digest_active ON lang_digest_subscribers(active, language)`,
+		`CREATE INDEX IF NOT EXISTS idx_lang_digest_unsub ON lang_digest_subscribers(unsubscribed_at)`,
+		`CREATE INDEX IF NOT EXISTS idx_lang_digest_tokens_sub ON lang_digest_tokens(subscriber_id, purpose)`,
+		`CREATE INDEX IF NOT EXISTS idx_lang_digest_rate_limits_ip ON lang_digest_rate_limits(ip, created_at)`,
 		// In-app notification center lookups
 		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_visible ON in_app_notifications(user_id, visible_at, id DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_unread ON in_app_notifications(user_id, visible_at, read_at)`,
