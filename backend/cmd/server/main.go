@@ -82,6 +82,10 @@ func main() {
 	oauthTokenRepo := repository.NewOAuthTokenRepository(database, cfg)
 	profileRepo := repository.NewContributorProfileRepository(database)
 	entitlementRepo := repository.NewEntitlementRepository(database)
+	recruiterRepo := repository.NewRecruiterRepository(database)
+	// Talent Pass: async reindexer keeps the recruiter-search index fresh after
+	// every contributor_profiles mutation (AC8). No new infra — single worker goroutine.
+	handler.StartRecruiterReindexWorker(profileRepo)
 	apiKeyRepo := repository.NewAPIKeyRepository(database)
 	tokenMgr := auth.NewTokenManager(oauthTokenRepo, cfg, nil)
 	dnaWorker := pipeline.NewContributorDNAWorker(userRepo, profileRepo, tokenMgr, cfg.GithubToken, nil)
@@ -328,7 +332,7 @@ func main() {
 			middleware.RequireProOrQuota(entitlementRepo),
 			handler.EvaluatePreflightHandler(gh))
 		api.POST("/preflight/pr-details", handler.FetchPRDetailsHandler(gh))
-		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo, database))
+		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo, database, recruiterRepo))
 		api.POST("/webhooks/github-app", handler.GithubAppWebhookHandler(ghAppSvc))
 		api.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
 		api.GET("/repos/:id/claim-status", handler.GetPublicClaimStatusHandler(claimRepo))
@@ -369,6 +373,13 @@ func main() {
 		userApi.GET("/auth/me", handler.GetCurrentUser(userRepo))
 		userApi.PATCH("/user/consent", handler.UpdateConsent(userRepo))
 		userApi.PATCH("/user/profile-visibility", handler.UpdateProfileVisibilityHandler(userRepo))
+		// Talent Pass: 'Open to Opportunities' opt-in (AC1) + owner-only status
+		// visibility (AC5). Triggers an async recruiter-index reindex on toggle.
+		userApi.GET("/user/open-to-opportunities", handler.GetOpenToOpportunitiesHandler(userRepo, profileRepo))
+		userApi.PATCH("/user/open-to-opportunities", handler.ToggleOpenToOpportunitiesHandler(profileRepo))
+		// Recruiter Pass checkout: writes a PENDING entitlement row; the Dodo
+		// webhook flips it to 'active' (AC2/AC6).
+		userApi.POST("/user/recruiter-pass/checkout", handler.CreateRecruiterPassCheckoutHandler(cfg, recruiterRepo))
 		userApi.DELETE("/me/data", handler.DeleteUserData(cfg, userRepo))
 		userApi.GET("/user/dna", handler.GetContributorDNA(profileRepo))
 		userApi.POST("/user/dna/refresh", handler.RefreshContributorDNA(profileRepo, dnaWorker))
@@ -433,6 +444,12 @@ func main() {
 
 		userApi.POST("/user/feedback", handler.CreateFeedback(database, cfg.GithubToken))
 		userApi.DELETE("/user/feedback/:id", handler.DeleteFeedback(database))
+
+		// Talent Pass Recruiter Search (AC7): standalone /api/v1/recruiter/search
+		// (NOT under /users/:slug) to avoid radix collision. 30/min/IP rate limit
+		// (AC4). UserAuth -> 401 when unauthed; handler -> 403 until the Recruiter
+		// Pass entitlement is 'active' (AC6/AC9); never 500 on the pending race.
+		userApi.GET("/recruiter/search", middleware.RateLimitPerIP(30, time.Minute), handler.RecruiterSearchHandler(recruiterRepo))
 
 		// Pay-as-you-go preflight credit packs (AC1/AC4/AC5): checkout
 		// creation stores the order with the purchaser's user_id; the
