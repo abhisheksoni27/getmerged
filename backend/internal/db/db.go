@@ -1147,40 +1147,7 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE TABLE IF NOT EXISTS repo_boost_locks (
 			user_id BIGINT PRIMARY KEY
 		);`,
-		// Featured Placement (Repo Boost: paid featured placement in contributor
-		// discovery, AC1-AC10). Synchronous-capture model: a row is inserted
-		// only after the payment is captured; the live query JOINs repo_claims
-		// to exclude revoked/unverified claims (AC8, no cron needed).
-		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS featured (
-			id INTEGER PRIMARY KEY %s,
-			repo_claim_id BIGINT NOT NULL,
-			paid_until DATETIME NOT NULL,
-			sponsored BOOLEAN NOT NULL DEFAULT TRUE,
-			capture_ref VARCHAR(255) NULL,
-			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-		);`, autoInc),
-		// Idempotency lock (AC3/AC7/AC10): unique(idempotency_key) makes a
-		// duplicate insert fail, letting the second concurrent request
-		// short-circuit and return the already-captured result with no
-		// re-capture. status: pending | captured | failed.
-		`CREATE TABLE IF NOT EXISTS featured_idempotency_lock (
-			key VARCHAR(255) PRIMARY KEY,
-			status VARCHAR(20) NOT NULL DEFAULT 'pending',
-			repo_claim_id BIGINT NULL,
-			featured_id BIGINT NULL,
-			capture_ref VARCHAR(255) NULL,
-			result_json TEXT NULL,
-			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			updated_at DATETIME NULL
-		);`,
-		// Per-user daily rate-limit counter (AC5): incremented ONLY after a
-		// successful capture, never at lock time.
-		`CREATE TABLE IF NOT EXISTS featured_rate_limits (
-			user_id BIGINT NOT NULL,
-			day VARCHAR(10) NOT NULL,
-			count INTEGER NOT NULL DEFAULT 0,
-			PRIMARY KEY(user_id, day)
-		);`,
+	}
 
 	for i, stmt := range statements {
 		if _, err := db.Exec(stmt); err != nil {
@@ -1270,10 +1237,6 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_repo_audit_session ON repo_audit_purchases(session_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_repo_audit_checkout ON repo_audit_purchases(dodo_checkout_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_repo_audit_reconcile ON repo_audit_purchases(status, dodo_checkout_id)`,
-		// Featured Placement (AC6/AC8): live query JOINs featured -> repo_claims
-		// and filters on paid_until + verified/non-revoked claim.
-		`CREATE INDEX IF NOT EXISTS idx_featured_paid_until ON featured(repo_claim_id, paid_until)`,
-		`CREATE INDEX IF NOT EXISTS idx_featured_lock_key ON featured_idempotency_lock(key, status)`,
 		// In-app notification center lookups
 		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_visible ON in_app_notifications(user_id, visible_at, id DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_unread ON in_app_notifications(user_id, visible_at, read_at)`,
