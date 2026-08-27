@@ -30,6 +30,8 @@ import { EASE_OUT_EXPO, useReducedMotion } from "@/lib/motion";
 
 interface HomeClientProps {
   initialStats: MacroStats | null;
+  initialRepos?: Repo[];
+  initialSpotlightRepos?: Repo[];
 }
 
 function CountUp({ value, duration = 1.2 }: { value: number; duration?: number }) {
@@ -57,8 +59,12 @@ function CountUp({ value, duration = 1.2 }: { value: number; duration?: number }
   return <span ref={ref}>{display.toLocaleString()}</span>;
 }
 
-export default function HomeClient({ initialStats }: HomeClientProps) {
-  const [repos, setRepos] = useState<Repo[]>([]);
+export default function HomeClient({
+  initialStats,
+  initialRepos = [],
+  initialSpotlightRepos = [],
+}: HomeClientProps) {
+  const [repos, setRepos] = useState<Repo[]>(initialRepos);
   const [stats, setStats] = useState<MacroStats | null>(initialStats);
   const [selectedLang, setSelectedLang] = useState<string>("All");
   const [selectedBucket, setSelectedBucket] = useState<string>("All");
@@ -67,7 +73,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
   const [selectedFirstTimerBucket, setSelectedFirstTimerBucket] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [trendingOnly, setTrendingOnly] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(initialRepos.length === 0);
 
   // Auth Modal State
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
@@ -262,7 +268,7 @@ export default function HomeClient({ initialStats }: HomeClientProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const [spotlightRepos, setSpotlightRepos] = useState<Repo[]>([]);
+  const [spotlightRepos, setSpotlightRepos] = useState<Repo[]>(initialSpotlightRepos);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/v1/repos?scored_today=true&max_last_activity_days=7&exclude_stale=true&exclude_fallback=true&min_tier=B&sort=c_rank_score&order=desc&per_page=30`)

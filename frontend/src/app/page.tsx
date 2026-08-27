@@ -1,6 +1,6 @@
 import React from "react";
 import HomeClient from "./HomeClient";
-import type { MacroStats } from "@/types/opendoor";
+import type { MacroStats, Repo } from "@/types/opendoor";
 
 async function getMacroStats(): Promise<MacroStats | null> {
   try {
@@ -16,8 +16,79 @@ async function getMacroStats(): Promise<MacroStats | null> {
   }
 }
 
+async function getInitialRepos(): Promise<Repo[]> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
+    const res = await fetch(`${baseUrl}/api/v1/repos?page=1&per_page=15&sort=stars&order=desc&tier=S`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    const rawList = data.data || data.repos || [];
+    if (Array.isArray(rawList)) {
+      return rawList.map((r: Record<string, unknown>) => ({
+        ...(r as unknown as Repo),
+        c_rank_tier: (r.c_rank_tier as string) || (r.class_rank as string) || "S",
+        class_rank: (r.class_rank as string) || (r.c_rank_tier as string) || "S",
+        first_timer_success_rate:
+          (r.first_timer_success_rate as number) !== undefined
+            ? (r.first_timer_success_rate as number)
+            : (r.first_timer_rate as number),
+      }));
+    }
+    return [];
+  } catch {
+    return [];
+  }
+}
+
+async function getInitialSpotlightRepos(): Promise<Repo[]> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
+    const res = await fetch(
+      `${baseUrl}/api/v1/repos?scored_today=true&max_last_activity_days=7&exclude_stale=true&exclude_fallback=true&min_tier=B&sort=c_rank_score&order=desc&per_page=30`,
+      { next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    const rawList = data?.data || data?.repos;
+    if (Array.isArray(rawList) && rawList.length > 0) {
+      const mapped: Repo[] = rawList.map((r: Record<string, unknown>) => ({
+        ...(r as unknown as Repo),
+        c_rank_tier: (r.c_rank_tier as string) || (r.class_rank as string) || "",
+        class_rank: (r.class_rank as string) || (r.c_rank_tier as string) || "",
+        first_timer_success_rate:
+          (r.first_timer_success_rate as number) !== undefined
+            ? (r.first_timer_success_rate as number)
+            : (r.first_timer_rate as number),
+      }));
+
+      const distinctLangRepos: Repo[] = [];
+      const seenLangs = new Set<string>();
+
+      for (const repo of mapped) {
+        const lang = repo.language || "Other";
+        if (!seenLangs.has(lang)) {
+          seenLangs.add(lang);
+          distinctLangRepos.push(repo);
+        }
+        if (distinctLangRepos.length === 3) break;
+      }
+
+      return distinctLangRepos.length === 3 ? distinctLangRepos : mapped.slice(0, 3);
+    }
+    return [];
+  } catch {
+    return [];
+  }
+}
+
 export default async function HomePage() {
-  const initialStats = await getMacroStats();
+  const [initialStats, initialRepos, initialSpotlightRepos] = await Promise.all([
+    getMacroStats(),
+    getInitialRepos(),
+    getInitialSpotlightRepos(),
+  ]);
 
   const graphJsonLd = {
     "@context": "https://schema.org",
@@ -71,7 +142,11 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd) }}
       />
-      <HomeClient initialStats={initialStats} />
+      <HomeClient
+        initialStats={initialStats}
+        initialRepos={initialRepos}
+        initialSpotlightRepos={initialSpotlightRepos}
+      />
     </>
   );
 }
