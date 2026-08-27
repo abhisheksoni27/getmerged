@@ -283,7 +283,7 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
       />
       <React.Suspense
         fallback={
-          <div className="min-h-screen bg-[#faf9f6] flex items-center justify-center">
+          <div className="min-h-screen bg-[#0f172a] flex items-center justify-center">
             <div className="h-8 w-8 rounded-full border-2 border-zinc-900 border-t-transparent animate-spin" />
           </div>
         }

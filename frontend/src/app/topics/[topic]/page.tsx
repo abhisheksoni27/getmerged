@@ -120,7 +120,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] dev-grid-pattern flex flex-col font-sans">
+    <div className="min-h-screen bg-[#0f172a] dev-grid-pattern flex flex-col font-sans">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}

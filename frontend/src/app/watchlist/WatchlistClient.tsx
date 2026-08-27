@@ -80,7 +80,7 @@ function getBadgeStyle(rank?: string) {
       };
     default:
       return {
-        badgeClass: "bg-[#faf9f6] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
+        badgeClass: "bg-[#0f172a] text-black border-2 border-black font-bold shadow-[2px_2px_0px_#000]",
         label: "Scored",
         indicatorColor: "bg-zinc-600",
       };
@@ -640,7 +640,7 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] py-10">
+    <div className="min-h-screen bg-[#0f172a] py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Watchlist Hero Header */}
         <div className="mb-8 border-b border-zinc-200/80 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">

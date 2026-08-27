@@ -431,7 +431,7 @@ function fmtNum(v: number): string {
 
 function AuditShell({ fullName, children }: { fullName: string; children: React.ReactNode }) {
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-[#faf9f6] overflow-x-hidden">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-[#0f172a] overflow-x-hidden">
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-6">
         <Link
           href={`/${fullName}`}

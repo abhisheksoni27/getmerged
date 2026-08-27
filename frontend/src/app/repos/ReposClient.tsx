@@ -305,7 +305,7 @@ export function ReposClient({ initialRepos = [], initialTotal = 0 }: ReposClient
   }, [page, totalPages]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern text-zinc-900 overflow-x-hidden font-sans">
+    <div className="min-h-screen flex flex-col bg-[#0f172a] dev-grid-pattern text-zinc-900 overflow-x-hidden font-sans">
       <Header />
 
       <main className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1">

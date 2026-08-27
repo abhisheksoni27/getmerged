@@ -1237,7 +1237,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                     setValue: setBeginnerRating,
                   },
                 ].map((rating) => (
-                  <div key={rating.label} className="rounded-xl border-2 border-brand-dark bg-[#faf9f6] p-3 shadow-[2px_2px_0px_#222831]">
+                  <div key={rating.label} className="rounded-xl border-2 border-brand-dark bg-[#0f172a] p-3 shadow-[2px_2px_0px_#222831]">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <span className="font-mono text-xs font-bold text-zinc-900">
                         {rating.label}
@@ -1272,7 +1272,7 @@ export function ClientRepoDetail({ repo, fullName, initialInsights }: ClientRepo
                       id="feedback-comment"
                       rows={3}
                       placeholder={`Anything future contributors should know before opening a PR to ${fullName}?`}
-                      className="w-full text-xs sm:text-sm font-sans rounded-xl border-2 border-brand-dark p-3.5 bg-[#faf9f6] text-zinc-950 placeholder:text-zinc-500 focus:outline-none focus:ring-0 shadow-[2px_2px_0px_#222831]"
+                      className="w-full text-xs sm:text-sm font-sans rounded-xl border-2 border-brand-dark p-3.5 bg-[#0f172a] text-zinc-950 placeholder:text-zinc-500 focus:outline-none focus:ring-0 shadow-[2px_2px_0px_#222831]"
                     />
                   </div>
                 )}

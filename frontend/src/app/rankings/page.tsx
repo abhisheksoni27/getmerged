@@ -66,7 +66,7 @@ export default function RankingsIndexPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-[#0f172a] dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"

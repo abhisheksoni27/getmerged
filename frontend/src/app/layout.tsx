@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, DM_Sans, DM_Mono } from "next/font/google";
+import { Space_Grotesk, Inter, DM_Mono } from "next/font/google";
 import "./globals.css";
 import { PostHogInit } from "@/app/posthog-init";
 import { CookieBanner } from "@/components/CookieBanner";
@@ -11,9 +11,9 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
 });
 
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
+  variable: "--font-inter",
 });
 
 const dmMono = DM_Mono({
@@ -86,8 +86,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${dmSans.variable} ${dmMono.variable} h-full antialiased`}>
-      <body className="nb-theme min-h-full flex flex-col bg-white text-zinc-900">
+    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${dmMono.variable} h-full antialiased dark`}>
+      <body className="min-h-full flex flex-col bg-[#0f172a] text-slate-100 selection:bg-orange-500 selection:text-white">
         <PostHogInit />
         <SearchProvider>
           {children}

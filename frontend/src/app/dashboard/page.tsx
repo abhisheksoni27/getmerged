@@ -25,7 +25,7 @@ export default async function PRTrackerPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#faf9f6]">
+    <div className="flex min-h-screen flex-col bg-[#0f172a]">
       <Header />
       <main className="flex-1 pt-8">
         <DashboardClient />
