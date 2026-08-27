@@ -86,7 +86,7 @@ export function StatusClient() {
             {healthStatus === "checking" && <RefreshCw className="h-8 w-8 text-zinc-400 animate-spin shrink-0" />}
 
             <div>
-              <h2 className="text-lg font-semibold">
+              <h2 className="text-lg font-bold font-space">
                 {healthStatus === "healthy" && "All Systems Operational"}
                 {healthStatus === "degraded" && "Degraded API Performance"}
                 {healthStatus === "unhealthy" && "System Outage Detected"}

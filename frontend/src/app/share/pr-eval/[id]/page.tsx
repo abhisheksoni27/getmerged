@@ -211,7 +211,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
               <Link
                 href={preflightCtaUrl}
                 data-testid="share-cta-preflight"
-                className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all "
+                className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-[2px_2px_0px_#000]"
               >
                 <Sparkles className="h-4 w-4 text-emerald-400" />
                 <span>Test Your Own PR Free</span>
@@ -221,7 +221,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
               <Link
                 href={cRankUrl}
                 data-testid="share-cta-crank"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white border-2 border-zinc-200/60 text-zinc-900 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-50 active:scale-[0.98] transition-all "
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white border-2 border-zinc-200/60 text-zinc-900 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-50 active:scale-[0.98] transition-all shadow-[2px_2px_0px_#000]"
               >
                 <ShieldCheck className="h-4 w-4 text-emerald-600" />
                 <span>Explore {repoClean} C-Rank</span>
