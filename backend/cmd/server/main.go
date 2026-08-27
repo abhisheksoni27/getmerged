@@ -26,6 +26,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/hacktoberfest"
 	"github.com/abhisheksoni27/opendoor/internal/handler"
 	"github.com/abhisheksoni27/opendoor/internal/issueclaim"
+	"github.com/abhisheksoni27/opendoor/internal/league"
 	"github.com/abhisheksoni27/opendoor/internal/maintainerclaim"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/notification"
@@ -180,7 +181,7 @@ func main() {
 	defer stopHacktoberfestCron()
 
 	// Monthly League Service
-	leagueSvc := league.NewService(database)
+	leagueSvc := league.NewService(database.DB)
 
 	// Stalled-PR rescue alerts: hourly sweep comparing tracked open PRs
 	// against each repo's merged p75 wait; email + configured Slack/Discord.

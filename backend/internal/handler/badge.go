@@ -158,11 +158,7 @@ func GetLiveBadgeSVG(repoStore repository.RepoRepository, appBaseURL string) gin
 			}
 		}
 
-		reportURL := strings.TrimSuffix(appBaseURL, "/") + "/" + fullName
-		if tier != "" {
-			reportURL += "#raise-your-rank"
-		}
-		writeBadgeSVG(c, http.StatusOK, "GetMerged", message, color, reportURL)
+		writeBadgeSVG(c, http.StatusOK, "GetMerged", message, color, "")
 	}
 }
 
