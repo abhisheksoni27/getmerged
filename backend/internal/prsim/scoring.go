@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+
+	"github.com/abhisheksoni27/opendoor/internal/scoring"
 )
 
 // ScoreBreakdown lists points earned per heuristic (AC1). Each field is
@@ -29,6 +31,7 @@ type Result struct {
 	Breakdown   ScoreBreakdown `json:"breakdown"`
 	Suggestions []string       `json:"suggestions,omitempty"`
 	Turnaround  *Turnaround    `json:"turnaround,omitempty"`
+	Fixes       []scoring.Fix  `json:"fixes,omitempty"`
 }
 
 // ValidateDiff enforces AC3: max 512KB and unified-diff shape (must start
@@ -180,7 +183,60 @@ func Score(title, diff, description string, contributingPts int, contributingHin
 	res.Suggestions = append(res.Suggestions, testHints...)
 	res.Suggestions = append(res.Suggestions, descHints...)
 	res.Suggestions = append(res.Suggestions, contributingHints...)
+
+	// Attach >=1 concrete fix to every failed prsim check (AC1). No repo/PR
+	// context is available here, so deep links fall back to clipboard safely
+	// inside scoring.FixForCheck.
+	simInput := scoring.PreflightInput{
+		PRTitle:       title,
+		PRDescription: description,
+		ChangedFiles:  extractDiffFiles(diff),
+	}
+	if bd.Title < DefaultWeights.Title {
+		res.Fixes = append(res.Fixes, scoring.FixForCheck(scoring.PreflightCheckItem{
+			Key: "conventional_title", Passed: false,
+		}, simInput)...)
+	}
+	if bd.TestsTouched == 0 {
+		res.Fixes = append(res.Fixes, scoring.FixForCheck(scoring.PreflightCheckItem{
+			Key: "test_coverage", Passed: false,
+		}, simInput)...)
+	}
+	if bd.DescriptionLength == 0 {
+		res.Fixes = append(res.Fixes, scoring.FixForCheck(scoring.PreflightCheckItem{
+			Key: "description_depth", Passed: false,
+		}, simInput)...)
+	}
 	return res
+}
+
+// extractDiffFiles pulls changed file paths from a unified diff so the
+// missing-test checklist can suggest a concrete test target. Defensive against
+// malformed diffs (returns nil, never panics).
+func extractDiffFiles(diff string) []string {
+	if strings.TrimSpace(diff) == "" {
+		return nil
+	}
+	files := make([]string, 0, 4)
+	for _, line := range strings.Split(diff, "\n") {
+		var path string
+		switch {
+		case strings.HasPrefix(line, "diff --git "):
+			parts := strings.Fields(line)
+			if len(parts) >= 4 {
+				path = strings.TrimPrefix(parts[3], "b/")
+			}
+		case strings.HasPrefix(line, "+++ "):
+			p := strings.TrimSpace(strings.TrimPrefix(line, "+++ "))
+			path = strings.TrimPrefix(p, "b/")
+		default:
+			continue
+		}
+		if path != "" && path != "/dev/null" {
+			files = append(files, path)
+		}
+	}
+	return files
 }
 
 func clamp(v, lo, hi int) int {

@@ -23,6 +23,10 @@ func (f *fakeEntitlementRepo) DeductQuota(ctx context.Context, userID int64) (bo
 	return true, nil
 }
 
+func (f *fakeEntitlementRepo) GetEntitlement(ctx context.Context, userID int64) (*repository.UserEntitlement, error) {
+	return &repository.UserEntitlement{UserID: userID, IsPro: false, MonthlyEvalCount: 0}, nil
+}
+
 // Instant Anonymous Preflight Trial: anonymous requests pass quota enforcement
 // as a one-per-IP trial; signed-in users go through normal quota deduction.
 func TestRequireProOrQuota_AnonymousTrial(t *testing.T) {
