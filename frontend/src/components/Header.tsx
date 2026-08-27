@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { User } from "@/types/opendoor";
+import { NotificationBell } from "@/components/NotificationBell";
 import posthog from "posthog-js";
 import { AuthModal } from "@/components/AuthModal";
 
@@ -206,6 +207,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   </span>
                 </div>
               )}
+              <NotificationBell user={user} />
               <Link
                 href="/watchlist"
                 title="My Watchlist"

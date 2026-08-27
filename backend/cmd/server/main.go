@@ -88,6 +88,9 @@ func main() {
 	repoStore := repository.NewRepoRepository(database)
 	watchlistRepo := repository.NewWatchlistRepository(database)
 	notifRepo := notification.NewNotificationCenterRepository(database)
+
+	// In-App Notification Center: retention cron prunes read rows >30d (AC9).
+	notification.StartRetentionCron(context.Background(), notifRepo, 24*time.Hour)
 	aiRepo := repository.NewAIRepository(database)
 	shareCardRepo := repository.NewShareCardRepository(database)
 	claimRepo := repository.NewClaimRepository(database)
@@ -325,7 +328,7 @@ func main() {
 			middleware.RequireProOrQuota(entitlementRepo),
 			handler.EvaluatePreflightHandler(gh))
 		api.POST("/preflight/pr-details", handler.FetchPRDetailsHandler(gh))
-		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo))
+		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo, database))
 		api.POST("/webhooks/github-app", handler.GithubAppWebhookHandler(ghAppSvc))
 		api.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
 		api.GET("/repos/:id/claim-status", handler.GetPublicClaimStatusHandler(claimRepo))
@@ -442,22 +445,28 @@ func main() {
 			handler.PackStatusHandler(cfg, entitlementRepo))
 
 		// In-App Notification Center (AC1 - AC4)
-		userApi.GET("/notifications", handler.GetNotificationsHandler(notifRepo))
+		userApi.GET("/notifications", middleware.RateLimitPerUser(1), handler.GetNotificationsHandler(notifRepo))
 		userApi.GET("/notifications/unread-count", middleware.RateLimitPerUser(60), handler.GetUnreadNotificationCountHandler(notifRepo))
 		userApi.POST("/notifications/mark-read", handler.MarkNotificationsReadHandler(notifRepo))
 		userApi.GET("/notifications/preferences", handler.GetNotificationPreferencesHandler(notifRepo))
 		userApi.PUT("/notifications/preferences", handler.UpdateNotificationPreferencesHandler(notifRepo))
+		// SSE live stream + gap-replay (AC2/AC8)
+		userApi.GET("/notifications/stream", handler.GetNotificationStreamHandler(notifRepo, database))
+		userApi.GET("/notifications/since", handler.GetNotificationsSinceHandler(notifRepo))
 	}
 
 	// Top-level aliases for /api/notifications (AC1 - AC4)
 	apiNotif := r.Group("/api/notifications")
 	apiNotif.Use(middleware.UserAuth(cfg.JWTSecret))
 	{
-		apiNotif.GET("", handler.GetNotificationsHandler(notifRepo))
+		apiNotif.GET("", middleware.RateLimitPerUser(1), handler.GetNotificationsHandler(notifRepo))
 		apiNotif.GET("/unread-count", middleware.RateLimitPerUser(60), handler.GetUnreadNotificationCountHandler(notifRepo))
 		apiNotif.POST("/mark-read", handler.MarkNotificationsReadHandler(notifRepo))
 		apiNotif.GET("/preferences", handler.GetNotificationPreferencesHandler(notifRepo))
 		apiNotif.PUT("/preferences", handler.UpdateNotificationPreferencesHandler(notifRepo))
+		// SSE live stream + gap-replay (AC2/AC8)
+		apiNotif.GET("/stream", handler.GetNotificationStreamHandler(notifRepo, database))
+		apiNotif.GET("/since", handler.GetNotificationsSinceHandler(notifRepo))
 	}
 
 	// Internal routes - nginx blocks these externally

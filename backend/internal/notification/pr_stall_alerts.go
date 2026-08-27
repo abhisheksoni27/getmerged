@@ -477,8 +477,7 @@ func EvaluatePRStallAlerts(ctx context.Context, db *sqlx.DB, cfg PRStallAlertCon
 			notifTitle := fmt.Sprintf("PR Review Update: %s", f.fire.cand.PRID)
 			notifMsg := fmt.Sprintf("Your pull request %s has crossed the maintainer response threshold.", f.fire.cand.PRID)
 			notifLink := "/dashboard"
-			notifRepo := NewNotificationCenterRepository(db)
-			_ = EmitNotification(ctx, db, notifRepo, f.fire.cand.UserID, CategoryPRMilestone, notifTitle, notifMsg, notifLink)
+			go WriteNotification(db, f.fire.cand.UserID, CategoryPR, NotificationPayload{Title: notifTitle, Message: notifMsg, LinkURL: notifLink})
 		}
 	}
 	// AC3: send only after commit — a crash here leaves clean pending rows.
