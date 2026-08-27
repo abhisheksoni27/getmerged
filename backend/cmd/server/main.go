@@ -352,6 +352,16 @@ func main() {
 	// Anonymous language-match quiz (AC1): public GET reusing the ForYou
 	// C-Rank/GFI matching. Static /api/public prefix keeps the route tree
 	// free of wildcard conflicts; rate limit + cache live in the handler.
+	// Anonymous RSS/Atom/iCal feeds for Good First Issues (AC1-AC6). Explicit
+	// .rss/.atom/.ics format suffixes avoid any wildcard collision in the radix
+	// tree. The FeedCacheRateLimit middleware applies the 60 req/min/IP sliding
+	// token bucket and a 5-minute cache; cache hits never consume tokens so
+	// legitimate WebCal pollers are never throttled (AC5/AC6).
+	feedRL := middleware.FeedCacheRateLimit(60, time.Minute, 5*time.Minute)
+	r.GET("/api/feeds/gfi.rss", feedRL, handler.GFIFeedRSS(gfiRepo, repoStore))
+	r.GET("/api/feeds/gfi.atom", feedRL, handler.GFIFeedAtom(gfiRepo, repoStore))
+	r.GET("/api/feeds/gfi.ics", feedRL, handler.GFIFeedICS(gfiRepo, repoStore))
+
 	r.GET("/api/public/quiz-match", handler.QuizMatchHandler(repoStore, gfiRepo, database))
 
 	// Anonymous Weekly Language Digest signup (AC1-AC11): double opt-in email

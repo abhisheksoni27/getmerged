@@ -40,6 +40,19 @@ type GFIRepository interface {
 	UpsertIssues(ctx context.Context, repoID string, issues []github.GoodFirstIssue) error
 	ListByLanguage(ctx context.Context, language string, limit int, bountyOnly bool) ([]GoodFirstIssueItem, error)
 	ListByRepoID(ctx context.Context, repoID string, limit int, bountyOnly bool) ([]GoodFirstIssueItem, error)
+	// ListFeed returns Good First Issues indexed within the last 7 days
+	// (AC3 inclusion window) filtered by an optional allow-listed language,
+	// topic, or repository full name (any combinable, all optional). Results
+	// are deduped by issue id and ordered newest-first.
+	ListFeed(ctx context.Context, filter GFIFeedFilter, limit int) ([]GoodFirstIssueItem, error)
+}
+
+// GFIFeedFilter carries the optional, pre-validated feed filters (AC4). Empty
+// fields mean "no filter" on that dimension.
+type GFIFeedFilter struct {
+	Language     string
+	Topic        string
+	RepoFullName string
 }
 
 type sqlxGFIRepository struct {
@@ -193,6 +206,64 @@ func (r *sqlxGFIRepository) ListByRepoID(ctx context.Context, repoID string, lim
 		return nil, err
 	}
 	return finalizeBountyList(items, bountyOnly, limit), nil
+}
+
+// ListFeed implements the GFIRepository interface (AC1/AC3/AC4). The inclusion
+// window is the last 7 days by created_at, deduped by issue id, and filtered by
+// any pre-validated language/topic/repo combination.
+func (r *sqlxGFIRepository) ListFeed(ctx context.Context, filter GFIFeedFilter, limit int) ([]GoodFirstIssueItem, error) {
+	if limit <= 0 || limit > 200 {
+		limit = 100
+	}
+
+	// AC3: only issues indexed within the last 7 days are eligible.
+	cutoff := time.Now().UTC().Add(-7 * 24 * time.Hour)
+	now := time.Now().UTC()
+
+	// gfiListSelect carries a `b.expires_at > ?` placeholder (boost join) as
+	// its first argument, so `now` must be args[0].
+	where := "g.created_at >= ?"
+	args := []interface{}{now, cutoff}
+	if filter.Language != "" {
+		where += " AND LOWER(rep.language) = LOWER(?)"
+		args = append(args, filter.Language)
+	}
+	if filter.Topic != "" {
+		// EXISTS avoids row multiplication when a repo has many topics.
+		where += " AND EXISTS (SELECT 1 FROM repository_topics rt WHERE rt.repository_id = rep.id AND rt.topic = ?)"
+		args = append(args, filter.Topic)
+	}
+	if filter.RepoFullName != "" {
+		where += " AND rep.full_name = ?"
+		args = append(args, filter.RepoFullName)
+	}
+	args = append(args, limit)
+
+	query := gfiListSelect + `
+		WHERE ` + where + `
+		ORDER BY g.created_at DESC, g.id DESC
+		LIMIT ?
+	`
+
+	items, err := r.selectAndEnrich(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	// AC3: dedupe by issue id regardless of join shape.
+	seen := make(map[int64]bool, len(items))
+	out := items[:0]
+	for _, it := range items {
+		if seen[it.ID] {
+			continue
+		}
+		seen[it.ID] = true
+		out = append(out, it)
+	}
+	if out == nil {
+		out = []GoodFirstIssueItem{}
+	}
+	return out, nil
 }
 
 func (r *sqlxGFIRepository) selectAndEnrich(ctx context.Context, query string, args ...interface{}) ([]GoodFirstIssueItem, error) {

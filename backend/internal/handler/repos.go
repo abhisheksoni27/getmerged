@@ -654,7 +654,7 @@ func GetOptimalTimeHandler(repoStore repository.RepoRepository) gin.HandlerFunc 
 			events = []scoring.MaintainerEvent{}
 		}
 
-		res := scoring.CalculateOptimalWindow(events)
+		res := scoring.CalculateOptimalWindow(events, repo.FullName)
 
 		c.JSON(http.StatusOK, gin.H{
 			"repository":   repo.FullName,

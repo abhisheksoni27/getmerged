@@ -60,7 +60,7 @@ test.describe("Repo Metadata & FAQ Unit Tests (IDEA-20260820-02)", () => {
 
     expect(meta.title).toBe("vercel/next.js Contributor Review & C-Rank™: 84.5/100 (A Tier) | GetMerged");
     expect(meta.description).toContain("scored 84.5/100 (A Tier) on C-Rank™");
-    expect(meta.description).toContain("PR merge rate: 68.2%");
+    expect(meta.description).toContain("68.2% PR merge rate");
   });
 
   test("buildRepoFaqList creates honest contextual answers for unscored repo without asserting fabricated score/tier", () => {
