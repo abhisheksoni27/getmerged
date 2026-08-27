@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { API_BASE_URL } from "@/lib/api";
-import { LeagueClient, LeagueRepo } from "../LeagueClient";
+import { LeagueClient, LeagueRepo, ContributorMVP } from "../LeagueClient";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -32,22 +32,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-async function getMonthlyLeaderboard(month: string): Promise<{ repos: LeagueRepo[]; monthName: string }> {
+async function getMonthlyLeaderboard(month: string): Promise<{ repos: LeagueRepo[]; contributors: ContributorMVP[]; monthName: string }> {
   try {
     const res = await fetch(`${API_BASE_URL}/api/v1/league/leaderboard?month=${encodeURIComponent(month)}&limit=50`, {
       next: { revalidate: 3600 },
     });
     if (!res.ok) {
-      return { repos: [], monthName: `${month} Sprint` };
+      return { repos: [], contributors: [], monthName: `${month} Sprint` };
     }
     const data = await res.json();
     return {
       repos: data.repos || [],
+      contributors: data.contributors || [],
       monthName: data.month_name || `${month} Sprint`,
     };
   } catch (e) {
     console.error("Failed to fetch monthly league archive:", e);
-    return { repos: [], monthName: `${month} Sprint` };
+    return { repos: [], contributors: [], monthName: `${month} Sprint` };
   }
 }
 
@@ -57,7 +58,7 @@ export default async function MonthlyLeagueArchivePage({ params }: PageProps) {
     notFound();
   }
 
-  const { repos, monthName } = await getMonthlyLeaderboard(month);
+  const { repos, contributors, monthName } = await getMonthlyLeaderboard(month);
 
   const itemListJsonLd = {
     "@context": "https://schema.org",
@@ -103,7 +104,7 @@ export default async function MonthlyLeagueArchivePage({ params }: PageProps) {
       </section>
 
       <main className="flex-1">
-        <LeagueClient initialRepos={repos} monthName={monthName} currentMonth={month} />
+        <LeagueClient initialRepos={repos} contributors={contributors} monthName={monthName} currentMonth={month} />
       </main>
       <Footer />
     </div>
