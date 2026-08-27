@@ -3,17 +3,13 @@ import { Metadata } from "next";
 import { StatusClient } from "./StatusClient";
 
 export const metadata: Metadata = {
-  title: "System Status - GetMerged",
+  title: "System Status & API Latency Telemetry | GetMerged",
   description: "Real-time API operational status, latency metrics, and backend service health checks.",
-  robots: {
-    index: false,
-    follow: true,
-  },
   alternates: {
     canonical: "https://getmerged.abhishekco.de/status",
   },
   openGraph: {
-    title: "System Status - GetMerged",
+    title: "System Status & API Latency Telemetry | GetMerged",
     description: "Real-time API operational status, latency metrics, and backend service health checks.",
     url: "https://getmerged.abhishekco.de/status",
     siteName: "GetMerged",
@@ -21,5 +17,13 @@ export const metadata: Metadata = {
 };
 
 export default function StatusPage() {
-  return <StatusClient />;
+  return (
+    <>
+      <section className="sr-only" aria-label="System Status Overview">
+        <h1>GetMerged Live System Status & Health Metrics</h1>
+        <p>Operational health of GetMerged GraphQL indexing pipelines, database cluster, API endpoints, and caching servers.</p>
+      </section>
+      <StatusClient />
+    </>
+  );
 }
