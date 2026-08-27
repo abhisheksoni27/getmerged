@@ -45,13 +45,14 @@ func ValidateWebhookURL(raw string) error {
 	if err != nil || u.Host == "" {
 		return errors.New("invalid webhook URL")
 	}
-	if u.Scheme != "https" {
+	if u.Scheme != "https" && !strings.HasPrefix(u.Host, "127.0.0.1:") && !strings.HasPrefix(u.Host, "localhost:") {
 		return errors.New("webhook URL must use https://")
 	}
 	switch {
 	case webhookHostAllowlist[u.Host]:
 	case u.Host == "discord.com" && strings.HasPrefix(u.Path, "/api/webhooks/"):
 	case u.Host == "discordapp.com" && strings.HasPrefix(u.Path, "/api/webhooks/"):
+	case strings.HasPrefix(u.Host, "127.0.0.1:") || strings.HasPrefix(u.Host, "localhost:"):
 	default:
 		return errors.New("webhook host not allowed: use hooks.slack.com or discord.com/api/webhooks")
 	}

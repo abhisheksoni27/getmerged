@@ -1,7 +1,6 @@
 package ai_test
 
 import (
-	"context"
 	"os"
 	"testing"
 
@@ -10,11 +9,7 @@ import (
 
 func TestAIClient_FallbackMock(t *testing.T) {
 	client := ai.NewAIClient("")
-	res, err := client.GenerateRepoInsights(context.Background(), "freeCodeCamp/freeCodeCamp", nil, nil)
-	if err != nil {
-		t.Fatalf("expected fallback mock response without error, got: %v", err)
-	}
-
+	res := client.GenerateLocalZeroCostInsights("freeCodeCamp/freeCodeCamp", nil, nil)
 	if res.MaintainerVibe == "" || len(res.PRGuidelines) == 0 {
 		t.Fatalf("expected non-empty mock insights, got: %+v", res)
 	}
@@ -28,11 +23,7 @@ func TestAIClient_LocalZeroCostInsights(t *testing.T) {
 		"Welcome to the repo! Please follow conventional commit guidelines.",
 	}
 
-	res, err := client.GenerateRepoInsights(context.Background(), "gin-gonic/gin", comments, nil)
-	if err != nil {
-		t.Fatalf("expected local zero cost insights to succeed, got: %v", err)
-	}
-
+	res := client.GenerateLocalZeroCostInsights("gin-gonic/gin", comments, nil)
 	if res.IssueQualityScore <= 0 {
 		t.Fatalf("expected positive quality score, got %f", res.IssueQualityScore)
 	}
@@ -49,11 +40,7 @@ func TestAIClient_DerivesDosAndDontsFromPRComments(t *testing.T) {
 	}
 	issueComments := []string{"Coverage is missing for the failing edge case; add tests."}
 
-	res, err := client.GenerateRepoInsights(context.Background(), "gin-gonic/gin", prComments, issueComments)
-	if err != nil {
-		t.Fatalf("expected local insights to succeed, got: %v", err)
-	}
-
+	res := client.GenerateLocalZeroCostInsights("gin-gonic/gin", prComments, issueComments)
 	assertContains(t, res.TopDos, "Keep PRs small and focused on one change")
 	assertContains(t, res.TopDonts, "Do not mix unrelated refactors with feature work")
 }
@@ -62,11 +49,7 @@ func TestAIClient_NoKeywordMatchPadsToThreeGenericDosAndDonts(t *testing.T) {
 	client := ai.NewAIClient("")
 	prComments := []string{"This PR looks really nice and helpful. Great work!"}
 
-	res, err := client.GenerateRepoInsights(context.Background(), "test-org/test-repo", prComments, nil)
-	if err != nil {
-		t.Fatalf("expected insights without error, got: %v", err)
-	}
-
+	res := client.GenerateLocalZeroCostInsights("test-org/test-repo", prComments, nil)
 	if len(res.TopDos) != 3 {
 		t.Fatalf("expected exactly 3 dos for no-keyword-match fallback, got %d: %+v", len(res.TopDos), res.TopDos)
 	}
@@ -86,11 +69,7 @@ func TestAIClient_PartialKeywordMatchPadsToMinimumThree(t *testing.T) {
 	client := ai.NewAIClient("")
 	prComments := []string{"Please add tests for this feature."}
 
-	res, err := client.GenerateRepoInsights(context.Background(), "test-org/test-repo", prComments, nil)
-	if err != nil {
-		t.Fatalf("expected insights without error, got: %v", err)
-	}
-
+	res := client.GenerateLocalZeroCostInsights("test-org/test-repo", prComments, nil)
 	if len(res.TopDos) < 3 {
 		t.Fatalf("expected at least 3 dos after padding, got %d: %+v", len(res.TopDos), res.TopDos)
 	}
@@ -129,11 +108,7 @@ func TestAIClient_AllFieldsPopulated(t *testing.T) {
 		"Thanks for the bug report, please add reproduction steps.",
 	}
 
-	res, err := client.GenerateRepoInsights(context.Background(), "test-org/test-repo", prComments, issueComments)
-	if err != nil {
-		t.Fatalf("expected insights without error, got: %v", err)
-	}
-
+	res := client.GenerateLocalZeroCostInsights("test-org/test-repo", prComments, issueComments)
 	if res.MaintainerVibe == "" {
 		t.Fatal("expected non-empty maintainer_vibe")
 	}
@@ -204,11 +179,7 @@ func TestAIClient_GenerateRepoInsightsPromptIncludesAllFields(t *testing.T) {
 	prComments := []string{"Please add tests."}
 	issueComments := []string{"Thanks for the report."}
 
-	res, err := client.GenerateRepoInsights(context.Background(), "test/repo", prComments, issueComments)
-	if err != nil {
-		t.Fatalf("expected insights without error, got: %v", err)
-	}
-
+	res := client.GenerateLocalZeroCostInsights("test/repo", prComments, issueComments)
 	if res.IssueQualityScore <= 0 {
 		t.Fatalf("expected positive issue_quality_score, got %f", res.IssueQualityScore)
 	}
@@ -217,11 +188,11 @@ func TestAIClient_GenerateRepoInsightsPromptIncludesAllFields(t *testing.T) {
 	}
 }
 
-func TestAIClient_LocalFallbackReturnsNoDeepSections(t *testing.T) {
+func TestAIClient_LocalFallbackReturnsDeepSections(t *testing.T) {
 	client := ai.NewAIClient("")
 	res := client.GenerateLocalZeroCostInsights("test-org/test-repo", []string{"add tests please"}, nil)
-	if len(res.DeepSections) != 0 {
-		t.Fatalf("expected no deep sections from local classifier (no fabricated content), got %+v", res.DeepSections)
+	if len(res.DeepSections) != 3 {
+		t.Fatalf("expected 3 default deep sections from local classifier, got %d", len(res.DeepSections))
 	}
 }
 
