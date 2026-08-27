@@ -158,12 +158,23 @@ func (r *sqlxContributorProfileRepository) SaveFailure(ctx context.Context, user
 }
 
 func (r *sqlxContributorProfileRepository) SetOpenToOpportunities(ctx context.Context, userID int64, val bool) error {
-	_, err := r.db.ExecContext(ctx, `
-		UPDATE contributor_profiles
-		SET open_to_opportunities = ?,
-		    updated_at = CURRENT_TIMESTAMP
-		WHERE user_id = ?
-	`, val, userID)
+	query := `
+		INSERT INTO contributor_profiles (user_id, profiling_status, open_to_opportunities, updated_at)
+		VALUES (?, 'pending', ?, CURRENT_TIMESTAMP)
+		ON DUPLICATE KEY UPDATE
+			open_to_opportunities = VALUES(open_to_opportunities),
+			updated_at = CURRENT_TIMESTAMP
+	`
+	if r.db.DriverName() == "sqlite" {
+		query = `
+			INSERT INTO contributor_profiles (user_id, profiling_status, open_to_opportunities, updated_at)
+			VALUES (?, 'pending', ?, CURRENT_TIMESTAMP)
+			ON CONFLICT(user_id) DO UPDATE SET
+				open_to_opportunities = excluded.open_to_opportunities,
+				updated_at = CURRENT_TIMESTAMP
+		`
+	}
+	_, err := r.db.ExecContext(ctx, query, userID, val)
 	return err
 }
 
