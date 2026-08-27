@@ -142,11 +142,7 @@ export function Footer() {
         <div className="border-t border-white/[0.08] pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-emerald-400" />
-<<<<<<< HEAD
-            <span>OpenDoor / GetMerged &middot; Precision Diagnostic Telemetry</span>
-=======
-            <span>OpenDoor / GetMerged - Diagnostic Open Source Intelligence</span>
->>>>>>> c0bf0a7 (well well well)
+<span>OpenDoor / GetMerged &middot; Precision Diagnostic Telemetry</span>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/privacy" title="Privacy Policy" className="hover:text-zinc-300 transition-colors">Privacy</Link>
