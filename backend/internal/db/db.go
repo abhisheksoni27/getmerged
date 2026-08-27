@@ -1042,6 +1042,31 @@ func AutoMigrate(db *sqlx.DB) error {
 			user_id INTEGER NOT NULL,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`, autoInc),
+		// One-Time $19 Repo Deep-Audit purchases (AC3): keyed (user_id, repo_key).
+		// Status state machine: pending -> paid -> refunded | disputed. A
+		// repurchase after refund/dispute executes an idempotent reactivation
+		// upsert back to 'paid' — never a permanent block. dodo_checkout_id /
+		// dodo_payment_id / session_id provide the webhook idempotency + the
+		// 5-minute reconcile lookup keys.
+		`CREATE TABLE IF NOT EXISTS repo_audit_purchases (
+			user_id INTEGER NOT NULL,
+			repo_key VARCHAR(255) NOT NULL,
+			status VARCHAR(20) NOT NULL DEFAULT 'pending',
+			dodo_checkout_id VARCHAR(255) NOT NULL DEFAULT '',
+			dodo_payment_id VARCHAR(255) NOT NULL DEFAULT '',
+			session_id VARCHAR(255) NOT NULL DEFAULT '',
+			paid_at DATETIME NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY(user_id, repo_key)
+		);`,
+		// AI-insights regen rate-limit ledger (AC7): 1/day per (user_id, repo_key).
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS repo_audit_regen_log (
+			user_id INTEGER NOT NULL,
+			repo_key VARCHAR(255) NOT NULL,
+			last_regen_at DATETIME NULL,
+			PRIMARY KEY(user_id, repo_key)
+		);`, autoInc),
 	}
 
 	for i, stmt := range statements {
@@ -1127,6 +1152,11 @@ func AutoMigrate(db *sqlx.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_issue_claims_user ON issue_claims(user_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_issue_claims_user_state ON issue_claims(user_id, state)`,
 		`CREATE INDEX IF NOT EXISTS idx_issue_claim_log_user_time ON issue_claim_comment_log(user_id, created_at)`,
+		// Repo deep-audit purchases: idempotent webhook lookup by session/checkout
+		// id and the 5-minute reconcile sweep over pending sessions.
+		`CREATE INDEX IF NOT EXISTS idx_repo_audit_session ON repo_audit_purchases(session_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_repo_audit_checkout ON repo_audit_purchases(dodo_checkout_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_repo_audit_reconcile ON repo_audit_purchases(status, dodo_checkout_id)`,
 		// In-app notification center lookups
 		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_visible ON in_app_notifications(user_id, visible_at, id DESC)`,
 		`CREATE INDEX IF NOT EXISTS idx_in_app_notif_user_unread ON in_app_notifications(user_id, visible_at, read_at)`,

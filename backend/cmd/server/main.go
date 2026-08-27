@@ -93,6 +93,7 @@ func main() {
 	dnaWorker := pipeline.NewContributorDNAWorker(userRepo, profileRepo, tokenMgr, cfg.GithubToken, nil)
 	repoStore := repository.NewRepoRepository(database)
 	watchlistRepo := repository.NewWatchlistRepository(database)
+	auditRepo := repository.NewAuditPurchaseRepository(database)
 	notifRepo := notification.NewNotificationCenterRepository(database)
 
 	// In-App Notification Center: retention cron prunes read rows >30d (AC9).
@@ -133,6 +134,11 @@ func main() {
 	// pack purchases (missed-webhook failure mode, AC4). No-ops without an
 	// API key configured.
 	handler.NewPackPurchaseReconciler(cfg, entitlementRepo).Start(context.Background())
+
+	// Repo deep-audit reconcile: 5-minute DodoPayments poll for paid-but-un-
+	// activated one-time audit purchases (missed-webhook failure mode, AC6).
+	// No-ops without an API key configured.
+	handler.NewRepoAuditReconciler(cfg, auditRepo).Start(context.Background())
 
 	// Hacktoberfest hub: lazy 5-min poll over active viewers only (AC5).
 	hbStore := hacktoberfest.NewStore(database)
@@ -382,7 +388,7 @@ func main() {
 			middleware.RequireProOrQuota(entitlementRepo),
 			handler.EvaluatePreflightHandler(gh))
 		api.POST("/preflight/pr-details", handler.FetchPRDetailsHandler(gh))
-		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo, database, recruiterRepo))
+		api.POST("/payments/webhook/dodopayments", handler.DodopaymentsWebhookHandler(cfg, entitlementRepo, database, recruiterRepo, auditRepo))
 		api.POST("/webhooks/github-app", handler.GithubAppWebhookHandler(ghAppSvc))
 		api.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
 		api.GET("/repos/:id/claim-status", handler.GetPublicClaimStatusHandler(claimRepo))
@@ -462,6 +468,17 @@ func main() {
 		r.POST("/repo/:owner/:name/claim", middleware.UserAuth(cfg.JWTSecret), handler.PostClaimRepoHandler(claimSvc))
 		r.POST("/repo/:owner/:name/verify", middleware.UserAuth(cfg.JWTSecret), handler.PostVerifyRepoHandler(claimSvc))
 		r.GET("/repo/:owner/:name/console", middleware.UserAuth(cfg.JWTSecret), handler.GetMaintainerConsoleHandler(claimSvc))
+
+		// One-Time $19 Repo Deep-Audit (AC1-AC8). Static "audit" child under
+		// :owner/:name never collides with the existing claim/verify/console
+		// segments (no radix/wildcard mixing). Server-side access is enforced
+		// inside each handler via auth user + purchases.status='paid'.
+		r.POST("/repo/:owner/:name/audit/checkout", middleware.UserAuth(cfg.JWTSecret), handler.CreateRepoAuditCheckoutHandler(cfg, auditRepo, repoStore))
+		r.GET("/repo/:owner/:name/audit", middleware.UserAuth(cfg.JWTSecret), handler.GetRepoAuditReportHandler(cfg, auditRepo, repoStore, aiClient, aiRepo))
+		r.POST("/repo/:owner/:name/audit/regen", middleware.UserAuth(cfg.JWTSecret), handler.RegenerateRepoAuditInsightsHandler(cfg, auditRepo, repoStore, aiClient, aiRepo))
+		// AC6 client poll: /api/audit/status?repo_key=... (distinct static
+		// prefix from /api/v1 so no wildcard mixing at the API-root level).
+		r.GET("/api/audit/status", middleware.UserAuth(cfg.JWTSecret), handler.GetRepoAuditStatusHandler(auditRepo, cfg))
 
 		// AC6: one-click unsubscribe /u/{userId}?sig=HMAC(secret, userId+expiry30d)
 		r.GET("/u/:userid", handler.GFIUnsubscribeShortHandler(cfg))
