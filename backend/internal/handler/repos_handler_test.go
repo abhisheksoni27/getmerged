@@ -218,6 +218,7 @@ func TestGetBadgeSVG(t *testing.T) {
 	r := gin.New()
 	r.GET("/badge/:owner/:repo", handler.GetBadgeSVG(repoStore))
 
+	// AC1+AC4: graded badge shows grade + score and links to the deep-dive report.
 	req := httptest.NewRequest("GET", "/badge/gin-gonic/gin.svg", nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
@@ -225,79 +226,94 @@ func TestGetBadgeSVG(t *testing.T) {
 	if w.Code != http.StatusOK {
 		t.Fatalf("expected 200 OK for badge SVG, got %d", w.Code)
 	}
-
-	if contentType := w.Header().Get("Content-Type"); contentType != "image/svg+xml" {
-		t.Fatalf("expected Content-Type image/svg+xml, got %s", contentType)
+	if ct := w.Header().Get("Content-Type"); ct != "image/svg+xml" {
+		t.Fatalf("expected Content-Type image/svg+xml, got %s", ct)
+	}
+	body := w.Body.String()
+	if !strings.Contains(body, "<svg") {
+		t.Fatalf("expected svg body, got: %s", body)
+	}
+	if !strings.Contains(body, "C-Rank") {
+		t.Fatalf("expected C-Rank label, got: %s", body)
+	}
+	if !strings.Contains(body, "S 99") {
+		t.Fatalf("expected grade+score 'S 99', got: %s", body)
+	}
+	if !strings.Contains(body, `href="https://opendoor.app/r/gin-gonic/gin"`) {
+		t.Fatalf("expected deep-dive report link, got: %s", body)
 	}
 
-	body := w.Body.String()
-	if !strings.Contains(body, "<svg") || !strings.Contains(body, "Opendoor") {
-		t.Fatalf("unexpected badge SVG content: %s", body)
+	// AC9: ?v cache-bust query is accepted and does not break rendering.
+	wv := httptest.NewRecorder()
+	r.ServeHTTP(wv, httptest.NewRequest("GET", "/badge/gin-gonic/gin.svg?v=abc123", nil))
+	if wv.Code != http.StatusOK || !strings.Contains(wv.Body.String(), "S 99") {
+		t.Fatalf("?v cache-bust query broke rendering: %d %s", wv.Code, wv.Body.String())
 	}
 }
 
-func TestGetBadgeSVGQueryParams(t *testing.T) {
+// TestGetBadgeSVGUnknown verifies AC2: unknown/unscored repos return the
+// styled 'C-Rank: unknown' SVG with HTTP 404 (never an error page).
+func TestGetBadgeSVGUnknown(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	database := setupBadgeTestDB(t)
 	defer database.Close()
 
-	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, description, github_url, updated_at) VALUES ('badge-repo', 'gin-gonic/gin', 'gin-gonic', 'gin', 'Go', 0, '', '', ?)`, time.Now())
-	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, updated_at) VALUES ('badge-repo', '2026-01-01', 'S', 99.0, ?)`, time.Now())
-
 	repoStore := repository.NewRepoRepository(database)
-
 	r := gin.New()
 	r.GET("/badge/:owner/:repo", handler.GetBadgeSVG(repoStore))
 
-	cases := []struct {
-		name       string
-		path       string
-		wantText   string
-		wantAbsent string
-	}{
-		{
-			name:       "points shown when requested",
-			path:       "/badge/gin-gonic/gin.svg?points=1",
-			wantText:   "Super Welcoming (99.0)",
-			wantAbsent: "A Tier",
-		},
-		{
-			name:       "points omitted by default",
-			path:       "/badge/gin-gonic/gin.svg",
-			wantText:   "Super Welcoming",
-			wantAbsent: "·",
-		},
-		{
-			name:     "custom color applied",
-			path:     "/badge/gin-gonic/gin.svg?color=purple",
-			wantText: "#7c3aed",
-		},
-		{
-			name:       "unknown color falls back to tier color",
-			path:       "/badge/gin-gonic/gin.svg?color=nope",
-			wantText:   "#059669",
-			wantAbsent: "#nope",
-		},
+	// not-found repo
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, httptest.NewRequest("GET", "/badge/nope/nothere", nil))
+	if w.Code != http.StatusNotFound {
+		t.Fatalf("expected 404 for unknown repo, got %d", w.Code)
+	}
+	if !strings.Contains(w.Body.String(), "<svg") || !strings.Contains(w.Body.String(), "C-Rank: unknown") {
+		t.Fatalf("expected 'C-Rank: unknown' SVG, got: %s", w.Body.String())
 	}
 
-	for _, tc := range cases {
-		t.Run(tc.name, func(t *testing.T) {
-			req := httptest.NewRequest("GET", tc.path, nil)
-			w := httptest.NewRecorder()
-			r.ServeHTTP(w, req)
+	// known repo, not-yet-computed C-Rank (no snapshot)
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('unscored', 'foo/bar', 'foo', 'bar', 'Go', 0, ?)`, time.Now())
+	w2 := httptest.NewRecorder()
+	r.ServeHTTP(w2, httptest.NewRequest("GET", "/badge/foo/bar", nil))
+	if w2.Code != http.StatusNotFound || !strings.Contains(w2.Body.String(), "C-Rank: unknown") {
+		t.Fatalf("expected 404 'C-Rank: unknown' for unscored repo, got: %d %s", w2.Code, w2.Body.String())
+	}
+}
 
-			if w.Code != http.StatusOK {
-				t.Fatalf("expected 200 OK, got %d", w.Code)
-			}
+// TestGetBadgeSVGValidation verifies AC5: malformed owner/repo segments are
+// rejected with HTTP 400 and the styled 404 SVG.
+func TestGetBadgeSVGValidation(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	database := setupBadgeTestDB(t)
+	defer database.Close()
 
-			body := w.Body.String()
-			if tc.wantText != "" && !strings.Contains(body, tc.wantText) {
-				t.Fatalf("expected body to contain %q, got: %s", tc.wantText, body)
-			}
-			if tc.wantAbsent != "" && strings.Contains(body, tc.wantAbsent) {
-				t.Fatalf("expected body NOT to contain %q, got: %s", tc.wantAbsent, body)
-			}
-		})
+	repoStore := repository.NewRepoRepository(database)
+	r := gin.New()
+	r.GET("/badge/:owner/:repo", handler.GetBadgeSVG(repoStore))
+
+	cases := []string{
+		"/badge/invalid@char/gin",
+		"/badge/gin/" + strings.Repeat("x", 40),
+		"/badge/" + strings.Repeat("x", 40) + "/gin",
+		"/badge/a/b", // each segment < 2 chars
+	}
+	for _, p := range cases {
+		w := httptest.NewRecorder()
+		r.ServeHTTP(w, httptest.NewRequest("GET", p, nil))
+		if w.Code != http.StatusBadRequest {
+			t.Fatalf("expected 400 for %q, got %d", p, w.Code)
+		}
+		if !strings.Contains(w.Body.String(), "<svg") || !strings.Contains(w.Body.String(), "C-Rank: unknown") {
+			t.Fatalf("expected 400 'C-Rank: unknown' SVG for %q, got: %s", p, w.Body.String())
+		}
+	}
+
+	// dots are allowed (AC5 allows . _ -)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, httptest.NewRequest("GET", "/badge/.github/.github", nil))
+	if w.Code != http.StatusOK && w.Code != http.StatusNotFound {
+		t.Fatalf("dot segments should be valid, got %d", w.Code)
 	}
 }
 
@@ -663,4 +679,3 @@ func TestGetRepoTrend_DefaultDays(t *testing.T) {
 		t.Fatalf("expected default days=90, got %d", resp.Days)
 	}
 }
-
