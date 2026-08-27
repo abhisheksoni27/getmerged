@@ -315,6 +315,11 @@ func main() {
 	// record. Root-level like /cards to stay outside the API-key group; static
 	// "u" child never conflicts with the group's other static segments (AC4).
 	r.GET("/api/v1/u/:username", handler.GetPublicContributorProfileHandler(userRepo, prTrackerStore))
+	// Shareable contributor report-card OG backing data (AC1/AC3/AC5). The
+	// static "report-card" child under :username never collides with the
+	// single-segment :username route above. Rate-limited 30 req/min/IP to
+	// blunt PNG-generation DoS; caching handled in the handler.
+	r.GET("/api/v1/u/:username/report-card", middleware.RateLimitPerIP(30, time.Minute), handler.ReportCardHandler(userRepo, prTrackerStore))
 
 	// Anonymous language-match quiz (AC1): public GET reusing the ForYou
 	// C-Rank/GFI matching. Static /api/public prefix keeps the route tree

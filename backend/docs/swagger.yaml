@@ -34,6 +34,15 @@ definitions:
           type: string
         type: array
     type: object
+  handler.StartScanBody:
+    properties:
+      force:
+        type: boolean
+      repo:
+        type: string
+      url:
+        type: string
+    type: object
   notification.CRankAlertSummary:
     properties:
       alerts_found:
@@ -392,6 +401,58 @@ paths:
       summary: Trigger score update
       tags:
       - internal
+  /scan:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Repository URL or owner/repo
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.StartScanBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Start an on-demand C-Rank scan for any public GitHub repo
+      tags:
+      - scan
+  /scan/status/{owner}/{name}:
+    get:
+      parameters:
+      - description: Repository owner
+        in: path
+        name: owner
+        required: true
+        type: string
+      - description: Repository name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Poll on-demand scan progress
+      tags:
+      - scan
 securityDefinitions:
   BearerAuth:
     description: 'Public API key auth. Create a key in your dashboard, then send:
