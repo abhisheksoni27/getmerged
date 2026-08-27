@@ -44,18 +44,18 @@ type Config struct {
 	RepoBoostDailySpendCap int64
 	// Featured Placement (Repo Boost: paid featured placement in contributor
 	// discovery, AC1-AC10). Synchronous-capture model with idempotency lock.
-	FeaturedPriceCents int64
-	FeaturedWindowDays int
-	FeaturedMaxPerDay  int
-	JobSecret          string
-	SMTPHost                  string
-	SMTPPort                  string
-	SMTPUser                  string
-	SMTPPassword              string
-	SMTPFrom                  string
-	SMTPPhysicalAddress       string
-	AdminEmail                string
-	AppBaseURL                string
+	FeaturedPriceCents  int64
+	FeaturedWindowDays  int
+	FeaturedMaxPerDay   int
+	JobSecret           string
+	SMTPHost            string
+	SMTPPort            string
+	SMTPUser            string
+	SMTPPassword        string
+	SMTPFrom            string
+	SMTPPhysicalAddress string
+	AdminEmail          string
+	AppBaseURL          string
 	// AC7: purpose-scoped HMAC keys for GFI email tokens. The *_OLD vars
 	// enable rotation: during the dual-key window both old and new verify.
 	EmailTokenKey     string
@@ -66,19 +66,19 @@ type Config struct {
 	// When CaptchaSecret is empty the check is disabled (dev/test). A
 	// CaptchaTestToken, when set, is always accepted so automated sanity
 	// flows can pass without a real provider challenge.
-	CaptchaSecret    string
-	CaptchaSiteKey   string
-	CaptchaVerifyURL string
-	CaptchaTestToken string
-	GithubAppID                string
-	GithubAppPrivateKey        string
-	GithubAppWebhookSecret     string
+	CaptchaSecret               string
+	CaptchaSiteKey              string
+	CaptchaVerifyURL            string
+	CaptchaTestToken            string
+	GithubAppID                 string
+	GithubAppPrivateKey         string
+	GithubAppWebhookSecret      string
 	GithubAppDailyCommentBudget int
-	DiscoveryIntervalMinutes  int
-	DiscoveryMaxNewPerRun     int
-	SnapshotRetentionDays     int
-	CrawlerWorkers            int
-	AlertDropThreshold        float64
+	DiscoveryIntervalMinutes    int
+	DiscoveryMaxNewPerRun       int
+	SnapshotRetentionDays       int
+	CrawlerWorkers              int
+	AlertDropThreshold          float64
 }
 
 // Load reads .env (if present) then validates all required variables are set.

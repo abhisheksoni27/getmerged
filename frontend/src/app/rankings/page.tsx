@@ -66,7 +66,7 @@ export default function RankingsIndexPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-[#FCFCFD]">
       <Header />
       <script
         type="application/ld+json"
@@ -87,7 +87,7 @@ export default function RankingsIndexPage() {
         </Link>
 
         {/* Hero Section */}
-        <div className="rounded-3xl bg-white p-6 sm:p-10 border border-zinc-200/80 shadow-xs mb-8 border-b-4 border-b-zinc-900">
+        <div className="rounded-3xl bg-white p-6 sm:p-10 border border-zinc-200/80 shadow-xs mb-8 ">
           <div className="flex items-center gap-2 mb-3">
             <span className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
               <Trophy className="h-3.5 w-3.5 text-amber-400" /> Ecosystem Directory

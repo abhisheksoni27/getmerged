@@ -43,7 +43,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
 
   if (loading) {
     return (
-      <div className="rounded-2xl bg-white p-5 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-6 animate-pulse">
+      <div className="rounded-2xl bg-white p-5 border-2 border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-6 animate-pulse">
         <div className="flex items-center justify-between mb-4">
           <div className="h-5 bg-zinc-200 rounded w-1/3"></div>
           <div className="h-4 bg-zinc-200 rounded w-24"></div>
@@ -76,11 +76,11 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
   const localWindow = isMounted ? formatUTCRangeToLocal(primaryStart, primaryEnd) : `${padZero(primaryStart)}:00 - ${padZero(primaryEnd)}:00 UTC`;
 
   return (
-    <div className="rounded-2xl bg-white p-5 sm:p-6 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] mb-6 font-mono">
+    <div className="rounded-2xl bg-white p-5 sm:p-6 border-2 border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-6 font-mono">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-brand-dark bg-emerald-100 text-emerald-900 shadow-[2px_2px_0px_#222831]">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-zinc-200/60 bg-emerald-100 text-emerald-900 shadow-[2px_2px_0px_#222831]">
             <Clock className="h-4 w-4 text-emerald-700" />
           </div>
           <div>

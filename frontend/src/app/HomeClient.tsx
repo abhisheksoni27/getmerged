@@ -309,7 +309,7 @@ export default function HomeClient({
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#faf9f6] dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-[#FCFCFD]">
       <RelativityCanvas />
       <Header
         searchQuery={searchQuery}
@@ -346,7 +346,7 @@ export default function HomeClient({
         >
           <div
             onClick={() => openSearch(searchQuery)}
-            className="nb-opt-out relative flex items-center rounded-2xl border border-zinc-300 bg-white px-4 py-3.5 shadow-sm hover:border-zinc-400 hover:shadow-md transition-all cursor-pointer group"
+            className="relative flex items-center rounded-2xl border border-zinc-300 bg-white px-4 py-3.5 shadow-sm hover:border-zinc-400 hover:shadow-md transition-all cursor-pointer group"
           >
             <Search className="h-5 w-5 text-zinc-400 group-hover:text-zinc-600 shrink-0 transition-colors" />
             <input
@@ -633,17 +633,17 @@ export default function HomeClient({
 
           {/* Narrative Block 3: Maintainer Persona & Repository Claim Flow */}
           <motion.div
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-[#faf9f6] p-8 sm:p-12 border-2 border-black shadow-[6px_6px_0px_#000]"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-[#FCFCFD] p-8 sm:p-12 border border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
           >
             <div className="lg:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-900 bg-[#8ce99a] border border-black px-3 py-1 shadow-[2px_2px_0px_#000]">
+              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-emerald-700 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full">
                 <ShieldCheck className="h-3.5 w-3.5" /> Maintainer Workspace
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold font-space text-zinc-900 tracking-tight leading-tight">
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.03em] text-zinc-950 leading-tight">
                 Own an Open Source Repository? See Why Outside Contributors Bounce.
               </h2>
               <p className="text-sm sm:text-base text-zinc-700 font-sans leading-relaxed">
@@ -653,22 +653,22 @@ export default function HomeClient({
                 <button
                   type="button"
                   onClick={() => openSearch()}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white font-mono text-xs font-bold border-2 border-black shadow-[3px_3px_0px_#fff] hover:bg-zinc-800 cursor-pointer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-900 text-white text-xs font-semibold hover:bg-zinc-800 transition-all active:scale-[0.98] cursor-pointer"
                 >
                   <Search className="h-3.5 w-3.5" /> Check Your Repository Grade
                 </button>
                 <Link
                   href="/guides/how-to-know-if-maintainer-will-review"
                   title="Maintainer Hospitality Best Practices"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-black font-mono text-xs font-bold border-2 border-black shadow-[3px_3px_0px_#000] hover:bg-zinc-100"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-zinc-200/80 bg-white text-zinc-900 text-xs font-semibold hover:border-zinc-300 hover:bg-zinc-50 transition-all"
                 >
                   Read Reviewer Playbook <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
             </div>
 
-            <div className="lg:col-span-5 bg-white border-2 border-black p-6 space-y-3 font-mono text-xs shadow-[4px_4px_0px_#000]">
-              <div className="font-bold text-zinc-900 border-b-2 border-black pb-2 flex items-center justify-between">
+            <div className="lg:col-span-5 bg-white border border-zinc-200/60 p-6 space-y-3 font-mono text-xs shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+              <div className="font-semibold text-zinc-900 border-b border-zinc-100 pb-2 flex items-center justify-between">
                 <span>Maintainer Health Check</span>
                 <span className="text-emerald-700">Live Telemetry</span>
               </div>
@@ -736,10 +736,10 @@ export default function HomeClient({
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all shrink-0 cursor-pointer border border-zinc-200/60 ${
                 selectedTier === "S" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All"
-                  ? "bg-[#ffd93d] text-black shadow-[3px_3px_0px_#000]"
-                  : "bg-white text-zinc-800 hover:bg-[#fff9db] hover:shadow-[2px_2px_0px_#000]"
+                  ? "bg-[#ffd93d] text-black "
+                  : "bg-white text-zinc-800 hover:bg-zinc-100 "
               }`}
             >
               👑 Hall of Fame
@@ -759,10 +759,10 @@ export default function HomeClient({
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all shrink-0 cursor-pointer border border-zinc-200/60 ${
                 selectedTier === "A"
-                  ? "bg-[#8ce99a] text-black shadow-[3px_3px_0px_#000]"
-                  : "bg-white text-zinc-800 hover:bg-[#ebfbee] hover:shadow-[2px_2px_0px_#000]"
+                  ? "bg-[#8ce99a] text-black "
+                  : "bg-white text-zinc-800 hover:bg-zinc-100 "
               }`}
             >
               ⚡ Welcoming
@@ -782,10 +782,10 @@ export default function HomeClient({
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all shrink-0 cursor-pointer border border-zinc-200/60 ${
                 selectedBucket === "50k+"
-                  ? "bg-[#e5dbff] text-black shadow-[3px_3px_0px_#000]"
-                  : "bg-white text-zinc-800 hover:bg-[#f3f0ff] hover:shadow-[2px_2px_0px_#000]"
+                  ? "bg-[#e5dbff] text-black "
+                  : "bg-white text-zinc-800 hover:bg-zinc-100 "
               }`}
             >
               ⭐ Star Giants
@@ -805,10 +805,10 @@ export default function HomeClient({
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all shrink-0 cursor-pointer border border-zinc-200/60 ${
                 selectedFirstTimerBucket === "has_gfi"
-                  ? "bg-[#bfdbff] text-black shadow-[3px_3px_0px_#000]"
-                  : "bg-white text-zinc-800 hover:bg-[#e7f5ff] hover:shadow-[2px_2px_0px_#000]"
+                  ? "bg-[#bfdbff] text-black "
+                  : "bg-white text-zinc-800 hover:bg-zinc-100 "
               }`}
             >
               🌱 Has Good First Issue
@@ -828,10 +828,10 @@ export default function HomeClient({
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all shrink-0 cursor-pointer border border-zinc-200/60 ${
                 selectedMinMergeRate === "60%"
-                  ? "bg-[#ffc9c9] text-black shadow-[3px_3px_0px_#000]"
-                  : "bg-white text-zinc-800 hover:bg-[#ffe3e3] hover:shadow-[2px_2px_0px_#000]"
+                  ? "bg-[#ffc9c9] text-black "
+                  : "bg-white text-zinc-800 hover:bg-zinc-100 "
               }`}
             >
               🚀 High Merge Rate
@@ -851,10 +851,10 @@ export default function HomeClient({
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border-2 border-black ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all shrink-0 cursor-pointer border border-zinc-200/60 ${
                 selectedFirstTimerBucket === "60-80%"
-                  ? "bg-[#ffb3c7] text-black shadow-[3px_3px_0px_#000]"
-                  : "bg-white text-zinc-800 hover:bg-[#fff0f6] hover:shadow-[2px_2px_0px_#000]"
+                  ? "bg-[#ffb3c7] text-black "
+                  : "bg-white text-zinc-800 hover:bg-zinc-100 "
               }`}
             >
               🎯 First Timer Awesome
@@ -1150,7 +1150,7 @@ export default function HomeClient({
           </div>
 
           {/* Telemetry Architecture Overview */}
-          <div className="rounded-3xl border border-zinc-200 bg-[#faf9f6] p-8 sm:p-12 shadow-xs mb-16">
+          <div className="rounded-3xl border border-zinc-200 bg-[#FCFCFD] p-8 sm:p-12 shadow-xs mb-16">
             <div className="max-w-3xl mb-10">
               <h3 className="text-2xl sm:text-3xl font-bold font-space text-zinc-900 tracking-tight">
                 How GetMerged Eliminates Ghost-Town Repositories

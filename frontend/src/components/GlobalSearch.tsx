@@ -191,7 +191,7 @@ export function GlobalSearch() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: -10 }}
             transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="nb-opt-out w-full max-w-2xl bg-white border border-zinc-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col focus:outline-none"
+            className="w-full max-w-2xl bg-white border border-zinc-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col focus:outline-none"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={handleKeyDown}
           >
@@ -272,13 +272,13 @@ export function GlobalSearch() {
                           {r.language || "Other"}
                         </span>
                         <span
-                          className={`px-2 py-0.5 text-[10px] font-bold font-mono border-2 border-black rounded-lg shadow-[1px_1px_0px_#000] text-black ${
+                          className={`px-2 py-0.5 text-[10px] font-bold font-mono border border-zinc-200/60 rounded-lg shadow-[1px_1px_0px_#000] text-black ${
                             rankTier === "S"
-                              ? "bg-[#8ce99a]"
+                              ? "bg-emerald-500/10"
                               : rankTier === "A"
                               ? "bg-[#bfdbff]"
                               : rankTier === "B"
-                              ? "bg-[#ffd93d]"
+                              ? "bg-amber-500/10"
                               : rankTier === "C"
                               ? "bg-[#e5dbff]"
                               : "bg-[#ffb3c7]"

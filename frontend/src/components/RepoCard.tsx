@@ -23,7 +23,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
     switch (r) {
       case "S":
         return {
-          badgeClass: "bg-[#8ce99a] text-zinc-950 border border-emerald-600/30 font-bold",
+          badgeClass: "bg-emerald-500/10 text-zinc-950 border border-emerald-600/30 font-bold",
           label: "Super Welcoming",
           indicatorColor: "bg-emerald-600",
         };
@@ -35,7 +35,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
         };
       case "B":
         return {
-          badgeClass: "bg-[#ffd93d] text-zinc-950 border border-amber-600/30 font-bold",
+          badgeClass: "bg-amber-500/10 text-zinc-950 border border-amber-600/30 font-bold",
           label: "Moderate",
           indicatorColor: "bg-amber-600",
         };
@@ -155,7 +155,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       href={`/${ownerPart}/${namePart}`}
       onClick={handleClick}
       title={`View ${repo.full_name} C-Rank scorecard, PR response time & merge metrics`}
-      className={`group dev-card-glow relative flex h-full flex-col justify-between rounded-2xl p-5 bg-white border transition-all duration-200 block text-current no-underline cursor-pointer border-b-4 border-b-zinc-900 hover:-translate-y-0.5 ${
+      className={`group dev-card-glow relative flex h-full flex-col justify-between rounded-2xl p-5 bg-white border transition-all duration-200 block text-current no-underline cursor-pointer  hover:-translate-y-0.5 ${
         isSpotlight
           ? "border-zinc-300 shadow-md hover:border-zinc-400 hover:border-b-black"
           : "border-zinc-200/90 shadow-xs hover:border-zinc-300 hover:border-b-black"
@@ -165,7 +165,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
         {/* Card Header */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3 min-w-0 flex-1">
-            <div className="h-9 w-9 rounded-xl border border-zinc-200 bg-zinc-50 overflow-hidden shrink-0 group-hover:border-zinc-300 transition-colors">
+            <div className="h-9 w-9 rounded-2xl border border-zinc-200/60 bg-zinc-50 overflow-hidden shrink-0 group-hover:border-zinc-300 transition-colors">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`https://github.com/${ownerPart}.png?size=64`}

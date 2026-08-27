@@ -40,7 +40,7 @@ export function RepoDetailHero({
   const isScored = repo?.is_scored ?? (score > 0);
 
   return (
-    <div className="border border-zinc-200/90 bg-white p-5 sm:p-7 shadow-xs rounded-3xl mb-6 border-b-4 border-b-zinc-900">
+    <div className="border border-zinc-200/90 bg-white p-5 sm:p-7 shadow-xs rounded-3xl mb-6 ">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         {/* Left: Identity, Title, and Description */}
         <div className="flex items-start gap-4 flex-1 min-w-0">
@@ -53,7 +53,7 @@ export function RepoDetailHero({
           <div className="min-w-0 flex-1">
             {/* 1. Repo Full Name & Primary Identity First */}
             <div className="flex flex-wrap items-center gap-2.5">
-              <h1 className="text-2xl sm:text-3xl font-bold font-space text-zinc-950 tracking-tight leading-tight break-all">
+              <h1 className="text-2xl sm:text-3xl font-semibold text-zinc-950 tracking-tight leading-tight break-all">
                 {fullName}
               </h1>
               {typeof repo?.stars === "number" && repo.stars >= 0 && (
@@ -71,13 +71,13 @@ export function RepoDetailHero({
             <div className="flex flex-wrap items-center gap-2 mt-2">
               {isScored ? (
                 <>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 font-mono text-xs font-bold rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] text-black ${
+                  <span className={`inline-flex items-center px-2.5 py-0.5 font-mono text-xs font-bold rounded-lg border border-zinc-200/60  text-black ${
                     rank === "S"
-                      ? "bg-[#8ce99a]"
+                      ? "bg-emerald-500/10"
                       : rank === "A"
                       ? "bg-[#bfdbff]"
                       : rank === "B"
-                      ? "bg-[#ffd93d]"
+                      ? "bg-amber-500/10"
                       : rank === "C"
                       ? "bg-[#e5dbff]"
                       : "bg-[#ffb3c7]"
@@ -85,7 +85,7 @@ export function RepoDetailHero({
                     {rankLabel} (Tier {rank})
                   </span>
                   {roundedScore > 0 && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 font-mono text-xs font-bold rounded-lg bg-zinc-900 text-white shadow-[2px_2px_0px_#000] border-2 border-black">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 font-mono text-xs font-bold rounded-lg bg-zinc-900 text-white  border border-zinc-200/60">
                       <span>C-Rank:</span>
                       <span className="text-emerald-400">{roundedScore}</span>
                       <span className="text-zinc-400 font-normal">/100</span>
@@ -139,7 +139,7 @@ export function RepoDetailHero({
             <Link
               href={`/compare?a=${encodeURIComponent(fullName)}`}
               title={`Compare ${fullName} with another repository`}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold font-sans rounded-xl border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700 hover:text-zinc-900 transition-all shadow-2xs cursor-pointer active:scale-[0.98]"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold font-sans rounded-2xl border border-zinc-200/60 bg-white hover:bg-zinc-50 text-zinc-700 hover:text-zinc-900 transition-all shadow-2xs cursor-pointer active:scale-[0.98]"
             >
               <Scale className="h-3.5 w-3.5 text-zinc-500" />
               <span>Compare</span>

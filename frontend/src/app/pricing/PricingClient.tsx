@@ -53,7 +53,7 @@ export default function PricingClient() {
       {/* Pricing Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
         {/* Free Tier Card */}
-        <div className="rounded-2xl bg-white p-6 sm:p-8 border-2 border-brand-dark shadow-[4px_4px_0px_#222831] flex flex-col justify-between font-sans">
+        <div className="rounded-2xl bg-white p-6 sm:p-8 border-2 border-zinc-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between font-sans">
           <div>
             <div className="flex items-center justify-between mb-2 font-mono">
               <h2 className="text-lg font-bold text-zinc-900">Community Free</h2>
