@@ -8,7 +8,9 @@ import { ClientRepoDetail } from "@/components/ClientRepoDetail";
 import { InstantScanPanel } from "@/components/InstantScanPanel";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { buildRepoMetadata, buildRepoFaqList } from "@/lib/repo-metadata";
+import { GemojiText } from "@/lib/gemoji";
 import { getGradeColor } from "@/components/CRankBadge";
+import { gemojiToUnicode } from "@/lib/gemoji";
 
 const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
 
@@ -224,7 +226,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
     name: fullName,
-    description: repo?.description || "Public open-source repository",
+    description: gemojiToUnicode(repo?.description || "Public open-source repository"),
     programmingLanguage: repo?.language || "Multi-Language",
     codeRepository: repo?.github_url || `https://github.com/${fullName}`,
     author: {
@@ -310,7 +312,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
       {/* Semantic Server-Rendered Content for Search Engine Bots */}
       <section className="sr-only" aria-label="Repository Telemetry Overview">
         <h2>{fullName} - Open Source PR Review Scorecard</h2>
-        <p>{repo.description}</p>
+        <p><GemojiText>{repo.description}</GemojiText></p>
         <p>C-Rank Grade: {rank} ({rankInfo.label}) - {score}/100</p>
         <p>External PR Merge Rate: {mergeRate}</p>
         <p>Response Time: {responseTime}</p>

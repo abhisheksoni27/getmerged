@@ -18,6 +18,7 @@ import {
   ShieldCheck,
   Zap,
 } from "lucide-react";
+import { GemojiText } from "@/lib/gemoji";
 
 export interface LeaderboardRepo {
   id: string;
@@ -506,7 +507,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
                       </div>
                       {repo.description && (
                         <div className="text-[11px] font-normal text-zinc-300 font-sans truncate max-w-md mt-0.5">
-                          {repo.description}
+                          <GemojiText>{repo.description}</GemojiText>
                         </div>
                       )}
                     </td>

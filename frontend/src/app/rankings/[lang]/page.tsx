@@ -8,6 +8,7 @@ import { getEcosystemMetadata } from "@/lib/ecosystem-descriptions";
 import { LangDigestSignup } from "@/components/LangDigestSignup";
 import { Sparkles, Code2, Trophy, Sprout, Star, GitPullRequest, AlertTriangle, RefreshCw, Activity } from "lucide-react";
 import { CRankBadge } from "@/components/CRankBadge";
+import { GemojiText } from "@/lib/gemoji";
 import Link from "next/link";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
@@ -443,7 +444,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                         </div>
                         {item.repo.description && (
                           <div className="text-xs font-normal text-zinc-300 font-sans line-clamp-1 max-w-xl mt-1">
-                            {item.repo.description}
+                            <GemojiText>{item.repo.description}</GemojiText>
                           </div>
                         )}
                       </td>

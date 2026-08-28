@@ -8,6 +8,7 @@ import { OrgClaimButton } from "@/components/OrgClaimButton";
 import { OrgConsoleCard } from "@/components/OrgConsoleCard";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
+import { GemojiText } from "@/lib/gemoji";
 import {
   Building2,
   GitPullRequest,
@@ -204,7 +205,7 @@ export default async function OrgPage({ params }: OrgPageProps) {
                 </h2>
                 {repo.description && (
                   <p className="text-xs text-zinc-300 mt-1 line-clamp-2 leading-relaxed">
-                    {repo.description}
+                    <GemojiText>{repo.description}</GemojiText>
                   </p>
                 )}
                 <div className="flex items-center gap-4 mt-3 text-xs font-mono text-zinc-300 flex-wrap">

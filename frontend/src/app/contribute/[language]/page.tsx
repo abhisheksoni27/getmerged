@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { MatchRepo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import { getLanguageFromSlug, getLanguageSlug, displayNameFromSlug } from "@/lib/languageSlug";
+import { GemojiText } from "@/lib/gemoji";
 import {
   Sparkles,
   ArrowRight,
@@ -223,7 +224,7 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
                   </Link>
                 </h2>
                 {repo.description && (
-                  <p className="text-xs text-zinc-300 mt-1 line-clamp-2 leading-relaxed">{repo.description}</p>
+                  <p className="text-xs text-zinc-300 mt-1 line-clamp-2 leading-relaxed"><GemojiText>{repo.description}</GemojiText></p>
                 )}
 
                 {/* Why this repo matches you */}

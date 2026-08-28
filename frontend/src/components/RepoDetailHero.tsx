@@ -5,6 +5,7 @@ import { LangLogo } from "@/components/LangLogo";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { Repo } from "@/types/opendoor";
 import { CRankBadge } from "@/components/CRankBadge";
+import { GemojiText } from "@/lib/gemoji";
 
 interface RepoDetailHeroProps {
   fullName: string;
@@ -106,7 +107,7 @@ export function RepoDetailHero({
 
             {/* Description */}
             <p className="mt-3 text-sm text-zinc-300 leading-relaxed font-sans max-w-3xl">
-              {repo?.description || "Open-source repository analyzed with precision C-Rank telemetry."}
+              <GemojiText>{repo?.description || "Open-source repository analyzed with precision C-Rank telemetry."}</GemojiText>
             </p>
           </div>
         </div>

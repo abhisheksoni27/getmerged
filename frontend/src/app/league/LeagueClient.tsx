@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { CRankBadge } from "@/components/CRankBadge";
 import { API_BASE_URL } from "@/lib/api";
+import { GemojiText } from "@/lib/gemoji";
 
 export interface LeagueRepo {
   id: string;
@@ -331,7 +332,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                   </div>
 
                   <p className="text-xs text-zinc-300 line-clamp-2 leading-relaxed mb-4">
-                    {repo.description || "Active open-source repository indexed by GetMerged."}
+                    <GemojiText>{repo.description || "Active open-source repository indexed by GetMerged."}</GemojiText>
                   </p>
                 </div>
 

@@ -4,6 +4,8 @@ import { ReposClient } from "./ReposClient";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
 import Link from "next/link";
+import { GemojiText } from "@/lib/gemoji";
+import { gemojiToUnicode } from "@/lib/gemoji";
 
 interface ReposPageProps {
   searchParams: Promise<{
@@ -185,7 +187,7 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
         position: idx + 1,
         name: repo.full_name,
         url: `https://getmerged.abhishekco.de/${repo.full_name}`,
-        description: repo.description || undefined,
+        description: gemojiToUnicode(repo.description) || undefined,
       })),
     },
   };
@@ -254,7 +256,7 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
               <Link href={`/${r.full_name}`} title={`View ${r.full_name} C-Rank scorecard`}>
                 {r.full_name} ({r.language || "Code"}) - Tier {r.class_rank || r.c_rank_tier || "A"} ({r.external_pr_merge_rate ? `${Math.round(r.external_pr_merge_rate)}% merge rate` : ""})
               </Link>
-              <p>{r.description}</p>
+              <p><GemojiText>{r.description}</GemojiText></p>
             </li>
           ))}
         </ul>
