@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, DM_Mono } from "next/font/google";
+import { Geist, DM_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { PostHogInit } from "@/app/posthog-init";
 import { CookieBanner } from "@/components/CookieBanner";
@@ -16,6 +16,12 @@ const dmMono = DM_Mono({
   weight: ["400", "500"],
   subsets: ["latin"],
   variable: "--font-dm-mono",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
 });
 
 export const metadata: Metadata = {
@@ -82,7 +88,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${dmMono.variable} h-full antialiased dark`}>
+    <html lang="en" className={`${geist.variable} ${dmMono.variable} ${spaceGrotesk.variable} h-full antialiased dark`}>
       <body className="min-h-full flex flex-col bg-[#0a0a0a] text-[#fafafa] selection:bg-[#ff6b00]/30 selection:text-white relative">
         {/* Global spatial background dot-grid texture */}
         <div aria-hidden="true" className="fixed inset-0 pointer-events-none -z-20 bg-dot-grid opacity-30 mask-radial-faded" />
