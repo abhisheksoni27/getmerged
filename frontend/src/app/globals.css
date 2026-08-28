@@ -3,7 +3,8 @@
 @theme static {
   --font-sans: var(--font-geist), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-dm-mono), "SF Mono", Menlo, Monaco, monospace;
-  --font-display: var(--font-geist), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-geist), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-space: var(--font-space-grotesk), var(--font-geist), -apple-system, BlinkMacSystemFont, sans-serif;
 
   --color-grade-s: #10b981;
   --color-grade-a: #38bdf8;
@@ -53,8 +54,36 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   line-height: 1.6;
   letter-spacing: -0.011em;
+}
+
+/* Airbnb-grade display typography: Space Grotesk for headings,
+   tight tracking, balanced wrapping, fluid feel. */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1 { letter-spacing: -0.03em; line-height: 1.1; }
+h2 { letter-spacing: -0.025em; line-height: 1.15; }
+h3 { letter-spacing: -0.02em; line-height: 1.25; }
+
+/* Data/mono numerals align cleanly (scores, %, counts). */
+.font-mono,
+code,
+kbd,
+samp,
+.font-space,
+.font-display {
+  font-feature-settings: "tnum" 1, "ss01" 1;
+  font-variant-numeric: tabular-nums;
+}
+
+p, li {
+  text-wrap: pretty;
 }
 
 /* Clean Surface System */
