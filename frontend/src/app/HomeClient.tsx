@@ -314,8 +314,13 @@ export default function HomeClient({
         placeholderText={`Search repositories, e.g. ${famousRepos[placeholderIndex]}`}
       />
 
-      {/* Hero Section - Clean, data-forward */}
-      <section className="relative mx-auto max-w-6xl px-4 pt-20 pb-12 text-center sm:px-6 lg:px-8">
+      {/* Hero Section - Clean, data-forward with calibrated ambient glass glow */}
+      <section className="relative mx-auto max-w-6xl px-4 pt-20 pb-12 text-center sm:px-6 lg:px-8 overflow-hidden">
+        {/* Ambient atmospheric glows */}
+        <div aria-hidden="true" className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 -z-10 h-[380px] w-[600px] max-w-full opacity-60 blur-3xl">
+          <div className="h-full w-full rounded-full bg-gradient-to-tr from-emerald-500/10 via-amber-500/5 to-orange-500/15" />
+        </div>
+
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -344,7 +349,7 @@ export default function HomeClient({
         >
           <div
             onClick={() => openSearch(searchQuery)}
-            className="relative flex items-center rounded-xl border border-white/[0.08] bg-[#141414] px-4 py-3.5 hover:border-white/[0.16] transition-all cursor-pointer group"
+            className="relative flex items-center rounded-xl border border-white/[0.12] bg-[#141414]/70 backdrop-blur-xl px-4 py-3.5 hover:border-white/[0.22] hover:bg-[#1a1a1a]/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_8px_30px_rgba(0,0,0,0.4)] transition-all cursor-pointer group"
           >
             <Search className="h-5 w-5 text-[#a3a3a3] group-hover:text-[#d4d4d4] shrink-0 transition-colors" />
             <input
@@ -375,8 +380,8 @@ export default function HomeClient({
             </div>
           </div>
 
-          {/* Quick Search Chips */}
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs">
+          {/* Quick-explore chips */}
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5 text-xs">
             <span className="font-mono text-[#737373]">Quick explore:</span>
             {["nextjs", "react", "rust", "bun", "fastapi"].map((term, i) => (
               <motion.button
@@ -396,7 +401,7 @@ export default function HomeClient({
                     gridEl.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="rounded-lg border border-white/[0.08] bg-[#141414] px-2.5 py-1 font-mono text-[#a3a3a3] hover:border-white/[0.16] hover:text-white cursor-pointer transition-colors"
+                className="rounded-lg border border-white/[0.08] bg-[#141414]/60 backdrop-blur-md px-2.5 py-1 font-mono text-[#a3a3a3] hover:border-white/[0.18] hover:text-white hover:bg-[#1f1f1f]/80 cursor-pointer transition-all shadow-xs"
               >
                 {term}
               </motion.button>
@@ -413,7 +418,7 @@ export default function HomeClient({
 
         {/* Macro Telemetry Grid */}
         <motion.div
-          className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-3xl mx-auto rounded-xl bg-[#141414] p-4 sm:p-5 border border-white/[0.08] items-center text-center"
+          className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-3xl mx-auto rounded-2xl bg-[#141414]/70 backdrop-blur-xl p-4 sm:p-5 border border-white/[0.1] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_12px_32px_-8px_rgba(0,0,0,0.5)] items-center text-center"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
