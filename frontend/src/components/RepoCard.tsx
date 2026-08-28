@@ -136,10 +136,10 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       href={`/${fullName}`}
       onClick={handleClick}
       title={`View ${fullName} C-Rank scorecard, PR response time & merge metrics`}
-      className={`group relative flex h-full flex-col justify-between rounded-xl bg-[#141414] p-6 transition-all duration-200 block text-current no-underline cursor-pointer border border-white/[0.08] hover:border-white/[0.16] hover:bg-[#1c1c1c] ${
+      className={`group relative flex h-full flex-col justify-between rounded-xl bg-[#141414]/75 backdrop-blur-md p-6 transition-all duration-200 block text-current no-underline cursor-pointer border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#1a1a1a]/90 hover:shadow-[0_8px_30px_rgba(0,0,0,0.35),inset_0_1px_0_0_rgba(255,255,255,0.08)] ${
         isSpotlight
-          ? "ring-1 ring-[#ff6b00]/50 border-[#ff6b00]/30"
-          : ""
+          ? "ring-1 ring-[#ff6b00]/50 border-[#ff6b00]/30 shadow-[0_0_20px_rgba(255,107,0,0.08)]"
+          : "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]"
       }`}
     >
       <div className="flex flex-col flex-1">
