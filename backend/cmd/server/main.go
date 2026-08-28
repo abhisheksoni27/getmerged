@@ -440,7 +440,6 @@ func main() {
 		api.GET("/issues/good-first", handler.ListGoodFirstIssues(gfiRepo, repoBoostRepo))
 		api.GET("/history/:id", handler.GetRepoHistory(repoStore))
 		api.GET("/repos/:id/trend", handler.GetRepoTrend(repoStore))
-		api.GET("/repos/:owner/:name/trend", handler.GetRepoTrend(repoStore))
 		api.POST("/repos/queue", handler.RequestRepoIndexing(database))
 		api.GET("/languages", handler.ListLanguages(database))
 		api.GET("/languages/trends", handler.GetLanguageTrends(database))
@@ -452,7 +451,6 @@ func main() {
 		api.GET("/hacktoberfest/leaderboard", handler.GetHacktoberfestLeaderboardHandler(hbStore))
 
 		api.GET("/repos/:id/feedback", handler.ListFeedback(database))
-		api.GET("/repos/:owner/:name/feedback", handler.ListFeedback(database))
 		api.GET("/match", handler.MatchReposHandler(repoStore))
 		api.GET("/users/:slug", handler.GetUserProfile(userRepo))
 		api.GET("/users/:slug/achievement.svg", handler.RenderAchievementCardHandler(userRepo))
@@ -471,14 +469,11 @@ func main() {
 		api.POST("/payments/webhook/stripe", handler.StripeRepoBoostWebhookHandler(cfg, repoBoostRepo))
 		api.POST("/webhooks/github-app", handler.GithubAppWebhookHandler(ghAppSvc))
 		api.GET("/repos/:id/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
-		api.GET("/repos/:owner/:name/insights", handler.GetRepoInsights(aiClient, aiRepo, repoStore))
 		api.GET("/repos/:id/claim-status", handler.GetPublicClaimStatusHandler(claimRepo))
-		api.GET("/repos/:owner/:name/claim-status", handler.GetPublicClaimStatusHandler(claimRepo))
 		// Public raise-your-C-Rank checklist from stored telemetry (AC1, AC2).
 		// OptionalUserAuth: signed-in maintainers get per-metric detail,
 		// anonymous visitors only repo name + tier (redacted in-handler).
 		api.GET("/repos/:id/playbook", middleware.OptionalUserAuth(cfg.JWTSecret), handler.GetRepoPlaybookHandler(claimSvc))
-		api.GET("/repos/:owner/:name/playbook", middleware.OptionalUserAuth(cfg.JWTSecret), handler.GetRepoPlaybookHandler(claimSvc))
 
 		// Good First Issue alerts & digest (AC1, AC5, AC6, AC8)
 		api.POST("/gfi-alerts/subscribe", handler.GFISubscribeHandler(cfg))
