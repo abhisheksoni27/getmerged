@@ -101,14 +101,14 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
 
         {/* Floating Search Button */}
         {isSearchVisible && (
-          <div className="flex-1 min-w-[140px] max-w-xs sm:max-w-sm mx-2">
+          <div className="flex-1 min-w-0 max-w-xs sm:max-w-sm mx-1 sm:mx-2">
             <button
               type="button"
               onClick={handleOpenSearch}
               aria-label="Search repositories"
-              className="w-full relative flex items-center justify-between h-9 rounded-lg border border-white/[0.08] bg-[#141414] hover:border-white/[0.16] hover:bg-[#1c1c1c] px-3 transition-all cursor-pointer group text-left"
+              className="w-full relative flex items-center justify-between h-8 sm:h-9 rounded-lg border border-white/[0.08] bg-[#141414] hover:border-white/[0.16] hover:bg-[#1c1c1c] px-2.5 sm:px-3 transition-all cursor-pointer group text-left"
             >
-              <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">
+              <div className="flex items-center gap-1.5 sm:gap-2 overflow-hidden flex-1 min-w-0 mr-1 sm:mr-2">
                 <Search className="h-3.5 w-3.5 text-[#a3a3a3] group-hover:text-[#d4d4d4] shrink-0 transition-colors" />
                 <span className="text-xs text-[#a3a3a3] group-hover:text-[#d4d4d4] truncate font-sans block">
                   {displayQuery || placeholderText || "Search repositories..."}
@@ -122,40 +122,40 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
         )}
 
         {/* Right Actions */}
-        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           {authLoading ? (
-            <div className="h-8 w-20 rounded-lg bg-[#1c1c1c] animate-pulse border border-white/[0.04]" />
+            <div className="h-8 w-16 sm:w-20 rounded-lg bg-[#1c1c1c] animate-pulse border border-white/[0.04]" />
           ) : user ? (
-            <div className="flex items-center gap-2.5 bg-[#141414] border border-white/[0.08] rounded-lg px-3 py-1.5 shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-2.5 bg-[#141414] border border-white/[0.08] rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 shrink-0">
               {user.slug ? (
                 <Link
                   href={`/${user.slug}`}
                   title={`View your public GetMerged profile (@${user.slug})`}
-                  className="flex items-center gap-2 min-w-0 hover:opacity-80 transition-opacity"
+                  className="flex items-center gap-1.5 sm:gap-2 min-w-0 hover:opacity-80 transition-opacity"
                 >
                   {user.avatar_url ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={user.avatar_url}
                       alt={user.username}
-                      className="h-6 w-6 rounded-full shrink-0 ring-1 ring-white/[0.12]"
+                      className="h-5 w-5 sm:h-6 sm:w-6 rounded-full shrink-0 ring-1 ring-white/[0.12]"
                     />
                   ) : null}
-                  <span className="font-sans text-xs font-medium text-[#d4d4d4] max-w-[90px] truncate">
+                  <span className="font-sans text-xs font-medium text-[#d4d4d4] max-w-[50px] sm:max-w-[90px] truncate hidden xs:inline sm:inline">
                     {user.username}
                   </span>
                 </Link>
               ) : (
-                <div className="flex items-center gap-2 min-w-0">
+                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                   {user.avatar_url ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={user.avatar_url}
                       alt={user.username}
-                      className="h-6 w-6 rounded-full shrink-0 ring-1 ring-white/[0.12]"
+                      className="h-5 w-5 sm:h-6 sm:w-6 rounded-full shrink-0 ring-1 ring-white/[0.12]"
                     />
                   ) : null}
-                  <span className="font-sans text-xs font-medium text-[#d4d4d4] max-w-[90px] truncate">
+                  <span className="font-sans text-xs font-medium text-[#d4d4d4] max-w-[50px] sm:max-w-[90px] truncate hidden xs:inline sm:inline">
                     {user.username}
                   </span>
                 </div>
@@ -164,7 +164,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <Link
                 href="/watchlist"
                 title="My Watchlist"
-                className="flex items-center gap-1.5 px-2 py-0.5 text-xs font-sans font-medium text-[#a3a3a3] hover:text-white rounded-md transition-colors border-l border-white/[0.08] pl-2.5 shrink-0"
+                className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 text-xs font-sans font-medium text-[#a3a3a3] hover:text-white rounded-md transition-colors border-l border-white/[0.08] pl-2.5 shrink-0"
               >
                 <Bookmark className="h-3.5 w-3.5 text-[#a3a3a3]" />
                 <span className="hidden md:inline">Watchlist</span>
