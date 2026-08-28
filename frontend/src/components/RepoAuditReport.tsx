@@ -91,8 +91,8 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
       });
       if (res.status === 403) return false;
       if (res.status === 404) {
-        setPhase("notfound");
-        return true;
+        // If not found on audit endpoint, verify whether user purchased or if repo is unindexed
+        return false;
       }
       if (!res.ok) {
         setErrorMsg("Failed to load audit report.");
@@ -154,7 +154,16 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
       const loaded = await fetchReport();
       if (cancelled) return;
       if (!loaded) {
-        // Not purchased (403): show purchase flow and reconcile via poll in
+        // Check if repo exists in opendoor DB first
+        try {
+          const repoCheck = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(owner)}/${encodeURIComponent(name)}`);
+          if (repoCheck.status === 404) {
+            setPhase("notfound");
+            return;
+          }
+        } catch {}
+
+        // Not purchased (403/404): show purchase flow and reconcile via poll in
         // case the webhook lands after Dodo redirects back (AC6).
         setPhase("pay");
         startPolling();
@@ -164,7 +173,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
       cancelled = true;
       if (pollRef.current) clearTimeout(pollRef.current);
     };
-  }, [fetchReport, startPolling]);
+  }, [fetchReport, startPolling, owner, name]);
 
   const startCheckout = useCallback(async () => {
     setCheckoutLoading(true);
