@@ -6,6 +6,7 @@ import { API_BASE_URL } from "@/lib/api";
 import { Metadata } from "next";
 import Link from "next/link";
 import { Trophy, ArrowLeft, Star, GitPullRequest, Clock, Flame, Users } from "lucide-react";
+import { GemojiText } from "@/lib/gemoji";
 
 interface ContributorEntry {
   rank: number;
@@ -237,7 +238,7 @@ export default async function LeaderboardPage() {
                         {repo.full_name}
                       </Link>
                       <div className="text-[11px] font-normal text-zinc-300 font-sans truncate max-w-md mt-0.5">
-                        {repo.description}
+                        <GemojiText>{repo.description}</GemojiText>
                       </div>
                     </td>
                     <td className="py-3.5 px-4 text-center">

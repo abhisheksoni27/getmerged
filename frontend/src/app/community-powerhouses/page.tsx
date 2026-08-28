@@ -6,6 +6,7 @@ import { LangLogo } from "@/components/LangLogo";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { API_BASE_URL } from "@/lib/api";
+import { GemojiText } from "@/lib/gemoji";
 
 const MIN_MAINTAINERS = 5;
 
@@ -146,7 +147,7 @@ export default async function CommunityPowerhousesPage() {
                       </div>
                     </div>
                     <p className="text-xs text-zinc-300 leading-relaxed font-sans line-clamp-2">
-                      {repo.description || "No description available."}
+                      <GemojiText>{repo.description || "No description available."}</GemojiText>
                     </p>
                   </div>
 

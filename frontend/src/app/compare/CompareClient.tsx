@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { LangLogo } from "@/components/LangLogo";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
+import { GemojiText } from "@/lib/gemoji";
 import {
   Scale,
   Search,
@@ -395,7 +396,7 @@ export default function CompareClient() {
                                 {r.full_name}
                               </div>
                               <div className="text-[11px] text-zinc-300 line-clamp-1">
-                                {r.description || "No description"}
+                                <GemojiText>{r.description || "No description"}</GemojiText>
                               </div>
                             </div>
                             <div className="flex items-center gap-2 shrink-0 font-mono text-[11px]">
@@ -516,7 +517,7 @@ export default function CompareClient() {
                                 {r.full_name}
                               </div>
                               <div className="text-[11px] text-zinc-300 line-clamp-1">
-                                {r.description || "No description"}
+                                <GemojiText>{r.description || "No description"}</GemojiText>
                               </div>
                             </div>
                             <div className="flex items-center gap-2 shrink-0 font-mono text-[11px]">

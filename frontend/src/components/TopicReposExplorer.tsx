@@ -16,6 +16,7 @@ import {
 import type { Repo } from "@/types/opendoor";
 import { canonicalizeSlug, displayNameFromSlug } from "@/lib/languageSlug";
 import { LangLogo } from "@/components/LangLogo";
+import { GemojiText } from "@/lib/gemoji";
 
 interface TopicReposExplorerProps {
   topic: string;
@@ -162,7 +163,7 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
 
                 {repo.description && (
                   <p className="text-xs sm:text-sm text-zinc-300 mt-1.5 line-clamp-2 leading-relaxed font-sans">
-                    {repo.description}
+                    <GemojiText>{repo.description}</GemojiText>
                   </p>
                 )}
 

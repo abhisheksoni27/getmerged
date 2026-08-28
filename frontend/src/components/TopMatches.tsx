@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
+import { GemojiText } from "@/lib/gemoji";
 
 interface TopMatch {
   id: string;
@@ -66,7 +67,7 @@ export function TopMatches() {
                 </span>
               </div>
               <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-300">
-                {m.description || "No description available."}
+                <GemojiText>{m.description || "No description available."}</GemojiText>
               </p>
               {m.reasons.length > 0 && (
                 <ul className="mt-2 space-y-1">

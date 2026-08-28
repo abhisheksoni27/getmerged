@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Sparkles, Lock, CalendarDays, ExternalLink, Star } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
+import { GemojiText } from "@/lib/gemoji";
 
 interface LangCount {
   lang: string;
@@ -154,7 +155,7 @@ export function ForYou() {
                       {r.c_rank_tier}
                     </span>
                   </div>
-                  <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-300">{r.description || "No description available."}</p>
+                  <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-300"><GemojiText>{r.description || "No description available."}</GemojiText></p>
                   <div className="mt-2 flex items-center gap-3 text-[11px] text-zinc-300">
                     {r.language && <span className="rounded-full glass-card px-2 py-0.5 font-medium capitalize">{r.language}</span>}
                     <span className="inline-flex items-center gap-1">

@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useSearch } from "@/context/SearchContext";
 import { API_BASE_URL } from "@/lib/api";
 import { Repo } from "@/types/opendoor";
+import { GemojiText } from "@/lib/gemoji";
 import posthog from "posthog-js";
 
 const FAMOUS_REPOS = [
@@ -262,7 +263,7 @@ export function GlobalSearch() {
                             {r.full_name}
                           </div>
                           <div className="text-xs text-zinc-300 truncate font-sans">
-                            {r.description || "No description provided."}
+                            <GemojiText>{r.description || "No description provided."}</GemojiText>
                           </div>
                         </div>
                       </div>
