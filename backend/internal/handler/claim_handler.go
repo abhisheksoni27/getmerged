@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/abhisheksoni27/opendoor/internal/auth"
@@ -19,6 +20,9 @@ func getOwnerAndName(c *gin.Context) (string, string) {
 		return owner, name
 	}
 	id := c.Param("id")
+	if unescaped, err := url.QueryUnescape(id); err == nil && unescaped != "" {
+		id = unescaped
+	}
 	if strings.Contains(id, "/") {
 		parts := strings.SplitN(id, "/", 2)
 		return parts[0], parts[1]

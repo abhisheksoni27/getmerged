@@ -386,11 +386,16 @@ func GetRepoHistory(repoStore repository.RepoRepository) gin.HandlerFunc {
 	}
 }
 
-// GetRepoTrend handles GET /api/v1/repos/:id/trend?days=90
+// GetRepoTrend handles GET /api/v1/repos/:id/trend or /api/v1/repos/:owner/:name/trend?days=90
 func GetRepoTrend(repoStore repository.RepoRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
-		if unescaped, err := url.QueryUnescape(id); err == nil {
+		owner := c.Param("owner")
+		name := c.Param("name")
+		if owner != "" && name != "" {
+			id = owner + "/" + name
+		}
+		if unescaped, err := url.QueryUnescape(id); err == nil && unescaped != "" {
 			id = unescaped
 		}
 		repo, err := repoStore.FindByIDOrName(c.Request.Context(), id)
