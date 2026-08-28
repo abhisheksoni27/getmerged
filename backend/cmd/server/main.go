@@ -641,7 +641,7 @@ func main() {
 			handler.PackStatusHandler(cfg, entitlementRepo))
 
 		// In-App Notification Center (AC1 - AC4)
-		userApi.GET("/notifications", middleware.RateLimitPerUser(1), handler.GetNotificationsHandler(notifRepo))
+		userApi.GET("/notifications", middleware.RateLimitPerUser(60), handler.GetNotificationsHandler(notifRepo))
 		userApi.GET("/notifications/unread-count", middleware.RateLimitPerUser(60), handler.GetUnreadNotificationCountHandler(notifRepo))
 		userApi.POST("/notifications/mark-read", handler.MarkNotificationsReadHandler(notifRepo))
 		userApi.GET("/notifications/preferences", handler.GetNotificationPreferencesHandler(notifRepo))
@@ -655,7 +655,7 @@ func main() {
 	apiNotif := r.Group("/api/notifications")
 	apiNotif.Use(middleware.UserAuth(cfg.JWTSecret))
 	{
-		apiNotif.GET("", middleware.RateLimitPerUser(1), handler.GetNotificationsHandler(notifRepo))
+		apiNotif.GET("", middleware.RateLimitPerUser(60), handler.GetNotificationsHandler(notifRepo))
 		apiNotif.GET("/unread-count", middleware.RateLimitPerUser(60), handler.GetUnreadNotificationCountHandler(notifRepo))
 		apiNotif.POST("/mark-read", handler.MarkNotificationsReadHandler(notifRepo))
 		apiNotif.GET("/preferences", handler.GetNotificationPreferencesHandler(notifRepo))
