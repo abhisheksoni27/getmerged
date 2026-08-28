@@ -14,10 +14,10 @@ interface Node {
 }
 
 const COLORS = [
-  { color: "rgba(16, 185, 129, 0.75)", glow: "rgba(16, 185, 129, 0.4)" }, // S - Emerald
-  { color: "rgba(56, 189, 248, 0.75)", glow: "rgba(56, 189, 248, 0.4)" }, // A - Sky
-  { color: "rgba(192, 132, 252, 0.75)", glow: "rgba(192, 132, 252, 0.4)" }, // B - Violet
-  { color: "rgba(255, 107, 0, 0.75)", glow: "rgba(255, 107, 0, 0.4)" }, // Primary Orange
+  { color: "rgba(16, 185, 129, 0.95)", glow: "rgba(16, 185, 129, 0.7)" }, // S - Emerald
+  { color: "rgba(56, 189, 248, 0.95)", glow: "rgba(56, 189, 248, 0.7)" }, // A - Sky
+  { color: "rgba(192, 132, 252, 0.95)", glow: "rgba(192, 132, 252, 0.7)" }, // B - Violet
+  { color: "rgba(255, 107, 0, 0.95)", glow: "rgba(255, 107, 0, 0.7)" }, // Primary Orange
 ];
 
 export function PhysicsCanvas() {
@@ -141,12 +141,12 @@ export function PhysicsCanvas() {
           const dist2 = Math.hypot(n.x - n2.x, n.y - n2.y);
 
           if (dist2 < maxLinkDistance) {
-            const alpha = (1 - dist2 / maxLinkDistance) * 0.22;
+            const alpha = (1 - dist2 / maxLinkDistance) * 0.45;
             ctx.beginPath();
             ctx.moveTo(n.x, n.y);
             ctx.lineTo(n2.x, n2.y);
             ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-            ctx.lineWidth = 0.75;
+            ctx.lineWidth = 1.0;
             ctx.stroke();
           }
         }
@@ -156,7 +156,7 @@ export function PhysicsCanvas() {
         ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
         ctx.fillStyle = n.color;
         ctx.shadowColor = n.glow;
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 14;
         ctx.fill();
         ctx.shadowBlur = 0; // reset
       }
@@ -178,7 +178,8 @@ export function PhysicsCanvas() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="fixed inset-0 pointer-events-none -z-15 opacity-70"
+      style={{ zIndex: 0 }}
+      className="fixed inset-0 pointer-events-none opacity-80"
     />
   );
 }
