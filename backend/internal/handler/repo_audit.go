@@ -16,6 +16,7 @@ import (
 
 	"github.com/abhisheksoni27/opendoor/internal/ai"
 	"github.com/abhisheksoni27/opendoor/internal/config"
+	"github.com/abhisheksoni27/opendoor/internal/gemoji"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
@@ -392,7 +393,7 @@ func buildAuditReport(ctx context.Context, repoStore repository.RepoRepository, 
 			"full_name":    repo.FullName,
 			"language":     repo.Language,
 			"stars":        repo.Stars,
-			"description":  repo.Description,
+			"description":  gemoji.Resolve(repo.Description),
 			"c_rank_score": round1(score),
 			"c_rank_tier":  tier,
 		},

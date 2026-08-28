@@ -13,7 +13,6 @@ import {
   XCircle,
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
-import { GemojiText } from "@/lib/gemoji";
 
 interface AuditFactor {
   key: string;
@@ -332,7 +331,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
                 Deep-Audit Unlocked
               </span>
               <h1 className="text-2xl font-bold font-mono text-white">{r.repo.full_name}</h1>
-              {r.repo.description && <p className="text-sm text-zinc-300 mt-1 max-w-2xl"><GemojiText>{r.repo.description}</GemojiText></p>}
+              {r.repo.description && <p className="text-sm text-zinc-300 mt-1 max-w-2xl">{r.repo.description}</p>}
             </div>
             <div className="text-right">
               <div className="text-3xl font-extrabold font-mono text-white">{r.overall.score.toFixed(1)}</div>

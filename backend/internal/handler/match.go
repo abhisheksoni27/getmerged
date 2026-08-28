@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/abhisheksoni27/opendoor/internal/gemoji"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/gin-gonic/gin"
@@ -109,7 +110,7 @@ func toRepoResponse(r repository.RepoRecord) repoResponse {
 		FullName:                 r.FullName,
 		Language:                 r.Language,
 		Stars:                    r.Stars,
-		Description:              r.Description,
+		Description:              gemoji.Resolve(r.Description),
 		GithubURL:                r.GithubURL,
 		CRankTier:                r.CRankTier,
 		CRankScore:               r.CRankScore,

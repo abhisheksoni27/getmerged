@@ -8,7 +8,6 @@ import { CompareShareBar } from "@/components/CompareShareBar";
 import { VsShowdownCard } from "@/components/VsShowdownCard";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
-import { GemojiText } from "@/lib/gemoji";
 import {
   GitPullRequest,
   Clock,
@@ -184,7 +183,7 @@ export default async function ComparePage({ params }: ComparePageProps) {
                   {repoA.full_name}
                 </Link>
               </h2>
-              <p className="text-xs text-zinc-300 line-clamp-2 mb-6"><GemojiText>{repoA.description || "No description provided."}</GemojiText></p>
+              <p className="text-xs text-zinc-300 line-clamp-2 mb-6">{repoA.description || "No description provided."}</p>
 
               <div className="space-y-3 font-mono text-xs">
                 <div className="flex items-center justify-between p-2.5 rounded-xl glass-card border border-white/[0.1]">
@@ -237,7 +236,7 @@ export default async function ComparePage({ params }: ComparePageProps) {
                   {repoB.full_name}
                 </Link>
               </h2>
-              <p className="text-xs text-zinc-300 line-clamp-2 mb-6"><GemojiText>{repoB.description || "No description provided."}</GemojiText></p>
+              <p className="text-xs text-zinc-300 line-clamp-2 mb-6">{repoB.description || "No description provided."}</p>
 
               <div className="space-y-3 font-mono text-xs">
                 <div className="flex items-center justify-between p-2.5 rounded-xl glass-card border border-white/[0.1]">

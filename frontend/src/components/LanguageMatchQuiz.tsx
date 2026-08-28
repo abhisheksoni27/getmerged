@@ -5,7 +5,6 @@ import { Sparkles, Star, ExternalLink, ArrowRight, Loader2 } from "lucide-react"
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { displayNameFromSlug } from "@/lib/languageSlug";
-import { GemojiText } from "@/lib/gemoji";
 
 const QUIZ_LANGUAGES = [
   "python",
@@ -249,7 +248,7 @@ export function LanguageMatchQuiz() {
                       </span>
                     </div>
                     <p className="mt-1.5 line-clamp-2 text-xs sm:text-sm leading-relaxed text-zinc-200">
-                      <GemojiText>{m.description || "No description available."}</GemojiText>
+                      {m.description || "No description available."}
                     </p>
                     <div className="mt-3 flex items-center gap-3 text-xs text-zinc-300">
                       {m.language && <span className="rounded-md glass-card px-2 py-0.5 font-medium capitalize text-white">{m.language}</span>}

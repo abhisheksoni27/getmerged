@@ -2,7 +2,6 @@ import React from "react";
 import HomeClient from "./HomeClient";
 import type { MacroStats, Repo } from "@/types/opendoor";
 import Link from "next/link";
-import { GemojiText } from "@/lib/gemoji";
 
 async function getMacroStats(): Promise<MacroStats | null> {
   try {
@@ -158,7 +157,7 @@ export default async function HomePage() {
                 <Link href={`/${repo.full_name}`} title={`View ${repo.full_name} C-Rank metrics`}>
                   {repo.full_name} ({repo.language || "Code"}) - C-Rank Tier {repo.c_rank_tier || "A"} ({repo.external_pr_merge_rate ? `${Math.round(repo.external_pr_merge_rate)}% merge rate` : ""})
                 </Link>
-                <p><GemojiText>{repo.description}</GemojiText></p>
+                <p>{repo.description}</p>
               </li>
             ))}
           </ul>
