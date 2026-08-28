@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"strings"
 	"time"
 
@@ -430,6 +431,10 @@ func (r *sqlxRepoRepository) GetAllTopicStats(ctx context.Context) ([]TopicStat,
 }
 
 func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier string) (*RepoRecord, error) {
+	if unescaped, err := url.QueryUnescape(identifier); err == nil && unescaped != "" {
+		identifier = unescaped
+	}
+	identifier = strings.TrimSpace(identifier)
 	query := `
 		SELECT
 			r.id, r.full_name, COALESCE(r.language,'') as language, r.stars,
