@@ -136,9 +136,9 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       href={`/${fullName}`}
       onClick={handleClick}
       title={`View ${fullName} C-Rank scorecard, PR response time & merge metrics`}
-      className={`group relative flex h-full flex-col justify-between rounded-xl bg-[#141414]/75 backdrop-blur-md p-6 transition-all duration-200 block text-current no-underline cursor-pointer border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#1a1a1a]/90 hover:shadow-[0_8px_30px_rgba(0,0,0,0.35),inset_0_1px_0_0_rgba(255,255,255,0.08)] ${
+      className={`group card-specular-bevel relative flex h-full flex-col justify-between rounded-xl bg-[#141414]/70 backdrop-blur-md p-6 transition-all duration-200 block text-current no-underline cursor-pointer border border-white/[0.08] hover:border-white/[0.22] hover:bg-[#1a1a1a]/90 hover:shadow-[0_12px_36px_rgba(0,0,0,0.45),inset_0_1px_0_0_rgba(255,255,255,0.1)] hover:-translate-y-0.5 ${
         isSpotlight
-          ? "ring-1 ring-[#ff6b00]/50 border-[#ff6b00]/30 shadow-[0_0_20px_rgba(255,107,0,0.08)]"
+          ? "ring-1 ring-[#ff6b00]/50 border-[#ff6b00]/30 shadow-[0_0_24px_rgba(255,107,0,0.1)]"
           : "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]"
       }`}
     >

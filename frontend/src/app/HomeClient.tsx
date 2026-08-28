@@ -321,13 +321,27 @@ export default function HomeClient({
           <div className="h-full w-full rounded-full bg-gradient-to-tr from-emerald-500/10 via-amber-500/5 to-orange-500/15" />
         </div>
 
+        {/* Live radar badge */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
+          className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-mono font-medium text-emerald-400 backdrop-blur-md mb-6 shadow-[0_0_20px_rgba(16,185,129,0.15)]"
+        >
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+          </span>
+          <span>RADAR: 42,000+ REPOSITORIES MONITORED IN REAL-TIME</span>
+        </motion.div>
+
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
           className="text-4xl font-bold tracking-tight text-white sm:text-6xl font-sans leading-[1.1]"
         >
-          Find repos that <span className="text-[#ff6b00]">actually merge</span> your PRs.
+          Find repos that <span className="text-shimmer font-extrabold">actually merge</span> your PRs.
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
