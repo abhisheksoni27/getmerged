@@ -56,18 +56,20 @@ export function RepoStickyBar({
     }
   }, [activeSection]);
 
-  const getRankBadgeBg = (r: string) => {
-    switch (r) {
+  const getRankBadgeClasses = (r: string) => {
+    switch (r?.toUpperCase()) {
       case "S":
-        return "bg-[#8ce99a] text-slate-900";
+        return "bg-emerald-500/15 text-emerald-300 border-emerald-500/30";
       case "A":
-        return "bg-[#bfdbff] text-slate-900";
+        return "bg-sky-500/15 text-sky-300 border-sky-500/30";
       case "B":
-        return "bg-[#ffd93d] text-slate-900";
+        return "bg-purple-500/15 text-purple-300 border-purple-500/30";
       case "C":
-        return "bg-[#e5dbff] text-slate-900";
+        return "bg-amber-500/15 text-amber-300 border-amber-500/30";
+      case "D":
+        return "bg-rose-500/15 text-rose-300 border-rose-500/30";
       default:
-        return "bg-[#ffb3c7] text-slate-900";
+        return "bg-zinc-800 text-zinc-300 border-zinc-700";
     }
   };
 
@@ -97,7 +99,7 @@ export function RepoStickyBar({
                 {fullName}
               </span>
               <span
-                className={`inline-flex items-center px-2 py-0.5 font-mono text-[10px] font-bold rounded-md border border-white/[0.1] text-white ${getRankBadgeBg(
+                className={`inline-flex items-center px-2 py-0.5 font-mono text-[10px] font-bold rounded-md border ${getRankBadgeClasses(
                   rank
                 )}`}
               >
