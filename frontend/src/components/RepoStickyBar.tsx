@@ -99,11 +99,13 @@ export function RepoStickyBar({
                 {fullName}
               </span>
               <span
-                className={`inline-flex items-center px-2 py-0.5 font-mono text-[10px] font-bold rounded-md border ${getRankBadgeClasses(
+                className={`inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[10px] font-bold rounded-md border ${getRankBadgeClasses(
                   rank
                 )}`}
               >
-                {rankLabel}
+                <span>{rank}</span>
+                <span>•</span>
+                <span className="font-sans font-semibold">{rankLabel}</span>
               </span>
               {typeof repo?.stars === "number" && (
                 <span className="inline-flex items-center gap-1 font-mono text-[10px] font-semibold text-zinc-300">

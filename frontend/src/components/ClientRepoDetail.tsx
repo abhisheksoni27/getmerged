@@ -328,18 +328,7 @@ export function ClientRepoDetail({
       : "No first-timer merges recorded in window";
 
   const getRankHumanLabel = (r?: string) => {
-    switch (r) {
-      case "S":
-        return "Super Welcoming";
-      case "A":
-        return "Welcoming";
-      case "B":
-        return "Moderate";
-      case "C":
-        return "Slow Review";
-      default:
-        return "Scored";
-    }
+    return getGradeColor(r).label;
   };  const tabs: RepoSectionTab[] = useMemo(() => [
     { id: "overview", label: "Overview", icon: Sparkles },
     ...(insights ? [{ id: "guidelines", label: "AI Guidelines", icon: Sparkles }] : []),
