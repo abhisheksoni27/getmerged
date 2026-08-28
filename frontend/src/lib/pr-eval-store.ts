@@ -10,7 +10,6 @@ export interface PREvaluationPayload {
 
 // Global in-memory KV store with 90-day TTL (AC2)
 declare global {
-  // eslint-disable-next-line no-var
   var __prEvalStore: Map<string, { data: PREvaluationPayload; expiresAt: number }> | undefined;
 }
 

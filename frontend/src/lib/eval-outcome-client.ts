@@ -6,7 +6,6 @@ import type { PREvalOutcome } from "./pr-verdict";
 const TTL_MS = 3_600_000;
 
 declare global {
-  // eslint-disable-next-line no-var
   var __prEvalOutcomeCache: Map<string, { at: number; data: PREvalOutcome | null }> | undefined;
 }
 

@@ -12,7 +12,6 @@ interface ShareForecastButtonProps {
   prNumber?: number | null;
   overallScore?: number | null;
   readyToMerge?: boolean | null;
-  status?: string;
   isPrivate?: boolean;
   className?: string;
   variant?: "button" | "compact";
@@ -24,7 +23,6 @@ export function ShareForecastButton({
   prNumber,
   overallScore,
   readyToMerge,
-  status,
   isPrivate = false,
   className = "",
   variant = "button",
