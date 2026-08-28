@@ -31,7 +31,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
   const mergeRateVal = repo.external_pr_merge_rate !== undefined && repo.external_pr_merge_rate > 0
     ? Math.round(repo.external_pr_merge_rate)
     : null;
-  const mergeRateStr = mergeRateVal !== null ? `${mergeRateVal}%` : "—";
+  const mergeRateStr = mergeRateVal !== null ? `${mergeRateVal}%` : " - ";
 
   const firstResponseHours = repo.time_to_first_response_hours;
   const firstResponseStr =
@@ -41,7 +41,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
         : firstResponseHours < 24
         ? `${Math.round(firstResponseHours)}h`
         : `${Math.round(firstResponseHours / 24)}d`
-      : "—";
+      : " - ";
 
   const responsePercentage = firstResponseHours
     ? Math.max(0, Math.min(100, Math.round(100 - (firstResponseHours / 72) * 80)))
@@ -50,7 +50,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
   const firstTimerRateVal = repo.first_timer_success_rate !== undefined && repo.first_timer_success_rate >= 0
     ? Math.round(repo.first_timer_success_rate)
     : null;
-  const firstTimerStr = firstTimerRateVal !== null ? `${firstTimerRateVal}%` : "—";
+  const firstTimerStr = firstTimerRateVal !== null ? `${firstTimerRateVal}%` : " - ";
 
   const gfiCount = repo.good_first_issue_count ?? 0;
   const gfiLabel = gfiCount === 1 ? "1 good first issue" : `${gfiCount} good first issues`;
@@ -136,9 +136,9 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       href={`/${fullName}`}
       onClick={handleClick}
       title={`View ${fullName} C-Rank scorecard, PR response time & merge metrics`}
-      className={`group glass-panel relative flex h-full flex-col justify-between rounded-3xl p-6 sm:p-7 transition-all duration-300 block text-current no-underline cursor-pointer border border-white/[0.12] hover:border-white/[0.28] hover:shadow-[0_12px_40px_rgba(0,0,0,0.8)] ${
+      className={`group relative flex h-full flex-col justify-between rounded-xl bg-[#141414] p-6 transition-all duration-200 block text-current no-underline cursor-pointer border border-white/[0.08] hover:border-white/[0.16] hover:bg-[#1c1c1c] ${
         isSpotlight
-          ? "ring-1 ring-orange-500/50 shadow-[0_0_28px_rgba(255,107,0,0.15)]"
+          ? "ring-1 ring-[#ff6b00]/50 border-[#ff6b00]/30"
           : ""
       }`}
     >
@@ -146,7 +146,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
         {/* Top Bar: Identity & Grade Badge */}
         <div className="flex items-start justify-between gap-4 mb-4">
           <div className="flex items-center gap-3.5 min-w-0 flex-1">
-            <div className="h-12 w-12 rounded-2xl border border-white/[0.14] bg-black/60 overflow-hidden shrink-0 group-hover:border-white/[0.35] transition-colors shadow-md">
+            <div className="h-12 w-12 rounded-lg border border-white/[0.08] bg-[#1c1c1c] overflow-hidden shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`https://github.com/${ownerPart || "github"}.png?size=96`}
@@ -161,11 +161,11 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
               />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="font-space text-lg sm:text-xl font-black text-white group-hover:text-orange-400 transition-colors flex items-center gap-1.5 min-w-0 tracking-tight" title={fullName}>
+              <div className="font-sans text-lg sm:text-xl font-bold text-white group-hover:text-[#ff6b00] transition-colors flex items-center gap-1.5 min-w-0 tracking-tight" title={fullName}>
                 <span className="truncate">{displayName}</span>
-                <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity text-orange-400 shrink-0" />
+                <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity text-[#ff6b00] shrink-0" />
               </div>
-              <div className="text-xs font-mono text-zinc-300 truncate mt-0.5 font-medium">
+              <div className="text-xs font-mono text-[#737373] truncate mt-0.5">
                 {fullName}
               </div>
             </div>
@@ -177,20 +177,20 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
         </div>
 
         {/* Sub-meta: Stars & Language */}
-        <div className="flex items-center gap-3 mb-4 font-mono text-xs text-zinc-200">
-          <span className="flex items-center gap-1.5 font-bold text-white bg-white/[0.08] px-2.5 py-1 rounded-lg border border-white/[0.12]">
-            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+        <div className="flex items-center gap-3 mb-4 font-mono text-xs">
+          <span className="flex items-center gap-1.5 font-bold text-white bg-[#1c1c1c] px-2.5 py-1 rounded-lg border border-white/[0.08]">
+            <Star className="h-3.5 w-3.5 fill-[#fbbf24] text-[#fbbf24]" />
             {repo.stars >= 1_000 ? `${(repo.stars / 1_000).toFixed(1)}k` : repo.stars}
           </span>
-          <span className="text-zinc-500">•</span>
-          <span className="flex items-center gap-1.5 truncate text-white bg-white/[0.08] px-2.5 py-1 rounded-lg border border-white/[0.12]">
+          <span className="text-[#525252]">·</span>
+          <span className="flex items-center gap-1.5 truncate text-white bg-[#1c1c1c] px-2.5 py-1 rounded-lg border border-white/[0.08]">
             <LangLogo language={repo.language} />
             <span className="truncate font-bold">{repo.language || "Code"}</span>
           </span>
         </div>
 
         {/* Description */}
-        <p className="text-sm text-zinc-200 line-clamp-2 leading-relaxed font-sans mb-5 min-h-[2.75rem]">
+        <p className="text-sm text-[#a3a3a3] line-clamp-2 leading-relaxed font-sans mb-5 min-h-[2.75rem]">
           {repo.description || "No repository description available."}
         </p>
 
@@ -206,14 +206,14 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
               title={`Explore ${topic} repositories`}
               onClick={(e) => handleTopicChipClick(e, topic)}
               onKeyDown={(e) => handleTopicChipKeyDown(e, topic)}
-              className="inline-flex items-center px-3 py-1 rounded-lg bg-white/[0.08] text-zinc-200 border border-white/[0.1] font-mono text-xs font-semibold hover:bg-white/[0.16] hover:text-white hover:border-white/[0.25] transition-colors cursor-pointer shrink-0 whitespace-nowrap"
+              className="inline-flex items-center px-3 py-1 rounded-lg bg-[#1c1c1c] text-[#d4d4d4] border border-white/[0.08] font-mono text-xs font-semibold hover:bg-[#262626] hover:text-white hover:border-white/[0.16] transition-colors cursor-pointer shrink-0 whitespace-nowrap"
             >
               #{topic}
             </span>
           ))}
           {topicOverflow > 0 && (
             <span
-              className="inline-flex items-center px-2 py-1 rounded-lg bg-white/[0.05] text-zinc-400 border border-white/[0.1] font-mono text-xs font-medium shrink-0"
+              className="inline-flex items-center px-2 py-1 rounded-lg bg-[#141414] text-[#737373] border border-white/[0.04] font-mono text-xs font-medium shrink-0"
               aria-hidden="true"
             >
               +{topicOverflow}
@@ -221,8 +221,8 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
           )}
         </div>
 
-        {/* Telemetry Precision Well */}
-        <div className="grid grid-cols-3 gap-2.5 sm:gap-3 p-2.5 rounded-2xl bg-black/60 border border-white/[0.1] mb-5 shadow-inner">
+        {/* Telemetry Metrics */}
+        <div className="grid grid-cols-3 gap-2.5 sm:gap-3 p-2.5 rounded-lg bg-[#0a0a0a] border border-white/[0.04] mb-5">
           <MetricGauge
             label="Merge Rate"
             value={mergeRateStr}
@@ -245,7 +245,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       </div>
 
       {/* Card Footer */}
-      <div className="pt-4 border-t border-white/[0.1] flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-zinc-300">
+      <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-[#a3a3a3]">
         <div className="flex items-center gap-2 min-w-0">
           {gfiCount > 0 ? (
             <span
@@ -260,18 +260,18 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
                 handleGfiClick();
               }}
               onKeyDown={handleGfiKeyDown}
-              className="inline-flex items-center gap-1.5 text-emerald-300 bg-emerald-500/15 px-3 py-1 rounded-full border border-emerald-500/30 font-bold text-xs hover:bg-emerald-500/25 transition-colors cursor-pointer shrink-0 whitespace-nowrap shadow-xs"
+              className="inline-flex items-center gap-1.5 text-[#10b981] bg-[#10b981]/10 px-3 py-1 rounded-lg border border-[#10b981]/20 font-bold text-xs hover:bg-[#10b981]/20 transition-colors cursor-pointer shrink-0 whitespace-nowrap"
             >
-              <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
+              <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
               <span>{gfiCount} GFI</span>
             </span>
           ) : repo.is_trending ? (
-            <span className="inline-flex items-center gap-1.5 text-orange-300 bg-orange-500/15 px-3 py-1 rounded-full border border-orange-500/30 font-bold text-xs shrink-0 whitespace-nowrap shadow-xs">
-              <Flame className="h-3.5 w-3.5 shrink-0 text-orange-400" />
+            <span className="inline-flex items-center gap-1.5 text-[#ff6b00] bg-[#ff6b00]/10 px-3 py-1 rounded-lg border border-[#ff6b00]/20 font-bold text-xs shrink-0 whitespace-nowrap">
+              <Flame className="h-3.5 w-3.5 shrink-0" />
               <span>Trending</span>
             </span>
           ) : (
-            <span className="text-zinc-400 text-xs font-medium">Telemetry Tracked</span>
+            <span className="text-[#737373] text-xs font-medium">Tracked</span>
           )}
         </div>
 
@@ -283,12 +283,12 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
             title={`Compare ${fullName} with other repos`}
             onClick={handleCompareClick}
             onKeyDown={handleCompareKeyDown}
-            className="inline-flex items-center gap-1.5 text-zinc-300 hover:text-white px-2.5 py-1 rounded-lg hover:bg-white/[0.1] transition-colors cursor-pointer text-xs font-semibold"
+            className="inline-flex items-center gap-1.5 text-[#a3a3a3] hover:text-white px-2.5 py-1 rounded-lg hover:bg-[#1c1c1c] transition-colors cursor-pointer text-xs font-semibold"
           >
-            <Scale className="h-3.5 w-3.5 text-zinc-400" />
+            <Scale className="h-3.5 w-3.5" />
             <span>Compare</span>
           </button>
-          <span className="inline-flex items-center gap-1 text-orange-400 font-bold hover:text-orange-300 transition-colors text-xs">
+          <span className="inline-flex items-center gap-1 text-[#ff6b00] font-bold hover:text-[#ff8a33] transition-colors text-xs">
             <span>Scorecard</span>
             <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
           </span>

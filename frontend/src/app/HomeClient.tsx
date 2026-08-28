@@ -4,7 +4,6 @@ import React, { useEffect, useState, useCallback, useMemo, useRef } from "react"
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RepoCard } from "@/components/RepoCard";
-import { RelativityCanvas } from "@/components/RelativityCanvas";
 import { LangLogo } from "@/components/LangLogo";
 import { Repo, MacroStats } from "@/types/opendoor";
 import {
@@ -309,30 +308,29 @@ export default function HomeClient({
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-black ambient-glow dev-grid-pattern">
-      <RelativityCanvas />
+    <div className="relative min-h-screen flex flex-col bg-[#0a0a0a]">
       <Header
         searchQuery={searchQuery}
         placeholderText={`Search repositories, e.g. ${famousRepos[placeholderIndex]}`}
       />
 
-      {/* Hero Section */}
-      <section className="relative mx-auto max-w-6xl px-4 pt-14 pb-10 text-center sm:px-6 lg:px-8">
+      {/* Hero Section - Clean, data-forward */}
+      <section className="relative mx-auto max-w-6xl px-4 pt-20 pb-12 text-center sm:px-6 lg:px-8">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-          className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl font-space leading-tight"
+          className="text-4xl font-bold tracking-tight text-white sm:text-6xl font-sans leading-[1.1]"
         >
-          Stop wasting weeks on <span className="glass-panel text-white px-3 py-0.5 rounded-xl border border-orange-300/60 shadow-xs inline-block transform -rotate-1">ignored PRs.</span>
+          Find repos that <span className="text-[#ff6b00]">actually merge</span> your PRs.
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: EASE_OUT_EXPO, delay: 0.1 }}
-          className="mx-auto mt-4 max-w-xl text-base text-zinc-300 sm:text-lg leading-relaxed font-sans"
+          className="mx-auto mt-5 max-w-xl text-base text-[#a3a3a3] sm:text-lg leading-relaxed font-sans"
         >
-          Find repositories where maintainers actually review and merge contributions, backed by real PR response rates and first-timer success metrics.
+          GetMerged scores repositories by real maintainer response times, merge rates, and first-timer success. No vanity stars.
         </motion.p>
 
         {/* Hero Search Bar */}
@@ -346,16 +344,16 @@ export default function HomeClient({
         >
           <div
             onClick={() => openSearch(searchQuery)}
-            className="nb-opt-out relative flex items-center rounded-2xl border border-white/[0.12] glass-panel px-4 py-3.5 shadow-sm hover:border-white/[0.18] hover:shadow-md transition-all cursor-pointer group"
+            className="relative flex items-center rounded-xl border border-white/[0.08] bg-[#141414] px-4 py-3.5 hover:border-white/[0.16] transition-all cursor-pointer group"
           >
-            <Search className="h-5 w-5 text-zinc-300 group-hover:text-zinc-300 shrink-0 transition-colors" />
+            <Search className="h-5 w-5 text-[#a3a3a3] group-hover:text-[#d4d4d4] shrink-0 transition-colors" />
             <input
               ref={searchInputRef}
               type="text"
               readOnly
               placeholder={`Search repositories, e.g. ${famousRepos[placeholderIndex]}`}
               value={searchQuery}
-              className="w-full pl-3 pr-20 text-sm text-white placeholder-zinc-400 focus:outline-none font-sans bg-transparent cursor-pointer"
+              className="w-full pl-3 pr-20 text-sm text-white placeholder-[#737373] focus:outline-none font-sans bg-transparent cursor-pointer"
             />
             <div className="absolute right-3 flex items-center gap-1.5 pointer-events-none">
               {searchQuery ? (
@@ -366,12 +364,12 @@ export default function HomeClient({
                     setLoading(true);
                     setPage(1);
                   }}
-                  className="pointer-events-auto text-xs font-mono text-zinc-300 hover:text-zinc-200 mr-1"
+                  className="pointer-events-auto text-xs font-mono text-[#a3a3a3] hover:text-[#d4d4d4] mr-1"
                 >
                   Clear
                 </button>
               ) : null}
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-white/[0.1] glass-card px-2 py-0.5 font-mono text-[11px] font-semibold text-zinc-300">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 font-mono text-[11px] font-semibold text-[#a3a3a3]">
                 <span>⌘</span>K
               </kbd>
             </div>
@@ -379,7 +377,7 @@ export default function HomeClient({
 
           {/* Quick Search Chips */}
           <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs">
-            <span className="font-mono text-zinc-300">Quick explore:</span>
+            <span className="font-mono text-[#737373]">Quick explore:</span>
             {["nextjs", "react", "rust", "bun", "fastapi"].map((term, i) => (
               <motion.button
                 key={term}
@@ -398,7 +396,7 @@ export default function HomeClient({
                     gridEl.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="rounded-lg border border-white/[0.1] glass-panel px-2.5 py-1 font-mono text-zinc-300 hover:border-white/[0.12] hover:text-white shadow-2xs cursor-pointer transition-colors"
+                className="rounded-lg border border-white/[0.08] bg-[#141414] px-2.5 py-1 font-mono text-[#a3a3a3] hover:border-white/[0.16] hover:text-white cursor-pointer transition-colors"
               >
                 {term}
               </motion.button>
@@ -415,7 +413,7 @@ export default function HomeClient({
 
         {/* Macro Telemetry Grid */}
         <motion.div
-          className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-3xl mx-auto rounded-2xl glass-panel p-4 sm:p-5 border border-white/[0.1] shadow-xs items-center text-center"
+          className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-3xl mx-auto rounded-xl bg-[#141414] p-4 sm:p-5 border border-white/[0.08] items-center text-center"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
@@ -423,9 +421,9 @@ export default function HomeClient({
         >
           <div>
             <div className="text-xl sm:text-2xl font-bold font-mono text-white">
-              {stats?.avg_response_hours ? "82%" : <div className="h-6 w-12 glass-card rounded animate-pulse mx-auto" />}
+              {stats?.avg_response_hours ? "82%" : <div className="h-6 w-12 bg-[#1c1c1c] rounded animate-pulse mx-auto" />}
             </div>
-            <div className="text-[11px] sm:text-xs text-zinc-300 font-mono">Avg Merge Rate</div>
+            <div className="text-[11px] sm:text-xs text-[#a3a3a3] font-mono">Avg Merge Rate</div>
           </div>
           <div>
             <div className="text-xl sm:text-2xl font-bold font-mono text-white">
@@ -436,293 +434,290 @@ export default function HomeClient({
                   ? `${Math.floor(stats.avg_response_hours)}h`
                   : `${Math.floor(stats.avg_response_hours / 24)}d+`
               ) : (
-                <div className="h-6 w-12 glass-card rounded animate-pulse mx-auto" />
+                <div className="h-6 w-12 bg-[#1c1c1c] rounded animate-pulse mx-auto" />
               )}
             </div>
-            <div className="text-[11px] sm:text-xs text-zinc-300 font-mono">Avg First Review</div>
+            <div className="text-[11px] sm:text-xs text-[#a3a3a3] font-mono">Avg First Review</div>
           </div>
           <div>
             <div className="text-xl sm:text-2xl font-bold font-mono text-white">
               {stats?.s_class_count !== undefined ? (
                 <CountUp value={stats.s_class_count} />
               ) : (
-                <div className="h-6 w-12 glass-card rounded animate-pulse mx-auto" />
+                <div className="h-6 w-12 bg-[#1c1c1c] rounded animate-pulse mx-auto" />
               )}
             </div>
-            <div className="text-[11px] sm:text-xs text-zinc-300 font-mono">Welcoming Repos</div>
+            <div className="text-[11px] sm:text-xs text-[#a3a3a3] font-mono">Welcoming Repos</div>
           </div>
           <div>
             <div className="text-xl sm:text-2xl font-bold font-mono text-white">
               {stats?.total_repos ? (
                 <CountUp value={stats.total_repos} />
               ) : (
-                <div className="h-6 w-12 glass-card rounded animate-pulse mx-auto" />
+                <div className="h-6 w-12 bg-[#1c1c1c] rounded animate-pulse mx-auto" />
               )}
             </div>
-            <div className="text-[11px] sm:text-xs text-zinc-300 font-mono">Repos Scored</div>
+            <div className="text-[11px] sm:text-xs text-[#a3a3a3] font-mono">Repos Scored</div>
           </div>
         </motion.div>
-
-        {/* Educational Storytelling & Problem-Solution Narrative Blocks */}
-        <div className="my-16 space-y-16 text-left">
-          {/* Narrative Block 1: Left Copy, Right Visual (The Star Paradox & Zombie PRs) */}
-          <motion.div
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-2xl glass-panel p-8 sm:p-12 border border-white/[0.1] shadow-xs"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-          >
-            <div className="lg:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-amber-300 bg-amber-500/10 border border-amber-500/30 text-amber-300 px-3 py-1 rounded-xl">
-                <Star className="h-3.5 w-3.5 text-amber-600 fill-amber-400" /> The GitHub Star Illusion
-              </div>
-              <h2 className="text-2xl sm:text-4xl font-bold font-space text-white tracking-tight leading-tight">
-                Stars Measure Yesterday&apos;s Hype. C-Rank Measures Today&apos;s Open Doors.
-              </h2>
-              <p className="text-sm sm:text-base text-zinc-300 font-sans leading-relaxed">
-                Over <strong className="text-white">60% of open-source maintainers</strong> are unpaid and overwhelmed by backlogs. When contributors sort solely by GitHub stars, they walk straight into exhausted projects where pull requests become &ldquo;zombie PRs&rdquo; that sit unreviewed for months.
-              </p>
-              <p className="text-xs sm:text-sm text-zinc-300 font-sans leading-relaxed">
-                GetMerged bypasses vanity stars by monitoring real maintainer review turnaround, first-timer acceptance rates, and external PR merge velocity.
-              </p>
-              <div className="pt-2">
-                <Link
-                  href="/how-c-rank-works"
-                  title="Read the science of open source hospitality"
-                  className="inline-flex items-center gap-2 text-xs font-mono font-bold text-white hover:text-zinc-300 underline underline-offset-4"
-                >
-                  <span>Read the science of open source hospitality</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-5 glass-card border border-white/[0.1] rounded-2xl p-6 space-y-4 font-mono text-xs shadow-2xs">
-              <div className="flex items-center justify-between border-b border-white/[0.1] pb-3">
-                <span className="text-zinc-300">Live Telemetry Contrast</span>
-                <span className="text-emerald-400 font-bold">Real-time</span>
-              </div>
-              <div className="space-y-3">
-                <div className="p-3.5 rounded-xl glass-panel border border-rose-200/70">
-                  <div className="flex justify-between text-zinc-200 font-bold mb-1">
-                    <span>Famous Ghost Town</span>
-                    <span className="text-rose-600 font-semibold">45k ★</span>
-                  </div>
-                  <div className="text-[11px] text-zinc-300 font-sans leading-relaxed">
-                    Median PR review wait: <strong className="text-rose-700">140+ days</strong> (C-Rank: Unmaintained)
-                  </div>
-                </div>
-                <div className="p-3.5 rounded-xl glass-panel border border-emerald-200">
-                  <div className="flex justify-between text-zinc-200 font-bold mb-1">
-                    <span>Welcoming Open Door</span>
-                    <span className="text-emerald-400 font-semibold">1.8k ★</span>
-                  </div>
-                  <div className="text-[11px] text-zinc-300 font-sans leading-relaxed">
-                    Median PR review wait: <strong className="text-emerald-300">&lt;6 hours</strong> (C-Rank: Super Welcoming)
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Today's Top Welcoming Repositories (Interspersed Live Demonstration) */}
-          <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/[0.1] pb-3">
-              <div>
-                <h2 className="text-xl sm:text-2xl font-space font-bold text-white flex items-center gap-2">
-                  <Flame className="h-5 w-5 text-orange-500 fill-orange-500" /> Today&apos;s Open Doors (High Review Velocity)
-                </h2>
-                <p className="text-xs text-zinc-300 font-sans mt-0.5">Verified active maintainers actively merging community contributions right now.</p>
-              </div>
-              <Link
-                href="/hall-of-fame"
-                title="View S-Tier Hall of Fame repositories"
-                className="text-xs font-mono font-bold text-emerald-300 hover:text-zinc-300 inline-flex items-center gap-1 shrink-0"
-              >
-                View S-Tier Hall of Fame <ArrowRight className="h-3 w-3" />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {spotlightRepos.length === 0 && loading ? (
-                [1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="relative overflow-hidden rounded-2xl border border-white/[0.1] glass-panel p-5 h-[260px] flex flex-col justify-between"
-                  >
-                    <div className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 glass-panel animate-shimmer" />
-                    <div>
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="h-5 w-32 rounded bg-zinc-200" />
-                        <div className="h-5 w-16 rounded bg-zinc-200" />
-                      </div>
-                      <div className="h-3 w-full rounded bg-zinc-200 mb-2" />
-                      <div className="h-3 w-3/4 rounded bg-zinc-200 mb-5" />
-                      <div className="h-10 w-full rounded glass-card border border-white/[0.1] mb-4" />
-                    </div>
-                    <div className="flex items-center justify-between pt-3 border-t border-white/[0.1]">
-                      <div className="h-4 w-20 rounded bg-zinc-200" />
-                      <div className="h-4 w-16 rounded bg-zinc-200" />
-                    </div>
-                  </div>
-                ))
-              ) : spotlightRepos.length > 0 ? (
-                spotlightRepos.slice(0, 3).map((r, idx) => (
-                  <RepoCard key={r.id || r.full_name} repo={r} isLoggedIn={isLoggedIn} isSpotlight={true} spotlightIndex={idx} />
-                ))
-              ) : null}
-            </div>
-          </div>
-
-          {/* Narrative Block 2: Left Visual (9-Factor Radar), Right Copy */}
-          <motion.div
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-2xl glass-panel p-8 sm:p-12 border border-white/[0.1] shadow-xs"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-          >
-            <div className="lg:col-span-5 glass-card text-white rounded-2xl p-6 space-y-3 font-mono text-xs shadow-md">
-              <div className="flex justify-between items-center text-zinc-300 border-b border-white/[0.1] pb-2">
-                <span>C-Rank™ Multi-Factor Telemetry</span>
-                <span className="text-emerald-400 font-bold">Continuous Index</span>
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center bg-black ambient-glow p-2.5 rounded-xl border border-white/[0.1]">
-                  <span className="text-zinc-300">External Merge Rate</span>
-                  <span className="text-emerald-400 font-bold">Primary</span>
-                </div>
-                <div className="flex justify-between items-center bg-black ambient-glow p-2.5 rounded-xl border border-white/[0.1]">
-                  <span className="text-zinc-300">Review Turnaround Latency</span>
-                  <span className="text-blue-400 font-bold">Core Factor</span>
-                </div>
-                <div className="flex justify-between items-center bg-black ambient-glow p-2.5 rounded-xl border border-white/[0.1]">
-                  <span className="text-zinc-300">Commit Pulse & Recency</span>
-                  <span className="text-purple-400 font-bold">Core Factor</span>
-                </div>
-                <div className="flex justify-between items-center bg-black ambient-glow p-2.5 rounded-xl border border-white/[0.1]">
-                  <span className="text-zinc-300">First-Timer PR Conversion</span>
-                  <span className="text-amber-400 font-bold">Hospitality</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-blue-300 bg-sky-500/10 border border-sky-500/30 text-sky-300 px-3 py-1 rounded-xl">
-                <Sparkles className="h-3.5 w-3.5 text-blue-600" /> Objective Mathematics
-              </div>
-              <h2 className="text-2xl sm:text-4xl font-bold font-space text-white tracking-tight leading-tight">
-                9 Telemetry Factors. Zero Subjective Gossip.
-              </h2>
-              <p className="text-sm sm:text-base text-zinc-300 font-sans leading-relaxed">
-                GetMerged benchmarks repositories against peer codebases across 20+ language ecosystems. We measure reviewer turnaround velocity, repeat contributor retention, pull request friction, and maintainer core bus-factors.
-              </p>
-              <div className="pt-2">
-                <Link
-                  href="/how-c-rank-works"
-                  title="Explore the C-Rank scoring methodology"
-                  className="inline-flex items-center gap-2 rounded-xl glass-card px-5 py-2.5 font-sans text-xs font-semibold text-white hover:bg-zinc-800 transition-all shadow-xs"
-                >
-                  <span>Explore the scoring methodology</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Narrative Block 3: Maintainer Persona & Repository Claim Flow */}
-          <motion.div
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl bg-black ambient-glow p-8 sm:p-12 border border-white/[0.12] shadow-sm"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-          >
-            <div className="lg:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-300 bg-[#8ce99a] border border-white/[0.1] px-3 py-1 shadow-sm">
-                <ShieldCheck className="h-3.5 w-3.5" /> Maintainer Workspace
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold font-space text-white tracking-tight leading-tight">
-                Own an Open Source Repository? See Why Outside Contributors Bounce.
-              </h2>
-              <p className="text-sm sm:text-base text-zinc-300 font-sans leading-relaxed">
-                Discover your codebase&apos;s objective C-Rank™ grade, review turnaround latency, and first-timer acceptance score. Learn how to optimize your CONTRIBUTING.md, clear zombie PR bottlenecks, and attract dependable repeat contributors.
-              </p>
-              <div className="pt-2 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={() => openSearch()}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white font-mono text-xs font-bold border border-white/[0.12] shadow-sm hover:bg-zinc-800 cursor-pointer"
-                >
-                  <Search className="h-3.5 w-3.5" /> Check Your Repository Grade
-                </button>
-                <Link
-                  href="/guides/how-to-know-if-maintainer-will-review"
-                  title="Maintainer Hospitality Best Practices"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 glass-panel text-white font-mono text-xs font-bold border border-white/[0.12] shadow-sm hover:glass-card"
-                >
-                  Read Reviewer Playbook <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-5 glass-panel border border-white/[0.12] p-6 space-y-3 font-mono text-xs shadow-sm">
-              <div className="font-bold text-white border-b border-white/[0.1] pb-2 flex items-center justify-between">
-                <span>Maintainer Health Check</span>
-                <span className="text-emerald-400">Live Telemetry</span>
-              </div>
-              <div className="space-y-2 pt-1">
-                <div className="flex items-center gap-2 text-zinc-300">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                  <span>p50 Review Turnaround &lt; 24h</span>
-                </div>
-                <div className="flex items-center gap-2 text-zinc-300">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                  <span>Outside PR Merge Rate &gt; 65%</span>
-                </div>
-                <div className="flex items-center gap-2 text-zinc-300">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                  <span>Multi-Maintainer Core (Bus Factor &gt; 1)</span>
-                </div>
-                <div className="flex items-center gap-2 text-zinc-300">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                  <span>Scoped Good First Issues (&lt; 60d)</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
       </section>
 
-      {/* Main Curated Showroom Section */}
-      <main id="leaderboard-grid" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex-1 w-full pt-4">
-        {/* Streamlined Category Switcher Bar */}
-        <div className="mb-8 rounded-2xl glass-panel p-5 sm:p-6 border border-white/[0.1] shadow-xs space-y-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-zinc-300 mb-1">
-                <Sparkles className="h-3.5 w-3.5 text-orange-500" /> Curated Repository Showroom
-              </div>
-              <h2 className="text-xl sm:text-2xl font-bold font-space text-white">
-                Explore Open Doors by Category
-              </h2>
+      {/* Problem-Solution Section - Split layout */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+        <motion.div
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+        >
+          {/* Left: Problem statement */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#ff6b00]">
+              <Star className="h-3.5 w-3.5 fill-[#ff6b00]" /> The Star Illusion
             </div>
-
-            {/* Direct Link to Full /repos Directory */}
+            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight font-sans">
+              Stars measure hype. C-Rank measures open doors.
+            </h2>
+            <p className="text-sm text-[#a3a3a3] font-sans leading-relaxed">
+              Over 60% of maintainers are unpaid and overwhelmed. When you sort by stars alone, you walk into exhausted projects where PRs sit unreviewed for months.
+            </p>
             <Link
-              href="/repos"
-              title="Open full multi-filter repository directory"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-black ambient-glow hover:bg-zinc-800 text-white px-5 py-2.5 text-xs font-semibold shadow-xs transition-all self-start md:self-auto"
+              href="/how-c-rank-works"
+              title="Read the science of open source hospitality"
+              className="inline-flex items-center gap-2 text-xs font-mono font-bold text-white hover:text-[#a3a3a3] transition-colors"
             >
-              <span>Explore All {stats?.total_repos ? `${stats.total_repos.toLocaleString()} ` : ""}Repositories & Filters</span>
+              <span>Read the methodology</span>
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
-          {/* User-Specified Category Showroom Chips */}
-          <div className="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none text-xs font-sans">
-            {/* 1. Hall of Fame (S-Tier) */}
+          {/* Right: Live telemetry contrast */}
+          <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-6 space-y-4 font-mono text-xs">
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <span className="text-[#a3a3a3]">Live Telemetry</span>
+              <span className="text-[#10b981] font-bold">Real-time</span>
+            </div>
+            <div className="space-y-3">
+              <div className="p-3.5 rounded-lg bg-[#0a0a0a] border border-[#f87171]/30">
+                <div className="flex justify-between text-[#d4d4d4] font-bold mb-1">
+                  <span>Ghost Town Repo</span>
+                  <span className="text-[#f87171]">45k ★</span>
+                </div>
+                <div className="text-[11px] text-[#a3a3a3] font-sans leading-relaxed">
+                  Median PR review wait: <strong className="text-[#f87171]">140+ days</strong>
+                </div>
+              </div>
+              <div className="p-3.5 rounded-lg bg-[#0a0a0a] border border-[#10b981]/30">
+                <div className="flex justify-between text-[#d4d4d4] font-bold mb-1">
+                  <span>Welcoming Repo</span>
+                  <span className="text-[#10b981]">1.8k ★</span>
+                </div>
+                <div className="text-[11px] text-[#a3a3a3] font-sans leading-relaxed">
+                  Median PR review wait: <strong className="text-[#10b981]">&lt;6 hours</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Today's Top Repos - Spotlight */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/[0.08] pb-4 mb-6">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 font-sans">
+              <Flame className="h-5 w-5 text-[#ff6b00] fill-[#ff6b00]" /> Today&apos;s Open Doors
+            </h2>
+            <p className="text-xs text-[#737373] font-sans mt-0.5">Verified active maintainers merging community contributions right now.</p>
+          </div>
+          <Link
+            href="/hall-of-fame"
+            title="View S-Tier Hall of Fame repositories"
+            className="text-xs font-mono font-bold text-[#10b981] hover:text-[#a3a3a3] inline-flex items-center gap-1 shrink-0"
+          >
+            View S-Tier Hall of Fame <ArrowRight className="h-3 w-3" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {spotlightRepos.length === 0 && loading ? (
+            [1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="relative overflow-hidden rounded-xl border border-white/[0.08] bg-[#141414] p-5 h-[260px] flex flex-col justify-between"
+              >
+                <div className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 bg-[#1c1c1c] animate-pulse" />
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="h-5 w-32 rounded bg-[#1c1c1c]" />
+                    <div className="h-5 w-16 rounded bg-[#1c1c1c]" />
+                  </div>
+                  <div className="h-3 w-full rounded bg-[#1c1c1c] mb-2" />
+                  <div className="h-3 w-3/4 rounded bg-[#1c1c1c] mb-5" />
+                  <div className="h-10 w-full rounded bg-[#1c1c1c] border border-white/[0.04] mb-4" />
+                </div>
+                <div className="flex items-center justify-between pt-3 border-t border-white/[0.08]">
+                  <div className="h-4 w-20 rounded bg-[#1c1c1c]" />
+                  <div className="h-4 w-16 rounded bg-[#1c1c1c]" />
+                </div>
+              </div>
+            ))
+          ) : spotlightRepos.length > 0 ? (
+            spotlightRepos.slice(0, 3).map((r, idx) => (
+              <RepoCard key={r.id || r.full_name} repo={r} isLoggedIn={isLoggedIn} isSpotlight={true} spotlightIndex={idx} />
+            ))
+          ) : null}
+        </div>
+      </section>
+
+      {/* C-Rank Factors - Horizontal layout, no eyebrows */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+        <motion.div
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+        >
+          {/* Left: Factor list */}
+          <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-6 space-y-3 font-mono text-xs">
+            <div className="flex justify-between items-center text-[#a3a3a3] border-b border-white/[0.08] pb-3">
+              <span>C-Rank Multi-Factor Telemetry</span>
+              <span className="text-[#10b981] font-bold">Continuous</span>
+            </div>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center bg-[#0a0a0a] p-2.5 rounded-lg border border-white/[0.04]">
+                <span className="text-[#a3a3a3]">External Merge Rate</span>
+                <span className="text-[#10b981] font-bold">Primary</span>
+              </div>
+              <div className="flex justify-between items-center bg-[#0a0a0a] p-2.5 rounded-lg border border-white/[0.04]">
+                <span className="text-[#a3a3a3]">Review Turnaround</span>
+                <span className="text-[#38bdf8] font-bold">Core</span>
+              </div>
+              <div className="flex justify-between items-center bg-[#0a0a0a] p-2.5 rounded-lg border border-white/[0.04]">
+                <span className="text-[#a3a3a3]">Commit Recency</span>
+                <span className="text-[#c084fc] font-bold">Core</span>
+              </div>
+              <div className="flex justify-between items-center bg-[#0a0a0a] p-2.5 rounded-lg border border-white/[0.04]">
+                <span className="text-[#a3a3a3]">First-Timer Success</span>
+                <span className="text-[#fbbf24] font-bold">Hospitality</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Description */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#38bdf8]">
+              <Sparkles className="h-3.5 w-3.5" /> Objective Scoring
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight font-sans">
+              9 factors. Zero subjective gossip.
+            </h2>
+            <p className="text-sm text-[#a3a3a3] font-sans leading-relaxed">
+              GetMerged benchmarks repositories across 20+ language ecosystems. We measure reviewer turnaround, repeat contributor retention, and PR friction.
+            </p>
+            <Link
+              href="/how-c-rank-works"
+              title="Explore the C-Rank scoring methodology"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#1c1c1c] border border-white/[0.08] px-5 py-2.5 font-sans text-xs font-semibold text-white hover:bg-[#262626] hover:border-white/[0.16] transition-all"
+            >
+              <span>Explore the methodology</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Maintainer CTA - Full width banner */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
+        <motion.div
+          className="rounded-xl bg-[#141414] border border-white/[0.08] p-8 sm:p-10"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#10b981]">
+                <ShieldCheck className="h-3.5 w-3.5" /> For Maintainers
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-sans">
+                Own a repo? See why contributors bounce.
+              </h2>
+              <p className="text-sm text-[#a3a3a3] font-sans leading-relaxed">
+                Discover your C-Rank grade, review turnaround, and first-timer acceptance score.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() => openSearch()}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#ff6b00] text-white font-mono text-xs font-bold rounded-lg hover:bg-[#ff8a33] cursor-pointer transition-colors"
+                >
+                  <Search className="h-3.5 w-3.5" /> Check Your Grade
+                </button>
+                <Link
+                  href="/guides/how-to-know-if-maintainer-will-review"
+                  title="Maintainer Hospitality Best Practices"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#1c1c1c] border border-white/[0.08] text-white font-mono text-xs font-bold rounded-lg hover:bg-[#262626] transition-colors"
+                >
+                  Read Playbook <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="bg-[#0a0a0a] border border-white/[0.08] rounded-xl p-6 space-y-3 font-mono text-xs">
+              <div className="font-bold text-white border-b border-white/[0.08] pb-2 flex items-center justify-between">
+                <span>Maintainer Health Check</span>
+                <span className="text-[#10b981]">Live</span>
+              </div>
+              <div className="space-y-2 pt-1">
+                <div className="flex items-center gap-2 text-[#a3a3a3]">
+                  <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0" />
+                  <span>p50 Review Turnaround &lt; 24h</span>
+                </div>
+                <div className="flex items-center gap-2 text-[#a3a3a3]">
+                  <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0" />
+                  <span>Outside PR Merge Rate &gt; 65%</span>
+                </div>
+                <div className="flex items-center gap-2 text-[#a3a3a3]">
+                  <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0" />
+                  <span>Multi-Maintainer Core</span>
+                </div>
+                <div className="flex items-center gap-2 text-[#a3a3a3]">
+                  <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0" />
+                  <span>Scoped Good First Issues</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Main Curated Showroom Section */}
+      <main id="leaderboard-grid" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex-1 w-full pt-4">
+        {/* Category Switcher */}
+        <div className="mb-8 rounded-xl bg-[#141414] p-5 sm:p-6 border border-white/[0.08] space-y-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-white font-sans">
+                Explore Open Doors by Category
+              </h2>
+            </div>
+
+            <Link
+              href="/repos"
+              title="Open full multi-filter repository directory"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1c1c1c] border border-white/[0.08] hover:bg-[#262626] text-white px-5 py-2.5 text-xs font-semibold transition-all self-start md:self-auto"
+            >
+              <span>Explore All {stats?.total_repos ? `${stats.total_repos.toLocaleString()} ` : ""}Repositories</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+
+          {/* Category Chips */}
+          <div className="flex items-center gap-2.5 overflow-x-auto pb-2 text-xs font-sans">
             <motion.button
               type="button"
               aria-pressed={selectedTier === "S" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All"}
@@ -736,16 +731,15 @@ export default function HomeClient({
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
+              className={`px-4 py-2 rounded-lg font-bold transition-all shrink-0 cursor-pointer border ${
                 selectedTier === "S" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All"
-                  ? "bg-amber-600 text-white shadow-sm"
-                  : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                  ? "bg-[#fbbf24] text-black border-[#fbbf24]"
+                  : "bg-[#1c1c1c] text-[#d4d4d4] border-white/[0.08] hover:border-white/[0.16]"
               }`}
             >
-              👑 Hall of Fame
+              Hall of Fame
             </motion.button>
 
-            {/* 2. Welcoming (A-Tier & S-Tier) */}
             <motion.button
               type="button"
               aria-pressed={selectedTier === "A" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All"}
@@ -759,16 +753,15 @@ export default function HomeClient({
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
+              className={`px-4 py-2 rounded-lg font-bold transition-all shrink-0 cursor-pointer border ${
                 selectedTier === "A"
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                  ? "bg-[#10b981] text-white border-[#10b981]"
+                  : "bg-[#1c1c1c] text-[#d4d4d4] border-white/[0.08] hover:border-white/[0.16]"
               }`}
             >
-              ⚡ Welcoming
+              Welcoming
             </motion.button>
 
-            {/* 3. Star Giants (50k+ Stars) */}
             <motion.button
               type="button"
               aria-pressed={selectedBucket === "50k+"}
@@ -782,16 +775,15 @@ export default function HomeClient({
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
+              className={`px-4 py-2 rounded-lg font-bold transition-all shrink-0 cursor-pointer border ${
                 selectedBucket === "50k+"
-                  ? "bg-violet-600 text-white shadow-sm"
-                  : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                  ? "bg-[#c084fc] text-white border-[#c084fc]"
+                  : "bg-[#1c1c1c] text-[#d4d4d4] border-white/[0.08] hover:border-white/[0.16]"
               }`}
             >
-              ⭐ Star Giants
+              Star Giants
             </motion.button>
 
-            {/* 4. Has Good First Issue */}
             <motion.button
               type="button"
               aria-pressed={selectedFirstTimerBucket === "has_gfi"}
@@ -805,16 +797,15 @@ export default function HomeClient({
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
+              className={`px-4 py-2 rounded-lg font-bold transition-all shrink-0 cursor-pointer border ${
                 selectedFirstTimerBucket === "has_gfi"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                  ? "bg-[#38bdf8] text-white border-[#38bdf8]"
+                  : "bg-[#1c1c1c] text-[#d4d4d4] border-white/[0.08] hover:border-white/[0.16]"
               }`}
             >
-              🌱 Has Good First Issue
+              Has Good First Issue
             </motion.button>
 
-            {/* 5. High Merge Rate (>= 60%) */}
             <motion.button
               type="button"
               aria-pressed={selectedMinMergeRate === "60%"}
@@ -828,16 +819,15 @@ export default function HomeClient({
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
+              className={`px-4 py-2 rounded-lg font-bold transition-all shrink-0 cursor-pointer border ${
                 selectedMinMergeRate === "60%"
-                  ? "bg-rose-600 text-white shadow-sm"
-                  : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                  ? "bg-[#f87171] text-white border-[#f87171]"
+                  : "bg-[#1c1c1c] text-[#d4d4d4] border-white/[0.08] hover:border-white/[0.16]"
               }`}
             >
-              🚀 High Merge Rate
+              High Merge Rate
             </motion.button>
 
-            {/* 6. First Timer Awesome (> 60% Acceptance) */}
             <motion.button
               type="button"
               aria-pressed={selectedFirstTimerBucket === "60-80%"}
@@ -851,13 +841,13 @@ export default function HomeClient({
                 setPage(1);
               }}
               whileTap={{ scale: 0.96 }}
-              className={`px-4 py-2 rounded-xl font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
+              className={`px-4 py-2 rounded-lg font-bold transition-all shrink-0 cursor-pointer border ${
                 selectedFirstTimerBucket === "60-80%"
-                  ? "bg-rose-600 text-white shadow-sm"
-                  : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                  ? "bg-[#ff6b00] text-white border-[#ff6b00]"
+                  : "bg-[#1c1c1c] text-[#d4d4d4] border-white/[0.08] hover:border-white/[0.16]"
               }`}
             >
-              🎯 First Timer Awesome
+              First Timer Awesome
             </motion.button>
           </div>
         </div>
@@ -868,7 +858,7 @@ export default function HomeClient({
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
-                className="relative overflow-hidden rounded-3xl border border-white/[0.1] glass-panel p-6 h-[260px] animate-pulse"
+                className="relative overflow-hidden rounded-xl border border-white/[0.08] bg-[#141414] p-6 h-[260px] animate-pulse"
               />
             ))}
           </div>
@@ -888,23 +878,23 @@ export default function HomeClient({
               ))}
             </div>
 
-            {/* Bottom Callout Banner */}
-            <div className="my-8 rounded-3xl glass-card text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+            {/* Bottom CTA */}
+            <div className="my-8 rounded-xl bg-[#141414] border border-white/[0.08] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
               <div>
-                <h3 className="text-lg sm:text-xl font-bold font-space">
-                  Looking for custom languages, merge rates, or response times?
+                <h3 className="text-lg sm:text-xl font-bold text-white font-sans">
+                  Looking for custom languages or merge rates?
                 </h3>
-                <p className="text-xs text-zinc-300 mt-1 font-sans">
-                  Filter across 20+ language ecosystems with full pagination in our new dedicated repository index.
+                <p className="text-xs text-[#737373] mt-1 font-sans">
+                  Filter across 20+ ecosystems with full pagination.
                 </p>
               </div>
 
               <Link
                 href="/repos"
                 title="Browse full repository database with all filters"
-                className="inline-flex items-center gap-2 rounded-2xl glass-panel text-white hover:glass-card px-6 py-3 text-xs font-bold font-sans shrink-0 shadow-2xs transition-transform active:scale-98"
+                className="inline-flex items-center gap-2 rounded-lg bg-[#ff6b00] text-white hover:bg-[#ff8a33] px-6 py-3 text-xs font-bold font-sans shrink-0 transition-colors"
               >
-                <span>Open /repos Explorer</span>
+                <span>Open Explorer</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -914,14 +904,14 @@ export default function HomeClient({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="rounded-3xl border border-dashed border-white/[0.12] p-12 text-center glass-panel shadow-2xs my-4"
+            className="rounded-xl border border-dashed border-white/[0.12] p-12 text-center bg-[#141414] my-4"
           >
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl glass-card text-zinc-300 mb-3">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-[#1c1c1c] text-[#a3a3a3] mb-3">
               <Search className="h-5 w-5" />
             </div>
-            <h3 className="text-base font-space font-bold text-white">No open doors found</h3>
-            <p className="mt-1 text-xs text-zinc-300 font-sans max-w-sm mx-auto leading-relaxed">
-              No repositories matched your selected language, star tier, or search query.
+            <h3 className="text-base font-bold text-white font-sans">No open doors found</h3>
+            <p className="mt-1 text-xs text-[#737373] font-sans max-w-sm mx-auto leading-relaxed">
+              No repositories matched your filters.
             </p>
             <button
               onClick={() => {
@@ -933,306 +923,254 @@ export default function HomeClient({
                 setPage(1);
                 setLoading(true);
               }}
-              className="mt-4 inline-flex items-center gap-1.5 rounded-xl glass-card px-4 py-2 text-xs font-mono font-semibold text-white hover:bg-zinc-800 active:scale-95 transition-all shadow-xs cursor-pointer"
+              className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#1c1c1c] border border-white/[0.08] px-4 py-2 text-xs font-mono font-semibold text-white hover:bg-[#262626] active:scale-95 transition-all cursor-pointer"
             >
-              Reset all filters →
+              Reset all filters
             </button>
           </motion.div>
         )}
       </main>
 
-      {/* SEO & Telemetry Intelligence Section */}
-      <section className="border-t border-white/[0.1] glass-panel py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl font-bold font-space text-white lg:text-4xl">
-              Stop submitting PRs to <span className="bg-orange-500/20 text-white px-2 rounded-lg">ghost towns.</span>
-            </h2>
-            <p className="mt-4 text-xs sm:text-sm lg:text-base text-zinc-300 leading-relaxed font-sans">
-              Thousands of open-source contributors waste hours writing clean pull requests only to have them sit unreviewed for months. 
-              <strong> GetMerged</strong> uses objective mathematical telemetry to grade repository maintainer responsiveness, merge velocity, and first-time contributor success.
-            </p>
-          </div>
+      {/* Ecosystem Rankings */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+        <div className="mx-auto max-w-3xl text-center mb-12 sm:mb-16">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white lg:text-4xl font-sans">
+            Top welcoming ecosystems
+          </h2>
+          <p className="mt-4 text-xs sm:text-sm lg:text-base text-[#a3a3a3] leading-relaxed font-sans">
+            Rankings of open-source ecosystems that actively welcome external pull requests.
+          </p>
+        </div>
 
-          {/* Ecosystem Leaderboard Section */}
-          <div className="grid grid-cols-1 gap-6 mb-16 font-mono">
-            <div className="rounded-2xl glass-panel p-6 sm:p-10 border border-white/[0.1] shadow-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-white/[0.1] pb-6 mb-8 gap-4">
-                <div>
-                  <h3 className="text-2xl font-bold text-white font-space tracking-tight">
-                    Top Welcoming Ecosystems
-                  </h3>
-                  <p className="text-xs sm:text-sm text-zinc-300 font-sans mt-1">
-                    Rankings of open-source ecosystems that actively welcome external pull requests.
-                  </p>
-                </div>
-                
-                <div className="flex items-center gap-2.5 shrink-0">
-                  <span className="text-xs text-zinc-300 font-sans font-semibold hidden sm:inline">Share:</span>
-                  <a
-                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                      "No more writing PRs for dead repos. GetMerged grades public GitHub projects using mathematical PR merge rates and review times. Check out these rankings! 🚪✨\n\nhttps://getmerged.abhishekco.de"
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Share GetMerged rankings on Twitter / X"
-                    onClick={() => posthog.capture("rankings_shared", { platform: "twitter" })}
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] glass-panel px-3.5 py-2 text-xs font-bold text-white hover:glass-card transition-all font-sans cursor-pointer shadow-2xs"
+        <div className="rounded-xl bg-[#141414] border border-white/[0.08] p-6 sm:p-10">
+          <div className="divide-y divide-white/[0.08]">
+            {(
+              stats?.language_breakdown || [
+                { language: "Python", total: 245, tier_map: { S: 35, A: 85, B: 95, C: 30 } },
+                { language: "TypeScript", total: 210, tier_map: { S: 28, A: 72, B: 80, C: 30 } },
+                { language: "Go", total: 180, tier_map: { S: 25, A: 65, B: 60, C: 30 } },
+                { language: "Rust", total: 140, tier_map: { S: 18, A: 42, B: 50, C: 30 } },
+                { language: "Java", total: 120, tier_map: { S: 15, A: 35, B: 40, C: 30 } },
+              ]
+            )
+              .map((item) => {
+                const sCount = item.tier_map?.["S"] || 0;
+                const aCount = item.tier_map?.["A"] || 0;
+                const bCount = item.tier_map?.["B"] || 0;
+                const cCount = item.tier_map?.["C"] || 0;
+                const dCount = item.tier_map?.["D"] || 0;
+                const grandTotal = item.total || sCount + aCount + bCount + cCount + dCount || 1;
+
+                const sPct = (sCount / grandTotal) * 100;
+                const aPct = (aCount / grandTotal) * 100;
+                const bPct = (bCount / grandTotal) * 100;
+                const cPct = (cCount / grandTotal) * 100;
+                const dPct = (dCount / grandTotal) * 100;
+
+                const weightedScore = sPct * 1.0 + aPct * 0.75 + bPct * 0.4 + cPct * 0.1;
+
+                return {
+                  ...item,
+                  sCount,
+                  aCount,
+                  bCount,
+                  cCount,
+                  dCount,
+                  grandTotal,
+                  sPct,
+                  aPct,
+                  bPct,
+                  cPct,
+                  dPct,
+                  weightedScore,
+                };
+              })
+              .filter((item) => item.grandTotal >= 15 && (item.sCount + item.aCount) >= 3)
+              .sort((a, b) => b.weightedScore - a.weightedScore)
+              .slice(0, 10)
+              .map((item, idx) => {
+                const rankMedal = idx === 0 ? "1" : idx === 1 ? "2" : idx === 2 ? "3" : `${idx + 1}`;
+                return (
+                  <motion.div
+                    key={item.language}
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.35, ease: EASE_OUT_EXPO, delay: idx * 0.05 }}
+                    className="py-5 first:pt-2 last:pb-2 group transition-colors"
                   >
-                    <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
-                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                    </svg>
-                    <span>Twitter / X</span>
-                  </a>
-                  <a
-                    href={`https://www.reddit.com/submit?url=${encodeURIComponent("https://getmerged.abhishekco.de")}&title=${encodeURIComponent(
-                      "Don't waste time on dead repos. GetMerged scores projects by PR merge rates, review times, and first-timer success."
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Share GetMerged on Reddit"
-                    onClick={() => posthog.capture("rankings_shared", { platform: "reddit" })}
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] glass-panel px-3.5 py-2 text-xs font-bold text-white hover:glass-card transition-all font-sans cursor-pointer shadow-2xs"
-                  >
-                    <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
-                      <path d="M24 11.5c0-1.65-1.35-3-3-3-.96 0-1.86.48-2.42 1.24-1.64-1-3.85-1.64-6.24-1.72l1.37-4.31 3.8 1.19c.14.78.8 1.38 1.63 1.38 1.05 0 1.9-.85 1.9-1.9s-.85-1.9-1.9-1.9c-.83 0-1.5.59-1.63 1.38l-4.14-1.3c-.2-.06-.41.04-.48.24l-1.52 4.8C5.9 7.82 3.69 8.46 2.05 9.46 1.48 8.7 0.58 8.22-.38 8.22c-1.65 0-3 1.35-3 3 0 1.21.72 2.26 1.77 2.73C-1.6 14.54-1.6 15.14-1.6 15.5c0 3.59 5.37 6.5 12 6.5s12-2.91 12-6.5c0-.36 0-.96-.02-1.53 1.05-.47 1.77-1.52 1.77-2.73z" />
-                    </svg>
-                    <span>Reddit</span>
-                  </a>
-                </div>
-              </div>
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-sm font-bold text-[#737373] w-6">#{rankMedal}</span>
+                        <div className="h-10 w-10 rounded-lg bg-[#1c1c1c] border border-white/[0.08] flex items-center justify-center shrink-0">
+                          <LangLogo language={item.language} />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <Link
+                              href={`/rankings/${getLanguageSlug(item.language)}`}
+                              title={`Top Welcoming Open-Source ${item.language} Repositories`}
+                              className="text-lg font-bold text-white group-hover:text-[#a3a3a3] transition-colors tracking-tight hover:underline font-sans"
+                            >
+                              {item.language}
+                            </Link>
+                          </div>
+                          <p className="text-xs text-[#737373] font-sans mt-0.5">
+                            <strong className="text-[#d4d4d4]">{item.sCount + item.aCount}</strong> welcoming projects, avg <strong className="text-[#d4d4d4]">{item.avg_merge_rate ? `${item.avg_merge_rate.toFixed(0)}%` : "84%"}</strong> acceptance.
+                          </p>
+                        </div>
+                      </div>
 
-              <div className="divide-y divide-zinc-100">
-                {(
-                  stats?.language_breakdown || [
-                    { language: "Python", total: 245, tier_map: { S: 35, A: 85, B: 95, C: 30 } },
-                    { language: "TypeScript", total: 210, tier_map: { S: 28, A: 72, B: 80, C: 30 } },
-                    { language: "Go", total: 180, tier_map: { S: 25, A: 65, B: 60, C: 30 } },
-                    { language: "Rust", total: 140, tier_map: { S: 18, A: 42, B: 50, C: 30 } },
-                    { language: "Java", total: 120, tier_map: { S: 15, A: 35, B: 40, C: 30 } },
-                  ]
-                )
-                  .map((item) => {
-                    const sCount = item.tier_map?.["S"] || 0;
-                    const aCount = item.tier_map?.["A"] || 0;
-                    const bCount = item.tier_map?.["B"] || 0;
-                    const cCount = item.tier_map?.["C"] || 0;
-                    const dCount = item.tier_map?.["D"] || 0;
-                    const grandTotal = item.total || sCount + aCount + bCount + cCount + dCount || 1;
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8 shrink-0 font-mono pl-9 lg:pl-0">
+                        <div className="flex flex-col gap-1 w-full sm:w-56">
+                          <div className="flex items-center justify-between text-[11px] font-sans text-[#737373]">
+                            <span>Tier Spread</span>
+                            <span className="font-mono text-[10px]">{item.grandTotal} repos</span>
+                          </div>
+                          <div
+                            className="h-2.5 w-full rounded-full bg-[#1c1c1c] p-0.5 flex overflow-hidden border border-white/[0.04]"
+                            title={`S: ${item.sCount}, A: ${item.aCount}, B: ${item.bCount}, C/D: ${item.cCount + item.dCount}`}
+                          >
+                            {item.sPct > 0 && (
+                              <div
+                                style={{ width: `${item.sPct}%` }}
+                                className="h-full bg-[#fbbf24] rounded-l-full first:rounded-l-full last:rounded-r-full transition-all"
+                              />
+                            )}
+                            {item.aPct > 0 && (
+                              <div
+                                style={{ width: `${item.aPct}%` }}
+                                className="h-full bg-[#10b981] first:rounded-l-full last:rounded-r-full transition-all"
+                              />
+                            )}
+                            {item.bPct > 0 && (
+                              <div
+                                style={{ width: `${item.bPct}%` }}
+                                className="h-full bg-[#38bdf8] first:rounded-l-full last:rounded-r-full transition-all"
+                              />
+                            )}
+                            {(item.cPct + item.dPct) > 0 && (
+                              <div
+                                style={{ width: `${item.cPct + item.dPct}%` }}
+                                className="h-full bg-[#525252] rounded-r-full first:rounded-l-full last:rounded-r-full transition-all"
+                              />
+                            )}
+                          </div>
+                          <div className="flex items-center justify-between text-[10px] font-mono text-[#737373]">
+                            <span className="text-[#fbbf24] font-semibold">{item.sCount} S</span>
+                            <span className="text-[#10b981] font-semibold">{item.aCount} A</span>
+                            <span className="text-[#38bdf8] font-semibold">{item.bCount} B</span>
+                            <span>{item.cCount + item.dCount} C/D</span>
+                          </div>
+                        </div>
 
-                    const sPct = (sCount / grandTotal) * 100;
-                    const aPct = (aCount / grandTotal) * 100;
-                    const bPct = (bCount / grandTotal) * 100;
-                    const cPct = (cCount / grandTotal) * 100;
-                    const dPct = (dCount / grandTotal) * 100;
-
-                    const weightedScore = sPct * 1.0 + aPct * 0.75 + bPct * 0.4 + cPct * 0.1;
-
-                    return {
-                      ...item,
-                      sCount,
-                      aCount,
-                      bCount,
-                      cCount,
-                      dCount,
-                      grandTotal,
-                      sPct,
-                      aPct,
-                      bPct,
-                      cPct,
-                      dPct,
-                      weightedScore,
-                    };
-                  })
-                  .filter((item) => item.grandTotal >= 15 && (item.sCount + item.aCount) >= 3)
-                  .sort((a, b) => b.weightedScore - a.weightedScore)
-                  .slice(0, 10)
-                  .map((item, idx) => {
-                    const rankMedal = idx === 0 ? "1" : idx === 1 ? "2" : idx === 2 ? "3" : `${idx + 1}`;
-                    return (
-                      <motion.div
-                        key={item.language}
-                        initial={{ opacity: 0, y: 12 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-40px" }}
-                        transition={{ duration: 0.35, ease: EASE_OUT_EXPO, delay: idx * 0.05 }}
-                        className="py-5 first:pt-2 last:pb-2 group transition-colors"
-                      >
-                        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                          <div className="flex items-center gap-3">
-                            <span className="font-mono text-sm font-bold text-zinc-300 w-6">#{rankMedal}</span>
-                            <div className="h-10 w-10 rounded-xl border border-white/[0.1] glass-card flex items-center justify-center shrink-0">
-                              <LangLogo language={item.language} />
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <Link
-                                  href={`/rankings/${getLanguageSlug(item.language)}`}
-                                  title={`View Top Welcoming Open-Source ${item.language} Repositories`}
-                                  className="font-space text-lg font-bold text-white group-hover:text-zinc-300 transition-colors tracking-tight hover:underline"
-                                >
-                                  {item.language}
-                                </Link>
-                              </div>
-                              <p className="text-xs text-zinc-300 font-sans mt-0.5">
-                                Maintainers merge <strong>{item.sCount + item.aCount}</strong> welcoming projects with an avg <strong>{item.avg_merge_rate ? `${item.avg_merge_rate.toFixed(0)}%` : "84%"}</strong> acceptance rate.
-                              </p>
+                        <div className="flex items-center gap-6 text-right shrink-0">
+                          <div>
+                            <div className="text-[11px] text-[#737373] font-sans">Welcoming</div>
+                            <div className="text-sm font-bold text-white">
+                              {item.sCount + item.aCount}
                             </div>
                           </div>
-
-                          {/* Multi-Segment Tier Pill & Metrics Group */}
-                          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8 shrink-0 font-mono pl-9 lg:pl-0">
-                            {/* Visual Multi-Segment Pill Bar */}
-                            <div className="flex flex-col gap-1 w-full sm:w-56">
-                              <div className="flex items-center justify-between text-[11px] font-sans text-zinc-300">
-                                <span>Tier Spread</span>
-                                <span className="font-mono text-[10px] text-zinc-300">{item.grandTotal} repos</span>
-                              </div>
-                              <div
-                                className="h-2.5 w-full rounded-full glass-card p-0.5 flex overflow-hidden border border-white/[0.1] shadow-2xs"
-                                title={`S-Tier: ${item.sCount} (${item.sPct.toFixed(1)}%), A-Tier: ${item.aCount} (${item.aPct.toFixed(1)}%), B-Tier: ${item.bCount} (${item.bPct.toFixed(1)}%), C/D-Tier: ${item.cCount + item.dCount}`}
-                              >
-                                {item.sPct > 0 && (
-                                  <div
-                                    style={{ width: `${item.sPct}%` }}
-                                    className="h-full bg-amber-500 rounded-l-full first:rounded-l-full last:rounded-r-full transition-all"
-                                  />
-                                )}
-                                {item.aPct > 0 && (
-                                  <div
-                                    style={{ width: `${item.aPct}%` }}
-                                    className="h-full bg-emerald-600 first:rounded-l-full last:rounded-r-full transition-all"
-                                  />
-                                )}
-                                {item.bPct > 0 && (
-                                  <div
-                                    style={{ width: `${item.bPct}%` }}
-                                    className="h-full bg-blue-500 first:rounded-l-full last:rounded-r-full transition-all"
-                                  />
-                                )}
-                                {(item.cPct + item.dPct) > 0 && (
-                                  <div
-                                    style={{ width: `${item.cPct + item.dPct}%` }}
-                                    className="h-full bg-zinc-300 rounded-r-full first:rounded-l-full last:rounded-r-full transition-all"
-                                  />
-                                )}
-                              </div>
-                              <div className="flex items-center justify-between text-[10px] font-mono text-zinc-300">
-                                <span className="text-amber-600 font-semibold">{item.sCount} S</span>
-                                <span className="text-emerald-600 font-semibold">{item.aCount} A</span>
-                                <span className="text-blue-600 font-semibold">{item.bCount} B</span>
-                                <span className="text-zinc-300">{item.cCount + item.dCount} C/D</span>
-                              </div>
-                            </div>
-
-                             {/* Welcoming & Score Badges */}
-                            <div className="flex items-center gap-6 text-right shrink-0">
-                              <div>
-                                <div className="text-[11px] text-zinc-300 font-sans">Welcoming</div>
-                                <div className="text-sm font-bold text-white">
-                                  {item.sCount + item.aCount}
-                                </div>
-                              </div>
-                              <div>
-                                <div className="text-[11px] text-zinc-300 font-sans">Score</div>
-                                <div className="inline-block px-2.5 py-1 rounded-lg glass-card border border-white/[0.1] text-white font-bold text-xs">
-                                  {item.weightedScore.toFixed(1)} pts
-                                </div>
-                              </div>
+                          <div>
+                            <div className="text-[11px] text-[#737373] font-sans">Score</div>
+                            <div className="inline-block px-2.5 py-1 rounded-lg bg-[#1c1c1c] border border-white/[0.08] text-white font-bold text-xs">
+                              {item.weightedScore.toFixed(1)} pts
                             </div>
                           </div>
                         </div>
-                      </motion.div>
-                    );
-                  })}
-              </div>
-            </div>
-          </div>
-
-          {/* Telemetry Architecture Overview */}
-          <div className="rounded-3xl border border-white/[0.1] bg-black ambient-glow p-8 sm:p-12 shadow-xs mb-16">
-            <div className="max-w-3xl mb-10">
-              <h3 className="text-2xl sm:text-3xl font-bold font-space text-white tracking-tight">
-                How GetMerged Eliminates Ghost-Town Repositories
-              </h3>
-              <p className="text-xs sm:text-sm text-zinc-300 font-sans mt-2 leading-relaxed">
-                We do not rely on subjective opinions or vanity star counts. GetMerged queries raw GitHub GraphQL event streams continuously to compute real maintainer velocity metrics.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6 border-t border-white/[0.1] font-sans">
-              <div className="space-y-2.5">
-                <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg glass-card text-white font-mono font-bold text-xs">
-                  01
-                </div>
-                <h4 className="font-space text-base font-bold text-white">GraphQL Telemetry Engine</h4>
-                <p className="text-xs text-zinc-300 leading-relaxed">
-                  Calculates maintainer response latency down to the minute. PRs reviewed within 24 hours score highest in C-Rank™ calculations.
-                </p>
-              </div>
-
-              <div className="space-y-2.5">
-                <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg glass-card text-white font-mono font-bold text-xs">
-                  02
-                </div>
-                <h4 className="font-space text-lg font-bold text-white">First-Timer Conversion Rate</h4>
-                <p className="text-xs text-zinc-300 leading-relaxed">
-                  Evaluates the success rate of authors submitting their first PR to a repo. Excludes internal maintainer merges to preserve external contributor stats.
-                </p>
-              </div>
-
-              <div className="space-y-2.5">
-                <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg glass-card text-white font-mono font-bold text-xs">
-                  03
-                </div>
-                <h4 className="font-space text-lg font-bold text-white">Verified Contributor Badges</h4>
-                <p className="text-xs text-zinc-300 leading-relaxed">
-                  Sign in with GitHub to cross-reference merged commits. Reviews submitted by verified contributors provide authentic community ratings and maintainer turnaround insights.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* GitHub Sign-In / Contributor Action Banner */}
-          <div className="rounded-3xl border border-white/[0.1] glass-panel p-8 sm:p-12 text-white shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-            <div className="max-w-xl">
-              <h3 className="text-2xl sm:text-3xl font-bold font-space tracking-tight leading-tight">
-                Ready to find your next welcoming open-source contribution?
-              </h3>
-              <p className="mt-3 text-xs sm:text-sm text-zinc-300 leading-relaxed font-sans">
-                {isLoggedIn
-                  ? "Explore indexed repositories above or filter by your favorite tech stack to find open doors."
-                  : "Sign in with your GitHub account to watch repositories, unlock maintainer guidelines, and receive automated PR review alerts."}
-              </p>
-            </div>
-            {isLoggedIn ? (
-              <button
-                onClick={() => {
-                  const gridEl = document.getElementById("leaderboard-grid");
-                  if (gridEl) {
-                    gridEl.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
-                className="inline-flex items-center gap-2.5 rounded-xl glass-card px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs shrink-0 cursor-pointer"
-              >
-                <span>Explore Welcoming Repos</span>
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            ) : (
-              <button
-                onClick={() => openAuthModal("Sign in to GetMerged", "Sign in to access daily trending repositories, page 2+ pagination, and contributor insights.", "homepage_cta_banner")}
-                title="Sign in to GetMerged"
-                className="inline-flex items-center gap-2.5 rounded-xl glass-card px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs shrink-0 cursor-pointer"
-              >
-                <span>Sign in to GetMerged</span>
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            )}
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
           </div>
         </div>
       </section>
 
-      {/* Anonymous onboarding quiz: converts organic traffic into signups */}
+      {/* How It Works - 3 columns */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-3xl mb-10">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight font-sans">
+            How GetMerged works
+          </h2>
+          <p className="text-xs sm:text-sm text-[#737373] font-sans mt-2 leading-relaxed">
+            We query raw GitHub GraphQL event streams to compute real maintainer velocity metrics.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 font-sans">
+          <div className="space-y-2.5">
+            <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#1c1c1c] border border-white/[0.08] text-white font-mono font-bold text-xs">
+              01
+            </div>
+            <h4 className="text-base font-bold text-white">GraphQL Telemetry</h4>
+            <p className="text-xs text-[#a3a3a3] leading-relaxed">
+              Calculates maintainer response latency. PRs reviewed within 24h score highest.
+            </p>
+          </div>
+
+          <div className="space-y-2.5">
+            <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#1c1c1c] border border-white/[0.08] text-white font-mono font-bold text-xs">
+              02
+            </div>
+            <h4 className="text-base font-bold text-white">First-Timer Conversion</h4>
+            <p className="text-xs text-[#a3a3a3] leading-relaxed">
+              Evaluates success rate of first PRs. Excludes internal maintainer merges.
+            </p>
+          </div>
+
+          <div className="space-y-2.5">
+            <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#1c1c1c] border border-white/[0.08] text-white font-mono font-bold text-xs">
+              03
+            </div>
+            <h4 className="text-base font-bold text-white">Verified Badges</h4>
+            <p className="text-xs text-[#a3a3a3] leading-relaxed">
+              Sign in with GitHub to cross-reference merged commits and provide authentic reviews.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Banner */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+        <div className="rounded-xl bg-[#141414] border border-white/[0.08] p-8 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+          <div className="max-w-xl">
+            <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight font-sans">
+              Ready to find your next contribution?
+            </h3>
+            <p className="mt-3 text-xs sm:text-sm text-[#a3a3a3] leading-relaxed font-sans">
+              {isLoggedIn
+                ? "Explore indexed repositories above or filter by your favorite tech stack."
+                : "Sign in with GitHub to watch repositories, unlock maintainer guidelines, and receive PR review alerts."}
+            </p>
+          </div>
+          {isLoggedIn ? (
+            <button
+              onClick={() => {
+                const gridEl = document.getElementById("leaderboard-grid");
+                if (gridEl) {
+                  gridEl.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+              className="inline-flex items-center gap-2.5 rounded-lg bg-[#ff6b00] px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-[#ff8a33] active:scale-[0.98] transition-all shrink-0 cursor-pointer"
+            >
+              <span>Explore Repos</span>
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          ) : (
+            <button
+              onClick={() => openAuthModal("Sign in to GetMerged", "Sign in to access trending repositories and contributor insights.", "homepage_cta_banner")}
+              title="Sign in to GetMerged"
+              className="inline-flex items-center gap-2.5 rounded-lg bg-[#ff6b00] px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-[#ff8a33] active:scale-[0.98] transition-all shrink-0 cursor-pointer"
+            >
+              <span>Sign in to GetMerged</span>
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      </section>
+
+      {/* Language Quiz */}
       <div className="mx-auto max-w-6xl px-4 pb-14 sm:px-6 lg:px-8">
         <LanguageMatchQuiz />
       </div>

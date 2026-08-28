@@ -54,7 +54,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/[0.1] bg-black/75 backdrop-blur-xl transition-all">
+    <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-[#0a0a0a]/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Brand Logo & Navigation */}
         <div className="flex items-center gap-8 min-w-0 shrink-0">
@@ -64,26 +64,24 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             className="flex items-center gap-2.5 group shrink-0"
           >
             <motion.div
-              className="h-8 w-8 rounded-xl glass-panel border border-white/[0.15] flex items-center justify-center shadow-inner"
+              className="h-8 w-8 rounded-lg bg-[#1c1c1c] border border-white/[0.08] flex items-center justify-center"
               whileHover={reduceMotion ? undefined : { scale: 1.05 }}
               transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
               aria-hidden="true"
             >
-              <span className="font-space text-xs font-bold text-white tracking-tight">GM</span>
+              <span className="font-sans text-xs font-bold text-white tracking-tight">GM</span>
             </motion.div>
-            <div className="flex flex-col">
-              <span className="font-sans text-sm font-semibold tracking-tight text-white group-hover:text-white transition-colors">
-                GetMerged
-              </span>
-            </div>
+            <span className="font-sans text-sm font-semibold tracking-tight text-white group-hover:text-white transition-colors">
+              GetMerged
+            </span>
           </Link>
 
-          <nav className="hidden xl:flex items-center gap-6 text-xs font-sans font-medium text-zinc-300 shrink-0">
+          <nav className="hidden xl:flex items-center gap-6 text-xs font-sans font-medium text-[#a3a3a3] shrink-0">
             <Link href="/repos" title="Explore All Open Source Repositories" className="hover:text-white transition-colors">
               Repositories
             </Link>
             <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm and Methodology" className="hover:text-white transition-colors">
-              How C-Rank™ Works
+              How C-Rank Works
             </Link>
             <Link href="/rankings" title="Browse Top Open Source Repositories by Language Ecosystem" className="hover:text-white transition-colors">
               Ecosystems
@@ -94,29 +92,29 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             <Link href="/guides" title="Open Source Contribution Guides and Best Practices" className="hover:text-white transition-colors">
               Guides
             </Link>
-            <Link href="/league" title="Monthly Open-Source Contributor League & Active Sprints" className="text-orange-400 hover:text-orange-300 font-semibold transition-colors flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+            <Link href="/league" title="Monthly Open-Source Contributor League & Active Sprints" className="text-[#ff6b00] hover:text-[#ff8a33] font-semibold transition-colors flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b00] animate-pulse" />
               Monthly League
             </Link>
           </nav>
         </div>
 
-        {/* Floating Apple-Style Search Button */}
+        {/* Floating Search Button */}
         {isSearchVisible && (
           <div className="flex-1 min-w-[140px] max-w-xs sm:max-w-sm mx-2">
             <button
               type="button"
               onClick={handleOpenSearch}
               aria-label="Search repositories"
-              className="w-full relative flex items-center justify-between h-9 rounded-xl border border-white/[0.1] glass-card/60 hover:glass-panel hover:border-white/[0.15] px-3 shadow-inner focus-visible:ring-2 focus-visible:ring-orange-500 transition-all cursor-pointer group text-left"
+              className="w-full relative flex items-center justify-between h-9 rounded-lg border border-white/[0.08] bg-[#141414] hover:border-white/[0.16] hover:bg-[#1c1c1c] px-3 transition-all cursor-pointer group text-left"
             >
               <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">
-                <Search className="h-3.5 w-3.5 text-zinc-300 group-hover:text-zinc-200 shrink-0 transition-colors" />
-                <span className="text-xs text-zinc-300 group-hover:text-zinc-300 truncate font-sans block">
+                <Search className="h-3.5 w-3.5 text-[#a3a3a3] group-hover:text-[#d4d4d4] shrink-0 transition-colors" />
+                <span className="text-xs text-[#a3a3a3] group-hover:text-[#d4d4d4] truncate font-sans block">
                   {displayQuery || placeholderText || "Search repositories..."}
                 </span>
               </div>
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-md border border-white/[0.1] bg-white/[0.05] px-1.5 py-0.5 font-mono text-[10px] font-medium text-zinc-300 shrink-0">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-md border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] font-medium text-[#a3a3a3] shrink-0">
                 <span>⌘</span>K
               </kbd>
             </button>
@@ -126,9 +124,9 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
         {/* Right Actions */}
         <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
           {authLoading ? (
-            <div className="h-8 w-20 rounded-xl glass-card animate-pulse border border-white/[0.05]" />
+            <div className="h-8 w-20 rounded-lg bg-[#1c1c1c] animate-pulse border border-white/[0.04]" />
           ) : user ? (
-            <div className="flex items-center gap-2.5 glass-panel border border-white/[0.1] rounded-xl px-3 py-1.5 shadow-sm shrink-0 backdrop-blur-md">
+            <div className="flex items-center gap-2.5 bg-[#141414] border border-white/[0.08] rounded-lg px-3 py-1.5 shrink-0">
               {user.slug ? (
                 <Link
                   href={`/${user.slug}`}
@@ -140,10 +138,10 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                     <img
                       src={user.avatar_url}
                       alt={user.username}
-                      className="h-6 w-6 rounded-full shrink-0 ring-1 ring-white/[0.2]"
+                      className="h-6 w-6 rounded-full shrink-0 ring-1 ring-white/[0.12]"
                     />
                   ) : null}
-                  <span className="font-sans text-xs font-medium text-zinc-200 max-w-[90px] truncate">
+                  <span className="font-sans text-xs font-medium text-[#d4d4d4] max-w-[90px] truncate">
                     {user.username}
                   </span>
                 </Link>
@@ -154,10 +152,10 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                     <img
                       src={user.avatar_url}
                       alt={user.username}
-                      className="h-6 w-6 rounded-full shrink-0 ring-1 ring-white/[0.2]"
+                      className="h-6 w-6 rounded-full shrink-0 ring-1 ring-white/[0.12]"
                     />
                   ) : null}
-                  <span className="font-sans text-xs font-medium text-zinc-200 max-w-[90px] truncate">
+                  <span className="font-sans text-xs font-medium text-[#d4d4d4] max-w-[90px] truncate">
                     {user.username}
                   </span>
                 </div>
@@ -166,9 +164,9 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <Link
                 href="/watchlist"
                 title="My Watchlist"
-                className="flex items-center gap-1.5 px-2 py-0.5 text-xs font-sans font-medium text-zinc-300 hover:text-white rounded-lg transition-colors border-l border-white/[0.1] pl-2.5 shrink-0"
+                className="flex items-center gap-1.5 px-2 py-0.5 text-xs font-sans font-medium text-[#a3a3a3] hover:text-white rounded-md transition-colors border-l border-white/[0.08] pl-2.5 shrink-0"
               >
-                <Bookmark className="h-3.5 w-3.5 text-zinc-300" />
+                <Bookmark className="h-3.5 w-3.5 text-[#a3a3a3]" />
                 <span className="hidden md:inline">Watchlist</span>
               </Link>
             </div>
@@ -181,7 +179,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   setIsAuthModalOpen(true);
                 }}
                 title="Sign in to GetMerged"
-                className="inline-flex items-center gap-2 rounded-xl glass-card text-white hover:bg-zinc-200 px-4 py-1.5 text-xs font-semibold shadow-sm active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer shrink-0"
+                className="inline-flex items-center gap-2 rounded-lg bg-[#1c1c1c] border border-white/[0.08] text-white hover:bg-[#262626] hover:border-white/[0.16] px-4 py-1.5 text-xs font-semibold active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer shrink-0"
               >
                 <span>Sign in</span>
               </button>

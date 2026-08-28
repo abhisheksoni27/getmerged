@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme static {
-  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  --font-sans: var(--font-geist), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-dm-mono), "SF Mono", Menlo, Monaco, monospace;
-  --font-space: var(--font-space-grotesk), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: var(--font-geist), -apple-system, BlinkMacSystemFont, sans-serif;
 
   --color-grade-s: #10b981;
   --color-grade-a: #38bdf8;
@@ -12,143 +12,109 @@
   --color-grade-d: #f87171;
 
   --color-primary: #ff6b00;
-  --color-neutral-50: #ffffff;
-  --color-neutral-100: #ffffff;
-  --color-neutral-200: #f4f4f5;
-  --color-neutral-300: #e4e4e7;
-  --color-neutral-400: #a1a1aa;
-  --color-neutral-500: #71717a;
-  --color-neutral-800: #27272a;
-  --color-neutral-900: #18181b;
-  --color-neutral-950: #000000;
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+  --color-neutral-950: #0a0a0a;
 }
 
 :root {
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
 
-  /* Apple Pro Liquid Black Glass */
-  --bg-canvas: #000000;
-  --bg-surface: #0a0a0c;
-  --border-subtle: rgba(255, 255, 255, 0.12);
-  --border-hover: rgba(255, 255, 255, 0.3);
-  --text-primary: #ffffff;
-  --text-secondary: #f4f4f5;
-  --text-tertiary: #a1a1aa;
+  --bg-canvas: #0a0a0a;
+  --bg-surface: #141414;
+  --bg-elevated: #1c1c1c;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.16);
+  --border-strong: rgba(255, 255, 255, 0.24);
+  --text-primary: #fafafa;
+  --text-secondary: #a3a3a3;
+  --text-tertiary: #737373;
 }
 
 html {
   font-size: 16px;
-  background-color: #000000;
+  background-color: var(--bg-canvas);
   color-scheme: dark;
 }
 
 body {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
   font-family: var(--font-sans);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
-  letter-spacing: -0.015em;
-  background-image: 
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 119, 198, 0.18), transparent 70%),
-    radial-gradient(ellipse 60% 40% at 85% 15%, rgba(56, 189, 248, 0.08), transparent 60%),
-    radial-gradient(ellipse 50% 30% at 15% 40%, rgba(255, 107, 0, 0.06), transparent 50%);
-  background-attachment: fixed;
+  letter-spacing: -0.011em;
 }
 
-/* Liquid Glass Translucent Gradient Surfaces */
-.glass-panel {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(12, 12, 16, 0.78);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  box-shadow: 0 20px 50px -8px rgba(0, 0, 0, 0.8), inset 0 1px 0 0 rgba(255, 255, 255, 0.22);
+/* Clean Surface System */
+.surface-base {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
 }
 
-.glass-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.015) 100%), rgba(16, 16, 22, 0.72);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.65), inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+.surface-elevated {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
 }
 
-.glass-card:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%), rgba(24, 24, 32, 0.9);
-  border-color: rgba(255, 255, 255, 0.32);
-  transform: translateY(-2px);
-  box-shadow: 0 24px 60px -6px rgba(0, 0, 0, 0.9), inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
+.surface-glass {
+  background: rgba(20, 20, 20, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
 }
 
-/* Liquid Gradient Text Utilities */
-.text-gradient-white {
-  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.75) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.surface-glass:hover {
+  border-color: var(--border-hover);
 }
 
-.text-gradient-orange {
-  background: linear-gradient(135deg, #ff8a00 0%, #ff5500 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Data Gauge Indicators */
+.gauge-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin: 0 1.5px;
+  border-radius: 50%;
+  background-color: var(--grade-color, var(--color-neutral-400));
 }
 
-.text-gradient-emerald {
-  background: linear-gradient(135deg, #34d399 0%, #059669 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.gauge-dot-filled {
+  background-color: var(--grade-color);
 }
 
-/* Vibrant Liquid Accent Badges */
-.badge-glow-emerald {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.08) 100%);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  color: #6ee7b7;
-  box-shadow: 0 0 16px -2px rgba(16, 185, 129, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+.gauge-dot-empty {
+  background-color: var(--color-neutral-800);
 }
 
-.badge-glow-sky {
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0.08) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  color: #7dd3fc;
-  box-shadow: 0 0 16px -2px rgba(56, 189, 248, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
-}
-
-.badge-glow-amber {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.08) 100%);
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  color: #fcd34d;
-  box-shadow: 0 0 16px -2px rgba(245, 158, 11, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
-}
-
-.badge-glow-orange {
-  background: linear-gradient(135deg, rgba(255, 107, 0, 0.22) 0%, rgba(255, 107, 0, 0.08) 100%);
-  border: 1px solid rgba(255, 107, 0, 0.4);
-  color: #ffedd5;
-  box-shadow: 0 0 20px -2px rgba(255, 107, 0, 0.35), inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
-}
-
-/* Subtle Ambient Glow Container */
-.ambient-glow {
-  background-image: 
-    radial-gradient(ellipse 70% 50% at 50% -20%, rgba(120, 119, 198, 0.18), rgba(255, 255, 255, 0)),
-    radial-gradient(ellipse 50% 30% at 50% 10%, rgba(255, 107, 0, 0.08), rgba(255, 255, 255, 0));
-}
+/* Grade Color Utilities */
+.grade-s { --grade-color: var(--color-grade-s); }
+.grade-a { --grade-color: var(--color-grade-a); }
+.grade-b { --grade-color: var(--color-grade-b); }
+.grade-c { --grade-color: var(--color-grade-c); }
+.grade-d { --grade-color: var(--color-grade-d); }
 
 /* Accessible focus ring */
-a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.6) !important;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2) !important;
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary) !important;
   outline-offset: 2px !important;
 }
 
-/* Custom subtle scrollbar */
+/* Custom scrollbar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -158,6 +124,18 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 ::selection {
-  background-color: rgba(255, 107, 0, 0.45);
+  background-color: rgba(255, 107, 0, 0.3);
   color: #ffffff;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
