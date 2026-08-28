@@ -59,15 +59,15 @@ export function RepoStickyBar({
   const getRankBadgeBg = (r: string) => {
     switch (r) {
       case "S":
-        return "bg-[#8ce99a]";
+        return "bg-[#8ce99a] text-slate-900";
       case "A":
-        return "bg-[#bfdbff]";
+        return "bg-[#bfdbff] text-slate-900";
       case "B":
-        return "bg-[#ffd93d]";
+        return "bg-[#ffd93d] text-slate-900";
       case "C":
-        return "bg-[#e5dbff]";
+        return "bg-[#e5dbff] text-slate-900";
       default:
-        return "bg-[#ffb3c7]";
+        return "bg-[#ffb3c7] text-slate-900";
     }
   };
 
@@ -158,11 +158,11 @@ export function RepoStickyBar({
                 title={`Jump to ${tab.label}`}
                 className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono transition-all shrink-0 cursor-pointer ${
                   isActive
-                    ? "bg-[#ffd93d] text-white font-bold border border-white/[0.12] shadow-sm"
+                    ? "bg-orange-500/15 text-orange-400 font-bold border border-orange-500/30 shadow-sm"
                     : "glass-panel text-zinc-300 hover:glass-card border border-white/[0.12] font-medium hover:text-white"
                 }`}
               >
-                <Icon className={`h-3 w-3 ${isActive ? "text-white font-bold" : "text-zinc-300"}`} />
+                <Icon className={`h-3 w-3 ${isActive ? "text-orange-400 font-bold" : "text-zinc-300"}`} />
                 <span>{tab.label}</span>
               </button>
             );

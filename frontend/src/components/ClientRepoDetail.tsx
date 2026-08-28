@@ -538,12 +538,12 @@ export function ClientRepoDetail({
         visible={showSticky}
       />
 
-      <main className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 w-full overflow-hidden">
+      <main className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-6 flex-1 w-full overflow-hidden">
         {/* Navigation Breadcrumb */}
         <Link
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 text-xs font-sans text-zinc-300 hover:text-white transition-colors mb-4"
+          className="inline-flex items-center gap-1.5 text-xs font-sans text-zinc-300 hover:text-white transition-colors mb-3"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Explorer
