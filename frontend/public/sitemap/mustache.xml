@@ -127,6 +127,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/getredash/contrib-helm-chart</loc>
+    <lastmod>2026-08-28T12:43:23Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/percona/percona-helm-charts</loc>
     <lastmod>2026-08-21T15:24:49Z</lastmod>
     <changefreq>daily</changefreq>
@@ -153,6 +159,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/renovatebot/helm-charts</loc>
     <lastmod>2026-08-21T15:24:49Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/opencost/opencost-helm-chart</loc>
+    <lastmod>2026-08-28T12:43:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

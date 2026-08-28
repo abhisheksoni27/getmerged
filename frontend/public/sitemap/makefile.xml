@@ -55,6 +55,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/PartialVolume/shredos.x86_64</loc>
+    <lastmod>2026-08-28T11:46:24Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/CodyReichert/awesome-cl</loc>
     <lastmod>2026-08-16T22:39:46Z</lastmod>
     <changefreq>daily</changefreq>
@@ -505,13 +511,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/cachix/docs.cachix.org</loc>
+    <loc>https://getmerged.abhishekco.de/plone/documentation</loc>
     <lastmod>2026-08-17T07:48:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/plone/documentation</loc>
+    <loc>https://getmerged.abhishekco.de/cachix/docs.cachix.org</loc>
     <lastmod>2026-08-17T07:48:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
