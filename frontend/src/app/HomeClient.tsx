@@ -332,7 +332,9 @@ export default function HomeClient({
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
           </span>
-          <span>RADAR: 42,000+ REPOSITORIES MONITORED IN REAL-TIME</span>
+          <span>
+            RADAR: {stats?.total_repos ? `${stats.total_repos.toLocaleString()}+` : "1,000+"} REPOSITORIES MONITORED IN REAL-TIME
+          </span>
         </motion.div>
 
         <motion.h1
