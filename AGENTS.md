@@ -24,8 +24,8 @@ Think of it as *Glassdoor for open‑source repos*: don't guess which door is op
 7. No ORMs. Native mysql Queries.
 8. Config driven by .env, no hacks, no wrappers, no defaults.
 9. Connections to distributed components should be made in middleware and passed on to the below layers as part of gin's context.
-10. Do NOT run `npm run build` after every code edit for verification. Use `eslint` or `npm run lint` instead.
-11. Linting rule: All new code must pass `eslint` or `npm run lint` before submission.
+10. Verification rule: ALWAYS run `make check` (runs frontend `npm run lint` + `npm run typecheck`, and backend `go vet`) before any commit/submission. Never skip.
+11. Type-safety and Linting rule: All new code must pass `make check` with 0 errors before push.
 12. Never hardcode fake/fallback mock data. Always fetch real data from APIs or handle loading/empty states cleanly.
 13. All anchor tags (`<a>` and `<Link>`) must have descriptive, accessible `title` attributes. Never omit title attributes on links.
 14. For deployments, NEVER run manual `go build` or ad-hoc binaries. ALWAYS use Makefile targets only (e.g. `make deploy-server`, `make deploy-frontend-server`).
