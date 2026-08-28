@@ -82,7 +82,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geist.variable} ${dmMono.variable} h-full antialiased dark`}>
-      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-[#fafafa] selection:bg-[#ff6b00]/30 selection:text-white">
+      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-[#fafafa] selection:bg-[#ff6b00]/30 selection:text-white relative">
+        {/* Spatial background dot-grid texture */}
+        <div aria-hidden="true" className="fixed inset-0 pointer-events-none -z-20 bg-dot-grid opacity-30" />
         <PostHogInit />
         <SearchProvider>
           {children}
