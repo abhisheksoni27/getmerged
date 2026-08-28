@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
-import { GemojiText } from "@/lib/gemoji";
 import { LangLogo } from "@/components/LangLogo";
 import {
   Bookmark,
@@ -322,7 +321,7 @@ function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts }: Wat
 
         {/* Description */}
         <p className="text-xs text-zinc-300 line-clamp-2 leading-relaxed font-sans font-normal mb-4 min-h-[2.5rem]">
-          <GemojiText>{repo.description || "No repository description available."}</GemojiText>
+          {repo.description || "No repository description available."}
         </p>
 
         {/* Telemetry Metrics Scorecard */}

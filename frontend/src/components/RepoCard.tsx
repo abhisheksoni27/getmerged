@@ -8,7 +8,6 @@ import { LangLogo } from "@/components/LangLogo";
 import { CRankBadge } from "@/components/CRankBadge";
 import { MetricGauge } from "@/components/MetricGauge";
 import posthog from "posthog-js";
-import { GemojiText } from "@/lib/gemoji";
 
 interface RepoCardProps {
   repo: Repo;
@@ -192,7 +191,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
 
         {/* Description */}
         <p className="text-sm text-[#a3a3a3] line-clamp-2 leading-relaxed font-sans mb-5 min-h-[2.75rem]">
-          <GemojiText>{repo.description || "No repository description available."}</GemojiText>
+          {repo.description || "No repository description available."}
         </p>
 
         {/* Topic tags */}

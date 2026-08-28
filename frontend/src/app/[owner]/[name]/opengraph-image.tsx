@@ -1,5 +1,4 @@
 import { ImageResponse } from "next/og";
-import { gemojiToUnicode } from "@/lib/gemoji";
 
 export const runtime = "edge";
 export const alt = "C-Rank Contributor Readiness Score Card";
@@ -30,7 +29,7 @@ export default async function Image({
       if (Array.isArray(rawList) && rawList.length > 0) {
         const repo = rawList.find((r: { full_name: string }) => r.full_name.toLowerCase() === fullName.toLowerCase()) || rawList[0];
         if (repo) {
-          description = gemojiToUnicode(repo.description) || description;
+          description = repo.description || description;
           tier = repo.c_rank_tier || tier;
           score = repo.c_rank_score ? repo.c_rank_score.toFixed(1) : score;
         }

@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import posthog from "posthog-js";
 import { API_BASE_URL } from "@/lib/api";
-import { GemojiText } from "@/lib/gemoji";
 
 const STORAGE_KEY = "opendoor_first_merge_track_v1";
 const EVENT_QUEUE_KEY = "opendoor_first_merge_events_v1";
@@ -1087,7 +1086,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                         )}
                       </div>
                       <p className="mt-1 line-clamp-2 text-[11px] text-zinc-300">
-                        <GemojiText>{m.description || "Active community with beginner friendly issues."}</GemojiText>
+                        {m.description || "Active community with beginner friendly issues."}
                       </p>
                       {m.reasons && m.reasons.length > 0 && (
                         <div className="mt-2 text-[10px] text-emerald-400 flex items-center gap-1 font-medium">
