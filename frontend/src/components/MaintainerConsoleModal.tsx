@@ -107,7 +107,7 @@ export function MaintainerConsoleModal({
     } finally {
       setLoading(false);
     }
-  }, [fullName, fetchConsole, onVerificationSuccess]);
+  }, [fullName, fetchConsole, onVerificationSuccess, router]);
 
   const fileDispute = async () => {
     setDisputing(true);

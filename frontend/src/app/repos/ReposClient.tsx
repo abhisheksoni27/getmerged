@@ -10,7 +10,6 @@ import { LangLogo } from "@/components/LangLogo";
 import { Repo } from "@/types/opendoor";
 import {
   Search,
-  SlidersHorizontal,
   X,
   Sparkles,
   Flame,
@@ -114,17 +113,9 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
   const [repos, setRepos] = useState<Repo[]>(initialRepos);
   const [totalCount, setTotalCount] = useState<number>(initialTotal);
   const [loading, setLoading] = useState<boolean>(false);
-  const [isFilterSheetOpen, setIsFilterSheetOpen] = useState<boolean>(false);
 
   // Auth Modal State
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authModalConfig, setAuthModalConfig] = useState<{ title?: string; description?: string; source?: string }>({});
-
-  const openAuthModal = (title?: string, description?: string, source = "repos_page") => {
-    setAuthModalConfig({ title, description, source });
-    setIsAuthModalOpen(true);
-  };
-
   const isLoggedIn = useMemo(() => {
     return typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
   }, []);
@@ -426,32 +417,10 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
               )}
             </div>
 
-            {/* Mobile Filter Sheet Trigger Button */}
-            <div className="flex lg:hidden items-center justify-between gap-2 pt-2 border-t border-white/[0.1]">
-              <button
-                type="button"
-                onClick={() => setIsFilterSheetOpen(true)}
-                className="flex-1 inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-white/[0.1] text-white font-sans text-xs font-bold shadow-sm cursor-pointer active:scale-98 transition-transform"
-              >
-                <SlidersHorizontal className="h-4 w-4" />
-                <span>Filters {activeFilterCount > 0 ? `(${activeFilterCount})` : ""}</span>
-              </button>
-
-              {activeFilterCount > 0 && (
-                <button
-                  type="button"
-                  onClick={resetFilters}
-                  title="Reset all filters"
-                  className="p-3 rounded-xl border border-white/[0.12] bg-black/70 text-zinc-300 text-xs font-semibold cursor-pointer"
-                >
-                  <RotateCcw className="h-4 w-4" />
-                </button>
-              )}
             </div>
-          </div>
 
-          {/* Quick Language Chips Carousel */}
-          <div className="mt-4 pt-4 border-t border-white/[0.1] flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+            {/* Quick Language Chips Carousel */}
+            <div className="mt-4 pt-4 border-t border-white/[0.1] flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
             <span className="text-zinc-300 font-mono shrink-0 pl-1">Quick:</span>
             {LANGUAGES.map((lang) => {
               const active = selectedLang === lang;
@@ -615,8 +584,6 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
-        title={authModalConfig.title}
-        description={authModalConfig.description}
       />
     </div>
   );

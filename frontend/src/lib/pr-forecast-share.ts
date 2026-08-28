@@ -14,7 +14,6 @@ export interface ForecastSnapshot {
 
 // Global in-memory cache for server-side eval snapshot caching (24h TTL)
 declare global {
-  // eslint-disable-next-line no-var
   var __forecastSnapshotCache: Map<string, { snapshot: ForecastSnapshot; expiresAt: number }> | undefined;
 }
 

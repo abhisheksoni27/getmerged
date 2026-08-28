@@ -319,6 +319,7 @@ export default function PRSimulatorPage() {
 
             {result.submission_id && (
               <div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`${API_BASE_URL}/api/v1/pr-sim/badge/${result.submission_id}.svg`}
                   alt={`Simulated acceptance badge: ${result.score} out of 100`}

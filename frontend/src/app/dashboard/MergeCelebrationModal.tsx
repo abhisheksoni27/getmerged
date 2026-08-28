@@ -187,6 +187,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
 
           {/* Auto-generated share card via the existing OG endpoint */}
           {!cardFailed && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={links.ogCardUrl}
               alt={`Share card: ${links.headline} for ${celebrating.full_name}`}
