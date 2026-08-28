@@ -5,6 +5,7 @@ import { PostHogInit } from "@/app/posthog-init";
 import { CookieBanner } from "@/components/CookieBanner";
 import { SearchProvider } from "@/context/SearchContext";
 import { GlobalSearch } from "@/components/GlobalSearch";
+import { PhysicsCanvas } from "@/components/PhysicsCanvas";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -86,6 +87,9 @@ export default function RootLayout({
         {/* Global spatial background dot-grid texture */}
         <div aria-hidden="true" className="fixed inset-0 pointer-events-none -z-20 bg-dot-grid opacity-30 mask-radial-faded" />
         
+        {/* Interactive physics node canvas */}
+        <PhysicsCanvas />
+
         {/* Global atmospheric ambient glow orbs */}
         <div aria-hidden="true" className="fixed top-0 left-1/2 -translate-x-1/2 -z-10 pointer-events-none w-[900px] h-[400px] max-w-full opacity-40 blur-[120px] bg-gradient-to-b from-emerald-500/10 via-amber-500/5 to-transparent" />
         <div aria-hidden="true" className="fixed bottom-0 right-0 -z-10 pointer-events-none w-[500px] h-[300px] max-w-full opacity-25 blur-[100px] bg-gradient-to-t from-violet-500/10 to-transparent" />
