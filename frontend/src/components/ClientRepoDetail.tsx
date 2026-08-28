@@ -47,6 +47,7 @@ import { MaintainerConsoleModal } from "@/components/MaintainerConsoleModal";
 import { RepoStickyBar, RepoSectionTab } from "@/components/RepoStickyBar";
 import { RepoAuditCTA } from "@/components/RepoAuditCTA";
 import { isRepoScored } from "@/lib/repo-metadata";
+import { getGradeColor } from "@/components/CRankBadge";
 
 
 interface ClientRepoDetailProps {
