@@ -75,6 +75,21 @@ async function getGoodFirstIssues(targetIdOrName: string | number): Promise<Good
 
 async function getRepoData(fullName: string): Promise<Repo | null> {
   try {
+    // 1. First try direct ID/name lookup endpoint
+    const directRes = await fetch(
+      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(fullName)}`,
+      {
+        next: { revalidate: 3600 },
+      }
+    );
+    if (directRes.ok) {
+      const data = await directRes.json();
+      if (data && (data.id || data.full_name)) {
+        return data as Repo;
+      }
+    }
+
+    // 2. Fallback to list search query
     const res = await fetch(
       `${INTERNAL_API_URL}/api/v1/repos?name=${encodeURIComponent(fullName)}`,
       {
