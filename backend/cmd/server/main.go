@@ -263,6 +263,8 @@ func main() {
 
 	gin.SetMode(cfg.GinMode)
 	r := gin.New()
+	r.UseRawPath = true
+	r.UnescapePathValues = true
 	r.Use(gin.Logger(), gin.Recovery())
 
 	r.Use(middleware.CORS())
