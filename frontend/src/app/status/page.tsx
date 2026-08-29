@@ -3,13 +3,13 @@ import { Metadata } from "next";
 import { StatusClient } from "./StatusClient";
 
 export const metadata: Metadata = {
-  title: "System Status & API Latency Telemetry | GetMerged",
+  title: "System Status & API Health | GetMerged",
   description: "Real-time API operational status, latency metrics, and backend service health checks.",
   alternates: {
     canonical: "https://getmerged.abhishekco.de/status",
   },
   openGraph: {
-    title: "System Status & API Latency Telemetry | GetMerged",
+    title: "System Status & API Health | GetMerged",
     description: "Real-time API operational status, latency metrics, and backend service health checks.",
     url: "https://getmerged.abhishekco.de/status",
     siteName: "GetMerged",

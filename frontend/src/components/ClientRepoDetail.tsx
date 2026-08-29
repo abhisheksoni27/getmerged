@@ -451,7 +451,7 @@ export function ClientRepoDetail({
           </h1>
 
           <p className="text-sm text-zinc-300 max-w-lg mx-auto leading-relaxed mb-8">
-            This repository is currently in our indexing queue. Our telemetry engine will analyze maintainer response speeds and PR merge rates in our next processing run.
+            This repository is currently in our indexing queue. We will calculate maintainer response speeds and PR merge rates in our next processing run.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -1489,7 +1489,7 @@ export function ClientRepoDetail({
             GetMerged C-Rank™ Indexing Standard
           </h2>
           <p className="text-xs text-zinc-200 leading-relaxed font-sans">
-            All telemetry metrics displayed for {fullName} are automatically retrieved via the GitHub GraphQL API and recalculated daily. Insider pull requests submitted by repository owners or organization members are excluded from merge rate calculations to preserve objective external contributor statistics.
+            All metrics displayed for {fullName} are automatically retrieved via the public GitHub API and recalculated daily. Insider pull requests submitted by repository owners or organization members are excluded from merge rate calculations to preserve objective external contributor statistics.
           </p>
         </section>
       </motion.section>

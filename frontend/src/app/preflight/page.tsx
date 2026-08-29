@@ -927,9 +927,9 @@ export default function PreflightPage() {
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Hero Section */}
         <div className="mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-emerald-300 text-xs font-semibold mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-semibold mb-3">
             <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
-            <span>Static Heuristic PR Pre-Flight Checklist</span>
+            <span>Pull Request Pre-Flight Checklist</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold font-space text-white tracking-tight">
             PR Acceptance Pre-Flight Evaluator

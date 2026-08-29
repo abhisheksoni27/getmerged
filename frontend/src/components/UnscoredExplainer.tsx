@@ -30,19 +30,19 @@ export function UnscoredExplainer({ fullName, language }: UnscoredExplainerProps
               {fullName} is currently Unscored
             </h2>
             <p className="text-sm text-zinc-300 font-sans mt-1 leading-relaxed">
-              This repository has no indexed public pull request reviews or maintainer telemetry on
-              GitHub. Some large projects conduct code reviews via external tooling (e.g. Gerrit,
-              Phabricator) or internal monorepos. As soon as public PR review activity is recorded,
-              C-Rank™ computes objective scores automatically.
+              This repository has no indexed public pull request reviews or activity on
+              GitHub yet. Some large projects conduct code reviews via external tooling or
+              private repositories. As soon as public PR review activity is recorded,
+              C-Rank™ computes scores automatically.
             </p>
           </div>
         </div>
         <Link
           href={rankingsHref}
-          title={`Explore verified-welcoming open-source ${language || "repositories"} on GetMerged`}
+          title={`Explore active, welcoming open-source ${language || "repositories"} on GetMerged`}
           className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-emerald-400 hover:text-emerald-300 underline underline-offset-2 shrink-0 transition-colors"
         >
-          Explore verified-welcoming alternatives
+          Explore active &amp; welcoming alternatives
           <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>
