@@ -407,7 +407,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
 
             <p className="text-sm text-zinc-300 mb-2 max-w-xl mx-auto leading-relaxed">
               10-dimension live analysis using your GitHub token. Stale PR triage, reviewer burnout signals,
-              contributor retention curves, and ready-to-copy GitHub templates — generated for you, not at you.
+              contributor retention curves, and ready-to-copy GitHub templates - generated for you, not at you.
             </p>
 
             {/* Mini dimension grid teaser */}
@@ -429,7 +429,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-emerald-500 px-7 py-3.5 text-sm font-mono font-bold text-black shadow-lg transition-all hover:bg-emerald-400 active:scale-[0.99] disabled:opacity-60 cursor-pointer"
               >
                 <Zap className="h-4 w-4" />
-                {checkoutLoading ? "Redirecting to checkout…" : `Unlock Maintainer Audit — $10`}
+                {checkoutLoading ? "Redirecting to checkout…" : `Unlock Maintainer Audit - $10`}
               </button>
 
               <Link
@@ -492,7 +492,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Animated analyzing view — pure UX, no real backend streaming needed
+// Animated analyzing view - pure UX, no real backend streaming needed
 // ─────────────────────────────────────────────────────────────────────────────
 
 function AuditAnalyzingView({
@@ -614,7 +614,7 @@ function AuditAnalyzingView({
 
       <div className="text-center text-xs font-mono text-zinc-500">
         {done ? (
-          <span className="text-emerald-400 animate-pulse">✓ Analysis complete — loading your report…</span>
+          <span className="text-emerald-400 animate-pulse">✓ Analysis complete - loading your report…</span>
         ) : (
           <span>{totalDone} of {ANALYSIS_STEPS.length} dimensions complete · est. {Math.max(0, Math.ceil((ANALYSIS_STEPS.length - totalDone) * 1.0))}s remaining</span>
         )}
@@ -699,7 +699,7 @@ export function AuditReportContent({
                 <div className="flex items-center gap-1.5 text-xs font-mono">
                   <GitMerge className="h-3.5 w-3.5 text-emerald-400" />
                   <span className="text-zinc-400">Merge rate</span>
-                  <span className="text-white font-bold">{pf?.merge_rate.toFixed(1) ?? "—"}%</span>
+                  <span className="text-white font-bold">{pf?.merge_rate.toFixed(1) ?? " - "}%</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs font-mono">
                   <Users className="h-3.5 w-3.5 text-sky-400" />
@@ -743,7 +743,7 @@ export function AuditReportContent({
               <p className="text-xs font-mono font-bold text-amber-300 mb-0.5">Top Priority This Week</p>
               <p className="text-sm font-mono text-white font-bold">{topBottleneck.label}</p>
               <p className="text-xs text-zinc-400 mt-1">
-                Currently at the <span className="text-amber-300 font-bold">{topBottleneck.peer_percentile.toFixed(0)}th percentile</span> among peers —{" "}
+                Currently at the <span className="text-amber-300 font-bold">{topBottleneck.peer_percentile.toFixed(0)}th percentile</span> among peers - {" "}
                 {topBottleneck.simulated_uplift > 0
                   ? `fixing this could add +${topBottleneck.simulated_uplift.toFixed(1)} pts to your C-Rank™`
                   : `this is your biggest drag on contributor experience`}.
@@ -777,7 +777,7 @@ export function AuditReportContent({
                   : <span className="text-amber-300">some return but struggle to close</span>
                 }. {ghostRate > 50
                   ? "Consider a welcome bot and explicit \"good first issue\" labeling to reduce ghost rate."
-                  : "Your newcomer conversion is solid — focus on improving the merge timeline."
+                  : "Your newcomer conversion is solid - focus on improving the merge timeline."
                 }
               </p>
             </div>
@@ -826,7 +826,7 @@ export function AuditReportContent({
                     <span className="font-bold">Burnout Risk:</span>{" "}
                     {rh.bus_factor <= 1
                       ? "A single reviewer is your entire bottleneck. If they step back, PRs stall."
-                      : "Small core team — consider explicitly mentoring 1-2 contributors toward reviewer status."
+                      : "Small core team - consider explicitly mentoring 1-2 contributors toward reviewer status."
                     }
                   </p>
                 </div>
@@ -850,7 +850,7 @@ export function AuditReportContent({
                   {ff.formatting_and_style_pct >= 40
                     ? <>
                         <span className="font-bold text-white">Quick win:</span>{" "}
-                        {ff.formatting_and_style_pct.toFixed(0)}% of review friction is style/lint — a shared <span className="text-sky-400">.editorconfig</span> or pre-commit hook eliminates most of it without any human review cost.
+                        {ff.formatting_and_style_pct.toFixed(0)}% of review friction is style/lint - a shared <span className="text-sky-400">.editorconfig</span> or pre-commit hook eliminates most of it without any human review cost.
                       </>
                     : ff.missing_tests_and_ci_pct >= 35
                     ? <>
@@ -858,7 +858,7 @@ export function AuditReportContent({
                         {ff.missing_tests_and_ci_pct.toFixed(0)}% of friction is missing tests. A required CI status check blocks this category before it reaches review.
                       </>
                     : <>
-                        <span className="font-bold text-white">Architectural discussions</span> dominate your review friction — consider RFC or proposal templates for large changes.
+                        <span className="font-bold text-white">Architectural discussions</span> dominate your review friction - consider RFC or proposal templates for large changes.
                       </>
                   }
                 </p>
