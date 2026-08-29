@@ -108,8 +108,9 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             <Link href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="hover:text-white transition-colors whitespace-nowrap">
               Good First Issues
             </Link>
-            <Link href="/guides" title="Open Source Contribution Guides and Best Practices" className="hover:text-white transition-colors">
-              Guides
+            <Link href="/stack" title="Stalk Your Tech Stack & Dependencies" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1 whitespace-nowrap">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Stalk Stack
             </Link>
             <Link href="/league" title="Monthly Open-Source Contributor League & Active Sprints" className="text-[#ff6b00] hover:text-[#ff8a33] font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap">
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b00] animate-pulse" />
@@ -248,11 +249,12 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                 Good First Issues
               </Link>
               <Link
-                href="/guides"
+                href="/stack"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
+                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-emerald-400 font-semibold transition-colors flex items-center gap-2"
               >
-                Guides
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                Stalk Stack
               </Link>
               <Link
                 href="/league"

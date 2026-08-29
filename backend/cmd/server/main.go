@@ -35,6 +35,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/prtracker"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/abhisheksoni27/opendoor/internal/scan"
+	"github.com/abhisheksoni27/opendoor/internal/stack"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	swaggerFiles "github.com/swaggo/files"
@@ -182,6 +183,10 @@ func main() {
 
 	// Monthly League Service
 	leagueSvc := league.NewService(database.DB)
+
+	// Stack Stalker & Dependency Health Radar
+	stackAnalyzer := stack.NewAnalyzer(database)
+	stackHandler := handler.NewStackHandler(stackAnalyzer, tokenMgr, userRepo, database)
 
 	// Stalled-PR rescue alerts: hourly sweep comparing tracked open PRs
 	// against each repo's merged p75 wait; email + configured Slack/Discord.
@@ -493,6 +498,10 @@ func main() {
 		api.GET("/gfi-alerts/claim", handler.GFIClaimLinkHandler(cfg))
 		api.POST("/webhooks/email-events", handler.GFIEmailWebhookHandler(cfg))
 
+		// Stack Stalker & Dependency Health Radar (Story 1.1)
+		api.POST("/stack/analyze", stackHandler.AnalyzeDirect)
+		api.POST("/stack/scan-repo", middleware.OptionalUserAuth(cfg.JWTSecret), stackHandler.ScanRepo)
+
 		// Auth Routes
 		authGroup := api.Group("/auth")
 		{
@@ -526,6 +535,8 @@ func main() {
 		userApi.GET("/user/top-matches", handler.GetTopMatchesHandler(userRepo, repoStore))
 		userApi.GET("/user/for-you", handler.GetForYouHandler(userRepo, repoStore, gfiRepo, entitlementRepo))
 		userApi.GET("/user/referral", handler.GetMyReferral(entitlementRepo))
+		userApi.GET("/stack/user-repos", stackHandler.GetUserRepos)
+		userApi.GET("/stack/saved", stackHandler.GetSavedStacks)
 
 		// Maintainer Claims & C-Rank Console (AC1, AC2, AC3, AC6, AC8)
 		userApi.POST("/repos/:id/claim", handler.PostClaimRepoHandler(claimSvc))
