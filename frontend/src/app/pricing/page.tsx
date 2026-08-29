@@ -71,7 +71,7 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-black text-white font-sans">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-transparent text-white font-sans">
       <Header />
       <script
         type="application/ld+json"

@@ -308,7 +308,7 @@ export default function HomeClient({
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#0a0a0a]">
+    <div className="relative min-h-screen flex flex-col bg-transparent">
       <Header
         searchQuery={searchQuery}
         placeholderText={`Search repositories, e.g. ${famousRepos[placeholderIndex]}`}

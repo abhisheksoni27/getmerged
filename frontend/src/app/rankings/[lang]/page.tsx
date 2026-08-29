@@ -260,7 +260,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-black text-white font-sans selection:bg-orange-500/30">
+    <div className="relative min-h-screen flex flex-col bg-transparent text-white font-sans selection:bg-orange-500/30">
       <Header />
       <script
         type="application/ld+json"

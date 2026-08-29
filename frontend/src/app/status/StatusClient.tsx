@@ -36,7 +36,7 @@ export function StatusClient() {
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-black dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-transparent dev-grid-pattern">
       <Header />
       <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 flex-1 w-full font-sans text-zinc-200">
         <Link
