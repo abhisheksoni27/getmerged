@@ -452,7 +452,7 @@ func (c *BackgroundCrawler) processDiscoveryBatch() error {
 
 	slog.Info("background crawler [P3 Discovery]: sweeping", "language", lang, "stars", fmt.Sprintf("%d..%d", bucket.MinStars, bucket.MaxStars))
 
-	newRepos, pages, err := DiscoverNewRepos(c.db, c.gh, lang, bucket, 3, c.discoveryMaxNew, 2, 100)
+	newRepos, pages, err := DiscoverNewRepos(c.db, c.gh, lang, bucket, 7, c.discoveryMaxNew, 4, 100)
 	if err != nil {
 		return err
 	}
