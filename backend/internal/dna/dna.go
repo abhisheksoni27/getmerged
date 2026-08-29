@@ -27,9 +27,10 @@ type Result struct {
 	Persona        string     `json:"persona,omitempty"`
 	PersonaVerdict string     `json:"persona_verdict,omitempty"`
 	PersonaSignals []string   `json:"persona_signals,omitempty"`
-	Temporal       Temporal   `json:"temporal"`
-	StarsPulledIn  int        `json:"stars_pulled_in"`
-	TopRepos       []TopRepo  `json:"top_repos"`
+	Temporal       Temporal    `json:"temporal"`
+	StarsPulledIn  int         `json:"stars_pulled_in"`
+	TopRepos       []TopRepo   `json:"top_repos"`
+	OwnedRepos     []OwnedRepo `json:"owned_repos,omitempty"`
 }
 
 type Temporal struct {
@@ -40,6 +41,17 @@ type Temporal struct {
 type TopRepo struct {
 	NameWithOwner   string  `json:"name_with_owner"`
 	StargazerCount  int     `json:"stargazer_count"`
+	PrimaryLanguage *string `json:"primary_language,omitempty"`
+}
+
+type OwnedRepo struct {
+	NameWithOwner   string  `json:"name_with_owner"`
+	Name            string  `json:"name"`
+	Description     string  `json:"description"`
+	StargazerCount  int     `json:"stargazer_count"`
+	ForkCount       int     `json:"fork_count"`
+	URL             string  `json:"url"`
+	IsFork          bool    `json:"is_fork"`
 	PrimaryLanguage *string `json:"primary_language,omitempty"`
 }
 

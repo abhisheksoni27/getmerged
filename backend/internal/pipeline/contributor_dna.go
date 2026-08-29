@@ -99,8 +99,18 @@ query ContributorDNA($login: String!, $searchQuery: String!) {
   user(login: $login) {
     createdAt
     followers { totalCount }
-    repositories(first: 1, orderBy: {field: STARGAZERS, direction: DESC}) {
+    repositories(first: 30, isFork: false, privacy: PUBLIC, orderBy: {field: STARGAZERS, direction: DESC}, ownerAffiliations: [OWNER]) {
       totalCount
+      nodes {
+        name
+        nameWithOwner
+        description
+        stargazerCount
+        forkCount
+        url
+        isFork
+        primaryLanguage { name }
+      }
     }
   }
   search(query: $searchQuery, type: ISSUE, first: 50) {
@@ -128,10 +138,26 @@ query ContributorDNA($login: String!, $searchQuery: String!) {
 // Named types for the GraphQL response. Extracted from inline anonymous
 // structs so the persona/temporal/stars helpers (and their tests) can pass
 // values around without redeclaring the literal. JSON wire format unchanged.
+type DNAUserRepo struct {
+	Name            string `json:"name"`
+	NameWithOwner   string `json:"nameWithOwner"`
+	Description     string `json:"description"`
+	StargazerCount  int    `json:"stargazerCount"`
+	ForkCount       int    `json:"forkCount"`
+	URL             string `json:"url"`
+	IsFork          bool   `json:"isFork"`
+	PrimaryLanguage *struct {
+		Name string `json:"name"`
+	} `json:"primaryLanguage"`
+}
+
 type DNAUser struct {
-	CreatedAt     string `json:"createdAt"`
-	Followers     struct{ TotalCount int `json:"totalCount"` } `json:"followers"`
-	Repositories struct{ TotalCount int `json:"totalCount"` } `json:"repositories"`
+	CreatedAt    string `json:"createdAt"`
+	Followers    struct{ TotalCount int `json:"totalCount"` } `json:"followers"`
+	Repositories struct {
+		TotalCount int           `json:"totalCount"`
+		Nodes      []DNAUserRepo `json:"nodes"`
+	} `json:"repositories"`
 }
 
 type DNARepo struct {
@@ -293,6 +319,27 @@ func (w *contributorDNAWorker) AnalyzeUser(ctx context.Context, userID int64) er
 		})
 	}
 	result := dna.Compute(dnodes, gqlResp.Data.User.Followers.TotalCount, gqlResp.Data.User.Repositories.TotalCount)
+	result.OwnedRepos = make([]dna.OwnedRepo, 0, len(gqlResp.Data.User.Repositories.Nodes))
+	for _, repo := range gqlResp.Data.User.Repositories.Nodes {
+		if repo.IsFork {
+			continue
+		}
+		var lang *string
+		if repo.PrimaryLanguage != nil && repo.PrimaryLanguage.Name != "" {
+			l := repo.PrimaryLanguage.Name
+			lang = &l
+		}
+		result.OwnedRepos = append(result.OwnedRepos, dna.OwnedRepo{
+			NameWithOwner:   repo.NameWithOwner,
+			Name:            repo.Name,
+			Description:     repo.Description,
+			StargazerCount:  repo.StargazerCount,
+			ForkCount:       repo.ForkCount,
+			URL:             repo.URL,
+			IsFork:          false,
+			PrimaryLanguage: lang,
+		})
+	}
 	dnaJSON, err := json.Marshal(result)
 	if err != nil {
 		_ = w.profileRepo.SaveFailure(ctx, userID, "failed", err.Error())

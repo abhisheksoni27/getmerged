@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"encoding/json"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -12,6 +13,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
 )
 
 // recruiterReindexCh is the in-process async queue that keeps the recruiter
@@ -289,3 +291,49 @@ func statusOrEmpty(p *repository.RecruiterPass) string {
 	}
 	return p.Status
 }
+
+type PostHireInquiryRequest struct {
+	TargetSlug string `json:"target_slug" binding:"required"`
+	Email      string `json:"email" binding:"required"`
+	Company    string `json:"company" binding:"required"`
+	Message    string `json:"message"`
+}
+
+// PostHireInquiryHandler handles public POST /api/v1/user/hire-inquiry
+// Allows recruiters, companies, or sponsors to connect and register hiring signals for a contributor.
+func PostHireInquiryHandler(userRepo repository.UserRepository, db *sqlx.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var req PostHireInquiryRequest
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid inquiry payload: " + err.Error()})
+			return
+		}
+
+		slugClean := strings.TrimPrefix(strings.TrimSpace(req.TargetSlug), "@")
+		slugClean = strings.ToLower(slugClean)
+		targetUser, err := userRepo.FindBySlug(c.Request.Context(), slugClean)
+		if err != nil || targetUser == nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "contributor not found"})
+			return
+		}
+
+		payloadBytes, _ := json.Marshal(gin.H{
+			"from_email":  strings.TrimSpace(req.Email),
+			"company":     strings.TrimSpace(req.Company),
+			"message":     strings.TrimSpace(req.Message),
+			"target_slug": targetUser.SlugOrUsername(),
+			"created_at":  time.Now().Format(time.RFC3339),
+		})
+
+		_, _ = db.ExecContext(c.Request.Context(), `
+			INSERT INTO notification_queue (user_id, type, payload, status, created_at)
+			VALUES (?, 'hire_inquiry', ?, 'pending', CURRENT_TIMESTAMP)
+		`, targetUser.ID, string(payloadBytes))
+
+		c.JSON(http.StatusOK, gin.H{
+			"status":  "ok",
+			"message": "hiring signal registered successfully",
+		})
+	}
+}
+

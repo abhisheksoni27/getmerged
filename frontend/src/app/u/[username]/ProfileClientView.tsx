@@ -43,8 +43,12 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
 }) => {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [profile] = useState<PublicProfile>(initialProfile);
+  const [profile, setProfile] = useState<PublicProfile>(initialProfile);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  useEffect(() => {
+    setProfile(initialProfile);
+  }, [initialProfile]);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/v1/auth/me`, { credentials: "include" })
@@ -71,8 +75,10 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
   const evalFeed = profile.evals ?? [];
   const dna = profile.dna;
 
-  // Language breakdown computation
-  const languages = dna?.language_breakdown ? Object.entries(dna.language_breakdown) : [];
+  // Language breakdown computation - sorted descending by number of contributions/PRs
+  const languages = dna?.language_breakdown
+    ? Object.entries(dna.language_breakdown).sort((a, b) => b[1] - a[1])
+    : [];
   const totalLangPRs = languages.reduce((acc, [, count]) => acc + count, 0);
 
   // Markdown badge string for one-click embed
@@ -137,12 +143,15 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
                   <p className="mt-3 text-sm text-zinc-200 leading-relaxed font-sans whitespace-pre-line">
                     {profile.bio}
                   </p>
-                ) : (
-                  <p className="mt-3 text-sm text-zinc-400 leading-relaxed font-sans">
-                    {dna?.persona_verdict ||
-                      "Verified open-source track record: pull request activity and maintainer interactions benchmarked via empirical GitHub telemetry."}
-                  </p>
-                )}
+                ) : isOwner ? (
+                  <button
+                    type="button"
+                    onClick={() => setIsEditModalOpen(true)}
+                    className="mt-3 text-xs font-mono text-zinc-400 hover:text-amber-300 flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Edit3 className="h-3 w-3 text-amber-400" /> Add your bio...
+                  </button>
+                ) : null}
               </div>
             </div>
 
@@ -258,9 +267,9 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
           </div>
         )}
 
-        {/* Section 4: Core Telemetry KPI Quad */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          <div className="rounded-md border border-white/[0.1] glass-panel p-5 shadow-sm border-t-2 border-t-emerald-500">
+        {/* Section 4: Core Telemetry KPI Quad (2x2 Grid) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+          <div className="rounded-xl border border-white/[0.1] glass-panel p-5 shadow-sm border-t-2 border-t-emerald-500">
             <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-zinc-300">
               <Merge className="h-4 w-4 text-emerald-400" /> Merged PRs
             </div>
@@ -270,7 +279,7 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
             <div className="text-xs text-zinc-400 font-sans mt-1">Verified public merges</div>
           </div>
 
-          <div className="rounded-md border border-white/[0.1] glass-panel p-5 shadow-sm border-t-2 border-t-blue-500">
+          <div className="rounded-xl border border-white/[0.1] glass-panel p-5 shadow-sm border-t-2 border-t-blue-500">
             <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-zinc-300">
               <Target className="h-4 w-4 text-blue-400" /> Accuracy
             </div>
@@ -280,7 +289,7 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
             <div className="text-xs text-zinc-400 font-sans mt-1">Over settled PR evals</div>
           </div>
 
-          <div className="rounded-md border border-white/[0.1] glass-panel p-5 shadow-sm border-t-2 border-t-amber-500">
+          <div className="rounded-xl border border-white/[0.1] glass-panel p-5 shadow-sm border-t-2 border-t-amber-500">
             <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-zinc-300">
               <Star className="h-4 w-4 text-amber-400" /> Stars Impacted
             </div>
@@ -294,11 +303,11 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
             <div className="text-xs text-zinc-400 font-sans mt-1">Combined repo reach</div>
           </div>
 
-          <div className="rounded-md border border-white/[0.1] glass-panel p-5 shadow-sm border-t-2 border-t-purple-500">
+          <div className="rounded-xl border border-white/[0.1] glass-panel p-5 shadow-sm border-t-2 border-t-purple-500">
             <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-zinc-300">
               <Zap className="h-4 w-4 text-purple-400" /> Skill Level
             </div>
-            <div className="mt-2 text-xl sm:text-2xl font-bold font-mono text-white truncate">
+            <div className="mt-2 text-xl sm:text-2xl font-bold font-mono text-white break-words">
               {dna?.skill_level || (profile.merged_count > 0 ? "Active" : "Novice")}
             </div>
             <div className="text-xs text-zinc-400 font-sans mt-1">
@@ -581,7 +590,7 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
         </div>
 
         {/* Section 12: Recruiter & Opportunities Direct Signal on GetMerged */}
-        <RecruiterContactSection username={profile.username} />
+        <RecruiterContactSection username={profile.username} slug={profile.slug} />
       </main>
 
       {/* Edit Profile Modal */}
@@ -590,7 +599,10 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
           profile={profile}
-          onProfileUpdated={() => {
+          onProfileUpdated={(updated) => {
+            if (updated) {
+              setProfile((prev) => ({ ...prev, ...updated }));
+            }
             router.refresh();
           }}
         />
