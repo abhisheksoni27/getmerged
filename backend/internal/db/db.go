@@ -153,6 +153,21 @@ func AutoMigrate(db *sqlx.DB) error {
 			created_at DATETIME NOT NULL,
 			PRIMARY KEY(user_id, repo_id)
 		);`,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS user_monitored_stacks (
+			id INTEGER PRIMARY KEY %s,
+			user_id INTEGER NOT NULL,
+			repo_full_name VARCHAR(255) NOT NULL,
+			manifest_type VARCHAR(50) NOT NULL,
+			dependency_count INTEGER NOT NULL DEFAULT 0,
+			health_grade VARCHAR(10) NOT NULL DEFAULT 'B',
+			health_score FLOAT NOT NULL DEFAULT 0,
+			at_risk_count INTEGER NOT NULL DEFAULT 0,
+			dependencies_json TEXT,
+			alert_enabled BOOLEAN DEFAULT TRUE,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(user_id, repo_full_name)
+		);`, autoInc),
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS macro_stats (
 			id INTEGER PRIMARY KEY %s,
 			metric_key VARCHAR(255) UNIQUE NOT NULL,

@@ -3,12 +3,16 @@ package scoring
 import (
 	"database/sql"
 	"fmt"
+	"os"
 	"testing"
 	"time"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func TestProbeExact(t *testing.T) {
+	if os.Getenv("INTEGRATION_TEST") == "" {
+		t.Skip("skipping integration probe test without INTEGRATION_TEST=1")
+	}
 	db, _ := sql.Open("mysql", "opendoor_user:opendoor_pass@tcp(127.0.0.1:3306)/opendoor?parseTime=true")
 	defer db.Close()
 	var rid string
