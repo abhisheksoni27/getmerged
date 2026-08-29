@@ -89,6 +89,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geist.variable} ${dmMono.variable} ${spaceGrotesk.variable} h-full antialiased dark`}>
+      <head>
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-[#0a0a0a] text-[#fafafa] selection:bg-[#ff6b00]/30 selection:text-white relative">
         {/* Global spatial background dot-grid texture */}
         <div aria-hidden="true" className="fixed inset-0 pointer-events-none -z-20 bg-dot-grid opacity-30 mask-radial-faded" />
