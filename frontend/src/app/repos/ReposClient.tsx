@@ -263,7 +263,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
   }, [page, totalPages]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-black dev-grid-pattern text-white overflow-x-hidden font-sans">
+    <div className="min-h-screen flex flex-col bg-transparent dev-grid-pattern text-white overflow-x-hidden font-sans">
       <Header />
 
       <main className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex-1">

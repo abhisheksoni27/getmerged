@@ -189,7 +189,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
       notFound();
     }
     return (
-      <div className="relative min-h-screen dev-grid-pattern flex flex-col bg-black text-white font-sans">
+      <div className="relative min-h-screen dev-grid-pattern flex flex-col bg-transparent text-white font-sans">
         <Header />
         <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-6">
           <h1 className="font-space text-2xl font-extrabold text-white">
@@ -291,7 +291,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
   const firstTimerRate = repo.first_timer_success_rate ? `${Math.round(repo.first_timer_success_rate)}%` : " - ";
 
   return (
-    <div className="relative min-h-screen dev-grid-pattern flex flex-col bg-black text-white font-sans">
+    <div className="relative min-h-screen dev-grid-pattern flex flex-col bg-transparent text-white font-sans">
       <Header />
       <script
         type="application/ld+json"

@@ -92,7 +92,7 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
   const badgeMarkdown = `[![GetMerged Verified Contributor](https://getmerged.abhishekco.de/api/badge/u/${profile.slug})](https://getmerged.abhishekco.de/u/${profile.slug})`;
 
   return (
-    <div className="min-h-screen flex flex-col bg-black text-white font-sans dev-grid-pattern">
+    <div className="min-h-screen flex flex-col bg-transparent text-white font-sans dev-grid-pattern">
       <Header />
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 sm:py-10">

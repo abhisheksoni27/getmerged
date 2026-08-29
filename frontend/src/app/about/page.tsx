@@ -36,7 +36,7 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-black text-white">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-transparent text-white">
       <Header />
       <script
         type="application/ld+json"

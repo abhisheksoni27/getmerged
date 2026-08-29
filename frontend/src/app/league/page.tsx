@@ -66,7 +66,7 @@ export default async function MonthlyLeaguePage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-black text-white font-sans">
+    <div className="flex min-h-screen flex-col bg-transparent text-white font-sans">
       <Header />
       <script
         type="application/ld+json"

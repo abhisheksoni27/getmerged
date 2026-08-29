@@ -42,7 +42,7 @@ export default function PrivacyPolicyPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-black dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-transparent dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"

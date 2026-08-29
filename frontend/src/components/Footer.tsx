@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck, Sparkles, Flame } from "lucide-react";
 
 export function Footer() {
   const rankingLangs = [
@@ -23,14 +23,14 @@ export function Footer() {
   ];
 
   return (
-    <footer className="border-t border-white/[0.08] bg-[#0a0a0a] text-[#a3a3a3] font-sans pt-16 pb-12 mt-auto">
+    <footer className="border-t border-white/[0.08] bg-transparent text-[#a3a3a3] font-sans pt-16 pb-12 mt-auto">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Top Directory Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 text-xs">
           {/* Column 1: Ecosystem Rankings */}
           <div className="space-y-3">
             <h4 className="font-semibold text-[#d4d4d4] text-xs uppercase tracking-wider font-mono">
-              Ecosystem Rankings
+              Ecosystems
             </h4>
             <ul className="space-y-2 font-mono text-[11px] text-[#a3a3a3]">
               {rankingLangs.slice(0, 7).map((lang) => (
@@ -48,7 +48,7 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 2: More Ecosystems */}
+          {/* Column 2: More Ecosystems & Topics */}
           <div className="space-y-3">
             <h4 className="font-semibold text-[#d4d4d4] text-xs uppercase tracking-wider font-mono">
               More Ecosystems
@@ -66,6 +66,16 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li className="pt-1">
+                <Link
+                  href="/topics"
+                  prefetch={false}
+                  title="Explore GitHub Repositories by Topic & Category"
+                  className="text-white hover:text-[#ff8a33] font-semibold transition-colors flex items-center gap-1"
+                >
+                  <span>Explore All Topics &rarr;</span>
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -75,7 +85,7 @@ export function Footer() {
               Good First Issues
             </h4>
             <ul className="space-y-2 font-mono text-[11px] text-[#a3a3a3]">
-              {rankingLangs.slice(0, 7).map((lang) => (
+              {rankingLangs.slice(0, 6).map((lang) => (
                 <li key={`gfi-${lang.slug}`}>
                   <Link
                     href={`/good-first-issue/${lang.slug}`}
@@ -83,42 +93,83 @@ export function Footer() {
                     title={`Beginner Friendly Good First Issues in ${lang.name}`}
                     className="hover:text-[#d4d4d4] transition-colors"
                   >
-                    {`${lang.name} Good First Issues`}
+                    {`${lang.name} Issues`}
                   </Link>
                 </li>
               ))}
+              <li className="pt-1">
+                <Link
+                  href="/good-first-issue"
+                  prefetch={false}
+                  title="Explore All Good First Issues Across All Languages"
+                  className="text-white hover:text-[#ff8a33] font-semibold transition-colors flex items-center gap-1"
+                >
+                  <span>All Good First Issues &rarr;</span>
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Column 4: Platform & Scoring */}
+          {/* Column 4: Curated Discovery Collections */}
+          <div className="space-y-3">
+            <h4 className="font-semibold text-[#d4d4d4] text-xs uppercase tracking-wider font-mono">
+              Discovery
+            </h4>
+            <ul className="space-y-2 font-mono text-[11px] text-[#a3a3a3]">
+              <li>
+                <Link href="/league" title="Monthly Open-Source Contributor League & Active Sprints" className="text-[#ff6b00] hover:text-[#ff8a33] font-semibold transition-colors flex items-center gap-1">
+                  <Flame className="h-3 w-3" />
+                  Monthly League Sprint
+                </Link>
+              </li>
+              <li>
+                <Link href="/community-powerhouses" title="Open Source Repositories with 3+ Active Maintainers" className="hover:text-white transition-colors flex items-center gap-1">
+                  <Sparkles className="h-3 w-3 text-cyan-400" />
+                  Community Powerhouses
+                </Link>
+              </li>
+              <li>
+                <Link href="/hall-of-fame" title="S-Tier Welcoming Hall of Fame Repositories" className="hover:text-[#d4d4d4] transition-colors">
+                  Hall of Fame (S-Tier)
+                </Link>
+              </li>
+              <li>
+                <Link href="/leaderboard" title="Fastest PR Review Turnaround Leaderboard" className="hover:text-[#d4d4d4] transition-colors">
+                  Review Velocity Board
+                </Link>
+              </li>
+              <li>
+                <Link href="/repos" title="Complete Directory of Scored GitHub Repositories" className="hover:text-[#d4d4d4] transition-colors">
+                  Repository Directory
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 5: Platform & Methodology */}
           <div className="space-y-3">
             <h4 className="font-semibold text-[#d4d4d4] text-xs uppercase tracking-wider font-mono">
               Platform
             </h4>
             <ul className="space-y-2 font-mono text-[11px] text-[#a3a3a3]">
               <li>
-                <Link href="/repos" title="Directory of Scored GitHub Repositories" className="hover:text-[#d4d4d4] transition-colors">
-                  All Repositories
-                </Link>
-              </li>
-              <li>
                 <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm and Methodology" className="hover:text-[#d4d4d4] transition-colors">
                   How C-Rank Works
                 </Link>
               </li>
               <li>
-                <Link href="/compare" title="Compare GitHub Repositories by Merge Rate" className="hover:text-[#d4d4d4] transition-colors">
+                <Link href="/compare" title="Compare GitHub Repositories Side-by-Side" className="hover:text-[#d4d4d4] transition-colors">
                   Compare Repositories
                 </Link>
               </li>
               <li>
-                <Link href="/guides" title="Open Source Contribution Best Practices" className="hover:text-[#d4d4d4] transition-colors">
+                <Link href="/guides" title="Open Source Contribution Best Practices & Playbooks" className="hover:text-[#d4d4d4] transition-colors">
                   Contribution Guides
                 </Link>
               </li>
               <li>
-                <Link href="/hacktoberfest" title="Hacktoberfest 2026 Live Hub" className="text-[#ff6b00] hover:text-[#ff8a33] transition-colors">
-                  Hacktoberfest Hub
+                <Link href="/about" title="About GetMerged" className="hover:text-[#d4d4d4] transition-colors">
+                  About GetMerged
                 </Link>
               </li>
               <li>
