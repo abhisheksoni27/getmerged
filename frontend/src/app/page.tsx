@@ -20,7 +20,7 @@ async function getMacroStats(): Promise<MacroStats | null> {
 async function getInitialRepos(): Promise<Repo[]> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
-    const res = await fetch(`${baseUrl}/api/v1/repos?page=1&per_page=15&sort=stars&order=desc&tier=S`, {
+    const res = await fetch(`${baseUrl}/api/v1/repos?page=1&per_page=30&sort=stars&order=desc&tier=S`, {
       next: { revalidate: 3600 },
     });
     if (!res.ok) return [];
