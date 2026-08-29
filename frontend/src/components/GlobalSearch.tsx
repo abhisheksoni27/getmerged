@@ -25,6 +25,17 @@ const FAMOUS_REPOS = [
   "django/django",
 ];
 
+export function parseGitHubInput(input: string): string {
+  const trimmed = input.trim();
+  const ghMatch = trimmed.match(/(?:https?:\/\/)?(?:www\.)?github\.com\/([A-Za-z0-9_.-]+)\/([A-Za-z0-9_.-]+)/i);
+  if (ghMatch) {
+    const owner = ghMatch[1];
+    const name = ghMatch[2].replace(/\.git$/i, "").replace(/\/.*$/, "");
+    return `${owner}/${name}`;
+  }
+  return trimmed;
+}
+
 export function GlobalSearch() {
   const { isOpen, closeSearch, searchQuery, setSearchQuery } = useSearch();
   const [results, setResults] = useState<Repo[]>([]);
@@ -48,7 +59,8 @@ export function GlobalSearch() {
 
   // Fetch search results from API
   const fetchResults = useCallback(async (query: string) => {
-    if (!query.trim()) {
+    const parsed = parseGitHubInput(query);
+    if (!parsed) {
       setResults([]);
       selectedIndexRef.current = -1;
       setSelectedIndex(-1);
@@ -58,7 +70,7 @@ export function GlobalSearch() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(query.trim())}&per_page=10`);
+      const res = await fetch(`${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(parsed)}&per_page=10`);
       if (!res.ok) throw new Error("Search request failed");
       const data = await res.json();
       const rawList = data.data || data.repos;
@@ -144,6 +156,12 @@ export function GlobalSearch() {
       if (targetRepo) {
         closeSearch();
         router.push(`/${targetRepo.full_name}`);
+      } else {
+        const parsed = parseGitHubInput(searchQuery);
+        if (/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(parsed)) {
+          closeSearch();
+          router.push(`/${parsed}`);
+        }
       }
     } else if (e.key === "Tab") {
       // Focus trapping
@@ -178,150 +196,168 @@ export function GlobalSearch() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/40 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/70 backdrop-blur-md"
           onClick={closeSearch}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Search repositories"
         >
           <motion.div
             ref={modalRef}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Search repositories"
-            tabIndex={-1}
-            initial={{ opacity: 0, scale: 0.98, y: -10 }}
+            initial={{ opacity: 0, scale: 0.96, y: -8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.98, y: -10 }}
-            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="nb-opt-out w-full max-w-2xl glass-panel border border-white/[0.1] rounded-2xl shadow-2xl overflow-hidden flex flex-col focus:outline-none"
+            exit={{ opacity: 0, scale: 0.96, y: -8 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="w-full max-w-2xl rounded-2xl border border-white/[0.12] bg-[#111111]/95 shadow-[0_24px_60px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.06)] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={handleKeyDown}
           >
-            {/* Search Input Header */}
-            <div className="relative flex items-center border-b border-white/[0.1] glass-card/50 p-4">
-              <Search className="absolute left-5 h-5 w-5 text-zinc-300 pointer-events-none" />
+            {/* Search Input Bar */}
+            <div className="flex items-center px-4 py-3.5 border-b border-white/[0.08] gap-3">
+              <Search className="h-5 w-5 text-zinc-300 shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
-                placeholder={`Search repositories by name, e.g. ${FAMOUS_REPOS[placeholderIndex]}`}
                 value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  selectedIndexRef.current = -1;
-                  setSelectedIndex(-1);
-                }}
-                className="w-full pl-10 pr-24 py-1.5 text-base font-sans text-white placeholder-zinc-400 focus:outline-none bg-transparent"
-                autoFocus
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={`Search or paste GitHub URL (e.g. ${FAMOUS_REPOS[placeholderIndex]})`}
+                className="w-full bg-transparent text-sm text-white placeholder-zinc-300 focus:outline-none font-sans"
+                aria-autocomplete="list"
+                aria-controls="search-results-list"
+                aria-activedescendant={
+                  selectedIndex >= 0 && results[selectedIndex]
+                    ? `search-result-${results[selectedIndex].id || results[selectedIndex].full_name}`
+                    : undefined
+                }
               />
-              <div className="absolute right-4 flex items-center gap-2">
-                {loading && <Loader2 className="h-4 w-4 text-zinc-300 animate-spin mr-1" />}
-                <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-white/[0.1] glass-panel px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-300 shadow-2xs">
-                  ESC
-                </kbd>
+              {loading && <Loader2 className="h-4 w-4 text-zinc-300 animate-spin shrink-0" />}
+              {searchQuery && !loading && (
                 <button
                   type="button"
-                  onClick={closeSearch}
-                  aria-label="Close search"
-                  className="p-1 rounded-lg text-zinc-300 hover:text-zinc-300 hover:glass-card transition-colors cursor-pointer"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setResults([]);
+                    inputRef.current?.focus();
+                  }}
+                  aria-label="Clear search query"
+                  className="text-zinc-300 hover:text-white transition-colors cursor-pointer p-0.5 rounded"
                 >
                   <X className="h-4 w-4" />
                 </button>
-              </div>
+              )}
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] font-medium text-zinc-300">
+                ESC
+              </kbd>
             </div>
 
-            {/* Modal Body / Results Container */}
+            {/* Results List */}
             <div
               ref={resultsContainerRef}
-              data-testid="global-search-results"
-              className="max-h-96 overflow-y-auto p-3 space-y-1 font-sans divide-y divide-zinc-100"
+              id="search-results-list"
+              role="listbox"
+              aria-label="Search results"
+              className="max-h-[380px] overflow-y-auto divide-y divide-white/[0.04] p-1.5"
             >
               {results.length > 0 ? (
-                results.slice(0, 8).map((r, index) => {
-                  const rankTier = r.class_rank || r.c_rank_tier || "A";
-                  const isSelected = index === selectedIndex;
+                results.map((repo, idx) => {
+                  const isSelected = selectedIndex === idx;
                   return (
                     <Link
-                      key={r.id || r.full_name}
-                      href={`/${r.full_name}`}
-                      onClick={closeSearch}
-                      title={`View ${r.full_name} C-Rank scorecard, PR response time & merge metrics`}
-                      className={`flex items-center justify-between p-3 rounded-xl transition-all group cursor-pointer block no-underline text-current pt-3 ${
-                        isSelected ? "glass-card ring-1 ring-zinc-300 font-medium" : "hover:glass-card"
+                      key={repo.id || repo.full_name}
+                      id={`search-result-${repo.id || repo.full_name}`}
+                      role="option"
+                      aria-selected={isSelected}
+                      href={`/${repo.full_name}`}
+                      onClick={() => {
+                        posthog.capture("repo_clicked_from_search", { repo_full_name: repo.full_name });
+                        closeSearch();
+                      }}
+                      onMouseEnter={() => {
+                        selectedIndexRef.current = idx;
+                        setSelectedIndex(idx);
+                      }}
+                      className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
+                        isSelected
+                          ? "bg-white/[0.08] text-white"
+                          : "hover:bg-white/[0.04] text-zinc-300"
                       }`}
                     >
-                      <div className="flex items-center gap-3 min-w-0">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={`https://github.com/${r.full_name?.split("/")[0]}.png?size=64`}
-                          alt={r.full_name}
-                          className="h-8 w-8 rounded-lg border border-white/[0.1] glass-panel shrink-0 object-cover"
-                          onError={(e) => {
-                            (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
-                          }}
-                        />
-                        <div className="min-w-0">
-                          <div className="font-space text-sm font-bold text-white group-hover:text-zinc-300 transition-colors truncate">
-                            {r.full_name}
-                          </div>
-                          <div className="text-xs text-zinc-300 truncate font-sans">
-                            {r.description || "No description provided."}
-                          </div>
-                        </div>
+                      <div className="flex flex-col min-w-0 pr-3">
+                        <span className="text-sm font-semibold font-mono text-white truncate">
+                          {repo.full_name}
+                        </span>
+                        {repo.description && (
+                          <span className="text-xs text-zinc-300 font-sans truncate mt-0.5 max-w-md">
+                            {repo.description}
+                          </span>
+                        )}
                       </div>
 
-                      <div className="flex items-center gap-3 shrink-0 ml-3">
-                        <span className="text-xs font-mono text-zinc-300 font-medium">
-                          {r.language || "Other"}
-                        </span>
+                      <div className="flex items-center gap-2 shrink-0">
+                        {repo.language && (
+                          <span className="text-[11px] font-mono text-zinc-300 px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06]">
+                            {repo.language}
+                          </span>
+                        )}
                         <span
-                          className={`px-2 py-0.5 text-[10px] font-bold font-mono border border-white/[0.12] rounded-lg shadow-sm text-white ${
-                            rankTier === "S"
-                              ? "bg-[#8ce99a]"
-                              : rankTier === "A"
-                              ? "bg-[#bfdbff]"
-                              : rankTier === "B"
-                              ? "bg-[#ffd93d]"
-                              : rankTier === "C"
-                              ? "bg-[#e5dbff]"
-                              : "bg-[#ffb3c7]"
+                          className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${
+                            repo.c_rank_tier === "S"
+                              ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                              : repo.c_rank_tier === "A"
+                              ? "bg-sky-500/15 text-sky-400 border border-sky-500/30"
+                              : repo.c_rank_tier === "B"
+                              ? "bg-violet-500/15 text-violet-400 border border-violet-500/30"
+                              : "bg-amber-500/15 text-amber-400 border border-amber-500/30"
                           }`}
                         >
-                          {rankTier} Rank
+                          {repo.c_rank_tier || "A"}
                         </span>
-                        {isSelected && (
-                          <CornerDownLeft className="h-3.5 w-3.5 text-zinc-300 hidden sm:block" />
-                        )}
                       </div>
                     </Link>
                   );
                 })
-              ) : searchQuery.trim() ? (
-                <div className="p-8 text-center text-xs text-zinc-300 font-mono">
-                  {loading ? "Searching repositories..." : `No repositories found matching "${searchQuery}".`}
+              ) : searchQuery.trim() && !loading ? (
+                <div className="px-4 py-8 text-center text-xs text-zinc-300 font-mono">
+                  No indexed repositories matching &ldquo;{searchQuery}&rdquo;.
+                  <div className="mt-2 text-zinc-300 font-sans">
+                    Press <kbd className="px-1.5 py-0.5 rounded bg-white/[0.06] border border-white/[0.08] text-[10px]">Enter</kbd> to run an instant scan on GitHub.
+                  </div>
                 </div>
-              ) : (
-                <div className="p-6 text-center text-xs text-zinc-300 font-sans">
-                  Type a repository name to search live rankings, or press <kbd className="font-mono glass-card px-1 py-0.5 rounded border border-white/[0.1] text-zinc-300">ESC</kbd> to exit.
+              ) : !searchQuery.trim() ? (
+                <div className="p-3">
+                  <div className="text-[11px] font-mono font-semibold text-zinc-300 px-2 pb-2">
+                    Popular Repositories
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 px-2">
+                    {FAMOUS_REPOS.slice(0, 6).map((term) => (
+                      <button
+                        key={term}
+                        type="button"
+                        onClick={() => {
+                          setSearchQuery(term);
+                          inputRef.current?.focus();
+                        }}
+                        className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-2.5 py-1 text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/[0.08] cursor-pointer transition-all"
+                      >
+                        {term}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              )}
+              ) : null}
             </div>
 
-            {/* Modal Footer */}
-            <div className="px-5 py-3 glass-card border-t border-white/[0.1] flex items-center justify-between text-[11px] font-mono text-zinc-300">
+            {/* Modal Footer Controls */}
+            <div className="flex items-center justify-between px-4 py-2.5 border-t border-white/[0.06] bg-black/40 text-[11px] font-mono text-zinc-300">
               <div className="flex items-center gap-3">
-                <span className="hidden sm:inline-flex items-center gap-1">
+                <span className="flex items-center gap-1">
                   <ArrowUpDown className="h-3 w-3" /> Navigate
                 </span>
-                <span>
-                  Press <kbd className="bg-zinc-200 px-1 py-0.5 rounded text-zinc-300 font-medium">ESC</kbd> to close
+                <span className="flex items-center gap-1">
+                  <CornerDownLeft className="h-3 w-3" /> Select
                 </span>
               </div>
-              <Link
-                href="/repos"
-                onClick={closeSearch}
-                title="View all repository search results in the repository explorer"
-                className="text-white font-semibold hover:underline cursor-pointer font-sans"
-              >
-                View all explorer results →
-              </Link>
+              <span>GetMerged Telemetry Index</span>
             </div>
           </motion.div>
         </motion.div>
