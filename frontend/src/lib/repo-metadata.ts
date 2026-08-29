@@ -27,24 +27,30 @@ export function buildRepoMetadata(fullName: string, repo: Repo | null): RepoMeta
   const mergeRate = (repo.external_pr_merge_rate || 0).toFixed(0);
   const respHours = (repo.response_p50_hours && repo.response_p50_hours > 0 ? repo.response_p50_hours : (repo.time_to_first_response_hours || 0)).toFixed(0);
 
-  // SEO Standard: Title must fit strictly under 60 characters for SERP
-  let title = `${fullName} (${tier}-Tier ${score}) | GetMerged`;
+  // Fill full ~55-60 character title budget with high-value keywords
+  const fullTitle = `${fullName} • ${score}/100 C-Rank (${tier}-Tier) | GetMerged`;
+  const midTitle = `${fullName} (${tier}-Tier ${score}) • ${mergeRate}% Merge | GM`;
+  const compactTitle = `${fullName} (${tier}-Tier ${score}) | GetMerged`;
+
+  let title = fullTitle;
+  if (title.length > 60) title = midTitle;
+  if (title.length > 60) title = compactTitle;
   if (title.length > 60) {
     const repoName = repo.name || fullName.split("/")[1] || fullName;
-    title = `${repoName} (${tier}-Tier ${score}) | GetMerged`;
+    title = `${repoName} • ${score}/100 (${tier}-Tier) | GetMerged`;
     if (title.length > 60) {
       title = `${fullName.slice(0, 48)} | GetMerged`;
     }
   }
 
-  // SEO Standard: Meta description strictly under 155-160 characters to avoid SERP truncation
-  let description = `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. View review telemetry on GetMerged.`;
-  if (description.length > 158) {
-    description = `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. Full review speed & maintainer telemetry on GetMerged.`;
-  }
-  if (description.length > 158) {
-    description = `${fullName} PR acceptance: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. Check maintainer responsiveness before you PR on GetMerged.`;
-  }
+  // Fill full ~150-158 character description budget with rich maintainer telemetry & PR verdict
+  const fullDesc = `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate, ~${respHours}h response time & review speed. Full telemetry on GetMerged.`;
+  const compactDesc = `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. View review telemetry on GetMerged.`;
+  const shortDesc = `${fullName} PR acceptance: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate & ~${respHours}h response time. Check maintainer review speed on GetMerged.`;
+
+  let description = fullDesc;
+  if (description.length > 158) description = compactDesc;
+  if (description.length > 158) description = shortDesc;
 
   return { title, description };
 }

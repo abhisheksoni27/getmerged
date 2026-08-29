@@ -58,7 +58,7 @@ test.describe("Repo Metadata & FAQ Unit Tests (IDEA-20260820-02)", () => {
   test("buildRepoMetadata produces rich telemetry description with all core metrics (regression guard)", () => {
     const meta = buildRepoMetadata("vercel/next.js", mockScoredRepo);
 
-    expect(meta.title).toBe("vercel/next.js (A-Tier 84.5) | GetMerged");
+    expect(meta.title).toBe("vercel/next.js • 84.5/100 C-Rank (A-Tier) | GetMerged");
     expect(meta.title.length).toBeLessThanOrEqual(60);
     expect(meta.description.length).toBeLessThanOrEqual(160);
     expect(meta.description).toContain("Will vercel/next.js merge your PR?");
