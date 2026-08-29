@@ -24,22 +24,27 @@ export function buildRepoMetadata(fullName: string, repo: Repo | null): RepoMeta
 
   const score = repo.c_rank_score !== undefined ? repo.c_rank_score.toFixed(1) : "0.0";
   const tier = repo.c_rank_tier || "D";
-  const mergeRate = (repo.external_pr_merge_rate || 0).toFixed(1);
-  const respHours = (repo.response_p50_hours && repo.response_p50_hours > 0 ? repo.response_p50_hours : (repo.time_to_first_response_hours || 0)).toFixed(1);
-  const firstTimerRate = (repo.first_timer_success_rate || 0).toFixed(1);
-  const busFactor = repo.bus_factor || 1;
-  const gfiCount = repo.good_first_issue_count || 0;
+  const mergeRate = (repo.external_pr_merge_rate || 0).toFixed(0);
+  const respHours = (repo.response_p50_hours && repo.response_p50_hours > 0 ? repo.response_p50_hours : (repo.time_to_first_response_hours || 0)).toFixed(0);
 
-  // Compelling title with high CTR & clear value proposition
-  const title = `${fullName} | ${score}/100 C-Rank (${tier}-Tier) • ${mergeRate}% Merge Rate | GetMerged`;
+  // SEO Standard: Title must fit strictly under 60 characters for SERP
+  let title = `${fullName} (${tier}-Tier ${score}) | GetMerged`;
+  if (title.length > 60) {
+    const repoName = repo.name || fullName.split("/")[1] || fullName;
+    title = `${repoName} (${tier}-Tier ${score}) | GetMerged`;
+    if (title.length > 60) {
+      title = `${fullName.slice(0, 48)} | GetMerged`;
+    }
+  }
 
-  // Rich, punchy description highlighting actionable PR intelligence
-  const descPrefix = `Will ${fullName} merge your PR? Rated ${tier}-Tier (${score}/100 C-Rank).`;
-  const metricsHighlight = `${mergeRate}% external merge rate, ~${respHours}h response latency, ${firstTimerRate}% first-timer acceptance, bus factor of ${busFactor}${gfiCount > 0 ? `, and ${gfiCount} good first issues` : ""}.`;
-  
-  const description = repo.description
-    ? `${descPrefix} ${metricsHighlight} "${repo.description.trim()}"`
-    : `${descPrefix} Detailed maintainer turnaround, review bottlenecks, and acceptance odds on GetMerged: ${metricsHighlight}`;
+  // SEO Standard: Meta description strictly under 155-160 characters to avoid SERP truncation
+  let description = `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. View review telemetry on GetMerged.`;
+  if (description.length > 158) {
+    description = `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. Full review speed & maintainer telemetry on GetMerged.`;
+  }
+  if (description.length > 158) {
+    description = `${fullName} PR acceptance: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. Check maintainer responsiveness before you PR on GetMerged.`;
+  }
 
   return { title, description };
 }

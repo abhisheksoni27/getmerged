@@ -58,15 +58,12 @@ test.describe("Repo Metadata & FAQ Unit Tests (IDEA-20260820-02)", () => {
   test("buildRepoMetadata produces rich telemetry description with all core metrics (regression guard)", () => {
     const meta = buildRepoMetadata("vercel/next.js", mockScoredRepo);
 
-    expect(meta.title).toBe("vercel/next.js | 84.5/100 C-Rank (A-Tier) • 68.2% Merge Rate | GetMerged");
+    expect(meta.title).toBe("vercel/next.js (A-Tier 84.5) | GetMerged");
+    expect(meta.title.length).toBeLessThanOrEqual(60);
+    expect(meta.description.length).toBeLessThanOrEqual(160);
     expect(meta.description).toContain("Will vercel/next.js merge your PR?");
-    expect(meta.description).toContain("Rated A-Tier (84.5/100 C-Rank)");
-    expect(meta.description).toContain("68.2% external merge rate");
-    expect(meta.description).toContain("~3.5h response latency");
-    expect(meta.description).toContain("55.0% first-timer acceptance");
-    expect(meta.description).toContain("bus factor of 1");
-    expect(meta.description).toContain("5 good first issues");
-    expect(meta.description).toContain("The React Framework for the Web");
+    expect(meta.description).toContain("84.5/100 C-Rank (A-Tier)");
+    expect(meta.description).toContain("68% merge rate");
   });
 
   test("buildRepoFaqList creates honest contextual answers for unscored repo without asserting fabricated score/tier", () => {
