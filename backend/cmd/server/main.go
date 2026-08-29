@@ -509,6 +509,8 @@ func main() {
 		userApi.GET("/auth/me", handler.GetCurrentUser(userRepo))
 		userApi.PATCH("/user/consent", handler.UpdateConsent(userRepo))
 		userApi.PATCH("/user/profile-visibility", handler.UpdateProfileVisibilityHandler(userRepo))
+		userApi.PATCH("/user/profile", handler.UpdateUserProfileCustomizationHandler(userRepo))
+		userApi.GET("/user/github-repos", handler.GetUserGitHubReposHandler(userRepo))
 		// Talent Pass: 'Open to Opportunities' opt-in (AC1) + owner-only status
 		// visibility (AC5). Triggers an async recruiter-index reindex on toggle.
 		userApi.GET("/user/open-to-opportunities", handler.GetOpenToOpportunitiesHandler(userRepo, profileRepo))

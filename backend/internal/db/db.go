@@ -48,6 +48,10 @@ func AutoMigrate(db *sqlx.DB) error {
 			profiling_consent_at DATETIME,
 			public_accuracy BOOLEAN DEFAULT FALSE,
 			is_public BOOLEAN DEFAULT FALSE,
+			bio TEXT NULL,
+			headline TEXT NULL,
+			showcase_projects_json TEXT NULL,
+			pinned_repos_json TEXT NULL,
 			skills VARCHAR(100) NULL,
 			lang_snapshot TEXT NULL,
 			lang_snapshot_at DATETIME NULL,
@@ -1408,6 +1412,10 @@ func AutoMigrate(db *sqlx.DB) error {
 	// Contributor XP streak state (AC2/AC5): the only users columns added.
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN streak_count INTEGER NOT NULL DEFAULT 0`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN last_active_date DATE`)
+	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN bio TEXT NULL`)
+	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN headline TEXT NULL`)
+	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN showcase_projects_json TEXT NULL`)
+	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN pinned_repos_json TEXT NULL`)
 
 	// Repo Boost (AC1/AC5/AC6): repo-level featured-placement expiry column on
 	// repositories. Query-time ranking reads boost_expires_at > now() so no cron
