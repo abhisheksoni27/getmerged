@@ -136,16 +136,16 @@ const POLL_TIMEOUT_MS = 60000;
 
 // The 10 analysis dimensions shown during the animated progress phase
 const ANALYSIS_STEPS = [
-  { key: "pr_funnel", label: "PR Lifecycle Funnel", icon: "📊", durationMs: 900 },
-  { key: "first_timer", label: "First-Timer Journey", icon: "🌱", durationMs: 1100 },
-  { key: "reviewer_load", label: "Reviewer Load Distribution", icon: "⚖️", durationMs: 1300 },
-  { key: "stale_prs", label: "Stale PR Graveyard", icon: "🕰️", durationMs: 800 },
-  { key: "review_quality", label: "Review Comment Quality", icon: "🔬", durationMs: 1200 },
-  { key: "retention", label: "Contributor Retention Curve", icon: "📈", durationMs: 1000 },
-  { key: "activity_patterns", label: "Activity Time Patterns", icon: "🗓️", durationMs: 700 },
-  { key: "issue_conversion", label: "Issue-to-PR Conversion", icon: "🎯", durationMs: 900 },
-  { key: "velocity_trend", label: "Merge Velocity Trend", icon: "🚀", durationMs: 1100 },
-  { key: "peer_benchmark", label: "Peer Ecosystem Benchmark", icon: "🏆", durationMs: 1400 },
+  { key: "pr_funnel", label: "PR Lifecycle Funnel", icon: "📊", durationMs: 900, badge: "Live", description: "Full 90-day PR journey: opened → reviewed → merged or abandoned. Exact drop-off at each stage." },
+  { key: "first_timer", label: "First-Timer Journey", icon: "🌱", durationMs: 1100, badge: "Live", description: "Newcomer merge rate, ghost rate, and how many first-timers become repeat contributors." },
+  { key: "reviewer_load", label: "Reviewer Load Distribution", icon: "⚖️", durationMs: 1300, badge: "Live", description: "Which reviewers carry 70%+ of the load? Early burnout warning before someone quietly disappears." },
+  { key: "stale_prs", label: "Stale PR Graveyard", icon: "🕰️", durationMs: 800, badge: "Actionable", description: "Open PRs older than 30 days, each with a suggested action: merge it, close it, or just comment." },
+  { key: "review_quality", label: "Review Comment Quality", icon: "🔬", durationMs: 1200, badge: "Live", description: "Nitpick vs blocking vs architectural ratio. Are reviews helping contributors or just slowing them down?" },
+  { key: "retention", label: "Contributor Retention Curve", icon: "📈", durationMs: 1000, badge: "Live", description: "Month-over-month cohort view of who keeps contributing vs who ghosts after their first PR." },
+  { key: "activity_patterns", label: "Activity Time Patterns", icon: "🗓️", durationMs: 700, badge: "Live", description: "Hour-of-day and day-of-week breakdown. When do PRs get reviewed fastest? Tell your contributors." },
+  { key: "issue_conversion", label: "Issue-to-PR Conversion", icon: "🎯", durationMs: 900, badge: "Live", description: "Of your good-first-issues, how many actually get a PR? Identify which labels and titles convert." },
+  { key: "velocity_trend", label: "Merge Velocity Trend", icon: "🚀", durationMs: 1100, badge: "Live", description: "Month-over-month merge rate. Is momentum building or quietly stalling? Catch it before it flatlines." },
+  { key: "peer_benchmark", label: "Peer Ecosystem Benchmark", icon: "🏆", durationMs: 1400, badge: "Live", description: "All 9 C-Rank™ factors scored against 500+ peer repositories. Know exactly where you stand." },
 ];
 
 export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps) {
@@ -458,53 +458,23 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
-                    <TrendingUp className="h-3.5 w-3.5 text-emerald-400" /> PR Funnel & First-Timer Journey
-                  </span>
-                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded">Live</span>
+              {ANALYSIS_STEPS.map((step) => (
+                <div key={step.key} className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
+                      <span>{step.icon}</span> {step.label}
+                    </span>
+                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${
+                      step.badge === "Actionable"
+                        ? "text-amber-400 bg-amber-950/60"
+                        : "text-emerald-400 bg-emerald-950/60"
+                    }`}>{step.badge}</span>
+                  </div>
+                  <p className="text-[12px] text-zinc-400">
+                    {step.description}
+                  </p>
                 </div>
-                <p className="text-[12px] text-zinc-400">
-                  Who opens PRs, who gets merged, who never comes back. Newcomer success vs ghost rate.
-                </p>
-              </div>
-
-              <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
-                    <Users className="h-3.5 w-3.5 text-amber-400" /> Reviewer Burnout Signals
-                  </span>
-                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded">Live</span>
-                </div>
-                <p className="text-[12px] text-zinc-400">
-                  Which reviewers carry 70%+ of the load? Is one person quietly burning out?
-                </p>
-              </div>
-
-              <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
-                    <Clock className="h-3.5 w-3.5 text-rose-400" /> Stale PR Triage
-                  </span>
-                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded">Actionable</span>
-                </div>
-                <p className="text-[12px] text-zinc-400">
-                  Open PRs older than 30 days. Each one gets a suggested next action — merge, close, or comment.
-                </p>
-              </div>
-
-              <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
-                    <BarChart3 className="h-3.5 w-3.5 text-indigo-400" /> Velocity Trend + Peer Benchmark
-                  </span>
-                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded">Live</span>
-                </div>
-                <p className="text-[12px] text-zinc-400">
-                  Is your merge pace accelerating or stalling? Compared against 500+ peer repositories.
-                </p>
-              </div>
+              ))}
             </div>
           </div>
         </div>
