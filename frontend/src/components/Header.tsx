@@ -129,7 +129,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             <div className="flex items-center gap-1.5 sm:gap-2.5 bg-[#141414] border border-white/[0.08] rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 shrink-0">
               {user.slug ? (
                 <Link
-                  href={`/${user.slug}`}
+                  href={`/u/${user.slug}`}
                   title={`View your public GetMerged profile (@${user.slug})`}
                   className="flex items-center gap-1.5 sm:gap-2 min-w-0 hover:opacity-80 transition-opacity"
                 >

@@ -25,12 +25,39 @@ type User struct {
 	ProfilingConsent bool       `db:"profiling_consent" json:"profiling_consent"`
 	PublicAccuracy   bool       `db:"public_accuracy" json:"public_accuracy"`
 	IsPublic         bool       `db:"is_public" json:"is_public"`
+	Bio              *string    `db:"bio" json:"bio,omitempty"`
+	Headline         *string    `db:"headline" json:"headline,omitempty"`
+	ShowcaseProjectsJSON *string `db:"showcase_projects_json" json:"showcase_projects_json,omitempty"`
+	PinnedReposJSON  *string    `db:"pinned_repos_json" json:"pinned_repos_json,omitempty"`
 	Skills           *string    `db:"skills" json:"skills,omitempty"`
 	LangSnapshot     *string    `db:"lang_snapshot" json:"lang_snapshot,omitempty"`
 	LangSnapshotAt   *time.Time `db:"lang_snapshot_at" json:"lang_snapshot_at,omitempty"`
 	DeletedAt        *time.Time `db:"deleted_at" json:"-"`
 	CreatedAt        time.Time  `db:"created_at" json:"created_at"`
 	UpdatedAt        time.Time  `db:"updated_at" json:"updated_at"`
+}
+
+type ShowcaseProject struct {
+	ID          string   `json:"id"`
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
+	DemoURL     string   `json:"demo_url,omitempty"`
+	RepoURL     string   `json:"repo_url,omitempty"`
+	IsPrivate   bool     `json:"is_private,omitempty"`
+	Tags        []string `json:"tags,omitempty"`
+	ImageURLs   []string `json:"image_urls,omitempty"`
+	Stars       int      `json:"stars,omitempty"`
+}
+
+type UserPublicRepo struct {
+	FullName    string `json:"full_name"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Language    string `json:"language"`
+	Stars       int    `json:"stars"`
+	Forks       int    `json:"forks"`
+	HTMLURL     string `json:"html_url"`
+	IsPinned    bool   `json:"is_pinned,omitempty"`
 }
 
 type UserStats struct {
@@ -56,6 +83,8 @@ type UserProfile struct {
 	Slug        string             `json:"slug"`
 	Username    string             `json:"username"`
 	AvatarURL   *string            `json:"avatar_url,omitempty"`
+	Bio         string             `json:"bio,omitempty"`
+	Headline    string             `json:"headline,omitempty"`
 	MemberSince time.Time          `json:"member_since"`
 	GithubURL   *string            `json:"github_url,omitempty"`
 	Stats       UserStats          `json:"stats"`
@@ -82,17 +111,21 @@ type PublicEvalItem struct {
 // track record only. Accuracy is nil when nothing has settled yet so callers
 // hide it instead of rendering 0%/NaN.
 type PublicContributorProfile struct {
-	Slug         string           `json:"slug"`
-	Username     string           `json:"username"`
-	AvatarURL    *string          `json:"avatar_url,omitempty"`
-	MemberSince  time.Time        `json:"member_since"`
-	IsPublic     bool             `json:"is_public"`
-	TotalEvals   int              `json:"total_evals"`
-	AccuracyRate *float64         `json:"accuracy_rate"`
-	AccuracyN    int              `json:"accuracy_n"`
-	MergedCount  int              `json:"merged_count"`
-	Repos        []PublicRepoTier `json:"repos"`
-	Evals        []PublicEvalItem `json:"evals"`
+	Slug             string            `json:"slug"`
+	Username         string            `json:"username"`
+	AvatarURL        *string           `json:"avatar_url,omitempty"`
+	Bio              string            `json:"bio,omitempty"`
+	Headline         string            `json:"headline,omitempty"`
+	MemberSince      time.Time         `json:"member_since"`
+	IsPublic         bool              `json:"is_public"`
+	TotalEvals       int               `json:"total_evals"`
+	AccuracyRate     *float64          `json:"accuracy_rate"`
+	AccuracyN        int               `json:"accuracy_n"`
+	MergedCount      int               `json:"merged_count"`
+	Repos            []PublicRepoTier  `json:"repos"`
+	PublicRepos      []UserPublicRepo  `json:"public_repos"`
+	ShowcaseProjects []ShowcaseProject `json:"showcase_projects"`
+	Evals            []PublicEvalItem  `json:"evals"`
 	// Contributor XP season (AC2/AC8): level/streak/season rank attached from
 	// the pr-eval store. Level defaults to 0 and season_rank to null (rendered
 	// as a dash) for zero-XP profiles.
@@ -118,6 +151,7 @@ type UserRepository interface {
 	GetUserProfileBySlug(ctx context.Context, slug string) (*UserProfile, error)
 	GetPublicContributorProfileBySlug(ctx context.Context, slug string) (*PublicContributorProfile, error)
 	UpdateProfilePublic(ctx context.Context, userID int64, public bool) error
+	UpdateUserBioAndShowcase(ctx context.Context, userID int64, bio, headline string, showcaseJSON string, pinnedReposJSON string) error
 	UpsertUser(ctx context.Context, githubID int64, username, email, avatarURL string) (int64, error)
 	UpsertGoogleUser(ctx context.Context, googleID string, username, email, avatarURL string) (int64, error)
 	UpdateProfilingConsent(ctx context.Context, userID int64, consent bool) error
@@ -146,7 +180,7 @@ func NewUserRepository(db *sqlx.DB, cfg *config.Config) UserRepository {
 
 func (r *sqlxUserRepository) FindByGithubID(ctx context.Context, githubID int64) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, is_public, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE github_id = ? AND deleted_at IS NULL", githubID)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, is_public, bio, headline, showcase_projects_json, pinned_repos_json, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE github_id = ? AND deleted_at IS NULL", githubID)
 	if err != nil {
 		return nil, err
 	}
@@ -157,7 +191,7 @@ func (r *sqlxUserRepository) FindByGithubID(ctx context.Context, githubID int64)
 
 func (r *sqlxUserRepository) FindByGoogleID(ctx context.Context, googleID string) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, is_public, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE google_id = ? AND deleted_at IS NULL", googleID)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, is_public, bio, headline, showcase_projects_json, pinned_repos_json, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE google_id = ? AND deleted_at IS NULL", googleID)
 	if err != nil {
 		return nil, err
 	}
@@ -168,7 +202,7 @@ func (r *sqlxUserRepository) FindByGoogleID(ctx context.Context, googleID string
 
 func (r *sqlxUserRepository) FindByID(ctx context.Context, id int64) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, is_public, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE id = ? AND deleted_at IS NULL", id)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, is_public, bio, headline, showcase_projects_json, pinned_repos_json, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE id = ? AND deleted_at IS NULL", id)
 	if err != nil {
 		return nil, err
 	}
@@ -179,7 +213,7 @@ func (r *sqlxUserRepository) FindByID(ctx context.Context, id int64) (*User, err
 
 func (r *sqlxUserRepository) FindBySlug(ctx context.Context, slug string) (*User, error) {
 	var user User
-	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, is_public, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE slug = ? AND deleted_at IS NULL", slug)
+	err := r.db.GetContext(ctx, &user, "SELECT id, github_id, google_id, slug, username, email, avatar_url, profiling_consent, is_public, bio, headline, showcase_projects_json, pinned_repos_json, skills, lang_snapshot, lang_snapshot_at, deleted_at, created_at, updated_at FROM users WHERE slug = ? AND deleted_at IS NULL", slug)
 	if err != nil {
 		return nil, err
 	}
@@ -674,7 +708,60 @@ func (r *sqlxUserRepository) GetPublicContributorProfileBySlug(ctx context.Conte
 		}
 	}
 
+	if user.Bio != nil {
+		profile.Bio = *user.Bio
+	}
+	if user.Headline != nil {
+		profile.Headline = *user.Headline
+	}
+	if user.ShowcaseProjectsJSON != nil && *user.ShowcaseProjectsJSON != "" {
+		_ = json.Unmarshal([]byte(*user.ShowcaseProjectsJSON), &profile.ShowcaseProjects)
+	}
+	if profile.ShowcaseProjects == nil {
+		profile.ShowcaseProjects = []ShowcaseProject{}
+	}
+
+	pinnedSet := make(map[string]bool)
+	if user.PinnedReposJSON != nil && *user.PinnedReposJSON != "" {
+		var pinnedList []string
+		if err := json.Unmarshal([]byte(*user.PinnedReposJSON), &pinnedList); err == nil {
+			for _, p := range pinnedList {
+				pinnedSet[strings.ToLower(p)] = true
+			}
+		}
+	}
+
+	profile.PublicRepos = []UserPublicRepo{}
+	if profile.DNA != nil && len(profile.DNA.TopRepos) > 0 {
+		for _, tr := range profile.DNA.TopRepos {
+			isPinned := pinnedSet[strings.ToLower(tr.NameWithOwner)]
+			lang := ""
+			if tr.PrimaryLanguage != nil {
+				lang = *tr.PrimaryLanguage
+			}
+			parts := strings.Split(tr.NameWithOwner, "/")
+			repoName := tr.NameWithOwner
+			if len(parts) == 2 {
+				repoName = parts[1]
+			}
+			profile.PublicRepos = append(profile.PublicRepos, UserPublicRepo{
+				FullName:    tr.NameWithOwner,
+				Name:        repoName,
+				Description: "",
+				Language:    lang,
+				Stars:       tr.StargazerCount,
+				HTMLURL:     fmt.Sprintf("https://github.com/%s", tr.NameWithOwner),
+				IsPinned:    isPinned,
+			})
+		}
+	}
+
 	return profile, nil
+}
+
+func (r *sqlxUserRepository) UpdateUserBioAndShowcase(ctx context.Context, userID int64, bio, headline string, showcaseJSON string, pinnedReposJSON string) error {
+	_, err := r.db.ExecContext(ctx, "UPDATE users SET bio = ?, headline = ?, showcase_projects_json = ?, pinned_repos_json = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?", bio, headline, showcaseJSON, pinnedReposJSON, userID)
+	return err
 }
 
 func (u *User) SlugOrUsername() string {

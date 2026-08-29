@@ -44,16 +44,43 @@ export interface PublicProfileEval {
   created_at: string;
 }
 
+export interface ShowcaseProject {
+  id: string;
+  title: string;
+  description: string;
+  demo_url?: string;
+  repo_url?: string;
+  is_private?: boolean;
+  tags?: string[];
+  image_urls?: string[];
+  stars?: number;
+}
+
+export interface UserPublicRepo {
+  full_name: string;
+  name: string;
+  description: string;
+  language: string;
+  stars: number;
+  forks?: number;
+  html_url: string;
+  is_pinned?: boolean;
+}
+
 export interface PublicProfile {
   slug: string;
   username: string;
   avatar_url?: string;
+  bio?: string;
+  headline?: string;
   member_since: string;
   is_public: boolean;
   total_evals: number;
   accuracy_rate: number | null;
   accuracy_n: number;
   merged_count: number;
+  showcase_projects?: ShowcaseProject[];
+  public_repos?: UserPublicRepo[];
   // Contributor XP season (optional fields degrade to zero-state dashes).
   season?: string;
   total_xp?: number;
