@@ -223,13 +223,15 @@ p, li {
 .grade-d { --grade-color: var(--color-grade-d); }
 
 /* Accessible focus ring */
-a:focus-visible,
-button:focus-visible,
+:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.2);
+  outline-offset: 2px;
+}
+
 input:focus-visible,
-select:focus-visible,
-[tabindex]:focus-visible {
-  outline: 2px solid var(--color-primary) !important;
-  outline-offset: 2px !important;
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
 }
 
 /* Custom scrollbar */
