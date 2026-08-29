@@ -38,7 +38,8 @@ func testDB(t *testing.T) *sqlx.DB {
 			repository_id VARCHAR(255) PRIMARY KEY,
 			snapshot_date VARCHAR(255) NOT NULL,
 			c_rank_tier VARCHAR(10) DEFAULT 'D',
-			c_rank_score REAL DEFAULT 0
+			c_rank_score REAL DEFAULT 0,
+			updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 		)`,
 		`CREATE TABLE IF NOT EXISTS indexing_queue (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -78,6 +79,12 @@ func testDB(t *testing.T) *sqlx.DB {
 			repository_id VARCHAR(255) NOT NULL,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			PRIMARY KEY (topic, repository_id)
+		)`,
+		`CREATE TABLE IF NOT EXISTS macro_stats (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			metric_key VARCHAR(255) UNIQUE NOT NULL,
+			metric_value TEXT NOT NULL,
+			updated_at DATETIME NOT NULL
 		)`,
 	} {
 		if _, err := database.Exec(stmt); err != nil {
@@ -139,12 +146,12 @@ func TestEnqueueDueRepos_OnlyScansActiveRepos(t *testing.T) {
 	}
 
 	_, err = dbConn.Exec(`
-		INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier) VALUES
-		('repo-1', '2026-08-01', 'S'),
-		('repo-2', '2026-08-01', 'D'),
-		('repo-3', '2026-08-03', 'S'),
-		('repo-4', '2026-08-01', 'S'),
-		('repo-5', '2026-08-01', 'S')
+		INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, updated_at) VALUES
+		('repo-1', '2026-08-01', 'S', '2026-08-01 00:00:00'),
+		('repo-2', '2026-08-01', 'D', '2026-08-01 00:00:00'),
+		('repo-3', '2026-08-03', 'S', CURRENT_TIMESTAMP),
+		('repo-4', '2026-08-01', 'S', '2026-08-01 00:00:00'),
+		('repo-5', '2026-08-01', 'S', '2026-08-01 00:00:00')
 	`)
 	if err != nil {
 		t.Fatalf("insert snapshots failed: %v", err)
@@ -201,7 +208,7 @@ func TestEnqueueDueRepos_ReEnqueuesCompleted(t *testing.T) {
 		t.Fatalf("insert repos failed: %v", err)
 	}
 
-	_, err = dbConn.Exec("INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier) VALUES ('repo-1', '2026-08-01', 'S')")
+	_, err = dbConn.Exec("INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, updated_at) VALUES ('repo-1', '2026-08-01', 'S', '2026-08-01 00:00:00')")
 	if err != nil {
 		t.Fatalf("insert snapshots failed: %v", err)
 	}
@@ -320,3 +327,56 @@ func TestScoreAndSaveRepo_GeneratesAIInsights(t *testing.T) {
 		t.Errorf("expected 1 repo_ai_insights record in DB, got %d", aiCount)
 	}
 }
+
+func TestRecoverStuckProcessingItems(t *testing.T) {
+	dbConn := testDB(t)
+	crawler := NewBackgroundCrawler(dbConn, nil, nil)
+
+	// Seed stuck processing items (> 30 min old) and recent processing items (< 30 min old)
+	_, err := dbConn.Exec(`
+		INSERT INTO indexing_queue (full_name, owner, name, status, priority, created_at) VALUES
+		('owner/stuck-repo', 'owner', 'stuck-repo', 'processing', 1, datetime('now', '-45 minutes')),
+		('owner/recent-repo', 'owner', 'recent-repo', 'processing', 1, datetime('now', '-5 minutes'))
+	`)
+	if err != nil {
+		t.Fatalf("insert queue items failed: %v", err)
+	}
+
+	crawler.recoverStuckProcessingItems()
+
+	var stuckStatus, recentStatus string
+	_ = dbConn.Get(&stuckStatus, "SELECT status FROM indexing_queue WHERE full_name = 'owner/stuck-repo'")
+	_ = dbConn.Get(&recentStatus, "SELECT status FROM indexing_queue WHERE full_name = 'owner/recent-repo'")
+
+	if stuckStatus != "pending" {
+		t.Errorf("expected stuck item to be recovered to 'pending', got '%s'", stuckStatus)
+	}
+	if recentStatus != "processing" {
+		t.Errorf("expected recent item to remain 'processing', got '%s'", recentStatus)
+	}
+}
+
+func TestRefreshMacroStats(t *testing.T) {
+	dbConn := testDB(t)
+	crawler := NewBackgroundCrawler(dbConn, nil, nil)
+
+	_, err := dbConn.Exec(`
+		INSERT INTO repositories (id, full_name, owner, name, stars, github_url, created_at, updated_at) VALUES
+		('repo-1', 'owner/repo-1', 'owner', 'repo-1', 100, 'https://github.com/owner/repo-1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+	`)
+	if err != nil {
+		t.Fatalf("insert repos failed: %v", err)
+	}
+
+	crawler.refreshMacroStats()
+
+	var val string
+	err = dbConn.Get(&val, "SELECT metric_value FROM macro_stats WHERE metric_key = 'global_summary'")
+	if err != nil {
+		t.Fatalf("query macro_stats failed: %v", err)
+	}
+	if val == "" {
+		t.Errorf("expected non-empty macro_stats cache")
+	}
+}
+
