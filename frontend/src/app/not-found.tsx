@@ -33,7 +33,7 @@ export default function NotFound() {
           </h1>
 
           <p className="text-zinc-300 text-sm sm:text-base leading-relaxed mb-8">
-            This repository has not been indexed or does not meet the minimum public contribution telemetry thresholds on GitHub.
+            This repository has not been indexed yet or the URL might be mistyped. Explore our active repository directory or search for welcoming projects below.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">

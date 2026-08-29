@@ -17,8 +17,8 @@ export function buildRepoMetadata(fullName: string, repo: Repo | null): RepoMeta
   const scored = isRepoScored(repo);
 
   if (!repo || !scored) {
-    const title = `${fullName} Contributor Telemetry & C-Rank™: Unscored | GetMerged`;
-    const description = `${fullName} currently has no public PR telemetry recorded on GitHub (reviews may occur on internal tooling). View verified-welcoming alternative open-source projects on GetMerged.`;
+    const title = `${fullName} Review Speed & PR Merge Stats: Unscored | GetMerged`;
+    const description = `${fullName} currently has no public pull request activity recorded on GitHub. View active, welcoming open source projects on GetMerged.`;
     return { title, description };
   }
 
@@ -41,16 +41,16 @@ export function buildRepoMetadata(fullName: string, repo: Repo | null): RepoMeta
 
   // Dynamic Description Construction (Strictly <= 154 chars)
   const descCandidates = [
-    `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. View review telemetry on GetMerged.`,
+    `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. Check review speed on GetMerged.`,
     `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate & ~${respHours}h response. Check review speed on GetMerged.`,
-    `Will ${repoName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. View review telemetry on GetMerged.`,
+    `Will ${repoName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. Check review speed on GetMerged.`,
     `Will ${repoName} merge your PR? ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate & ~${respHours}h response. Check review speed on GetMerged.`,
-    `${fullName} PR telemetry: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`,
-    `${repoName} PR telemetry: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`,
+    `${fullName} PR stats: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`,
+    `${repoName} PR stats: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`,
   ];
   let description = descCandidates.find((d) => d.length <= 154) || "";
   if (!description) {
-    const base = `PR telemetry for ${fullName}: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. Review speed on GetMerged.`;
+    const base = `PR stats for ${fullName}: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. Review speed on GetMerged.`;
     description = base.length <= 154 ? base : base.slice(0, 151) + "...";
   }
 
@@ -69,19 +69,19 @@ export function buildRepoFaqList(fullName: string, repo: Repo | null): RepoFaqIt
     return [
       {
         q: "What does the Unscored status represent?",
-        a: "This repository currently has no indexed public pull request reviews or maintainer telemetry on GitHub. Some large projects conduct code reviews via external tooling (e.g. Gerrit, Phabricator) or internal monorepos. As soon as public PR review activity is recorded, C-Rank™ computes objective scores automatically.",
+        a: "This repository currently has no indexed public pull request reviews or activity on GitHub. Some large projects conduct code reviews via external tooling (e.g. Gerrit, Phabricator) or internal monorepos. As soon as public PR review activity is recorded, scores are computed automatically.",
       },
       {
         q: "Is this project welcoming to external pull requests?",
-        a: "No public review velocity has been recorded on GitHub for this project. Check the project CONTRIBUTING guide or explore our verified-welcoming alternatives in the same language ecosystem.",
+        a: "No public review history has been recorded on GitHub for this project yet. Check the project CONTRIBUTING guide or explore active, welcoming alternatives in the same language ecosystem.",
       },
       {
         q: `What is the external contributor pull request merge rate for ${fullName}?`,
-        a: `No public pull request merge telemetry is recorded on GitHub for ${fullName}. Review workflows may be hosted externally or restricted to core teams.`,
+        a: `No public pull request merge data is recorded on GitHub for ${fullName}. Review workflows may be hosted externally or restricted to core teams.`,
       },
       {
         q: `How fast can I expect code review feedback on my pull request?`,
-        a: `Review latency is currently unmeasured due to zero public GitHub PR telemetry. Refer to the repository's contributing guidelines for team workflow norms.`,
+        a: `Review speed is currently unmeasured due to no public GitHub PR activity. Refer to the repository's contributing guidelines for team workflow norms.`,
       },
       {
         q: `Are there Good First Issues available in ${fullName}?`,
@@ -99,15 +99,15 @@ export function buildRepoFaqList(fullName: string, repo: Repo | null): RepoFaqIt
     },
     {
       q: `How fast can I expect code review feedback on my pull request?`,
-      a: `Maintainers in ${fullName} respond to incoming external pull requests in approximately ${(repo.time_to_first_response_hours || 0).toFixed(1)} hours on average. Keeping PRs scoped to single concerns and ensuring CI checks succeed will optimize review turnaround.`,
+      a: `Maintainers in ${fullName} respond to incoming external pull requests in approximately ${(repo.time_to_first_response_hours || 0).toFixed(1)} hours on average. Keeping PRs focused on single tasks and ensuring tests pass helps maintainers review faster.`,
     },
     {
       q: `What does the ${(repo.c_rank_score || 0).toFixed(1)} C-Rank™ score (${repo.c_rank_tier || "A"} Tier) represent?`,
-      a: `The C-Rank™ system evaluates GitHub projects on a 0–100 scale using objective telemetry: PR merge velocity, first-comment latency, active maintainer count, and first-time contributor acceptance rates. A score of ${(repo.c_rank_score || 0).toFixed(1)} places ${fullName} in the ${repo.c_rank_tier || "A"} tier.`,
+      a: `The C-Rank™ system evaluates GitHub projects on a 0–100 scale using real data: PR merge rates, review turnaround time, active maintainer presence, and first-time contributor success. A score of ${(repo.c_rank_score || 0).toFixed(1)} places ${fullName} in the ${repo.c_rank_tier || "A"} tier.`,
     },
     {
       q: `What is the external contributor pull request merge rate for ${fullName}?`,
-      a: `The external contributor pull request merge rate for ${fullName} is ${(repo.external_pr_merge_rate || 0).toFixed(1)}%, based on public PR telemetry from non-core contributors.`,
+      a: `The external contributor pull request merge rate for ${fullName} is ${(repo.external_pr_merge_rate || 0).toFixed(1)}%, based on public PR activity from non-core contributors.`,
     },
     {
       q: `Are there Good First Issues available in ${fullName}?`,

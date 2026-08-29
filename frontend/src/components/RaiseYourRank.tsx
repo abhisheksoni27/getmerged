@@ -101,9 +101,9 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
       </div>
 
       <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed mb-4">
-        Quantified gaps from live telemetry - each row shows your current value against the
-        S-tier target and the one fix that closes it. Maintainers can verify ownership to unlock
-        automated re-scores and a before/after share card.
+        Actionable improvements based on your GitHub activity - each row shows your current metric against the
+        S-tier benchmark and the fix to improve it. Maintainers can verify ownership to unlock
+        automated re-scores and progress tracking.
       </p>
 
       <div className="space-y-3">
