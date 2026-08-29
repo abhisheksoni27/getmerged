@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Sprout, ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 import { LanguageMatchQuiz } from "@/components/LanguageMatchQuiz";
+import { IssueSniperTrigger } from "@/components/IssueSniperTrigger";
 
 export const metadata: Metadata = {
   title: "Find Good First Issues: Top Beginner Repos Ranked by Merge Rate (2026) | GetMerged",
@@ -106,6 +107,10 @@ export default function GoodFirstIssueIndexPage() {
         </div>
 
         <LanguageMatchQuiz />
+
+        <div className="mt-8 mb-4">
+          <IssueSniperTrigger />
+        </div>
 
         <div className="mb-6 mt-12 flex items-center justify-between border-b border-white/[0.1] pb-4">
           <h2 className="text-sm font-bold text-white flex items-center gap-2 font-space">

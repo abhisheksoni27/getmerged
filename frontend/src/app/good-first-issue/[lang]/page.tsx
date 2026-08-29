@@ -7,6 +7,7 @@ import { API_BASE_URL } from "@/lib/api";
 import { canonicalizeSlug, displayNameFromSlug } from "@/lib/languageSlug";
 import { formatFreshness } from "@/lib/freshness";
 import { LangDigestSignup } from "@/components/LangDigestSignup";
+import { IssueSniperTrigger } from "@/components/IssueSniperTrigger";
 import { Sparkles, Code2, ArrowLeft, ShieldCheck, Sprout, ExternalLink, MessageSquare, Star, Award } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -228,6 +229,11 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
             <span>Updated: {new Date().toUTCString().slice(0, 16)} UTC (Live GitHub Sync)</span>
           </div>
+        </div>
+
+        {/* Real-Time Issue Sniper Radar */}
+        <div className="mb-10">
+          <IssueSniperTrigger language={languageName} />
         </div>
 
         {/* Real Live Issues Feed (Audit H9 Target Shape) */}

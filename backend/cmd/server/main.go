@@ -188,6 +188,9 @@ func main() {
 	stackAnalyzer := stack.NewAnalyzer(database)
 	stackHandler := handler.NewStackHandler(stackAnalyzer, tokenMgr, userRepo, database)
 
+	// Issue Sniper Alert Service
+	sniperHandler := handler.NewSniperHandler(database)
+
 	// Stalled-PR rescue alerts: hourly sweep comparing tracked open PRs
 	// against each repo's merged p75 wait; email + configured Slack/Discord.
 	stopStallAlertCron := startPRStallAlertCron(cfg, database)
@@ -502,6 +505,9 @@ func main() {
 		api.POST("/stack/analyze", stackHandler.AnalyzeDirect)
 		api.POST("/stack/scan-repo", middleware.OptionalUserAuth(cfg.JWTSecret), stackHandler.ScanRepo)
 
+		// Issue Sniper Alert Service (Story 1.2)
+		api.POST("/alerts/subscribe-sniper", middleware.OptionalUserAuth(cfg.JWTSecret), sniperHandler.SubscribeSniper)
+
 		// Auth Routes
 		authGroup := api.Group("/auth")
 		{
@@ -537,6 +543,7 @@ func main() {
 		userApi.GET("/user/referral", handler.GetMyReferral(entitlementRepo))
 		userApi.GET("/stack/user-repos", stackHandler.GetUserRepos)
 		userApi.GET("/stack/saved", stackHandler.GetSavedStacks)
+		userApi.GET("/alerts/my-snipers", sniperHandler.GetUserSnipers)
 
 		// Maintainer Claims & C-Rank Console (AC1, AC2, AC3, AC6, AC8)
 		userApi.POST("/repos/:id/claim", handler.PostClaimRepoHandler(claimSvc))
