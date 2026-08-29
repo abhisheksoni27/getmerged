@@ -226,7 +226,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
           </p>
           <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-zinc-300">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
-            <span>Telemetry updated: {new Date().toUTCString().slice(0, 16)} UTC (Continuous Sync)</span>
+            <span>Updated: {new Date().toUTCString().slice(0, 16)} UTC (Live GitHub Sync)</span>
           </div>
         </div>
 

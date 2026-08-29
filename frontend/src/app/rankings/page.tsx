@@ -102,7 +102,7 @@ export default function RankingsIndexPage() {
           </p>
           <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-zinc-300">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
-            <span>Telemetry updated daily via GitHub GraphQL</span>
+            <span>Updated daily with real GitHub activity</span>
           </div>
         </div>
 
@@ -112,7 +112,7 @@ export default function RankingsIndexPage() {
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
             Browse by Ecosystem ({ecosystems.length})
           </h2>
-          <span className="text-[11px] text-zinc-300 font-mono hidden sm:inline">C-Rank™ Welcoming Telemetry</span>
+          <span className="text-[11px] text-zinc-300 font-mono hidden sm:inline">Active &amp; Welcoming Projects</span>
         </div>
 
         {/* Ecosystem Cards Grid */}

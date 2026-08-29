@@ -9,16 +9,16 @@ import { BookOpen, ArrowRight, ArrowLeft, Clock, ShieldCheck, Sparkles } from "l
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Open Source Contribution Guides & PR Telemetry | GetMerged",
+  title: "Open Source Contribution Guides & Tips | GetMerged",
   description:
-    "Data-driven guides on finding open source projects that actually merge PRs, avoiding zombie codebases, and beginner repository playbooks.",
+    "Practical step-by-step guides on finding beginner-friendly GitHub repositories, writing great pull requests, and getting merged faster.",
   alternates: {
     canonical: "https://getmerged.abhishekco.de/guides",
   },
   openGraph: {
-    title: "Open Source Contribution Guides & PR Telemetry | GetMerged",
+    title: "Open Source Contribution Guides & Tips | GetMerged",
     description:
-      "Data-driven developer guides for open source contribution, maintainer response velocity, and pull request etiquette.",
+      "Practical developer guides for open source contribution, finding active maintainers, and pull request best practices.",
     url: "https://getmerged.abhishekco.de/guides",
     siteName: "GetMerged",
   },
@@ -31,7 +31,7 @@ export default function GuidesHubPage() {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "Open Source Contribution Guides",
-    description: "Data-driven developer guides for open source contribution and pull request telemetry.",
+    description: "Practical developer guides for finding active open source projects and making successful pull requests.",
     url: "https://getmerged.abhishekco.de/guides",
     publisher: {
       "@type": "Organization",
@@ -84,13 +84,13 @@ export default function GuidesHubPage() {
         <div className="border border-white/[0.1] glass-panel p-8 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-950/80 border border-emerald-700 text-emerald-300 rounded font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-            Empirical Developer Guides &middot; Zero Speculation
+            Developer Guides &middot; Actionable Playbooks
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight font-sans text-white mb-4">
-            Open Source Contribution Playbooks
+            Open Source Contribution Guides
           </h1>
           <p className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-3xl">
-            Stop guessing whether maintainers will review your pull requests. Our engineering guides use real GitHub GraphQL telemetry from 53,000+ indexed repositories to help you pick responsive targets and get your code merged into main.
+            Stop guessing whether maintainers will review your work. Our practical guides help you find active repositories looking for help, write clean pull requests, and get your code merged into main.
           </p>
         </div>
 

@@ -173,7 +173,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/status" title="System Status & Live Indexing Telemetry" className="hover:text-[#d4d4d4] transition-colors">
+                <Link href="/status" title="System Status & Live Indexing" className="hover:text-[#d4d4d4] transition-colors">
                   System Status
                 </Link>
               </li>
@@ -185,7 +185,7 @@ export function Footer() {
         <div className="border-t border-white/[0.08] pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#737373]">
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-[#10b981]" />
-            <span>GetMerged - Precision Diagnostic Telemetry</span>
+            <span>GetMerged - Find welcoming open source projects that actually merge PRs</span>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/privacy" title="Privacy Policy" className="hover:text-[#a3a3a3] transition-colors">Privacy</Link>

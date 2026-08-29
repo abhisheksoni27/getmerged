@@ -351,7 +351,7 @@ export default function HomeClient({
           transition={{ duration: 0.5, ease: EASE_OUT_EXPO, delay: 0.1 }}
           className="mx-auto mt-5 max-w-xl text-base text-[#a3a3a3] sm:text-lg leading-relaxed font-sans"
         >
-          GetMerged scores repositories by real maintainer response times, merge rates, and first-timer success. No vanity stars.
+          GetMerged tracks real reviewer response times, merge rates, and beginner-friendly maintainers - so you never waste hours on ignored pull requests.
         </motion.p>
 
         {/* Hero Search Bar */}
@@ -495,34 +495,34 @@ export default function HomeClient({
           {/* Left: Problem statement */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#ff6b00]">
-              <Star className="h-3.5 w-3.5 fill-[#ff6b00]" /> The Star Illusion
+              <Star className="h-3.5 w-3.5 fill-[#ff6b00]" /> Beyond GitHub Stars
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight font-sans">
-              Stars measure hype. C-Rank measures open doors.
+              Stars measure popularity. C-Rank measures active maintainers.
             </h2>
             <p className="text-sm text-[#a3a3a3] font-sans leading-relaxed">
-              Over 60% of maintainers are unpaid and overwhelmed. When you sort by stars alone, you walk into exhausted projects where PRs sit unreviewed for months.
+              A repository with 40,000 stars might have unanswered PRs from months ago. When you pick projects by stars alone, you often run into backlogged, exhausted teams. GetMerged checks whether maintainers are actually reviewing and merging community pull requests today.
             </p>
             <Link
               href="/how-c-rank-works"
-              title="Read the science of open source hospitality"
+              title="Learn how GetMerged scores open source projects"
               className="inline-flex items-center gap-2 text-xs font-mono font-bold text-white hover:text-[#a3a3a3] transition-colors"
             >
-              <span>Read the methodology</span>
+              <span>See how scoring works</span>
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
-          {/* Right: Live telemetry contrast */}
+          {/* Right: Live activity contrast */}
           <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-6 space-y-4 font-mono text-xs">
             <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
-              <span className="text-[#a3a3a3]">Live Telemetry</span>
-              <span className="text-[#10b981] font-bold">Real-time</span>
+              <span className="text-[#a3a3a3]">Real GitHub Activity</span>
+              <span className="text-[#10b981] font-bold">Live Data</span>
             </div>
             <div className="space-y-3">
               <div className="p-3.5 rounded-lg bg-[#0a0a0a] border border-[#f87171]/30">
                 <div className="flex justify-between text-[#d4d4d4] font-bold mb-1">
-                  <span>Ghost Town Repo</span>
+                  <span>Backlogged Repository</span>
                   <span className="text-[#f87171]">45k ★</span>
                 </div>
                 <div className="text-[11px] text-[#a3a3a3] font-sans leading-relaxed">
@@ -531,7 +531,7 @@ export default function HomeClient({
               </div>
               <div className="p-3.5 rounded-lg bg-[#0a0a0a] border border-[#10b981]/30">
                 <div className="flex justify-between text-[#d4d4d4] font-bold mb-1">
-                  <span>Welcoming Repo</span>
+                  <span>Active &amp; Welcoming Repo</span>
                   <span className="text-[#10b981]">1.8k ★</span>
                 </div>
                 <div className="text-[11px] text-[#a3a3a3] font-sans leading-relaxed">
@@ -604,24 +604,24 @@ export default function HomeClient({
           {/* Left: Factor list */}
           <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-6 space-y-3 font-mono text-xs">
             <div className="flex justify-between items-center text-[#a3a3a3] border-b border-white/[0.08] pb-3">
-              <span>C-Rank Multi-Factor Telemetry</span>
+              <span>How We Score Repositories</span>
               <span className="text-[#10b981] font-bold">Continuous</span>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center bg-[#0a0a0a] p-2.5 rounded-lg border border-white/[0.04]">
-                <span className="text-[#a3a3a3]">External Merge Rate</span>
+                <span className="text-[#a3a3a3]">External PR Merge Rate</span>
                 <span className="text-[#10b981] font-bold">Primary</span>
               </div>
               <div className="flex justify-between items-center bg-[#0a0a0a] p-2.5 rounded-lg border border-white/[0.04]">
-                <span className="text-[#a3a3a3]">Review Turnaround</span>
+                <span className="text-[#a3a3a3]">Review Response Time</span>
                 <span className="text-[#38bdf8] font-bold">Core</span>
               </div>
               <div className="flex justify-between items-center bg-[#0a0a0a] p-2.5 rounded-lg border border-white/[0.04]">
-                <span className="text-[#a3a3a3]">Commit Recency</span>
+                <span className="text-[#a3a3a3]">Recent Commit Activity</span>
                 <span className="text-[#c084fc] font-bold">Core</span>
               </div>
               <div className="flex justify-between items-center bg-[#0a0a0a] p-2.5 rounded-lg border border-white/[0.04]">
-                <span className="text-[#a3a3a3]">First-Timer Success</span>
+                <span className="text-[#a3a3a3]">First-Timer Onboarding</span>
                 <span className="text-[#fbbf24] font-bold">Hospitality</span>
               </div>
             </div>
@@ -630,20 +630,20 @@ export default function HomeClient({
           {/* Right: Description */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#38bdf8]">
-              <Sparkles className="h-3.5 w-3.5" /> Objective Scoring
+              <Sparkles className="h-3.5 w-3.5" /> Transparent Metrics
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight font-sans">
-              9 factors. Zero subjective gossip.
+              9 real signals. Zero guesswork.
             </h2>
             <p className="text-sm text-[#a3a3a3] font-sans leading-relaxed">
-              GetMerged benchmarks repositories across 20+ language ecosystems. We measure reviewer turnaround, repeat contributor retention, and PR friction.
+              GetMerged tracks active pull requests across 20+ programming languages - measuring real review turnaround, newcomer acceptance, and maintainer responsiveness.
             </p>
             <Link
               href="/how-c-rank-works"
-              title="Explore the C-Rank scoring methodology"
+              title="Learn how GetMerged scores repositories"
               className="inline-flex items-center gap-2 rounded-lg bg-[#1c1c1c] border border-white/[0.08] px-5 py-2.5 font-sans text-xs font-semibold text-white hover:bg-[#262626] hover:border-white/[0.16] transition-all"
             >
-              <span>Explore the methodology</span>
+              <span>See how scoring works</span>
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
@@ -665,10 +665,10 @@ export default function HomeClient({
                 <ShieldCheck className="h-3.5 w-3.5" /> For Maintainers
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-sans">
-                Own a repo? See why contributors bounce.
+                Maintain an open source repo? See your contributor experience.
               </h2>
               <p className="text-sm text-[#a3a3a3] font-sans leading-relaxed">
-                Discover your C-Rank grade, review turnaround, and first-timer acceptance score.
+                Discover your review response grade, outside PR merge rates, and where prospective contributors might encounter bottlenecks.
               </p>
               <div className="flex flex-wrap gap-3">
                 <button
@@ -676,11 +676,11 @@ export default function HomeClient({
                   onClick={() => openSearch()}
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#ff6b00] text-white font-mono text-xs font-bold rounded-lg hover:bg-[#ff8a33] cursor-pointer transition-colors"
                 >
-                  <Search className="h-3.5 w-3.5" /> Check Your Grade
+                  <Search className="h-3.5 w-3.5" /> Check Your Repository
                 </button>
                 <Link
                   href="/guides/how-to-know-if-maintainer-will-review"
-                  title="Maintainer Hospitality Best Practices"
+                  title="Maintainer Best Practices"
                   className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#1c1c1c] border border-white/[0.08] text-white font-mono text-xs font-bold rounded-lg hover:bg-[#262626] transition-colors"
                 >
                   Read Playbook <ArrowRight className="h-3.5 w-3.5" />
@@ -696,7 +696,7 @@ export default function HomeClient({
               <div className="space-y-2 pt-1">
                 <div className="flex items-center gap-2 text-[#a3a3a3]">
                   <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0" />
-                  <span>p50 Review Turnaround &lt; 24h</span>
+                  <span>Median Review Wait &lt; 24h</span>
                 </div>
                 <div className="flex items-center gap-2 text-[#a3a3a3]">
                   <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0" />
@@ -704,11 +704,11 @@ export default function HomeClient({
                 </div>
                 <div className="flex items-center gap-2 text-[#a3a3a3]">
                   <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0" />
-                  <span>Multi-Maintainer Core</span>
+                  <span>Multiple Active Reviewers</span>
                 </div>
                 <div className="flex items-center gap-2 text-[#a3a3a3]">
                   <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0" />
-                  <span>Scoped Good First Issues</span>
+                  <span>Active Good First Issues</span>
                 </div>
               </div>
             </div>
@@ -1124,9 +1124,9 @@ export default function HomeClient({
             <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#1c1c1c] border border-white/[0.08] text-white font-mono font-bold text-xs">
               01
             </div>
-            <h4 className="text-base font-bold text-white">GraphQL Telemetry</h4>
+            <h4 className="text-base font-bold text-white">Review Speed</h4>
             <p className="text-xs text-[#a3a3a3] leading-relaxed">
-              Calculates maintainer response latency. PRs reviewed within 24h score highest.
+              We calculate how quickly maintainers post actionable reviews. Projects replying within 24 hours score highest.
             </p>
           </div>
 
@@ -1134,9 +1134,9 @@ export default function HomeClient({
             <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#1c1c1c] border border-white/[0.08] text-white font-mono font-bold text-xs">
               02
             </div>
-            <h4 className="text-base font-bold text-white">First-Timer Conversion</h4>
+            <h4 className="text-base font-bold text-white">New Contributor Merge Rate</h4>
             <p className="text-xs text-[#a3a3a3] leading-relaxed">
-              Evaluates success rate of first PRs. Excludes internal maintainer merges.
+              Measures the success rate of developers opening their very first PR, filtering out internal bot merges.
             </p>
           </div>
 
@@ -1144,9 +1144,9 @@ export default function HomeClient({
             <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#1c1c1c] border border-white/[0.08] text-white font-mono font-bold text-xs">
               03
             </div>
-            <h4 className="text-base font-bold text-white">Verified Badges</h4>
+            <h4 className="text-base font-bold text-white">Verified Reviews</h4>
             <p className="text-xs text-[#a3a3a3] leading-relaxed">
-              Sign in with GitHub to cross-reference merged commits and provide authentic reviews.
+              Sign in with GitHub to share genuine feedback on your contributor onboarding experience.
             </p>
           </div>
         </div>
