@@ -26,17 +26,6 @@ interface WandSpark {
   hue: number;
 }
 
-interface GradientTrail {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  radius: number;
-  life: number;
-  decay: number;
-  hue: number;
-}
-
 interface Ripple {
   x: number;
   y: number;
@@ -60,17 +49,17 @@ export function PhysicsCanvas() {
 
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
     let width = window.innerWidth;
     let height = window.innerHeight;
-    let dpr = window.devicePixelRatio || 1;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap DPR to 2 to prevent 3x/4x mobile render stall
     let animationFrameId: number;
 
     const handleResize = () => {
       if (!canvas || !ctx) return;
-      dpr = window.devicePixelRatio || 1;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = width * dpr;
@@ -95,28 +84,30 @@ export function PhysicsCanvas() {
       isActive: false,
     };
 
+    // Pre-allocated object pools
+    const MAX_WAND_SPARKS = 60;
     const wandSparks: WandSpark[] = [];
-    const MAX_WAND_SPARKS = 120;
 
-    const trails: GradientTrail[] = [];
-    const MAX_TRAILS = 35;
-
+    const MAX_RIPPLES = 8;
     const ripples: Ripple[] = [];
 
     let globalHue = 190;
     let localHue = 190;
 
-    const addRipple = (x: number, y: number, maxRadius = 260, strength = 1.0) => {
-      const hue = (globalHue + (Math.random() - 0.5) * 90 + 360) % 360;
+    const addRipple = (x: number, y: number, maxRadius = 220, strength = 0.8) => {
+      if (ripples.length >= MAX_RIPPLES) {
+        ripples.shift();
+      }
+      const hue = Math.round((globalHue + (Math.random() - 0.5) * 80 + 360) % 360);
       ripples.push({
         x,
         y,
         radius: 0,
         maxRadius,
         strength,
-        speed: 6.0 + Math.random() * 2.5,
+        speed: 7.0,
         life: 1.0,
-        decay: 0.038,
+        decay: 0.045,
         hue,
       });
     };
@@ -130,49 +121,32 @@ export function PhysicsCanvas() {
 
       const moveDist = Math.hypot(e.clientX - prevTargetX, e.clientY - prevTargetY);
 
-      if (moveDist > 2) {
-        // Dynamic color shift influenced by mouse speed
-        localHue = (localHue + moveDist * 0.8) % 360;
+      if (moveDist > 3) {
+        localHue = (localHue + moveDist * 0.6) % 360;
 
-        // 1. Emit Lumos Wand Stardust Sparks
-        const sparkCount = Math.min(4, Math.floor(moveDist / 6) + 1);
-        for (let i = 0; i < sparkCount; i++) {
+        // Emit lightweight wand sparks
+        const count = Math.min(2, Math.floor(moveDist / 12) + 1);
+        for (let i = 0; i < count; i++) {
+          if (wandSparks.length >= MAX_WAND_SPARKS) {
+            wandSparks.shift();
+          }
           const angle = Math.random() * Math.PI * 2;
-          const spd = 0.8 + Math.random() * (moveDist * 0.12 + 2);
-          const sparkHue = (localHue + (Math.random() - 0.5) * 45 + 360) % 360;
+          const spd = 0.8 + Math.random() * 2.5;
           wandSparks.push({
-            x: e.clientX + (Math.random() - 0.5) * 12,
-            y: e.clientY + (Math.random() - 0.5) * 12,
-            vx: Math.cos(angle) * spd * 0.6,
-            vy: Math.sin(angle) * spd * 0.6 - 0.4,
-            size: 0.5 + Math.random() * 0.9,
+            x: e.clientX + (Math.random() - 0.5) * 8,
+            y: e.clientY + (Math.random() - 0.5) * 8,
+            vx: Math.cos(angle) * spd * 0.5,
+            vy: Math.sin(angle) * spd * 0.5 - 0.3,
+            size: 0.5 + Math.random() * 0.8,
             life: 1.0,
-            decay: 0.025 + Math.random() * 0.03,
-            hue: sparkHue,
+            decay: 0.035 + Math.random() * 0.02,
+            hue: Math.round((localHue + (Math.random() - 0.5) * 40 + 360) % 360),
           });
-        }
-        if (wandSparks.length > MAX_WAND_SPARKS) {
-          wandSparks.splice(0, wandSparks.length - MAX_WAND_SPARKS);
-        }
-
-        // 2. Emit Smooth Aurora Gradient Puff
-        trails.push({
-          x: e.clientX,
-          y: e.clientY,
-          vx: (Math.random() - 0.5) * 0.8,
-          vy: (Math.random() - 0.5) * 0.8,
-          radius: 18 + Math.min(45, moveDist * 1.2),
-          life: 1.0,
-          decay: 0.042,
-          hue: localHue,
-        });
-        if (trails.length > MAX_TRAILS) {
-          trails.shift();
         }
       }
 
-      if (moveDist > 45 && Math.random() < 0.25) {
-        addRipple(e.clientX, e.clientY, 180 + moveDist * 1.5, 0.7);
+      if (moveDist > 55 && Math.random() < 0.2) {
+        addRipple(e.clientX, e.clientY, 160 + moveDist * 1.2, 0.6);
       }
     };
 
@@ -181,43 +155,47 @@ export function PhysicsCanvas() {
     };
 
     const handleClick = (e: MouseEvent) => {
-      addRipple(e.clientX, e.clientY, 350, 1.3);
-      for (let i = 0; i < 35; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const spd = 2.5 + Math.random() * 5.5;
-        const sparkHue = (localHue + i * 10) % 360;
+      addRipple(e.clientX, e.clientY, 260, 1.0);
+      // Fast burst without shadow blur
+      const count = 16;
+      for (let i = 0; i < count; i++) {
+        if (wandSparks.length >= MAX_WAND_SPARKS) {
+          wandSparks.shift();
+        }
+        const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.2;
+        const spd = 2.0 + Math.random() * 3.5;
         wandSparks.push({
           x: e.clientX,
           y: e.clientY,
           vx: Math.cos(angle) * spd,
           vy: Math.sin(angle) * spd,
-          size: 0.6 + Math.random() * 1.0,
+          size: 0.6 + Math.random() * 0.8,
           life: 1.0,
-          decay: 0.02 + Math.random() * 0.02,
-          hue: sparkHue,
+          decay: 0.03 + Math.random() * 0.02,
+          hue: Math.round((localHue + i * 15) % 360),
         });
       }
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseleave", handleMouseLeave);
-    window.addEventListener("click", handleClick);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("mouseleave", handleMouseLeave, { passive: true });
+    window.addEventListener("click", handleClick, { passive: true });
 
-    // Microscopic Stardust swarm
-    const dustCount = Math.min(320, Math.floor((width * height) / 4500));
+    // Calibrated Stardust Swarm (N=140 for smooth 60fps)
+    const dustCount = Math.min(140, Math.floor((width * height) / 10000));
     const dust: DustParticle[] = [];
 
     for (let i = 0; i < dustCount; i++) {
       dust.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.45,
-        vy: -0.15 - Math.random() * 0.45,
-        size: 0.4 + Math.random() * 0.7,
-        baseAlpha: 0.25 + Math.random() * 0.55,
-        shimmerSpeed: 0.03 + Math.random() * 0.05,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: -0.12 - Math.random() * 0.35,
+        size: 0.4 + Math.random() * 0.6,
+        baseAlpha: 0.25 + Math.random() * 0.45,
+        shimmerSpeed: 0.03 + Math.random() * 0.04,
         shimmerPhase: Math.random() * Math.PI * 2,
-        hueOffset: (Math.random() - 0.5) * 120,
+        hueOffset: Math.round((Math.random() - 0.5) * 100),
         excited: 0,
       });
     }
@@ -228,11 +206,10 @@ export function PhysicsCanvas() {
       const dt = Math.min(32, now - lastTime) / 16.666;
       lastTime = now;
 
-      // Continuous rich color morphing over time
-      globalHue = (globalHue + 0.35 * dt) % 360;
+      globalHue = (globalHue + 0.3 * dt) % 360;
       localHue = (localHue + 0.2 * dt) % 360;
 
-      // Fast responsive wand tracking
+      // Mouse lerp
       const prevX = mouse.x;
       const prevY = mouse.y;
       mouse.x += (mouse.targetX - mouse.x) * 0.45 * dt;
@@ -243,41 +220,14 @@ export function PhysicsCanvas() {
 
       ctx.clearRect(0, 0, width, height);
 
-      ctx.save();
-      ctx.globalCompositeOperation = "screen";
-
-      // --- LAYER 1: Radiant Lumos Aurora Gradient Puffs ---
-      for (let i = trails.length - 1; i >= 0; i--) {
-        const t = trails[i];
-        t.x += t.vx * dt;
-        t.y += t.vy * dt;
-        t.life -= t.decay * dt;
-        t.radius += 1.0 * dt;
-
-        if (t.life <= 0) {
-          trails.splice(i, 1);
-          continue;
-        }
-
-        const alpha = t.life * 0.22;
-        const grad = ctx.createRadialGradient(t.x, t.y, 0, t.x, t.y, t.radius);
-        grad.addColorStop(0, `hsla(${t.hue}, 95%, 75%, ${alpha})`);
-        grad.addColorStop(0.4, `hsla(${(t.hue + 45) % 360}, 90%, 65%, ${alpha * 0.45})`);
-        grad.addColorStop(1, `hsla(${t.hue}, 80%, 60%, 0)`);
-
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(t.x, t.y, t.radius, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // Active Wand Tip Focus (Lumos aura)
+      // --- LAYER 1: Active Wand Glow (Single lightweight radial gradient) ---
       if (mouse.isActive) {
-        const wandRadius = 45 + Math.min(35, mouse.speed * 1.6);
+        const wandRadius = 35 + Math.min(25, mouse.speed * 1.2);
         const wandGrad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, wandRadius);
-        wandGrad.addColorStop(0, `hsla(${localHue}, 95%, 85%, 0.2)`);
-        wandGrad.addColorStop(0.45, `hsla(${(localHue + 50) % 360}, 90%, 70%, 0.06)`);
-        wandGrad.addColorStop(1, `hsla(${localHue}, 85%, 60%, 0)`);
+        const h = Math.round(localHue);
+        wandGrad.addColorStop(0, `hsla(${h}, 90%, 80%, 0.16)`);
+        wandGrad.addColorStop(0.5, `hsla(${(h + 40) % 360}, 85%, 70%, 0.04)`);
+        wandGrad.addColorStop(1, `hsla(${h}, 80%, 60%, 0)`);
 
         ctx.fillStyle = wandGrad;
         ctx.beginPath();
@@ -285,7 +235,7 @@ export function PhysicsCanvas() {
         ctx.fill();
       }
 
-      // --- LAYER 2: Expanding Prismatic Shockwaves ---
+      // --- LAYER 2: Expanding Delicate Shockwaves ---
       for (let i = ripples.length - 1; i >= 0; i--) {
         const r = ripples[i];
         r.radius += r.speed * dt;
@@ -296,33 +246,21 @@ export function PhysicsCanvas() {
           continue;
         }
 
-        const ringAlpha = Math.sin(r.life * Math.PI) * 0.35 * r.strength;
-        const ringHue = r.hue;
-
+        const ringAlpha = (Math.sin(r.life * Math.PI) * 0.3 * r.strength).toFixed(3);
         ctx.beginPath();
         ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `hsla(${ringHue}, 95%, 82%, ${ringAlpha})`;
-        ctx.lineWidth = 1.2;
+        ctx.strokeStyle = `hsla(${r.hue}, 90%, 80%, ${ringAlpha})`;
+        ctx.lineWidth = 1.0;
         ctx.stroke();
-
-        const waveGrad = ctx.createRadialGradient(r.x, r.y, Math.max(0, r.radius - 16), r.x, r.y, r.radius + 12);
-        waveGrad.addColorStop(0, `hsla(${ringHue}, 90%, 75%, 0)`);
-        waveGrad.addColorStop(0.5, `hsla(${ringHue}, 90%, 75%, ${ringAlpha * 0.4})`);
-        waveGrad.addColorStop(1, `hsla(${(ringHue + 40) % 360}, 90%, 65%, 0)`);
-
-        ctx.fillStyle = waveGrad;
-        ctx.beginPath();
-        ctx.arc(r.x, r.y, r.radius + 12, 0, Math.PI * 2);
-        ctx.fill();
       }
 
-      // --- LAYER 3: Lumos Wand Cast Sparks (Wake Particles) ---
+      // --- LAYER 3: Lumos Wand Sparks (Hardware-accelerated arc draws, zero shadowBlur) ---
       for (let i = wandSparks.length - 1; i >= 0; i--) {
         const s = wandSparks[i];
         s.x += s.vx * dt;
         s.y += s.vy * dt;
-        s.vx *= 0.95;
-        s.vy *= 0.95;
+        s.vx *= 0.96;
+        s.vy *= 0.96;
         s.life -= s.decay * dt;
 
         if (s.life <= 0) {
@@ -330,25 +268,19 @@ export function PhysicsCanvas() {
           continue;
         }
 
-        const sparkAlpha = s.life * 0.9;
+        const alpha = (s.life * 0.85).toFixed(2);
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.size * (0.8 + (1 - s.life) * 0.5), 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${s.hue}, 95%, 85%, ${sparkAlpha})`;
-        ctx.shadowColor = `hsla(${s.hue}, 95%, 70%, 0.8)`;
-        ctx.shadowBlur = 6;
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${s.hue}, 95%, 82%, ${alpha})`;
         ctx.fill();
-        ctx.shadowBlur = 0;
       }
 
-      ctx.restore();
-
-      // --- LAYER 4: Microscopic Stardust Swarm (Awakened & Dispersed by Wand) ---
+      // --- LAYER 4: Microscopic Stardust Swarm ---
       for (let i = 0; i < dust.length; i++) {
         const p = dust[i];
         p.x += p.vx * dt;
         p.y += p.vy * dt;
 
-        // Wrap edges
         if (p.x < 0) p.x = width;
         if (p.x > width) p.x = 0;
         if (p.y < 0) {
@@ -356,37 +288,33 @@ export function PhysicsCanvas() {
           p.x = Math.random() * width;
         }
 
-        // Shimmer twinkle
         p.shimmerPhase += p.shimmerSpeed * dt;
         const twinkle = (Math.sin(p.shimmerPhase) + 1) * 0.5;
 
-        // Wand proximity physics: Disperse, swirl, and ignite luminosity
+        // Proximity repulsion
         if (mouse.isActive) {
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
-          const dist = Math.hypot(dx, dy);
-          const wandInfluenceRadius = 140;
+          const distSq = dx * dx + dy * dy;
+          const wandRadiusSq = 14400; // 120^2
 
-          if (dist < wandInfluenceRadius && dist > 0) {
-            const force = 1 - dist / wandInfluenceRadius;
-            p.x += (dx / dist) * force * 3.5 * dt;
-            p.y += (dy / dist) * force * 3.5 * dt;
-
-            p.x += (-dy / dist) * force * 1.5 * dt;
-            p.y += (dx / dist) * force * 1.5 * dt;
-
-            p.excited = Math.min(1.0, p.excited + force * 0.6);
+          if (distSq < wandRadiusSq && distSq > 0) {
+            const dist = Math.sqrt(distSq);
+            const force = 1 - dist / 120;
+            p.x += (dx / dist) * force * 2.8 * dt;
+            p.y += (dy / dist) * force * 2.8 * dt;
+            p.excited = Math.min(1.0, p.excited + force * 0.5);
           }
         }
 
         p.excited *= 0.94;
 
-        const effectiveAlpha = Math.min(1.0, p.baseAlpha * (0.5 + twinkle * 0.5) + p.excited * 0.55);
-        const currentHue = (globalHue + p.hueOffset + p.excited * 60 + 360) % 360;
+        const alpha = Math.min(1.0, (p.baseAlpha * (0.5 + twinkle * 0.5)) + p.excited * 0.5).toFixed(2);
+        const hue = Math.round((globalHue + p.hueOffset + p.excited * 50 + 360) % 360);
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * (1 + p.excited * 0.6), 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${currentHue}, 85%, ${75 + p.excited * 20}%, ${effectiveAlpha})`;
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${hue}, 85%, 78%, ${alpha})`;
         ctx.fill();
       }
 
