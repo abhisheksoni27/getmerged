@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GetMerged - Pixel Retro Shard Deep Dive (8 Precision Variants)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Press+Start+2P&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card-bg: #141414;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #fafafa;
+      --text-muted: #a3a3a3;
+      --orange: #ff5722;
+      --emerald: #10b981;
+      --cyan: #06b6d4;
+      --purple: #a855f7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 40px 24px;
+      background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 87, 34, 0.1), transparent),
+        radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.06), transparent);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255, 87, 34, 0.12);
+      border: 1px solid rgba(255, 87, 34, 0.3);
+      border-radius: 9999px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: #ff8a33;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    h1 {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* Navbar Simulation Box */
+    .navbar-preview-section {
+      background: #121212;
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 40px;
+    }
+
+    .section-header {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .section-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .switcher-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .switch-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #d1d5db;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .switch-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .switch-btn.active {
+      background: #ff5722;
+      border-color: #ff5722;
+      color: #fff;
+      box-shadow: 0 0 16px rgba(255, 87, 34, 0.35);
+    }
+
+    .browser-tab-mock {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #1c1c1c;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-bottom: none;
+      padding: 8px 16px;
+      border-radius: 8px 8px 0 0;
+      width: 260px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #e5e7eb;
+    }
+
+    .nav-mock {
+      background: rgba(10, 10, 10, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 0 20px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .nav-wordmark {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 13px;
+      color: #a3a3a3;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .nav-links span.active {
+      color: #ff6b00;
+      font-weight: 600;
+    }
+
+    .nav-btn {
+      background: #1c1c1c;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* Scaling matrix */
+    .favicon-matrix {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      background: #0d0d0d;
+      padding: 20px 24px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      flex-wrap: wrap;
+    }
+
+    .fav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .fav-item span {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: #737373;
+    }
+
+    /* Grid of 8 Cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .concept-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s;
+    }
+
+    .concept-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .concept-card.featured {
+      border-color: rgba(255, 87, 34, 0.5);
+      box-shadow: 0 0 25px -5px rgba(255, 87, 34, 0.2);
+    }
+
+    .preview-stage {
+      padding: 28px 20px;
+      background: #0d0d0d;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .concept-name {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .concept-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .tag-concept {
+      font-size: 10px;
+      font-family: 'DM Mono', monospace;
+      padding: 2px 7px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #d4d4d4;
+      margin-left: 6px;
+    }
+
+    .select-btn {
+      margin-top: auto;
+      background: #1f1f1f;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+
+    .select-btn:hover {
+      background: #ff5722;
+      border-color: #ff5722;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="badge-pill">👾 Deep Dive: Pixel Retro Shard</div>
+    <h1>8 Precision Pixel & Voxel Variants</h1>
+    <p class="subtitle">
+      Mathematical 8-bit & 16-bit grid alignment with strict pixel spacing. Dual branches collapsing into a glowing merge payload with arcade cyberpunk swagger.
+    </p>
+  </header>
+
+  <!-- Interactive Live Switcher -->
+  <div class="navbar-preview-section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Live Header & Browser Tab Simulation</div>
+        <div class="section-desc">Click any pixel variant below to test crispness in navbar, browser tab, and small favicons:</div>
+      </div>
+      <div class="switcher-bar" id="switcherButtons"></div>
+    </div>
+
+    <!-- Browser Tab Simulation -->
+    <div style="background: #141414; border-radius: 10px 10px 0 0; padding: 10px 14px 0 14px; border: 1px solid rgba(255,255,255,0.08); border-bottom: none; display: inline-block;">
+      <div class="browser-tab-mock">
+        <div id="tabIcon" style="display:flex; align-items:center;"></div>
+        <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">GetMerged — Open Source Index</span>
+        <span style="margin-left:auto; color:#6b7280; font-size:10px;">✕</span>
+      </div>
+    </div>
+
+    <!-- Real Navbar Replica -->
+    <div class="nav-mock">
+      <div class="nav-brand" id="activeNavbarLogo"></div>
+
+      <div class="nav-links">
+        <span>Repositories</span>
+        <span>How C-Rank Works</span>
+        <span>Ecosystems</span>
+        <span>Good First Issues</span>
+        <span class="active">🔥 Monthly League</span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="background: #141414; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 6px 12px; font-size: 12px; color: #71717a; display: flex; align-items: center; gap: 8px;">
+          <span>🔍 Search repos...</span>
+          <kbd style="background: rgba(255,255,255,0.05); padding: 2px 5px; border-radius: 4px; font-family: monospace; font-size: 10px;">⌘K</kbd>
+        </div>
+        <button class="nav-btn">Sign in</button>
+      </div>
+    </div>
+
+    <!-- Exact Scale Matrix -->
+    <div style="font-size: 13px; font-weight: 600; margin-bottom: 12px; color: var(--text-muted);">Exact Vector Scale Rendering (Zero blur, aligned to whole pixel units):</div>
+    <div class="favicon-matrix" id="scaleMatrix"></div>
+  </div>
+
+  <!-- 8 Pixel Variants Grid -->
+  <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 20px; color: #fff;">
+    Explore the 8 Pixel Shard Directions
+  </h2>
+
+  <div class="grid" id="conceptsGrid"></div>
+</div>
+
+<script>
+  // Strict 32x32 pixel-grid coordinates for razor sharp rendering
+  const concepts = [
+    {
+      id: 'p1',
+      name: '1. The Classic Pixel-Merge (Balanced)',
+      desc: 'Clean 3x3 block branches (Top Cyan, Bottom Flame Orange) converging into a 2x3 solid Emerald release payload. Perfect symmetric 2px gutter.',
+      badge: '★ Recommended',
+      renderIcon: (size) => `
+        <svg width="${size}" height="${size}" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <rect width="32" height="32" rx="8" fill="#12131a" stroke="rgba(255,255,255,0.12)" stroke-width="1" />
+          <!-- Top Branch: Cyan to Emerald -->
+          <rect x="6" y="8" width="4" height="4" rx="0.75" fill="#38bdf8" />
+          <rect x="11" y="11" width="4" height="4" rx="0.75" fill="#06b6d4" />
+          <!-- Bottom Branch: Orange to Coral -->
+          <rect x="6" y="20" width="4" height="4" rx="0.75" fill="#ff5722" />
+          <rect x="11" y="17" width="4" height="4" rx="0.75" fill="#ff8a33" />
+          <!-- Merged Release Head -->
+          <rect x="16" y="14" width="5" height="4" rx="0.75" fill="#10b981" />
+          <rect x="22" y="14" width="4" height="4" rx="0.75" fill="#34d399" />
+          <circle cx="24" cy="16" r="1" fill="#ffffff" />
+        </svg>
+      `,
+      wordmark: '<span class="nav-wordmark">Get<span style="color:#10b981">Merged</span></span>'
+    },
+    {
+      id: 'p2',
+      name: '2. Neon Synthwave Shards (Cyber Pink / Cyan)',
+      desc: 'High-contrast arcade palette: Hot Magenta PR branch merging with Electric Cyan Main branch into a pure Neon Green core.',
+      badge: 'Cyberpunk',
+      renderIcon: (size) => `
+        <svg width="${size}" height="${size}" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <rect width="32" height="32" rx="8" fill="#0d0e17" stroke="rgba(236,72,153,0.25)" stroke-width="1" />
+          <rect x="6" y="7" width="4.5" height="4.5" rx="0.5" fill="#ec4899" />
+          <rect x="11.5" y="10.5" width="4.5" height="4.5" rx="0.5" fill="#d946ef" />
+          <rect x="6" y="20.5" width="4.5" height="4.5" rx="0.5" fill="#06b6d4" />
+          <rect x="11.5" y="17" width="4.5" height="4.5" rx="0.5" fill="#3b82f6" />
+          <rect x="17" y="13.75" width="8.5" height="4.5" rx="0.75" fill="#10b981" />
+          <rect x="20.5" y="14.75" width="4" height="2.5" rx="0.5" fill="#ffffff" />
+        </svg>
+      `,
+      wordmark: '<span class="nav-wordmark">Get<span style="color:#ec4899">Merged</span></span>'
+    },
+    {
+      id: 'p3',
+      name: '3. Diagonal Pixel Arrow (Fast PR)',
+      desc: 'A stepped isometric chevron pixel cluster pointing directly forward. Clean diagonal merge lanes with arrow kinematics.',
+      badge: 'Directional',
+      renderIcon: (size) => `
+        <svg width="${size}" height="${size}" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <rect width="32" height="32" rx="8" fill="#14111f" stroke="rgba(255,107,0,0.2)" stroke-width="1" />
+          <rect x="7" y="8" width="4" height="4" fill="#ff7a00" />
+          <rect x="12" y="11" width="4" height="4" fill="#ffaa00" />
+          <rect x="7" y="20" width="4" height="4" fill="#a855f7" />
+          <rect x="12" y="17" width="4" height="4" fill="#c084fc" />
+          <rect x="17" y="14" width="4" height="4" fill="#10b981" />
+          <rect x="22" y="14" width="3.5" height="4" fill="#34d399" />
+          <polygon points="25.5,14 27.5,16 25.5,18" fill="#ffffff" />
+        </svg>
+      `,
+      wordmark: '<span class="nav-wordmark">Get<span style="color:#ff7a00">Merged</span></span>'
+    },
+    {
+      id: 'p4',
+      name: '4. Pure 8-Bit Arcade Glyphs (Chunky Blocks)',
+      desc: 'Bold 5x5 chunky pixel clusters. Maximized readability for extremely small resolutions (16x16 / 24x24) with retro Nintendo flair.',
+      badge: 'Ultra Crisp 16px',
+      renderIcon: (size) => `
+        <svg width="${size}" height="${size}" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <rect width="32" height="32" rx="8" fill="#101014" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
+          <rect x="6" y="8" width="5" height="5" fill="#38bdf8" />
+          <rect x="12" y="11" width="5" height="5" fill="#38bdf8" />
+          <rect x="6" y="19" width="5" height="5" fill="#ff5722" />
+          <rect x="12" y="16" width="5" height="5" fill="#ff5722" />
+          <rect x="18" y="13.5" width="8" height="5" fill="#10b981" />
+          <rect x="23" y="14.5" width="2" height="3" fill="#ffffff" />
+        </svg>
+      `,
+      wordmark: '<span class="nav-wordmark">Get<span style="color:#38bdf8">Merged</span></span>'
+    },
+    {
+      id: 'p5',
+      name: '5. Voxel Isometric Cube Merge (3D Pixel)',
+      desc: 'Isometric 3D pixel cubes cascading from upper-left and lower-left into a connected isometric merge core.',
+      badge: '3D Voxel',
+      renderIcon: (size) => `
+        <svg width="${size}" height="${size}" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <rect width="32" height="32" rx="8" fill="#11131a" stroke="rgba(255,255,255,0.12)" stroke-width="1" />
+          <!-- Top Voxel Cube -->
+          <polygon points="9,6 13,8 9,10 5,8" fill="#38bdf8" />
+          <polygon points="5,8 9,10 9,14 5,12" fill="#0284c7" />
+          <polygon points="9,10 13,8 13,12 9,14" fill="#0369a1" />
+          <!-- Bottom Voxel Cube -->
+          <polygon points="9,18 13,20 9,22 5,20" fill="#ff7a00" />
+          <polygon points="5,20 9,22 9,26 5,24" fill="#ea580c" />
+          <polygon points="9,22 13,20 13,24 9,26" fill="#c2410c" />
+          <!-- Center Merged Voxel Core -->
+          <polygon points="20,11 26,14 20,17 14,14" fill="#34d399" />
+          <polygon points="14,14 20,17 20,23 14,20" fill="#10b981" />
+          <polygon points="20,17 26,14 26,20 20,23" fill="#059669" />
+        </svg>
+      `,
+      wordmark: '<span class="nav-wordmark">Get<span style="color:#34d399">Merged</span></span>'
+    },
+    {
+      id: 'p6',
+      name: '6. Minimal Mono Matrix (Pixel GM)',
+      desc: 'A stylized minimalist pixel matrix outlining the letters G and M merging across a single center baseline.',
+      badge: 'Pixel Monogram',
+      renderIcon: (size) => `
+        <svg width="${size}" height="${size}" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <rect width="32" height="32" rx="8" fill="#16171f" stroke="rgba(255,255,255,0.12)" stroke-width="1" />
+          <!-- Pixel G -->
+          <rect x="6" y="10" width="8" height="2.5" fill="#ffffff" />
+          <rect x="6" y="10" width="2.5" height="12" fill="#ffffff" />
+          <rect x="6" y="19.5" width="8" height="2.5" fill="#ffffff" />
+          <rect x="11.5" y="15" width="2.5" height="7" fill="#ffffff" />
+          <rect x="9" y="15" width="3" height="2.5" fill="#ffffff" />
+          <!-- Pixel M (Merged in Orange) -->
+          <rect x="17" y="10" width="2.5" height="12" fill="#ff5722" />
+          <rect x="19.5" y="12" width="2.5" height="4" fill="#ff8a33" />
+          <rect x="22" y="10" width="2.5" height="12" fill="#ff5722" />
+          <!-- Merge release spark pixel -->
+          <rect x="26" y="10" width="2.5" height="2.5" fill="#10b981" />
+        </svg>
+      `,
+      wordmark: '<span class="nav-wordmark">Get<span style="color:#ff5722">Merged</span></span>'
+    },
+    {
+      id: 'p7',
+      name: '7. Stepped Ladder Merge (Git Stream)',
+      desc: 'Staircase pixel steps leading from 2 independent pipelines into a unified horizontal commit beam.',
+      badge: 'Commit Stream',
+      renderIcon: (size) => `
+        <svg width="${size}" height="${size}" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <rect width="32" height="32" rx="8" fill="#0e1317" stroke="rgba(16,185,129,0.2)" stroke-width="1" />
+          <!-- Top step track -->
+          <rect x="6" y="9" width="3" height="3" fill="#38bdf8" />
+          <rect x="9" y="11" width="3" height="3" fill="#38bdf8" />
+          <rect x="12" y="13" width="3" height="3" fill="#06b6d4" />
+          <!-- Bottom step track -->
+          <rect x="6" y="20" width="3" height="3" fill="#f59e0b" />
+          <rect x="9" y="18" width="3" height="3" fill="#f59e0b" />
+          <rect x="12" y="16" width="3" height="3" fill="#ff5722" />
+          <!-- Merged pipeline line -->
+          <rect x="15" y="14.5" width="11" height="3" fill="#10b981" />
+          <rect x="23" y="13" width="3" height="6" fill="#34d399" />
+        </svg>
+      `,
+      wordmark: '<span class="nav-wordmark">Get<span style="color:#10b981">Merged</span></span>'
+    },
+    {
+      id: 'p8',
+      name: '8. Glitch Quantum Shards (High-Tech Hacker)',
+      desc: 'Segmented glitch pixel pulses with glowing offsets. Ultra funky, modern terminal vibe with maximum contrast.',
+      badge: 'Glitch Hacker',
+      renderIcon: (size) => `
+        <svg width="${size}" height="${size}" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <rect width="32" height="32" rx="8" fill="#0a0f0d" stroke="rgba(16,185,129,0.3)" stroke-width="1" />
+          <!-- Glitch bars -->
+          <rect x="5" y="9" width="6" height="3" fill="#10b981" />
+          <rect x="12" y="11" width="4" height="3" fill="#34d399" />
+          <rect x="5" y="20" width="6" height="3" fill="#ff3b30" />
+          <rect x="12" y="18" width="4" height="3" fill="#ff9500" />
+          <!-- Converged high-tech core -->
+          <rect x="17" y="13.5" width="7" height="5" fill="#10b981" />
+          <rect x="25" y="15" width="2" height="2" fill="#ffffff" />
+          <rect x="19" y="9.5" width="2" height="2" fill="#38bdf8" />
+          <rect x="19" y="20.5" width="2" height="2" fill="#f59e0b" />
+        </svg>
+      `,
+      wordmark: '<span class="nav-wordmark">Get<span style="color:#10b981">Merged</span></span>'
+    }
+  ];
+
+  let selectedIdx = 0;
+
+  function renderCards() {
+    const grid = document.getElementById('conceptsGrid');
+    grid.innerHTML = '';
+    concepts.forEach((c, idx) => {
+      const card = document.createElement('div');
+      card.className = `concept-card ${idx === 0 ? 'featured' : ''}`;
+      card.innerHTML = `
+        <div class="preview-stage">
+          <div style="display:flex; align-items:center; gap:12px;">
+            ${c.renderIcon(44)}
+            <div style="font-size: 20px; font-weight: 800; color: #fff;">
+              ${c.wordmark}
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            ${c.renderIcon(24)}
+            ${c.renderIcon(18)}
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="concept-name">
+            ${c.name}
+            <span class="tag-concept">${c.badge}</span>
+          </div>
+          <div class="concept-desc">${c.desc}</div>
+          <button class="select-btn" onclick="selectConcept(${idx})">Preview in Header & Tab</button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function renderSwitcher() {
+    const btnContainer = document.getElementById('switcherButtons');
+    btnContainer.innerHTML = '';
+    concepts.forEach((c, idx) => {
+      const btn = document.createElement('button');
+      btn.className = `switch-btn ${idx === selectedIdx ? 'active' : ''}`;
+      btn.innerText = c.name.split(' (')[0];
+      btn.onclick = () => selectConcept(idx);
+      btnContainer.appendChild(btn);
+    });
+  }
+
+  function selectConcept(idx) {
+    selectedIdx = idx;
+    renderSwitcher();
+    const c = concepts[idx];
+
+    // 1. Update Real Navbar (Icon + Wordmark)
+    document.getElementById('activeNavbarLogo').innerHTML = `
+      <div style="display:flex; align-items:center; gap:10px;">
+        ${c.renderIcon(32)}
+        ${c.wordmark}
+      </div>
+    `;
+
+    // 2. Update Simulated Browser Tab
+    document.getElementById('tabIcon').innerHTML = c.renderIcon(18);
+
+    // 3. Update Scalability Matrix
+    const matrix = document.getElementById('scaleMatrix');
+    matrix.innerHTML = `
+      <div class="fav-item">
+        ${c.renderIcon(64)}
+        <span>64×64 Retina</span>
+      </div>
+      <div class="fav-item">
+        ${c.renderIcon(48)}
+        <span>48×48 Mac Dock</span>
+      </div>
+      <div class="fav-item">
+        ${c.renderIcon(32)}
+        <span>32×32 Navbar</span>
+      </div>
+      <div class="fav-item">
+        ${c.renderIcon(24)}
+        <span>24×24 Small</span>
+      </div>
+      <div class="fav-item">
+        ${c.renderIcon(16)}
+        <span>16×16 Tab Favicon</span>
+      </div>
+    `;
+  }
+
+  // Initialize
+  renderCards();
+  renderSwitcher();
+  selectConcept(0);
+</script>
+</body>
+</html>
