@@ -177,9 +177,55 @@ export function PhysicsCanvas() {
       }
     };
 
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const t = e.touches[0];
+        mouse.targetX = t.clientX;
+        mouse.targetY = t.clientY;
+        mouse.x = t.clientX;
+        mouse.y = t.clientY;
+        mouse.isActive = true;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const t = e.touches[0];
+        const prevTargetX = mouse.targetX;
+        const prevTargetY = mouse.targetY;
+        mouse.targetX = t.clientX;
+        mouse.targetY = t.clientY;
+        mouse.isActive = true;
+
+        const moveDist = Math.hypot(t.clientX - prevTargetX, t.clientY - prevTargetY);
+        if (moveDist > 4) {
+          localHue = (localHue + moveDist * 0.6) % 360;
+          if (wandSparks.length < MAX_WAND_SPARKS) {
+            wandSparks.push({
+              x: t.clientX,
+              y: t.clientY,
+              vx: (Math.random() - 0.5) * 1.5,
+              vy: (Math.random() - 0.5) * 1.5 - 0.2,
+              size: 0.5 + Math.random() * 0.7,
+              life: 1.0,
+              decay: 0.04,
+              hue: Math.round((localHue + (Math.random() - 0.5) * 40 + 360) % 360),
+            });
+          }
+        }
+      }
+    };
+
+    const handleTouchEnd = () => {
+      mouse.isActive = false;
+    };
+
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     window.addEventListener("mouseleave", handleMouseLeave, { passive: true });
     window.addEventListener("click", handleClick, { passive: true });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("touchend", handleTouchEnd, { passive: true });
 
     // Calibrated Stardust Swarm (N=140 for smooth 60fps)
     const dustCount = Math.min(140, Math.floor((width * height) / 10000));
@@ -328,6 +374,9 @@ export function PhysicsCanvas() {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
       window.removeEventListener("click", handleClick);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { Bookmark, GitPullRequest, Star, Scale, CircleDot, Check } from "lucide-react";
+import { Bookmark, GitPullRequest, Star, Scale, CircleDot, Check, Share2, Copy } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { Repo } from "@/types/opendoor";
 import { CRankBadge } from "@/components/CRankBadge";
+import posthog from "posthog-js";
 
 interface RepoDetailHeroProps {
   fullName: string;
@@ -33,10 +34,29 @@ export function RepoDetailHero({
   onWatchToggle,
   onGithubClick,
 }: RepoDetailHeroProps) {
+  const [copied, setCopied] = useState(false);
   const owner = repo?.owner || fullName.split("/")[0];
   const ownerAvatarUrl = `https://github.com/${owner}.png?size=64`;
   const roundedScore = Math.round(score);
   const isScored = repo?.is_scored ?? (score > 0);
+
+  const handleCopyLink = () => {
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      posthog.capture("repo_share_link_copied", { repo_full_name: fullName });
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleShareX = () => {
+    const text = encodeURIComponent(
+      `Check out ${fullName} on @GetMerged! C-Rank™ Grade: ${rank} (${roundedScore}/100) with empirical PR merge rate telemetry.\n\n`
+    );
+    const url = encodeURIComponent(typeof window !== "undefined" ? window.location.href : `https://getmerged.abhishekco.de/${fullName}`);
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank", "noopener,noreferrer");
+    posthog.capture("repo_shared_twitter", { repo_full_name: fullName, tier: rank });
+  };
 
   return (
     <div className="glass-panel p-6 sm:p-8 rounded-2xl mb-8">
@@ -49,33 +69,29 @@ export function RepoDetailHero({
             alt={owner}
             className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border border-white/[0.1] glass-card shrink-0 object-cover shadow-inner mt-1"
           />
-          <div className="min-w-0 flex-1">
-            {/* Repo Title & Stars */}
-            <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-2xl sm:text-3xl font-bold font-sans text-white tracking-tight leading-tight break-all">
+
+          <div className="flex-1 min-w-0">
+            {/* Title & Stars */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-space truncate">
                 {fullName}
               </h1>
-              {typeof repo?.stars === "number" && repo.stars >= 0 && (
-                <span
-                  title={`${repo.stars.toLocaleString()} GitHub stars`}
-                  className="inline-flex items-center gap-1.5 border border-white/[0.1] bg-white/[0.04] px-2.5 py-1 font-mono text-xs font-medium rounded-full text-zinc-300 shadow-xs shrink-0"
-                >
+              {repo?.stars !== undefined && (
+                <div className="flex items-center gap-1 text-zinc-300 text-xs font-mono">
                   <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                  <span>{repo.stars >= 1000 ? `${(repo.stars / 1000).toFixed(1)}k` : repo.stars}</span>
-                </span>
+                  <span>{repo.stars.toLocaleString()}</span>
+                </div>
               )}
             </div>
 
-            {/* Verdict & Language Badges */}
-            <div className="flex flex-wrap items-center gap-2 mt-3">
+            {/* Badges Row */}
+            <div className="mt-2.5 flex flex-wrap items-center gap-2">
               {isScored ? (
                 <>
-                  <CRankBadge rank={rank} size="md" showLabel={true} />
+                  <CRankBadge rank={rank} size="sm" showLabel />
                   {roundedScore > 0 && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs font-semibold rounded-full bg-white/[0.05] text-zinc-200 border border-white/[0.1]">
-                      <span className="text-zinc-300">Score:</span>
-                      <span className="text-emerald-400 font-bold">{roundedScore}</span>
-                      <span className="text-zinc-300 font-normal">/100</span>
+                    <span className="text-xs font-mono text-zinc-300">
+                      ({roundedScore}/100)
                     </span>
                   )}
                 </>
@@ -127,6 +143,26 @@ export function RepoDetailHero({
             >
               <Bookmark className={`h-3.5 w-3.5 ${isWatching ? "fill-orange-400 text-orange-400" : ""}`} />
               <span>{isWatching ? "Watchlisted" : "Watchlist"}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleShareX}
+              title="Share scorecard on X / Twitter"
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-mono font-semibold rounded-xl bg-white/[0.04] text-zinc-300 border border-white/[0.1] hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer"
+            >
+              <Share2 className="h-3.5 w-3.5 text-[#38bdf8]" />
+              <span className="hidden sm:inline">Share</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleCopyLink}
+              title="Copy link to scorecard"
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-mono font-semibold rounded-xl bg-white/[0.04] text-zinc-300 border border-white/[0.1] hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer"
+            >
+              {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+              <span>{copied ? "Copied" : "Link"}</span>
             </button>
 
             <button
