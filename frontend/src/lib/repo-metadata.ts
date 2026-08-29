@@ -27,32 +27,31 @@ export function buildRepoMetadata(fullName: string, repo: Repo | null): RepoMeta
   const mergeRate = (repo.external_pr_merge_rate || 0).toFixed(0);
   const respHours = (repo.response_p50_hours && repo.response_p50_hours > 0 ? repo.response_p50_hours : (repo.time_to_first_response_hours || 0)).toFixed(0);
 
-  // Fill full ~55-60 character title budget with high-value keywords
-  const fullTitle = `${fullName} • ${score}/100 C-Rank (${tier}-Tier) | GetMerged`;
-  const midTitle = `${fullName} (${tier}-Tier ${score}) • ${mergeRate}% Merge | GM`;
-  const compactTitle = `${fullName} (${tier}-Tier ${score}) | GetMerged`;
+  // Dynamic Title Construction (Strictly <= 60 chars)
+  const repoName = repo.name || fullName.split("/")[1] || fullName;
+  const titleCandidates = [
+    `${fullName} • ${score}/100 C-Rank (${tier}-Tier) | GetMerged`,
+    `${fullName} (${tier}-Tier ${score}) • ${mergeRate}% Merge | GM`,
+    `${fullName} (${tier}-Tier ${score}) | GetMerged`,
+    `${repoName} • ${score}/100 (${tier}-Tier) | GetMerged`,
+    `${repoName} (${tier}-Tier ${score}) | GetMerged`,
+    `${fullName.slice(0, 48)} | GetMerged`,
+  ];
+  const title = titleCandidates.find((t) => t.length <= 60) || `${fullName.slice(0, 48)} | GetMerged`;
 
-  let title = fullTitle;
-  if (title.length > 60) title = midTitle;
-  if (title.length > 60) title = compactTitle;
-  if (title.length > 60) {
-    const repoName = repo.name || fullName.split("/")[1] || fullName;
-    title = `${repoName} • ${score}/100 (${tier}-Tier) | GetMerged`;
-    if (title.length > 60) {
-      title = `${fullName.slice(0, 48)} | GetMerged`;
-    }
-  }
-
-  // Fill description budget strictly under 155 characters (target: 140-154 chars)
-  const fullDesc = `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. View review telemetry on GetMerged.`;
-  const compactDesc = `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate & ~${respHours}h response. Check review speed on GetMerged.`;
-  const shortDesc = `${fullName} PR acceptance: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`;
-
-  let description = fullDesc;
-  if (description.length > 154) description = compactDesc;
-  if (description.length > 154) description = shortDesc;
-  if (description.length > 154) {
-    description = description.slice(0, 151) + "...";
+  // Dynamic Description Construction (Strictly <= 154 chars)
+  const descCandidates = [
+    `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. View review telemetry on GetMerged.`,
+    `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate & ~${respHours}h response. Check review speed on GetMerged.`,
+    `Will ${repoName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. View review telemetry on GetMerged.`,
+    `Will ${repoName} merge your PR? ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate & ~${respHours}h response. Check review speed on GetMerged.`,
+    `${fullName} PR telemetry: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`,
+    `${repoName} PR telemetry: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`,
+  ];
+  let description = descCandidates.find((d) => d.length <= 154) || "";
+  if (!description) {
+    const base = `PR telemetry for ${fullName}: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. Review speed on GetMerged.`;
+    description = base.length <= 154 ? base : base.slice(0, 151) + "...";
   }
 
   return { title, description };
