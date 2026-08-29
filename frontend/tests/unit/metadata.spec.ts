@@ -91,4 +91,24 @@ test.describe("Repo Metadata & FAQ Unit Tests (IDEA-20260820-02)", () => {
     const firstTimerFaq = faqs.find((f) => f.q.includes("first-time"));
     expect(firstTimerFaq?.a).toContain("55.0%");
   });
+
+  test("buildRepoMetadata handles short, long, and ultra-long repo names strictly within SERP bounds", () => {
+    const testCases = [
+      "go/go", // Short
+      "facebook/react", // Standard
+      "session-foundation/session-android", // Long
+      "very-long-organization-name-with-many-words/extremely-verbose-repository-identifier-module-engine", // Ultra-long
+    ];
+
+    for (const repoSlug of testCases) {
+      const meta = buildRepoMetadata(repoSlug, {
+        ...mockScoredRepo,
+        full_name: repoSlug,
+        name: repoSlug.split("/")[1],
+      });
+
+      expect(meta.title.length).toBeLessThanOrEqual(60);
+      expect(meta.description.length).toBeLessThanOrEqual(154);
+    }
+  });
 });
