@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"sort"
 	"strings"
 	"time"
 
@@ -732,29 +734,94 @@ func (r *sqlxUserRepository) GetPublicContributorProfileBySlug(ctx context.Conte
 	}
 
 	profile.PublicRepos = []UserPublicRepo{}
-	if profile.DNA != nil && len(profile.DNA.TopRepos) > 0 {
-		for _, tr := range profile.DNA.TopRepos {
-			isPinned := pinnedSet[strings.ToLower(tr.NameWithOwner)]
-			lang := ""
-			if tr.PrimaryLanguage != nil {
-				lang = *tr.PrimaryLanguage
+	if profile.DNA != nil && len(profile.DNA.OwnedRepos) > 0 {
+		for _, or := range profile.DNA.OwnedRepos {
+			if or.IsFork {
+				continue
 			}
-			parts := strings.Split(tr.NameWithOwner, "/")
-			repoName := tr.NameWithOwner
-			if len(parts) == 2 {
-				repoName = parts[1]
+			isPinned := pinnedSet[strings.ToLower(or.NameWithOwner)] || pinnedSet[strings.ToLower(or.Name)]
+			lang := ""
+			if or.PrimaryLanguage != nil {
+				lang = *or.PrimaryLanguage
+			}
+			repoName := or.Name
+			if repoName == "" {
+				parts := strings.Split(or.NameWithOwner, "/")
+				if len(parts) == 2 {
+					repoName = parts[1]
+				} else {
+					repoName = or.NameWithOwner
+				}
 			}
 			profile.PublicRepos = append(profile.PublicRepos, UserPublicRepo{
-				FullName:    tr.NameWithOwner,
+				FullName:    or.NameWithOwner,
 				Name:        repoName,
-				Description: "",
+				Description: or.Description,
 				Language:    lang,
-				Stars:       tr.StargazerCount,
-				HTMLURL:     fmt.Sprintf("https://github.com/%s", tr.NameWithOwner),
+				Stars:       or.StargazerCount,
+				Forks:       or.ForkCount,
+				HTMLURL:     or.URL,
 				IsPinned:    isPinned,
 			})
 		}
 	}
+
+	// If no owned repos cached in DNA, fetch from GitHub directly (strictly ignoring forks)
+	if len(profile.PublicRepos) == 0 && user.SlugOrUsername() != "" {
+		targetUsername := user.SlugOrUsername()
+		req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("https://api.github.com/users/%s/repos?per_page=100&type=owner", targetUsername), nil)
+		if err == nil {
+			req.Header.Set("Accept", "application/vnd.github.v3+json")
+			req.Header.Set("User-Agent", "GetMerged-App")
+			client := &http.Client{Timeout: 3 * time.Second}
+			resp, err := client.Do(req)
+			if err == nil && resp.StatusCode == http.StatusOK {
+				defer resp.Body.Close()
+				var ghRepos []struct {
+					FullName    string `json:"full_name"`
+					Name        string `json:"name"`
+					Description string `json:"description"`
+					Language    string `json:"language"`
+					Stargazers  int    `json:"stargazers_count"`
+					Forks       int    `json:"forks_count"`
+					HTMLURL     string `json:"html_url"`
+					Fork        bool   `json:"fork"`
+					Owner       struct {
+						Login string `json:"login"`
+					} `json:"owner"`
+				}
+				if err := json.NewDecoder(resp.Body).Decode(&ghRepos); err == nil {
+					for _, gr := range ghRepos {
+						if gr.Fork {
+							continue
+						}
+						if gr.Owner.Login != "" && !strings.EqualFold(gr.Owner.Login, targetUsername) {
+							continue
+						}
+						isPinned := pinnedSet[strings.ToLower(gr.FullName)] || pinnedSet[strings.ToLower(gr.Name)]
+						profile.PublicRepos = append(profile.PublicRepos, UserPublicRepo{
+							FullName:    gr.FullName,
+							Name:        gr.Name,
+							Description: gr.Description,
+							Language:    gr.Language,
+							Stars:       gr.Stargazers,
+							Forks:       gr.Forks,
+							HTMLURL:     gr.HTMLURL,
+							IsPinned:    isPinned,
+						})
+					}
+				}
+			}
+		}
+	}
+
+	// Sort so pinned repos come first, then ranked by stars descending
+	sort.SliceStable(profile.PublicRepos, func(i, j int) bool {
+		if profile.PublicRepos[i].IsPinned != profile.PublicRepos[j].IsPinned {
+			return profile.PublicRepos[i].IsPinned
+		}
+		return profile.PublicRepos[i].Stars > profile.PublicRepos[j].Stars
+	})
 
 	return profile, nil
 }

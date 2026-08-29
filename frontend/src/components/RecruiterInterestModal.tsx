@@ -6,11 +6,12 @@ import { API_BASE_URL } from "@/lib/api";
 
 interface RecruiterInterestModalProps {
   username: string;
+  slug?: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function RecruiterInterestModal({ username, isOpen, onClose }: RecruiterInterestModalProps) {
+export function RecruiterInterestModal({ username, slug, isOpen, onClose }: RecruiterInterestModalProps) {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [message, setMessage] = useState("");
@@ -27,24 +28,22 @@ export function RecruiterInterestModal({ username, isOpen, onClose }: RecruiterI
     setError(null);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/user/feedback`, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/user/hire-inquiry`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({
-          repo_id: `recruiter-interest:${username}`,
-          full_name: `hire/@${username}`,
-          maintainer_rating: 5,
-          review_speed_rating: 5,
-          beginner_rating: 5,
-          comment: `[Recruiter Hire Signal for @${username}] Company: ${company.trim()} | Email: ${email.trim()} | Note: ${message.trim()}`,
+          target_slug: slug || username,
+          email: email.trim(),
+          company: company.trim(),
+          message: message.trim(),
         }),
       });
 
       if (res.ok) {
         setSent(true);
       } else {
-        setError("Failed to register hiring inquiry. Please try again.");
+        const data = await res.json().catch(() => null);
+        setError(data?.error || "Failed to register hiring inquiry. Please try again.");
       }
     } catch {
       setError("Network error submitting hiring signal.");

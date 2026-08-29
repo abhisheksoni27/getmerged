@@ -9,7 +9,7 @@ interface ProfileEditModalProps {
   isOpen: boolean;
   onClose: () => void;
   profile: PublicProfile;
-  onProfileUpdated: () => void;
+  onProfileUpdated: (updated?: Partial<PublicProfile>) => void;
 }
 
 export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
@@ -118,7 +118,11 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
         throw new Error(data.error || "Failed to save profile changes");
       }
 
-      onProfileUpdated();
+      onProfileUpdated({
+        headline: headline.trim(),
+        bio: bio.trim(),
+        showcase_projects: showcaseProjects,
+      });
       onClose();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to save profile");

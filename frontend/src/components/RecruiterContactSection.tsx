@@ -6,9 +6,10 @@ import { RecruiterInterestModal } from "./RecruiterInterestModal";
 
 interface RecruiterContactSectionProps {
   username: string;
+  slug?: string;
 }
 
-export function RecruiterContactSection({ username }: RecruiterContactSectionProps) {
+export function RecruiterContactSection({ username, slug }: RecruiterContactSectionProps) {
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
@@ -39,6 +40,7 @@ export function RecruiterContactSection({ username }: RecruiterContactSectionPro
 
       <RecruiterInterestModal
         username={username}
+        slug={slug}
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
       />

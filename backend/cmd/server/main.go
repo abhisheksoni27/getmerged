@@ -476,6 +476,7 @@ func main() {
 		// OptionalUserAuth: signed-in maintainers get per-metric detail,
 		// anonymous visitors only repo name + tier (redacted in-handler).
 		api.GET("/repos/:id/playbook", middleware.OptionalUserAuth(cfg.JWTSecret), handler.GetRepoPlaybookHandler(claimSvc))
+		api.POST("/user/hire-inquiry", handler.PostHireInquiryHandler(userRepo, database))
 
 		// Good First Issue alerts & digest (AC1, AC5, AC6, AC8)
 		api.POST("/gfi-alerts/subscribe", handler.GFISubscribeHandler(cfg))

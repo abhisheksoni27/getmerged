@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sort"
 	"strings"
 	"time"
 
@@ -115,7 +116,7 @@ func GetUserGitHubReposHandler(userRepo repository.UserRepository) gin.HandlerFu
 		// Try fetching from public GitHub API if user has a username/slug
 		targetUsername := user.SlugOrUsername()
 		if targetUsername != "" {
-			req, err := http.NewRequestWithContext(c.Request.Context(), "GET", fmt.Sprintf("https://api.github.com/users/%s/repos?sort=stars&per_page=30&type=owner", targetUsername), nil)
+			req, err := http.NewRequestWithContext(c.Request.Context(), "GET", fmt.Sprintf("https://api.github.com/users/%s/repos?per_page=100&type=owner", targetUsername), nil)
 			if err == nil {
 				req.Header.Set("Accept", "application/vnd.github.v3+json")
 				req.Header.Set("User-Agent", "GetMerged-App")
@@ -131,9 +132,20 @@ func GetUserGitHubReposHandler(userRepo repository.UserRepository) gin.HandlerFu
 						Stargazers  int    `json:"stargazers_count"`
 						Forks       int    `json:"forks_count"`
 						HTMLURL     string `json:"html_url"`
+						Fork        bool   `json:"fork"`
+						Owner       struct {
+							Login string `json:"login"`
+						} `json:"owner"`
 					}
 					if err := json.NewDecoder(resp.Body).Decode(&ghRepos); err == nil {
 						for _, gr := range ghRepos {
+							// Filter out forks - only own public repos
+							if gr.Fork {
+								continue
+							}
+							if gr.Owner.Login != "" && !strings.EqualFold(gr.Owner.Login, targetUsername) {
+								continue
+							}
 							repos = append(repos, repository.UserPublicRepo{
 								FullName:    gr.FullName,
 								Name:        gr.Name,
@@ -149,6 +161,14 @@ func GetUserGitHubReposHandler(userRepo repository.UserRepository) gin.HandlerFu
 			}
 		}
 
+		// Sort non-fork repos by Stars descending, then by Name
+		sort.Slice(repos, func(i, j int) bool {
+			if repos[i].Stars != repos[j].Stars {
+				return repos[i].Stars > repos[j].Stars
+			}
+			return repos[i].Name < repos[j].Name
+		})
+
 		// Check pinned repos
 		pinnedSet := make(map[string]bool)
 		if user.PinnedReposJSON != nil && *user.PinnedReposJSON != "" {
@@ -161,10 +181,18 @@ func GetUserGitHubReposHandler(userRepo repository.UserRepository) gin.HandlerFu
 		}
 
 		for i := range repos {
-			if pinnedSet[strings.ToLower(repos[i].FullName)] {
+			if pinnedSet[strings.ToLower(repos[i].FullName)] || pinnedSet[strings.ToLower(repos[i].Name)] {
 				repos[i].IsPinned = true
 			}
 		}
+
+		// Sort so pinned repos come first, then ranked by stars
+		sort.SliceStable(repos, func(i, j int) bool {
+			if repos[i].IsPinned != repos[j].IsPinned {
+				return repos[i].IsPinned
+			}
+			return repos[i].Stars > repos[j].Stars
+		})
 
 		c.JSON(http.StatusOK, gin.H{
 			"repos": repos,
