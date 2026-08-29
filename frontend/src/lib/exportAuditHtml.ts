@@ -43,7 +43,7 @@ export function generateAuditHtml(r: AuditReport): string {
           </span>
         </td>
         <td style="padding: 12px; border-bottom: 1px solid #27272a; color: #4ade80; font-weight: 700; font-family: monospace;">
-          ${f.simulated_uplift > 0 ? `+${f.simulated_uplift.toFixed(1)} pts` : "—"}
+          ${f.simulated_uplift > 0 ? `+${f.simulated_uplift.toFixed(1)} pts` : " - "}
         </td>
       </tr>
     `

@@ -35,7 +35,7 @@ const sampleReactReport: AuditReport = {
     avg_review_rounds: 3.2,
     time_to_first_response_h: 18.4,
     time_to_merge_h: 94.2,
-    concentration_risk: "Moderate — Concentrated Core Team",
+    concentration_risk: "Moderate - Concentrated Core Team",
   },
   friction_fingerprint: {
     formatting_and_style_pct: 35,
@@ -161,7 +161,7 @@ const sampleReactReport: AuditReport = {
     {
       priority: 1,
       type: "avoid",
-      text: "Avoid uncoordinated cosmetic refactors across internal package boundaries — 42% of closed unmerged PRs cited scope friction.",
+      text: "Avoid uncoordinated cosmetic refactors across internal package boundaries - 42% of closed unmerged PRs cited scope friction.",
     },
     {
       priority: 2,
@@ -209,7 +209,7 @@ export default function SampleAuditPage() {
           <div className="flex items-center gap-2 text-amber-200">
             <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
             <span className="font-bold">Live Interactive Sample Report (facebook/react)</span>
-            <span className="hidden sm:inline text-amber-400/80">— See what a $19 Deep-Audit delivers</span>
+            <span className="hidden sm:inline text-amber-400/80"> - See what a $19 Deep-Audit delivers</span>
           </div>
           <div className="flex items-center gap-3">
             <Link

@@ -12,10 +12,10 @@ import {
   Star,
   Sparkles,
   ArrowRight,
-  ShieldCheck,
   CheckCircle2,
 } from "lucide-react";
 import { motion, useMotionValue, animate, useInView } from "framer-motion";
+import { FloatingRepoCircles } from "@/components/FloatingRepoCircles";
 import { API_BASE_URL } from "@/lib/api";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { captureReferralFromUrl } from "@/lib/referral";
