@@ -2,12 +2,14 @@ package pipeline
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log/slog"
 	"sync"
 	"sync/atomic"
 	"time"
 
+	"github.com/abhisheksoni27/opendoor/internal/analytics"
 	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/notification"
 	"github.com/jmoiron/sqlx"
@@ -106,7 +108,7 @@ func (c *BackgroundCrawler) runLoop() {
 	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
 
-	// Run scheduler every 10 minutes to populate queue
+	// Run scheduler every 10 minutes to populate queue and recover stuck items
 	scheduleTicker := time.NewTicker(10 * time.Minute)
 	defer scheduleTicker.Stop()
 
@@ -114,8 +116,14 @@ func (c *BackgroundCrawler) runLoop() {
 	discoveryTicker := time.NewTicker(c.discoveryInterval)
 	defer discoveryTicker.Stop()
 
+	// Refresh global macro telemetry stats cache every 30 minutes
+	macroStatsTicker := time.NewTicker(30 * time.Minute)
+	defer macroStatsTicker.Stop()
+
 	// Initial seed of due repos on startup
 	c.EnqueueDueRepos()
+	c.recoverStuckProcessingItems()
+	c.refreshMacroStats()
 
 	for {
 		select {
@@ -123,8 +131,11 @@ func (c *BackgroundCrawler) runLoop() {
 			slog.Info("background crawler: worker loop terminated")
 			return
 		case <-scheduleTicker.C:
+			c.recoverStuckProcessingItems()
 			c.EnqueueDueRepos()
 			c.pruneOldSnapshots()
+		case <-macroStatsTicker.C:
+			c.refreshMacroStats()
 		case <-discoveryTicker.C:
 			if err := c.processDiscoveryBatch(); err != nil {
 				slog.Error("background crawler: error processing discovery batch", "err", err)
@@ -133,6 +144,45 @@ func (c *BackgroundCrawler) runLoop() {
 			c.processNextWorkItem()
 			c.checkAndSendPulseDigest()
 		}
+	}
+}
+
+// recoverStuckProcessingItems resets items stuck in 'processing' state back to 'pending'
+func (c *BackgroundCrawler) recoverStuckProcessingItems() {
+	var res sql.Result
+	var err error
+	if c.db.DriverName() == "sqlite" {
+		res, err = c.db.Exec(`
+			UPDATE indexing_queue
+			SET status = 'pending'
+			WHERE status = 'processing'
+			  AND created_at < datetime('now', '-30 minutes')
+		`)
+	} else {
+		res, err = c.db.Exec(`
+			UPDATE indexing_queue
+			SET status = 'pending'
+			WHERE status = 'processing'
+			  AND created_at < NOW() - INTERVAL 30 MINUTE
+		`)
+	}
+	if err != nil {
+		slog.Error("background crawler: error recovering stuck processing items", "err", err)
+		return
+	}
+	if affected, _ := res.RowsAffected(); affected > 0 {
+		slog.Warn("background crawler: recovered stuck processing items back to pending", "count", affected)
+	}
+}
+
+// refreshMacroStats recomputes macro statistics in the background so API cache never goes stale
+func (c *BackgroundCrawler) refreshMacroStats() {
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
+	defer cancel()
+	if _, err := analytics.ComputeAndCacheMacroStats(ctx, c.db); err != nil {
+		slog.Error("background crawler: failed to refresh macro stats cache", "err", err)
+	} else {
+		slog.Info("background crawler: refreshed macro stats cache successfully")
 	}
 }
 
@@ -163,7 +213,7 @@ func (c *BackgroundCrawler) pruneOldSnapshots() {
 // and enqueues them into indexing_queue with priority.
 func (c *BackgroundCrawler) EnqueueDueRepos() {
 	slog.Info("background crawler producer: checking due repos to enqueue")
-	// Tiered rescan cadence: S/A every 3d, B 5d, C/D 10d. SQLite (test
+	// Tiered rescan cadence: S/A every 3d, B 5d, C/D 10d based on snapshot age (or repositories.updated_at). SQLite (test
 	// harness) lacks MySQL's INTERVAL syntax, so branch the query.
 	query := `
 		SELECT r.full_name, r.owner, r.name,
@@ -171,15 +221,19 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		FROM repositories r
 		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
 		LEFT JOIN indexing_queue q ON r.full_name = q.full_name
-		WHERE r.updated_at <= NOW() - INTERVAL
-		        CASE
-		          WHEN COALESCE(ls.c_rank_tier, 'D') IN ('S','A') THEN 3
-		          WHEN COALESCE(ls.c_rank_tier, 'D') = 'B' THEN 5
-		          ELSE 10
-		        END DAY
+		WHERE (
+		        (ls.updated_at IS NOT NULL AND ls.updated_at <= NOW() - INTERVAL
+		          CASE
+		            WHEN COALESCE(ls.c_rank_tier, 'D') IN ('S','A') THEN 3
+		            WHEN COALESCE(ls.c_rank_tier, 'D') = 'B' THEN 5
+		            ELSE 10
+		          END DAY)
+		        OR
+		        (ls.updated_at IS NULL AND r.updated_at <= NOW() - INTERVAL 10 DAY)
+		      )
 		  AND EXISTS (SELECT 1 FROM repo_pr_events e WHERE e.repository_id = r.id)
 		  AND (q.status IS NULL OR q.status NOT IN ('pending', 'processing'))
-		ORDER BY ls.c_rank_tier ASC, r.updated_at ASC
+		ORDER BY ls.c_rank_tier ASC, COALESCE(ls.updated_at, r.updated_at) ASC
 		LIMIT 1000
 	`
 	if c.db.DriverName() == "sqlite" {
@@ -189,15 +243,19 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 			FROM repositories r
 			LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
 			LEFT JOIN indexing_queue q ON r.full_name = q.full_name
-			WHERE r.updated_at <= datetime('now',
-			        '-' || CASE
-			          WHEN COALESCE(ls.c_rank_tier, 'D') IN ('S','A') THEN 3
-			          WHEN COALESCE(ls.c_rank_tier, 'D') = 'B' THEN 5
-			          ELSE 10
-			        END || ' days')
+			WHERE (
+			        (ls.updated_at IS NOT NULL AND ls.updated_at <= datetime('now',
+			          '-' || CASE
+			            WHEN COALESCE(ls.c_rank_tier, 'D') IN ('S','A') THEN 3
+			            WHEN COALESCE(ls.c_rank_tier, 'D') = 'B' THEN 5
+			            ELSE 10
+			          END || ' days'))
+			        OR
+			        (ls.updated_at IS NULL AND r.updated_at <= datetime('now', '-10 days'))
+			      )
 			  AND EXISTS (SELECT 1 FROM repo_pr_events e WHERE e.repository_id = r.id)
 			  AND (q.status IS NULL OR q.status NOT IN ('pending', 'processing'))
-			ORDER BY ls.c_rank_tier ASC, r.updated_at ASC
+			ORDER BY ls.c_rank_tier ASC, COALESCE(ls.updated_at, r.updated_at) ASC
 			LIMIT 1000
 		`
 	}
