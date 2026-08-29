@@ -40,7 +40,7 @@ export default function HowCRankWorksPage() {
       name: "External PR Acceptance Rate",
       priority: "Primary Filter",
       icon: GitMerge,
-      color: "text-emerald-400 bg-emerald-950/70 border-emerald-800/80 border-emerald-200",
+      color: "text-emerald-400 bg-emerald-950/60 border-emerald-500/30",
       headline: "Are outside submissions welcomed into main?",
       desc: "Measures whether non-maintainer community code actually reaches production. Filters out internal bot merges, automated dependencies, and core-team-only branches.",
     },
@@ -48,7 +48,7 @@ export default function HowCRankWorksPage() {
       name: "Reviewer Response Turnaround",
       priority: "Velocity Core",
       icon: Clock,
-      color: "text-blue-700 bg-blue-950/70 border-blue-800/80 border-blue-200",
+      color: "text-blue-400 bg-blue-950/60 border-blue-500/30",
       headline: "The 24-Hour Momentum Window",
       desc: "Calculates the median hours before a human reviewer leaves an actionable reply. PRs that wait more than 7 days have an 80% higher abandon rate.",
     },
@@ -56,7 +56,7 @@ export default function HowCRankWorksPage() {
       name: "Commit Pulse & Recency",
       priority: "Freshness Signal",
       icon: Activity,
-      color: "text-purple-700 bg-purple-950/70 border-purple-800/80 border-purple-200",
+      color: "text-purple-400 bg-purple-950/60 border-purple-500/30",
       headline: "Active Heartbeat vs. Dormant Giant",
       desc: "Monitors active commit rhythms across a rolling 180-day window, ensuring you never write code for a project whose maintainers stepped away months ago.",
     },
@@ -64,7 +64,7 @@ export default function HowCRankWorksPage() {
       name: "First-Timer Contributor Success",
       priority: "Hospitality Metric",
       icon: ShieldCheck,
-      color: "text-amber-700 bg-amber-950/70 border-amber-800/80 border-amber-200",
+      color: "text-amber-400 bg-amber-950/60 border-amber-500/30",
       headline: "Do new authors receive constructive onboarding?",
       desc: "Specifically evaluates developers opening their first pull request. Separates patient, mentorship-driven teams from insular, gatekept codebases.",
     },
@@ -72,7 +72,7 @@ export default function HowCRankWorksPage() {
       name: "Resolution & Land Velocity",
       priority: "Velocity Metric",
       icon: Zap,
-      color: "text-indigo-700 bg-indigo-950/40 border border-indigo-500/20 border-indigo-200",
+      color: "text-indigo-400 bg-indigo-950/60 border-indigo-500/30",
       headline: "Speed to final merge without infinite rebasing",
       desc: "Tracks total hours from initial opening to merged commit, preventing the dreaded weeks-long cycle of repeated merge-conflict resolution.",
     },
@@ -80,7 +80,7 @@ export default function HowCRankWorksPage() {
       name: "Repeat Contributor Retention",
       priority: "Culture Signal",
       icon: Repeat,
-      color: "text-cyan-700 bg-cyan-950/40 border border-cyan-500/20 border-cyan-200",
+      color: "text-cyan-400 bg-cyan-950/60 border-cyan-500/30",
       headline: "Do contributors return for PR #2 and #3?",
       desc: "Measures whether outside developers enjoy their first experience enough to stay and contribute regularly. The ultimate proof of healthy maintainer empathy.",
     },
@@ -88,7 +88,7 @@ export default function HowCRankWorksPage() {
       name: "Review Cycle Density",
       priority: "Friction Signal",
       icon: HelpCircle,
-      color: "text-orange-700 bg-orange-50 border-orange-200",
+      color: "text-orange-400 bg-orange-950/60 border-orange-500/30",
       headline: "Clear, consolidated guidance vs. endless nitpicks",
       desc: "Analyzes comment patterns per merged pull request to reward consolidated, respectful review rounds over fragmented multi-week review churn.",
     },
@@ -96,7 +96,7 @@ export default function HowCRankWorksPage() {
       name: "Maintainer Core Distribution",
       priority: "Bus-Factor Metric",
       icon: Users,
-      color: "text-rose-700 bg-rose-950/70 border-rose-800/80 border-rose-200",
+      color: "text-rose-400 bg-rose-950/60 border-rose-500/30",
       headline: "Multi-maintainer review cores",
       desc: "Evaluates the number of active distinct reviewers. Projects with distributed review teams avoid single-maintainer bottlenecks and burnout freezes.",
     },
@@ -104,7 +104,7 @@ export default function HowCRankWorksPage() {
       name: "Issue & Discussion Triage",
       priority: "Community Health",
       icon: Sparkles,
-      color: "text-emerald-300 bg-emerald-950/70 border-emerald-800/80 border-emerald-200",
+      color: "text-emerald-400 bg-emerald-950/60 border-emerald-500/30",
       headline: "Proactive issue scoping and triaging",
       desc: "Tracks maintainer responsiveness on incoming issues and discussions to evaluate whether the project actively guides prospective contributors.",
     },
@@ -340,7 +340,7 @@ export default function HowCRankWorksPage() {
 
           <div className="overflow-x-auto rounded-2xl glass-panel border border-white/[0.1] shadow-xs">
             <table className="w-full text-left text-xs text-zinc-300 font-sans">
-              <thead className="glass-card text-white border-b border-white/[0.1] font-semibold font-space uppercase tracking-wider text-[11px]">
+              <thead className="bg-[#141414] text-zinc-200 border-b border-white/[0.1] font-semibold font-space uppercase tracking-wider text-[11px]">
                 <tr>
                   <th className="py-3.5 px-5">Telemetry Factor</th>
                   <th className="py-3.5 px-4 text-center font-mono">Impact Priority</th>
@@ -348,58 +348,94 @@ export default function HowCRankWorksPage() {
                   <th className="py-3.5 px-5">Evaluation Focus</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 font-sans">
-                <tr className="hover:glass-card/60 transition-colors">
+              <tbody className="divide-y divide-white/[0.08] font-sans">
+                <tr className="hover:bg-white/[0.03] transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">1. External PR Merge Velocity</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-emerald-300 bg-emerald-950/70 border-emerald-800/80/50">Primary</td>
+                  <td className="py-3.5 px-4 text-center font-mono">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-emerald-950/80 text-emerald-300 border border-emerald-500/30">
+                      Primary
+                    </span>
+                  </td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">180-Day Rolling</td>
                   <td className="py-3.5 px-5 text-zinc-300">Ratio of merged vs. abandoned external (non-bot) community pull requests.</td>
                 </tr>
-                <tr className="hover:glass-card/60 transition-colors">
+                <tr className="hover:bg-white/[0.03] transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">2. Initial Review Response Turnaround</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-blue-300 bg-blue-950/70 border-blue-800/80/50">High Impact</td>
+                  <td className="py-3.5 px-4 text-center font-mono">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-blue-950/80 text-blue-300 border border-blue-500/30">
+                      High Impact
+                    </span>
+                  </td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">Recent PRs</td>
                   <td className="py-3.5 px-5 text-zinc-300">Median hours before a human maintainer posts an actionable, constructive review.</td>
                 </tr>
-                <tr className="hover:glass-card/60 transition-colors">
+                <tr className="hover:bg-white/[0.03] transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">3. Maintainer Commit &amp; Merge Recency</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-purple-300 bg-purple-950/70 border-purple-800/80/50">High Impact</td>
+                  <td className="py-3.5 px-4 text-center font-mono">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-purple-950/80 text-purple-300 border border-purple-500/30">
+                      High Impact
+                    </span>
+                  </td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">Rolling Pulse</td>
                   <td className="py-3.5 px-5 text-zinc-300">Continuous commit rhythm and recency of active maintainer participation.</td>
                 </tr>
-                <tr className="hover:glass-card/60 transition-colors">
+                <tr className="hover:bg-white/[0.03] transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">4. First-Timer Contributor Success</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-amber-300 bg-amber-950/70 border-amber-800/80/50">Core Hospitality</td>
+                  <td className="py-3.5 px-4 text-center font-mono">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-amber-950/80 text-amber-300 border border-amber-500/30">
+                      Core Hospitality
+                    </span>
+                  </td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">New Authors</td>
                   <td className="py-3.5 px-5 text-zinc-300">Acceptance rate and onboarding assistance for authors opening their first PR.</td>
                 </tr>
-                <tr className="hover:glass-card/60 transition-colors">
+                <tr className="hover:bg-white/[0.03] transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">5. Resolution &amp; Land Velocity</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-indigo-800 bg-indigo-950/40 border border-indigo-500/20/50">Core Velocity</td>
+                  <td className="py-3.5 px-4 text-center font-mono">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-indigo-950/80 text-indigo-300 border border-indigo-500/30">
+                      Core Velocity
+                    </span>
+                  </td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">Merged PRs</td>
                   <td className="py-3.5 px-5 text-zinc-300">Total cycle duration from initial PR opening to final main-branch merge.</td>
                 </tr>
-                <tr className="hover:glass-card/60 transition-colors">
+                <tr className="hover:bg-white/[0.03] transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">6. Repeat Contributor Retention</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-cyan-800 bg-cyan-950/40 border border-cyan-500/20/50">Culture Signal</td>
+                  <td className="py-3.5 px-4 text-center font-mono">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-cyan-950/80 text-cyan-300 border border-cyan-500/30">
+                      Culture Signal
+                    </span>
+                  </td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">Cohorts</td>
                   <td className="py-3.5 px-5 text-zinc-300">Percentage of outside developers returning for subsequent contributions.</td>
                 </tr>
-                <tr className="hover:glass-card/60 transition-colors">
+                <tr className="hover:bg-white/[0.03] transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">7. Review Friction &amp; Cycle Density</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-orange-800 bg-orange-50/50">Friction Factor</td>
+                  <td className="py-3.5 px-4 text-center font-mono">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-orange-950/80 text-orange-300 border border-orange-500/30">
+                      Friction Factor
+                    </span>
+                  </td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">Per PR</td>
                   <td className="py-3.5 px-5 text-zinc-300">Efficient feedback rounds without multi-week fragmented review delays.</td>
                 </tr>
-                <tr className="hover:glass-card/60 transition-colors">
+                <tr className="hover:bg-white/[0.03] transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">8. Maintainer Breadth &amp; Bus Factor</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-rose-300 bg-rose-950/70 border-rose-800/80/50">Safety Gate</td>
+                  <td className="py-3.5 px-4 text-center font-mono">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-rose-950/80 text-rose-300 border border-rose-500/30">
+                      Safety Gate
+                    </span>
+                  </td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">90-Day Active</td>
                   <td className="py-3.5 px-5 text-zinc-300">Multi-maintainer bench depth; single-maintainer bottlenecks cap score.</td>
                 </tr>
-                <tr className="hover:glass-card/60 transition-colors">
+                <tr className="hover:bg-white/[0.03] transition-colors">
                   <td className="py-3.5 px-5 font-bold text-white font-space">9. Issue &amp; Discussion Triage</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-emerald-300 bg-emerald-950/70 border-emerald-800/80/50">Community Support</td>
+                  <td className="py-3.5 px-4 text-center font-mono">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-emerald-950/80 text-emerald-300 border border-emerald-500/30">
+                      Community Support
+                    </span>
+                  </td>
                   <td className="py-3.5 px-4 font-mono text-zinc-300">Issues</td>
                   <td className="py-3.5 px-5 text-zinc-300">Promptness and clarity when triaging prospective contributor questions.</td>
                 </tr>

@@ -64,14 +64,15 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             className="flex items-center gap-2.5 group shrink-0"
           >
             <motion.div
-              className="h-8 w-8 rounded-lg bg-[#1c1c1c] border border-white/[0.08] flex items-center justify-center"
+              className="relative h-8 w-8 rounded-lg bg-[#222831] border border-white/[0.12] flex items-center justify-center shadow-xs"
               whileHover={reduceMotion ? undefined : { scale: 1.05 }}
               transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
               aria-hidden="true"
             >
-              <span className="font-sans text-xs font-bold text-white tracking-tight">GM</span>
+              <span className="font-space text-xs font-bold text-white tracking-tight leading-none">GM</span>
+              <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-[#dfd0b8] ring-1 ring-[#222831] shadow-[0_0_4px_rgba(223,208,184,0.6)]" />
             </motion.div>
-            <span className="font-sans text-sm font-semibold tracking-tight text-white group-hover:text-white transition-colors">
+            <span className="font-space text-sm font-bold tracking-tight text-white group-hover:text-white transition-colors">
               GetMerged
             </span>
           </Link>
