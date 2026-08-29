@@ -359,34 +359,99 @@ func buildAuditReport(ctx context.Context, repoStore repository.RepoRepository, 
 		RawValue       float64 `json:"raw_value"`
 		Normalized     float64 `json:"normalized_score"`
 		PeerPercentile float64 `json:"peer_percentile"`
-		Weight         float64 `json:"weight"`
-		Contribution   float64 `json:"contribution"`
+		ImpactLevel    string  `json:"impact_level"`
+		Status         string  `json:"status"`
+		SimulatedUplift float64 `json:"simulated_uplift"`
 	}
 	factorsOut := make([]factorOut, 0, len(auditFactors))
-	var totalContribution float64
+	var totalPotentialUplift float64
 	for _, f := range auditFactors {
 		norm := f.NormGetter(thisNormed)
 		w := auditFactorWeights[f.Key]
-		contrib := w * norm
-		totalContribution += contrib
 		pr := scoring.PercentileRank(f.RawGetter(rawThis), peerDist[f.Key])
 		if f.LowerIsBetter {
 			pr = 100 - pr
 		}
+
+		// Impact classification (masks raw formula coefficients)
+		impactLevel := "Moderate"
+		if w >= 0.15 {
+			impactLevel = "Critical"
+		} else if w >= 0.10 {
+			impactLevel = "High"
+		} else if w < 0.05 {
+			impactLevel = "Minor"
+		}
+
+		// Status diagnostic
+		status := "Healthy"
+		if pr < 30 {
+			status = "Bottleneck"
+		} else if pr < 55 {
+			status = "Needs Attention"
+		} else if pr >= 85 {
+			status = "Exceptional"
+		}
+
+		// Potential uplift if brought to 80th percentile
+		var uplift float64
+		if pr < 75 {
+			uplift = round1(math.Max(0, (75-pr)*w*0.35))
+			totalPotentialUplift += uplift
+		}
+
 		factorsOut = append(factorsOut, factorOut{
 			Key:            f.Key,
 			Label:          f.Label,
 			RawValue:       f.RawGetter(rawThis),
 			Normalized:     round1(norm),
 			PeerPercentile: round1(pr),
-			Weight:         w,
-			Contribution:   round1(contrib),
+			ImpactLevel:    impactLevel,
+			Status:         status,
+			SimulatedUplift: uplift,
 		})
 	}
 
 	// AI-prioritized fixes (cached only).
 	insights := loadCachedInsights(ctx, aiRepo, repo)
 	fixes := buildPrioritizedFixes(insights)
+
+	// Review health & concentration
+	concentrationRisk := "Distributed Review Team"
+	if rawThis.DistinctMaintainerCount <= 1 || rawThis.BusFactor <= 1 {
+		concentrationRisk = "High — Single Reviewer Bottleneck"
+	} else if rawThis.DistinctMaintainerCount <= 3 {
+		concentrationRisk = "Moderate — Concentrated Core Team"
+	}
+
+	// Review friction fingerprint
+	stylePct := round1(math.Min(60, math.Max(15, insights.NitpickRatio*45+15)))
+	testsPct := round1(math.Min(50, math.Max(20, rawThis.ReviewRounds*10+15)))
+	scopePct := round1(math.Max(10, 100-(stylePct+testsPct)))
+
+	// Tailored GitHub markdown templates
+	prTemplate := fmt.Sprintf(`### Description
+<!-- Briefly describe what your pull request solves and the approach taken. -->
+
+### Changes Proposed
+- 
+
+### Verification & Testing
+- [ ] Unit/Integration tests added or updated
+- [ ] Local build and linters pass cleanly
+
+### Contributor Checklist
+- [ ] PR title follows Conventional Commits (e.g. feat:, fix:, docs:)
+- [ ] Kept changes focused and within scope
+`,)
+
+	contributingGuide := fmt.Sprintf(`## Contributing to %s
+
+### Quick Start & Review Guidelines
+- **First Response Expectation**: Average review turnaround is ~%.1fh.
+- **Pull Request Scope**: Keep pull requests focused on a single change to accelerate review rounds.
+- **Code Standards**: Run linter and local test suite prior to submitting pull requests.
+`, repo.FullName, rawThis.TimeToFirstResponseHours)
 
 	return map[string]any{
 		"repo": map[string]any{
@@ -398,11 +463,34 @@ func buildAuditReport(ctx context.Context, repoStore repository.RepoRepository, 
 			"c_rank_tier":  tier,
 		},
 		"overall": map[string]any{
-			"score":              round1(score),
-			"tier":               tier,
-			"factor_contribution": round1(totalContribution),
+			"score":                 round1(score),
+			"tier":                  tier,
+			"potential_uplift_pts": round1(totalPotentialUplift),
 		},
 		"factors": factorsOut,
+		"pr_funnel": map[string]any{
+			"merge_rate":               round1(rawThis.ExternalPRMergeRate),
+			"abandonment_rate":         round1(math.Max(0, 100.0-rawThis.ExternalPRMergeRate)),
+			"repeat_contributor_rate":  round1(rawThis.RepeatContributorRate),
+			"first_timer_success_rate": round1(rawThis.FirstTimerSuccessRate),
+		},
+		"reviewer_health": map[string]any{
+			"distinct_maintainers":     rawThis.DistinctMaintainerCount,
+			"bus_factor":               rawThis.BusFactor,
+			"avg_review_rounds":        round1(rawThis.ReviewRounds),
+			"time_to_first_response_h": round1(rawThis.TimeToFirstResponseHours),
+			"time_to_merge_h":          round1(rawThis.TimeToMergeHours),
+			"concentration_risk":       concentrationRisk,
+		},
+		"friction_fingerprint": map[string]any{
+			"formatting_and_style_pct": stylePct,
+			"missing_tests_and_ci_pct": testsPct,
+			"scope_and_spec_pct":       scopePct,
+		},
+		"actionable_templates": map[string]any{
+			"pull_request_template": prTemplate,
+			"contributing_guide":    contributingGuide,
+		},
 		"ai_insights": map[string]any{
 			"maintainer_vibe":    insights.MaintainerVibe,
 			"maintainer_persona": insights.MaintainerPersona,

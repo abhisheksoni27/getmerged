@@ -97,4 +97,22 @@ test.describe("Repo Deep-Audit Flow (/owner/name/audit)", () => {
     await expect(page.getByText("Repository not found")).toBeVisible({ timeout: 10000 });
     await expect(page.getByText("This repository is not indexed yet.")).toBeVisible();
   });
+
+  test("Sample audit demo page (/audit/sample) renders full interactive diagnostics", async ({ page }) => {
+    await page.goto("/audit/sample", { waitUntil: "domcontentloaded" });
+
+    // Assert demo banner is visible
+    await expect(page.getByText(/Live Interactive Sample Report/i)).toBeVisible({ timeout: 10000 });
+
+    // Assert PR Funnel and Diagnostic sections
+    await expect(page.getByText("PR Acceptance & Drop-off Funnel")).toBeVisible();
+    await expect(page.getByText("Reviewer Team Health")).toBeVisible();
+    await expect(page.getByText("Review Friction Breakdown")).toBeVisible();
+    await expect(page.getByText("Ecosystem Benchmark & Diagnostics")).toBeVisible();
+    await expect(page.getByText("AI-Prioritized Remediation Punchlist")).toBeVisible();
+    await expect(page.getByText("Tailored GitHub Configuration Patches")).toBeVisible();
+
+    // Assert Export HTML button exists
+    await expect(page.getByRole("button", { name: /Export HTML/i })).toBeVisible();
+  });
 });
