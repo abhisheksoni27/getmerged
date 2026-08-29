@@ -77,23 +77,23 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             </span>
           </Link>
 
-          <nav className="hidden xl:flex items-center gap-4 xl:gap-5 text-xs font-sans font-medium text-[#a3a3a3] shrink-0">
+          <nav className="hidden xl:flex items-center gap-3.5 2xl:gap-5 text-xs font-sans font-medium text-[#a3a3a3] shrink-0">
             <Link href="/repos" title="Explore All Open Source Repositories" className="hover:text-white transition-colors">
               Repositories
             </Link>
-            <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm and Methodology" className="hover:text-white transition-colors">
+            <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm and Methodology" className="hover:text-white transition-colors whitespace-nowrap">
               How C-Rank Works
             </Link>
             <Link href="/rankings" title="Browse Top Open Source Repositories by Language Ecosystem" className="hover:text-white transition-colors">
               Ecosystems
             </Link>
-            <Link href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="hover:text-white transition-colors">
+            <Link href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="hover:text-white transition-colors whitespace-nowrap">
               Good First Issues
             </Link>
             <Link href="/guides" title="Open Source Contribution Guides and Best Practices" className="hover:text-white transition-colors">
               Guides
             </Link>
-            <Link href="/league" title="Monthly Open-Source Contributor League & Active Sprints" className="text-[#ff6b00] hover:text-[#ff8a33] font-semibold transition-colors flex items-center gap-1.5">
+            <Link href="/league" title="Monthly Open-Source Contributor League & Active Sprints" className="text-[#ff6b00] hover:text-[#ff8a33] font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap">
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b00] animate-pulse" />
               Monthly League
             </Link>
@@ -102,12 +102,12 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
 
         {/* Floating Search Button */}
         {isSearchVisible && (
-          <div className="flex-1 min-w-[160px] sm:min-w-[200px] max-w-[280px] sm:max-w-xs mx-2 sm:mx-3 shrink-0 sm:shrink">
+          <div className="flex-1 min-w-[130px] sm:min-w-[160px] md:min-w-[180px] max-w-[260px] mx-1.5 sm:mx-3 shrink-0 sm:shrink">
             <button
               type="button"
               onClick={handleOpenSearch}
               aria-label="Search repositories"
-              className="w-full relative flex items-center justify-between h-9 rounded-lg border border-white/[0.08] bg-[#141414] hover:border-white/[0.16] hover:bg-[#1c1c1c] px-3 transition-all cursor-pointer group text-left"
+              className="w-full relative flex items-center justify-between h-9 rounded-lg border border-white/[0.08] bg-[#141414] hover:border-white/[0.16] hover:bg-[#1c1c1c] px-2.5 sm:px-3 transition-all cursor-pointer group text-left"
             >
               <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">
                 <Search className="h-3.5 w-3.5 text-[#a3a3a3] group-hover:text-[#d4d4d4] shrink-0 transition-colors" />
@@ -123,52 +123,36 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
         )}
 
         {/* Right Actions */}
-        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           {authLoading ? (
             <div className="h-8 w-16 sm:w-20 rounded-lg bg-[#1c1c1c] animate-pulse border border-white/[0.04]" />
           ) : user ? (
-            <div className="flex items-center gap-1.5 sm:gap-2.5 bg-[#141414] border border-white/[0.08] rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 shrink-0">
-              {user.slug ? (
-                <Link
-                  href={`/u/${user.slug}`}
-                  title={`View your public GetMerged profile (@${user.slug})`}
-                  className="flex items-center gap-1.5 sm:gap-2 min-w-0 hover:opacity-80 transition-opacity"
-                >
-                  {user.avatar_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={user.avatar_url}
-                      alt={user.username}
-                      className="h-5 w-5 sm:h-6 sm:w-6 rounded-full shrink-0 ring-1 ring-white/[0.12]"
-                    />
-                  ) : null}
-                  <span className="font-sans text-xs font-medium text-[#d4d4d4] max-w-[50px] sm:max-w-[90px] truncate hidden xs:inline sm:inline">
-                    {user.username}
-                  </span>
-                </Link>
-              ) : (
-                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-                  {user.avatar_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={user.avatar_url}
-                      alt={user.username}
-                      className="h-5 w-5 sm:h-6 sm:w-6 rounded-full shrink-0 ring-1 ring-white/[0.12]"
-                    />
-                  ) : null}
-                  <span className="font-sans text-xs font-medium text-[#d4d4d4] max-w-[50px] sm:max-w-[90px] truncate hidden xs:inline sm:inline">
-                    {user.username}
-                  </span>
-                </div>
-              )}
+            <div className="flex items-center gap-1.5 bg-[#141414] border border-white/[0.08] rounded-lg p-1 shrink-0">
+              <Link
+                href={user.slug ? `/u/${user.slug}` : `/dashboard`}
+                title={`Signed in as @${user.username} - View Profile`}
+                className="flex items-center hover:opacity-80 transition-opacity p-0.5"
+              >
+                {user.avatar_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={user.avatar_url}
+                    alt={user.username}
+                    className="h-6 w-6 rounded-full shrink-0 ring-1 ring-white/[0.12]"
+                  />
+                ) : (
+                  <div className="h-6 w-6 rounded-full bg-orange-600 flex items-center justify-center font-bold text-white text-[11px] shrink-0">
+                    {(user.username || "U").slice(0, 1).toUpperCase()}
+                  </div>
+                )}
+              </Link>
               <NotificationBell user={user} />
               <Link
                 href="/watchlist"
                 title="My Watchlist"
-                className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 text-xs font-sans font-medium text-[#a3a3a3] hover:text-white rounded-md transition-colors border-l border-white/[0.08] pl-2.5 shrink-0"
+                className="flex items-center justify-center h-6 w-6 text-[#a3a3a3] hover:text-white rounded-md transition-colors border-l border-white/[0.08] ml-0.5 pl-1.5 shrink-0"
               >
-                <Bookmark className="h-3.5 w-3.5 text-[#a3a3a3]" />
-                <span className="hidden md:inline">Watchlist</span>
+                <Bookmark className="h-3.5 w-3.5" />
               </Link>
             </div>
           ) : (
