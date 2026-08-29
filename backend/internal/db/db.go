@@ -168,6 +168,20 @@ func AutoMigrate(db *sqlx.DB) error {
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			UNIQUE(user_id, repo_full_name)
 		);`, autoInc),
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS user_sniper_subscriptions (
+			id INTEGER PRIMARY KEY %s,
+			user_id INTEGER NULL,
+			email VARCHAR(255) NOT NULL,
+			languages_json TEXT,
+			topics_json TEXT,
+			repo_full_name VARCHAR(255) NULL,
+			frequency VARCHAR(50) NOT NULL DEFAULT 'instant',
+			channel VARCHAR(50) NOT NULL DEFAULT 'email',
+			webhook_url TEXT NULL,
+			is_active BOOLEAN DEFAULT TRUE,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`, autoInc),
 		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS macro_stats (
 			id INTEGER PRIMARY KEY %s,
 			metric_key VARCHAR(255) UNIQUE NOT NULL,
