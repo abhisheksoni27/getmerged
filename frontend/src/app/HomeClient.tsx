@@ -963,7 +963,7 @@ export default function HomeClient({
             Top welcoming ecosystems
           </h2>
           <p className="mt-4 text-xs sm:text-sm lg:text-base text-[#a3a3a3] leading-relaxed font-sans">
-            Rankings of open-source ecosystems that actively welcome external pull requests.
+            Ranked by a composite index of maintainer merge velocity (70%) and active ecosystem opportunity depth (30%).
           </p>
         </div>
 
@@ -992,7 +992,9 @@ export default function HomeClient({
                 const cPct = (cCount / grandTotal) * 100;
                 const dPct = (dCount / grandTotal) * 100;
 
-                const weightedScore = sPct * 1.0 + aPct * 0.75 + bPct * 0.4 + cPct * 0.1;
+                // Score powered directly by backend API (protecting trade secrets)
+                const score = item.score !== undefined && item.score > 0 ? item.score : 40.0;
+                const welcomingTotal = item.welcoming_count ?? (sCount + aCount);
 
                 return {
                   ...item,
@@ -1007,11 +1009,12 @@ export default function HomeClient({
                   bPct,
                   cPct,
                   dPct,
-                  weightedScore,
+                  score,
+                  welcomingTotal,
                 };
               })
               .filter((item) => item.grandTotal >= 15 && (item.sCount + item.aCount) >= 3)
-              .sort((a, b) => b.weightedScore - a.weightedScore)
+              .sort((a, b) => b.score - a.score)
               .slice(0, 10)
               .map((item, idx) => {
                 const rankMedal = idx === 0 ? "1" : idx === 1 ? "2" : idx === 2 ? "3" : `${idx + 1}`;
@@ -1099,7 +1102,7 @@ export default function HomeClient({
                           <div>
                             <div className="text-[11px] text-[#737373] font-sans">Score</div>
                             <div className="inline-block px-2.5 py-1 rounded-lg bg-[#1c1c1c] border border-white/[0.08] text-white font-bold text-xs">
-                              {item.weightedScore.toFixed(1)} pts
+                              {item.score.toFixed(1)} pts
                             </div>
                           </div>
                         </div>

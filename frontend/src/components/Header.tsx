@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Bookmark, Search } from "lucide-react";
-import { motion } from "framer-motion";
+import { Bookmark, Search, Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { User } from "@/types/opendoor";
@@ -24,6 +24,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const reduceMotion = useReducedMotion();
 
   const { openSearch, heroSearchVisible, searchQuery: contextQuery } = useSearch();
@@ -55,9 +56,9 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-[#0a0a0a]/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 sm:gap-4 px-4 sm:px-6 lg:px-8">
         {/* Brand Logo & Navigation */}
-        <div className="flex items-center gap-4 lg:gap-6 min-w-0 shrink-0">
+        <div className="flex items-center gap-3 md:gap-4 lg:gap-6 min-w-0">
           <Link
             href="/"
             title="GetMerged - Find Welcoming Open Source Repositories"
@@ -93,7 +94,8 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             </span>
           </Link>
 
-          <nav className="hidden xl:flex items-center gap-3.5 2xl:gap-5 text-xs font-sans font-medium text-[#a3a3a3] shrink-0">
+          {/* Desktop & Laptop Nav Links */}
+          <nav className="hidden md:flex items-center gap-2.5 lg:gap-3.5 xl:gap-5 text-xs font-sans font-medium text-[#a3a3a3] shrink-0">
             <Link href="/repos" title="Explore All Open Source Repositories" className="hover:text-white transition-colors">
               Repositories
             </Link>
@@ -118,7 +120,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
 
         {/* Floating Search Button */}
         {isSearchVisible && (
-          <div className="flex-1 min-w-[130px] sm:min-w-[160px] md:min-w-[180px] max-w-[260px] mx-1.5 sm:mx-3 shrink-0 sm:shrink">
+          <div className="flex-1 min-w-[120px] sm:min-w-[150px] md:min-w-[170px] max-w-[240px] mx-1 sm:mx-2 shrink-0 sm:shrink">
             <button
               type="button"
               onClick={handleOpenSearch}
@@ -180,7 +182,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   setIsAuthModalOpen(true);
                 }}
                 title="Sign in to GetMerged"
-                className="inline-flex items-center gap-2 rounded-lg bg-[#1c1c1c] border border-white/[0.08] text-white hover:bg-[#262626] hover:border-white/[0.16] px-4 py-1.5 text-xs font-semibold active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer shrink-0"
+                className="inline-flex items-center gap-2 rounded-lg bg-[#1c1c1c] border border-white/[0.08] text-white hover:bg-[#262626] hover:border-white/[0.16] px-3.5 sm:px-4 py-1.5 text-xs font-semibold active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer shrink-0"
               >
                 <span>Sign in</span>
               </button>
@@ -193,8 +195,77 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               />
             </>
           )}
+
+          {/* Mobile Menu Toggle Button (< md screens) */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            aria-label="Toggle navigation menu"
+            className="md:hidden flex items-center justify-center h-9 w-9 rounded-lg border border-white/[0.08] bg-[#141414] text-[#a3a3a3] hover:text-white hover:border-white/[0.16] hover:bg-[#1c1c1c] transition-colors"
+          >
+            {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Drawer Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="md:hidden border-t border-white/[0.08] bg-[#0d0d0e]/95 backdrop-blur-2xl px-4 py-4 space-y-3 overflow-hidden"
+          >
+            <nav className="flex flex-col space-y-2.5 text-sm font-medium text-[#a3a3a3]">
+              <Link
+                href="/repos"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
+              >
+                Repositories
+              </Link>
+              <Link
+                href="/how-c-rank-works"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
+              >
+                How C-Rank Works
+              </Link>
+              <Link
+                href="/rankings"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
+              >
+                Ecosystems
+              </Link>
+              <Link
+                href="/good-first-issue"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
+              >
+                Good First Issues
+              </Link>
+              <Link
+                href="/guides"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
+              >
+                Guides
+              </Link>
+              <Link
+                href="/league"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-[#ff6b00] font-semibold transition-colors flex items-center gap-2"
+              >
+                <span className="w-2 h-2 rounded-full bg-[#ff6b00] animate-pulse" />
+                Monthly League
+              </Link>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

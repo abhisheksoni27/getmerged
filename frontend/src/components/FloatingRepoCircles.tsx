@@ -31,6 +31,8 @@ interface OrbItem {
     right?: string;
     mobileHide?: boolean;
     size: number;
+    align: "left" | "right";
+    vAlign: "top" | "bottom";
   };
   animation: {
     y: number[];
@@ -68,21 +70,21 @@ const CURATED_S_TIER_REPOS: Array<{
   { fullName: "elastic/elasticsearch", owner: "elastic", name: "elasticsearch", stars: 71000, mergeRate: 85, language: "Java" },
 ];
 
-// Pre-defined spatial slots orbiting around the hero content
+// Pre-defined spatial slots orbiting around the hero content with directional tooltip anchoring
 const ORB_SLOTS = [
-  // Left flank
-  { top: "6%", left: "3%", mobileHide: false, size: 54 },
-  { top: "28%", left: "1%", mobileHide: true, size: 62 },
-  { top: "54%", left: "5%", mobileHide: false, size: 50 },
-  { top: "78%", left: "2%", mobileHide: true, size: 58 },
-  { top: "42%", left: "12%", mobileHide: true, size: 46 },
+  // Left flank (open rightward so tooltip never overflows left edge)
+  { top: "6%", left: "3%", mobileHide: false, size: 54, align: "left" as const, vAlign: "bottom" as const },
+  { top: "28%", left: "1.5%", mobileHide: true, size: 62, align: "left" as const, vAlign: "bottom" as const },
+  { top: "54%", left: "5%", mobileHide: false, size: 50, align: "left" as const, vAlign: "bottom" as const },
+  { top: "78%", left: "2%", mobileHide: true, size: 58, align: "left" as const, vAlign: "top" as const },
+  { top: "42%", left: "12%", mobileHide: true, size: 46, align: "left" as const, vAlign: "bottom" as const },
 
-  // Right flank
-  { top: "8%", right: "3%", mobileHide: false, size: 58 },
-  { top: "30%", right: "1%", mobileHide: false, size: 52 },
-  { top: "56%", right: "6%", mobileHide: true, size: 62 },
-  { top: "80%", right: "2%", mobileHide: true, size: 48 },
-  { top: "40%", right: "12%", mobileHide: true, size: 56 },
+  // Right flank (open leftward so tooltip never overflows right edge)
+  { top: "8%", right: "3%", mobileHide: false, size: 58, align: "right" as const, vAlign: "bottom" as const },
+  { top: "30%", right: "1.5%", mobileHide: false, size: 52, align: "right" as const, vAlign: "bottom" as const },
+  { top: "56%", right: "6%", mobileHide: true, size: 62, align: "right" as const, vAlign: "bottom" as const },
+  { top: "80%", right: "2%", mobileHide: true, size: 48, align: "right" as const, vAlign: "top" as const },
+  { top: "40%", right: "12%", mobileHide: true, size: 56, align: "right" as const, vAlign: "bottom" as const },
 ];
 
 // Deterministic PRNG seeded by day
@@ -222,6 +224,10 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
         const isHovered = hoveredRepo === orb.id;
         const hasImgError = imageErrors[orb.id];
 
+        // Compute safe in-bounds tooltip alignment
+        const isLeftAligned = orb.slot.align === "left";
+        const isTopAligned = orb.slot.vAlign === "top";
+
         return (
           <motion.div
             key={orb.id}
@@ -325,28 +331,42 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
                 </div>
               </Link>
 
-              {/* Interactive Tooltip Card on Hover */}
+              {/* Interactive Tooltip Card on Hover - Strictly in-bounds */}
               <AnimatePresence>
                 {isHovered && (
                   <motion.div
-                    initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                    initial={{
+                      opacity: 0,
+                      y: isTopAligned ? -6 : 6,
+                      scale: 0.95,
+                    }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                    exit={{
+                      opacity: 0,
+                      y: isTopAligned ? -4 : 4,
+                      scale: 0.95,
+                    }}
                     transition={{ duration: 0.18, ease: "easeOut" }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 rounded-xl border border-white/[0.18] bg-[#121214]/95 backdrop-blur-2xl p-2.5 text-left shadow-[0_16px_40px_rgba(0,0,0,0.6)] z-50 pointer-events-none"
+                    className={`absolute w-48 rounded-xl border border-white/[0.18] bg-[#121214]/95 backdrop-blur-2xl p-2.5 text-left shadow-[0_16px_40px_rgba(0,0,0,0.65)] z-50 pointer-events-none ${
+                      isTopAligned ? "bottom-full mb-2.5" : "top-full mt-2.5"
+                    } ${
+                      isLeftAligned
+                        ? "left-0 origin-top-left"
+                        : "right-0 origin-top-right"
+                    }`}
                   >
                     <div className="flex items-center gap-1.5 mb-1">
                       <span className="inline-flex items-center rounded-md bg-emerald-500/20 px-1.5 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
                         TOP S-TIER
                       </span>
                       {orb.language && (
-                        <span className="text-[11px] text-zinc-400 truncate">
+                        <span className="text-[11px] text-zinc-400 truncate font-mono">
                           {orb.language}
                         </span>
                       )}
                     </div>
                     
-                    <p className="font-semibold text-xs text-white truncate">
+                    <p className="font-semibold text-xs text-white truncate font-sans">
                       {orb.fullName}
                     </p>
 
@@ -365,7 +385,7 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
                       )}
                     </div>
 
-                    <div className="mt-2 pt-1.5 border-t border-white/10 flex items-center justify-between text-[10px] text-emerald-400 font-medium">
+                    <div className="mt-2 pt-1.5 border-t border-white/10 flex items-center justify-between text-[10px] text-emerald-400 font-medium font-sans">
                       <span>View C-Rank</span>
                       <ExternalLink className="h-2.5 w-2.5" />
                     </div>

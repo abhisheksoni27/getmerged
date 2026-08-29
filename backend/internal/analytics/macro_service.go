@@ -3,16 +3,21 @@ package analytics
 import (
 	"context"
 	"encoding/json"
+	"math"
+	"sort"
 	"time"
 
 	"github.com/jmoiron/sqlx"
 )
 
 type LanguageTierBreakdown struct {
-	Language  string         `json:"language"`
-	Total     int            `json:"total"`
-	TierMap   map[string]int `json:"tier_map"`
-	MergeRate float64        `json:"avg_merge_rate"`
+	Language       string         `json:"language"`
+	Total          int            `json:"total"`
+	TierMap        map[string]int `json:"tier_map"`
+	MergeRate      float64        `json:"avg_merge_rate"`
+	Score          float64        `json:"score"`
+	WelcomingCount int            `json:"welcoming_count"`
+	Rank           int            `json:"rank,omitempty"`
 }
 
 type MacroStats struct {
@@ -109,7 +114,52 @@ func ComputeAndCacheMacroStats(ctx context.Context, db *sqlx.DB) (*MacroStats, e
 	}
 
 	for _, item := range langMap {
+		sCount := item.TierMap["S"]
+		aCount := item.TierMap["A"]
+		bCount := item.TierMap["B"]
+		cCount := item.TierMap["C"]
+		dCount := item.TierMap["D"]
+		grandTotal := item.Total
+		if grandTotal <= 0 {
+			grandTotal = sCount + aCount + bCount + cCount + dCount
+		}
+		if grandTotal <= 0 {
+			grandTotal = 1
+		}
+
+		sPct := (float64(sCount) / float64(grandTotal)) * 100.0
+		aPct := (float64(aCount) / float64(grandTotal)) * 100.0
+		bPct := (float64(bCount) / float64(grandTotal)) * 100.0
+		cPct := (float64(cCount) / float64(grandTotal)) * 100.0
+		dPct := (float64(dCount) / float64(grandTotal)) * 100.0
+
+		// 1. Maintainer Quality Density (85% weight): S/A concentration + merge velocity - zombie penalty
+		avgMerge := item.MergeRate
+		if avgMerge <= 0 {
+			avgMerge = 75.0
+		}
+		mergeBonus := math.Max(0, math.Min(15.0, ((avgMerge-50.0)/50.0)*15.0))
+		zombiePenalty := ((cPct + dPct) / 100.0) * 12.0
+		qualityDensity := math.Max(0, math.Min(100.0, sPct*1.0+aPct*0.75+bPct*0.35+mergeBonus-zombiePenalty))
+
+		// 2. Opportunity Depth Scale (15% weight): Logarithmic scale of active welcoming projects
+		welcomingCount := sCount + aCount
+		scaleFactor := math.Min(100.0, (math.Log10(float64(welcomingCount)+1.0)/math.Log10(2000.0))*100.0)
+
+		// Proprietary Composite Ecosystem Index (0-100 pts)
+		item.Score = math.Round((qualityDensity*0.85+scaleFactor*0.15)*10.0) / 10.0
+		item.WelcomingCount = welcomingCount
+
 		stats.LanguageBreakdown = append(stats.LanguageBreakdown, *item)
+	}
+
+	// Sort LanguageBreakdown by Score descending on backend
+	sort.Slice(stats.LanguageBreakdown, func(i, j int) bool {
+		return stats.LanguageBreakdown[i].Score > stats.LanguageBreakdown[j].Score
+	})
+
+	for i := range stats.LanguageBreakdown {
+		stats.LanguageBreakdown[i].Rank = i + 1
 	}
 
 	jsonBytes, err := json.Marshal(stats)
