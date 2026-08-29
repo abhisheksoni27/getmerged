@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, DM_Mono, Space_Grotesk } from "next/font/google";
+import { Inter, DM_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { PostHogInit } from "@/app/posthog-init";
 import { CookieBanner } from "@/components/CookieBanner";
@@ -7,9 +7,10 @@ import { SearchProvider } from "@/context/SearchContext";
 import { GlobalSearch } from "@/components/GlobalSearch";
 import { PhysicsCanvas } from "@/components/PhysicsCanvas";
 
-const geist = Geist({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-inter",
+  display: "swap",
 });
 
 const dmMono = DM_Mono({
@@ -88,7 +89,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${dmMono.variable} ${spaceGrotesk.variable} h-full antialiased dark`}>
+    <html lang="en" className={`${inter.variable} ${dmMono.variable} ${spaceGrotesk.variable} h-full antialiased dark`}>
       <head>
         <link
           rel="stylesheet"
