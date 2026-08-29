@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { Bookmark, GitPullRequest, Star, Scale, CircleDot, Check, Share2, Copy } from "lucide-react";
+import { Bookmark, GitPullRequest, Star, Scale, CircleDot, Check, Share2, Copy, Shield } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { Repo } from "@/types/opendoor";
@@ -34,7 +34,8 @@ export function RepoDetailHero({
   onWatchToggle,
   onGithubClick,
 }: RepoDetailHeroProps) {
-  const [copied, setCopied] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
+  const [copiedBadge, setCopiedBadge] = useState(false);
   const owner = repo?.owner || fullName.split("/")[0];
   const ownerAvatarUrl = `https://github.com/${owner}.png?size=64`;
   const roundedScore = Math.round(score);
@@ -43,9 +44,19 @@ export function RepoDetailHero({
   const handleCopyLink = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
+      setCopiedLink(true);
       posthog.capture("repo_share_link_copied", { repo_full_name: fullName });
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopiedLink(false), 2000);
+    }
+  };
+
+  const handleCopyBadge = () => {
+    if (typeof window !== "undefined") {
+      const badgeCode = `[![GetMerged C-Rank](https://getmerged.abhishekco.de/api/badge/${fullName})](https://getmerged.abhishekco.de/${fullName})`;
+      navigator.clipboard.writeText(badgeCode);
+      setCopiedBadge(true);
+      posthog.capture("repo_badge_copied", { repo_full_name: fullName, tier: rank });
+      setTimeout(() => setCopiedBadge(false), 2500);
     }
   };
 
@@ -129,13 +140,13 @@ export function RepoDetailHero({
 
         {/* Right: Actions */}
         <div className="flex flex-wrap items-center gap-3 shrink-0 lg:flex-col lg:items-end">
-          <div className="flex items-center gap-2.5 w-full lg:w-auto">
+          <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
             <button
               type="button"
               onClick={onWatchToggle}
               disabled={watchLoading}
               title={isWatching ? "Remove from watchlist" : "Add to watchlist"}
-              className={`flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-mono font-semibold rounded-xl border transition-all cursor-pointer ${
+              className={`flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-mono font-semibold rounded-xl border transition-all cursor-pointer ${
                 isWatching
                   ? "bg-orange-500/15 text-orange-400 border-orange-500/30 hover:bg-orange-500/25"
                   : "bg-white/[0.04] text-zinc-300 border-white/[0.1] hover:text-white hover:bg-white/[0.08]"
@@ -152,7 +163,17 @@ export function RepoDetailHero({
               className="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-mono font-semibold rounded-xl bg-white/[0.04] text-zinc-300 border border-white/[0.1] hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer"
             >
               <Share2 className="h-3.5 w-3.5 text-[#38bdf8]" />
-              <span className="hidden sm:inline">Share</span>
+              <span>Share</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleCopyBadge}
+              title="Copy Markdown badge embed code for GitHub README"
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-mono font-semibold rounded-xl bg-white/[0.04] text-zinc-300 border border-white/[0.1] hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer"
+            >
+              {copiedBadge ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Shield className="h-3.5 w-3.5 text-amber-400" />}
+              <span>{copiedBadge ? "Badge Copied!" : "Badge"}</span>
             </button>
 
             <button
@@ -161,15 +182,15 @@ export function RepoDetailHero({
               title="Copy link to scorecard"
               className="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-mono font-semibold rounded-xl bg-white/[0.04] text-zinc-300 border border-white/[0.1] hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer"
             >
-              {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-              <span>{copied ? "Copied" : "Link"}</span>
+              {copiedLink ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+              <span>{copiedLink ? "Copied" : "Link"}</span>
             </button>
 
             <button
               type="button"
               onClick={onGithubClick}
               title={`View ${fullName} on GitHub`}
-              className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-mono font-semibold rounded-xl glass-card text-white hover:bg-zinc-200 transition-all shadow-sm cursor-pointer"
+              className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-mono font-semibold rounded-xl glass-card text-white hover:bg-zinc-200 transition-all shadow-sm cursor-pointer"
             >
               <GitPullRequest className="h-3.5 w-3.5" />
               <span>GitHub</span>
