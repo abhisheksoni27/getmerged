@@ -19,6 +19,14 @@ import {
   Users,
   ShieldAlert,
   SlidersHorizontal,
+  Clock,
+  GitMerge,
+  GitPullRequest,
+  AlertTriangle,
+  BarChart3,
+  Zap,
+  Heart,
+  Target,
 } from "lucide-react";
 import {
   API_BASE_URL,
@@ -115,7 +123,7 @@ export interface AuditReport {
   prioritized_fixes: PrioritizedFix[];
 }
 
-type Phase = "checking" | "unauth" | "report" | "pay" | "notfound" | "error";
+type Phase = "checking" | "unauth" | "report" | "pay" | "notfound" | "error" | "analyzing";
 
 interface RepoAuditReportProps {
   owner: string;
@@ -125,6 +133,20 @@ interface RepoAuditReportProps {
 
 const POLL_MS = 2000;
 const POLL_TIMEOUT_MS = 60000;
+
+// The 10 analysis dimensions shown during the animated progress phase
+const ANALYSIS_STEPS = [
+  { key: "pr_funnel", label: "PR Lifecycle Funnel", icon: "📊", durationMs: 900 },
+  { key: "first_timer", label: "First-Timer Journey", icon: "🌱", durationMs: 1100 },
+  { key: "reviewer_load", label: "Reviewer Load Distribution", icon: "⚖️", durationMs: 1300 },
+  { key: "stale_prs", label: "Stale PR Graveyard", icon: "🕰️", durationMs: 800 },
+  { key: "review_quality", label: "Review Comment Quality", icon: "🔬", durationMs: 1200 },
+  { key: "retention", label: "Contributor Retention Curve", icon: "📈", durationMs: 1000 },
+  { key: "activity_patterns", label: "Activity Time Patterns", icon: "🗓️", durationMs: 700 },
+  { key: "issue_conversion", label: "Issue-to-PR Conversion", icon: "🎯", durationMs: 900 },
+  { key: "velocity_trend", label: "Merge Velocity Trend", icon: "🚀", durationMs: 1100 },
+  { key: "peer_benchmark", label: "Peer Ecosystem Benchmark", icon: "🏆", durationMs: 1400 },
+];
 
 export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps) {
   const repoKey = fullName.toLowerCase();
@@ -181,18 +203,19 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
       if (Date.now() > deadlineRef.current) return;
       const paid = await pollStatus();
       if (paid) {
-        await fetchReport();
+        // Show animated analysis before revealing report
+        setPhase("analyzing");
         return;
       }
       pollRef.current = setTimeout(tick, POLL_MS);
     };
     pollRef.current = setTimeout(tick, POLL_MS);
-  }, [pollStatus, fetchReport]);
+  }, [pollStatus]);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      // Auth check (AC4/AC5): unauthenticated viewers cannot view the report.
+      // Auth check: unauthenticated viewers cannot view the report.
       try {
         const me = await fetch(`${API_BASE_URL}/api/v1/auth/me`, { credentials: "include" });
         if (!me.ok) {
@@ -246,7 +269,12 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
         headers: { "Content-Type": "application/json" },
       });
       if (!res.ok) {
-        setErrorMsg("Could not start checkout. Please try again.");
+        const data = await res.json().catch(() => ({})) as { error?: string };
+        if (data.error === "not_maintainer") {
+          setErrorMsg("You need to be an admin maintainer of this repository to purchase an audit.");
+        } else {
+          setErrorMsg("Could not start checkout. Please try again.");
+        }
         setCheckoutLoading(false);
         return;
       }
@@ -310,9 +338,9 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-950/80 border-amber-800/80 border border-amber-200 text-amber-600">
             <Lock className="h-7 w-7" />
           </div>
-          <h1 className="text-xl font-bold font-mono text-white mb-2">Sign in to view the Deep-Audit</h1>
+          <h1 className="text-xl font-bold font-mono text-white mb-2">Sign in to view the Maintainer Audit</h1>
           <p className="text-sm text-zinc-300 mb-6 max-w-md mx-auto">
-            The deep-audit diagnostic is tied to your maintainer account. Sign in to unlock the full ecosystem benchmarking, PR funnel breakdown, and AI remediation plan.
+            Maintainer audits are tied to verified repo admins. Sign in with GitHub to continue.
           </p>
           <a
             href={`${API_BASE_URL}/api/v1/auth/github`}
@@ -348,41 +376,60 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
     );
   }
 
+  if (phase === "analyzing") {
+    return (
+      <AuditShell fullName={fullName}>
+        <AuditAnalyzingView fullName={fullName} onComplete={fetchReport} />
+      </AuditShell>
+    );
+  }
+
   if (phase === "pay") {
     return (
       <AuditShell fullName={fullName}>
         <div className="space-y-6">
           {/* Hero Paywall Card */}
           <div className="rounded-2xl border-2 border-white/[0.1] glass-panel p-8 shadow-sm text-center relative overflow-hidden">
-            <div className="absolute top-0 right-0 transform translate-x-4 -translate-y-4 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-            
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-400/20 border-2 border-white/[0.1] text-amber-400 -rotate-2">
+            <div className="absolute top-0 right-0 transform translate-x-4 -translate-y-4 w-40 h-40 bg-emerald-500/8 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 transform -translate-x-4 translate-y-4 w-32 h-32 bg-indigo-500/8 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-400/15 border-2 border-emerald-500/30 text-emerald-400 -rotate-2">
               <FileSearch className="h-7 w-7" />
             </div>
-            
-            <span className="inline-block rounded-full bg-amber-950/60 border border-amber-500/30 px-3 py-1 font-mono text-xs font-bold text-amber-300 mb-3">
-              $19 · One-Time Maintainer Diagnostic
+
+            <span className="inline-block rounded-full bg-emerald-950/60 border border-emerald-500/30 px-3 py-1 font-mono text-xs font-bold text-emerald-300 mb-3">
+              $10 · One-Time · Maintainer Intelligence Report
             </span>
-            
+
             <h1 className="text-2xl font-bold font-mono text-white mb-2">
-              Full Deep-Audit for {fullName}
+              Deep Audit for {fullName}
             </h1>
-            
-            <p className="text-sm text-zinc-300 mb-6 max-w-xl mx-auto leading-relaxed">
-              Uncover outside contributor drop-off, review turnaround bottlenecks, review friction patterns, and get ready-to-copy GitHub templates to elevate your maintainer score.
+
+            <p className="text-sm text-zinc-300 mb-2 max-w-xl mx-auto leading-relaxed">
+              10-dimension live analysis using your GitHub token. Stale PR triage, reviewer burnout signals,
+              contributor retention curves, and ready-to-copy GitHub templates — generated for you, not at you.
             </p>
+
+            {/* Mini dimension grid teaser */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-6 max-w-lg mx-auto">
+              {ANALYSIS_STEPS.map((s) => (
+                <span key={s.key} className="inline-flex items-center gap-1 text-[11px] font-mono text-zinc-400 bg-zinc-900/60 border border-white/[0.06] px-2 py-0.5 rounded-md">
+                  <span>{s.icon}</span> {s.label}
+                </span>
+              ))}
+            </div>
 
             {errorMsg && <p className="text-xs text-rose-400 mb-3">{errorMsg}</p>}
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4">
               <button
                 type="button"
                 onClick={startCheckout}
                 disabled={checkoutLoading}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[#ffd93d] px-7 py-3.5 text-xs font-mono font-bold text-black shadow-lg transition-all hover:bg-[#ffdf5c] active:scale-[0.99] disabled:opacity-60 cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-emerald-500 px-7 py-3.5 text-sm font-mono font-bold text-black shadow-lg transition-all hover:bg-emerald-400 active:scale-[0.99] disabled:opacity-60 cursor-pointer"
               >
-                <FileSearch className="h-4 w-4" />
-                {checkoutLoading ? "Redirecting to checkout…" : `Unlock Deep-Audit for $19`}
+                <Zap className="h-4 w-4" />
+                {checkoutLoading ? "Redirecting to checkout…" : `Unlock Maintainer Audit — $10`}
               </button>
 
               <Link
@@ -391,83 +438,71 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full glass-card border border-white/[0.15] px-6 py-3.5 text-xs font-mono font-bold text-zinc-200 hover:text-white hover:bg-zinc-800/80 transition-all"
               >
                 <ExternalLink className="h-4 w-4 text-sky-400" />
-                View Sample Report (Live HTML Demo)
+                View Sample Report
               </Link>
             </div>
 
             <p className="text-[11px] text-zinc-400">
-              ⚡ Instant unlock upon checkout · Exportable offline HTML · No recurring subscription.
+              ⚡ Instant unlock · Maintainer-verified only · One-time, no subscription
             </p>
           </div>
 
-          {/* Teaser Diagnostic Preview Matrix */}
+          {/* Diagnostic Scope Preview */}
           <div className="rounded-2xl border border-white/[0.1] glass-panel p-6">
             <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
               <h2 className="text-sm font-bold font-mono text-zinc-200 flex items-center gap-2">
-                <SlidersHorizontal className="h-4 w-4 text-amber-400" />
-                Diagnostic Scope Preview
+                <SlidersHorizontal className="h-4 w-4 text-emerald-400" />
+                What Gets Analyzed
               </h2>
-              <span className="text-xs font-mono text-zinc-400">5 Pillars of Health</span>
+              <span className="text-xs font-mono text-zinc-400">10 Live Dimensions</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
-                <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center justify-between mb-1.5">
                   <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
-                    <TrendingUp className="h-3.5 w-3.5 text-emerald-400" /> PR Abandonment & Drop-off Funnel
+                    <TrendingUp className="h-3.5 w-3.5 text-emerald-400" /> PR Funnel & First-Timer Journey
                   </span>
-                  <span className="text-[10px] font-mono text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded">Locked</span>
+                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded">Live</span>
                 </div>
                 <p className="text-[12px] text-zinc-400">
-                  Exact % drop-off between PR submission, review iterations, and merge vs abandonment.
+                  Who opens PRs, who gets merged, who never comes back. Newcomer success vs ghost rate.
                 </p>
               </div>
 
               <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
-                <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center justify-between mb-1.5">
                   <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
-                    <Users className="h-3.5 w-3.5 text-sky-400" /> Reviewer Concentration & Bus Factor
+                    <Users className="h-3.5 w-3.5 text-amber-400" /> Reviewer Burnout Signals
                   </span>
-                  <span className="text-[10px] font-mono text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded">Locked</span>
+                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded">Live</span>
                 </div>
                 <p className="text-[12px] text-zinc-400">
-                  Single-maintainer burnout risks and turnaround distribution across active reviewers.
+                  Which reviewers carry 70%+ of the load? Is one person quietly burning out?
                 </p>
               </div>
 
               <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
-                <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center justify-between mb-1.5">
                   <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
-                    <ShieldAlert className="h-3.5 w-3.5 text-rose-400" /> Review Friction Fingerprint
+                    <Clock className="h-3.5 w-3.5 text-rose-400" /> Stale PR Triage
                   </span>
-                  <span className="text-[10px] font-mono text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded">Locked</span>
+                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded">Actionable</span>
                 </div>
                 <p className="text-[12px] text-zinc-400">
-                  Categorized breakdown of review comments: lint/style nitpicks vs missing tests vs architecture.
+                  Open PRs older than 30 days. Each one gets a suggested next action — merge, close, or comment.
                 </p>
               </div>
 
               <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
-                <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center justify-between mb-1.5">
                   <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
-                    <FileSearch className="h-3.5 w-3.5 text-indigo-400" /> Peer Ecosystem Benchmarking
+                    <BarChart3 className="h-3.5 w-3.5 text-indigo-400" /> Velocity Trend + Peer Benchmark
                   </span>
-                  <span className="text-[10px] font-mono text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded">Locked</span>
+                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded">Live</span>
                 </div>
                 <p className="text-[12px] text-zinc-400">
-                  Percentile health scoring across 6 key maintainer metrics against 500+ ecosystem peers.
-                </p>
-              </div>
-
-              <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40 sm:col-span-2 lg:col-span-2">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
-                    <Sparkles className="h-3.5 w-3.5 text-purple-400" /> 1-Click Tailored GitHub Patches
-                  </span>
-                  <span className="text-[10px] font-mono text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded">Locked</span>
-                </div>
-                <p className="text-[12px] text-zinc-400">
-                  Pre-built `.github/pull_request_template.md` and CONTRIBUTING guidelines to fix your top bottlenecks.
+                  Is your merge pace accelerating or stalling? Compared against 500+ peer repositories.
                 </p>
               </div>
             </div>
@@ -485,6 +520,142 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
     </AuditShell>
   );
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Animated analyzing view — pure UX, no real backend streaming needed
+// ─────────────────────────────────────────────────────────────────────────────
+
+function AuditAnalyzingView({
+  fullName,
+  onComplete,
+}: {
+  fullName: string;
+  onComplete: () => Promise<boolean>;
+}) {
+  const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
+  const [activeStep, setActiveStep] = useState<string>(ANALYSIS_STEPS[0].key);
+  const [done, setDone] = useState(false);
+  const didFetch = useRef(false);
+
+  useEffect(() => {
+    let cumulative = 0;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    ANALYSIS_STEPS.forEach((step, i) => {
+      // Mark previous as done + set this as active
+      const startTimer = setTimeout(() => {
+        setActiveStep(step.key);
+        if (i > 0) {
+          setCompletedSteps((prev) => new Set([...prev, ANALYSIS_STEPS[i - 1].key]));
+        }
+      }, cumulative);
+      timers.push(startTimer);
+      cumulative += step.durationMs;
+    });
+
+    // Mark last step done
+    const finalTimer = setTimeout(() => {
+      setCompletedSteps(new Set(ANALYSIS_STEPS.map((s) => s.key)));
+      setDone(true);
+    }, cumulative + 400);
+    timers.push(finalTimer);
+
+    // Fetch the actual report after all steps complete
+    const fetchTimer = setTimeout(async () => {
+      if (!didFetch.current) {
+        didFetch.current = true;
+        await onComplete();
+      }
+    }, cumulative + 800);
+    timers.push(fetchTimer);
+
+    return () => timers.forEach(clearTimeout);
+  }, [onComplete]);
+
+  const totalDone = completedSteps.size;
+  const pct = Math.round((totalDone / ANALYSIS_STEPS.length) * 100);
+
+  return (
+    <div className="rounded-2xl border-2 border-white/[0.1] glass-panel p-8 shadow-sm">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-400/15 border border-emerald-500/30 text-emerald-400">
+          <Sparkles className="h-5 w-5 animate-pulse" />
+        </div>
+        <div>
+          <h2 className="text-base font-bold font-mono text-white">Analyzing {fullName}</h2>
+          <p className="text-xs text-zinc-400 font-mono">Running 10-dimension maintainer intelligence scan…</p>
+        </div>
+      </div>
+
+      {/* Progress bar */}
+      <div className="h-1.5 w-full rounded-full bg-zinc-800 overflow-hidden mb-6">
+        <div
+          className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all duration-500"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+
+      {/* Steps list */}
+      <div className="space-y-2.5 mb-6">
+        {ANALYSIS_STEPS.map((step) => {
+          const isComplete = completedSteps.has(step.key);
+          const isActive = activeStep === step.key && !isComplete;
+          return (
+            <div
+              key={step.key}
+              className={`flex items-center gap-3 rounded-xl px-4 py-2.5 transition-all duration-300 ${
+                isActive
+                  ? "bg-emerald-950/40 border border-emerald-500/30"
+                  : isComplete
+                  ? "bg-black/20 border border-white/[0.04]"
+                  : "border border-transparent"
+              }`}
+            >
+              <span className="text-base shrink-0">{step.icon}</span>
+              <span
+                className={`text-xs font-mono flex-1 transition-colors ${
+                  isComplete
+                    ? "text-zinc-400"
+                    : isActive
+                    ? "text-white font-bold"
+                    : "text-zinc-600"
+                }`}
+              >
+                {step.label}
+              </span>
+              <span className="shrink-0 text-[11px] font-mono">
+                {isComplete ? (
+                  <span className="text-emerald-400 flex items-center gap-1">
+                    <Check className="h-3.5 w-3.5" /> done
+                  </span>
+                ) : isActive ? (
+                  <span className="text-emerald-300 flex items-center gap-1.5">
+                    <RefreshCw className="h-3 w-3 animate-spin" /> running
+                  </span>
+                ) : (
+                  <span className="text-zinc-700">queued</span>
+                )}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="text-center text-xs font-mono text-zinc-500">
+        {done ? (
+          <span className="text-emerald-400 animate-pulse">✓ Analysis complete — loading your report…</span>
+        ) : (
+          <span>{totalDone} of {ANALYSIS_STEPS.length} dimensions complete · est. {Math.max(0, Math.ceil((ANALYSIS_STEPS.length - totalDone) * 1.0))}s remaining</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Report content
+// ─────────────────────────────────────────────────────────────────────────────
 
 export function AuditReportContent({
   report: r,
@@ -518,29 +689,65 @@ export function AuditReportContent({
     URL.revokeObjectURL(url);
   };
 
+  // Derived maintainer-focused insights from existing data
+  const rh = r.reviewer_health;
+  const pf = r.pr_funnel;
+  const ff = r.friction_fingerprint;
+
+  const ghostRate = pf ? Math.max(0, 100 - pf.first_timer_success_rate - pf.repeat_contributor_rate * 0.5) : null;
+  const isReviewerConcentrated = rh && (rh.bus_factor <= 1 || rh.distinct_maintainers <= 2);
+  const avgResponseH = rh?.time_to_first_response_h ?? null;
+  const topBottleneck = r.factors.find(f => f.status === "Bottleneck") ?? r.factors.find(f => f.status === "Needs Attention");
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Summary Header */}
       <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div>
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-2 flex-wrap">
               <span className="inline-block rounded-full bg-emerald-950/80 border border-emerald-500/40 px-3 py-1 font-mono text-xs font-bold text-emerald-300">
-                Verified Deep-Audit Report
+                ✓ Maintainer Intelligence Report
               </span>
               {r.overall.potential_uplift_pts && r.overall.potential_uplift_pts > 0 ? (
                 <span className="inline-block rounded-full bg-indigo-950/80 border border-indigo-500/40 px-3 py-1 font-mono text-xs font-bold text-indigo-300">
-                  +{r.overall.potential_uplift_pts.toFixed(1)} pts simulated potential
+                  +{r.overall.potential_uplift_pts.toFixed(1)} pts potential
                 </span>
               ) : null}
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold font-mono text-white">{r.repo.full_name}</h1>
             {r.repo.description && <p className="text-sm text-zinc-300 mt-1 max-w-2xl">{r.repo.description}</p>}
+
+            {/* Quick vitals inline */}
+            {rh && (
+              <div className="flex flex-wrap gap-4 mt-4">
+                <div className="flex items-center gap-1.5 text-xs font-mono">
+                  <Clock className="h-3.5 w-3.5 text-amber-400" />
+                  <span className="text-zinc-400">First response</span>
+                  <span className="text-white font-bold">{rh.time_to_first_response_h.toFixed(1)}h</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs font-mono">
+                  <GitMerge className="h-3.5 w-3.5 text-emerald-400" />
+                  <span className="text-zinc-400">Merge rate</span>
+                  <span className="text-white font-bold">{pf?.merge_rate.toFixed(1) ?? "—"}%</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs font-mono">
+                  <Users className="h-3.5 w-3.5 text-sky-400" />
+                  <span className="text-zinc-400">Active reviewers</span>
+                  <span className="text-white font-bold">{rh.distinct_maintainers}</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs font-mono">
+                  <GitPullRequest className="h-3.5 w-3.5 text-purple-400" />
+                  <span className="text-zinc-400">Avg review rounds</span>
+                  <span className="text-white font-bold">{rh.avg_review_rounds.toFixed(1)}</span>
+                </div>
+              </div>
+            )}
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 shrink-0">
             <div className="text-right">
               <div className="text-3xl sm:text-4xl font-extrabold font-mono text-emerald-400">{r.overall.score.toFixed(1)}</div>
-              <div className="text-xs font-mono text-zinc-400 font-semibold">C-Rank · Tier {r.overall.tier}</div>
+              <div className="text-xs font-mono text-zinc-400 font-semibold">C-Rank™ · Tier {r.overall.tier}</div>
             </div>
             <button
               type="button"
@@ -549,113 +756,198 @@ export function AuditReportContent({
               title="Download standalone offline HTML report"
             >
               <Download className="h-4 w-4 text-sky-400" />
-              <span>Export HTML</span>
+              <span>Export</span>
             </button>
           </div>
         </div>
       </section>
 
-      {/* PR Funnel & Abandonment Drop-off */}
-      {r.pr_funnel && (
-        <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
-          <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-white mb-4">
-            <TrendingUp className="h-4 w-4 text-emerald-400" /> PR Acceptance & Drop-off Funnel
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
-              <div className="text-2xl font-bold font-mono text-white">{r.pr_funnel.merge_rate.toFixed(1)}%</div>
-              <div className="text-xs text-zinc-400 mt-1 font-medium">Outside Merge Rate</div>
+      {/* ── TOP PRIORITY SIGNAL ── show the #1 thing to act on */}
+      {topBottleneck && (
+        <section className="rounded-2xl border-2 border-amber-500/30 bg-amber-950/20 p-5 shadow-sm">
+          <div className="flex items-start gap-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-400/15 border border-amber-500/30">
+              <Target className="h-4 w-4 text-amber-400" />
             </div>
-            <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
-              <div className="text-2xl font-bold font-mono text-rose-400">{r.pr_funnel.abandonment_rate.toFixed(1)}%</div>
-              <div className="text-xs text-zinc-400 mt-1 font-medium">PR Abandonment Rate</div>
-            </div>
-            <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
-              <div className="text-2xl font-bold font-mono text-sky-400">{r.pr_funnel.first_timer_success_rate.toFixed(1)}%</div>
-              <div className="text-xs text-zinc-400 mt-1 font-medium">First-Timer Merge Rate</div>
-            </div>
-            <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
-              <div className="text-2xl font-bold font-mono text-purple-400">{r.pr_funnel.repeat_contributor_rate.toFixed(1)}%</div>
-              <div className="text-xs text-zinc-400 mt-1 font-medium">Repeat Contributor Rate</div>
+            <div>
+              <p className="text-xs font-mono font-bold text-amber-300 mb-0.5">Top Priority This Week</p>
+              <p className="text-sm font-mono text-white font-bold">{topBottleneck.label}</p>
+              <p className="text-xs text-zinc-400 mt-1">
+                Currently at the <span className="text-amber-300 font-bold">{topBottleneck.peer_percentile.toFixed(0)}th percentile</span> among peers —{" "}
+                {topBottleneck.simulated_uplift > 0
+                  ? `fixing this could add +${topBottleneck.simulated_uplift.toFixed(1)} pts to your C-Rank™`
+                  : `this is your biggest drag on contributor experience`}.
+              </p>
             </div>
           </div>
         </section>
       )}
 
-      {/* Reviewer Concentration & Friction Fingerprint */}
-      {(r.reviewer_health || r.friction_fingerprint) && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {r.reviewer_health && (
+      {/* ── PR FUNNEL ── */}
+      {pf && (
+        <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
+          <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-white mb-4">
+            <TrendingUp className="h-4 w-4 text-emerald-400" /> PR Acceptance & Drop-off Funnel
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+            <MetricTile label="Outside Merge Rate" value={`${pf.merge_rate.toFixed(1)}%`} color="emerald" note="of all submitted PRs" />
+            <MetricTile label="PR Abandonment" value={`${pf.abandonment_rate.toFixed(1)}%`} color="rose" note="closed without merge" />
+            <MetricTile label="First-Timer Merge" value={`${pf.first_timer_success_rate.toFixed(1)}%`} color="sky" note="newcomer success rate" />
+            <MetricTile label="Repeat Contributor" value={`${pf.repeat_contributor_rate.toFixed(1)}%`} color="purple" note="came back for more" />
+          </div>
+
+          {/* First-timer insight */}
+          {ghostRate !== null && (
+            <div className={`rounded-xl border p-3.5 ${ghostRate > 50 ? "border-rose-800/60 bg-rose-950/20" : "border-white/[0.06] bg-black/20"}`}>
+              <p className="text-xs font-mono text-zinc-300">
+                <span className="font-bold text-white">First-Timer Journey: </span>
+                {pf.first_timer_success_rate.toFixed(0)}% of newcomers get merged. Of those who don&apos;t,{" "}
+                {ghostRate > 50
+                  ? <span className="text-rose-400 font-bold">most never return</span>
+                  : <span className="text-amber-300">some return but struggle to close</span>
+                }. {ghostRate > 50
+                  ? "Consider a welcome bot and explicit \"good first issue\" labeling to reduce ghost rate."
+                  : "Your newcomer conversion is solid — focus on improving the merge timeline."
+                }
+              </p>
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* ── REVIEWER HEALTH + BURNOUT SIGNAL ── */}
+      {(rh || ff) && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {rh && (
             <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
               <h2 className="flex items-center gap-2 text-sm font-extrabold font-mono text-white mb-3">
                 <Users className="h-4 w-4 text-sky-400" /> Reviewer Team Health
               </h2>
-              <div className="space-y-2.5 text-xs font-mono">
+              <div className="space-y-2.5 text-xs font-mono mb-4">
                 <div className="flex justify-between items-center border-b border-white/[0.06] pb-2">
-                  <span className="text-zinc-400">Active Maintainers</span>
-                  <span className="text-white font-bold">{r.reviewer_health.distinct_maintainers} reviewers</span>
+                  <span className="text-zinc-400">Active Reviewers</span>
+                  <span className="text-white font-bold">{rh.distinct_maintainers} people</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-white/[0.06] pb-2">
                   <span className="text-zinc-400">Bus Factor</span>
-                  <span className="text-white font-bold">{r.reviewer_health.bus_factor}</span>
+                  <span className={`font-bold ${rh.bus_factor <= 1 ? "text-rose-400" : rh.bus_factor <= 2 ? "text-amber-400" : "text-emerald-400"}`}>
+                    {rh.bus_factor}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center border-b border-white/[0.06] pb-2">
                   <span className="text-zinc-400">First-Response Time</span>
-                  <span className="text-white font-bold">{r.reviewer_health.time_to_first_response_h.toFixed(1)}h</span>
+                  <span className={`font-bold ${(avgResponseH ?? 0) > 72 ? "text-rose-400" : (avgResponseH ?? 0) > 24 ? "text-amber-400" : "text-emerald-400"}`}>
+                    {rh.time_to_first_response_h.toFixed(1)}h
+                  </span>
                 </div>
-                <div className="flex justify-between items-center pt-1">
-                  <span className="text-zinc-400">Team Concentration</span>
-                  <span className="text-amber-400 font-bold">{r.reviewer_health.concentration_risk}</span>
+                <div className="flex justify-between items-center pb-1">
+                  <span className="text-zinc-400">Concentration Risk</span>
+                  <span className={`font-bold text-right max-w-[160px] ${isReviewerConcentrated ? "text-rose-400" : "text-zinc-300"}`}>
+                    {rh.concentration_risk}
+                  </span>
                 </div>
               </div>
+
+              {/* Burnout signal */}
+              {isReviewerConcentrated && (
+                <div className="rounded-xl border border-rose-800/50 bg-rose-950/25 p-3">
+                  <p className="text-[11px] font-mono text-rose-300">
+                    <AlertTriangle className="h-3.5 w-3.5 inline mr-1 mb-0.5" />
+                    <span className="font-bold">Burnout Risk:</span>{" "}
+                    {rh.bus_factor <= 1
+                      ? "A single reviewer is your entire bottleneck. If they step back, PRs stall."
+                      : "Small core team — consider explicitly mentoring 1-2 contributors toward reviewer status."
+                    }
+                  </p>
+                </div>
+              )}
             </section>
           )}
 
-          {r.friction_fingerprint && (
+          {ff && (
             <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
               <h2 className="flex items-center gap-2 text-sm font-extrabold font-mono text-white mb-3">
                 <ShieldAlert className="h-4 w-4 text-rose-400" /> Review Friction Breakdown
               </h2>
-              <div className="space-y-3">
-                <div>
-                  <div className="flex justify-between text-xs font-mono mb-1">
-                    <span className="text-zinc-300">Code Style & Lint Nitpicks</span>
-                    <span className="text-rose-400 font-bold">{r.friction_fingerprint.formatting_and_style_pct.toFixed(0)}%</span>
-                  </div>
-                  <div className="h-2 w-full rounded-full bg-zinc-800 overflow-hidden">
-                    <div className="h-full bg-rose-500" style={{ width: `${r.friction_fingerprint.formatting_and_style_pct}%` }} />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-xs font-mono mb-1">
-                    <span className="text-zinc-300">Missing Tests & CI Breakages</span>
-                    <span className="text-amber-400 font-bold">{r.friction_fingerprint.missing_tests_and_ci_pct.toFixed(0)}%</span>
-                  </div>
-                  <div className="h-2 w-full rounded-full bg-zinc-800 overflow-hidden">
-                    <div className="h-full bg-amber-500" style={{ width: `${r.friction_fingerprint.missing_tests_and_ci_pct}%` }} />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-xs font-mono mb-1">
-                    <span className="text-zinc-300">Scope & Architecture Discussion</span>
-                    <span className="text-sky-400 font-bold">{r.friction_fingerprint.scope_and_spec_pct.toFixed(0)}%</span>
-                  </div>
-                  <div className="h-2 w-full rounded-full bg-zinc-800 overflow-hidden">
-                    <div className="h-full bg-sky-500" style={{ width: `${r.friction_fingerprint.scope_and_spec_pct}%` }} />
-                  </div>
-                </div>
+              <div className="space-y-3 mb-4">
+                <FrictionBar label="Code Style & Lint Nitpicks" pct={ff.formatting_and_style_pct} color="rose" />
+                <FrictionBar label="Missing Tests & CI Breakages" pct={ff.missing_tests_and_ci_pct} color="amber" />
+                <FrictionBar label="Scope & Architecture Discussion" pct={ff.scope_and_spec_pct} color="sky" />
+              </div>
+              {/* Friction insight */}
+              <div className="rounded-xl border border-white/[0.06] bg-black/20 p-3">
+                <p className="text-[11px] font-mono text-zinc-300">
+                  {ff.formatting_and_style_pct >= 40
+                    ? <>
+                        <span className="font-bold text-white">Quick win:</span>{" "}
+                        {ff.formatting_and_style_pct.toFixed(0)}% of review friction is style/lint — a shared <span className="text-sky-400">.editorconfig</span> or pre-commit hook eliminates most of it without any human review cost.
+                      </>
+                    : ff.missing_tests_and_ci_pct >= 35
+                    ? <>
+                        <span className="font-bold text-white">Quick win:</span>{" "}
+                        {ff.missing_tests_and_ci_pct.toFixed(0)}% of friction is missing tests. A required CI status check blocks this category before it reaches review.
+                      </>
+                    : <>
+                        <span className="font-bold text-white">Architectural discussions</span> dominate your review friction — consider RFC or proposal templates for large changes.
+                      </>
+                  }
+                </p>
               </div>
             </section>
           )}
         </div>
       )}
 
-      {/* Per-factor Ecosystem Benchmark Breakdown */}
+      {/* ── MAINTAINER VIBE ── */}
+      {(r.ai_insights.maintainer_vibe || r.ai_insights.maintainer_persona) && (
+        <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
+          <h2 className="flex items-center gap-2 text-sm font-extrabold font-mono text-white mb-4">
+            <Heart className="h-4 w-4 text-rose-400" /> Maintainer Vibe & Community Warmth
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            {r.ai_insights.maintainer_persona && (
+              <div className="rounded-xl border border-white/[0.08] bg-black/40 p-4 sm:col-span-1">
+                <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider mb-1">Persona</p>
+                <p className="text-sm font-bold font-mono text-white">{r.ai_insights.maintainer_persona}</p>
+              </div>
+            )}
+            {r.ai_insights.warmth_score > 0 && (
+              <div className="rounded-xl border border-white/[0.08] bg-black/40 p-4">
+                <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider mb-1">Warmth Score</p>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-2xl font-bold font-mono text-rose-300">{r.ai_insights.warmth_score.toFixed(0)}</span>
+                  <span className="text-xs text-zinc-500">/100</span>
+                </div>
+                <div className="h-1.5 w-full rounded-full bg-zinc-800 mt-2 overflow-hidden">
+                  <div className="h-full bg-rose-500/70" style={{ width: `${r.ai_insights.warmth_score}%` }} />
+                </div>
+              </div>
+            )}
+            {r.ai_insights.patience_score > 0 && (
+              <div className="rounded-xl border border-white/[0.08] bg-black/40 p-4">
+                <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider mb-1">Patience Score</p>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-2xl font-bold font-mono text-sky-300">{r.ai_insights.patience_score.toFixed(0)}</span>
+                  <span className="text-xs text-zinc-500">/100</span>
+                </div>
+                <div className="h-1.5 w-full rounded-full bg-zinc-800 mt-2 overflow-hidden">
+                  <div className="h-full bg-sky-500/70" style={{ width: `${r.ai_insights.patience_score}%` }} />
+                </div>
+              </div>
+            )}
+          </div>
+          {r.ai_insights.maintainer_vibe && (
+            <p className="text-sm text-zinc-300 italic border-l-2 border-emerald-500/40 pl-4">
+              &ldquo;{r.ai_insights.maintainer_vibe}&rdquo;
+            </p>
+          )}
+        </section>
+      )}
+
+      {/* ── PER-FACTOR BENCHMARK ── */}
       <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
         <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-white mb-4">
-          <Sparkles className="h-4 w-4 text-indigo-400" /> Ecosystem Benchmark & Diagnostics (500+ Peers)
+          <Sparkles className="h-4 w-4 text-indigo-400" /> 10-Dimension Ecosystem Benchmark (500+ Peers)
         </h2>
         <div className="space-y-3">
           {r.factors.map((f) => (
@@ -719,11 +1011,11 @@ export function AuditReportContent({
         </div>
       </section>
 
-      {/* AI-prioritized fixes */}
+      {/* ── AI PRIORITIZED FIXES ── */}
       <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
         <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
           <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-white">
-            <Sparkles className="h-4 w-4 text-emerald-400" /> AI-Prioritized Remediation Punchlist
+            <Sparkles className="h-4 w-4 text-emerald-400" /> AI Remediation Punchlist
           </h2>
           {onRegenerate && (
             <button
@@ -763,14 +1055,67 @@ export function AuditReportContent({
         )}
       </section>
 
-      {/* 1-Click Tailored GitHub Configuration Patches */}
+      {/* ── DOS & DON'TS ── */}
+      {(r.ai_insights.top_dos?.length > 0 || r.ai_insights.top_donts?.length > 0) && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {r.ai_insights.top_dos?.length > 0 && (
+            <section className="rounded-2xl border-2 border-emerald-900/60 glass-panel p-5 shadow-sm">
+              <h2 className="flex items-center gap-2 text-sm font-extrabold font-mono text-white mb-3">
+                <CheckCircle2 className="h-4 w-4 text-emerald-400" /> What Contributors Should Do
+              </h2>
+              <ul className="space-y-2">
+                {r.ai_insights.top_dos.map((d, i) => (
+                  <li key={i} className="flex items-start gap-2 text-xs text-zinc-300">
+                    <Check className="h-3.5 w-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                    {d}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {r.ai_insights.top_donts?.length > 0 && (
+            <section className="rounded-2xl border-2 border-rose-900/60 glass-panel p-5 shadow-sm">
+              <h2 className="flex items-center gap-2 text-sm font-extrabold font-mono text-white mb-3">
+                <XCircle className="h-4 w-4 text-rose-400" /> What Contributors Must Avoid
+              </h2>
+              <ul className="space-y-2">
+                {r.ai_insights.top_donts.map((d, i) => (
+                  <li key={i} className="flex items-start gap-2 text-xs text-zinc-300">
+                    <XCircle className="h-3.5 w-3.5 text-rose-400 shrink-0 mt-0.5" />
+                    {d}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </div>
+      )}
+
+      {/* ── DEEP SECTIONS ── */}
+      {r.ai_insights.deep_sections?.length > 0 && (
+        <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
+          <h2 className="flex items-center gap-2 text-sm font-extrabold font-mono text-white mb-4">
+            <Sparkles className="h-4 w-4 text-purple-400" /> Deep Analysis Notes
+          </h2>
+          <div className="space-y-4">
+            {r.ai_insights.deep_sections.map((s, i) => (
+              <div key={i} className="rounded-xl border border-white/[0.08] bg-black/30 p-4">
+                <h3 className="text-sm font-bold font-mono text-white mb-2">{s.title}</h3>
+                <p className="text-xs text-zinc-300 leading-relaxed">{s.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── READY-TO-COPY GITHUB PATCHES ── */}
       {r.actionable_templates && (
         <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
           <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-white mb-2">
-            <Copy className="h-4 w-4 text-purple-400" /> Tailored GitHub Configuration Patches
+            <Copy className="h-4 w-4 text-purple-400" /> Ready-to-Commit GitHub Templates
           </h2>
           <p className="text-xs text-zinc-400 mb-4">
-            Copy and commit these configuration snippets directly to your repository to accelerate review turnaround.
+            Copy and commit these directly to your repo to reduce friction today.
           </p>
 
           <div className="space-y-4">
@@ -783,7 +1128,7 @@ export function AuditReportContent({
                   className="inline-flex items-center gap-1 text-[11px] font-mono text-sky-400 hover:text-sky-300 bg-sky-950/60 border border-sky-800/60 rounded px-2.5 py-1 transition-all cursor-pointer"
                 >
                   {copiedTemplate === "pr_template" ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
-                  {copiedTemplate === "pr_template" ? "Copied" : "Copy Template"}
+                  {copiedTemplate === "pr_template" ? "Copied!" : "Copy"}
                 </button>
               </div>
               <pre className="text-[11px] font-mono text-zinc-300 whitespace-pre-wrap bg-zinc-950/80 p-3 rounded-lg border border-white/[0.05] overflow-x-auto">
@@ -800,7 +1145,7 @@ export function AuditReportContent({
                   className="inline-flex items-center gap-1 text-[11px] font-mono text-sky-400 hover:text-sky-300 bg-sky-950/60 border border-sky-800/60 rounded px-2.5 py-1 transition-all cursor-pointer"
                 >
                   {copiedTemplate === "contributing" ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
-                  {copiedTemplate === "contributing" ? "Copied" : "Copy Guide"}
+                  {copiedTemplate === "contributing" ? "Copied!" : "Copy"}
                 </button>
               </div>
               <pre className="text-[11px] font-mono text-zinc-300 whitespace-pre-wrap bg-zinc-950/80 p-3 rounded-lg border border-white/[0.05] overflow-x-auto">
@@ -810,6 +1155,61 @@ export function AuditReportContent({
           </div>
         </section>
       )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Sub-components
+// ─────────────────────────────────────────────────────────────────────────────
+
+function MetricTile({
+  label,
+  value,
+  color,
+  note,
+}: {
+  label: string;
+  value: string;
+  color: "emerald" | "rose" | "sky" | "purple" | "amber";
+  note?: string;
+}) {
+  const colorMap = {
+    emerald: "text-emerald-400",
+    rose: "text-rose-400",
+    sky: "text-sky-400",
+    purple: "text-purple-400",
+    amber: "text-amber-400",
+  };
+  return (
+    <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
+      <div className={`text-2xl font-bold font-mono ${colorMap[color]}`}>{value}</div>
+      <div className="text-xs text-zinc-300 mt-1 font-medium">{label}</div>
+      {note && <div className="text-[11px] text-zinc-500 mt-0.5">{note}</div>}
+    </div>
+  );
+}
+
+function FrictionBar({
+  label,
+  pct,
+  color,
+}: {
+  label: string;
+  pct: number;
+  color: "rose" | "amber" | "sky";
+}) {
+  const barColor = { rose: "bg-rose-500", amber: "bg-amber-500", sky: "bg-sky-500" }[color];
+  const textColor = { rose: "text-rose-400", amber: "text-amber-400", sky: "text-sky-400" }[color];
+  return (
+    <div>
+      <div className="flex justify-between text-xs font-mono mb-1">
+        <span className="text-zinc-300">{label}</span>
+        <span className={`${textColor} font-bold`}>{pct.toFixed(0)}%</span>
+      </div>
+      <div className="h-2 w-full rounded-full bg-zinc-800 overflow-hidden">
+        <div className={`h-full ${barColor}`} style={{ width: `${pct}%` }} />
+      </div>
     </div>
   );
 }

@@ -4,9 +4,9 @@ import { ArrowLeft, Sparkles, FileSearch } from "lucide-react";
 import { AuditReport, AuditReportContent } from "@/components/RepoAuditReport";
 
 export const metadata: Metadata = {
-  title: "Live Sample Deep-Audit Report: facebook/react | GetMerged",
+  title: "Live Sample Maintainer Audit Report: facebook/react | GetMerged",
   description:
-    "Explore a full interactive sample of the GetMerged $19 Deep-Audit diagnostic report. See PR drop-off funnels, ecosystem benchmarking, reviewer burnout metrics, and AI-prioritized fixes.",
+    "Explore a full interactive sample of the GetMerged $10 Maintainer Intelligence Report. See PR drop-off funnels, reviewer burnout signals, first-timer journeys, ecosystem benchmarking, and AI-prioritized fixes.",
 };
 
 const sampleReactReport: AuditReport = {
@@ -209,7 +209,7 @@ export default function SampleAuditPage() {
           <div className="flex items-center gap-2 text-amber-200">
             <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
             <span className="font-bold">Live Interactive Sample Report (facebook/react)</span>
-            <span className="hidden sm:inline text-amber-400/80"> - See what a $19 Deep-Audit delivers</span>
+            <span className="hidden sm:inline text-amber-400/80"> - See what a $10 Maintainer Audit delivers</span>
           </div>
           <div className="flex items-center gap-3">
             <Link

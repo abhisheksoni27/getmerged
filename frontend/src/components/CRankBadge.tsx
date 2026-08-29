@@ -87,21 +87,22 @@ export function CRankBadge({ rank = "A", size = "md", showLabel = true, classNam
   const normalizedRank = rank?.toUpperCase() || "A";
 
   const sizeClasses = {
-    sm: "px-3 py-1 text-xs gap-2",
-    md: "px-3.5 py-1.5 text-xs gap-2.5",
-    lg: "px-4 py-2 text-sm gap-3",
+    sm: "px-2.5 py-0.5 text-xs gap-1.5",
+    md: "px-3 py-1 text-xs gap-2",
+    lg: "px-4 py-2 text-sm gap-2.5",
   }[size];
 
   return (
     <span
-      className={`inline-flex items-center rounded-full font-mono font-bold border backdrop-blur-xl transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] cursor-default select-none ${grade.bgClass} ${grade.textClass} ${grade.borderClass} ${sizeClasses} ${className}`}
+      className={`inline-flex items-center whitespace-nowrap shrink-0 rounded-full font-mono font-bold border backdrop-blur-xl transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] cursor-default select-none ${grade.bgClass} ${grade.textClass} ${grade.borderClass} ${sizeClasses} ${className}`}
       title={`C-Rank Grade ${normalizedRank} (${grade.title})`}
     >
-      <span className={`h-2 w-2 rounded-full animate-pulse ${grade.dotClass}`} />
-      <span className="font-extrabold tracking-tight">{normalizedRank}</span>
+      <span className={`h-1.5 w-1.5 rounded-full shrink-0 animate-pulse ${grade.dotClass}`} />
+      <span className="font-extrabold tracking-tight shrink-0">{normalizedRank}</span>
       {showLabel && (
-        <span className="font-sans font-semibold tracking-normal text-white">
-          • {grade.label}
+        <span className="font-sans font-semibold tracking-normal text-white whitespace-nowrap inline-flex items-center gap-1">
+          <span>•</span>
+          <span>{grade.label}</span>
         </span>
       )}
     </span>
