@@ -42,6 +42,9 @@ export interface LanguageTierBreakdown {
   total: number;
   tier_map: Record<string, number>;
   avg_merge_rate?: number;
+  score?: number;
+  welcoming_count?: number;
+  rank?: number;
 }
 
 export interface MacroStats {
