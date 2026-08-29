@@ -64,16 +64,32 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             className="flex items-center gap-2.5 group shrink-0"
           >
             <motion.div
-              className="relative h-8 w-8 rounded-lg bg-[#222831] border border-white/[0.12] flex items-center justify-center shadow-xs"
+              className="shrink-0"
               whileHover={reduceMotion ? undefined : { scale: 1.05 }}
               transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
               aria-hidden="true"
             >
-              <span className="font-space text-xs font-bold text-white tracking-tight leading-none">GM</span>
-              <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-[#dfd0b8] ring-1 ring-[#222831] shadow-[0_0_4px_rgba(223,208,184,0.6)]" />
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="shrink-0"
+              >
+                <rect width="32" height="32" rx="8" fill="#0a0f0d" stroke="rgba(16,185,129,0.3)" strokeWidth="1" />
+                <rect x="5" y="9" width="6" height="3" rx="0.5" fill="#10b981" />
+                <rect x="12" y="11" width="4" height="3" rx="0.5" fill="#34d399" />
+                <rect x="5" y="20" width="6" height="3" rx="0.5" fill="#ff3b30" />
+                <rect x="12" y="18" width="4" height="3" rx="0.5" fill="#ff9500" />
+                <rect x="17" y="13.5" width="7" height="5" rx="0.75" fill="#10b981" />
+                <rect x="25" y="15" width="2" height="2" fill="#ffffff" />
+                <rect x="19" y="9.5" width="2" height="2" fill="#38bdf8" />
+                <rect x="19" y="20.5" width="2" height="2" fill="#f59e0b" />
+              </svg>
             </motion.div>
             <span className="font-space text-sm font-bold tracking-tight text-white group-hover:text-white transition-colors">
-              GetMerged
+              Get<span className="text-[#10b981]">Merged</span>
             </span>
           </Link>
 
