@@ -57,7 +57,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
     <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-[#0a0a0a]/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Brand Logo & Navigation */}
-        <div className="flex items-center gap-8 min-w-0 shrink-0">
+        <div className="flex items-center gap-4 lg:gap-6 min-w-0 shrink-0">
           <Link
             href="/"
             title="GetMerged - Find Welcoming Open Source Repositories"
@@ -76,7 +76,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             </span>
           </Link>
 
-          <nav className="hidden xl:flex items-center gap-6 text-xs font-sans font-medium text-[#a3a3a3] shrink-0">
+          <nav className="hidden xl:flex items-center gap-4 xl:gap-5 text-xs font-sans font-medium text-[#a3a3a3] shrink-0">
             <Link href="/repos" title="Explore All Open Source Repositories" className="hover:text-white transition-colors">
               Repositories
             </Link>
@@ -101,14 +101,14 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
 
         {/* Floating Search Button */}
         {isSearchVisible && (
-          <div className="flex-1 min-w-0 max-w-xs sm:max-w-sm mx-1 sm:mx-2">
+          <div className="flex-1 min-w-[160px] sm:min-w-[200px] max-w-[280px] sm:max-w-xs mx-2 sm:mx-3 shrink-0 sm:shrink">
             <button
               type="button"
               onClick={handleOpenSearch}
               aria-label="Search repositories"
-              className="w-full relative flex items-center justify-between h-8 sm:h-9 rounded-lg border border-white/[0.08] bg-[#141414] hover:border-white/[0.16] hover:bg-[#1c1c1c] px-2.5 sm:px-3 transition-all cursor-pointer group text-left"
+              className="w-full relative flex items-center justify-between h-9 rounded-lg border border-white/[0.08] bg-[#141414] hover:border-white/[0.16] hover:bg-[#1c1c1c] px-3 transition-all cursor-pointer group text-left"
             >
-              <div className="flex items-center gap-1.5 sm:gap-2 overflow-hidden flex-1 min-w-0 mr-1 sm:mr-2">
+              <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">
                 <Search className="h-3.5 w-3.5 text-[#a3a3a3] group-hover:text-[#d4d4d4] shrink-0 transition-colors" />
                 <span className="text-xs text-[#a3a3a3] group-hover:text-[#d4d4d4] truncate font-sans block">
                   {displayQuery || placeholderText || "Search repositories..."}
