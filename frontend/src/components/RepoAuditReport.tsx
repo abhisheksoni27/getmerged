@@ -1125,6 +1125,46 @@ export function AuditReportContent({
           </div>
         </section>
       )}
+
+      {/* ── 10-DIMENSION DIAGNOSTIC COVERAGE ── */}
+      <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
+        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <div>
+            <h2 className="text-base font-extrabold font-mono text-white flex items-center gap-2">
+              <SlidersHorizontal className="h-4 w-4 text-emerald-400" />
+              10-Dimension Maintainer Intelligence Suite
+            </h2>
+            <p className="text-xs text-zinc-400 font-mono mt-0.5">
+              Comprehensive scan vectors analyzed using GitHub GraphQL & Maintainer Tokens
+            </p>
+          </div>
+          <span className="text-xs font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-1 rounded-md">
+            10 of 10 Dimensions Active
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {ANALYSIS_STEPS.map((step) => (
+            <div key={step.key} className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
+                  <span>{step.icon}</span> {step.label}
+                </span>
+                <span
+                  className={`text-[10px] font-mono px-2 py-0.5 rounded ${
+                    step.badge === "Actionable"
+                      ? "text-amber-400 bg-amber-950/60"
+                      : "text-emerald-400 bg-emerald-950/60"
+                  }`}
+                >
+                  {step.badge}
+                </span>
+              </div>
+              <p className="text-[12px] text-zinc-400">{step.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
