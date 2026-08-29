@@ -1019,15 +1019,15 @@ export function ClientRepoDetail({
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b-2 border-white/[0.1] pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-white/[0.08] pb-5">
           <div>
             <h2 className="text-xl sm:text-2xl font-extrabold font-space text-white flex items-center gap-2.5">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border-2 border-white/[0.1] bg-blue-200 shadow-sm -rotate-2">
-                <Users className="h-5 w-5 text-zinc-300 shrink-0" />
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-400 shadow-sm -rotate-2">
+                <Users className="h-5 w-5 text-sky-400 shrink-0" />
               </span>
               Contributor Community Vibe Feedback
             </h2>
-            <p className="text-sm text-zinc-300 mt-1 leading-relaxed">
+            <p className="text-sm text-zinc-400 mt-1 leading-relaxed">
               Rate what actually matters after opening a pull request here.
             </p>
           </div>
@@ -1036,7 +1036,7 @@ export function ClientRepoDetail({
               <span
                 id="auth-provider-badge"
                 data-testid="auth-provider-badge"
-                className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-zinc-300 bg-emerald-200 px-3.5 py-1.5 rounded-lg border-2 border-white/[0.1] shadow-sm shrink-0"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-300 bg-emerald-500/15 px-3.5 py-1.5 rounded-lg border border-emerald-500/30 shadow-sm shrink-0"
               >
                 <ShieldCheck className="h-4 w-4 text-emerald-400" />
                 Signed in with GitHub
@@ -1046,10 +1046,10 @@ export function ClientRepoDetail({
                 id="auth-provider-badge"
                 data-testid="auth-provider-badge"
                 href={`${API_BASE_URL}/api/v1/auth/github`}
-                className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-amber-300 bg-amber-200 hover:bg-amber-300 px-3.5 py-1.5 rounded-lg border-2 border-white/[0.1] shadow-sm transition-colors shrink-0 cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-amber-300 bg-amber-500/15 hover:bg-amber-500/25 px-3.5 py-1.5 rounded-lg border border-amber-500/30 shadow-sm transition-colors shrink-0 cursor-pointer"
                 title="Link GitHub account to verify contributor status"
               >
-                <ShieldCheck className="h-4 w-4 text-amber-700" />
+                <ShieldCheck className="h-4 w-4 text-amber-400" />
                 Google Account (Link GitHub to verify)
               </a>
             )
@@ -1065,10 +1065,10 @@ export function ClientRepoDetail({
                   "feedback_verify"
                 )
               }
-              className="inline-flex items-center gap-1.5 text-xs font-sans font-extrabold text-white glass-card hover:bg-zinc-200 px-3.5 py-1.5 rounded-lg border-2 border-white/[0.1] shadow-sm transition-colors cursor-pointer shrink-0"
+              className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-zinc-200 bg-white/[0.06] hover:bg-white/[0.12] hover:text-white px-3.5 py-1.5 rounded-lg border border-white/[0.12] shadow-sm transition-colors cursor-pointer shrink-0"
               title="Sign in with GitHub to verify contributor status"
             >
-              <ShieldCheck className="h-4 w-4 text-zinc-300" />
+              <ShieldCheck className="h-4 w-4 text-zinc-400" />
               Sign in to verify
             </button>
           )}
@@ -1207,14 +1207,20 @@ export function ClientRepoDetail({
               <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between mb-5">
                 <div>
                   <h3 className="font-space text-sm font-extrabold text-white uppercase tracking-wider">
-                    Score this repo
+                    Have you contributed to this repo?
                   </h3>
-                  <p className="text-xs text-zinc-300 mt-1">
-                    Three taps.
+                  <p className="text-xs text-zinc-400 mt-1">
+                    Rate your first-hand PR experience (review speed, maintainer responsiveness, and onboarding ease) to help other contributors.
                   </p>
                 </div>
-                <span className="inline-flex w-fit rounded-lg border-2 border-white/[0.1] bg-brand-cream px-3 py-1 text-[10px] font-mono font-extrabold text-brand-dark shadow-sm">
-                  {allFeedbackRatingsSelected ? "Ready to submit" : "3 ratings required"}
+                <span
+                  className={`inline-flex w-fit rounded-lg border px-3 py-1 text-[10px] font-mono font-bold shrink-0 shadow-sm ${
+                    allFeedbackRatingsSelected
+                      ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-300"
+                      : "bg-white/[0.06] border-white/[0.1] text-zinc-400"
+                  }`}
+                >
+                  {allFeedbackRatingsSelected ? "✓ Ready to submit" : "3 ratings required"}
                 </span>
               </div>
 
@@ -1236,7 +1242,7 @@ export function ClientRepoDetail({
                     setValue: setBeginnerRating,
                   },
                 ].map((rating) => (
-                  <div key={rating.label} className="rounded-xl border-2 border-white/[0.1] bg-black p-3 shadow-sm">
+                  <div key={rating.label} className="rounded-xl border border-white/[0.08] bg-black/50 p-3.5 shadow-sm">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <span className="font-mono text-xs font-bold text-white">
                         {rating.label}
@@ -1248,10 +1254,10 @@ export function ClientRepoDetail({
                             type="button"
                             onClick={() => rating.setValue(star)}
                             aria-label={`${rating.label}: ${star} star${star === 1 ? "" : "s"}`}
-                             className={`rounded-lg border-2 border-white/[0.1] p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center shadow-sm transition-all cursor-pointer ${
+                             className={`rounded-lg border p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center shadow-sm transition-all cursor-pointer ${
                                rating.value >= star
-                                 ? "bg-amber-400 text-white scale-105"
-                                 : "glass-card text-zinc-300 hover:bg-amber-950/40 border border-amber-500/20 hover:text-zinc-300"
+                                 ? "bg-amber-400/20 border-amber-400/40 text-amber-300 scale-105"
+                                 : "border-white/[0.08] bg-white/[0.03] text-zinc-500 hover:bg-white/[0.08] hover:text-zinc-300"
                              }`}
                           >
                             <Star className={`h-4 w-4 ${rating.value >= star ? "fill-current" : ""}`} />
@@ -1271,7 +1277,7 @@ export function ClientRepoDetail({
                       id="feedback-comment"
                       rows={3}
                       placeholder={`Anything future contributors should know before opening a PR to ${fullName}?`}
-                      className="w-full text-xs sm:text-sm font-sans rounded-xl border-2 border-white/[0.1] p-3.5 bg-black text-white placeholder:text-zinc-300 focus:outline-none focus:ring-0 shadow-sm"
+                      className="w-full text-xs sm:text-sm font-sans rounded-xl border border-white/[0.1] p-3.5 bg-black/60 text-white placeholder:text-zinc-500 focus:outline-none focus:border-emerald-500/50 shadow-sm"
                     />
                   </div>
                 )}
@@ -1287,7 +1293,7 @@ export function ClientRepoDetail({
                       }
                       if (!isLoggedIn) {
                         openAuthModal(
-                          "Submit Repository Ratings",
+                          "Submit Contributor Ratings",
                           "Sign in to verify your contributor signal and submit ratings.",
                           "feedback_submit"
                         );
@@ -1335,9 +1341,10 @@ export function ClientRepoDetail({
                       }
                     }}
                     disabled={!allFeedbackRatingsSelected}
-                    className="flex ml-auto items-center justify-center gap-2 rounded-xl border-2 border-white/[0.1] bg-black px-6 py-3 font-mono text-xs font-extrabold text-white shadow-sm hover:-translate-y-0.5 hover:shadow-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-sm transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex ml-auto items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white text-black hover:bg-zinc-200 px-6 py-3 font-mono text-xs font-bold shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-500 disabled:border-white/[0.06]"
                   >
-                    Submit Ratings
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                    Submit Contributor Rating
                   </button>
 
                   {feedbackError && (
@@ -1364,8 +1371,8 @@ export function ClientRepoDetail({
       >
         <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-5 sm:p-6 shadow-sm">
           <h2 className="text-base sm:text-lg font-extrabold font-space text-white mb-3 flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border-2 border-white/[0.1] bg-emerald-200 shadow-sm rotate-2">
-              <Activity className="h-4 w-4 text-zinc-300 shrink-0" />
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 shadow-sm rotate-2">
+              <Activity className="h-4 w-4 text-emerald-400 shrink-0" />
             </span>
             Contributor Compatibility & Review Speed Analysis for {fullName}
           </h2>
@@ -1383,8 +1390,8 @@ export function ClientRepoDetail({
 
         <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-5 sm:p-6 rounded-2xl mb-8">
           <h2 className="text-base sm:text-lg font-extrabold font-space text-white mb-4 flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border-2 border-white/[0.1] bg-blue-200 shadow-sm -rotate-2">
-              <FileCode2 className="h-4 w-4 text-zinc-300 shrink-0" />
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-400 shadow-sm -rotate-2">
+              <FileCode2 className="h-4 w-4 text-sky-400 shrink-0" />
             </span>
             Frequently Asked Questions - Contributing to {fullName}
           </h2>
@@ -1392,7 +1399,7 @@ export function ClientRepoDetail({
             {/* FAQ 1 */}
             <div className="rounded-xl border-2 border-white/[0.1] glass-panel p-4 shadow-sm">
               <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-white/[0.1] bg-emerald-200 font-mono text-xs font-extrabold text-zinc-300 shadow-sm">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-emerald-500/30 bg-emerald-500/15 font-mono text-xs font-bold text-emerald-300 shadow-sm">
                   01
                 </span>
                 <div>
@@ -1409,7 +1416,7 @@ export function ClientRepoDetail({
             {/* FAQ 2 */}
             <div className="rounded-xl border-2 border-white/[0.1] glass-panel p-4 shadow-sm">
               <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-white/[0.1] bg-orange-200 font-mono text-xs font-extrabold text-orange-950 shadow-sm">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-orange-500/30 bg-orange-500/15 font-mono text-xs font-bold text-orange-300 shadow-sm">
                   02
                 </span>
                 <div>
@@ -1426,7 +1433,7 @@ export function ClientRepoDetail({
             {/* FAQ 3 */}
             <div className="rounded-xl border-2 border-white/[0.1] glass-panel p-4 shadow-sm">
               <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-white/[0.1] bg-pink-200 font-mono text-xs font-extrabold text-pink-950 shadow-sm">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-pink-500/30 bg-pink-500/15 font-mono text-xs font-bold text-pink-300 shadow-sm">
                   03
                 </span>
                 <div>
@@ -1443,7 +1450,7 @@ export function ClientRepoDetail({
             {/* FAQ 4 */}
             <div className="rounded-xl border-2 border-white/[0.1] glass-panel p-4 shadow-sm">
               <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-white/[0.1] bg-amber-400/20 font-mono text-xs font-extrabold text-yellow-950 shadow-sm">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-amber-500/30 bg-amber-500/15 font-mono text-xs font-bold text-amber-300 shadow-sm">
                   04
                 </span>
                 <div>
@@ -1460,7 +1467,7 @@ export function ClientRepoDetail({
             {/* FAQ 5 */}
             <div className="rounded-xl border-2 border-white/[0.1] glass-panel p-4 shadow-sm">
               <div className="flex gap-3">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 border-white/[0.1] bg-cyan-200 font-mono text-xs font-extrabold text-cyan-950 shadow-sm">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-cyan-500/30 bg-cyan-500/15 font-mono text-xs font-bold text-cyan-300 shadow-sm">
                   05
                 </span>
                 <div>
@@ -1510,35 +1517,35 @@ export function ClientRepoDetail({
 function RepoDetailSkeleton() {
   return (
     <main className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 py-10 sm:py-12 flex-1 w-full overflow-hidden font-sans">
-      <div className="h-4 w-28 bg-zinc-200 animate-pulse rounded mb-6" />
+      <div className="h-4 w-28 bg-white/[0.08] animate-pulse rounded mb-6" />
 
-      <div className="flex flex-col gap-4 border-b border-white/[0.1]/40 pb-6 mb-8">
+      <div className="flex flex-col gap-4 border-b border-white/[0.1] pb-6 mb-8">
         <div className="flex gap-2">
-          <div className="h-6 w-24 bg-zinc-200 animate-pulse rounded-lg" />
-          <div className="h-6 w-32 bg-zinc-200 animate-pulse rounded-lg" />
+          <div className="h-6 w-24 bg-white/[0.08] animate-pulse rounded-lg" />
+          <div className="h-6 w-32 bg-white/[0.08] animate-pulse rounded-lg" />
         </div>
-        <div className="h-8 w-64 bg-zinc-200 animate-pulse rounded-xl" />
-        <div className="h-4 w-96 max-w-full bg-zinc-200 animate-pulse rounded" />
+        <div className="h-8 w-64 bg-white/[0.08] animate-pulse rounded-xl" />
+        <div className="h-4 w-96 max-w-full bg-white/[0.08] animate-pulse rounded" />
       </div>
 
       <div className="rounded-2xl glass-panel p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.015)] mb-10">
-        <div className="h-4 w-48 bg-zinc-200 animate-pulse rounded mb-6" />
+        <div className="h-4 w-48 bg-white/[0.08] animate-pulse rounded mb-6" />
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="space-y-2">
-              <div className="h-3 w-20 bg-zinc-200 animate-pulse rounded" />
-              <div className="h-8 w-24 bg-zinc-200 animate-pulse rounded-lg" />
-              <div className="h-3 w-28 bg-zinc-200 animate-pulse rounded" />
+              <div className="h-3 w-20 bg-white/[0.08] animate-pulse rounded" />
+              <div className="h-8 w-24 bg-white/[0.08] animate-pulse rounded-lg" />
+              <div className="h-3 w-28 bg-white/[0.08] animate-pulse rounded" />
             </div>
           ))}
         </div>
       </div>
 
       <div className="rounded-2xl glass-panel p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
-        <div className="h-5 w-56 bg-zinc-200 animate-pulse rounded mb-4" />
+        <div className="h-5 w-56 bg-white/[0.08] animate-pulse rounded mb-4" />
         <div className="space-y-2">
-          <div className="h-4 w-full bg-zinc-200 animate-pulse rounded" />
-          <div className="h-4 w-3/4 bg-zinc-200 animate-pulse rounded" />
+          <div className="h-4 w-full bg-white/[0.08] animate-pulse rounded" />
+          <div className="h-4 w-3/4 bg-white/[0.08] animate-pulse rounded" />
         </div>
       </div>
     </main>
