@@ -12,7 +12,7 @@
 set -euo pipefail
 
 DAYS="${1:-30}"
-TIERS="${2:-S,A,B,C,D}"
+TIERS="${2:-S,A,B,C,D,UNSCORED}"
 COMMENT_TIERS="${3:-S,A,B,C,D}"
 
 ENV_FILE="${OPENDOR_ENV_FILE:-/opt/opendoor/.env}"

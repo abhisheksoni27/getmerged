@@ -174,7 +174,7 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 	normed := scoring.NormaliseAll(rawSlice)
 
 	for i, rm := range all {
-		score, tier := scoring.ComputeCRank(normed[i], rm.raw.StalenessFlag, rm.raw.GoodFirstIssueCount)
+		score, tier := scoring.ComputeCRankWithBusFactor(normed[i], rm.raw.StalenessFlag, rm.raw.GoodFirstIssueCount, rm.raw.BusFactor, rm.raw.PRsCreated6m)
 
 		slog.Info("cron: scored repo",
 			"repo", rm.repo.FullName,

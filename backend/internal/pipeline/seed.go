@@ -160,12 +160,59 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	}
 
 	if len(prs) == 0 {
-		// PR-activity-first rule: a repo with no PR events in our dataset is
-		// NOT "D-tier" - it is simply unscored. Persisting all-zero metrics and
-		// a D snapshot here would stamp fresh repos as D before the event
-		// stream has collected their history. Leave it unscored and let a later
-		// crawl score it once real PR data exists.
-		slog.Debug("scoreAndSaveRepo: skipping snapshot - no PR events for repo", "repo", fullName)
+		// Fallback: If DB has no PR events yet, fetch them directly from GitHub GraphQL API
+		ghPRs, meta, fetchErr := gh.FetchPRs(owner, name, 180)
+		if fetchErr == nil && len(ghPRs) > 0 {
+			// Persist fetched PR events into repo_pr_events so subsequent queries and event stream match
+			for _, p := range ghPRs {
+				action := "opened"
+				if p.State == "MERGED" {
+					action = "merged"
+				} else if p.State == "CLOSED" {
+					action = "closed"
+				}
+				eventAt := p.CreatedAt
+				if p.MergedAt != nil {
+					eventAt = *p.MergedAt
+				}
+				if db.DriverName() == "sqlite" {
+					_, _ = db.Exec(`
+						INSERT OR IGNORE INTO repo_pr_events (repository_id, pr_number, actor_login, action, event_at)
+						VALUES (?, ?, ?, ?, ?)
+					`, repoID, p.Number, p.AuthorLogin, action, eventAt)
+				} else {
+					_, _ = db.Exec(`
+						INSERT IGNORE INTO repo_pr_events (repository_id, pr_number, actor_login, action, event_at)
+						VALUES (?, ?, ?, ?, ?)
+					`, repoID, p.Number, p.AuthorLogin, action, eventAt)
+				}
+			}
+
+			if len(meta.Topics) > 0 {
+				_ = repository.NewRepoRepository(db).UpsertTopics(context.Background(), repoID, meta.Topics)
+			}
+
+			// Map to scoring.PR
+			scoringPRs := make([]scoring.PR, len(ghPRs))
+			for i, p := range ghPRs {
+				scoringPRs[i] = scoring.PR{
+					State:             p.State,
+					CreatedAt:         p.CreatedAt,
+					MergedAt:          p.MergedAt,
+					AuthorAssociation: p.AuthorAssociation,
+					AuthorLogin:       p.AuthorLogin,
+					FirstCommentAt:    p.FirstCommentAt,
+					TotalComments:     p.TotalComments,
+					CommentAuthors:    p.CommentAuthors,
+				}
+			}
+			prs = scoringPRs
+		}
+	}
+
+	if len(prs) == 0 {
+		// Truly zero PRs on GitHub or fetch failed
+		slog.Debug("scoreAndSaveRepo: skipping snapshot - zero PRs found for repo", "repo", fullName)
 		return existingMetrics, nil
 	}
 
@@ -226,7 +273,7 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	var prevTier string
 	_ = db.Get(&prevTier, "SELECT c_rank_tier FROM latest_snapshots WHERE repository_id = ?", repoID)
 
-	score, tier := scoring.ComputeCRankWithBusFactor(thisNormed, raw.StalenessFlag, raw.GoodFirstIssueCount, raw.BusFactor, prevTier)
+	score, tier := scoring.ComputeCRankWithBusFactor(thisNormed, raw.StalenessFlag, raw.GoodFirstIssueCount, raw.BusFactor, raw.PRsCreated6m, prevTier)
 
 	// PR comment text insertion is now entirely handled by the GHArchive stream worker
 

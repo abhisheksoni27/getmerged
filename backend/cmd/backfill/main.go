@@ -131,18 +131,50 @@ func main() {
 		repos = append(repos, r)
 	} else {
 		tierList := strings.Split(*tiersFlag, ",")
+		includeUnscored := false
+		var cleanTiers []string
 		for i := range tierList {
-			tierList[i] = strings.TrimSpace(tierList[i])
+			t := strings.ToUpper(strings.TrimSpace(tierList[i]))
+			if t == "UNSCORED" || t == "ALL" {
+				includeUnscored = true
+			}
+			if t != "" && t != "UNSCORED" && t != "ALL" {
+				cleanTiers = append(cleanTiers, t)
+			}
 		}
-		query, args, err := sqlx.In(`
-			SELECT r.id, r.full_name, r.owner, r.name, COALESCE(s.c_rank_tier, 'A') as c_rank_tier
-			FROM repositories r
-			JOIN latest_snapshots s ON s.repository_id = r.id
-			WHERE s.c_rank_tier IN (?)
-			ORDER BY s.c_rank_score DESC
-		`, tierList)
-		if err != nil {
-			slog.Error("Failed to build SQL query for tiers", "err", err)
+
+		var query string
+		var args []any
+		var inErr error
+
+		if includeUnscored && len(cleanTiers) == 0 {
+			query = `
+				SELECT r.id, r.full_name, r.owner, r.name, 'UNSCORED' as c_rank_tier
+				FROM repositories r
+				LEFT JOIN latest_snapshots s ON s.repository_id = r.id
+				WHERE s.repository_id IS NULL
+				ORDER BY r.stars DESC
+			`
+		} else if includeUnscored {
+			query, args, inErr = sqlx.In(`
+				SELECT r.id, r.full_name, r.owner, r.name, COALESCE(s.c_rank_tier, 'UNSCORED') as c_rank_tier
+				FROM repositories r
+				LEFT JOIN latest_snapshots s ON s.repository_id = r.id
+				WHERE s.repository_id IS NULL OR s.c_rank_tier IN (?)
+				ORDER BY COALESCE(s.c_rank_score, 0) DESC, r.stars DESC
+			`, cleanTiers)
+		} else {
+			query, args, inErr = sqlx.In(`
+				SELECT r.id, r.full_name, r.owner, r.name, COALESCE(s.c_rank_tier, 'A') as c_rank_tier
+				FROM repositories r
+				JOIN latest_snapshots s ON s.repository_id = r.id
+				WHERE s.c_rank_tier IN (?)
+				ORDER BY s.c_rank_score DESC
+			`, cleanTiers)
+		}
+
+		if inErr != nil {
+			slog.Error("Failed to build SQL query for tiers", "err", inErr)
 			os.Exit(1)
 		}
 		query = db.Rebind(query)

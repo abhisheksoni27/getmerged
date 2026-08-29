@@ -307,11 +307,8 @@ func main() {
 			raw := batchRaw[j]
 			normed := batchNormed[j]
 
-			// For global recalculation re-anchor, evaluate clean baseline thresholds (S >= 70.0)
-			score, tier := scoring.ComputeCRank(normed, raw.StalenessFlag, raw.GoodFirstIssueCount)
-			if raw.ExternalPRCount > 0 && !raw.StalenessFlag {
-				score = scoring.ComputeConfidenceScore(score, raw.ExternalPRCount)
-			}
+			// For global recalculation re-anchor, evaluate unified formula with Bayesian shrinkage and Bus Factor safety cap
+			score, tier := scoring.ComputeCRankWithBusFactor(normed, raw.StalenessFlag, raw.GoodFirstIssueCount, raw.BusFactor, raw.ExternalPRCount)
 
 			staleness := 0
 			if raw.StalenessFlag {

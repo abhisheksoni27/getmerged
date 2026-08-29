@@ -83,17 +83,15 @@ func ComputeConfidenceScore(rawScore float64, totalPRs int) float64 {
 
 // ComputeCRank calculates the C-Rank score and tier from normalised metrics.
 // If staleness is true, the score is capped to <30 (max 29.9) and assigned D.
-// ComputeCRank calculates the C-Rank score and tier from normalised metrics.
-// If staleness is true, the score is capped to <30 (max 29.9) and assigned D.
 // Continuous logarithmic bonus is applied for beginner-friendly good first issues:
 // gfiBonus = min(5.0, 2.5 * ln(1 + gfiCount)).
 // Universal boundary hysteresis (promotion delta vs demotion buffer) is applied across all tiers.
 func ComputeCRank(n NormalisedMetrics, staleness bool, gfiCount int, prevTier ...string) (score float64, tier string) {
-	return ComputeCRankWithBusFactor(n, staleness, gfiCount, 2, prevTier...)
+	return ComputeCRankWithBusFactor(n, staleness, gfiCount, 2, 0, prevTier...)
 }
 
-// ComputeCRankWithBusFactor computes C-Rank and enforces Bus Factor safety capping (BusFactor <= 1 -> max tier B).
-func ComputeCRankWithBusFactor(n NormalisedMetrics, staleness bool, gfiCount int, busFactor int, prevTier ...string) (score float64, tier string) {
+// ComputeCRankWithBusFactor computes C-Rank with Bayesian confidence shrinkage and enforces Bus Factor safety capping (BusFactor <= 1 -> max tier B).
+func ComputeCRankWithBusFactor(n NormalisedMetrics, staleness bool, gfiCount int, busFactor int, totalPRs int, prevTier ...string) (score float64, tier string) {
 	rawScore := weights.MergeRate*n.MergeRate +
 		weights.ResponseTime*n.ResponseTime +
 		weights.ActivityRecency*n.ActivityRecency +
@@ -113,6 +111,11 @@ func ComputeCRankWithBusFactor(n NormalisedMetrics, staleness bool, gfiCount int
 		// Damped logarithmic bonus (max +5.0 points) instead of discrete 15% spike
 		gfiBonus := math.Min(5.0, 2.5*math.Log(1.0+float64(gfiCount)))
 		rawScore = math.Min(100.0, rawScore+gfiBonus)
+	}
+
+	// Apply Bayesian shrinkage towards global neutral prior (50.0) based on sample size (total PRs)
+	if totalPRs > 0 {
+		rawScore = ComputeConfidenceScore(rawScore, totalPRs)
 	}
 
 	previousTier := ""
