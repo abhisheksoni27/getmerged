@@ -410,7 +410,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
               <span className="text-xs font-mono text-zinc-400">5 Pillars of Health</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
@@ -438,7 +438,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
               <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
-                    <ShieldAlert className="h-3.5 w-3.5 text-rose-400" /> Review Comment Friction Fingerprint
+                    <ShieldAlert className="h-3.5 w-3.5 text-rose-400" /> Review Friction Fingerprint
                   </span>
                   <span className="text-[10px] font-mono text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded">Locked</span>
                 </div>
@@ -448,6 +448,18 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
               </div>
 
               <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
+                    <FileSearch className="h-3.5 w-3.5 text-indigo-400" /> Peer Ecosystem Benchmarking
+                  </span>
+                  <span className="text-[10px] font-mono text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded">Locked</span>
+                </div>
+                <p className="text-[12px] text-zinc-400">
+                  Percentile health scoring across 6 key maintainer metrics against 500+ ecosystem peers.
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-white/[0.08] p-4 bg-black/40 sm:col-span-2 lg:col-span-2">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
                     <Sparkles className="h-3.5 w-3.5 text-purple-400" /> 1-Click Tailored GitHub Patches

@@ -75,8 +75,8 @@ export function RepoStickyBar({
 
   return (
     <div
-      className={`sticky top-16 z-40 w-full bg-black/95 backdrop-blur-md border-b-2 border-white/[0.12] shadow-sm transition-all duration-300 ${
-        visible ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-3 pointer-events-none"
+      className={`fixed top-16 left-0 right-0 z-40 w-full bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/[0.12] shadow-md transition-all duration-300 ${
+        visible ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"
       }`}
     >
       <div className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 py-2">

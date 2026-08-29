@@ -45,11 +45,11 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
     return (
       <div className="rounded-2xl glass-panel p-5 border-2 border-white/[0.1] shadow-sm mb-6 animate-pulse">
         <div className="flex items-center justify-between mb-4">
-          <div className="h-5 bg-zinc-200 rounded w-1/3"></div>
-          <div className="h-4 bg-zinc-200 rounded w-24"></div>
+          <div className="h-5 bg-white/[0.08] animate-pulse rounded w-1/3"></div>
+          <div className="h-4 bg-white/[0.08] animate-pulse rounded w-24"></div>
         </div>
         <div className="h-24 glass-card rounded-xl mb-4"></div>
-        <div className="h-4 bg-zinc-200 rounded w-1/2"></div>
+        <div className="h-4 bg-white/[0.08] animate-pulse rounded w-1/2"></div>
       </div>
     );
   }
@@ -64,11 +64,11 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
   const dayWindow = data.recommended_day_window || "Tuesday - Thursday";
 
   const getBarColor = (val: number, isPeak: boolean) => {
-    if (isPeak) return "bg-emerald-700 hover:bg-emerald-800";
-    if (val > 0.6) return "bg-emerald-500 hover:bg-emerald-600";
-    if (val > 0.25) return "bg-emerald-300 hover:bg-emerald-400";
-    if (val > 0.05) return "bg-emerald-950/80 border-emerald-800/80 hover:bg-emerald-200";
-    return "glass-card hover:bg-zinc-200";
+    if (isPeak) return "bg-emerald-500 hover:bg-emerald-400";
+    if (val > 0.6) return "bg-emerald-600 hover:bg-emerald-500";
+    if (val > 0.25) return "bg-emerald-700/80 hover:bg-emerald-600";
+    if (val > 0.05) return "bg-emerald-950/80 border border-emerald-800/80 hover:bg-emerald-900";
+    return "bg-white/[0.04] border border-white/[0.06] hover:bg-white/[0.1]";
   };
 
   const userTimezone = isMounted ? getUserTimeZone() : "UTC";
@@ -80,7 +80,7 @@ export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-white/[0.1] bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 shadow-sm">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 shadow-sm">
             <Clock className="h-4 w-4 text-emerald-400" />
           </div>
           <div>
