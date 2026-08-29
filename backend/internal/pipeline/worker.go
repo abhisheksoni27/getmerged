@@ -227,11 +227,11 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 		            WHEN COALESCE(ls.c_rank_tier, 'D') IN ('S','A') THEN 3
 		            WHEN COALESCE(ls.c_rank_tier, 'D') = 'B' THEN 5
 		            ELSE 10
-		          END DAY)
+		          END DAY
+		          AND EXISTS (SELECT 1 FROM repo_pr_events e WHERE e.repository_id = r.id))
 		        OR
-		        (ls.updated_at IS NULL AND r.updated_at <= NOW() - INTERVAL 10 DAY)
+		        (ls.repository_id IS NULL AND (r.updated_at <= NOW() - INTERVAL 1 DAY OR r.created_at <= NOW() - INTERVAL 1 DAY))
 		      )
-		  AND EXISTS (SELECT 1 FROM repo_pr_events e WHERE e.repository_id = r.id)
 		  AND (q.status IS NULL OR q.status NOT IN ('pending', 'processing'))
 		ORDER BY ls.c_rank_tier ASC, COALESCE(ls.updated_at, r.updated_at) ASC
 		LIMIT 1000
@@ -249,11 +249,11 @@ func (c *BackgroundCrawler) EnqueueDueRepos() {
 			            WHEN COALESCE(ls.c_rank_tier, 'D') IN ('S','A') THEN 3
 			            WHEN COALESCE(ls.c_rank_tier, 'D') = 'B' THEN 5
 			            ELSE 10
-			          END || ' days'))
+			          END || ' days')
+			          AND EXISTS (SELECT 1 FROM repo_pr_events e WHERE e.repository_id = r.id))
 			        OR
-			        (ls.updated_at IS NULL AND r.updated_at <= datetime('now', '-10 days'))
+			        (ls.repository_id IS NULL AND (r.updated_at <= datetime('now', '-1 days') OR r.created_at <= datetime('now', '-1 days')))
 			      )
-			  AND EXISTS (SELECT 1 FROM repo_pr_events e WHERE e.repository_id = r.id)
 			  AND (q.status IS NULL OR q.status NOT IN ('pending', 'processing'))
 			ORDER BY ls.c_rank_tier ASC, COALESCE(ls.updated_at, r.updated_at) ASC
 			LIMIT 1000

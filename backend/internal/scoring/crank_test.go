@@ -271,3 +271,43 @@ func TestComputeConfidenceScore_SmallSampleShrinkage(t *testing.T) {
 	}
 }
 
+func TestComputeCRankWithBusFactor_UnifiedFormula(t *testing.T) {
+	perfectNormed := scoring.NormalisedMetrics{
+		MergeRate:         100,
+		ResponseTime:      100,
+		ActivityRecency:   100,
+		FirstTimer:        100,
+		TimeToMerge:       100,
+		RepeatContributor: 100,
+		ReviewRounds:      100,
+		MaintainerBreadth: 100,
+		Responsiveness:    100,
+	}
+
+	// Case 1: 1 PR with perfect metrics (sample size shrinkage prevents S tier)
+	// Raw score = 100, with 1 PR shrunk to ~57.6, bus factor 2 -> Tier B (due to shrunk score < 70)
+	score1PR, tier1PR := scoring.ComputeCRankWithBusFactor(perfectNormed, false, 0, 2, 1)
+	if score1PR >= 70.0 || tier1PR == scoring.TierS {
+		t.Errorf("1 PR repo should NOT be S tier! got score=%.2f, tier=%s", score1PR, tier1PR)
+	}
+
+	// Case 2: 50 PRs with perfect metrics and bus factor 1 (bus factor cap prevents S tier)
+	// Raw score = 100, confidence preserved, but BusFactor=1 forces max Tier B
+	scoreBF1, tierBF1 := scoring.ComputeCRankWithBusFactor(perfectNormed, false, 0, 1, 50)
+	if tierBF1 != scoring.TierB {
+		t.Errorf("BusFactor=1 repo must be capped at Tier B, got tier=%s (score=%.2f)", tierBF1, scoreBF1)
+	}
+
+	// Case 3: 50 PRs with perfect metrics and bus factor 3 -> True S tier
+	scoreS, tierS := scoring.ComputeCRankWithBusFactor(perfectNormed, false, 0, 3, 50)
+	if tierS != scoring.TierS || scoreS < 70.0 {
+		t.Errorf("50 PRs with BusFactor=3 should be Tier S, got tier=%s, score=%.2f", tierS, scoreS)
+	}
+
+	// Case 4: Stale repository -> Forced Tier D and score < 30
+	scoreD, tierD := scoring.ComputeCRankWithBusFactor(perfectNormed, true, 0, 3, 50)
+	if tierD != scoring.TierD || scoreD >= 30.0 {
+		t.Errorf("Stale repo must be Tier D with score < 30, got tier=%s, score=%.2f", tierD, scoreD)
+	}
+}
+
