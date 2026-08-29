@@ -12,7 +12,15 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
-import { API_BASE_URL } from "@/lib/api";
+import {
+  API_BASE_URL,
+  getRepoApiUrl,
+  getRepoQueryUrl,
+  getRepoAuditUrl,
+  getRepoAuditCheckoutUrl,
+  getRepoAuditRegenUrl,
+  getRepoAuditStatusUrl,
+} from "@/lib/api";
 
 interface AuditFactor {
   key: string;
@@ -86,7 +94,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
 
   const fetchReport = useCallback(async (): Promise<boolean> => {
     try {
-      const res = await fetch(`${API_BASE_URL}/repo/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/audit`, {
+      const res = await fetch(getRepoAuditUrl(owner, name), {
         credentials: "include",
       });
       if (res.status === 403) return false;
@@ -112,7 +120,7 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
 
   const pollStatus = useCallback(async (): Promise<boolean> => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/audit/status?repo_key=${encodeURIComponent(repoKey)}`, {
+      const res = await fetch(getRepoAuditStatusUrl(repoKey), {
         credentials: "include",
       });
       if (!res.ok) return false;
@@ -156,10 +164,21 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
       if (!loaded) {
         // Check if repo exists in opendoor DB first
         try {
-          const repoCheck = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(owner)}/${encodeURIComponent(name)}`);
-          if (repoCheck.status === 404) {
-            setPhase("notfound");
-            return;
+          const repoCheck = await fetch(getRepoApiUrl(fullName));
+          if (!repoCheck.ok && repoCheck.status === 404) {
+            const searchCheck = await fetch(getRepoQueryUrl(fullName));
+            if (searchCheck.ok) {
+              const data = await searchCheck.json();
+              const list = data.data || data.repos || [];
+              const exists = Array.isArray(list) && list.some((r: { full_name?: string }) => r.full_name?.toLowerCase() === fullName.toLowerCase());
+              if (!exists) {
+                setPhase("notfound");
+                return;
+              }
+            } else {
+              setPhase("notfound");
+              return;
+            }
           }
         } catch {}
 
@@ -173,16 +192,17 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
       cancelled = true;
       if (pollRef.current) clearTimeout(pollRef.current);
     };
-  }, [fetchReport, startPolling, owner, name]);
+  }, [fetchReport, startPolling, owner, name, fullName]);
 
   const startCheckout = useCallback(async () => {
     setCheckoutLoading(true);
     setErrorMsg(null);
     try {
-      const res = await fetch(
-        `${API_BASE_URL}/repo/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/audit/checkout`,
-        { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" } }
-      );
+      const res = await fetch(getRepoAuditCheckoutUrl(owner, name), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
       if (!res.ok) {
         setErrorMsg("Could not start checkout. Please try again.");
         setCheckoutLoading(false);
@@ -206,10 +226,11 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
     setRegenLoading(true);
     setRegenNote(null);
     try {
-      const res = await fetch(
-        `${API_BASE_URL}/repo/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/audit/regen`,
-        { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" } }
-      );
+      const res = await fetch(getRepoAuditRegenUrl(owner, name), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
       if (!res.ok) {
         setRegenNote("Could not regenerate insights.");
         return;
