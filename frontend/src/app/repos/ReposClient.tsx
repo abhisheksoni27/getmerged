@@ -65,19 +65,19 @@ const FAQS = [
   },
   {
     q: "Does GetMerged track private code or require repository write access?",
-    a: "No. All telemetry is calculated strictly from public GitHub GraphQL events and public pull request activity without requesting code access or write permissions.",
+    a: "No. All metrics are calculated strictly from public GitHub events and public pull request activity without requesting code access or write permissions.",
   },
   {
     q: "How are repositories evaluated in this directory?",
-    a: "Every repository is benchmarked continuously using our proprietary C-Rank™ telemetry algorithm. We track real maintainer PR response turnaround, external merge rates, first-timer acceptance rates, and review friction across thousands of GitHub projects.",
+    a: "Every repository is scored using our C-Rank™ algorithm. We track real maintainer PR response turnaround, external merge rates, first-timer acceptance rates, and active maintainer presence across thousands of GitHub projects.",
   },
   {
     q: "What does the C-Rank™ tier (S, A, B, C, D) mean?",
-    a: "Tier S repositories are Super Welcoming with fast maintainer response (< 24h) and high merge rates. Tier A is Welcoming, Tier B is Standard, Tier C is Selective, and Tier D indicates unmaintained backlogs or slow review times.",
+    a: "Tier S repositories are Super Welcoming with fast maintainer response (< 24h) and high merge rates. Tier A is Welcoming, Tier B is Active, Tier C is Selective, and Tier D indicates unmaintained backlogs or slow review times.",
   },
   {
-    q: "How often is telemetry updated?",
-    a: "Our automated pipeline syncs daily GraphQL and event stream snapshots. Every repository page reflects the latest snapshot timestamp directly from GitHub.",
+    q: "How often is data updated?",
+    a: "Our automated pipeline syncs daily from GitHub. Every repository page reflects the latest snapshot timestamp directly from GitHub.",
   },
   {
     q: "Can I request my repository to be indexed or re-scored?",

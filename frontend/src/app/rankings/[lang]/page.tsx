@@ -308,12 +308,12 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             Top Welcoming Open-Source {languageName} Repositories
           </h1>
           <p className="mt-4 text-base sm:text-lg text-zinc-200 max-w-3xl leading-relaxed font-sans">
-            Empirical C-Rank™ telemetry for {languageName} projects. Scored from 90-day external PR merge rates, maintainer response velocity, first-timer success rates, and onboarding documentation.
+            Top welcoming {languageName} repositories. Scored by real 90-day external PR merge rates, maintainer review turnaround speed, and first-time contributor success.
           </p>
 
           <div className="mt-4 flex items-center gap-2 text-xs font-mono text-zinc-400">
             <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Telemetry verified daily • {latestSnapshotDate ? latestSnapshotDate.toUTCString().slice(0, 16) : "Live"} UTC</span>
+            <span>Updated daily • {latestSnapshotDate ? latestSnapshotDate.toUTCString().slice(0, 16) : "Live"} UTC</span>
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">

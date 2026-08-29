@@ -144,10 +144,10 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd) }}
       />
       {/* Semantic Crawl Floor directly in Initial SSR HTML */}
-      <section className="sr-only" aria-label="Open Source Intelligence Summary">
-        <h1>GetMerged - Objective C-Rank™ Telemetry for GitHub Repositories</h1>
+      <section className="sr-only" aria-label="Open Source Repository Finder Summary">
+        <h1>GetMerged - Find Active Open Source GitHub Repositories That Merge PRs</h1>
         <p>
-          Find welcoming open-source repositories ranked by empirical PR merge rates, maintainer response velocity, and first-timer success.
+          Find welcoming open source projects looking for contributors. Scored by real PR merge rates, fast reviewer response times, and beginner-friendly maintainers.
         </p>
         <div>
           <h2>Top Welcoming Repositories</h2>
