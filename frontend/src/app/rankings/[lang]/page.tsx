@@ -79,7 +79,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-async function getRankingRepos(languageName: string): Promise<Repo[]> {
+async function getRankingRepos(languageName: string): Promise<{ repos: Repo[]; total: number }> {
   try {
     const queryParams = new URLSearchParams({
       language: languageName,
@@ -89,12 +89,14 @@ async function getRankingRepos(languageName: string): Promise<Repo[]> {
     const res = await fetch(`${API_BASE_URL}/api/v1/repos?${queryParams.toString()}`, {
       next: { revalidate: 3600 },
     });
-    if (!res.ok) return [];
+    if (!res.ok) return { repos: [], total: 0 };
     const data = await res.json();
-    return data.data || data.repos || [];
+    const repos = data.data || data.repos || [];
+    const total = typeof data.meta?.total === "number" ? data.meta.total : repos.length;
+    return { repos, total };
   } catch (e) {
     console.error("Failed to fetch ranking repos during SSR", e);
-    return [];
+    return { repos: [], total: 0 };
   }
 }
 
@@ -106,7 +108,8 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
   }
 
   const languageName = displayNameFromSlug(lang);
-  const rawRepos = await getRankingRepos(languageName);
+  const meta = getEcosystemMetadata(canonicalLang);
+  const { repos: rawRepos, total: totalTrackedRepos } = await getRankingRepos(languageName);
 
   // Filter and rank repos
   const scoredList: RankedRepoItem[] = rawRepos.map((repo) => {
@@ -340,7 +343,9 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-12">
           <div className="glass-panel p-6 rounded-2xl shadow-md">
             <div className="text-xs font-mono font-semibold text-zinc-400 uppercase tracking-wider">Tracked Repos</div>
-            <div className="mt-2 text-3xl sm:text-4xl font-black font-space text-white">{rankedItems.length}</div>
+            <div className="mt-2 text-3xl sm:text-4xl font-black font-space text-white">
+              {totalTrackedRepos > 0 ? totalTrackedRepos.toLocaleString() : rankedItems.length}
+            </div>
             <div className="text-xs text-zinc-400 font-sans mt-1">&gt;100 stars verified</div>
           </div>
           <div className="glass-panel p-6 rounded-2xl shadow-md">
@@ -369,9 +374,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             </h2>
             {rankedItems.length > 0 && (
               <p className="text-xs text-zinc-400 font-sans mt-1">
-                {rankedItems.length < 50
-                  ? `Showing ${rankedItems.length} of 50 qualifying projects`
-                  : `Showing top 50 ranked repositories`}
+                Showing top {rankedItems.length} of {totalTrackedRepos > 0 ? totalTrackedRepos.toLocaleString() : rankedItems.length} ranked repositories
               </p>
             )}
           </div>
@@ -507,37 +510,29 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
           <div className="rounded-3xl glass-panel p-6 sm:p-10 font-sans shadow-lg">
             <h3 className="text-lg sm:text-xl font-bold text-white mb-5 flex items-center gap-2 font-space">
               <Trophy className="h-5 w-5 text-amber-400" />
-              Top {languageName} Frameworks
+              Top {languageName} Frameworks &amp; Stacks
             </h3>
             <div className="flex flex-wrap gap-2.5 pt-1 font-sans text-xs">
-              <Link
-                href="/topics/android"
-                title="Browse open source Android repositories"
-                className="px-4 py-2.5 rounded-xl glass-card text-zinc-100 hover:text-white font-mono cursor-pointer transition-colors"
-              >
-                #android
-              </Link>
-              <Link
-                href="/topics/compose"
-                title="Browse open source Jetpack Compose repositories"
-                className="px-4 py-2.5 rounded-xl glass-card text-zinc-100 hover:text-white font-mono cursor-pointer transition-colors"
-              >
-                #compose-multiplatform
-              </Link>
-              <Link
-                href="/topics/ktor"
-                title="Browse open source Ktor repositories"
-                className="px-4 py-2.5 rounded-xl glass-card text-zinc-100 hover:text-white font-mono cursor-pointer transition-colors"
-              >
-                #ktor
-              </Link>
-              <Link
-                href="/topics/spring"
-                title="Browse open source Spring repositories"
-                className="px-4 py-2.5 rounded-xl glass-card text-zinc-100 hover:text-white font-mono cursor-pointer transition-colors"
-              >
-                #spring-boot
-              </Link>
+              {meta.topFrameworks && meta.topFrameworks.length > 0 ? (
+                meta.topFrameworks.map((fw) => (
+                  <Link
+                    key={fw.slug}
+                    href={`/topics/${fw.slug}`}
+                    title={`Browse open source ${fw.name} repositories`}
+                    className="px-4 py-2.5 rounded-xl glass-card text-zinc-100 hover:text-white font-mono cursor-pointer transition-colors"
+                  >
+                    {fw.tag}
+                  </Link>
+                ))
+              ) : (
+                <Link
+                  href="/topics"
+                  title={`Browse ${languageName} topics`}
+                  className="px-4 py-2.5 rounded-xl glass-card text-zinc-100 hover:text-white font-mono cursor-pointer transition-colors"
+                >
+                  #all-topics
+                </Link>
+              )}
             </div>
           </div>
         </section>

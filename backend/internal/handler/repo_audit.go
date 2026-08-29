@@ -17,14 +17,15 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/ai"
 	"github.com/abhisheksoni27/opendoor/internal/config"
 	"github.com/abhisheksoni27/opendoor/internal/gemoji"
+	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/middleware"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/abhisheksoni27/opendoor/internal/scoring"
 	"github.com/gin-gonic/gin"
 )
 
-// repoAuditDodoProductID is the DodoPayments product for the one-time $19
-// deep-audit (AC5). Reuses the existing DodoPayments checkout + webhook stack.
+// repoAuditDodoProductID is the DodoPayments product for the one-time $10
+// maintainer intelligence audit. Reuses the existing DodoPayments checkout + webhook stack.
 const repoAuditDodoProductID = "pdt_opendoor_audit"
 
 // auditHostedCheckoutURL is the safe fallback when the Dodo session API is
@@ -79,12 +80,9 @@ func newAuditSessionToken() (string, error) {
 }
 
 // CreateRepoAuditCheckoutHandler handles POST /repo/:owner/:name/audit/checkout
-// (AC2/AC5/AC8): requires auth, verifies the repo exists + is public, opens a
-// DodoPayments hosted checkout carrying (user_id, repo_key, product) metadata,
-// and persists a 'pending' purchase owned by the user. Already-paid repos are
-// not re-billed. Unauthenticated callers 401 so the frontend can force login
-// then retry checkout.
-func CreateRepoAuditCheckoutHandler(cfg *config.Config, auditRepo repository.AuditPurchaseRepository, repoStore repository.RepoRepository) gin.HandlerFunc {
+// Requires auth + verifies the requesting user is an admin maintainer of the repo
+// (using the stored maintainer OAuth token). Already-paid repos are not re-billed.
+func CreateRepoAuditCheckoutHandler(cfg *config.Config, auditRepo repository.AuditPurchaseRepository, repoStore repository.RepoRepository, oauthRepo repository.OAuthTokenRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userIDVal, exists := c.Get(middleware.UserIDKey)
 		if !exists {
@@ -92,6 +90,10 @@ func CreateRepoAuditCheckoutHandler(cfg *config.Config, auditRepo repository.Aud
 			return
 		}
 		userID := userIDVal.(int64)
+
+		// Username is set by UserAuth middleware from the JWT claims.
+		usernameVal, _ := c.Get(middleware.UsernameKey)
+		username, _ := usernameVal.(string)
 
 		owner := c.Param("owner")
 		name := c.Param("name")
@@ -101,6 +103,16 @@ func CreateRepoAuditCheckoutHandler(cfg *config.Config, auditRepo repository.Aud
 		repo, err := repoStore.FindByIDOrName(c.Request.Context(), fullName)
 		if err != nil || repo == nil {
 			c.JSON(http.StatusNotFound, gin.H{"error": "repository not found"})
+			return
+		}
+
+		// ── Maintainer verification ────────────────────────────────────────────
+		// Reuse the stored maintainer OAuth token (github_maintainer provider).
+		// If unavailable, fall back to the standard github login token.
+		// On any successful token, verify the user is an admin collaborator.
+		if err := verifyRepoMaintainer(c.Request.Context(), oauthRepo, userID, username, owner, name); err != nil {
+			slog.Warn("audit checkout: maintainer verification failed", "user_id", userID, "repo", fullName, "err", err)
+			c.JSON(http.StatusForbidden, gin.H{"error": "not_maintainer", "message": "You must be an admin maintainer of this repository to purchase an audit."})
 			return
 		}
 
@@ -135,6 +147,43 @@ func CreateRepoAuditCheckoutHandler(cfg *config.Config, auditRepo repository.Aud
 		})
 	}
 }
+
+// verifyRepoMaintainer checks that the authenticated user is an admin collaborator
+// on the repo by using their stored maintainer OAuth token (github_maintainer provider).
+// Falls back to the standard github provider token if the maintainer token is absent.
+// Returns nil on success, an error if the user is not a maintainer.
+func verifyRepoMaintainer(ctx context.Context, oauthRepo repository.OAuthTokenRepository, userID int64, username, owner, name string) error {
+	// Try maintainer-specific token first (most permissive scope).
+	token, _, _, err := oauthRepo.GetToken(ctx, userID, "github_maintainer")
+	if err != nil || token == "" {
+		// Fall back to the standard github login token.
+		token, _, _, err = oauthRepo.GetToken(ctx, userID, "github")
+		if err != nil || token == "" {
+			// No token stored at all — cannot verify. Block checkout to be safe.
+			return fmt.Errorf("no github token available for user %d", userID)
+		}
+	}
+
+	// Resolve login from token if username not in JWT (should always be set, but defensive).
+	login := username
+	if login == "" {
+		login, err = ghclient.GetViewerLogin(token)
+		if err != nil {
+			return fmt.Errorf("failed to resolve github login: %w", err)
+		}
+	}
+
+	perm, err := ghclient.CheckCollaboratorPermission(token, owner, name, login)
+	if err != nil {
+		return fmt.Errorf("permission check failed: %w", err)
+	}
+	if perm != "admin" && perm != "maintain" {
+		return fmt.Errorf("user %q has permission %q on %s/%s, not admin/maintain", login, perm, owner, name)
+	}
+	return nil
+}
+
+
 
 // returnURL builds the post-payment redirect target for an audit checkout,
 // pointing back at the report page so the client poll can unlock it (AC6).

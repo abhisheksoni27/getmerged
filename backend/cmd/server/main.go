@@ -568,11 +568,9 @@ func main() {
 		r.POST("/repo/:owner/:name/verify", middleware.UserAuth(cfg.JWTSecret), handler.PostVerifyRepoHandler(claimSvc))
 		r.GET("/repo/:owner/:name/console", middleware.UserAuth(cfg.JWTSecret), handler.GetMaintainerConsoleHandler(claimSvc))
 
-		// One-Time $19 Repo Deep-Audit (AC1-AC8). Static "audit" child under
-		// :owner/:name never collides with the existing claim/verify/console
-		// segments (no radix/wildcard mixing). Server-side access is enforced
-		// inside each handler via auth user + purchases.status='paid'.
-		r.POST("/repo/:owner/:name/audit/checkout", middleware.UserAuth(cfg.JWTSecret), handler.CreateRepoAuditCheckoutHandler(cfg, auditRepo, repoStore))
+		// One-Time $10 Repo Maintainer Audit. Maintainer verification gate uses the
+		// stored OAuth token (github_maintainer or github provider) to confirm admin access.
+		r.POST("/repo/:owner/:name/audit/checkout", middleware.UserAuth(cfg.JWTSecret), handler.CreateRepoAuditCheckoutHandler(cfg, auditRepo, repoStore, oauthTokenRepo))
 		r.GET("/repo/:owner/:name/audit", middleware.UserAuth(cfg.JWTSecret), handler.GetRepoAuditReportHandler(cfg, auditRepo, repoStore, aiClient, aiRepo))
 		r.POST("/repo/:owner/:name/audit/regen", middleware.UserAuth(cfg.JWTSecret), handler.RegenerateRepoAuditInsightsHandler(cfg, auditRepo, repoStore, aiClient, aiRepo))
 		// AC6 client poll: /api/audit/status?repo_key=... (distinct static
