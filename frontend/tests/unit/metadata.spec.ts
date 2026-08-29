@@ -60,7 +60,7 @@ test.describe("Repo Metadata & FAQ Unit Tests (IDEA-20260820-02)", () => {
 
     expect(meta.title).toBe("vercel/next.js • 84.5/100 C-Rank (A-Tier) | GetMerged");
     expect(meta.title.length).toBeLessThanOrEqual(60);
-    expect(meta.description.length).toBeLessThanOrEqual(160);
+    expect(meta.description.length).toBeLessThanOrEqual(154);
     expect(meta.description).toContain("Will vercel/next.js merge your PR?");
     expect(meta.description).toContain("84.5/100 C-Rank (A-Tier)");
     expect(meta.description).toContain("68% merge rate");

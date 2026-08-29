@@ -43,14 +43,17 @@ export function buildRepoMetadata(fullName: string, repo: Repo | null): RepoMeta
     }
   }
 
-  // Fill full ~150-158 character description budget with rich maintainer telemetry & PR verdict
-  const fullDesc = `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate, ~${respHours}h response time & review speed. Full telemetry on GetMerged.`;
-  const compactDesc = `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. View review telemetry on GetMerged.`;
-  const shortDesc = `${fullName} PR acceptance: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate & ~${respHours}h response time. Check maintainer review speed on GetMerged.`;
+  // Fill description budget strictly under 155 characters (target: 140-154 chars)
+  const fullDesc = `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. View review telemetry on GetMerged.`;
+  const compactDesc = `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate & ~${respHours}h response. Check review speed on GetMerged.`;
+  const shortDesc = `${fullName} PR acceptance: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`;
 
   let description = fullDesc;
-  if (description.length > 158) description = compactDesc;
-  if (description.length > 158) description = shortDesc;
+  if (description.length > 154) description = compactDesc;
+  if (description.length > 154) description = shortDesc;
+  if (description.length > 154) {
+    description = description.slice(0, 151) + "...";
+  }
 
   return { title, description };
 }
