@@ -12,6 +12,7 @@ import {
   Star,
   Sparkles,
   ArrowRight,
+  ShieldCheck,
   CheckCircle2,
 } from "lucide-react";
 import { motion, useMotionValue, animate, useInView } from "framer-motion";
@@ -314,12 +315,15 @@ export default function HomeClient({
         placeholderText={`Search repositories, e.g. ${famousRepos[placeholderIndex]}`}
       />
 
-      {/* Hero Section - Clean, data-forward with calibrated ambient glass glow */}
-      <section className="relative mx-auto max-w-6xl px-4 pt-20 pb-12 text-center sm:px-6 lg:px-8 overflow-hidden">
+      {/* Hero Section - Clean, data-forward with calibrated ambient glass glow & floating S-tier repos */}
+      <section className="relative mx-auto max-w-6xl px-4 pt-20 pb-12 text-center sm:px-6 lg:px-8 overflow-visible">
         {/* Ambient atmospheric glows */}
-        <div aria-hidden="true" className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 -z-10 h-[380px] w-[600px] max-w-full opacity-60 blur-3xl">
+        <div aria-hidden="true" className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 -z-10 h-[380px] w-[600px] max-w-full opacity-60 blur-3xl overflow-hidden">
           <div className="h-full w-full rounded-full bg-gradient-to-tr from-emerald-500/10 via-amber-500/5 to-orange-500/15" />
         </div>
+
+        {/* Dynamic floating circles of top S-tier repos */}
+        <FloatingRepoCircles repos={repos} />
 
         {/* Live radar badge */}
         <motion.div
