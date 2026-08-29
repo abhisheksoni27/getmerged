@@ -30,13 +30,16 @@ export function buildRepoMetadata(fullName: string, repo: Repo | null): RepoMeta
   const busFactor = repo.bus_factor || 1;
   const gfiCount = repo.good_first_issue_count || 0;
 
-  const title = `${fullName} Contributor Review & C-Rank™: ${score}/100 (${tier} Tier) | GetMerged`;
-  
-  const metricsSnippet = `scored ${score}/100 (${tier} Tier) on C-Rank™ with ${mergeRate}% PR merge rate, ${respHours}h review response, ${firstTimerRate}% first-timer acceptance, bus factor of ${busFactor}${gfiCount > 0 ? `, and ${gfiCount} open good-first-issues` : ""}.`;
+  // Compelling title with high CTR & clear value proposition
+  const title = `${fullName} | ${score}/100 C-Rank (${tier}-Tier) • ${mergeRate}% Merge Rate | GetMerged`;
+
+  // Rich, punchy description highlighting actionable PR intelligence
+  const descPrefix = `Will ${fullName} merge your PR? Rated ${tier}-Tier (${score}/100 C-Rank).`;
+  const metricsHighlight = `${mergeRate}% external merge rate, ~${respHours}h response latency, ${firstTimerRate}% first-timer acceptance, bus factor of ${busFactor}${gfiCount > 0 ? `, and ${gfiCount} good first issues` : ""}.`;
   
   const description = repo.description
-    ? `${fullName} ${metricsSnippet} ${repo.description.trim()}`
-    : `${fullName} contributor review: ${metricsSnippet} View maintainer responsiveness, review turnaround, and acceptance probability on GetMerged.`;
+    ? `${descPrefix} ${metricsHighlight} "${repo.description.trim()}"`
+    : `${descPrefix} Detailed maintainer turnaround, review bottlenecks, and acceptance odds on GetMerged: ${metricsHighlight}`;
 
   return { title, description };
 }
