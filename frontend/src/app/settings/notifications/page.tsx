@@ -12,6 +12,7 @@ import {
   updatePreferences,
 } from "@/lib/notifications";
 import { GfiSniperCard } from "@/components/GfiSniperCard";
+import { WeeklyWrapCard } from "@/components/WeeklyWrapCard";
 
 export default function NotificationPreferencesPage() {
   const [prefs, setPrefs] = useState<NotificationPreferences | null>(null);
@@ -94,7 +95,8 @@ export default function NotificationPreferencesPage() {
         })}
       </div>
 
-      <div className="mt-10">
+      <div className="mt-8 space-y-8">
+        <WeeklyWrapCard />
         <GfiSniperCard />
       </div>
     </main>
