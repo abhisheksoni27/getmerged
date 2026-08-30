@@ -210,13 +210,13 @@ Sprint 3: Community & Maintainer Marketplace (Phase 3) [COMPLETED ✅]
 ├── [x] 3.3 Maintainer Claim Portal & Funnel Analytics (/maintainers)
 └── [x] 3.4 Monthly Language Leagues & Hacktoberfest Hub (/league)
 
-Sprint 4: Browser Extension & Viral Growth (Phase 4)
-├── 4.1 DoorPal Chrome & Arc Extension
-├── 4.2 1-Click AI README Badge Prompt Generator
-└── 4.3 Programmatic SEO Comparison & Topic Pages
+Sprint 4: Browser Extension & Viral Growth (Phase 4) [COMPLETED ✅]
+├── [x] 4.1 DoorPal Chrome & Arc Extension (Manifest V3 & GitHub DOM overlay)
+├── [x] 4.2 1-Click AI README Badge Prompt Generator (Cursor & Copilot integration)
+└── [x] 4.3 Programmatic SEO Comparison & Topic Pages (/compare/[slug] & /topics/[topic])
 
-Sprint 5: B2B Talent & Enterprise Intelligence (Phase 5)
-├── 5.1 Recruiter Talent Pass & Candidate Directory (/talent)
-├── 5.2 Enterprise Org Portals & DevRel Benchmarks (/org/[org])
-└── 5.3 Commercial Telemetry API Gateway
+Sprint 5: B2B Talent & Enterprise Intelligence (Phase 5) [COMPLETED ✅]
+├── [x] 5.1 Recruiter Talent Pass & Candidate Directory (/talent & /api/v1/recruiter/search)
+├── [x] 5.2 Enterprise Org Portals & DevRel Benchmarks (/org/[org])
+└── [x] 5.3 Commercial Telemetry API Gateway (/docs & API Key authentication)
 ```
