@@ -73,6 +73,8 @@ export interface PublicProfile {
   avatar_url?: string;
   bio?: string;
   headline?: string;
+  location?: string;
+  skills?: string[];
   member_since: string;
   is_public: boolean;
   total_evals: number;
