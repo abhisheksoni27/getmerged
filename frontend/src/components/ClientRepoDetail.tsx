@@ -41,6 +41,7 @@ import { SimilarRepos } from "@/components/SimilarRepos";
 import { RepoTrendChart } from "@/components/RepoTrendChart";
 import { PRAcceptanceWidget } from "@/components/PRAcceptanceWidget";
 import { OptimalReviewWindow } from "@/components/OptimalReviewWindow";
+import { PRSizeSweetSpotCard } from "@/components/PRSizeSweetSpotCard";
 import { UnscoredExplainer } from "@/components/UnscoredExplainer";
 import { RaiseYourRank } from "@/components/RaiseYourRank";
 import { MaintainerConsoleModal } from "@/components/MaintainerConsoleModal";
@@ -824,6 +825,9 @@ export function ClientRepoDetail({
 
         {/* Optimal PR Submission Window & Maintainer Activity Heatmap (Story 7.1 / IDEA-20260819-01) */}
         <OptimalReviewWindow fullName={fullName} />
+
+        {/* PR Velocity Sweet Spot Benchmark (Story 2.1) */}
+        <PRSizeSweetSpotCard repoId={repo?.id ? String(repo.id) : fullName} repoFullName={fullName} />
       </motion.section>
 
       {/* Similar Repositories & Alternatives Interlinking (Issue #55) */}

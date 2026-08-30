@@ -12,6 +12,7 @@ import OpenToOpportunitiesToggle from "@/components/OpenToOpportunitiesToggle";
 import ShareCardButton from "@/components/ShareCardButton";
 import { CRankBadge } from "@/components/CRankBadge";
 import { CopyBadgeButton } from "@/components/CopyBadgeButton";
+import { KarmaProfileBadge } from "@/components/KarmaProfileBadge";
 import { RecruiterContactSection } from "@/components/RecruiterContactSection";
 import { LangLogo } from "@/components/LangLogo";
 import {
@@ -173,6 +174,11 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
 
         {/* Talent Pass Toggle */}
         <OpenToOpportunitiesToggle slug={profile.slug} />
+
+        {/* Proof-of-Work Karma & Reputation Section */}
+        <div className="mb-8">
+          <KarmaProfileBadge username={profile.slug || profile.username} />
+        </div>
 
         {/* Section 2: Featured Showcase Projects (Private & Public Work with Photos) */}
         {showcaseProjects.length > 0 && (
