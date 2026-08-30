@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://getmerged.abhishekco.de/cheat-engine/cheat-engine</loc>
+    <lastmod>2026-08-30T09:20:01Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/stascorp/rdpwrap</loc>
+    <lastmod>2026-08-30T09:20:34Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/peazip/PeaZip</loc>
     <lastmod>2026-08-19T11:03:27Z</lastmod>
     <changefreq>daily</changefreq>
@@ -31,8 +43,26 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/Embarcadero/Dev-Cpp</loc>
+    <lastmod>2026-08-30T09:23:18Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/red-prig/fpPS4</loc>
     <lastmod>2026-08-20T18:50:40Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/robhagemans/hoard-of-bitfonts</loc>
+    <lastmod>2026-08-30T09:26:05Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/opensoldat/opensoldat</loc>
+    <lastmod>2026-08-30T09:26:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -80,13 +110,25 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FrankBijnen/ExifToolGui</loc>
-    <lastmod>2026-08-19T04:57:28Z</lastmod>
+    <lastmod>2026-08-30T09:26:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rotators/Fo1in2</loc>
     <lastmod>2026-08-18T03:06:24Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/MojtabaTajik/Robber</loc>
+    <lastmod>2026-08-30T09:27:31Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/hdrover/discord-drover</loc>
+    <lastmod>2026-08-30T09:27:49Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -319,6 +361,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/ok2cqr/cqrlog</loc>
+    <lastmod>2026-08-18T06:46:04Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/diversenok/NtUtilsLibrary</loc>
     <lastmod>2026-08-21T15:42:50Z</lastmod>
     <changefreq>daily</changefreq>
@@ -327,12 +375,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/Alexey-T/CudaLister</loc>
     <lastmod>2026-08-21T15:42:50Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/ok2cqr/cqrlog</loc>
-    <lastmod>2026-08-18T06:46:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

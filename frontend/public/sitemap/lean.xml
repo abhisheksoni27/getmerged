@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover/lean4</loc>
-    <lastmod>2026-08-19T04:27:28Z</lastmod>
+    <lastmod>2026-08-30T09:21:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -32,7 +32,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ImperialCollegeLondon/FLT</loc>
-    <lastmod>2026-08-19T17:15:27Z</lastmod>
+    <lastmod>2026-08-30T09:27:23Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/google-deepmind/superhuman</loc>
+    <lastmod>2026-08-30T09:27:49Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -163,14 +169,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/TauCetiProject/TauCeti</loc>
-    <lastmod>2026-08-18T23:21:09Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/cajal-technologies/talos</loc>
+    <lastmod>2026-08-20T11:29:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/cajal-technologies/talos</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/TauCetiProject/TauCeti</loc>
+    <lastmod>2026-08-18T23:21:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

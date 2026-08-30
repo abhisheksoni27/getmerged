@@ -7,6 +7,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/monitoringartist/grafana-aws-cloudwatch-dashboards</loc>
+    <lastmod>2026-08-30T04:37:16Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/CGamesPlay/infra</loc>
     <lastmod>2026-08-20T12:23:50Z</lastmod>
     <changefreq>daily</changefreq>

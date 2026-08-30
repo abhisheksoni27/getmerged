@@ -8,7 +8,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/w3c/csswg-drafts</loc>
-    <lastmod>2026-08-19T11:00:44Z</lastmod>
+    <lastmod>2026-08-30T09:22:33Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/w3c/webtransport</loc>
+    <lastmod>2026-08-30T09:26:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -31,8 +37,20 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/w3c/attribution</loc>
+    <lastmod>2026-08-30T00:25:17Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/w3c/largest-contentful-paint</loc>
     <lastmod>2026-08-27T00:35:59Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/w3c/window-management</loc>
+    <lastmod>2026-08-30T00:25:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

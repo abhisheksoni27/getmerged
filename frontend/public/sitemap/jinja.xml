@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/kubernetes-sigs/kubespray</loc>
-    <lastmod>2026-08-21T07:48:49Z</lastmod>
+    <lastmod>2026-08-30T09:20:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -25,6 +25,24 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/geerlingguy/internet-pi</loc>
+    <lastmod>2026-08-30T09:22:58Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/iiab/iiab</loc>
+    <lastmod>2026-08-30T09:25:24Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/forem/selfhost</loc>
+    <lastmod>2026-08-30T09:25:54Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/twrpdtgen/twrpdtgen</loc>
     <lastmod>2026-08-20T20:47:45Z</lastmod>
     <changefreq>daily</changefreq>
@@ -39,6 +57,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/openstack/ansible-hardening</loc>
     <lastmod>2026-08-28T09:43:29Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jekhokie/raspberry-noaa-v2</loc>
+    <lastmod>2026-08-30T09:28:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -151,13 +175,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/archlinux/infrastructure</loc>
+    <loc>https://getmerged.abhishekco.de/zimmertr/Kubernetes-Manifests</loc>
     <lastmod>2026-08-22T21:27:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/zimmertr/Kubernetes-Manifests</loc>
+    <loc>https://getmerged.abhishekco.de/archlinux/infrastructure</loc>
     <lastmod>2026-08-22T21:27:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
