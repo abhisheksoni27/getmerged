@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Repo, AIInsights, GoodFirstIssueItem } from "@/types/opendoor";
+import { Repo, AIInsights, GoodFirstIssueItem, PRSizeSweetSpotData } from "@/types/opendoor";
 import {
   ArrowLeft,
   Sparkles,
@@ -57,6 +57,7 @@ interface ClientRepoDetailProps {
   initialInsights?: AIInsights | null;
   initialRelatedRepos?: Repo[];
   initialGfiList?: GoodFirstIssueItem[];
+  initialSweetSpot?: PRSizeSweetSpotData | null;
 }
 
 export function ClientRepoDetail({
@@ -65,6 +66,7 @@ export function ClientRepoDetail({
   initialInsights,
   initialRelatedRepos = [],
   initialGfiList = [],
+  initialSweetSpot = null,
 }: ClientRepoDetailProps) {
   const [currentUser, setCurrentUser] = useState<{
     username?: string;
@@ -827,7 +829,11 @@ export function ClientRepoDetail({
         <OptimalReviewWindow fullName={fullName} />
 
         {/* PR Velocity Sweet Spot Benchmark (Story 2.1) */}
-        <PRSizeSweetSpotCard repoId={repo?.id ? String(repo.id) : fullName} repoFullName={fullName} />
+        <PRSizeSweetSpotCard
+          repoId={repo?.id ? String(repo.id) : fullName}
+          repoFullName={fullName}
+          initialData={initialSweetSpot}
+        />
       </motion.section>
 
       {/* Similar Repositories & Alternatives Interlinking (Issue #55) */}
