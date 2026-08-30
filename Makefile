@@ -46,6 +46,9 @@ build-linux-arm: swagger
 build-recalculate-linux-arm:
 	cd backend && CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="$(LDFLAGS)" -o bin/recalculate-history-linux-arm ./cmd/recalculate_history
 
+build-discover-catalog:
+	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/discover_catalog ./cmd/discover_catalog
+
 build-backfill:
 	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/backfill ./cmd/backfill
 
@@ -100,18 +103,21 @@ deploy: build-linux-arm
 		sudo systemctl status opendoor.service --no-pager'
 
 # Deploy from a checkout of this repo already on the server - no ssh/rsync, plain copy.
-deploy-server: build
+deploy-server: build build-discover-catalog
 	@echo "=== Copy backend binary & nlp_sidecar ==="
 	cd backend && go build -ldflags="$(LDFLAGS)" -o bin/eventstream ./cmd/eventstream
 	cp backend/bin/server /opt/opendoor/backend/server.new
 	cp backend/bin/gharchive /opt/opendoor/backend/gharchive.new
 	cp backend/bin/eventstream /opt/opendoor/backend/eventstream.new
+	cp backend/bin/discover_catalog /opt/opendoor/backend/discover_catalog.new
 	mv -f /opt/opendoor/backend/server.new /opt/opendoor/backend/server
 	mv -f /opt/opendoor/backend/gharchive.new /opt/opendoor/backend/gharchive
 	mv -f /opt/opendoor/backend/eventstream.new /opt/opendoor/backend/eventstream
+	mv -f /opt/opendoor/backend/discover_catalog.new /opt/opendoor/backend/discover_catalog
 	chmod +x /opt/opendoor/backend/server
 	chmod +x /opt/opendoor/backend/gharchive
 	chmod +x /opt/opendoor/backend/eventstream
+	chmod +x /opt/opendoor/backend/discover_catalog
 	cp -r backend/nlp_sidecar /opt/opendoor/backend/
 	sudo restorecon -v /opt/opendoor/backend/server
 	sudo systemctl restart opendoor.service
