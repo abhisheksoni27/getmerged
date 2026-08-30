@@ -153,6 +153,16 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5 font-mono text-[11px] text-[#e5e5e5]">
               <li>
+                <Link href="/maintainers" title="Maintainer Claim Portal & PR Telemetry" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                  For Maintainers ⚡
+                </Link>
+              </li>
+              <li>
+                <Link href="/stack" title="Stalk Your Tech Stack & Dependencies" className="text-emerald-400 hover:text-emerald-300 transition-colors">
+                  Stalk My Stack
+                </Link>
+              </li>
+              <li>
                 <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm and Methodology" className="hover:text-white transition-colors">
                   How C-Rank Works
                 </Link>

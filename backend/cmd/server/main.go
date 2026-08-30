@@ -515,6 +515,9 @@ func main() {
 		// PR Size Sweet Spot Telemetry
 		api.GET("/repos/:id/pr-size-sweetspot", handler.GetPRSizeSweetSpotHandler(repoStore))
 
+		// Contributor Progression Quest Track
+		api.GET("/user/quests", middleware.OptionalUserAuth(cfg.JWTSecret), handler.GetUserQuestsHandler(database, profileRepo))
+
 		// Auth Routes
 		authGroup := api.Group("/auth")
 		{
