@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Sparkles, CheckCircle2, AlertTriangle, XCircle, ArrowRight } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
+import { PAYMENTS_ENABLED } from "@/lib/flags";
 import { ShareForecastButton } from "@/components/ShareForecastButton";
 
 interface CheckItem {
@@ -318,6 +319,11 @@ function PreflightContent() {
   }, [packPending]);
 
   const handleBuyPack = async () => {
+    if (!PAYMENTS_ENABLED) {
+      setUpgrade(null);
+      setError("Payment processing is currently in early-access mode. Please check back shortly.");
+      return;
+    }
     try {
       window.sessionStorage.setItem(PACK_PROCESSING_KEY, JSON.stringify({ pending: true }));
     } catch {
