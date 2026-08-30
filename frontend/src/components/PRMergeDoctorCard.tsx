@@ -24,12 +24,12 @@ export function PRMergeDoctorCard({
   sweetSpotLines = 180,
 }: PRMergeDoctorProps) {
   const [prUrl, setPrUrl] = useState("");
-  const [linesAdded, setLinesAdded] = useState("450");
-  const [linesDeleted, setLinesDeleted] = useState("120");
-  const [hasTests, setHasTests] = useState(false);
+  const [linesAdded, setLinesAdded] = useState("120");
+  const [linesDeleted, setLinesDeleted] = useState("30");
+  const [hasTests, setHasTests] = useState(true);
   const [hasIssueLink, setHasIssueLink] = useState(true);
   const [isDiagnosing, setIsDiagnosing] = useState(false);
-  const [diagnosed, setDiagnosed] = useState(true);
+  const [diagnosed, setDiagnosed] = useState(false);
   const [copiedScript, setCopiedScript] = useState(false);
 
   const totalLines = (parseInt(linesAdded) || 0) + (parseInt(linesDeleted) || 0);
@@ -56,7 +56,7 @@ git push origin pr-part-2-implementation`;
     setTimeout(() => {
       setIsDiagnosing(false);
       setDiagnosed(true);
-    }, 600);
+    }, 400);
   };
 
   const handleCopyGit = () => {
@@ -67,23 +67,31 @@ git push origin pr-part-2-implementation`;
 
   return (
     <div className="rounded-3xl glass-panel border border-emerald-500/30 bg-gradient-to-br from-emerald-950/20 via-zinc-950/90 to-zinc-900/50 p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden font-sans">
+      {/* Visual Connector to PR Sweet Spot Benchmark */}
+      <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-mono">
+        <Split className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+        <span>
+          <strong>Interactive Test:</strong> Test your planned branch diff against {repoName}&apos;s <strong>~{sweetSpotLines} LOC sweet spot</strong> before opening a PR.
+        </span>
+      </div>
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-semibold">
             <Stethoscope className="h-3.5 w-3.5" />
-            <span>PR Merge Doctor · Pre-Submission Acceptance Diagnosis</span>
+            <span>PR Merge Doctor · Pre-Submission Diff Check</span>
           </div>
           <h3 className="text-xl font-bold font-space text-white">
-            Guarantee 24-Hour PR Merges Before Submitting
+            Simulate Your PR Merge Speed
           </h3>
           <p className="text-xs text-zinc-400">
-            Maintainers reject oversized or untested PRs. Diagnose your branch diff to match {repoName}&apos;s exact review sweet spot.
+            Enter your branch size and test coverage below to forecast review turnaround and get 1-click git splitting commands.
           </p>
         </div>
 
         <span className="glass-card px-3 py-1 rounded-xl text-xs font-mono text-emerald-400 shrink-0 self-start sm:self-auto flex items-center gap-1">
-          ⚡ 94% Acceptance Target
+          ⚡ Sweet spot: ~{sweetSpotLines} LOC
         </span>
       </div>
 

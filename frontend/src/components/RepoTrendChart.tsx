@@ -5,7 +5,7 @@ import { API_BASE_URL } from "@/lib/api";
 import { getGradeColor } from "@/components/CRankBadge";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 
-interface TrendPoint {
+export interface TrendPoint {
   snapshot_date: string;
   c_rank_score: number;
   c_rank_tier: string;
@@ -25,12 +25,16 @@ function formatDate(iso: string) {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-export function RepoTrendChart({ repoId }: { repoId: string }) {
-  const [trend, setTrend] = useState<TrendPoint[] | null>(null);
+export function RepoTrendChart({ repoId, initialTrend = null }: { repoId: string; initialTrend?: TrendPoint[] | null }) {
+  const [trend, setTrend] = useState<TrendPoint[] | null>(initialTrend);
   const [error, setError] = useState(false);
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
 
   useEffect(() => {
+    if (initialTrend) {
+      setTrend(initialTrend);
+      return;
+    }
     fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(repoId)}/trend?days=90`)
       .then((res) => (res.ok ? res.json() : Promise.reject(new Error("fetch failed"))))
       .then((data: TrendResponse) => setTrend(data.trend))

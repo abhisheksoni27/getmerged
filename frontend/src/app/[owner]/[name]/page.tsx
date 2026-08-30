@@ -1,7 +1,7 @@
 import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Repo, AIInsights, GoodFirstIssueItem, PRSizeSweetSpotData } from "@/types/opendoor";
+import { Repo, AIInsights, GoodFirstIssueItem, PRSizeSweetSpotData, OptimalTimeResult } from "@/types/opendoor";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { ClientRepoDetail } from "@/components/ClientRepoDetail";
@@ -9,6 +9,8 @@ import { InstantScanPanel } from "@/components/InstantScanPanel";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { buildRepoMetadata, buildRepoFaqList } from "@/lib/repo-metadata";
 import { getGradeColor } from "@/components/CRankBadge";
+import { PRLikelihoodData } from "@/components/PRAcceptanceWidget";
+import { TrendPoint } from "@/components/RepoTrendChart";
 
 const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
 
@@ -86,6 +88,56 @@ async function getPRSizeSweetSpot(targetIdOrName: string | number): Promise<PRSi
     return await res.json();
   } catch (e) {
     console.error("SSR fetch failed for pr size sweet spot:", targetIdOrName, e);
+  }
+  return null;
+}
+
+async function getPRLikelihood(fullName: string): Promise<PRLikelihoodData | null> {
+  try {
+    const res = await fetch(
+      `${INTERNAL_API_URL}/api/v1/pr-likelihood?name=${encodeURIComponent(fullName)}`,
+      {
+        next: { revalidate: 3600 },
+      }
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    console.error("SSR fetch failed for pr-likelihood:", fullName, e);
+  }
+  return null;
+}
+
+async function getOptimalTime(fullName: string): Promise<OptimalTimeResult | null> {
+  try {
+    const res = await fetch(
+      `${INTERNAL_API_URL}/api/v1/optimal-time?name=${encodeURIComponent(fullName)}`,
+      {
+        next: { revalidate: 3600 },
+      }
+    );
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json?.optimal_time || null;
+  } catch (e) {
+    console.error("SSR fetch failed for optimal-time:", fullName, e);
+  }
+  return null;
+}
+
+async function getRepoTrend(fullName: string): Promise<TrendPoint[] | null> {
+  try {
+    const res = await fetch(
+      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(fullName)}/trend?days=90`,
+      {
+        next: { revalidate: 3600 },
+      }
+    );
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json?.trend || null;
+  } catch (e) {
+    console.error("SSR fetch failed for repo trend:", fullName, e);
   }
   return null;
 }
@@ -229,12 +281,15 @@ export default async function RepoDetailPage({ params }: PageProps) {
 
   const targetInsightKey = repo?.id ? String(repo.id) : repo.full_name;
   
-  // Parallel Server Fetch: insights, related repos, good first issues, and pr size sweet spot
-  const [insights, relatedRepos, gfiList, sweetSpot] = await Promise.all([
+  // Parallel Server Fetch: insights, related repos, good first issues, pr size sweet spot, likelihood, optimal time, and 90d trend
+  const [insights, relatedRepos, gfiList, sweetSpot, likelihood, optimalTime, trend] = await Promise.all([
     getRepoInsights(targetInsightKey),
     getRelatedRepos(targetInsightKey),
     getGoodFirstIssues(targetInsightKey),
     getPRSizeSweetSpot(targetInsightKey),
+    getPRLikelihood(fullName),
+    getOptimalTime(fullName),
+    getRepoTrend(fullName),
   ]);
 
   // Schema.org JSON-LD Structured Data
@@ -352,6 +407,9 @@ export default async function RepoDetailPage({ params }: PageProps) {
         initialRelatedRepos={relatedRepos}
         initialGfiList={gfiList}
         initialSweetSpot={sweetSpot}
+        initialLikelihood={likelihood}
+        initialOptimalTime={optimalTime}
+        initialTrend={trend}
       />
 
       <Footer />

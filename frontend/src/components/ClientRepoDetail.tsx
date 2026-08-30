@@ -52,6 +52,10 @@ import { isRepoScored } from "@/lib/repo-metadata";
 import { getGradeColor } from "@/components/CRankBadge";
 
 
+import { PRLikelihoodData } from "@/components/PRAcceptanceWidget";
+import { OptimalTimeResult } from "@/types/opendoor";
+import { TrendPoint } from "@/components/RepoTrendChart";
+
 interface ClientRepoDetailProps {
   repo: Repo | null;
   fullName: string;
@@ -59,6 +63,9 @@ interface ClientRepoDetailProps {
   initialRelatedRepos?: Repo[];
   initialGfiList?: GoodFirstIssueItem[];
   initialSweetSpot?: PRSizeSweetSpotData | null;
+  initialLikelihood?: PRLikelihoodData | null;
+  initialOptimalTime?: OptimalTimeResult | null;
+  initialTrend?: TrendPoint[] | null;
 }
 
 export function ClientRepoDetail({
@@ -68,6 +75,9 @@ export function ClientRepoDetail({
   initialRelatedRepos = [],
   initialGfiList = [],
   initialSweetSpot = null,
+  initialLikelihood = null,
+  initialOptimalTime = null,
+  initialTrend = null,
 }: ClientRepoDetailProps) {
   const [currentUser, setCurrentUser] = useState<{
     username?: string;
@@ -817,17 +827,17 @@ export function ClientRepoDetail({
         transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
       >
         {/* C-Rank Trend */}
-        <RepoTrendChart repoId={fullName} />
+        <RepoTrendChart repoId={fullName} initialTrend={initialTrend} />
 
         {/* PR Acceptance & Review Speed Forecast Widget (Epic 3, Story 3.4) */}
         {fullName && (() => {
           const [owner, name] = fullName.split("/");
           if (!owner || !name) return null;
-          return <PRAcceptanceWidget owner={owner} name={name} />;
+          return <PRAcceptanceWidget owner={owner} name={name} initialData={initialLikelihood} />;
         })()}
 
         {/* Optimal PR Submission Window & Maintainer Activity Heatmap (Story 7.1 / IDEA-20260819-01) */}
-        <OptimalReviewWindow fullName={fullName} />
+        <OptimalReviewWindow fullName={fullName} initialData={initialOptimalTime} />
 
         {/* PR Velocity Sweet Spot Benchmark (Story 2.1) */}
         <PRSizeSweetSpotCard
@@ -837,7 +847,14 @@ export function ClientRepoDetail({
         />
 
         {/* PR Merge Doctor (Pre-Flight Diff Check & 1-Click Split) */}
-        <PRMergeDoctorCard repoName={fullName} />
+        <PRMergeDoctorCard
+          repoName={fullName}
+          sweetSpotLines={
+            initialSweetSpot?.sweet_spot_threshold
+              ? parseInt(initialSweetSpot.sweet_spot_threshold.replace(/\D/g, "")) || 180
+              : 180
+          }
+        />
       </motion.section>
 
       {/* Similar Repositories & Alternatives Interlinking (Issue #55) */}
