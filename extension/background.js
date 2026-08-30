@@ -9,7 +9,7 @@
 //   SW -> content : { type: 'TELEMETRY_RESULT', payload | null, error | null }
 //   error is one of 'API_TIMEOUT' | 'OFFLINE' | 'NOT_FOUND'.
 
-const API_BASE = 'https://api.opendoor.dev';
+const API_BASE = 'https://getmerged.abhishekco.de';
 const CACHE_PREFIX = 'od_telemetry:';
 const INDEX_KEY = 'od_telemetry_index';
 const CACHE_TTL_MS = 10 * 60 * 1000; // AC4: TTL 10min

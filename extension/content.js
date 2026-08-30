@@ -11,7 +11,7 @@
   const api = globalThis.browser || globalThis.chrome;
   if (!api || !api.runtime) return;
 
-  const DEEP_BASE = 'https://opendoor.dev';
+  const DEEP_BASE = 'https://getmerged.abhishekco.de';
   const WIDGET_ID = 'od-readiness';
   const MAX_ATTEMPTS = 3;
   const TIER_COLORS = {
