@@ -93,26 +93,11 @@ func GetNLPSidecarURL() string {
 // It retries with exponential backoff on transient token exhaustion or rate limits,
 // and fails fast with an error rather than degrading into low-quality synthetic heuristics.
 func (c *AIClient) GenerateRepoInsights(ctx context.Context, repoFullName string, prComments, issueComments []string) (*AIInsightsResponse, error) {
-	var lastErr error
-	backoff := 2 * time.Second
-
-	for attempt := 1; attempt <= 3; attempt++ {
-		resp, err := c.generateWithKiloCLI(ctx, repoFullName, prComments, issueComments)
-		if err == nil && resp != nil && len(resp.DeepSections) > 0 {
-			return resp, nil
-		}
-		lastErr = err
-		slog.Warn("Kilo generation attempt failed or returned empty deep sections, waiting for recovery...", "repo", repoFullName, "attempt", attempt, "err", err, "backoff", backoff)
-		
-		select {
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		case <-time.After(backoff):
-		}
-		backoff *= 2
+	resp, err := c.generateWithKiloCLI(ctx, repoFullName, prComments, issueComments)
+	if err == nil && resp != nil && len(resp.DeepSections) > 0 {
+		return resp, nil
 	}
-
-	return nil, fmt.Errorf("kilo code generation exhausted retries for %s: %w", repoFullName, lastErr)
+	return nil, fmt.Errorf("kilo code generation failed for %s: %w", repoFullName, err)
 }
 
 func (c *AIClient) generateWithKiloCLI(ctx context.Context, repoFullName string, prComments, issueComments []string) (*AIInsightsResponse, error) {

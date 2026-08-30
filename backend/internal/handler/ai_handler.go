@@ -94,9 +94,8 @@ func GetRepoInsights(aiClient *ai.AIClient, aiRepo repository.AIRepository, repo
 		// 4. Generate insights via AI client / Python sidecar / local classifier
 		insights, err := aiClient.GenerateRepoInsights(c.Request.Context(), repo.FullName, prComments, issueComments)
 		if err != nil {
-			slog.Error("get repo insights: ai generation failed", "repo", repo.FullName, "err", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate AI insights"})
-			return
+			slog.Warn("get repo insights: ai generation failed, falling back to local sentiment classifier", "repo", repo.FullName, "err", err)
+			insights = aiClient.GenerateLocalZeroCostInsights(repo.FullName, prComments, issueComments)
 		}
 
 		guidelinesBytes, _ := json.Marshal(insights.PRGuidelines)
