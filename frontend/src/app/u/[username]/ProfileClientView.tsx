@@ -13,6 +13,7 @@ import ShareCardButton from "@/components/ShareCardButton";
 import { CRankBadge } from "@/components/CRankBadge";
 import { CopyBadgeButton } from "@/components/CopyBadgeButton";
 import { KarmaProfileBadge, type ContributorKarmaData } from "@/components/KarmaProfileBadge";
+import { EmbedKarmaBadgeCard } from "@/components/EmbedKarmaBadgeCard";
 import { RecruiterContactSection } from "@/components/RecruiterContactSection";
 import { LangLogo } from "@/components/LangLogo";
 import {
@@ -178,10 +179,16 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
         <OpenToOpportunitiesToggle slug={profile.slug} />
 
         {/* Proof-of-Work Karma & Reputation Section */}
-        <div className="mb-8">
+        <div className="mb-8 space-y-6">
           <KarmaProfileBadge
             username={profile.slug || profile.username}
             initialKarma={initialKarma}
+          />
+          <EmbedKarmaBadgeCard
+            username={profile.slug || profile.username}
+            karma={initialKarma?.total_karma}
+            levelTitle={initialKarma?.rank?.title}
+            badgeColor={initialKarma?.rank?.badge_color}
           />
         </div>
 
