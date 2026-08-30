@@ -2,13 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/microsoft/vcpkg</loc>
-    <lastmod>2026-08-18T06:43:10Z</lastmod>
+    <lastmod>2026-08-30T09:19:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/OpenMoonRay/openmoonray</loc>
-    <lastmod>2026-08-27T01:35:39Z</lastmod>
+    <lastmod>2026-08-30T09:22:58Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/shinchiro/mpv-winbuild-cmake</loc>
+    <lastmod>2026-08-30T01:22:16Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -21,6 +27,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/libbpf/libbpf-bootstrap</loc>
     <lastmod>2026-08-27T01:35:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/corrosion-rs/corrosion</loc>
+    <lastmod>2026-08-30T09:25:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

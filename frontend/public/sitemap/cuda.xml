@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://getmerged.abhishekco.de/karpathy/llm.c</loc>
+    <lastmod>2026-08-30T09:19:29Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/NVlabs/instant-ngp</loc>
+    <lastmod>2026-08-30T09:20:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/HazyResearch/ThunderKittens</loc>
     <lastmod>2026-08-25T09:38:42Z</lastmod>
     <changefreq>daily</changefreq>
@@ -9,6 +21,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/BBuf/how-to-optim-algorithm-in-cuda</loc>
     <lastmod>2026-08-25T09:38:42Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/computerhistory/AlexNet-Source-Code</loc>
+    <lastmod>2026-08-30T09:23:32Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -31,6 +49,36 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/CannyLab/tsne-cuda</loc>
+    <lastmod>2026-08-30T09:25:03Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/NVIDIA/nccl-tests</loc>
+    <lastmod>2026-08-30T02:25:18Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/graphdeco-inria/diff-gaussian-rasterization</loc>
+    <lastmod>2026-08-30T09:25:41Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/chengdazhi/Deformable-Convolution-V2-PyTorch</loc>
+    <lastmod>2026-08-30T09:25:54Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/mit-han-lab/torchsparse</loc>
+    <lastmod>2026-08-30T09:26:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/alibaba/rtp-llm</loc>
     <lastmod>2026-08-25T09:38:42Z</lastmod>
     <changefreq>daily</changefreq>
@@ -45,6 +93,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/NVIDIA/cuopt</loc>
     <lastmod>2026-08-25T09:38:42Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/nv-tlabs/NKSR</loc>
+    <lastmod>2026-08-30T09:27:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

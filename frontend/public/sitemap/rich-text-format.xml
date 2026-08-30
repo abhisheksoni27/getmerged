@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://getmerged.abhishekco.de/MacDownApp/macdown</loc>
+    <lastmod>2026-08-30T09:21:13Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/addyosmani/backbone-fundamentals</loc>
+    <lastmod>2026-08-30T09:21:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/RealDeco/xiaozhi-esphome</loc>
     <lastmod>2026-08-23T05:39:50Z</lastmod>
     <changefreq>daily</changefreq>

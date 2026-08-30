@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://getmerged.abhishekco.de/gleam-wisp/wisp</loc>
+    <lastmod>2026-08-30T09:26:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/gleam-lang/stdlib</loc>
     <lastmod>2026-08-20T04:23:39Z</lastmod>
     <changefreq>daily</changefreq>
@@ -13,20 +19,62 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/bcpeinhardt/learn_otp_with_gleam</loc>
+    <lastmod>2026-08-30T12:19:59Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/CrowdHailer/eyg-lang</loc>
-    <lastmod>2026-08-18T07:07:06Z</lastmod>
+    <lastmod>2026-08-30T12:19:59Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/gleam-lang/http</loc>
+    <lastmod>2026-08-30T12:20:01Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/lpil/pog</loc>
+    <lastmod>2026-08-30T12:20:01Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/gleam-lang/cookbook</loc>
+    <lastmod>2026-08-30T12:20:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/alii/arc</loc>
-    <lastmod>2026-08-19T16:51:27Z</lastmod>
+    <lastmod>2026-08-30T12:20:01Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/glimr-org/glimr</loc>
+    <lastmod>2026-08-30T12:20:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/daniellionel01/parrot</loc>
-    <lastmod>2026-08-19T16:51:27Z</lastmod>
+    <lastmod>2026-08-30T12:20:01Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/midas-framework/midas</loc>
+    <lastmod>2026-08-30T12:20:01Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/giacomocavalieri/birdie</loc>
+    <lastmod>2026-08-30T12:20:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

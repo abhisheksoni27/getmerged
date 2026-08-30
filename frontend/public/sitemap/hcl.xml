@@ -7,6 +7,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/antonputra/tutorials</loc>
+    <lastmod>2026-08-30T09:23:05Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/terraform-aws-modules/terraform-aws-vpc</loc>
     <lastmod>2026-08-21T14:39:49Z</lastmod>
     <changefreq>daily</changefreq>
@@ -15,6 +21,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/aws-ia/terraform-aws-eks-blueprints</loc>
     <lastmod>2026-08-27T05:41:58Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/SadServers/sadservers</loc>
+    <lastmod>2026-08-30T09:23:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -37,6 +49,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/100daysofdevops/100daysofdevops</loc>
+    <lastmod>2026-08-30T09:24:32Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/tungbq/devops-basics</loc>
     <lastmod>2026-08-17T12:27:47Z</lastmod>
     <changefreq>daily</changefreq>
@@ -55,8 +73,20 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/sidpalas/devops-directive-terraform-course</loc>
+    <lastmod>2026-08-30T09:26:23Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/terraform-google-modules/terraform-google-kubernetes-engine</loc>
     <lastmod>2026-08-17T12:27:47Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/vmware/packer-examples-for-vsphere</loc>
+    <lastmod>2026-08-30T09:27:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -81,6 +111,18 @@
   <url>
     <loc>https://getmerged.abhishekco.de/hashicorp/agent-skills</loc>
     <lastmod>2026-08-19T16:57:28Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Olivr/free-domain</loc>
+    <lastmod>2026-08-30T09:27:37Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/nccgroup/sadcloud</loc>
+    <lastmod>2026-08-30T09:28:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -223,14 +265,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/alphagov/govuk-infrastructure</loc>
-    <lastmod>2026-08-18T02:24:24Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/trussworks/terraform-layout-example</loc>
+    <lastmod>2026-08-22T09:10:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/trussworks/terraform-layout-example</loc>
-    <lastmod>2026-08-22T09:10:10Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/alphagov/govuk-infrastructure</loc>
+    <lastmod>2026-08-18T02:24:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -283,14 +325,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nats-io/nats-box</loc>
-    <lastmod>2026-08-22T09:10:10Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/cloudnative-pg/postgres-containers</loc>
+    <lastmod>2026-08-18T02:24:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/cloudnative-pg/postgres-containers</loc>
-    <lastmod>2026-08-18T02:24:24Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/nats-io/nats-box</loc>
+    <lastmod>2026-08-22T09:10:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -379,14 +421,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/GoogleCloudPlatform/accelerated-platforms</loc>
-    <lastmod>2026-08-18T17:01:05Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/in4it/terraform-modules</loc>
+    <lastmod>2026-08-22T09:10:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/in4it/terraform-modules</loc>
-    <lastmod>2026-08-22T09:10:10Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/GoogleCloudPlatform/accelerated-platforms</loc>
+    <lastmod>2026-08-18T17:01:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/llvm/llvm-project</loc>
-    <lastmod>2026-08-16T15:29:16Z</lastmod>
+    <lastmod>2026-08-30T09:19:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -99,6 +99,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/pgarba/SiMBA-</loc>
     <lastmod>2026-08-27T08:41:57Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/SVF-tools/Software-Security-Analysis</loc>
+    <lastmod>2026-08-30T05:22:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
