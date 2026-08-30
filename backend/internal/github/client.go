@@ -950,7 +950,7 @@ func (c *Client) handleRateLimit(rl rateLimitInfo) {
 
 	slog.Debug("github rate limit", "remaining", rl.Remaining, "cost", rl.Cost)
 
-	if rl.Remaining >= 100 {
+	if rl.Remaining >= 10 {
 		return
 	}
 
