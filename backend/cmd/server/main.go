@@ -508,6 +508,13 @@ func main() {
 		// Issue Sniper Alert Service (Story 1.2)
 		api.POST("/alerts/subscribe-sniper", middleware.OptionalUserAuth(cfg.JWTSecret), sniperHandler.SubscribeSniper)
 
+		// Contributor Karma & Reputation Badges
+		api.GET("/u/:username/karma", handler.GetKarmaHandler(userRepo, profileRepo))
+		api.GET("/u/:username/karma.svg", handler.GetKarmaBadgeSVGHandler(userRepo, profileRepo))
+
+		// PR Size Sweet Spot Telemetry
+		api.GET("/repos/:id/pr-size-sweetspot", handler.GetPRSizeSweetSpotHandler(repoStore))
+
 		// Auth Routes
 		authGroup := api.Group("/auth")
 		{
