@@ -71,13 +71,13 @@ export function QuestTrackCard() {
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-semibold">
             <Target className="h-3.5 w-3.5" />
-            <span>Contributor Quest Track</span>
+            <span>Contributor Onboarding</span>
           </div>
           <h3 className="text-xl sm:text-2xl font-bold font-space text-white">
-            Level Up Your OSS Reputation
+            Build Your Open Source Track Record
           </h3>
           <p className="text-xs text-zinc-400">
-            Complete milestones to earn verified Proof-of-Work Karma points.
+            Complete these quick steps to find welcoming repos and earn Karma points.
           </p>
         </div>
 
@@ -87,7 +87,7 @@ export function QuestTrackCard() {
               <Sparkles className="h-4 w-4" />
               {track.completed_quests} / {track.total_quests}
             </div>
-            <div className="text-[11px] font-mono text-zinc-400">Quests Completed</div>
+            <div className="text-[11px] font-mono text-zinc-400">Steps Completed</div>
           </div>
         </div>
       </div>

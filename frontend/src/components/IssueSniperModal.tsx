@@ -94,14 +94,14 @@ export function IssueSniperModal({
         <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
             <Crosshair className="h-3.5 w-3.5 text-emerald-400" />
-            <span>Real-Time Issue Sniper</span>
+            <span>Instant Good First Issue Alerts</span>
           </div>
           <h3 className="text-xl sm:text-2xl font-bold font-space text-white">
-            Never Miss High-Value Beginner Issues.
+            Get Notified When Good First Issues Open.
           </h3>
           <p className="text-xs text-zinc-400 leading-relaxed">
-            Top beginner issues in welcoming S/A-Tier repos get claimed within 15 minutes. Get
-            instant alerts sent to your inbox or Discord the second they drop.
+            Good beginner issues in active open-source projects get claimed fast. Get
+            an email or Discord notification the moment maintainers open a new starter task.
           </p>
         </div>
 
@@ -111,10 +111,10 @@ export function IssueSniperModal({
               <CheckCircle2 className="h-8 w-8" />
             </div>
             <div className="space-y-1">
-              <h4 className="text-lg font-bold text-white">Issue Sniper Activated!</h4>
+              <h4 className="text-lg font-bold text-white">Alerts Activated!</h4>
               <p className="text-xs text-zinc-400 max-w-sm mx-auto">
-                Your radar is live. We will alert you the instant a fresh Good-First-Issue matching
-                your parameters is discovered.
+                You&apos;re all set. We will notify you whenever new Good First Issues matching
+                your languages are opened on GitHub.
               </p>
             </div>
             <button

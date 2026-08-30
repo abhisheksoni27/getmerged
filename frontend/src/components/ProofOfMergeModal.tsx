@@ -28,7 +28,7 @@ export function ProofOfMergeModal({
 
   if (!isOpen) return null;
 
-  const shareText = `🚀 Just got my Pull Request #${prNumber} merged into ${repoFullName} (${cRankTier}-Tier on @GetMerged)! Earned +${karmaEarned} verified Proof-of-Work Karma. Check my contributor profile: https://getmerged.abhishekco.de/u/${username}`;
+  const shareText = `🚀 Just got my Pull Request #${prNumber} merged into ${repoFullName}! Earned +${karmaEarned} contributor Karma on @GetMerged. Check my open-source profile: https://getmerged.abhishekco.de/u/${username}`;
   const xShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
   const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://getmerged.abhishekco.de/u/${username}`)}`;
 
@@ -56,13 +56,13 @@ export function ProofOfMergeModal({
           </div>
           <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-semibold">
             <Sparkles className="h-3.5 w-3.5" />
-            <span>Proof-of-Merge Verified</span>
+            <span>PR Merged on GitHub</span>
           </div>
           <h3 className="text-2xl font-black font-space text-white">
             Pull Request Merged!
           </h3>
           <p className="text-xs text-zinc-300 max-w-sm mx-auto">
-            Your contribution to <strong>{repoFullName}</strong> was verified on GitHub. You earned Proof-of-Work Karma!
+            Your pull request to <strong>{repoFullName}</strong> was merged! You earned +{karmaEarned} Karma points.
           </p>
         </div>
 

@@ -483,27 +483,27 @@ export default function StackClient() {
 
               <div className="p-4 rounded-xl bg-emerald-900/30 border border-emerald-400/30">
                 <div className="text-emerald-300 text-xs font-mono mb-1 flex items-center gap-1">
-                  <Sparkles className="h-3.5 w-3.5 text-emerald-400" /> In-Stack GFIs
+                  <Sparkles className="h-3.5 w-3.5 text-emerald-400" /> Open Good First Issues
                 </div>
                 <div className="text-2xl font-bold font-mono text-white">
                   {analysisResult.summary.total_good_first_issues}
                 </div>
-                <div className="text-[11px] text-emerald-300/80 mt-1">Open Issues in Your Stack</div>
+                <div className="text-[11px] text-emerald-300/80 mt-1">Beginner Issues in Your Stack</div>
               </div>
             </div>
           </div>
 
-          {/* In-Stack Contribution Openings (HERO Section) */}
+          {/* Good First Issues in Your Stack */}
           {allIssues.length > 0 && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-bold font-space text-white flex items-center gap-2">
                     <Sparkles className="h-5 w-5 text-emerald-400" />
-                    <span>In-Stack Contribution Openings</span>
+                    <span>Good First Issues in Your Tech Stack</span>
                   </h3>
                   <p className="text-xs text-zinc-400">
-                    Open beginner issues in the exact dependencies you run in this project.
+                    Open beginner issues in the exact packages and libraries your code runs on.
                   </p>
                 </div>
                 <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-lg">
