@@ -8,7 +8,8 @@ import { canonicalizeSlug, displayNameFromSlug } from "@/lib/languageSlug";
 import { formatFreshness } from "@/lib/freshness";
 import { LangDigestSignup } from "@/components/LangDigestSignup";
 import { IssueSniperTrigger } from "@/components/IssueSniperTrigger";
-import { Sparkles, Code2, ArrowLeft, ShieldCheck, Sprout, ExternalLink, MessageSquare, Star, Award } from "lucide-react";
+import { ClaimIssueButton } from "@/components/ClaimIssueButton";
+import { Sparkles, Code2, ArrowLeft, ShieldCheck, Sprout, MessageSquare, Star, Award } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
@@ -373,16 +374,16 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
                         </span>
                       )}
 
-                      <a
-                        href={iss.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title={`Claim issue #${iss.issue_number} on GitHub`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-card text-white text-xs font-mono font-semibold hover:bg-zinc-800 shadow-2xs transition-colors"
-                      >
-                        <span>Claim on GitHub</span>
-                        <ExternalLink className="h-3 w-3" />
-                      </a>
+                      <ClaimIssueButton
+                        issue={{
+                          id: `${iss.repository_id}-${iss.issue_number}`,
+                          repo_name: iss.repo_full_name,
+                          issue_number: iss.issue_number,
+                          title: iss.title,
+                          url: iss.url,
+                          c_rank_tier: iss.c_rank_tier,
+                        }}
+                      />
                     </div>
                   </div>
                 );

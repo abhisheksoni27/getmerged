@@ -10,7 +10,6 @@ import { FirstMergeTrack } from "@/components/FirstMergeTrack";
 import { SeasonCard } from "@/components/SeasonCard";
 import { QuestTrackCard } from "@/components/QuestTrackCard";
 import { EmbedKarmaBadgeCard } from "@/components/EmbedKarmaBadgeCard";
-import { ApiKeysCard } from "./ApiKeysCard";
 import { MergeCelebrationModal } from "./MergeCelebrationModal";
 import {
   GitPullRequest,
@@ -361,9 +360,6 @@ export function DashboardClient() {
       <div className="mb-6">
         <ForYou />
         <TopMatches />
-      </div>
-      <div className="mb-6">
-        <ApiKeysCard />
       </div>
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
