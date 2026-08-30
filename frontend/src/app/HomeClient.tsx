@@ -442,9 +442,6 @@ export default function HomeClient({
         {/* Macro Telemetry Grid */}
         <motion.div
           className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-3xl mx-auto rounded-2xl bg-[#141414]/70 backdrop-blur-xl p-4 sm:p-5 border border-white/[0.1] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_12px_32px_-8px_rgba(0,0,0,0.5)] items-center text-center"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
         >
           <div>
@@ -578,9 +575,6 @@ export default function HomeClient({
       <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
         >
           {/* Left: Problem statement */}
@@ -687,9 +681,6 @@ export default function HomeClient({
       <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
         >
           {/* Left: Factor list */}
@@ -745,9 +736,6 @@ export default function HomeClient({
       <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
         <motion.div
           className="rounded-xl bg-[#141414] border border-white/[0.08] p-8 sm:p-10"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -980,9 +968,6 @@ export default function HomeClient({
               {repos.slice(0, 6).map((repo, index) => (
                 <motion.div
                   key={repo.id}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
                   transition={{ duration: 0.4, ease: EASE_OUT_EXPO, delay: index * 0.04 }}
                 >
                   <RepoCard repo={repo} isLoggedIn={isLoggedIn} />
@@ -1108,9 +1093,6 @@ export default function HomeClient({
                 return (
                   <motion.div
                     key={item.language}
-                    initial={{ opacity: 0, y: 12 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-40px" }}
                     transition={{ duration: 0.35, ease: EASE_OUT_EXPO, delay: idx * 0.05 }}
                     className="py-5 first:pt-2 last:pb-2 group transition-colors"
                   >
