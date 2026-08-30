@@ -8,15 +8,21 @@ import { formatUTCHourToLocal, formatUTCRangeToLocal, getUserTimeZone, padZero }
 
 interface OptimalReviewWindowProps {
   fullName: string;
+  initialData?: OptimalTimeResult | null;
 }
 
-export function OptimalReviewWindow({ fullName }: OptimalReviewWindowProps) {
-  const [data, setData] = useState<OptimalTimeResult | null>(null);
-  const [loading, setLoading] = useState(true);
+export function OptimalReviewWindow({ fullName, initialData = null }: OptimalReviewWindowProps) {
+  const [data, setData] = useState<OptimalTimeResult | null>(initialData);
+  const [loading, setLoading] = useState(!initialData);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
+    if (initialData) {
+      setData(initialData);
+      setLoading(false);
+      return;
+    }
     let isSubscribed = true;
 
     async function fetchOptimalTime() {

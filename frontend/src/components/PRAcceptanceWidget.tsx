@@ -9,9 +9,10 @@ import { ShareForecastButton } from "@/components/ShareForecastButton";
 interface PRAcceptanceWidgetProps {
   owner: string;
   name: string;
+  initialData?: PRLikelihoodData | null;
 }
 
-interface PRLikelihoodData {
+export interface PRLikelihoodData {
   repository: string;
   c_rank_tier: string;
   overall_acceptance_rate: number | null;
@@ -25,11 +26,16 @@ interface PRLikelihoodData {
   calculated_at: string | null;
 }
 
-export function PRAcceptanceWidget({ owner, name }: PRAcceptanceWidgetProps) {
-  const [data, setData] = useState<PRLikelihoodData | null>(null);
-  const [loading, setLoading] = useState(true);
+export function PRAcceptanceWidget({ owner, name, initialData = null }: PRAcceptanceWidgetProps) {
+  const [data, setData] = useState<PRLikelihoodData | null>(initialData);
+  const [loading, setLoading] = useState(!initialData);
 
   useEffect(() => {
+    if (initialData) {
+      setData(initialData);
+      setLoading(false);
+      return;
+    }
     let isMounted = true;
     async function fetchLikelihood() {
       try {
