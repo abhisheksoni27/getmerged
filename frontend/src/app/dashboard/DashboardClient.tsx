@@ -9,6 +9,7 @@ import { ForYou } from "@/components/ForYou";
 import { FirstMergeTrack } from "@/components/FirstMergeTrack";
 import { SeasonCard } from "@/components/SeasonCard";
 import { QuestTrackCard } from "@/components/QuestTrackCard";
+import { EmbedKarmaBadgeCard } from "@/components/EmbedKarmaBadgeCard";
 import { ApiKeysCard } from "./ApiKeysCard";
 import { MergeCelebrationModal } from "./MergeCelebrationModal";
 import {
@@ -458,9 +459,10 @@ export function DashboardClient() {
         </div>
       )}
 
-      {/* Contributor Progression Quest Track */}
-      <div className="mb-8">
+      {/* Contributor Progression Quest Track & GitHub README Badge */}
+      <div className="mb-8 space-y-6">
         <QuestTrackCard />
+        {me?.username && <EmbedKarmaBadgeCard username={me.username} />}
       </div>
 
       {!data || data.prs.length === 0 ? (

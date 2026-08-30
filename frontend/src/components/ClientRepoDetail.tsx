@@ -42,6 +42,7 @@ import { RepoTrendChart } from "@/components/RepoTrendChart";
 import { PRAcceptanceWidget } from "@/components/PRAcceptanceWidget";
 import { OptimalReviewWindow } from "@/components/OptimalReviewWindow";
 import { PRSizeSweetSpotCard } from "@/components/PRSizeSweetSpotCard";
+import { PRMergeDoctorCard } from "@/components/PRMergeDoctorCard";
 import { UnscoredExplainer } from "@/components/UnscoredExplainer";
 import { RaiseYourRank } from "@/components/RaiseYourRank";
 import { MaintainerConsoleModal } from "@/components/MaintainerConsoleModal";
@@ -834,6 +835,9 @@ export function ClientRepoDetail({
           repoFullName={fullName}
           initialData={initialSweetSpot}
         />
+
+        {/* PR Merge Doctor (Pre-Flight Diff Check & 1-Click Split) */}
+        <PRMergeDoctorCard repoName={fullName} />
       </motion.section>
 
       {/* Similar Repositories & Alternatives Interlinking (Issue #55) */}

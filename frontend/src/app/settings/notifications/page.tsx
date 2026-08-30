@@ -11,6 +11,7 @@ import {
   setEnabled,
   updatePreferences,
 } from "@/lib/notifications";
+import { GfiSniperCard } from "@/components/GfiSniperCard";
 
 export default function NotificationPreferencesPage() {
   const [prefs, setPrefs] = useState<NotificationPreferences | null>(null);
@@ -91,6 +92,10 @@ export default function NotificationPreferencesPage() {
             </div>
           );
         })}
+      </div>
+
+      <div className="mt-10">
+        <GfiSniperCard />
       </div>
     </main>
   );
