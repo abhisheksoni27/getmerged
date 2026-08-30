@@ -38,6 +38,8 @@ type EntitlementRepository interface {
 	CreateCreditPackOrder(ctx context.Context, order *CreditPackOrder) error
 	GetCreditPackOrder(ctx context.Context, orderID string) (*CreditPackOrder, error)
 	MarkCreditPackOrder(ctx context.Context, orderID, status string) error
+	GetMaintainerSLA(ctx context.Context, userID int64) (*MaintainerSLASubscription, error)
+	UpdateMaintainerSLA(ctx context.Context, userID int64, subID string, active bool, expiresAt *time.Time) error
 }
 
 // CreditPackOrder tracks a one-time pack checkout so pack-status can enforce
@@ -50,6 +52,16 @@ type CreditPackOrder struct {
 	Status         string    `db:"status" json:"status"`
 	CreatedAt      time.Time `db:"created_at" json:"created_at"`
 	UpdatedAt      time.Time `db:"updated_at" json:"updated_at"`
+}
+
+// MaintainerSLASubscription tracks the per-user Maintainer SLA subscription.
+type MaintainerSLASubscription struct {
+	UserID         int64      `db:"user_id" json:"user_id"`
+	SubscriptionID *string    `db:"subscription_id" json:"subscription_id,omitempty"`
+	Status         string     `db:"status" json:"status"`
+	ExpiresAt      *time.Time `db:"expires_at" json:"expires_at,omitempty"`
+	CreatedAt      time.Time  `db:"created_at" json:"created_at"`
+	UpdatedAt      time.Time  `db:"updated_at" json:"updated_at"`
 }
 
 // Referral bonus constants: one-time grants stacked on the free tier.
@@ -458,5 +470,49 @@ func (r *sqlxEntitlementRepository) MarkCreditPackOrder(ctx context.Context, ord
 	_, err := r.db.ExecContext(ctx,
 		"UPDATE credit_pack_orders SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE order_id = ?",
 		status, orderID)
+	return err
+}
+
+// GetMaintainerSLA returns the active Maintainer SLA subscription for a user.
+func (r *sqlxEntitlementRepository) GetMaintainerSLA(ctx context.Context, userID int64) (*MaintainerSLASubscription, error) {
+	var sub MaintainerSLASubscription
+	err := r.db.GetContext(ctx, &sub,
+		`SELECT user_id, subscription_id, status, expires_at, created_at, updated_at
+		 FROM user_maintainer_sla WHERE user_id = ?`, userID)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &sub, nil
+}
+
+// UpdateMaintainerSLA upserts the Maintainer SLA subscription state.
+func (r *sqlxEntitlementRepository) UpdateMaintainerSLA(ctx context.Context, userID int64, subID string, active bool, expiresAt *time.Time) error {
+	status := "inactive"
+	if active {
+		status = "active"
+	}
+	_, err := r.db.ExecContext(ctx,
+		`INSERT INTO user_maintainer_sla (user_id, subscription_id, status, expires_at, updated_at)
+		 VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+		 ON DUPLICATE KEY UPDATE
+			subscription_id = VALUES(subscription_id),
+			status = VALUES(status),
+			expires_at = VALUES(expires_at),
+			updated_at = CURRENT_TIMESTAMP`,
+		userID, subID, status, expiresAt)
+	if r.db.DriverName() == "sqlite" {
+		_, err = r.db.ExecContext(ctx,
+			`INSERT INTO user_maintainer_sla (user_id, subscription_id, status, expires_at, updated_at)
+			 VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+			 ON CONFLICT(user_id) DO UPDATE SET
+				subscription_id = excluded.subscription_id,
+				status = excluded.status,
+				expires_at = excluded.expires_at,
+				updated_at = excluded.updated_at`,
+			userID, subID, status, expiresAt)
+	}
 	return err
 }

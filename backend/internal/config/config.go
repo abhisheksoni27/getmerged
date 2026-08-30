@@ -33,6 +33,13 @@ type Config struct {
 	TelegramChatID            string
 	DodopaymentsWebhookSecret string
 	DodopaymentsAPIKey        string
+	DodopaymentsEnvironment   string // test_mode or live_mode
+	DodopaymentsProductPro     string
+	DodopaymentsProductPack10  string
+	DodopaymentsProductAudit   string
+	DodopaymentsProductBoost7  string
+	DodopaymentsProductRecruiterPass string
+	DodopaymentsProductMaintainerSLA string
 	// Stripe (Repo Boost — paid featured placement, AC1-AC8).
 	StripeSecretKey        string
 	StripeWebhookSecret    string
@@ -90,6 +97,12 @@ func Load() (*Config, error) {
 		TelegramChatID:            os.Getenv("TELEGRAM_CHAT_ID"),
 		DodopaymentsWebhookSecret: os.Getenv("DODOPAYMENTS_WEBHOOK_SECRET"),
 		DodopaymentsAPIKey:        os.Getenv("DODOPAYMENTS_API_KEY"), // optional - enables hourly pack-purchase reconcile
+		DodopaymentsProductPro:     os.Getenv("DODOPAYMENTS_PRODUCT_PRO"),
+		DodopaymentsProductPack10:  os.Getenv("DODOPAYMENTS_PRODUCT_PACK10"),
+		DodopaymentsProductAudit:   os.Getenv("DODOPAYMENTS_PRODUCT_AUDIT"),
+		DodopaymentsProductBoost7:  os.Getenv("DODOPAYMENTS_PRODUCT_BOOST7"),
+		DodopaymentsProductRecruiterPass: os.Getenv("DODOPAYMENTS_PRODUCT_RECRUITER_PASS"),
+		DodopaymentsProductMaintainerSLA: os.Getenv("DODOPAYMENTS_PRODUCT_MAINTAINER_SLA"),
 		StripeSecretKey:           os.Getenv("STRIPE_SECRET_KEY"),
 		StripeWebhookSecret:       os.Getenv("STRIPE_WEBHOOK_SECRET"),
 		StripePublishableKey:      os.Getenv("STRIPE_PUBLISHABLE_KEY"),
@@ -135,6 +148,25 @@ func Load() (*Config, error) {
 	}
 	if c.UnsubscribeKey == "" {
 		c.UnsubscribeKey = c.JobSecret
+	}
+
+	if c.DodopaymentsProductPro == "" {
+		c.DodopaymentsProductPro = "pdt_opendoor_pro"
+	}
+	if c.DodopaymentsProductPack10 == "" {
+		c.DodopaymentsProductPack10 = "pdt_opendoor_pack10"
+	}
+	if c.DodopaymentsProductAudit == "" {
+		c.DodopaymentsProductAudit = "pdt_opendoor_audit"
+	}
+	if c.DodopaymentsProductBoost7 == "" {
+		c.DodopaymentsProductBoost7 = "pdt_opendoor_boost7"
+	}
+	if c.DodopaymentsProductRecruiterPass == "" {
+		c.DodopaymentsProductRecruiterPass = "pdt_recruiter_pass"
+	}
+	if c.DodopaymentsProductMaintainerSLA == "" {
+		c.DodopaymentsProductMaintainerSLA = "pdt_maintainer_sla"
 	}
 
 	// Optional crawler tuning knobs. Falls back to conservative defaults

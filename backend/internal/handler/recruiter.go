@@ -3,6 +3,8 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"io"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -135,9 +137,7 @@ func GetOpenToOpportunitiesHandler(userRepo repository.UserRepository, profileRe
 }
 
 // CreateRecruiterPassCheckoutHandler handles POST /api/v1/user/recruiter-pass/checkout.
-// Creates a pending Recruiter Pass entitlement row (status 'pending') so the
-// webhook race in AC6 is observable: search stays 403 until the Dodo webhook
-// flips the row to 'active'.
+// Creates a DodoPayments checkout session for the Recruiter Pass subscription.
 func CreateRecruiterPassCheckoutHandler(cfg *config.Config, recruiterRepo repository.RecruiterRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userIDVal, ok := c.Get(middleware.UserIDKey)
@@ -151,7 +151,13 @@ func CreateRecruiterPassCheckoutHandler(cfg *config.Config, recruiterRepo reposi
 			return
 		}
 
-		checkoutID := "rc_" + strconv.FormatInt(userID, 10) + "_" + strconv.FormatInt(time.Now().UnixNano(), 10)
+		orderID := "rc_" + strconv.FormatInt(userID, 10) + "_" + strconv.FormatInt(time.Now().UnixNano(), 10)
+
+		checkoutURL, checkoutID := createDodoRecruiterCheckout(c.Request.Context(), cfg, userID, orderID)
+		if checkoutURL == "" {
+			checkoutURL = "https://checkout.dodopayments.com/buy/" + cfg.DodopaymentsProductRecruiterPass
+		}
+
 		if err := recruiterRepo.CreateRecruiterPassOrder(c.Request.Context(), userID, checkoutID, ""); err != nil {
 			slog.Error("failed to create recruiter pass order", "user_id", userID, "err", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create recruiter pass checkout"})
@@ -159,11 +165,75 @@ func CreateRecruiterPassCheckoutHandler(cfg *config.Config, recruiterRepo reposi
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"status":              "pending",
-			"checkout_id":         checkoutID,
-			"message":             "complete payment to activate the Recruiter Pass",
+			"status":      "pending",
+			"checkout_id": checkoutID,
+			"checkout_url": checkoutURL,
+			"message":     "complete payment to activate the Recruiter Pass",
 		})
 	}
+}
+
+func createDodoRecruiterCheckout(ctx context.Context, cfg *config.Config, userID int64, orderID string) (string, string) {
+	if cfg == nil || cfg.DodopaymentsAPIKey == "" {
+		return "", ""
+	}
+
+	body, err := json.Marshal(map[string]any{
+		"product_cart": []map[string]any{
+			{"product_id": cfg.DodopaymentsProductRecruiterPass, "quantity": 1},
+		},
+		"metadata": map[string]string{
+			"user_id":  fmt.Sprintf("%d", userID),
+			"order_id": orderID,
+		},
+	})
+	if err != nil {
+		return "", ""
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, dodoCheckoutsAPIURL, strings.NewReader(string(body)))
+	if err != nil {
+		return "", ""
+	}
+	req.Header.Set("Authorization", "Bearer "+cfg.DodopaymentsAPIKey)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	client := &http.Client{Timeout: 15 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		slog.Warn("recruiter pass checkout session request failed; using hosted fallback", "err", err)
+		return "", ""
+	}
+	defer resp.Body.Close()
+	respBody, _ := io.ReadAll(io.LimitReader(resp.Body, 1<<20))
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
+		slog.Warn("recruiter pass checkout session returned non-2xx; using hosted fallback", "status", resp.StatusCode)
+		return "", ""
+	}
+
+	var parsed struct {
+		ID          string `json:"id"`
+		CheckoutID  string `json:"checkout_id"`
+		CheckoutURL string `json:"checkout_url"`
+		PaymentLink string `json:"payment_link"`
+	}
+	if err := json.Unmarshal(respBody, &parsed); err != nil {
+		return "", ""
+	}
+
+	sessionID := parsed.ID
+	if sessionID == "" {
+		sessionID = parsed.CheckoutID
+	}
+	url := parsed.CheckoutURL
+	if url == "" {
+		url = parsed.PaymentLink
+	}
+	if url == "" {
+		return "", ""
+	}
+	return url, sessionID
 }
 
 // RecruiterSearchHandler handles GET /api/v1/recruiter/search (AC7: NOT under

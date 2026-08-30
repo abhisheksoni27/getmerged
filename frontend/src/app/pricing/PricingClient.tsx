@@ -35,7 +35,28 @@ export default function PricingClient() {
     }
   }, [searchParams]);
 
-  const handleCheckout = (product: string, planCycle: "monthly" | "yearly") => {
+  const handleCheckout = async (product: string, planCycle: "monthly" | "yearly") => {
+    let endpoint = "";
+    if (product === "pdt_opendoor_pro") {
+      endpoint = `/api/v1/user/pro/checkout?billing_cycle=${planCycle}`;
+    } else if (product === "pdt_recruiter_pass") {
+      endpoint = "/api/v1/user/recruiter-pass/checkout";
+    } else if (product === "pdt_maintainer_sla") {
+      endpoint = "/api/v1/user/maintainer-sla/checkout";
+    }
+
+    if (endpoint) {
+      try {
+        const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" } });
+        const data = await res.json();
+        if (data.checkout_url) {
+          window.location.href = data.checkout_url;
+          return;
+        }
+      } catch (e) {
+        console.error("checkout session failed", e);
+      }
+    }
     window.location.href = `https://checkout.dodopayments.com/buy/${product}?billing_cycle=${planCycle}`;
   };
 

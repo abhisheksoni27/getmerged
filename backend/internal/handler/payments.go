@@ -103,6 +103,19 @@ func isAuditPurchase(p DodopaymentsWebhookPayload) bool {
 	return false
 }
 
+// isProductPurchase reports whether a payload contains the given product ID.
+func isProductPurchase(p DodopaymentsWebhookPayload, productID string) bool {
+	if productID == "" {
+		return false
+	}
+	for _, item := range p.Data.ProductCart {
+		if item.ProductID == productID {
+			return true
+		}
+	}
+	return false
+}
+
 // DodopaymentsWebhookHandler handles POST /api/v1/payments/webhook/dodopayments (Story 5.2)
 func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.EntitlementRepository, database *sqlx.DB, recruiterRepo repository.RecruiterRepository, auditRepo repository.AuditPurchaseRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -170,12 +183,15 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 			expiresAt = &exp
 		}
 
-		// 4. State Transitions - branch on event type + SKU (AC2): one-time
+		// 4. State Transitions - branch on event type + product (AC2): one-time
 		// pack payments grant ledger credits; the Recruiter Pass activates the
-		// talent-pass entitlement; everything else keeps the existing
-		// subscription entitlement flow.
+		// talent-pass entitlement; Pro subscriptions unlock is_pro; Maintainer
+		// SLA subscriptions activate the SLA entitlement; everything else keeps
+		// the existing subscription entitlement flow.
 		isRecruiter := isRecruiterPassPurchase(payload)
 		isAudit := isAuditPurchase(payload)
+		isPro := isProductPurchase(payload, cfg.DodopaymentsProductPro)
+		isSLA := isProductPurchase(payload, cfg.DodopaymentsProductMaintainerSLA)
 		switch payload.EventType {
 		case "payment.succeeded":
 			if isCreditPackPurchase(payload) {
@@ -188,25 +204,16 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to grant credit pack"})
 					return
 				}
-				// Close out the tracked pack order (AC4/AC5): the UI
-				// pack-status poll reads this state.
 				if orderID := payload.Data.Metadata.OrderID; orderID != "" {
 					_ = entRepo.MarkCreditPackOrder(c.Request.Context(), orderID, "granted")
 				}
 			} else if isRecruiter {
-				// AC2/AC6: Recruiter Pass flips from 'pending' (checkout) to
-				// 'active' only here, after the Dodo payment confirms.
 				if err := recruiterRepo.ActivateRecruiterPass(c.Request.Context(), userID, payload.Data.SubscriptionID); err != nil {
 					slog.Error("failed to activate recruiter pass", "user_id", userID, "err", err)
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to activate recruiter pass"})
 					return
 				}
 			} else if isAudit {
-				// AC5/AC8: one-time $19 deep-audit payment reactivates the
-				// (user_id, repo_key) purchase to 'paid' idempotently. The
-				// unique (user_id, repo_key) key makes replayed webhooks and
-				// the reconcile cron no-ops; a repurchase after refund/dispute
-				// simply flips status back to 'paid'.
 				repoKey := strings.ToLower(strings.TrimSpace(payload.Data.Metadata.RepoKey))
 				sessionID := payload.Data.Metadata.SessionID
 				if repoKey == "" && sessionID != "" {
@@ -223,6 +230,10 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 						slog.Error("failed to mark audit purchase paid", "user_id", userID, "repo_key", repoKey, "err", err)
 					}
 				}
+			} else if isPro {
+				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
+			} else if isSLA {
+				_ = entRepo.UpdateMaintainerSLA(c.Request.Context(), userID, payload.Data.SubscriptionID, true, expiresAt)
 			} else {
 				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
 			}
@@ -233,10 +244,15 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to activate recruiter pass"})
 					return
 				}
+			} else if isPro {
+				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
+				if err := notification.OnPlanChanged(database, userID, true, eventTime); err != nil {
+					slog.Warn("notification plan sweep on upgrade failed", "user_id", userID, "err", err)
+				}
+			} else if isSLA {
+				_ = entRepo.UpdateMaintainerSLA(c.Request.Context(), userID, payload.Data.SubscriptionID, true, expiresAt)
 			} else {
 				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
-				// AC5: upgrade to Pro promotes any pending (delayed) notifications
-				// to instant delivery via the pending-window sweep.
 				if err := notification.OnPlanChanged(database, userID, true, eventTime); err != nil {
 					slog.Warn("notification plan sweep on upgrade failed", "user_id", userID, "err", err)
 				}
@@ -246,9 +262,15 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 				if err := recruiterRepo.DeactivateRecruiterPass(c.Request.Context(), userID); err != nil {
 					slog.Warn("failed to deactivate recruiter pass", "user_id", userID, "err", err)
 				}
+			} else if isPro {
+				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, false, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
+				if err := notification.OnPlanChanged(database, userID, false, eventTime); err != nil {
+					slog.Warn("notification plan sweep on downgrade failed", "user_id", userID, "err", err)
+				}
+			} else if isSLA {
+				_ = entRepo.UpdateMaintainerSLA(c.Request.Context(), userID, payload.Data.SubscriptionID, false, expiresAt)
 			} else {
 				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, false, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
-				// AC5: downgrade re-applies Free delay within the pending window.
 				if err := notification.OnPlanChanged(database, userID, false, eventTime); err != nil {
 					slog.Warn("notification plan sweep on downgrade failed", "user_id", userID, "err", err)
 				}
@@ -262,8 +284,6 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 					}
 				}
 				if repoKey != "" {
-					// AC8: refund flips the purchase to 'refunded'; the report
-					// 403s until a repurchase reactivates it.
 					if err := auditRepo.MarkRefunded(c.Request.Context(), userID, repoKey); err != nil {
 						slog.Warn("audit refund mark failed", "user_id", userID, "repo_key", repoKey, "err", err)
 					}
@@ -278,7 +298,6 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 					}
 				}
 				if repoKey != "" {
-					// AC8: dispute flips the purchase to 'disputed'.
 					if err := auditRepo.MarkDisputed(c.Request.Context(), userID, repoKey); err != nil {
 						slog.Warn("audit dispute mark failed", "user_id", userID, "repo_key", repoKey, "err", err)
 					}
@@ -286,26 +305,19 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 			}
 			isPack := isCreditPackPurchase(payload)
 			if isAudit {
-				// AC8: a failed audit checkout keeps the purchase 'pending' so
-				// the CTA remains and the user can retry — never touches Pro.
 				break
 			}
 			if isRecruiter {
-				// AC6: failed Recruiter Pass payment leaves the entitlement
-				// pending (or reverts an active one); never touches Pro.
 				if err := recruiterRepo.DeactivateRecruiterPass(c.Request.Context(), userID); err != nil {
 					slog.Warn("failed to deactivate recruiter pass on payment failure", "user_id", userID, "err", err)
 				}
 			}
 			_ = entRepo.UpdateSubscription(c.Request.Context(), userID, false, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
-			// A failed one-time pack payment must surface as a failure
-			// state with no credits (AC5).
 			if isPack {
 				if orderID := payload.Data.Metadata.OrderID; orderID != "" {
 					_ = entRepo.MarkCreditPackOrder(c.Request.Context(), orderID, "failed")
 				}
 			} else {
-				// A failed subscription payment is a downgrade (AC5).
 				if err := notification.OnPlanChanged(database, userID, false, eventTime); err != nil {
 					slog.Warn("notification plan sweep on downgrade failed", "user_id", userID, "err", err)
 				}
