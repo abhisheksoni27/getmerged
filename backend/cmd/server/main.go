@@ -525,6 +525,7 @@ func main() {
 			authGroup.GET("/github/callback", handler.GitHubOAuthCallback(cfg, userRepo, tokenMgr, entitlementRepo, dnaWorker))
 			authGroup.GET("/google", handler.GoogleOAuthRedirect(cfg))
 			authGroup.GET("/google/callback", handler.GoogleOAuthCallback(cfg, userRepo))
+			authGroup.POST("/logout", handler.LogoutHandler(cfg))
 		}
 	}
 

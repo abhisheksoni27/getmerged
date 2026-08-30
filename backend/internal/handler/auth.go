@@ -489,6 +489,23 @@ func GetCurrentUser(userRepo repository.UserRepository) gin.HandlerFunc {
 	}
 }
 
+// LogoutHandler handles POST /api/v1/auth/logout to clear the session cookie.
+func LogoutHandler(cfg *config.Config) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		isSecure := cfg.GinMode == "release"
+		http.SetCookie(c.Writer, &http.Cookie{
+			Name:     "opendoor_token",
+			Value:    "",
+			Path:     "/",
+			MaxAge:   -1,
+			HttpOnly: false,
+			Secure:   isSecure,
+			SameSite: http.SameSiteLaxMode,
+		})
+		c.JSON(http.StatusOK, gin.H{"message": "logged out successfully"})
+	}
+}
+
 type UpdateConsentBody struct {
 	ProfilingConsent bool `json:"profiling_consent"`
 }
