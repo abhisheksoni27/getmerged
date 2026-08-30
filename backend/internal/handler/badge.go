@@ -21,18 +21,17 @@ var badgeTierColors = map[string]string{
 	"B":        "#d97706",
 	"C":        "#ea580c",
 	"D":        "#dc2626",
-	"unranked": "#9ca3af",
+	"unranked": "#0284c7",
 }
 
-// badgeTierVerdicts maps tiers to plain-English contributor-facing phrases
-// (the raw letter grade alone means nothing to someone who has never seen C-Rank).
+// badgeTierVerdicts maps tiers to plain-English contributor-facing phrases.
 var badgeTierVerdicts = map[string]string{
 	"S":        "super welcoming",
 	"A":        "very welcoming",
 	"B":        "welcoming",
 	"C":        "selective",
-	"D":        "hard going",
-	"unranked": "unranked",
+	"D":        "strict reviews",
+	"unranked": "indexed",
 }
 
 // badgeSegmentRe validates owner/repo path segments before lookup (AC2).
@@ -51,24 +50,31 @@ type liveBadgeData struct {
 	Link                string
 }
 
-// liveBadgeTemplate renders a clean, modern flat two-segment badge.
-// Parsed once at init; html/template escapes all dynamic values (AC1).
+// liveBadgeTemplate renders a clean, modern squircle badge with brand styling.
 var liveBadgeTemplate = template.Must(template.New("liveBadge").Parse(
-	`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{.Total}}" height="20" role="img" aria-label="{{.Label}}: {{.Message}}">
+	`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{.Total}}" height="24" viewBox="0 0 {{.Total}} 24" role="img" aria-label="{{.Label}}: {{.Message}}">
 <title>{{.Label}}: {{.Message}}</title>
 <defs>
-<linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-opacity=".05"/></linearGradient>
-<clipPath id="r"><rect width="{{.Total}}" height="20" rx="4" fill="#fff"/></clipPath>
+<linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#ffffff" stop-opacity="0.15"/>
+<stop offset="100%" stop-color="#000000" stop-opacity="0.25"/>
+</linearGradient>
+<clipPath id="squircle"><rect width="{{.Total}}" height="24" rx="6" fill="#ffffff"/></clipPath>
 </defs>
 {{if .Link}}<a xlink:href="{{.Link}}">{{end}}
-<g clip-path="url(#r)">
-<rect width="{{.Total}}" height="20" fill="#24292f"/>
-<rect x="{{.LabelW}}" width="{{.MsgW}}" height="20" fill="{{.Color}}"/>
-<rect width="{{.Total}}" height="20" fill="url(#s)"/>
+<g clip-path="url(#squircle)">
+<rect width="{{.LabelW}}" height="24" fill="#09090b"/>
+<rect x="{{.LabelW}}" width="{{.MsgW}}" height="24" fill="{{.Color}}"/>
+<rect width="{{.Total}}" height="24" fill="url(#gloss)"/>
+<line x1="{{.LabelW}}" y1="0" x2="{{.LabelW}}" y2="24" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+<rect width="{{.Total}}" height="24" rx="6" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
 </g>
-<g fill="#fff" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="600" text-rendering="geometricPrecision">
-<text x="{{.LabelX}}" y="14">{{.Label}}</text>
-<text x="{{.MsgX}}" y="14">{{.Message}}</text>
+<g transform="translate(6, 5)">
+<path d="M7 1L1 8H6L5 13L11 6H6L7 1Z" fill="#10b981" stroke="#059669" stroke-width="0.5" stroke-linejoin="round"/>
+</g>
+<g fill="#ffffff" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,system-ui,sans-serif" font-size="11" font-weight="700" text-rendering="geometricPrecision">
+<text x="{{.LabelX}}" y="16">{{.Label}}</text>
+<text x="{{.MsgX}}" y="16" font-weight="600">{{.Message}}</text>
 </g>
 {{if .Link}}</a>{{end}}
 </svg>`))
