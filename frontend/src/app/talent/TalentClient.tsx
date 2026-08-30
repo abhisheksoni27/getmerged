@@ -17,6 +17,9 @@ import {
   Mail,
   MapPin,
   X,
+  Copy,
+  Check,
+  Send,
 } from "lucide-react";
 
 function LinkedinIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -318,6 +321,74 @@ export function TalentClient() {
   const [showRecruiterModal, setShowRecruiterModal] = useState<boolean>(false);
   const [activeDossierCandidate, setActiveDossierCandidate] = useState<CandidateProfile | null>(null);
 
+  // 1-Click Founder Pitch State
+  const [pitchCandidate, setPitchCandidate] = useState<CandidateProfile | null>(null);
+  const [pitchCompany, setPitchCompany] = useState("Our Infra Team");
+  const [pitchSenderTitle, setPitchSenderTitle] = useState("CTO & Co-Founder");
+  const [pitchRole, setPitchRole] = useState("Staff Systems Lead ($220k–$280k + equity)");
+  const [pitchChallenge, setPitchChallenge] = useState("scaling our low-latency distributed cluster architecture");
+  const [pitchTone, setPitchTone] = useState<"peer" | "deep" | "coffee">("peer");
+  const [copiedPitch, setCopiedPitch] = useState(false);
+
+  const generatedPitch = useMemo(() => {
+    if (!pitchCandidate) return { subject: "", body: "" };
+    const firstName = pitchCandidate.name.split(" ")[0];
+    const topPR = pitchCandidate.work_done[0];
+    const repo = topPR ? topPR.repo_name : pitchCandidate.top_repos[0] || "open-source";
+    const prTitle = topPR ? topPR.pr_title : "production performance improvements";
+
+    if (pitchTone === "coffee") {
+      const subject = `Saw your work in ${repo} - quick coffee chat?`;
+      const body = `Hey ${firstName},
+
+I'm the ${pitchSenderTitle} at ${pitchCompany}. Saw your contributions in ${repo} (specifically "${prTitle}"). Really clean architecture.
+
+We're currently ${pitchChallenge} and looking for a ${pitchRole}.
+
+Would you be open to a casual 15-minute intro chat sometime this week? No recruiter screens or LeetCode trivia - just engineers talking systems.
+
+Best,
+${pitchSenderTitle}, ${pitchCompany}`;
+      return { subject, body };
+    }
+
+    if (pitchTone === "deep") {
+      const subject = `Deep dive on your ${repo} PR / ${pitchRole} at ${pitchCompany}`;
+      const body = `Hey ${firstName},
+
+I was reading through your merged PR in ${repo}: "${prTitle}". 
+
+The way you handled lines (+${topPR?.lines_added || 400}/-${topPR?.lines_deleted || 100}) with a ${topPR?.turnaround_hours || 18}h maintainer turnaround is rare proof of high-velocity engineering.
+
+At ${pitchCompany}, we're tackling an identical bottleneck: ${pitchChallenge}. We need someone with your exact depth in ${pitchCandidate.primary_language} to take full ownership.
+
+Role: ${pitchRole}
+Location: Remote / Flexible
+
+If you're open to exploring what we're building, let's grab 20 minutes to geek out over the architecture.
+
+Best,
+${pitchSenderTitle}, ${pitchCompany}`;
+      return { subject, body };
+    }
+
+    // Default "peer"
+    const subject = `Your PR in ${repo} / Technical Lead at ${pitchCompany}`;
+    const body = `Hey ${firstName},
+
+I'm the ${pitchSenderTitle} at ${pitchCompany}. I came across your work in ${repo} on GetMerged - especially your work on "${prTitle}".
+
+We are currently ${pitchChallenge}. Given your track record in ${pitchCandidate.languages.slice(0, 3).join(", ")}, you'd have massive leverage here.
+
+We're hiring a ${pitchRole}. We don't do whiteboard algorithms or 5-round HR loops; we hire engineers based on proof of work.
+
+Are you open to a quick technical chat this week?
+
+Best,
+${pitchSenderTitle}, ${pitchCompany}`;
+    return { subject, body };
+  }, [pitchCandidate, pitchCompany, pitchSenderTitle, pitchRole, pitchChallenge, pitchTone]);
+
   const languagesList = ["All", "Go", "TypeScript", "Rust", "Python", "C++"];
 
   const filteredCandidates = useMemo(() => {
@@ -604,11 +675,23 @@ export function TalentClient() {
                 </div>
 
                 {/* Right: Action Buttons */}
-                <div className="flex flex-col sm:flex-row lg:flex-col items-stretch gap-2.5 shrink-0 lg:w-48">
+                <div className="flex flex-col sm:flex-row lg:flex-col items-stretch gap-2 shrink-0 lg:w-52">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPitchCandidate(cand);
+                      setCopiedPitch(false);
+                    }}
+                    className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 text-white font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-md shadow-indigo-950/50 cursor-pointer active:scale-[0.98]"
+                  >
+                    <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
+                    <span>Draft Founder Pitch</span>
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => setActiveDossierCandidate(cand)}
-                    className="px-4 py-2.5 rounded-xl glass-panel border border-white/[0.14] hover:bg-white/[0.08] text-white font-mono text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    className="px-3.5 py-2 rounded-xl glass-panel border border-white/[0.14] hover:bg-white/[0.08] text-white font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <span>Inspect Dossier</span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -620,9 +703,9 @@ export function TalentClient() {
                       setSelectedCandidate(cand);
                       setShowRecruiterModal(true);
                     }}
-                    className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-950/40 cursor-pointer active:scale-[0.98]"
+                    className="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/[0.12] text-zinc-200 font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.98]"
                   >
-                    <Lock className="h-3.5 w-3.5" />
+                    <Lock className="h-3.5 w-3.5 text-blue-400" />
                     <span>Unlock Contact</span>
                   </button>
                 </div>
@@ -700,32 +783,234 @@ export function TalentClient() {
               </div>
             </div>
 
-            <div className="pt-2 flex items-center justify-end gap-3 border-t border-white/[0.08]">
-              <button
-                type="button"
-                onClick={() => setActiveDossierCandidate(null)}
-                className="px-4 py-2 text-xs font-mono text-zinc-400 hover:text-white"
-              >
-                Close
-              </button>
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/[0.08]">
               <button
                 type="button"
                 onClick={() => {
-                  setSelectedCandidate(activeDossierCandidate);
+                  const target = activeDossierCandidate;
                   setActiveDossierCandidate(null);
-                  setShowRecruiterModal(true);
+                  setPitchCandidate(target);
+                  setCopiedPitch(false);
                 }}
-                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold transition-all flex items-center gap-2"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 text-white font-mono text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-950/40"
               >
-                <Lock className="h-3.5 w-3.5" />
-                <span>Unlock Contact Details</span>
+                <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
+                <span>Draft Founder Pitch for this PR</span>
               </button>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <button
+                  type="button"
+                  onClick={() => setActiveDossierCandidate(null)}
+                  className="px-4 py-2 text-xs font-mono text-zinc-400 hover:text-white"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedCandidate(activeDossierCandidate);
+                    setActiveDossierCandidate(null);
+                    setShowRecruiterModal(true);
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold transition-all flex items-center gap-2"
+                >
+                  <Lock className="h-3.5 w-3.5" />
+                  <span>Unlock Contact</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* MODAL 2: RECRUITER CONTACT UNLOCK / PASS GATE */}
+      {/* MODAL 2: 1-CLICK FOUNDER TECHNICAL COMPLIMENT OUTREACH ENGINE */}
+      {pitchCandidate && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 overflow-y-auto">
+          <div className="relative w-full max-w-3xl rounded-3xl glass-panel border border-violet-500/30 bg-[#121214] p-6 sm:p-8 space-y-6 shadow-2xl">
+            <button
+              type="button"
+              onClick={() => setPitchCandidate(null)}
+              className="absolute right-5 top-5 p-2 rounded-full glass-card text-zinc-400 hover:text-white cursor-pointer"
+            >
+              <X className="h-4 w-4" />
+            </button>
+
+            {/* Header */}
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600/30 to-blue-600/30 border border-violet-500/40 flex items-center justify-center text-violet-400 shrink-0">
+                <Sparkles className="h-6 w-6 text-cyan-300" />
+              </div>
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-300 text-[11px] font-mono mb-1">
+                  Founder-to-Engineer Pitch Engine · 80%+ Reply Rate
+                </div>
+                <h3 className="text-xl font-bold font-space text-white">
+                  Technical Pitch for {pitchCandidate.name}
+                </h3>
+                <p className="text-xs text-zinc-400 font-sans mt-0.5">
+                  Generates an ego-stroking, hyper-targeted peer-to-peer message analyzing their exact PR in <strong className="text-white">{pitchCandidate.top_repos[0]}</strong>.
+                </p>
+              </div>
+            </div>
+
+            {/* Config Controls Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-[#0a0a0c] border border-white/[0.08] text-xs font-sans">
+              <div className="space-y-1.5">
+                <label className="text-zinc-400 font-mono text-[11px] flex items-center gap-1">
+                  <span>Your Company / Team Name:</span>
+                </label>
+                <input
+                  type="text"
+                  value={pitchCompany}
+                  onChange={(e) => setPitchCompany(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg bg-zinc-900 border border-white/[0.1] text-white text-xs font-mono focus:border-violet-500 focus:outline-none"
+                  placeholder="e.g. Acme Infra"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-zinc-400 font-mono text-[11px]">Your Role / Title:</label>
+                <input
+                  type="text"
+                  value={pitchSenderTitle}
+                  onChange={(e) => setPitchSenderTitle(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg bg-zinc-900 border border-white/[0.1] text-white text-xs font-mono focus:border-violet-500 focus:outline-none"
+                  placeholder="e.g. CTO & Co-Founder"
+                />
+              </div>
+
+              <div className="space-y-1.5 sm:col-span-2">
+                <label className="text-zinc-400 font-mono text-[11px]">Role & Target Comp:</label>
+                <input
+                  type="text"
+                  value={pitchRole}
+                  onChange={(e) => setPitchRole(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg bg-zinc-900 border border-white/[0.1] text-white text-xs font-mono focus:border-violet-500 focus:outline-none"
+                  placeholder="e.g. Staff Distributed Systems Lead ($240k–$300k + equity)"
+                />
+              </div>
+
+              <div className="space-y-1.5 sm:col-span-2">
+                <label className="text-zinc-400 font-mono text-[11px]">Your Core Technical Challenge (Symmetry Hook):</label>
+                <input
+                  type="text"
+                  value={pitchChallenge}
+                  onChange={(e) => setPitchChallenge(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg bg-zinc-900 border border-white/[0.1] text-white text-xs font-mono focus:border-violet-500 focus:outline-none"
+                  placeholder="e.g. scaling our low-latency distributed cluster architecture"
+                />
+              </div>
+
+              {/* Pitch Tone Selector */}
+              <div className="sm:col-span-2 pt-1 flex items-center gap-2 flex-wrap font-mono text-[11px]">
+                <span className="text-zinc-400">Pitch Style:</span>
+                <button
+                  type="button"
+                  onClick={() => setPitchTone("peer")}
+                  className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                    pitchTone === "peer"
+                      ? "bg-violet-600 text-white font-bold"
+                      : "glass-card text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  Architecture Peer (Standard)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPitchTone("deep")}
+                  className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                    pitchTone === "deep"
+                      ? "bg-violet-600 text-white font-bold"
+                      : "glass-card text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  Deep Technical Flattery (PR Diffs)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPitchTone("coffee")}
+                  className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                    pitchTone === "coffee"
+                      ? "bg-violet-600 text-white font-bold"
+                      : "glass-card text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  Fast 2-Line Coffee Chat
+                </button>
+              </div>
+            </div>
+
+            {/* Live Generated Message Box */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
+                <span>Generated Outreach Pitch (Ready to Send):</span>
+                <span className="text-emerald-400 flex items-center gap-1">
+                  ✓ High-conversion peer format
+                </span>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-[#09090b] border border-violet-500/20 space-y-3 font-mono text-xs text-zinc-200 selection:bg-violet-500/30">
+                <div className="pb-2 border-b border-white/[0.06] text-zinc-300">
+                  <span className="text-zinc-500">Subject: </span>
+                  <strong className="text-white">{generatedPitch.subject}</strong>
+                </div>
+                <div className="whitespace-pre-wrap leading-relaxed font-sans text-sm text-zinc-200">
+                  {generatedPitch.body}
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/[0.08]">
+              <div className="text-[11px] font-mono text-zinc-400">
+                Direct Candidate Email: <span className="blur-[4px] select-none text-zinc-300">masked@private.dev</span>
+              </div>
+
+              <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const fullText = `Subject: ${generatedPitch.subject}\n\n${generatedPitch.body}`;
+                    navigator.clipboard.writeText(fullText);
+                    setCopiedPitch(true);
+                    setTimeout(() => setCopiedPitch(false), 2500);
+                  }}
+                  className="px-5 py-2.5 rounded-xl glass-panel border border-white/[0.15] hover:bg-white/[0.08] text-white font-mono text-xs font-bold transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98]"
+                >
+                  {copiedPitch ? (
+                    <>
+                      <Check className="h-4 w-4 text-emerald-400" />
+                      <span className="text-emerald-400">Copied Pitch!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-4 w-4 text-zinc-300" />
+                      <span>Copy Pitch</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const target = pitchCandidate;
+                    setPitchCandidate(null);
+                    setSelectedCandidate(target);
+                    setShowRecruiterModal(true);
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold transition-all flex items-center gap-2 shadow-lg shadow-blue-950/40 cursor-pointer active:scale-[0.98]"
+                >
+                  <Send className="h-3.5 w-3.5" />
+                  <span>Send Direct Email ($49/mo)</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 3: RECRUITER CONTACT UNLOCK / PASS GATE */}
       {showRecruiterModal && selectedCandidate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
           <div className="relative w-full max-w-lg rounded-3xl glass-panel border border-blue-500/40 bg-[#121214] p-6 sm:p-8 space-y-6 shadow-2xl text-center">
@@ -771,7 +1056,7 @@ export function TalentClient() {
                 href="/pricing?tab=recruiter"
                 className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xl shadow-blue-950/60"
               >
-                <span>Get WorkDone Recruiter Pass ($49/mo)</span>
+                <span>Get WorkDone Founder Pass ($49/mo)</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <p className="text-[11px] font-sans text-zinc-400">
