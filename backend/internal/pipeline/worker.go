@@ -34,6 +34,7 @@ type BackgroundCrawler struct {
 	workers           int
 	lastSnapshotPurge time.Time
 	langScheduler     *LanguageScheduler
+	gfiBackfill       *GFIBackfillService
 }
 
 // NewBackgroundCrawler initializes a BackgroundCrawler instance.
@@ -49,6 +50,7 @@ func NewBackgroundCrawler(db *sqlx.DB, gh *ghclient.Client, telegram *notificati
 		snapshotRetention: 90 * 24 * time.Hour,
 		workers:           10,
 		langScheduler:     NewLanguageScheduler(db),
+		gfiBackfill:       NewGFIBackfillService(db, gh),
 	}
 }
 
@@ -120,16 +122,35 @@ func (c *BackgroundCrawler) runLoop() {
 	macroStatsTicker := time.NewTicker(30 * time.Minute)
 	defer macroStatsTicker.Stop()
 
+	// GFI Backfill sweep runs every 3 minutes to keep repo_good_first_issues fresh
+	gfiTicker := time.NewTicker(3 * time.Minute)
+	defer gfiTicker.Stop()
+
 	// Initial seed of due repos on startup
 	c.EnqueueDueRepos()
 	c.recoverStuckProcessingItems()
 	c.refreshMacroStats()
+
+	// Run initial GFI sweep in background
+	if c.gfiBackfill != nil {
+		go func() {
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+			defer cancel()
+			_, _ = c.gfiBackfill.RunSweep(ctx, 30)
+		}()
+	}
 
 	for {
 		select {
 		case <-c.stopChan:
 			slog.Info("background crawler: worker loop terminated")
 			return
+		case <-gfiTicker.C:
+			if c.gfiBackfill != nil {
+				ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+				_, _ = c.gfiBackfill.RunSweep(ctx, 30)
+				cancel()
+			}
 		case <-scheduleTicker.C:
 			c.recoverStuckProcessingItems()
 			c.EnqueueDueRepos()

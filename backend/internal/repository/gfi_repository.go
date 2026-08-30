@@ -125,8 +125,11 @@ func (r *sqlxGFIRepository) UpsertIssues(ctx context.Context, repoID string, iss
 			`
 		}
 
+		sanitizedTitle := strings.ToValidUTF8(issue.Title, "")
+		sanitizedBody := strings.ToValidUTF8(issue.BodyText, "")
+
 		if _, err := r.db.ExecContext(ctx, query,
-			repoID, issue.Number, issue.Title, issue.BodyText, issue.URL,
+			repoID, issue.Number, sanitizedTitle, sanitizedBody, issue.URL,
 			issue.CommentsCount, issue.LabelsJSON, issue.QualityScore, bountyAmt, bountyStatus, issue.CreatedAt,
 		); err != nil {
 			return err
