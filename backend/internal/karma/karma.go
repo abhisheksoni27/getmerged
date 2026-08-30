@@ -167,8 +167,8 @@ func ComputeLevelRank(points int) LevelRank {
 func RenderKarmaBadgeSVG(username string, karma ContributorKarma) string {
 	rightText := fmt.Sprintf("⚡ %s Karma · %s", formatKarmaNumber(karma.TotalKarma), karma.Rank.Title)
 
-	leftWidth := 98
-	rightWidth := int(float64(len(rightText))*7.2) + 20
+	leftWidth := 104
+	rightWidth := int(float64(len(rightText))*7.2) + 24
 	if rightWidth < 150 {
 		rightWidth = 150
 	}
@@ -215,11 +215,20 @@ func RenderKarmaBadgeSVG(username string, karma ContributorKarma) string {
     <rect width="%d" height="24" rx="6" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
     <rect x="%d" y="23" width="%d" height="1" fill="%s"/>
   </g>
-  <g transform="translate(8, 5)">
-    <path d="M7 1L1 8H6L5 13L11 6H6L7 1Z" fill="#10b981" stroke="#059669" stroke-width="0.5" stroke-linejoin="round"/>
+  <!-- Real GetMerged Git Convergence Brand Logo (16x16) -->
+  <g transform="translate(6, 4)">
+    <rect width="16" height="16" rx="4" fill="#0a0f0d" stroke="rgba(16,185,129,0.3)" stroke-width="0.75" />
+    <rect x="2.5" y="4.5" width="3" height="1.5" rx="0.25" fill="#10b981" />
+    <rect x="6" y="5.5" width="2" height="1.5" rx="0.25" fill="#34d399" />
+    <rect x="2.5" y="10" width="3" height="1.5" rx="0.25" fill="#ef4444" />
+    <rect x="6" y="9" width="2" height="1.5" rx="0.25" fill="#f59e0b" />
+    <rect x="8.5" y="6.75" width="3.5" height="2.5" rx="0.4" fill="#10b981" />
+    <circle cx="12.5" cy="7.5" r="0.75" fill="#ffffff" />
+    <circle cx="9.5" cy="4.8" r="0.6" fill="#38bdf8" />
+    <circle cx="9.5" cy="10.8" r="0.6" fill="#f59e0b" />
   </g>
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif" font-size="11" font-weight="700" text-rendering="geometricPrecision">
-    <text x="24" y="16" fill="#f4f4f5" letter-spacing="-0.2px">GetMerged</text>
+    <text x="28" y="16" fill="#f4f4f5" letter-spacing="-0.2px">Get<tspan fill="#10b981">Merged</tspan></text>
     <text x="%d" y="16" fill="%s" text-anchor="middle" font-weight="600" letter-spacing="-0.1px">%s</text>
   </g>
 </svg>`, totalWidth, totalWidth, rightText, rightText, bgColor1, bgColor2, totalWidth, leftWidth, leftWidth, rightWidth, totalWidth, leftWidth, leftWidth, totalWidth, leftWidth, rightWidth, accentColor, rightCenter, textColor, rightText)

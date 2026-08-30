@@ -56,7 +56,7 @@ var liveBadgeTemplate = template.Must(template.New("liveBadge").Parse(
 <title>{{.Label}}: {{.Message}}</title>
 <defs>
 <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
-<stop offset="0%" stop-color="#ffffff" stop-opacity="0.15"/>
+<stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
 <stop offset="100%" stop-color="#000000" stop-opacity="0.25"/>
 </linearGradient>
 <clipPath id="squircle"><rect width="{{.Total}}" height="24" rx="6" fill="#ffffff"/></clipPath>
@@ -66,30 +66,42 @@ var liveBadgeTemplate = template.Must(template.New("liveBadge").Parse(
 <rect width="{{.LabelW}}" height="24" fill="#09090b"/>
 <rect x="{{.LabelW}}" width="{{.MsgW}}" height="24" fill="{{.Color}}"/>
 <rect width="{{.Total}}" height="24" fill="url(#gloss)"/>
-<line x1="{{.LabelW}}" y1="0" x2="{{.LabelW}}" y2="24" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-<rect width="{{.Total}}" height="24" rx="6" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+<line x1="{{.LabelW}}" y1="0" x2="{{.LabelW}}" y2="24" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+<rect width="{{.Total}}" height="24" rx="6" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
 </g>
-<g transform="translate(6, 5)">
-<path d="M7 1L1 8H6L5 13L11 6H6L7 1Z" fill="#10b981" stroke="#059669" stroke-width="0.5" stroke-linejoin="round"/>
+<!-- Real GetMerged Git Convergence Brand Logo (16x16) -->
+<g transform="translate(6, 4)">
+<rect width="16" height="16" rx="4" fill="#0a0f0d" stroke="rgba(16,185,129,0.3)" stroke-width="0.75" />
+<rect x="2.5" y="4.5" width="3" height="1.5" rx="0.25" fill="#10b981" />
+<rect x="6" y="5.5" width="2" height="1.5" rx="0.25" fill="#34d399" />
+<rect x="2.5" y="10" width="3" height="1.5" rx="0.25" fill="#ef4444" />
+<rect x="6" y="9" width="2" height="1.5" rx="0.25" fill="#f59e0b" />
+<rect x="8.5" y="6.75" width="3.5" height="2.5" rx="0.4" fill="#10b981" />
+<circle cx="12.5" cy="7.5" r="0.75" fill="#ffffff" />
+<circle cx="9.5" cy="4.8" r="0.6" fill="#38bdf8" />
+<circle cx="9.5" cy="10.8" r="0.6" fill="#f59e0b" />
 </g>
-<g fill="#ffffff" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,system-ui,sans-serif" font-size="11" font-weight="700" text-rendering="geometricPrecision">
-<text x="{{.LabelX}}" y="16">{{.Label}}</text>
-<text x="{{.MsgX}}" y="16" font-weight="600">{{.Message}}</text>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,system-ui,sans-serif" font-size="11" font-weight="700" text-rendering="geometricPrecision">
+<text x="28" y="16" fill="#f4f4f5" letter-spacing="-0.2px">Get<tspan fill="#10b981">Merged</tspan></text>
+<text x="{{.MsgX}}" y="16" fill="#ffffff" text-anchor="middle" font-weight="600" letter-spacing="-0.1px">{{.Message}}</text>
 </g>
 {{if .Link}}</a>{{end}}
 </svg>`))
 
-// renderLiveBadge executes liveBadgeTemplate. Widths are estimated at ~7px
+// renderLiveBadge executes liveBadgeTemplate. Widths are estimated at ~7.2px
 // per character.
 func renderLiveBadge(label, message, color, link string) (string, error) {
-	labelW := len([]rune(label))*7 + 16
-	msgW := len([]rune(message))*7 + 16
+	labelW := 104
+	msgW := int(float64(len([]rune(message)))*7.2) + 24
+	if msgW < 80 {
+		msgW = 80
+	}
 	var buf bytes.Buffer
 	err := liveBadgeTemplate.Execute(&buf, liveBadgeData{
 		Total:   labelW + msgW,
 		LabelW:  labelW,
 		MsgW:    msgW,
-		LabelX:  float64(labelW) / 2,
+		LabelX:  28,
 		MsgX:    float64(labelW) + float64(msgW)/2,
 		Label:   label,
 		Message: message,
