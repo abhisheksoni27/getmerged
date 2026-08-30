@@ -11,7 +11,6 @@ import { ProfileEditModal } from "@/components/ProfileEditModal";
 import OpenToOpportunitiesToggle from "@/components/OpenToOpportunitiesToggle";
 import ShareCardButton from "@/components/ShareCardButton";
 import { CRankBadge } from "@/components/CRankBadge";
-import { CopyBadgeButton } from "@/components/CopyBadgeButton";
 import { KarmaProfileBadge, type ContributorKarmaData } from "@/components/KarmaProfileBadge";
 import { EmbedKarmaBadgeCard } from "@/components/EmbedKarmaBadgeCard";
 import { ProofOfWorkResumeModal } from "@/components/ProofOfWorkResumeModal";
@@ -29,7 +28,6 @@ import {
   Sparkles,
   Zap,
   Star,
-  Copy,
   Clock,
   Award,
   Edit3,
@@ -102,9 +100,6 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
     ? Object.entries(dna.language_breakdown).sort((a, b) => b[1] - a[1])
     : [];
   const totalLangPRs = languages.reduce((acc, [, count]) => acc + count, 0);
-
-  // Markdown badge string for one-click embed
-  const badgeMarkdown = `[![GetMerged Verified Contributor](https://getmerged.abhishekco.de/api/badge/u/${profile.slug})](https://getmerged.abhishekco.de/u/${profile.slug})`;
 
   const showcaseProjects = profile.showcase_projects || [];
   const publicRepos = profile.public_repos || [];
@@ -628,23 +623,6 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
             </div>
           );
         })()}
-
-        {/* Section 11: Embeddable Resume Markdown Badge */}
-        <div className="mb-8 rounded-md glass-panel p-6 border border-white/[0.1] shadow-sm border-t-2 border-t-slate-700">
-          <h2 className="text-base font-bold font-sans text-white mb-2 flex items-center gap-2">
-            <Copy className="h-4 w-4 text-zinc-400" />
-            Embed on GitHub README or Resume
-          </h2>
-          <p className="text-xs text-zinc-400 font-sans mb-3">
-            Copy the markdown badge below to showcase your verified GetMerged contributor score directly in your GitHub profile README.
-          </p>
-          <div className="flex items-center gap-3 bg-black/80 border border-white/[0.1] text-zinc-200 p-3 sm:p-4 rounded-xl font-mono text-xs overflow-hidden">
-            <code className="flex-1 overflow-x-auto whitespace-nowrap text-amber-400 scrollbar-none py-1">
-              {badgeMarkdown}
-            </code>
-            <CopyBadgeButton text={badgeMarkdown} />
-          </div>
-        </div>
 
         {/* Section 12: Recruiter & Opportunities Direct Signal on GetMerged */}
         <RecruiterContactSection username={profile.username} slug={profile.slug} />
