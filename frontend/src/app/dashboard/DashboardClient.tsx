@@ -8,6 +8,7 @@ import { TopMatches } from "@/components/TopMatches";
 import { ForYou } from "@/components/ForYou";
 import { FirstMergeTrack } from "@/components/FirstMergeTrack";
 import { SeasonCard } from "@/components/SeasonCard";
+import { QuestTrackCard } from "@/components/QuestTrackCard";
 import { ApiKeysCard } from "./ApiKeysCard";
 import { MergeCelebrationModal } from "./MergeCelebrationModal";
 import {
@@ -410,6 +411,11 @@ export function DashboardClient() {
           GitHub API rate limit hit - showing cached data. Live sync resumes automatically.
         </div>
       )}
+
+      {/* Contributor Progression Quest Track */}
+      <div className="mb-8">
+        <QuestTrackCard />
+      </div>
 
       {!data || data.prs.length === 0 ? (
         <div className="rounded-xl border border-dashed border-white/[0.12] p-10 text-center text-sm text-zinc-300">
