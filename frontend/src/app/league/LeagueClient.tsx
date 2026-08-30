@@ -15,6 +15,7 @@ import {
   Users,
 } from "lucide-react";
 import { CRankBadge } from "@/components/CRankBadge";
+import { ContributorWrappedModal } from "@/components/ContributorWrappedModal";
 import { API_BASE_URL } from "@/lib/api";
 
 export interface LeagueRepo {
@@ -54,6 +55,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
   const [trackingMsg, setTrackingMsg] = useState<{ text: string; type: "success" | "error" } | null>(null);
   const [trackingLoading, setTrackingLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"repos" | "mvps">("repos");
+  const [wrappedUser, setWrappedUser] = useState<ContributorMVP | null>(null);
 
   // Calculate days remaining dynamically
   const daysRemaining = useMemo(() => {
@@ -419,7 +421,15 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                   </div>
                 </div>
 
-                <div className="shrink-0 text-right">
+                <div className="shrink-0 flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setWrappedUser(c)}
+                    title="Share Contributor Wrapped Card"
+                    className="p-2 rounded-xl glass-card hover:bg-amber-500/20 text-zinc-400 hover:text-amber-400 border border-white/[0.08] hover:border-amber-500/30 transition-all cursor-pointer"
+                  >
+                    <Share2 className="h-4 w-4" />
+                  </button>
                   <span className={`inline-block px-2.5 py-1 rounded-lg text-xs font-mono font-bold ${
                     c.level === "Gold" ? "bg-amber-500/10 border border-amber-500/20 text-amber-400" :
                     c.level === "Silver" ? "bg-zinc-500/10 border border-zinc-500/20 text-zinc-300" :
@@ -432,6 +442,22 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
             ))}
           </div>
         </div>
+      )}
+
+      {/* Contributor Wrapped Modal */}
+      {wrappedUser && (
+        <ContributorWrappedModal
+          username={wrappedUser.username}
+          avatarUrl={wrappedUser.avatar_url}
+          rank={wrappedUser.rank}
+          karma={wrappedUser.monthly_points}
+          mergedCount={wrappedUser.merged_count}
+          monthName={monthName}
+          topLang={wrappedUser.primary_lang}
+          percentile={wrappedUser.rank <= 3 ? "Top 1%" : "Top 5%"}
+          isOpen={!!wrappedUser}
+          onClose={() => setWrappedUser(null)}
+        />
       )}
     </div>
   );

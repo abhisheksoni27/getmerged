@@ -28,6 +28,7 @@ import {
   Share2,
   Sparkles,
   ArrowRight,
+  FileText,
 } from "lucide-react";
 
 interface Benchmark {
@@ -401,6 +402,15 @@ export function DashboardClient() {
                 <Share2 className={`h-3.5 w-3.5 ${sharing ? "animate-pulse" : ""}`} />
                 Share profile
               </button>
+              <Link
+                href={`/u/${me.slug}/resume`}
+                target="_blank"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 whitespace-nowrap transition-colors"
+                title="Print your verified Proof-of-Work PDF resume"
+              >
+                <FileText className="h-3.5 w-3.5" />
+                <span>PDF Resume</span>
+              </Link>
             </>
           )}
           <button

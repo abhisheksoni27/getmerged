@@ -14,6 +14,7 @@ import { CRankBadge } from "@/components/CRankBadge";
 import { CopyBadgeButton } from "@/components/CopyBadgeButton";
 import { KarmaProfileBadge, type ContributorKarmaData } from "@/components/KarmaProfileBadge";
 import { EmbedKarmaBadgeCard } from "@/components/EmbedKarmaBadgeCard";
+import { ProofOfWorkResumeModal } from "@/components/ProofOfWorkResumeModal";
 import { RecruiterContactSection } from "@/components/RecruiterContactSection";
 import { LangLogo } from "@/components/LangLogo";
 import {
@@ -34,6 +35,7 @@ import {
   Edit3,
   Pin,
   FolderGit2,
+  FileText,
 } from "lucide-react";
 
 interface ProfileClientViewProps {
@@ -49,6 +51,7 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<PublicProfile>(initialProfile);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
   useEffect(() => {
     setProfile(initialProfile);
@@ -170,6 +173,14 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
                   Edit Profile
                 </button>
               )}
+              <button
+                type="button"
+                onClick={() => setIsResumeModalOpen(true)}
+                className="px-3.5 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 hover:text-white border border-emerald-500/30 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+              >
+                <FileText className="h-3.5 w-3.5 text-emerald-400" />
+                <span>Export Resume</span>
+              </button>
               <ShareCardButton slug={profile.slug} username={profile.username} />
             </div>
           </div>
@@ -625,6 +636,14 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
           }}
         />
       )}
+
+      {/* Proof of Work Resume Modal */}
+      <ProofOfWorkResumeModal
+        profile={profile}
+        karma={initialKarma}
+        isOpen={isResumeModalOpen}
+        onClose={() => setIsResumeModalOpen(false)}
+      />
     </>
   );
 };
