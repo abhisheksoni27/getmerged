@@ -165,30 +165,33 @@ func ComputeLevelRank(points int) LevelRank {
 
 // RenderKarmaBadgeSVG outputs Shields.io-styled SVG badge for GitHub README embeds
 func RenderKarmaBadgeSVG(username string, karma ContributorKarma) string {
-	ptsText := fmt.Sprintf("%d Karma", karma.TotalKarma)
-	titleText := karma.Rank.Title
-	if karma.Rank.Level >= 4 {
-		titleText = fmt.Sprintf("Lv.%d %s", karma.Rank.Level, karma.Rank.Title)
+	leftText := "GetMerged ⚡"
+	rightText := fmt.Sprintf("%d Karma (%s)", karma.TotalKarma, karma.Rank.Title)
+
+	leftWidth := 105
+	rightWidth := int(float64(len(rightText))*7.8) + 24
+	if rightWidth < 130 {
+		rightWidth = 130
 	}
+	totalWidth := leftWidth + rightWidth
+	rightCenter := leftWidth + rightWidth/2
 
-	totalWidth := 190 + len(titleText)*6
-
-	return fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="28" role="img" aria-label="GetMerged Karma: %s (%s)">
+	return fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="28" role="img" aria-label="GetMerged Karma: %s">
   <linearGradient id="b" x2="0" y2="100%%">
-    <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
-    <stop offset="1" stop-opacity=".1"/>
+    <stop offset="0" stop-color="#bbb" stop-opacity=".15"/>
+    <stop offset="1" stop-opacity=".15"/>
   </linearGradient>
   <mask id="a">
     <rect width="%d" height="28" rx="6" fill="#fff"/>
   </mask>
   <g mask="url(#a)">
-    <rect width="105" height="28" fill="#09090b"/>
-    <rect x="105" width="%d" height="28" fill="%s"/>
+    <rect width="%d" height="28" fill="#18181b"/>
+    <rect x="%d" width="%d" height="28" fill="%s"/>
     <rect width="%d" height="28" fill="url(#b)"/>
   </g>
-  <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
-    <text x="53" y="18" fill="#a1a1aa" font-weight="bold">GetMerged ⚡</text>
-    <text x="%d" y="18" fill="#ffffff" font-weight="bold">%s (%s)</text>
+  <g fill="#fff" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11" font-weight="600">
+    <text x="%d" y="18" fill="#e4e4e7">%s</text>
+    <text x="%d" y="18" fill="#ffffff">%s</text>
   </g>
-</svg>`, totalWidth, ptsText, titleText, totalWidth, totalWidth-105, karma.Rank.BadgeColor, totalWidth, 105+(totalWidth-105)/2, ptsText, titleText)
+</svg>`, totalWidth, rightText, totalWidth, leftWidth, leftWidth, rightWidth, karma.Rank.BadgeColor, totalWidth, leftWidth/2, leftText, rightCenter, rightText)
 }

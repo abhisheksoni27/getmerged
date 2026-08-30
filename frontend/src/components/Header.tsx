@@ -95,27 +95,28 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
           </Link>
 
           {/* Desktop & Laptop Nav Links */}
-          <nav className="hidden md:flex items-center gap-2.5 lg:gap-3.5 xl:gap-5 text-xs font-sans font-medium text-[#a3a3a3] shrink-0">
+          <nav className="hidden md:flex items-center gap-2.5 lg:gap-3.5 xl:gap-4 text-xs font-sans font-medium text-[#a3a3a3] shrink-0">
             <Link href="/repos" title="Explore All Open Source Repositories" className="hover:text-white transition-colors">
               Repositories
-            </Link>
-            <Link href="/how-c-rank-works" title="How C-Rank Works - Scoring Algorithm and Methodology" className="hover:text-white transition-colors whitespace-nowrap">
-              How C-Rank Works
-            </Link>
-            <Link href="/rankings" title="Browse Top Open Source Repositories by Language Ecosystem" className="hover:text-white transition-colors">
-              Ecosystems
             </Link>
             <Link href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="hover:text-white transition-colors whitespace-nowrap">
               Good First Issues
             </Link>
-            <Link href="/stack" title="Stalk Your Tech Stack & Dependencies" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1 whitespace-nowrap">
+            <Link href="/stack" title="Find Good First Issues in Your Tech Stack" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1 whitespace-nowrap">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Stalk Stack
             </Link>
-            <Link href="/league" title="Monthly Open-Source Contributor League & Active Sprints" className="text-[#ff6b00] hover:text-[#ff8a33] font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b00] animate-pulse" />
-              Monthly League
+            <Link href="/maintainers" title="Claim Your Repository & PR Telemetry" className="hover:text-white font-medium transition-colors whitespace-nowrap">
+              Maintainers
             </Link>
+            <Link href="/talent" title="Hire Verified Open Source Engineers" className="text-blue-400 hover:text-blue-300 font-medium transition-colors whitespace-nowrap">
+              Talent 💼
+            </Link>
+            {user && (
+              <Link href="/dashboard" title="Contributor PR Tracker & Quests" className="hover:text-white font-bold text-white transition-colors whitespace-nowrap">
+                Dashboard
+              </Link>
+            )}
           </nav>
         </div>
 
@@ -255,6 +256,27 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               >
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 Stalk Stack
+              </Link>
+              <Link
+                href="/maintainers"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
+              >
+                For Maintainers ⚡
+              </Link>
+              <Link
+                href="/talent"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-blue-400 font-semibold transition-colors"
+              >
+                Hire Talent 💼
+              </Link>
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-white font-bold transition-colors"
+              >
+                Dashboard
               </Link>
               <Link
                 href="/league"

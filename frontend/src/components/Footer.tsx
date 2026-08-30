@@ -153,6 +153,11 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5 font-mono text-[11px] text-[#e5e5e5]">
               <li>
+                <Link href="/dashboard" title="Contributor PR Tracker, Quests & Reputation" className="text-white font-semibold transition-colors">
+                  Contributor Dashboard
+                </Link>
+              </li>
+              <li>
                 <Link href="/talent" title="Hire Verified Open-Source Engineers" className="text-blue-400 hover:text-blue-300 font-semibold transition-colors">
                   Hire Talent 💼
                 </Link>
@@ -163,7 +168,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/stack" title="Stalk Your Tech Stack & Dependencies" className="text-emerald-400 hover:text-emerald-300 transition-colors">
+                <Link href="/stack" title="Find Good First Issues in Your Dependencies" className="text-emerald-400 hover:text-emerald-300 transition-colors">
                   Stalk My Stack
                 </Link>
               </li>
