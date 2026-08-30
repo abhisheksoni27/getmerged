@@ -153,7 +153,12 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5 font-mono text-[11px] text-[#e5e5e5]">
               <li>
-                <Link href="/dashboard" title="Contributor PR Tracker, Quests & Reputation" className="text-white font-semibold transition-colors">
+                <Link href="/pricing" title="Pro Contributor, Recruiter Pass & Maintainer Plans" className="text-white font-semibold hover:text-emerald-400 transition-colors">
+                  Pricing & Plans 💳
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard" title="Contributor PR Tracker, Quests & Reputation" className="hover:text-white transition-colors">
                   Contributor Dashboard
                 </Link>
               </li>
@@ -208,6 +213,7 @@ export function Footer() {
             <span className="text-[#e5e5e5]">GetMerged - Find welcoming open source projects that actually merge PRs</span>
           </div>
           <div className="flex items-center gap-4 text-[#e5e5e5]">
+            <Link href="/pricing" title="Pricing & Plans" className="hover:text-white font-semibold text-white transition-colors">Pricing</Link>
             <Link href="/privacy" title="Privacy Policy" className="hover:text-white transition-colors">Privacy</Link>
             <Link href="/terms" title="Terms of Service" className="hover:text-white transition-colors">Terms</Link>
             <a href="https://github.com" target="_blank" rel="noopener noreferrer" title="GitHub" className="hover:text-white transition-colors">GitHub API</a>
