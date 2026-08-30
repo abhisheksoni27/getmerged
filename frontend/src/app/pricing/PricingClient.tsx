@@ -30,6 +30,7 @@ export default function PricingClient() {
 
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("yearly");
   const [showVerificationNotice, setShowVerificationNotice] = useState(false);
+  const noticeRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const tabParam = searchParams.get("tab") as AudienceTab | null;
@@ -41,6 +42,11 @@ export default function PricingClient() {
   const handleCheckout = async (product: string, planCycle: "monthly" | "yearly") => {
     if (!PAYMENTS_ENABLED) {
       setShowVerificationNotice(true);
+      if (noticeRef.current) {
+        noticeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
       return;
     }
 
@@ -113,11 +119,18 @@ export default function PricingClient() {
       </div>
 
       {/* Merchant verification banner */}
-      {showVerificationNotice && (
-        <div className="rounded-2xl border border-emerald-500/40 bg-emerald-950/30 p-5 text-center max-w-2xl mx-auto animate-in fade-in duration-300">
+      {!PAYMENTS_ENABLED && (
+        <div
+          ref={noticeRef}
+          className={`rounded-2xl border transition-all duration-300 p-5 text-center max-w-2xl mx-auto ${
+            showVerificationNotice
+              ? "border-emerald-500 bg-emerald-950/60 ring-2 ring-emerald-500/50 shadow-lg shadow-emerald-950/50 scale-[1.02]"
+              : "border-emerald-500/30 bg-emerald-950/20"
+          }`}
+        >
           <div className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 font-bold mb-2">
             <Sparkles className="h-4 w-4" />
-            <span>EARLY ACCESS IN PROGRESS</span>
+            <span>EARLY ACCESS PREVIEW</span>
           </div>
           <h3 className="text-base font-bold text-white font-space">
             Payment Processing Verification Underway
