@@ -88,7 +88,9 @@ export default function PricingPage() {
       </section>
 
       <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
-        <PricingClient />
+        <React.Suspense fallback={<div className="text-center py-20 text-zinc-400 font-mono text-xs">Loading pricing plans...</div>}>
+          <PricingClient />
+        </React.Suspense>
       </main>
       <Footer />
     </div>
