@@ -14,13 +14,13 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "GetMerged Talent: Hire Verified Open-Source Engineers | GetMerged",
+  title: "Hire Open Source Developers & Verified Contributors | GetMerged Talent",
   description:
-    "Source pre-vetted software engineers based on real, verified pull requests merged into Tier S/A open-source repositories.",
+    "Hire pre-vetted software engineers based on real, verified pull requests merged into top open-source repositories on GitHub. Filter by language and Karma score.",
   openGraph: {
-    title: "GetMerged Talent: Hire Verified Open-Source Engineers",
+    title: "Hire Open Source Developers & Verified Contributors | GetMerged",
     description:
-      "Stop screening resume keywords. Hire engineers with proven code contributions to Tier S repositories.",
+      "Stop screening resume fluff. Hire engineers with proven code contributions and merged PRs in real production codebases.",
     url: "https://getmerged.abhishekco.de/talent",
     siteName: "GetMerged",
   },
@@ -66,19 +66,19 @@ export default function TalentPage() {
         <div className="rounded-3xl glass-panel border border-blue-500/30 p-8 sm:p-12 bg-gradient-to-br from-blue-950/30 via-zinc-950/80 to-zinc-900/40 shadow-2xl relative overflow-hidden text-center space-y-6">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-mono font-semibold">
             <Briefcase className="h-4 w-4" />
-            <span>Recruiter Talent Pass</span>
+            <span>Developer Talent Search</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black font-space tracking-tight text-white max-w-3xl mx-auto leading-tight">
-            Stop Guessing on Resumes. <br />
+            Stop Screening Resumes. <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-              Hire Proven OSS Engineers.
+              Hire Developers Who Actually Ship.
             </span>
           </h1>
 
           <p className="text-sm sm:text-base text-zinc-300 max-w-2xl mx-auto leading-relaxed">
-            GetMerged verifies real pull requests merged into Tier S and A repositories. Search candidate
-            profiles by actual code impact, Proof-of-Work Karma, and code review feedback.
+            GetMerged verifies real pull requests merged into active open-source projects. Search candidate
+            profiles by actual code impact, Karma reputation points, and code review track records.
           </p>
 
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">

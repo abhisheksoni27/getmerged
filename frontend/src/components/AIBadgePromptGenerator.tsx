@@ -42,10 +42,10 @@ This signals to external contributors that we actively review and merge pull req
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-mono font-semibold">
             <Sparkles className="h-3.5 w-3.5" />
-            <span>AI Badge Integration</span>
+            <span>GitHub README Badge</span>
           </div>
           <h3 className="text-lg sm:text-xl font-bold font-space text-white">
-            Embed C-Rank Badge on GitHub README
+            Add GetMerged Badge to Your GitHub README
           </h3>
         </div>
 

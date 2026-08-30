@@ -14,13 +14,13 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "For Maintainers: Claim Your Repository Scorecard | GetMerged",
+  title: "For Maintainers: Get Better Pull Requests & Highlight Good First Issues | GetMerged",
   description:
-    "Claim your open-source project on GetMerged. Attract vetted first-time contributors, reduce PR review friction, and spotlight your Good First Issues.",
+    "Claim your GitHub repository on GetMerged. Show contributors your preferred PR size, highlight open Good First Issues, and reduce code review friction.",
   openGraph: {
-    title: "For Maintainers: Claim Your Repository Scorecard | GetMerged",
+    title: "For Maintainers: Get Better Pull Requests & Highlight Good First Issues | GetMerged",
     description:
-      "Claim your open-source project on GetMerged to attract vetted contributors and optimize PR turnaround time.",
+      "Claim your GitHub repository on GetMerged to highlight beginner issues and guide contributors to submit smaller, faster-to-review pull requests.",
     url: "https://getmerged.abhishekco.de/maintainers",
     siteName: "GetMerged",
   },
@@ -36,7 +36,7 @@ export default function MaintainersPage() {
         <div className="rounded-3xl glass-panel border border-emerald-500/30 p-8 sm:p-12 bg-gradient-to-br from-emerald-950/30 via-zinc-950/80 to-zinc-900/40 shadow-2xl relative overflow-hidden text-center space-y-6">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-semibold">
             <ShieldCheck className="h-4 w-4" />
-            <span>Maintainer Command Console</span>
+            <span>For Open Source Maintainers</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black font-space tracking-tight text-white max-w-3xl mx-auto leading-tight">

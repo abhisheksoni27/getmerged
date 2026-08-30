@@ -64,10 +64,10 @@ export function PRSizeSweetSpotCard({ repoId, repoFullName }: PRSizeSweetSpotCar
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono font-semibold">
             <Zap className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
-            <span>PR Velocity Sweet Spot</span>
+            <span>PR Size vs Review Speed</span>
           </div>
           <h3 className="text-lg sm:text-xl font-bold font-space text-white">
-            Optimal PR Size for {repoFullName}
+            Best Pull Request Size for {repoFullName}
           </h3>
         </div>
 

@@ -36,8 +36,8 @@ func ComputeUserQuests(activity UserActivitySnapshot) QuestTrack {
 	quests := []Quest{
 		{
 			ID:          "quest-stack-scan",
-			Title:       "Initialize Dependency Radar",
-			Description: "Connect your GitHub or paste a manifest on /stack to scan your production dependencies.",
+			Title:       "Scan Your Tech Stack",
+			Description: "Connect your GitHub or paste a package file on /stack to find open issues in your dependencies.",
 			KarmaReward: 50,
 			IsCompleted: activity.HasScannedStack,
 			ProgressPct: boolToPct(activity.HasScannedStack),
@@ -46,8 +46,8 @@ func ComputeUserQuests(activity UserActivitySnapshot) QuestTrack {
 		},
 		{
 			ID:          "quest-issue-sniper",
-			Title:       "Arm the Issue Sniper",
-			Description: "Subscribe to instant or weekly beginner issue alerts in your favorite language or target repo.",
+			Title:       "Turn On Good First Issue Alerts",
+			Description: "Subscribe to instant or weekly beginner issue alerts in your favorite programming language.",
 			KarmaReward: 50,
 			IsCompleted: activity.HasActiveSniper,
 			ProgressPct: boolToPct(activity.HasActiveSniper),
@@ -56,8 +56,8 @@ func ComputeUserQuests(activity UserActivitySnapshot) QuestTrack {
 		},
 		{
 			ID:          "quest-sweet-spot",
-			Title:       "Calibrate PR Velocity",
-			Description: "Check the PR Size Sweet Spot on a repository scorecard to optimize your pull request diff.",
+			Title:       "Check PR Size Sweet Spot",
+			Description: "Look at the PR Size vs Review Speed card on any repo to see how fast small pull requests get merged.",
 			KarmaReward: 50,
 			IsCompleted: activity.HasViewedSweetSpot,
 			ProgressPct: boolToPct(activity.HasViewedSweetSpot),
@@ -66,8 +66,8 @@ func ComputeUserQuests(activity UserActivitySnapshot) QuestTrack {
 		},
 		{
 			ID:          "quest-first-merge",
-			Title:       "First Verified PR Merge",
-			Description: "Get a pull request merged into any audited open-source repository.",
+			Title:       "First Merged Pull Request",
+			Description: "Get a pull request reviewed and merged into any open-source repository on GitHub.",
 			KarmaReward: 100,
 			IsCompleted: activity.MergedPRCount > 0,
 			ProgressPct: boolToPct(activity.MergedPRCount > 0),
@@ -76,8 +76,8 @@ func ComputeUserQuests(activity UserActivitySnapshot) QuestTrack {
 		},
 		{
 			ID:          "quest-peer-review",
-			Title:       "Review a Maintainer",
-			Description: "Leave verified Glassdoor-style community feedback on a repository you've contributed to.",
+			Title:       "Review a Maintainer & Repo",
+			Description: "Leave verified community feedback on how welcoming a repository maintainer was on your PR.",
 			KarmaReward: 50,
 			IsCompleted: activity.HasSubmittedReview,
 			ProgressPct: boolToPct(activity.HasSubmittedReview),

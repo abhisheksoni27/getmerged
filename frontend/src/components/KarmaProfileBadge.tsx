@@ -82,13 +82,13 @@ export function KarmaProfileBadge({ username }: KarmaProfileBadgeProps) {
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-semibold">
             <Sparkles className="h-3.5 w-3.5" />
-            <span>Proof-of-Work Reputation</span>
+            <span>Open Source Karma</span>
           </div>
           <h3 className="text-xl sm:text-2xl font-bold font-space text-white">
             {karma.reputation_headline}
           </h3>
           <p className="text-xs text-zinc-400">
-            Verified open-source contribution karma earned across audited repositories.
+            Points earned from merged pull requests in welcoming open-source repositories.
           </p>
         </div>
 

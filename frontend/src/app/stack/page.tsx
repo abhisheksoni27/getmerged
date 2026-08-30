@@ -5,16 +5,16 @@ import { Footer } from "@/components/Footer";
 import StackClient from "./StackClient";
 
 export const metadata: Metadata = {
-  title: "Stalk My Tech Stack & Find Contribution Openings | GetMerged",
+  title: "Find Good First Issues in Your Tech Stack | Open Source Finder | GetMerged",
   description:
-    "Scan your repository dependencies (package.json, go.mod, Cargo.toml) to discover maintainer responsiveness, bus factor vulnerabilities, and open Good-First-Issues in your production stack.",
+    "Scan your package.json, go.mod, or Cargo.toml to instantly find beginner-friendly Good First Issues and fast-reviewing open-source libraries in your tech stack.",
   alternates: {
     canonical: "https://getmerged.abhishekco.de/stack",
   },
   openGraph: {
-    title: "Stalk My Tech Stack & Find Contribution Openings | GetMerged",
+    title: "Find Good First Issues in Your Tech Stack | GetMerged",
     description:
-      "Scan your repository dependencies to discover maintainer health, bus factor risks, and open beginner issues in the exact libraries you run.",
+      "Scan your project dependencies to find open beginner issues and active maintainers in the exact packages you use every day.",
     url: "https://getmerged.abhishekco.de/stack",
   },
 };
