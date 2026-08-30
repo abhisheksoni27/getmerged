@@ -549,12 +549,6 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 					PrimaryLanguage *struct {
 						Name string `json:"name"`
 					} `json:"primaryLanguage"`
-					IssueTemplates []struct {
-						Name string `json:"name"`
-					} `json:"issueTemplates"`
-					PullRequestTemplates []struct {
-						Filename string `json:"filename"`
-					} `json:"pullRequestTemplates"`
 					RepositoryTopics struct {
 						Nodes []struct {
 							Topic struct {
@@ -569,6 +563,10 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 					CodeOfConduct      *struct{ ID string `json:"id"` } `json:"codeOfConduct"`
 					CodeOfConductLower *struct{ ID string `json:"id"` } `json:"codeOfConductLower"`
 					CodeOfConductGithub *struct{ ID string `json:"id"` } `json:"codeOfConductGithub"`
+					IssueTemplateDir   *struct{ ID string `json:"id"` } `json:"issueTemplateDir"`
+					IssueTemplateMd    *struct{ ID string `json:"id"` } `json:"issueTemplateMd"`
+					PRTemplateMd       *struct{ ID string `json:"id"` } `json:"prTemplateMd"`
+					PRTemplateDir      *struct{ ID string `json:"id"` } `json:"prTemplateDir"`
 					PullRequests struct {
 						PageInfo struct {
 							HasNextPage bool   `json:"hasNextPage"`
@@ -637,8 +635,8 @@ func (c *Client) FetchPRs(owner, name string, windowDays int) ([]PR, RepoMeta, e
 		if resp.Data.Repository.PrimaryLanguage != nil {
 			meta.Language = resp.Data.Repository.PrimaryLanguage.Name
 		}
-		meta.HasIssueTemplate = len(resp.Data.Repository.IssueTemplates) > 0
-		meta.HasPRTemplate = len(resp.Data.Repository.PullRequestTemplates) > 0
+		meta.HasIssueTemplate = resp.Data.Repository.IssueTemplateDir != nil || resp.Data.Repository.IssueTemplateMd != nil
+		meta.HasPRTemplate = resp.Data.Repository.PRTemplateMd != nil || resp.Data.Repository.PRTemplateDir != nil
 		meta.HasContributing = resp.Data.Repository.Contributing != nil ||
 			resp.Data.Repository.ContributingLower != nil ||
 			resp.Data.Repository.ContributingGithub != nil ||

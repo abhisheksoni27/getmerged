@@ -89,8 +89,6 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
     primaryLanguage { name }
     isArchived
     hasIssuesEnabled
-    issueTemplates { name }
-    pullRequestTemplates { filename }
     repositoryTopics(first: 10) { nodes { topic { name } } }
     contributing: object(expression: "HEAD:CONTRIBUTING.md") { id }
     contributingLower: object(expression: "HEAD:contributing.md") { id }
@@ -99,6 +97,10 @@ query RepoPRs($owner: String!, $name: String!, $cursor: String) {
     codeOfConduct: object(expression: "HEAD:CODE_OF_CONDUCT.md") { id }
     codeOfConductLower: object(expression: "HEAD:code_of_conduct.md") { id }
     codeOfConductGithub: object(expression: "HEAD:.github/CODE_OF_CONDUCT.md") { id }
+    issueTemplateDir: object(expression: "HEAD:.github/ISSUE_TEMPLATE") { id }
+    issueTemplateMd: object(expression: "HEAD:.github/issue_template.md") { id }
+    prTemplateMd: object(expression: "HEAD:.github/pull_request_template.md") { id }
+    prTemplateDir: object(expression: "HEAD:.github/PULL_REQUEST_TEMPLATE") { id }
     pullRequests(
       first: 5
       after: $cursor
