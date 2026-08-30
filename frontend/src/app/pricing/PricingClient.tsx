@@ -66,7 +66,7 @@ export default function PricingClient() {
             }`}
           >
             <Briefcase className="h-4 w-4" />
-            <span>For Hiring Teams 💼</span>
+            <span>For CTOs & Founders 💼</span>
           </button>
           <button
             type="button"
@@ -231,19 +231,19 @@ export default function PricingClient() {
         </div>
       )}
 
-      {/* TAB 2: B2B HIRING & RECRUITER PASS */}
+      {/* TAB 2: B2B HIRING FOR CTOS & FOUNDERS */}
       {activeTab === "recruiter" && (
         <div className="space-y-10">
           <div className="text-center max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-mono font-semibold mb-4">
               <Briefcase className="h-3.5 w-3.5" />
-              <span>For Engineering Leaders, Founders & Recruiters</span>
+              <span>For Technical Founders, CTOs & Engineering Leaders</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold font-space text-white tracking-tight mb-3">
               Stop Screening Resumes. Hire Verified Contributors.
             </h1>
             <p className="text-sm sm:text-base text-zinc-300 font-sans leading-relaxed">
-              Source software engineers with proven merge records in top audited open-source codebases.
+              Source software engineers with proven merge records in Kubernetes, Next.js, Tokio, and production open-source infrastructure.
             </p>
 
             {/* Billing Toggle */}
@@ -316,20 +316,20 @@ export default function PricingClient() {
               </Link>
             </div>
 
-            {/* Recruiter Pass Card */}
+            {/* Founder & CTO Pass Card */}
             <div className="rounded-2xl glass-panel p-6 sm:p-8 border-2 border-blue-500 shadow-xl shadow-blue-950/20 flex flex-col justify-between relative font-sans">
               <div className="absolute -top-3 right-6 bg-blue-500 text-white text-[11px] font-bold font-mono uppercase px-3 py-0.5 rounded-full shadow-sm">
-                B2B Recruiter
+                For Founders & CTOs
               </div>
 
               <div>
                 <div className="flex items-center justify-between mb-2 font-mono">
                   <h2 className="text-lg font-bold text-white flex items-center gap-1.5">
-                    <Briefcase className="h-4 w-4 text-blue-400" /> Recruiter Pass
+                    <Briefcase className="h-4 w-4 text-blue-400" /> WorkDone Founder Pass
                   </h2>
                 </div>
                 <p className="text-xs text-zinc-300 mb-6">
-                  Direct outreach access to top 5% open-source engineers actively open to job opportunities.
+                  Direct outreach access to top 5% open-source engineers actively open to new roles.
                 </p>
 
                 <div className="flex items-baseline gap-1 mb-6">
@@ -352,15 +352,15 @@ export default function PricingClient() {
                   </li>
                   <li className="flex items-center gap-2.5">
                     <Check className="h-4 w-4 text-blue-400 shrink-0" />
-                    <span>Verified PR merge history & codebase seniority audit</span>
+                    <span>Verified PR merge history & codebase seniority dossiers</span>
                   </li>
                   <li className="flex items-center gap-2.5">
                     <Check className="h-4 w-4 text-blue-400 shrink-0" />
-                    <span>Targeted alerts when S-Tier contributors open job status</span>
+                    <span>Instant alerts when contributors in your tech stack open up</span>
                   </li>
                   <li className="flex items-center gap-2.5">
                     <Check className="h-4 w-4 text-blue-400 shrink-0" />
-                    <span>Commercial candidate pipeline exports (CSV / API)</span>
+                    <span>High-credibility technical outreach dossiers with diff metrics</span>
                   </li>
                 </ul>
               </div>
@@ -370,7 +370,7 @@ export default function PricingClient() {
                 onClick={() => handleCheckout("pdt_recruiter_pass", billingCycle)}
                 className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-950/50 cursor-pointer active:scale-[0.98]"
               >
-                <span>Unlock Recruiter Pass</span>
+                <span>Unlock Founder Pass ($49/mo)</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>

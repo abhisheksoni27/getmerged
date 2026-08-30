@@ -350,18 +350,18 @@ export function TalentClient() {
       <div className="rounded-3xl glass-panel border border-blue-500/30 p-8 sm:p-12 bg-gradient-to-br from-blue-950/40 via-zinc-950/90 to-zinc-900/50 shadow-2xl relative overflow-hidden text-center space-y-6">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-mono font-semibold">
           <Briefcase className="h-4 w-4" />
-          <span>WorkDone Database · by GetMerged</span>
+          <span>WorkDone Database · For Technical Founders, CTOs & Engineering Leaders</span>
         </div>
 
-        <h1 className="text-3xl sm:text-5xl font-black font-space tracking-tight text-white max-w-3xl mx-auto leading-tight">
+        <h1 className="text-3xl sm:text-5xl font-black font-space tracking-tight text-white max-w-4xl mx-auto leading-tight">
           Stop Screening Resumes. <br />
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-300 to-emerald-400">
-            Search Developers by Work Done.
+            Hire the Engineers Who Built Your Tech Stack.
           </span>
         </h1>
 
         <p className="text-sm sm:text-base text-zinc-300 max-w-2xl mx-auto leading-relaxed font-sans">
-          Resumes are full of claims. <strong>WorkDone Database</strong> is full of proof. Search senior software engineers indexed by actual pull requests merged into active, audited open-source codebases.
+          Resumes are full of self-reported claims. <strong>WorkDone Database</strong> is full of proof. Search senior software engineers indexed by actual pull requests merged into Kubernetes, Next.js, Envoy, Tokio, and production open-source infrastructure.
         </p>
 
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -370,7 +370,7 @@ export function TalentClient() {
             className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xl shadow-blue-950/60 cursor-pointer active:scale-[0.98]"
           >
             <Zap className="h-4 w-4" />
-            <span>Unlock WorkDone Recruiter Pass ($49/mo)</span>
+            <span>Unlock Founder & CTO Pass ($49/mo)</span>
           </Link>
           <button
             type="button"
@@ -393,7 +393,7 @@ export function TalentClient() {
             1. Audited Code Proof
           </h3>
           <p className="text-xs text-zinc-400 leading-relaxed font-sans">
-            Every candidate card links to exact GitHub commits and merged PRs reviewed by core maintainers.
+            Every candidate profile links to exact GitHub commits and merged PRs reviewed by core maintainers. No LeetCode trivia needed.
           </p>
         </div>
 
@@ -402,10 +402,10 @@ export function TalentClient() {
             <Award className="h-5 w-5" />
           </div>
           <h3 className="text-base font-bold font-space text-white">
-            2. Proof-of-Work Karma
+            2. Proof-of-Work Seniority
           </h3>
           <p className="text-xs text-zinc-400 leading-relaxed font-sans">
-            Filter by verified reputation score. A Level 4+ engineer has proven merges across multiple Tier-S codebases.
+            Filter by verified Karma reputation. A Level 4+ engineer has proven merges across multiple Tier-S repositories.
           </p>
         </div>
 
@@ -414,10 +414,10 @@ export function TalentClient() {
             <Sparkles className="h-5 w-5" />
           </div>
           <h3 className="text-base font-bold font-space text-white">
-            3. Active Availability Only
+            3. Direct Technical Outreach
           </h3>
           <p className="text-xs text-zinc-400 leading-relaxed font-sans">
-            Connect directly with high-signal developers who explicitly toggled <strong>&ldquo;Open to Opportunities&rdquo;</strong>.
+            Connect directly founder-to-engineer with candidates who explicitly toggled <strong>&ldquo;Open to Opportunities&rdquo;</strong>.
           </p>
         </div>
       </div>
