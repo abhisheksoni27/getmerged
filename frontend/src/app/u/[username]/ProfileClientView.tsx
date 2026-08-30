@@ -12,7 +12,7 @@ import OpenToOpportunitiesToggle from "@/components/OpenToOpportunitiesToggle";
 import ShareCardButton from "@/components/ShareCardButton";
 import { CRankBadge } from "@/components/CRankBadge";
 import { CopyBadgeButton } from "@/components/CopyBadgeButton";
-import { KarmaProfileBadge } from "@/components/KarmaProfileBadge";
+import { KarmaProfileBadge, type ContributorKarmaData } from "@/components/KarmaProfileBadge";
 import { RecruiterContactSection } from "@/components/RecruiterContactSection";
 import { LangLogo } from "@/components/LangLogo";
 import {
@@ -37,10 +37,12 @@ import {
 
 interface ProfileClientViewProps {
   initialProfile: PublicProfile;
+  initialKarma?: ContributorKarmaData | null;
 }
 
 export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
   initialProfile,
+  initialKarma = null,
 }) => {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -177,7 +179,10 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
 
         {/* Proof-of-Work Karma & Reputation Section */}
         <div className="mb-8">
-          <KarmaProfileBadge username={profile.slug || profile.username} />
+          <KarmaProfileBadge
+            username={profile.slug || profile.username}
+            initialKarma={initialKarma}
+          />
         </div>
 
         {/* Section 2: Featured Showcase Projects (Private & Public Work with Photos) */}

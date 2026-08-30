@@ -1,7 +1,7 @@
 import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Repo, AIInsights, GoodFirstIssueItem } from "@/types/opendoor";
+import { Repo, AIInsights, GoodFirstIssueItem, PRSizeSweetSpotData } from "@/types/opendoor";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { ClientRepoDetail } from "@/components/ClientRepoDetail";
@@ -71,6 +71,23 @@ async function getGoodFirstIssues(targetIdOrName: string | number): Promise<Good
     console.error("SSR fetch failed for good first issues:", targetIdOrName, e);
   }
   return [];
+}
+
+async function getPRSizeSweetSpot(targetIdOrName: string | number): Promise<PRSizeSweetSpotData | null> {
+  try {
+    const target = String(targetIdOrName);
+    const res = await fetch(
+      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(target)}/pr-size-sweetspot`,
+      {
+        next: { revalidate: 3600 },
+      }
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    console.error("SSR fetch failed for pr size sweet spot:", targetIdOrName, e);
+  }
+  return null;
 }
 
 async function getRepoData(fullName: string): Promise<Repo | null> {
@@ -212,11 +229,12 @@ export default async function RepoDetailPage({ params }: PageProps) {
 
   const targetInsightKey = repo?.id ? String(repo.id) : repo.full_name;
   
-  // Parallel Server Fetch: insights, related repos, and good first issues
-  const [insights, relatedRepos, gfiList] = await Promise.all([
+  // Parallel Server Fetch: insights, related repos, good first issues, and pr size sweet spot
+  const [insights, relatedRepos, gfiList, sweetSpot] = await Promise.all([
     getRepoInsights(targetInsightKey),
     getRelatedRepos(targetInsightKey),
     getGoodFirstIssues(targetInsightKey),
+    getPRSizeSweetSpot(targetInsightKey),
   ]);
 
   // Schema.org JSON-LD Structured Data
@@ -333,6 +351,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
         initialInsights={insights}
         initialRelatedRepos={relatedRepos}
         initialGfiList={gfiList}
+        initialSweetSpot={sweetSpot}
       />
 
       <Footer />

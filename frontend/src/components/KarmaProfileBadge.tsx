@@ -14,7 +14,7 @@ interface LevelRank {
   percentile: string;
 }
 
-interface ContributorKarmaData {
+export interface ContributorKarmaData {
   total_karma: number;
   rank: LevelRank;
   merged_tier_s_count: number;
@@ -29,13 +29,19 @@ interface ContributorKarmaData {
 
 interface KarmaProfileBadgeProps {
   username: string;
+  initialKarma?: ContributorKarmaData | null;
 }
 
-export function KarmaProfileBadge({ username }: KarmaProfileBadgeProps) {
-  const [karma, setKarma] = useState<ContributorKarmaData | null>(null);
+export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfileBadgeProps) {
+  const [karma, setKarma] = useState<ContributorKarmaData | null>(initialKarma);
   const [copied, setCopied] = useState<boolean>(false);
 
   useEffect(() => {
+    if (initialKarma) {
+      setKarma(initialKarma);
+      return;
+    }
+
     async function fetchKarma() {
       try {
         const res = await fetch(`${API_BASE_URL}/api/v1/u/${encodeURIComponent(username)}/karma`);
@@ -50,7 +56,7 @@ export function KarmaProfileBadge({ username }: KarmaProfileBadgeProps) {
     if (username) {
       fetchKarma();
     }
-  }, [username]);
+  }, [username, initialKarma]);
 
   if (!karma) return null;
 

@@ -1,36 +1,31 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Zap, TrendingUp, AlertTriangle, ShieldCheck, Sparkles } from "lucide-react";
+import { Zap, ShieldCheck, Sparkles, TrendingUp, AlertTriangle } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
-
-interface PRSizeBucket {
-  label: string;
-  line_range: string;
-  median_merge_hours: number;
-  merge_rate: number;
-  review_likelihood: string;
-}
-
-interface PRSizeSweetSpotData {
-  sweet_spot_threshold: string;
-  speed_multiplier: number;
-  actionable_advice: string;
-  small_pr: PRSizeBucket;
-  medium_pr: PRSizeBucket;
-  large_pr: PRSizeBucket;
-}
+import { PRSizeSweetSpotData } from "@/types/opendoor";
 
 interface PRSizeSweetSpotCardProps {
   repoId: string;
   repoFullName: string;
+  initialData?: PRSizeSweetSpotData | null;
 }
 
-export function PRSizeSweetSpotCard({ repoId, repoFullName }: PRSizeSweetSpotCardProps) {
-  const [data, setData] = useState<PRSizeSweetSpotData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+export function PRSizeSweetSpotCard({
+  repoId,
+  repoFullName,
+  initialData = null,
+}: PRSizeSweetSpotCardProps) {
+  const [data, setData] = useState<PRSizeSweetSpotData | null>(initialData);
+  const [loading, setLoading] = useState<boolean>(!initialData);
 
   useEffect(() => {
+    if (initialData) {
+      setData(initialData);
+      setLoading(false);
+      return;
+    }
+
     async function fetchSweetSpot() {
       try {
         const res = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(repoId)}/pr-size-sweetspot`);
@@ -47,7 +42,7 @@ export function PRSizeSweetSpotCard({ repoId, repoFullName }: PRSizeSweetSpotCar
     if (repoId) {
       fetchSweetSpot();
     }
-  }, [repoId]);
+  }, [repoId, initialData]);
 
   if (loading || !data) return null;
 

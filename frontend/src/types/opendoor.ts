@@ -293,4 +293,21 @@ export interface RescoreResult {
   status?: string;
 }
 
+export interface PRSizeBucket {
+  label: string;
+  line_range: string;
+  median_merge_hours: number;
+  merge_rate: number;
+  review_likelihood: string;
+}
+
+export interface PRSizeSweetSpotData {
+  sweet_spot_threshold: string;
+  speed_multiplier: number;
+  actionable_advice: string;
+  small_pr: PRSizeBucket;
+  medium_pr: PRSizeBucket;
+  large_pr: PRSizeBucket;
+}
+
 

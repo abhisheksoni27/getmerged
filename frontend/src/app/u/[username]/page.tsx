@@ -7,9 +7,11 @@ import {
   getPublicProfile,
   isReservedUsername,
   isValidUsername,
-  type PublicProfile,
 } from "@/lib/public-profile";
 import { ProfileClientView } from "./ProfileClientView";
+import { type ContributorKarmaData } from "@/components/KarmaProfileBadge";
+
+const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
 
 interface ProfilePageProps {
   params: Promise<{ username: string }>;
@@ -46,18 +48,37 @@ export async function generateMetadata({ params }: ProfilePageProps): Promise<Me
   };
 }
 
+
+async function getKarma(username: string): Promise<ContributorKarmaData | null> {
+  try {
+    const res = await fetch(
+      `${INTERNAL_API_URL}/api/v1/u/${encodeURIComponent(username)}/karma`,
+      { next: { revalidate: 300 } }
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    console.error("SSR fetch failed for karma:", username, e);
+  }
+  return null;
+}
+
 export default async function PublicProfilePage({ params }: ProfilePageProps) {
   const { username } = await params;
 
   if (!username || !isValidUsername(username) || isReservedUsername(username)) notFound();
 
-  const profile: PublicProfile | null = await getPublicProfile(username);
+  const [profile, karma] = await Promise.all([
+    getPublicProfile(username),
+    getKarma(username),
+  ]);
+
   if (!profile) notFound();
 
   return (
     <div className="min-h-screen flex flex-col bg-transparent text-white font-sans dev-grid-pattern">
       <Header />
-      <ProfileClientView initialProfile={profile} />
+      <ProfileClientView initialProfile={profile} initialKarma={karma} />
       <Footer />
     </div>
   );
