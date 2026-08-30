@@ -63,8 +63,8 @@ export function EmbedKarmaBadgeCard({
       {/* Live Badge Preview Box */}
       <div className="p-5 rounded-xl bg-[#09090b] border border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="space-y-1.5 text-center sm:text-left">
-          <div className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
-            Live Preview (Shields.io Style):
+          <div className="text-[11px] font-mono text-emerald-400 uppercase tracking-wider font-semibold">
+            Live Badge Preview:
           </div>
           <div className="pt-1">
             {/* eslint-disable-next-line @next/next/no-img-element */}

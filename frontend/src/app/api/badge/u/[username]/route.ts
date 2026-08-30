@@ -9,9 +9,9 @@ export async function GET(
   const { username } = await params;
   const cleanUsername = username ? username.trim().replace(/^@/, "") : "contributor";
 
-  let karmaPoints = 2450;
-  let levelTitle = "Senior Contributor";
-  let badgeColor = "#3b82f6";
+  let karmaPoints = 1450;
+  let levelTitle = "Verified Contributor";
+  let badgeTheme = "emerald";
 
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
@@ -21,47 +21,88 @@ export async function GET(
     });
     if (res.ok) {
       const data = await res.json();
-      if (data?.total_karma !== undefined) {
+      if (data?.total_karma !== undefined && data.total_karma > 0) {
         karmaPoints = data.total_karma;
-        levelTitle = data.level_title || levelTitle;
-        badgeColor = data.badge_color || badgeColor;
+        levelTitle = data.rank?.title || (karmaPoints >= 2000 ? "Senior Contributor" : "Active Contributor");
+        if (karmaPoints >= 3000) badgeTheme = "gold";
+        else if (karmaPoints >= 1000) badgeTheme = "emerald";
+        else badgeTheme = "cyan";
       }
     }
   } catch {}
 
-  const leftText = "GetMerged Karma";
-  const rightText = `⚡ ${karmaPoints.toLocaleString()} · ${levelTitle}`;
+  // Format display text
+  const rightText = `⚡ ${karmaPoints.toLocaleString()} Karma · ${levelTitle}`;
 
-  // Approximate character widths
-  const leftWidth = Math.max(110, leftText.length * 7.5 + 24);
-  const rightWidth = Math.max(140, rightText.length * 6.8 + 24);
+  // Theme palettes: background gradients and accents
+  const themes: Record<string, { bg1: string; bg2: string; stroke: string; text: string; accent: string }> = {
+    gold: {
+      bg1: "#451a03",
+      bg2: "#270e02",
+      stroke: "rgba(245, 158, 11, 0.4)",
+      text: "#fde68a",
+      accent: "#f59e0b",
+    },
+    emerald: {
+      bg1: "#064e3b",
+      bg2: "#022c22",
+      stroke: "rgba(16, 185, 129, 0.4)",
+      text: "#a7f3d0",
+      accent: "#10b981",
+    },
+    cyan: {
+      bg1: "#0c4a6e",
+      bg2: "#082f49",
+      stroke: "rgba(56, 189, 248, 0.4)",
+      text: "#bae6fd",
+      accent: "#38bdf8",
+    },
+  };
+
+  const theme = themes[badgeTheme] || themes.emerald;
+
+  // Exact pixel measurement calculation for 24px height modern badge
+  const leftWidth = 98;
+  const rightWidth = Math.max(160, rightText.length * 7.2 + 20);
   const totalWidth = leftWidth + rightWidth;
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="28" viewBox="0 0 ${totalWidth} 28" fill="none" role="img" aria-label="${leftText}: ${rightText}">
-  <title>${leftText}: ${rightText}</title>
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="24" viewBox="0 0 ${totalWidth} 24" fill="none" role="img" aria-label="GetMerged: ${rightText}">
+  <title>GetMerged Contributor: ${rightText}</title>
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#fff" stop-opacity=".15"/>
-      <stop offset="1" stop-color="#000" stop-opacity=".25"/>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.25"/>
     </linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="${badgeColor}"/>
-      <stop offset="1" stop-color="#10b981"/>
+    <linearGradient id="rightBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="${theme.bg1}"/>
+      <stop offset="100%" stop-color="${theme.bg2}"/>
     </linearGradient>
-    <clipPath id="r">
-      <rect width="${totalWidth}" height="28" rx="6" fill="#fff"/>
+    <clipPath id="squircle">
+      <rect width="${totalWidth}" height="24" rx="6" fill="#ffffff"/>
     </clipPath>
   </defs>
-  <g clip-path="url(#r)">
-    <rect width="${leftWidth}" height="28" fill="#121214"/>
-    <rect x="${leftWidth}" width="${rightWidth}" height="28" fill="#1c1c20"/>
-    <rect width="${totalWidth}" height="28" fill="url(#g)"/>
-    <line x1="${leftWidth}" y1="0" x2="${leftWidth}" y2="28" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-    <rect x="0" y="26" width="${totalWidth}" height="2" fill="url(#accent)"/>
+  <g clip-path="url(#squircle)">
+    <!-- Left brand segment -->
+    <rect width="${leftWidth}" height="24" fill="#09090b"/>
+    <!-- Right value segment -->
+    <rect x="${leftWidth}" width="${rightWidth}" height="24" fill="url(#rightBg)"/>
+    <!-- Specular gloss overlay -->
+    <rect width="${totalWidth}" height="24" fill="url(#gloss)"/>
+    <!-- Divider -->
+    <line x1="${leftWidth}" y1="0" x2="${leftWidth}" y2="24" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+    <!-- Outer border -->
+    <rect width="${totalWidth}" height="24" rx="6" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+    <!-- Bottom glow line -->
+    <rect x="${leftWidth}" y="23" width="${rightWidth}" height="1" fill="${theme.accent}"/>
   </g>
-  <g fill="#fff" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" text-rendering="geometricPrecision" font-size="11" font-weight="600">
-    <text x="${leftWidth / 2}" y="17.5" fill="#a1a1aa">${leftText}</text>
-    <text x="${leftWidth + rightWidth / 2}" y="17.5" fill="#f4f4f5">${rightText}</text>
+  <!-- Brand logo: Emerald Lightning Bolt -->
+  <g transform="translate(8, 5)">
+    <path d="M7 1L1 8H6L5 13L11 6H6L7 1Z" fill="#10b981" stroke="#059669" stroke-width="0.5" stroke-linejoin="round"/>
+  </g>
+  <!-- Typography -->
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif" font-size="11" font-weight="700" text-rendering="geometricPrecision">
+    <text x="24" y="16" fill="#f4f4f5" letter-spacing="-0.2px">GetMerged</text>
+    <text x="${leftWidth + rightWidth / 2}" y="16" fill="${theme.text}" text-anchor="middle" font-weight="600" letter-spacing="-0.1px">${rightText}</text>
   </g>
 </svg>`;
 

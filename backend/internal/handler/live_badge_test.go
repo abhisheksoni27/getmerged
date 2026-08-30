@@ -75,10 +75,10 @@ func TestLiveBadgeACs(t *testing.T) {
 		t.Fatalf("dot seg should be neutral fallback: %d %s", w4.Code, w4.Body.String())
 	}
 
-	// AC4: unknown repo -> neutral gray fallback SVG, still 200, never 500
+	// AC4: unknown repo -> neutral fallback SVG, still 200, never 500
 	w5 := httptest.NewRecorder()
 	r.ServeHTTP(w5, httptest.NewRequest("GET", "/api/badge/nope/nothere", nil))
-	if w5.Code != http.StatusOK || !strings.Contains(w5.Body.String(), "#9ca3af") {
+	if w5.Code != http.StatusOK || !strings.Contains(w5.Body.String(), "#0284c7") {
 		t.Fatalf("unknown repo fallback wrong: %d", w5.Code)
 	}
 }
