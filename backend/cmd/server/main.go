@@ -11,8 +11,10 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"io"
 	"log/slog"
+	"net/http"
 	"os"
 	"time"
 
@@ -63,6 +65,10 @@ func main() {
 	if err := db.AutoMigrate(database); err != nil {
 		slog.Error("auto-migrate failed", "err", err)
 		os.Exit(1)
+	}
+
+	if cfg.DodopaymentsAPIKey != "" {
+		validateDodoProducts(cfg)
 	}
 
 	cacheMiddleware, vkClient, err := middleware.Cache(cfg.ValkeyURL, cfg.ValkeyUsername, cfg.ValkeyPassword)
@@ -545,6 +551,13 @@ func main() {
 		// Recruiter Pass checkout: writes a PENDING entitlement row; the Dodo
 		// webhook flips it to 'active' (AC2/AC6).
 		userApi.POST("/user/recruiter-pass/checkout", handler.CreateRecruiterPassCheckoutHandler(cfg, recruiterRepo))
+		// Pro Contributor checkout: creates a Dodo checkout session for the
+		// Pro subscription with server-side attribution metadata.
+		userApi.POST("/user/pro/checkout", handler.CreateProCheckoutHandler(cfg, entitlementRepo))
+		// Maintainer SLA checkout: creates a Dodo checkout session for the
+		// Maintainer SLA subscription.
+		userApi.POST("/user/maintainer-sla/checkout", handler.CreateMaintainerSLACheckoutHandler(cfg, entitlementRepo))
+		userApi.GET("/user/maintainer-sla/status", handler.GetMaintainerSLAStatusHandler(entitlementRepo))
 		userApi.DELETE("/me/data", handler.DeleteUserData(cfg, userRepo))
 		userApi.GET("/user/dna", handler.GetContributorDNA(profileRepo))
 		userApi.POST("/user/dna/refresh", handler.RefreshContributorDNA(profileRepo, dnaWorker))
@@ -961,9 +974,79 @@ func startPRStallAlertCron(cfg *config.Config, database *sqlx.DB) func() {
 			}
 		}
 	}()
+
 	return func() { close(stop) }
 }
 
+// validateDodoProducts verifies that all configured DodoPayments product IDs
+// exist in the account. Logs warnings for missing products; does not block
+// startup so dev/test environments with uncreated products still boot.
+func validateDodoProducts(cfg *config.Config) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet,
+		"https://api.dodopayments.com/v1/products?limit=100", nil)
+	if err != nil {
+		slog.Warn("dodo product validation: request build failed", "err", err)
+		return
+	}
+	req.Header.Set("Authorization", "Bearer "+cfg.DodopaymentsAPIKey)
+	req.Header.Set("Accept", "application/json")
+
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		slog.Warn("dodo product validation: request failed", "err", err)
+		return
+	}
+	defer resp.Body.Close()
+	body, _ := io.ReadAll(io.LimitReader(resp.Body, 1<<20))
+	if resp.StatusCode != http.StatusOK {
+		slog.Warn("dodo product validation: non-200", "status", resp.StatusCode)
+		return
+	}
+
+	var parsed struct {
+		Data []struct {
+			ProductID string `json:"product_id"`
+			Name      string `json:"name"`
+			Archived  bool   `json:"archived"`
+		} `json:"data"`
+	}
+	if err := json.Unmarshal(body, &parsed); err != nil {
+		slog.Warn("dodo product validation: parse failed", "err", err)
+		return
+	}
+
+	active := map[string]bool{}
+	for _, p := range parsed.Data {
+		if !p.Archived {
+			active[p.ProductID] = true
+		}
+	}
+
+	products := map[string]string{
+		"Pro":             cfg.DodopaymentsProductPro,
+		"Pack10":          cfg.DodopaymentsProductPack10,
+		"Audit":           cfg.DodopaymentsProductAudit,
+		"Boost7":          cfg.DodopaymentsProductBoost7,
+		"RecruiterPass":   cfg.DodopaymentsProductRecruiterPass,
+		"MaintainerSLA":   cfg.DodopaymentsProductMaintainerSLA,
+	}
+	for name, id := range products {
+		if id == "" {
+			slog.Warn("dodo product validation: empty product id", "product", name)
+			continue
+		}
+		if !active[id] {
+			slog.Warn("dodo product validation: product missing or archived in dashboard",
+				"product", name, "id", id)
+		} else {
+			slog.Info("dodo product validated", "product", name, "id", id)
+		}
+	}
+}
 // startXPDeriveCron runs the nightly xp_events award pass (AC1): idempotent
 // INSERT .. ON CONFLICT DO NOTHING keyed by the composite (source, eval_id),
 // so overlapping or repeated runs never double-award XP.

@@ -105,6 +105,14 @@ func AutoMigrate(db *sqlx.DB) error {
 			subscription_updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);`,
+		`CREATE TABLE IF NOT EXISTS user_maintainer_sla (
+			user_id INTEGER PRIMARY KEY,
+			subscription_id VARCHAR(255),
+			status VARCHAR(20) NOT NULL DEFAULT 'inactive',
+			expires_at DATETIME,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);`,
 		// Recruiter Pass entitlement (Talent Pass): paid Dodo subscription that
 		// unlocks /api/v1/recruiter/search. Status lifecycle mirrors the
 		// order->webhook race: 'pending' on checkout, 'active' only after the
@@ -1324,6 +1332,14 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN digest_unsubscribed BOOLEAN DEFAULT FALSE`)
 	_, _ = db.Exec(`ALTER TABLE users ADD COLUMN referral_code VARCHAR(32) UNIQUE`)
 	_, _ = db.Exec(`ALTER TABLE user_entitlements ADD COLUMN bonus_evals INTEGER DEFAULT 0`)
+	_, _ = db.Exec(`CREATE TABLE IF NOT EXISTS user_maintainer_sla (
+		user_id INTEGER PRIMARY KEY,
+		subscription_id VARCHAR(255),
+		status VARCHAR(20) NOT NULL DEFAULT 'inactive',
+		expires_at DATETIME,
+		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+	);`)
 	// Stall-rescue nudge mentions (AC1): reviewer logins per snapshot.
 	_, _ = db.Exec(`ALTER TABLE pr_snapshots ADD COLUMN requested_reviewers TEXT`)
 	// Stall clock anchor (AC5): draft flag + frozen draft->ready instant.

@@ -9,5 +9,9 @@
       "type": "stdio",
       "env": []
     }
+  },
+  "plugin": ["@dodopayments/opencode-plugin"],
+  "skills": {
+    "paths": ["node_modules/@dodopayments/opencode-plugin/skills"]
   }
 }
