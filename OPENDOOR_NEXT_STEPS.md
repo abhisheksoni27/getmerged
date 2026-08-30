@@ -197,11 +197,12 @@ Sprint 1: The Daily Inbound Radar (Phase 1) [COMPLETED ✅]
 ├── [x] 1.3 Active PR Tracker & Review Latency Forecaster
 └── [x] 1.4 Monday Morning Contributor Dispatch Engine (Resend)
 
-Sprint 2: Pre-Flight Guard & Pro Paywall (Phase 2)
-├── 2.1 Pre-Flight PR Diff Checker (/preflight & API)
-├── 2.2 Contributor DNA Profiling Engine
-├── 2.3 Dodopayments Subscription & Quota Middleware ($9/mo)
-└── 2.4 "Proof-of-Merge" Dynamic Social & README Badges
+Sprint 2: Karma Reputation, PR Size Sweet Spot & Proof-of-Merge (Phase 2) [COMPLETED ✅]
+├── [x] 2.1 PR Size Sweet Spot Velocity Telemetry (LOC vs Review Time benchmarks on repo pages)
+├── [x] 2.2 Contributor DNA Profiling & Personal Merge Odds Engine
+├── [x] 2.3 Verified Proof-of-Work Karma & Level Progression Engine (Dynamic SVG README Badges)
+├── [x] 2.4 "Proof-of-Merge" Dynamic Social Share Cards & Confetti Celebrations
+└── [x] 2.5 Dodopayments Pro Paywall & Quota Middleware ($9/mo)
 
 Sprint 3: Community & Maintainer Marketplace (Phase 3)
 ├── 3.1 Contributor Progression Quest Engine
