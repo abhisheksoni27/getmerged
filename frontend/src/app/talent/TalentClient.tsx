@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Search,
   Briefcase,
@@ -20,6 +21,7 @@ import {
   Copy,
   Check,
   Send,
+  UserCheck,
 } from "lucide-react";
 
 function LinkedinIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -69,250 +71,13 @@ export interface CandidateProfile {
   linkedin?: string;
 }
 
-const INITIAL_CANDIDATES: CandidateProfile[] = [
-  {
-    id: "cand-1",
-    username: "alexrivera-eng",
-    name: "Alex Rivera",
-    avatar_url: "https://avatars.githubusercontent.com/u/1024025?v=4",
-    headline: "Staff Systems Engineer · Kubernetes, Envoy & Cilium Contributor",
-    bio: "Focused on high-throughput network dataplanes, eBPF telemetry, and kernel-level network proxies. 8+ years building distributed cloud infrastructure.",
-    location: "San Francisco, CA (Remote)",
-    timezone: "UTC-7 (PST)",
-    primary_language: "Go",
-    languages: ["Go", "C++", "Rust", "eBPF"],
-    total_karma: 4250,
-    level: 5,
-    level_title: "Core OSS Legend",
-    percentile: "Top 1% Worldwide",
-    badge_color: "#10b981",
-    open_to_work: true,
-    work_type_preference: "Staff / Lead",
-    maintainer_trust_rating: 4.95,
-    merged_prs_count: 24,
-    top_repos: ["kubernetes/kubernetes", "envoyproxy/envoy", "cilium/cilium"],
-    email: "alex.rivera@staff-infra.dev",
-    linkedin: "https://linkedin.com/in/alexrivera-systems",
-    work_done: [
-      {
-        repo_name: "kubernetes/kubernetes",
-        repo_tier: "S",
-        pr_title: "kube-proxy: optimize iptables rule synchronization throughput for 5k+ nodes",
-        pr_url: "https://github.com/kubernetes/kubernetes/pull/118242",
-        lines_added: 840,
-        lines_deleted: 310,
-        turnaround_hours: 18,
-        merged_at: "2 weeks ago",
-      },
-      {
-        repo_name: "envoyproxy/envoy",
-        repo_tier: "S",
-        pr_title: "http: reduce memory overhead in streaming buffer chunk allocation",
-        pr_url: "https://github.com/envoyproxy/envoy/pull/28914",
-        lines_added: 420,
-        lines_deleted: 115,
-        turnaround_hours: 12,
-        merged_at: "1 month ago",
-      },
-      {
-        repo_name: "cilium/cilium",
-        repo_tier: "S",
-        pr_title: "bpf: fix conntrack table entry race condition during rapid pod migration",
-        pr_url: "https://github.com/cilium/cilium/pull/24180",
-        lines_added: 195,
-        lines_deleted: 42,
-        turnaround_hours: 8,
-        merged_at: "2 months ago",
-      },
-    ],
-  },
-  {
-    id: "cand-2",
-    username: "priyasharma-dev",
-    name: "Priya Sharma",
-    avatar_url: "https://avatars.githubusercontent.com/u/2048552?v=4",
-    headline: "Senior Frontend Architect · Next.js, Turborepo & Tailwind Contributor",
-    bio: "React and Next.js performance specialist. Architected zero-CLS server-side component rendering systems for high-scale e-commerce products.",
-    location: "Bengaluru, India (Remote)",
-    timezone: "UTC+5:30 (IST)",
-    primary_language: "TypeScript",
-    languages: ["TypeScript", "React", "Rust", "Node.js"],
-    total_karma: 2890,
-    level: 4,
-    level_title: "Senior Open-Source Engineer",
-    percentile: "Top 5% Worldwide",
-    badge_color: "#3b82f6",
-    open_to_work: true,
-    work_type_preference: "Full-Time",
-    maintainer_trust_rating: 4.88,
-    merged_prs_count: 16,
-    top_repos: ["vercel/next.js", "tailwindlabs/tailwindcss", "shadcn-ui/ui"],
-    email: "priya.sharma@fullstack-lead.io",
-    linkedin: "https://linkedin.com/in/priya-sharma-dev",
-    work_done: [
-      {
-        repo_name: "vercel/next.js",
-        repo_tier: "S",
-        pr_title: "app-router: improve streaming SSR payload hydration speed for nested suspense trees",
-        pr_url: "https://github.com/vercel/next.js/pull/62114",
-        lines_added: 620,
-        lines_deleted: 190,
-        turnaround_hours: 14,
-        merged_at: "5 days ago",
-      },
-      {
-        repo_name: "tailwindlabs/tailwindcss",
-        repo_tier: "S",
-        pr_title: "v4-oxide: optimize container query CSS generation parser in Rust",
-        pr_url: "https://github.com/tailwindlabs/tailwindcss/pull/14102",
-        lines_added: 340,
-        lines_deleted: 85,
-        turnaround_hours: 22,
-        merged_at: "3 weeks ago",
-      },
-    ],
-  },
-  {
-    id: "cand-3",
-    username: "marcus-vance-rs",
-    name: "Marcus Vance",
-    avatar_url: "https://avatars.githubusercontent.com/u/3819201?v=4",
-    headline: "Rust Core & Distributed DB Engineer · Tokio & DataFusion Contributor",
-    bio: "Low-latency systems developer specializing in async runtime internals, column-oriented database execution engines, and WebAssembly.",
-    location: "Berlin, Germany (Remote / Hybrid)",
-    timezone: "UTC+1 (CET)",
-    primary_language: "Rust",
-    languages: ["Rust", "C++", "Go", "SQL"],
-    total_karma: 3410,
-    level: 4,
-    level_title: "Senior Open-Source Engineer",
-    percentile: "Top 5% Worldwide",
-    badge_color: "#3b82f6",
-    open_to_work: true,
-    work_type_preference: "Full-Time",
-    maintainer_trust_rating: 4.92,
-    merged_prs_count: 19,
-    top_repos: ["tokio-rs/tokio", "apache/arrow-datafusion", "vectordotdev/vector"],
-    email: "marcus@rustacean.org",
-    linkedin: "https://linkedin.com/in/marcus-vance-rust",
-    work_done: [
-      {
-        repo_name: "tokio-rs/tokio",
-        repo_tier: "S",
-        pr_title: "io: zero-copy ringbuffer implementation for vectorized socket I/O",
-        pr_url: "https://github.com/tokio-rs/tokio/pull/6201",
-        lines_added: 512,
-        lines_deleted: 140,
-        turnaround_hours: 16,
-        merged_at: "1 week ago",
-      },
-      {
-        repo_name: "apache/arrow-datafusion",
-        repo_tier: "S",
-        pr_title: "physical-plan: parallelize Parquet bloom filter evaluation across worker partitions",
-        pr_url: "https://github.com/apache/arrow-datafusion/pull/9812",
-        lines_added: 730,
-        lines_deleted: 210,
-        turnaround_hours: 26,
-        merged_at: "1 month ago",
-      },
-    ],
-  },
-  {
-    id: "cand-4",
-    username: "elena-rostova",
-    name: "Elena Rostova",
-    avatar_url: "https://avatars.githubusercontent.com/u/4910283?v=4",
-    headline: "AI Infrastructure & ML Systems · vLLM & PyTorch Contributor",
-    bio: "Optimizing GPU kernel dispatch, FlashAttention integration, and high-throughput speculative decoding for LLM inference engines.",
-    location: "Austin, TX (Remote)",
-    timezone: "UTC-5 (CST)",
-    primary_language: "Python",
-    languages: ["Python", "CUDA", "C++", "PyTorch"],
-    total_karma: 3880,
-    level: 5,
-    level_title: "Core OSS Legend",
-    percentile: "Top 1% Worldwide",
-    badge_color: "#10b981",
-    open_to_work: true,
-    work_type_preference: "Staff / Lead",
-    maintainer_trust_rating: 4.98,
-    merged_prs_count: 22,
-    top_repos: ["vllm-project/vllm", "pytorch/pytorch", "huggingface/transformers"],
-    email: "elena@ml-systems.ai",
-    linkedin: "https://linkedin.com/in/elena-rostova-ai",
-    work_done: [
-      {
-        repo_name: "vllm-project/vllm",
-        repo_tier: "S",
-        pr_title: "attention: implement PagedAttention chunked prefill pipelining for multi-GPU nodes",
-        pr_url: "https://github.com/vllm-project/vllm/pull/5820",
-        lines_added: 940,
-        lines_deleted: 320,
-        turnaround_hours: 10,
-        merged_at: "4 days ago",
-      },
-      {
-        repo_name: "huggingface/transformers",
-        repo_tier: "S",
-        pr_title: "quantization: support 4-bit AWQ weight dequantization kernels on modern CUDA architectures",
-        pr_url: "https://github.com/huggingface/transformers/pull/31940",
-        lines_added: 480,
-        lines_deleted: 95,
-        turnaround_hours: 15,
-        merged_at: "3 weeks ago",
-      },
-    ],
-  },
-  {
-    id: "cand-5",
-    username: "davidkim-backend",
-    name: "David Kim",
-    avatar_url: "https://avatars.githubusercontent.com/u/5829104?v=4",
-    headline: "Backend & Storage Engineer · Gin, Redis-Go & Postgres Contributor",
-    bio: "Microservices performance, distributed locking protocols, and database connection pooling. 6+ years shipping high-availability APIs.",
-    location: "Seattle, WA (Remote)",
-    timezone: "UTC-7 (PST)",
-    primary_language: "Go",
-    languages: ["Go", "SQL", "Docker", "gRPC"],
-    total_karma: 1640,
-    level: 4,
-    level_title: "Senior Open-Source Engineer",
-    percentile: "Top 5% Worldwide",
-    badge_color: "#3b82f6",
-    open_to_work: true,
-    work_type_preference: "Full-Time",
-    maintainer_trust_rating: 4.82,
-    merged_prs_count: 11,
-    top_repos: ["gin-gonic/gin", "redis/go-redis", "jackc/pgx"],
-    email: "david@backend-infra.io",
-    linkedin: "https://linkedin.com/in/david-kim-backend",
-    work_done: [
-      {
-        repo_name: "gin-gonic/gin",
-        repo_tier: "A",
-        pr_title: "context: reuse sync.Pool buffers during multi-part file stream parsing",
-        pr_url: "https://github.com/gin-gonic/gin/pull/3840",
-        lines_added: 210,
-        lines_deleted: 65,
-        turnaround_hours: 24,
-        merged_at: "2 weeks ago",
-      },
-      {
-        repo_name: "jackc/pgx",
-        repo_tier: "S",
-        pr_title: "pool: add jittered exponential backoff during sudden RDS failover",
-        pr_url: "https://github.com/jackc/pgx/pull/1820",
-        lines_added: 175,
-        lines_deleted: 40,
-        turnaround_hours: 14,
-        merged_at: "1 month ago",
-      },
-    ],
-  },
-];
+interface TalentClientProps {
+  initialCandidates?: CandidateProfile[];
+}
 
-export function TalentClient() {
+export function TalentClient({ initialCandidates = [] }: TalentClientProps) {
+  const router = useRouter();
+  const [candidates] = useState<CandidateProfile[]>(initialCandidates);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLang, setSelectedLang] = useState<string>("All");
   const [selectedMinKarma, setSelectedMinKarma] = useState<number>(0);
@@ -320,6 +85,9 @@ export function TalentClient() {
   const [selectedCandidate, setSelectedCandidate] = useState<CandidateProfile | null>(null);
   const [showRecruiterModal, setShowRecruiterModal] = useState<boolean>(false);
   const [activeDossierCandidate, setActiveDossierCandidate] = useState<CandidateProfile | null>(null);
+
+  // Direct GitHub Username Lookup input
+  const [lookupUsername, setLookupUsername] = useState("");
 
   // 1-Click Founder Pitch State
   const [pitchCandidate, setPitchCandidate] = useState<CandidateProfile | null>(null);
@@ -330,12 +98,20 @@ export function TalentClient() {
   const [pitchTone, setPitchTone] = useState<"peer" | "deep" | "coffee">("peer");
   const [copiedPitch, setCopiedPitch] = useState(false);
 
+  const handleLookupSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = lookupUsername.trim().replace(/^@/, "");
+    if (clean) {
+      router.push(`/u/${clean}`);
+    }
+  };
+
   const generatedPitch = useMemo(() => {
     if (!pitchCandidate) return { subject: "", body: "" };
-    const firstName = pitchCandidate.name.split(" ")[0];
+    const firstName = pitchCandidate.name.split(" ")[0] || pitchCandidate.username;
     const topPR = pitchCandidate.work_done[0];
     const repo = topPR ? topPR.repo_name : pitchCandidate.top_repos[0] || "open-source";
-    const prTitle = topPR ? topPR.pr_title : "production performance improvements";
+    const prTitle = topPR ? topPR.pr_title : "production pull request contributions";
 
     if (pitchTone === "coffee") {
       const subject = `Saw your work in ${repo} - quick coffee chat?`;
@@ -392,7 +168,7 @@ ${pitchSenderTitle}, ${pitchCompany}`;
   const languagesList = ["All", "Go", "TypeScript", "Rust", "Python", "C++"];
 
   const filteredCandidates = useMemo(() => {
-    return INITIAL_CANDIDATES.filter((c) => {
+    return candidates.filter((c) => {
       if (openToWorkOnly && !c.open_to_work) return false;
       if (selectedLang !== "All" && c.primary_language !== selectedLang && !c.languages.includes(selectedLang)) {
         return false;
@@ -403,17 +179,18 @@ ${pitchSenderTitle}, ${pitchCompany}`;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchesName = c.name.toLowerCase().includes(q);
+        const matchesUsername = c.username.toLowerCase().includes(q);
         const matchesHeadline = c.headline.toLowerCase().includes(q);
         const matchesBio = c.bio.toLowerCase().includes(q);
         const matchesRepos = c.top_repos.some((r) => r.toLowerCase().includes(q));
         const matchesLang = c.languages.some((l) => l.toLowerCase().includes(q));
-        if (!matchesName && !matchesHeadline && !matchesBio && !matchesRepos && !matchesLang) {
+        if (!matchesName && !matchesUsername && !matchesHeadline && !matchesBio && !matchesRepos && !matchesLang) {
           return false;
         }
       }
       return true;
     });
-  }, [searchQuery, selectedLang, selectedMinKarma, openToWorkOnly]);
+  }, [candidates, searchQuery, selectedLang, selectedMinKarma, openToWorkOnly]);
 
   return (
     <div className="space-y-12">
@@ -432,7 +209,7 @@ ${pitchSenderTitle}, ${pitchCompany}`;
         </h1>
 
         <p className="text-sm sm:text-base text-zinc-300 max-w-2xl mx-auto leading-relaxed font-sans">
-          Resumes are full of self-reported claims. <strong>WorkDone Database</strong> is full of proof. Search senior software engineers indexed by actual pull requests merged into Kubernetes, Next.js, Envoy, Tokio, and production open-source infrastructure.
+          Resumes are full of self-reported claims. <strong>WorkDone Database</strong> is full of proof. Search senior software engineers indexed by actual pull requests merged into production open-source infrastructure.
         </p>
 
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -443,14 +220,13 @@ ${pitchSenderTitle}, ${pitchCompany}`;
             <Zap className="h-4 w-4" />
             <span>Unlock Founder & CTO Pass ($49/mo)</span>
           </Link>
-          <button
-            type="button"
-            onClick={() => setActiveDossierCandidate(INITIAL_CANDIDATES[0])}
+          <Link
+            href="/dashboard"
             className="w-full sm:w-auto px-8 py-3.5 rounded-2xl glass-panel border border-white/[0.14] text-white font-mono text-xs font-bold uppercase tracking-wider hover:bg-white/[0.08] transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
-            <span>Inspect Sample Work Dossier</span>
-            <ArrowRight className="h-4 w-4" />
-          </button>
+            <UserCheck className="h-4 w-4 text-emerald-400" />
+            <span>Join Talent Pool (For Devs)</span>
+          </Link>
         </div>
       </div>
 
@@ -493,6 +269,40 @@ ${pitchSenderTitle}, ${pitchCompany}`;
         </div>
       </div>
 
+      {/* Direct Public GitHub Profile Inspector */}
+      <div className="p-6 rounded-2xl glass-panel border border-white/[0.1] bg-[#121214]/90 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 className="text-base font-bold font-space text-white flex items-center gap-2">
+              <Search className="h-4 w-4 text-emerald-400" />
+              Inspect Any GitHub Developer&apos;s WorkDone Dossier
+            </h3>
+            <p className="text-xs text-zinc-400 font-sans mt-0.5">
+              Enter any public GitHub username to inspect their verified Karma score, merged PR history, and codebase seniority.
+            </p>
+          </div>
+        </div>
+
+        <form onSubmit={handleLookupSubmit} className="flex gap-2">
+          <div className="relative flex-1">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-mono text-zinc-500">github.com/</span>
+            <input
+              type="text"
+              value={lookupUsername}
+              onChange={(e) => setLookupUsername(e.target.value)}
+              placeholder="e.g. torvalds, shadcn, or your candidate's username"
+              className="w-full pl-28 pr-4 py-2.5 rounded-xl bg-[#0a0a0c] border border-white/[0.12] text-white text-xs font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 transition-colors"
+            />
+          </div>
+          <button
+            type="submit"
+            className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold transition-all shrink-0 cursor-pointer"
+          >
+            Inspect Profile
+          </button>
+        </form>
+      </div>
+
       {/* The WorkDone Parametric Search Matrix */}
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -502,12 +312,12 @@ ${pitchSenderTitle}, ${pitchCompany}`;
               WorkDone Parametric Search
             </h2>
             <p className="text-xs text-zinc-400 font-sans mt-0.5">
-              Search by target codebase, language ecosystem, Karma score, or architecture keywords.
+              Search verified opt-in contributors by target codebase, language ecosystem, or Karma score.
             </p>
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
-            <span>Showing <strong className="text-white">{filteredCandidates.length}</strong> verified engineers</span>
+            <span>Showing <strong className="text-white">{filteredCandidates.length}</strong> verified opt-in engineers</span>
           </div>
         </div>
 
@@ -520,14 +330,14 @@ ${pitchSenderTitle}, ${pitchCompany}`;
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by repo (e.g. 'kubernetes', 'next.js'), skill, or candidate name..."
+              placeholder="Search by repo (e.g. 'kubernetes', 'next.js'), skill, or candidate username..."
               className="w-full pl-11 pr-4 py-3 rounded-xl bg-[#0a0a0c] border border-white/[0.1] text-white text-sm font-sans placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-colors"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-400 hover:text-white px-2 py-1"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-400 hover:text-white px-2 py-1 cursor-pointer"
               >
                 Clear
               </button>
@@ -591,8 +401,35 @@ ${pitchSenderTitle}, ${pitchCompany}`;
         {/* Candidate List Results */}
         <div className="space-y-4">
           {filteredCandidates.length === 0 ? (
-            <div className="p-12 text-center rounded-2xl glass-panel border border-white/[0.08] text-zinc-400 font-mono text-sm">
-              No verified candidates found matching your filters. Try clearing the search query or selecting &quot;All&quot; ecosystems.
+            <div className="p-12 text-center rounded-3xl glass-panel border border-white/[0.08] bg-[#0c0c0e]/80 space-y-5">
+              <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.1] flex items-center justify-center mx-auto text-zinc-400">
+                <UserCheck className="h-6 w-6 text-emerald-400" />
+              </div>
+
+              <div className="space-y-2 max-w-md mx-auto">
+                <h3 className="text-lg font-bold font-space text-white">
+                  Zero Fake Profiles · Real Opt-Ins Only
+                </h3>
+                <p className="text-xs text-zinc-400 font-sans leading-relaxed">
+                  WorkDone Database never scrapes fake profiles or sells scraped emails. Only verified GitHub contributors who explicitly opt in through their dashboard appear here.
+                </p>
+              </div>
+
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <Link
+                  href="/dashboard"
+                  className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 shadow-lg shadow-emerald-950/40"
+                >
+                  <UserCheck className="h-4 w-4" />
+                  <span>Opt In to Talent Pool (For Devs)</span>
+                </Link>
+                <Link
+                  href="/pricing?tab=recruiter"
+                  className="px-6 py-2.5 rounded-xl glass-panel border border-white/[0.14] hover:bg-white/[0.08] text-white font-mono text-xs font-bold uppercase tracking-wider transition-all"
+                >
+                  <span>Set Up Founder Talent Alert ($49/mo)</span>
+                </Link>
+              </div>
             </div>
           ) : (
             filteredCandidates.map((cand) => (
@@ -722,7 +559,7 @@ ${pitchSenderTitle}, ${pitchCompany}`;
             <button
               type="button"
               onClick={() => setActiveDossierCandidate(null)}
-              className="absolute right-5 top-5 p-2 rounded-full glass-card text-zinc-400 hover:text-white"
+              className="absolute right-5 top-5 p-2 rounded-full glass-card text-zinc-400 hover:text-white cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
@@ -792,7 +629,7 @@ ${pitchSenderTitle}, ${pitchCompany}`;
                   setPitchCandidate(target);
                   setCopiedPitch(false);
                 }}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 text-white font-mono text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-950/40"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 text-white font-mono text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-950/40 cursor-pointer"
               >
                 <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
                 <span>Draft Founder Pitch for this PR</span>
@@ -802,7 +639,7 @@ ${pitchSenderTitle}, ${pitchCompany}`;
                 <button
                   type="button"
                   onClick={() => setActiveDossierCandidate(null)}
-                  className="px-4 py-2 text-xs font-mono text-zinc-400 hover:text-white"
+                  className="px-4 py-2 text-xs font-mono text-zinc-400 hover:text-white cursor-pointer"
                 >
                   Close
                 </button>
@@ -813,7 +650,7 @@ ${pitchSenderTitle}, ${pitchCompany}`;
                     setActiveDossierCandidate(null);
                     setShowRecruiterModal(true);
                   }}
-                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold transition-all flex items-center gap-2"
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Lock className="h-3.5 w-3.5" />
                   <span>Unlock Contact</span>
@@ -1017,7 +854,7 @@ ${pitchSenderTitle}, ${pitchCompany}`;
             <button
               type="button"
               onClick={() => setShowRecruiterModal(false)}
-              className="absolute right-5 top-5 p-2 rounded-full glass-card text-zinc-400 hover:text-white"
+              className="absolute right-5 top-5 p-2 rounded-full glass-card text-zinc-400 hover:text-white cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
@@ -1041,7 +878,7 @@ ${pitchSenderTitle}, ${pitchCompany}`;
                 <span className="flex items-center gap-2">
                   <Mail className="h-3.5 w-3.5" /> Email:
                 </span>
-                <span className="blur-[5px] select-none text-zinc-300">alex.rivera@private.dev</span>
+                <span className="blur-[5px] select-none text-zinc-300">masked@private.dev</span>
               </div>
               <div className="flex items-center justify-between text-zinc-400">
                 <span className="flex items-center gap-2">
