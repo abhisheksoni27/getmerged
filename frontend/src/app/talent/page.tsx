@@ -83,7 +83,7 @@ export default function TalentPage() {
 
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/pricing"
+              href="/pricing?tab=recruiter"
               className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xl shadow-blue-950/60 cursor-pointer"
             >
               <Zap className="h-4 w-4" />
