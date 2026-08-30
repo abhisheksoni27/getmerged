@@ -136,10 +136,6 @@ func (c *BackgroundCrawler) runLoop() {
 			c.pruneOldSnapshots()
 		case <-macroStatsTicker.C:
 			c.refreshMacroStats()
-		case <-discoveryTicker.C:
-			if err := c.processDiscoveryBatch(); err != nil {
-				slog.Error("background crawler: error processing discovery batch", "err", err)
-			}
 		case <-ticker.C:
 			c.processNextWorkItem()
 			c.checkAndSendPulseDigest()
