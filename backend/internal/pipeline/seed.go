@@ -162,7 +162,12 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	if len(prs) == 0 {
 		// Fallback: If DB has no PR events yet, fetch them directly from GitHub GraphQL API
 		ghPRs, meta, fetchErr := gh.FetchPRs(owner, name, 180)
-		if fetchErr == nil && len(ghPRs) > 0 {
+		if fetchErr != nil {
+			// Fail with error so caller/worker retries the repo instead of falsely completing it
+			return existingMetrics, fmt.Errorf("gh.FetchPRs fallback failed: %w", fetchErr)
+		}
+
+		if len(ghPRs) > 0 {
 			// Persist fetched PR events into repo_pr_events so subsequent queries and event stream match
 			for _, p := range ghPRs {
 				action := "opened"
@@ -211,9 +216,8 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	}
 
 	if len(prs) == 0 {
-		// Truly zero PRs on GitHub or fetch failed
-		slog.Debug("scoreAndSaveRepo: skipping snapshot - zero PRs found for repo", "repo", fullName)
-		return existingMetrics, nil
+		// Truly zero PRs on GitHub (e.g. issues/PRs disabled or zero PRs in repo history)
+		slog.Debug("scoreAndSaveRepo: zero PRs found on GitHub for repo", "repo", fullName)
 	}
 
 	gfiIssues, gfiCount, err := gh.FetchGoodFirstIssuesList(owner, name, 5)
