@@ -36,6 +36,7 @@ import {
   Pin,
   FolderGit2,
   FileText,
+  LogOut,
 } from "lucide-react";
 
 interface ProfileClientViewProps {
@@ -73,6 +74,20 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
     !!currentUser &&
     (currentUser.slug?.toLowerCase() === profile.slug.toLowerCase() ||
       currentUser.username?.toLowerCase() === profile.username.toLowerCase());
+
+  const handleLogout = async () => {
+    try {
+      await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch {
+      // Clear cookie client-side as fallback
+      document.cookie = "opendoor_token=; Path=/; Max-Age=0; SameSite=Lax";
+    }
+    setCurrentUser(null);
+    window.location.href = "/";
+  };
 
   const hasEvals = profile.total_evals > 0;
   const accuracyPct =
@@ -162,16 +177,27 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
               </div>
             </div>
 
-            <div className="shrink-0 flex items-center gap-2.5 self-start md:self-auto">
+            <div className="shrink-0 flex items-center gap-2.5 self-start md:self-auto flex-wrap">
               {isOwner && (
-                <button
-                  type="button"
-                  onClick={() => setIsEditModalOpen(true)}
-                  className="px-3.5 py-2 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-zinc-200 hover:text-white border border-white/[0.12] text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
-                >
-                  <Edit3 className="h-3.5 w-3.5 text-amber-400" />
-                  Edit Profile
-                </button>
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditModalOpen(true)}
+                    className="px-3.5 py-2 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-zinc-200 hover:text-white border border-white/[0.12] text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    <Edit3 className="h-3.5 w-3.5 text-amber-400" />
+                    Edit Profile
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    title="Log out of GetMerged"
+                    className="px-3 py-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-rose-200 border border-rose-500/30 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    <LogOut className="h-3.5 w-3.5 text-rose-400" />
+                    <span>Log Out</span>
+                  </button>
+                </>
               )}
               <button
                 type="button"
