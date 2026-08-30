@@ -60,7 +60,10 @@ export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfil
 
   if (!karma) return null;
 
-  const badgeMarkdown = `[![GetMerged Karma](https://getmerged.abhishekco.de/api/v1/u/${username}/karma.svg)](https://getmerged.abhishekco.de/u/${username})`;
+  const cleanUsername = username.replace(/^@/, "");
+  const badgeSvgUrl = `https://getmerged.abhishekco.de/api/v1/u/${encodeURIComponent(cleanUsername)}/karma.svg`;
+  const profileUrl = `https://getmerged.abhishekco.de/u/${encodeURIComponent(cleanUsername)}`;
+  const badgeMarkdown = `[![GetMerged Contributor Karma](${badgeSvgUrl})](${profileUrl})`;
 
   const handleCopyBadge = () => {
     navigator.clipboard.writeText(badgeMarkdown);
@@ -100,32 +103,37 @@ export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfil
 
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <div className="text-3xl font-black font-mono text-emerald-400 flex items-center justify-end gap-1">
-              <Zap className="h-5 w-5 fill-emerald-400" />
+            <div className="text-2xl sm:text-3xl font-bold font-mono text-emerald-400">
               {karma.total_karma.toLocaleString()}
             </div>
-            <div className="text-[11px] font-mono text-zinc-400">Verified Karma Pts</div>
+            <div className="text-xs font-mono text-zinc-400">Total Karma Points</div>
           </div>
         </div>
       </div>
 
       {/* Level Progress Bar */}
       <div className="space-y-2">
-        <div className="flex justify-between text-xs font-mono text-zinc-400">
-          <span>Level {karma.rank.level} · {karma.rank.title}</span>
-          <span>{karma.rank.percentile}</span>
+        <div className="flex items-center justify-between text-xs font-mono">
+          <span className="font-semibold text-zinc-200">
+            Level {karma.rank.level} · {karma.rank.title}
+          </span>
+          <span className="text-zinc-400">
+            {karma.rank.next_tier !== "Max Rank" ? (
+              <>
+                <strong className="text-emerald-400">{karma.rank.points_to_next_tier}</strong> pts to{" "}
+                {karma.rank.next_tier}
+              </>
+            ) : (
+              <span className="text-emerald-400 font-bold">Top Tier Mastered</span>
+            )}
+          </span>
         </div>
-        <div className="h-3 w-full bg-zinc-900 rounded-full overflow-hidden border border-white/[0.08] p-0.5">
+        <div className="h-2.5 w-full rounded-full bg-zinc-900 overflow-hidden border border-white/[0.08]">
           <div
-            className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500"
+            className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500"
             style={{ width: `${progressToNext}%` }}
           />
         </div>
-        {karma.rank.points_to_next_tier > 0 && (
-          <div className="text-[11px] font-mono text-zinc-500 text-right">
-            {karma.rank.points_to_next_tier} pts to next rank
-          </div>
-        )}
       </div>
 
       {/* Tier Merge Stats Grid */}
@@ -148,31 +156,49 @@ export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfil
         </div>
       </div>
 
-      {/* GitHub README Badge Embed Snippet */}
-      <div className="p-4 rounded-2xl bg-zinc-900/90 border border-white/[0.1] space-y-2.5">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-mono font-semibold text-zinc-300 flex items-center gap-1.5">
-            <Award className="h-3.5 w-3.5 text-emerald-400" /> Embed Karma on GitHub Profile README:
-          </span>
-          <button
-            onClick={handleCopyBadge}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-xs font-mono text-zinc-200 transition-colors cursor-pointer"
-          >
-            {copied ? (
-              <>
-                <Check className="h-3 w-3 text-emerald-400" />
-                <span className="text-emerald-400">Copied!</span>
-              </>
-            ) : (
-              <>
-                <Copy className="h-3 w-3" />
-                <span>Copy Markdown</span>
-              </>
-            )}
-          </button>
+      {/* GitHub README Badge Embed Snippet & Live Preview */}
+      <div className="p-5 rounded-2xl bg-zinc-900/90 border border-white/[0.1] space-y-4">
+        {/* Live Badge Preview */}
+        <div className="space-y-1.5">
+          <div className="text-[11px] font-mono text-emerald-400 uppercase tracking-wider font-semibold">
+            Live Badge Preview:
+          </div>
+          <div className="pt-1">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`/api/v1/u/${encodeURIComponent(cleanUsername)}/karma.svg`}
+              alt={`GetMerged Karma: ${karma.total_karma.toLocaleString()} · ${karma.rank.title}`}
+              className="inline-block hover:opacity-95 transition-opacity"
+            />
+          </div>
         </div>
-        <div className="p-2.5 rounded-xl bg-black/60 border border-white/[0.06] text-xs font-mono text-emerald-300 overflow-x-auto select-all">
-          {badgeMarkdown}
+
+        {/* Copy Bar */}
+        <div className="space-y-2 pt-2 border-t border-white/[0.06]">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono font-semibold text-zinc-300 flex items-center gap-1.5">
+              <Award className="h-3.5 w-3.5 text-emerald-400" /> Embed Karma on GitHub Profile README:
+            </span>
+            <button
+              onClick={handleCopyBadge}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-xs font-mono text-zinc-200 transition-colors cursor-pointer"
+            >
+              {copied ? (
+                <>
+                  <Check className="h-3 w-3 text-emerald-400" />
+                  <span className="text-emerald-400">Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="h-3 w-3" />
+                  <span>Copy Markdown</span>
+                </>
+              )}
+            </button>
+          </div>
+          <div className="p-2.5 rounded-xl bg-black/60 border border-white/[0.06] text-xs font-mono text-emerald-300 overflow-x-auto select-all">
+            {badgeMarkdown}
+          </div>
         </div>
       </div>
     </div>
