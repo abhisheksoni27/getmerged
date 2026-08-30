@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Bookmark, Search, Menu, X, LogOut } from "lucide-react";
+import { Bookmark, Search, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
@@ -54,19 +54,6 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
       .finally(() => setAuthLoading(false));
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
-    } catch {
-      document.cookie = "opendoor_token=; Path=/; Max-Age=0; SameSite=Lax";
-    }
-    setUser(null);
-    window.location.href = "/";
-  };
-
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-[#0a0a0a]/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 sm:gap-4 px-4 sm:px-6 lg:px-8">
@@ -112,45 +99,48 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             <Link href="/repos" title="Explore All Open Source Repositories" className="hover:text-white transition-colors">
               Repositories
             </Link>
-            <Link href="/how-c-rank-works" title="How C-Rank Evaluates Repositories" className="hover:text-white transition-colors">
-              How C-Rank Works
-            </Link>
-            <Link href="/rankings" title="Browse Open Source Rankings by Language" className="hover:text-white transition-colors">
-              Ecosystems
-            </Link>
-            <Link href="/good-first-issue" title="Find Beginner Friendly Good First Issues" className="hover:text-white transition-colors">
+            <Link href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="hover:text-white transition-colors whitespace-nowrap">
               Good First Issues
             </Link>
-            <Link href="/talent" title="Verified Contributor Talent Pass" className="hover:text-white transition-colors">
-              Talent Pass
+            <Link href="/stack" title="Find Good First Issues in Your Tech Stack" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1 whitespace-nowrap">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Stalk Stack
             </Link>
-            <Link href="/pricing" title="Claim Repositories & Fast-Track Features" className="hover:text-white transition-colors">
+            <Link href="/maintainers" title="Claim Your Repository & PR Telemetry" className="hover:text-white font-medium transition-colors whitespace-nowrap">
               Maintainers
             </Link>
+            <Link href="/talent" title="Hire Verified Open Source Engineers" className="text-blue-400 hover:text-blue-300 font-medium transition-colors whitespace-nowrap">
+              Talent 💼
+            </Link>
+            {user && (
+              <Link href="/dashboard" title="Contributor PR Tracker & Quests" className="hover:text-white font-bold text-white transition-colors whitespace-nowrap">
+                Dashboard
+              </Link>
+            )}
           </nav>
         </div>
 
-        {/* Global Search Pill */}
-        <div className="flex-1 max-w-sm mx-2 sm:mx-4 hidden sm:block">
-          {isSearchVisible && (
+        {/* Floating Search Button */}
+        {isSearchVisible && (
+          <div className="flex-1 min-w-[120px] sm:min-w-[150px] md:min-w-[170px] max-w-[240px] mx-1 sm:mx-2 shrink-0 sm:shrink">
             <button
               type="button"
               onClick={handleOpenSearch}
-              title="Search Repositories (Cmd+K)"
-              className="w-full flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-[#141414]/70 hover:bg-[#1a1a1a] hover:border-white/[0.16] text-[#737373] hover:text-[#a3a3a3] transition-all text-xs font-sans group cursor-pointer"
+              aria-label="Search repositories"
+              className="w-full relative flex items-center justify-between h-9 rounded-lg border border-white/[0.08] bg-[#141414] hover:border-white/[0.16] hover:bg-[#1c1c1c] px-2.5 sm:px-3 transition-all cursor-pointer group text-left"
             >
-              <div className="flex items-center gap-2 min-w-0">
-                <Search className="h-3.5 w-3.5 text-[#525252] group-hover:text-[#a3a3a3] transition-colors shrink-0" />
-                <span className="truncate">
-                  {displayQuery ? `Search: "${displayQuery}"` : placeholderText || "Search repositories by name, language or topic..."}
+              <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">
+                <Search className="h-3.5 w-3.5 text-[#a3a3a3] group-hover:text-[#d4d4d4] shrink-0 transition-colors" />
+                <span className="text-xs text-[#a3a3a3] group-hover:text-[#d4d4d4] truncate font-sans block">
+                  {displayQuery || placeholderText || "Search repositories..."}
                 </span>
               </div>
-              <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono text-[#525252] bg-white/[0.04] border border-white/[0.06] rounded shrink-0">
-                <span className="text-xs">⌘</span>K
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-md border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] font-medium text-[#a3a3a3] shrink-0">
+                <span>⌘</span>K
               </kbd>
             </button>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 shrink-0">
@@ -184,14 +174,6 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               >
                 <Bookmark className="h-3.5 w-3.5" />
               </Link>
-              <button
-                type="button"
-                onClick={handleLogout}
-                title="Log out of GetMerged"
-                className="flex items-center justify-center h-6 w-6 text-[#a3a3a3] hover:text-rose-400 rounded-md transition-colors border-l border-white/[0.08] ml-0.5 pl-1.5 shrink-0 cursor-pointer"
-              >
-                <LogOut className="h-3.5 w-3.5" />
-              </button>
             </div>
           ) : (
             <>
@@ -303,19 +285,6 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               >
                 Dashboard
               </Link>
-              {user && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    handleLogout();
-                  }}
-                  className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-rose-500/10 text-rose-400 font-semibold transition-colors flex items-center gap-2 cursor-pointer"
-                >
-                  <LogOut className="h-4 w-4" />
-                  <span>Log Out</span>
-                </button>
-              )}
               <Link
                 href="/league"
                 onClick={() => setMobileMenuOpen(false)}
