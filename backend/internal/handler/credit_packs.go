@@ -24,7 +24,7 @@ import (
 // key is not configured - the buy flow must never dead-end (AC1/AC5).
 const packHostedCheckoutURL = "https://checkout.dodopayments.com/buy/pdt_opendoor_pack10"
 
-const dodoCheckoutsAPIURL = "https://api.dodopayments.com/v1/checkouts"
+const dodoCheckoutsAPIURL = "https://live.dodopayments.com/checkouts"
 
 // newPackOrderID returns a high-entropy order id ("pack_<32hex>") that is
 // stored with the purchaser's user_id at checkout creation (AC4).

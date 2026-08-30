@@ -37,6 +37,7 @@ import {
   getRepoAuditRegenUrl,
   getRepoAuditStatusUrl,
 } from "@/lib/api";
+import { PAYMENTS_ENABLED } from "@/lib/flags";
 import { generateAuditHtml } from "@/lib/exportAuditHtml";
 
 export interface AuditFactor {
@@ -260,6 +261,10 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
   }, [fetchReport, startPolling, owner, name, fullName]);
 
   const startCheckout = useCallback(async () => {
+    if (!PAYMENTS_ENABLED) {
+      setErrorMsg("Maintainer Audit checkout is temporarily paused during merchant verification. Please check back shortly or explore the free sample report.");
+      return;
+    }
     setCheckoutLoading(true);
     setErrorMsg(null);
     try {
@@ -270,10 +275,12 @@ export function RepoAuditReport({ owner, name, fullName }: RepoAuditReportProps)
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({})) as { error?: string };
-        if (data.error === "not_maintainer") {
+        if (data.error === "unauthenticated") {
+          setErrorMsg("Please sign in with your GitHub account to access maintainer audits.");
+        } else if (data.error === "not_maintainer") {
           setErrorMsg("You need to be an admin maintainer of this repository to purchase an audit.");
         } else {
-          setErrorMsg("Could not start checkout. Please try again.");
+          setErrorMsg("Maintainer Audit checkout is temporarily unavailable. Please check back shortly.");
         }
         setCheckoutLoading(false);
         return;
