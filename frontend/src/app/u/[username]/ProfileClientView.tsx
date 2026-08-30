@@ -114,44 +114,37 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 sm:py-10">
         {/* Section 1: Executive Contributor Header */}
         <div className="mb-8 rounded-xl glass-panel p-6 sm:p-8 border border-white/[0.1] border-t-2 border-t-slate-700 shadow-sm relative overflow-hidden">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="flex items-start gap-5 flex-1 min-w-0">
+          {/* Top Bar: Identity & Actions */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/[0.06]">
+            <div className="flex items-center gap-4 min-w-0">
               {profile.avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={profile.avatar_url}
                   alt={profile.username}
-                  className="h-16 w-16 sm:h-20 sm:w-20 rounded-xl border border-white/[0.12] bg-slate-800 shadow-md object-cover shrink-0"
+                  className="h-16 w-16 sm:h-18 sm:w-18 rounded-xl border border-white/[0.12] bg-slate-800 shadow-md object-cover shrink-0"
                 />
               ) : (
-                <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-xl bg-slate-800 text-white flex items-center justify-center font-sans font-bold text-2xl shrink-0 border border-white/[0.12]">
+                <div className="h-16 w-16 sm:h-18 sm:w-18 rounded-xl bg-slate-800 text-white flex items-center justify-center font-sans font-bold text-2xl shrink-0 border border-white/[0.12]">
                   {profile.username.slice(0, 2).toUpperCase()}
                 </div>
               )}
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <h1 className="text-2xl sm:text-3xl font-bold font-sans text-white truncate">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h1 className="text-xl sm:text-2xl font-bold font-sans text-white truncate">
                     {profile.username}
                   </h1>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-slate-800 text-zinc-300 text-xs font-mono border border-white/[0.12]">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded bg-slate-800 text-zinc-300 text-xs font-mono border border-white/[0.12]">
                     @{profile.slug}
                   </span>
                   {dna?.persona && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-emerald-950/80 text-emerald-300 text-xs font-mono font-bold border border-emerald-700/80">
-                      <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 text-xs font-mono font-bold border border-emerald-700/80">
+                      <Sparkles className="h-3 w-3 text-emerald-400" />
                       {dna.persona}
                     </span>
                   )}
                 </div>
-
-                {/* Professional Headline */}
-                {profile.headline ? (
-                  <p className="text-sm font-medium text-amber-300/90 font-sans mt-1.5 leading-snug">
-                    {profile.headline}
-                  </p>
-                ) : null}
-
-                <p className="text-xs font-mono text-zinc-400 flex items-center gap-1.5 mt-2">
+                <p className="text-xs font-mono text-zinc-400 flex items-center gap-1.5 mt-1.5">
                   <Calendar className="h-3.5 w-3.5 text-zinc-400" />
                   Verified on GetMerged since{" "}
                   {new Date(profile.member_since).toLocaleDateString("en-US", {
@@ -159,56 +152,65 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
                     month: "short",
                   })}
                 </p>
-
-                {/* Bio / About */}
-                {profile.bio ? (
-                  <p className="mt-3 text-sm text-zinc-200 leading-relaxed font-sans whitespace-pre-line">
-                    {profile.bio}
-                  </p>
-                ) : isOwner ? (
-                  <button
-                    type="button"
-                    onClick={() => setIsEditModalOpen(true)}
-                    className="mt-3 text-xs font-mono text-zinc-400 hover:text-amber-300 flex items-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <Edit3 className="h-3 w-3 text-amber-400" /> Add your bio...
-                  </button>
-                ) : null}
               </div>
             </div>
 
-            <div className="shrink-0 flex items-center gap-2.5 self-start md:self-auto flex-wrap">
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
               {isOwner && (
                 <>
                   <button
                     type="button"
                     onClick={() => setIsEditModalOpen(true)}
-                    className="px-3.5 py-2 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-zinc-200 hover:text-white border border-white/[0.12] text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+                    className="px-3 py-1.5 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-zinc-200 hover:text-white border border-white/[0.12] text-xs font-mono font-medium flex items-center gap-1.5 transition-all cursor-pointer"
                   >
                     <Edit3 className="h-3.5 w-3.5 text-amber-400" />
-                    Edit Profile
+                    Edit
                   </button>
                   <button
                     type="button"
                     onClick={handleLogout}
                     title="Log out of GetMerged"
-                    className="px-3 py-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-rose-200 border border-rose-500/30 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+                    className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-rose-200 border border-rose-500/25 text-xs font-mono font-medium flex items-center gap-1 transition-all cursor-pointer"
                   >
                     <LogOut className="h-3.5 w-3.5 text-rose-400" />
-                    <span>Log Out</span>
+                    <span>Log out</span>
                   </button>
                 </>
               )}
               <button
                 type="button"
                 onClick={() => setIsResumeModalOpen(true)}
-                className="px-3.5 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 hover:text-white border border-emerald-500/30 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 hover:text-white border border-emerald-500/30 text-xs font-mono font-medium flex items-center gap-1.5 transition-all cursor-pointer"
               >
                 <FileText className="h-3.5 w-3.5 text-emerald-400" />
-                <span>Export Resume</span>
+                <span>Resume</span>
               </button>
               <ShareCardButton slug={profile.slug} username={profile.username} />
             </div>
+          </div>
+
+          {/* Bottom Area: Headline & Full-Width Bio */}
+          <div className="pt-4">
+            {profile.headline && (
+              <p className="text-sm font-semibold text-amber-300/90 font-sans leading-snug">
+                {profile.headline}
+              </p>
+            )}
+
+            {profile.bio ? (
+              <p className="mt-2 text-sm text-zinc-200 leading-relaxed font-sans whitespace-pre-line">
+                {profile.bio}
+              </p>
+            ) : isOwner ? (
+              <button
+                type="button"
+                onClick={() => setIsEditModalOpen(true)}
+                className="mt-2 text-xs font-mono text-zinc-400 hover:text-amber-300 flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <Edit3 className="h-3 w-3 text-amber-400" /> Add your bio...
+              </button>
+            ) : null}
           </div>
         </div>
 
