@@ -12,6 +12,7 @@ import { AuthModal } from "@/components/AuthModal";
 
 import { useSearch } from "@/context/SearchContext";
 import { EASE_OUT_EXPO, useReducedMotion } from "@/lib/motion";
+import { PAYMENTS_ENABLED } from "@/lib/flags";
 
 interface HeaderProps {
   showSearchBar?: boolean;
@@ -271,13 +272,15 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               >
                 WorkDone Database 💼
               </Link>
-              <Link
-                href="/pricing"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-emerald-400 font-semibold transition-colors"
-              >
-                Pricing & Plans 💳
-              </Link>
+              {PAYMENTS_ENABLED && (
+                <Link
+                  href="/pricing"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-emerald-400 font-semibold transition-colors"
+                >
+                  Pricing & Plans 💳
+                </Link>
+              )}
               <Link
                 href="/dashboard"
                 onClick={() => setMobileMenuOpen(false)}

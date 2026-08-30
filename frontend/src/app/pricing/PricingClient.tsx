@@ -14,6 +14,8 @@ import {
   Activity,
 } from "lucide-react";
 
+import { PAYMENTS_ENABLED } from "@/lib/flags";
+
 type AudienceTab = "contributors" | "recruiter" | "maintainers";
 
 export default function PricingClient() {
@@ -27,6 +29,7 @@ export default function PricingClient() {
   );
 
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("yearly");
+  const [showVerificationNotice, setShowVerificationNotice] = useState(false);
 
   useEffect(() => {
     const tabParam = searchParams.get("tab") as AudienceTab | null;
@@ -36,6 +39,11 @@ export default function PricingClient() {
   }, [searchParams]);
 
   const handleCheckout = async (product: string, planCycle: "monthly" | "yearly") => {
+    if (!PAYMENTS_ENABLED) {
+      setShowVerificationNotice(true);
+      return;
+    }
+
     let endpoint = "";
     if (product === "pdt_opendoor_pro") {
       endpoint = `/api/v1/user/pro/checkout?billing_cycle=${planCycle}`;
@@ -103,6 +111,22 @@ export default function PricingClient() {
           </button>
         </div>
       </div>
+
+      {/* Merchant verification banner */}
+      {showVerificationNotice && (
+        <div className="rounded-2xl border border-emerald-500/40 bg-emerald-950/30 p-5 text-center max-w-2xl mx-auto animate-in fade-in duration-300">
+          <div className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 font-bold mb-2">
+            <Sparkles className="h-4 w-4" />
+            <span>EARLY ACCESS IN PROGRESS</span>
+          </div>
+          <h3 className="text-base font-bold text-white font-space">
+            Payment Processing Verification Underway
+          </h3>
+          <p className="text-xs text-zinc-300 font-sans mt-1.5 leading-relaxed">
+            Our merchant verification with Dodo Payments is completing. In the meantime, core features across GetMerged remain free to explore.
+          </p>
+        </div>
+      )}
 
       {/* TAB 1: CONTRIBUTORS PRICING */}
       {activeTab === "contributors" && (

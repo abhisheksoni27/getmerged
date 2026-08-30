@@ -23,6 +23,7 @@ import {
   Send,
   UserCheck,
 } from "lucide-react";
+import { PAYMENTS_ENABLED } from "@/lib/flags";
 
 function LinkedinIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -213,13 +214,20 @@ ${pitchSenderTitle}, ${pitchCompany}`;
         </p>
 
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
-            href="/pricing?tab=recruiter"
-            className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xl shadow-blue-950/60 cursor-pointer active:scale-[0.98]"
-          >
-            <Zap className="h-4 w-4" />
-            <span>Unlock Founder & CTO Pass ($49/mo)</span>
-          </Link>
+          {PAYMENTS_ENABLED ? (
+            <Link
+              href="/pricing?tab=recruiter"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xl shadow-blue-950/60 cursor-pointer active:scale-[0.98]"
+            >
+              <Zap className="h-4 w-4" />
+              <span>Unlock Founder & CTO Pass ($49/mo)</span>
+            </Link>
+          ) : (
+            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-blue-950/40 border border-blue-500/30 text-blue-400 font-mono text-xs font-semibold">
+              <Sparkles className="h-4 w-4" />
+              <span>Free Early Access Talent Directory</span>
+            </div>
+          )}
           <Link
             href="/dashboard"
             className="w-full sm:w-auto px-8 py-3.5 rounded-2xl glass-panel border border-white/[0.14] text-white font-mono text-xs font-bold uppercase tracking-wider hover:bg-white/[0.08] transition-all flex items-center justify-center gap-2 cursor-pointer"

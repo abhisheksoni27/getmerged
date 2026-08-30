@@ -174,7 +174,7 @@ deploy-frontend: build-frontend
 deploy-frontend-server: build-frontend
 	@echo "=== Sync standalone root ==="
 	rsync $(RSYNC_FLAGS) \
-		frontend/.next/standalone/ \
+		frontend/.next/standalone/frontend/ \
 		/opt/opendoor/frontend/
 
 	@echo "=== Sync static assets ==="
