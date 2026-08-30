@@ -163,35 +163,86 @@ func ComputeLevelRank(points int) LevelRank {
 	}
 }
 
-// RenderKarmaBadgeSVG outputs Shields.io-styled SVG badge for GitHub README embeds
+// RenderKarmaBadgeSVG outputs modern squircle SVG badge for GitHub README embeds
 func RenderKarmaBadgeSVG(username string, karma ContributorKarma) string {
-	leftText := "GetMerged ⚡"
-	rightText := fmt.Sprintf("%d Karma (%s)", karma.TotalKarma, karma.Rank.Title)
+	rightText := fmt.Sprintf("⚡ %s Karma · %s", formatKarmaNumber(karma.TotalKarma), karma.Rank.Title)
 
-	leftWidth := 105
-	rightWidth := int(float64(len(rightText))*7.8) + 24
-	if rightWidth < 130 {
-		rightWidth = 130
+	leftWidth := 98
+	rightWidth := int(float64(len(rightText))*7.2) + 20
+	if rightWidth < 150 {
+		rightWidth = 150
 	}
 	totalWidth := leftWidth + rightWidth
 	rightCenter := leftWidth + rightWidth/2
 
-	return fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="28" role="img" aria-label="GetMerged Karma: %s">
-  <linearGradient id="b" x2="0" y2="100%%">
-    <stop offset="0" stop-color="#bbb" stop-opacity=".15"/>
-    <stop offset="1" stop-opacity=".15"/>
-  </linearGradient>
-  <mask id="a">
-    <rect width="%d" height="28" rx="6" fill="#fff"/>
-  </mask>
-  <g mask="url(#a)">
-    <rect width="%d" height="28" fill="#18181b"/>
-    <rect x="%d" width="%d" height="28" fill="%s"/>
-    <rect width="%d" height="28" fill="url(#b)"/>
+	bgColor1 := "#064e3b"
+	bgColor2 := "#022c22"
+	accentColor := "#10b981"
+	textColor := "#a7f3d0"
+
+	if karma.TotalKarma >= 3000 {
+		bgColor1 = "#451a03"
+		bgColor2 = "#270e02"
+		accentColor = "#f59e0b"
+		textColor = "#fde68a"
+	} else if karma.TotalKarma < 1000 {
+		bgColor1 = "#0c4a6e"
+		bgColor2 = "#082f49"
+		accentColor = "#38bdf8"
+		textColor = "#bae6fd"
+	}
+
+	return fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="24" viewBox="0 0 %d 24" fill="none" role="img" aria-label="GetMerged: %s">
+  <title>GetMerged Contributor: %s</title>
+  <defs>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%%" stop-color="#000000" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="rightBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%%" stop-color="%s"/>
+      <stop offset="100%%" stop-color="%s"/>
+    </linearGradient>
+    <clipPath id="squircle">
+      <rect width="%d" height="24" rx="6" fill="#ffffff"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#squircle)">
+    <rect width="%d" height="24" fill="#09090b"/>
+    <rect x="%d" width="%d" height="24" fill="url(#rightBg)"/>
+    <rect width="%d" height="24" fill="url(#gloss)"/>
+    <line x1="%d" y1="0" x2="%d" y2="24" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+    <rect width="%d" height="24" rx="6" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+    <rect x="%d" y="23" width="%d" height="1" fill="%s"/>
   </g>
-  <g fill="#fff" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11" font-weight="600">
-    <text x="%d" y="18" fill="#e4e4e7">%s</text>
-    <text x="%d" y="18" fill="#ffffff">%s</text>
+  <g transform="translate(8, 5)">
+    <path d="M7 1L1 8H6L5 13L11 6H6L7 1Z" fill="#10b981" stroke="#059669" stroke-width="0.5" stroke-linejoin="round"/>
   </g>
-</svg>`, totalWidth, rightText, totalWidth, leftWidth, leftWidth, rightWidth, karma.Rank.BadgeColor, totalWidth, leftWidth/2, leftText, rightCenter, rightText)
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif" font-size="11" font-weight="700" text-rendering="geometricPrecision">
+    <text x="24" y="16" fill="#f4f4f5" letter-spacing="-0.2px">GetMerged</text>
+    <text x="%d" y="16" fill="%s" text-anchor="middle" font-weight="600" letter-spacing="-0.1px">%s</text>
+  </g>
+</svg>`, totalWidth, totalWidth, rightText, rightText, bgColor1, bgColor2, totalWidth, leftWidth, leftWidth, rightWidth, totalWidth, leftWidth, leftWidth, totalWidth, leftWidth, rightWidth, accentColor, rightCenter, textColor, rightText)
+}
+
+func formatKarmaNumber(n int) string {
+	in := fmt.Sprintf("%d", n)
+	if len(in) <= 3 {
+		return in
+	}
+	var res []byte
+	rem := len(in) % 3
+	if rem > 0 {
+		res = append(res, in[:rem]...)
+		if len(in) > rem {
+			res = append(res, ',')
+		}
+	}
+	for i := rem; i < len(in); i += 3 {
+		res = append(res, in[i:i+3]...)
+		if i+3 < len(in) {
+			res = append(res, ',')
+		}
+	}
+	return string(res)
 }
