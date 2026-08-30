@@ -153,6 +153,11 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5 font-mono text-[11px] text-[#e5e5e5]">
               <li>
+                <Link href="/talent" title="Hire Verified Open-Source Engineers" className="text-blue-400 hover:text-blue-300 font-semibold transition-colors">
+                  Hire Talent 💼
+                </Link>
+              </li>
+              <li>
                 <Link href="/maintainers" title="Maintainer Claim Portal & PR Telemetry" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
                   For Maintainers ⚡
                 </Link>
