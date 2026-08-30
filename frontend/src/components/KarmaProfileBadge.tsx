@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Award, Zap, Copy, Check, Sparkles } from "lucide-react";
+import { Award, Copy, Check, Sparkles } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 
 interface LevelRank {
@@ -10,6 +10,7 @@ interface LevelRank {
   badge_color: string;
   min_points: number;
   max_points: number;
+  next_tier?: string;
   points_to_next_tier: number;
   percentile: string;
 }
