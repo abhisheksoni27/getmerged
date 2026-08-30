@@ -26,6 +26,7 @@ import {
   CircleDashed,
   Share2,
   Sparkles,
+  ArrowRight,
 } from "lucide-react";
 
 interface Benchmark {
@@ -246,14 +247,22 @@ export function DashboardClient() {
     }
   }
 
+  const [unauthorized, setUnauthorized] = useState(false);
+
   const load = useCallback(async (refresh = false) => {
     if (refresh) setRefreshing(true);
     try {
       const res = await fetch(`${API_BASE_URL}/api/v1/user/prs${refresh ? "?refresh=1" : ""}`, {
         credentials: "include",
       });
+      if (res.status === 401) {
+        setUnauthorized(true);
+        setError(null);
+        return;
+      }
       if (!res.ok) throw new Error(`Failed to load PR tracker (${res.status})`);
       setData(await res.json());
+      setUnauthorized(false);
       setError(null);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load PR tracker");
@@ -286,8 +295,36 @@ export function DashboardClient() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-16 text-sm text-zinc-300 animate-pulse">
-        Loading your pull requests…
+      <div className="max-w-4xl mx-auto px-4 py-24 text-center">
+        <div className="inline-flex items-center gap-3 text-sm text-zinc-300 font-mono">
+          <RefreshCw className="h-4 w-4 animate-spin text-emerald-400" />
+          Loading your pull requests & telemetry…
+        </div>
+      </div>
+    );
+  }
+
+  if (unauthorized) {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-20 text-center">
+        <div className="rounded-2xl border border-white/[0.1] glass-panel p-8 shadow-2xl">
+          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-4 text-emerald-400">
+            <GitPullRequest className="h-6 w-6" />
+          </div>
+          <h1 className="text-xl font-bold font-sans text-white mb-2">
+            Sign In to View Your Contributor Dashboard
+          </h1>
+          <p className="text-sm text-zinc-300 mb-6 font-sans">
+            Connect your GitHub account to track open pull requests, view review time forecasts, complete onboarding quests, and earn Karma points.
+          </p>
+          <a
+            href={`${API_BASE_URL}/api/v1/auth/github`}
+            className="inline-flex items-center justify-center gap-2 w-full py-3 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition-all shadow-lg shadow-emerald-950/40 active:scale-[0.98]"
+          >
+            <span>Continue with GitHub</span>
+            <ArrowRight className="h-4 w-4" />
+          </a>
+        </div>
       </div>
     );
   }
@@ -295,8 +332,17 @@ export function DashboardClient() {
   if (error) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16">
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 flex items-center gap-2">
-          <AlertTriangle className="h-4 w-4 shrink-0" /> {error}
+        <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 shrink-0 text-red-400" /> {error}
+          </div>
+          <button
+            type="button"
+            onClick={() => load(true)}
+            className="px-3 py-1 text-xs font-semibold rounded bg-red-500/20 hover:bg-red-500/30 text-red-200"
+          >
+            Retry
+          </button>
         </div>
       </div>
     );

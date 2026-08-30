@@ -97,8 +97,9 @@ export function ApiKeysCard() {
     });
   }
 
-  const activeKeys = data?.keys.filter((k) => !k.revoked_at) ?? [];
-  const revokedKeys = data?.keys.filter((k) => k.revoked_at) ?? [];
+  const keysList = Array.isArray(data?.keys) ? data.keys : [];
+  const activeKeys = keysList.filter((k) => !k.revoked_at);
+  const revokedKeys = keysList.filter((k) => k.revoked_at);
 
   return (
     <div className="rounded-xl border border-white/[0.1] glass-panel p-5 shadow-sm/5">
