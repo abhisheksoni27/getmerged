@@ -81,4 +81,53 @@ func TestLiveBadgeACs(t *testing.T) {
 	if w5.Code != http.StatusOK || !strings.Contains(w5.Body.String(), "#0284c7") {
 		t.Fatalf("unknown repo fallback wrong: %d", w5.Code)
 	}
+
+	// AC5: Test S-Tier rendering (phi repo scenario)
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('s1', 'pulseaiclub/phi', 'pulseaiclub', 'phi', 'Go', 198, ?)`, time.Now())
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, response_p50_hours, updated_at) VALUES ('s1', '2026-08-30', 'S', 73.2, 0.05, ?)`, time.Now())
+
+	wS := httptest.NewRecorder()
+	reqS := httptest.NewRequest("GET", "/api/badge/pulseaiclub/phi", nil)
+	reqS.Header.Set("User-Agent", "GitHub-Camo")
+	r.ServeHTTP(wS, reqS)
+	if wS.Code != http.StatusOK {
+		t.Fatalf("S-tier badge want 200 got %d", wS.Code)
+	}
+	bodyS := wS.Body.String()
+	if !strings.Contains(bodyS, `fill="#059669"`) {
+		t.Fatalf("S-tier emerald color missing: %s", bodyS)
+	}
+	if !strings.Contains(bodyS, "super welcoming (73)") {
+		t.Fatalf("S-tier message missing: %s", bodyS)
+	}
+	if !strings.Contains(bodyS, "Get<tspan fill=\"#10b981\">Merged</tspan>") {
+		t.Fatalf("GetMerged brand logo/text missing in SVG: %s", bodyS)
+	}
+
+	// AC6: Test B, C, D tier badges
+	tiers := []struct {
+		tier     string
+		color    string
+		score    float64
+		expected string
+	}{
+		{"B", "#d97706", 62.0, "welcoming (62)"},
+		{"C", "#ea580c", 45.0, "selective (45)"},
+		{"D", "#dc2626", 28.0, "strict reviews (28)"},
+	}
+	for _, tc := range tiers {
+		id := "t_" + tc.tier
+		database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES (?, ?, 'testowner', ?, 'Go', 50, ?)`, id, "testowner/"+tc.tier, tc.tier, time.Now())
+		database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, response_p50_hours, updated_at) VALUES (?, '2026-08-30', ?, ?, 1.0, ?)`, id, tc.tier, tc.score, time.Now())
+
+		wT := httptest.NewRecorder()
+		r.ServeHTTP(wT, httptest.NewRequest("GET", "/api/badge/testowner/"+tc.tier, nil))
+		if wT.Code != http.StatusOK {
+			t.Fatalf("tier %s want 200 got %d", tc.tier, wT.Code)
+		}
+		bodyT := wT.Body.String()
+		if !strings.Contains(bodyT, tc.color) || !strings.Contains(bodyT, tc.expected) {
+			t.Fatalf("tier %s badge content wrong: %s", tc.tier, bodyT)
+		}
+	}
 }
