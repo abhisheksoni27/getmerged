@@ -42,8 +42,9 @@ export function PhysicsCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    // Respect reduced motion settings
-    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    // Respect reduced motion settings or mobile touch screens to save GPU/CPU and prevent scroll lag
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || window.innerWidth < 768) {
       return;
     }
 

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState, useMemo } from "react";
-import { motion } from "framer-motion";
 import { Repo, AIInsights, GoodFirstIssueItem, PRSizeSweetSpotData } from "@/types/opendoor";
 import {
   ArrowLeft,
@@ -31,7 +30,6 @@ import {
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { getLanguageSlug } from "@/lib/languageSlug";
-import { EASE_OUT_EXPO } from "@/lib/motion";
 import posthog from "posthog-js";
 import { AuthModal } from "@/components/AuthModal";
 import { RepoDetailHero } from "@/components/RepoDetailHero";
@@ -554,13 +552,7 @@ export function ClientRepoDetail({
         </Link>
 
         {/* Section 1: Overview & Hero */}
-        <motion.section
-          id="overview"
-          className="scroll-mt-36 mb-6"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-        >
+        <section id="overview" className="scroll-mt-36 mb-6">
           {/* Hero Header */}
           <RepoDetailHero
             fullName={fullName}
@@ -603,7 +595,7 @@ export function ClientRepoDetail({
               );
             })}
           </div>
-        </motion.section>
+        </section>
 
       {/* Maintainer Console Modal (AC1 & AC6) */}
       <MaintainerConsoleModal
@@ -650,14 +642,7 @@ export function ClientRepoDetail({
 
       {/* AI Insights & Maintainer Review Guidelines - moved up per Issue #80 */}
       {insights && (
-        <motion.section
-          id="guidelines"
-          className="scroll-mt-36 relative rounded-2xl border border-white/[0.1] glass-panel p-5 sm:p-6 rounded-2xl mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-        >
+        <section id="guidelines" className="scroll-mt-36 relative rounded-2xl border border-white/[0.1] glass-panel p-5 sm:p-6 rounded-2xl mb-10">
           <div className="flex items-center gap-2 mb-4">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-white/[0.1] bg-orange-500/20 text-orange-400 border border-orange-500/30">
               <Sparkles className="h-4 w-4" />
@@ -788,18 +773,11 @@ export function ClientRepoDetail({
               </div>
             )}
           </div>
-        </motion.section>
+        </section>
       )}
 
       {/* Scorecards & Macro Metrics */}
-      <motion.section
-        id="scorecards"
-        className="scroll-mt-36 space-y-8 mb-10"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-      >
+      <section id="scorecards" className="scroll-mt-36 space-y-8 mb-10">
         <RepoScorecards
           responseTimeStr={responseTimeStr}
           responseCommentary={responseCommentary}
@@ -815,17 +793,10 @@ export function ClientRepoDetail({
 
         {/* Interactive README C-Rank Live Badge Generator (Issue #50) */}
         <RepoBadgeGenerator fullName={fullName} />
-      </motion.section>
+      </section>
 
       {/* Trends & Forecasts */}
-      <motion.section
-        id="trends"
-        className="scroll-mt-36 space-y-8 mb-10"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-      >
+      <section id="trends" className="scroll-mt-36 space-y-8 mb-10">
         {/* C-Rank Trend */}
         <RepoTrendChart repoId={fullName} initialTrend={initialTrend} />
 
@@ -855,31 +826,17 @@ export function ClientRepoDetail({
               : 180
           }
         />
-      </motion.section>
+      </section>
 
       {/* Similar Repositories & Alternatives Interlinking (Issue #55) */}
       {relatedRepos.length > 0 && (
-        <motion.section
-          id="alternatives"
-          className="scroll-mt-36 mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-        >
+        <section id="alternatives" className="scroll-mt-36 mb-10">
           <SimilarRepos relatedRepos={relatedRepos} language={repo?.language} />
-        </motion.section>
+        </section>
       )}
       
       {/* Good First Issues Cards (Story 10.2 & Story 10.3) */}
-      <motion.section
-        id="good-first-issues"
-        className="scroll-mt-36 rounded-2xl glass-panel p-4 sm:p-5 mb-10 border-2 border-white/[0.1] shadow-sm font-mono"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-      >
+      <section id="good-first-issues" className="scroll-mt-36 rounded-2xl glass-panel p-4 sm:p-5 mb-10 border-2 border-white/[0.1] shadow-sm font-mono">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <div className="flex items-center gap-3">
             <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -1038,18 +995,11 @@ export function ClientRepoDetail({
             </Link>
           </div>
         )}
-      </motion.section>
+      </section>
 
 
       {/* Issues #6, #7, #8: Contributor Community Feedback & Verification Module */}
-      <motion.section
-        id="community-feedback"
-        className="scroll-mt-36 rounded-2xl border-2 border-white/[0.1] glass-panel p-5 sm:p-8 shadow-sm mb-10 font-sans"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-      >
+      <section id="community-feedback" className="scroll-mt-36 rounded-2xl border-2 border-white/[0.1] glass-panel p-5 sm:p-8 shadow-sm mb-10 font-sans">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-white/[0.08] pb-5">
           <div>
             <h2 className="text-xl sm:text-2xl font-extrabold font-space text-white flex items-center gap-2.5">
@@ -1389,17 +1339,10 @@ export function ClientRepoDetail({
             </>
           )}
         </div>
-      </motion.section>
+      </section>
 
       {/* Content-Heavy SEO Modules for Search Engines & Crawlers */}
-      <motion.section
-        id="faqs"
-        className="scroll-mt-36 space-y-8 font-sans border-t-2 border-white/[0.1] pt-8 text-zinc-200"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-      >
+      <section id="faqs" className="scroll-mt-36 space-y-8 font-sans border-t-2 border-white/[0.1] pt-8 text-zinc-200">
         <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-5 sm:p-6 shadow-sm">
           <h2 className="text-base sm:text-lg font-extrabold font-space text-white mb-3 flex items-center gap-2">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 shadow-sm rotate-2">
@@ -1530,7 +1473,7 @@ export function ClientRepoDetail({
             All metrics displayed for {fullName} are automatically retrieved via the public GitHub API and recalculated daily. Insider pull requests submitted by repository owners or organization members are excluded from merge rate calculations to preserve objective external contributor statistics.
           </p>
         </section>
-      </motion.section>
+      </section>
 
       {/* Auth Modal Component */}
       <AuthModal
