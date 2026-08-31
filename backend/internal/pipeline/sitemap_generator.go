@@ -76,6 +76,67 @@ type Sitemap struct {
 // required before a topic landing page is published to Google sitemaps.
 const MinTopicRepoThreshold = 1
 
+// MaxURLsPerSitemap defines the maximum number of URLs allowed per individual XML sitemap file.
+// Google Search Console strictly caps single sitemap files at 50,000 URLs / 50MB.
+// We partition at 45,000 to remain safely below the limit.
+const MaxURLsPerSitemap = 45000
+
+// writeSitemapPartition writes a slice of URLs to one or more partitioned XML files (<= MaxURLsPerSitemap each).
+func writeSitemapPartition(sitemapDir string, prefix string, urls []URL, baseUrl string, today string) ([]Sitemap, error) {
+	if len(urls) == 0 {
+		return nil, nil
+	}
+
+	xmlHeader := []byte(xml.Header)
+	var generated []Sitemap
+
+	if len(urls) <= MaxURLsPerSitemap {
+		urlset := URLSet{URLs: urls}
+		output, err := xml.MarshalIndent(urlset, "", "  ")
+		if err != nil {
+			return nil, fmt.Errorf("marshal %s.xml: %w", prefix, err)
+		}
+		fileName := fmt.Sprintf("%s.xml", prefix)
+		filePath := filepath.Join(sitemapDir, fileName)
+		if err := os.WriteFile(filePath, append(xmlHeader, output...), 0644); err != nil {
+			return nil, fmt.Errorf("write %s: %w", filePath, err)
+		}
+		generated = append(generated, Sitemap{
+			Loc:     fmt.Sprintf("%s/sitemap/%s", baseUrl, url.PathEscape(fileName)),
+			LastMod: today,
+		})
+		return generated, nil
+	}
+
+	// Partition into chunks of <= MaxURLsPerSitemap (e.g. main-1.xml, main-2.xml)
+	numChunks := (len(urls) + MaxURLsPerSitemap - 1) / MaxURLsPerSitemap
+	for i := 0; i < numChunks; i++ {
+		start := i * MaxURLsPerSitemap
+		end := start + MaxURLsPerSitemap
+		if end > len(urls) {
+			end = len(urls)
+		}
+
+		chunkUrls := urls[start:end]
+		urlset := URLSet{URLs: chunkUrls}
+		output, err := xml.MarshalIndent(urlset, "", "  ")
+		if err != nil {
+			return nil, fmt.Errorf("marshal %s-%d.xml: %w", prefix, i+1, err)
+		}
+		fileName := fmt.Sprintf("%s-%d.xml", prefix, i+1)
+		filePath := filepath.Join(sitemapDir, fileName)
+		if err := os.WriteFile(filePath, append(xmlHeader, output...), 0644); err != nil {
+			return nil, fmt.Errorf("write %s: %w", filePath, err)
+		}
+		generated = append(generated, Sitemap{
+			Loc:     fmt.Sprintf("%s/sitemap/%s", baseUrl, url.PathEscape(fileName)),
+			LastMod: today,
+		})
+	}
+
+	return generated, nil
+}
+
 // GenerateStaticSitemaps partitions the database into static sitemaps and writes to publicDir.
 func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 	baseUrl := "https://getmerged.abhishekco.de"
@@ -115,12 +176,16 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		langMap[slug] = append(langMap[slug], r)
 	}
 
-	// Generate main.xml for core landing pages and hubs
+	// Generate main partition for core landing pages, hubs, and topics
 	mainUrls := []URL{
 		{Loc: baseUrl, LastMod: today, ChangeFreq: "daily", Priority: "1.0"},
 		{Loc: fmt.Sprintf("%s/repos", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "1.0"},
 		{Loc: fmt.Sprintf("%s/rankings", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "0.9"},
 		{Loc: fmt.Sprintf("%s/compare", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "0.9"},
+		{Loc: fmt.Sprintf("%s/pricing", baseUrl), LastMod: today, ChangeFreq: "monthly", Priority: "0.9"},
+		{Loc: fmt.Sprintf("%s/talent", baseUrl), LastMod: today, ChangeFreq: "monthly", Priority: "0.8"},
+		{Loc: fmt.Sprintf("%s/maintainers", baseUrl), LastMod: today, ChangeFreq: "monthly", Priority: "0.8"},
+		{Loc: fmt.Sprintf("%s/community-powerhouses", baseUrl), LastMod: today, ChangeFreq: "weekly", Priority: "0.8"},
 		{Loc: fmt.Sprintf("%s/how-c-rank-works", baseUrl), LastMod: today, ChangeFreq: "weekly", Priority: "0.9"},
 		{Loc: fmt.Sprintf("%s/guides", baseUrl), LastMod: today, ChangeFreq: "weekly", Priority: "0.9"},
 		{Loc: fmt.Sprintf("%s/guides/how-to-find-repos-that-merge-prs", baseUrl), LastMod: today, ChangeFreq: "weekly", Priority: "0.8"},
@@ -195,25 +260,20 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		}
 	}
 
-	mainUrlset := URLSet{URLs: mainUrls}
-	mainOutput, err := xml.MarshalIndent(mainUrlset, "", "  ")
-	if err == nil {
-		mainFilePath := filepath.Join(sitemapDir, "main.xml")
-		xmlHeader := []byte(xml.Header)
-		if err := os.WriteFile(mainFilePath, append(xmlHeader, mainOutput...), 0644); err == nil {
-			indexSitemaps = append(indexSitemaps, Sitemap{
-				Loc:     fmt.Sprintf("%s/sitemap/main.xml", baseUrl),
-				LastMod: today,
-			})
+	mainSitemaps, err := writeSitemapPartition(sitemapDir, "main", mainUrls, baseUrl, today)
+	if err != nil {
+		slog.Error("sitemap generator: main sitemap generation failed", "err", err)
+	} else {
+		indexSitemaps = append(indexSitemaps, mainSitemaps...)
+		if len(mainUrls) > MaxURLsPerSitemap {
+			// Remove legacy oversized main.xml if chunked partitions were generated
+			_ = os.Remove(filepath.Join(sitemapDir, "main.xml"))
 		}
 	}
 
 	// 2. Generate language partition sitemaps
 	for lang, langRepos := range langMap {
-		urlset := URLSet{
-			URLs: []URL{},
-		}
-
+		var langUrls []URL
 		for _, r := range langRepos {
 			parts := strings.Split(r.FullName, "/")
 			if len(parts) == 2 {
@@ -221,7 +281,7 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 				if r.UpdatedAt != nil && *r.UpdatedAt != "" {
 					lastMod = *r.UpdatedAt
 				}
-				urlset.URLs = append(urlset.URLs, URL{
+				langUrls = append(langUrls, URL{
 					Loc:        fmt.Sprintf("%s/%s/%s", baseUrl, parts[0], parts[1]),
 					LastMod:    lastMod,
 					ChangeFreq: "daily",
@@ -230,28 +290,15 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 			}
 		}
 
-		// Marshal XML
-		output, err := xml.MarshalIndent(urlset, "", "  ")
+		langSitemaps, err := writeSitemapPartition(sitemapDir, lang, langUrls, baseUrl, today)
 		if err != nil {
-			slog.Error("sitemap generator: xml marshal failed", "lang", lang, "err", err)
+			slog.Error("sitemap generator: lang sitemap generation failed", "lang", lang, "err", err)
 			continue
 		}
-
-		fileName := fmt.Sprintf("%s.xml", lang)
-		filePath := filepath.Join(sitemapDir, fileName)
-		xmlHeader := []byte(xml.Header)
-		if err := os.WriteFile(filePath, append(xmlHeader, output...), 0644); err != nil {
-			slog.Error("sitemap generator: write file failed", "file", filePath, "err", err)
-			continue
-		}
-
-		indexSitemaps = append(indexSitemaps, Sitemap{
-			Loc:     fmt.Sprintf("%s/sitemap/%s", baseUrl, url.PathEscape(fileName)),
-			LastMod: today,
-		})
+		indexSitemaps = append(indexSitemaps, langSitemaps...)
 	}
 
-	// 3. Generate compare.xml for bounded head-to-head repo comparisons (Top 10 Tier S/A per language vs 3 rank neighbors, max 1000)
+	// 3. Generate compare partition sitemaps
 	type rankedRepo struct {
 		FullName string  `db:"full_name"`
 		Language string  `db:"language"`
@@ -330,17 +377,11 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		}
 
 		if len(compareUrls) > 0 {
-			compareUrlset := URLSet{URLs: compareUrls}
-			compareOutput, err := xml.MarshalIndent(compareUrlset, "", "  ")
-			if err == nil {
-				compareFilePath := filepath.Join(sitemapDir, "compare.xml")
-				xmlHeader := []byte(xml.Header)
-				if err := os.WriteFile(compareFilePath, append(xmlHeader, compareOutput...), 0644); err == nil {
-					indexSitemaps = append(indexSitemaps, Sitemap{
-						Loc:     fmt.Sprintf("%s/sitemap/compare.xml", baseUrl),
-						LastMod: today,
-					})
-				}
+			compSitemaps, err := writeSitemapPartition(sitemapDir, "compare", compareUrls, baseUrl, today)
+			if err != nil {
+				slog.Error("sitemap generator: compare sitemap generation failed", "err", err)
+			} else {
+				indexSitemaps = append(indexSitemaps, compSitemaps...)
 			}
 		}
 	}

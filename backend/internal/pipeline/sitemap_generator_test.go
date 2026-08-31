@@ -239,3 +239,68 @@ func TestGenerateStaticSitemaps_CompareSitemap(t *testing.T) {
 	}
 }
 
+func TestGenerateStaticSitemaps_Chunking(t *testing.T) {
+	database, err := sqlx.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("failed to open memory db: %v", err)
+	}
+	defer database.Close()
+
+	if err := db.AutoMigrate(database); err != nil {
+		t.Fatalf("failed to auto migrate: %v", err)
+	}
+
+	now := time.Now()
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('1', 'org/repo', 'org', 'repo', 'Go', 100, ?)`, now)
+
+	// Insert 46,000 topics to exceed MaxURLsPerSitemap (45,000)
+	tx, err := database.Begin()
+	if err != nil {
+		t.Fatalf("failed to begin tx: %v", err)
+	}
+	stmt, err := tx.Prepare(`INSERT INTO repository_topics (topic, repository_id) VALUES (?, '1')`)
+	if err != nil {
+		t.Fatalf("failed to prepare stmt: %v", err)
+	}
+	for i := 0; i < 46000; i++ {
+		_, _ = stmt.Exec(fmt.Sprintf("topic-%06d", i))
+	}
+	stmt.Close()
+	_ = tx.Commit()
+
+	tempDir, err := os.MkdirTemp("", "sitemap_chunk_test_*")
+	if err != nil {
+		t.Fatalf("failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	if err := pipeline.GenerateStaticSitemaps(database, tempDir); err != nil {
+		t.Fatalf("expected GenerateStaticSitemaps to succeed, got: %v", err)
+	}
+
+	// main-1.xml and main-2.xml should exist, monolithic main.xml should NOT exist
+	if _, err := os.Stat(filepath.Join(tempDir, "sitemap", "main-1.xml")); err != nil {
+		t.Fatalf("expected main-1.xml to be generated, got err: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(tempDir, "sitemap", "main-2.xml")); err != nil {
+		t.Fatalf("expected main-2.xml to be generated, got err: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(tempDir, "sitemap", "main.xml")); err == nil {
+		t.Fatalf("monolithic main.xml should not exist when chunked into main-1.xml and main-2.xml")
+	}
+
+	// master sitemap.xml must reference main-1.xml and main-2.xml
+	masterContent, err := os.ReadFile(filepath.Join(tempDir, "sitemap.xml"))
+	if err != nil {
+		t.Fatalf("failed to read master sitemap: %v", err)
+	}
+	masterStr := string(masterContent)
+	if !strings.Contains(masterStr, "https://getmerged.abhishekco.de/sitemap/main-1.xml") {
+		t.Fatalf("master sitemap missing main-1.xml:\n%s", masterStr)
+	}
+	if !strings.Contains(masterStr, "https://getmerged.abhishekco.de/sitemap/main-2.xml") {
+		t.Fatalf("master sitemap missing main-2.xml:\n%s", masterStr)
+	}
+}
+
+
