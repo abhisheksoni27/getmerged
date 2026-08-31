@@ -175,13 +175,7 @@ export function formatBadge(count: number): string {
   return count > 99 ? "99+" : String(count);
 }
 
-const FREE_POLL_MS = 15 * 60 * 1000;
-const PRO_POLL_MS = 60 * 1000;
-
-// useNotificationCenter wires the in-app feed: SSE live stream is the primary
-// transport; a resilient polling fallback is used for no-SSE clients and for
-// Free-tier users (forced 15m interval). Gap-replay happens implicitly on the
-// next poll; the server is the single source of truth for the unread count.
+// useNotificationCenter wires the in-app feed via lightweight polling.
 export function useNotificationCenter(enabled: boolean) {
   const [items, setItems] = useState<InAppNotification[]>([]);
   const [unread, setUnread] = useState(0);
@@ -189,10 +183,9 @@ export function useNotificationCenter(enabled: boolean) {
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [live, setLive] = useState(false);
+  const [live, setLive] = useState(true);
   const [upgradeAvailable, setUpgradeAvailable] = useState(false);
   const cursorRef = useRef("");
-  const esRef = useRef<EventSource | null>(null);
 
   const refresh = useCallback(async () => {
     if (!enabled) return;
@@ -220,58 +213,16 @@ export function useNotificationCenter(enabled: boolean) {
     setLoading(false);
   }, [enabled]);
 
-  const openStream = useCallback(() => {
-    if (!enabled || typeof EventSource === "undefined") return;
-    if (esRef.current) return;
-    const es = new EventSource(`${API_BASE_URL}/api/notifications/stream`, {
-      withCredentials: true,
-    });
-    es.addEventListener("notification", (ev) => {
-      try {
-        const n = JSON.parse((ev as MessageEvent).data) as InAppNotification;
-        setItems((prev) => dedupe([n, ...prev]));
-        setUnread((u) => (n.read ? u : u + 1));
-      } catch {
-        /* ignore malformed frame */
-      }
-    });
-    es.addEventListener("count", (ev) => {
-      try {
-        const data = JSON.parse((ev as MessageEvent).data) as UnreadResult;
-        setUnread(data.unread_count);
-        setUpgradeAvailable(data.upgrade_available);
-      } catch {
-        /* ignore malformed frame */
-      }
-    });
-    es.onopen = () => setLive(true);
-    es.onerror = () => {
-      // Free tier (or network) → no SSE; poll path already covers delivery.
-      setLive(false);
-      es.close();
-      esRef.current = null;
-    };
-    esRef.current = es;
-  }, [enabled]);
-
   useEffect(() => {
     if (!enabled) return;
     cursorRef.current = "";
     void refresh();
-    openStream();
-    // Plan-aware polling fallback: Free (upsell) = 15m, otherwise 60s (AC7).
-    const pollMs = upgradeAvailable ? FREE_POLL_MS : PRO_POLL_MS;
-    const t = setInterval(() => void refresh(), pollMs);
-    const sseRetry = setInterval(() => {
-      if (!live) openStream();
-    }, 5 * 60 * 1000);
+    // Clean interval polling (every 5 minutes)
+    const t = setInterval(() => void refresh(), 5 * 60 * 1000);
     return () => {
       clearInterval(t);
-      clearInterval(sseRetry);
-      esRef.current?.close();
-      esRef.current = null;
     };
-  }, [enabled, refresh, openStream, live, upgradeAvailable]);
+  }, [enabled, refresh]);
 
   const loadMore = useCallback(async () => {
     if (!hasMore || !cursor) return;
