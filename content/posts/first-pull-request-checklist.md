@@ -117,7 +117,7 @@ The draft model removes the worst failure mode — silence between "I opened it"
 4. **Link, don't orphan:** connect the draft to its issue so it appears in the maintainer's triage view instead of relying on notifications.
 5. **Timebox the wait after marking ready:** ping politely at ~72 hours if silent (the window where 74% of eventual answers land); past day 14, redirect effort rather than accumulate zombie risk ([abandonment curve](/guides/zombie-prs-why-contributions-get-ignored)).
 
-GetMerged's [/preflight](/preflight) tool accepts a pasted PR description and returns structural feedback before you publish; the [watchlist](/watchlist) tracks a candidate repo's telemetry while you work so staleness surprises don't land mid-review.
+GetMerged's [watchlist](/watchlist) tracks a candidate repo's telemetry while you work so staleness surprises don't land mid-review.
 
 ## The 30-Second Version
 

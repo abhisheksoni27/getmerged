@@ -87,7 +87,6 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
 
   const repoClean = repo.replace(/^https?:\/\/github\.com\//i, "").trim();
   const cRankUrl = `/${repoClean}${validatedReferrerId ? `?ref=${encodeURIComponent(validatedReferrerId)}` : ""}`;
-  const preflightCtaUrl = `/preflight?repo=${encodeURIComponent(repoClean)}${validatedReferrerId ? `&ref=${encodeURIComponent(validatedReferrerId)}` : ""}`;
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-white font-sans">
@@ -209,22 +208,13 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-4 border-t border-white/[0.1]">
               <Link
-                href={preflightCtaUrl}
-                data-testid="share-cta-preflight"
-                className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-sm"
-              >
-                <Sparkles className="h-4 w-4 text-emerald-400" />
-                <span>Test Your Own PR Free</span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-
-              <Link
                 href={cRankUrl}
                 data-testid="share-cta-crank"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl glass-panel border-2 border-white/[0.1] text-white font-mono font-bold text-xs uppercase tracking-wider hover:glass-card active:scale-[0.98] transition-all shadow-sm"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-sm"
               >
-                <ShieldCheck className="h-4 w-4 text-emerald-600" />
+                <ShieldCheck className="h-4 w-4 text-emerald-400" />
                 <span>Explore {repoClean} C-Rank</span>
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
