@@ -17,6 +17,36 @@ export function middleware(request: NextRequest) {
     response.headers.set("Cache-Control", "private, no-store, must-revalidate");
     response.headers.set("Cloudflare-CDN-Cache-Control", "no-store");
     response.headers.set("CDN-Cache-Control", "no-store");
+  } else {
+    // Generate bucketed Cache-Tag headers for targeted edge purging
+    const path = request.nextUrl.pathname;
+    const tags: string[] = ["all-pages"];
+
+    if (path === "/") {
+      tags.push("home");
+    } else if (path.startsWith("/topics/")) {
+      tags.push("topics");
+      const topic = path.replace("/topics/", "").split("/")[0];
+      if (topic) tags.push(`topic-${topic}`);
+    } else if (path.startsWith("/good-first-issue/")) {
+      tags.push("good-first-issue");
+      const lang = path.replace("/good-first-issue/", "").split("/")[0];
+      if (lang) tags.push(`gfi-${lang}`);
+    } else if (path.startsWith("/rankings/")) {
+      tags.push("rankings");
+    } else if (path.startsWith("/compare/")) {
+      tags.push("compare");
+    } else if (path.startsWith("/guides")) {
+      tags.push("guides");
+    } else {
+      // Single repo page: /[owner]/[name]
+      const parts = path.split("/").filter(Boolean);
+      if (parts.length === 2 && !parts[0].startsWith("_") && parts[0] !== "api") {
+        tags.push("repos", `repo-${parts[0]}-${parts[1]}`, `owner-${parts[0]}`);
+      }
+    }
+
+    response.headers.set("Cache-Tag", tags.join(","));
   }
 
   return response;

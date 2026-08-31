@@ -140,6 +140,18 @@ purge-cache:
 	@curl -X POST 'http://localhost:10000/internal/purge-cache' \
 		-H 'x-api-key: $(INTERNAL_API_KEY)'
 
+purge-cf-all:
+	./scripts/purge-cloudflare-cache.sh --all
+
+purge-cf-repo:
+	./scripts/purge-cloudflare-cache.sh --repo $(REPO)
+
+purge-cf-topic:
+	./scripts/purge-cloudflare-cache.sh --topic $(TOPIC)
+
+purge-cf-tags:
+	./scripts/purge-cloudflare-cache.sh --tags "$(TAGS)"
+
 RSYNC_FLAGS = -az \
 	--delete \
 	--exclude='.DS_Store' \
