@@ -1,0 +1,21 @@
+User-Agent: *
+Allow: /
+Disallow: /api/
+
+User-Agent: GPTBot
+Allow: /
+Disallow: /api/
+
+User-Agent: ClaudeBot
+Allow: /
+Disallow: /api/
+
+User-Agent: PerplexityBot
+Allow: /
+Disallow: /api/
+
+User-Agent: Anthropic-ai
+Allow: /
+Disallow: /api/
+
+Sitemap: https://getmerged.abhishekco.de/sitemap.xml

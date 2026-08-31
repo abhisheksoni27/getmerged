@@ -1348,7 +1348,7 @@ export function ClientRepoDetail({
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 shadow-sm rotate-2">
               <Activity className="h-4 w-4 text-emerald-400 shrink-0" />
             </span>
-            Contributor Compatibility & Review Speed Analysis for {fullName}
+            {`Contributor Compatibility & Review Speed Analysis for ${fullName}`}
           </h2>
           <div className="rounded-xl border-2 border-white/[0.1] glass-panel p-4 text-zinc-300 leading-relaxed max-w-none space-y-3 font-sans shadow-sm">
             <p>
@@ -1367,7 +1367,7 @@ export function ClientRepoDetail({
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-400 shadow-sm -rotate-2">
               <FileCode2 className="h-4 w-4 text-sky-400 shrink-0" />
             </span>
-            Frequently Asked Questions - Contributing to {fullName}
+            {`Frequently Asked Questions - Contributing to ${fullName}`}
           </h2>
           <div className="space-y-3.5">
             {/* FAQ 1 */}

@@ -143,12 +143,12 @@ export default async function HomePage() {
       />
       {/* Semantic Crawl Floor directly in Initial SSR HTML */}
       <section className="sr-only" aria-label="Open Source Repository Finder Summary">
-        <h1>GetMerged - Find Active Open Source GitHub Repositories That Merge PRs</h1>
+        <h2>Active Open Source GitHub Repositories Telemetry</h2>
         <p>
           Find welcoming open source projects looking for contributors. Scored by real PR merge rates, fast reviewer response times, and beginner-friendly maintainers.
         </p>
         <div>
-          <h2>Top Welcoming Repositories</h2>
+          <h3>Top Welcoming Repositories</h3>
           <ul>
             {initialRepos.map((repo) => (
               <li key={repo.full_name}>

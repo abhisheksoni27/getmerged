@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: A4;
+    margin: 22mm 18mm 25mm 18mm;
+    @bottom-center {
+      content: "Page " counter(page) " of " counter(pages);
+      font-size: 9pt;
+      color: #6b7280;
+      font-family: 'DejaVu Serif', 'Times New Roman', Georgia, serif;
+    }
+    @bottom-left {
+      content: "Confidential";
+      font-size: 7pt;
+      color: #d6d3cc;
+      font-family: 'DejaVu Serif', 'Times New Roman', Georgia, serif;
+    }
+    @bottom-right {
+      content: "getmerged.abhishekco.de Google SEO Report";
+      font-size: 8pt;
+      color: #cbd5e1;
+      font-family: 'DejaVu Serif', 'Times New Roman', Georgia, serif;
+    }
+  }
+
+  @page :first {
+    margin: 0;
+    @bottom-left { content: none; }
+    @bottom-center { content: none; }
+    @bottom-right { content: none; }
+  }
+
+  @page toc {
+    @bottom-center {
+      content: counter(page);
+      font-size: 9pt;
+      color: #6b7280;
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Times New Roman', 'DejaVu Serif', Georgia, serif;
+    font-size: 10pt;
+    line-height: 1.55;
+    color: #1e293b;
+    background: white;
+  }
+
+  /* ─── Title Page (Clean White) ─── */
+  .title-page {
+    page: first;
+    width: 210mm;
+    height: 297mm;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #1a1a2e;
+    position: relative;
+    padding: 50mm 30mm 40mm 30mm;
+    border-top: 6mm solid #1e3a5f;
+  }
+
+  .title-page .badge {
+    background: #f7f6f3;
+    border: 1px solid #d6d3cc;
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 9pt;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 15mm;
+    color: #1e3a5f;
+  }
+
+  .title-page h1 {
+    font-size: 28pt;
+    font-weight: bold;
+    margin-bottom: 5mm;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    color: #1a1a2e;
+  }
+
+  .title-page .subtitle {
+    font-size: 13pt;
+    color: #6b7280;
+    margin-bottom: 12mm;
+    font-weight: 300;
+  }
+
+  .title-page .url {
+    font-size: 12pt;
+    color: #1e3a5f;
+    margin-bottom: 15mm;
+    padding: 4mm 8mm;
+    border: 1px solid #d6d3cc;
+    border-radius: 6px;
+    background: #faf9f7;
+  }
+
+  .title-page .score-box {
+    background: #faf9f7;
+    border: 2px solid #d6d3cc;
+    border-radius: 12px;
+    padding: 6mm 12mm;
+    margin-bottom: 15mm;
+  }
+
+  .title-page .score-number {
+    font-size: 42pt;
+    font-weight: bold;
+    color: #1e3a5f;
+    line-height: 1;
+  }
+
+  .title-page .score-label {
+    font-size: 10pt;
+    color: #6b7280;
+    margin-top: 2mm;
+  }
+
+  .title-page .meta {
+    font-size: 9pt;
+    color: #6b7280;
+    margin-top: 8mm;
+    padding-top: 5mm;
+    border-top: 1px solid #d6d3cc;
+  }
+
+  .title-page .meta span {
+    margin: 0 8px;
+  }
+
+  /* ─── Table of Contents ─── */
+  .toc-page {
+    page: toc;
+    page-break-before: always;
+  }
+
+  .toc-page h2 {
+    font-size: 18pt;
+    color: #1e3a5f;
+    margin-bottom: 8mm;
+    padding-bottom: 3mm;
+    border-bottom: 2px solid #1e3a5f;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .toc-list li {
+    padding: 2mm 0;
+    border-bottom: 1px solid #f1f5f9;
+    overflow: hidden;
+  }
+
+  .toc-list li.toc-section {
+    font-weight: bold;
+    font-size: 11pt;
+    padding-top: 4mm;
+    color: #0f172a;
+  }
+
+  .toc-list li.toc-sub {
+    padding-left: 8mm;
+    font-size: 9.5pt;
+    color: #475569;
+  }
+
+  .toc-score {
+    display: inline-block;
+    float: right;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 9pt;
+    font-weight: bold;
+    color: white;
+  }
+
+  .score-good { background: #2d6a4f; }
+  .score-warn { background: #d4740e; }
+  .score-bad { background: #c53030; }
+
+  /* ─── Section Styles ─── */
+  div.section {
+    page-break-before: always;
+  }
+
+  .section-header {
+    background: #faf9f7;
+    border-left: 4px solid #1e3a5f;
+    padding: 5mm 6mm;
+    margin-bottom: 6mm;
+    page-break-after: avoid;
+  }
+
+  .section-header h2 {
+    font-size: 16pt;
+    color: #0f172a;
+    margin-bottom: 1mm;
+  }
+
+  .section-header .section-score {
+    font-size: 12pt;
+    font-weight: bold;
+    float: right;
+    margin-top: -6mm;
+  }
+
+  h3 {
+    font-size: 12pt;
+    color: #1e3a5f;
+    margin-top: 6mm;
+    margin-bottom: 3mm;
+    padding-bottom: 1.5mm;
+    border-bottom: 1px solid #d6d3cc;
+    page-break-after: avoid;
+  }
+
+  h4 {
+    font-size: 10.5pt;
+    color: #334155;
+    margin-top: 4mm;
+    margin-bottom: 2mm;
+    page-break-after: avoid;
+  }
+
+  p {
+    margin-bottom: 3mm;
+    color: #334155;
+  }
+
+  .highlight {
+    background: #fef3c7;
+    border-left: 3px solid #d4740e;
+    padding: 3mm 4mm;
+    margin: 4mm 0;
+    font-size: 9.5pt;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .critical-box {
+    background: #fef2f2;
+    border-left: 3px solid #c53030;
+    padding: 3mm 4mm;
+    margin: 4mm 0;
+    font-size: 9.5pt;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .success-box {
+    background: #f0fdf4;
+    border-left: 3px solid #2d6a4f;
+    padding: 3mm 4mm;
+    margin: 4mm 0;
+    font-size: 9.5pt;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  /* ─── Tables ─── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 4mm 0 6mm 0;
+    font-size: 9pt;
+  }
+
+  thead th {
+    background: #f7f6f3;
+    color: #0f172a;
+    font-weight: bold;
+    padding: 3mm 4mm;
+    text-align: left;
+    border-bottom: 2px solid #d6d3cc;
+    font-size: 9pt;
+  }
+
+  tbody td {
+    padding: 2.5mm 3mm;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: top;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #fdfcfa;
+  }
+
+  .status-pass {
+    color: #2d6a4f;
+    font-weight: bold;
+  }
+
+  .status-fail {
+    color: #c53030;
+    font-weight: bold;
+  }
+
+  .status-warn {
+    color: #d4740e;
+    font-weight: bold;
+  }
+
+  .status-partial {
+    color: #4a5568;
+    font-weight: bold;
+  }
+
+  /* ─── Charts ─── */
+  .chart-container {
+    text-align: center;
+    margin: 4mm 0;
+  }
+
+  .chart-container img {
+    max-width: 100%;
+    max-height: 120mm;
+    height: auto;
+  }
+
+  .chart-caption {
+    font-size: 8.5pt;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 2mm;
+    text-align: center;
+  }
+
+  .chart-half {
+    display: inline-block;
+    width: 48%;
+    vertical-align: top;
+    text-align: center;
+    margin: 2mm 0;
+  }
+
+  .chart-half img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ─── Two column layout ─── */
+  .two-col {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    margin: 3mm 0;
+  }
+
+  .two-col .col {
+    display: table-cell;
+    vertical-align: top;
+    padding: 0 2mm;
+  }
+
+  .four-col {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    margin: 3mm 0;
+  }
+
+  .four-col .col {
+    display: table-cell;
+    vertical-align: top;
+    padding: 0 1.5mm;
+  }
+
+  /* ─── Metric Cards ─── */
+  .metric-card {
+    background: #faf9f7;
+    border: 1px solid #d6d3cc;
+    border-radius: 6px;
+    padding: 2.5mm 3mm;
+    text-align: center;
+    margin: 2mm 0;
+  }
+
+  .metric-card .value {
+    font-size: 14pt;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+
+  .metric-card .label {
+    font-size: 7.5pt;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 1mm;
+  }
+
+  /* ─── Action Plan ─── */
+  .action-item {
+    background: #faf9f7;
+    border-radius: 4px;
+    padding: 3mm 4mm;
+    margin: 3mm 0;
+    border-left: 3px solid #cbd5e1;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .action-item.critical {
+    border-left-color: #c53030;
+    background: #fdf2f2;
+  }
+
+  .action-item.high {
+    border-left-color: #d4740e;
+    background: #fdf8ef;
+  }
+
+  .action-item.medium {
+    border-left-color: #1e3a5f;
+    background: #f0f4f8;
+  }
+
+  .action-item.low {
+    border-left-color: #94a3b8;
+  }
+
+  .action-item h4 {
+    margin-top: 0;
+    margin-bottom: 1.5mm;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .action-item .effort {
+    font-size: 8.5pt;
+    color: #64748b;
+    float: right;
+  }
+
+  .priority-tag {
+    display: inline-block;
+    padding: 0.5mm 3mm;
+    border-radius: 3px;
+    font-size: 8pt;
+    font-weight: bold;
+    color: white;
+    margin-right: 2mm;
+    vertical-align: middle;
+  }
+
+  .priority-critical { background: #c53030; }
+  .priority-high { background: #d4740e; }
+  .priority-medium { background: #1e3a5f; }
+  .priority-low { background: #94a3b8; }
+
+  /* ─── Code blocks ─── */
+  .code-block {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 3mm 4mm;
+    border-radius: 4px;
+    font-family: 'DejaVu Sans Mono', monospace;
+    font-size: 8pt;
+    line-height: 1.6;
+    margin: 3mm 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  /* ─── Divider ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid #d6d3cc;
+    margin: 5mm 0;
+  }
+
+  /* ─── Roadmap ─── */
+  .roadmap-phase {
+    background: #faf9f7;
+    border-radius: 6px;
+    padding: 4mm 5mm;
+    margin: 4mm 0;
+    border: 1px solid #d6d3cc;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .roadmap-phase h4 {
+    margin-top: 0;
+    border-bottom: none;
+    color: #1e3a5f;
+  }
+
+  .roadmap-phase ul {
+    margin: 2mm 0 0 5mm;
+    padding: 0;
+  }
+
+  .roadmap-phase li {
+    margin-bottom: 1.5mm;
+    font-size: 9.5pt;
+    color: #334155;
+  }
+
+  /* ─── Lists ─── */
+  ul {
+    margin-left: 5mm;
+    margin-bottom: 3mm;
+  }
+
+  li {
+    margin-bottom: 1.5mm;
+  }
+
+  /* ─── Data freshness ─── */
+  .data-freshness {
+    font-size: 8pt;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 4mm;
+    padding-top: 2mm;
+    border-top: 1px solid #d6d3cc;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ======================================================= TITLE PAGE === -->
+<div class="title-page">
+  <div class="badge">Full SEO Audit Report</div>
+  <h1>getmerged.abhishekco.de</h1>
+  <div class="subtitle">Prepared by Claude SEO</div>
+  <div class="score-box">
+    <div class="score-number">89<span style="font-size: 20pt; color: #94a3b8;">/100</span></div>
+    <div class="score-label">SEO Health Score</div>
+  </div>
+  <div class="meta">
+    <span>August 31, 2026</span>
+    <span>Full Audit</span>
+  </div>
+</div>
+
+
+<!-- ======================================================= TABLE OF CONTENTS === -->
+<div class="toc-page">
+  <h2>Table of Contents</h2>
+  <ul class="toc-list">
+    <li class="toc-section"><span>1. Executive Summary</span></li>
+    <li class="toc-sub"><span>Key Metrics, Critical Issues &amp; Quick Wins</span></li>
+    <li class="toc-section"><span>2. Audit Categories</span></li>
+    <li class="toc-sub"><span>What Works</span></li>
+    <li class="toc-sub"><span>Findings by Severity</span></li>
+    <li class="toc-section"><span>3. Action Plan</span></li>
+    <li class="toc-sub"><span>Phased Roadmap</span></li>
+    <li class="toc-section"><span>4. Data Sources &amp; Methodology</span></li>
+  </ul>
+</div>
+
+
+<!-- ======================================================= 1. EXECUTIVE SUMMARY === -->
+<div class="section">
+  <div class="section-header">
+    <h2>1. Executive Summary</h2>
+  </div>
+
+  <p>This report presents a comprehensive SEO audit of <strong>getmerged.abhishekco.de</strong> for a <strong>SaaS / Developer Intelligence Platform</strong> site, generated on August 31, 2026. Findings combine technical, content, schema, performance, visual, and search-readiness evidence as available.</p>
+
+  <div class="two-col">
+    <div class="col">
+      <div class="metric-card">
+        <div class="value" style="color: #d4740e;">89/100</div>
+        <div class="label">SEO Health Score</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="critical-box">
+    <strong>Critical Issues Found:</strong>
+    <ol>
+      <li><strong>Critical:</strong> Sitemap main.xml exceeds Google 50k URL limit (66,349 URLs)</li>
+      <li><strong>High:</strong> Missing transactional routes (/pricing, /talent, /maintainers) from XML sitemap</li>
+      <li><strong>High:</strong> Multiple H1 tags on homepage and missing H1 on pricing/compare pages</li>
+      <li><strong>High:</strong> External render-blocking CSS loaded from cdn.jsdelivr.net</li>
+      <li><strong>Medium:</strong> Conflicting dual X-Frame-Options headers (DENY and SAMEORIGIN)</li>
+    </ol>
+  </div>
+
+  <div class="success-box">
+    <strong>Quick Wins:</strong>
+    <ol>
+      <li>Split sitemap/main.xml into main-1.xml and main-2.xml (under 50,000 URLs each)</li>
+      <li>Add /pricing, /talent, /maintainers to static XML sitemap</li>
+      <li>Remove render-blocking external devicons stylesheet or bundle locally</li>
+      <li>Fix H1 heading hierarchy on homepage (single H1) and add semantic H1 to /pricing and /compare</li>
+      <li>Fix missing whitespace in dynamic heading JSX templates (e.g. Open-SourceRustRepositories)</li>
+    </ol>
+  </div>
+
+</div>
+
+<!-- ======================================================= 2. AUDIT CATEGORIES === -->
+<div class="section">
+  <div class="section-header">
+    <h2>2. Audit Categories</h2>
+  </div>
+
+  <h3>2.1 Technical SEO</h3>
+  <p><strong>Score:</strong> <span class="status-pass">86/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>SSR-First Next.js architecture with instant pre-rendered HTML</li>
+    <li>Comprehensive robots.txt explicitly allowing AI search crawlers (GPTBot, ClaudeBot, PerplexityBot)</li>
+    <li>Strict HSTS header with preload enabled</li>
+    <li>Clean self-referencing canonical tags across all templates</li>
+    <li>Cloudflare CDN edge caching with stale-while-revalidate</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Sitemap File URL Cap Exceeded <span class="status-warn">Critical</span></h4>
+    <p>https://getmerged.abhishekco.de/sitemap/main.xml contains 66,349 URLs, exceeding Google Search Console&#x27;s hard limit of 50,000 URLs per sitemap file.</p>
+    <p><strong>Recommendation:</strong> Chunk main.xml into paginated sitemaps of &lt;= 45,000 URLs each (e.g. main-1.xml, main-2.xml) in the sitemap index.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>High-Value Transactional Pages Missing from Sitemaps <span class="status-warn">High</span></h4>
+    <p>/pricing, /talent, and /maintainers are omitted from the sitemap index.</p>
+    <p><strong>Recommendation:</strong> Add high-priority static marketing and pricing routes to a dedicated static.xml sitemap.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Conflicting Security Headers Emitted <span class="status-warn">Medium</span></h4>
+    <p>Server returns conflicting x-frame-options headers (&#x27;DENY&#x27; and &#x27;SAMEORIGIN&#x27;) and duplicate referrer-policy headers.</p>
+    <p><strong>Recommendation:</strong> Deduplicate security headers in next.config.js and Cloudflare edge rules.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Cache-Control: no-store on Public HTML <span class="status-warn">Medium</span></h4>
+    <p>Public pre-rendered pages return &#x27;Cache-Control: ... no-store&#x27;, preventing browsers from utilizing bfcache for instant back/forward navigation.</p>
+    <p><strong>Recommendation:</strong> Remove no-store from public SSR routes; retain only s-maxage and stale-while-revalidate.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Non-Redirecting Trailing Slashes <span class="status-warn">Low</span></h4>
+    <p>Both trailing slash and non-trailing slash URLs return HTTP 200 without a 301 redirect.</p>
+    <p><strong>Recommendation:</strong> Set trailingSlash: false in next.config.js to enforce 301 redirects to canonical URLs.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.2 Content Quality &amp; E-E-A-T</h3>
+  <p><strong>Score:</strong> <span class="status-pass">92/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Empirical first-hand telemetry: PR merge rates, P50 response latencies, LOC sweet spots</li>
+    <li>Transparent methodology documented on /how-c-rank-works</li>
+    <li>Clear entity attribution to founder and open-source project</li>
+    <li>High information density across 167k+ repository pages</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Thin Initial SSR State on Dynamic Tools <span class="status-warn">High</span></h4>
+    <p>Default /compare and /pricing routes have under 40 words in initial SSR HTML when unselected.</p>
+    <p><strong>Recommendation:</strong> Pre-render curated comparison showdowns and comprehensive feature comparison matrices on SSR.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Marketing Cliché Usage <span class="status-warn">Low</span></h4>
+    <p>Content quality scorer identified &#x27;elevate your&#x27; phrasing in component previews.</p>
+    <p><strong>Recommendation:</strong> Replace with punchy developer-centric verbs (&#x27;accelerate&#x27;, &#x27;merge faster&#x27;, &#x27;inspect telemetry&#x27;).</p>
+  </div>
+  <hr class="divider">
+  <h3>2.3 On-Page SEO &amp; Structure</h3>
+  <p><strong>Score:</strong> <span class="status-pass">85/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Keyword-rich, unique meta titles and descriptions across all ecosystem rankings and scorecards</li>
+    <li>OpenGraph and Twitter summary cards with dynamic scorecard image URLs</li>
+    <li>Strong semantic landmark markup (14 landmarks, 115 semantic links)</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Multiple H1 Elements on Homepage <span class="status-warn">High</span></h4>
+    <p>Homepage renders two distinct &lt;h1&gt; tags, creating semantic hierarchy ambiguity.</p>
+    <p><strong>Recommendation:</strong> Consolidate into a single primary &lt;h1&gt; tag for the homepage hero.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Missing H1 on Pricing and Compare Routes <span class="status-warn">High</span></h4>
+    <p>/pricing and /compare lack an &lt;h1&gt; element in their SSR markup.</p>
+    <p><strong>Recommendation:</strong> Promote section headings to &lt;h1&gt; tags on both routes.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Text Concatenation Spacing Glitches in Headings <span class="status-warn">Medium</span></h4>
+    <p>Dynamic headings concatenate words without spaces (e.g. &#x27;Open-SourceRustRepositories&#x27;, &#x27;forrust-lang/rust&#x27;, &#x27;dani84bs/AnnotationSync.kopluginvsntop/ntopng&#x27;).</p>
+    <p><strong>Recommendation:</strong> Add explicit spaces in JSX interpolation strings.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.4 Schema / Structured Data</h3>
+  <p><strong>Score:</strong> <span class="status-pass">94/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Dataset schema on rankings with downloadable JSON distribution links</li>
+    <li>ItemList schema on rankings enumerating top 50 repos</li>
+    <li>SoftwareSourceCode and BreadcrumbList schemas on all repository scorecards</li>
+    <li>WebSite and WebApplication schemas on homepage with SearchAction query input</li>
+    <li>Product schema with tiered Offer definitions on /pricing</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>FAQPage Schema Legacy Usage <span class="status-warn">Info</span></h4>
+    <p>FAQPage schema is used on repository and ranking pages. Google retired FAQ rich results in May 2026.</p>
+    <p><strong>Recommendation:</strong> Keep markup for general semantic understanding, but focus rich result efforts on Dataset, ItemList, and SoftwareApplication.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Product Schema Missing Optional Attributes <span class="status-warn">Low</span></h4>
+    <p>Product schema on /pricing lacks &#x27;image&#x27; or &#x27;brand&#x27; schema properties.</p>
+    <p><strong>Recommendation:</strong> Add brand and logo references to the Product JSON-LD schema.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.5 Performance (CWV)</h3>
+  <p><strong>Score:</strong> <span class="status-pass">88/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Edge-cached SSR HTML with ~25ms TTFB via Cloudflare</li>
+    <li>Preloaded WOFF2 fonts with zero render blocking font swaps</li>
+    <li>Zero CLS layout stability on static scorecard grids</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Render-Blocking Third-Party CDN Stylesheet <span class="status-warn">High</span></h4>
+    <p>cdn.jsdelivr.net devicon.min.css is loaded synchronously in &lt;head&gt;, blocking initial render.</p>
+    <p><strong>Recommendation:</strong> Self-host the devicon CSS or load asynchronously / inline required SVGs.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Speculation Rules API Missing <span class="status-warn">Low</span></h4>
+    <p>No prefetch/prerender speculation rules configured for high-intent links.</p>
+    <p><strong>Recommendation:</strong> Add Speculation Rules script for instant subpage transitions.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.6 AI Search Readiness (GEO)</h3>
+  <p><strong>Score:</strong> <span class="status-pass">92/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Comprehensive /llms.txt with C-Rank tier taxonomy, API endpoints, and agent instructions</li>
+    <li>Direct JSON API (/api/v1/repos) and Raw Markdown (/repo/{owner}/{name}/raw) endpoints</li>
+    <li>Robots.txt explicitly allows GPTBot, ClaudeBot, PerplexityBot, Anthropic-ai</li>
+    <li>High citation utility with empirical PR merge rates and latency stats</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Missing Extended /llms-full.txt <span class="status-warn">Medium</span></h4>
+    <p>/llms.txt is present, but /llms-full.txt with complete ecosystem taxonomy and mathematical scoring formula is missing.</p>
+    <p><strong>Recommendation:</strong> Generate /llms-full.txt containing full scoring weights, formulas, and top 200 benchmark repositories.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.7 Images &amp; UX (SXO)</h3>
+  <p><strong>Score:</strong> <span class="status-pass">90/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>100% of images have explicit alt text and dimensional bounds</li>
+    <li>Clean dark-mode UI with high contrast and C-Rank visual color coding</li>
+    <li>Agent UX score 100/100 with full semantic accessibility</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Missing Breadcrumbs on Deep Comparison Routes <span class="status-warn">Low</span></h4>
+    <p>Deep comparison pages lack visible breadcrumb navigation back to /compare hub.</p>
+    <p><strong>Recommendation:</strong> Add visual breadcrumb component matching JSON-LD BreadcrumbList.</p>
+  </div>
+  <hr class="divider">
+</div>
+
+<!-- ======================================================= 3. ACTION PLAN === -->
+<div class="section">
+  <div class="section-header">
+    <h2>3. Action Plan</h2>
+  </div>
+
+  <div class="roadmap-phase">
+    <h4>Phase 1: Critical Fixes &amp; Crawl Budget <span class="effort">Week 1</span></h4>
+    <ul>
+      <li>Split sitemap/main.xml into main-1.xml and main-2.xml (&lt;= 50,000 URLs each)</li>
+      <li>Add /pricing, /talent, and /maintainers to XML sitemap index</li>
+      <li>Eliminate duplicate X-Frame-Options and Referrer-Policy response headers</li>
+    </ul>
+  </div>
+  <div class="roadmap-phase">
+    <h4>Phase 2: On-Page &amp; Performance Optimization <span class="effort">Weeks 2-3</span></h4>
+    <ul>
+      <li>Self-host or inline devicon CSS to remove third-party render-blocking CDN dependency</li>
+      <li>Consolidate homepage to single semantic &lt;h1&gt;; add &lt;h1&gt; to /pricing and /compare</li>
+      <li>Fix JSX string template concatenation whitespace glitches across rankings and scorecards</li>
+      <li>Remove &#x27;no-store&#x27; from Cache-Control on public SSR routes to enable browser bfcache</li>
+    </ul>
+  </div>
+  <div class="roadmap-phase">
+    <h4>Phase 3: Content Depth &amp; Rich Results <span class="effort">Month 2</span></h4>
+    <ul>
+      <li>Pre-render curated showdowns on /compare SSR to eliminate thin content state</li>
+      <li>Publish /llms-full.txt with complete C-Rank scoring algorithms and benchmark directories</li>
+      <li>Add visual breadcrumbs to deep comparison routes</li>
+    </ul>
+  </div>
+  <div class="roadmap-phase">
+    <h4>Phase 4: Monitoring &amp; AI Search Dominance <span class="effort">Ongoing</span></h4>
+    <ul>
+      <li>Monitor daily indexing coverage via Google Search Console and IndexNow submissions</li>
+      <li>Track AI Overview citations in Perplexity, ChatGPT Search, and Google AI Mode</li>
+      <li>Run periodic drift baseline checks to safeguard SSR data integrity</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================================================= DATA SOURCES & METHODOLOGY === -->
+<div class="section" style="text-align: center; padding-top: 15mm;">
+  <hr class="divider">
+  <h3 style="text-align: left;">Data Sources &amp; Methodology</h3>
+  <table>
+    <thead>
+      <tr><th>Source</th><th>Description</th><th>Update Frequency</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>PageSpeed Insights API</td>
+          <td>Lighthouse lab audit (mobile emulation, Moto G Power, slow 4G)</td>
+          <td>Real-time</td></tr>
+      <tr><td>Chrome UX Report (CrUX)</td>
+          <td>28-day rolling field data from real Chrome users</td>
+          <td>Daily ~04:00 UTC</td></tr>
+      <tr><td>CrUX History API</td>
+          <td>25-week p75 trend data per metric</td>
+          <td>Weekly</td></tr>
+      <tr><td>Google Search Console</td>
+          <td>Search Analytics (clicks, impressions, CTR, position)</td>
+          <td>2-3 day lag</td></tr>
+      <tr><td>URL Inspection API</td>
+          <td>Per-URL index status, coverage state, crawl info</td>
+          <td>Real-time (2,000/day)</td></tr>
+    </tbody>
+  </table>
+  <p style="color: #94a3b8; font-size: 9pt; margin-top: 5mm;">
+    Report generated by Claude SEO &mdash; Google SEO Intelligence Skill &mdash; August 31, 2026<br>
+    Methodology based on Google Web Vitals thresholds, Search Console documentation, and Lighthouse scoring algorithms.
+  </p>
+</div>
+
+</body>
+</html>

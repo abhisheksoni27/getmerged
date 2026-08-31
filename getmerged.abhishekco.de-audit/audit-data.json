@@ -1,0 +1,266 @@
+{
+  "summary": {
+    "health_score": 89,
+    "business_type": "SaaS / Developer Intelligence Platform",
+    "top_findings": [
+      {
+        "title": "Sitemap main.xml exceeds Google 50k URL limit (66,349 URLs)",
+        "severity": "Critical",
+        "category": "Technical SEO"
+      },
+      {
+        "title": "Missing transactional routes (/pricing, /talent, /maintainers) from XML sitemap",
+        "severity": "High",
+        "category": "Technical SEO"
+      },
+      {
+        "title": "Multiple H1 tags on homepage and missing H1 on pricing/compare pages",
+        "severity": "High",
+        "category": "On-Page SEO"
+      },
+      {
+        "title": "External render-blocking CSS loaded from cdn.jsdelivr.net",
+        "severity": "High",
+        "category": "Performance (CWV)"
+      },
+      {
+        "title": "Conflicting dual X-Frame-Options headers (DENY and SAMEORIGIN)",
+        "severity": "Medium",
+        "category": "Technical SEO"
+      }
+    ],
+    "quick_wins": [
+      "Split sitemap/main.xml into main-1.xml and main-2.xml (under 50,000 URLs each)",
+      "Add /pricing, /talent, /maintainers to static XML sitemap",
+      "Remove render-blocking external devicons stylesheet or bundle locally",
+      "Fix H1 heading hierarchy on homepage (single H1) and add semantic H1 to /pricing and /compare",
+      "Fix missing whitespace in dynamic heading JSX templates (e.g. Open-SourceRustRepositories)"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 86,
+      "what_works": [
+        "SSR-First Next.js architecture with instant pre-rendered HTML",
+        "Comprehensive robots.txt explicitly allowing AI search crawlers (GPTBot, ClaudeBot, PerplexityBot)",
+        "Strict HSTS header with preload enabled",
+        "Clean self-referencing canonical tags across all templates",
+        "Cloudflare CDN edge caching with stale-while-revalidate"
+      ],
+      "findings": [
+        {
+          "title": "Sitemap File URL Cap Exceeded",
+          "severity": "Critical",
+          "description": "https://getmerged.abhishekco.de/sitemap/main.xml contains 66,349 URLs, exceeding Google Search Console's hard limit of 50,000 URLs per sitemap file.",
+          "recommendation": "Chunk main.xml into paginated sitemaps of <= 45,000 URLs each (e.g. main-1.xml, main-2.xml) in the sitemap index."
+        },
+        {
+          "title": "High-Value Transactional Pages Missing from Sitemaps",
+          "severity": "High",
+          "description": "/pricing, /talent, and /maintainers are omitted from the sitemap index.",
+          "recommendation": "Add high-priority static marketing and pricing routes to a dedicated static.xml sitemap."
+        },
+        {
+          "title": "Conflicting Security Headers Emitted",
+          "severity": "Medium",
+          "description": "Server returns conflicting x-frame-options headers ('DENY' and 'SAMEORIGIN') and duplicate referrer-policy headers.",
+          "recommendation": "Deduplicate security headers in next.config.js and Cloudflare edge rules."
+        },
+        {
+          "title": "Cache-Control: no-store on Public HTML",
+          "severity": "Medium",
+          "description": "Public pre-rendered pages return 'Cache-Control: ... no-store', preventing browsers from utilizing bfcache for instant back/forward navigation.",
+          "recommendation": "Remove no-store from public SSR routes; retain only s-maxage and stale-while-revalidate."
+        },
+        {
+          "title": "Non-Redirecting Trailing Slashes",
+          "severity": "Low",
+          "description": "Both trailing slash and non-trailing slash URLs return HTTP 200 without a 301 redirect.",
+          "recommendation": "Set trailingSlash: false in next.config.js to enforce 301 redirects to canonical URLs."
+        }
+      ]
+    },
+    {
+      "name": "Content Quality & E-E-A-T",
+      "score": 92,
+      "what_works": [
+        "Empirical first-hand telemetry: PR merge rates, P50 response latencies, LOC sweet spots",
+        "Transparent methodology documented on /how-c-rank-works",
+        "Clear entity attribution to founder and open-source project",
+        "High information density across 167k+ repository pages"
+      ],
+      "findings": [
+        {
+          "title": "Thin Initial SSR State on Dynamic Tools",
+          "severity": "High",
+          "description": "Default /compare and /pricing routes have under 40 words in initial SSR HTML when unselected.",
+          "recommendation": "Pre-render curated comparison showdowns and comprehensive feature comparison matrices on SSR."
+        },
+        {
+          "title": "Marketing Clich\u00e9 Usage",
+          "severity": "Low",
+          "description": "Content quality scorer identified 'elevate your' phrasing in component previews.",
+          "recommendation": "Replace with punchy developer-centric verbs ('accelerate', 'merge faster', 'inspect telemetry')."
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO & Structure",
+      "score": 85,
+      "what_works": [
+        "Keyword-rich, unique meta titles and descriptions across all ecosystem rankings and scorecards",
+        "OpenGraph and Twitter summary cards with dynamic scorecard image URLs",
+        "Strong semantic landmark markup (14 landmarks, 115 semantic links)"
+      ],
+      "findings": [
+        {
+          "title": "Multiple H1 Elements on Homepage",
+          "severity": "High",
+          "description": "Homepage renders two distinct <h1> tags, creating semantic hierarchy ambiguity.",
+          "recommendation": "Consolidate into a single primary <h1> tag for the homepage hero."
+        },
+        {
+          "title": "Missing H1 on Pricing and Compare Routes",
+          "severity": "High",
+          "description": "/pricing and /compare lack an <h1> element in their SSR markup.",
+          "recommendation": "Promote section headings to <h1> tags on both routes."
+        },
+        {
+          "title": "Text Concatenation Spacing Glitches in Headings",
+          "severity": "Medium",
+          "description": "Dynamic headings concatenate words without spaces (e.g. 'Open-SourceRustRepositories', 'forrust-lang/rust', 'dani84bs/AnnotationSync.kopluginvsntop/ntopng').",
+          "recommendation": "Add explicit spaces in JSX interpolation strings."
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 94,
+      "what_works": [
+        "Dataset schema on rankings with downloadable JSON distribution links",
+        "ItemList schema on rankings enumerating top 50 repos",
+        "SoftwareSourceCode and BreadcrumbList schemas on all repository scorecards",
+        "WebSite and WebApplication schemas on homepage with SearchAction query input",
+        "Product schema with tiered Offer definitions on /pricing"
+      ],
+      "findings": [
+        {
+          "title": "FAQPage Schema Legacy Usage",
+          "severity": "Info",
+          "description": "FAQPage schema is used on repository and ranking pages. Google retired FAQ rich results in May 2026.",
+          "recommendation": "Keep markup for general semantic understanding, but focus rich result efforts on Dataset, ItemList, and SoftwareApplication."
+        },
+        {
+          "title": "Product Schema Missing Optional Attributes",
+          "severity": "Low",
+          "description": "Product schema on /pricing lacks 'image' or 'brand' schema properties.",
+          "recommendation": "Add brand and logo references to the Product JSON-LD schema."
+        }
+      ]
+    },
+    {
+      "name": "Performance (CWV)",
+      "score": 88,
+      "what_works": [
+        "Edge-cached SSR HTML with ~25ms TTFB via Cloudflare",
+        "Preloaded WOFF2 fonts with zero render blocking font swaps",
+        "Zero CLS layout stability on static scorecard grids"
+      ],
+      "findings": [
+        {
+          "title": "Render-Blocking Third-Party CDN Stylesheet",
+          "severity": "High",
+          "description": "cdn.jsdelivr.net devicon.min.css is loaded synchronously in <head>, blocking initial render.",
+          "recommendation": "Self-host the devicon CSS or load asynchronously / inline required SVGs."
+        },
+        {
+          "title": "Speculation Rules API Missing",
+          "severity": "Low",
+          "description": "No prefetch/prerender speculation rules configured for high-intent links.",
+          "recommendation": "Add Speculation Rules script for instant subpage transitions."
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness (GEO)",
+      "score": 92,
+      "what_works": [
+        "Comprehensive /llms.txt with C-Rank tier taxonomy, API endpoints, and agent instructions",
+        "Direct JSON API (/api/v1/repos) and Raw Markdown (/repo/{owner}/{name}/raw) endpoints",
+        "Robots.txt explicitly allows GPTBot, ClaudeBot, PerplexityBot, Anthropic-ai",
+        "High citation utility with empirical PR merge rates and latency stats"
+      ],
+      "findings": [
+        {
+          "title": "Missing Extended /llms-full.txt",
+          "severity": "Medium",
+          "description": "/llms.txt is present, but /llms-full.txt with complete ecosystem taxonomy and mathematical scoring formula is missing.",
+          "recommendation": "Generate /llms-full.txt containing full scoring weights, formulas, and top 200 benchmark repositories."
+        }
+      ]
+    },
+    {
+      "name": "Images & UX (SXO)",
+      "score": 90,
+      "what_works": [
+        "100% of images have explicit alt text and dimensional bounds",
+        "Clean dark-mode UI with high contrast and C-Rank visual color coding",
+        "Agent UX score 100/100 with full semantic accessibility"
+      ],
+      "findings": [
+        {
+          "title": "Missing Breadcrumbs on Deep Comparison Routes",
+          "severity": "Low",
+          "description": "Deep comparison pages lack visible breadcrumb navigation back to /compare hub.",
+          "recommendation": "Add visual breadcrumb component matching JSON-LD BreadcrumbList."
+        }
+      ]
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Critical Fixes & Crawl Budget",
+        "timeframe": "Week 1",
+        "items": [
+          "Split sitemap/main.xml into main-1.xml and main-2.xml (<= 50,000 URLs each)",
+          "Add /pricing, /talent, and /maintainers to XML sitemap index",
+          "Eliminate duplicate X-Frame-Options and Referrer-Policy response headers"
+        ]
+      },
+      {
+        "name": "Phase 2: On-Page & Performance Optimization",
+        "timeframe": "Weeks 2-3",
+        "items": [
+          "Self-host or inline devicon CSS to remove third-party render-blocking CDN dependency",
+          "Consolidate homepage to single semantic <h1>; add <h1> to /pricing and /compare",
+          "Fix JSX string template concatenation whitespace glitches across rankings and scorecards",
+          "Remove 'no-store' from Cache-Control on public SSR routes to enable browser bfcache"
+        ]
+      },
+      {
+        "name": "Phase 3: Content Depth & Rich Results",
+        "timeframe": "Month 2",
+        "items": [
+          "Pre-render curated showdowns on /compare SSR to eliminate thin content state",
+          "Publish /llms-full.txt with complete C-Rank scoring algorithms and benchmark directories",
+          "Add visual breadcrumbs to deep comparison routes"
+        ]
+      },
+      {
+        "name": "Phase 4: Monitoring & AI Search Dominance",
+        "timeframe": "Ongoing",
+        "items": [
+          "Monitor daily indexing coverage via Google Search Console and IndexNow submissions",
+          "Track AI Overview citations in Perplexity, ChatGPT Search, and Google AI Mode",
+          "Run periodic drift baseline checks to safeguard SSR data integrity"
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "findings/",
+    "screenshots_dir": "screenshots/"
+  }
+}

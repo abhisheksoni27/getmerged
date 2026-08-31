@@ -51,7 +51,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  skipTrailingSlashRedirect: true,
+  trailingSlash: false,
   headers: async () => [
     {
       // Match all HTML pages / document routes
@@ -79,7 +79,7 @@ const nextConfig: NextConfig = {
         },
         {
           key: "X-Frame-Options",
-          value: "DENY",
+          value: "SAMEORIGIN",
         },
         {
           key: "Referrer-Policy",
