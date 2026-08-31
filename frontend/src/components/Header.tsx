@@ -110,9 +110,6 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             <Link href="/maintainers" title="Claim Your Repository & PR Telemetry" className="hover:text-white font-medium transition-colors whitespace-nowrap">
               Maintainers
             </Link>
-            <Link href="/talent" title="Hire Verified Open Source Engineers" className="text-blue-400 hover:text-blue-300 font-medium transition-colors whitespace-nowrap">
-              Talent 💼
-            </Link>
             {user && (
               <Link href="/dashboard" title="Contributor PR Tracker & Quests" className="hover:text-white font-bold text-white transition-colors whitespace-nowrap">
                 Dashboard
@@ -264,13 +261,6 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                 className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
               >
                 For Maintainers ⚡
-              </Link>
-              <Link
-                href="/talent"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-blue-400 font-semibold transition-colors"
-              >
-                WorkDone Database 💼
               </Link>
               {PAYMENTS_ENABLED && (
                 <Link

@@ -11,7 +11,6 @@ import {
   setEnabled,
   updatePreferences,
 } from "@/lib/notifications";
-import { GfiSniperCard } from "@/components/GfiSniperCard";
 import { WeeklyWrapCard } from "@/components/WeeklyWrapCard";
 
 export default function NotificationPreferencesPage() {
@@ -96,8 +95,11 @@ export default function NotificationPreferencesPage() {
       </div>
 
       <div className="mt-8 space-y-8">
-        <WeeklyWrapCard />
-        <GfiSniperCard />
+        <WeeklyWrapCard
+          isSubscribed={isEnabled(prefs, "weekly_wrap")}
+          onToggle={() => toggle("weekly_wrap")}
+          busy={busy}
+        />
       </div>
     </main>
   );

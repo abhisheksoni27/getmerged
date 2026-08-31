@@ -11,9 +11,42 @@ import {
   Trophy,
 } from "lucide-react";
 
-export function WeeklyWrapCard() {
-  const [subscribed, setSubscribed] = useState(true);
+interface WeeklyWrapCardProps {
+  isSubscribed?: boolean;
+  onToggle?: (enabled: boolean) => void;
+  busy?: boolean;
+}
+
+export function WeeklyWrapCard({
+  isSubscribed = true,
+  onToggle,
+  busy = false,
+}: WeeklyWrapCardProps) {
   const [showPreview, setShowPreview] = useState(false);
+  const [userStats, setUserStats] = useState<{
+    username: string;
+    total_karma: number;
+    streak_weeks: number;
+    level_title: string;
+    primary_language: string;
+  } | null>(null);
+
+  React.useEffect(() => {
+    fetch("/api/v1/auth/me", { credentials: "include" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.user) {
+          setUserStats({
+            username: data.user.username || "Contributor",
+            total_karma: data.user.karma_score || 0,
+            streak_weeks: data.user.streak_weeks || 1,
+            level_title: data.user.level_title || "Verified Contributor",
+            primary_language: data.user.primary_language || "TypeScript",
+          });
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="rounded-3xl glass-panel border border-emerald-500/20 bg-[#121215] p-6 sm:p-7 space-y-5 shadow-xl">
@@ -48,14 +81,15 @@ export function WeeklyWrapCard() {
 
           <button
             type="button"
-            onClick={() => setSubscribed(!subscribed)}
+            disabled={busy}
+            onClick={() => onToggle?.(!isSubscribed)}
             className={`px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
-              subscribed
+              isSubscribed
                 ? "bg-emerald-600/20 border border-emerald-500/40 text-emerald-400"
                 : "glass-card text-zinc-400 border border-white/[0.08]"
             }`}
           >
-            {subscribed ? "Subscribed ✓" : "Enable"}
+            {isSubscribed ? "Subscribed ✓" : "Enable"}
           </button>
         </div>
       </div>
@@ -132,20 +166,20 @@ export function WeeklyWrapCard() {
                   Your Contributor Momentum
                 </div>
                 <div className="text-sm font-bold text-white">
-                  You earned <span className="text-emerald-400">+150 Karma</span> this week
+                  Welcome back, <span className="text-emerald-400">@{userStats?.username || "Contributor"}</span>
                 </div>
                 <div className="grid grid-cols-3 gap-2 text-center font-mono text-[10px]">
                   <div className="p-2 rounded bg-black/40 border border-white/[0.06]">
                     <div className="text-zinc-400">Streak</div>
-                    <div className="text-amber-400 font-bold text-xs mt-0.5">🔥 3 Wks</div>
+                    <div className="text-amber-400 font-bold text-xs mt-0.5">🔥 {userStats?.streak_weeks || 1} Wks</div>
                   </div>
                   <div className="p-2 rounded bg-black/40 border border-white/[0.06]">
-                    <div className="text-zinc-400">Level</div>
-                    <div className="text-white font-bold text-xs mt-0.5">Level 4</div>
+                    <div className="text-zinc-400">Stack</div>
+                    <div className="text-white font-bold text-xs mt-0.5">{userStats?.primary_language || "TypeScript"}</div>
                   </div>
                   <div className="p-2 rounded bg-black/40 border border-white/[0.06]">
-                    <div className="text-zinc-400">Total</div>
-                    <div className="text-emerald-400 font-bold text-xs mt-0.5">2,450 pts</div>
+                    <div className="text-zinc-400">Total Karma</div>
+                    <div className="text-emerald-400 font-bold text-xs mt-0.5">{(userStats?.total_karma || 0).toLocaleString()} pts</div>
                   </div>
                 </div>
               </div>
@@ -187,7 +221,7 @@ export function WeeklyWrapCard() {
               <button
                 type="button"
                 onClick={() => {
-                  setSubscribed(true);
+                  onToggle?.(true);
                   setShowPreview(false);
                 }}
                 className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold transition-all cursor-pointer"

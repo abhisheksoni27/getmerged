@@ -542,29 +542,29 @@ export default function HomeClient({
             </div>
           </Link>
 
-          {/* Pillar 3: For Hiring & Talent */}
+          {/* Pillar 3: Good First Issues & Stack */}
           <Link
-            href="/talent"
+            href="/good-first-issue"
             className="p-5 rounded-xl border border-white/[0.1] bg-[#141414]/90 hover:bg-[#1c1c1c] hover:border-blue-500/40 transition-all group flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between mb-3">
                 <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                  <Briefcase className="h-5 w-5" />
+                  <Sparkles className="h-5 w-5" />
                 </div>
                 <span className="text-[11px] font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full">
-                  For Hiring Teams
+                  Beginner Friendly
                 </span>
               </div>
               <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors">
-                Hire Verified Contributors
+                Good First Issues
               </h3>
               <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed font-sans">
-                Source software engineers with proven merge records and verified open source Karma scores.
+                Curated, active beginner issues ranked by maintainer responsiveness and real merge probability.
               </p>
             </div>
             <div className="mt-4 flex items-center text-xs font-mono font-semibold text-blue-400 group-hover:translate-x-1 transition-transform">
-              <span>Search Talent</span>
+              <span>Explore Issues</span>
               <ArrowRight className="h-3.5 w-3.5 ml-1" />
             </div>
           </Link>
