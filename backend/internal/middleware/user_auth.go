@@ -15,6 +15,11 @@ const UsernameKey = "username"
 // UserAuth validates custom Opendoor JWT tokens from Authorization header or cookie.
 func UserAuth(jwtSecret string) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Strict security: all authenticated user endpoints must never be cached
+		c.Header("Cache-Control", "private, no-store, must-revalidate")
+		c.Header("Cloudflare-CDN-Cache-Control", "no-store")
+		c.Header("CDN-Cache-Control", "no-store")
+
 		authHeader := c.GetHeader("Authorization")
 		var tokenStr string
 

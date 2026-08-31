@@ -464,7 +464,7 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
-		WHERE r.id = ? OR LOWER(r.full_name) = LOWER(?)
+		WHERE r.full_name = ? OR r.id = ?
 		LIMIT 1
 	`
 	var repo RepoRecord
