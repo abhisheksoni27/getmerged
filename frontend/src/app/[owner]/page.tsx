@@ -2,16 +2,15 @@ import { notFound, redirect } from "next/navigation";
 import { Metadata } from "next";
 import { UserProfile } from "@/types/opendoor";
 
+import { API_BASE_URL } from "@/lib/api";
+
 interface ProfilePageProps {
   params: Promise<{ owner: string }>;
 }
 
-const INTERNAL_API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
-
 async function getUserProfile(slug: string): Promise<UserProfile | null> {
   try {
-    const res = await fetch(`${INTERNAL_API_URL}/api/v1/users/${encodeURIComponent(slug)}`, {
+    const res = await fetch(`${API_BASE_URL}/api/v1/users/${encodeURIComponent(slug)}`, {
       cache: "no-store",
     });
     if (!res.ok) return null;

@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "@/lib/api";
+
 export async function generateUserBadgeSvg(username: string) {
   const cleanUsername = username ? username.trim().replace(/^@/, "") : "contributor";
 
@@ -6,8 +8,7 @@ export async function generateUserBadgeSvg(username: string) {
   let badgeTheme = "cyan";
 
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
-    const res = await fetch(`${baseUrl}/api/v1/u/${encodeURIComponent(cleanUsername)}/karma`, {
+    const res = await fetch(`${API_BASE_URL}/api/v1/u/${encodeURIComponent(cleanUsername)}/karma`, {
       headers: { Accept: "application/json" },
       next: { revalidate: 3600 },
     });
@@ -109,8 +110,7 @@ export async function generateRepoBadgeSvg(owner: string, name: string) {
   let mergeRate = "";
 
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
-    const res = await fetch(`${baseUrl}/api/v1/repos?name=${encodeURIComponent(fullName)}`);
+    const res = await fetch(`${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(fullName)}`);
     if (res.ok) {
       const data = await res.json();
       const rawList = data.data || data.repos;

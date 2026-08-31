@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { API_BASE_URL } from "@/lib/api";
 
 export const runtime = "edge";
 export const alt = "C-Rank Contributor Readiness Score Card";
@@ -21,8 +22,7 @@ export default async function Image({
   let score = "75.0";
 
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
-    const res = await fetch(`${baseUrl}/api/v1/repos?name=${encodeURIComponent(fullName)}`);
+    const res = await fetch(`${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(fullName)}`);
     if (res.ok) {
       const data = await res.json();
       const rawList = data.data || data.repos;

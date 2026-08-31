@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Repo } from "@/types/opendoor";
-
-const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
+import { API_BASE_URL } from "@/lib/api";
 
 export async function GET(
   request: NextRequest,
@@ -12,7 +11,7 @@ export async function GET(
 
   try {
     const res = await fetch(
-      `${INTERNAL_API_URL}/api/v1/repos?name=${encodeURIComponent(fullName)}`
+      `${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(fullName)}`
     );
     if (!res.ok) {
       return new NextResponse(`Repository ${fullName} not found`, { status: 404 });

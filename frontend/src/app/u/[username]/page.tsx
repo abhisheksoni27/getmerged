@@ -11,7 +11,7 @@ import {
 import { ProfileClientView } from "./ProfileClientView";
 import { type ContributorKarmaData } from "@/components/KarmaProfileBadge";
 
-const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
+import { API_BASE_URL } from "@/lib/api";
 
 interface ProfilePageProps {
   params: Promise<{ username: string }>;
@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: ProfilePageProps): Promise<Me
 async function getKarma(username: string): Promise<ContributorKarmaData | null> {
   try {
     const res = await fetch(
-      `${INTERNAL_API_URL}/api/v1/u/${encodeURIComponent(username)}/karma`,
+      `${API_BASE_URL}/api/v1/u/${encodeURIComponent(username)}/karma`,
       { next: { revalidate: 300 } }
     );
     if (!res.ok) return null;

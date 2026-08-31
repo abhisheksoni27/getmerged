@@ -11,8 +11,7 @@ import { buildRepoMetadata, buildRepoFaqList } from "@/lib/repo-metadata";
 import { getGradeColor } from "@/components/CRankBadge";
 import { PRLikelihoodData } from "@/components/PRAcceptanceWidget";
 import { TrendPoint } from "@/components/RepoTrendChart";
-
-const INTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
+import { API_BASE_URL, PUBLIC_API_URL } from "@/lib/api";
 
 // Owner/name shapes GitHub itself allows; anything else stays a hard 404.
 const VALID_SLUG_RE = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$/;
@@ -25,7 +24,7 @@ async function getRepoInsights(targetIdOrName: string | number): Promise<AIInsig
   try {
     const target = String(targetIdOrName);
     const res = await fetch(
-      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(target)}/insights`,
+      `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(target)}/insights`,
       {
         next: { revalidate: 3600 },
       }
@@ -43,14 +42,14 @@ async function getRelatedRepos(targetIdOrName: string | number): Promise<Repo[]>
   try {
     const target = String(targetIdOrName);
     const res = await fetch(
-      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(target)}/related?limit=3`,
+      `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(target)}/related?limit=3`,
       {
         next: { revalidate: 3600 },
       }
     );
     if (!res.ok) return [];
     const data = await res.json();
-    return data?.related || [];
+    return data?.repos || [];
   } catch (e) {
     console.error("SSR fetch failed for related repos:", targetIdOrName, e);
   }
@@ -61,14 +60,14 @@ async function getGoodFirstIssues(targetIdOrName: string | number): Promise<Good
   try {
     const target = String(targetIdOrName);
     const res = await fetch(
-      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(target)}/good-first-issues`,
+      `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(target)}/good-first-issues`,
       {
         next: { revalidate: 3600 },
       }
     );
     if (!res.ok) return [];
     const data = await res.json();
-    return data?.data || [];
+    return data?.issues || [];
   } catch (e) {
     console.error("SSR fetch failed for good first issues:", targetIdOrName, e);
   }
@@ -79,7 +78,7 @@ async function getPRSizeSweetSpot(targetIdOrName: string | number): Promise<PRSi
   try {
     const target = String(targetIdOrName);
     const res = await fetch(
-      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(target)}/pr-size-sweetspot`,
+      `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(target)}/pr-size-sweetspot`,
       {
         next: { revalidate: 3600 },
       }
@@ -95,7 +94,7 @@ async function getPRSizeSweetSpot(targetIdOrName: string | number): Promise<PRSi
 async function getPRLikelihood(fullName: string): Promise<PRLikelihoodData | null> {
   try {
     const res = await fetch(
-      `${INTERNAL_API_URL}/api/v1/pr-likelihood?name=${encodeURIComponent(fullName)}`,
+      `${API_BASE_URL}/api/v1/pr-likelihood?name=${encodeURIComponent(fullName)}`,
       {
         next: { revalidate: 3600 },
       }
@@ -103,7 +102,7 @@ async function getPRLikelihood(fullName: string): Promise<PRLikelihoodData | nul
     if (!res.ok) return null;
     return await res.json();
   } catch (e) {
-    console.error("SSR fetch failed for pr-likelihood:", fullName, e);
+    console.error("SSR fetch failed for pr likelihood:", fullName, e);
   }
   return null;
 }
@@ -111,65 +110,67 @@ async function getPRLikelihood(fullName: string): Promise<PRLikelihoodData | nul
 async function getOptimalTime(fullName: string): Promise<OptimalTimeResult | null> {
   try {
     const res = await fetch(
-      `${INTERNAL_API_URL}/api/v1/optimal-time?name=${encodeURIComponent(fullName)}`,
+      `${API_BASE_URL}/api/v1/optimal-time?name=${encodeURIComponent(fullName)}`,
       {
         next: { revalidate: 3600 },
       }
     );
     if (!res.ok) return null;
-    const json = await res.json();
-    return json?.optimal_time || null;
+    return await res.json();
   } catch (e) {
-    console.error("SSR fetch failed for optimal-time:", fullName, e);
+    console.error("SSR fetch failed for optimal time:", fullName, e);
   }
   return null;
 }
 
-async function getRepoTrend(fullName: string): Promise<TrendPoint[] | null> {
+async function getRepoTrend(fullName: string): Promise<TrendPoint[]> {
   try {
     const res = await fetch(
-      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(fullName)}/trend?days=90`,
+      `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/trend?days=90`,
       {
         next: { revalidate: 3600 },
       }
     );
-    if (!res.ok) return null;
-    const json = await res.json();
-    return json?.trend || null;
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data?.trend || [];
   } catch (e) {
     console.error("SSR fetch failed for repo trend:", fullName, e);
   }
-  return null;
+  return [];
 }
 
 async function getRepoData(fullName: string): Promise<Repo | null> {
   try {
-    // 1. First try direct ID/name lookup endpoint
+    // 1. Direct path lookup
     const directRes = await fetch(
-      `${INTERNAL_API_URL}/api/v1/repos/${encodeURIComponent(fullName)}`,
+      `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}`,
       {
         next: { revalidate: 3600 },
       }
     );
     if (directRes.ok) {
       const data = await directRes.json();
-      if (data && (data.id || data.full_name)) {
-        return data as Repo;
-      }
+      if (data?.repo) return data.repo;
+      if (data?.id) return data as Repo;
     }
 
-    // 2. Fallback to list search query
+    // 2. Query param lookup
     const res = await fetch(
-      `${INTERNAL_API_URL}/api/v1/repos?name=${encodeURIComponent(fullName)}`,
+      `${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(fullName)}`,
       {
-        next: { revalidate: 3600 }, // Cache on edge/ISR for 1 hour
+        next: { revalidate: 3600 },
       }
     );
     if (!res.ok) return null;
     const data = await res.json();
     const rawList = data.data || data.repos;
     if (Array.isArray(rawList) && rawList.length > 0) {
-      return rawList.find((r: Repo) => r.full_name.toLowerCase() === fullName.toLowerCase()) || null;
+      return (
+        rawList.find(
+          (r: Repo) => r.full_name.toLowerCase() === fullName.toLowerCase()
+        ) || rawList[0]
+      );
     }
   } catch (e) {
     console.error("SSR fetch failed for repo:", fullName, e);
@@ -199,7 +200,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         siteName: "GetMerged",
         images: [
           {
-            url: `${INTERNAL_API_URL}/og/scan/${encodeURIComponent(owner)}/${encodeURIComponent(name)}`,
+            url: `${PUBLIC_API_URL}/og/scan/${encodeURIComponent(owner)}/${encodeURIComponent(name)}`,
             width: 1200,
             height: 630,
             alt: `${fullName} C-Rank verdict card`,
@@ -210,7 +211,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         card: "summary_large_image",
         title: `Instant C-Rank check: ${fullName}`,
         description: `Score ${fullName} on demand from GitHub's public pull-request history.`,
-        images: [`${INTERNAL_API_URL}/og/scan/${encodeURIComponent(owner)}/${encodeURIComponent(name)}`],
+        images: [`${PUBLIC_API_URL}/og/scan/${encodeURIComponent(owner)}/${encodeURIComponent(name)}`],
       },
     };
   }
