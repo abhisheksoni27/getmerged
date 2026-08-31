@@ -137,23 +137,21 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 	}
 
 	if filter.Language != "" {
-		where += " AND LOWER(r.language) = LOWER(?)"
+		where += " AND r.language = ?"
 		args = append(args, filter.Language)
 	}
 
 	if len(filter.Languages) > 0 {
-		lowered := make([]interface{}, 0, len(filter.Languages))
 		placeholders := make([]string, 0, len(filter.Languages))
 		for _, l := range filter.Languages {
 			if l == "" {
 				continue
 			}
-			lowered = append(lowered, strings.ToLower(l))
+			args = append(args, l)
 			placeholders = append(placeholders, "?")
 		}
-		if len(lowered) > 0 {
-			where += " AND LOWER(r.language) IN (" + strings.Join(placeholders, ",") + ")"
-			args = append(args, lowered...)
+		if len(placeholders) > 0 {
+			where += " AND r.language IN (" + strings.Join(placeholders, ",") + ")"
 		}
 	}
 
@@ -714,7 +712,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON r.id = s.repository_id
-		WHERE r.id != ? AND LOWER(r.language) = LOWER(?)
+		WHERE r.id != ? AND r.language = ?
 		ORDER BY ABS(COALESCE(s.external_pr_merge_rate, 0) - ?) ASC,
 		         ABS(COALESCE(s.c_rank_score, 0) - ?) ASC,
 		         r.stars DESC
