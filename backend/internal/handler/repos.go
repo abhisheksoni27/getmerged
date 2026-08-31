@@ -182,13 +182,24 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		excludeFallback := strings.ToLower(strings.TrimSpace(c.Query("exclude_fallback"))) == "true"
 		minTier := strings.ToUpper(strings.TrimSpace(c.Query("min_tier")))
 
+		searchQuery := strings.TrimSpace(c.Query("search"))
+		fullNameQuery := ""
+		if name != "" {
+			if strings.Contains(name, "/") {
+				fullNameQuery = name
+			} else if searchQuery == "" {
+				searchQuery = name
+			}
+		}
+
 		filter := repository.RepoFilter{
 			Language:                 lang,
 			Tier:                     tierParam,
 			MinMergeRate:             minMergeRate,
 			MinStars:                 minStars,
 			MaxStars:                 maxStars,
-			Search:                   name,
+			Search:                   searchQuery,
+			FullName:                 fullNameQuery,
 			SortBy:                   sortParam,
 			Order:                    orderParam,
 			Limit:                    perPage,
