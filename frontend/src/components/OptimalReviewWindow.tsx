@@ -88,9 +88,9 @@ export function OptimalReviewWindow({ fullName, initialData = null }: OptimalRev
 
   const isLowConfidence = data.confidence_score < 0.2;
   const heatmap = data.hourly_heatmap || new Array(24).fill(0);
-  const peakHour = data.peak_hour_utc;
-  const primaryStart = data.primary_start_hour_utc;
-  const primaryEnd = data.primary_end_hour_utc;
+  const peakHour = typeof data.peak_hour_utc === "number" && !Number.isNaN(data.peak_hour_utc) ? data.peak_hour_utc : 0;
+  const primaryStart = typeof data.primary_start_hour_utc === "number" && !Number.isNaN(data.primary_start_hour_utc) ? data.primary_start_hour_utc : 0;
+  const primaryEnd = typeof data.primary_end_hour_utc === "number" && !Number.isNaN(data.primary_end_hour_utc) ? data.primary_end_hour_utc : 0;
   const dayWindow = data.recommended_day_window || "Monday - Friday";
 
   const getBarColor = (val: number, isPeak: boolean) => {
