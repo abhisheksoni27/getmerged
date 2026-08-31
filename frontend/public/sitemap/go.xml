@@ -43,13 +43,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/gohugoio/hugo</loc>
-    <lastmod>2026-08-30T09:18:23Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/infiniflow/ragflow</loc>
+    <lastmod>2026-08-31T06:37:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/infiniflow/ragflow</loc>
+    <loc>https://getmerged.abhishekco.de/gohugoio/hugo</loc>
     <lastmod>2026-08-30T09:18:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -7904,7 +7904,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/matrixorigin/matrixone</loc>
-    <lastmod>2026-08-30T06:31:47Z</lastmod>
+    <lastmod>2026-08-31T06:39:56Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -8599,14 +8599,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/containerd/stargz-snapshotter</loc>
-    <lastmod>2026-08-21T06:31:57Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/rulego/rulego</loc>
+    <lastmod>2026-08-31T06:35:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/rulego/rulego</loc>
-    <lastmod>2026-08-22T06:39:39Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/containerd/stargz-snapshotter</loc>
+    <lastmod>2026-08-21T06:31:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -16604,7 +16604,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JungHoonGhae/tossinvest-cli</loc>
-    <lastmod>2026-08-30T10:18:44Z</lastmod>
+    <lastmod>2026-08-31T06:33:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -32341,6 +32341,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/tektoncd/pipelines-as-code</loc>
+    <lastmod>2026-08-31T06:42:04Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/openvex/vexctl</loc>
     <lastmod>2026-08-25T08:25:10Z</lastmod>
     <changefreq>daily</changefreq>
@@ -32445,12 +32451,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/EmissarySocial/emissary</loc>
     <lastmod>2026-08-06T07:34:09Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/tektoncd/pipelines-as-code</loc>
-    <lastmod>2026-08-13T07:41:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -38918,7 +38918,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fullsend-ai/fullsend</loc>
-    <lastmod>2026-08-30T06:36:30Z</lastmod>
+    <lastmod>2026-08-31T06:31:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
