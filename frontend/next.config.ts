@@ -62,6 +62,14 @@ const nextConfig: NextConfig = {
           value: "public, max-age=0, must-revalidate",
         },
         {
+          key: "Cloudflare-CDN-Cache-Control",
+          value: "max-age=3600, stale-while-revalidate=86400",
+        },
+        {
+          key: "CDN-Cache-Control",
+          value: "max-age=3600, stale-while-revalidate=86400",
+        },
+        {
           key: "Strict-Transport-Security",
           value: "max-age=31536000; includeSubDomains; preload",
         },
@@ -88,7 +96,11 @@ const nextConfig: NextConfig = {
       // is_public flip has no tag-based purge path. Revisit with s-maxage +
       // revalidateTag("profile:<username>") once purge exists.
       source: "/u/:path*",
-      headers: [{ key: "Cache-Control", value: "private, no-store" }],
+      headers: [
+        { key: "Cache-Control", value: "private, no-store" },
+        { key: "Cloudflare-CDN-Cache-Control", value: "no-store" },
+        { key: "CDN-Cache-Control", value: "no-store" },
+      ],
     },
     {
       // Match all immutable JS/CSS static build chunks
@@ -102,7 +114,11 @@ const nextConfig: NextConfig = {
     },
     {
       source: "/api/og/u/:path*",
-      headers: [{ key: "Cache-Control", value: "private, no-store" }],
+      headers: [
+        { key: "Cache-Control", value: "private, no-store" },
+        { key: "Cloudflare-CDN-Cache-Control", value: "no-store" },
+        { key: "CDN-Cache-Control", value: "no-store" },
+      ],
     },
     {
       source: "/icon.svg",
