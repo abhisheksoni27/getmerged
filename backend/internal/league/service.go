@@ -81,15 +81,16 @@ func (s *Service) GetWelcomingReposLeaderboard(ctx context.Context, limit int) (
 	query := `
 		SELECT 
 			r.id, r.full_name, r.description, r.language, r.stars,
-			COALESCE(r.c_rank_tier, 'A') as c_rank_tier,
-			COALESCE(r.c_rank_score, 0) as c_rank_score,
-			COALESCE(r.gfi_count, 0) as gfi_count,
-			COALESCE(r.first_timer_success_rate, 0) as first_timer_success_rate
+			COALESCE(s.c_rank_tier, 'A') as c_rank_tier,
+			COALESCE(s.c_rank_score, 0) as c_rank_score,
+			COALESCE(s.good_first_issue_count, 0) as gfi_count,
+			COALESCE(s.first_timer_success_rate, 0) as first_timer_success_rate
 		FROM repositories r
-		WHERE r.c_rank_tier IN ('S', 'A', 'B')
+		JOIN latest_snapshots s ON r.id = s.repository_id
+		WHERE s.c_rank_tier IN ('S', 'A', 'B')
 		ORDER BY 
-			CASE r.c_rank_tier WHEN 'S' THEN 1 WHEN 'A' THEN 2 WHEN 'B' THEN 3 ELSE 4 END,
-			r.c_rank_score DESC,
+			CASE s.c_rank_tier WHEN 'S' THEN 1 WHEN 'A' THEN 2 WHEN 'B' THEN 3 ELSE 4 END,
+			s.c_rank_score DESC,
 			r.stars DESC
 		LIMIT ?;
 	`
@@ -128,14 +129,15 @@ func (s *Service) GetTopContributorsLeaderboard(ctx context.Context, monthKey st
 			COALESCE(u.avatar_url, CONCAT('https://github.com/', u.username, '.png')) as avatar_url,
 			COUNT(pe.id) as merged_count,
 			COALESCE(SUM(CASE 
-				WHEN r.c_rank_tier = 'S' THEN 100
-				WHEN r.c_rank_tier = 'A' THEN 70
+				WHEN s.c_rank_tier = 'S' THEN 100
+				WHEN s.c_rank_tier = 'A' THEN 70
 				ELSE 40 END), 0) as monthly_points,
 			COALESCE(MAX(r.language), 'TypeScript') as primary_lang
 		FROM pr_evaluations pe
-		JOIN users u ON pe.user_id = u.id
-		LEFT JOIN repositories r ON pe.repository_id = r.id
-		WHERE pe.status = 'merged'
+		JOIN users u ON pe.owner_user_id = u.id
+		LEFT JOIN repositories r ON pe.repository_full_name = r.full_name
+		LEFT JOIN latest_snapshots s ON r.id = s.repository_id
+		WHERE pe.outcome = 'hit'
 		  AND pe.merged_at >= ? AND pe.merged_at < ?
 		GROUP BY u.id, u.username, u.slug, u.avatar_url
 		ORDER BY monthly_points DESC, merged_count DESC
