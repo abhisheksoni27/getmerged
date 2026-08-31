@@ -56,14 +56,14 @@ export default function PricingPage() {
       {
         "@type": "Offer",
         name: "Pro Contributor (Monthly)",
-        price: "9.00",
+        price: "5.00",
         priceCurrency: "USD",
         availability: "https://schema.org/InStock",
       },
       {
         "@type": "Offer",
         name: "Pro Contributor (Annual)",
-        price: "90.00",
+        price: "39.00",
         priceCurrency: "USD",
         availability: "https://schema.org/InStock",
       },
@@ -102,7 +102,7 @@ export default function PricingPage() {
         </article>
 
         <article>
-          <h2>Pro Contributor Plan ($9/month or $90/year)</h2>
+          <h2>Pro Contributor Plan ($5/month or $39/year)</h2>
           <p>
             Engineered for serious open source contributors and job seekers aiming to build verifiable public engineering credentials. Features unlimited pull request acceptance forecasting, AI maintainer vibe checks, and automated pre-flight reviews.
           </p>
@@ -116,7 +116,7 @@ export default function PricingPage() {
         </article>
 
         <article>
-          <h2>Recruiter & CTO Talent Pass ($49/month)</h2>
+          <h2>Recruiter & CTO Talent Pass ($25/month)</h2>
           <p>
             Designed for engineering leaders and technical recruiters hiring verified open-source engineers. Filter contributors by real merged PR complexity, language mastery, and maintainer reviews.
           </p>
@@ -139,7 +139,7 @@ export default function PricingPage() {
           </section>
           <section>
             <h3>Is there a discount for annual billing?</h3>
-            <p>Yes, choosing annual billing gives you two months free ($90/year instead of $108/year).</p>
+            <p>Yes, choosing annual billing gives you more than two months free ($39/year instead of $54/year).</p>
           </section>
         </article>
       </section>

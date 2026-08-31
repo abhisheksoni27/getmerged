@@ -13,14 +13,23 @@ import {
   GitPullRequest,
   Activity,
 } from "lucide-react";
-
 import { PAYMENTS_ENABLED } from "@/lib/flags";
 
 type AudienceTab = "contributors" | "recruiter" | "maintainers";
 
+interface UserMe {
+  slug: string;
+  username: string;
+  is_pro?: boolean;
+  has_recruiter_pass?: boolean;
+  has_maintainer_sla?: boolean;
+  billing_cycle?: string;
+}
+
 export default function PricingClient() {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get("tab") as AudienceTab | null;
+  const isCheckoutSuccess = searchParams.get("checkout") === "success" || searchParams.get("welcome") === "1";
 
   const [activeTab, setActiveTab] = useState<AudienceTab>(
     initialTab && ["contributors", "recruiter", "maintainers"].includes(initialTab)
@@ -30,6 +39,7 @@ export default function PricingClient() {
 
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("yearly");
   const [showVerificationNotice, setShowVerificationNotice] = useState(false);
+  const [user, setUser] = useState<UserMe | null>(null);
   const noticeRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -38,6 +48,21 @@ export default function PricingClient() {
       setActiveTab(tabParam);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/v1/auth/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (active && data?.user) {
+          setUser(data.user);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleCheckout = async (product: string, planCycle: "monthly" | "yearly") => {
     if (!PAYMENTS_ENABLED) {
@@ -51,11 +76,11 @@ export default function PricingClient() {
     }
 
     let endpoint = "";
-    if (product === "pdt_opendoor_pro") {
+    if (product === "pdt_0Nmb34qDKDQU7BIeRzHUZ" || product === "pdt_opendoor_pro") {
       endpoint = `/api/v1/user/pro/checkout?billing_cycle=${planCycle}`;
-    } else if (product === "pdt_recruiter_pass") {
-      endpoint = "/api/v1/user/recruiter-pass/checkout";
-    } else if (product === "pdt_maintainer_sla") {
+    } else if (product === "pdt_0Nmb34u42gATqhr9H5ssc" || product === "pdt_recruiter_pass") {
+      endpoint = `/api/v1/user/recruiter-pass/checkout?billing_cycle=${planCycle}`;
+    } else if (product === "pdt_0Nmb34vLLQ8DBLbnrCXY5" || product === "pdt_maintainer_sla") {
       endpoint = "/api/v1/user/maintainer-sla/checkout";
     }
 
@@ -71,7 +96,8 @@ export default function PricingClient() {
         console.error("checkout session failed", e);
       }
     }
-    window.location.href = `https://checkout.dodopayments.com/buy/${product}?billing_cycle=${planCycle}`;
+    const targetProduct = product === "pdt_0Nmb34qDKDQU7BIeRzHUZ" && planCycle === "yearly" ? "pdt_0Nmb34qlI3XGXRYvor2xg" : product;
+    window.location.href = `https://checkout.dodopayments.com/buy/${targetProduct}?billing_cycle=${planCycle}`;
   };
 
   return (
@@ -87,46 +113,62 @@ export default function PricingClient() {
       </div>
 
       {/* Audience Selector Tabs */}
-      <div className="flex items-center justify-center">
-        <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#141414] border border-white/[0.1] shadow-lg">
+      <div className="flex items-center justify-center w-full">
+        <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#141414] border border-white/[0.1] shadow-lg max-w-full overflow-x-auto no-scrollbar scroll-smooth">
           <button
             type="button"
             onClick={() => setActiveTab("contributors")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-all shrink-0 cursor-pointer whitespace-nowrap ${
               activeTab === "contributors"
                 ? "bg-emerald-600 text-white shadow-md shadow-emerald-950/40"
                 : "text-zinc-400 hover:text-white"
             }`}
           >
-            <GitPullRequest className="h-4 w-4" />
-            <span>For Contributors</span>
+            <GitPullRequest className="h-4 w-4 shrink-0" />
+            <span>Contributors</span>
           </button>
           <button
             type="button"
             onClick={() => setActiveTab("recruiter")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-all shrink-0 cursor-pointer whitespace-nowrap ${
               activeTab === "recruiter"
                 ? "bg-blue-600 text-white shadow-md shadow-blue-950/40"
                 : "text-zinc-400 hover:text-white"
             }`}
           >
-            <Briefcase className="h-4 w-4" />
-            <span>For CTOs & Founders 💼</span>
+            <Briefcase className="h-4 w-4 shrink-0" />
+            <span>CTOs & Founders</span>
           </button>
           <button
             type="button"
             onClick={() => setActiveTab("maintainers")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-all shrink-0 cursor-pointer whitespace-nowrap ${
               activeTab === "maintainers"
                 ? "bg-amber-600 text-white shadow-md shadow-amber-950/40"
                 : "text-zinc-400 hover:text-white"
             }`}
           >
-            <Activity className="h-4 w-4" />
-            <span>For Maintainers ⚡</span>
+            <Activity className="h-4 w-4 shrink-0" />
+            <span>Maintainers</span>
           </button>
         </div>
       </div>
+
+      {/* Checkout Success Banner */}
+      {isCheckoutSuccess && (
+        <div className="rounded-2xl border border-emerald-500/50 bg-emerald-950/40 p-5 text-center max-w-2xl mx-auto ring-1 ring-emerald-500/30">
+          <div className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 font-bold mb-1.5">
+            <Sparkles className="h-4 w-4" />
+            <span>MEMBERSHIP ACTIVATED</span>
+          </div>
+          <h3 className="text-base font-bold text-white font-space">
+            Welcome to GetMerged!
+          </h3>
+          <p className="text-xs text-zinc-300 font-sans mt-1 leading-relaxed">
+            Your payment succeeded and your plan entitlements are now active on your profile and dashboard.
+          </p>
+        </div>
+      )}
 
       {/* Merchant verification banner */}
       {!PAYMENTS_ENABLED && (
@@ -186,7 +228,7 @@ export default function PricingClient() {
               >
                 Annual Billing
                 <span className="bg-emerald-500/20 text-emerald-400 text-[10px] px-1.5 py-0.2 rounded-full font-bold">
-                  Save 27%
+                  Save 28%
                 </span>
               </button>
             </div>
@@ -255,10 +297,10 @@ export default function PricingClient() {
 
                 <div className="flex items-baseline gap-1 mb-6">
                   <span className="text-4xl font-bold font-mono text-white">
-                    {billingCycle === "yearly" ? "$79" : "$9"}
+                    {billingCycle === "yearly" ? "$39" : "$5"}
                   </span>
                   <span className="text-xs font-sans text-zinc-400">
-                    {billingCycle === "yearly" ? "/ year ($6.58/mo)" : "/ month"}
+                    {billingCycle === "yearly" ? "/ year ($3.25/mo)" : "/ month"}
                   </span>
                 </div>
 
@@ -286,14 +328,21 @@ export default function PricingClient() {
                 </ul>
               </div>
 
-              <button
-                type="button"
-                onClick={() => handleCheckout("pdt_opendoor_pro", billingCycle)}
-                className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50 cursor-pointer active:scale-[0.98]"
-              >
-                <span>Upgrade to Pro Now</span>
-                <ArrowRight className="h-4 w-4" />
-              </button>
+              {user?.is_pro ? (
+                <div className="w-full py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono font-bold text-xs uppercase tracking-wider text-center flex items-center justify-center gap-1.5">
+                  <Check className="h-4 w-4" />
+                  <span>Pro Plan Active ({user.billing_cycle ?? "yearly"})</span>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleCheckout("pdt_0Nmb34qDKDQU7BIeRzHUZ", billingCycle)}
+                  className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50 cursor-pointer active:scale-[0.98]"
+                >
+                  <span>Upgrade to Pro Now</span>
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -334,7 +383,7 @@ export default function PricingClient() {
               >
                 Annual Billing
                 <span className="bg-blue-500/20 text-blue-400 text-[10px] px-1.5 py-0.2 rounded-full font-bold">
-                  Save 33%
+                  Save 35%
                 </span>
               </button>
             </div>
@@ -402,10 +451,10 @@ export default function PricingClient() {
 
                 <div className="flex items-baseline gap-1 mb-6">
                   <span className="text-4xl font-bold font-mono text-white">
-                    {billingCycle === "yearly" ? "$390" : "$49"}
+                    {billingCycle === "yearly" ? "$195" : "$25"}
                   </span>
                   <span className="text-xs font-sans text-zinc-400">
-                    {billingCycle === "yearly" ? "/ year ($32.50/mo)" : "/ month"}
+                    {billingCycle === "yearly" ? "/ year ($16.25/mo)" : "/ month"}
                   </span>
                 </div>
 
@@ -433,14 +482,21 @@ export default function PricingClient() {
                 </ul>
               </div>
 
-              <button
-                type="button"
-                onClick={() => handleCheckout("pdt_recruiter_pass", billingCycle)}
-                className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-950/50 cursor-pointer active:scale-[0.98]"
-              >
-                <span>Unlock Founder Pass ($49/mo)</span>
-                <ArrowRight className="h-4 w-4" />
-              </button>
+              {user?.has_recruiter_pass ? (
+                <div className="w-full py-2.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400 font-mono font-bold text-xs uppercase tracking-wider text-center flex items-center justify-center gap-1.5">
+                  <Check className="h-4 w-4" />
+                  <span>Founder Pass Active</span>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleCheckout("pdt_0Nmb34u42gATqhr9H5ssc", billingCycle)}
+                  className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-950/50 cursor-pointer active:scale-[0.98]"
+                >
+                  <span>Unlock Founder Pass ($25/mo)</span>
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -519,7 +575,7 @@ export default function PricingClient() {
                 </p>
 
                 <div className="text-3xl font-bold font-mono text-white mb-6">
-                  $29 <span className="text-xs font-normal font-sans text-zinc-400">/ month</span>
+                  $15 <span className="text-xs font-normal font-sans text-zinc-400">/ month</span>
                 </div>
 
                 <ul className="space-y-3 text-xs text-zinc-300 mb-8">
@@ -542,14 +598,21 @@ export default function PricingClient() {
                 </ul>
               </div>
 
-              <button
-                type="button"
-                onClick={() => handleCheckout("pdt_maintainer_sla", "monthly")}
-                className="w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-950/50 cursor-pointer active:scale-[0.98]"
-              >
-                <span>Upgrade Maintainer SLA</span>
-                <ArrowRight className="h-4 w-4" />
-              </button>
+              {user?.has_maintainer_sla ? (
+                <div className="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono font-bold text-xs uppercase tracking-wider text-center flex items-center justify-center gap-1.5">
+                  <Check className="h-4 w-4" />
+                  <span>Maintainer SLA Active</span>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleCheckout("pdt_0Nmb34vLLQ8DBLbnrCXY5", "monthly")}
+                  className="w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-950/50 cursor-pointer active:scale-[0.98]"
+                >
+                  <span>Upgrade Maintainer SLA</span>
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              )}
             </div>
           </div>
         </div>

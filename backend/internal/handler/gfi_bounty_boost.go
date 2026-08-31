@@ -22,11 +22,11 @@ import (
 // boostHostedCheckoutURL is the static hosted DodoPayments product page used
 // as a safe fallback when the checkout-session API is unavailable (AC4) - the
 // buy flow must never dead-end.
-const boostHostedCheckoutURL = "https://checkout.dodopayments.com/buy/pdt_opendoor_boost7"
+const boostHostedCheckoutURL = "https://checkout.dodopayments.com/buy/pdt_0Nmb34tc5ywffZ9vzfQ07"
 
 // boostDodoProductID is the DodoPayments product ID for the one-time
-// 7-day paid bounty listing boost.
-const boostDodoProductID = "pdt_opendoor_boost7"
+// 7-day paid bounty listing boost ($4.50).
+const boostDodoProductID = "pdt_0Nmb34tc5ywffZ9vzfQ07"
 
 // newBoostOrderID returns a high-entropy order id ("boost_<32hex>").
 func newBoostOrderID() (string, error) {

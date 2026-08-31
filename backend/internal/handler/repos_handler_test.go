@@ -127,6 +127,15 @@ func setupBadgeTestDB(t *testing.T) *sqlx.DB {
 		comment_text TEXT NOT NULL,
 		created_at DATETIME NOT NULL
 	);
+
+	CREATE TABLE IF NOT EXISTS repo_pr_events (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		repository_id TEXT NOT NULL,
+		pr_number INTEGER NOT NULL,
+		actor_login TEXT NOT NULL,
+		action TEXT NOT NULL,
+		event_at DATETIME NOT NULL
+	);
 	`
 	database.MustExec(schema)
 
@@ -401,16 +410,16 @@ func TestGetOptimalTimeHandler(t *testing.T) {
 	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('opt-1', 'facebook/react', 'facebook', 'react', 'JavaScript', 220000, ?)`, time.Now())
 	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('opt-2', 'vuejs/core', 'vuejs', 'core', 'TypeScript', 45000, ?)`, time.Now())
 
-	// Seed maintainer comments for facebook/react: maintainer active at 17:00 UTC on Tuesday (e.g., 2026-08-18 17:00:00 UTC)
+	// Seed maintainer events for facebook/react: maintainer active at 17:00 UTC on Tuesday (e.g., 2026-08-18 17:00:00 UTC)
 	for i := 0; i < 10; i++ {
 		tVal := time.Date(2026, 8, 18, 17, i, 0, 0, time.UTC)
-		database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at) VALUES ('opt-1', ?, 'issue_comment', 'gaearon', 'MEMBER', 'LGTM', ?)`, i+1, tVal)
+		database.MustExec(`INSERT INTO repo_pr_events (repository_id, pr_number, actor_login, action, event_at) VALUES ('opt-1', ?, 'gaearon', 'merged', ?)`, i+1, tVal)
 	}
 
-	// Seed maintainer comments for vuejs/core: maintainer active at 09:00 UTC on Wednesday (e.g., 2026-08-19 09:00:00 UTC)
+	// Seed maintainer events for vuejs/core: maintainer active at 09:00 UTC on Wednesday (e.g., 2026-08-19 09:00:00 UTC)
 	for i := 0; i < 15; i++ {
 		tVal := time.Date(2026, 8, 19, 9, i, 0, 0, time.UTC)
-		database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at) VALUES ('opt-2', ?, 'issue_comment', 'yyx990803', 'OWNER', 'Thanks', ?)`, i+1, tVal)
+		database.MustExec(`INSERT INTO repo_pr_events (repository_id, pr_number, actor_login, action, event_at) VALUES ('opt-2', ?, 'yyx990803', 'merged', ?)`, i+1, tVal)
 	}
 
 	r := gin.New()

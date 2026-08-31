@@ -60,14 +60,38 @@ export function OptimalReviewWindow({ fullName, initialData = null }: OptimalRev
     );
   }
 
-  if (!data) return null;
+  if (!data || (data.active_maintainer_count === 0 && data.confidence_score === 0)) {
+    return (
+      <div className="rounded-2xl glass-panel p-5 sm:p-6 border-2 border-white/[0.1] shadow-sm mb-6 font-mono">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800 border border-white/[0.1] text-zinc-400">
+            <Clock className="h-4 w-4 text-zinc-400" />
+          </div>
+          <div>
+            <h3 className="text-base font-bold text-white font-space">
+              Optimal PR Submission Window
+            </h3>
+            <p className="text-[11px] font-sans text-zinc-400">
+              Maintainer review activity heatmap
+            </p>
+          </div>
+        </div>
+        <div className="rounded-xl glass-card border border-white/[0.1] p-4 text-xs font-sans text-zinc-300 flex items-center gap-2">
+          <AlertCircle className="h-4 w-4 text-zinc-400 shrink-0" />
+          <span>
+            Insufficient maintainer review activity recorded in the last 90 days for <strong>{fullName}</strong>. Real submission window patterns will appear as maintainers review and merge incoming pull requests.
+          </span>
+        </div>
+      </div>
+    );
+  }
 
-  const isLowConfidence = data.confidence_score < 0.1 || data.active_maintainer_count === 0;
+  const isLowConfidence = data.confidence_score < 0.2;
   const heatmap = data.hourly_heatmap || new Array(24).fill(0);
-  const peakHour = data.peak_hour_utc ?? 14;
-  const primaryStart = data.primary_start_hour_utc ?? 14;
-  const primaryEnd = data.primary_end_hour_utc ?? 18;
-  const dayWindow = data.recommended_day_window || "Tuesday - Thursday";
+  const peakHour = data.peak_hour_utc;
+  const primaryStart = data.primary_start_hour_utc;
+  const primaryEnd = data.primary_end_hour_utc;
+  const dayWindow = data.recommended_day_window || "Monday - Friday";
 
   const getBarColor = (val: number, isPeak: boolean) => {
     if (isPeak) return "bg-emerald-500 hover:bg-emerald-400";
@@ -114,7 +138,7 @@ export function OptimalReviewWindow({ fullName, initialData = null }: OptimalRev
                 : "bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border-emerald-200"
             }`}
           >
-            {isLowConfidence ? "Low Data Confidence" : `Confidence: ${(data.confidence_score * 100).toFixed(0)}%`}
+            {isLowConfidence ? "Limited Sample Size" : `Confidence: ${(data.confidence_score * 100).toFixed(0)}%`}
           </span>
         </div>
       </div>
@@ -153,7 +177,7 @@ export function OptimalReviewWindow({ fullName, initialData = null }: OptimalRev
             <span>Active Maintainers</span>
           </div>
           <div className="text-lg font-bold font-mono text-white">
-            {data.active_maintainer_count > 0 ? `${data.active_maintainer_count} Tracked` : "Heuristic Estimate"}
+            {data.active_maintainer_count} Tracked
           </div>
           <p className="text-[11px] text-zinc-300 mt-0.5 truncate" title={userTimezone}>
             Detected: {userTimezone}
@@ -229,14 +253,6 @@ export function OptimalReviewWindow({ fullName, initialData = null }: OptimalRev
             ({localWindow} local).
           </span>
         </p>
-        {isLowConfidence && (
-          <p className="flex items-center gap-1.5 text-amber-300 text-[11px] pt-1 border-t border-white/[0.1]">
-            <AlertCircle className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-            <span>
-              Limited recent maintainer review activity recorded for this repository. Prediction based on heuristic baseline.
-            </span>
-          </p>
-        )}
       </div>
     </div>
   );

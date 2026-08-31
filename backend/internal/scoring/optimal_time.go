@@ -25,45 +25,29 @@ type OptimalWindowResult struct {
 // CalculateOptimalWindow analyzes maintainer event times to find prime PR review windows.
 func CalculateOptimalWindow(events []MaintainerEvent, repoFullName ...string) OptimalWindowResult {
 	if len(events) == 0 {
-		startHour := 14
-		dayWindow := "Tuesday - Thursday"
-		if len(repoFullName) > 0 && repoFullName[0] != "" {
-			var h uint32
-			for i := 0; i < len(repoFullName[0]); i++ {
-				h = h*31 + uint32(repoFullName[0][i])
-			}
-			// Spread realistic start hours between 09:00 and 17:00 UTC
-			startHour = 9 + int(h%9)
-			dayOptions := []string{"Monday - Wednesday", "Tuesday - Thursday", "Wednesday - Friday", "Monday - Thursday"}
-			dayWindow = dayOptions[int(h/9)%len(dayOptions)]
-		}
-		peak := (startHour + 2) % 24
-		end := (startHour + 4) % 24
-		var heatmap [24]float64
-		heatmap[startHour] = 0.5
-		heatmap[(startHour+1)%24] = 0.8
-		heatmap[peak] = 1.0
-		heatmap[(startHour+3)%24] = 0.7
-		heatmap[end] = 0.3
-
 		return OptimalWindowResult{
-			PrimaryStartHourUTC:   startHour,
-			PrimaryEndHourUTC:     end,
-			PeakHourUTC:           peak,
+			PrimaryStartHourUTC:   0,
+			PrimaryEndHourUTC:     0,
+			PeakHourUTC:           0,
 			ActiveMaintainerCount: 0,
-			HourlyHeatmap:         heatmap,
-			RecommendedDayWindow:  dayWindow,
+			HourlyHeatmap:         [24]float64{},
+			RecommendedDayWindow:  "",
 			ConfidenceScore:       0.0,
 		}
 	}
 
 	maintainersMap := make(map[string]bool)
 	var hourlyCounts [24]int
+	var dayCounts [7]int
 	var totalWeekdayEvents int
 
 	for _, ev := range events {
 		if ev.MaintainerLogin != "" {
 			maintainersMap[ev.MaintainerLogin] = true
+		}
+
+		if ev.DayOfWeek >= time.Sunday && ev.DayOfWeek <= time.Saturday {
+			dayCounts[ev.DayOfWeek]++
 		}
 
 		// Adjust for global working week: include Friday late night / Monday early morning
@@ -141,6 +125,9 @@ func CalculateOptimalWindow(events []MaintainerEvent, repoFullName ...string) Op
 		confidence = 1.0
 	}
 
+	// Compute active days from real weekday activity
+	recommendedDays := calculateRecommendedDays(dayCounts)
+
 	return OptimalWindowResult{
 		PrimaryStartHourUTC:   primaryStart,
 		PrimaryEndHourUTC:     primaryEnd,
@@ -149,7 +136,28 @@ func CalculateOptimalWindow(events []MaintainerEvent, repoFullName ...string) Op
 		PeakHourUTC:           peakHour,
 		ActiveMaintainerCount: len(maintainersMap),
 		HourlyHeatmap:         heatmap,
-		RecommendedDayWindow:  "Tuesday - Thursday",
+		RecommendedDayWindow:  recommendedDays,
 		ConfidenceScore:       confidence,
 	}
+}
+
+func calculateRecommendedDays(dayCounts [7]int) string {
+	// Weekdays: Mon(1), Tue(2), Wed(3), Thu(4), Fri(5)
+	dayNames := [7]string{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}
+	
+	// Best 3-consecutive weekday block
+	bestSum := -1
+	bestStart := 2 // Default Tuesday
+	for start := 1; start <= 3; start++ { // Mon-Wed (1), Tue-Thu (2), Wed-Fri (3)
+		sum := dayCounts[start] + dayCounts[start+1] + dayCounts[start+2]
+		if sum > bestSum {
+			bestSum = sum
+			bestStart = start
+		}
+	}
+	
+	if bestSum == 0 {
+		return "Monday - Friday"
+	}
+	return dayNames[bestStart] + " - " + dayNames[bestStart+2]
 }

@@ -3,8 +3,10 @@ package handler
 import (
 	"crypto/hmac"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log/slog"
 	"net/http"
@@ -22,7 +24,9 @@ import (
 type DodopaymentsWebhookPayload struct {
 	EventID   string `json:"event_id"`
 	EventType string `json:"event_type"` // "subscription.created", "subscription.active", "subscription.renewed", "subscription.cancelled", "payment.failed", "payment.succeeded"
+	Type      string `json:"type"`       // Standard webhooks format
 	CreatedAt string `json:"created_at"`
+	Timestamp string `json:"timestamp"`  // Standard webhooks format
 	Data struct {
 		PaymentID      string `json:"payment_id"`
 		SubscriptionID string `json:"subscription_id"`
@@ -42,9 +46,10 @@ type DodopaymentsWebhookPayload struct {
 			// Audit deep-purchase metadata (AC5): identifies the one-time
 			// $19 repo deep-audit checkout so the webhook can reactivate the
 			// (user_id, repo_key) purchase idempotently.
-			RepoKey   string `json:"repo_key"`
-			Product   string `json:"product"`
-			SessionID string `json:"session_id"`
+			RepoKey      string `json:"repo_key"`
+			Product      string `json:"product"`
+			SessionID    string `json:"session_id"`
+			BillingCycle string `json:"billing_cycle"`
 		} `json:"metadata"`
 		BillingCycle string `json:"billing_cycle"` // "monthly" | "yearly"
 		ExpiresAt    string `json:"expires_at"`
@@ -56,19 +61,21 @@ type DodopaymentsWebhookPayload struct {
 }
 
 // creditPackDodoProductID is the DodoPayments product ID for the one-time
-// $5 "10 preflight evaluations" pack sold from the quota-exceeded modal.
-const creditPackDodoProductID = "pdt_opendoor_pack10"
+// $2.50 "10 preflight evaluations" pack sold from the quota-exceeded modal.
+const creditPackDodoProductID = "pdt_0Nmb34rTrFZuI3Ft8ak0G"
+const legacyCreditPackDodoProductID = "pdt_opendoor_pack10"
 
 // recruiterPassDodoProductID is the DodoPayments product ID for the monthly
 // Recruiter Pass (Talent Pass) that unlocks /api/v1/recruiter/search.
-const recruiterPassDodoProductID = "pdt_opendoor_recruiter_pass"
+const recruiterPassDodoProductID = "pdt_0Nmb34u42gATqhr9H5ssc"
+const legacyRecruiterPassDodoProductID = "pdt_recruiter_pass"
 
 // isCreditPackPurchase reports whether a payment.succeeded payload is a
 // one-time pack purchase (vs a subscription invoice) by matching SKU in the
 // product cart.
 func isCreditPackPurchase(p DodopaymentsWebhookPayload) bool {
 	for _, item := range p.Data.ProductCart {
-		if item.ProductID == creditPackDodoProductID {
+		if item.ProductID == creditPackDodoProductID || item.ProductID == legacyCreditPackDodoProductID {
 			return true
 		}
 	}
@@ -78,7 +85,7 @@ func isCreditPackPurchase(p DodopaymentsWebhookPayload) bool {
 // isRecruiterPassPurchase reports whether a payload is for the Recruiter Pass.
 func isRecruiterPassPurchase(p DodopaymentsWebhookPayload) bool {
 	for _, item := range p.Data.ProductCart {
-		if item.ProductID == recruiterPassDodoProductID {
+		if item.ProductID == recruiterPassDodoProductID || item.ProductID == legacyRecruiterPassDodoProductID || item.ProductID == "pdt_opendoor_recruiter_pass" {
 			return true
 		}
 	}
@@ -126,9 +133,26 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 		}
 
 		// 1. Validate Webhook Signature
-		sigHeader := c.GetHeader("X-Dodopayments-Signature")
+		sigHeader := c.GetHeader("webhook-signature")
+		if sigHeader == "" {
+			sigHeader = c.GetHeader("Webhook-Signature")
+		}
+		if sigHeader == "" {
+			sigHeader = c.GetHeader("X-Dodopayments-Signature")
+		}
+
+		msgID := c.GetHeader("webhook-id")
+		if msgID == "" {
+			msgID = c.GetHeader("Webhook-Id")
+		}
+		msgTimestamp := c.GetHeader("webhook-timestamp")
+		if msgTimestamp == "" {
+			msgTimestamp = c.GetHeader("Webhook-Timestamp")
+		}
+
 		if cfg.DodopaymentsWebhookSecret != "" {
-			if !validateDodopaymentsSignature(bodyBytes, sigHeader, cfg.DodopaymentsWebhookSecret) {
+			if !validateDodopaymentsStandardSignature(bodyBytes, sigHeader, msgID, msgTimestamp, cfg.DodopaymentsWebhookSecret) {
+				slog.Warn("webhook signature verification failed", "sig", sigHeader, "id", msgID, "ts", msgTimestamp)
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid webhook signature"})
 				return
 			}
@@ -139,6 +163,20 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 		if err := json.Unmarshal(bodyBytes, &payload); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid json payload"})
 			return
+		}
+
+		// Support both standard payload format (type, timestamp, webhook-id) and legacy format
+		if payload.EventType == "" && payload.Type != "" {
+			payload.EventType = payload.Type
+		}
+		if payload.EventID == "" {
+			payload.EventID = msgID
+		}
+		if payload.EventID == "" {
+			payload.EventID = payload.Data.PaymentID
+		}
+		if payload.EventID == "" {
+			payload.EventID = payload.Data.SubscriptionID
 		}
 
 		if payload.EventID == "" {
@@ -172,12 +210,20 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 			eventTime = t
 		}
 
+		cycle := payload.Data.BillingCycle
+		if cycle == "" {
+			cycle = payload.Data.Metadata.BillingCycle
+		}
+		if cycle == "" {
+			cycle = "monthly"
+		}
+
 		var expiresAt *time.Time
 		if t, err := time.Parse(time.RFC3339, payload.Data.ExpiresAt); err == nil {
 			expiresAt = &t
 		} else {
 			exp := eventTime.Add(32 * 24 * time.Hour)
-			if payload.Data.BillingCycle == "yearly" {
+			if cycle == "yearly" {
 				exp = eventTime.Add(366 * 24 * time.Hour)
 			}
 			expiresAt = &exp
@@ -231,11 +277,11 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 					}
 				}
 			} else if isPro {
-				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
+				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, cycle, expiresAt, eventTime)
 			} else if isSLA {
 				_ = entRepo.UpdateMaintainerSLA(c.Request.Context(), userID, payload.Data.SubscriptionID, true, expiresAt)
 			} else {
-				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
+				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, cycle, expiresAt, eventTime)
 			}
 		case "subscription.created", "subscription.active", "subscription.renewed":
 			if isRecruiter {
@@ -245,14 +291,11 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 					return
 				}
 			} else if isPro {
-				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
-				if err := notification.OnPlanChanged(database, userID, true, eventTime); err != nil {
-					slog.Warn("notification plan sweep on upgrade failed", "user_id", userID, "err", err)
-				}
+				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, cycle, expiresAt, eventTime)
 			} else if isSLA {
 				_ = entRepo.UpdateMaintainerSLA(c.Request.Context(), userID, payload.Data.SubscriptionID, true, expiresAt)
 			} else {
-				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, payload.Data.BillingCycle, expiresAt, eventTime)
+				_ = entRepo.UpdateSubscription(c.Request.Context(), userID, true, payload.Data.SubscriptionID, cycle, expiresAt, eventTime)
 				if err := notification.OnPlanChanged(database, userID, true, eventTime); err != nil {
 					slog.Warn("notification plan sweep on upgrade failed", "user_id", userID, "err", err)
 				}
@@ -330,12 +373,38 @@ func DodopaymentsWebhookHandler(cfg *config.Config, entRepo repository.Entitleme
 	}
 }
 
-func validateDodopaymentsSignature(body []byte, signature, secret string) bool {
-	if signature == "" || secret == "" {
+func validateDodopaymentsStandardSignature(body []byte, sigHeader, msgID, msgTimestamp, secret string) bool {
+	if sigHeader == "" || secret == "" {
 		return false
 	}
+
+	// 1. Standard Webhooks format: "v1,<base64_sig>" or space-separated signatures
+	cleanSecret := strings.TrimPrefix(secret, "whsec_")
+	keyBytes, err := base64.StdEncoding.DecodeString(cleanSecret)
+	if err == nil && msgID != "" && msgTimestamp != "" {
+		toSign := fmt.Sprintf("%s.%s.%s", msgID, msgTimestamp, string(body))
+		mac := hmac.New(sha256.New, keyBytes)
+		mac.Write([]byte(toSign))
+		expectedSig := base64.StdEncoding.EncodeToString(mac.Sum(nil))
+
+		for _, part := range strings.Split(sigHeader, " ") {
+			part = strings.TrimSpace(part)
+			if strings.HasPrefix(part, "v1,") {
+				sigVal := strings.TrimPrefix(part, "v1,")
+				if hmac.Equal([]byte(sigVal), []byte(expectedSig)) {
+					return true
+				}
+			}
+		}
+	}
+
+	// 2. Fallback to direct body HMAC hex (legacy format)
 	mac := hmac.New(sha256.New, []byte(secret))
 	mac.Write(body)
 	expectedMAC := hex.EncodeToString(mac.Sum(nil))
-	return hmac.Equal([]byte(signature), []byte(expectedMAC))
+	return hmac.Equal([]byte(sigHeader), []byte(expectedMAC))
+}
+
+func validateDodopaymentsSignature(body []byte, signature, secret string) bool {
+	return validateDodopaymentsStandardSignature(body, signature, "", "", secret)
 }

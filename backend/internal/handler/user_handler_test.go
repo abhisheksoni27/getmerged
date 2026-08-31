@@ -154,7 +154,7 @@ func TestAuthMeResolvesAfterSoftDeletedReauth(t *testing.T) {
 
 	r := gin.New()
 	r.Use(middleware.UserAuth(jwtSecret))
-	r.GET("/api/v1/auth/me", handler.GetCurrentUser(userRepo))
+	r.GET("/api/v1/auth/me", handler.GetCurrentUser(userRepo, nil, nil))
 
 	req, _ := http.NewRequest("GET", "/api/v1/auth/me", nil)
 	req.Header.Set("Authorization", "Bearer "+signedToken)
@@ -214,9 +214,12 @@ func TestUsernameStableAcrossGithubRelogin(t *testing.T) {
 		t.Fatalf("failed to generate token: %v", err)
 	}
 
+	entitlementRepo := repository.NewEntitlementRepository(database)
+	recruiterRepo := repository.NewRecruiterRepository(database)
+
 	r := gin.New()
 	r.Use(middleware.UserAuth(jwtSecret))
-	r.GET("/api/v1/auth/me", handler.GetCurrentUser(userRepo))
+	r.GET("/api/v1/auth/me", handler.GetCurrentUser(userRepo, entitlementRepo, recruiterRepo))
 	r.GET("/api/v1/users/:slug", handler.GetUserProfile(userRepo))
 
 	fetchMe := func() string {

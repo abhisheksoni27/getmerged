@@ -18,7 +18,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const proHostedCheckoutURL = "https://checkout.dodopayments.com/buy/pdt_opendoor_pro"
+const proHostedCheckoutURL = "https://checkout.dodopayments.com/buy/pdt_0Nmb34qDKDQU7BIeRzHUZ"
 
 func newProOrderID() (string, error) {
 	buf := make([]byte, 16)
@@ -64,16 +64,60 @@ func CreateProCheckoutHandler(cfg *config.Config, entRepo repository.Entitlement
 	}
 }
 
+// CancelProSubscriptionHandler handles POST /api/v1/user/pro/cancel.
+// Schedules subscription cancellation at the next billing date on Dodo Payments.
+func CancelProSubscriptionHandler(cfg *config.Config, entRepo repository.EntitlementRepository) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userIDVal, exists := c.Get(middleware.UserIDKey)
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthenticated"})
+			return
+		}
+		userID := userIDVal.(int64)
+
+		ent, err := entRepo.GetEntitlement(c.Request.Context(), userID)
+		if err != nil || ent == nil || !ent.IsPro || ent.SubscriptionID == nil || *ent.SubscriptionID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "no active subscription found"})
+			return
+		}
+
+		if cfg.DodopaymentsAPIKey != "" {
+			reqBody, _ := json.Marshal(map[string]any{
+				"cancel_at_next_billing_date": true,
+			})
+			req, err := http.NewRequestWithContext(c.Request.Context(), http.MethodPatch, fmt.Sprintf("https://live.dodopayments.com/subscriptions/%s", *ent.SubscriptionID), strings.NewReader(string(reqBody)))
+			if err == nil {
+				req.Header.Set("Authorization", "Bearer "+cfg.DodopaymentsAPIKey)
+				req.Header.Set("Content-Type", "application/json")
+				req.Header.Set("Accept", "application/json")
+				client := &http.Client{Timeout: 10 * time.Second}
+				_, _ = client.Do(req)
+			}
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"status":  "cancellation_scheduled",
+			"message": "Your subscription will not renew after the current billing period.",
+		})
+	}
+}
+
 // createDodoProCheckout opens a DodoPayments checkout session for Pro.
 func createDodoProCheckout(ctx context.Context, cfg *config.Config, userID int64, orderID, billingCycle string) (string, string) {
 	if cfg == nil || cfg.DodopaymentsAPIKey == "" {
 		return "", ""
 	}
 
+	productID := cfg.DodopaymentsProductPro
+	if billingCycle == "yearly" && cfg.DodopaymentsProductProYearly != "" {
+		productID = cfg.DodopaymentsProductProYearly
+	}
+
 	body, err := json.Marshal(map[string]any{
 		"product_cart": []map[string]any{
-			{"product_id": cfg.DodopaymentsProductPro, "quantity": 1},
+			{"product_id": productID, "quantity": 1},
 		},
+		"return_url": "https://getmerged.abhishekco.de/pricing?checkout=success",
 		"metadata": map[string]string{
 			"user_id":       fmt.Sprintf("%d", userID),
 			"order_id":      orderID,

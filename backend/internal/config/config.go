@@ -34,12 +34,14 @@ type Config struct {
 	DodopaymentsWebhookSecret string
 	DodopaymentsAPIKey        string
 	DodopaymentsEnvironment   string // test_mode or live_mode
-	DodopaymentsProductPro     string
-	DodopaymentsProductPack10  string
-	DodopaymentsProductAudit   string
-	DodopaymentsProductBoost7  string
-	DodopaymentsProductRecruiterPass string
-	DodopaymentsProductMaintainerSLA string
+	DodopaymentsProductPro            string
+	DodopaymentsProductProYearly      string
+	DodopaymentsProductPack10         string
+	DodopaymentsProductAudit          string
+	DodopaymentsProductBoost7         string
+	DodopaymentsProductRecruiterPass  string
+	DodopaymentsProductRecruiterPassYearly string
+	DodopaymentsProductMaintainerSLA  string
 	// Stripe (Repo Boost — paid featured placement, AC1-AC8).
 	StripeSecretKey        string
 	StripeWebhookSecret    string
@@ -151,22 +153,28 @@ func Load() (*Config, error) {
 	}
 
 	if c.DodopaymentsProductPro == "" {
-		c.DodopaymentsProductPro = "pdt_opendoor_pro"
+		c.DodopaymentsProductPro = "pdt_0Nmb34qDKDQU7BIeRzHUZ"
+	}
+	if c.DodopaymentsProductProYearly == "" {
+		c.DodopaymentsProductProYearly = "pdt_0Nmb34qlI3XGXRYvor2xg"
 	}
 	if c.DodopaymentsProductPack10 == "" {
-		c.DodopaymentsProductPack10 = "pdt_opendoor_pack10"
+		c.DodopaymentsProductPack10 = "pdt_0Nmb34rTrFZuI3Ft8ak0G"
 	}
 	if c.DodopaymentsProductAudit == "" {
-		c.DodopaymentsProductAudit = "pdt_opendoor_audit"
+		c.DodopaymentsProductAudit = "pdt_0Nmb34t0HxGR01OBwxwMU"
 	}
 	if c.DodopaymentsProductBoost7 == "" {
-		c.DodopaymentsProductBoost7 = "pdt_opendoor_boost7"
+		c.DodopaymentsProductBoost7 = "pdt_0Nmb34tc5ywffZ9vzfQ07"
 	}
 	if c.DodopaymentsProductRecruiterPass == "" {
-		c.DodopaymentsProductRecruiterPass = "pdt_recruiter_pass"
+		c.DodopaymentsProductRecruiterPass = "pdt_0Nmb34u42gATqhr9H5ssc"
+	}
+	if c.DodopaymentsProductRecruiterPassYearly == "" {
+		c.DodopaymentsProductRecruiterPassYearly = "pdt_0Nmb34ukLPZTUra83X8LP"
 	}
 	if c.DodopaymentsProductMaintainerSLA == "" {
-		c.DodopaymentsProductMaintainerSLA = "pdt_maintainer_sla"
+		c.DodopaymentsProductMaintainerSLA = "pdt_0Nmb34vLLQ8DBLbnrCXY5"
 	}
 
 	// Optional crawler tuning knobs. Falls back to conservative defaults

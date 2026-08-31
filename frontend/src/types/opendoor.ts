@@ -111,6 +111,11 @@ export interface User {
   email?: string;
   avatar_url?: string;
   profiling_consent?: boolean;
+  is_pro?: boolean;
+  billing_cycle?: string;
+  subscription_expires_at?: string | null;
+  has_recruiter_pass?: boolean;
+  has_maintainer_sla?: boolean;
 }
 
 export interface UserStats {

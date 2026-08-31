@@ -120,6 +120,7 @@ type PublicContributorProfile struct {
 	Headline         string            `json:"headline,omitempty"`
 	MemberSince      time.Time         `json:"member_since"`
 	IsPublic         bool              `json:"is_public"`
+	IsPro            bool              `json:"is_pro"`
 	TotalEvals       int               `json:"total_evals"`
 	AccuracyRate     *float64          `json:"accuracy_rate"`
 	AccuracyN        int               `json:"accuracy_n"`
@@ -627,11 +628,15 @@ func (r *sqlxUserRepository) GetPublicContributorProfileBySlug(ctx context.Conte
 		return nil, err
 	}
 
+	var isPro int
+	_ = r.db.GetContext(ctx, &isPro, "SELECT is_pro FROM user_entitlements WHERE user_id = ?", user.ID)
+
 	profile := &PublicContributorProfile{
 		Username:    user.Username,
 		AvatarURL:   user.AvatarURL,
 		MemberSince: user.CreatedAt,
 		IsPublic:    user.IsPublic,
+		IsPro:       isPro == 1,
 		Repos:       []PublicRepoTier{},
 		Evals:       []PublicEvalItem{},
 		// AC5: zero-PR profiles stay Level 0 with 0 XP.
