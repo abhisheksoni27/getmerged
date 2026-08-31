@@ -443,7 +443,7 @@ func GoogleOAuthCallback(cfg *config.Config, userRepo repository.UserRepository)
 }
 
 // GetCurrentUser handles GET /api/v1/auth/me
-func GetCurrentUser(userRepo repository.UserRepository) gin.HandlerFunc {
+func GetCurrentUser(userRepo repository.UserRepository, entRepo repository.EntitlementRepository, recruiterRepo repository.RecruiterRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userIDVal, exists := c.Get(middleware.UserIDKey)
 		if !exists {
@@ -476,15 +476,45 @@ func GetCurrentUser(userRepo repository.UserRepository) gin.HandlerFunc {
 			avatarURL = &formatted
 		}
 
+		isPro := false
+		var billingCycle *string
+		var expiresAt *time.Time
+		if entRepo != nil {
+			if ent, err := entRepo.GetEntitlement(c.Request.Context(), userID); err == nil && ent != nil {
+				isPro = ent.IsPro
+				billingCycle = ent.BillingCycle
+				expiresAt = ent.SubscriptionExpiresAt
+			}
+		}
+
+		hasRecruiterPass := false
+		if recruiterRepo != nil {
+			if pass, err := recruiterRepo.GetRecruiterPass(c.Request.Context(), userID); err == nil && pass != nil {
+				hasRecruiterPass = pass.Status == "active"
+			}
+		}
+
+		hasMaintainerSLA := false
+		if entRepo != nil {
+			if sla, err := entRepo.GetMaintainerSLA(c.Request.Context(), userID); err == nil && sla != nil {
+				hasMaintainerSLA = sla.Status == "active"
+			}
+		}
+
 		c.JSON(http.StatusOK, gin.H{"user": gin.H{
-			"slug":              user.Slug,
-			"username":          user.Username,
-			"avatar_url":        avatarURL,
-			"profiling_consent": user.ProfilingConsent,
-			"is_public":         user.IsPublic,
-			"skills":            user.Skills,
-			"auth_provider":     authProvider,
-			"has_github":        user.GithubID != nil,
+			"slug":                   user.Slug,
+			"username":               user.Username,
+			"avatar_url":             avatarURL,
+			"profiling_consent":      user.ProfilingConsent,
+			"is_public":              user.IsPublic,
+			"skills":                 user.Skills,
+			"auth_provider":          authProvider,
+			"has_github":             user.GithubID != nil,
+			"is_pro":                 isPro,
+			"billing_cycle":          billingCycle,
+			"subscription_expires_at": expiresAt,
+			"has_recruiter_pass":     hasRecruiterPass,
+			"has_maintainer_sla":     hasMaintainerSLA,
 		}})
 	}
 }

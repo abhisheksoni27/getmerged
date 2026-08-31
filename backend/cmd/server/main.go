@@ -539,7 +539,7 @@ func main() {
 	userApi := r.Group("/api/v1")
 	userApi.Use(middleware.UserAuth(cfg.JWTSecret))
 	{
-		userApi.GET("/auth/me", handler.GetCurrentUser(userRepo))
+		userApi.GET("/auth/me", handler.GetCurrentUser(userRepo, entitlementRepo, recruiterRepo))
 		userApi.PATCH("/user/consent", handler.UpdateConsent(userRepo))
 		userApi.PATCH("/user/profile-visibility", handler.UpdateProfileVisibilityHandler(userRepo))
 		userApi.PATCH("/user/profile", handler.UpdateUserProfileCustomizationHandler(userRepo))
@@ -554,6 +554,7 @@ func main() {
 		// Pro Contributor checkout: creates a Dodo checkout session for the
 		// Pro subscription with server-side attribution metadata.
 		userApi.POST("/user/pro/checkout", handler.CreateProCheckoutHandler(cfg, entitlementRepo))
+		userApi.POST("/user/pro/cancel", handler.CancelProSubscriptionHandler(cfg, entitlementRepo))
 		// Maintainer SLA checkout: creates a Dodo checkout session for the
 		// Maintainer SLA subscription.
 		userApi.POST("/user/maintainer-sla/checkout", handler.CreateMaintainerSLACheckoutHandler(cfg, entitlementRepo))

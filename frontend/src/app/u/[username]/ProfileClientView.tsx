@@ -132,6 +132,12 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
                   <span className="inline-flex items-center px-2 py-0.5 rounded bg-slate-800 text-zinc-300 text-xs font-mono border border-white/[0.12]">
                     @{profile.slug}
                   </span>
+                  {(profile.is_pro || (isOwner && currentUser?.is_pro)) && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-mono font-bold border border-emerald-500/40 shadow-sm shadow-emerald-950/40">
+                      <Zap className="h-3 w-3 text-emerald-400 fill-emerald-400" />
+                      PRO
+                    </span>
+                  )}
                   {dna?.persona && (
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 text-xs font-mono font-bold border border-emerald-700/80">
                       <Sparkles className="h-3 w-3 text-emerald-400" />
@@ -207,6 +213,59 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
               </button>
             ) : null}
           </div>
+
+          {/* Owner Plan & Subscription Management Box */}
+          {isOwner && currentUser?.is_pro && (
+            <div className="mt-4 pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-zinc-200">
+                  Active Subscription:{" "}
+                  <strong className="text-emerald-400 font-semibold uppercase">
+                    Pro ({currentUser.billing_cycle || "yearly"})
+                  </strong>
+                </span>
+                {currentUser.subscription_expires_at && (
+                  <span className="text-zinc-400">
+                    · Renews{" "}
+                    {new Date(currentUser.subscription_expires_at).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/pricing"
+                  className="px-2.5 py-1 rounded bg-white/[0.06] hover:bg-white/[0.12] text-zinc-300 hover:text-white transition-colors"
+                >
+                  View Plans
+                </Link>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (confirm("Are you sure you want to cancel renewal for your Pro subscription? You will keep Pro access until your current period ends.")) {
+                      try {
+                        const res = await fetch(`${API_BASE_URL}/api/v1/user/pro/cancel`, {
+                          method: "POST",
+                          credentials: "include",
+                        });
+                        const data = await res.json();
+                        alert(data.message || "Cancellation scheduled.");
+                      } catch {
+                        alert("Could not reach server. Please try again.");
+                      }
+                    }
+                  }}
+                  className="px-2.5 py-1 rounded bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-rose-200 border border-rose-500/20 transition-colors cursor-pointer"
+                >
+                  Cancel Renewal
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Talent Pass Toggle */}

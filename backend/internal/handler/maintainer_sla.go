@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	maintainerSLAHostedCheckoutURL = "https://checkout.dodopayments.com/buy/pdt_maintainer_sla"
+	maintainerSLAHostedCheckoutURL = "https://checkout.dodopayments.com/buy/pdt_0Nmb34vLLQ8DBLbnrCXY5"
 )
 
 func newMaintainerSLAOrderID() (string, error) {

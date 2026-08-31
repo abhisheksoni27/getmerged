@@ -24,13 +24,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// repoAuditDodoProductID is the DodoPayments product for the one-time $10
+// repoAuditDodoProductID is the DodoPayments product for the one-time $9.50
 // maintainer intelligence audit. Reuses the existing DodoPayments checkout + webhook stack.
-const repoAuditDodoProductID = "pdt_opendoor_audit"
+const repoAuditDodoProductID = "pdt_0Nmb34t0HxGR01OBwxwMU"
 
 // auditHostedCheckoutURL is the safe fallback when the Dodo session API is
 // unavailable — the buy path must never dead-end (matches pack flow AC1/AC5).
-const auditHostedCheckoutURL = "https://checkout.dodopayments.com/buy/pdt_opendoor_audit"
+const auditHostedCheckoutURL = "https://checkout.dodopayments.com/buy/pdt_0Nmb34t0HxGR01OBwxwMU"
 
 // auditFactorWeights mirrors scoring.weights (unexported there) so the report
 // can present per-factor C-Rank contributions. Must sum to 1.0.
@@ -214,7 +214,7 @@ func createDodoAuditCheckout(ctx context.Context, cfg *config.Config, userID int
 		"session_id": sessionToken,
 		// AC6: Dodo redirects here after payment so the client can poll
 		// /api/audit/status and auto-unlock the report.
-		"return_url": returnURL(cfg, repoKey),
+		"return_url": returnURL(cfg, repoKey) + "?checkout=success",
 	})
 	if err != nil {
 		return "", ""

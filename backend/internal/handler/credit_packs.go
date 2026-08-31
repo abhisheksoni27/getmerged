@@ -22,7 +22,7 @@ import (
 // packHostedCheckoutURL is the static hosted DodoPayments product page used
 // as a safe fallback when the checkout-session API is unavailable or the API
 // key is not configured - the buy flow must never dead-end (AC1/AC5).
-const packHostedCheckoutURL = "https://checkout.dodopayments.com/buy/pdt_opendoor_pack10"
+const packHostedCheckoutURL = "https://checkout.dodopayments.com/buy/pdt_0Nmb34rTrFZuI3Ft8ak0G"
 
 const dodoCheckoutsAPIURL = "https://live.dodopayments.com/checkouts"
 
@@ -93,6 +93,7 @@ func createDodoPackCheckout(ctx context.Context, cfg *config.Config, userID int6
 		"product_cart": []map[string]any{
 			{"product_id": creditPackDodoProductID, "quantity": 1},
 		},
+		"return_url": "https://getmerged.abhishekco.de/pr-simulator?checkout=success",
 		"metadata": map[string]string{
 			"user_id":  fmt.Sprintf("%d", userID),
 			"order_id": orderID,

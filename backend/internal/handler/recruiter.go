@@ -151,11 +151,20 @@ func CreateRecruiterPassCheckoutHandler(cfg *config.Config, recruiterRepo reposi
 			return
 		}
 
+		billingCycle := c.DefaultQuery("billing_cycle", "monthly")
+		if billingCycle != "monthly" && billingCycle != "yearly" {
+			billingCycle = "monthly"
+		}
+
 		orderID := "rc_" + strconv.FormatInt(userID, 10) + "_" + strconv.FormatInt(time.Now().UnixNano(), 10)
 
-		checkoutURL, checkoutID := createDodoRecruiterCheckout(c.Request.Context(), cfg, userID, orderID)
+		checkoutURL, checkoutID := createDodoRecruiterCheckout(c.Request.Context(), cfg, userID, orderID, billingCycle)
 		if checkoutURL == "" {
-			checkoutURL = "https://checkout.dodopayments.com/buy/" + cfg.DodopaymentsProductRecruiterPass
+			productID := cfg.DodopaymentsProductRecruiterPass
+			if billingCycle == "yearly" && cfg.DodopaymentsProductRecruiterPassYearly != "" {
+				productID = cfg.DodopaymentsProductRecruiterPassYearly
+			}
+			checkoutURL = "https://checkout.dodopayments.com/buy/" + productID
 		}
 
 		if err := recruiterRepo.CreateRecruiterPassOrder(c.Request.Context(), userID, checkoutID, ""); err != nil {
@@ -173,18 +182,25 @@ func CreateRecruiterPassCheckoutHandler(cfg *config.Config, recruiterRepo reposi
 	}
 }
 
-func createDodoRecruiterCheckout(ctx context.Context, cfg *config.Config, userID int64, orderID string) (string, string) {
+func createDodoRecruiterCheckout(ctx context.Context, cfg *config.Config, userID int64, orderID, billingCycle string) (string, string) {
 	if cfg == nil || cfg.DodopaymentsAPIKey == "" {
 		return "", ""
 	}
 
+	productID := cfg.DodopaymentsProductRecruiterPass
+	if billingCycle == "yearly" && cfg.DodopaymentsProductRecruiterPassYearly != "" {
+		productID = cfg.DodopaymentsProductRecruiterPassYearly
+	}
+
 	body, err := json.Marshal(map[string]any{
 		"product_cart": []map[string]any{
-			{"product_id": cfg.DodopaymentsProductRecruiterPass, "quantity": 1},
+			{"product_id": productID, "quantity": 1},
 		},
+		"return_url": "https://getmerged.abhishekco.de/talent?checkout=success",
 		"metadata": map[string]string{
-			"user_id":  fmt.Sprintf("%d", userID),
-			"order_id": orderID,
+			"user_id":       fmt.Sprintf("%d", userID),
+			"order_id":      orderID,
+			"billing_cycle": billingCycle,
 		},
 	})
 	if err != nil {

@@ -63,7 +63,7 @@ func TestGetMe_AuthProviderMetadata(t *testing.T) {
 		} else if uid == "google" {
 			c.Set(middleware.UserIDKey, googleUserID)
 		}
-		handler.GetCurrentUser(userRepo)(c)
+		handler.GetCurrentUser(userRepo, nil, nil)(c)
 	})
 
 	// Test GitHub user

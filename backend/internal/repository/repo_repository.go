@@ -812,32 +812,48 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 	return repos, nil
 }
 
-// GetMaintainerEvents queries repo_pr_comments for maintainer activity within the last 90 days
-// and extracts HourUTC and DayOfWeek in Go to maintain driver-agnostic compatibility (MySQL & SQLite).
+// GetMaintainerEvents queries maintainer activity within the last 90 days from repo_pr_events
+// (merged, closed, labeled, assigned actions) and repo_pr_comments,
+// extracting HourUTC and DayOfWeek in Go to maintain driver-agnostic compatibility (MySQL & SQLite).
 func (r *sqlxRepoRepository) GetMaintainerEvents(ctx context.Context, repoID string) ([]scoring.MaintainerEvent, error) {
 	since := time.Now().UTC().AddDate(0, 0, -90)
 	query := `
-		SELECT author_login, created_at
-		FROM repo_pr_comments
+		SELECT actor_login, event_at
+		FROM repo_pr_events
 		WHERE repository_id = ?
-		  AND author_association IN ('MEMBER', 'OWNER', 'COLLABORATOR')
-		  AND created_at >= ?
-		ORDER BY created_at DESC
+		  AND action IN ('merged', 'closed', 'labeled', 'assigned')
+		  AND event_at >= ?
+		ORDER BY event_at DESC
+		LIMIT 1000
 	`
 	rows, err := r.db.QueryContext(ctx, query, repoID, since)
 	if err != nil {
-		return nil, err
+		// Fallback to repo_pr_comments if repo_pr_events table does not exist (e.g. legacy test databases)
+		legacyQuery := `
+			SELECT author_login, created_at
+			FROM repo_pr_comments
+			WHERE repository_id = ?
+			  AND author_association IN ('MEMBER', 'OWNER', 'COLLABORATOR')
+			  AND created_at >= ?
+			ORDER BY created_at DESC
+			LIMIT 1000
+		`
+		var lErr error
+		rows, lErr = r.db.QueryContext(ctx, legacyQuery, repoID, since)
+		if lErr != nil {
+			return nil, err
+		}
 	}
 	defer rows.Close()
 
 	var events []scoring.MaintainerEvent
 	for rows.Next() {
 		var authorLogin string
-		var createdAt time.Time
-		if err := rows.Scan(&authorLogin, &createdAt); err != nil {
+		var eventAt time.Time
+		if err := rows.Scan(&authorLogin, &eventAt); err != nil {
 			return nil, err
 		}
-		utcTime := createdAt.UTC()
+		utcTime := eventAt.UTC()
 		events = append(events, scoring.MaintainerEvent{
 			MaintainerLogin: authorLogin,
 			HourUTC:         utcTime.Hour(),

@@ -144,29 +144,29 @@ func TestRepoRepository_GetMaintainerEvents(t *testing.T) {
 	recentMaintainerTime := now.AddDate(0, 0, -5)
 	oldMaintainerTime := now.AddDate(0, 0, -100) // Older than 90 days
 
-	// Valid maintainer event (recent)
-	database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at)
-		VALUES ('repo-1', 101, 'issue_comment', 'alice_member', 'MEMBER', 'looks good', ?)`, recentMaintainerTime)
+	// Valid maintainer event (recent merged)
+	database.MustExec(`INSERT INTO repo_pr_events (repository_id, pr_number, actor_login, action, event_at)
+		VALUES ('repo-1', 101, 'alice_member', 'merged', ?)`, recentMaintainerTime)
 
-	// Valid owner event (recent)
-	database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at)
-		VALUES ('repo-1', 102, 'review_comment', 'bob_owner', 'OWNER', 'approved', ?)`, recentMaintainerTime.Add(time.Hour))
+	// Valid owner event (recent closed)
+	database.MustExec(`INSERT INTO repo_pr_events (repository_id, pr_number, actor_login, action, event_at)
+		VALUES ('repo-1', 102, 'bob_owner', 'closed', ?)`, recentMaintainerTime.Add(time.Hour))
 
-	// Valid collaborator event (recent)
-	database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at)
-		VALUES ('repo-1', 103, 'issue_comment', 'charlie_collab', 'COLLABORATOR', 'merged', ?)`, recentMaintainerTime.Add(2*time.Hour))
+	// Valid collaborator event (recent labeled)
+	database.MustExec(`INSERT INTO repo_pr_events (repository_id, pr_number, actor_login, action, event_at)
+		VALUES ('repo-1', 103, 'charlie_collab', 'labeled', ?)`, recentMaintainerTime.Add(2*time.Hour))
 
-	// Non-maintainer (FIRST_TIME_CONTRIBUTOR / NONE) -> should be excluded
-	database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at)
-		VALUES ('repo-1', 104, 'issue_comment', 'stranger', 'NONE', 'question', ?)`, recentMaintainerTime)
+	// Ignored action (e.g. opened by contributor) -> should be excluded
+	database.MustExec(`INSERT INTO repo_pr_events (repository_id, pr_number, actor_login, action, event_at)
+		VALUES ('repo-1', 104, 'stranger', 'opened', ?)`, recentMaintainerTime)
 
 	// Outdated maintainer event (>90 days old) -> should be excluded
-	database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at)
-		VALUES ('repo-1', 105, 'issue_comment', 'retired_maintainer', 'MEMBER', 'old comment', ?)`, oldMaintainerTime)
+	database.MustExec(`INSERT INTO repo_pr_events (repository_id, pr_number, actor_login, action, event_at)
+		VALUES ('repo-1', 105, 'retired_maintainer', 'merged', ?)`, oldMaintainerTime)
 
 	// Another repo maintainer event -> should be excluded
-	database.MustExec(`INSERT INTO repo_pr_comments (repository_id, pr_number, source_type, author_login, author_association, comment_text, created_at)
-		VALUES ('repo-2', 201, 'issue_comment', 'other_member', 'MEMBER', 'other repo', ?)`, recentMaintainerTime)
+	database.MustExec(`INSERT INTO repo_pr_events (repository_id, pr_number, actor_login, action, event_at)
+		VALUES ('repo-2', 201, 'other_member', 'merged', ?)`, recentMaintainerTime)
 
 	events, err := repoStore.GetMaintainerEvents(ctx, "repo-1")
 	if err != nil {

@@ -77,6 +77,7 @@ export interface PublicProfile {
   skills?: string[];
   member_since: string;
   is_public: boolean;
+  is_pro?: boolean;
   total_evals: number;
   accuracy_rate: number | null;
   accuracy_n: number;
