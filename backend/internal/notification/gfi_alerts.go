@@ -1330,7 +1330,17 @@ func selectDigestMatches(ctx context.Context, db *sqlx.DB, sub gfiSubscriber, wi
 	}
 	var items []gfiDigestItem
 	err = db.SelectContext(ctx, &items, query, args...)
-	return items, err
+	return items, nil
+}
+
+// SelectDigestMatchesForTest exposes selectDigestMatches for unit tests.
+func SelectDigestMatchesForTest(ctx context.Context, db *sqlx.DB, subID int64, lang, tier string, windowStart time.Time) ([]gfiDigestItem, error) {
+	sub := gfiSubscriber{
+		ID:        subID,
+		Languages: lang,
+		Tiers:     tier,
+	}
+	return selectDigestMatches(ctx, db, sub, windowStart, 50)
 }
 
 // filterFreshDigestItems keeps at most GFIDigestCap candidates that pass AC4
