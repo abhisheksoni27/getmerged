@@ -161,16 +161,15 @@ func parseNginxLogsForDate(logDir string, targetDate string) (googlebot int, tot
 			}
 
 			if len(entry.Time) >= 10 && entry.Time[:10] == targetDate {
+				// Exclude internal Next.js SSR loopback and healthchecks
+				if entry.CFConnectingIP == "80.225.224.144" || entry.CFConnectingIP == "127.0.0.1" || entry.UserAgent == "node" || entry.UserAgent == "Next.js Middleware" || strings.Contains(entry.UserAgent, "Go-http-client") {
+					continue
+				}
+
 				totalReq++
 
-				ip := entry.CFConnectingIP
-				if ip == "" {
-					ip = entry.Time
-				}
-				if entry.CFConnectingIP != "" && entry.CFConnectingIP != "127.0.0.1" {
+				if entry.CFConnectingIP != "" {
 					ipMap[entry.CFConnectingIP] = true
-				} else if entry.CFConnectingIP == "" && entry.Time != "" && !strings.Contains(entry.UserAgent, "Go-http-client") {
-					// Fallback
 				}
 
 				uaLower := strings.ToLower(entry.UserAgent)

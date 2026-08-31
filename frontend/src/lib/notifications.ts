@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
+import { API_BASE_URL } from "@/lib/api";
 
 export type NotificationCategory = "watchlist" | "pr" | "achievement" | "gfi";
 

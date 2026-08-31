@@ -1,12 +1,12 @@
 import React from "react";
 import HomeClient from "./HomeClient";
 import type { MacroStats, Repo } from "@/types/opendoor";
+import { API_BASE_URL } from "@/lib/api";
 import Link from "next/link";
 
 async function getMacroStats(): Promise<MacroStats | null> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
-    const res = await fetch(`${baseUrl}/api/v1/stats/macro`, {
+    const res = await fetch(`${API_BASE_URL}/api/v1/stats/macro`, {
       next: { revalidate: 3600 },
     });
     if (!res.ok) return null;
@@ -19,8 +19,7 @@ async function getMacroStats(): Promise<MacroStats | null> {
 
 async function getInitialRepos(): Promise<Repo[]> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
-    const res = await fetch(`${baseUrl}/api/v1/repos?page=1&per_page=30&sort=stars&order=desc&tier=S`, {
+    const res = await fetch(`${API_BASE_URL}/api/v1/repos?page=1&per_page=30&sort=stars&order=desc&tier=S`, {
       next: { revalidate: 3600 },
     });
     if (!res.ok) return [];
@@ -45,9 +44,8 @@ async function getInitialRepos(): Promise<Repo[]> {
 
 async function getInitialSpotlightRepos(): Promise<Repo[]> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
     const res = await fetch(
-      `${baseUrl}/api/v1/repos?scored_today=true&max_last_activity_days=7&exclude_stale=true&exclude_fallback=true&min_tier=B&min_stars=500&sort=c_rank_score&order=desc&per_page=30`,
+      `${API_BASE_URL}/api/v1/repos?scored_today=true&max_last_activity_days=7&exclude_stale=true&exclude_fallback=true&min_tier=B&min_stars=500&sort=c_rank_score&order=desc&per_page=30`,
       { next: { revalidate: 3600 } }
     );
     if (!res.ok) return [];

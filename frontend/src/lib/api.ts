@@ -1,5 +1,13 @@
-export const API_BASE_URL =
+export const PUBLIC_API_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
+
+export const INTERNAL_API_URL =
+  process.env.INTERNAL_API_URL || "http://internal.getmerged.abhishekco.de";
+
+export const API_BASE_URL =
+  typeof window === "undefined"
+    ? INTERNAL_API_URL
+    : PUBLIC_API_URL;
 
 export function getRepoApiUrl(identifier: string | number): string {
   return `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(String(identifier))}`;
