@@ -12,6 +12,7 @@ import { getGradeColor } from "@/components/CRankBadge";
 import { PRLikelihoodData } from "@/components/PRAcceptanceWidget";
 import { TrendPoint } from "@/components/RepoTrendChart";
 import { API_BASE_URL, PUBLIC_API_URL } from "@/lib/api";
+import { getTierCacheConfig } from "@/lib/cache-tier";
 
 // Owner/name shapes GitHub itself allows; anything else stays a hard 404.
 const VALID_SLUG_RE = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$/;
@@ -20,13 +21,13 @@ interface PageProps {
   params: Promise<{ owner: string; name: string }>;
 }
 
-async function getRepoInsights(targetIdOrName: string | number): Promise<AIInsights | null> {
+async function getRepoInsights(targetIdOrName: string | number, revalidate = 86400): Promise<AIInsights | null> {
   try {
     const target = String(targetIdOrName);
     const res = await fetch(
       `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(target)}/insights`,
       {
-        next: { revalidate: 3600 },
+        next: { revalidate },
       }
     );
     if (!res.ok) return null;
@@ -38,13 +39,13 @@ async function getRepoInsights(targetIdOrName: string | number): Promise<AIInsig
   return null;
 }
 
-async function getRelatedRepos(targetIdOrName: string | number): Promise<Repo[]> {
+async function getRelatedRepos(targetIdOrName: string | number, revalidate = 86400): Promise<Repo[]> {
   try {
     const target = String(targetIdOrName);
     const res = await fetch(
       `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(target)}/related?limit=3`,
       {
-        next: { revalidate: 3600 },
+        next: { revalidate },
       }
     );
     if (!res.ok) return [];
@@ -56,13 +57,13 @@ async function getRelatedRepos(targetIdOrName: string | number): Promise<Repo[]>
   return [];
 }
 
-async function getGoodFirstIssues(targetIdOrName: string | number): Promise<GoodFirstIssueItem[]> {
+async function getGoodFirstIssues(targetIdOrName: string | number, revalidate = 86400): Promise<GoodFirstIssueItem[]> {
   try {
     const target = String(targetIdOrName);
     const res = await fetch(
       `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(target)}/good-first-issues`,
       {
-        next: { revalidate: 3600 },
+        next: { revalidate },
       }
     );
     if (!res.ok) return [];
@@ -74,13 +75,13 @@ async function getGoodFirstIssues(targetIdOrName: string | number): Promise<Good
   return [];
 }
 
-async function getPRSizeSweetSpot(targetIdOrName: string | number): Promise<PRSizeSweetSpotData | null> {
+async function getPRSizeSweetSpot(targetIdOrName: string | number, revalidate = 86400): Promise<PRSizeSweetSpotData | null> {
   try {
     const target = String(targetIdOrName);
     const res = await fetch(
       `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(target)}/pr-size-sweetspot`,
       {
-        next: { revalidate: 3600 },
+        next: { revalidate },
       }
     );
     if (!res.ok) return null;
@@ -91,12 +92,12 @@ async function getPRSizeSweetSpot(targetIdOrName: string | number): Promise<PRSi
   return null;
 }
 
-async function getPRLikelihood(fullName: string): Promise<PRLikelihoodData | null> {
+async function getPRLikelihood(fullName: string, revalidate = 86400): Promise<PRLikelihoodData | null> {
   try {
     const res = await fetch(
       `${API_BASE_URL}/api/v1/pr-likelihood?name=${encodeURIComponent(fullName)}`,
       {
-        next: { revalidate: 3600 },
+        next: { revalidate },
       }
     );
     if (!res.ok) return null;
@@ -107,12 +108,12 @@ async function getPRLikelihood(fullName: string): Promise<PRLikelihoodData | nul
   return null;
 }
 
-async function getOptimalTime(fullName: string): Promise<OptimalTimeResult | null> {
+async function getOptimalTime(fullName: string, revalidate = 86400): Promise<OptimalTimeResult | null> {
   try {
     const res = await fetch(
       `${API_BASE_URL}/api/v1/optimal-time?name=${encodeURIComponent(fullName)}`,
       {
-        next: { revalidate: 3600 },
+        next: { revalidate },
       }
     );
     if (!res.ok) return null;
@@ -123,12 +124,12 @@ async function getOptimalTime(fullName: string): Promise<OptimalTimeResult | nul
   return null;
 }
 
-async function getRepoTrend(fullName: string): Promise<TrendPoint[]> {
+async function getRepoTrend(fullName: string, revalidate = 86400): Promise<TrendPoint[]> {
   try {
     const res = await fetch(
       `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/trend?days=90`,
       {
-        next: { revalidate: 3600 },
+        next: { revalidate },
       }
     );
     if (!res.ok) return [];
@@ -281,16 +282,18 @@ export default async function RepoDetailPage({ params }: PageProps) {
   }
 
   const targetInsightKey = repo?.id ? String(repo.id) : repo.full_name;
+  const tierConfig = getTierCacheConfig(repo.c_rank_tier || repo.class_rank);
+  const dynamicTtl = tierConfig.revalidate;
   
   // Parallel Server Fetch: insights, related repos, good first issues, pr size sweet spot, likelihood, optimal time, and 90d trend
   const [insights, relatedRepos, gfiList, sweetSpot, likelihood, optimalTime, trend] = await Promise.all([
-    getRepoInsights(targetInsightKey),
-    getRelatedRepos(targetInsightKey),
-    getGoodFirstIssues(targetInsightKey),
-    getPRSizeSweetSpot(targetInsightKey),
-    getPRLikelihood(fullName),
-    getOptimalTime(fullName),
-    getRepoTrend(fullName),
+    getRepoInsights(targetInsightKey, dynamicTtl),
+    getRelatedRepos(targetInsightKey, dynamicTtl),
+    getGoodFirstIssues(targetInsightKey, dynamicTtl),
+    getPRSizeSweetSpot(targetInsightKey, dynamicTtl),
+    getPRLikelihood(fullName, dynamicTtl),
+    getOptimalTime(fullName, dynamicTtl),
+    getRepoTrend(fullName, dynamicTtl),
   ]);
 
   // Schema.org JSON-LD Structured Data

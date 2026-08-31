@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
+import { getTierCacheControlHeader } from "@/lib/cache-tier";
 
 export async function GET(
   request: NextRequest,
@@ -58,10 +59,13 @@ ${
 Source: GetMerged Open Source Explorer (https://getmerged.abhishekco.de/repo/${owner}/${name})
 `;
 
+    const cacheControl = getTierCacheControlHeader(rank);
     return new NextResponse(markdown, {
       headers: {
         "Content-Type": "text/markdown; charset=utf-8",
-        "Cache-Control": "public, max-age=3600, s-maxage=3600",
+        "Cache-Control": cacheControl,
+        "CDN-Cache-Control": cacheControl,
+        "Cloudflare-CDN-Cache-Control": cacheControl,
       },
     });
   } catch {
