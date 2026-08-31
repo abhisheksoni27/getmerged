@@ -21,6 +21,7 @@ const (
 	CategoryPR          = "pr"
 	CategoryAchievement = "achievement"
 	CategoryGFI         = "gfi"
+	CategoryWeeklyWrap  = "weekly_wrap"
 )
 
 var validCategories = map[string]struct{}{
@@ -28,6 +29,7 @@ var validCategories = map[string]struct{}{
 	CategoryPR:          {},
 	CategoryAchievement: {},
 	CategoryGFI:         {},
+	CategoryWeeklyWrap:  {},
 }
 
 // FreeDeliveryDelay is the delay applied to Free-tier notifications: they are

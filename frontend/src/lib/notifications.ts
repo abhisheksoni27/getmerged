@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { API_BASE_URL } from "@/lib/api";
 
-export type NotificationCategory = "watchlist" | "pr" | "achievement" | "gfi";
+export type NotificationCategory = "watchlist" | "pr" | "achievement" | "gfi" | "weekly_wrap";
 
 export const CATEGORIES: NotificationCategory[] = [
   "watchlist",
   "pr",
   "achievement",
   "gfi",
+  "weekly_wrap",
 ];
 
 export const CATEGORY_LABELS: Record<
@@ -29,6 +30,10 @@ export const CATEGORY_LABELS: Record<
   gfi: {
     label: "Good first issues",
     hint: "When a matched good-first-issue is found.",
+  },
+  weekly_wrap: {
+    label: "Sunday Weekly Contributor Wrap",
+    hint: "Weekly recap of your PR streak, Karma growth, and personalized good first issues.",
   },
 };
 

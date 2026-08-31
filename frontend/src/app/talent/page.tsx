@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   title: "WorkDone Database - Search Developers by Proof of Work | GetMerged",
   description:
     "Stop screening resume buzzwords. Search 50,000+ software engineers indexed by real pull requests merged into active open-source codebases. Filter by language, Karma reputation, and codebase seniority.",
+  robots: {
+    index: false,
+    follow: false,
+  },
   alternates: {
     canonical: "https://getmerged.abhishekco.de/talent",
   },

@@ -2,9 +2,12 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
+	"github.com/abhisheksoni27/opendoor/internal/notification"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 )
@@ -58,6 +61,13 @@ func (h *SniperHandler) SubscribeSniper(c *gin.Context) {
 		}
 	}
 
+	if req.WebhookURL != "" {
+		if err := notification.ValidateWebhookURL(req.WebhookURL); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+	}
+
 	userID, _ := getUserIDFromCtx(c)
 	var userIDVal any = nil
 	if userID > 0 {
@@ -87,6 +97,67 @@ func (h *SniperHandler) SubscribeSniper(c *gin.Context) {
 		"frequency": req.Frequency,
 		"channel":   req.Channel,
 	})
+}
+
+// TestWebhookRequest represents payload for dispatching an immediate live test alert
+type TestWebhookRequest struct {
+	WebhookURL string `json:"webhook_url"`
+	Channel    string `json:"channel"` // "discord" or "slack" / generic
+}
+
+// TestSniperWebhook handles POST /api/v1/alerts/test-webhook
+func (h *SniperHandler) TestSniperWebhook(c *gin.Context) {
+	var req TestWebhookRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
+		return
+	}
+	req.WebhookURL = strings.TrimSpace(req.WebhookURL)
+	if req.WebhookURL == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Webhook URL is required"})
+		return
+	}
+	if err := notification.ValidateWebhookURL(req.WebhookURL); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	testMsg := "🎯 **[GetMerged Sniper Test Alert]**\nFresh Good First Issue indexed in your stack: `vercel/next.js` - *Fix edge routing regex cache hit #71249*\nMaintainer Turnaround: **~4h** (Tier S Repo)\nLink: https://getmerged.abhishekco.de/good-first-issue"
+
+	var payload any
+	if strings.Contains(req.WebhookURL, "discord.com") || req.Channel == "discord" {
+		p, err := notification.BuildDiscordPayload(testMsg)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to construct Discord payload"})
+			return
+		}
+		payload = p
+	} else {
+		payload = notification.BuildSlackPayload(testMsg)
+	}
+
+	body, _ := json.Marshal(payload)
+	httpReq, err := http.NewRequestWithContext(c.Request.Context(), "POST", req.WebhookURL, strings.NewReader(string(body)))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to create HTTP request"})
+		return
+	}
+	httpReq.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{Timeout: 8 * time.Second}
+	resp, err := client.Do(httpReq)
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": "Failed to reach webhook destination: " + err.Error()})
+		return
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode >= 400 {
+		c.JSON(http.StatusBadGateway, gin.H{"error": fmt.Sprintf("Webhook endpoint responded with status %d", resp.StatusCode)})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "delivered", "message": "Test alert dispatched successfully!"})
 }
 
 // GetUserSnipers handles GET /api/v1/alerts/my-snipers

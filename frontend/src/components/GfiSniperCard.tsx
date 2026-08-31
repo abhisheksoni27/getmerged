@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
+import React, { useState, useEffect } from "react";
 import {
   Bell,
   Zap,
@@ -9,27 +8,51 @@ import {
   Send,
   Radio,
   Clock,
-  ChevronRight,
   Flame,
   Bot,
+  AlertCircle,
 } from "lucide-react";
+import { API_BASE_URL } from "@/lib/api";
 
 interface GfiSniperCardProps {
-  isPro?: boolean;
   defaultEmail?: string;
 }
 
-export function GfiSniperCard({ isPro = false, defaultEmail = "" }: GfiSniperCardProps) {
-  const [channel, setChannel] = useState<"telegram" | "discord" | "email">("telegram");
-  const [telegramHandle, setTelegramHandle] = useState("");
-  const [discordWebhook, setDiscordWebhook] = useState("");
+export function GfiSniperCard({ defaultEmail = "" }: GfiSniperCardProps) {
+  const [channel, setChannel] = useState<"discord" | "webhook" | "email">("discord");
+  const [webhookUrl, setWebhookUrl] = useState("");
   const [email, setEmail] = useState(defaultEmail);
   const [selectedLangs, setSelectedLangs] = useState<string[]>(["TypeScript", "Go"]);
-  const [frequency, setFrequency] = useState<"instant" | "daily">(isPro ? "instant" : "daily");
-  const [isSaved, setIsSaved] = useState(false);
-  const [testSent, setTestSent] = useState(false);
+  const [frequency, setFrequency] = useState<"instant" | "weekly">("instant");
+
+  const [saving, setSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const availableLangs = ["TypeScript", "Go", "Rust", "Python", "C++", "Java", "Ruby"];
+
+  useEffect(() => {
+    // Load existing sniper subscription if signed in
+    fetch(`${API_BASE_URL}/api/v1/alerts/my-snipers`, { credentials: "include" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.subscriptions && data.subscriptions.length > 0) {
+          const sub = data.subscriptions[0];
+          if (sub.webhook_url) setWebhookUrl(sub.webhook_url);
+          if (sub.email) setEmail(sub.email);
+          if (sub.languages && Array.isArray(sub.languages) && sub.languages.length > 0) {
+            setSelectedLangs(sub.languages);
+          }
+          if (sub.channel === "discord" || sub.channel === "webhook" || sub.channel === "email") {
+            setChannel(sub.channel);
+          }
+          if (sub.frequency) setFrequency(sub.frequency);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const toggleLang = (lang: string) => {
     if (selectedLangs.includes(lang)) {
@@ -41,15 +64,73 @@ export function GfiSniperCard({ isPro = false, defaultEmail = "" }: GfiSniperCar
     }
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 3000);
+    setSaving(true);
+    setErrorMsg(null);
+    setSaveSuccess(false);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/alerts/subscribe-sniper`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          email: channel === "email" ? email : "",
+          webhook_url: channel !== "email" ? webhookUrl : "",
+          channel,
+          frequency,
+          languages: selectedLangs,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to save alert preferences");
+      }
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : "Failed to save alert preferences");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleSendTest = () => {
-    setTestSent(true);
-    setTimeout(() => setTestSent(false), 3000);
+  const handleSendTest = async () => {
+    if (channel === "email") {
+      setTestResult({ success: true, message: "Email subscription preferences saved." });
+      return;
+    }
+
+    if (!webhookUrl) {
+      setErrorMsg("Please enter a Webhook URL first.");
+      return;
+    }
+
+    setTesting(true);
+    setTestResult(null);
+    setErrorMsg(null);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/alerts/test-webhook`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          webhook_url: webhookUrl,
+          channel,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Webhook delivery test failed");
+      }
+      setTestResult({ success: true, message: "✓ Live test alert dispatched to your webhook!" });
+    } catch (err: unknown) {
+      setTestResult({ success: false, message: err instanceof Error ? err.message : "Delivery failed" });
+    } finally {
+      setTesting(false);
+    }
   };
 
   return (
@@ -59,18 +140,18 @@ export function GfiSniperCard({ isPro = false, defaultEmail = "" }: GfiSniperCar
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono font-semibold">
             <Radio className="h-3.5 w-3.5 animate-pulse" />
-            <span>Good First Issue Sniper · Instant Alert Radar</span>
+            <span>Good First Issue Sniper · Webhook Radar</span>
           </div>
           <h3 className="text-xl font-bold font-space text-white">
             Never Miss a Beginner Issue in Your Tech Stack
           </h3>
           <p className="text-xs text-zinc-400 font-sans">
-            Good first issues get claimed within minutes. The Sniper notifies you on Telegram, Discord, or Email the second a maintainer labels one.
+            Good first issues get claimed fast. The Sniper delivers instant webhook payloads to your Discord, Telegram bridge, or custom automation endpoint when maintainers label beginner tickets.
           </p>
         </div>
 
         <span className="glass-card px-3 py-1 rounded-xl text-xs font-mono text-cyan-400 shrink-0 self-start sm:self-auto flex items-center gap-1.5">
-          <Flame className="h-3.5 w-3.5 text-amber-400" /> &lt;30s Latency
+          <Flame className="h-3.5 w-3.5 text-amber-400" /> Webhook Powered
         </span>
       </div>
 
@@ -83,22 +164,6 @@ export function GfiSniperCard({ isPro = false, defaultEmail = "" }: GfiSniperCar
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <button
               type="button"
-              onClick={() => setChannel("telegram")}
-              className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
-                channel === "telegram"
-                  ? "bg-blue-600/20 border-blue-500 text-white shadow-md shadow-blue-950/40"
-                  : "glass-card border-white/[0.08] text-zinc-400 hover:text-white"
-              }`}
-            >
-              <Send className="h-5 w-5 text-blue-400 shrink-0" />
-              <div>
-                <div className="text-xs font-bold font-mono">Telegram Bot</div>
-                <div className="text-[11px] text-zinc-400">Direct instant DM</div>
-              </div>
-            </button>
-
-            <button
-              type="button"
               onClick={() => setChannel("discord")}
               className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
                 channel === "discord"
@@ -109,7 +174,23 @@ export function GfiSniperCard({ isPro = false, defaultEmail = "" }: GfiSniperCar
               <Bot className="h-5 w-5 text-indigo-400 shrink-0" />
               <div>
                 <div className="text-xs font-bold font-mono">Discord Webhook</div>
-                <div className="text-[11px] text-zinc-400">Server channel alert</div>
+                <div className="text-[11px] text-zinc-400">Channel push alert</div>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setChannel("webhook")}
+              className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
+                channel === "webhook"
+                  ? "bg-blue-600/20 border-blue-500 text-white shadow-md shadow-blue-950/40"
+                  : "glass-card border-white/[0.08] text-zinc-400 hover:text-white"
+              }`}
+            >
+              <Send className="h-5 w-5 text-blue-400 shrink-0" />
+              <div>
+                <div className="text-xs font-bold font-mono">Telegram / Custom Hook</div>
+                <div className="text-[11px] text-zinc-400">HTTPS Webhook link</div>
               </div>
             </button>
 
@@ -133,38 +214,29 @@ export function GfiSniperCard({ isPro = false, defaultEmail = "" }: GfiSniperCar
 
         {/* Step 2: Channel Input Details */}
         <div className="p-4 rounded-2xl bg-[#09090b] border border-white/[0.08] space-y-3">
-          {channel === "telegram" && (
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-mono">
-                <label className="text-zinc-300 font-semibold">Your Telegram Username or Chat ID:</label>
-                <a
-                  href="https://t.me/GetMergedSniperBot"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-400 hover:underline flex items-center gap-1 text-[11px]"
-                >
-                  <span>Start @GetMergedSniperBot</span>
-                  <ChevronRight className="h-3 w-3" />
-                </a>
-              </div>
-              <input
-                type="text"
-                value={telegramHandle}
-                onChange={(e) => setTelegramHandle(e.target.value)}
-                placeholder="@your_telegram_username"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-white/[0.1] text-white text-xs font-mono focus:border-cyan-500 focus:outline-none"
-              />
-            </div>
-          )}
-
           {channel === "discord" && (
             <div className="space-y-1.5">
               <label className="text-xs font-mono text-zinc-300 font-semibold">Discord Channel Webhook URL:</label>
               <input
                 type="url"
-                value={discordWebhook}
-                onChange={(e) => setDiscordWebhook(e.target.value)}
+                required
+                value={webhookUrl}
+                onChange={(e) => setWebhookUrl(e.target.value)}
                 placeholder="https://discord.com/api/webhooks/..."
+                className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-white/[0.1] text-white text-xs font-mono focus:border-cyan-500 focus:outline-none"
+              />
+            </div>
+          )}
+
+          {channel === "webhook" && (
+            <div className="space-y-1.5">
+              <label className="text-xs font-mono text-zinc-300 font-semibold">Telegram Bridge or Custom Webhook URL (HTTPS):</label>
+              <input
+                type="url"
+                required
+                value={webhookUrl}
+                onChange={(e) => setWebhookUrl(e.target.value)}
+                placeholder="https://your-webhook-endpoint.com/receive or https://api.telegram.org/..."
                 className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-white/[0.1] text-white text-xs font-mono focus:border-cyan-500 focus:outline-none"
               />
             </div>
@@ -175,6 +247,7 @@ export function GfiSniperCard({ isPro = false, defaultEmail = "" }: GfiSniperCar
               <label className="text-xs font-mono text-zinc-300 font-semibold">Alert Email Address:</label>
               <input
                 type="email"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="developer@example.com"
@@ -210,27 +283,27 @@ export function GfiSniperCard({ isPro = false, defaultEmail = "" }: GfiSniperCar
           </div>
         </div>
 
-        {/* Step 4: Speed Frequency (Pro Upsell Trigger) */}
+        {/* Step 4: Dispatch Frequency */}
         <div className="p-4 rounded-2xl glass-card border border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="text-xs font-mono font-bold text-white flex items-center gap-1.5">
               <Clock className="h-4 w-4 text-cyan-400" />
-              <span>Sniper Alert Latency:</span>
+              <span>Sniper Alert Frequency:</span>
             </div>
             <p className="text-xs text-zinc-400">
-              Free accounts receive daily batch summaries. Pro members get instant sub-minute push alerts.
+              Receive alerts the moment issues are indexed or batch into a weekly digest.
             </p>
           </div>
 
           <div className="inline-flex items-center gap-1 p-1 bg-[#09090b] rounded-xl border border-white/[0.1] font-mono text-xs shrink-0">
             <button
               type="button"
-              onClick={() => setFrequency("daily")}
+              onClick={() => setFrequency("weekly")}
               className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                frequency === "daily" ? "bg-white/[0.1] text-white font-bold" : "text-zinc-400 hover:text-white"
+                frequency === "weekly" ? "bg-white/[0.1] text-white font-bold" : "text-zinc-400 hover:text-white"
               }`}
             >
-              Daily Digest (Free)
+              Weekly Digest
             </button>
             <button
               type="button"
@@ -242,46 +315,57 @@ export function GfiSniperCard({ isPro = false, defaultEmail = "" }: GfiSniperCar
               }`}
             >
               <Zap className="h-3 w-3 text-amber-300" />
-              <span>Instant Real-Time (Pro)</span>
+              <span>Instant Webhook</span>
             </button>
           </div>
         </div>
 
+        {errorMsg && (
+          <div className="p-3 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-mono flex items-center gap-2">
+            <AlertCircle className="h-4 w-4 shrink-0" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
+
+        {testResult && (
+          <div className={`p-3 rounded-xl text-xs font-mono flex items-center gap-2 ${
+            testResult.success
+              ? "bg-emerald-950/40 border border-emerald-500/30 text-emerald-300"
+              : "bg-rose-950/40 border border-rose-500/30 text-rose-300"
+          }`}>
+            {testResult.success ? <Check className="h-4 w-4 shrink-0" /> : <AlertCircle className="h-4 w-4 shrink-0" />}
+            <span>{testResult.message}</span>
+          </div>
+        )}
+
         {/* Submit Bar */}
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/[0.08]">
-          <button
-            type="button"
-            onClick={handleSendTest}
-            className="text-xs font-mono text-zinc-400 hover:text-white flex items-center gap-1 cursor-pointer"
-          >
-            {testSent ? (
-              <span className="text-emerald-400">✓ Test alert dispatched!</span>
-            ) : (
-              <span>Send Sample Test Alert</span>
-            )}
-          </button>
+          {channel !== "email" ? (
+            <button
+              type="button"
+              disabled={testing || !webhookUrl}
+              onClick={handleSendTest}
+              className="text-xs font-mono text-zinc-400 hover:text-white flex items-center gap-1 cursor-pointer disabled:opacity-50"
+            >
+              <span>{testing ? "Testing delivery..." : "Send Test Webhook Alert"}</span>
+            </button>
+          ) : <div />}
 
           <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-            <Link
-              href="/pricing?tab=contributors"
-              className="text-xs font-mono text-cyan-400 hover:underline"
-            >
-              Unlock Unlimited Repos ($9/mo)
-            </Link>
-
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-bold transition-all flex items-center gap-2 shadow-lg shadow-cyan-950/40 cursor-pointer active:scale-[0.98]"
+              disabled={saving}
+              className="px-6 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white font-mono text-xs font-bold transition-all flex items-center gap-2 shadow-lg shadow-cyan-950/40 cursor-pointer active:scale-[0.98]"
             >
-              {isSaved ? (
+              {saveSuccess ? (
                 <>
                   <Check className="h-4 w-4 text-emerald-300" />
-                  <span>Sniper Active!</span>
+                  <span>Preferences Saved!</span>
                 </>
               ) : (
                 <>
                   <Zap className="h-4 w-4" />
-                  <span>Activate Sniper Radar</span>
+                  <span>{saving ? "Saving..." : "Activate Sniper Radar"}</span>
                 </>
               )}
             </button>

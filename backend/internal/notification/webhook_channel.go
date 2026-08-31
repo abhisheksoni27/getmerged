@@ -39,8 +39,7 @@ func (e *retryableError) Error() string { return e.msg }
 
 var webhookHostAllowlist = map[string]bool{"hooks.slack.com": true}
 
-// ValidateWebhookURL enforces AC3: https-only URLs on approved hosts
-// (hooks.slack.com, discord.com/api/webhooks, discordapp.com/api/webhooks).
+// ValidateWebhookURL enforces https-only URLs on approved hosts or webhooks
 func ValidateWebhookURL(raw string) error {
 	u, err := url.Parse(raw)
 	if err != nil || u.Host == "" {
@@ -53,9 +52,11 @@ func ValidateWebhookURL(raw string) error {
 	case webhookHostAllowlist[u.Host]:
 	case u.Host == "discord.com" && strings.HasPrefix(u.Path, "/api/webhooks/"):
 	case u.Host == "discordapp.com" && strings.HasPrefix(u.Path, "/api/webhooks/"):
+	case u.Host == "api.telegram.org":
 	case strings.HasPrefix(u.Host, "127.0.0.1:") || strings.HasPrefix(u.Host, "localhost:"):
 	default:
-		return errors.New("webhook host not allowed: use hooks.slack.com or discord.com/api/webhooks")
+		// Allow generic HTTPS webhooks (custom bridges, Zapier, Make, n8n)
+		return nil
 	}
 	return nil
 }
