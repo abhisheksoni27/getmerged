@@ -11,6 +11,14 @@ export function middleware(request: NextRequest) {
     response.headers.set("X-Robots-Tag", "noindex, follow");
   }
 
+  // If user is logged in (has active auth token), bypass all CDN & browser caching
+  const token = request.cookies.get("opendoor_token")?.value;
+  if (token) {
+    response.headers.set("Cache-Control", "private, no-store, must-revalidate");
+    response.headers.set("Cloudflare-CDN-Cache-Control", "no-store");
+    response.headers.set("CDN-Cache-Control", "no-store");
+  }
+
   return response;
 }
 
