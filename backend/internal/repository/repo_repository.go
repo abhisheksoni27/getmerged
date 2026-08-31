@@ -53,6 +53,7 @@ type RepoFilter struct {
 	MinStars                 int
 	MaxStars                 int
 	Search                   string
+	FullName                 string
 	SortBy                   string
 	Order                    string
 	Limit                    int
@@ -174,9 +175,12 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 		args = append(args, filter.MinMergeRate)
 	}
 
-	if filter.Search != "" {
-		where += " AND (LOWER(r.full_name) LIKE ? OR LOWER(r.description) LIKE ?)"
-		pattern := "%" + strings.ToLower(filter.Search) + "%"
+	if filter.FullName != "" {
+		where += " AND r.full_name = ?"
+		args = append(args, filter.FullName)
+	} else if filter.Search != "" {
+		where += " AND (r.full_name LIKE ? OR r.description LIKE ?)"
+		pattern := "%" + filter.Search + "%"
 		args = append(args, pattern, pattern)
 	}
 
