@@ -544,19 +544,7 @@ export function DashboardClient() {
                   </div>
                 )}
 
-                {/* One-click AI Preflight deep-link (prefills via pr_url auto-fetch) */}
-                {pr.html_url && (
-                  <div className="mt-3">
-                    <Link
-                      href={`/preflight?pr_url=${encodeURIComponent(pr.html_url)}`}
-                      data-testid="dashboard-pr-preflight-cta"
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-300 bg-emerald-950/70 border-emerald-800/80 px-2.5 py-1 text-xs font-semibold text-emerald-300 hover:bg-emerald-950/80 border-emerald-800/80 active:scale-[0.98] transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-                      aria-label={`Run pre-flight check for ${pr.title}`}
-                    >
-                      <Sparkles className="h-3 w-3" /> Run Pre-flight Check
-                    </Link>
-                  </div>
-                )}
+
 
                 {/* AC4: Pro-gated transparent rule-based forecast */}
                 <div className="mt-2">

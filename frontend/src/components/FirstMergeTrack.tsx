@@ -1360,28 +1360,8 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
               </div>
             </div>
 
-            {/* CTA to open preflight evaluation page or manual register */}
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-xl border border-emerald-200 bg-emerald-950/70 border-emerald-800/80/50 p-4">
-                <h4 className="text-xs font-bold text-zinc-300">Preflight Evaluator</h4>
-                <p className="mt-1 text-[11px] text-emerald-300 leading-relaxed">
-                  Run automated heuristics on test coverage, description length, and file diff size for your branch.
-                </p>
-                <div className="mt-3">
-                  <Link
-                    href={
-                      trackState.selectedRepo?.fullName
-                        ? `/preflight?repo=${encodeURIComponent(trackState.selectedRepo.fullName)}`
-                        : `/preflight`
-                    }
-                    target="_blank"
-                    className="inline-flex items-center gap-1.5 rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700"
-                  >
-                    Open Preflight Tool <ExternalLink className="h-3 w-3" />
-                  </Link>
-                </div>
-              </div>
-
+            {/* Registration of PR */}
+            <div className="mt-4">
               <div className="rounded-xl border border-white/[0.1] glass-card p-4">
                 <h4 className="text-xs font-bold text-white">Submitted your PR?</h4>
                 <p className="mt-1 text-[11px] text-zinc-300 leading-relaxed">
@@ -1390,7 +1370,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
                 <div className="mt-3">
                   <button
                     onClick={() => handleManualAdvance(4)}
-                    className="inline-flex items-center gap-1.5 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 cursor-pointer"
                   >
                     Track PR to Merge →
                   </button>

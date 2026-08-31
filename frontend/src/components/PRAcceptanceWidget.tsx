@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import { Clock, Percent, Users, ShieldAlert, Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
+import { Clock, Percent, Users, ShieldAlert, Sparkles, CheckCircle2 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 import { ShareForecastButton } from "@/components/ShareForecastButton";
 
@@ -88,17 +87,6 @@ export function PRAcceptanceWidget({ owner, name, initialData = null }: PRAccept
             readyToMerge={data.overall_acceptance_rate !== null ? data.overall_acceptance_rate >= 50 : undefined}
             variant="compact"
           />
-          <Link
-            href={`/preflight?repo=${encodeURIComponent(`${owner}/${name}`)}`}
-            data-testid="pr-preflight-cta"
-            title={`Run pre-flight evaluation for ${owner}/${name}`}
-            aria-label={`Run pre-flight evaluation for ${owner}/${name}`}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white border border-emerald-800 hover:bg-emerald-500 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 active:scale-[0.98] shadow-sm"
-          >
-            <Sparkles className="h-3.5 w-3.5 text-white" aria-hidden="true" />
-            <span>Run Pre-flight PR Check</span>
-            <ArrowRight className="h-3 w-3 text-white" aria-hidden="true" />
-          </Link>
           <span className="text-[11px] font-sans text-zinc-300 glass-card px-2 py-0.5 rounded-full">
             Precomputed via Live PR Events
           </span>
