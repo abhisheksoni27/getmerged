@@ -48,10 +48,10 @@ test.describe("Repo Metadata & FAQ Unit Tests (IDEA-20260820-02)", () => {
   test("buildRepoMetadata produces honest 'Unscored' title and description for unscored repo (zero score fabrication)", () => {
     const meta = buildRepoMetadata("facebook/react", mockUnscoredRepo);
 
-    expect(meta.title).toBe("facebook/react Contributor Telemetry & C-Rank™: Unscored | GetMerged");
+    expect(meta.title).toBe("facebook/react Review Speed & PR Merge Stats: Unscored | GetMerged");
     expect(meta.title).not.toContain("75.0");
     expect(meta.title).not.toContain("A Tier");
-    expect(meta.description).toContain("currently has no public PR telemetry recorded on GitHub");
+    expect(meta.description).toContain("currently has no public pull request activity recorded on GitHub");
     expect(meta.description).not.toContain("scored 75.0/100");
   });
 
@@ -72,13 +72,13 @@ test.describe("Repo Metadata & FAQ Unit Tests (IDEA-20260820-02)", () => {
     const scoreFaq = faqs.find((f) => f.q.includes("Unscored") || f.q.includes("C-Rank"));
     expect(scoreFaq).toBeDefined();
     expect(scoreFaq?.q).toBe("What does the Unscored status represent?");
-    expect(scoreFaq?.a).toContain("currently has no indexed public pull request reviews or maintainer telemetry on GitHub");
+    expect(scoreFaq?.a).toContain("currently has no indexed public pull request reviews or activity on GitHub");
     expect(scoreFaq?.a).not.toContain("places facebook/react in the A tier");
     expect(scoreFaq?.a).not.toContain("75.0");
 
     const welcomingFaq = faqs.find((f) => f.q.includes("welcoming"));
     expect(welcomingFaq).toBeDefined();
-    expect(welcomingFaq?.a).toContain("No public review velocity has been recorded on GitHub for this project");
+    expect(welcomingFaq?.a).toContain("No public review history has been recorded on GitHub for this project yet");
   });
 
   test("buildRepoFaqList keeps standard telemetry calculations for scored repo", () => {
