@@ -6,10 +6,12 @@ import (
 	"crypto/sha256"
 	"database/sql"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"html"
 	"log/slog"
+	"net/http"
 	"net/mail"
 	"regexp"
 	"strings"
@@ -460,10 +462,10 @@ func EnqueueGFIInstantAlerts(ctx context.Context, db *sqlx.DB, repoID string, is
 				// In-App Notification Center: emit alert if subscriber is a registered user
 				var uID int64
 				if err := tx.GetContext(ctx, &uID, `SELECT id FROM users WHERE email = ? LIMIT 1`, sub.Email); err == nil && uID > 0 {
-				notifTitle := fmt.Sprintf("New Good First Issue in %s", repo.FullName)
-				notifMsg := fmt.Sprintf("Issue #%d matched your preferred languages and tech stack.", num)
-				notifLink := fmt.Sprintf("/repos/%s", repoID)
-				go WriteNotification(db, uID, CategoryGFI, NotificationPayload{Title: notifTitle, Message: notifMsg, LinkURL: notifLink})
+					notifTitle := fmt.Sprintf("New Good First Issue in %s", repo.FullName)
+					notifMsg := fmt.Sprintf("Issue #%d matched your preferred languages and tech stack.", num)
+					notifLink := fmt.Sprintf("/repos/%s", repoID)
+					go WriteNotification(db, uID, CategoryGFI, NotificationPayload{Title: notifTitle, Message: notifMsg, LinkURL: notifLink})
 				}
 			}
 		}
@@ -476,6 +478,12 @@ func EnqueueGFIInstantAlerts(ctx context.Context, db *sqlx.DB, repoID string, is
 				return matched, fmt.Errorf("gfi-alert batch roll: %w", err)
 			}
 		}
+	}
+
+	// Dispatch real-time webhooks (Discord / Custom Webhooks) for newly indexed issues
+	for _, num := range fresh {
+		issueURL := fmt.Sprintf("https://getmerged.abhishekco.de/good-first-issue")
+		go DispatchSniperWebhooks(context.Background(), db, repo, num, fmt.Sprintf("Issue #%d in %s", num, repo.FullName), issueURL)
 	}
 	if err := tx.Commit(); err != nil {
 		return matched, err
@@ -1702,13 +1710,74 @@ func ResetGFIDigestLockForTest() {
 	gfiDigestLock = map[string]bool{}
 }
 
-// SelectDigestMatchesForTest exposes digest matching queries for unit tests.
-func SelectDigestMatchesForTest(ctx context.Context, db *sqlx.DB, subID int64, languages, tiers string, windowStart time.Time) ([]gfiDigestItem, error) {
-	sub := gfiSubscriber{
-		ID:        subID,
-		Languages: languages,
-		Tiers:     tiers,
+// DispatchSniperWebhooks triggers real-time Discord & Webhook alerts for active sniper subscriptions
+func DispatchSniperWebhooks(ctx context.Context, db *sqlx.DB, repo gfiRepoCtx, issueNumber int, title, url string) {
+	if db == nil {
+		return
 	}
-	return selectDigestMatches(ctx, db, sub, windowStart, GFIDigestCap)
+	var snipers []struct {
+		ID         int64  `db:"id"`
+		UserID     *int64 `db:"user_id"`
+		LangsJSON  string `db:"languages_json"`
+		Channel    string `db:"channel"`
+		WebhookURL string `db:"webhook_url"`
+		Frequency  string `db:"frequency"`
+	}
+
+	query := `
+		SELECT id, user_id, languages_json, channel, webhook_url, frequency
+		FROM user_sniper_subscriptions
+		WHERE is_active = TRUE AND webhook_url != ''
+	`
+	if err := db.SelectContext(ctx, &snipers, query); err != nil || len(snipers) == 0 {
+		return
+	}
+
+	repoLang := strings.ToLower(strings.TrimSpace(repo.Language))
+	msg := fmt.Sprintf("🎯 **[GetMerged Sniper Alert]**\nFresh Good First Issue in **%s** (%s):\n#%d - *%s*\nTurnaround: **~%.1fh** (Tier %s)\nLink: %s",
+		repo.FullName, repo.Language, issueNumber, title, repo.ResponseP50Hours, repo.Tier, url)
+
+	client := &http.Client{Timeout: 8 * time.Second}
+
+	for _, s := range snipers {
+		if s.Frequency != "instant" && s.Frequency != "" {
+			continue
+		}
+		var langs []string
+		_ = json.Unmarshal([]byte(s.LangsJSON), &langs)
+		matched := len(langs) == 0
+		for _, l := range langs {
+			if strings.EqualFold(l, repoLang) || strings.EqualFold(l, "all") {
+				matched = true
+				break
+			}
+		}
+		if !matched {
+			continue
+		}
+
+		go func(targetURL, ch string) {
+			var payload any
+			if strings.Contains(targetURL, "discord.com") || ch == "discord" {
+				p, err := BuildDiscordPayload(msg)
+				if err != nil {
+					return
+				}
+				payload = p
+			} else {
+				payload = BuildSlackPayload(msg)
+			}
+			body, _ := json.Marshal(payload)
+			req, err := http.NewRequestWithContext(context.Background(), "POST", targetURL, strings.NewReader(string(body)))
+			if err != nil {
+				return
+			}
+			req.Header.Set("Content-Type", "application/json")
+			resp, err := client.Do(req)
+			if err == nil && resp != nil {
+				_ = resp.Body.Close()
+			}
+		}(s.WebhookURL, s.Channel)
+	}
 }
 

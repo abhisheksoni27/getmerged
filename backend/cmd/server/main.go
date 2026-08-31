@@ -513,6 +513,7 @@ func main() {
 
 		// Issue Sniper Alert Service (Story 1.2)
 		api.POST("/alerts/subscribe-sniper", middleware.OptionalUserAuth(cfg.JWTSecret), sniperHandler.SubscribeSniper)
+		api.POST("/alerts/test-webhook", middleware.OptionalUserAuth(cfg.JWTSecret), sniperHandler.TestSniperWebhook)
 
 		// Contributor Karma & Reputation Badges
 		api.GET("/u/:username/karma", handler.GetKarmaHandler(userRepo, profileRepo))
@@ -568,8 +569,6 @@ func main() {
 		userApi.GET("/user/referral", handler.GetMyReferral(entitlementRepo))
 		userApi.GET("/stack/user-repos", stackHandler.GetUserRepos)
 		userApi.GET("/alerts/my-snipers", sniperHandler.GetUserSnipers)
-		userApi.POST("/alerts/subscribe-sniper", sniperHandler.SubscribeSniper)
-		userApi.POST("/alerts/test-webhook", sniperHandler.TestSniperWebhook)
 
 		// Maintainer Claims & C-Rank Console (AC1, AC2, AC3, AC6, AC8)
 		userApi.POST("/repos/:id/claim", handler.PostClaimRepoHandler(claimSvc))

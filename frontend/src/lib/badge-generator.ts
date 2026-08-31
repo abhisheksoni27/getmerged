@@ -141,7 +141,8 @@ export async function generateRepoBadgeSvg(owner: string, name: string) {
   const rightWidth = Math.max(140, valueText.length * 7.2 + 24);
   const totalWidth = leftWidth + rightWidth;
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="24" viewBox="0 0 ${totalWidth} 24" fill="none" role="img" aria-label="GetMerged: ${valueText}">
+  return {
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="24" viewBox="0 0 ${totalWidth} 24" fill="none" role="img" aria-label="GetMerged: ${valueText}">
   <title>GetMerged Repo: ${valueText}</title>
   <defs>
     <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
@@ -180,5 +181,7 @@ export async function generateRepoBadgeSvg(owner: string, name: string) {
     <text x="28" y="16" fill="#f4f4f5" letter-spacing="-0.2px">Get<tspan fill="#10b981">Merged</tspan></text>
     <text x="${leftWidth + rightWidth / 2}" y="16" fill="${theme.text}" text-anchor="middle" font-weight="600" letter-spacing="-0.1px">${valueText}</text>
   </g>
-</svg>`;
+</svg>`,
+    tier,
+  };
 }
