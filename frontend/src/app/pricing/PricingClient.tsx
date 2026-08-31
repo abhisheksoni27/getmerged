@@ -75,7 +75,17 @@ export default function PricingClient() {
   };
 
   return (
-    <div className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 sm:py-12 space-y-10">
+    <div className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 sm:py-12 space-y-8">
+      {/* Header Section */}
+      <div className="text-center max-w-2xl mx-auto space-y-3">
+        <h1 className="text-3xl sm:text-5xl font-black text-white font-space tracking-tight">
+          Pro Contributor Plans & Pricing
+        </h1>
+        <p className="text-sm sm:text-base text-zinc-300 font-sans leading-relaxed">
+          Upgrade to GetMerged Pro for unlimited repository acceptance forecasts, live maintainer vibe checks, and automated pre-flight pull request reviews.
+        </p>
+      </div>
+
       {/* Audience Selector Tabs */}
       <div className="flex items-center justify-center">
         <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#141414] border border-white/[0.1] shadow-lg">

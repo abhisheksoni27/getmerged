@@ -308,7 +308,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
           </div>
 
           <h1 className="text-3xl sm:text-6xl font-black text-white tracking-tight font-space leading-[1.1] max-w-4xl">
-            Top Welcoming Open-Source {languageName} Repositories
+            {`Top Welcoming Open-Source ${languageName} Repositories`}
           </h1>
           <p className="mt-4 text-base sm:text-lg text-zinc-200 max-w-3xl leading-relaxed font-sans">
             Top welcoming {languageName} repositories. Scored by real 90-day external PR merge rates, maintainer review turnaround speed, and first-time contributor success.
