@@ -259,13 +259,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/fsprojects/FSharpLint</loc>
+    <loc>https://getmerged.abhishekco.de/mbraceproject/FsPickler</loc>
     <lastmod>2026-08-30T12:18:51Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mbraceproject/FsPickler</loc>
+    <loc>https://getmerged.abhishekco.de/fsprojects/FSharpLint</loc>
     <lastmod>2026-08-30T12:18:51Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -397,6 +397,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/ionide/Fornax</loc>
+    <lastmod>2026-08-30T12:18:51Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/ieviev/resharp-dotnet</loc>
     <lastmod>2026-08-30T12:18:51Z</lastmod>
     <changefreq>daily</changefreq>
@@ -404,12 +410,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dsyme/dsyme-presentations</loc>
-    <lastmod>2026-08-30T12:18:51Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/ionide/Fornax</loc>
     <lastmod>2026-08-30T12:18:51Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -535,7 +535,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/BSLang/BS</loc>
+    <loc>https://getmerged.abhishekco.de/slaveOftime/Fun.Blazor</loc>
     <lastmod>2026-08-30T12:18:51Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -547,7 +547,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/slaveOftime/Fun.Blazor</loc>
+    <loc>https://getmerged.abhishekco.de/BSLang/BS</loc>
     <lastmod>2026-08-30T12:18:51Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

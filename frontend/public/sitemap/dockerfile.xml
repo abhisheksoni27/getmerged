@@ -595,14 +595,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/fabiocicerchia/nginx-lua</loc>
-    <lastmod>2026-08-17T07:30:47Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/StaPH-B/docker-builds</loc>
+    <lastmod>2026-08-20T17:29:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/StaPH-B/docker-builds</loc>
-    <lastmod>2026-08-20T17:29:46Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/fabiocicerchia/nginx-lua</loc>
+    <lastmod>2026-08-17T07:30:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -841,13 +841,19 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/laravel/vapor-php-build</loc>
+    <lastmod>2026-08-20T17:29:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/streetsidesoftware/cspell-cli</loc>
     <lastmod>2026-08-18T22:27:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/laravel/vapor-php-build</loc>
+    <loc>https://getmerged.abhishekco.de/f4exb/sdrangel-docker</loc>
     <lastmod>2026-08-20T17:29:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -855,12 +861,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/BenoitAnastay/paperless-home-assistant-addon</loc>
     <lastmod>2026-08-17T07:30:47Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/f4exb/sdrangel-docker</loc>
-    <lastmod>2026-08-20T17:29:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

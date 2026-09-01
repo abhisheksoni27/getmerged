@@ -163,13 +163,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/provable-things/ethereum-examples</loc>
+    <loc>https://getmerged.abhishekco.de/weiroll/weiroll</loc>
     <lastmod>2026-08-30T11:32:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/weiroll/weiroll</loc>
+    <loc>https://getmerged.abhishekco.de/provable-things/ethereum-examples</loc>
     <lastmod>2026-08-30T11:32:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -199,13 +199,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/farcasterxyz/contracts</loc>
+    <loc>https://getmerged.abhishekco.de/WeBankBlockchain/SmartDev-Contract</loc>
     <lastmod>2026-08-30T11:32:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/WeBankBlockchain/SmartDev-Contract</loc>
+    <loc>https://getmerged.abhishekco.de/farcasterxyz/contracts</loc>
     <lastmod>2026-08-30T11:32:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -307,13 +307,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/bokkypoobah/BokkyPooBahsDateTimeLibrary</loc>
+    <loc>https://getmerged.abhishekco.de/graphprotocol/contracts</loc>
     <lastmod>2026-08-30T11:32:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/graphprotocol/contracts</loc>
+    <loc>https://getmerged.abhishekco.de/bokkypoobah/BokkyPooBahsDateTimeLibrary</loc>
     <lastmod>2026-08-30T11:32:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -325,13 +325,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/keep3r-network/keep3r.network</loc>
+    <loc>https://getmerged.abhishekco.de/pancakeswap/pancake-smart-contracts</loc>
     <lastmod>2026-08-30T11:32:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/pancakeswap/pancake-smart-contracts</loc>
+    <loc>https://getmerged.abhishekco.de/keep3r-network/keep3r.network</loc>
     <lastmod>2026-08-30T11:32:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -355,25 +355,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/winsznx/bull-rush</loc>
-    <lastmod>2026-08-30T11:32:05Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/morpho-org/morpho-blue</loc>
     <lastmod>2026-08-30T11:32:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Rivaill/CryptoVulhub</loc>
+    <loc>https://getmerged.abhishekco.de/winsznx/bull-rush</loc>
     <lastmod>2026-08-30T11:32:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/sablier-labs/evm-monorepo</loc>
+    <lastmod>2026-08-30T11:32:05Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Rivaill/CryptoVulhub</loc>
     <lastmod>2026-08-30T11:32:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -505,13 +505,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/alchemyplatform/learn-solidity-presentations</loc>
+    <loc>https://getmerged.abhishekco.de/Consensys/anonymous-zether</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Consensys/anonymous-zether</loc>
+    <loc>https://getmerged.abhishekco.de/alchemyplatform/learn-solidity-presentations</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -565,13 +565,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Vectorized/multicaller</loc>
+    <loc>https://getmerged.abhishekco.de/base/webauthn-sol</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/base/webauthn-sol</loc>
+    <loc>https://getmerged.abhishekco.de/Vectorized/multicaller</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -607,12 +607,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Jeiwan/flash-loans-comparison</loc>
-    <lastmod>2026-08-30T11:32:09Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/itublockchain/web3-bootcamp</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
@@ -620,6 +614,12 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ciaranmcveigh5/ethernaut-x-foundry</loc>
+    <lastmod>2026-08-30T11:32:09Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Jeiwan/flash-loans-comparison</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -661,13 +661,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/DessertHeart/Dive-Into-Blockchain</loc>
+    <loc>https://getmerged.abhishekco.de/dharma-eng/dharma-smart-wallet</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/dharma-eng/dharma-smart-wallet</loc>
+    <loc>https://getmerged.abhishekco.de/DessertHeart/Dive-Into-Blockchain</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -745,13 +745,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/marbleprotocol/flash-lending</loc>
+    <loc>https://getmerged.abhishekco.de/kevinz917/zk-NFT</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/kevinz917/zk-NFT</loc>
+    <loc>https://getmerged.abhishekco.de/marbleprotocol/flash-lending</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -901,13 +901,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/AztecProtocol/aztec-connect-bridges</loc>
+    <loc>https://getmerged.abhishekco.de/circlefin/evm-cctp-contracts</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/circlefin/evm-cctp-contracts</loc>
+    <loc>https://getmerged.abhishekco.de/AztecProtocol/aztec-connect-bridges</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -931,12 +931,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/a16z/erc4626-tests</loc>
-    <lastmod>2026-08-30T11:32:09Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/alejoacosta74/ethereum-erc20token-vault</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
@@ -950,6 +944,12 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/euler-xyz/euler-vault-kit</loc>
+    <lastmod>2026-08-30T11:32:09Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/a16z/erc4626-tests</loc>
     <lastmod>2026-08-30T11:32:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1051,6 +1051,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/mattdf/payment-channel</loc>
+    <lastmod>2026-08-30T11:32:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/coinbase/commerce-onchain-payment-protocol</loc>
     <lastmod>2026-08-30T11:32:11Z</lastmod>
     <changefreq>daily</changefreq>
@@ -1063,19 +1069,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mattdf/payment-channel</loc>
+    <loc>https://getmerged.abhishekco.de/OriginProtocol/security</loc>
     <lastmod>2026-08-30T11:32:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/defi-wonderland/solidity-foundry-boilerplate</loc>
-    <lastmod>2026-08-30T11:32:11Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/OriginProtocol/security</loc>
     <lastmod>2026-08-30T11:32:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1099,19 +1099,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/sky-ecosystem/spells-mainnet</loc>
-    <lastmod>2026-08-19T18:21:28Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/delegatexyz/delegate-registry</loc>
     <lastmod>2026-08-19T18:21:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/sky-ecosystem/spells-mainnet</loc>
+    <lastmod>2026-08-19T18:21:28Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/NomicFoundation/solx</loc>
+    <lastmod>2026-08-19T18:21:28Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Auditware/radar</loc>
     <lastmod>2026-08-19T18:21:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1124,12 +1130,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/yieldnest/yieldnest-vault</loc>
-    <lastmod>2026-08-19T18:21:28Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Auditware/radar</loc>
     <lastmod>2026-08-19T18:21:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1159,13 +1159,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/pcaversaccio/malleable-signatures</loc>
+    <loc>https://getmerged.abhishekco.de/lidofinance/staking-modules</loc>
     <lastmod>2026-08-19T18:21:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/lidofinance/staking-modules</loc>
+    <loc>https://getmerged.abhishekco.de/pcaversaccio/malleable-signatures</loc>
     <lastmod>2026-08-19T18:21:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1189,25 +1189,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/sparkdotfi/spark-spells</loc>
-    <lastmod>2026-08-19T18:21:28Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/morpho-org/midnight</loc>
     <lastmod>2026-08-19T18:21:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/whetstoneresearch/doppler</loc>
+    <loc>https://getmerged.abhishekco.de/sparkdotfi/spark-spells</loc>
     <lastmod>2026-08-19T18:21:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Virtual-Protocol/protocol-contracts</loc>
+    <lastmod>2026-08-19T18:21:28Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/whetstoneresearch/doppler</loc>
     <lastmod>2026-08-19T18:21:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
