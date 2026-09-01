@@ -91,13 +91,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/libprima/prima</loc>
+    <loc>https://getmerged.abhishekco.de/MFlowCode/MFC</loc>
     <lastmod>2026-08-30T12:18:43Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/MFlowCode/MFC</loc>
+    <loc>https://getmerged.abhishekco.de/libprima/prima</loc>
     <lastmod>2026-08-30T12:18:43Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -349,13 +349,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jgomezc1/ABAQUS-US</loc>
+    <loc>https://getmerged.abhishekco.de/ylikx/forpy</loc>
     <lastmod>2026-08-30T12:18:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ylikx/forpy</loc>
+    <loc>https://getmerged.abhishekco.de/jgomezc1/ABAQUS-US</loc>
     <lastmod>2026-08-30T12:18:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -427,13 +427,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/xzhang66/MPM3D-F90</loc>
+    <loc>https://getmerged.abhishekco.de/xcompact3d/Incompact3d</loc>
     <lastmod>2026-08-30T12:18:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/xcompact3d/Incompact3d</loc>
+    <loc>https://getmerged.abhishekco.de/xzhang66/MPM3D-F90</loc>
     <lastmod>2026-08-30T12:18:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -451,25 +451,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Starlink/starlink</loc>
-    <lastmod>2026-08-30T12:18:47Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/Dhondtguido/CalculiX</loc>
     <lastmod>2026-08-30T12:18:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jacobwilliams/Fortran-Astrodynamics-Toolkit</loc>
+    <loc>https://getmerged.abhishekco.de/Starlink/starlink</loc>
     <lastmod>2026-08-30T12:18:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciFortran/SciFortran</loc>
+    <lastmod>2026-08-30T12:18:47Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jacobwilliams/Fortran-Astrodynamics-Toolkit</loc>
     <lastmod>2026-08-30T12:18:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
