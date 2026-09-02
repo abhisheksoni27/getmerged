@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/lib/api";
@@ -8,6 +8,7 @@ import type { User } from "@/types/opendoor";
 import type { PublicProfile } from "@/lib/public-profile";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
+import { DeleteAccountModal } from "@/components/DeleteAccountModal";
 import OpenToOpportunitiesToggle from "@/components/OpenToOpportunitiesToggle";
 import ShareCardButton from "@/components/ShareCardButton";
 import { CRankBadge } from "@/components/CRankBadge";
@@ -35,6 +36,8 @@ import {
   FolderGit2,
   FileText,
   LogOut,
+  MoreVertical,
+  Trash2,
 } from "lucide-react";
 
 interface ProfileClientViewProps {
@@ -51,6 +54,23 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
   const [profile, setProfile] = useState<PublicProfile>(initialProfile);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    }
+    if (isMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   useEffect(() => {
     setProfile(initialProfile);
@@ -188,6 +208,38 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
                 <span>Resume</span>
               </button>
               <ShareCardButton slug={profile.slug} username={profile.username} />
+
+              {/* Triple Dots Actions Menu for Profile Owner */}
+              {isOwner && (
+                <div className="relative" ref={menuRef}>
+                  <button
+                    type="button"
+                    onClick={() => setIsMenuOpen((prev) => !prev)}
+                    title="More profile options"
+                    aria-label="More options"
+                    aria-expanded={isMenuOpen}
+                    className="p-1.5 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-zinc-300 hover:text-white border border-white/[0.12] transition-all cursor-pointer flex items-center justify-center"
+                  >
+                    <MoreVertical className="h-4 w-4" />
+                  </button>
+
+                  {isMenuOpen && (
+                    <div className="absolute right-0 top-full mt-1.5 w-48 rounded-xl bg-slate-900/95 border border-white/[0.12] shadow-xl backdrop-blur-md py-1.5 z-30 animate-in fade-in zoom-in-95 duration-100">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          setIsDeleteModalOpen(true);
+                        }}
+                        className="w-full px-3 py-2 text-left text-xs font-mono text-rose-400 hover:text-rose-200 hover:bg-rose-500/15 flex items-center gap-2 transition-colors cursor-pointer"
+                      >
+                        <Trash2 className="h-3.5 w-3.5 text-rose-400" />
+                        <span>Delete Account</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -709,6 +761,15 @@ export const ProfileClientView: React.FC<ProfileClientViewProps> = ({
         isOpen={isResumeModalOpen}
         onClose={() => setIsResumeModalOpen(false)}
       />
+
+      {/* Delete Account Modal */}
+      {isOwner && (
+        <DeleteAccountModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          username={profile.username}
+        />
+      )}
     </>
   );
 };
