@@ -349,13 +349,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/guzba/zippy</loc>
+    <loc>https://getmerged.abhishekco.de/Anuken/animdustry</loc>
     <lastmod>2026-08-30T11:32:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Anuken/animdustry</loc>
+    <loc>https://getmerged.abhishekco.de/guzba/zippy</loc>
     <lastmod>2026-08-30T11:32:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -457,6 +457,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/cheatfate/nimcrypto</loc>
+    <lastmod>2026-08-30T11:32:22Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/jboy/nim-pymod</loc>
     <lastmod>2026-08-30T11:32:22Z</lastmod>
     <changefreq>daily</changefreq>
@@ -464,12 +470,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/godot-nim/gdext-nim</loc>
-    <lastmod>2026-08-30T11:32:22Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/cheatfate/nimcrypto</loc>
     <lastmod>2026-08-30T11:32:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -487,13 +487,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/S3cur3Th1sSh1t/NimSyscallPacker</loc>
+    <loc>https://getmerged.abhishekco.de/docopt/docopt.nim</loc>
     <lastmod>2026-08-30T11:32:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/docopt/docopt.nim</loc>
+    <loc>https://getmerged.abhishekco.de/S3cur3Th1sSh1t/NimSyscallPacker</loc>
     <lastmod>2026-08-30T11:32:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -523,13 +523,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/xomachine/SteamForwarder</loc>
+    <loc>https://getmerged.abhishekco.de/pietroppeter/nimib</loc>
     <lastmod>2026-08-30T11:32:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/pietroppeter/nimib</loc>
+    <loc>https://getmerged.abhishekco.de/xomachine/SteamForwarder</loc>
     <lastmod>2026-08-30T11:32:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
