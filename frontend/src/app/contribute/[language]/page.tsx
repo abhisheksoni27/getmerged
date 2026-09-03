@@ -61,12 +61,12 @@ function buildMetadata(language: string, level: string): Metadata {
     title,
     description,
     alternates: {
-      canonical: `${SITE_URL}/contribute/${language}?level=${level}`,
+      canonical: `${SITE_URL}/contribute/${language}`,
     },
     openGraph: {
       title,
       description,
-      url: `${SITE_URL}/contribute/${language}?level=${level}`,
+      url: `${SITE_URL}/contribute/${language}`,
       siteName: "GetMerged",
       type: "website",
     },
@@ -110,7 +110,7 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
         "@type": "ListItem",
         position: 3,
         name: `${canonicalLang} for ${level === "experienced" ? "Experienced Devs" : "Beginners"}`,
-        item: `${SITE_URL}/contribute/${langSlug}?level=${level}`,
+        item: `${SITE_URL}/contribute/${langSlug}`,
       },
     ],
   };
