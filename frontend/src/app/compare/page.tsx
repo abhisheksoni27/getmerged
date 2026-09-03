@@ -74,7 +74,7 @@ export default function CompareHubPage() {
               <p>Compare developer contribution turnaround and maintainer velocity between React and Vue.</p>
             </li>
             <li>
-              <Link href="/compare/vercel/next.js/vs/remix-run/remix">
+              <Link href="/compare/remix-run/remix/vs/vercel/next.js">
                 Next.js vs Remix Code Review Turnaround & Merge Likelihood Showdown
               </Link>
               <p>Compare full-stack React framework maintainer responsiveness and contributor welcoming scores.</p>
@@ -86,19 +86,19 @@ export default function CompareHubPage() {
               <p>Analyze maintainer responsiveness and newcomer acceptance rates between the Go and Rust language teams.</p>
             </li>
             <li>
-              <Link href="/compare/fastify/fastify/vs/expressjs/express">
+              <Link href="/compare/expressjs/express/vs/fastify/fastify">
                 Fastify vs Express.js Maintainer Activity & Pull Request Turnaround
               </Link>
               <p>Benchmark review latency and first-timer acceptance odds across Node.js backend frameworks.</p>
             </li>
             <li>
-              <Link href="/compare/oven-sh/bun/vs/nodejs/node">
+              <Link href="/compare/nodejs/node/vs/oven-sh/bun">
                 Bun vs Node.js GitHub Repository Review Speed & Merge Metrics
               </Link>
               <p>Side-by-side JavaScript runtime contribution statistics, PR sweet spots, and review velocity.</p>
             </li>
             <li>
-              <Link href="/compare/tailwindlabs/tailwindcss/vs/twbs/bootstrap">
+              <Link href="/compare/bootstrap/vs/tailwindlabs/tailwindcss">
                 Tailwind CSS vs Bootstrap Contributor Hospitality & PR Acceptance Odds
               </Link>
               <p>Evaluate CSS framework maintainer engagement, review speed, and open-source contribution guidelines.</p>

@@ -38,8 +38,8 @@ const POPULAR_COMPARISONS = [
     category: "Frontend UI Frameworks",
   },
   {
-    repoA: "vercel/next.js",
-    repoB: "remix-run/remix",
+    repoA: "remix-run/remix",
+    repoB: "vercel/next.js",
     category: "Full-Stack React Frameworks",
   },
   {
@@ -48,18 +48,18 @@ const POPULAR_COMPARISONS = [
     category: "Systems & Backend Languages",
   },
   {
-    repoA: "fastify/fastify",
-    repoB: "expressjs/express",
+    repoA: "expressjs/express",
+    repoB: "fastify/fastify",
     category: "Node.js Web Frameworks",
   },
   {
-    repoA: "tailwindlabs/tailwindcss",
-    repoB: "twbs/bootstrap",
+    repoA: "bootstrap",
+    repoB: "tailwindlabs/tailwindcss",
     category: "CSS Systems & Utility Frameworks",
   },
   {
-    repoA: "oven-sh/bun",
-    repoB: "nodejs/node",
+    repoA: "nodejs/node",
+    repoB: "oven-sh/bun",
     category: "JavaScript Runtimes & Tooling",
   },
 ];
