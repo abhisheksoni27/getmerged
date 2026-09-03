@@ -211,13 +211,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/fukamachi/mito</loc>
+    <loc>https://getmerged.abhishekco.de/lispgames/cl-sdl2</loc>
     <lastmod>2026-08-30T12:18:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/lispgames/cl-sdl2</loc>
+    <loc>https://getmerged.abhishekco.de/fukamachi/mito</loc>
     <lastmod>2026-08-30T12:18:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -541,6 +541,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/joinr/clclojure</loc>
+    <lastmod>2026-08-30T12:18:57Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/fukamachi/cl-dbi</loc>
     <lastmod>2026-08-30T12:18:57Z</lastmod>
     <changefreq>daily</changefreq>
@@ -548,12 +554,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/andreer/lispbox</loc>
-    <lastmod>2026-08-30T12:18:57Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/joinr/clclojure</loc>
     <lastmod>2026-08-30T12:18:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

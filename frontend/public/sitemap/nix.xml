@@ -907,13 +907,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ornicar/dotfiles</loc>
+    <loc>https://getmerged.abhishekco.de/jordanisaacs/neovim-flake</loc>
     <lastmod>2026-08-30T11:31:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jordanisaacs/neovim-flake</loc>
+    <loc>https://getmerged.abhishekco.de/ornicar/dotfiles</loc>
     <lastmod>2026-08-30T11:31:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1177,13 +1177,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ALT-F4-LLC/kickstart.nix</loc>
+    <loc>https://getmerged.abhishekco.de/bottlesdevs/bottles-next</loc>
     <lastmod>2026-08-30T11:31:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/bottlesdevs/bottles-next</loc>
+    <loc>https://getmerged.abhishekco.de/ALT-F4-LLC/kickstart.nix</loc>
     <lastmod>2026-08-30T11:31:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1333,14 +1333,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/youwen5/zen-browser-flake</loc>
-    <lastmod>2026-08-20T05:11:43Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jacopone/antigravity-nix</loc>
+    <lastmod>2026-08-17T03:18:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jacopone/antigravity-nix</loc>
-    <lastmod>2026-08-17T03:18:48Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/youwen5/zen-browser-flake</loc>
+    <lastmod>2026-08-20T05:11:43Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
