@@ -301,13 +301,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/matteoredaelli/ebot</loc>
+    <loc>https://getmerged.abhishekco.de/wg/epgsql</loc>
     <lastmod>2026-08-30T11:32:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/wg/epgsql</loc>
+    <loc>https://getmerged.abhishekco.de/matteoredaelli/ebot</loc>
     <lastmod>2026-08-30T11:32:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -337,13 +337,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jlouis/graphql-erlang</loc>
+    <loc>https://getmerged.abhishekco.de/epgsql/pooler</loc>
     <lastmod>2026-08-30T11:32:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/epgsql/pooler</loc>
+    <loc>https://getmerged.abhishekco.de/jlouis/graphql-erlang</loc>
     <lastmod>2026-08-30T11:32:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -553,6 +553,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/jcomellas/getopt</loc>
+    <lastmod>2026-08-30T11:32:17Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/ferd/vmstats</loc>
     <lastmod>2026-08-30T11:32:17Z</lastmod>
     <changefreq>daily</changefreq>
@@ -560,12 +566,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mochi/statebox</loc>
-    <lastmod>2026-08-30T11:32:17Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/jcomellas/getopt</loc>
     <lastmod>2026-08-30T11:32:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -673,13 +673,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/priestjim/gen_rpc</loc>
+    <loc>https://getmerged.abhishekco.de/massemanet/redbug</loc>
     <lastmod>2026-08-30T11:32:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/massemanet/redbug</loc>
+    <loc>https://getmerged.abhishekco.de/priestjim/gen_rpc</loc>
     <lastmod>2026-08-30T11:32:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -697,13 +697,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/kivra/oauth2</loc>
+    <loc>https://getmerged.abhishekco.de/okeuday/uuid</loc>
     <lastmod>2026-08-30T11:32:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/okeuday/uuid</loc>
+    <loc>https://getmerged.abhishekco.de/kivra/oauth2</loc>
     <lastmod>2026-08-30T11:32:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

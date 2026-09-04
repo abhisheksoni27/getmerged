@@ -145,12 +145,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/SveltePress/sveltepress</loc>
-    <lastmod>2026-08-16T23:12:45Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/azat-io/todoctor</loc>
     <lastmod>2026-08-23T12:01:19Z</lastmod>
     <changefreq>daily</changefreq>
@@ -517,13 +511,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Levminer/cores</loc>
+    <loc>https://getmerged.abhishekco.de/kasper9n/date-picker-svelte</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/kasper9n/date-picker-svelte</loc>
+    <loc>https://getmerged.abhishekco.de/Levminer/cores</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -553,13 +547,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/SauravKanchan/svelte-chartjs</loc>
+    <loc>https://getmerged.abhishekco.de/discohaus/discopanel</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/discohaus/discopanel</loc>
+    <loc>https://getmerged.abhishekco.de/SauravKanchan/svelte-chartjs</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -625,13 +619,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/agustinl/svelte-tags-input</loc>
+    <loc>https://getmerged.abhishekco.de/kaisermann/svelte-loadable</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/kaisermann/svelte-loadable</loc>
+    <loc>https://getmerged.abhishekco.de/agustinl/svelte-tags-input</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -781,14 +775,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/trakt/trakt-web</loc>
-    <lastmod>2026-08-17T08:27:46Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/stablecog/stablecog</loc>
+    <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/stablecog/stablecog</loc>
-    <lastmod>2026-08-30T11:28:02Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/trakt/trakt-web</loc>
+    <lastmod>2026-08-17T08:27:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -811,25 +805,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/sheodox/alexandrite</loc>
-    <lastmod>2026-08-30T11:28:02Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/nmelhado/league-page</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/stephane-vanraes/renderless-svelte</loc>
+    <loc>https://getmerged.abhishekco.de/sheodox/alexandrite</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mpiorowski/sgsg</loc>
+    <lastmod>2026-08-30T11:28:02Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/stephane-vanraes/renderless-svelte</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -895,13 +889,19 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/vinodnimbalkar/svelte-pdf</loc>
+    <lastmod>2026-08-30T11:28:02Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/agnosticeng/agx</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/vinodnimbalkar/svelte-pdf</loc>
+    <loc>https://getmerged.abhishekco.de/shiryel/saos</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -914,12 +914,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/yuedanlabs/icp-query-extension</loc>
-    <lastmod>2026-08-30T11:28:02Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/shiryel/saos</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -967,13 +961,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/hannansatopay/devstar</loc>
+    <loc>https://getmerged.abhishekco.de/regisx001/Worklog</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/regisx001/Worklog</loc>
+    <loc>https://getmerged.abhishekco.de/hannansatopay/devstar</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1009,13 +1003,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/afterschoolstudio/Depot</loc>
+    <loc>https://getmerged.abhishekco.de/mithril-security/blind_chat</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mithril-security/blind_chat</loc>
+    <loc>https://getmerged.abhishekco.de/afterschoolstudio/Depot</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1027,13 +1021,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/daison12006013/sveltekit-starter</loc>
+    <loc>https://getmerged.abhishekco.de/mskocik/svelty-picker</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mskocik/svelty-picker</loc>
+    <loc>https://getmerged.abhishekco.de/daison12006013/sveltekit-starter</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1081,13 +1075,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/svar-widgets/grid</loc>
+    <loc>https://getmerged.abhishekco.de/manga-you-know/desktop</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/manga-you-know/desktop</loc>
+    <loc>https://getmerged.abhishekco.de/svar-widgets/grid</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1095,6 +1089,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/brianschwabauer/remarkably-organized</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/open-goal/launcher</loc>
+    <lastmod>2026-08-30T11:28:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1111,19 +1111,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/open-goal/launcher</loc>
+    <loc>https://getmerged.abhishekco.de/delay/sveltekit-auth-starter</loc>
     <lastmod>2026-08-30T11:28:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/muonw/muonw-powertable</loc>
-    <lastmod>2026-08-30T11:28:04Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/delay/sveltekit-auth-starter</loc>
     <lastmod>2026-08-30T11:28:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1159,12 +1153,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/outpoot/rugplay</loc>
-    <lastmod>2026-08-30T11:28:04Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/touchifyapp/svelte-codemirror-editor</loc>
     <lastmod>2026-08-30T11:28:04Z</lastmod>
     <changefreq>daily</changefreq>
@@ -1172,6 +1160,12 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rohitpotato/svelte-command-palette</loc>
+    <lastmod>2026-08-30T11:28:04Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/outpoot/rugplay</loc>
     <lastmod>2026-08-30T11:28:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1285,7 +1279,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/pngwn/svelte-travel-transitions</loc>
+    <loc>https://getmerged.abhishekco.de/Aveek-Saha/DuskPlayer</loc>
     <lastmod>2026-08-30T11:28:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1297,7 +1291,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Aveek-Saha/DuskPlayer</loc>
+    <loc>https://getmerged.abhishekco.de/pngwn/svelte-travel-transitions</loc>
     <lastmod>2026-08-30T11:28:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

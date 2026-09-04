@@ -493,14 +493,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/OP-TEE/build</loc>
-    <lastmod>2026-08-20T18:23:41Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/moq-wg/moq-transport</loc>
+    <lastmod>2026-08-22T09:46:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/moq-wg/moq-transport</loc>
-    <lastmod>2026-08-22T09:46:10Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/OP-TEE/build</loc>
+    <lastmod>2026-08-20T18:23:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -577,13 +577,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/woblerr/docker-pgbackrest</loc>
+    <loc>https://getmerged.abhishekco.de/kickingvegas/elisp-for-python</loc>
     <lastmod>2026-08-22T09:46:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/kickingvegas/elisp-for-python</loc>
+    <loc>https://getmerged.abhishekco.de/woblerr/docker-pgbackrest</loc>
     <lastmod>2026-08-22T09:46:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
