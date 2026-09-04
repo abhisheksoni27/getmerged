@@ -169,13 +169,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ESCOMP/CTSM</loc>
+    <loc>https://getmerged.abhishekco.de/crest-lab/crest</loc>
     <lastmod>2026-08-30T12:18:43Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/crest-lab/crest</loc>
+    <loc>https://getmerged.abhishekco.de/ESCOMP/CTSM</loc>
     <lastmod>2026-08-30T12:18:43Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -223,13 +223,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/TarletonGroup/CrystalPlasticity</loc>
+    <loc>https://getmerged.abhishekco.de/MPAS-Dev/MPAS-Model</loc>
     <lastmod>2026-08-30T12:18:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/MPAS-Dev/MPAS-Model</loc>
+    <loc>https://getmerged.abhishekco.de/TarletonGroup/CrystalPlasticity</loc>
     <lastmod>2026-08-30T12:18:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -349,13 +349,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ylikx/forpy</loc>
+    <loc>https://getmerged.abhishekco.de/jgomezc1/ABAQUS-US</loc>
     <lastmod>2026-08-30T12:18:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jgomezc1/ABAQUS-US</loc>
+    <loc>https://getmerged.abhishekco.de/ylikx/forpy</loc>
     <lastmod>2026-08-30T12:18:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -379,25 +379,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/DSSAT/dssat-csm-os</loc>
-    <lastmod>2026-08-30T12:18:47Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/dftd4/dftd4</loc>
     <lastmod>2026-08-30T12:18:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/davidrpugh/pyeconomics</loc>
+    <loc>https://getmerged.abhishekco.de/DSSAT/dssat-csm-os</loc>
     <lastmod>2026-08-30T12:18:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/certik/fortran-utils</loc>
+    <lastmod>2026-08-30T12:18:47Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/davidrpugh/pyeconomics</loc>
     <lastmod>2026-08-30T12:18:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -451,7 +451,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/SciFortran/SciFortran</loc>
+    <loc>https://getmerged.abhishekco.de/Dhondtguido/CalculiX</loc>
     <lastmod>2026-08-30T12:18:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -463,7 +463,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Dhondtguido/CalculiX</loc>
+    <loc>https://getmerged.abhishekco.de/SciFortran/SciFortran</loc>
     <lastmod>2026-08-30T12:18:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -553,14 +553,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/NOAA-GFDL/FMS</loc>
-    <lastmod>2026-08-21T07:18:49Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/PrincetonUniversity/STELLOPT</loc>
+    <lastmod>2026-08-20T04:17:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/PrincetonUniversity/STELLOPT</loc>
-    <lastmod>2026-08-20T04:17:41Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/NOAA-GFDL/FMS</loc>
+    <lastmod>2026-08-21T07:18:49Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
