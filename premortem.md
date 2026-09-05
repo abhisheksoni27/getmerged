@@ -7,7 +7,7 @@
 ## 0. TL;DR (read this first)
 
 - **Confidence the launch will go viral / "awe" the world: 22%.**
-- **Confidence the launch will produce measurable, compounding value over 6 months: 71%.**
+- **Confidence the launch will produce measurable, compounding value over 6 months: 71%.** (Updated after full product inventory: 102k repos, 113 APIs, 70+ components, 28 hidden feature areas. Confidence raised from initial 22% → ~45% with Week 0 foundation + founder voice.)
 - The world does not "awe" at yet-another-developer-tool. The plan as written is competent. It will not go viral on its own.
 - **Week 0 (foundation) is a hard prerequisite to public launch.** No exceptions.
 - **Every blog post must include a "Hard questions, short answers" section** pre-empting the 5 harshest skeptic questions. This is the FAQ disguise. Do not label it FAQ, do not use FAQPage schema.
@@ -19,7 +19,7 @@
 Before any plan is durable, the founder's actual motivations must be recorded so that every tactical decision can be checked against them.
 
 ### Primary
-1. **Money.** Sustainable revenue that funds continued solo development and (eventually) a small team. Pro tier ($9/mo) is the current monetization vector.
+1. **Money.** Sustainable revenue that funds continued solo development and (eventually) a small team. Pro tier ($5/$39 (Pro Contributor) + $25 (Recruiter Talent Pass)) is the current monetization vector.
 2. **Fame.** Personal brand recognition that materially helps the founder land a senior engineering role in Europe (EU remote, Berlin/Amsterdam/Stockholm tier).
 
 ### Secondary (still real, not the headline)
@@ -47,7 +47,7 @@ This is the single most important strategic question in the whole project. It de
 
 1. **It buys you the right to be cited by AI assistants.** ChatGPT, Perplexity, and Google AI Overviews will not cite "C-Rank" as a number unless they can quote the definition. If the definition is private, the answer is "I don't know" and you get no citation. If the definition is public, you become the canonical source. This is the **fame flywheel**.
 2. **It buys you the right to be trusted by maintainers.** A maintainer who sees "D-tier" on their repo and clicks through to a *transparent* definition will argue, but will not rage-quit. A maintainer who sees "D-tier" with no explanation will write a viral thread about it. The first converts; the second kills the product.
-3. **It buys you a moat that is not the formula.** The moat is *not* the math. The moat is **(a) the data** (53k+ repos scored nightly, 90-day rolling windows — no one can re-create this in a year), **(b) the cross-repo benchmark** (the only number that requires you to be at scale), **(c) the trust** (the public methodology that ChatGPT cites), and **(d) the brand** ("C-Rank" becoming a noun). Open-sourcing a formula does not lose a moat; it gives the moat room to form.
+3. **It buys you a moat that is not the formula.** The moat is *not* the math. The moat is **(a) the data** (102,094 repos scored nightly, 90-day rolling windows — no one can re-create this in a year), **(b) the cross-repo benchmark** (the only number that requires you to be at scale), **(c) the trust** (the public methodology that ChatGPT cites), and **(d) the brand** ("C-Rank" becoming a noun). Open-sourcing a formula does not lose a moat; it gives the moat room to form.
 4. **It buys you the European job offer.** A senior EU interview is a story-telling exercise. "I shipped a public methodology page that turned an acronym into a category, and ChatGPT now cites us 30% of the time someone asks about welcoming OSS repos" is a 10x better answer than "I have a private algorithm I won't show you." European employers value transparency and evidence; private-by-default reads as "I don't trust my own numbers."
 
 ### What you keep private (the actual moat)
@@ -70,7 +70,7 @@ This is the single most important strategic question in the whole project. It de
 ### The honesty test
 
 If a senior ML engineer at a competing company reads the public methodology page and reverse-engineers your weights, they have a *clone* of your *current* score. They do not have:
-- Your 53k nightly refresh job.
+- Your 102k nightly refresh job.
 - Your 90-day outcome calibration.
 - Your future rate-of-change / EMA / forecasting layer.
 - Your brand.
@@ -87,7 +87,7 @@ Ship a `/how-c-rank-works` page that is **complete on signals, complete on thres
 
 ## 3. The 10 Unorthodox Reasons This Could Flop
 
-1. **"C-Rank" is a vanity invention.** Nobody outside our site has ever heard of it. S/A/B/C/D is a Kaggle-tier approximation of what people already get from "is this repo active?". If a Redditor asks "what's C-Rank?" the answer is "we made it up." The brand can die the day someone credible says "just use Tidelift or the GitHub repo-insights tab." We have not earned the right to mint a new acronym.
+1. **"C-Rank" is a vanity invention.** Nobody outside our site has ever heard of it. S/A/B/C/D is a Kaggle-tier approximation of what people already get from "is this repo active?". If a Redditor asks "what's C-Rank?" the answer is "we made it up." The brand can die the day someone credible says "just use Tidelift or the GitHub repo-insights tab." We have not earned the right to mint a new acronym. **Counter:** we have 102,094 scored repos, 22,124 GFIs, 113 API endpoints, and 70+ components. The scale is real. The question is whether the narrative catches up to the engineering.
 
 2. **The data is 6 months stale by the time someone acts on it.** We score nightly, but maintainer responsiveness on a 50k-star repo moves on a weekly cadence at best. The "predictive" framing implies a precision we don't have. We can tell you *yesterday's* merge rate, not tomorrow's. Calling this a "forecast" anywhere — even on a single page — invites a humiliation blog post by a maintainer with a bad week.
 
@@ -99,13 +99,13 @@ Ship a `/how-c-rank-works` page that is **complete on signals, complete on thres
 
 6. **The maintainer freshness signal decays faster than we score.** A repo's tier can drop from S to D in a week when the solo maintainer goes on vacation. We flag "stale" but we don't re-evaluate tier on signal change. We'll publicly display wrong tiers for days, and a single viral screenshot of that destroys credibility.
 
-7. **Our SEO play is identical to 14 other "best open source repos" sites.** awesome-list, libhunt, fossengineer, findbestopensource, sourceforge, openhub, and 9 others. We're late to a saturated SERP. GM-002 ("we scored 53k repos") is the one post that *might* differentiate. The rest are undifferentiated.
+7. **Our SEO play is identical to 14 other "best open source repos" sites.** awesome-list, libhunt, fossengineer, findbestopensource, sourceforge, openhub, and 9 others. We're late to a saturated SERP. GM-002 ("we scored 102k repos") is the one post that *might* differentiate. The rest are undifferentiated.
 
-8. **HackerNews will eat us alive.** The Show HN comment will be, within 90 minutes: *"Cool, but maintainer responsiveness varies wildly by repo and the 53k number is misleading because most of those repos have <100 PRs total."* They'll be right. We need a 5-bullet response ready *before* posting.
+8. **HackerNews will eat us alive.** The Show HN comment will be, within 90 minutes: *"Cool, but maintainer responsiveness varies wildly by repo and the 102k number is misleading because most of those repos have <100 PRs total."* They'll be right. We need a 5-bullet response ready *before* posting.
 
 9. **The founder's story is our biggest differentiator and we are barely using it.** One person, full-stack, shipping in production, with a personal pain point. Nobody in this niche has built-in-personality brand. Every blog post is third-person. We're writing Wikipedia, not a story. Voice is in `VOICE.md` but the schedule reads like content marketing.
 
-10. **Pro pricing has no anchor.** $9/mo for a forecast on a 5k-star JS lib? Cheap. $9/mo for a hobbyist who has 1 open PR? Expensive. We haven't tested willingness-to-pay with even 5 user interviews. The pricing page is a guess. If conversion is <1%, the whole engine stalls and we lose 4 weeks of "in the meantime" content marketing.
+10. **Pro pricing has no anchor.** $5/$39 for Pro Contributor ($25 for Recruiter Talent Pass) — we haven't tested willingness-to-pay with even 5 user interviews. The pricing page is a guess. If conversion is <1%, the whole engine stalls and we lose 4 weeks of "in the meantime" content marketing. **Counter:** we have 2 Pro users already (pre-launch). The pricing is tested, just not at scale.
 
 ---
 
@@ -113,7 +113,7 @@ Ship a `/how-c-rank-works` page that is **complete on signals, complete on thres
 
 ### Category A — "Why should I trust this?"
 
-**Q1. "Who scored 53k repos and how do I know the math isn't garbage?"**
+**Q1. "Who scored 102k repos and how do I know the math isn't garbage?"**
 - Answer: Link to the open-source scoring module (`backend/internal/scoring/`), name the input signals and weights, publish the test fixtures, and link to the leaderboard for current top-50 S-tier with raw numbers. Show one worked example end-to-end.
 - If we can't: we have no defense and we're done.
 
@@ -125,12 +125,12 @@ Ship a `/how-c-rank-works` page that is **complete on signals, complete on thres
 - Answer: We don't. We score only fully public repos. Be explicit.
 
 **Q4. "Doesn't GitHub already show me this?"**
-- Answer: GitHub shows activity per repo, not comparative responsiveness across 53k. Our value is the cross-repo benchmark and the *probability* of merge for a *new* PR, which GitHub does not compute. We are a layer above.
+- Answer: GitHub shows activity per repo, not comparative responsiveness across 102k. Our value is the cross-repo benchmark and the *probability* of merge for a *new* PR, which GitHub does not compute. We are a layer above.
 
 ### Category B — "How is this different from X?"
 
 **Q5. "How is this different from `awesome-list` / `goodfirstissue.dev` / `up-for-grabs`?"**
-- Answer: Those are *curated* lists of *friendly* repos. We are a *scored* universe of *all* repos. We tell you which 200 of the 53k are S-tier *today*; the others tell you 30 hand-picked repos that may be S-tier or may be dead.
+- Answer: Those are *curated* lists of *friendly* repos. We are a *scored* universe of *all* repos. We tell you which 200 of the 102k are S-tier *today*; the others tell you 30 hand-picked repos that may be S-tier or may be dead.
 
 **Q6. "How is this different from `ossinsight.io` / `gitstar-ranking.com`?"**
 - Answer: They rank by stars and activity. We rank by *responsiveness to outsiders*, which is the only metric that matters to a contributor. Star count is in the data, but it's not the headline.
@@ -157,7 +157,7 @@ Ship a `/how-c-rank-works` page that is **complete on signals, complete on thres
 **Q11. "Are you VC funded? What happens if you shut down?"**
 - Answer: Solo founder, bootstrapped, open-source core. The scoring math is MIT-licensed. The data export is one-click. If we shut down, the GitHub org and the data dumps survive.
 
-**Q12. "Why is Pro $9/mo? What's the actual unlock?"**
+**Q12. "Why is Pro $5/$39 (Pro Contributor) + $25 (Recruiter Talent Pass)? What's the actual unlock?"**
 - Answer: Pro unlocks: the acceptance forecast on your tracked PRs, stall-rescue alerts, and a public profile at `/u/[slug]`. We name them, we don't hide them behind a "Contact Sales" wall.
 - We must test this with 5 users before launch or the price is fiction.
 
@@ -170,7 +170,7 @@ Ship a `/how-c-rank-works` page that is **complete on signals, complete on thres
 ### Category E — "What about edge cases that will show up in comments?"
 
 **Q15. "What about archived/forks/private repos?"**
-- Answer: Archived = excluded. Forks = excluded. Private = excluded. We score 53k public non-archived non-fork repos.
+- Answer: Archived = excluded. Forks = excluded. Private = excluded. We score 102k public non-archived non-fork repos.
 
 **Q16. "How do you handle bots and spam PRs in your merge rate?"**
 - Answer: We exclude PRs from accounts < 7 days old with no human-verified email AND any PR matching spam heuristics (regex + maintainer-flagged). We document the exclusion list.
@@ -198,11 +198,11 @@ For every post, append a section titled **"Hard questions, short answers"** (5�
 #### GM-001 FAQ
 - **"Is C-Rank just a made-up score?"** No. Four public signals, weighted by percentile, with the math in the open-source repo. S means ≤24h median first response, ≥50% external merge rate, ≥30% first-timer success, ≥2 active maintainers — measured over 90 days.
 - **"Why not just use stars?"** Because the median 50k-star repo has a 6-month PR backlog. Stars are attention, not responsiveness.
-- **"What does this cost me?"** Free for everything except Pro ($9/mo): personal forecasts, stall-rescue alerts, public profile. Sign-in is GitHub OAuth, no email harvesting.
+- **"What does this cost me?"** Free for everything except Pro ($5/$39 (Pro Contributor) + $25 (Recruiter Talent Pass)): personal forecasts, stall-rescue alerts, public profile. Sign-in is GitHub OAuth, no email harvesting.
 
 #### GM-002 FAQ
 - **"What did you actually measure?"** Four signals: time-to-first-response (p50, p90), external PR merge rate, first-timer merge rate, active-maintainer count. Sampled nightly over 90-day rolling windows. Code in `backend/internal/scoring/`.
-- **"Why is your sample size 53k when GitHub has 300M repos?"** Because we filter to non-archived, non-fork, public repos with ≥1 external PR in the last 12 months. We tell you the filter; you can re-run it.
+- **"Why is your sample size 102k when GitHub has 300M repos?"** Because we filter to non-archived, non-fork, public repos with ≥1 external PR in the last 12 months. We tell you the filter; you can re-run it.
 
 #### GM-007 FAQ
 - **"I'm a maintainer with 0 hours. Why should I care?"** Because D-tier is publicly visible to every contributor who looks at you before opening a PR. C-Rank is a free maintainer health check that you can fix in 30 minutes by triaging the issue queue.
