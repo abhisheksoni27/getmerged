@@ -274,7 +274,22 @@ export function DashboardClient() {
   }, []);
 
   useEffect(() => {
-    load(true); // initial page-load refresh; server enforces the 5-min/user throttle
+    // Initial render: serve stored snapshots immediately (fast), then trigger
+    // a background refresh at most once per day. Without this, the first
+    // request would carry ?refresh=1, forcing a live GitHub GraphQL sync
+    // that can take 30-40s on every page load.
+    load(false);
+    if (typeof window !== "undefined") {
+      const today = new Date().toISOString().slice(0, 10);
+      const lastSyncDate = window.localStorage.getItem("dashboard_last_sync_date");
+      if (lastSyncDate !== today) {
+        const t = setTimeout(() => {
+          load(true);
+          window.localStorage.setItem("dashboard_last_sync_date", today);
+        }, 1500);
+        return () => clearTimeout(t);
+      }
+    }
   }, [load]);
 
   async function reconnect() {
