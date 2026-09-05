@@ -90,11 +90,11 @@ export function NotificationBell({ user }: { user: User | null }) {
         title="Notifications"
         aria-label="Open notifications"
         onClick={() => setOpen((o) => !o)}
-        className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.1] glass-panel text-zinc-300 shadow-2xs transition-colors hover:text-white hover:glass-card"
+        className="relative flex h-6 w-6 items-center justify-center rounded-md text-[#a3a3a3] hover:text-white transition-colors shrink-0"
       >
-        <Bell className="h-4 w-4" />
+        <Bell className="h-3.5 w-3.5" />
         {unread > 0 && (
-          <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-bold text-white ring-2 ring-[#faf9f6]">
+          <span className="absolute -right-1 -top-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-bold text-white ring-2 ring-[#141414]">
             {formatBadge(unread)}
           </span>
         )}
