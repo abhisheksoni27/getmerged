@@ -126,7 +126,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
     const params = new URLSearchParams();
     params.set("page", page.toString());
     params.set("per_page", perPage.toString());
-    params.set("sort", "stars");
+    params.set("sort", "c_rank_score");
     params.set("order", "desc");
 
     if (searchQuery.trim()) params.set("name", searchQuery.trim());

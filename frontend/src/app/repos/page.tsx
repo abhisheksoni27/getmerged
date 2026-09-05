@@ -49,7 +49,7 @@ async function getReposSSR(paramsObj: {
   const params = new URLSearchParams();
   params.set("page", page.toString());
   params.set("per_page", perPage.toString());
-  params.set("sort", "stars");
+  params.set("sort", "c_rank_score");
   params.set("order", "desc");
 
   if (paramsObj.q?.trim()) params.set("name", paramsObj.q.trim());
