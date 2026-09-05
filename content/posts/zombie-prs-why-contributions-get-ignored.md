@@ -58,7 +58,7 @@ Correlating `log10(stargazerCount)` against external merge rate across all 53k i
 | High-star, high-throughput | ~14% | Median merge rate 71%; p50 response under a day; foundations and funded projects with review rotas |
 | High-star, low-throughput | ~29% | Median merge rate 34%; p50 response over three days; popular code, closed maintenance loop |
 
-Both regimes contain repos with tens of thousands of stars. The README cannot tell you which regime you're entering; the PR history can. That gap — identical stardom, opposite contributor outcomes — is what C-Rank's 0.275-weighted merge-rate term exists to expose. Popular does not mean staffed.
+Both regimes contain repos with tens of thousands of stars. The README cannot tell you which regime you're entering; the PR history can. That gap — identical stardom, opposite contributor outcomes — is what C-Rank's highest-weighted merge-rate signal exists to expose. Popular does not mean staffed.
 
 ## Bus Factor One: The Single-Maintainer Bottleneck
 

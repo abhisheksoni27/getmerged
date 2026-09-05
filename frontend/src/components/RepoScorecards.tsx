@@ -13,6 +13,8 @@ interface RepoScorecardsProps {
   maintainersCommentary: string;
   vibeScore: number;
   onboardingScore?: number;
+  score?: number;
+  rank?: string;
 }
 
 export function RepoScorecards({
@@ -25,7 +27,10 @@ export function RepoScorecards({
   busFactor,
   maintainersCommentary,
   vibeScore,
+  score,
+  rank,
 }: RepoScorecardsProps) {
+  const isCappedAtB = (score ?? 0) >= 55 && rank?.toUpperCase() === "B" && busFactor <= 1;
   const parseNum = (str: string) => {
     const n = parseInt(str.replace(/[^0-9]/g, ""), 10);
     return isNaN(n) ? 0 : n;
@@ -95,11 +100,18 @@ export function RepoScorecards({
               <Users className="h-4 w-4 text-amber-400 shrink-0" />
               <span>Active Maintainers</span>
             </div>
-            {busFactor === 0 && (
+            {busFactor === 0 ? (
               <span className="px-2 py-0.5 text-[10px] font-bold font-mono bg-rose-500/15 text-rose-400 border border-rose-500/30 rounded-full">
                 CRITICAL BUS FACTOR
               </span>
-            )}
+            ) : isCappedAtB ? (
+              <span
+                title="Single maintainer bottleneck caps project to Tier B regardless of raw score"
+                className="px-2 py-0.5 text-[10px] font-bold font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30 rounded-full cursor-help"
+              >
+                CAPS TIER AT B
+              </span>
+            ) : null}
           </div>
           <div className="text-3xl font-bold text-white font-mono tracking-tight">
             {busFactor > 0 ? `${busFactor} core` : "Single maintainer"}

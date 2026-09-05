@@ -65,7 +65,7 @@ Two scores do the work:
 
 Word counts above 1,500 *subtract* 5 — walls of pasted stack traces correlate with unresolved, underspecified bugs.
 
-**C-Rank first-timer weight (per repo).** First-timer success carries a 0.10 weight in the repo's overall score, plus the logarithmic good-first-issue backlog bonus capped at +5 points. A repository cannot buy its way to S-tier with labels alone — but among otherwise-equal repos, the one merging newcomers wins.
+**C-Rank first-timer signal (per repo).** First-timer success is a meaningful signal in the repo's overall score, plus a logarithmic good-first-issue backlog bonus capped at a modest number of points. A repository cannot buy its way to S-tier with labels alone — but among otherwise-equal repos, the one merging newcomers wins.
 
 ## The Six Ecosystems, By the Numbers
 

@@ -788,6 +788,8 @@ export function ClientRepoDetail({
           maintainersCommentary={maintainersCommentary}
           vibeScore={vibeScore}
           onboardingScore={repo?.onboarding_score}
+          score={score}
+          rank={rank}
         />
 
         {/* Interactive README C-Rank Live Badge Generator (Issue #50) */}

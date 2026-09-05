@@ -65,7 +65,7 @@ But the *crown jewel* — the rolling EMA, the rate-of-change normalization, the
 |---|---|---|
 | **Tier thresholds** (S ≥ 70, A ≥ 55, B ≥ 40, C ≥ 25, D < 25) | ✅ Public | Trust + AI citation |
 | **Signal definitions** (all 9 signals, what they measure) | ✅ Public | Trust + AI citation |
-| **The exact weights** (MergeRate 0.275, ResponseTime 0.15, ActivityRecency 0.15, FirstTimer 0.10, TimeToMerge 0.10, RepeatContributor 0.10, ReviewRounds 0.05, MaintainerBreadth 0.05, Responsiveness 0.025) | ❌ Private — repo is private | A competitor can reverse-engineer if we publish them. Keep private. Versioned. |
+| **The exact weights** (MergeRate, ResponseTime, ActivityRecency, FirstTimer, TimeToMerge, RepeatContributor, ReviewRounds, MaintainerBreadth, Responsiveness) | ❌ Private — repo is private | A competitor can reverse-engineer if we publish them. Keep private. Versioned. |
 | **Score formula** (weighted sum of normalized signals + GFI bonus + Bayesian shrinkage) | ✅ Public at the family level | Trust. We describe it as a weighted combination of normalized signals without giving the exact coefficients. |
 | **Bayesian shrinkage parameters** (k, prior) | ❌ Private | Same reason — private repo. |
 | **Hysteresis band values** | ❌ Private | Same reason. |

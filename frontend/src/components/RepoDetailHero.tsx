@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { Bookmark, GitPullRequest, Star, Scale, CircleDot, Check, Share2, Copy, Shield } from "lucide-react";
+import { Bookmark, GitPullRequest, Star, Scale, CircleDot, Check, Share2, Copy, Shield, AlertTriangle } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { Repo } from "@/types/opendoor";
@@ -40,6 +40,9 @@ export function RepoDetailHero({
   const ownerAvatarUrl = `https://github.com/${owner}.png?size=64`;
   const roundedScore = Math.round(score);
   const isScored = repo?.is_scored ?? (score > 0);
+  const busFactor = repo?.bus_factor ?? 0;
+  // If score mathematically qualifies for A/S (>=55) but capped at B due to solo maintainer
+  const isBusFactorCapped = isScored && rank?.toUpperCase() === "B" && roundedScore >= 55 && busFactor <= 1;
 
   const handleCopyLink = () => {
     if (typeof window !== "undefined") {
@@ -103,6 +106,15 @@ export function RepoDetailHero({
                   {roundedScore > 0 && (
                     <span className="text-xs font-mono text-zinc-300">
                       ({roundedScore}/100)
+                    </span>
+                  )}
+                  {isBusFactorCapped && (
+                    <span
+                      title={`Score (${roundedScore}/100) qualifies for ${roundedScore >= 70 ? "S" : "A"} Tier, but safety-capped at B because this repo has a single active maintainer (Bus Factor: ${busFactor}).`}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/25 font-mono text-xs cursor-help"
+                    >
+                      <AlertTriangle className="h-3 w-3 text-amber-400 shrink-0" />
+                      <span>Capped at B (Bus Factor: {busFactor})</span>
                     </span>
                   )}
                 </>
