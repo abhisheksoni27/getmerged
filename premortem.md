@@ -63,18 +63,26 @@ But the *crown jewel* — the rolling EMA, the rate-of-change normalization, the
 
 | Layer | Public? | Why |
 |---|---|---|
-| **Tier thresholds** (S = response_p50 ≤ 24h AND external_merge_rate ≥ 50% AND first_timer_rate ≥ 30% AND ≥2 active maintainers) | ✅ Public | Trust + AI citation |
-| **Signal definitions** (what is "external PR", "first-timer", "active maintainer") | ✅ Public | Trust + AI citation |
-| **Trailing window** (90 days) | ✅ Public | Trust + AI citation |
-| **Exclusion rules** (spam bots, low-sample, archived, forks) | ✅ Public | Trust + AI citation |
-| **Score formula** (linear combination of normalized signals) | ✅ Public at the *family* level ("weighted sum of normalized signals") | Trust. The exact weights can be described as "calibrated annually via held-out PR outcomes" without giving a number. |
-| **The exact weights** (e.g. 0.35/0.30/0.20/0.15) | ❌ Private | A competitor can copy the *idea*; the *calibration* is the work. Versioned. Notated in a `/methodology/changelog` once a year. |
-| **The EMA decay constants** | ❌ Private | These are the "feel" of the score. Changing them moves ranks. |
-| **The rate-of-change normalization** | ❌ Private | This is the *prediction* layer. Anyone can copy "4 signals," nobody can copy the 6 months of outcome calibration. |
-| **The future: acceptance-forecast model weights** | ❌ Private | Pure moat. |
-| **The future: maintainer-breadth decay function** | ❌ Private | Pure moat. |
+| **Tier thresholds** (S ≥ 70, A ≥ 55, B ≥ 40, C ≥ 25, D < 25) | ✅ Public | Trust + AI citation |
+| **Signal definitions** (all 9 signals) | ✅ Public | Trust + AI citation |
+| **Exact weights** (MergeRate 0.275, ResponseTime 0.15, ActivityRecency 0.15, FirstTimer 0.10, TimeToMerge 0.10, RepeatContributor 0.10, ReviewRounds 0.05, MaintainerBreadth 0.05, Responsiveness 0.025) | ✅ Public — already in the open-source repo at `backend/internal/scoring/crank.go` | Trust + AI citation. The weights are public. Deal with it. |
+| **Score formula** (weighted sum of normalized signals + GFI bonus + Bayesian shrinkage) | ✅ Public | Trust + AI citation |
+| **Bayesian shrinkage parameters** (k=6.0, globalPrior=50.0) | ✅ Public | Already in the open-source code |
+| **Hysteresis bands** (±2.0 boundary) | ✅ Public | Already in the open-source code |
+| **Staleness cap** (180-day window, score capped at 29.9, forced D) | ✅ Public | Trust |
+| **Bus factor cap** (≤1 → max tier B) | ✅ Public | Trust |
+| **GFI bonus formula** (min(5.0, 2.5 × ln(1 + gfiCount))) | ✅ Public | Trust |
+| **Rescan schedule** (S/A=1d, B/C=7d, D=15d, stagnant=30d) | ✅ Public | Trust |
+| **MinNormalisationPeers** (2) | ✅ Public | Trust |
+| **Bot exclusions** ([bot], vercel, github-actions, codecov, dependabot, stale, sentry-io) | ✅ Public | Trust |
+| **External associations** (CONTRIBUTOR, FIRST_TIME_CONTRIBUTOR, NONE) | ✅ Public | Trust |
+| **The 102k nightly refresh pipeline** | ❌ Private | The data asset. No one can re-create this in a year. |
+| **The percentile normalization across 102k repos** | ❌ Private | The cross-repo benchmark. Requires all the data. |
 | **The raw underlying PR-level data** | ❌ Private | The real asset. |
 | **The training-set of "merged vs closed" outcomes** | ❌ Private | The real asset. |
+| **The future: acceptance-forecast model weights** | ❌ Private | Pure moat. |
+| **The future: rate-of-change normalization** | ❌ Private | Pure moat. |
+| **The future: maintainer-breadth decay function** | ❌ Private | Pure moat. |
 
 ### The honesty test
 
@@ -124,7 +132,7 @@ The clone is 12 months behind. The moat is the *data and time*, not the math.
 - If we can't: we have no defense and we're done.
 
 **Q2. "What does Tier S actually mean in numbers? Give me the thresholds."**
-- Answer: A single public reference page `/how-c-rank-works` that shows: response_p50 ≤ 24h AND external merge rate ≥ 50% AND first-timer rate ≥ 30% AND ≥2 active maintainers. With the weights described at the family level.
+- Answer: A single public reference page `/how-c-rank-works` that shows the exact 9-signal formula, the weights, the Bayesian shrinkage (k=6.0, prior=50), the staleness cap (180 days → D), the bus factor cap (≤1 maintainer → max B), the hysteresis bands, and the tier boundaries: S ≥ 70, A ≥ 55, B ≥ 40, C ≥ 25, D < 25. Every number is in the open-source repo at `backend/internal/scoring/crank.go`.
 - If we can't: S is a marketing word, not a metric.
 
 **Q3. "How do you score closed-source private repos that host public mirrors?"**
@@ -204,7 +212,7 @@ This kills 80% of comment-thread hostility and gives AI citation engines the mos
 ### Working drafts
 
 #### GM-001 FAQ
-- **"Is C-Rank just a made-up score?"** No. Four public signals, weighted by percentile, with the math in the open-source repo. S means ≤24h median first response, ≥50% external merge rate, ≥30% first-timer success, ≥2 active maintainers — measured over 90 days.
+- **"Is C-Rank just a made-up score?"** No. Nine public signals, weighted and normalized against 102k repos, with the math in the open-source repo. S means a composite score of 70+ out of 100 — not a single metric, but a weighted combination of merge rate, response time, activity recency, first-timer success, time to merge, repeat contributors, review efficiency, maintainer breadth, and issue responsiveness. Measured over 90-day rolling windows with Bayesian shrinkage for low-sample repos.
 - **"Why not just use stars?"** Because the median 50k-star repo has a 6-month PR backlog. Stars are attention, not responsiveness.
 - **"What does this cost me?"** Free for everything except Pro ($5/$39): personal forecasts, stall-rescue alerts, public profile. Sign-in is GitHub OAuth, no email harvesting.
 
