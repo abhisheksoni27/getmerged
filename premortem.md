@@ -64,18 +64,18 @@ But the *crown jewel* — the rolling EMA, the rate-of-change normalization, the
 | Layer | Public? | Why |
 |---|---|---|
 | **Tier thresholds** (S ≥ 70, A ≥ 55, B ≥ 40, C ≥ 25, D < 25) | ✅ Public | Trust + AI citation |
-| **Signal definitions** (all 9 signals) | ✅ Public | Trust + AI citation |
-| **Exact weights** (MergeRate 0.275, ResponseTime 0.15, ActivityRecency 0.15, FirstTimer 0.10, TimeToMerge 0.10, RepeatContributor 0.10, ReviewRounds 0.05, MaintainerBreadth 0.05, Responsiveness 0.025) | ✅ Public — already in the open-source repo at `backend/internal/scoring/crank.go` | Trust + AI citation. The weights are public. Deal with it. |
-| **Score formula** (weighted sum of normalized signals + GFI bonus + Bayesian shrinkage) | ✅ Public | Trust + AI citation |
-| **Bayesian shrinkage parameters** (k=6.0, globalPrior=50.0) | ✅ Public | Already in the open-source code |
-| **Hysteresis bands** (±2.0 boundary) | ✅ Public | Already in the open-source code |
-| **Staleness cap** (180-day window, score capped at 29.9, forced D) | ✅ Public | Trust |
-| **Bus factor cap** (≤1 → max tier B) | ✅ Public | Trust |
-| **GFI bonus formula** (min(5.0, 2.5 × ln(1 + gfiCount))) | ✅ Public | Trust |
-| **Rescan schedule** (S/A=1d, B/C=7d, D=15d, stagnant=30d) | ✅ Public | Trust |
-| **MinNormalisationPeers** (2) | ✅ Public | Trust |
-| **Bot exclusions** ([bot], vercel, github-actions, codecov, dependabot, stale, sentry-io) | ✅ Public | Trust |
-| **External associations** (CONTRIBUTOR, FIRST_TIME_CONTRIBUTOR, NONE) | ✅ Public | Trust |
+| **Signal definitions** (all 9 signals, what they measure) | ✅ Public | Trust + AI citation |
+| **The exact weights** (MergeRate 0.275, ResponseTime 0.15, ActivityRecency 0.15, FirstTimer 0.10, TimeToMerge 0.10, RepeatContributor 0.10, ReviewRounds 0.05, MaintainerBreadth 0.05, Responsiveness 0.025) | ❌ Private — repo is private | A competitor can reverse-engineer if we publish them. Keep private. Versioned. |
+| **Score formula** (weighted sum of normalized signals + GFI bonus + Bayesian shrinkage) | ✅ Public at the family level | Trust. We describe it as a weighted combination of normalized signals without giving the exact coefficients. |
+| **Bayesian shrinkage parameters** (k, prior) | ❌ Private | Same reason — private repo. |
+| **Hysteresis band values** | ❌ Private | Same reason. |
+| **Staleness cap values** | ❌ Private | Same reason. |
+| **Bus factor cap threshold** | ❌ Private | Same reason. |
+| **GFI bonus formula parameters** | ❌ Private | Same reason. |
+| **Bot exclusion list** | ❌ Private | Same reason. |
+| **External association rules** | ❌ Private | Same reason. |
+| **Rescan schedule values** | ❌ Private | Same reason. |
+| **MinNormalisationPeers threshold** | ❌ Private | Same reason. |
 | **The 102k nightly refresh pipeline** | ❌ Private | The data asset. No one can re-create this in a year. |
 | **The percentile normalization across 102k repos** | ❌ Private | The cross-repo benchmark. Requires all the data. |
 | **The raw underlying PR-level data** | ❌ Private | The real asset. |
@@ -132,7 +132,7 @@ The clone is 12 months behind. The moat is the *data and time*, not the math.
 - If we can't: we have no defense and we're done.
 
 **Q2. "What does Tier S actually mean in numbers? Give me the thresholds."**
-- Answer: A single public reference page `/how-c-rank-works` that shows the exact 9-signal formula, the weights, the Bayesian shrinkage (k=6.0, prior=50), the staleness cap (180 days → D), the bus factor cap (≤1 maintainer → max B), the hysteresis bands, and the tier boundaries: S ≥ 70, A ≥ 55, B ≥ 40, C ≥ 25, D < 25. Every number is in the open-source repo at `backend/internal/scoring/crank.go`.
+- Answer: A single public reference page `/how-c-rank-works` that shows the 9-signal methodology, the tier boundaries (S/A/B/C/D), the safety rules (staleness cap, maintainer team safety cap, Bayesian shrinkage for low-sample repos, hysteresis bands), and the exclusion rules. The exact weights and parameters remain private in the scoring module, but the methodology is fully explained and auditable. Every repo scorecard shows the raw data so you can verify.
 - If we can't: S is a marketing word, not a metric.
 
 **Q3. "How do you score closed-source private repos that host public mirrors?"**
