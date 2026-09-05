@@ -445,4 +445,4 @@ Any post not on this schedule requires a one-line justification in the PR descri
 ## 13. Change Log
 
 - **2026-09-05** — Initial schedule drafted (Weeks 1–4 + sustain queue) for the GetMerged public launch.
-- **2026-09-05** — Full product inventory completed: updated repo count to 102,094, GFIs to 22,124, API endpoints to 113, components to 70+. Added 5th pillar (Gamification). Added 7 new posts (GM-007, GM-011, GM-015–GM-020, GM-022–GM-030). Added recruiter segment (Segment D). Added founder fame goal. Added skeptic FAQ requirement to quality gates. Added recruiter distribution channel. Added specific numbers for tier distribution and language counts.
+- **2026-09-06** — Full rewrite in brand voice. Updated repo count to 102,094, GFIs to 22,124, APIs to 113, components to 70+. Added 5th pillar (Gamification). Added 7 new posts (GM-007, GM-011, GM-015–GM-020, GM-022–GM-030). Added recruiter segment (Segment D). Added founder fame goal. Added skeptic FAQ requirement to quality gates. Added recruiter distribution channel. Updated Pro pricing to $5/$39 (Pro) + $25 (Recruiter). Added specific numbers for tier distribution and language counts.

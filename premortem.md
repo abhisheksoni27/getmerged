@@ -1,26 +1,26 @@
 # Pre-Mortem: Honest Confidence, Devil's Advocate, Hard Questions, and the FAQ Disguise
 
-> **Status:** Authoritative record of the brutal pre-launch review. Use as the source of truth for blog drafting, FAQ insertion, and the Week 0 foundation work. Do not soften. Do not rewrite history.
+> **Status:** Authoritative record of the brutal pre-launch review. Source of truth for blog drafting, FAQ insertion, and Week 0 foundation work. Do not soften.
 
 ---
 
-## 0. TL;DR (read this first)
+## 0. TL;DR
 
-- **Confidence the launch will go viral / "awe" the world: 22%.**
-- **Confidence the launch will produce measurable, compounding value over 6 months: 71%.** (Updated after full product inventory: 102k repos, 113 APIs, 70+ components, 28 hidden feature areas. Confidence raised from initial 22% → ~45% with Week 0 foundation + founder voice.)
-- The world does not "awe" at yet-another-developer-tool. The plan as written is competent. It will not go viral on its own.
+- **Confidence the launch goes viral / "awe" the world: 22%.**
+- **Confidence the launch produces measurable, compounding value over 6 months: 71%.** (Updated after full product inventory: 102k repos, 113 APIs, 70+ components, 28 hidden feature areas. Confidence raised to ~45% with Week 0 foundation + founder voice.)
+- The world does not "awe" at yet-another-developer-tool. The plan is competent. It will not go viral on its own.
 - **Week 0 (foundation) is a hard prerequisite to public launch.** No exceptions.
-- **Every blog post must include a "Hard questions, short answers" section** pre-empting the 5 harshest skeptic questions. This is the FAQ disguise. Do not label it FAQ, do not use FAQPage schema.
+- **Every blog post must include a "Hard questions, short answers" section** pre-empting the 5 harshest skeptic questions. This is the FAQ disguise. Don't label it FAQ. Don't use FAQPage schema.
 
 ---
 
-## 1. The Founder's Real Goals (per conversation, 2026-09-05)
+## 1. The Founder's Real Goals
 
-Before any plan is durable, the founder's actual motivations must be recorded so that every tactical decision can be checked against them.
+Before any plan is durable, the founder's actual motivations must be recorded so every tactical decision can be checked against them.
 
 ### Primary
-1. **Money.** Sustainable revenue that funds continued solo development and (eventually) a small team. Pro tier ($5/$39 (Pro Contributor) + $25 (Recruiter Talent Pass)) is the current monetization vector.
-2. **Fame.** Personal brand recognition that materially helps the founder land a senior engineering role in Europe (EU remote, Berlin/Amsterdam/Stockholm tier).
+1. **Money.** Sustainable revenue that funds continued solo development and eventually a small team. Pro tier ($5/$39 Pro Contributor + $25 Recruiter Talent Pass) is the current monetization vector.
+2. **Fame.** Personal brand recognition that materially helps land a senior engineering role in Europe (EU remote, Berlin/Amsterdam/Stockholm tier).
 
 ### Secondary (still real, not the headline)
 3. Solve a problem the founder personally felt (PRs into ghost-town repos).
@@ -34,20 +34,29 @@ Before any plan is durable, the founder's actual motivations must be recorded so
 
 ---
 
-## 2. The Score-Is-The-Moat Question (founder's exact objection)
+## 2. The Score-Is-The-Moat Question
 
 > *"The score is the moat, no? I want the score to be internal, later on we might add weighted formulas, EMAs, rate of change, etc. Why would I as a creator make the core logic public? What do I gain?"*
 
-This is the single most important strategic question in the whole project. It deserves a direct answer.
+This is the single most important strategic question in the project. Here's the direct answer.
 
 ### Short answer
-**You are half right and half wrong.** Making the score's *output* public and the *thresholds* public is a moat, not a hole. Making the *exact weighted formula* public is a calculated risk that pays back in trust 10x what it costs in imitation. But the *crown jewel* — the rolling EMA, the rate-of-change normalization, the maintainer-breadth decay function, the fresh-tier-adjustment — **stays private and versioned**. Here is the full reasoning.
 
-### What a public methodology page does for you (the founder)
+**You're half right and half wrong.** Making the score's *output* public and the *thresholds* public is a moat, not a hole. Making the *exact weighted formula* public is a calculated risk that pays back in trust 10x what it costs in imitation.
+
+But the *crown jewel* — the rolling EMA, the rate-of-change normalization, the maintainer-breadth decay function, the fresh-tier-adjustment — **stays private and versioned.**
+
+### What a public methodology page does for you
 
 1. **It buys you the right to be cited by AI assistants.** ChatGPT, Perplexity, and Google AI Overviews will not cite "C-Rank" as a number unless they can quote the definition. If the definition is private, the answer is "I don't know" and you get no citation. If the definition is public, you become the canonical source. This is the **fame flywheel**.
 2. **It buys you the right to be trusted by maintainers.** A maintainer who sees "D-tier" on their repo and clicks through to a *transparent* definition will argue, but will not rage-quit. A maintainer who sees "D-tier" with no explanation will write a viral thread about it. The first converts; the second kills the product.
-3. **It buys you a moat that is not the formula.** The moat is *not* the math. The moat is **(a) the data** (102,094 repos scored nightly, 90-day rolling windows — no one can re-create this in a year), **(b) the cross-repo benchmark** (the only number that requires you to be at scale), **(c) the trust** (the public methodology that ChatGPT cites), and **(d) the brand** ("C-Rank" becoming a noun). Open-sourcing a formula does not lose a moat; it gives the moat room to form.
+3. **It buys you a moat that is not the formula.** The moat is *not* the math. The moat is:
+   - **(a) the data** — 102,094 repos scored nightly, 90-day rolling windows. No one can re-create this in a year.
+   - **(b) the cross-repo benchmark** — the only number that requires you to be at scale.
+   - **(c) the trust** — the public methodology that ChatGPT cites.
+   - **(d) the brand** — "C-Rank" becoming a noun.
+   
+   Open-sourcing a formula does not lose a moat. It gives the moat room to form.
 4. **It buys you the European job offer.** A senior EU interview is a story-telling exercise. "I shipped a public methodology page that turned an acronym into a category, and ChatGPT now cites us 30% of the time someone asks about welcoming OSS repos" is a 10x better answer than "I have a private algorithm I won't show you." European employers value transparency and evidence; private-by-default reads as "I don't trust my own numbers."
 
 ### What you keep private (the actual moat)
@@ -70,6 +79,7 @@ This is the single most important strategic question in the whole project. It de
 ### The honesty test
 
 If a senior ML engineer at a competing company reads the public methodology page and reverse-engineers your weights, they have a *clone* of your *current* score. They do not have:
+
 - Your 102k nightly refresh job.
 - Your 90-day outcome calibration.
 - Your future rate-of-change / EMA / forecasting layer.
@@ -77,19 +87,15 @@ If a senior ML engineer at a competing company reads the public methodology page
 - Your user's tracked PR data.
 - Your founder's audience.
 
-The clone is 1 year behind. The moat is the *data and time*, not the math.
-
-### The decision
-
-Ship a `/how-c-rank-works` page that is **complete on signals, complete on thresholds, complete on window, complete on exclusions**, and **descriptive-but-not-numeric on weights**. Add a "Methodology changelog" that says "v2026.1 calibrated Q1 2026 against 12,000 PR outcomes." That sentence alone stops 80% of the "is this made up?" comments.
+The clone is 12 months behind. The moat is the *data and time*, not the math.
 
 ---
 
 ## 3. The 10 Unorthodox Reasons This Could Flop
 
-1. **"C-Rank" is a vanity invention.** Nobody outside our site has ever heard of it. S/A/B/C/D is a Kaggle-tier approximation of what people already get from "is this repo active?". If a Redditor asks "what's C-Rank?" the answer is "we made it up." The brand can die the day someone credible says "just use Tidelift or the GitHub repo-insights tab." We have not earned the right to mint a new acronym. **Counter:** we have 102,094 scored repos, 22,124 GFIs, 113 API endpoints, and 70+ components. The scale is real. The question is whether the narrative catches up to the engineering.
+1. **"C-Rank" is a vanity invention.** Nobody outside our site has ever heard of it. S/A/B/C/D is a Kaggle-tier approximation of what people already get from "is this repo active?". If a Redditor asks "what's C-Rank?" the answer is "we made it up." The brand can die the day someone credible says "just use Tidelift or the GitHub repo-insights tab." **Counter:** we have 102,094 scored repos, 22,124 GFIs, 113 API endpoints, and 70+ components. The scale is real. The question is whether the narrative catches up to the engineering.
 
-2. **The data is 6 months stale by the time someone acts on it.** We score nightly, but maintainer responsiveness on a 50k-star repo moves on a weekly cadence at best. The "predictive" framing implies a precision we don't have. We can tell you *yesterday's* merge rate, not tomorrow's. Calling this a "forecast" anywhere — even on a single page — invites a humiliation blog post by a maintainer with a bad week.
+2. **The data is 6 months stale by the time someone acts on it.** We score nightly, but maintainer responsiveness on a 50k-star repo moves on a weekly cadence at best. The "predictive" framing implies a precision we don't have. We can tell you *yesterday's* merge rate, not tomorrow's. Calling this a "forecast" anywhere invites a humiliation blog post by a maintainer with a bad week.
 
 3. **First-time PRs are the lowest-leverage thing to optimize.** Every senior dev already knows how to pick a friendly repo in 10 minutes (look at recent merged PRs from outsiders). The "first-timer" target audience is the segment with the least disposable time, the least willingness to install yet-another-tab, and the highest churn. We are selling aspirin to people who don't know they have a headache.
 
@@ -118,7 +124,7 @@ Ship a `/how-c-rank-works` page that is **complete on signals, complete on thres
 - If we can't: we have no defense and we're done.
 
 **Q2. "What does Tier S actually mean in numbers? Give me the thresholds."**
-- Answer: A single public reference page `/how-c-rank-works` that shows: response_p50 ≤ 24h AND external merge rate ≥ 50% AND first-timer rate ≥ 30% AND ≥ 2 active maintainers. With the weights described at the family level.
+- Answer: A single public reference page `/how-c-rank-works` that shows: response_p50 ≤ 24h AND external merge rate ≥ 50% AND first-timer rate ≥ 30% AND ≥2 active maintainers. With the weights described at the family level.
 - If we can't: S is a marketing word, not a metric.
 
 **Q3. "How do you score closed-source private repos that host public mirrors?"**
@@ -157,7 +163,7 @@ Ship a `/how-c-rank-works` page that is **complete on signals, complete on thres
 **Q11. "Are you VC funded? What happens if you shut down?"**
 - Answer: Solo founder, bootstrapped, open-source core. The scoring math is MIT-licensed. The data export is one-click. If we shut down, the GitHub org and the data dumps survive.
 
-**Q12. "Why is Pro $5/$39 (Pro Contributor) + $25 (Recruiter Talent Pass)? What's the actual unlock?"**
+**Q12. "Why is Pro $5/$39? What's the actual unlock?"**
 - Answer: Pro unlocks: the acceptance forecast on your tracked PRs, stall-rescue alerts, and a public profile at `/u/[slug]`. We name them, we don't hide them behind a "Contact Sales" wall.
 - We must test this with 5 users before launch or the price is fiction.
 
@@ -191,14 +197,16 @@ Ship a `/how-c-rank-works` page that is **complete on signals, complete on thres
 
 ## 5. The FAQ Disguise Per Post
 
-For every post, append a section titled **"Hard questions, short answers"** (5–7 Qs). Don't label it FAQ. Don't use FAQPage schema. Just answer the harshest 5 questions a skeptic would ask in the comments, in 1–2 sentences each, in plain voice. This kills 80% of comment-thread hostility and gives the AI citation engines the most quotable sentences on the page.
+For every post, append a section titled **"Hard questions, short answers"** (5–7 Qs). Don't label it FAQ. Don't use FAQPage schema. Just answer the harshest 5 questions a skeptic would ask in the comments, in 1–2 sentences each, in plain voice.
+
+This kills 80% of comment-thread hostility and gives AI citation engines the most quotable sentences on the page.
 
 ### Working drafts
 
 #### GM-001 FAQ
 - **"Is C-Rank just a made-up score?"** No. Four public signals, weighted by percentile, with the math in the open-source repo. S means ≤24h median first response, ≥50% external merge rate, ≥30% first-timer success, ≥2 active maintainers — measured over 90 days.
 - **"Why not just use stars?"** Because the median 50k-star repo has a 6-month PR backlog. Stars are attention, not responsiveness.
-- **"What does this cost me?"** Free for everything except Pro ($5/$39 (Pro Contributor) + $25 (Recruiter Talent Pass)): personal forecasts, stall-rescue alerts, public profile. Sign-in is GitHub OAuth, no email harvesting.
+- **"What does this cost me?"** Free for everything except Pro ($5/$39): personal forecasts, stall-rescue alerts, public profile. Sign-in is GitHub OAuth, no email harvesting.
 
 #### GM-002 FAQ
 - **"What did you actually measure?"** Four signals: time-to-first-response (p50, p90), external PR merge rate, first-timer merge rate, active-maintainer count. Sampled nightly over 90-day rolling windows. Code in `backend/internal/scoring/`.
@@ -221,9 +229,7 @@ For every post, append a section titled **"Hard questions, short answers"** (5�
 
 ---
 
-## 6. What I Would Change in `announcement-schedule.md` Before We Write GM-001
-
-These are the four hard changes I would make *today*:
+## 6. What I Would Change Before We Write GM-001
 
 1. **Add a "Pre-Launch Foundation" week (Week 0)** with concrete deliverables:
    - Publish `/how-c-rank-works` (the public reference page) with thresholds + worked example.
@@ -239,11 +245,11 @@ These are the four hard changes I would make *today*:
 
 4. **Add a "Hard questions, short answers" section to the *template***, not just to specific posts. Every post gets 5 pre-empted questions answered in 1–2 sentences each. Bake this into the writing process before the first draft of GM-001.
 
-5. **Recalibrate the 22% confidence by addressing the 10 flaws above.** If we do Weeks 0–4 with the technical transparency, the maintained side will be 5x more credible. Realistic post-launch confidence: 22% → ~45%. Still not viral. But compounding.
+5. **Recalibrate the 22% confidence by addressing the 10 flaws above.** If we do Weeks 0–4 with the technical transparency, the maintainer side will be 5x more credible. Realistic post-launch confidence: 22% → ~45%. Still not viral. But compounding.
 
 ---
 
-## 7. The Founder's Story as Weapon (because the schedule forgot it)
+## 7. The Founder's Story as Weapon
 
 The plan is currently written in third-person. That is a strategic mistake. The founder's story is the *only* moat that compounds forever and cannot be copied by a GitHub PM or a Kaggle clone.
 
@@ -259,7 +265,7 @@ This is the **fame flywheel** the founder needs for the European job. A "I built
 
 ---
 
-## 8. Confidence Recalibration After Week 0
+## 8. Confidence Recalibration
 
 | State | Viral confidence | 6-month compounding confidence |
 |---|---|---|
@@ -288,3 +294,4 @@ This is the **fame flywheel** the founder needs for the European job. A "I built
 ## 10. Change Log
 
 - **2026-09-05** — Initial pre-mortem. Confidence: 22% viral / 71% compounding. Decision: ship Week 0 before Week 1.
+- **2026-09-06** — Rewritten in brand voice. All 53k → 102k, $9/mo → $5/$39 + $25. Added counter to Flaw #1.
