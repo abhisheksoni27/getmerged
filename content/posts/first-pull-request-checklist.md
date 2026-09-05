@@ -59,7 +59,7 @@ Run these checks before writing any code. All five are precomputed on every [Get
 
 | # | Check | Pass condition | Why it's first |
 |---|---|---|---|
-| 1 | External merge rate | > 50% (ideally 60%+) | Highest-weighted C-Rank term (0.275); below half, most outside work dies |
+| 1 | External merge rate | > 50% (ideally 60%+) | Highest-weighted C-Rank term; below half, most outside work dies |
 | 2 | p50 first response | ≤ 72 h | 74% of all answered PRs get their answer within 72 h of opening |
 | 3 | Last external merge | ≤ 180 days | Past this line the repo is formally stale — capped at tier D |
 | 4 | Active maintainers (90 d) | ≥ 2, ideally ≥ 3 | Bus factor 1 caps even great repos at tier B and couples you to one calendar |

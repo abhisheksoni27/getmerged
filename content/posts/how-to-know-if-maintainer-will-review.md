@@ -84,9 +84,9 @@ The metric is **days since the last external PR was merged** (`LastActivityDays`
 |---|---|---|
 | ≤ 7 days | Green | Live review loop; S/A-tier repos rescan daily at this level |
 | ≤ 60 days | Yellow | Alive but slowing; check commit pulse on the default branch too |
-| ≥ 180 days | Red | Staleness flag fires; score capped at 29.9, tier D, regardless of history |
+| ≥ 180 days | Red | Staleness flag fires; score capped at a low maximum, tier D, regardless of history |
 
-That red row is absolute. A legendary project that stopped merging outsiders six months ago is graded identically to an abandoned toy — because for contribution purposes they are identical. Scan cadence decays accordingly: D/stale repos drop to 15-day rescans, then 30 days after two consecutive stagnant scans.
+That red row is absolute. A legendary project that stopped merging outsiders six months ago is graded identically to an abandoned toy — because for contribution purposes they are identical. Scan cadence decays accordingly: D/stale repos drop to a long rescan interval, then even longer after two consecutive stagnant scans.
 
 ## Signal 4: Review Cycle Density and Discussion Triage
 

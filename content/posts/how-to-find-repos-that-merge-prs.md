@@ -42,8 +42,8 @@ Most contribution advice tells you to browse by topic and hope for the best. The
 We run exactly this pipeline at [GetMerged](https://getmerged.abhishekco.de/): 53,000+ public repositories indexed via the GitHub GraphQL API, each scored on a rolling 180-day window of PR telemetry. This guide shows the full scoring math so you can apply it manually or let the rankings do it for you.
 
 > **Key Takeaways**
-> - External merge rate carries the highest weight (0.275) in GetMerged's C-Rank™ score; star count carries zero.
-> - Repositories need roughly 6 closed external PRs before their score reaches ~63% confidence, and ~20 before it exceeds 96% — small samples are shrunk toward neutral, so a lucky repo can't fake an S-tier.
+> - External merge rate is the highest-weighted signal in GetMerged's C-Rank™ score; star count carries zero weight.
+> - Repositories need a meaningful sample of closed external PRs before their score reaches reliable confidence. Small samples are shrunk toward neutral, so a lucky repo can't fake an S-tier.
 > - A repository with no external PR merged in 180 days is flagged stale and hard-capped at tier D, regardless of every other metric.
 > - Median first-response time across the GetMerged index is 27 hours; S-tier velocity starts under 6 hours.
 
@@ -53,54 +53,54 @@ Stars measure attention. They say nothing about whether a stranger's pull reques
 
 What does predict a merged PR is recent, observed merge behavior on *external* contributions — PRs from people with `CONTRIBUTOR`, `FIRST_TIME_CONTRIBUTOR`, or no association to the repo. Insiders (`OWNER`, `MEMBER`, `COLLABORATOR`) merging each other's work tells you nothing about your odds.
 
-## The C-Rank Formula, Weight by Weight
+## The C-Rank Formula, Signal by Signal
 
-C-Rank scores each repository 0–100 as a weighted sum of nine percentile-normalized metrics, then maps the score to a tier: **S** ≥ 70, **A** ≥ 55, **B** ≥ 40, **C** ≥ 25, **D** below 25.
+C-Rank scores each repository 0–100 as a weighted combination of nine percentile-normalized metrics, then maps the score to a tier: **S** ≥ 70, **A** ≥ 55, **B** ≥ 40, **C** ≥ 25, **D** below 25.
 
-| Metric | Weight | What it measures |
-|---|---|---|
-| External PR merge rate | 0.275 | % of outside PRs closed as MERGED in the 180-day window |
-| First-response time | 0.150 | Median hours until a human comments on an external PR |
-| Activity recency | 0.150 | Days since the last external PR was merged |
-| First-timer success | 0.100 | % of first-time contributors whose PR was merged |
-| Time-to-merge | 0.100 | Median hours from PR open to merge |
-| Repeat contributor rate | 0.100 | % of external authors who came back |
-| Review rounds | 0.050 | Median comment count per merged PR (fewer = tighter process) |
-| Maintainer breadth | 0.050 | Distinct maintainers active on PRs |
-| Responsiveness | 0.025 | Mirrors first-response latency |
+| Metric | What it measures |
+|---|---|
+| External PR merge rate | % of outside PRs closed as MERGED in the 180-day window |
+| First-response time | Median hours until a human comments on an external PR |
+| Activity recency | Days since the last external PR was merged |
+| First-timer success | % of first-time contributors whose PR was merged |
+| Time-to-merge | Median hours from PR open to merge |
+| Repeat contributor rate | % of external authors who came back |
+| Review rounds | Median comment count per merged PR (fewer = tighter process) |
+| Maintainer breadth | Distinct maintainers active on PRs |
+| Responsiveness | Mirrors first-response latency |
 
 Three design choices matter when you're choosing where to spend a weekend:
 
 1. **Merge rate dominates.** A repo that merges 8 of 10 outside PRs beats a repo that merges 2 of 10 even if the second has better response times everywhere else.
-2. **First-timer success is a real term (0.10),** computed from GitHub's own `FIRST_TIME_CONTRIBUTOR` association — not inferred.
-3. **Repos with live `good first issue` backlogs get a damped bonus:** min(5.0, 2.5 · ln(1 + issueCount)), capped at 5 points. One labeled issue adds ~1.7 points; ten or more hits the cap. Beginner-friendly posture nudges, never dominates.
+2. **First-timer success is a real term,** computed from GitHub's own `FIRST_TIME_CONTRIBUTOR` association — not inferred.
+3. **Repos with live `good first issue` backlogs get a damped bonus:** capped at a modest number of points. One labeled issue adds a small boost; many issues hit the cap. Beginner-friendly posture nudges, never dominates.
 
 The complete metric definitions live on [how C-Rank works](/how-c-rank-works); you can browse the output on the [/repos explorer](/repos) or per-language [/rankings](/rankings/go).
 
 ## Sample Size: When to Trust a Score
 
-Raw percentages lie when the denominator is two PRs. GetMerged applies Bayesian shrinkage toward a neutral prior of 50 using confidence = 1 − e^(−n/6):
+Raw percentages lie when the denominator is two PRs. GetMerged applies Bayesian shrinkage toward a neutral prior so that small-sample scores are pulled back toward the middle:
 
 | Closed external PRs (n) | Confidence in observed behavior |
 |---|---|
-| 1 | 15% |
-| 3 | 39% |
-| 6 | 63% |
-| 15 | 92% |
-| 20+ | 96%+ |
+| 1 | Low |
+| 3 | Moderate |
+| 6 | Solid |
+| 15 | High |
+| 20+ | Very high |
 
 Practical rule: treat sub-6-PR scores as weak signals. If you compute merge rates by hand from a repo's closed-PR list, don't trust anything below ~6 closed external PRs either. A repo with 1 PR, merged, showing "100% merge rate" is statistically indistinguishable from noise.
 
 ## Response Velocity: The Band That Predicts Everything Else
 
-Median hours to first human response (bots excluded — Dependabot, GitHub Actions, `[bot]` accounts, codecov, stale-bot, sentry-io, vercel are filtered before averaging) splits the index into four velocity bands:
+Median hours to first human response (bots excluded — automated accounts are filtered before averaging) splits the index into four velocity bands:
 
 | p50 first response | Velocity score | What it feels like as a contributor |
 |---|---|---|
-| ≤ 6 h | 98 | Same-day triage; maintainer is watching the queue |
-| ≤ 24 h | 80 | Normal healthy project cadence |
-| ≤ 72 h | 65 | Reviewed weekly; fine for patient contributors |
-| > 72 h | 45 | Your PR will sit. Plan accordingly |
+| ≤ 6 h | Elite | Same-day triage; maintainer is watching the queue |
+| ≤ 24 h | Strong | Normal healthy project cadence |
+| ≤ 72 h | Moderate | Reviewed weekly; fine for patient contributors |
+| > 72 h | Weak | Your PR will sit. Plan accordingly |
 
 Across the whole index, median p50 response is 27 hours, but the p90 tail stretches past nine days — which is why we track both percentiles. A repo can respond to half its PRs same-day and still strand the other half for weeks. Check the p50 *and* p90 on any [repo detail page](/repo/kubernetes/kubernetes) before committing work.
 
@@ -111,8 +111,8 @@ A ghost codebase looks alive — commits land, stars accrue — but no outsider 
 GetMerged enforces this mechanically:
 
 - **Staleness flag:** true when no external PR was merged in the rolling 180-day window (or the last external merge is ≥ 180 days old).
-- **Hard cap:** a stale repo's score is capped at 29.9 and tiered D — every other metric becomes irrelevant.
-- **Scan decay:** S/A-tier repos rescan daily, B/C weekly, D/stale every 15 days; two consecutive stagnant scans push the interval to 30 days, because dead repos rarely resurrect mid-cycle.
+- **Hard cap:** a stale repo's score is capped at a low maximum and tiered D — every other metric becomes irrelevant.
+- **Scan decay:** S/A-tier repos rescan frequently, B/C less often, D/stale on a long cycle; two consecutive stagnant scans push the interval even further, because dead repos rarely resurrect mid-cycle.
 
 In the August 2026 index snapshot, 31% of tracked repositories had merged zero external PRs in their trailing 180 days. Roughly one in three "active-looking" projects will not merge your work, and none of them advertise that fact on their README.
 
