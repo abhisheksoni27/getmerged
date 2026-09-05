@@ -2,13 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/Ovi/DummyJSON</loc>
-    <lastmod>2026-08-30T09:24:05Z</lastmod>
+    <lastmod>2026-09-04T22:40:33Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/github/haikus-for-codespaces</loc>
+    <lastmod>2026-09-04T22:40:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/aaronshaf/dynamodb-admin</loc>
-    <lastmod>2026-08-30T09:25:54Z</lastmod>
+    <lastmod>2026-09-04T22:42:32Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

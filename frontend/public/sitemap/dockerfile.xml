@@ -14,13 +14,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/iggredible/Learn-Vim</loc>
-    <lastmod>2026-08-30T09:21:00Z</lastmod>
+    <lastmod>2026-09-04T22:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jaywcjlove/reference</loc>
-    <lastmod>2026-08-30T09:21:00Z</lastmod>
+    <lastmod>2026-09-04T22:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dotnet/dotnet-docker</loc>
-    <lastmod>2026-08-30T09:22:33Z</lastmod>
+    <lastmod>2026-09-04T22:39:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -56,7 +56,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Dark-Xploit/CypherX</loc>
-    <lastmod>2026-08-30T09:23:59Z</lastmod>
+    <lastmod>2026-09-04T22:40:27Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -80,13 +80,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-code-server</loc>
-    <lastmod>2026-08-30T09:24:32Z</lastmod>
+    <lastmod>2026-09-04T22:41:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/p0dalirius/Awesome-RCE-techniques</loc>
-    <lastmod>2026-08-30T09:25:24Z</lastmod>
+    <lastmod>2026-09-04T22:41:58Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -188,19 +188,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/amancevice/docker-superset</loc>
-    <lastmod>2026-08-30T09:26:46Z</lastmod>
+    <lastmod>2026-09-04T22:43:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/anibali/docker-pytorch</loc>
-    <lastmod>2026-08-30T09:27:05Z</lastmod>
+    <lastmod>2026-09-04T22:43:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/RICwang/docker-wechat</loc>
-    <lastmod>2026-08-30T09:27:11Z</lastmod>
+    <lastmod>2026-09-04T22:43:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -248,13 +248,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jpillora/docker-dnsmasq</loc>
-    <lastmod>2026-08-30T09:27:54Z</lastmod>
+    <lastmod>2026-09-04T22:44:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/GoogleCloudPlatform/cloud-sdk-docker</loc>
-    <lastmod>2026-08-30T09:28:29Z</lastmod>
+    <lastmod>2026-09-04T23:36:47Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/omerbsezer/Fast-Docker</loc>
+    <lastmod>2026-09-04T23:36:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -463,13 +469,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-lidarr</loc>
+    <loc>https://getmerged.abhishekco.de/ledermann/docker-rails-base</loc>
     <lastmod>2026-08-17T02:45:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ledermann/docker-rails-base</loc>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-lidarr</loc>
     <lastmod>2026-08-17T02:45:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -955,14 +961,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-librespeed</loc>
-    <lastmod>2026-08-17T07:30:47Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/naskio/docker-n8n-python</loc>
+    <lastmod>2026-08-19T16:33:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/naskio/docker-n8n-python</loc>
-    <lastmod>2026-08-19T16:33:29Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-librespeed</loc>
+    <lastmod>2026-08-17T07:30:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
