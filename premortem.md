@@ -121,6 +121,8 @@ The clone is 12 months behind. The moat is the *data and time*, not the math.
 
 10. **Pro pricing has no anchor.** $5/$39 for Pro Contributor ($25 for Recruiter Talent Pass) — we haven't tested willingness-to-pay with even 5 user interviews. The pricing page is a guess. If conversion is <1%, the whole engine stalls and we lose 4 weeks of "in the meantime" content marketing. **Counter:** we have 2 Pro users already (pre-launch). The pricing is tested, just not at scale.
 
+11. **The product is a ghost town and every screenshot will prove it.** 4 users, 0 tracked PRs, 0 stall alerts, 0 GFI subscribers, 0 contributor feedback, 0 playbook cards. The scoring engine is massive but the user-facing engagement layer is empty. The Dashboard has nothing to show. The League has no participants. The Karma system has no data. A new user signs in and sees "Level 1, 0 XP, 0 tracked PRs" — which reads as "nobody uses this." Every screenshot in GM-001 will either show the founder's own data or an empty product. **Counter:** every product starts at zero. But the founder must seed their own real usage (track PRs, claim repos, submit feedback, build karma) before taking a single screenshot. This is not fake data — it's dogfooding. Added to `do-this-fast.md` as P0 #7.
+
 ---
 
 ## 4. Skeptic Pre-Mortem: Every Hard Question a User Will Ask
@@ -280,6 +282,9 @@ This is the **fame flywheel** the founder needs for the European job. A "I built
 | Plan as written, today | **22%** | 71% |
 | Plan + Week 0 foundation shipped + founder voice in copy | **~45%** | ~80% |
 | Plan + Week 0 + 5 user interviews validating Pro pricing + one maintainer case study pre-launch | **~55%** | ~85% |
+| Plan + all above + **actual HN/Reddit feedback absorbed in Days 9–12 pivot window** | **~30–60%** | ~75–90% |
+
+The fourth row reflects reality: launch week feedback is non-linear. It either validates positioning (confidence jumps to 60%) or reveals a gap you didn't anticipate (confidence drops to 30%). Reserve Days 9–12 post-launch for absorbing feedback before publishing GM-002. Do not commit to the full content schedule until you've read the first 48 hours of comments.
 
 **We are not at the second row yet. The first step is Week 0.**
 
@@ -303,3 +308,4 @@ This is the **fame flywheel** the founder needs for the European job. A "I built
 
 - **2026-09-05** — Initial pre-mortem. Confidence: 22% viral / 71% compounding. Decision: ship Week 0 before Week 1.
 - **2026-09-06** — Rewritten in brand voice. All 53k → 102k, $9/mo → $5/$39 + $25. Added counter to Flaw #1.
+- **2026-09-06** — Added Flaw #11 (cold-start / ghost town product — 0 tracked PRs, 0 feedback, 0 league participants). Added 4th row to confidence recalibration table (post-launch feedback pivot window, Days 9–12). Counter: founder seeds own usage data before screenshots.

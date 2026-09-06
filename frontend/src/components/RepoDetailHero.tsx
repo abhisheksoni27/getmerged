@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { Bookmark, GitPullRequest, Star, Scale, CircleDot, Check, Share2, Copy, Shield, AlertTriangle } from "lucide-react";
+import { Bookmark, GitPullRequest, Star, Scale, CircleDot, Check, Share2, Copy, Shield, AlertTriangle, ShieldAlert } from "lucide-react";
 import { LangLogo } from "@/components/LangLogo";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { Repo } from "@/types/opendoor";
@@ -18,6 +18,7 @@ interface RepoDetailHeroProps {
   isClaimed?: boolean;
   isVerified?: boolean;
   onClaimClick?: () => void;
+  onDisputeClick?: () => void;
   onWatchToggle: () => void;
   onGithubClick: () => void;
 }
@@ -31,6 +32,7 @@ export function RepoDetailHero({
   watchLoading,
   isVerified,
   onClaimClick,
+  onDisputeClick,
   onWatchToggle,
   onGithubClick,
 }: RepoDetailHeroProps) {
@@ -229,6 +231,20 @@ export function RepoDetailHero({
                 >
                   <CircleDot className="h-3 w-3" />
                   <span>Claim</span>
+                </button>
+              </>
+            )}
+            {onDisputeClick && (
+              <>
+                <span>•</span>
+                <button
+                  type="button"
+                  onClick={onDisputeClick}
+                  title="Report or dispute telemetry accuracy (48h SLA)"
+                  className="inline-flex items-center gap-1 text-zinc-400 hover:text-amber-400 transition-colors cursor-pointer"
+                >
+                  <ShieldAlert className="h-3 w-3" />
+                  <span>Dispute</span>
                 </button>
               </>
             )}

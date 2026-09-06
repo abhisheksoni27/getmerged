@@ -354,8 +354,32 @@ GM-007        GM-011
 | ProductHunt | GM-001 | — | — | — | — |
 | IndieHackers | GM-001 | — | — | — | — |
 | daily.dev seed | ✓ | ✓ | ✓ | ✓ | ✓ |
+| **Instagram Reels (2/day)** | **✓** | **✓** | **✓** | **✓** | **✓** |
 | OSS maintainer newsletter | — | — | GM-008 | — | monthly |
 | Recruiter LinkedIn campaign | — | — | — | — | GM-029, GM-024 |
+
+### Instagram Reels Strategy (NEW — 2 reels/day)
+
+**Format:** 30–60 second walkthrough of one S-tier repo's scorecard on GetMerged. Phone screen recording + founder voiceover.
+
+**Structure per reel:**
+1. **Hook (3 sec):** "This repo merges 94% of outside PRs." or "Want your first open source PR merged? This repo responds in 4 hours."
+2. **Walkthrough (20–40 sec):** Show the repo's GetMerged scorecard — tier badge, merge rate, response time, first-timer success rate, PR size sweet spot, optimal review window. Scroll through real data.
+3. **CTA (5 sec):** "Link in bio → getmerged.abhishekco.de. Search any repo."
+
+**Repo selection:** Rotate across languages. Mon/Tue = Python/TS. Wed/Thu = Go/Rust. Fri/Sat = Java/C++/Swift. Sun = wildcard (niche language or "worst D-tier repo" contrast reel). Prioritize repos with 1k–50k stars (recognizable but not FAANG-tier).
+
+**Why this works:**
+- Reels are the only format where a solo founder can compete with funded teams. No budget needed — just a phone and real data.
+- Each reel is a micro-ad for GetMerged that doesn't feel like an ad. You're teaching, not selling.
+- The data is inherently visual — tier badges, gauge charts, trend lines. Instagram rewards visual density.
+- The hook format ("this repo merges 94% of PRs") is naturally curiosity-driven.
+- Two per day builds a corpus fast. In 30 days = 60 reels. Instagram's algorithm rewards volume + consistency.
+
+**Risks to watch:**
+- Don't let reels become the main job. Cap production at 30 min/day total (15 min per reel). If it takes longer, simplify the format.
+- Avoid repos whose maintainers might take offense at being featured without consent. Stick to repos with public contribution guidelines.
+- Track Instagram → site traffic via UTM in the bio link. If it's <10 clicks/day after 2 weeks, evaluate whether the time is worth it vs. writing GM-002.
 
 ---
 
@@ -446,3 +470,4 @@ Any post not on this schedule requires a one-line justification in the PR descri
 
 - **2026-09-05** — Initial schedule drafted (Weeks 1–4 + sustain queue) for the GetMerged public launch.
 - **2026-09-06** — Full rewrite in brand voice. Updated repo count to 102,094, GFIs to 22,124, APIs to 113, components to 70+. Added 5th pillar (Gamification). Added 7 new posts (GM-007, GM-011, GM-015–GM-020, GM-022–GM-030). Added recruiter segment (Segment D). Added founder fame goal. Added skeptic FAQ requirement to quality gates. Added recruiter distribution channel. Updated Pro pricing to $5/$39 (Pro) + $25 (Recruiter). Added specific numbers for tier distribution and language counts.
+- **2026-09-06** — Added Instagram Reels as daily distribution channel (2 reels/day, S-tier repo walkthrough format). Added full reel strategy: hook/walkthrough/CTA structure, language rotation schedule, 30 min/day cap, UTM tracking requirement.

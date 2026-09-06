@@ -89,20 +89,9 @@
 
 ---
 
-### 5. Add `stale` threshold + re-evaluation trigger
+### ~~5. Add `stale` threshold + re-evaluation trigger~~ → MOVED TO P2 (#11)
 
-**Why:** Flaw #6 — "The maintainer freshness signal decays faster than we score." A repo can drop from S to D in a week, but we don't re-evaluate tier on signal change.
-
-**What to build:**
-- Backend: in the scoring pipeline, when a repo's tier would change based on new data, flag it as `tier_changed: true` and trigger a re-evaluation within 24 hours (not waiting for the next nightly batch).
-- Frontend: when a repo's tier has changed since the last snapshot, show a "Tier changed recently" badge with the old and new tier.
-
-**Acceptance test:** Simulate a repo whose tier would drop from S to D based on new data. The system flags it and re-evaluates within 24h. The frontend shows the change.
-
-**File paths:**
-- `backend/internal/scoring/` (add tier-change detection)
-- `backend/internal/pipeline/` (add re-evaluation trigger)
-- `frontend/src/components/RepoCard.tsx` (render badge)
+**Downgraded from P0.** Reason: the `currently_active` badge (P0 #3) already communicates freshness to users. Nightly scoring already runs — tier decay within a single day won't be noticed by anyone in launch week. Building a real-time re-evaluation pipeline risks destabilizing the scoring engine right before go-live. Ship this after launch settles.
 
 ---
 
@@ -124,9 +113,75 @@
 
 ---
 
+### 7. Seed your own usage data (cold-start prevention)
+
+**Why:** Product inventory shows 4 users, 0 tracked PRs, 0 feedback, 0 playbook cards. Every screenshot in GM-001 will show an empty product if you don't seed it with your own real usage first.
+
+**What to do:**
+- Track 5–10 of your own open/merged PRs via the Dashboard.
+- Claim 3–5 repos you maintain or contribute to.
+- Submit 2–3 contributor feedback entries on repos you've actually used.
+- Ensure your `/u/[username]` profile has karma, level, and streak data populated.
+
+**Acceptance test:** Your Dashboard shows real tracked PRs with statuses. Your profile shows real karma. The League/Season pages have at least one participant. Screenshots look alive.
+
+**Owner:** Founder (no code — just use the product)
+
+---
+
+### 8. Verify OG images work for all shareable routes
+
+**Why:** Social sharing is your viral loop. If OG images are broken, every X/LinkedIn/Reddit post shows a blank card. Kills distribution.
+
+**What to test:**
+- `/[owner]/[name]` — repo scorecard OG
+- `/compare/[...slug]` — compare OG
+- `/u/[username]` — profile OG
+- `/c/[id]` — share card OG
+- Homepage — main OG
+- Use [opengraph.xyz](https://opengraph.xyz) or Twitter Card Validator.
+
+**Acceptance test:** All 5 routes produce correct, readable OG images when pasted into a social sharing debugger.
+
+**Owner:** Founder (15 min)
+
+---
+
+### 9. Write the Show HN post in first-person
+
+**Why:** The premortem (§7) says the founder's story is the biggest differentiator. The Show HN post must be first-person, not third-person marketing.
+
+**What to write:**
+- Single-sentence opener: "I sent 11 PRs to OSS projects in 2024. Three got reviewed. I built GetMerged so the next person doesn't have to count on luck."
+- 3–4 sentences on what GetMerged does (C-Rank, 102k repos, the scoring approach).
+- One sentence on what's free vs Pro.
+- "Try it: [link]. Feedback welcome."
+- Have `hn-defense.md` ready to paste from.
+
+**Acceptance test:** The post reads like a real person talking, not a landing page. Under 200 words.
+
+**File path:** `hn-post.md` (repo root)
+
+---
+
+### 10. Test GitHub OAuth flow end-to-end from a fresh browser
+
+**Why:** One broken OAuth = zero sign-ups on launch day. This is a 15-minute smoke test that catches the worst possible launch-day failure.
+
+**What to test:**
+- Open an incognito/fresh browser. Click "Sign in with GitHub." Complete the flow. Verify you land on Dashboard with your GitHub data populated.
+- Test on mobile Safari and Chrome.
+- Verify the callback URL matches production, not localhost.
+
+**Acceptance test:** A fresh user can sign in via GitHub OAuth and see their Dashboard within 30 seconds.
+
+**Owner:** Founder (15 min)
+
+---
+
 ## P1 — Ship within 48 hours of launch
 
-### 7. Add founder first-person voice to `/about`
+### 11. Add founder first-person voice to `/about`
 
 **Why:** Flaw #9 — "The founder's story is our biggest differentiator and we are barely using it." Every blog post is third-person. The `/about` page should be first-person.
 
@@ -143,7 +198,7 @@
 
 ---
 
-### 8. Add founder byline + photo to every blog post template
+### 12. Add founder byline + photo to every blog post template
 
 **Why:** The blog template currently has no author byline. AI citation engines and readers need a named author.
 
@@ -160,7 +215,7 @@
 
 ---
 
-### 9. Implement the "currently_active" badge on repo cards
+### 13. Implement the "currently_active" badge on repo cards
 
 **Why:** This is a P0 item that may have been missed if the scoring pipeline doesn't have the data yet.
 
@@ -175,7 +230,7 @@
 
 ---
 
-### 10. Add `low_sample: true` badge rendering
+### 14. Add `low_sample: true` badge rendering
 
 **Why:** Same as P0 #2 — the frontend rendering part.
 
@@ -192,7 +247,7 @@
 
 ## P2 — Ship within 2 weeks
 
-### 11. Implement tier re-evaluation on signal change
+### 15. Implement tier re-evaluation on signal change (moved from P0 #5)
 
 **Why:** Flaw #6 — tier decay. A repo's tier should reflect current state, not a week-old snapshot.
 
@@ -209,7 +264,7 @@
 
 ---
 
-### 12. Add the dispute form + changelog page
+### 16. Add the dispute form + changelog page
 
 **Why:** P0 #4 — the backend endpoint exists. The frontend is the missing piece.
 
@@ -224,7 +279,7 @@
 
 ---
 
-### 13. Add the "Hard questions, short answers" section to the blog template
+### 17. Add the "Hard questions, short answers" section to the blog template
 
 **Why:** Every post needs the FAQ disguise. Baking it into the template means writers can't forget it.
 
@@ -238,7 +293,7 @@
 
 ---
 
-### 14. Test Pro pricing with 5 user interviews
+### 18. Test Pro pricing with 5 user interviews
 
 **Why:** Flaw #10 — "Pro pricing has no anchor." We have 2 Pro users but we don't know why they paid. We need to validate the price before scaling distribution.
 
@@ -253,7 +308,7 @@
 
 ---
 
-### 15. Add the "currently_active" and "low_sample" flags to the API response
+### 19. Add the "currently_active" and "low_sample" flags to the API response
 
 **Why:** P0 items #2 and #3 — the backend data layer.
 
@@ -268,7 +323,7 @@
 
 ## P3 — Backlog (do after launch)
 
-### 16. Implement the `currently_active` re-evaluation cron
+### 20. Implement the `currently_active` re-evaluation cron
 
 **Why:** P0 #5 — the backend trigger.
 
@@ -282,9 +337,9 @@
 
 ---
 
-### 17. Add the "Tier changed recently" badge
+### 21. Add the "Tier changed recently" badge
 
-**Why:** P2 #11 — the frontend part of tier re-evaluation.
+**Why:** P2 #15 — the frontend part of tier re-evaluation.
 
 **What to build:**
 - Same as P0 #5 above, but specifically the frontend rendering part.
@@ -294,7 +349,7 @@
 
 ---
 
-### 18. Implement the score dispute backend workflow
+### 22. Implement the score dispute backend workflow
 
 **Why:** P0 #4 — the full workflow (backend + frontend + changelog).
 
@@ -309,7 +364,7 @@
 
 ---
 
-### 19. Add `low_sample` enforcement in tier assignment logic
+### 23. Add `low_sample` enforcement in tier assignment logic
 
 **Why:** P0 #2 — the backend enforcement.
 
@@ -323,33 +378,46 @@
 
 ## Execution Order
 
-**Day 0 (today):**
-1. P0 #1: Write `/how-c-rank-works` page (4 hours)
-2. P0 #6: Write `hn-defense.md` (30 minutes)
-3. P0 #4: Wire up dispute form (1 hour)
-4. P1 #7: Rewrite `/about` in first-person (1 hour)
-5. P1 #8: Add founder byline to blog template (30 minutes)
+**Day -1 (today, before any code):**
+1. P0 #7: Seed your own usage data — track PRs, claim repos, submit reviews (2 hours)
+2. P0 #9: Write the Show HN post in first-person (30 minutes)
+3. P0 #6: Write `hn-defense.md` (30 minutes)
+4. P0 #10: Test GitHub OAuth flow end-to-end (15 minutes)
+5. P0 #8: Verify OG images on all shareable routes (15 minutes)
+
+**Day 0 (code):**
+6. P0 #1: Upgrade `/how-c-rank-works` page (4 hours)
+7. P0 #4: Wire up dispute form to existing endpoint (1 hour)
+8. P1 #11: Rewrite `/about` in first-person (1 hour)
+9. P1 #12: Add founder byline to blog template (30 minutes)
 
 **Day 1:**
-6. P0 #2: Add `low_sample` flag to backend + frontend (2 hours)
-7. P0 #3: Add `currently_active` to backend + frontend (2 hours)
-8. P1 #14: Send 5 user interview emails (30 minutes)
+10. P0 #2: Add `low_sample` flag — backend column + scoring logic + handler + frontend badge (4–6 hours — this is from scratch, not a quick wire-up)
+11. P1 #18: Send 5 user interview emails (30 minutes)
 
 **Day 2:**
-9. P0 #5: Implement tier re-evaluation trigger (3 hours)
-10. P1 #13: Add FAQ disguise to blog template (30 minutes)
-11. P1 #9 + #10: Verify P0 #2 and #3 frontend rendering (1 hour)
+12. P0 #3: Add `currently_active` — backend logic + handler + frontend dot/tooltip (3–4 hours)
+13. P1 #17: Add FAQ disguise to blog template (30 minutes)
+14. P1 #13 + #14: Verify frontend rendering of low_sample + currently_active (1 hour)
 
-**Day 3-7:**
-12. P2 #11: Full tier re-evaluation cron (4 hours)
-13. P2 #12: Dispute form + changelog page (2 hours)
-14. P2 #14: Conduct user interviews, document quotes (2 hours)
-15. Test everything. Run `npm run lint`, `go test ./...`, deploy.
+**Day 3–7:**
+15. P2 #15: Tier re-evaluation on signal change (4 hours)
+16. P2 #16: Dispute form page + methodology changelog page (2 hours)
+17. P2 #18: Conduct user interviews, document quotes (2 hours)
+18. Test everything. Run `npm run lint`, `go test ./...`, deploy.
 
 **Day 8 (launch day):**
-16. Post Show HN with `hn-defense.md` ready.
-17. Post ProductHunt.
-18. Post X thread, LinkedIn, Reddit.
+19. Post Show HN with `hn-defense.md` ready.
+20. Post ProductHunt.
+21. Post X thread, LinkedIn, Reddit.
+22. First Instagram reel: walk through an S-tier repo scorecard.
+
+**Days 9–12 (post-launch pivot window):**
+23. Read all HN/Reddit/X feedback. Identify the #1 criticism.
+24. If the criticism is about positioning: rewrite GM-002/GM-003 before publishing.
+25. If the criticism is about data quality: prioritize P2 #15 (tier re-evaluation).
+26. If the criticism is about pricing: fast-track P2 #18 (user interviews).
+27. Do NOT publish GM-002 until you've absorbed launch-day feedback.
 
 ---
 
@@ -361,24 +429,29 @@
 | P0 #2 | `backend/internal/scoring/`, `backend/internal/handler/repos.go`, `frontend/src/components/RepoCard.tsx`, `frontend/src/components/RepoScorecards.tsx` |
 | P0 #3 | `backend/internal/handler/repos.go`, `frontend/src/components/RepoCard.tsx`, `frontend/src/app/[owner]/[name]/page.tsx` |
 | P0 #4 | `frontend/src/app/[owner]/[name]/page.tsx`, `frontend/src/app/dispute/page.tsx`, `backend/internal/handler/repos.go`, `frontend/src/app/methodology/changelog/page.tsx` |
-| P0 #5 | `backend/internal/scoring/`, `backend/internal/pipeline/`, `frontend/src/components/RepoCard.tsx` |
+| ~~P0 #5~~ | Moved to P2 #15 |
 | P0 #6 | `hn-defense.md` (repo root) |
-| P1 #7 | `frontend/src/app/about/page.tsx` |
-| P1 #8 | Blog post template (in `content/` or `frontend/`) |
-| P1 #9 | `frontend/src/components/RepoCard.tsx` |
-| P1 #10 | `frontend/src/components/RepoCard.tsx`, `frontend/src/components/RepoScorecards.tsx` |
-| P2 #11 | `backend/internal/scoring/`, `backend/internal/pipeline/`, `frontend/src/components/RepoCard.tsx` |
-| P2 #12 | `frontend/src/app/dispute/page.tsx`, `frontend/src/app/methodology/changelog/page.tsx` |
-| P2 #13 | Blog post template |
-| P2 #14 | No code (founder activity) |
-| P2 #15 | `backend/internal/scoring/`, `backend/internal/handler/repos.go` |
-| P3 #16 | `backend/internal/pipeline/`, `backend/internal/notification/crank_alerts.go` |
-| P3 #17 | `frontend/src/components/RepoCard.tsx` |
-| P3 #18 | `backend/internal/handler/repos.go`, `frontend/src/app/dispute/page.tsx`, `frontend/src/app/methodology/changelog/page.tsx` |
-| P3 #19 | `backend/internal/scoring/` |
+| P0 #7 | No code (founder activity — seed usage data) |
+| P0 #8 | No code (OG image verification) |
+| P0 #9 | `hn-post.md` (repo root) |
+| P0 #10 | No code (OAuth smoke test) |
+| P1 #11 | `frontend/src/app/about/page.tsx` |
+| P1 #12 | Blog post template (in `content/` or `frontend/`) |
+| P1 #13 | `frontend/src/components/RepoCard.tsx` |
+| P1 #14 | `frontend/src/components/RepoCard.tsx`, `frontend/src/components/RepoScorecards.tsx` |
+| P2 #15 | `backend/internal/scoring/`, `backend/internal/pipeline/`, `frontend/src/components/RepoCard.tsx` |
+| P2 #16 | `frontend/src/app/dispute/page.tsx`, `frontend/src/app/methodology/changelog/page.tsx` |
+| P2 #17 | Blog post template |
+| P2 #18 | No code (founder activity — user interviews) |
+| P2 #19 | `backend/internal/scoring/`, `backend/internal/handler/repos.go` |
+| P3 #20 | `backend/internal/pipeline/`, `backend/internal/notification/crank_alerts.go` |
+| P3 #21 | `frontend/src/components/RepoCard.tsx` |
+| P3 #22 | `backend/internal/handler/repos.go`, `frontend/src/app/dispute/page.tsx`, `frontend/src/app/methodology/changelog/page.tsx` |
+| P3 #23 | `backend/internal/scoring/` |
 
 ---
 
 ## Change Log
 
 - **2026-09-06** — Initial `do-this-fast.md` created from `premortem.md`. 19 tasks across P0/P1/P2/P3. Execution order with file paths and acceptance tests.
+- **2026-09-06** — Revised: moved P0 #5 (tier re-evaluation) to P2 — `currently_active` badge covers the freshness concern at launch. Added 4 new tasks: P0 #7 (seed usage data), P0 #8 (OG image verification), P0 #9 (Show HN post), P0 #10 (OAuth smoke test). Adjusted time estimates for P0 #2 (2h→4-6h) and P0 #3 (2h→3-4h) — these are built from scratch. Added Days 9–12 post-launch pivot window. Total: 23 tasks.
