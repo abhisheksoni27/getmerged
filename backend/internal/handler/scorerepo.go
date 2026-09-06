@@ -123,7 +123,7 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 		normed := scoring.NormaliseAll(allRaw)
 		thisNormed := normed[len(normed)-1]
 
-		score, tier := scoring.ComputeCRank(thisNormed, raw.StalenessFlag, raw.GoodFirstIssueCount)
+		score, tier := scoring.ComputeCRankWithBusFactor(thisNormed, raw.StalenessFlag, raw.GoodFirstIssueCount, raw.BusFactor, raw.ExternalPRCount)
 
 		// --- Save to DB ---
 		var repoID string
