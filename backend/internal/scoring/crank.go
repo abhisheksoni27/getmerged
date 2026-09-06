@@ -24,6 +24,16 @@ const (
 // normalisation to be meaningful. Below this, PercentileRank collapses to 50.
 const MinNormalisationPeers = 2
 
+// MinSampleSizeForTopTiers is the minimum number of scored PRs required for a repository
+// to be eligible for Tier S or Tier A (Issue #18 in premortem / do-this-fast P0 #2).
+// Repositories with fewer PRs have low_sample: true and cannot be ranked higher than Tier B.
+const MinSampleSizeForTopTiers = 20
+
+// IsLowSample returns true if the PR count is below the minimum statistical significance threshold.
+func IsLowSample(totalPRs int) bool {
+	return totalPRs < MinSampleSizeForTopTiers
+}
+
 // ResolveScoreSource classifies score provenance from the normalisation peer count.
 func ResolveScoreSource(peerCount int) string {
 	if peerCount < MinNormalisationPeers {
@@ -127,6 +137,11 @@ func ComputeCRankWithBusFactor(n NormalisedMetrics, staleness bool, gfiCount int
 
 	// Story 1.3: Enforce Bus Factor safety cap (bus factor <= 1 -> max tier B)
 	if busFactor <= 1 && (calculatedTier == TierS || calculatedTier == TierA) {
+		calculatedTier = TierB
+	}
+
+	// Premortem Q18 / do-this-fast P0 #2: Enforce Low Sample ceiling (totalPRs < 20 -> not eligible for Tier S or Tier A)
+	if totalPRs > 0 && totalPRs < MinSampleSizeForTopTiers && (calculatedTier == TierS || calculatedTier == TierA) {
 		calculatedTier = TierB
 	}
 

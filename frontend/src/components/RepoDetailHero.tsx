@@ -104,10 +104,34 @@ export function RepoDetailHero({
             <div className="mt-2.5 flex flex-wrap items-center gap-2">
               {isScored ? (
                 <>
+                  {repo?.currently_active !== undefined && (
+                    <span
+                      title={repo.currently_active ? "Active maintainer PR activity in the last 30 days" : "No PR activity in the last 30 days"}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-mono text-zinc-300"
+                    >
+                      <span
+                        className={`h-2 w-2 rounded-full shrink-0 ${
+                          repo.currently_active
+                            ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]"
+                            : "bg-zinc-600"
+                        }`}
+                      />
+                      <span>{repo.currently_active ? "Active (30d)" : "Inactive"}</span>
+                    </span>
+                  )}
                   <CRankBadge rank={rank} size="sm" showLabel />
                   {roundedScore > 0 && (
                     <span className="text-xs font-mono text-zinc-300">
                       ({roundedScore}/100)
+                    </span>
+                  )}
+                  {repo?.low_sample && (
+                    <span
+                      title="Sample size under 20 PRs in rolling window. Capped at Tier B until more contributions are recorded."
+                      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono text-xs"
+                    >
+                      <AlertTriangle className="h-3 w-3 text-amber-400 shrink-0" />
+                      <span>Low Sample (&lt;20 PRs)</span>
                     </span>
                   )}
                   {isBusFactorCapped && (

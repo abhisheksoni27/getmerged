@@ -171,8 +171,26 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
             </div>
           </div>
 
-          <div className="shrink-0">
+          <div className="shrink-0 flex items-center gap-2">
+            {repo.currently_active !== undefined && (
+              <span
+                title={repo.currently_active ? "Active in last 30 days" : "No PR activity in last 30 days"}
+                className={`h-2 w-2 rounded-full shrink-0 ${
+                  repo.currently_active
+                    ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]"
+                    : "bg-zinc-600"
+                }`}
+              />
+            )}
             <CRankBadge rank={rank} size="sm" showLabel={true} />
+            {repo.low_sample && (
+              <span
+                title="Low sample size (under 20 PRs in lookback window). Capped at Tier B."
+                className="px-2 py-0.5 rounded-md font-mono text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30"
+              >
+                Low Sample
+              </span>
+            )}
           </div>
         </div>
 

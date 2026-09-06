@@ -259,6 +259,28 @@ query RepoGfiList($query: String!, $first: Int!) {
             color
           }
         }
+        timelineItems(first: 5, itemTypes: [CROSS_REFERENCED_EVENT, CONNECTED_EVENT]) {
+          nodes {
+            ... on CrossReferencedEvent {
+              source {
+                ... on PullRequest {
+                  number
+                  state
+                  url
+                }
+              }
+            }
+            ... on ConnectedEvent {
+              subject {
+                ... on PullRequest {
+                  number
+                  state
+                  url
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

@@ -47,6 +47,8 @@ type repoResponse struct {
 	SnapshotDate             string  `json:"snapshot_date"`
 	GoodFirstIssueCount      int     `json:"good_first_issue_count"`
 	OnboardingScore          int     `json:"onboarding_score"`
+	LowSample                bool    `json:"low_sample"`
+	CurrentlyActive          bool    `json:"currently_active"`
 }
 
 type metaResponse struct {

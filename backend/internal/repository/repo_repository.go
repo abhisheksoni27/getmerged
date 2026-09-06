@@ -40,6 +40,8 @@ type RepoRecord struct {
 	ResponseP90Hours         float64   `db:"response_p90_hours" json:"response_p90_hours"`
 	PrCount6m                int       `db:"pr_count_6m" json:"pr_count_6m"`
 	IssueCount6m             int       `db:"issue_count_6m" json:"issue_count_6m"`
+	LowSample                bool      `db:"low_sample" json:"low_sample"`
+	CurrentlyActive          bool      `db:"currently_active" json:"currently_active"`
 	UpdatedAt                time.Time `db:"updated_at" json:"updated_at"`
 	Topics                   []string  `db:"-" json:"topics"`
 	IsScored                 bool      `db:"is_scored" json:"is_scored"`
@@ -297,6 +299,8 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 			COALESCE(s.response_p90_hours,0) as response_p90_hours,
 			COALESCE(s.pr_count_6m,0) as pr_count_6m,
 			COALESCE(s.issue_count_6m,0) as issue_count_6m,
+			CASE WHEN COALESCE(s.pr_count_6m, 0) < 20 THEN 1 ELSE 0 END as low_sample,
+			CASE WHEN COALESCE(s.last_activity_days, 180) <= 30 AND COALESCE(s.staleness_flag, 0) = 0 THEN 1 ELSE 0 END as currently_active,
 			CASE WHEN COALESCE(s.c_rank_score, 0) > 0 THEN 1 ELSE 0 END as is_scored,
 			r.updated_at
 		FROM repositories r
@@ -462,6 +466,8 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 			COALESCE(s.response_p90_hours,0) as response_p90_hours,
 			COALESCE(s.pr_count_6m,0) as pr_count_6m,
 			COALESCE(s.issue_count_6m,0) as issue_count_6m,
+			CASE WHEN COALESCE(s.pr_count_6m, 0) < 20 THEN 1 ELSE 0 END as low_sample,
+			CASE WHEN COALESCE(s.last_activity_days, 180) <= 30 AND COALESCE(s.staleness_flag, 0) = 0 THEN 1 ELSE 0 END as currently_active,
 			CASE WHEN COALESCE(s.c_rank_score, 0) > 0 THEN 1 ELSE 0 END as is_scored,
 			r.updated_at
 		FROM repositories r

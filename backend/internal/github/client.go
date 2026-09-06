@@ -1020,6 +1020,8 @@ type GoodFirstIssue struct {
 	WordCount               int       `json:"word_count"`
 	HasCodeSnippets         bool      `json:"has_code_snippets"`
 	QualityScore            int       `json:"quality_score"`
+	HasLinkedPR             bool      `json:"has_linked_pr"`
+	LinkedPRNumber          *int      `json:"linked_pr_number,omitempty"`
 }
 
 // FetchGoodFirstIssueCount returns the number of open beginner-friendly issues for a repo.
@@ -1134,6 +1136,20 @@ func (c *Client) FetchGoodFirstIssuesList(owner, name string, limit int) ([]Good
 							Color string `json:"color"`
 						} `json:"nodes"`
 					} `json:"labels"`
+					TimelineItems struct {
+						Nodes []struct {
+							Source *struct {
+								Number int    `json:"number"`
+								State  string `json:"state"`
+								URL    string `json:"url"`
+							} `json:"source"`
+							Subject *struct {
+								Number int    `json:"number"`
+								State  string `json:"state"`
+								URL    string `json:"url"`
+							} `json:"subject"`
+						} `json:"nodes"`
+					} `json:"timelineItems"`
 				} `json:"nodes"`
 			} `json:"search"`
 			RateLimit rateLimitInfo `json:"rateLimit"`
@@ -1202,6 +1218,23 @@ func (c *Client) FetchGoodFirstIssuesList(owner, name string, limit int) ([]Good
 			body = body[:1000]
 		}
 
+		var hasLinkedPR bool
+		var linkedPRNumber *int
+		for _, item := range n.TimelineItems.Nodes {
+			if item.Source != nil && strings.EqualFold(item.Source.State, "OPEN") && item.Source.Number > 0 {
+				hasLinkedPR = true
+				num := item.Source.Number
+				linkedPRNumber = &num
+				break
+			}
+			if item.Subject != nil && strings.EqualFold(item.Subject.State, "OPEN") && item.Subject.Number > 0 {
+				hasLinkedPR = true
+				num := item.Subject.Number
+				linkedPRNumber = &num
+				break
+			}
+		}
+
 		issues = append(issues, GoodFirstIssue{
 			Number:                  n.Number,
 			Title:                   n.Title,
@@ -1217,6 +1250,8 @@ func (c *Client) FetchGoodFirstIssuesList(owner, name string, limit int) ([]Good
 			WordCount:               wordCount,
 			HasCodeSnippets:         hasCodeSnippets,
 			QualityScore:            qualityScore,
+			HasLinkedPR:             hasLinkedPR,
+			LinkedPRNumber:          linkedPRNumber,
 		})
 	}
 
