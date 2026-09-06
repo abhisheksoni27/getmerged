@@ -145,13 +145,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/hierynomus/license-gradle-plugin</loc>
+    <loc>https://getmerged.abhishekco.de/embeddedartistry/templates</loc>
     <lastmod>2026-09-05T03:44:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/embeddedartistry/templates</loc>
+    <loc>https://getmerged.abhishekco.de/hierynomus/license-gradle-plugin</loc>
     <lastmod>2026-09-05T03:44:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -211,13 +211,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/stjohnjohnson/smartthings-mqtt-bridge</loc>
-    <lastmod>2026-09-05T03:44:47Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/jfrog/artifactory-user-plugins</loc>
+    <loc>https://getmerged.abhishekco.de/Goddchen/Android-Gradle-Examples</loc>
     <lastmod>2026-09-05T03:44:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -229,7 +223,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Goddchen/Android-Gradle-Examples</loc>
+    <loc>https://getmerged.abhishekco.de/stjohnjohnson/smartthings-mqtt-bridge</loc>
+    <lastmod>2026-09-05T03:44:47Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jfrog/artifactory-user-plugins</loc>
     <lastmod>2026-09-05T03:44:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -319,13 +319,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/TheBoegl/gradle-launch4j</loc>
+    <loc>https://getmerged.abhishekco.de/moqui/moqui-framework</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/moqui/moqui-framework</loc>
+    <loc>https://getmerged.abhishekco.de/TheBoegl/gradle-launch4j</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -427,13 +427,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/FrantisekGazo/Blade</loc>
+    <loc>https://getmerged.abhishekco.de/cloudogu/gitops-playground</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/cloudogu/gitops-playground</loc>
+    <loc>https://getmerged.abhishekco.de/FrantisekGazo/Blade</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -475,19 +475,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Blankj/AucFrameTemplate</loc>
-    <lastmod>2026-09-05T03:44:50Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/odavid/my-bloody-jenkins</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/DSAppTeam/ComponentCornerstone</loc>
+    <loc>https://getmerged.abhishekco.de/Blankj/AucFrameTemplate</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -499,13 +493,19 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/szpak/gradle-pitest-plugin</loc>
+    <loc>https://getmerged.abhishekco.de/DSAppTeam/ComponentCornerstone</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/GPars/GPars</loc>
+    <lastmod>2026-09-05T03:44:50Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/szpak/gradle-pitest-plugin</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -523,13 +523,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ssadedin/bpipe</loc>
+    <loc>https://getmerged.abhishekco.de/filebot/scripts</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/filebot/scripts</loc>
+    <loc>https://getmerged.abhishekco.de/ssadedin/bpipe</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -547,13 +547,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/hoto/jenkinsfile-examples</loc>
+    <loc>https://getmerged.abhishekco.de/hust201010701/CheckResourceConflict</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/hust201010701/CheckResourceConflict</loc>
+    <loc>https://getmerged.abhishekco.de/hoto/jenkinsfile-examples</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -613,13 +613,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nemerosa/versioning</loc>
+    <loc>https://getmerged.abhishekco.de/ppazos/cabolabs-ehrserver</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ppazos/cabolabs-ehrserver</loc>
+    <loc>https://getmerged.abhishekco.de/nemerosa/versioning</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
