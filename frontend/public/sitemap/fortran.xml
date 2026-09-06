@@ -85,13 +85,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/scivision/fortran2018-examples</loc>
+    <loc>https://getmerged.abhishekco.de/MFlowCode/MFC</loc>
     <lastmod>2026-09-05T03:43:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/MFlowCode/MFC</loc>
+    <loc>https://getmerged.abhishekco.de/scivision/fortran2018-examples</loc>
     <lastmod>2026-09-05T03:43:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -181,6 +181,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/NOAA-EMC/WW3</loc>
+    <lastmod>2026-09-05T03:43:59Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/nasa/CFL3D</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
@@ -188,12 +194,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Allen-Tildesley/examples</loc>
-    <lastmod>2026-09-05T03:43:59Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/NOAA-EMC/WW3</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -349,25 +349,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jgomezc1/ABAQUS-US</loc>
-    <lastmod>2026-09-05T03:43:59Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/ylikx/forpy</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ExtremeFLOW/neko</loc>
+    <loc>https://getmerged.abhishekco.de/jgomezc1/ABAQUS-US</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pencil-code/pencil-code</loc>
+    <lastmod>2026-09-05T03:43:59Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ExtremeFLOW/neko</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -391,13 +391,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/certik/fortran-utils</loc>
+    <loc>https://getmerged.abhishekco.de/davidrpugh/pyeconomics</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/davidrpugh/pyeconomics</loc>
+    <loc>https://getmerged.abhishekco.de/certik/fortran-utils</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -415,13 +415,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mom-ocean/MOM6</loc>
+    <loc>https://getmerged.abhishekco.de/tblite/tblite</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/tblite/tblite</loc>
+    <loc>https://getmerged.abhishekco.de/mom-ocean/MOM6</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -457,7 +457,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Starlink/starlink</loc>
+    <loc>https://getmerged.abhishekco.de/jacobwilliams/Fortran-Astrodynamics-Toolkit</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -469,7 +469,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jacobwilliams/Fortran-Astrodynamics-Toolkit</loc>
+    <loc>https://getmerged.abhishekco.de/Starlink/starlink</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -493,13 +493,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/damask-multiphysics/DAMASK</loc>
+    <loc>https://getmerged.abhishekco.de/CliMT/climt</loc>
     <lastmod>2026-08-20T04:17:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/CliMT/climt</loc>
+    <loc>https://getmerged.abhishekco.de/damask-multiphysics/DAMASK</loc>
     <lastmod>2026-08-20T04:17:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
