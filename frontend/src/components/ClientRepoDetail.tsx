@@ -43,6 +43,7 @@ import { PRSizeSweetSpotCard } from "@/components/PRSizeSweetSpotCard";
 import { UnscoredExplainer } from "@/components/UnscoredExplainer";
 import { RaiseYourRank } from "@/components/RaiseYourRank";
 import { MaintainerConsoleModal } from "@/components/MaintainerConsoleModal";
+import { DisputeModal } from "@/components/DisputeModal";
 import { RepoStickyBar, RepoSectionTab } from "@/components/RepoStickyBar";
 import { RepoAuditCTA } from "@/components/RepoAuditCTA";
 import { isRepoScored } from "@/lib/repo-metadata";
@@ -124,6 +125,9 @@ export function ClientRepoDetail({
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
   const [isRepoClaimed, setIsRepoClaimed] = useState(false);
   const [isRepoVerified, setIsRepoVerified] = useState(false);
+
+  // Score Dispute Modal State
+  const [isDisputeModalOpen, setIsDisputeModalOpen] = useState(false);
 
   const openAuthModal = (title?: string, description?: string, source = "modal") => {
     setAuthModalConfig({ title, description, source });
@@ -564,6 +568,7 @@ export function ClientRepoDetail({
             isClaimed={isRepoClaimed}
             isVerified={isRepoVerified}
             onClaimClick={handleClaimClick}
+            onDisputeClick={() => setIsDisputeModalOpen(true)}
             onWatchToggle={handleWatchToggle}
             onGithubClick={() => posthog.capture('repo_github_link_clicked', { repo_full_name: fullName, repo_tier: rank })}
           />
@@ -606,6 +611,13 @@ export function ClientRepoDetail({
           setIsRepoClaimed(true);
           setIsRepoVerified(true);
         }}
+      />
+
+      {/* Score Dispute Modal with 48h SLA */}
+      <DisputeModal
+        fullName={fullName}
+        isOpen={isDisputeModalOpen}
+        onClose={() => setIsDisputeModalOpen(false)}
       />
 
       {/* Unscored explainer + verified-welcoming alternatives (IDEA-20260820-02 AC2) */}

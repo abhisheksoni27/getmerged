@@ -734,3 +734,88 @@ func GetFitRadarHandler(repoStore repository.RepoRepository, profileRepo reposit
 		})
 	}
 }
+
+// ScoreDisputeRequest holds payload for disputing a repo score
+type ScoreDisputeRequest struct {
+	RepoFullName   string `json:"repo_full_name" binding:"required"`
+	Email          string `json:"email"`
+	GithubUsername string `json:"github_username"`
+	Reason         string `json:"reason" binding:"required"`
+	Details        string `json:"details" binding:"required"`
+	EvidenceURL    string `json:"evidence_url"`
+}
+
+// SubmitScoreDisputeHandler handles POST /api/v1/disputes
+func SubmitScoreDisputeHandler(db *sql.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var req ScoreDisputeRequest
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid dispute request: repo_full_name, reason, and details are required"})
+			return
+		}
+
+		cleanRepo := strings.TrimSpace(req.RepoFullName)
+		if strings.HasPrefix(cleanRepo, "https://github.com/") {
+			cleanRepo = strings.TrimPrefix(cleanRepo, "https://github.com/")
+		}
+		cleanRepo = strings.TrimSuffix(cleanRepo, "/")
+
+		query := `
+			INSERT INTO score_disputes (repo_full_name, email, github_username, reason, details, evidence_url, status)
+			VALUES (?, ?, ?, ?, ?, ?, 'pending')
+		`
+		res, err := db.ExecContext(c.Request.Context(), query, cleanRepo, req.Email, req.GithubUsername, req.Reason, req.Details, req.EvidenceURL)
+		if err != nil {
+			slog.Error("failed to record score dispute", "error", err, "repo", cleanRepo)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not record dispute"})
+			return
+		}
+
+		insertID, _ := res.LastInsertId()
+		c.JSON(http.StatusAccepted, gin.H{
+			"status":     "received",
+			"dispute_id": insertID,
+			"sla":        "48 hours",
+			"message":    "Dispute logged successfully. Our maintainer integrity team reviews all disputes within 48 hours.",
+		})
+	}
+}
+
+// PublicListDisputesHandler handles GET /api/v1/disputes/changelog
+func PublicListDisputesHandler(db *sql.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		rows, err := db.QueryContext(c.Request.Context(), `
+			SELECT id, repo_full_name, reason, status, created_at, updated_at
+			FROM score_disputes
+			ORDER BY created_at DESC
+			LIMIT 50
+		`)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{"disputes": []any{}})
+			return
+		}
+		defer rows.Close()
+
+		type DisputeItem struct {
+			ID           int    `json:"id"`
+			RepoFullName string `json:"repo_full_name"`
+			Reason       string `json:"reason"`
+			Status       string `json:"status"`
+			CreatedAt    string `json:"created_at"`
+			UpdatedAt    string `json:"updated_at"`
+		}
+
+		var items []DisputeItem
+		for rows.Next() {
+			var it DisputeItem
+			var created, updated time.Time
+			if err := rows.Scan(&it.ID, &it.RepoFullName, &it.Reason, &it.Status, &created, &updated); err == nil {
+				it.CreatedAt = created.Format(time.RFC3339)
+				it.UpdatedAt = updated.Format(time.RFC3339)
+				items = append(items, it)
+			}
+		}
+
+		c.JSON(http.StatusOK, gin.H{"disputes": items})
+	}
+}

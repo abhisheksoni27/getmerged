@@ -7,7 +7,7 @@ import { getGuideBySlug, getAllGuides } from "@/lib/guides";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Calendar, Clock, User, ArrowLeft, ArrowRight } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, ArrowRight } from "lucide-react";
 
 interface GuideDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -97,6 +97,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
       author: {
         "@type": "Person",
         name: guide.author,
+        url: "https://getmerged.abhishekco.de/about",
       },
       publisher: {
         "@type": "Organization",
@@ -139,8 +140,11 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
             <span className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" /> {guide.readingTime}
             </span>
-            <span className="flex items-center gap-1">
-              <User className="w-3.5 h-3.5" /> {guide.author}
+            <span className="flex items-center gap-1.5 text-zinc-200">
+              <span className="h-5 w-5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center font-bold text-[10px]">
+                AS
+              </span>
+              <span>{guide.author}</span>
             </span>
           </div>
 
@@ -262,6 +266,27 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
             {guide.content}
           </ReactMarkdown>
         </article>
+
+        {/* Founder Byline & Personal Bio */}
+        <div className="border border-white/[0.1] glass-panel p-6 sm:p-8 rounded-2xl shadow-sm mb-10 flex flex-col sm:flex-row items-start gap-4">
+          <div className="h-12 w-12 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">
+            AS
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="font-space font-bold text-white text-base">Abhishek Soni</span>
+              <span className="text-[11px] font-mono text-zinc-400 px-2 py-0.5 rounded-md bg-white/[0.05]">Founder &middot; GetMerged</span>
+            </div>
+            <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-sans">
+              Solo engineer building GetMerged in public. Writing guides to end pull-request ghost towns and help developers find welcoming open-source repositories.
+            </p>
+            <div className="pt-2 flex items-center gap-3 text-xs font-mono text-amber-400">
+              <Link href="/about" className="hover:underline">About the project &rarr;</Link>
+              <span className="text-zinc-600">&bull;</span>
+              <Link href="/how-c-rank-works" className="hover:underline">Methodology &rarr;</Link>
+            </div>
+          </div>
+        </div>
 
         {/* Read Next Section */}
         <div className="border border-white/[0.1] glass-panel p-6 sm:p-8 rounded-md border-t-2 border-t-slate-700 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">

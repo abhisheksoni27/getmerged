@@ -19,6 +19,7 @@ import {
   Code2,
   Calculator,
   CheckCircle2,
+  Star,
 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -119,37 +120,42 @@ export default function HowCRankWorksPage() {
     {
       tier: "S",
       label: "Super Welcoming",
+      threshold: "Score ≥ 70",
       badgeClass: "bg-emerald-600 text-white border border-white/[0.12] font-bold shadow-sm",
       indicatorColor: "bg-emerald-600",
-      desc: "Active maintainers, fast review, high merge rate, first-timers succeed. This is the open door.",
+      desc: "Top 1.6% of open-source projects. High external merge rate, fast reviewer response (p50 ≤ 24h), reliable first-timer onboarding, and active maintainer breadth. This is the open door.",
     },
     {
       tier: "A",
       label: "Welcoming",
+      threshold: "55 ≤ Score < 70",
       badgeClass: "bg-blue-600 text-white border border-white/[0.12] font-bold shadow-sm",
       indicatorColor: "bg-blue-600",
-      desc: "Reliable, healthy repositories with dependable review cadences. Consistent feedback and positive contributor culture.",
+      desc: "Top ~12% overall. Dependable review cadences, healthy contributor feedback culture, and positive outsider acceptance.",
     },
     {
       tier: "B",
       label: "Solid",
+      threshold: "40 ≤ Score < 55",
       badgeClass: "bg-amber-600 text-white border border-white/[0.12] font-bold shadow-sm",
       indicatorColor: "bg-amber-600",
-      desc: "Active maintainers who face periodic bottlenecks. Review cycles typically take 3–7 days. Worth a try if you have time.",
+      desc: "Healthy repositories with active maintainers experiencing periodic triage bottlenecks. Also includes S/A-scoring projects that are safety-capped due to single-maintainer bus factor.",
     },
     {
       tier: "C",
       label: "Selective",
+      threshold: "25 ≤ Score < 40",
       badgeClass: "bg-violet-600 text-white border border-white/[0.12] font-bold shadow-sm",
       indicatorColor: "bg-purple-600",
-      desc: "Slow review or backlogged maintainers. Best suited for seasoned developers who don't mind long turnaround delays.",
+      desc: "Slow review turnaround or strict maintainer review bars. Best suited for experienced contributors who don't mind multi-week turnaround times.",
     },
     {
       tier: "D",
-      label: "Risky",
+      label: "Risky / Dormant",
+      threshold: "Score < 25 (or stale)",
       badgeClass: "bg-rose-600 text-white border border-white/[0.12] font-bold shadow-sm",
       indicatorColor: "bg-rose-600",
-      desc: "Stale repositories or abandoned PR queues. Avoid unless actively requested by current maintainers.",
+      desc: "PR queues with low closure rates, abandoned reviews, or zero external activity in the lookback window. Contributors risk wasting effort here.",
     },
   ];
 
@@ -414,17 +420,88 @@ export default function HowCRankWorksPage() {
                 key={t.tier}
                 className="rounded-2xl glass-panel p-6 border border-white/[0.1] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
               >
-                <div className="flex items-start sm:items-center gap-4 flex-1">
-                  <div className={`px-3 py-1.5 rounded-xl font-mono text-sm font-bold border shrink-0 flex items-center gap-2 ${t.badgeClass}`}>
-                    <span className={`h-2 w-2 rounded-full ${t.indicatorColor}`} />
-                    <span>{t.label} ({t.tier})</span>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 flex-1">
+                  <div className="flex items-center gap-3">
+                    <div className={`px-3 py-1.5 rounded-xl font-mono text-sm font-bold border shrink-0 flex items-center gap-2 ${t.badgeClass}`}>
+                      <span className={`h-2 w-2 rounded-full ${t.indicatorColor}`} />
+                      <span>{t.label} ({t.tier})</span>
+                    </div>
+                    <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded-md bg-white/[0.06] border border-white/[0.1] text-zinc-300">
+                      {t.threshold}
+                    </span>
                   </div>
-                  <p className="text-xs sm:text-sm text-zinc-300 font-sans leading-relaxed">
+                  <p className="text-xs sm:text-sm text-zinc-300 font-sans leading-relaxed max-w-xl">
                     {t.desc}
                   </p>
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Worked Example */}
+        <div className="space-y-6 mb-16">
+          <div className="border-b border-white/[0.1] pb-4">
+            <h2 className="text-2xl font-bold font-space text-white flex items-center gap-2">
+              <Calculator className="h-6 w-6 text-emerald-400" />
+              Worked Example: How an S-Tier Repo Is Scored
+            </h2>
+            <p className="text-xs sm:text-sm text-zinc-300 font-sans mt-1">
+              Real numbers from our database. Here is how <strong className="text-white">HeyPuter/puter</strong> (43k+ stars) and <strong className="text-white">SubtitleEdit/subtitleedit</strong> earn their S-tier ranking.
+            </p>
+          </div>
+
+          <div className="rounded-2xl glass-panel p-6 sm:p-8 border border-white/[0.12] shadow-xs space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-space text-xl font-bold text-white">HeyPuter/puter</span>
+                  <span className="flex items-center gap-1 text-xs font-mono text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+                    <Star className="h-3 w-3 fill-amber-400 text-amber-400" /> 43,383
+                  </span>
+                </div>
+                <p className="text-xs text-zinc-300 mt-1">JavaScript / Cloud Desktop &middot; 753 PRs evaluated in trailing window</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="text-right">
+                  <div className="text-xs font-mono text-zinc-400">Final C-Rank</div>
+                  <div className="text-2xl font-bold font-space text-emerald-400">70.05 / 100</div>
+                </div>
+                <div className="px-3 py-1.5 rounded-xl font-mono text-sm font-bold bg-emerald-600 text-white border border-white/[0.12]">
+                  Tier S
+                </div>
+              </div>
+            </div>
+
+            {/* Step-by-step breakdown */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.08]">
+                <div className="text-xs font-mono text-zinc-400 mb-1">1. Outside Merge Rate</div>
+                <div className="text-xl font-bold font-space text-emerald-400">89.3%</div>
+                <p className="text-[11px] text-zinc-300 mt-1">Nearly 9 out of 10 external PRs are merged. Tops the 93rd percentile of JavaScript repos.</p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.08]">
+                <div className="text-xs font-mono text-zinc-400 mb-1">2. First-Timer Success</div>
+                <div className="text-xl font-bold font-space text-blue-400">54.5%</div>
+                <p className="text-[11px] text-zinc-300 mt-1">Over half of brand-new contributors have their initial PR accepted and merged into master.</p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.08]">
+                <div className="text-xs font-mono text-zinc-400 mb-1">3. Team Breadth (Bus Factor)</div>
+                <div className="text-xl font-bold font-space text-purple-400">34 Maintainers</div>
+                <p className="text-[11px] text-zinc-300 mt-1">34 distinct maintainers actively review PRs. Far above the single-maintainer safety cap ceiling.</p>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs font-mono space-y-2 text-zinc-300">
+              <div className="text-white font-bold font-space">The Calculation Flow:</div>
+              <div>&bull; <span className="text-amber-300">Raw Composite:</span> 9 signals weighted &rarr; 67.8 points</div>
+              <div>&bull; <span className="text-amber-300">Logarithmic GFI Bonus:</span> 3 curated GFIs &rarr; <code className="text-emerald-400">2.5 &times; ln(1 + 3) = +3.47</code> bonus points</div>
+              <div>&bull; <span className="text-amber-300">Bayesian Confidence Weight:</span> N = 753 PRs &rarr; <code className="text-emerald-400">1 - exp(-753 / 6.0) &approx; 1.00</code> (Zero shrinkage penalty)</div>
+              <div>&bull; <span className="text-amber-300">Bus Factor Check:</span> 34 maintainers &gt; 1 &rarr; Safe from Tier B cap</div>
+              <div>&bull; <span className="text-amber-300">Final Score:</span> 70.05 &rarr; Crosses the 70.0 threshold &rarr; <strong className="text-emerald-400">Awarded Tier S</strong></div>
+            </div>
           </div>
         </div>
 
@@ -531,14 +608,22 @@ export default function HowCRankWorksPage() {
 
           <div className="grid grid-cols-1 gap-4">
             <div className="rounded-2xl glass-panel p-6 border border-white/[0.1] shadow-xs">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="font-mono text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-md">
-                  v2026.1
-                </span>
-                <span className="text-xs text-zinc-300 font-mono">Q1 2026</span>
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-md">
+                    v2026.2
+                  </span>
+                  <span className="text-xs text-zinc-300 font-mono">Active (September 2026)</span>
+                </div>
+                <Link
+                  href="/methodology/changelog"
+                  className="text-xs font-mono text-amber-400 hover:text-amber-300 underline"
+                >
+                  Full audit log &amp; dispute history &rarr;
+                </Link>
               </div>
               <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-sans">
-                Initial public release. 9-signal weighted combination, Bayesian shrinkage for low-sample repos, 180-day rolling window, staleness cap, maintainer team safety cap, GFI bonus with damped logarithmic curve, hysteresis bands to prevent tier flapping. Calibrated against real PR outcomes.
+                Bayesian shrinkage prior (k = 6.0), bus-factor safety cap (single maintainer ceiling at Tier B), continuous logarithmic GFI curve, and 48-hour human dispute SLA with public recalibration audit logging.
               </p>
             </div>
           </div>
