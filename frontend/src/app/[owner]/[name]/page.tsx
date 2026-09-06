@@ -21,15 +21,23 @@ interface PageProps {
   params: Promise<{ owner: string; name: string }>;
 }
 
-async function getRepoInsights(targetIdOrName: string | number, revalidate = 86400): Promise<AIInsights | null> {
+async function getRepoInsights(targetIdOrName: string | number, fullName?: string, revalidate = 86400): Promise<AIInsights | null> {
   try {
     const target = String(targetIdOrName);
-    const res = await fetch(
+    let res = await fetch(
       `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(target)}/insights`,
       {
         next: { revalidate },
       }
     );
+    if (!res.ok && fullName && fullName !== target) {
+      res = await fetch(
+        `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/insights`,
+        {
+          next: { revalidate },
+        }
+      );
+    }
     if (!res.ok) return null;
     const data = await res.json();
     return data?.insights || null;
@@ -68,7 +76,7 @@ async function getGoodFirstIssues(targetIdOrName: string | number, revalidate = 
     );
     if (!res.ok) return [];
     const data = await res.json();
-    return data?.issues || [];
+    return data?.data || data?.issues || [];
   } catch (e) {
     console.error("SSR fetch failed for good first issues:", targetIdOrName, e);
   }
@@ -117,7 +125,8 @@ async function getOptimalTime(fullName: string, revalidate = 86400): Promise<Opt
       }
     );
     if (!res.ok) return null;
-    return await res.json();
+    const data = await res.json();
+    return data?.optimal_time || data || null;
   } catch (e) {
     console.error("SSR fetch failed for optimal time:", fullName, e);
   }
@@ -287,7 +296,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
   
   // Parallel Server Fetch: insights, related repos, good first issues, pr size sweet spot, likelihood, optimal time, and 90d trend
   const [insights, relatedRepos, gfiList, sweetSpot, likelihood, optimalTime, trend] = await Promise.all([
-    getRepoInsights(targetInsightKey, dynamicTtl),
+    getRepoInsights(targetInsightKey, fullName, dynamicTtl),
     getRelatedRepos(targetInsightKey, dynamicTtl),
     getGoodFirstIssues(targetInsightKey, dynamicTtl),
     getPRSizeSweetSpot(targetInsightKey, dynamicTtl),

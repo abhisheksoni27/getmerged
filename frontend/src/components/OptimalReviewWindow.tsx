@@ -49,7 +49,7 @@ export function OptimalReviewWindow({ fullName, initialData = null }: OptimalRev
 
   if (loading) {
     return (
-      <div className="rounded-2xl glass-panel p-5 border-2 border-white/[0.1] shadow-sm mb-6 animate-pulse">
+      <div className="min-h-[220px] rounded-2xl glass-panel p-5 border-2 border-white/[0.1] shadow-sm mb-6 animate-pulse">
         <div className="flex items-center justify-between mb-4">
           <div className="h-5 bg-white/[0.08] animate-pulse rounded w-1/3"></div>
           <div className="h-4 bg-white/[0.08] animate-pulse rounded w-24"></div>
@@ -62,7 +62,7 @@ export function OptimalReviewWindow({ fullName, initialData = null }: OptimalRev
 
   if (!data || (data.active_maintainer_count === 0 && data.confidence_score === 0)) {
     return (
-      <div className="rounded-2xl glass-panel p-5 sm:p-6 border-2 border-white/[0.1] shadow-sm mb-6 font-mono">
+      <div className="min-h-[220px] rounded-2xl glass-panel p-5 sm:p-6 border-2 border-white/[0.1] shadow-sm mb-6 font-mono">
         <div className="flex items-center gap-2 mb-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800 border border-white/[0.1] text-zinc-400">
             <Clock className="h-4 w-4 text-zinc-400" />
