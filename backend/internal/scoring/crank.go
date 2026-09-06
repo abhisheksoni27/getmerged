@@ -44,14 +44,14 @@ var weights = struct {
 	MaintainerBreadth float64
 	Responsiveness    float64
 }{
-	MergeRate:         0.275,
-	ResponseTime:      0.15,
-	ActivityRecency:   0.15,
+	MergeRate:         0.225,
+	ResponseTime:      0.125,
+	ActivityRecency:   0.125,
 	FirstTimer:        0.10,
 	TimeToMerge:       0.10,
 	RepeatContributor: 0.10,
 	ReviewRounds:      0.05,
-	MaintainerBreadth: 0.05,
+	MaintainerBreadth: 0.15,
 	Responsiveness:    0.025,
 }
 
