@@ -29,6 +29,8 @@ type GoodFirstIssueItem struct {
 	BountyStatus    string    `db:"bounty_status" json:"bounty_status"`
 	CreatedAt       time.Time `db:"created_at" json:"created_at"`
 	SyncedAt        time.Time `db:"synced_at" json:"synced_at"`
+	HasLinkedPR     bool      `db:"has_linked_pr" json:"has_linked_pr"`
+	LinkedPRNumber  *int      `db:"linked_pr_number" json:"linked_pr_number,omitempty"`
 	// Bounty signals derived from labels_json (AC1): self-reported
 	// bounty-labeled issues; amount is set only when the label encodes one.
 	IsBounty     bool     `db:"-" json:"is_bounty"`
@@ -94,8 +96,8 @@ func (r *sqlxGFIRepository) UpsertIssues(ctx context.Context, repoID string, iss
 
 		query := `
 			INSERT INTO repo_good_first_issues (
-				repository_id, issue_number, title, body_text, url, comments_count, labels_json, quality_score, bounty_amount_usd, bounty_status, is_open, created_at, synced_at
-			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, CURRENT_TIMESTAMP)
+				repository_id, issue_number, title, body_text, url, comments_count, labels_json, quality_score, bounty_amount_usd, bounty_status, has_linked_pr, linked_pr_number, is_open, created_at, synced_at
+			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, CURRENT_TIMESTAMP)
 			ON DUPLICATE KEY UPDATE
 				title = VALUES(title),
 				body_text = VALUES(body_text),
@@ -105,14 +107,16 @@ func (r *sqlxGFIRepository) UpsertIssues(ctx context.Context, repoID string, iss
 				quality_score = VALUES(quality_score),
 				bounty_amount_usd = VALUES(bounty_amount_usd),
 				bounty_status = VALUES(bounty_status),
+				has_linked_pr = VALUES(has_linked_pr),
+				linked_pr_number = VALUES(linked_pr_number),
 				is_open = 1,
 				synced_at = CURRENT_TIMESTAMP
 		`
 		if r.db.DriverName() == "sqlite" {
 			query = `
 				INSERT INTO repo_good_first_issues (
-					repository_id, issue_number, title, body_text, url, comments_count, labels_json, quality_score, bounty_amount_usd, bounty_status, is_open, created_at, synced_at
-				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, CURRENT_TIMESTAMP)
+					repository_id, issue_number, title, body_text, url, comments_count, labels_json, quality_score, bounty_amount_usd, bounty_status, has_linked_pr, linked_pr_number, is_open, created_at, synced_at
+				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, CURRENT_TIMESTAMP)
 				ON CONFLICT(repository_id, issue_number) DO UPDATE SET
 					title = excluded.title,
 					body_text = excluded.body_text,
@@ -121,6 +125,8 @@ func (r *sqlxGFIRepository) UpsertIssues(ctx context.Context, repoID string, iss
 					labels_json = excluded.labels_json,
 					bounty_amount_usd = excluded.bounty_amount_usd,
 					bounty_status = excluded.bounty_status,
+					has_linked_pr = excluded.has_linked_pr,
+					linked_pr_number = excluded.linked_pr_number,
 					is_open = 1,
 					synced_at = CURRENT_TIMESTAMP
 			`
@@ -131,7 +137,8 @@ func (r *sqlxGFIRepository) UpsertIssues(ctx context.Context, repoID string, iss
 
 		if _, err := r.db.ExecContext(ctx, query,
 			repoID, issue.Number, sanitizedTitle, sanitizedBody, issue.URL,
-			issue.CommentsCount, issue.LabelsJSON, issue.QualityScore, bountyAmt, bountyStatus, issue.CreatedAt,
+			issue.CommentsCount, issue.LabelsJSON, issue.QualityScore, bountyAmt, bountyStatus,
+			issue.HasLinkedPR, issue.LinkedPRNumber, issue.CreatedAt,
 		); err != nil {
 			return err
 		}
@@ -149,6 +156,7 @@ const gfiListSelect = `
 		g.issue_number, g.title, COALESCE(g.body_text, '') as body_text, g.url, g.comments_count,
 		g.labels_json, COALESCE(g.quality_score, 0) as quality_score,
 		g.bounty_amount_usd, COALESCE(g.bounty_status, 'active') as bounty_status,
+		g.has_linked_pr, g.linked_pr_number,
 		g.created_at, g.synced_at,
 		CASE WHEN b.payment_id IS NOT NULL THEN TRUE ELSE FALSE END as boosted,
 		rep.boost_expires_at as repo_boost_expires_at

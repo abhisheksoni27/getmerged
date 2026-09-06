@@ -1436,6 +1436,9 @@ func AutoMigrate(db *sqlx.DB) error {
 	// Bounty issue metadata (AC2): store parsed USD amount and lifecycle status
 	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN bounty_amount_usd DOUBLE NULL`)
 	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN bounty_status VARCHAR(20) NOT NULL DEFAULT 'active'`)
+	// Good First Issue linked PR detection
+	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN has_linked_pr BOOLEAN NOT NULL DEFAULT FALSE`)
+	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN linked_pr_number INTEGER NULL`)
 	// GFI prefs opt-out flag set by the stateless unsubscribe flow (AC4).
 	_, _ = db.Exec(`ALTER TABLE gfi_subscribers ADD COLUMN opt_out BOOLEAN NOT NULL DEFAULT FALSE`)
 	// Soft-bounce reputation counter (AC6): decrements deliverability trust

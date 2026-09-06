@@ -309,5 +309,20 @@ func TestComputeCRankWithBusFactor_UnifiedFormula(t *testing.T) {
 	if tierD != scoring.TierD || scoreD >= 30.0 {
 		t.Errorf("Stale repo must be Tier D with score < 30, got tier=%s, score=%.2f", tierD, scoreD)
 	}
+
+	// Case 5: 15 PRs with perfect metrics and bus factor 3 (low_sample cap prevents Tier S or A)
+	// totalPRs < 20 must cap at Tier B
+	score15PR, tier15PR := scoring.ComputeCRankWithBusFactor(perfectNormed, false, 0, 3, 15)
+	if tier15PR != scoring.TierB {
+		t.Errorf("totalPRs=15 (<20) must be capped at Tier B, got tier=%s (score=%.2f)", tier15PR, score15PR)
+	}
+
+	// Verify IsLowSample utility
+	if !scoring.IsLowSample(19) {
+		t.Errorf("IsLowSample(19) should be true")
+	}
+	if scoring.IsLowSample(20) {
+		t.Errorf("IsLowSample(20) should be false")
+	}
 }
 

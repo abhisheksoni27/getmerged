@@ -17,64 +17,199 @@ export default function Image() {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "flex-start",
           justifyContent: "space-between",
-          backgroundColor: "#09090b",
-          backgroundImage: "radial-gradient(circle at 25px 25px, #27272a 2px, transparent 0)",
-          backgroundSize: "50px 50px",
-          padding: "60px",
+          backgroundColor: "#07080b",
+          backgroundImage: "radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.08) 1.5px, transparent 0)",
+          backgroundSize: "32px 32px",
+          padding: "50px 60px",
           fontFamily: "sans-serif",
+          borderTop: "6px solid #10b981",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <div
-            style={{
-              width: "16px",
-              height: "16px",
-              borderRadius: "50%",
-              backgroundColor: "#10b981",
-            }}
-          />
-          <span style={{ color: "#a1a1aa", fontSize: "24px", fontWeight: 600 }}>
-            getmerged.abhishekco.de
-          </span>
-        </div>
+        {/* Top Header Bar */}
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+            <div
+              style={{
+                width: "14px",
+                height: "14px",
+                borderRadius: "50%",
+                backgroundColor: "#10b981",
+                boxShadow: "0 0 16px #10b981",
+              }}
+            />
+            <span
+              style={{
+                color: "#ffffff",
+                fontSize: "26px",
+                fontWeight: 800,
+                letterSpacing: "-0.5px",
+              }}
+            >
+              GetMerged
+            </span>
+            <span
+              style={{
+                color: "#10b981",
+                fontSize: "14px",
+                fontWeight: 700,
+                letterSpacing: "1.2px",
+                textTransform: "uppercase",
+                backgroundColor: "rgba(16, 185, 129, 0.12)",
+                border: "1px solid rgba(16, 185, 129, 0.3)",
+                padding: "4px 12px",
+                borderRadius: "999px",
+              }}
+            >
+              Open Source Telemetry
+            </span>
+          </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <span style={{ color: "#ffffff", fontSize: "56px", fontWeight: 800 }}>
-            Glassdoor for Open Source
-          </span>
-          <span
-            style={{
-              color: "#d4d4d8",
-              fontSize: "26px",
-              maxWidth: "960px",
-              lineHeight: 1.4,
-            }}
-          >
-            Stop guessing which door is open. Discover public GitHub repositories where your pull requests are welcomed, reviewed fast, and merged.
-          </span>
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "12px",
-              backgroundColor: "#10b981",
-              padding: "10px 24px",
-              borderRadius: "12px",
-              color: "#ffffff",
-              fontSize: "24px",
-              fontWeight: 800,
+              backgroundColor: "rgba(255, 255, 255, 0.04)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              padding: "6px 16px",
+              borderRadius: "999px",
+              color: "#a1a1aa",
+              fontSize: "16px",
+              fontFamily: "monospace",
             }}
           >
-            <span>C-Rank™ Index</span>
+            <span>102,480 Repos Scored Nightly</span>
           </div>
-          <span style={{ color: "#71717a", fontSize: "20px" }}>
-            PR Merge Rates &bull; Response Times &bull; Beginner Friendly Repos
+        </div>
+
+        {/* Hero Value Proposition */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxWidth: "1000px" }}>
+          <span
+            style={{
+              color: "#f4f4f5",
+              fontSize: "54px",
+              fontWeight: 900,
+              letterSpacing: "-1.5px",
+              lineHeight: 1.1,
+            }}
+          >
+            Where Pull Requests Don’t Go to Die.
           </span>
+          <span
+            style={{
+              color: "#a1a1aa",
+              fontSize: "23px",
+              lineHeight: 1.45,
+              fontWeight: 400,
+            }}
+          >
+            Stop guessing maintainer responsiveness. Live review latency, merge rates, and first-timer acceptance scores across 102k+ public GitHub repositories.
+          </span>
+        </div>
+
+        {/* Dynamic Metric Telemetry Cards */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            backgroundColor: "rgba(255, 255, 255, 0.03)",
+            border: "1px solid rgba(255, 255, 255, 0.09)",
+            borderRadius: "18px",
+            padding: "18px 26px",
+          }}
+        >
+          {/* Card 1: C-Rank */}
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#10b981",
+                color: "#000000",
+                padding: "8px 20px",
+                borderRadius: "10px",
+              }}
+            >
+              <span style={{ fontSize: "11px", fontWeight: 900, letterSpacing: "1px", textTransform: "uppercase" }}>
+                C-Rank™
+              </span>
+              <span style={{ fontSize: "28px", fontWeight: 900, lineHeight: 1 }}>
+                TIER S
+              </span>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span style={{ color: "#ffffff", fontSize: "18px", fontWeight: 700 }}>
+                Contributor Readiness
+              </span>
+              <span style={{ color: "#71717a", fontSize: "13px" }}>
+                9-signal maintainer index
+              </span>
+            </div>
+          </div>
+
+          <div style={{ width: "1px", height: "42px", backgroundColor: "rgba(255, 255, 255, 0.1)" }} />
+
+          {/* Metric 1 */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+            <span style={{ color: "#71717a", fontSize: "12px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 700 }}>
+              Median Response
+            </span>
+            <span style={{ color: "#38bdf8", fontSize: "24px", fontWeight: 800 }}>
+              &lt; 2.4 hrs
+            </span>
+          </div>
+
+          <div style={{ width: "1px", height: "42px", backgroundColor: "rgba(255, 255, 255, 0.1)" }} />
+
+          {/* Metric 2 */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+            <span style={{ color: "#71717a", fontSize: "12px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 700 }}>
+              External Merge Rate
+            </span>
+            <span style={{ color: "#10b981", fontSize: "24px", fontWeight: 800 }}>
+              88.4%
+            </span>
+          </div>
+
+          <div style={{ width: "1px", height: "42px", backgroundColor: "rgba(255, 255, 255, 0.1)" }} />
+
+          {/* Metric 3 */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+            <span style={{ color: "#71717a", fontSize: "12px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 700 }}>
+              First-Timer
+            </span>
+            <span style={{ color: "#c084fc", fontSize: "24px", fontWeight: 800 }}>
+              Top 5%
+            </span>
+          </div>
+
+          <div style={{ width: "1px", height: "42px", backgroundColor: "rgba(255, 255, 255, 0.1)" }} />
+
+          {/* Brand mark right */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              color: "#e4e4e7",
+              fontSize: "15px",
+              fontWeight: 700,
+              fontFamily: "monospace",
+            }}
+          >
+            getmerged.abhishekco.de
+          </div>
         </div>
       </div>
     ),

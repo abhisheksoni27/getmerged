@@ -9,14 +9,13 @@ import { formatFreshness } from "@/lib/freshness";
 import { LangDigestSignup } from "@/components/LangDigestSignup";
 import { IssueSniperTrigger } from "@/components/IssueSniperTrigger";
 import { ClaimIssueButton } from "@/components/ClaimIssueButton";
-import { Sparkles, Code2, ArrowLeft, ShieldCheck, Sprout, MessageSquare, Star, Award } from "lucide-react";
+import { Sparkles, Code2, ArrowLeft, ShieldCheck, Sprout, MessageSquare, Star, Award, GitPullRequest } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 interface PageProps {
   params: Promise<{ lang: string }>;
-  searchParams?: Promise<{ tab?: string }>;
 }
 
 const TIER_CHIP_STYLES: Record<string, string> = {
@@ -103,15 +102,12 @@ async function getGFIRepos(languageName: string): Promise<Repo[]> {
   }
 }
 
-async function getGFIIssues(languageName: string, bountyOnly = false): Promise<GoodFirstIssueItem[]> {
+async function getGFIIssues(languageName: string): Promise<GoodFirstIssueItem[]> {
   try {
     const params: Record<string, string> = {
       language: languageName,
       limit: "30",
     };
-    if (bountyOnly) {
-      params.bounty = "1";
-    }
     const queryParams = new URLSearchParams(params);
     const res = await fetch(`${API_BASE_URL}/api/v1/issues/good-first?${queryParams.toString()}`, {
       next: { revalidate: 1800 },
@@ -125,10 +121,8 @@ async function getGFIIssues(languageName: string, bountyOnly = false): Promise<G
   }
 }
 
-export default async function GoodFirstIssuePage({ params, searchParams }: PageProps) {
+export default async function GoodFirstIssuePage({ params }: PageProps) {
   const { lang } = await params;
-  const sp = searchParams ? await searchParams : {};
-  const currentTab = sp?.tab === "paid" ? "paid" : "all";
   const canonicalLang = canonicalizeSlug(lang);
   if (lang !== canonicalLang) {
     redirect(`/good-first-issue/${canonicalLang}`);
@@ -137,7 +131,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
   const languageName = displayNameFromSlug(canonicalLang);
   const [repos, issues] = await Promise.all([
     getGFIRepos(languageName),
-    getGFIIssues(languageName, currentTab === "paid"),
+    getGFIIssues(languageName),
   ]);
 
   // Schema.org Structured Data
@@ -240,35 +234,10 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
         {/* Real Live Issues Feed (Audit H9 Target Shape) */}
         <div>
           <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.1] pb-4">
-            <div className="flex items-center gap-3">
-              <h2 className="text-sm font-bold text-white flex items-center gap-2 font-space">
-                <Sprout className="h-4 w-4 text-emerald-600" />
-                Live Good First Issues ({issues.length})
-              </h2>
-              {/* Paid / All filter tabs (AC3) */}
-              <div className="inline-flex rounded-xl glass-card p-0.5 border border-white/[0.1] text-xs font-mono">
-                <Link
-                  href={`/good-first-issue/${canonicalLang}`}
-                  className={`px-3 py-1 rounded-lg transition-colors font-semibold ${
-                    currentTab === "all"
-                      ? "glass-panel text-white shadow-2xs"
-                      : "text-zinc-300 hover:text-white"
-                  }`}
-                >
-                  All Issues
-                </Link>
-                <Link
-                  href={`/good-first-issue/${canonicalLang}?tab=paid`}
-                  className={`px-3 py-1 rounded-lg transition-colors font-semibold flex items-center gap-1 ${
-                    currentTab === "paid"
-                      ? "bg-emerald-600 text-white shadow-2xs"
-                      : "text-zinc-300 hover:text-emerald-400"
-                  }`}
-                >
-                  <span>💰 Paid Bounties</span>
-                </Link>
-              </div>
-            </div>
+            <h2 className="text-sm font-bold text-white flex items-center gap-2 font-space">
+              <Sprout className="h-4 w-4 text-emerald-600" />
+              Live Good First Issues ({issues.length})
+            </h2>
             <span className="text-xs text-zinc-300 font-mono">Real-Time Open GitHub Issues</span>
           </div>
 
@@ -290,7 +259,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
                     className="group rounded-2xl glass-panel p-5 sm:p-7 border border-white/[0.1] shadow-xs hover:shadow-md hover:border-white/[0.12] hover:-translate-y-0.5 transition-all flex flex-col justify-between gap-5"
                   >
                     <div>
-                      {/* Prominent meta badges: repo, stars, level rank, bounty, boosted */}
+                      {/* Prominent meta badges: repo, stars, level rank, boosted */}
                       <div className="flex flex-wrap items-center gap-2 mb-5">
                         <Link
                           href={`/${iss.repo_full_name}`}
@@ -311,18 +280,25 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
                           <Award className="h-3.5 w-3.5" /> Tier {iss.c_rank_tier} · {iss.c_rank_score.toFixed(0)} pts
                         </span>
 
-                        {/* Bounty badge (AC3) */}
-                        {iss.is_bounty && (
-                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-950/80 border-emerald-800/80 border border-emerald-300 text-[11px] sm:text-xs font-mono font-bold text-emerald-300 shadow-2xs">
-                            💰 {iss.bounty_amount ? `$${iss.bounty_amount.toFixed(2)} Bounty` : "Cash Bounty"}
-                          </span>
-                        )}
-
                         {/* Boosted listing badge (AC4) */}
                         {iss.boosted && (
                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-950/40 border border-indigo-500/20 border border-indigo-300 text-[10px] sm:text-[11px] font-mono font-bold text-indigo-800">
                             🚀 Boosted
                           </span>
+                        )}
+
+                        {/* Linked PR in progress badge */}
+                        {iss.has_linked_pr && iss.linked_pr_number && (
+                          <a
+                            href={`https://github.com/${iss.repo_full_name}/pull/${iss.linked_pr_number}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-300 text-[11px] sm:text-xs font-mono font-semibold hover:bg-amber-900/60 hover:border-amber-400 transition-colors shadow-2xs"
+                            title={`Pull request #${iss.linked_pr_number} is already in progress on GitHub`}
+                          >
+                            <GitPullRequest className="h-3.5 w-3.5 text-amber-400" />
+                            <span>PR #{iss.linked_pr_number} In Progress</span>
+                          </a>
                         )}
                       </div>
 
@@ -382,6 +358,8 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
                           title: iss.title,
                           url: iss.url,
                           c_rank_tier: iss.c_rank_tier,
+                          has_linked_pr: iss.has_linked_pr,
+                          linked_pr_number: iss.linked_pr_number,
                         }}
                       />
                     </div>
@@ -391,9 +369,7 @@ export default async function GoodFirstIssuePage({ params, searchParams }: PageP
             </div>
           ) : (
             <div className="rounded-2xl glass-panel p-8 text-center text-zinc-300 text-xs mb-10 border border-dashed border-white/[0.12] font-sans">
-              {currentTab === "paid"
-                ? `No cash-bounty issues currently open for ${languageName}. Check back soon!`
-                : `No active good first issues found for ${languageName}.`}
+              No active good first issues found for {languageName}.
             </div>
           )}
         </div>

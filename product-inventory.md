@@ -49,7 +49,7 @@ Python 12,532 | TypeScript 9,157 | JavaScript 7,784 | Go 7,128 | C++ 5,891 | Rus
 | `/rankings` | Ecosystem hub: 20 language leaderboard cards with aggregate stats |
 | `/rankings/[lang]` | Per-language top-50: C-Rank score, merge rate, GFI count, dataset download, FAQ, ItemList schema |
 | `/good-first-issue` | Beginner issue hub: 14 language ecosystems, LanguageMatchQuiz, GfiSniperCard |
-| `/good-first-issue/[lang]` | Live GFI feed: repo grid, bounty/boost badges, freshness labels, claim actions, bounty-aware ordering |
+| `/good-first-issue/[lang]` | Live GFI feed: repo grid, boosted badges, freshness labels, claim actions |
 | `/topics` | Paginated topic directory (100+ topics) with search and stat badges |
 | `/topics/[topic]` | Repos tagged with a topic: aggregate merge rate, review latency, TopicReposExplorer grid |
 | `/hall-of-fame` | Curated S-tier showcase: highest C-Rank repos, responsive RepoCard grid |

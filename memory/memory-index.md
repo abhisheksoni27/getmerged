@@ -11,3 +11,5 @@
 - **SSR-First**: All public SEO routes must fetch data during server-side render in `page.tsx`.
 - **Zero Mock UI**: Every interactive feature must be backed by working backend APIs and DB tables before UI is rendered.
 - **Auto-Memory**: Always ground assumptions on `memory/memory-index.md` and keep sub-files updated.
+- **Product Inventory**: Always check `product-inventory.md` before starting a task; update it whenever major features land, change, or are removed.
+

@@ -35,6 +35,8 @@ export interface Repo {
   score_source?: "computed" | "fallback" | string;
   topics?: string[];
   is_scored?: boolean;
+  low_sample?: boolean;
+  currently_active?: boolean;
 }
 
 export interface LanguageTierBreakdown {
@@ -169,6 +171,8 @@ export interface GoodFirstIssueItem {
   is_bounty?: boolean;
   bounty_amount?: number | null;
   boosted?: boolean;
+  has_linked_pr?: boolean;
+  linked_pr_number?: number | null;
 }
 
 export interface OptimalTimeResult {
