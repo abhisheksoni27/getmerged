@@ -289,14 +289,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nicinabox/lets-split-guide</loc>
-    <lastmod>2026-09-04T23:37:44Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/chainguard-dev/osquery-defense-kit</loc>
+    <lastmod>2026-09-04T23:37:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/chainguard-dev/osquery-defense-kit</loc>
-    <lastmod>2026-09-04T23:37:50Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/nicinabox/lets-split-guide</loc>
+    <lastmod>2026-09-04T23:37:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -577,6 +577,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/kickingvegas/elisp-for-python</loc>
+    <lastmod>2026-08-22T09:46:10Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/bufbuild/makego</loc>
     <lastmod>2026-08-18T02:42:24Z</lastmod>
     <changefreq>daily</changefreq>
@@ -584,12 +590,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/woblerr/docker-pgbackrest</loc>
-    <lastmod>2026-08-22T09:46:10Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/kickingvegas/elisp-for-python</loc>
     <lastmod>2026-08-22T09:46:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -607,13 +607,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/cachix/docs.cachix.org</loc>
+    <loc>https://getmerged.abhishekco.de/plone/documentation</loc>
     <lastmod>2026-08-17T07:48:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/plone/documentation</loc>
+    <loc>https://getmerged.abhishekco.de/cachix/docs.cachix.org</loc>
     <lastmod>2026-08-17T07:48:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -631,14 +631,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/oauth-wg/oauth-v2-1</loc>
-    <lastmod>2026-08-18T17:19:05Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/josegonzalez/pakman</loc>
+    <lastmod>2026-08-17T07:48:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/josegonzalez/pakman</loc>
-    <lastmod>2026-08-17T07:48:47Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/oauth-wg/oauth-v2-1</loc>
+    <lastmod>2026-08-18T17:19:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
