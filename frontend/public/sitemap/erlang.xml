@@ -301,13 +301,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/wg/epgsql</loc>
+    <loc>https://getmerged.abhishekco.de/matteoredaelli/ebot</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/matteoredaelli/ebot</loc>
+    <loc>https://getmerged.abhishekco.de/wg/epgsql</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -337,13 +337,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/epgsql/pooler</loc>
+    <loc>https://getmerged.abhishekco.de/jlouis/graphql-erlang</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jlouis/graphql-erlang</loc>
+    <loc>https://getmerged.abhishekco.de/epgsql/pooler</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -355,13 +355,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Mainframe-Archive/switchboard</loc>
+    <loc>https://getmerged.abhishekco.de/basho/riak-erlang-client</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/basho/riak-erlang-client</loc>
+    <loc>https://getmerged.abhishekco.de/Mainframe-Archive/switchboard</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -427,13 +427,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/erlangpack/erlang-oauth</loc>
+    <loc>https://getmerged.abhishekco.de/inaka/worker_pool</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/inaka/worker_pool</loc>
+    <loc>https://getmerged.abhishekco.de/erlangpack/erlang-oauth</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -529,13 +529,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jlouis/safetyvalve</loc>
+    <loc>https://getmerged.abhishekco.de/yueyoum/make-proxy</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/yueyoum/make-proxy</loc>
+    <loc>https://getmerged.abhishekco.de/jlouis/safetyvalve</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -553,13 +553,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/processone/ejabberd-contrib</loc>
+    <loc>https://getmerged.abhishekco.de/ferd/vmstats</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ferd/vmstats</loc>
+    <loc>https://getmerged.abhishekco.de/processone/ejabberd-contrib</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -643,13 +643,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/cabol/erlbus</loc>
+    <loc>https://getmerged.abhishekco.de/synrc/fs</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/synrc/fs</loc>
+    <loc>https://getmerged.abhishekco.de/cabol/erlbus</loc>
     <lastmod>2026-09-05T03:42:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
