@@ -175,13 +175,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Dzoukr/Dapper.FSharp</loc>
+    <loc>https://getmerged.abhishekco.de/fsprojects/FSharp.Data.GraphQL</loc>
     <lastmod>2026-09-05T03:44:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/fsprojects/FSharp.Data.GraphQL</loc>
+    <loc>https://getmerged.abhishekco.de/Dzoukr/Dapper.FSharp</loc>
     <lastmod>2026-09-05T03:44:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -235,13 +235,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JetBrains/resharper-fsharp</loc>
+    <loc>https://getmerged.abhishekco.de/fsprojects/fsharp-cheatsheet</loc>
     <lastmod>2026-09-05T03:44:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/fsprojects/fsharp-cheatsheet</loc>
+    <loc>https://getmerged.abhishekco.de/JetBrains/resharper-fsharp</loc>
     <lastmod>2026-09-05T03:44:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -313,19 +313,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Zaid-Ajaj/Fable.Remoting</loc>
-    <lastmod>2026-09-05T03:44:04Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/fslaborg/XPlot</loc>
     <lastmod>2026-09-05T03:44:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/Zaid-Ajaj/Fable.Remoting</loc>
+    <lastmod>2026-09-05T03:44:04Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/SAFE-Stack/SAFE-template</loc>
+    <lastmod>2026-09-05T03:44:04Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/praeclarum/1brc</loc>
     <lastmod>2026-09-05T03:44:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -338,12 +344,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/kjnilsson/fez</loc>
-    <lastmod>2026-09-05T03:44:04Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/praeclarum/1brc</loc>
     <lastmod>2026-09-05T03:44:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -403,13 +403,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/dsyme/dsyme-presentations</loc>
+    <loc>https://getmerged.abhishekco.de/ieviev/resharp-dotnet</loc>
     <lastmod>2026-09-05T03:44:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ieviev/resharp-dotnet</loc>
+    <loc>https://getmerged.abhishekco.de/dsyme/dsyme-presentations</loc>
     <lastmod>2026-09-05T03:44:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -433,25 +433,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/sipeed/TangPrimer-20K-example</loc>
-    <lastmod>2026-09-05T03:44:04Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/fslaborg/RProvider</loc>
     <lastmod>2026-09-05T03:44:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/SoftSec-KAIST/CodeAlchemist</loc>
+    <loc>https://getmerged.abhishekco.de/sipeed/TangPrimer-20K-example</loc>
     <lastmod>2026-09-05T03:44:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/efcore/EFCore.FSharp</loc>
+    <lastmod>2026-09-05T03:44:04Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/SoftSec-KAIST/CodeAlchemist</loc>
     <lastmod>2026-09-05T03:44:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -547,13 +547,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/slaveOftime/Fun.Blazor</loc>
+    <loc>https://getmerged.abhishekco.de/mbraceproject/MBrace.Core</loc>
     <lastmod>2026-09-05T03:44:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mbraceproject/MBrace.Core</loc>
+    <loc>https://getmerged.abhishekco.de/slaveOftime/Fun.Blazor</loc>
     <lastmod>2026-09-05T03:44:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
