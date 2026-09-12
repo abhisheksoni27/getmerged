@@ -193,14 +193,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/anibali/docker-pytorch</loc>
-    <lastmod>2026-09-04T22:43:46Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/RICwang/docker-wechat</loc>
+    <lastmod>2026-09-04T22:43:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/RICwang/docker-wechat</loc>
-    <lastmod>2026-09-04T22:43:52Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/anibali/docker-pytorch</loc>
+    <lastmod>2026-09-04T22:43:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -469,7 +469,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/GuillaumeFalourd/useful-actions</loc>
+    <loc>https://getmerged.abhishekco.de/ledermann/docker-rails-base</loc>
     <lastmod>2026-08-17T02:45:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -481,7 +481,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ledermann/docker-rails-base</loc>
+    <loc>https://getmerged.abhishekco.de/GuillaumeFalourd/useful-actions</loc>
     <lastmod>2026-08-17T02:45:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -583,13 +583,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-faster-whisper</loc>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-freshrss</loc>
     <lastmod>2026-08-17T07:30:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-freshrss</loc>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-faster-whisper</loc>
     <lastmod>2026-08-17T07:30:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -601,14 +601,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/StaPH-B/docker-builds</loc>
-    <lastmod>2026-08-20T17:29:46Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/fabiocicerchia/nginx-lua</loc>
+    <lastmod>2026-08-17T07:30:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/fabiocicerchia/nginx-lua</loc>
-    <lastmod>2026-08-17T07:30:47Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/StaPH-B/docker-builds</loc>
+    <lastmod>2026-08-20T17:29:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -715,14 +715,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jlesage/docker-thunderbird</loc>
-    <lastmod>2026-08-18T22:27:01Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/osminogin/docker-tor-simple</loc>
+    <lastmod>2026-08-19T16:33:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/osminogin/docker-tor-simple</loc>
-    <lastmod>2026-08-19T16:33:29Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jlesage/docker-thunderbird</loc>
+    <lastmod>2026-08-18T22:27:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -961,12 +961,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Obamium69/hassio-beszel_agent</loc>
-    <lastmod>2026-08-18T22:27:01Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/naskio/docker-n8n-python</loc>
     <lastmod>2026-08-19T16:33:29Z</lastmod>
     <changefreq>daily</changefreq>
@@ -979,13 +973,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/hotio/radarr</loc>
+    <loc>https://getmerged.abhishekco.de/Obamium69/hassio-beszel_agent</loc>
     <lastmod>2026-08-18T22:27:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-wikijs</loc>
+    <loc>https://getmerged.abhishekco.de/hotio/radarr</loc>
     <lastmod>2026-08-18T22:27:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -993,6 +987,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/dream10201/115Docker</loc>
     <lastmod>2026-08-17T07:30:47Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-wikijs</loc>
+    <lastmod>2026-08-18T22:27:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
