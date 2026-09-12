@@ -29,9 +29,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
+import dynamic from "next/dynamic";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import posthog from "posthog-js";
-import { AuthModal } from "@/components/AuthModal";
 import { RepoDetailHero } from "@/components/RepoDetailHero";
 import { RepoScorecards } from "@/components/RepoScorecards";
 import { RepoBadgeGenerator } from "@/components/RepoBadgeGenerator";
@@ -42,9 +42,11 @@ import { OptimalReviewWindow } from "@/components/OptimalReviewWindow";
 import { PRSizeSweetSpotCard } from "@/components/PRSizeSweetSpotCard";
 import { UnscoredExplainer } from "@/components/UnscoredExplainer";
 import { RaiseYourRank } from "@/components/RaiseYourRank";
-import { MaintainerConsoleModal } from "@/components/MaintainerConsoleModal";
-import { DisputeModal } from "@/components/DisputeModal";
 import { RepoStickyBar, RepoSectionTab } from "@/components/RepoStickyBar";
+
+const AuthModal = dynamic(() => import("@/components/AuthModal").then((mod) => mod.AuthModal), { ssr: false });
+const MaintainerConsoleModal = dynamic(() => import("@/components/MaintainerConsoleModal").then((mod) => mod.MaintainerConsoleModal), { ssr: false });
+const DisputeModal = dynamic(() => import("@/components/DisputeModal").then((mod) => mod.DisputeModal), { ssr: false });
 import { RepoAuditCTA } from "@/components/RepoAuditCTA";
 import { isRepoScored } from "@/lib/repo-metadata";
 import { getGradeColor } from "@/components/CRankBadge";
@@ -64,6 +66,7 @@ interface ClientRepoDetailProps {
   initialLikelihood?: PRLikelihoodData | null;
   initialOptimalTime?: OptimalTimeResult | null;
   initialTrend?: TrendPoint[] | null;
+  initialClaimStatus?: { is_claimed?: boolean; is_verified?: boolean } | null;
 }
 
 export function ClientRepoDetail({
@@ -76,6 +79,7 @@ export function ClientRepoDetail({
   initialLikelihood = null,
   initialOptimalTime = null,
   initialTrend = null,
+  initialClaimStatus = null,
 }: ClientRepoDetailProps) {
   const [currentUser, setCurrentUser] = useState<{
     username?: string;
@@ -125,8 +129,8 @@ export function ClientRepoDetail({
 
   // Maintainer Console Modal State
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
-  const [isRepoClaimed, setIsRepoClaimed] = useState(false);
-  const [isRepoVerified, setIsRepoVerified] = useState(false);
+  const [isRepoClaimed, setIsRepoClaimed] = useState(Boolean(initialClaimStatus?.is_claimed));
+  const [isRepoVerified, setIsRepoVerified] = useState(Boolean(initialClaimStatus?.is_verified));
 
   // Score Dispute Modal State
   const [isDisputeModalOpen, setIsDisputeModalOpen] = useState(false);
@@ -226,7 +230,7 @@ export function ClientRepoDetail({
     };
 
     const fetchClaimStatus = async () => {
-      if (!fullName) return;
+      if (!fullName || initialClaimStatus !== null) return;
       try {
         const res = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/claim-status`, { credentials: "include" });
         if (!res.ok) return;
@@ -891,9 +895,16 @@ export function ClientRepoDetail({
                 ? issue.url
                 : (issueNumber ? `https://github.com/${fullName}/issues/${issueNumber}` : `https://github.com/${fullName}/issues`);
 
-              const dateStr = issue.created_at
-                ? new Date(issue.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-                : null;
+              let dateStr: string | null = null;
+              if (issue.created_at) {
+                try {
+                  const d = new Date(issue.created_at);
+                  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                  dateStr = `${months[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
+                } catch {
+                  dateStr = null;
+                }
+              }
 
               return (
                 <div
@@ -934,7 +945,7 @@ export function ClientRepoDetail({
                       </p>
                     )}
                     <div className="flex items-center gap-3 mt-2 text-[11px] font-mono text-zinc-300 flex-wrap">
-                      {dateStr && <span>📅 Opened {dateStr}</span>}
+                      {dateStr && <span suppressHydrationWarning>📅 Opened {dateStr}</span>}
                       {issue.comments_count !== undefined && (
                         <span>💬 {issue.comments_count} {issue.comments_count === 1 ? "comment" : "comments"}</span>
                       )}
@@ -1004,7 +1015,7 @@ export function ClientRepoDetail({
 
 
       {/* Issues #6, #7, #8: Contributor Community Feedback & Verification Module */}
-      <section id="community-feedback" className="scroll-mt-36 rounded-2xl border-2 border-white/[0.1] glass-panel p-5 sm:p-8 shadow-sm mb-10 font-sans">
+      <section id="community-feedback" className="content-auto scroll-mt-36 rounded-2xl border-2 border-white/[0.1] glass-panel p-5 sm:p-8 shadow-sm mb-10 font-sans">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-white/[0.08] pb-5">
           <div>
             <h2 className="text-xl sm:text-2xl font-extrabold font-space text-white flex items-center gap-2.5">
@@ -1367,7 +1378,7 @@ export function ClientRepoDetail({
           </div>
         </section>
 
-        <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-5 sm:p-6 rounded-2xl mb-8">
+        <section className="content-auto rounded-2xl border-2 border-white/[0.1] glass-panel p-5 sm:p-6 rounded-2xl mb-8">
           <h2 className="text-base sm:text-lg font-extrabold font-space text-white mb-4 flex items-center gap-2">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-400 shadow-sm -rotate-2">
               <FileCode2 className="h-4 w-4 text-sky-400 shrink-0" />

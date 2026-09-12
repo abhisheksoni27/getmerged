@@ -12,27 +12,25 @@ export function CookieBanner() {
   useEffect(() => {
     if (getConsent() !== null) return;
 
-    // Show after first user interaction (scroll, touch, keydown) or long idle
+    // Show only after user interaction (scroll, touch, click, keydown)
     const show = () => {
       setVisible(true);
+      cleanup();
+    };
+
+    const cleanup = () => {
       window.removeEventListener("scroll", show);
       window.removeEventListener("pointerdown", show);
+      window.removeEventListener("touchstart", show);
       window.removeEventListener("keydown", show);
     };
 
     window.addEventListener("scroll", show, { passive: true, once: true });
     window.addEventListener("pointerdown", show, { passive: true, once: true });
+    window.addEventListener("touchstart", show, { passive: true, once: true });
     window.addEventListener("keydown", show, { passive: true, once: true });
 
-    // Fallback after 6 seconds of inactivity
-    const timer = setTimeout(show, 6000);
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("scroll", show);
-      window.removeEventListener("pointerdown", show);
-      window.removeEventListener("keydown", show);
-    };
+    return cleanup;
   }, []);
 
   if (!visible) return null;

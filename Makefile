@@ -183,20 +183,22 @@ deploy-frontend: build-frontend
 		sudo systemctl status opendoor-frontend --no-pager'
 
 # Deploy from a checkout of this repo already on the server - no ssh, local rsync.
+LOCAL_RSYNC_FLAGS = -a --delete --exclude='.DS_Store' --exclude='._*'
+
 deploy-frontend-server: build-frontend
 	@echo "=== Sync standalone root ==="
-	rsync $(RSYNC_FLAGS) \
+	rsync $(LOCAL_RSYNC_FLAGS) \
 		frontend/.next/standalone/frontend/ \
 		/opt/opendoor/frontend/
 
 	@echo "=== Sync static assets ==="
 	mkdir -p /opt/opendoor/frontend/.next/static /opt/opendoor/frontend/public
-	rsync $(RSYNC_FLAGS) \
+	rsync $(LOCAL_RSYNC_FLAGS) \
 		frontend/.next/static/ \
 		/opt/opendoor/frontend/.next/static/
 
 	@echo "=== Sync public assets ==="
-	rsync $(RSYNC_FLAGS) \
+	rsync $(LOCAL_RSYNC_FLAGS) \
 		frontend/public/ \
 		/opt/opendoor/frontend/public/
 

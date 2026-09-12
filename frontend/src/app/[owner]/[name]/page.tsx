@@ -150,6 +150,22 @@ async function getRepoTrend(fullName: string, revalidate = 86400): Promise<Trend
   return [];
 }
 
+async function getClaimStatus(fullName: string, revalidate = 3600): Promise<{ is_claimed?: boolean; is_verified?: boolean } | null> {
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}/claim-status`,
+      {
+        next: { revalidate },
+      }
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    console.error("SSR fetch failed for claim status:", fullName, e);
+  }
+  return null;
+}
+
 async function getRepoData(fullName: string): Promise<Repo | null> {
   try {
     // 1. Direct path lookup
@@ -294,8 +310,8 @@ export default async function RepoDetailPage({ params }: PageProps) {
   const tierConfig = getTierCacheConfig(repo.c_rank_tier || repo.class_rank);
   const dynamicTtl = tierConfig.revalidate;
   
-  // Parallel Server Fetch: insights, related repos, good first issues, pr size sweet spot, likelihood, optimal time, and 90d trend
-  const [insights, relatedRepos, gfiList, sweetSpot, likelihood, optimalTime, trend] = await Promise.all([
+  // Parallel Server Fetch: insights, related repos, good first issues, pr size sweet spot, likelihood, optimal time, 90d trend, and claim status
+  const [insights, relatedRepos, gfiList, sweetSpot, likelihood, optimalTime, trend, claimStatus] = await Promise.all([
     getRepoInsights(targetInsightKey, fullName, dynamicTtl),
     getRelatedRepos(targetInsightKey, dynamicTtl),
     getGoodFirstIssues(targetInsightKey, dynamicTtl),
@@ -303,6 +319,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
     getPRLikelihood(fullName, dynamicTtl),
     getOptimalTime(fullName, dynamicTtl),
     getRepoTrend(fullName, dynamicTtl),
+    getClaimStatus(fullName, 3600),
   ]);
 
   // Schema.org JSON-LD Structured Data
@@ -423,6 +440,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
         initialLikelihood={likelihood}
         initialOptimalTime={optimalTime}
         initialTrend={trend}
+        initialClaimStatus={claimStatus}
       />
 
       <Footer />
