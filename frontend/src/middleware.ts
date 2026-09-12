@@ -2,6 +2,32 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // 301 redirect uppercase routes matching known static/dynamic sections to lowercase
+  if (/[A-Z]/.test(pathname)) {
+    const lower = pathname.toLowerCase();
+    const knownPrefixes = [
+      "/rankings",
+      "/good-first-issue",
+      "/repos",
+      "/pricing",
+      "/compare",
+      "/guides",
+      "/topics",
+      "/contribute",
+      "/hall-of-fame",
+      "/hacktoberfest",
+      "/how-c-rank-works",
+      "/about",
+    ];
+    if (knownPrefixes.some((p) => lower === p || lower.startsWith(p + "/"))) {
+      const url = request.nextUrl.clone();
+      url.pathname = lower;
+      return NextResponse.redirect(url, 301);
+    }
+  }
+
   const response = NextResponse.next();
 
   if (

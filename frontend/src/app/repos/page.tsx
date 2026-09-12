@@ -83,7 +83,7 @@ export async function generateMetadata({ searchParams }: ReposPageProps): Promis
   const resolvedParams = await searchParams;
   const { lang, tier, trending, q } = resolvedParams;
 
-  let title = "Open Source Repository Directory & C-Rank™ Explorer | GetMerged";
+  let title = "Open Source Repositories & C-Rank™ Explorer | GetMerged";
   let description =
     "Explore 102k+ open-source GitHub repositories ranked by C-Rank™ telemetry: PR merge rates, reviewer response velocity, and first-timer success.";
 
