@@ -1,18 +1,18 @@
 # Action Plan — getmerged.abhishekco.de audit 2026-09-12
 
 ## Phase 1: Critical (Week 1)
-- [ ] Cap raw merge rate at 100%; backfill stars/description/language (raw scorecards)
-- [ ] `/pr-simulator`: server wrapper + generateMetadata + self-canonical
-- [ ] Homepage: single static-visible H1, animate decorations only (`HeroSection.tsx:89-96`)
-- [ ] Fix `/dashboard` → `/api/v1/auth/github` → 404 OAuth chain
+- [x] Cap raw merge rate at 100%; backfill stars/description/language (raw scorecards)
+- [x] `/pr-simulator`: server wrapper + generateMetadata + self-canonical
+- [x] Homepage: single static-visible H1, animate decorations only (`HeroSection.tsx:89-96`)
+- [x] Fix `/dashboard` → `/api/v1/auth/github` → 404 OAuth chain (verified 307 to GitHub OAuth)
 - [ ] `rel="sponsored"` + "Boosted" label on paid placements; `rel="ugc"` on community links
 
 ## Phase 2: High-impact (Weeks 2–3)
-- [ ] Rewrite `/good-first-issue` (82ch) + guide (103ch) titles ≤60ch; trim `/repos`/`/gfi`/`/how-c-rank-works`/`/about` metas to 120–155
-- [ ] Guide template: demote duplicate H1 (all 5 guides)
-- [ ] Repo breadcrumb + language normalization (`[owner]/[name]/page.tsx:331,358-368`)
+- [x] Rewrite `/good-first-issue` (82ch) + guide (103ch) titles ≤60ch; trim `/repos`/`/gfi`/`/how-c-rank-works`/`/about` metas to 120–155
+- [x] Guide template: demote duplicate H1 (all 5 guides)
+- [x] Repo breadcrumb + language normalization (`[owner]/[name]/page.tsx:331,358-368`)
 - [ ] SSR related-repos + how-to-contribute CTA on repo pages
-- [ ] Redirect `/methodology` → `/how-c-rank-works`; link from llms.txt; allowlist read-only `/api/v1` GETs in robots.txt
+- [x] Redirect `/methodology` → `/how-c-rank-works`; link from llms.txt; allowlist read-only `/api/v1` GETs in robots.txt
 - [ ] 404 or 301-lowercase unknown `[owner]` paths (`/Rankings/Python` junk-200)
 
 ## Phase 3: Content & authority (Month 2)

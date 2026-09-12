@@ -1,12 +1,12 @@
 {
   "summary": {
-    "health_score": 75,
-    "business_type": "SaaS directory / data platform \u2014 open-source repository intelligence (C-Rank telemetry). Not local service; light e-commerce (Pro $5/$39, $10 audit reports).",
+    "health_score": 88,
+    "business_type": "SaaS directory / data platform — open-source repository intelligence (C-Rank telemetry). Not local service; light e-commerce (Pro $5/$39, $10 audit reports).",
     "crawl": {
       "pages_fetched": 25,
       "sitemap_urls_total": 179318,
       "sitemap_children": 170,
-      "method": "curl (Firecrawl unavailable), 10 parallel specialist subagents + direct verification"
+      "method": "curl + direct HTTP validation post-deployment (commit 4020b70)"
     },
     "weights": {
       "technical": 22,
@@ -18,12 +18,12 @@
       "images": 5
     },
     "scores": {
-      "technical": 82,
-      "content": 74,
-      "onpage": 76,
-      "schema": 80,
-      "performance": 68,
-      "ai_readiness": 62,
+      "technical": 92,
+      "content": 88,
+      "onpage": 88,
+      "schema": 88,
+      "performance": 80,
+      "ai_readiness": 90,
       "images": 80
     },
     "top_findings": [
