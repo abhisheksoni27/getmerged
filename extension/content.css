@@ -1,74 +1,240 @@
-.od-badge {
-  display: inline-flex;
+/* GetMerged Extension Styles - Sleek GitHub Primer Integration */
+
+.gm-repo-card {
+  display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
   flex-wrap: wrap;
-  margin: 8px 0;
-  padding: 6px 10px;
-  border: 1px solid #d0d7de;
+  gap: 12px;
+  margin: 10px 0 14px 0;
+  padding: 8px 14px;
   border-radius: 8px;
-  background: #f6f8fa;
-  color: #1f2328;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
   font-size: 12px;
-  font-weight: 600;
-  line-height: 1.4;
-  max-width: 720px;
+  line-height: 1.5;
+  background: #f6f8fa;
+  border: 1px solid #d0d7de;
+  box-shadow: 0 1px 3px rgba(31, 35, 40, 0.04);
+  transition: all 0.2s ease-in-out;
+  z-index: 20;
 }
 
-.od-crank {
-  color: #ffffff;
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.od-metrics {
-  display: inline-flex;
+.gm-left-cluster {
+  display: flex;
+  align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.od-m {
+.gm-brand {
   display: inline-flex;
-  gap: 4px;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 12px;
+  color: #1f2328;
+  text-decoration: none !important;
 }
 
-.od-ml {
+.gm-brand-logo {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.gm-brand-accent {
+  color: #10b981;
+}
+
+.gm-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 11px;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+
+.gm-tier-s {
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+.gm-tier-a {
+  background: #16a34a;
+}
+.gm-tier-b {
+  background: #d97706;
+}
+.gm-tier-c {
+  background: #ea580c;
+}
+.gm-tier-d {
+  background: #dc2626;
+}
+.gm-tier-unranked {
+  background: #6e7781;
+}
+
+.gm-score-pill {
+  font-weight: 600;
   color: #59636e;
+  font-size: 11px;
+}
+
+.gm-metrics-strip {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.gm-metric-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #1f2328;
+}
+
+.gm-metric-label {
+  color: #656d76;
   font-weight: 500;
 }
 
-.od-mv {
+.gm-metric-val {
+  font-weight: 700;
+  color: #1f2328;
+}
+
+.gm-metric-risk {
+  color: #dc2626 !important;
   font-weight: 700;
 }
 
-.od-link {
-  margin-left: auto;
-  color: #0969da !important;
-  text-decoration: none !important;
-  border: 1px solid rgba(31, 35, 40, 0.15);
-  padding: 2px 8px;
+.gm-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
   border-radius: 6px;
-  white-space: nowrap;
+  font-weight: 600;
+  font-size: 11px;
+  text-decoration: none !important;
+  background: #ffffff;
+  color: #0969da !important;
+  border: 1px solid #d0d7de;
+  transition: all 0.15s ease-in-out;
 }
 
-.od-link:hover {
-  background: rgba(9, 105, 218, 0.08);
+.gm-cta-btn:hover {
+  background: #f3f4f6;
+  border-color: #8c959f;
+  text-decoration: none !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  .od-badge {
-    border-color: #3d444d;
-    background: #151b23;
+/* PR Page Banner Alert */
+.gm-pr-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0 16px 0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  border-left: 4px solid;
+}
+
+.gm-pr-banner-s, .gm-pr-banner-a {
+  background: #f0fdf4;
+  border-color: #16a34a;
+  color: #166534;
+}
+
+.gm-pr-banner-b, .gm-pr-banner-c {
+  background: #fffbeb;
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+.gm-pr-banner-d {
+  background: #fef2f2;
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
+.gm-pr-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.gm-pr-banner-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* Dark mode theme support */
+@media (prefers-color-scheme: dark), [data-color-mode="dark"] {
+  .gm-repo-card {
+    background: #161b22;
+    border-color: #30363d;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    color: #e6edf3;
+  }
+
+  .gm-brand {
     color: #f0f6fc;
   }
-  .od-ml {
-    color: #9198a1;
+
+  .gm-score-pill {
+    color: #8b949e;
   }
-  .od-link {
-    color: #4493f8 !important;
-    border-color: rgba(240, 246, 252, 0.15);
+
+  .gm-metric-item {
+    color: #e6edf3;
+  }
+
+  .gm-metric-label {
+    color: #8b949e;
+  }
+
+  .gm-metric-val {
+    color: #f0f6fc;
+  }
+
+  .gm-cta-btn {
+    background: #21262d;
+    color: #58a6ff !important;
+    border-color: #30363d;
+  }
+
+  .gm-cta-btn:hover {
+    background: #30363d;
+    border-color: #8b949e;
+  }
+
+  .gm-pr-banner-s, .gm-pr-banner-a {
+    background: rgba(34, 197, 94, 0.12);
+    border-color: #22c55e;
+    color: #86efac;
+  }
+
+  .gm-pr-banner-b, .gm-pr-banner-c {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: #f59e0b;
+    color: #fcd34d;
+  }
+
+  .gm-pr-banner-d {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: #ef4444;
+    color: #fca5a5;
   }
 }

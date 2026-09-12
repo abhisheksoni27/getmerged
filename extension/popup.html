@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GetMerged Telemetry</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 32 32" width="20" height="20">
+            <rect width="32" height="32" rx="7" fill="#0a0f0d" stroke="rgba(16,185,129,0.5)" stroke-width="1.5" />
+            <rect x="5" y="9" width="6" height="3" rx="0.5" fill="#10b981" />
+            <rect x="12" y="11" width="4" height="3" rx="0.5" fill="#34d399" />
+            <rect x="5" y="20" width="6" height="3" rx="0.5" fill="#ef4444" />
+            <rect x="12" y="18" width="4" height="3" rx="0.5" fill="#f59e0b" />
+            <rect x="17" y="13.5" width="7" height="5" rx="0.75" fill="#10b981" />
+            <circle cx="26" cy="16" r="1.5" fill="#ffffff" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Get<span class="accent">Merged</span></span>
+          <span class="brand-sub">GitHub C-Rank™ Telemetry</span>
+        </div>
+      </div>
+      <a href="https://getmerged.abhishekco.de" target="_blank" class="header-link" title="Open Web App">↗</a>
+    </header>
+
+    <!-- Active Tab Telemetry Card -->
+    <div id="active-repo-section" class="section">
+      <div class="section-label" id="context-label">Current Tab</div>
+      <div id="card-content" class="card-loading">Detecting repository...</div>
+    </div>
+
+    <!-- Quick Search -->
+    <div class="section search-section">
+      <form id="search-form" class="search-box">
+        <input type="text" id="search-input" placeholder="Check repo (e.g. vercel/next.js)..." autocomplete="off" spellcheck="false">
+        <button type="submit" id="search-btn">Check</button>
+      </form>
+    </div>
+
+    <!-- Search Result Card -->
+    <div id="search-result" class="section hidden"></div>
+
+    <!-- Footer Links -->
+    <footer class="popup-footer">
+      <a href="https://getmerged.abhishekco.de" target="_blank" class="footer-link">Explore 34k+ Repos</a>
+      <span class="dot">•</span>
+      <a href="https://getmerged.abhishekco.de" target="_blank" class="footer-link">Ghost Town Index</a>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

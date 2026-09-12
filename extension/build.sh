@@ -1,27 +1,38 @@
 #!/usr/bin/env bash
-# Smoke build for the OpenDoor GitHub extension. Packages identical MV3 sources
-# into per-target zip artifacts for Chrome and Firefox (parity via polyfill).
+# Build & package script for GetMerged GitHub Extension (Chrome + Firefox)
 set -euo pipefail
 cd "$(dirname "$0")"
 
-command -v node >/dev/null 2>&1 || { echo "node required"; exit 1; }
-command -v zip  >/dev/null 2>&1 || { echo "zip required"; exit 1; }
+echo "==> Validating GetMerged Extension..."
 
-# 1. Validate manifest JSON for both embedded targets.
-node -e "JSON.parse(require('fs').readFileSync('manifest.json','utf8')); console.log('manifest.json OK')"
+# 1. Validate manifest JSON
+node -e "JSON.parse(require('fs').readFileSync('manifest.json','utf8')); console.log('✓ manifest.json is valid JSON');"
 
-# 2. Sanity-check the message contract + schema presence in source.
-grep -q "GET_TELEMETRY" background.js content.js || { echo "GET_TELEMETRY contract missing"; exit 1; }
-grep -q "TELEMETRY_RESULT" background.js content.js || { echo "TELEMETRY_RESULT contract missing"; exit 1; }
-grep -q "API_TIMEOUT\|OFFLINE\|NOT_FOUND" background.js || { echo "error codes missing"; exit 1; }
-grep -q "cRank" background.js || { echo "metrics schema missing"; exit 1; }
-grep -q "opendoor.dev/repo/" content.js || { echo "deeplink missing"; exit 1; }
+# 2. Check icon assets
+for icon in 16 32 48 128; do
+  if [ ! -f "icons/icon${icon}.png" ]; then
+    echo "✗ Missing icons/icon${icon}.png"
+    exit 1
+  fi
+done
+echo "✓ Icons 16/32/48/128 verified"
 
-# 3. Package both targets.
+# 3. Check critical files
+for f in background.js content.js content.css popup.html popup.js popup.css; do
+  if [ ! -f "$f" ]; then
+    echo "✗ Missing $f"
+    exit 1
+  fi
+done
+echo "✓ Core extension scripts and styles verified"
+
+# 4. Package zip for distribution
 rm -rf dist
 mkdir -p dist/chrome dist/firefox
-zip -r -q dist/chrome/opendoor-github-extension.zip . -x 'dist/*' '*.git/*' 'build.sh'
-cp dist/chrome/opendoor-github-extension.zip dist/firefox/opendoor-github-extension.zip
+zip -r -q dist/getmerged-chrome-extension.zip . -x 'dist/*' '*.git/*' 'build.sh' '*.DS_Store'
+cp dist/getmerged-chrome-extension.zip dist/chrome/opendoor-github-extension.zip
+cp dist/getmerged-chrome-extension.zip dist/firefox/opendoor-github-extension.zip
 
-echo "Built Chrome + Firefox targets:"
-ls -1 dist/chrome dist/firefox
+echo "✓ Extension packaged successfully:"
+ls -lh dist/getmerged-chrome-extension.zip dist/chrome/opendoor-github-extension.zip
+echo "==> Ready for Chrome Web Store upload or local developer loading!"
