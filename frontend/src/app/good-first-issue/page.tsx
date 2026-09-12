@@ -9,8 +9,8 @@ import { LanguageMatchQuiz } from "@/components/LanguageMatchQuiz";
 import { GfiSniperCard } from "@/components/GfiSniperCard";
 
 export const metadata: Metadata = {
-  title: "Find Good First Issues: Top Beginner Repos Ranked by Merge Rate (2026) | GetMerged",
-  description: "Discover beginner-friendly Good First Issues across Python, TypeScript, Go, Rust, C#, Java, and other open-source ecosystems ranked by maintainer merge rates.",
+  title: "Good First Issues: Repos Ranked by PR Merge Rate | GetMerged",
+  description: "Find beginner Good First Issues across Python, TypeScript, Go, Rust, and Java ranked by maintainer review speed and merge rates.",
   alternates: {
     canonical: "https://getmerged.abhishekco.de/good-first-issue",
     types: {
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Find Good First Issues: Top Beginner Repos Ranked by Merge Rate | GetMerged",
+    title: "Good First Issues: Repos Ranked by PR Merge Rate | GetMerged",
     description: "Find active beginner-friendly issues in GitHub repositories with high PR merge rates.",
     url: "https://getmerged.abhishekco.de/good-first-issue",
     siteName: "GetMerged",

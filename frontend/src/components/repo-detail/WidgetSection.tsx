@@ -5,7 +5,7 @@ import React from "react";
 interface WidgetSectionProps {
   id?: string;
   className?: string;
-  /** When false, renders nothing — replaces repeated `{cond && (<section ...>)}` blocks. */
+  /** When false, renders nothing - replaces repeated `{cond && (<section ...>)}` blocks. */
   show?: boolean;
   children: React.ReactNode;
 }

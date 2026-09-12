@@ -2,6 +2,21 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: "/methodology",
+        destination: "/how-c-rank-works",
+        permanent: true,
+      },
+      {
+        source: "/merge-rate",
+        destination: "/how-c-rank-works",
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://getmerged.abhishekco.de";
     return [

@@ -86,14 +86,9 @@ export function HeroSection({
         </span>
       </motion.div>
 
-      <motion.h1
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-        className="text-4xl font-bold tracking-tight text-white sm:text-6xl font-sans leading-[1.1]"
-      >
+      <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl font-sans leading-[1.1]">
         Find repos that <span className="text-shimmer font-extrabold">actually merge</span> your PRs.
-      </motion.h1>
+      </h1>
       <motion.p
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

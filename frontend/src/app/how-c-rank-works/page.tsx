@@ -27,7 +27,7 @@ import { Footer } from "@/components/Footer";
 export const metadata: Metadata = {
   title: "How GetMerged Scores Repositories - C-Rank™ Methodology",
   description:
-    "The methodology behind C-Rank™: 9 signals, weighted combination, Bayesian shrinkage for low-sample repos, staleness rules, and transparent tier classification.",
+    "C-Rank™ methodology: 9 signals, weighted scoring, Bayesian shrinkage for low-sample repos, staleness rules, and transparent tier classification.",
   alternates: {
     canonical: "https://getmerged.abhishekco.de/how-c-rank-works",
   },

@@ -322,13 +322,18 @@ export default async function RepoDetailPage({ params }: PageProps) {
     getClaimStatus(fullName, 3600),
   ]);
 
+  const rawLang = repo?.language?.trim();
+  const hasValidLang = Boolean(rawLang && rawLang.toLowerCase() !== "other" && rawLang.toLowerCase() !== "unknown");
+  const normalizedLang = hasValidLang ? rawLang : "Open Source";
+  const langSlug = getLanguageSlug(hasValidLang ? rawLang! : "other");
+
   // Schema.org JSON-LD Structured Data
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
     name: fullName,
     description: repo?.description || "Public open-source repository",
-    programmingLanguage: repo?.language || "Multi-Language",
+    ...(hasValidLang ? { programmingLanguage: normalizedLang } : {}),
     codeRepository: repo?.github_url || `https://github.com/${fullName}`,
     author: {
       "@type": "Organization",
@@ -353,8 +358,6 @@ export default async function RepoDetailPage({ params }: PageProps) {
     })),
   };
 
-  const langSlug = getLanguageSlug(repo?.language || "other");
-
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -368,8 +371,10 @@ export default async function RepoDetailPage({ params }: PageProps) {
       {
         "@type": "ListItem",
         position: 2,
-        name: `${repo?.language || "Multi-Language"} Good First Issues`,
-        item: `https://getmerged.abhishekco.de/good-first-issue/${langSlug}`,
+        name: hasValidLang ? `${normalizedLang} Good First Issues` : "Good First Issues",
+        item: hasValidLang
+          ? `https://getmerged.abhishekco.de/good-first-issue/${langSlug}`
+          : "https://getmerged.abhishekco.de/good-first-issue",
       },
       {
         "@type": "ListItem",

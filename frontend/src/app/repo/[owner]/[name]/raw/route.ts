@@ -31,8 +31,13 @@ export async function GET(
     const rank = repo.class_rank || repo.c_rank_tier || "A";
     const score = repo.c_rank_score || repo.score || 75.0;
     const responseHours = repo.time_to_first_response_hours || 0;
-    const mergeRate = ((repo.external_pr_merge_rate || 0) * 100).toFixed(1);
-    const firstTimerRate = ((repo.first_timer_success_rate || 0) * 100).toFixed(1);
+    const rawMergeRate = repo.external_pr_merge_rate || 0;
+    const normalizedMergeRate = rawMergeRate > 1 ? rawMergeRate : rawMergeRate * 100;
+    const mergeRate = Math.min(100, Math.max(0, normalizedMergeRate)).toFixed(1);
+
+    const rawFirstTimer = repo.first_timer_success_rate || 0;
+    const normalizedFirstTimer = rawFirstTimer > 1 ? rawFirstTimer : rawFirstTimer * 100;
+    const firstTimerRate = Math.min(100, Math.max(0, normalizedFirstTimer)).toFixed(1);
 
     const markdown = `# ${repo.full_name} - GetMerged C-Rank™ Report
 
