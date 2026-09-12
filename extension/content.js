@@ -109,10 +109,12 @@
     `;
     brand.appendChild(logoSvg);
 
-    const brandText = createEl('span', null, 'Get');
-    const brandAccent = createEl('span', 'gm-brand-accent', 'Merged');
-    brand.appendChild(brandText);
-    brand.appendChild(brandAccent);
+    const brandName = createEl('span', 'gm-brand-text');
+    const getSpan = createEl('span', null, 'Get');
+    const mergedSpan = createEl('span', 'gm-brand-accent', 'Merged');
+    brandName.appendChild(getSpan);
+    brandName.appendChild(mergedSpan);
+    brand.appendChild(brandName);
     left.appendChild(brand);
 
     const tier = data && data.cRank ? data.cRank : 'UNRANKED';
