@@ -86,6 +86,8 @@ export function ClientRepoDetail({
   const [insights, setInsights] = useState<AIInsights | null>(initialInsights || null);
 
   useEffect(() => {
+    const hasToken = typeof document !== "undefined" && document.cookie.includes("opendoor_token=");
+    if (!hasToken) return;
     fetch(`${API_BASE_URL}/api/v1/auth/me`, { credentials: "include" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {

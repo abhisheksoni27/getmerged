@@ -20,7 +20,14 @@ export function MetricGauge({ label, value, percentage = 0, tier = "A", classNam
       <div className="font-space text-lg sm:text-xl font-black tracking-tight text-white mb-2">{value}</div>
       
       {/* 5 Distinct Non-Overlapping Pills */}
-      <div className="w-full flex items-center justify-center gap-1 sm:gap-1.5 my-1.5 px-0.5" aria-label={`${label}: ${percentage}%`}>
+      <div
+        className="w-full flex items-center justify-center gap-1 sm:gap-1.5 my-1.5 px-0.5"
+        role="meter"
+        aria-label={label}
+        aria-valuenow={Math.min(100, Math.max(0, percentage))}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
         {Array.from({ length: totalSegments }).map((_, i) => {
           const isFilled = i < Math.floor(scoreOutOf5);
           const isPartial = !isFilled && i < scoreOutOf5;

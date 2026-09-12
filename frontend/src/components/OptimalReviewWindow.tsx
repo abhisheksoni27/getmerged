@@ -153,7 +153,7 @@ export function OptimalReviewWindow({ fullName, initialData = null }: OptimalRev
           <div data-testid="peak-hour-metric" className="text-lg font-bold font-mono text-white">
             {padZero(peakHour)}:00 UTC
           </div>
-          <p className="text-[11px] font-mono text-emerald-400 mt-0.5">
+          <p className="text-[11px] font-mono text-emerald-400 mt-0.5" suppressHydrationWarning>
             {isMounted ? `≈ ${localPeakTime} (Local)` : "Calculating local time..."}
           </p>
         </div>
@@ -166,7 +166,7 @@ export function OptimalReviewWindow({ fullName, initialData = null }: OptimalRev
           <div className="text-lg font-bold font-mono text-white">
             {padZero(primaryStart)}:00 - {padZero(primaryEnd)}:00 UTC
           </div>
-          <p className="text-[11px] font-mono text-blue-700 mt-0.5">
+          <p className="text-[11px] font-mono text-blue-700 mt-0.5" suppressHydrationWarning>
             {isMounted ? `≈ ${localWindow} (Local)` : "Calculating local time..."}
           </p>
         </div>
@@ -215,6 +215,7 @@ export function OptimalReviewWindow({ fullName, initialData = null }: OptimalRev
                 <div
                   key={h}
                   data-testid={`heatmap-bar-${h}`}
+                  role="img"
                   title={`${padZero(h)}:00 UTC (${localHourStr} Local) - ${activityLabel}`}
                   aria-label={`${padZero(h)}:00 UTC (${localHourStr} Local) - ${activityLabel}`}
                   tabIndex={0}
@@ -244,9 +245,9 @@ export function OptimalReviewWindow({ fullName, initialData = null }: OptimalRev
         data-testid="optimal-time-explanation"
         className="rounded-xl glass-card border border-white/[0.1] p-3 text-xs font-sans text-zinc-300 space-y-1.5"
       >
-        <p className="flex items-start gap-1.5">
+        <p className="flex items-start gap-1.5" suppressHydrationWarning>
           <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-          <span>
+          <span suppressHydrationWarning>
             Maintainers are most responsive around <strong>{padZero(peakHour)}:00 UTC</strong> (
             <strong>{localPeakTime}</strong> in your timezone). Recommended submission window is{" "}
             <strong>{dayWindow}</strong> from <strong>{padZero(primaryStart)}:00 to {padZero(primaryEnd)}:00 UTC</strong>{" "}

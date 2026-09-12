@@ -29,9 +29,9 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 text-xs">
           {/* Column 1: Ecosystem Rankings */}
           <div className="space-y-3">
-            <h4 className="font-bold text-white text-xs uppercase tracking-wider font-mono">
+            <h3 className="font-bold text-white text-xs uppercase tracking-wider font-mono">
               Ecosystems
-            </h4>
+            </h3>
             <ul className="space-y-2.5 font-mono text-[11px] text-[#e5e5e5]">
               {rankingLangs.slice(0, 7).map((lang) => (
                 <li key={`rank-${lang.slug}`}>
@@ -50,9 +50,9 @@ export function Footer() {
 
           {/* Column 2: More Ecosystems & Topics */}
           <div className="space-y-3">
-            <h4 className="font-bold text-white text-xs uppercase tracking-wider font-mono">
+            <h3 className="font-bold text-white text-xs uppercase tracking-wider font-mono">
               More Ecosystems
-            </h4>
+            </h3>
             <ul className="space-y-2.5 font-mono text-[11px] text-[#e5e5e5]">
               {rankingLangs.slice(7).map((lang) => (
                 <li key={`rank-more-${lang.slug}`}>
@@ -81,9 +81,9 @@ export function Footer() {
 
           {/* Column 3: Good First Issues */}
           <div className="space-y-3">
-            <h4 className="font-bold text-white text-xs uppercase tracking-wider font-mono">
+            <h3 className="font-bold text-white text-xs uppercase tracking-wider font-mono">
               Good First Issues
-            </h4>
+            </h3>
             <ul className="space-y-2.5 font-mono text-[11px] text-[#e5e5e5]">
               {rankingLangs.slice(0, 6).map((lang) => (
                 <li key={`gfi-${lang.slug}`}>
@@ -112,9 +112,9 @@ export function Footer() {
 
           {/* Column 4: Curated Discovery Collections */}
           <div className="space-y-3">
-            <h4 className="font-bold text-white text-xs uppercase tracking-wider font-mono">
+            <h3 className="font-bold text-white text-xs uppercase tracking-wider font-mono">
               Discovery
-            </h4>
+            </h3>
             <ul className="space-y-2.5 font-mono text-[11px] text-[#e5e5e5]">
               <li>
                 <Link href="/league" title="Monthly Open-Source Contributor League & Active Sprints" className="text-[#ff6b00] hover:text-[#ff8a33] font-semibold transition-colors flex items-center gap-1">
@@ -148,9 +148,9 @@ export function Footer() {
 
           {/* Column 5: Platform & Methodology */}
           <div className="space-y-3">
-            <h4 className="font-bold text-white text-xs uppercase tracking-wider font-mono">
+            <h3 className="font-bold text-white text-xs uppercase tracking-wider font-mono">
               Platform
-            </h4>
+            </h3>
             <ul className="space-y-2.5 font-mono text-[11px] text-[#e5e5e5]">
               <li>
                 <Link href="/pricing" title="Pro Contributor, Recruiter Pass & Maintainer Plans" className="text-white font-semibold hover:text-emerald-400 transition-colors">
