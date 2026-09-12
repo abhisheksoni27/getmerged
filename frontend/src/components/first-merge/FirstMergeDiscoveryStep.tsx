@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { ArrowRight, Check, ChevronRight, Search, Sparkles } from "lucide-react";
 import { MatchRepoItem } from "@/hooks/useFirstMergeMatches";
+import { StepShell } from "./FirstMergeStepShell";
 
 interface FirstMergeDiscoveryStepProps {
   matches: MatchRepoItem[];
@@ -15,23 +16,19 @@ export function FirstMergeDiscoveryStep({
   onSelectRepo,
 }: FirstMergeDiscoveryStepProps) {
   return (
-    <div>
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-            <Sparkles className="h-4 w-4 text-amber-500" /> Step 1: Pick a Welcoming Repo
-          </h3>
-          <p className="mt-0.5 text-xs text-zinc-300">
-            Select a repository with high first-timer merge rates and responsive maintainers.
-          </p>
-        </div>
+    <StepShell
+      icon={<Sparkles className="h-4 w-4 text-amber-500" />}
+      title="Step 1: Pick a Welcoming Repo"
+      description="Select a repository with high first-timer merge rates and responsive maintainers."
+      action={
         <Link
           href="/repos"
           className="text-xs font-semibold text-emerald-400 hover:underline flex items-center gap-1 shrink-0"
         >
           Browse all repos <ArrowRight className="h-3 w-3" />
         </Link>
-      </div>
+      }
+    >
 
       {loadingMatches ? (
         <div className="mt-4 py-8 text-center text-xs text-zinc-300 animate-pulse">
@@ -87,6 +84,6 @@ export function FirstMergeDiscoveryStep({
           ))}
         </div>
       )}
-    </div>
+    </StepShell>
   );
 }

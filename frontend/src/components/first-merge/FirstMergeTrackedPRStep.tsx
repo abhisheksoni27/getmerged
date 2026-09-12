@@ -3,22 +3,9 @@ import Link from "next/link";
 import { RefreshCw, AlertTriangle, ExternalLink, CheckCircle2, Sparkles } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 import { FirstMergeTrackState } from "@/hooks/useFirstMergePersistence";
+import { TrackedStatusItem } from "@/hooks/useFirstMergeTrack";
 import { FirstMergeTrackCard } from "./FirstMergeTrackCard";
-
-interface TrackedStatusItem {
-  pr_id: string;
-  owner: string;
-  repo: string;
-  pr_number: number;
-  state: string;
-  title: string;
-  html_url: string;
-  fetched_at: string;
-  has_artifact: boolean;
-  card_id: string;
-  share_url: string;
-  og_image_url: string;
-}
+import { StepShell } from "./FirstMergeStepShell";
 
 interface FirstMergeTrackedPRStepProps {
   trackState: FirstMergeTrackState;
@@ -58,23 +45,19 @@ export function FirstMergeTrackedPRStep({
     trackState.trackedPR.state === "closed";
 
   return (
-    <div>
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-            <RefreshCw className="h-4 w-4 text-emerald-600" /> Step 4: PR Merge Journey
-          </h3>
-          <p className="mt-0.5 text-xs text-zinc-300">
-            Tracking live review benchmarks, reviewer activity, and merge status.
-          </p>
-        </div>
+    <StepShell
+      icon={<RefreshCw className="h-4 w-4 text-emerald-600" />}
+      title="Step 4: PR Merge Journey"
+      description="Tracking live review benchmarks, reviewer activity, and merge status."
+      action={
         <button
           onClick={() => onRestartStep(1)}
           className="text-xs text-zinc-300 hover:text-zinc-300 underline cursor-pointer"
         >
           Start New Track
         </button>
-      </div>
+      }
+    >
 
       <div className="mt-4 rounded-xl border border-white/[0.1] glass-card/60 p-4">
         <div className="flex items-center gap-2">
@@ -215,6 +198,6 @@ export function FirstMergeTrackedPRStep({
           </p>
         </div>
       )}
-    </div>
+    </StepShell>
   );
 }

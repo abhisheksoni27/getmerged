@@ -1,6 +1,7 @@
 import React from "react";
 import { CheckCircle2 } from "lucide-react";
 import { FirstMergeTrackState } from "@/hooks/useFirstMergePersistence";
+import { StepShell } from "./FirstMergeStepShell";
 
 interface FirstMergePreflightStepProps {
   trackState: FirstMergeTrackState;
@@ -14,23 +15,19 @@ export function FirstMergePreflightStep({
   onManualAdvance,
 }: FirstMergePreflightStepProps) {
   return (
-    <div>
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-            <CheckCircle2 className="h-4 w-4 text-emerald-600" /> Step 3: Run Preflight Check
-          </h3>
-          <p className="mt-0.5 text-xs text-zinc-300">
-            Evaluate PR quality before submitting to avoid common reviewer rejections.
-          </p>
-        </div>
+    <StepShell
+      icon={<CheckCircle2 className="h-4 w-4 text-emerald-600" />}
+      title="Step 3: Run Preflight Check"
+      description="Evaluate PR quality before submitting to avoid common reviewer rejections."
+      action={
         <button
           onClick={() => onRestartStep(2)}
           className="text-xs text-zinc-300 hover:text-zinc-300 underline cursor-pointer"
         >
           Back to Issues
         </button>
-      </div>
+      }
+    >
 
       <div className="mt-3 rounded-lg border border-white/[0.1] glass-card p-3 text-xs text-zinc-300 flex flex-wrap items-center justify-between gap-2">
         <div>
@@ -70,6 +67,6 @@ export function FirstMergePreflightStep({
           </div>
         </div>
       </div>
-    </div>
+    </StepShell>
   );
 }
