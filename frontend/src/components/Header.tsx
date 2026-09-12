@@ -124,7 +124,6 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             <button
               type="button"
               onClick={handleOpenSearch}
-              aria-label="Search repositories"
               className="w-full relative flex items-center justify-between h-9 rounded-lg border border-white/[0.08] bg-[#141414] hover:border-white/[0.16] hover:bg-[#1c1c1c] px-2.5 sm:px-3 transition-all cursor-pointer group text-left"
             >
               <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">

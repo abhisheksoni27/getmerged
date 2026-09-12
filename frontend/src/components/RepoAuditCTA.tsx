@@ -22,8 +22,8 @@ export function RepoAuditCTA({ fullName, isScored, isLoggedIn, requireLogin }: R
   const repoKey = fullName.toLowerCase();
 
   const checkStatus = useCallback(async () => {
-    if (!isScored) {
-      setStatus("none");
+    if (!isScored || !isLoggedIn) {
+      setStatus(isLoggedIn ? "none" : "unauthenticated");
       return;
     }
     try {
@@ -44,7 +44,7 @@ export function RepoAuditCTA({ fullName, isScored, isLoggedIn, requireLogin }: R
     } catch {
       setStatus("none");
     }
-  }, [isScored, repoKey]);
+  }, [isScored, isLoggedIn, repoKey]);
 
   useEffect(() => {
     checkStatus();

@@ -17,6 +17,8 @@ export function PostHogInit() {
         capture_exceptions: true,
         persistence: "memory",
         opt_out_capturing_by_default: true,
+        disable_surveys: true,
+        disable_session_recording: true,
         debug: process.env.NODE_ENV === "development",
       });
       if (getConsent() === "accepted") {

@@ -212,7 +212,7 @@ export function ShareForecastButton({
           type="button"
           onClick={handleShareClick}
           data-testid="share-result-btn"
-          aria-label={`Share forecast result for ${repoFullName}`}
+          aria-label={`Share result forecast for ${repoFullName}`}
           title="Share forecast result (X & LinkedIn intents)"
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg glass-card text-zinc-200 border border-white/[0.12] hover:bg-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 active:scale-[0.98] ${className}`}
         >
@@ -224,7 +224,7 @@ export function ShareForecastButton({
           type="button"
           onClick={handleShareClick}
           data-testid="share-result-btn"
-          aria-label={`Share forecast result for ${repoFullName}`}
+          aria-label={`Share result forecast for ${repoFullName}`}
           title="Share forecast result (X & LinkedIn intents)"
           className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl glass-panel border-2 border-white/[0.1] text-white font-mono font-bold text-xs uppercase tracking-wider hover:glass-card active:scale-[0.98] transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer ${className}`}
         >
