@@ -43,6 +43,13 @@
   flex-shrink: 0;
 }
 
+.gm-brand-text {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
 .gm-brand-accent {
   color: #10b981;
 }
