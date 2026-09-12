@@ -274,3 +274,9 @@ select:focus-visible {
     scroll-behavior: auto !important;
   }
 }
+
+/* Optimize initial mobile layout & rendering work for deep sections */
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 400px;
+}
