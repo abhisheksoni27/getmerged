@@ -1,12 +1,23 @@
-# Search Experience Optimization (SXO) Audit: getmerged.abhishekco.de
+# SXO (Search Experience) — 72/100
+curl × 12 URLs + `frontend/src/app` source.
 
-**Category Score**: **90 / 100**
+| Intent | Page | Verdict |
+|---|---|---|
+| good first issue python | /good-first-issue/python (684KB SSR) | ✅ match |
+| welcoming open source repos | /rankings/python (422KB) | ✅ match |
+| repo merge rate | no page — /merge-rate + /audit 404 | ❌ gap |
+| hacktoberfest repos | /hacktoberfest (280KB) | ✅, no FAQ schema |
 
-## 1. Persona Scoring & Search Intent Match
-- **Intent**: High-intent developers searching for "good first issues", "rust open source repositories", "fast PR merge rate GitHub".
-- **Comprehension**: 2-second comprehension rule met; maintainer responsiveness and LOC sweet spot are immediately legible above the fold.
-- **Accessibility & UX**: Agent UX check scored **100 / 100** (42 semantic buttons, 115 semantic links, 14 semantic landmarks).
+## Personas
+- First-time contributor (GFI claim) 8/10 — SSR cards, Claim CTA pre-JS, 1 click from home. Deduct: no FAQ; sign-in gate not SSR-visible.
+- Experienced dev (welcoming repo) 9/10 — SSR 40 cards, FAQ on /rankings/python only (missing root/other langs).
+- Maintainer (repo health) 6/10 — scorecard works (/getsentry/sentry 183KB, FAQ ✅); /facebook/react fetched 152KB on recheck (earlier empty = flake). /maintainers no FAQ; /audit root 404.
+- Recruiter (talent) 4/10 — /talent gone (404); /pr-simulator + talent not linked from homepage.
 
-## 2. Navigational Gaps
-- Deep comparison routes (`/compare/[repo1]/vs/[repo2]`) lack visible breadcrumbs back to the `/compare` hub.
-- Missing spaces in dynamic heading templates (e.g. `Open-SourceRustRepositories`, `forrust-lang/rust`).
+## SSR violations (AGENTS.md)
+1. pr-simulator: use client + no metadata → wrong title + canonical→/ (P0).
+2. /stack: metadata OK but results require JS, no noscript fallback (acceptable for tool pages; flag if SEO-targeted).
+3. GFI/rankings/scorecards PASS (SSR cards, metadata, no skeletons).
+
+## Fixes
+1. pr-simulator canonical+metadata (P0). 2. Create /merge-rate or redirect; add /audit index. 3. FAQ schema on /pricing, /maintainers, GFI, /hacktoberfest. 4. Link /pr-simulator from nav (talent is 404 — decide: restore or drop). 5. Surface claim sign-in requirement in SSR copy.
