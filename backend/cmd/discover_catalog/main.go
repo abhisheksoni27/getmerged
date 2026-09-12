@@ -28,6 +28,8 @@ var targetLanguages = []string{
 
 func main() {
 	minStarsFlag := flag.Int("min-stars", 200, "Minimum stars threshold (default 200)")
+	langFlag := flag.String("lang", "", "Target a specific language (optional, e.g. 'Swift')")
+	maxPagesFlag := flag.Int("max-pages", 10, "Max search result pages per query (default 10)")
 	dryRunFlag := flag.Bool("dry-run", false, "Preview queries without DB insertion")
 	flag.Parse()
 
@@ -55,22 +57,27 @@ func main() {
 
 	gh := ghclient.NewClient(cfg.GithubToken, vkClient)
 
-	slog.Info("starting bulk catalog discovery pass", "min_stars", *minStarsFlag, "dry_run", *dryRunFlag)
+	slog.Info("starting catalog discovery pass", "min_stars", *minStarsFlag, "lang", *langFlag, "dry_run", *dryRunFlag)
+
+	// If a specific language is targeted, run full deep language brackets (200..4999 stars)
+	if *langFlag != "" {
+		sweepLanguageDeepBrackets(database, gh, *langFlag, *minStarsFlag, *maxPagesFlag, *dryRunFlag)
+		slog.Info("targeted language discovery pass finished successfully", "lang", *langFlag)
+		return
+	}
 
 	// Step 1: Global High-Star Sweep (all repos >= 500 stars, across all languages)
 	if *minStarsFlag <= 500 {
-		sweepGlobalBrackets(database, gh, *dryRunFlag)
+		sweepGlobalBrackets(database, gh, *maxPagesFlag, *dryRunFlag)
 	}
 
-	// Step 2: Per-Language 200..499 Sweep
-	if *minStarsFlag <= 200 {
-		sweepLanguageBrackets(database, gh, *dryRunFlag)
-	}
+	// Step 2: Per-Language Sweep across target languages
+	sweepAllLanguageBrackets(database, gh, *minStarsFlag, *maxPagesFlag, *dryRunFlag)
 
 	slog.Info("bulk catalog discovery pass finished successfully")
 }
 
-func sweepGlobalBrackets(database *sqlx.DB, gh *ghclient.Client, dryRun bool) {
+func sweepGlobalBrackets(database *sqlx.DB, gh *ghclient.Client, maxPages int, dryRun bool) {
 	brackets := []struct {
 		min int
 		max int
@@ -94,29 +101,67 @@ func sweepGlobalBrackets(database *sqlx.DB, gh *ghclient.Client, dryRun bool) {
 			query = fmt.Sprintf("stars:%d..%d archived:false sort:stars-desc", b.min, b.max)
 		}
 		slog.Info("sweeping global bracket", "query", query)
-		sweepQuery(database, gh, query, dryRun)
+		sweepQuery(database, gh, query, maxPages, dryRun)
 	}
 }
 
-func sweepLanguageBrackets(database *sqlx.DB, gh *ghclient.Client, dryRun bool) {
+// sweepLanguageDeepBrackets sweeps a specific language across the entire 200..4999 star spectrum
+// using fine-grained brackets to guarantee we stay below GitHub's 1000 search result cutoff.
+func sweepLanguageDeepBrackets(database *sqlx.DB, gh *ghclient.Client, lang string, minStars, maxPages int, dryRun bool) {
 	brackets := []struct {
 		min int
 		max int
 	}{
+		{min: 3000, max: 4999},
+		{min: 2000, max: 2999},
+		{min: 1000, max: 1999},
+		{min: 750, max: 999},
+		{min: 500, max: 749},
+		{min: 350, max: 499},
+		{min: 200, max: 349},
+	}
+
+	for _, b := range brackets {
+		if b.max < minStars {
+			continue
+		}
+		// Query in descending order
+		queryDesc := fmt.Sprintf("language:\"%s\" stars:%d..%d archived:false sort:stars-desc", lang, b.min, b.max)
+		slog.Info("sweeping deep language bracket (desc)", "language", lang, "stars", fmt.Sprintf("%d..%d", b.min, b.max))
+		sweepQuery(database, gh, queryDesc, maxPages, dryRun)
+
+		// Query in ascending order to capture long-tail repos near the bottom cutoff
+		queryAsc := fmt.Sprintf("language:\"%s\" stars:%d..%d archived:false sort:stars-asc", lang, b.min, b.max)
+		slog.Info("sweeping deep language bracket (asc)", "language", lang, "stars", fmt.Sprintf("%d..%d", b.min, b.max))
+		sweepQuery(database, gh, queryAsc, maxPages, dryRun)
+	}
+}
+
+func sweepAllLanguageBrackets(database *sqlx.DB, gh *ghclient.Client, minStars, maxPages int, dryRun bool) {
+	brackets := []struct {
+		min int
+		max int
+	}{
+		{min: 2000, max: 4999},
+		{min: 1000, max: 1999},
+		{min: 500, max: 999},
 		{min: 350, max: 499},
 		{min: 200, max: 349},
 	}
 
 	for _, lang := range targetLanguages {
 		for _, b := range brackets {
+			if b.max < minStars {
+				continue
+			}
 			query := fmt.Sprintf("language:\"%s\" stars:%d..%d archived:false sort:stars-desc", lang, b.min, b.max)
 			slog.Info("sweeping language bracket", "language", lang, "stars", fmt.Sprintf("%d..%d", b.min, b.max))
-			sweepQuery(database, gh, query, dryRun)
+			sweepQuery(database, gh, query, maxPages, dryRun)
 		}
 	}
 }
 
-func sweepQuery(database *sqlx.DB, gh *ghclient.Client, queryStr string, dryRun bool) {
+func sweepQuery(database *sqlx.DB, gh *ghclient.Client, queryStr string, maxPages int, dryRun bool) {
 	after := ""
 	pageCount := 0
 	newInThisQuery := 0
@@ -149,7 +194,7 @@ func sweepQuery(database *sqlx.DB, gh *ghclient.Client, queryStr string, dryRun 
 
 		slog.Info("page processed", "query", queryStr, "page", pageCount, "found", len(page.Repos), "new", newInThisQuery)
 
-		if !page.HasNextPage || page.EndCursor == "" || pageCount >= 10 {
+		if !page.HasNextPage || page.EndCursor == "" || pageCount >= maxPages {
 			break
 		}
 		after = page.EndCursor
