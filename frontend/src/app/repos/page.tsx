@@ -85,7 +85,7 @@ export async function generateMetadata({ searchParams }: ReposPageProps): Promis
 
   let title = "Open Source Repository Directory & C-Rank™ Explorer | GetMerged";
   let description =
-    "Explore 53,000+ open-source GitHub repositories ranked by objective C-Rank™ telemetry: pull request merge rates, maintainer response time, and first-timer success rates.";
+    "Explore 102k+ open-source GitHub repositories ranked by C-Rank™ telemetry: PR merge rates, reviewer response velocity, and first-timer success.";
 
   if (lang && lang !== "All") {
     title = `Top Welcoming ${lang} Repositories & Good First Issues | GetMerged`;

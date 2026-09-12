@@ -31,7 +31,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
 
   const openAuth = () => setIsAuthModalOpen(true);
 
-  // Pre-event: tracker is dormant until Oct 1 — show countdown + leaderboard.
+  // Pre-event: tracker is dormant until Oct 1 - show countdown + leaderboard.
   if (phase === "pre") {
     return (
       <div className="space-y-10">
@@ -49,7 +49,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
     );
   }
 
-  // Post-event: merges are frozen — show recap + leaderboard.
+  // Post-event: merges are frozen - show recap + leaderboard.
   if (phase === "post") {
     return (
       <div className="space-y-10">

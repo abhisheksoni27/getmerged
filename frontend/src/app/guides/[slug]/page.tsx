@@ -32,7 +32,8 @@ export async function generateMetadata({ params }: GuideDetailPageProps): Promis
     };
   }
 
-  const title = `${guide.title} | GetMerged Open Source Guides`;
+  const rawTitle = guide.title.length > 46 ? guide.title.slice(0, 45) + "…" : guide.title;
+  const title = `${rawTitle} | GetMerged`;
   const description = guide.description;
   const canonicalUrl = `https://getmerged.abhishekco.de/guides/${slug}`;
   const ogImageUrl = `https://getmerged.abhishekco.de/images/guides/${slug}.jpg`;
@@ -174,7 +175,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
             /* eslint-disable @typescript-eslint/no-unused-vars */
             components={{
               h1: ({ node, ...props }) => (
-                <h1 className="text-2xl sm:text-3xl font-bold font-sans text-white mt-8 mb-4 leading-tight border-b border-white/[0.1] pb-3" {...props} />
+                <h2 className="text-2xl sm:text-3xl font-bold font-sans text-white mt-8 mb-4 leading-tight border-b border-white/[0.1] pb-3" {...props} />
               ),
               h2: ({ node, ...props }) => (
                 <h2 className="text-xl sm:text-2xl font-bold font-sans text-white mt-10 mb-4 leading-snug border-b border-white/[0.1] pb-2 flex items-center gap-2" {...props} />

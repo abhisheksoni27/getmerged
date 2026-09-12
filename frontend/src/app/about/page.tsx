@@ -16,7 +16,7 @@ import {
 export const metadata: Metadata = {
   title: "About GetMerged - Why We Built The Open-Source Welcoming Index",
   description:
-    "The origin story, architecture principles, and community roadmap of GetMerged. Built by developers who were tired of pull requests rotting in abandoned backlogs.",
+    "The story, architecture, and roadmap of GetMerged. Built by developers tired of pull requests rotting in unmonitored GitHub backlogs.",
   alternates: {
     canonical: "https://getmerged.abhishekco.de/about",
   },
