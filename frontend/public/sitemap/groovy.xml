@@ -103,13 +103,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/samrocketman/jenkins-script-console-scripts</loc>
+    <loc>https://getmerged.abhishekco.de/openbakery/gradle-xcodePlugin</loc>
     <lastmod>2026-09-05T03:44:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/openbakery/gradle-xcodePlugin</loc>
+    <loc>https://getmerged.abhishekco.de/samrocketman/jenkins-script-console-scripts</loc>
     <lastmod>2026-09-05T03:44:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -145,13 +145,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/embeddedartistry/templates</loc>
+    <loc>https://getmerged.abhishekco.de/hierynomus/license-gradle-plugin</loc>
     <lastmod>2026-09-05T03:44:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/hierynomus/license-gradle-plugin</loc>
+    <loc>https://getmerged.abhishekco.de/embeddedartistry/templates</loc>
     <lastmod>2026-09-05T03:44:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -187,13 +187,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nebula-plugins/gradle-ospackage-plugin</loc>
+    <loc>https://getmerged.abhishekco.de/JeremyLiao/android-gradle-study</loc>
     <lastmod>2026-09-05T03:44:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JeremyLiao/android-gradle-study</loc>
+    <loc>https://getmerged.abhishekco.de/nebula-plugins/gradle-ospackage-plugin</loc>
     <lastmod>2026-09-05T03:44:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -223,13 +223,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Goddchen/Android-Gradle-Examples</loc>
+    <loc>https://getmerged.abhishekco.de/jk1/Gradle-License-Report</loc>
     <lastmod>2026-09-05T03:44:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jk1/Gradle-License-Report</loc>
+    <loc>https://getmerged.abhishekco.de/Goddchen/Android-Gradle-Examples</loc>
     <lastmod>2026-09-05T03:44:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -493,13 +493,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/GPars/GPars</loc>
+    <loc>https://getmerged.abhishekco.de/szpak/gradle-pitest-plugin</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/szpak/gradle-pitest-plugin</loc>
+    <loc>https://getmerged.abhishekco.de/GPars/GPars</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -541,13 +541,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/hust201010701/CheckResourceConflict</loc>
+    <loc>https://getmerged.abhishekco.de/hoto/jenkinsfile-examples</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/hoto/jenkinsfile-examples</loc>
+    <loc>https://getmerged.abhishekco.de/hust201010701/CheckResourceConflict</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -559,25 +559,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ady624/CoRE</loc>
-    <lastmod>2026-09-05T03:44:50Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/gaelyk/gaelyk</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/fison67/mi_connector</loc>
+    <loc>https://getmerged.abhishekco.de/ady624/CoRE</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/EastWoodYang/MicroModule</loc>
+    <lastmod>2026-09-05T03:44:50Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fison67/mi_connector</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -607,12 +607,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ethayer/lock-manager</loc>
-    <lastmod>2026-09-05T03:44:50Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/nemerosa/versioning</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
@@ -620,6 +614,12 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ppazos/cabolabs-ehrserver</loc>
+    <lastmod>2026-09-05T03:44:50Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ethayer/lock-manager</loc>
     <lastmod>2026-09-05T03:44:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

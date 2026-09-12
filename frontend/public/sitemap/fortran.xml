@@ -85,13 +85,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/MFlowCode/MFC</loc>
+    <loc>https://getmerged.abhishekco.de/scivision/fortran2018-examples</loc>
     <lastmod>2026-09-05T03:43:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/scivision/fortran2018-examples</loc>
+    <loc>https://getmerged.abhishekco.de/MFlowCode/MFC</loc>
     <lastmod>2026-09-05T03:43:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -181,13 +181,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Allen-Tildesley/examples</loc>
+    <loc>https://getmerged.abhishekco.de/nasa/CFL3D</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nasa/CFL3D</loc>
+    <loc>https://getmerged.abhishekco.de/Allen-Tildesley/examples</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -313,25 +313,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/epochpic/epoch</loc>
-    <lastmod>2026-09-05T03:43:59Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/flame/libflame</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/NCAR/wrf_hydro_nwm_public</loc>
+    <loc>https://getmerged.abhishekco.de/epochpic/epoch</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/sundmanbo/opencalphad</loc>
+    <lastmod>2026-09-05T03:43:59Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/NCAR/wrf_hydro_nwm_public</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -349,13 +349,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ylikx/forpy</loc>
+    <loc>https://getmerged.abhishekco.de/jgomezc1/ABAQUS-US</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jgomezc1/ABAQUS-US</loc>
+    <loc>https://getmerged.abhishekco.de/ylikx/forpy</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -391,13 +391,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/davidrpugh/pyeconomics</loc>
+    <loc>https://getmerged.abhishekco.de/certik/fortran-utils</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/certik/fortran-utils</loc>
+    <loc>https://getmerged.abhishekco.de/davidrpugh/pyeconomics</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -445,19 +445,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Dhondtguido/CalculiX</loc>
-    <lastmod>2026-09-05T03:43:59Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/davidmorinNTNU/ABAQUS_subroutines</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/SciFortran/SciFortran</loc>
+    <loc>https://getmerged.abhishekco.de/Dhondtguido/CalculiX</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -475,13 +469,19 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Goddard-Fortran-Ecosystem/pFUnit</loc>
+    <loc>https://getmerged.abhishekco.de/SciFortran/SciFortran</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Cambridge-ICCS/FTorch</loc>
+    <lastmod>2026-09-05T03:43:59Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Goddard-Fortran-Ecosystem/pFUnit</loc>
     <lastmod>2026-09-05T03:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
