@@ -1,204 +1,213 @@
 'use strict';
 
-// OpenDoor Contribution Readiness — Service Worker
-// Fetches OpenDoor telemetry, caches it in chrome.storage.local with TTL +
-// eviction guards, and answers GET_TELEMETRY messages from the content script.
-//
-// Message contract (AC3):
-//   content -> SW : { type: 'GET_TELEMETRY', repo: 'owner/name' }
-//   SW -> content : { type: 'TELEMETRY_RESULT', payload | null, error | null }
-//   error is one of 'API_TIMEOUT' | 'OFFLINE' | 'NOT_FOUND'.
+/**
+ * GetMerged: GitHub C-Rank™ & Contributor Telemetry
+ * Background Service Worker (Manifest V3)
+ *
+ * Handles API queries to https://getmerged.abhishekco.de, in-memory & local storage
+ * caching with 10-minute TTL, LRU eviction guards, and error resilience.
+ */
 
 const API_BASE = 'https://getmerged.abhishekco.de';
-const CACHE_PREFIX = 'od_telemetry:';
-const INDEX_KEY = 'od_telemetry_index';
-const CACHE_TTL_MS = 10 * 60 * 1000; // AC4: TTL 10min
-const MAX_ENTRIES = 500; // AC4: max 500 entries
-const FETCH_TIMEOUT_MS = 5000; // AC2: timeout 5s
-const QUOTA_GUARD_BYTES = 5 * 1024 * 1024;
+const CACHE_PREFIX = 'gm_telemetry:';
+const INDEX_KEY = 'gm_telemetry_index';
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes TTL
+const MAX_CACHE_ENTRIES = 500;
+const FETCH_TIMEOUT_MS = 6000;
 
-// ---- storage helpers (promise-based across Chrome + Firefox MV3) ----
-function storage() {
+function getStorage() {
   try {
     const api = globalThis.browser || globalThis.chrome;
     if (api && api.storage && api.storage.local) return api.storage.local;
   } catch (_) {}
   return null;
 }
-function sGet(keys) {
-  const s = storage();
-  if (!s) return Promise.resolve({});
-  return Promise.resolve(s.get(keys));
-}
-function sSet(obj) {
-  const s = storage();
-  if (!s) return Promise.resolve();
-  return Promise.resolve(s.set(obj));
-}
-function sRemove(keys) {
-  const s = storage();
-  if (!s) return Promise.resolve();
-  return Promise.resolve(s.remove(keys));
-}
-async function sBytes() {
-  const s = storage();
-  if (!s || !s.getBytesInUse) return 0;
-  try {
-    return await s.getBytesInUse(null);
-  } catch (_) {
-    return 0;
-  }
-}
 
-// ---- cache with TTL + eviction guards (AC4) ----
-async function cacheGet(repo) {
-  const key = CACHE_PREFIX + repo.toLowerCase();
-  const res = await sGet(key);
-  const hit = res ? res[key] : null;
-  if (!hit || !hit.payload) return { fresh: null, stale: null };
-  const age = Date.now() - (hit.fetched_at || 0);
-  if (age < CACHE_TTL_MS) return { fresh: hit.payload, stale: hit.payload };
-  return { fresh: null, stale: hit.payload }; // stale-while-revalidate
-}
-
-async function cachePut(repo, payload) {
-  const key = CACHE_PREFIX + repo.toLowerCase();
-  const entry = { fetched_at: Date.now(), payload };
-
-  let idx = [];
-  try {
-    const r = await sGet(INDEX_KEY);
-    idx = (r && r[INDEX_KEY]) || [];
-  } catch (_) {}
-  idx = idx.filter((k) => k !== key);
-  idx.push(key);
-
-  let overflow = idx.slice(0, Math.max(0, idx.length - MAX_ENTRIES));
-  idx = idx.slice(Math.max(0, idx.length - MAX_ENTRIES));
-
-  // quota check on setItem: if we are near the quota ceiling, drop oldest too.
-  try {
-    const used = await sBytes();
-    if (used > QUOTA_GUARD_BYTES && overflow.length === 0) {
-      const forced = idx.shift();
-      if (forced) overflow.push(forced);
-    }
-  } catch (_) {}
-
-  if (overflow.length) {
-    try {
-      await sRemove(overflow);
-    } catch (_) {}
-  }
-  try {
-    await sSet({ [key]: entry, [INDEX_KEY]: idx });
-  } catch (_) {}
-}
-
-// ---- metrics schema (AC5) ----
-function clamp01(v) {
-  if (typeof v !== 'number' || !isFinite(v)) return null;
-  return Math.min(1, Math.max(0, v));
-}
-function num(v) {
-  const n = Number(v);
-  return isFinite(n) ? n : null;
-}
-function buildMetrics(item) {
-  if (!item || typeof item !== 'object') return null;
-  const mergeRate = clamp01(num(item.external_pr_merge_rate));
-  const cRank =
-    typeof item.c_rank_tier === 'string' && item.c_rank_tier
-      ? String(item.c_rank_tier).toUpperCase()
-      : null;
-  const ghostRate = mergeRate == null ? null : clamp01(1 - mergeRate);
-  const hours = num(item.time_to_first_response_hours);
-  const reviewVelocityDays = hours == null ? null : Math.round((hours / 24) * 100) / 100;
-  let gfi = num(item.good_first_issue_count);
-  if (gfi == null || gfi <= 0) gfi = null; // null fields render as 'N/A'
-  return { cRank, mergeRate, ghostRate, reviewVelocityDays, goodFirstIssues: gfi };
-}
-
-function result(payload, error) {
-  return {
-    type: 'TELEMETRY_RESULT',
-    payload: payload || null,
-    error: error || null
-  };
-}
-
-async function getTelemetry(repo) {
-  const cached = await cacheGet(repo);
-  if (cached.fresh) return result(cached.fresh, null); // fresh cache hit
-
-  try {
-    if (globalThis.navigator && navigator.onLine === false) {
-      throw { code: 'OFFLINE' };
-    }
-    const url =
-      API_BASE + '/api/v1/repos?name=' + encodeURIComponent(repo);
-    const ctrl =
-      typeof AbortController === 'function' ? new AbortController() : null;
-    const timer = ctrl ? setTimeout(() => ctrl.abort(), FETCH_TIMEOUT_MS) : null;
-
-    let res;
-    try {
-      res = await fetch(url, {
-        headers: { Accept: 'application/json' },
-        signal: ctrl ? ctrl.signal : undefined
-      });
-    } catch (e) {
-      if (timer) clearTimeout(timer);
-      throw { code: e && e.name === 'AbortError' ? 'API_TIMEOUT' : 'OFFLINE' };
-    }
-    if (timer) clearTimeout(timer);
-
-    if (res.status === 404) throw { code: 'NOT_FOUND' };
-    if (!res.ok) throw { code: 'NOT_FOUND' };
-
-    const data = await res.json().catch(() => null);
-    const item = Array.isArray(data)
-      ? data[0] || null
-      : data && typeof data === 'object'
-        ? data
-        : null;
-    const payload = buildMetrics(item);
-
-    if (!payload) {
-      // 200 but empty/null body -> cached fallback
-      if (cached.stale) return result(cached.stale, null);
-      throw { code: 'NOT_FOUND' };
-    }
-
-    await cachePut(repo, payload); // stale-while-revalidate refresh
-    return result(payload, null);
-  } catch (err) {
-    const code = (err && err.code) || 'OFFLINE';
-    if (cached.stale) return result(cached.stale, code); // serve stale + flag
-    return result(null, code);
-  }
-}
-
-function wire() {
-  const api = globalThis.browser || globalThis.chrome;
-  if (!api || !api.runtime || !api.runtime.onMessage) return;
-  api.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
-    try {
-      if (!msg || msg.type !== 'GET_TELEMETRY') return undefined;
-      const repo = String(msg.repo || '').trim();
-      if (!repo || !/^[^/]+\/[^/]+$/.test(repo)) {
-        sendResponse(result(null, 'NOT_FOUND'));
-        return false;
-      }
-      getTelemetry(repo)
-        .then((r) => sendResponse(r))
-        .catch(() => sendResponse(result(null, 'OFFLINE')));
-      return true; // keep channel open for async sendResponse
-    } catch (_) {
-      sendResponse(result(null, 'OFFLINE'));
-      return false;
-    }
+async function sGet(key) {
+  const s = getStorage();
+  if (!s) return null;
+  return new Promise((resolve) => {
+    s.get(key, (items) => resolve(items ? items[key] : null));
   });
 }
 
-wire();
+async function sSet(key, value) {
+  const s = getStorage();
+  if (!s) return;
+  return new Promise((resolve) => {
+    s.set({ [key]: value }, resolve);
+  });
+}
+
+async function sRemove(keys) {
+  const s = getStorage();
+  if (!s) return;
+  return new Promise((resolve) => {
+    s.remove(keys, resolve);
+  });
+}
+
+async function getCachedTelemetry(repoKey) {
+  const key = CACHE_PREFIX + repoKey.toLowerCase();
+  const cached = await sGet(key);
+  if (!cached || !cached.payload) return { fresh: null, stale: null };
+  const age = Date.now() - (cached.fetched_at || 0);
+  if (age < CACHE_TTL_MS) {
+    return { fresh: cached.payload, stale: cached.payload };
+  }
+  return { fresh: null, stale: cached.payload };
+}
+
+async function putCachedTelemetry(repoKey, payload) {
+  const key = CACHE_PREFIX + repoKey.toLowerCase();
+  const entry = { fetched_at: Date.now(), payload };
+
+  let idx = (await sGet(INDEX_KEY)) || [];
+  if (!Array.isArray(idx)) idx = [];
+  idx = idx.filter((k) => k !== key);
+  idx.push(key);
+
+  if (idx.length > MAX_CACHE_ENTRIES) {
+    const overflow = idx.slice(0, idx.length - MAX_CACHE_ENTRIES);
+    idx = idx.slice(idx.length - MAX_CACHE_ENTRIES);
+    await sRemove(overflow);
+  }
+
+  await sSet(key, entry);
+  await sSet(INDEX_KEY, idx);
+}
+
+function parseTelemetryPayload(item) {
+  if (!item || typeof item !== 'object') return null;
+
+  const cRank = typeof item.c_rank_tier === 'string' ? item.c_rank_tier.toUpperCase() : null;
+  const score = typeof item.c_rank_score === 'number' ? Math.round(item.c_rank_score) : null;
+  const mergeRate = typeof item.external_pr_merge_rate === 'number' ? Math.round(item.external_pr_merge_rate * 10) / 10 : null;
+  
+  const rawHours = typeof item.time_to_first_response_hours === 'number' ? item.time_to_first_response_hours : null;
+  let responseTimeFormatted = 'N/A';
+  if (rawHours !== null) {
+    if (rawHours < 1) {
+      responseTimeFormatted = `${Math.round(rawHours * 60)}m`;
+    } else if (rawHours < 48) {
+      responseTimeFormatted = `${Math.round(rawHours * 10) / 10}h`;
+    } else {
+      responseTimeFormatted = `${Math.round((rawHours / 24) * 10) / 10}d`;
+    }
+  }
+
+  const rawMergeHours = typeof item.time_to_merge_hours === 'number' ? item.time_to_merge_hours : null;
+  let mergeTimeFormatted = 'N/A';
+  if (rawMergeHours !== null) {
+    if (rawMergeHours < 48) {
+      mergeTimeFormatted = `${Math.round(rawMergeHours * 10) / 10}h`;
+    } else {
+      mergeTimeFormatted = `${Math.round((rawMergeHours / 24) * 10) / 10}d`;
+    }
+  }
+
+  const firstTimerRate = typeof item.first_timer_success_rate === 'number' ? Math.round(item.first_timer_success_rate * 10) / 10 : null;
+  const maintainers = typeof item.distinct_maintainer_count === 'number' ? Math.round(item.distinct_maintainer_count) : null;
+  const busFactor = typeof item.bus_factor === 'number' ? Math.round(item.bus_factor) : null;
+  const gfi = typeof item.good_first_issue_count === 'number' ? item.good_first_issue_count : 0;
+  const stars = typeof item.stars === 'number' ? item.stars : null;
+  const language = item.language || 'Unknown';
+  const stalenessFlag = Boolean(item.staleness_flag);
+
+  return {
+    fullName: item.full_name || '',
+    cRank,
+    score,
+    mergeRate,
+    responseTimeFormatted,
+    rawHours,
+    mergeTimeFormatted,
+    firstTimerRate,
+    maintainers,
+    busFactor,
+    goodFirstIssues: gfi,
+    stars,
+    language,
+    stalenessFlag
+  };
+}
+
+async function fetchTelemetry(repoKey) {
+  const cached = await getCachedTelemetry(repoKey);
+  if (cached.fresh) {
+    return { type: 'TELEMETRY_RESULT', payload: cached.fresh, error: null, cached: true };
+  }
+
+  try {
+    const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(() => ctrl.abort(), FETCH_TIMEOUT_MS) : null;
+
+    const url = `${API_BASE}/api/v1/repos?name=${encodeURIComponent(repoKey)}`;
+    const resp = await fetch(url, {
+      headers: { Accept: 'application/json' },
+      signal: ctrl ? ctrl.signal : undefined
+    });
+
+    if (timer) clearTimeout(timer);
+
+    if (!resp.ok) {
+      if (resp.status === 404) {
+        return { type: 'TELEMETRY_RESULT', payload: null, error: 'NOT_FOUND' };
+      }
+      if (cached.stale) {
+        return { type: 'TELEMETRY_RESULT', payload: cached.stale, error: null, stale: true };
+      }
+      return { type: 'TELEMETRY_RESULT', payload: null, error: `HTTP_${resp.status}` };
+    }
+
+    const body = await resp.json();
+    let item = null;
+    if (body && Array.isArray(body.data) && body.data.length > 0) {
+      item = body.data[0];
+    } else if (Array.isArray(body) && body.length > 0) {
+      item = body[0];
+    } else if (body && typeof body === 'object' && body.id) {
+      item = body;
+    }
+
+    if (!item) {
+      if (cached.stale) return { type: 'TELEMETRY_RESULT', payload: cached.stale, error: null, stale: true };
+      return { type: 'TELEMETRY_RESULT', payload: null, error: 'NOT_FOUND' };
+    }
+
+    const payload = parseTelemetryPayload(item);
+    await putCachedTelemetry(repoKey, payload);
+    return { type: 'TELEMETRY_RESULT', payload, error: null, cached: false };
+
+  } catch (err) {
+    const isTimeout = err && (err.name === 'AbortError' || err.code === 'API_TIMEOUT');
+    const errorCode = isTimeout ? 'API_TIMEOUT' : 'OFFLINE';
+    if (cached.stale) {
+      return { type: 'TELEMETRY_RESULT', payload: cached.stale, error: null, stale: true };
+    }
+    return { type: 'TELEMETRY_RESULT', payload: null, error: errorCode };
+  }
+}
+
+// Listen for incoming extension requests
+const api = globalThis.browser || globalThis.chrome;
+if (api && api.runtime && api.runtime.onMessage) {
+  api.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+    if (!msg || typeof msg !== 'object') return false;
+
+    if (msg.type === 'GET_TELEMETRY') {
+      const repo = String(msg.repo || '').trim();
+      if (!repo || !/^[^/]+\/[^/]+$/.test(repo)) {
+        sendResponse({ type: 'TELEMETRY_RESULT', payload: null, error: 'INVALID_REPO' });
+        return false;
+      }
+
+      fetchTelemetry(repo)
+        .then((res) => sendResponse(res))
+        .catch((err) => sendResponse({ type: 'TELEMETRY_RESULT', payload: null, error: 'INTERNAL_ERROR' }));
+      return true; // Keep message channel open for async sendResponse
+    }
+
+    return false;
+  });
+}
