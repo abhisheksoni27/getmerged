@@ -1,68 +1,15 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { LangLogo } from "@/components/LangLogo";
-import { Repo } from "@/types/opendoor";
-import { API_BASE_URL } from "@/lib/api";
-import {
-  Scale,
-  Search,
-  ArrowRight,
-  Star,
-  X,
-  CheckCircle2,
-  Loader2,
-} from "lucide-react";
+import { Scale } from "lucide-react";
 import posthog from "posthog-js";
-
-interface SelectedRepo {
-  full_name: string;
-  owner: string;
-  name: string;
-  language?: string;
-  stars?: number;
-  c_rank_tier?: string;
-  class_rank?: string;
-  c_rank_score?: number;
-  description?: string;
-}
-
-const POPULAR_COMPARISONS = [
-  {
-    repoA: "facebook/react",
-    repoB: "vuejs/vue",
-    category: "Frontend UI Frameworks",
-  },
-  {
-    repoA: "remix-run/remix",
-    repoB: "vercel/next.js",
-    category: "Full-Stack React Frameworks",
-  },
-  {
-    repoA: "golang/go",
-    repoB: "rust-lang/rust",
-    category: "Systems & Backend Languages",
-  },
-  {
-    repoA: "expressjs/express",
-    repoB: "fastify/fastify",
-    category: "Node.js Web Frameworks",
-  },
-  {
-    repoA: "bootstrap",
-    repoB: "tailwindlabs/tailwindcss",
-    category: "CSS Systems & Utility Frameworks",
-  },
-  {
-    repoA: "nodejs/node",
-    repoB: "oven-sh/bun",
-    category: "JavaScript Runtimes & Tooling",
-  },
-];
+import { useCompareSelection } from "./hooks/useCompareSelection";
+import { RepoSlotPicker } from "./components/RepoSlotPicker";
+import { CompareActionRow } from "./components/CompareActionRow";
+import { PopularComparisonsGrid } from "./components/PopularComparisonsGrid";
 
 export default function CompareClient() {
   const router = useRouter();
@@ -70,198 +17,28 @@ export default function CompareClient() {
   const initialA = searchParams.get("a") || searchParams.get("repoA") || "";
   const initialB = searchParams.get("b") || searchParams.get("repoB") || "";
 
-  const [repoA, setRepoA] = useState<SelectedRepo | null>(null);
-  const [repoB, setRepoB] = useState<SelectedRepo | null>(null);
-
-  const [queryA, setQueryA] = useState(initialA);
-  const [queryB, setQueryB] = useState(initialB);
-
-  const [resultsA, setResultsA] = useState<Repo[]>([]);
-  const [resultsB, setResultsB] = useState<Repo[]>([]);
-
-  const [loadingA, setLoadingA] = useState(false);
-  const [loadingB, setLoadingB] = useState(false);
-
-  const [openDropdownA, setOpenDropdownA] = useState(false);
-  const [openDropdownB, setOpenDropdownB] = useState(false);
-
-  const dropdownRefA = useRef<HTMLDivElement | null>(null);
-  const dropdownRefB = useRef<HTMLDivElement | null>(null);
-
-  const fetchRepoByExactName = useCallback(async (fullName: string): Promise<SelectedRepo | null> => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(fullName)}`);
-      if (!res.ok) return null;
-      const data = await res.json();
-      const rawList = data.data || data.repos;
-      if (Array.isArray(rawList) && rawList.length > 0) {
-        const found = rawList.find((r: Repo) => r.full_name.toLowerCase() === fullName.toLowerCase()) || rawList[0];
-        const [owner, name] = found.full_name ? found.full_name.split("/") : ["", ""];
-        return {
-          full_name: found.full_name,
-          owner: found.owner || owner,
-          name: found.name || name,
-          language: found.language,
-          stars: found.stars,
-          c_rank_tier: found.c_rank_tier || found.class_rank || "A",
-          class_rank: found.class_rank || found.c_rank_tier || "A",
-          c_rank_score: found.c_rank_score,
-          description: found.description,
-        };
-      }
-      const parts = fullName.split("/");
-      if (parts.length === 2) {
-        return {
-          full_name: fullName,
-          owner: parts[0],
-          name: parts[1],
-          language: "Code",
-          stars: 0,
-          c_rank_tier: "A",
-        };
-      }
-      return null;
-    } catch {
-      const parts = fullName.split("/");
-      if (parts.length === 2) {
-        return {
-          full_name: fullName,
-          owner: parts[0],
-          name: parts[1],
-          language: "Code",
-          stars: 0,
-          c_rank_tier: "A",
-        };
-      }
-      return null;
-    }
-  }, []);
-
-  // Pre-fill slot A on initial load if ?a= is present
-  useEffect(() => {
-    if (initialA) {
-      fetchRepoByExactName(initialA).then((repo) => {
-        if (repo) {
-          setRepoA(repo);
-          setQueryA("");
-        }
-      });
-    }
-  }, [initialA, fetchRepoByExactName]);
-
-  // Pre-fill slot B on initial load if ?b= is present
-  useEffect(() => {
-    if (initialB) {
-      fetchRepoByExactName(initialB).then((repo) => {
-        if (repo) {
-          setRepoB(repo);
-          setQueryB("");
-        }
-      });
-    }
-  }, [initialB, fetchRepoByExactName]);
-
-  // Debounced search for slot A
-  useEffect(() => {
-    if (!queryA.trim() || repoA) {
-      setResultsA([]);
-      setLoadingA(false);
-      return;
-    }
-
-    setLoadingA(true);
-    const timer = setTimeout(async () => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(queryA.trim())}`);
-        if (res.ok) {
-          const data = await res.json();
-          setResultsA(data.data || data.repos || []);
-        }
-      } catch (err) {
-        console.error("Search A error:", err);
-      } finally {
-        setLoadingA(false);
-      }
-    }, 200);
-
-    return () => clearTimeout(timer);
-  }, [queryA, repoA]);
-
-  // Debounced search for slot B
-  useEffect(() => {
-    if (!queryB.trim() || repoB) {
-      setResultsB([]);
-      setLoadingB(false);
-      return;
-    }
-
-    setLoadingB(true);
-    const timer = setTimeout(async () => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(queryB.trim())}`);
-        if (res.ok) {
-          const data = await res.json();
-          setResultsB(data.data || data.repos || []);
-        }
-      } catch (err) {
-        console.error("Search B error:", err);
-      } finally {
-        setLoadingB(false);
-      }
-    }, 200);
-
-    return () => clearTimeout(timer);
-  }, [queryB, repoB]);
-
-  // Close dropdowns on outside click
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRefA.current && !dropdownRefA.current.contains(e.target as Node)) {
-        setOpenDropdownA(false);
-      }
-      if (dropdownRefB.current && !dropdownRefB.current.contains(e.target as Node)) {
-        setOpenDropdownB(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleSelectA = (r: Repo) => {
-    const [owner, name] = r.full_name ? r.full_name.split("/") : ["", ""];
-    setRepoA({
-      full_name: r.full_name,
-      owner: r.owner || owner,
-      name: r.name || name,
-      language: r.language,
-      stars: r.stars,
-      c_rank_tier: r.c_rank_tier || r.class_rank || "A",
-      class_rank: r.class_rank || r.c_rank_tier || "A",
-      c_rank_score: r.c_rank_score,
-      description: r.description,
-    });
-    setQueryA("");
-    setOpenDropdownA(false);
-    posthog.capture("compare_repo_selected", { slot: "A", repo: r.full_name });
-  };
-
-  const handleSelectB = (r: Repo) => {
-    const [owner, name] = r.full_name ? r.full_name.split("/") : ["", ""];
-    setRepoB({
-      full_name: r.full_name,
-      owner: r.owner || owner,
-      name: r.name || name,
-      language: r.language,
-      stars: r.stars,
-      c_rank_tier: r.c_rank_tier || r.class_rank || "A",
-      class_rank: r.class_rank || r.c_rank_tier || "A",
-      c_rank_score: r.c_rank_score,
-      description: r.description,
-    });
-    setQueryB("");
-    setOpenDropdownB(false);
-    posthog.capture("compare_repo_selected", { slot: "B", repo: r.full_name });
-  };
+  const {
+    repoA,
+    setRepoA,
+    repoB,
+    setRepoB,
+    queryA,
+    setQueryA,
+    queryB,
+    setQueryB,
+    resultsA,
+    resultsB,
+    loadingA,
+    loadingB,
+    openDropdownA,
+    setOpenDropdownA,
+    openDropdownB,
+    setOpenDropdownB,
+    dropdownRefA,
+    dropdownRefB,
+    handleSelectA,
+    handleSelectB,
+  } = useCompareSelection(initialA, initialB);
 
   const handleCompare = () => {
     if (!repoA || !repoB) return;
@@ -306,119 +83,21 @@ export default function CompareClient() {
         {/* Dual Repo Picker Box */}
         <div className="glass-panel border border-white/[0.1] rounded-3xl p-6 sm:p-8 shadow-xs mb-14">
           <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
-            {/* Slot A */}
-            <div className="w-full flex-1" ref={dropdownRefA}>
-              <label className="block text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider mb-2">
-                Repository A
-              </label>
-
-              {repoA ? (
-                <div className="flex items-center justify-between p-3.5 rounded-2xl glass-card border border-white/[0.1] shadow-2xs">
-                  <div className="flex items-center gap-3 min-w-0">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={`https://github.com/${repoA.owner}.png?size=64`}
-                      alt={repoA.owner}
-                      className="h-9 w-9 rounded-xl border border-white/[0.1] glass-panel object-cover shrink-0"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
-                      }}
-                    />
-                    <div className="min-w-0">
-                      <div className="font-space text-sm font-bold text-white truncate">
-                        {repoA.full_name}
-                      </div>
-                      <div className="flex items-center gap-2 mt-0.5 font-mono text-[11px] text-zinc-300">
-                        {typeof repoA.stars === "number" && (
-                          <span className="flex items-center gap-1 font-semibold text-zinc-300">
-                            <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
-                            {repoA.stars >= 1000 ? `${(repoA.stars / 1000).toFixed(1)}k` : repoA.stars}
-                          </span>
-                        )}
-                        <span>•</span>
-                        {repoA.language && (
-                          <>
-                            <span className="flex items-center gap-1 text-zinc-300">
-                              <LangLogo language={repoA.language} />
-                              <span>{repoA.language}</span>
-                            </span>
-                            <span>•</span>
-                          </>
-                        )}
-                        <span className="font-bold text-emerald-400">{repoA.c_rank_tier || "A"} Tier</span>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setRepoA(null)}
-                    aria-label="Clear Repository A"
-                    className="p-1.5 rounded-lg text-zinc-300 hover:text-zinc-300 hover:bg-zinc-200/60 transition-colors"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              ) : (
-                <div className="relative">
-                  <div className="relative flex items-center">
-                    <Search className="absolute left-3.5 h-4 w-4 text-zinc-300 pointer-events-none" />
-                    <input
-                      type="text"
-                      data-testid="repo-picker-a"
-                      placeholder="Search repository A (e.g. facebook/react)..."
-                      value={queryA}
-                      onChange={(e) => {
-                        setQueryA(e.target.value);
-                        setOpenDropdownA(true);
-                      }}
-                      onFocus={() => setOpenDropdownA(true)}
-                      className="w-full pl-10 pr-10 py-3 rounded-2xl glass-panel border border-white/[0.1] text-sm text-white placeholder:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1 transition-all"
-                    />
-                    {loadingA && (
-                      <Loader2 className="absolute right-3.5 h-4 w-4 animate-spin text-zinc-300" />
-                    )}
-                  </div>
-
-                  {/* Dropdown A */}
-                  {openDropdownA && queryA.trim().length > 0 && (
-                    <div className="absolute z-20 top-full left-0 right-0 mt-2 glass-panel border border-white/[0.1] rounded-2xl shadow-lg max-h-64 overflow-y-auto p-1.5">
-                      {resultsA.length > 0 ? (
-                        resultsA.map((r) => (
-                          <button
-                            key={r.id || r.full_name}
-                            type="button"
-                            onClick={() => handleSelectA(r)}
-                            className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-emerald-950/70 border-emerald-800/80/70 hover:text-zinc-300 flex items-center justify-between gap-3 transition-colors cursor-pointer"
-                          >
-                            <div className="min-w-0">
-                              <div className="font-space text-xs font-bold text-white truncate">
-                                {r.full_name}
-                              </div>
-                              <div className="text-[11px] text-zinc-300 line-clamp-1">
-                                {r.description || "No description"}
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-2 shrink-0 font-mono text-[11px]">
-                              <span className="flex items-center gap-0.5 text-zinc-300 font-semibold">
-                                <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
-                                {r.stars >= 1000 ? `${(r.stars / 1000).toFixed(1)}k` : r.stars}
-                              </span>
-                              <span className="px-1.5 py-0.5 rounded glass-card text-zinc-300 font-bold">
-                                {r.c_rank_tier || r.class_rank || "A"}
-                              </span>
-                            </div>
-                          </button>
-                        ))
-                      ) : !loadingA ? (
-                        <div className="p-3 text-center text-xs text-zinc-300 font-mono">
-                          No repositories found for &ldquo;{queryA}&rdquo;
-                        </div>
-                      ) : null}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+            <RepoSlotPicker
+              slotLabel="Repository A"
+              testId="repo-picker-a"
+              placeholder="Search repository A (e.g. facebook/react)..."
+              selected={repoA}
+              query={queryA}
+              results={resultsA}
+              loading={loadingA}
+              dropdownOpen={openDropdownA}
+              dropdownRef={dropdownRefA}
+              onQueryChange={setQueryA}
+              onDropdownOpen={() => setOpenDropdownA(true)}
+              onSelect={handleSelectA}
+              onClear={() => setRepoA(null)}
+            />
 
             {/* VS Badge */}
             <div className="shrink-0 flex items-center justify-center">
@@ -427,190 +106,28 @@ export default function CompareClient() {
               </div>
             </div>
 
-            {/* Slot B */}
-            <div className="w-full flex-1" ref={dropdownRefB}>
-              <label className="block text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider mb-2">
-                Repository B
-              </label>
-
-              {repoB ? (
-                <div className="flex items-center justify-between p-3.5 rounded-2xl glass-card border border-white/[0.1] shadow-2xs">
-                  <div className="flex items-center gap-3 min-w-0">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={`https://github.com/${repoB.owner}.png?size=64`}
-                      alt={repoB.owner}
-                      className="h-9 w-9 rounded-xl border border-white/[0.1] glass-panel object-cover shrink-0"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
-                      }}
-                    />
-                    <div className="min-w-0">
-                      <div className="font-space text-sm font-bold text-white truncate">
-                        {repoB.full_name}
-                      </div>
-                      <div className="flex items-center gap-2 mt-0.5 font-mono text-[11px] text-zinc-300">
-                        {typeof repoB.stars === "number" && (
-                          <span className="flex items-center gap-1 font-semibold text-zinc-300">
-                            <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
-                            {repoB.stars >= 1000 ? `${(repoB.stars / 1000).toFixed(1)}k` : repoB.stars}
-                          </span>
-                        )}
-                        <span>•</span>
-                        {repoB.language && (
-                          <>
-                            <span className="flex items-center gap-1 text-zinc-300">
-                              <LangLogo language={repoB.language} />
-                              <span>{repoB.language}</span>
-                            </span>
-                            <span>•</span>
-                          </>
-                        )}
-                        <span className="font-bold text-emerald-400">{repoB.c_rank_tier || "A"} Tier</span>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setRepoB(null)}
-                    aria-label="Clear Repository B"
-                    className="p-1.5 rounded-lg text-zinc-300 hover:text-zinc-300 hover:bg-zinc-200/60 transition-colors"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              ) : (
-                <div className="relative">
-                  <div className="relative flex items-center">
-                    <Search className="absolute left-3.5 h-4 w-4 text-zinc-300 pointer-events-none" />
-                    <input
-                      type="text"
-                      data-testid="repo-picker-b"
-                      placeholder="Search repository B (e.g. vuejs/vue)..."
-                      value={queryB}
-                      onChange={(e) => {
-                        setQueryB(e.target.value);
-                        setOpenDropdownB(true);
-                      }}
-                      onFocus={() => setOpenDropdownB(true)}
-                      className="w-full pl-10 pr-10 py-3 rounded-2xl glass-panel border border-white/[0.1] text-sm text-white placeholder:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ring-offset-1 transition-all"
-                    />
-                    {loadingB && (
-                      <Loader2 className="absolute right-3.5 h-4 w-4 animate-spin text-zinc-300" />
-                    )}
-                  </div>
-
-                  {/* Dropdown B */}
-                  {openDropdownB && queryB.trim().length > 0 && (
-                    <div className="absolute z-20 top-full left-0 right-0 mt-2 glass-panel border border-white/[0.1] rounded-2xl shadow-lg max-h-64 overflow-y-auto p-1.5">
-                      {resultsB.length > 0 ? (
-                        resultsB.map((r) => (
-                          <button
-                            key={r.id || r.full_name}
-                            type="button"
-                            onClick={() => handleSelectB(r)}
-                            className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-emerald-950/70 border-emerald-800/80/70 hover:text-zinc-300 flex items-center justify-between gap-3 transition-colors cursor-pointer"
-                          >
-                            <div className="min-w-0">
-                              <div className="font-space text-xs font-bold text-white truncate">
-                                {r.full_name}
-                              </div>
-                              <div className="text-[11px] text-zinc-300 line-clamp-1">
-                                {r.description || "No description"}
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-2 shrink-0 font-mono text-[11px]">
-                              <span className="flex items-center gap-0.5 text-zinc-300 font-semibold">
-                                <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
-                                {r.stars >= 1000 ? `${(r.stars / 1000).toFixed(1)}k` : r.stars}
-                              </span>
-                              <span className="px-1.5 py-0.5 rounded glass-card text-zinc-300 font-bold">
-                                {r.c_rank_tier || r.class_rank || "A"}
-                              </span>
-                            </div>
-                          </button>
-                        ))
-                      ) : !loadingB ? (
-                        <div className="p-3 text-center text-xs text-zinc-300 font-mono">
-                          No repositories found for &ldquo;{queryB}&rdquo;
-                        </div>
-                      ) : null}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+            <RepoSlotPicker
+              slotLabel="Repository B"
+              testId="repo-picker-b"
+              placeholder="Search repository B (e.g. vuejs/vue)..."
+              selected={repoB}
+              query={queryB}
+              results={resultsB}
+              loading={loadingB}
+              dropdownOpen={openDropdownB}
+              dropdownRef={dropdownRefB}
+              onQueryChange={setQueryB}
+              onDropdownOpen={() => setOpenDropdownB(true)}
+              onSelect={handleSelectB}
+              onClear={() => setRepoB(null)}
+            />
           </div>
 
-          {/* Action Row */}
-          <div className="mt-8 pt-6 border-t border-white/[0.1] flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs font-mono text-zinc-300 text-center sm:text-left">
-              {repoA && repoB ? (
-                <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5" /> Ready to compare {repoA.full_name} vs {repoB.full_name}
-                </span>
-              ) : (
-                <span>Select two repositories to unlock comprehensive side-by-side scorecard</span>
-              )}
-            </div>
-
-            <button
-              type="button"
-              disabled={!repoA || !repoB}
-              onClick={handleCompare}
-              className={`w-full sm:w-auto px-6 py-3 rounded-2xl font-bold font-sans text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
-                repoA && repoB
-                  ? "glass-card hover:bg-zinc-800 text-white shadow-md active:scale-[0.98]"
-                  : "glass-card text-zinc-300 cursor-not-allowed border border-white/[0.1]/60"
-              }`}
-            >
-              <Scale className="h-4 w-4" />
-              <span>Compare Repositories</span>
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </div>
+          <CompareActionRow repoA={repoA} repoB={repoB} onCompare={handleCompare} />
         </div>
 
         {/* Popular Head-to-Head Comparisons Section */}
-        <div>
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="font-space text-lg sm:text-xl font-bold text-white">
-                Popular Head-to-Head Comparisons
-              </h2>
-              <p className="text-xs text-zinc-300 font-sans mt-0.5">
-                Explore frequently referenced open-source benchmark pairings
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {POPULAR_COMPARISONS.map((item) => (
-              <Link
-                key={`${item.repoA}-vs-${item.repoB}`}
-                href={`/compare/${item.repoA}/vs/${item.repoB}`}
-                title={`Compare ${item.repoA} vs ${item.repoB} maintainer review metrics`}
-                className="group p-5 rounded-2xl glass-panel border border-white/[0.1] shadow-2xs hover:shadow-md hover:border-white/[0.12] hover:-translate-y-0.5 transition-all duration-150 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="text-[11px] font-mono text-zinc-300 font-semibold mb-2">
-                    {item.category}
-                  </div>
-                  <div className="font-space text-sm font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-2">
-                    <span>{item.repoA}</span>
-                    <span className="text-zinc-300 font-normal text-xs">vs</span>
-                    <span>{item.repoB}</span>
-                  </div>
-                </div>
-
-                <div className="mt-4 pt-3 border-t border-white/[0.1] flex items-center justify-between text-xs font-mono text-zinc-300">
-                  <span className="text-[11px]">Compare scorecard</span>
-                  <ArrowRight className="h-3.5 w-3.5 text-zinc-300 group-hover:text-zinc-300 group-hover:translate-x-0.5 transition-all" />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+        <PopularComparisonsGrid />
       </main>
 
       <Footer />
