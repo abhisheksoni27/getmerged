@@ -1,6 +1,6 @@
 ---
 title: "GitHub Maintainer Response Time: 5 Signals That Predict Whether Your PR Gets Reviewed"
-description: "How to evaluate GitHub maintainer response time before writing code: p50 latency, activity pulse, review density, and maintainer breadth from 53k repositories."
+description: "Evaluate GitHub maintainer response time before writing code: p50 latency, activity pulse, review density, and maintainer breadth from 53k repos."
 slug: how-to-know-if-maintainer-will-review
 date: 2026-08-23
 lastUpdated: 2026-08-23

@@ -1,6 +1,6 @@
 ---
 title: "How to Find Open Source Projects to Contribute To (Using Merge Data, Not Stars)"
-description: "How to find open source projects that actually merge contributions: C-Rank formula weights, response velocity bands, and ghost codebase detection from 53k repos."
+description: "Find open source projects that merge contributions: C-Rank formula weights, response velocity bands, and ghost codebase detection from 53k repos."
 slug: how-to-find-repos-that-merge-prs
 date: 2026-08-23
 lastUpdated: 2026-08-23

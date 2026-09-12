@@ -51,6 +51,18 @@ export default function GoodFirstIssueIndexPage() {
     url: "https://getmerged.abhishekco.de/good-first-issue",
   };
 
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Good First Issues Programming Ecosystems",
+    itemListElement: ecosystems.map((eco, idx) => ({
+      "@type": "ListItem",
+      position: idx + 1,
+      name: `${eco.name} Good First Issues`,
+      url: `https://getmerged.abhishekco.de/good-first-issue/${eco.slug}`,
+    })),
+  };
+
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -76,6 +88,10 @@ export default function GoodFirstIssueIndexPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
       />
       <script
         type="application/ld+json"

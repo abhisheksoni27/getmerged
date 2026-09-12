@@ -224,15 +224,17 @@ export function RepoDetailHero({
               <span>{copiedLink ? "Copied" : "Link"}</span>
             </button>
 
-            <button
-              type="button"
+            <a
+              href={`https://github.com/${fullName}`}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={onGithubClick}
               title={`View ${fullName} on GitHub`}
-              className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-mono font-semibold rounded-xl glass-card text-white hover:bg-zinc-200 transition-all shadow-sm cursor-pointer"
+              className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-mono font-semibold rounded-xl glass-card text-white hover:bg-white/[0.1] hover:text-white transition-all shadow-sm cursor-pointer"
             >
-              <GitPullRequest className="h-3.5 w-3.5" />
+              <GitPullRequest className="h-3.5 w-3.5 text-zinc-300" />
               <span>GitHub</span>
-            </button>
+            </a>
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono text-zinc-300">
