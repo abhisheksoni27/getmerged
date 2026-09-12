@@ -1,4 +1,5 @@
 export { FirstMergeStepIndicator } from "./FirstMergeStepIndicator";
+export { StepShell } from "./FirstMergeStepShell";
 export { FirstMergeDiscoveryStep } from "./FirstMergeDiscoveryStep";
 export { FirstMergeClaimStep } from "./FirstMergeClaimStep";
 export { FirstMergePreflightStep } from "./FirstMergePreflightStep";

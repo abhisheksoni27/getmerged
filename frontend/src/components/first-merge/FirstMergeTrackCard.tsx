@@ -1,20 +1,6 @@
 import React from "react";
 import { ExternalLink } from "lucide-react";
-
-interface TrackedStatusItem {
-  pr_id: string;
-  owner: string;
-  repo: string;
-  pr_number: number;
-  state: string;
-  title: string;
-  html_url: string;
-  fetched_at: string;
-  has_artifact: boolean;
-  card_id: string;
-  share_url: string;
-  og_image_url: string;
-}
+import { TrackedStatusItem } from "@/hooks/useFirstMergeTrack";
 
 interface FirstMergeTrackCardProps {
   item: TrackedStatusItem;

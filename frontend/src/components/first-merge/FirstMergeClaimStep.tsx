@@ -5,6 +5,7 @@ import { FirstMergeTrackState } from "@/hooks/useFirstMergePersistence";
 import { GoodFirstIssueItem } from "@/hooks/useFirstMergeMatches";
 import { FitRadarData } from "@/hooks/useFitRadar";
 import { IssueClaimResponse } from "@/hooks/useIssueClaims";
+import { StepShell } from "./FirstMergeStepShell";
 
 interface FirstMergeClaimStepProps {
   trackState: FirstMergeTrackState;
@@ -42,30 +43,26 @@ export function FirstMergeClaimStep({
   const fullName = trackState.selectedRepo?.fullName || "";
 
   return (
-    <div>
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <div className="flex items-center gap-2">
-            <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-              <Compass className="h-4 w-4 text-emerald-600" /> Step 2: Claim a Good First Issue
-            </h3>
-            {trackState.selectedRepo && (
-              <span className="rounded-full glass-card px-2 py-0.5 text-xs font-mono font-semibold text-zinc-200">
-                {trackState.selectedRepo.fullName}
-              </span>
-            )}
-          </div>
-          <p className="mt-0.5 text-xs text-zinc-300">
-            Pick an open starter issue to work on, then proceed to Preflight evaluation.
-          </p>
-        </div>
+    <StepShell
+      icon={<Compass className="h-4 w-4 text-emerald-600" />}
+      title="Step 2: Claim a Good First Issue"
+      description="Pick an open starter issue to work on, then proceed to Preflight evaluation."
+      badge={
+        trackState.selectedRepo && (
+          <span className="rounded-full glass-card px-2 py-0.5 text-xs font-mono font-semibold text-zinc-200">
+            {trackState.selectedRepo.fullName}
+          </span>
+        )
+      }
+      action={
         <button
           onClick={() => onRestartStep(1)}
           className="text-xs text-zinc-300 hover:text-zinc-300 underline cursor-pointer"
         >
           Change Repo
         </button>
-      </div>
+      }
+    >
 
       {fitRadar && (
         <div className="mt-3 rounded-lg border border-emerald-100 bg-emerald-950/70 border-emerald-800/80/40 p-3 text-xs flex flex-wrap items-center justify-between gap-2">
@@ -241,6 +238,6 @@ export function FirstMergeClaimStep({
           )}
         </>
       )}
-    </div>
+    </StepShell>
   );
 }
