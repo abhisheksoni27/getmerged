@@ -193,14 +193,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/RICwang/docker-wechat</loc>
-    <lastmod>2026-09-04T22:43:52Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/anibali/docker-pytorch</loc>
+    <lastmod>2026-09-04T22:43:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/anibali/docker-pytorch</loc>
-    <lastmod>2026-09-04T22:43:46Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/RICwang/docker-wechat</loc>
+    <lastmod>2026-09-04T22:43:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -469,13 +469,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-lidarr</loc>
+    <loc>https://getmerged.abhishekco.de/ledermann/docker-rails-base</loc>
     <lastmod>2026-08-17T02:45:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ledermann/docker-rails-base</loc>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-lidarr</loc>
     <lastmod>2026-08-17T02:45:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
