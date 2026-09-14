@@ -115,13 +115,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/gvolpe/nix-config</loc>
+    <loc>https://getmerged.abhishekco.de/nix-community/fenix</loc>
     <lastmod>2026-08-17T07:57:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nix-community/fenix</loc>
+    <loc>https://getmerged.abhishekco.de/gvolpe/nix-config</loc>
     <lastmod>2026-08-17T07:57:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -259,14 +259,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nixpak/nixpak</loc>
-    <lastmod>2026-09-04T23:37:33Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/numtide/treefmt-nix</loc>
+    <lastmod>2026-09-04T23:37:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/numtide/treefmt-nix</loc>
-    <lastmod>2026-09-04T23:37:39Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/nixpak/nixpak</loc>
+    <lastmod>2026-09-04T23:37:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1135,13 +1135,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/yunfachi/denix</loc>
+    <loc>https://getmerged.abhishekco.de/redcode-labs/RedNixOS</loc>
     <lastmod>2026-09-05T03:42:00Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/redcode-labs/RedNixOS</loc>
+    <loc>https://getmerged.abhishekco.de/yunfachi/denix</loc>
     <lastmod>2026-09-05T03:42:00Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1333,14 +1333,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/youwen5/zen-browser-flake</loc>
-    <lastmod>2026-08-20T05:11:43Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jacopone/antigravity-nix</loc>
+    <lastmod>2026-08-17T03:18:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jacopone/antigravity-nix</loc>
-    <lastmod>2026-08-17T03:18:48Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/youwen5/zen-browser-flake</loc>
+    <lastmod>2026-08-20T05:11:43Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1591,14 +1591,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/natsukium/dotfiles</loc>
-    <lastmod>2026-08-16T22:48:49Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/nix-community/nixpkgs-xr</loc>
+    <lastmod>2026-08-17T03:18:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nix-community/nixpkgs-xr</loc>
-    <lastmod>2026-08-17T03:18:48Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/natsukium/dotfiles</loc>
+    <lastmod>2026-08-16T22:48:49Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
