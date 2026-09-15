@@ -110,14 +110,14 @@ export default function AboutPage() {
             GetMerged evaluates 90-day rolling windows via the GitHub GraphQL API, isolating genuine outside contributors from automated dependency bots. Bayesian shrinkage ensures repos with only 1–2 PRs don&apos;t masquerade as S-tier, and solo maintainers trigger a bus-factor safety cap.
           </p>
           <div className="pt-2 flex flex-wrap gap-3">
-            <Link
+            <Link prefetch={false}
               href="/how-c-rank-works"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white text-black font-mono text-xs font-bold hover:bg-zinc-200 transition-colors"
             >
               <FileCheck2 className="w-3.5 h-3.5" />
               Explore Methodology
             </Link>
-            <Link
+            <Link prefetch={false}
               href="/methodology/changelog"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl glass-panel border border-white/[0.12] font-mono text-xs text-zinc-300 hover:text-white transition-colors"
             >
@@ -152,7 +152,7 @@ export default function AboutPage() {
               GitHub Organization
             </a>
 
-            <Link
+            <Link prefetch={false}
               href="/dispute"
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-500/10 text-amber-300 border border-amber-500/25 font-mono text-xs font-bold rounded-xl hover:bg-amber-500/20 transition-colors shadow-sm"
             >

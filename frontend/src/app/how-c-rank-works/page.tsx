@@ -284,7 +284,7 @@ export default function HowCRankWorksPage() {
       />
 
       <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full font-sans text-zinc-200">
-        <Link
+        <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-8 font-sans shadow-2xs"
@@ -307,7 +307,7 @@ export default function HowCRankWorksPage() {
             This page is the answer. Every signal, every step, every safeguard. The scoring module lives in a private repository, but the methodology is fully explained here. If we&apos;re wrong, you can see exactly why and dispute it.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <Link
+            <Link prefetch={false}
               href="https://github.com/abhisheksoni27/opendoor"
               target="_blank"
               rel="noopener noreferrer"
@@ -315,7 +315,7 @@ export default function HowCRankWorksPage() {
             >
               <Code2 className="h-3.5 w-3.5" /> scoring module on GitHub
             </Link>
-            <Link
+            <Link prefetch={false}
               href="/rankings"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors font-mono"
             >
@@ -615,7 +615,7 @@ export default function HowCRankWorksPage() {
                   </span>
                   <span className="text-xs text-zinc-300 font-mono">Active (September 2026)</span>
                 </div>
-                <Link
+                <Link prefetch={false}
                   href="/methodology/changelog"
                   className="text-xs font-mono text-amber-400 hover:text-amber-300 underline"
                 >
@@ -640,7 +640,7 @@ export default function HowCRankWorksPage() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-            <Link
+            <Link prefetch={false}
               href="/repos"
               title="Explore Open Source Repositories on GetMerged"
               className="inline-flex items-center gap-2 rounded-xl glass-panel px-6 py-3 font-sans text-xs font-bold text-white hover:glass-card active:scale-95 transition-all shadow-xs"
@@ -648,7 +648,7 @@ export default function HowCRankWorksPage() {
               <span>Explore Repos</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link
+            <Link prefetch={false}
               href="/stack"
               title="Scan your dependencies for good first issues"
               className="inline-flex items-center gap-2 rounded-xl glass-panel px-6 py-3 font-sans text-xs font-bold text-white hover:glass-card active:scale-95 transition-all shadow-xs"

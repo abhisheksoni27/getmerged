@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { API_BASE_URL } from "@/lib/api";
 import { LanguageTierBreakdown, MacroStats, Repo } from "@/types/opendoor";
 
@@ -201,7 +201,15 @@ export function useHomeData({ initialStats, initialRepos = [], initialSpotlightR
     }
   }, [selectedLang, selectedBucket, selectedTier, selectedMinMergeRate, selectedFirstTimerBucket, trendingOnly, searchQuery, page]);
 
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      if (initialRepos.length > 0) {
+        return;
+      }
+    }
     const timer = setTimeout(() => {
       fetchRepos().then(() => {
         const savedY = sessionStorage.getItem("opendoor_scroll_pos");
@@ -212,7 +220,7 @@ export function useHomeData({ initialStats, initialRepos = [], initialSpotlightR
       });
     }, 0);
     return () => clearTimeout(timer);
-  }, [fetchRepos]);
+  }, [fetchRepos, initialRepos.length]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -223,39 +231,43 @@ export function useHomeData({ initialStats, initialRepos = [], initialSpotlightR
   }, []);
 
   useEffect(() => {
-    fetch(
-      `${API_BASE_URL}/api/v1/repos?scored_today=true&max_last_activity_days=7&exclude_stale=true&exclude_fallback=true&min_tier=B&min_stars=500&sort=c_rank_score&order=desc&per_page=30`
-    )
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        const rawList = data?.data || data?.repos;
-        if (Array.isArray(rawList) && rawList.length > 0) {
-          const mapped: Repo[] = rawList.map((r: Record<string, unknown>) => mapRepoResponse(r, ""));
+    if (initialSpotlightRepos.length === 0) {
+      fetch(
+        `${API_BASE_URL}/api/v1/repos?scored_today=true&max_last_activity_days=7&exclude_stale=true&exclude_fallback=true&min_tier=B&min_stars=500&sort=c_rank_score&order=desc&per_page=30`
+      )
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          const rawList = data?.data || data?.repos;
+          if (Array.isArray(rawList) && rawList.length > 0) {
+            const mapped: Repo[] = rawList.map((r: Record<string, unknown>) => mapRepoResponse(r, ""));
 
-          const distinctLangRepos: Repo[] = [];
-          const seenLangs = new Set<string>();
+            const distinctLangRepos: Repo[] = [];
+            const seenLangs = new Set<string>();
 
-          for (const repo of mapped) {
-            const lang = repo.language || "Other";
-            if (!seenLangs.has(lang)) {
-              seenLangs.add(lang);
-              distinctLangRepos.push(repo);
+            for (const repo of mapped) {
+              const lang = repo.language || "Other";
+              if (!seenLangs.has(lang)) {
+                seenLangs.add(lang);
+                distinctLangRepos.push(repo);
+              }
+              if (distinctLangRepos.length === 3) break;
             }
-            if (distinctLangRepos.length === 3) break;
+
+            setSpotlightRepos(distinctLangRepos.length === 3 ? distinctLangRepos : mapped.slice(0, 3));
           }
+        })
+        .catch(() => {});
+    }
 
-          setSpotlightRepos(distinctLangRepos.length === 3 ? distinctLangRepos : mapped.slice(0, 3));
-        }
-      })
-      .catch(() => {});
-
-    fetch(`${API_BASE_URL}/api/v1/stats/macro`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.stats) setStats(data.stats);
-      })
-      .catch(() => {});
-  }, []);
+    if (!initialStats) {
+      fetch(`${API_BASE_URL}/api/v1/stats/macro`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.stats) setStats(data.stats);
+        })
+        .catch(() => {});
+    }
+  }, [initialSpotlightRepos.length, initialStats]);
 
   /** Memoized sorted/filtered repo lists for render. */
   const visibleRepos = useMemo(() => repos.slice(0, 6), [repos]);

@@ -93,7 +93,7 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
             <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
               <Flame className="h-4 w-4 text-amber-400" /> Contributor Season · {profile.season}
             </h2>
-            <Link
+            <Link prefetch={false}
               href="/leaderboard"
               title="View the weekly contributor leaderboard"
               className="inline-flex items-center gap-1 text-xs font-semibold text-orange-400 hover:text-orange-300 font-mono"

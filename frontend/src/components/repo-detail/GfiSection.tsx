@@ -172,7 +172,7 @@ export function GfiSection({ repo, fullName, gfiList, gfiTab, onTabChange }: Gfi
       {repo?.language && (
         <div className="pt-3 mt-3 border-t border-white/[0.1] flex items-center justify-between font-sans">
           <span className="text-[11px] text-zinc-300">Looking for more {repo.language} beginner tasks?</span>
-          <Link
+          <Link prefetch={false}
             href={`/good-first-issue/${getLanguageSlug(repo.language)}`}
             title={`Explore all ${repo.language} Good First Issues on GetMerged`}
             className="text-xs font-bold text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1 hover:underline"

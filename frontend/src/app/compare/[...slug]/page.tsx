@@ -220,11 +220,11 @@ export default async function ComparePage({ params }: ComparePageProps) {
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Navigation Breadcrumb */}
         <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-zinc-400">
-          <Link href="/" title="Home" className="hover:text-white transition-colors">
+          <Link prefetch={false} href="/" title="Home" className="hover:text-white transition-colors">
             Home
           </Link>
           <span>/</span>
-          <Link href="/compare" title="All Comparisons" className="hover:text-white transition-colors">
+          <Link prefetch={false} href="/compare" title="All Comparisons" className="hover:text-white transition-colors">
             Compare
           </Link>
           <span>/</span>

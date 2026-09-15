@@ -212,7 +212,7 @@ export default function SampleAuditPage() {
             <span className="hidden sm:inline text-amber-400/80"> - See what a $10 Maintainer Audit delivers</span>
           </div>
           <div className="flex items-center gap-3">
-            <Link
+            <Link prefetch={false}
               href="/"
               className="inline-flex items-center gap-1 text-white bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 px-3 py-1 rounded-full text-[11px] font-bold transition-all"
             >
@@ -225,7 +225,7 @@ export default function SampleAuditPage() {
 
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
         <div className="mb-6 flex items-center justify-between">
-          <Link
+          <Link prefetch={false}
             href="/"
             title="Back to home"
             className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-300 hover:text-white transition-colors"

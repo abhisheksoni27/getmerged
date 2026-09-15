@@ -51,7 +51,7 @@ export function ScoreFactors() {
           <p className="text-sm text-[#a3a3a3] font-sans leading-relaxed">
             GetMerged tracks active pull requests across 20+ programming languages - measuring real review turnaround, newcomer acceptance, and maintainer responsiveness.
           </p>
-          <Link
+          <Link prefetch={false}
             href="/how-c-rank-works"
             title="Learn how GetMerged scores repositories"
             className="inline-flex items-center gap-2 rounded-lg bg-[#1c1c1c] border border-white/[0.08] px-5 py-2.5 font-sans text-xs font-semibold text-white hover:bg-[#262626] hover:border-white/[0.16] transition-all"

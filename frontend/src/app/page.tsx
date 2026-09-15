@@ -152,7 +152,7 @@ export default async function HomePage() {
           <ul>
             {initialRepos.map((repo) => (
               <li key={repo.full_name}>
-                <Link href={`/${repo.full_name}`} title={`View ${repo.full_name} C-Rank metrics`}>
+                <Link prefetch={false} href={`/${repo.full_name}`} title={`View ${repo.full_name} C-Rank metrics`}>
                   {repo.full_name} ({repo.language || "Code"}) - C-Rank Tier {repo.c_rank_tier || "A"} ({repo.external_pr_merge_rate ? `${Math.round(repo.external_pr_merge_rate)}% merge rate` : ""})
                 </Link>
                 <p>{repo.description}</p>

@@ -94,7 +94,7 @@ export function SeasonCard() {
           >
             <Share2 className="h-3 w-3" /> Share card
           </button>
-          <Link
+          <Link prefetch={false}
             href="/leaderboard"
             title="View the weekly contributor leaderboard"
             className="inline-flex items-center rounded-lg border border-white/[0.12] px-2.5 py-1.5 text-[11px] font-semibold text-zinc-300 hover:border-emerald-500 hover:text-emerald-400"

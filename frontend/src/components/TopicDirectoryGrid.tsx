@@ -153,7 +153,7 @@ export function TopicDirectoryGrid({
           </h2>
           <div className="flex flex-wrap gap-2">
             {trendingTopics.map((stat) => (
-              <Link
+              <Link prefetch={false}
                 key={stat.name}
                 href={`/topics/${stat.name}`}
                 title={`Explore #${stat.name} repositories and contributor metrics`}
@@ -215,7 +215,7 @@ export function TopicDirectoryGrid({
             const starsLabel = formatStars(stat.avg_stars);
             const responseLabel = formatResponseHours(stat.avg_response_hours);
             return (
-              <Link
+              <Link prefetch={false}
                 key={stat.name}
                 href={`/topics/${stat.name}`}
                 title={`Explore #${stat.name} repositories and contributor metrics`}
@@ -303,7 +303,7 @@ export function TopicDirectoryGrid({
                 </>
               )}
             </button>
-            <Link
+            <Link prefetch={false}
               href={`/topics?page=${Math.min(Math.ceil(effectiveTotal / PAGE_SIZE), Math.ceil(visibleCount / PAGE_SIZE) + 1)}`}
               title={`Explore next page of repository topics (Page ${Math.ceil(visibleCount / PAGE_SIZE) + 1})`}
               className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-none border border-white/[0.12] border-b bg-amber-600 text-white font-mono text-xs font-bold hover:bg-amber-300 transition-all"

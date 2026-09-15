@@ -62,7 +62,7 @@ export function RepoAuditCTA({ fullName, isScored, isLoggedIn, requireLogin }: R
 
   if (status === "paid") {
     return (
-      <Link
+      <Link prefetch={false}
         href={`/${fullName}/audit`}
         title="View your full deep-audit report"
         className="inline-flex items-center gap-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 text-xs font-mono font-medium text-emerald-400 shadow-sm transition-all hover:bg-emerald-500/20 cursor-pointer"

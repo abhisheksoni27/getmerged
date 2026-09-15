@@ -83,7 +83,7 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
               </p>
             </div>
           </div>
-          <Link
+          <Link prefetch={false}
             href="/api/v1/auth/github"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-600 text-white text-xs font-semibold hover:bg-amber-700 transition-colors shrink-0 shadow-xs"
           >
@@ -183,7 +183,7 @@ function PostEventBanner({
         stays open year-round for finding welcoming repos.
       </p>
       {cardIssued && shareUrl && (
-        <Link
+        <Link prefetch={false}
           href={shareUrl}
           className="inline-flex items-center gap-1.5 mt-4 px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-xs"
         >

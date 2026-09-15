@@ -111,7 +111,7 @@ export function ApiKeysCard() {
           <p className="text-xs text-zinc-300 mt-1">
             Build bots, dashboards, and CI checks on C-Rank™ data. Send{" "}
             <code className="rounded glass-card px-1 py-0.5 text-[11px]">Authorization: Bearer &lt;key&gt;</code> to{" "}
-            <Link href="/docs" className="text-emerald-400 font-semibold hover:underline">
+            <Link prefetch={false} href="/docs" className="text-emerald-400 font-semibold hover:underline">
               /docs endpoints
             </Link>
             . Free tier: 60 req/hour + 10/min burst · Pro: 600 req/hour + 100/min burst.

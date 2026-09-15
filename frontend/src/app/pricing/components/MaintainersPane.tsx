@@ -32,7 +32,7 @@ export function MaintainersPane({ user, onCheckout }: MaintainersPaneProps) {
           plan={MAINTAINER_BASIC_PLAN}
           billingCycle="monthly"
           footer={
-            <Link
+            <Link prefetch={false}
               href="/maintainers"
               className="w-full py-2.5 rounded-xl glass-card text-zinc-300 font-mono font-bold text-xs uppercase tracking-wider text-center hover:bg-white/[0.08] transition-colors"
             >

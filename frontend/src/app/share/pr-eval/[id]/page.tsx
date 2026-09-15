@@ -100,7 +100,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
             <span>Public PR Pre-Flight Verification</span>
           </div>
 
-          <Link
+          <Link prefetch={false}
             href={cRankUrl}
             className="text-xs font-mono font-bold text-zinc-300 hover:text-emerald-400 flex items-center gap-1 transition-colors"
           >
@@ -207,7 +207,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-4 border-t border-white/[0.1]">
-              <Link
+              <Link prefetch={false}
                 href={cRankUrl}
                 data-testid="share-cta-crank"
                 className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-sm"

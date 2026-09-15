@@ -132,7 +132,7 @@ export default async function TopicsIndexPage({ searchParams }: TopicsPageProps)
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Navigation backlink */}
-        <Link
+        <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none glass-panel border border-white/[0.12] border-b text-xs text-white hover:glass-card transition-colors mb-6 font-sans font-bold"
@@ -170,7 +170,7 @@ export default async function TopicsIndexPage({ searchParams }: TopicsPageProps)
             <p className="text-xs sm:text-sm text-zinc-300 font-sans leading-relaxed mb-6">
               No indexed topics are available at this time. Check back soon as new open-source repositories are crawled and indexed.
             </p>
-            <Link
+            <Link prefetch={false}
               href="/"
               title="Return to home page"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-none bg-black hover:bg-zinc-800 text-white border border-white/[0.12] border-b font-bold text-xs transition-all"

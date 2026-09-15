@@ -53,14 +53,14 @@ export default function MaintainersPage() {
           </p>
 
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
+            <Link prefetch={false}
               href="/repos"
               className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xl shadow-emerald-950/60 cursor-pointer"
             >
               <Award className="h-4 w-4" />
               <span>Find & Claim Your Repo</span>
             </Link>
-            <Link
+            <Link prefetch={false}
               href="/how-c-rank-works"
               className="w-full sm:w-auto px-8 py-3.5 rounded-2xl glass-panel border border-white/[0.14] text-white font-mono text-xs font-bold uppercase tracking-wider hover:bg-white/[0.08] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >

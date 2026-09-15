@@ -37,7 +37,7 @@ export function UnscoredExplainer({ fullName, language }: UnscoredExplainerProps
             </p>
           </div>
         </div>
-        <Link
+        <Link prefetch={false}
           href={rankingsHref}
           title={`Explore active, welcoming open-source ${language || "repositories"} on GetMerged`}
           className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-emerald-400 hover:text-emerald-300 underline underline-offset-2 shrink-0 transition-colors"

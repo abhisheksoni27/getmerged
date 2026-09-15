@@ -122,7 +122,7 @@ export function ForYou() {
             <p className="mt-3 text-sm text-zinc-300">
               Your language snapshot is over 30 days old. Log in again with GitHub to refresh it, or browse manually:
             </p>
-            <Link
+            <Link prefetch={false}
               href={`/repos?languages=${encodeURIComponent(data.snapshot.map((l) => l.lang).join(","))}`}
               className="mt-2 inline-block rounded-lg glass-card px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-800"
             >
@@ -134,7 +134,7 @@ export function ForYou() {
           <div className="mt-3 rounded-xl border border-dashed border-white/[0.12] glass-panel/60 p-8 text-center text-sm text-zinc-300">
             No personalized matches yet - we couldn&apos;t find S/A ranked repos or good first issues for your GitHub languages.
             <div className="mt-2">
-              <Link href="/repos" className="text-emerald-400 font-semibold hover:underline">
+              <Link prefetch={false} href="/repos" className="text-emerald-400 font-semibold hover:underline">
                 Browse all repos manually →
               </Link>
             </div>
@@ -147,7 +147,7 @@ export function ForYou() {
               {data.repos.map((r) => (
                 <li key={r.id} className="flex flex-col rounded-xl border border-white/[0.1] glass-panel p-4 shadow-sm transition-shadow hover:shadow-md">
                   <div className="flex items-start justify-between gap-2">
-                    <Link href={`/repo/${r.full_name}`} className="text-sm font-semibold text-white hover:text-emerald-400">
+                    <Link prefetch={false} href={`/repo/${r.full_name}`} className="text-sm font-semibold text-white hover:text-emerald-400">
                       {r.full_name}
                     </Link>
                     <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-bold ${tierCls[r.c_rank_tier] ?? "glass-card text-zinc-300 border border-white/[0.12]"}`}>
@@ -192,7 +192,7 @@ export function ForYou() {
             <div className="mt-3 rounded-xl border border-dashed border-white/[0.12] glass-panel/60 p-8 text-center text-sm text-zinc-300">
               No personalized matches yet - we couldn&apos;t find S/A ranked repos or good first issues for your GitHub languages.
               <div className="mt-2">
-                <Link href="/repos" className="text-emerald-400 font-semibold hover:underline">
+                <Link prefetch={false} href="/repos" className="text-emerald-400 font-semibold hover:underline">
                   Browse all repos manually →
                 </Link>
               </div>
@@ -213,7 +213,7 @@ export function ForYou() {
               </li>
             ))}
           </ul>
-          <Link
+          <Link prefetch={false}
             href="/pricing"
             className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-xs font-semibold text-white hover:bg-amber-600"
           >

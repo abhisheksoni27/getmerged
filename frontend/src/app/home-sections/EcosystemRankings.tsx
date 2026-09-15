@@ -42,7 +42,7 @@ export function EcosystemRankings({ languages }: { languages: RankedLanguage[] }
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <Link
+                        <Link prefetch={false}
                           href={`/rankings/${getLanguageSlug(item.language)}`}
                           title={`Top Welcoming Open-Source ${item.language} Repositories`}
                           className="text-lg font-bold text-white group-hover:text-[#a3a3a3] transition-colors tracking-tight hover:underline font-sans"

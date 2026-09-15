@@ -122,7 +122,7 @@ export function PayView({
               {checkoutLoading ? "Redirecting to checkout…" : `Unlock Maintainer Audit - $10`}
             </button>
 
-            <Link
+            <Link prefetch={false}
               href="/audit/sample"
               target="_blank"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full glass-card border border-white/[0.15] px-6 py-3.5 text-xs font-mono font-bold text-zinc-200 hover:text-white hover:bg-zinc-800/80 transition-all"

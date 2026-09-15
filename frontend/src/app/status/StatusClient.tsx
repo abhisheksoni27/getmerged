@@ -39,7 +39,7 @@ export function StatusClient() {
     <div className="relative min-h-screen flex flex-col bg-transparent dev-grid-pattern">
       <Header />
       <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 flex-1 w-full font-sans text-zinc-200">
-        <Link
+        <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"

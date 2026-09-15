@@ -209,7 +209,7 @@ export function LanguageMatchQuiz() {
             >
               Try again
             </button>
-            <Link href="/repos" className="rounded-xl border border-white/[0.12] px-4 py-2 text-xs font-semibold text-zinc-200 hover:border-white/[0.25]">
+            <Link prefetch={false} href="/repos" className="rounded-xl border border-white/[0.12] px-4 py-2 text-xs font-semibold text-zinc-200 hover:border-white/[0.25]">
               Browse all repos →
             </Link>
           </div>

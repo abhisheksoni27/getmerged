@@ -26,7 +26,7 @@ export function ForecastCard({ forecast, forecastLocked }: ForecastCardProps) {
           <div className="mt-1 text-zinc-300 italic">{forecast.basis}</div>
         </div>
       ) : forecastLocked ? (
-        <Link
+        <Link prefetch={false}
           href="/pricing"
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-300 hover:text-emerald-400"
         >

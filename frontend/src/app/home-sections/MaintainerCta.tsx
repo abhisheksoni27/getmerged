@@ -43,7 +43,7 @@ export function MaintainerCta() {
                 >
                   <Search className="h-3.5 w-3.5" /> Check Your Repository
                 </button>
-                <Link
+                <Link prefetch={false}
                   href="/guides/how-to-know-if-maintainer-will-review"
                   title="Maintainer Best Practices"
                   className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#1c1c1c] border border-white/[0.08] text-white font-mono text-xs font-bold rounded-lg hover:bg-[#262626] transition-colors"

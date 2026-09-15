@@ -15,6 +15,7 @@ export function PostHogInit() {
         ui_host: "https://us.posthog.com",
         defaults: "2026-01-30",
         capture_exceptions: true,
+        autocapture: false,
         persistence: "memory",
         opt_out_capturing_by_default: true,
         disable_surveys: true,

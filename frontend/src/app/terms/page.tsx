@@ -50,7 +50,7 @@ export default function TermsPage() {
       />
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full font-sans text-zinc-200">
-        <Link
+        <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
@@ -76,7 +76,7 @@ export default function TermsPage() {
             <p>
               By accessing or using GetMerged (&quot;the Platform&quot;), you agree to be bound by these Terms of
               Service (&quot;Terms&quot;) and acknowledge our{" "}
-              <Link href="/privacy" title="View GetMerged Privacy Policy" className="text-white underline font-semibold">
+              <Link prefetch={false} href="/privacy" title="View GetMerged Privacy Policy" className="text-white underline font-semibold">
                 Privacy Policy
               </Link>
               . If you do not agree to these Terms, you may not access or use the Platform. GetMerged is an
@@ -298,7 +298,7 @@ export default function TermsPage() {
               <a href="mailto:hi@abhishekco.de" title="Email GetMerged support" className="text-white underline font-semibold">
                 hi@abhishekco.de
               </a>, or review our{" "}
-              <Link href="/privacy" title="View GetMerged Privacy Policy" className="text-white underline font-semibold">
+              <Link prefetch={false} href="/privacy" title="View GetMerged Privacy Policy" className="text-white underline font-semibold">
                 Privacy Policy
               </Link>{" "}
               for details on how we handle your data.

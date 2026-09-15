@@ -140,7 +140,7 @@ export const RepoSections: React.FC<RepoSectionsProps> = ({
                 key={repo.full_name}
                 className="flex items-center justify-between gap-3 rounded border border-white/[0.1] bg-slate-800/60 p-3.5 hover:bg-slate-800 hover:border-white/[0.12] transition-colors"
               >
-                <Link
+                <Link prefetch={false}
                   href={`/${repo.full_name}`}
                   title={`View ${repo.full_name} scorecard and merge metrics`}
                   className="truncate text-sm font-semibold font-sans text-zinc-200 hover:text-orange-400 transition-colors flex items-center gap-1.5 cursor-pointer"

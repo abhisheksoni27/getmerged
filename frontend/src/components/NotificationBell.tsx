@@ -169,7 +169,7 @@ export function NotificationBell({ user }: { user: User | null }) {
               <p className="mt-2 text-[10px] text-zinc-300">
                 In-app alerts are independent of email, Slack &amp; Discord.
               </p>
-              <Link
+              <Link prefetch={false}
                 href="/settings/notifications"
                 onClick={() => setOpen(false)}
                 className="mt-1 inline-block text-[10px] font-medium text-zinc-300 underline hover:text-zinc-200"
@@ -180,7 +180,7 @@ export function NotificationBell({ user }: { user: User | null }) {
           )}
 
           {upgradeAvailable && (
-            <Link
+            <Link prefetch={false}
               href="/pricing"
               onClick={() => setOpen(false)}
               className="flex items-center gap-2 bg-amber-950/70 border-amber-800/80 px-4 py-2 text-[11px] font-medium text-amber-700 hover:bg-amber-950/80 border-amber-800/80"
@@ -211,7 +211,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 {items.map((n) => (
                   <li key={n.id}>
                     {n.payload.link_url ? (
-                      <Link
+                      <Link prefetch={false}
                         href={n.payload.link_url}
                         onClick={() => onItemClick(n.id, n.payload.link_url || "")}
                         className="block px-4 py-3 transition-colors hover:glass-card"

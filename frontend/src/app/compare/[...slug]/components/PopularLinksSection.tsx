@@ -18,7 +18,7 @@ export function PopularLinksSection() {
       </h3>
       <div className="flex flex-wrap gap-2 text-xs font-mono">
         {POPULAR_LINKS.map((link) => (
-          <Link
+          <Link prefetch={false}
             key={link.href}
             href={link.href}
             className="px-3 py-1.5 rounded-xl glass-card text-zinc-300 hover:text-white hover:border-white/[0.2] transition-colors"

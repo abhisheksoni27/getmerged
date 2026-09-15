@@ -243,7 +243,7 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
 
         {/* Cross links */}
         <section className="flex flex-col sm:flex-row gap-3">
-          <Link
+          <Link prefetch={false}
             href={`/${fullName}`}
             title={`Open full contributor scorecard for ${fullName}`}
             className="flex-1 px-5 py-3 rounded-xl glass-card hover:bg-zinc-800 text-white font-bold text-sm inline-flex items-center justify-center gap-2 transition-all shadow-xs"
@@ -264,7 +264,7 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
         {langSlug && (
           <p className="mt-8 text-xs text-zinc-300">
             Looking for more? See{" "}
-            <Link
+            <Link prefetch={false}
               href={`/contribute/${langSlug}?level=beginner`}
               title={`Best ${langDisplay} repositories for first-time contributors`}
               className="text-emerald-400 hover:underline font-semibold"

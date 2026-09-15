@@ -37,7 +37,7 @@ export default function NotFound() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-            <Link
+            <Link prefetch={false}
               href="/"
               title="Return to GetMerged Home"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-black text-white font-mono text-sm font-bold border border-white/[0.12] shadow-sm hover:bg-zinc-800 transition-colors"
@@ -46,7 +46,7 @@ export default function NotFound() {
               Explore Welcoming Repos
             </Link>
 
-            <Link
+            <Link prefetch={false}
               href="/repos"
               title="Search all indexed repositories"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-mono text-sm font-bold border border-white/[0.12] shadow-sm hover:bg-[#a6cbff] transition-colors"

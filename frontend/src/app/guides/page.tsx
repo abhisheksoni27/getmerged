@@ -72,7 +72,7 @@ export default function GuidesHubPage() {
       />
 
       <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
-        <Link
+        <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 glass-panel border border-white/[0.12] text-xs text-zinc-200 hover:text-white hover:bg-slate-800 rounded transition-colors mb-6 font-semibold shadow-sm"
@@ -97,7 +97,7 @@ export default function GuidesHubPage() {
         {/* Guides Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {guides.map((guide) => (
-            <Link
+            <Link prefetch={false}
               key={guide.slug}
               href={`/guides/${guide.slug}`}
               title={`Read guide: ${guide.title}`}

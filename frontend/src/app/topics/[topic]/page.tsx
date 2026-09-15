@@ -133,7 +133,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Navigation backlink */}
-        <Link
+        <Link prefetch={false}
           href="/topics"
           title="Return to Topics Directory"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none glass-panel border border-white/[0.12] border-b text-xs text-white hover:glass-card transition-colors mb-6 font-sans font-bold"

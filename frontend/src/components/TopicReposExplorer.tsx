@@ -87,7 +87,7 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
             <BarChart3 className="h-3.5 w-3.5" /> Rankings
           </span>
           {languages.map(({ lang }) => (
-            <Link
+            <Link prefetch={false}
               key={lang}
               href={`/rankings/${canonicalizeSlug(lang)}`}
               title={`View ${displayNameFromSlug(lang)} rankings for the same topic`}
@@ -150,7 +150,7 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
                 </div>
 
                 <h2 className="font-space text-lg sm:text-xl font-bold text-white group-hover:text-zinc-300 transition-colors">
-                  <Link
+                  <Link prefetch={false}
                     href={`/${repo.full_name}`}
                     title={`View contributor metrics for ${repo.full_name}`}
                     className="hover:underline flex items-center gap-1.5"
@@ -196,7 +196,7 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
               </div>
 
               <div className="shrink-0 self-start sm:self-center">
-                <Link
+                <Link prefetch={false}
                   href={`/${repo.full_name}`}
                   title={`Open full scorecard for ${repo.full_name}`}
                   className="px-4 py-2.5 rounded-xl glass-card hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1.5 transition-all shadow-2xs hover:shadow-xs"

@@ -13,7 +13,7 @@ export function WatchlistEmptyState() {
       </p>
 
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-        <Link
+        <Link prefetch={false}
           href="/repos"
           title="Browse all indexed open source repositories"
           className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl glass-card text-white font-sans text-sm font-semibold hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs no-underline"
@@ -21,7 +21,7 @@ export function WatchlistEmptyState() {
           <Compass className="h-4 w-4" />
           <span>Browse Repositories</span>
         </Link>
-        <Link
+        <Link prefetch={false}
           href="/good-first-issue"
           title="Explore beginner friendly good first issues"
           className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-zinc-300 hover:text-white font-sans text-sm font-medium hover:glass-card transition-colors no-underline"

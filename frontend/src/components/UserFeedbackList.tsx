@@ -64,7 +64,7 @@ export function UserFeedbackList({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
             <div className="flex items-center gap-2.5 min-w-0">
               {item.repo_language && <LangLogo language={item.repo_language} />}
-              <Link
+              <Link prefetch={false}
                 href={`/${item.repo_full_name}`}
                 title={`View ${item.repo_full_name} C-Rank scorecard`}
                 className="text-sm font-space font-bold text-white hover:text-orange-600 transition-colors truncate"

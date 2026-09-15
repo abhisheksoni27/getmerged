@@ -52,7 +52,7 @@ export function RecruiterUnlockModal({ candidate, onClose }: RecruiterUnlockModa
         </div>
 
         <div className="space-y-3 pt-2">
-          <Link
+          <Link prefetch={false}
             href="/pricing?tab=recruiter"
             className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xl shadow-blue-950/60"
           >

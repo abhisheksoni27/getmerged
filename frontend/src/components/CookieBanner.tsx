@@ -62,7 +62,7 @@ export function CookieBanner() {
                   GetMerged uses an essential cookie to keep you signed in and
                   anonymized analytics (via PostHog) to improve the platform.
                   Analytics run only with your consent. See our{" "}
-                  <Link href="/privacy" title="Read GetMerged Privacy Policy" className="underline text-white hover:text-[#dfd0b8] transition-colors">
+                  <Link prefetch={false} href="/privacy" title="Read GetMerged Privacy Policy" className="underline text-white hover:text-[#dfd0b8] transition-colors">
                     Privacy Policy
                   </Link>
                   .

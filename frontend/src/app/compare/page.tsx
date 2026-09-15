@@ -68,37 +68,37 @@ export default function CompareHubPage() {
           <h2>Popular Repository Comparisons & Showdowns</h2>
           <ul>
             <li>
-              <Link href="/compare/facebook/react/vs/vuejs/vue">
+              <Link prefetch={false} href="/compare/facebook/react/vs/vuejs/vue">
                 React vs Vue.js Pull Request Merge Rate & Review Latency Comparison
               </Link>
               <p>Compare developer contribution turnaround and maintainer velocity between React and Vue.</p>
             </li>
             <li>
-              <Link href="/compare/remix-run/remix/vs/vercel/next.js">
+              <Link prefetch={false} href="/compare/remix-run/remix/vs/vercel/next.js">
                 Next.js vs Remix Code Review Turnaround & Merge Likelihood Showdown
               </Link>
               <p>Compare full-stack React framework maintainer responsiveness and contributor welcoming scores.</p>
             </li>
             <li>
-              <Link href="/compare/golang/go/vs/rust-lang/rust">
+              <Link prefetch={false} href="/compare/golang/go/vs/rust-lang/rust">
                 Go vs Rust Open Source Contributor Experience & PR Review Speed
               </Link>
               <p>Analyze maintainer responsiveness and newcomer acceptance rates between the Go and Rust language teams.</p>
             </li>
             <li>
-              <Link href="/compare/expressjs/express/vs/fastify/fastify">
+              <Link prefetch={false} href="/compare/expressjs/express/vs/fastify/fastify">
                 Fastify vs Express.js Maintainer Activity & Pull Request Turnaround
               </Link>
               <p>Benchmark review latency and first-timer acceptance odds across Node.js backend frameworks.</p>
             </li>
             <li>
-              <Link href="/compare/nodejs/node/vs/oven-sh/bun">
+              <Link prefetch={false} href="/compare/nodejs/node/vs/oven-sh/bun">
                 Bun vs Node.js GitHub Repository Review Speed & Merge Metrics
               </Link>
               <p>Side-by-side JavaScript runtime contribution statistics, PR sweet spots, and review velocity.</p>
             </li>
             <li>
-              <Link href="/compare/bootstrap/vs/tailwindlabs/tailwindcss">
+              <Link prefetch={false} href="/compare/bootstrap/vs/tailwindlabs/tailwindcss">
                 Tailwind CSS vs Bootstrap Contributor Hospitality & PR Acceptance Odds
               </Link>
               <p>Evaluate CSS framework maintainer engagement, review speed, and open-source contribution guidelines.</p>

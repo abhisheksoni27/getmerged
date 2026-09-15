@@ -85,7 +85,7 @@ export function DocsClient() {
         </h2>
         <p className="text-sm text-zinc-300">
           Generate an API key in your{" "}
-          <Link href="/dashboard" className="text-emerald-400 font-semibold hover:underline">
+          <Link prefetch={false} href="/dashboard" className="text-emerald-400 font-semibold hover:underline">
             dashboard
           </Link>{" "}
           and pass it as a Bearer token on every request:
@@ -102,7 +102,7 @@ export function DocsClient() {
           </div>
           <div className="rounded-lg border border-emerald-200 bg-emerald-950/70 border-emerald-800/80 px-3 py-2 text-emerald-300">
             <span className="font-bold">Pro</span> - 600 requests/hour + 100 requests/min burst.{" "}
-            <Link href="/pricing" className="font-semibold underline inline-flex items-center gap-0.5">
+            <Link prefetch={false} href="/pricing" className="font-semibold underline inline-flex items-center gap-0.5">
               Upgrade <ExternalLink className="h-3 w-3" />
             </Link>
           </div>

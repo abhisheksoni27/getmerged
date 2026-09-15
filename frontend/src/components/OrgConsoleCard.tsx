@@ -61,7 +61,7 @@ export function OrgConsoleCard({ org }: { org: string }) {
     return (
       <div className="mb-8 p-6 rounded-2xl border border-dashed border-white/[0.12] glass-panel text-center">
         <p className="text-sm text-zinc-300 font-sans">No repositories tracked for <strong>{org}</strong> yet.</p>
-        <Link
+        <Link prefetch={false}
           href="/repos"
           className="mt-3 inline-flex px-4 py-2 rounded-xl glass-card hover:bg-zinc-800 text-white font-bold text-xs items-center gap-1.5"
         >
@@ -136,7 +136,7 @@ export function OrgConsoleCard({ org }: { org: string }) {
       {!data.entitled && (
         <p className="mt-4 text-xs font-mono text-zinc-300">
           Peer benchmarks are part of Maintainer Pro.{" "}
-          <Link href="/pricing" className="font-bold text-emerald-400 underline underline-offset-2">Upgrade</Link>{" "}
+          <Link prefetch={false} href="/pricing" className="font-bold text-emerald-400 underline underline-offset-2">Upgrade</Link>{" "}
           to compare {org} against every ranked org and earn the Verified Welcoming Org badge.
         </p>
       )}

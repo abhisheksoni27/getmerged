@@ -8,7 +8,7 @@ export function PillarGrid() {
   return (
     <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto text-left">
       {/* Pillar 1: Contributors & PR Tracking */}
-      <Link
+      <Link prefetch={false}
         href="/dashboard"
         className="p-5 rounded-xl border border-white/[0.1] bg-[#141414]/90 hover:bg-[#1c1c1c] hover:border-emerald-500/40 transition-all group flex flex-col justify-between"
       >
@@ -35,7 +35,7 @@ export function PillarGrid() {
       </Link>
 
       {/* Pillar 2: For Maintainers */}
-      <Link
+      <Link prefetch={false}
         href="/maintainers"
         className="p-5 rounded-xl border border-white/[0.1] bg-[#141414]/90 hover:bg-[#1c1c1c] hover:border-amber-500/40 transition-all group flex flex-col justify-between"
       >
@@ -62,7 +62,7 @@ export function PillarGrid() {
       </Link>
 
       {/* Pillar 3: Good First Issues & Stack */}
-      <Link
+      <Link prefetch={false}
         href="/good-first-issue"
         className="p-5 rounded-xl border border-white/[0.1] bg-[#141414]/90 hover:bg-[#1c1c1c] hover:border-blue-500/40 transition-all group flex flex-col justify-between"
       >
