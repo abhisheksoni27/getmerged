@@ -50,7 +50,7 @@ export default function PrivacyPolicyPage() {
       />
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full font-sans text-zinc-200">
-        <Link
+        <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
@@ -367,7 +367,7 @@ export default function PrivacyPolicyPage() {
                 .
               </li>
               <li>Review the terms in our{" "}
-                <Link href="/terms" title="View GetMerged Terms of Service" className="text-white underline font-semibold">
+                <Link prefetch={false} href="/terms" title="View GetMerged Terms of Service" className="text-white underline font-semibold">
                   Terms of Service
                 </Link>.
               </li>

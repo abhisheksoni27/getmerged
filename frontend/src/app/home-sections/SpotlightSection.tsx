@@ -67,7 +67,7 @@ export function SpotlightSection({ spotlightVisible, loading, isLoggedIn }: Spot
           </h2>
           <p className="text-xs text-[#737373] font-sans mt-0.5">Verified active maintainers merging community contributions right now.</p>
         </div>
-        <Link
+        <Link prefetch={false}
           href="/hall-of-fame"
           title="View S-Tier Hall of Fame repositories"
           className="text-xs font-mono font-bold text-[#10b981] hover:text-[#a3a3a3] inline-flex items-center gap-1 shrink-0"

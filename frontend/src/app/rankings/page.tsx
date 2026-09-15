@@ -78,7 +78,7 @@ export default function RankingsIndexPage() {
       />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10 flex-1 w-full text-zinc-200 font-sans">
-        <Link
+        <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-5 font-sans shadow-2xs cursor-pointer"
@@ -118,7 +118,7 @@ export default function RankingsIndexPage() {
         {/* Ecosystem Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
           {ecosystems.map((eco) => (
-            <Link
+            <Link prefetch={false}
               key={eco.slug}
               href={`/rankings/${eco.slug}`}
               title={`View Top Welcoming ${eco.name} Open Source Repositories`}

@@ -21,7 +21,7 @@ export function FirstMergeDiscoveryStep({
       title="Step 1: Pick a Welcoming Repo"
       description="Select a repository with high first-timer merge rates and responsive maintainers."
       action={
-        <Link
+        <Link prefetch={false}
           href="/repos"
           className="text-xs font-semibold text-emerald-400 hover:underline flex items-center gap-1 shrink-0"
         >
@@ -38,7 +38,7 @@ export function FirstMergeDiscoveryStep({
         <div className="mt-4 rounded-lg border border-dashed border-white/[0.1] p-6 text-center text-xs text-zinc-300">
           No recommendations found yet. Search any welcoming repository to get started.
           <div className="mt-2">
-            <Link
+            <Link prefetch={false}
               href="/repos"
               className="inline-flex items-center gap-1 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
             >

@@ -193,7 +193,7 @@ export default async function OrgPage({ params }: OrgPageProps) {
                   )}
                 </div>
                 <h2 className="font-space text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
-                  <Link
+                  <Link prefetch={false}
                     href={`/${repo.full_name}`}
                     title={`View contributor metrics for ${repo.full_name}`}
                     className="hover:underline flex items-center gap-1.5"
@@ -215,7 +215,7 @@ export default async function OrgPage({ params }: OrgPageProps) {
               </div>
 
               <div className="shrink-0 self-start sm:self-center flex flex-col items-stretch gap-2">
-                <Link
+                <Link prefetch={false}
                   href={`/${repo.full_name}`}
                   title={`Open full scorecard for ${repo.full_name}`}
                   className="px-4 py-2 rounded-xl glass-card hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"

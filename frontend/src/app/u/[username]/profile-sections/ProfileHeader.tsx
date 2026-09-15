@@ -204,7 +204,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             )}
           </div>
           <div className="flex items-center gap-2">
-            <Link
+            <Link prefetch={false}
               href="/pricing"
               className="px-2.5 py-1 rounded bg-white/[0.06] hover:bg-white/[0.12] text-zinc-300 hover:text-white transition-colors"
             >

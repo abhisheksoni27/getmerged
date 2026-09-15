@@ -285,11 +285,11 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-16 flex-1 w-full text-zinc-100 font-sans">
         {/* Navigation Breadcrumb */}
         <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-zinc-400">
-          <Link href="/" title="Home" className="hover:text-white transition-colors">
+          <Link prefetch={false} href="/" title="Home" className="hover:text-white transition-colors">
             Home
           </Link>
           <span>/</span>
-          <Link href="/rankings" title="All Ecosystem Rankings" className="hover:text-white transition-colors">
+          <Link prefetch={false} href="/rankings" title="All Ecosystem Rankings" className="hover:text-white transition-colors">
             Rankings
           </Link>
           <span>/</span>
@@ -320,7 +320,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Link
+            <Link prefetch={false}
               href={`/good-first-issue/${canonicalLang}`}
               title={`Browse open ${languageName} good first issues`}
               className="inline-flex items-center gap-2 rounded-xl bg-orange-500 hover:bg-orange-600 px-6 py-3.5 text-xs font-bold font-mono text-white transition-all shadow-lg hover:shadow-orange-500/20 cursor-pointer active:scale-[0.98]"
@@ -328,7 +328,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
               <Sprout className="h-4 w-4" />
               <span>Browse {totalGFIs > 0 ? `${totalGFIs} Good First Issues` : `Good First Issues`} in {languageName}</span>
             </Link>
-            <Link
+            <Link prefetch={false}
               href="/compare"
               title="Compare repository maintainer velocity"
               className="inline-flex items-center gap-2 rounded-xl glass-card px-6 py-3.5 text-xs font-bold font-mono text-zinc-200 hover:text-white transition-all shadow-sm cursor-pointer active:scale-[0.98]"
@@ -430,7 +430,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                       </td>
                       <td className="py-5 px-6 font-bold text-white font-sans">
                         <div className="flex items-center gap-3">
-                          <Link
+                          <Link prefetch={false}
                             href={`/${owner}/${name}`}
                             title={`View ${item.repo.full_name} C-Rank scorecard and merge metrics`}
                             className="text-white group-hover:text-orange-400 transition-colors font-space text-base font-bold underline-offset-2 hover:underline cursor-pointer"
@@ -464,7 +464,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                       </td>
                       <td className="py-5 px-6 text-right text-zinc-200">
                         {item.goodFirstIssues > 0 ? (
-                          <Link
+                          <Link prefetch={false}
                             href={`/${owner}/${name}#good-first-issues`}
                             title={`View ${item.goodFirstIssues} open Good First Issues in ${item.repo.full_name}`}
                             className="inline-flex items-center gap-1.5 font-bold text-amber-400 hover:text-amber-300 bg-amber-500/10 px-3 py-1 rounded-lg border border-amber-500/20 hover:bg-amber-500/20 transition-all cursor-pointer text-sm"
@@ -515,7 +515,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             <div className="flex flex-wrap gap-2.5 pt-1 font-sans text-xs">
               {meta.topFrameworks && meta.topFrameworks.length > 0 ? (
                 meta.topFrameworks.map((fw) => (
-                  <Link
+                  <Link prefetch={false}
                     key={fw.slug}
                     href={`/topics/${fw.slug}`}
                     title={`Browse open source ${fw.name} repositories`}
@@ -525,7 +525,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                   </Link>
                 ))
               ) : (
-                <Link
+                <Link prefetch={false}
                   href="/topics"
                   title={`Browse ${languageName} topics`}
                   className="px-4 py-2.5 rounded-xl glass-card text-zinc-100 hover:text-white font-mono cursor-pointer transition-colors"
@@ -564,7 +564,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
               </h4>
               <p className="text-zinc-200 leading-relaxed font-sans">
                 You can browse verified beginner-friendly issues in {languageName} by visiting our curated Good First Issues directory at{" "}
-                <Link
+                <Link prefetch={false}
                   href={`/good-first-issue/${canonicalLang}`}
                   title={`Open ${languageName} good first issues directory`}
                   className="text-orange-400 hover:text-orange-300 underline font-semibold"

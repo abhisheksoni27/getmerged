@@ -174,7 +174,7 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
         {/* Audience switcher */}
         <div className="flex gap-2 mb-8">
           {LEVELS.map((lv) => (
-            <Link
+            <Link prefetch={false}
               key={lv.value}
               href={`/contribute/${langSlug}?level=${lv.value}`}
               title={`Show best ${canonicalLang} repositories for ${lv.label.toLowerCase()}s`}
@@ -213,7 +213,7 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
                   )}
                 </div>
                 <h2 className="font-space text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
-                  <Link
+                  <Link prefetch={false}
                     href={`/${repo.full_name}`}
                     title={`View contributor metrics for ${repo.full_name}`}
                     className="hover:underline flex items-center gap-1.5"
@@ -240,14 +240,14 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
               </div>
 
               <div className="shrink-0 self-start sm:self-center flex flex-col gap-2 items-stretch">
-                <Link
+                <Link prefetch={false}
                   href={`/${repo.full_name}`}
                   title={`Open full scorecard for ${repo.full_name}`}
                   className="px-4 py-2 rounded-xl glass-card hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
                 >
                   View Scorecard <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
-                <Link
+                <Link prefetch={false}
                   href={`/how-to-contribute/${repo.full_name}`}
                   title={`Read how to contribute to ${repo.full_name}`}
                   className="px-4 py-2 rounded-xl border border-white/[0.12] hover:border-zinc-500 text-zinc-300 font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all"
@@ -270,7 +270,7 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
               Sign in with GitHub to view personalized matches, your Contributor Fit Radar, and weekly digest alerts.
             </p>
             <div className="mt-4">
-              <Link
+              <Link prefetch={false}
                 href="/repos"
                 title={`Explore all ranked ${canonicalLang} repositories on GetMerged`}
                 className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs inline-flex items-center gap-2 transition-all shadow-xs"

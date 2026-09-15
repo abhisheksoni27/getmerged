@@ -6,7 +6,7 @@ import Link from "next/link";
 export function GithubNotFoundView({ fullName }: { fullName: string }) {
   return (
     <main className="mx-auto max-w-6xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
-      <Link
+      <Link prefetch={false}
         href="/"
         title="Return to GetMerged Explorer Home"
         className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-300 hover:text-white transition-colors mb-8"
@@ -33,7 +33,7 @@ export function GithubNotFoundView({ fullName }: { fullName: string }) {
         </p>
 
         <div className="flex items-center justify-center gap-3">
-          <Link
+          <Link prefetch={false}
             href="/"
             title="Return to GetMerged Explorer Home"
             className="inline-flex items-center gap-2 rounded-full glass-card px-6 py-3 text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-all shadow-xs"
@@ -66,7 +66,7 @@ export function IndexingView({
 }: IndexingViewProps) {
   return (
     <main className="mx-auto max-w-6xl px-4 sm:px-6 py-12 flex-1 w-full font-sans">
-      <Link
+      <Link prefetch={false}
         href="/"
         title="Return to GetMerged Explorer Home"
         className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-300 hover:text-white transition-colors mb-8"

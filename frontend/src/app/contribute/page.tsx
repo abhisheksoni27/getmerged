@@ -73,7 +73,7 @@ export default function ContributeHubPage() {
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {POPULAR_LANGUAGES.map((lang) => (
-              <Link
+              <Link prefetch={false}
                 key={lang.slug}
                 href={`/contribute/${lang.slug}`}
                 title={`Explore ${lang.name} open source contribution opportunities`}

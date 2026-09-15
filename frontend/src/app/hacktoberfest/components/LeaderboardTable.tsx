@@ -14,7 +14,7 @@ export function LeaderboardRow({ repo, rank }: { repo: LeaderboardRepo; rank: nu
       </td>
       <td className="py-3.5 px-4">
         <div className="flex items-center gap-2 flex-wrap">
-          <Link
+          <Link prefetch={false}
             href={`/${owner}/${name}`}
             className="hover:text-orange-600 transition-colors font-space text-sm font-bold text-white"
           >
@@ -49,7 +49,7 @@ export function LeaderboardRow({ repo, rank }: { repo: LeaderboardRepo; rank: nu
         </span>
       </td>
       <td className="py-3.5 px-4 text-center">
-        <Link
+        <Link prefetch={false}
           href={`/${owner}/${name}`}
           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg glass-card hover:bg-zinc-200 text-zinc-200 text-[11px] font-semibold transition-colors"
         >

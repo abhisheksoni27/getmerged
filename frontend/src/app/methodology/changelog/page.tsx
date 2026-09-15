@@ -51,7 +51,7 @@ export default async function MethodologyChangelogPage() {
       <Header />
 
       <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
-        <Link
+        <Link prefetch={false}
           href="/how-c-rank-works"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-8 font-sans"
         >
@@ -126,7 +126,7 @@ export default async function MethodologyChangelogPage() {
               <GitPullRequest className="h-5 w-5 text-blue-400" />
               Maintainer Score Disputes &amp; Resolutions
             </h2>
-            <Link
+            <Link prefetch={false}
               href="/dispute"
               className="text-xs font-mono text-amber-400 hover:text-amber-300 transition-colors"
             >

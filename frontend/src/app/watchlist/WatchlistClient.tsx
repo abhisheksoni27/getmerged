@@ -73,7 +73,7 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
+            <Link prefetch={false}
               href="/repos"
               title="Explore all indexed open source repositories"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl glass-panel border border-white/[0.1] text-zinc-200 hover:glass-card hover:border-white/[0.12] font-sans text-xs font-semibold shadow-2xs transition-all no-underline"

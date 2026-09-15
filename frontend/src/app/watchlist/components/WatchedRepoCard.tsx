@@ -120,7 +120,7 @@ export function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts
               />
             </div>
             <div className="min-w-0 flex-1">
-              <Link
+              <Link prefetch={false}
                 href={`/${ownerPart}/${namePart}`}
                 title={`View ${repo.full_name} scorecard`}
                 className="font-space text-base font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-1 min-w-0 no-underline"
@@ -240,7 +240,7 @@ export function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts
             <Scale className="h-3 w-3" />
             <span>Compare</span>
           </button>
-          <Link
+          <Link prefetch={false}
             href={`/${ownerPart}/${namePart}`}
             title={`View ${repo.full_name} details and C-Rank breakdown`}
             className="font-semibold text-white hover:text-emerald-400 transition-colors flex items-center gap-0.5 no-underline"

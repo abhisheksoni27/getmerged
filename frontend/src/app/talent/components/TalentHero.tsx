@@ -27,7 +27,7 @@ export function TalentHero() {
 
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
           {PAYMENTS_ENABLED ? (
-            <Link
+            <Link prefetch={false}
               href="/pricing?tab=recruiter"
               className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xl shadow-blue-950/60 cursor-pointer active:scale-[0.98]"
             >
@@ -40,7 +40,7 @@ export function TalentHero() {
               <span>Free Early Access Talent Directory</span>
             </div>
           )}
-          <Link
+          <Link prefetch={false}
             href="/dashboard"
             className="w-full sm:w-auto px-8 py-3.5 rounded-2xl glass-panel border border-white/[0.14] text-white font-mono text-xs font-bold uppercase tracking-wider hover:bg-white/[0.08] transition-all flex items-center justify-center gap-2 cursor-pointer"
           >

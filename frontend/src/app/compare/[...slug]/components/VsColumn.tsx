@@ -29,7 +29,7 @@ export function VsColumn({ repo, firstTimerRate }: VsColumnProps) {
           </span>
         </div>
         <h2 className="font-space text-xl font-bold text-white mb-1">
-          <Link
+          <Link prefetch={false}
             href={`/${repo.full_name}`}
             title={`View full scorecard for ${repo.full_name}`}
             className="hover:text-emerald-400 transition-colors"
@@ -64,7 +64,7 @@ export function VsColumn({ repo, firstTimerRate }: VsColumnProps) {
       </div>
 
       <div className="mt-6 pt-4 border-t border-white/[0.08]">
-        <Link
+        <Link prefetch={false}
           href={`/${repo.full_name}`}
           title={`Open full ${repo.full_name} scorecard`}
           className="w-full py-2.5 rounded-xl glass-card hover:bg-zinc-800 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all"

@@ -87,7 +87,7 @@ export default function DisputePage() {
             <span className="inline-flex items-center gap-1.5 text-blue-400">
               <FileCheck2 className="h-4 w-4" /> Public Methodology Changelog
             </span>
-            <Link
+            <Link prefetch={false}
               href="/methodology/changelog"
               className="inline-flex items-center gap-1 text-zinc-300 hover:text-white underline"
             >
@@ -117,7 +117,7 @@ export default function DisputePage() {
                 >
                   Submit Another
                 </button>
-                <Link
+                <Link prefetch={false}
                   href="/repos"
                   className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-white text-black text-xs font-mono font-bold hover:bg-zinc-200 transition-colors"
                 >
@@ -236,7 +236,7 @@ export default function DisputePage() {
               </div>
 
               <div className="flex items-center justify-between pt-4 border-t border-white/[0.08]">
-                <Link
+                <Link prefetch={false}
                   href="/how-c-rank-works"
                   className="text-xs font-mono text-zinc-400 hover:text-zinc-200 transition-colors"
                 >

@@ -75,7 +75,7 @@ export default async function CommunityPowerhousesPage() {
       />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-200 font-sans">
-        <Link
+        <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
@@ -124,7 +124,7 @@ export default async function CommunityPowerhousesPage() {
             {repos.map((repo) => {
               const [ownerPart, namePart] = repo.full_name.split("/");
               return (
-                <Link
+                <Link prefetch={false}
                   key={repo.id}
                   href={`/${repo.full_name}`}
                   title={`View ${repo.full_name} on GetMerged`}

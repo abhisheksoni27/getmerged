@@ -174,7 +174,7 @@ export function ClientRepoDetail({
 
       <main className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-6 flex-1 w-full overflow-hidden">
         {/* Navigation Breadcrumb */}
-        <Link
+        <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 text-xs font-sans text-zinc-300 hover:text-white transition-colors mb-3"

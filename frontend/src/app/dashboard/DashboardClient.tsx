@@ -170,7 +170,7 @@ export function DashboardClient() {
         <DashboardEmptyState>
           No open pull requests to C+ ranked repositories found yet.
           <div className="mt-2">
-            <Link href="/repos" className="text-emerald-400 font-semibold hover:underline">
+            <Link prefetch={false} href="/repos" className="text-emerald-400 font-semibold hover:underline">
               Find welcoming repos →
             </Link>
           </div>

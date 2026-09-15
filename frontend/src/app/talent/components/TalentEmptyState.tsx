@@ -20,14 +20,14 @@ export function TalentEmptyState() {
       </div>
 
       <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-        <Link
+        <Link prefetch={false}
           href="/dashboard"
           className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 shadow-lg shadow-emerald-950/40"
         >
           <UserCheck className="h-4 w-4" />
           <span>Opt In to Talent Pool (For Devs)</span>
         </Link>
-        <Link
+        <Link prefetch={false}
           href="/pricing?tab=recruiter"
           className="px-6 py-2.5 rounded-xl glass-panel border border-white/[0.14] hover:bg-white/[0.08] text-white font-mono text-xs font-bold uppercase tracking-wider transition-all"
         >

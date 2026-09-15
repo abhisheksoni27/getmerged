@@ -26,7 +26,7 @@ export function ResumePrintClient({ profile, karma }: ResumePrintClientProps) {
     <div className="min-h-screen bg-[#0d0d10] text-zinc-100 font-sans print:bg-white print:text-black py-8 px-4 sm:px-6">
       {/* Top Print Control Bar (Hidden on Print) */}
       <div className="max-w-4xl mx-auto mb-8 flex items-center justify-between print:hidden p-4 rounded-2xl glass-panel border border-white/[0.1] bg-zinc-950/80">
-        <Link
+        <Link prefetch={false}
           href={`/u/${username}`}
           className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 hover:text-white transition-colors"
         >

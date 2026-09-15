@@ -151,7 +151,7 @@ export function RepoDetailHero({
               )}
 
               {repo?.language && (
-                <Link
+                <Link prefetch={false}
                   href={`/rankings/${getLanguageSlug(repo.language)}`}
                   title={`View top ranked ${repo.language} repositories`}
                   className="inline-flex items-center gap-1.5 border border-white/[0.1] bg-white/[0.04] px-3 py-1 font-mono text-xs font-medium rounded-full text-zinc-300 hover:text-white hover:bg-white/[0.08] transition-colors shrink-0"
@@ -238,7 +238,7 @@ export function RepoDetailHero({
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono text-zinc-300">
-            <Link
+            <Link prefetch={false}
               href={`/compare?a=${encodeURIComponent(fullName)}`}
               title={`Compare ${fullName} against another repository`}
               className="inline-flex items-center gap-1 hover:text-zinc-300 transition-colors"

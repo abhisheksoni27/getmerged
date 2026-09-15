@@ -116,7 +116,7 @@ export function ProgressTracker({
 
               {progress?.card_issued && progress?.card && (
                 <div className="flex items-center gap-2">
-                  <Link
+                  <Link prefetch={false}
                     href={progress.card.share_url}
                     className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-xs"
                   >

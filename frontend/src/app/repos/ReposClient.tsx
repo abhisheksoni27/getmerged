@@ -137,7 +137,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
       <main className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex-1">
         {/* Breadcrumb Navigation */}
         <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-zinc-300">
-          <Link href="/" title="Back to GetMerged Home" className="hover:text-white transition-colors">
+          <Link prefetch={false} href="/" title="Back to GetMerged Home" className="hover:text-white transition-colors">
             Home
           </Link>
           <span>/</span>

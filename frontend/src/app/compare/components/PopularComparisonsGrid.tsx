@@ -21,7 +21,7 @@ export function PopularComparisonsGrid() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {POPULAR_COMPARISONS.map((item) => (
-          <Link
+          <Link prefetch={false}
             key={`${item.repoA}-vs-${item.repoB}`}
             href={`/compare/${item.repoA}/vs/${item.repoB}`}
             title={`Compare ${item.repoA} vs ${item.repoB} maintainer review metrics`}

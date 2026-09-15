@@ -128,6 +128,16 @@ const nextConfig: NextConfig = {
       ],
     },
     {
+      // Cache PostHog static bundles
+      source: "/ingest/static/:path*",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=86400, stale-while-revalidate=604800",
+        },
+      ],
+    },
+    {
       source: "/api/og/u/:path*",
       headers: [
         { key: "Cache-Control", value: "private, no-store" },

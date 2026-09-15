@@ -39,7 +39,7 @@ export function SearchRow(props: SearchRowProps) {
 
   const { repo, index, rowId, isSelected, onHover, onSelect } = props;
   return (
-    <Link
+    <Link prefetch={false}
       key={repo.id || repo.full_name}
       id={rowId}
       role="option"

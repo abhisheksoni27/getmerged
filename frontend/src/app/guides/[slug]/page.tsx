@@ -122,9 +122,9 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
         {/* Navigation Breadcrumb */}
         <div className="flex items-center gap-2 text-xs font-mono text-zinc-300 mb-6">
-          <Link href="/" title="GetMerged Home" className="hover:text-white font-bold">Home</Link>
+          <Link prefetch={false} href="/" title="GetMerged Home" className="hover:text-white font-bold">Home</Link>
           <span>/</span>
-          <Link href="/guides" title="GetMerged Guides Directory" className="hover:text-white font-bold">Guides</Link>
+          <Link prefetch={false} href="/guides" title="GetMerged Guides Directory" className="hover:text-white font-bold">Guides</Link>
           <span>/</span>
           <span className="text-zinc-200 font-bold truncate">{guide.title}</span>
         </div>
@@ -282,16 +282,16 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
               Solo engineer building GetMerged in public. Writing guides to end pull-request ghost towns and help developers find welcoming open-source repositories.
             </p>
             <div className="pt-2 flex items-center gap-3 text-xs font-mono text-amber-400">
-              <Link href="/about" className="hover:underline">About the project &rarr;</Link>
+              <Link prefetch={false} href="/about" className="hover:underline">About the project &rarr;</Link>
               <span className="text-zinc-600">&bull;</span>
-              <Link href="/how-c-rank-works" className="hover:underline">Methodology &rarr;</Link>
+              <Link prefetch={false} href="/how-c-rank-works" className="hover:underline">Methodology &rarr;</Link>
             </div>
           </div>
         </div>
 
         {/* Read Next Section */}
         <div className="border border-white/[0.1] glass-panel p-6 sm:p-8 rounded-md border-t-2 border-t-slate-700 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
-          <Link
+          <Link prefetch={false}
             href="/guides"
             title="Browse all GetMerged engineering guides"
             className="inline-flex items-center gap-2 font-mono text-xs font-bold text-zinc-300 hover:text-white"
@@ -299,7 +299,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
             <ArrowLeft className="w-4 h-4" /> All Playbooks & Guides
           </Link>
 
-          <Link
+          <Link prefetch={false}
             href="/repos"
             title="Find welcoming repositories with real-time PR review metrics"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-orange-500 hover:bg-orange-600 font-mono text-xs font-bold text-white transition-colors"

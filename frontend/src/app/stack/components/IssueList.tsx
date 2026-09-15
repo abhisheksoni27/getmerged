@@ -89,7 +89,7 @@ export function DependencyGrid({ dependencies }: { dependencies: StackRepoInfo[]
                   {dep.package_name}
                 </div>
                 {dep.repo_full_name && (
-                  <Link
+                  <Link prefetch={false}
                     href={`/repo/${dep.repo_full_name}`}
                     className="text-[11px] font-mono text-zinc-400 hover:text-emerald-400 truncate block"
                   >
@@ -140,7 +140,7 @@ export function DependencyGrid({ dependencies }: { dependencies: StackRepoInfo[]
               <div className="pt-2 flex items-center justify-between text-[11px] font-mono text-emerald-400">
                 <span>{dep.good_first_issues_count} Good First Issue(s)</span>
                 {dep.repo_full_name && (
-                  <Link
+                  <Link prefetch={false}
                     href={`/repo/${dep.repo_full_name}`}
                     className="hover:underline flex items-center gap-1"
                   >

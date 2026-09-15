@@ -251,7 +251,7 @@ export default async function ReposPage({ searchParams }: ReposPageProps) {
         <ul>
           {initialRepos.map((r) => (
             <li key={r.full_name}>
-              <Link href={`/${r.full_name}`} title={`View ${r.full_name} C-Rank scorecard`}>
+              <Link prefetch={false} href={`/${r.full_name}`} title={`View ${r.full_name} C-Rank scorecard`}>
                 {r.full_name} ({r.language || "Code"}) - Tier {r.class_rank || r.c_rank_tier || "A"} ({r.external_pr_merge_rate ? `${Math.round(r.external_pr_merge_rate)}% merge rate` : ""})
               </Link>
               <p>{r.description}</p>

@@ -25,7 +25,7 @@ export function CandidateCard({ candidate: cand, onDraftPitch, onInspect, onUnlo
           />
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
-              <Link
+              <Link prefetch={false}
                 href={`/u/${cand.username}`}
                 className="text-base font-bold font-space text-white hover:text-blue-400 transition-colors"
               >

@@ -95,7 +95,7 @@ export default async function MonthlyLeagueArchivePage({ params }: PageProps) {
         <ul>
           {repos.map((r) => (
             <li key={r.full_name}>
-              <Link href={`/${r.full_name}`} title={`View ${r.full_name} metrics`}>
+              <Link prefetch={false} href={`/${r.full_name}`} title={`View ${r.full_name} metrics`}>
                 {r.full_name} ({r.language || "Code"}) - Tier {r.c_rank_tier || "A"}
               </Link>
             </li>

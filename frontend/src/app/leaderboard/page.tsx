@@ -127,7 +127,7 @@ export default async function LeaderboardPage() {
       />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-200 font-sans">
-        <Link
+        <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
@@ -179,7 +179,7 @@ export default async function LeaderboardPage() {
                   <tr key={entry.rank} className="hover:glass-card/60 transition-colors">
                     <td className="py-3 px-4 text-center font-bold text-zinc-300">#{entry.rank}</td>
                     <td className="py-3 px-4 font-bold text-white">
-                      <Link
+                      <Link prefetch={false}
                         href={`/u/${encodeURIComponent(entry.login)}`}
                         title={`View ${entry.login}'s contributor profile and track record`}
                         className="hover:text-emerald-400 transition-colors font-space text-sm"
@@ -229,7 +229,7 @@ export default async function LeaderboardPage() {
                       #{idx + 1}
                     </td>
                     <td className="py-3.5 px-4 font-bold text-white">
-                      <Link
+                      <Link prefetch={false}
                         href={`/${owner}/${name}`}
                         title={`View ${repo.full_name} C-Rank details and merge telemetry`}
                         className="hover:text-zinc-300 transition-colors font-space text-sm"

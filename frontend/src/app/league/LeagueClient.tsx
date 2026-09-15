@@ -321,7 +321,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="font-mono text-xs text-zinc-300 font-bold">#{idx + 1}</span>
-                      <Link
+                      <Link prefetch={false}
                         href={`/${repo.full_name}`}
                         title={`View ${repo.full_name} scorecard`}
                         className="font-space font-bold text-sm text-white hover:text-orange-400 transition-colors truncate"
@@ -363,7 +363,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                     <span className="text-[11px] font-mono text-zinc-300">
                       {repo.language || "Code"}
                     </span>
-                    <Link
+                    <Link prefetch={false}
                       href={`/${repo.full_name}`}
                       title={`View ${repo.full_name} live metrics`}
                       className="inline-flex items-center gap-1 text-xs font-mono font-bold text-orange-400 hover:text-orange-300 transition-colors"
@@ -406,7 +406,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                     </span>
                   </div>
                   <div className="min-w-0">
-                    <Link
+                    <Link prefetch={false}
                       href={`/u/${c.slug}`}
                       title={`View ${c.username} profile`}
                       className="font-space font-bold text-sm text-white hover:text-orange-400 transition-colors truncate block"

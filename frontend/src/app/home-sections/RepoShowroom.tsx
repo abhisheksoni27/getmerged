@@ -89,7 +89,7 @@ function ShowroomBody({ visibleRepos, isLoggedIn, onResetFilters }: Pick<RepoSho
           <p className="text-xs text-[#737373] mt-1 font-sans">Filter across 20+ ecosystems with full pagination.</p>
         </div>
 
-        <Link
+        <Link prefetch={false}
           href="/repos"
           title="Browse full repository database with all filters"
           className="inline-flex items-center gap-2 rounded-lg bg-[#ff6b00] text-white hover:bg-[#ff8a33] px-6 py-3 text-xs font-bold font-sans shrink-0 transition-colors"
@@ -169,7 +169,7 @@ export function RepoShowroom({
             <h2 className="text-xl sm:text-2xl font-bold text-white font-sans">Explore Open Doors by Category</h2>
           </div>
 
-          <Link
+          <Link prefetch={false}
             href="/repos"
             title="Open full multi-filter repository directory"
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1c1c1c] border border-white/[0.08] hover:bg-[#262626] text-white px-5 py-2.5 text-xs font-semibold transition-all self-start md:self-auto"

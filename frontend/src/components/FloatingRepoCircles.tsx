@@ -285,7 +285,7 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
           >
             <div className="relative group flex items-center justify-center">
               {/* Floating Circle Button */}
-              <Link
+              <Link prefetch={false}
                 href={`/${orb.fullName}`}
                 onClick={() => {
                   posthog.capture("hero_floating_orb_clicked", {

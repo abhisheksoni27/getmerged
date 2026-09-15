@@ -76,7 +76,7 @@ export function TopMatches() {
             const tier = m.c_rank_tier || m.class_rank || "A";
 
             return (
-              <Link
+              <Link prefetch={false}
                 key={m.id || fullName}
                 href={`/${fullName}`}
                 onClick={() => {

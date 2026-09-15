@@ -119,7 +119,7 @@ export default async function ShareCardPage({ params }: PageProps) {
             </div>
 
             <div className="flex items-center gap-3">
-              <Link
+              <Link prefetch={false}
                 href="/hacktoberfest"
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl glass-card text-white text-xs font-semibold hover:bg-zinc-800 transition-colors shadow-xs"
               >

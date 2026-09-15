@@ -74,7 +74,7 @@ export default async function HacktoberfestPage() {
         <ul>
           {initialRepos.map((r) => (
             <li key={r.full_name}>
-              <Link href={`/${r.full_name}`} title={`View ${r.full_name} Hacktoberfest metrics`}>
+              <Link prefetch={false} href={`/${r.full_name}`} title={`View ${r.full_name} Hacktoberfest metrics`}>
                 {r.full_name} ({r.language || "Code"}) - Tier {r.c_rank_tier || "A"} ({r.first_timer_success_rate ? `${Math.round(r.first_timer_success_rate)}% first-timer success` : ""})
               </Link>
             </li>

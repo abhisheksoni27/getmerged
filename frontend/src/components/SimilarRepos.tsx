@@ -29,7 +29,7 @@ export function SimilarRepos({ relatedRepos, language }: SimilarReposProps) {
           </p>
         </div>
         {language && (
-          <Link
+          <Link prefetch={false}
             href={`/rankings/${getLanguageSlug(language)}`}
             title={`View all ${language} rankings on GetMerged`}
             className="text-xs font-semibold text-white hover:text-zinc-300 font-sans flex items-center gap-1 glass-card px-3 py-1.5 rounded-xl border border-white/[0.1]"

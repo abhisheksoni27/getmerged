@@ -25,7 +25,7 @@ export function ProblemSolution() {
           <p className="text-sm text-[#a3a3a3] font-sans leading-relaxed">
             A repository with 40,000 stars might have unanswered PRs from months ago. When you pick projects by stars alone, you often run into backlogged, exhausted teams. GetMerged checks whether maintainers are actually reviewing and merging community pull requests today.
           </p>
-          <Link
+          <Link prefetch={false}
             href="/how-c-rank-works"
             title="Learn how GetMerged scores open source projects"
             className="inline-flex items-center gap-2 text-xs font-mono font-bold text-white hover:text-[#a3a3a3] transition-colors"

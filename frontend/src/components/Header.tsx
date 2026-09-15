@@ -60,7 +60,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 sm:gap-4 px-4 sm:px-6 lg:px-8">
         {/* Brand Logo & Navigation */}
         <div className="flex items-center gap-3 md:gap-4 lg:gap-6 min-w-0">
-          <Link
+          <Link prefetch={false}
             href="/"
             title="GetMerged - Find Welcoming Open Source Repositories"
             className="flex items-center gap-2.5 group shrink-0"
@@ -97,21 +97,21 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
 
           {/* Desktop & Laptop Nav Links */}
           <nav className="hidden md:flex items-center gap-2.5 lg:gap-3.5 xl:gap-4 text-xs font-sans font-medium text-[#a3a3a3] shrink-0">
-            <Link href="/repos" title="Explore All Open Source Repositories" className="hover:text-white transition-colors">
+            <Link prefetch={false} href="/repos" title="Explore All Open Source Repositories" className="hover:text-white transition-colors">
               Repositories
             </Link>
-            <Link href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="hover:text-white transition-colors whitespace-nowrap">
+            <Link prefetch={false} href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="hover:text-white transition-colors whitespace-nowrap">
               Good First Issues
             </Link>
-            <Link href="/stack" title="Find Good First Issues in Your Tech Stack" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1 whitespace-nowrap">
+            <Link prefetch={false} href="/stack" title="Find Good First Issues in Your Tech Stack" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1 whitespace-nowrap">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Stalk Stack
             </Link>
-            <Link href="/maintainers" title="Claim Your Repository & PR Telemetry" className="hover:text-white font-medium transition-colors whitespace-nowrap">
+            <Link prefetch={false} href="/maintainers" title="Claim Your Repository & PR Telemetry" className="hover:text-white font-medium transition-colors whitespace-nowrap">
               Maintainers
             </Link>
             {user && (
-              <Link href="/dashboard" title="Contributor PR Tracker & Quests" className="hover:text-white font-bold text-white transition-colors whitespace-nowrap">
+              <Link prefetch={false} href="/dashboard" title="Contributor PR Tracker & Quests" className="hover:text-white font-bold text-white transition-colors whitespace-nowrap">
                 Dashboard
               </Link>
             )}
@@ -145,7 +145,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             <div className="h-8 w-16 sm:w-20 rounded-lg bg-[#1c1c1c] animate-pulse border border-white/[0.04]" />
           ) : user ? (
             <div className="flex items-center gap-1.5 bg-[#141414] border border-white/[0.08] rounded-lg p-1 shrink-0">
-              <Link
+              <Link prefetch={false}
                 href={user.slug ? `/u/${user.slug}` : `/dashboard`}
                 title={`Signed in as @${user.username} - View Profile`}
                 className="flex items-center hover:opacity-80 transition-opacity p-0.5"
@@ -164,7 +164,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                 )}
               </Link>
               <NotificationBell user={user} />
-              <Link
+              <Link prefetch={false}
                 href="/watchlist"
                 title="My Watchlist"
                 className="flex items-center justify-center h-6 w-6 text-[#a3a3a3] hover:text-white rounded-md transition-colors border-l border-white/[0.08] ml-0.5 pl-1.5 shrink-0"
@@ -218,35 +218,35 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             className="md:hidden border-t border-white/[0.08] bg-[#0d0d0e]/95 backdrop-blur-2xl px-4 py-4 space-y-3 overflow-hidden"
           >
             <nav className="flex flex-col space-y-2.5 text-sm font-medium text-[#a3a3a3]">
-              <Link
+              <Link prefetch={false}
                 href="/repos"
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
               >
                 Repositories
               </Link>
-              <Link
+              <Link prefetch={false}
                 href="/how-c-rank-works"
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
               >
                 How C-Rank Works
               </Link>
-              <Link
+              <Link prefetch={false}
                 href="/rankings"
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
               >
                 Ecosystems
               </Link>
-              <Link
+              <Link prefetch={false}
                 href="/good-first-issue"
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
               >
                 Good First Issues
               </Link>
-              <Link
+              <Link prefetch={false}
                 href="/stack"
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-emerald-400 font-semibold transition-colors flex items-center gap-2"
@@ -254,7 +254,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 Stalk Stack
               </Link>
-              <Link
+              <Link prefetch={false}
                 href="/maintainers"
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
@@ -262,7 +262,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                 For Maintainers ⚡
               </Link>
               {PAYMENTS_ENABLED && (
-                <Link
+                <Link prefetch={false}
                   href="/pricing"
                   onClick={() => setMobileMenuOpen(false)}
                   className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-emerald-400 font-semibold transition-colors"
@@ -270,14 +270,14 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   Pricing & Plans 💳
                 </Link>
               )}
-              <Link
+              <Link prefetch={false}
                 href="/dashboard"
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-white font-bold transition-colors"
               >
                 Dashboard
               </Link>
-              <Link
+              <Link prefetch={false}
                 href="/league"
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-[#ff6b00] font-semibold transition-colors flex items-center gap-2"
