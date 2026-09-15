@@ -937,14 +937,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/austin-taylor/code-vault</loc>
-    <lastmod>2026-09-04T22:42:05Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/aws-samples/amazon-bedrock-samples</loc>
+    <lastmod>2026-08-30T09:25:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/aws-samples/amazon-bedrock-samples</loc>
-    <lastmod>2026-08-30T09:25:29Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/austin-taylor/code-vault</loc>
+    <lastmod>2026-09-04T22:42:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -973,12 +973,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/FullStackRetrieval-com/RetrievalTutorials</loc>
-    <lastmod>2026-09-04T22:42:24Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/tjwei/GANotebooks</loc>
     <lastmod>2026-09-04T22:42:24Z</lastmod>
     <changefreq>daily</changefreq>
@@ -991,19 +985,25 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/FullStackRetrieval-com/RetrievalTutorials</loc>
+    <lastmod>2026-09-04T22:42:24Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/gengyanlei/fire-smoke-detect-yolov4</loc>
     <lastmod>2026-09-04T22:42:32Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/OpenGenerativeAI/llm-colosseum</loc>
+    <loc>https://getmerged.abhishekco.de/AI4Finance-Foundation/FinNLP</loc>
     <lastmod>2026-09-04T22:42:32Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/AI4Finance-Foundation/FinNLP</loc>
+    <loc>https://getmerged.abhishekco.de/OpenGenerativeAI/llm-colosseum</loc>
     <lastmod>2026-09-04T22:42:32Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1021,13 +1021,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/YuanGongND/ast</loc>
+    <loc>https://getmerged.abhishekco.de/bat67/pytorch-tutorials-examples-and-books</loc>
     <lastmod>2026-09-04T22:42:43Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/bat67/pytorch-tutorials-examples-and-books</loc>
+    <loc>https://getmerged.abhishekco.de/YuanGongND/ast</loc>
     <lastmod>2026-09-04T22:42:43Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1099,20 +1099,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/omertov/encoder4editing</loc>
-    <lastmod>2026-09-04T22:43:10Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/HumanCompatibleAI/overcooked_ai</loc>
     <lastmod>2026-08-30T09:26:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/PAIR-code/saliency</loc>
-    <lastmod>2026-09-04T22:43:17Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/omertov/encoder4editing</loc>
+    <lastmod>2026-09-04T22:43:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1124,6 +1118,12 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/datacamp/datacamp-community-tutorials</loc>
+    <lastmod>2026-09-04T22:43:17Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/PAIR-code/saliency</loc>
     <lastmod>2026-09-04T22:43:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1219,7 +1219,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mila-iqia/welcome_tutorials</loc>
+    <loc>https://getmerged.abhishekco.de/nicknochnack/TFODCourse</loc>
+    <lastmod>2026-09-04T22:43:59Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/webartifex/intro-to-python</loc>
     <lastmod>2026-09-04T22:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1231,13 +1237,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nicknochnack/TFODCourse</loc>
-    <lastmod>2026-09-04T22:43:59Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/webartifex/intro-to-python</loc>
+    <loc>https://getmerged.abhishekco.de/mila-iqia/welcome_tutorials</loc>
     <lastmod>2026-09-04T22:43:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1315,14 +1315,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/amirgholami/PyHessian</loc>
-    <lastmod>2026-09-04T22:44:33Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/teticio/audio-diffusion</loc>
+    <lastmod>2026-09-04T22:44:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/teticio/audio-diffusion</loc>
-    <lastmod>2026-09-04T22:44:39Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/amirgholami/PyHessian</loc>
+    <lastmod>2026-09-04T22:44:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1411,14 +1411,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mszell/geospatialdatascience</loc>
+    <loc>https://getmerged.abhishekco.de/pluralitybook/plurality</loc>
     <lastmod>2026-09-04T23:36:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jamwithai/beginner-local-rag-system</loc>
-    <lastmod>2026-08-30T09:28:35Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mszell/geospatialdatascience</loc>
+    <lastmod>2026-09-04T23:36:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1429,14 +1429,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/pluralitybook/plurality</loc>
-    <lastmod>2026-09-04T23:36:59Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/decodingai-magazine/personalized-recommender-course</loc>
-    <lastmod>2026-09-04T23:37:13Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jamwithai/beginner-local-rag-system</loc>
+    <lastmod>2026-08-30T09:28:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1453,14 +1447,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/yahoo/streaming-benchmarks</loc>
+    <loc>https://getmerged.abhishekco.de/decodingai-magazine/personalized-recommender-course</loc>
     <lastmod>2026-09-04T23:37:13Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/YuliangXiu/MobilePose</loc>
-    <lastmod>2026-09-04T23:37:20Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/yahoo/streaming-benchmarks</loc>
+    <lastmod>2026-09-04T23:37:13Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1471,7 +1465,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/AgentTorch/AgentTorch</loc>
+    <loc>https://getmerged.abhishekco.de/YuliangXiu/MobilePose</loc>
     <lastmod>2026-09-04T23:37:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1483,7 +1477,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/pyaf/load_forecasting</loc>
+    <loc>https://getmerged.abhishekco.de/AgentTorch/AgentTorch</loc>
     <lastmod>2026-09-04T23:37:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1491,6 +1485,30 @@
   <url>
     <loc>https://getmerged.abhishekco.de/daniilrobnikov/vits2</loc>
     <lastmod>2026-09-04T23:37:13Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/pyaf/load_forecasting</loc>
+    <lastmod>2026-09-04T23:37:20Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/PaddlePaddle/Quantum</loc>
+    <lastmod>2026-09-04T23:37:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/cvg/DeepLSD</loc>
+    <lastmod>2026-09-04T23:37:27Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jeffmli/TinderAutomation</loc>
+    <lastmod>2026-09-04T23:37:27Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1509,24 +1527,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/generative-ai-on-aws/generative-ai-on-aws</loc>
     <lastmod>2026-09-04T23:37:20Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/PaddlePaddle/Quantum</loc>
-    <lastmod>2026-09-04T23:37:27Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/jeffmli/TinderAutomation</loc>
-    <lastmod>2026-09-04T23:37:27Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/cvg/DeepLSD</loc>
-    <lastmod>2026-09-04T23:37:27Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1555,6 +1555,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/HeroKillerEver/coursera-deep-learning</loc>
+    <lastmod>2026-09-04T23:37:50Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/WillKoehrsen/hyperparameter-optimization</loc>
     <lastmod>2026-09-04T23:37:44Z</lastmod>
     <changefreq>daily</changefreq>
@@ -1567,7 +1573,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/HeroKillerEver/coursera-deep-learning</loc>
+    <loc>https://getmerged.abhishekco.de/facebookresearch/Ego4d</loc>
     <lastmod>2026-09-04T23:37:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1587,12 +1593,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/lansinuote/Simple_Reinforcement_Learning</loc>
     <lastmod>2026-09-04T23:37:57Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/facebookresearch/Ego4d</loc>
-    <lastmod>2026-09-04T23:37:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
