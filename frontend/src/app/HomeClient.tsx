@@ -82,7 +82,7 @@ export default function HomeClient({
 
       <HeroSection
         stats={stats}
-        repos={repos}
+        repos={initialRepos.length > 0 ? initialRepos : repos}
         searchQuery={searchQuery}
         isLoggedIn={isLoggedIn}
         famousRepos={famousRepos}

@@ -43,7 +43,7 @@ interface OrbItem {
   };
 }
 
-// Curated high-reputation S-tier open source repos pool
+// Curated high-reputation S-tier open source repos pool (used only as fallback if initialRepos is empty)
 const CURATED_S_TIER_REPOS: Array<{
   fullName: string;
   owner: string;
@@ -54,7 +54,7 @@ const CURATED_S_TIER_REPOS: Array<{
 }> = [
   { fullName: "facebook/react", owner: "facebook", name: "react", stars: 228000, mergeRate: 92, language: "JavaScript" },
   { fullName: "vercel/next.js", owner: "vercel", name: "next.js", stars: 125000, mergeRate: 89, language: "TypeScript" },
-  { fullName: "vuejs/vue", owner: "vuejs", name: "vue", stars: 208000, mergeRate: 94, language: "JavaScript" },
+  { fullName: "vuejs/core", owner: "vuejs", name: "core", stars: 49000, mergeRate: 94, language: "TypeScript" },
   { fullName: "golang/go", owner: "golang", name: "go", stars: 124000, mergeRate: 96, language: "Go" },
   { fullName: "rust-lang/rust", owner: "rust-lang", name: "rust", stars: 98000, mergeRate: 91, language: "Rust" },
   { fullName: "oven-sh/bun", owner: "oven-sh", name: "bun", stars: 74000, mergeRate: 88, language: "Zig" },
@@ -115,7 +115,6 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
     const today = new Date().toISOString().slice(0, 10);
     const prng = createSeededPrng(`getmerged-hero-s-tier-${today}`);
 
-    // Merge live S-tier repos with curated list to ensure rich dataset
     const candidateMap = new Map<string, {
       fullName: string;
       owner: string;
@@ -126,23 +125,14 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
       tier: string;
     }>();
 
-    // Add curated items first
-    for (const c of CURATED_S_TIER_REPOS) {
-      candidateMap.set(c.fullName.toLowerCase(), {
-        fullName: c.fullName,
-        owner: c.owner,
-        name: c.name,
-        stars: c.stars,
-        mergeRate: c.mergeRate,
-        language: c.language,
-        tier: "S",
-      });
-    }
+    // Prioritize live S-tier repos from DB props
+    const liveSTierRepos = repos.filter((r) => {
+      const tier = (r.c_rank_tier || r.class_rank || "").toUpperCase();
+      return tier === "S";
+    });
 
-    // Overlay live repos from props if they are S-tier
-    for (const r of repos) {
-      const tier = r.c_rank_tier || r.class_rank || "S";
-      if (tier === "S" || tier === "A") {
+    if (liveSTierRepos.length > 0) {
+      for (const r of liveSTierRepos) {
         const fullName = r.full_name || `${r.owner}/${r.name}`;
         candidateMap.set(fullName.toLowerCase(), {
           fullName,
@@ -151,7 +141,20 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
           stars: r.stars || 0,
           mergeRate: r.external_pr_merge_rate,
           language: r.language,
-          tier: tier || "S",
+          tier: "S",
+        });
+      }
+    } else {
+      // Fallback only if no live S-tier repos are provided
+      for (const c of CURATED_S_TIER_REPOS) {
+        candidateMap.set(c.fullName.toLowerCase(), {
+          fullName: c.fullName,
+          owner: c.owner,
+          name: c.name,
+          stars: c.stars,
+          mergeRate: c.mergeRate,
+          language: c.language,
+          tier: "S",
         });
       }
     }
