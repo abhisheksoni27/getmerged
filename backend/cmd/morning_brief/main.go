@@ -11,6 +11,7 @@ import (
 	"github.com/abhisheksoni27/opendoor/internal/config"
 	"github.com/abhisheksoni27/opendoor/internal/db"
 	"github.com/abhisheksoni27/opendoor/internal/notification"
+	"github.com/abhisheksoni27/opendoor/internal/spotlight"
 )
 
 func main() {
@@ -97,8 +98,18 @@ func main() {
 		}
 	}
 
-	// 5. Compose Morning Brief Telegram Message
-	briefMsg := analytics.FormatMorningPulseTelegram(summary, totalRepos, sRankCount, totalUsers, totalReviews, anomalies)
+	// 5. Generate / Retrieve Today's X (Twitter) Spotlight Drop
+	var spotlightSection string
+	spot, err := spotlight.GetOrCreateDailySpotlight(ctx, database, targetDate)
+	if err != nil {
+		slog.Warn("could not generate daily tweet spotlight", "err", err)
+	} else if spot != nil {
+		spotlightSection = spotlight.FormatTelegramSpotlightSection(spot)
+		slog.Info("generated daily tweet spotlight", "repo", spot.FullName, "target_date", targetDate)
+	}
+
+	// 6. Compose Morning Brief Telegram Message
+	briefMsg := analytics.FormatMorningPulseTelegram(summary, totalRepos, sRankCount, totalUsers, totalReviews, anomalies, spotlightSection)
 
 	fmt.Println(briefMsg)
 

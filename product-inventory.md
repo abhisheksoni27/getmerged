@@ -441,7 +441,7 @@ Python 12,532 | TypeScript 9,157 | JavaScript 7,784 | Go 7,128 | C++ 5,891 | Rus
 - **Entitlement middleware:** per-endpoint feature gating, 402 upgrade URLs
 - **Dodo Payments + Stripe webhooks:** payment processing
 
-### Data exports & integrations
+- **Daily X (Twitter) Spotlight Engine:** automated daily repo discovery, plain-English human stats breakdown, 1-click Twitter intent generation, Telegram morning pulse integration, and bulk scheduler CLI (`daily_x_post`) with CSV/JSON export.
 - **Public profile JSON:** `/u/:slug.json`
 - **GitHub Action:** preflight evaluator as CI action (`action.yml`, `pr-readiness-action/`)
 - **API keys:** user-scoped API key creation/revocation
@@ -592,5 +592,6 @@ GetMerged
 ---
 
 ## 10. Change Log
-
+ 
+- **2026-09-16** — Added Daily X (Twitter) Spotlight Engine (`backend/internal/spotlight`, `cmd/daily_x_post`, `morning_brief` integration) for zero-jargon daily posts on X with 1-click Telegram drops and 1,000+ bulk CSV exporter.
 - **2026-09-05** — Initial full product inventory. DB counts, 30 public routes, 113 API endpoints, 70+ components, 28 hidden feature areas, gap check against launch plan.
