@@ -451,6 +451,7 @@ func FormatMorningPulseTelegram(
 	summary *PerformanceSummary,
 	totalRepos, sRankCount, totalUsers, totalReviews int,
 	anomalies []string,
+	spotlightSection ...string,
 ) string {
 	var sb strings.Builder
 
@@ -514,6 +515,10 @@ func FormatMorningPulseTelegram(
 		}
 	} else {
 		sb.WriteString("✅ *System Status:* All Level 0 metrics within 10-day normal variance.")
+	}
+
+	if len(spotlightSection) > 0 && strings.TrimSpace(spotlightSection[0]) != "" {
+		sb.WriteString("\n\n" + strings.TrimSpace(spotlightSection[0]))
 	}
 
 	return sb.String()

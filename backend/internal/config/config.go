@@ -88,7 +88,9 @@ type Config struct {
 // Load reads .env (if present) then validates all required variables are set.
 // Fails fast - no defaults, no guessing.
 func Load() (*Config, error) {
-	_ = godotenv.Load()
+	for _, envPath := range []string{".env", "../.env", "/opt/opendoor/.env"} {
+		_ = godotenv.Load(envPath)
+	}
 
 	c := &Config{
 		ValkeyUsername:            os.Getenv("VALKEY_USERNAME"),  // optional - defaults to "default" if empty

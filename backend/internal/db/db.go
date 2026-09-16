@@ -1020,6 +1020,16 @@ func AutoMigrate(db *sqlx.DB) error {
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			expires_at DATETIME NOT NULL
 		);`,
+		fmt.Sprintf(`CREATE TABLE IF NOT EXISTS daily_tweet_spotlights (
+			id INTEGER PRIMARY KEY %s,
+			repository_id VARCHAR(255) NOT NULL,
+			full_name VARCHAR(255) NOT NULL,
+			spotlight_date VARCHAR(20) NOT NULL,
+			tweet_text TEXT NOT NULL,
+			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(spotlight_date),
+			UNIQUE(repository_id)
+		);`, autoInc),
 		// AC1-AC11: anonymous weekly language digest signup. Double opt-in:
 		// subscribers start 'pending' and only become 'active' after a single-
 		// use confirm link. Email stored normalized (trim+lowercase) so the
