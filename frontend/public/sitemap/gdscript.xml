@@ -1225,6 +1225,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/sempitern0/Terrainy</loc>
+    <lastmod>2026-09-15T15:04:44Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/noidexe/godot-version-manager</loc>
     <lastmod>2026-09-15T15:04:44Z</lastmod>
     <changefreq>daily</changefreq>
@@ -1232,12 +1238,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Bauxitedev/stylized-planet-generator</loc>
-    <lastmod>2026-09-15T15:04:44Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/sempitern0/Terrainy</loc>
     <lastmod>2026-09-15T15:04:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1363,13 +1363,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Platinguin/Godot-Cloud-Worlds</loc>
+    <loc>https://getmerged.abhishekco.de/tomeyro/godot-sfxr</loc>
     <lastmod>2026-09-15T15:04:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/tomeyro/godot-sfxr</loc>
+    <loc>https://getmerged.abhishekco.de/Platinguin/Godot-Cloud-Worlds</loc>
     <lastmod>2026-09-15T15:04:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1381,13 +1381,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/paddy-exe/GodotVisualShader-Extras</loc>
+    <loc>https://getmerged.abhishekco.de/daleblackwood/goshapes</loc>
     <lastmod>2026-09-15T15:04:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/daleblackwood/goshapes</loc>
+    <loc>https://getmerged.abhishekco.de/paddy-exe/GodotVisualShader-Extras</loc>
     <lastmod>2026-09-15T15:04:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1447,13 +1447,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Kehom/GodotAddonPack</loc>
+    <loc>https://getmerged.abhishekco.de/KOBUGE-Games/godot-logger</loc>
     <lastmod>2026-09-15T15:04:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/KOBUGE-Games/godot-logger</loc>
+    <loc>https://getmerged.abhishekco.de/Kehom/GodotAddonPack</loc>
     <lastmod>2026-09-15T15:04:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
