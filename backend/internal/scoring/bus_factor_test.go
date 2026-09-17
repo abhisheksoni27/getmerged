@@ -53,16 +53,16 @@ func TestBusFactorCalculationAndTierCap(t *testing.T) {
 		Responsiveness:    100,
 	}
 
-	// With bus factor 1, perfect 100 score should be clamped to Tier B
+	// With bus factor 1, perfect 100 score should be clamped to Tier A (reserving Tier S for multi-maintainer teams)
 	score, tier := ComputeCRankWithBusFactor(normed, false, 0, 1, 50)
-	if tier != TierB {
-		t.Errorf("expected tier to be clamped to B when BusFactor=1, got %s (score=%.2f)", tier, score)
+	if tier != TierA {
+		t.Errorf("expected tier to be clamped to A when BusFactor=1, got %s (score=%.2f)", tier, score)
 	}
 
-	// With bus factor 0, perfect 100 score should be clamped to Tier B
+	// With bus factor 0, perfect 100 score should be clamped to Tier A
 	score0, tier0 := ComputeCRankWithBusFactor(normed, false, 0, 0, 50)
-	if tier0 != TierB {
-		t.Errorf("expected tier to be clamped to B when BusFactor=0, got %s (score=%.2f)", tier0, score0)
+	if tier0 != TierA {
+		t.Errorf("expected tier to be clamped to A when BusFactor=0, got %s (score=%.2f)", tier0, score0)
 	}
 
 	// With bus factor 2, perfect 100 score should remain Tier S
