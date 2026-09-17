@@ -27,7 +27,7 @@ const MinNormalisationPeers = 2
 // MinSampleSizeForTopTiers is the minimum number of scored PRs required for a repository
 // to be eligible for Tier S or Tier A (Issue #18 in premortem / do-this-fast P0 #2).
 // Repositories with fewer PRs have low_sample: true and cannot be ranked higher than Tier B.
-const MinSampleSizeForTopTiers = 20
+const MinSampleSizeForTopTiers = 10
 
 // IsLowSample returns true if the PR count is below the minimum statistical significance threshold.
 func IsLowSample(totalPRs int) bool {
@@ -100,7 +100,7 @@ func ComputeCRank(n NormalisedMetrics, staleness bool, gfiCount int, prevTier ..
 	return ComputeCRankWithBusFactor(n, staleness, gfiCount, 2, 0, prevTier...)
 }
 
-// ComputeCRankWithBusFactor computes C-Rank with Bayesian confidence shrinkage and enforces Bus Factor safety capping (BusFactor <= 1 -> max tier B).
+// ComputeCRankWithBusFactor computes C-Rank with Bayesian confidence shrinkage and enforces Bus Factor safety capping (BusFactor <= 1 -> max tier A).
 func ComputeCRankWithBusFactor(n NormalisedMetrics, staleness bool, gfiCount int, busFactor int, totalPRs int, prevTier ...string) (score float64, tier string) {
 	rawScore := weights.MergeRate*n.MergeRate +
 		weights.ResponseTime*n.ResponseTime +
@@ -135,12 +135,12 @@ func ComputeCRankWithBusFactor(n NormalisedMetrics, staleness bool, gfiCount int
 
 	calculatedTier := scoreTierWithHysteresis(rawScore, previousTier)
 
-	// Story 1.3: Enforce Bus Factor safety cap (bus factor <= 1 -> max tier B)
-	if busFactor <= 1 && (calculatedTier == TierS || calculatedTier == TierA) {
-		calculatedTier = TierB
+	// Story 1.3: Enforce Bus Factor safety cap (bus factor <= 1 -> max tier A, reserving Tier S for multi-maintainer teams)
+	if busFactor <= 1 && calculatedTier == TierS {
+		calculatedTier = TierA
 	}
 
-	// Premortem Q18 / do-this-fast P0 #2: Enforce Low Sample ceiling (totalPRs < 20 -> not eligible for Tier S or Tier A)
+	// Premortem Q18 / do-this-fast P0 #2: Enforce Low Sample ceiling (totalPRs < 10 -> not eligible for Tier S or Tier A)
 	if totalPRs > 0 && totalPRs < MinSampleSizeForTopTiers && (calculatedTier == TierS || calculatedTier == TierA) {
 		calculatedTier = TierB
 	}
@@ -155,10 +155,10 @@ func scoreTierWithHysteresis(score float64, prevTier string) string {
 		if score < 68.0 {
 			return scoreTier(score) // Demoted from S
 		}
-		return TierS // Retain S within 68.0–72.0 band
+		return TierS // Retain S within 68.0–70.0 band
 
 	case TierA:
-		if score >= 72.0 {
+		if score >= 70.0 {
 			return TierS // Promoted to S
 		}
 		if score < 53.0 {

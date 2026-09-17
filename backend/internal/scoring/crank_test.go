@@ -150,11 +150,11 @@ func TestComputeCRank_UniversalHysteresis(t *testing.T) {
 		prevTier string
 		wantTier string
 	}{
-		// S <-> A Boundary (Base: 70, Promote: >=72, Demote: <68)
+		// S <-> A Boundary (Base: 70, Promote: >=70, Demote: <68)
 		{"S-tier stays S at 69 (above 68 buffer)", 69.0, scoring.TierS, scoring.TierS},
 		{"S-tier demoted to A at 67.9", 67.9, scoring.TierS, scoring.TierA},
-		{"A-tier stays A at 71.0 (below 72 threshold)", 71.0, scoring.TierA, scoring.TierA},
-		{"A-tier promoted to S at 72.5", 72.5, scoring.TierA, scoring.TierS},
+		{"A-tier stays A at 69.5 (below 70 threshold)", 69.5, scoring.TierA, scoring.TierA},
+		{"A-tier promoted to S at 70.5", 70.5, scoring.TierA, scoring.TierS},
 
 		// A <-> B Boundary (Base: 55, Promote: >=57, Demote: <53)
 		{"A-tier stays A at 54.0 (above 53 buffer)", 54.0, scoring.TierA, scoring.TierA},
@@ -292,10 +292,10 @@ func TestComputeCRankWithBusFactor_UnifiedFormula(t *testing.T) {
 	}
 
 	// Case 2: 50 PRs with perfect metrics and bus factor 1 (bus factor cap prevents S tier)
-	// Raw score = 100, confidence preserved, but BusFactor=1 forces max Tier B
+	// Raw score = 100, confidence preserved, but BusFactor=1 forces max Tier A
 	scoreBF1, tierBF1 := scoring.ComputeCRankWithBusFactor(perfectNormed, false, 0, 1, 50)
-	if tierBF1 != scoring.TierB {
-		t.Errorf("BusFactor=1 repo must be capped at Tier B, got tier=%s (score=%.2f)", tierBF1, scoreBF1)
+	if tierBF1 != scoring.TierA {
+		t.Errorf("BusFactor=1 repo must be capped at Tier A, got tier=%s (score=%.2f)", tierBF1, scoreBF1)
 	}
 
 	// Case 3: 50 PRs with perfect metrics and bus factor 3 -> True S tier
@@ -310,19 +310,19 @@ func TestComputeCRankWithBusFactor_UnifiedFormula(t *testing.T) {
 		t.Errorf("Stale repo must be Tier D with score < 30, got tier=%s, score=%.2f", tierD, scoreD)
 	}
 
-	// Case 5: 15 PRs with perfect metrics and bus factor 3 (low_sample cap prevents Tier S or A)
-	// totalPRs < 20 must cap at Tier B
-	score15PR, tier15PR := scoring.ComputeCRankWithBusFactor(perfectNormed, false, 0, 3, 15)
-	if tier15PR != scoring.TierB {
-		t.Errorf("totalPRs=15 (<20) must be capped at Tier B, got tier=%s (score=%.2f)", tier15PR, score15PR)
+	// Case 5: 5 PRs with perfect metrics and bus factor 3 (low_sample cap prevents Tier S or A)
+	// totalPRs < 10 must cap at Tier B
+	score5PR, tier5PR := scoring.ComputeCRankWithBusFactor(perfectNormed, false, 0, 3, 5)
+	if tier5PR != scoring.TierB {
+		t.Errorf("totalPRs=5 (<10) must be capped at Tier B, got tier=%s (score=%.2f)", tier5PR, score5PR)
 	}
 
 	// Verify IsLowSample utility
-	if !scoring.IsLowSample(19) {
-		t.Errorf("IsLowSample(19) should be true")
+	if !scoring.IsLowSample(9) {
+		t.Errorf("IsLowSample(9) should be true")
 	}
-	if scoring.IsLowSample(20) {
-		t.Errorf("IsLowSample(20) should be false")
+	if scoring.IsLowSample(10) {
+		t.Errorf("IsLowSample(10) should be false")
 	}
 }
 
