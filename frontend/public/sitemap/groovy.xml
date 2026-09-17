@@ -151,13 +151,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/embeddedartistry/templates</loc>
+    <loc>https://getmerged.abhishekco.de/beryx/badass-jlink-plugin</loc>
     <lastmod>2026-09-15T15:04:25Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/beryx/badass-jlink-plugin</loc>
+    <loc>https://getmerged.abhishekco.de/embeddedartistry/templates</loc>
     <lastmod>2026-09-15T15:04:25Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -175,25 +175,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/vanniktech/gradle-android-junit-jacoco-plugin</loc>
-    <lastmod>2026-09-15T15:04:25Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/jwagenleitner/groovy-wslite</loc>
     <lastmod>2026-09-15T15:04:25Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JeremyLiao/android-gradle-study</loc>
+    <loc>https://getmerged.abhishekco.de/vanniktech/gradle-android-junit-jacoco-plugin</loc>
     <lastmod>2026-09-15T15:04:25Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nebula-plugins/gradle-ospackage-plugin</loc>
+    <lastmod>2026-09-15T15:04:25Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JeremyLiao/android-gradle-study</loc>
     <lastmod>2026-09-15T15:04:25Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -217,13 +217,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jfrog/artifactory-user-plugins</loc>
+    <loc>https://getmerged.abhishekco.de/Goddchen/Android-Gradle-Examples</loc>
     <lastmod>2026-09-15T15:04:25Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Goddchen/Android-Gradle-Examples</loc>
+    <loc>https://getmerged.abhishekco.de/jfrog/artifactory-user-plugins</loc>
     <lastmod>2026-09-15T15:04:25Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -469,25 +469,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Blankj/AucFrameTemplate</loc>
-    <lastmod>2026-09-15T15:04:30Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/odavid/my-bloody-jenkins</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/DSAppTeam/ComponentCornerstone</loc>
+    <loc>https://getmerged.abhishekco.de/Blankj/AucFrameTemplate</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/a4refillpad/Xiaomi</loc>
+    <lastmod>2026-09-15T15:04:30Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/DSAppTeam/ComponentCornerstone</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -559,13 +559,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ady624/CoRE</loc>
+    <loc>https://getmerged.abhishekco.de/gaelyk/gaelyk</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/gaelyk/gaelyk</loc>
+    <loc>https://getmerged.abhishekco.de/ady624/CoRE</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -607,7 +607,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nemerosa/versioning</loc>
+    <loc>https://getmerged.abhishekco.de/ethayer/lock-manager</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -619,7 +619,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ethayer/lock-manager</loc>
+    <loc>https://getmerged.abhishekco.de/nemerosa/versioning</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -631,13 +631,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Dierk/GroovyInAction</loc>
+    <loc>https://getmerged.abhishekco.de/groovyfx-project/groovyfx</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/groovyfx-project/groovyfx</loc>
+    <loc>https://getmerged.abhishekco.de/Dierk/GroovyInAction</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
