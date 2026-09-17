@@ -18,3 +18,10 @@
 - **Status**: Accepted
 - **Context**: Growth and distribution requires daily organic presence on X.com highlighting top repos, human responsiveness metrics, and open good first issues, without requiring paid API keys or manual copywriting.
 - **Decision**: Implemented `internal/spotlight` and `cmd/daily_x_post` with `daily_tweet_spotlights` table tracking. Integrated into the daily `morning_brief` Telegram pulse. Morning brief drops a pre-formatted tweet (<280 chars) and a 1-click `twitter.com/intent/tweet` URL. Also supports bulk CSV export (`-bulk 1000 -format csv`) for Buffer/Typefully.
+
+## ADR-004: High-Impact Open Graph Scorecard Redesign
+- **Date**: 2026-09-17
+- **Status**: Accepted
+- **Context**: Previous dynamic OG cards scaled down poorly on Twitter mobile feeds with unreadable small numbers, low contrast, and dynamic font fetch 400 errors for external unicode glyphs.
+- **Decision**: Redesigned `[owner]/[name]/opengraph-image.tsx` and `repo/[owner]/[name]/opengraph-image.tsx`. Replaced external unicode glyphs with inline SVGs, upgraded primary metrics into a high-visibility bento surface (`36px` Tier label, `32px` merge rate/first response/GFI highlights), and added dynamic tier verdict pills (`TOP-TIER WELCOMING`, `HIGHLY RESPONSIVE`, etc.) with radial backdrop lighting.
+
