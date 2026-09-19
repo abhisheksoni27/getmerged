@@ -577,13 +577,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Aetherinox/csf-firewall</loc>
+    <loc>https://getmerged.abhishekco.de/atomia/atomiadns</loc>
     <lastmod>2026-09-05T03:42:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/atomia/atomiadns</loc>
+    <loc>https://getmerged.abhishekco.de/Aetherinox/csf-firewall</loc>
     <lastmod>2026-09-05T03:42:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -679,13 +679,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/RotherOSS/otobo</loc>
+    <loc>https://getmerged.abhishekco.de/centreon/centreon-plugins</loc>
     <lastmod>2026-09-05T03:42:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/centreon/centreon-plugins</loc>
+    <loc>https://getmerged.abhishekco.de/RotherOSS/otobo</loc>
     <lastmod>2026-09-05T03:42:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -775,13 +775,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/tseemann/barrnap</loc>
+    <loc>https://getmerged.abhishekco.de/TransDecoder/TransDecoder</loc>
     <lastmod>2026-09-05T03:42:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/TransDecoder/TransDecoder</loc>
+    <loc>https://getmerged.abhishekco.de/tseemann/barrnap</loc>
     <lastmod>2026-09-05T03:42:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -955,13 +955,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/tseemann/shovill</loc>
+    <loc>https://getmerged.abhishekco.de/proxmox/qemu-server</loc>
     <lastmod>2026-09-05T03:42:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/proxmox/qemu-server</loc>
+    <loc>https://getmerged.abhishekco.de/tseemann/shovill</loc>
     <lastmod>2026-09-05T03:42:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1003,13 +1003,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/petdance/bobby-tables</loc>
+    <loc>https://getmerged.abhishekco.de/abh/ntppool</loc>
     <lastmod>2026-09-05T03:42:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/abh/ntppool</loc>
+    <loc>https://getmerged.abhishekco.de/petdance/bobby-tables</loc>
     <lastmod>2026-09-05T03:42:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1333,25 +1333,19 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/perseo22/pacmanager</loc>
-    <lastmod>2026-09-05T03:42:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/GreyZhang/hack_autosar</loc>
     <lastmod>2026-09-05T03:42:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/dreamwidth/dreamwidth</loc>
+    <loc>https://getmerged.abhishekco.de/perseo22/pacmanager</loc>
     <lastmod>2026-09-05T03:42:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/torbiak/git-autofixup</loc>
+    <loc>https://getmerged.abhishekco.de/dreamwidth/dreamwidth</loc>
     <lastmod>2026-09-05T03:42:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1364,6 +1358,12 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/aziz0x48/vMass</loc>
+    <lastmod>2026-09-05T03:42:12Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/torbiak/git-autofixup</loc>
     <lastmod>2026-09-05T03:42:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1483,12 +1483,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/bandiaozimu/dj_voice_organize</loc>
-    <lastmod>2026-09-05T03:42:13Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/michaelherger/Spotty-Plugin</loc>
     <lastmod>2026-09-05T03:42:13Z</lastmod>
     <changefreq>daily</changefreq>
@@ -1507,6 +1501,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/bandiaozimu/dj_voice_organize</loc>
+    <lastmod>2026-09-05T03:42:13Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/noxxi/p5-ssl-tools</loc>
     <lastmod>2026-09-05T03:42:13Z</lastmod>
     <changefreq>daily</changefreq>
@@ -1519,13 +1519,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/konradjk/loftee</loc>
+    <loc>https://getmerged.abhishekco.de/Drahflow/Elymas</loc>
     <lastmod>2026-09-05T03:42:13Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Drahflow/Elymas</loc>
+    <loc>https://getmerged.abhishekco.de/konradjk/loftee</loc>
     <lastmod>2026-09-05T03:42:13Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1621,13 +1621,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/librenms/librenms-agent</loc>
+    <loc>https://getmerged.abhishekco.de/DFHack/df-structures</loc>
     <lastmod>2026-08-20T12:05:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/DFHack/df-structures</loc>
+    <loc>https://getmerged.abhishekco.de/librenms/librenms-agent</loc>
     <lastmod>2026-08-20T12:05:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
