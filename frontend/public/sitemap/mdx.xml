@@ -475,14 +475,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mscerts/hub</loc>
-    <lastmod>2026-08-20T04:53:42Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/microsoft/aspire.dev</loc>
+    <lastmod>2026-08-19T10:33:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/microsoft/aspire.dev</loc>
-    <lastmod>2026-08-19T10:33:29Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mscerts/hub</loc>
+    <lastmod>2026-08-20T04:53:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -529,26 +529,26 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ngrok/ngrok-docs</loc>
-    <lastmod>2026-08-19T10:33:30Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/jellyfin/jellyfin.org</loc>
     <lastmod>2026-08-19T10:33:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/AvaloniaUI/avalonia-docs</loc>
-    <lastmod>2026-08-19T10:33:29Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/ngrok/ngrok-docs</loc>
+    <lastmod>2026-08-19T10:33:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Siddhant-K-code/agentic-engineering-guide</loc>
     <lastmod>2026-08-22T21:45:41Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/AvaloniaUI/avalonia-docs</loc>
+    <lastmod>2026-08-19T10:33:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

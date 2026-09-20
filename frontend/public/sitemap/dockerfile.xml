@@ -253,13 +253,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/GoogleCloudPlatform/cloud-sdk-docker</loc>
+    <loc>https://getmerged.abhishekco.de/omerbsezer/Fast-Docker</loc>
     <lastmod>2026-09-04T23:36:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/omerbsezer/Fast-Docker</loc>
+    <loc>https://getmerged.abhishekco.de/GoogleCloudPlatform/cloud-sdk-docker</loc>
     <lastmod>2026-09-04T23:36:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -469,6 +469,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/GuillaumeFalourd/useful-actions</loc>
+    <lastmod>2026-08-17T02:45:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/ledermann/docker-rails-base</loc>
     <lastmod>2026-08-17T02:45:46Z</lastmod>
     <changefreq>daily</changefreq>
@@ -476,12 +482,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-lidarr</loc>
-    <lastmod>2026-08-17T02:45:46Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/GuillaumeFalourd/useful-actions</loc>
     <lastmod>2026-08-17T02:45:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -583,12 +583,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/traefik/traefik-library-image</loc>
-    <lastmod>2026-08-18T22:27:01Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-freshrss</loc>
     <lastmod>2026-08-17T07:30:47Z</lastmod>
     <changefreq>daily</changefreq>
@@ -601,14 +595,20 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/fabiocicerchia/nginx-lua</loc>
-    <lastmod>2026-08-17T07:30:47Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/traefik/traefik-library-image</loc>
+    <lastmod>2026-08-18T22:27:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/StaPH-B/docker-builds</loc>
     <lastmod>2026-08-20T17:29:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fabiocicerchia/nginx-lua</loc>
+    <lastmod>2026-08-17T07:30:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -961,12 +961,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/naskio/docker-n8n-python</loc>
-    <lastmod>2026-08-19T16:33:29Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/Obamium69/hassio-beszel_agent</loc>
     <lastmod>2026-08-18T22:27:01Z</lastmod>
     <changefreq>daily</changefreq>
@@ -975,6 +969,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-librespeed</loc>
     <lastmod>2026-08-17T07:30:47Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/naskio/docker-n8n-python</loc>
+    <lastmod>2026-08-19T16:33:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
