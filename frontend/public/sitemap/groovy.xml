@@ -163,13 +163,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/renxh4/CompressPng</loc>
+    <loc>https://getmerged.abhishekco.de/jvoegele/gradle-android-plugin</loc>
     <lastmod>2026-09-15T15:04:25Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jvoegele/gradle-android-plugin</loc>
+    <loc>https://getmerged.abhishekco.de/renxh4/CompressPng</loc>
     <lastmod>2026-09-15T15:04:25Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -421,13 +421,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/FrantisekGazo/Blade</loc>
+    <loc>https://getmerged.abhishekco.de/bmuschko/gradle-cargo-plugin</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/bmuschko/gradle-cargo-plugin</loc>
+    <loc>https://getmerged.abhishekco.de/FrantisekGazo/Blade</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -469,13 +469,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Blankj/AucFrameTemplate</loc>
+    <loc>https://getmerged.abhishekco.de/odavid/my-bloody-jenkins</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/odavid/my-bloody-jenkins</loc>
+    <loc>https://getmerged.abhishekco.de/Blankj/AucFrameTemplate</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -541,13 +541,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/hust201010701/CheckResourceConflict</loc>
+    <loc>https://getmerged.abhishekco.de/hoto/jenkinsfile-examples</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/hoto/jenkinsfile-examples</loc>
+    <loc>https://getmerged.abhishekco.de/hust201010701/CheckResourceConflict</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -607,12 +607,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nemerosa/versioning</loc>
-    <lastmod>2026-09-15T15:04:30Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/ethayer/lock-manager</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
@@ -620,6 +614,12 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ppazos/cabolabs-ehrserver</loc>
+    <lastmod>2026-09-15T15:04:30Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/nemerosa/versioning</loc>
     <lastmod>2026-09-15T15:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
