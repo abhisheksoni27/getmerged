@@ -559,13 +559,19 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/MIERUNE/svelte-maplibre-gl</loc>
+    <lastmod>2026-09-05T03:38:09Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/zaknaj/funding-simulator</loc>
     <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/MIERUNE/svelte-maplibre-gl</loc>
+    <loc>https://getmerged.abhishekco.de/engageintellect/spatz-2</loc>
     <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -573,12 +579,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/codewec/dashlit</loc>
     <lastmod>2026-08-30T11:28:02Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/engageintellect/spatz-2</loc>
-    <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -679,13 +679,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/DavidHDev/svelte-bits</loc>
+    <loc>https://getmerged.abhishekco.de/SikandarJODD/ai-elements</loc>
     <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/SikandarJODD/ai-elements</loc>
+    <loc>https://getmerged.abhishekco.de/DavidHDev/svelte-bits</loc>
     <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -901,13 +901,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/yuedanlabs/icp-query-extension</loc>
+    <loc>https://getmerged.abhishekco.de/dyaliCode/svelte-formly</loc>
     <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/dyaliCode/svelte-formly</loc>
+    <loc>https://getmerged.abhishekco.de/yuedanlabs/icp-query-extension</loc>
     <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -919,14 +919,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/SikandarJODD/form-builder</loc>
-    <lastmod>2026-09-05T03:38:09Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/joewinke/jat</loc>
+    <lastmod>2026-08-23T23:13:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/joewinke/jat</loc>
-    <lastmod>2026-08-23T23:13:20Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/SikandarJODD/form-builder</loc>
+    <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -997,13 +997,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mithril-security/blind_chat</loc>
+    <loc>https://getmerged.abhishekco.de/metonym/svelte-typeahead</loc>
     <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/metonym/svelte-typeahead</loc>
+    <loc>https://getmerged.abhishekco.de/mithril-security/blind_chat</loc>
     <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1033,13 +1033,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/kitschpatrol/svelte-tweakpane-ui</loc>
+    <loc>https://getmerged.abhishekco.de/spences10/cheat-sheets</loc>
     <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/spences10/cheat-sheets</loc>
+    <loc>https://getmerged.abhishekco.de/kitschpatrol/svelte-tweakpane-ui</loc>
     <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1087,7 +1087,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/open-goal/launcher</loc>
+    <loc>https://getmerged.abhishekco.de/MauritsWilke/mcpfp</loc>
     <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1099,7 +1099,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/MauritsWilke/mcpfp</loc>
+    <loc>https://getmerged.abhishekco.de/open-goal/launcher</loc>
     <lastmod>2026-09-05T03:38:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1225,13 +1225,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/bagusindrayana/roastgithub</loc>
+    <loc>https://getmerged.abhishekco.de/ThaUnknown/pwa-haven</loc>
     <lastmod>2026-09-05T03:38:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ThaUnknown/pwa-haven</loc>
+    <loc>https://getmerged.abhishekco.de/bagusindrayana/roastgithub</loc>
     <lastmod>2026-09-05T03:38:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1435,14 +1435,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/kevinclement/SimpleArmory</loc>
-    <lastmod>2026-08-20T12:41:42Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jieter/orc-data</loc>
+    <lastmod>2026-08-17T13:30:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jieter/orc-data</loc>
-    <lastmod>2026-08-17T13:30:47Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/kevinclement/SimpleArmory</loc>
+    <lastmod>2026-08-20T12:41:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
