@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/exacity/deeplearningbook-chinese</loc>
-    <lastmod>2026-08-30T09:19:09Z</lastmod>
+    <lastmod>2026-09-25T21:23:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/lib-pku/libpku</loc>
-    <lastmod>2026-08-30T09:19:15Z</lastmod>
+    <lastmod>2026-09-25T21:23:18Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/posquit0/Awesome-CV</loc>
-    <lastmod>2026-08-30T09:19:42Z</lastmod>
+    <lastmod>2026-09-25T21:23:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -44,49 +44,55 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/openmlsys/openmlsys</loc>
-    <lastmod>2026-09-04T22:39:15Z</lastmod>
+    <lastmod>2026-09-25T21:26:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/riscv/riscv-isa-manual</loc>
-    <lastmod>2026-09-04T22:39:21Z</lastmod>
+    <lastmod>2026-09-25T21:27:05Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/SLAM-Handbook-contributors/slam-handbook-public-release</loc>
+    <lastmod>2026-09-25T21:27:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ybayle/awesome-deep-learning-music</loc>
-    <lastmod>2026-09-04T22:39:55Z</lastmod>
+    <lastmod>2026-09-25T21:27:49Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dart-lang/language</loc>
-    <lastmod>2026-09-04T22:40:21Z</lastmod>
+    <lastmod>2026-09-25T21:28:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/horance-liu/tensorflow-internals</loc>
-    <lastmod>2026-09-04T22:40:46Z</lastmod>
+    <lastmod>2026-09-25T21:28:42Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/gavinkhung/machine-learning-visualized</loc>
+    <lastmod>2026-09-25T21:29:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/vEnhance/napkin</loc>
-    <lastmod>2026-09-04T22:41:46Z</lastmod>
+    <lastmod>2026-09-25T21:29:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mikubaka88/CCFA-Skills</loc>
     <lastmod>2026-08-30T09:25:17Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/gavinkhung/machine-learning-visualized</loc>
-    <lastmod>2026-09-04T22:41:51Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -122,13 +128,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ieure/sicp</loc>
-    <lastmod>2026-09-04T22:43:17Z</lastmod>
+    <lastmod>2026-09-25T22:22:56Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/IAAR-Shanghai/SurveyX</loc>
-    <lastmod>2026-09-04T22:43:35Z</lastmod>
+    <lastmod>2026-09-25T22:23:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -146,7 +152,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fangcun010/VulkanTutorialCN</loc>
-    <lastmod>2026-09-04T23:36:47Z</lastmod>
+    <lastmod>2026-09-25T22:24:45Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -176,19 +182,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dcetin/eth-cs-notes</loc>
-    <lastmod>2026-09-04T23:37:13Z</lastmod>
+    <lastmod>2026-09-25T22:25:06Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/uzh-rpg/agilicious</loc>
+    <lastmod>2026-09-25T22:25:27Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SiriusFzh/NovaForge</loc>
     <lastmod>2026-09-04T23:37:33Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/uzh-rpg/agilicious</loc>
-    <lastmod>2026-09-04T23:37:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -295,13 +301,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/standardgalactic/alphabet</loc>
+    <loc>https://getmerged.abhishekco.de/gavofyork/graypaper</loc>
     <lastmod>2026-08-21T16:36:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/gavofyork/graypaper</loc>
+    <loc>https://getmerged.abhishekco.de/standardgalactic/alphabet</loc>
     <lastmod>2026-08-21T16:36:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -319,13 +325,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/latex3/babel</loc>
+    <loc>https://getmerged.abhishekco.de/aml4td/website</loc>
     <lastmod>2026-08-21T16:36:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/aml4td/website</loc>
+    <loc>https://getmerged.abhishekco.de/latex3/babel</loc>
     <lastmod>2026-08-21T16:36:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -355,13 +361,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/lunduniversity/introprog</loc>
+    <loc>https://getmerged.abhishekco.de/wengan-li/ncku-thesis-template-latex</loc>
     <lastmod>2026-08-21T16:36:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/wengan-li/ncku-thesis-template-latex</loc>
+    <loc>https://getmerged.abhishekco.de/lunduniversity/introprog</loc>
     <lastmod>2026-08-21T16:36:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
