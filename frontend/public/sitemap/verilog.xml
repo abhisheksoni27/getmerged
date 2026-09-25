@@ -56,13 +56,31 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rejunity/z80-open-silicon</loc>
-    <lastmod>2026-09-04T23:36:42Z</lastmod>
+    <lastmod>2026-09-25T22:24:12Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ekknod/pcileech-wifi</loc>
+    <lastmod>2026-09-25T22:24:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/The-OpenROAD-Project/OpenROAD-flow-scripts</loc>
     <lastmod>2026-08-18T23:45:02Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fguzman82/gateGPT</loc>
+    <lastmod>2026-09-25T22:25:13Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/dtysky/FPGA-Imaging-Library</loc>
+    <lastmod>2026-09-25T22:26:13Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

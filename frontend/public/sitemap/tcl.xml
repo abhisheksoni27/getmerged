@@ -25,8 +25,20 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/superpung/TJU-CourseSharing</loc>
+    <lastmod>2026-09-25T22:23:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/envmodules/modules</loc>
     <lastmod>2026-08-17T08:30:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/TPC-Council/HammerDB</loc>
+    <lastmod>2026-09-25T22:24:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
