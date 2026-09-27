@@ -243,10 +243,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const { title, description } = buildRepoMetadata(repo.full_name, repo);
+  const isScored = repo.is_scored !== false && (repo.c_rank_score ?? 0) > 0;
+  const isAwesome = isScored && (
+    (!repo.staleness_flag && ["S", "A", "B"].includes(repo.c_rank_tier || "")) ||
+    (Boolean(repo.good_first_issue_count) && (repo.good_first_issue_count ?? 0) > 0) ||
+    (Boolean(repo.stars) && (repo.stars ?? 0) >= 1000)
+  );
 
   return {
     title,
     description,
+    robots: {
+      index: isAwesome,
+      follow: true,
+    },
     alternates: {
       canonical: `https://getmerged.abhishekco.de/${repo.full_name}`,
     },

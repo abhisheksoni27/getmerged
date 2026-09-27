@@ -2,19 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover/lean4</loc>
-    <lastmod>2026-09-25T21:25:49Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/leanprover-community/mathlib4</loc>
-    <lastmod>2026-08-19T11:00:44Z</lastmod>
+    <lastmod>2026-09-24T14:50:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/thomasahle/sunfish</loc>
-    <lastmod>2026-08-21T08:03:48Z</lastmod>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -26,211 +20,175 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/teorth/analysis</loc>
-    <lastmod>2026-09-25T21:30:08Z</lastmod>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/google-deepmind/formal-conjectures</loc>
-    <lastmod>2026-08-21T08:03:48Z</lastmod>
+    <lastmod>2026-09-24T14:49:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ImperialCollegeLondon/FLT</loc>
-    <lastmod>2026-09-04T22:43:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/google-deepmind/superhuman</loc>
-    <lastmod>2026-09-04T22:44:25Z</lastmod>
+    <lastmod>2026-09-24T12:54:36Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover-community/physlib</loc>
-    <lastmod>2026-08-19T17:15:27Z</lastmod>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover/cslib</loc>
-    <lastmod>2026-08-19T17:15:27Z</lastmod>
+    <lastmod>2026-09-24T14:49:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover-community/batteries</loc>
-    <lastmod>2026-08-21T15:09:49Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/digama0/mm0</loc>
-    <lastmod>2026-08-27T09:36:16Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/leanprover-community/aesop</loc>
-    <lastmod>2026-08-21T15:09:49Z</lastmod>
+    <lastmod>2026-09-24T14:49:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover/verso</loc>
-    <lastmod>2026-08-21T15:09:49Z</lastmod>
+    <lastmod>2026-09-24T11:56:45Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover-community/NNG4</loc>
-    <lastmod>2026-08-27T09:36:16Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/AlexKontorovich/PrimeNumberTheoremAnd</loc>
-    <lastmod>2026-08-27T09:36:16Z</lastmod>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Verified-zkEVM/ArkLib</loc>
-    <lastmod>2026-08-21T15:09:49Z</lastmod>
+    <lastmod>2026-09-24T14:49:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ufmg-smite/lean-smt</loc>
-    <lastmod>2026-08-27T09:36:16Z</lastmod>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/facebookresearch/atlas-lean</loc>
-    <lastmod>2026-08-27T09:36:16Z</lastmod>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/verse-lab/veil</loc>
-    <lastmod>2026-08-21T15:09:49Z</lastmod>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FormalizedFormalLogic/Foundation</loc>
-    <lastmod>2026-08-27T09:36:16Z</lastmod>
+    <lastmod>2026-09-24T14:49:58Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dwrensha/compfiles</loc>
-    <lastmod>2026-08-21T15:09:49Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/trishullab/PutnamBench</loc>
-    <lastmod>2026-08-27T09:36:16Z</lastmod>
+    <lastmod>2026-09-24T14:53:36Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/strata-org/Strata</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <lastmod>2026-09-22T21:53:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover-community/ProofWidgets4</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <lastmod>2026-09-22T17:47:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover-community/iris-lean</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/avigad/mathematics_in_lean_source</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <lastmod>2026-09-24T12:54:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cedar-policy/cedar-spec</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <lastmod>2026-09-24T12:54:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/anthropics/zeta-23-lean</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/TauCetiProject/TauCeti</loc>
-    <lastmod>2026-08-18T23:21:09Z</lastmod>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cajal-technologies/talos</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/TauCetiProject/TauCeti</loc>
+    <lastmod>2026-09-24T17:54:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover/comparator</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <lastmod>2026-09-26T00:54:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/lfglabs-dev/verity</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <lastmod>2026-09-24T14:49:16Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Verified-zkEVM/VCVio</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <lastmod>2026-09-24T13:53:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover/reference-manual</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <lastmod>2026-09-24T12:54:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/kim-em/lean-zip</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/emilyriehl/infinity-cosmos</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fpvandoorn/carleson</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <lastmod>2026-09-24T13:57:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Verilean/sparkle</loc>
-    <lastmod>2026-08-20T11:29:40Z</lastmod>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

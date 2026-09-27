@@ -74,7 +74,8 @@ type Sitemap struct {
 
 // MinTopicRepoThreshold defines the minimum number of indexed repositories
 // required before a topic landing page is published to Google sitemaps.
-const MinTopicRepoThreshold = 1
+// We set this to 3 so search engines only index rich topic hubs, not thin 1-repo tags.
+const MinTopicRepoThreshold = 3
 
 // MaxURLsPerSitemap defines the maximum number of URLs allowed per individual XML sitemap file.
 // Google Search Console strictly caps single sitemap files at 50,000 URLs / 50MB.
@@ -157,10 +158,21 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 	}
 
 	var repos []repoLang
+	// Directory of Awesomeness: Only index high-quality, vibrant, and scored open-source repositories.
+	// Filter out stale/dead graveyard repos (staleness_flag = 1) and unscored low-star repositories.
 	query := `
-		SELECT full_name, COALESCE(language, 'other') as language, updated_at
-		FROM repositories
-		ORDER BY stars DESC
+		SELECT 
+			r.full_name, 
+			COALESCE(r.language, 'other') as language, 
+			COALESCE(ls.updated_at, r.updated_at) as updated_at
+		FROM repositories r
+		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
+		WHERE (
+			(ls.c_rank_score > 0 AND ls.staleness_flag = 0 AND (ls.c_rank_tier IN ('S', 'A', 'B') OR ls.c_rank_tier IS NULL))
+			OR (ls.good_first_issue_count IS NOT NULL AND ls.good_first_issue_count > 0 AND ls.staleness_flag = 0)
+			OR (r.stars >= 1000 AND (ls.staleness_flag = 0 OR ls.repository_id IS NULL) AND (ls.c_rank_score IS NULL OR ls.c_rank_score > 0))
+		)
+		ORDER BY r.stars DESC
 	`
 	if err := db.Select(&repos, query); err != nil {
 		return fmt.Errorf("fetch repos for sitemap: %w", err)
@@ -230,11 +242,18 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 	// topics with >= MinTopicRepoThreshold indexed repositories so search engines never hit a 404 or thin content.
 	var topics []string
 	topicQuery := `
-		SELECT topic
-		FROM repository_topics
-		GROUP BY topic
-		HAVING COUNT(repository_id) >= ?
-		ORDER BY COUNT(repository_id) DESC, topic ASC
+		SELECT rt.topic
+		FROM repository_topics rt
+		INNER JOIN repositories r ON rt.repository_id = r.id
+		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
+		WHERE (
+			(ls.c_rank_score > 0 AND ls.staleness_flag = 0 AND (ls.c_rank_tier IN ('S', 'A', 'B') OR ls.c_rank_tier IS NULL))
+			OR (ls.good_first_issue_count IS NOT NULL AND ls.good_first_issue_count > 0 AND ls.staleness_flag = 0)
+			OR (r.stars >= 1000 AND (ls.staleness_flag = 0 OR ls.repository_id IS NULL) AND (ls.c_rank_score IS NULL OR ls.c_rank_score > 0))
+		)
+		GROUP BY rt.topic
+		HAVING COUNT(rt.repository_id) >= ?
+		ORDER BY COUNT(rt.repository_id) DESC, rt.topic ASC
 	`
 	if err := db.Select(&topics, topicQuery, MinTopicRepoThreshold); err != nil {
 		slog.Warn("sitemap generator: could not fetch topics", "err", err)

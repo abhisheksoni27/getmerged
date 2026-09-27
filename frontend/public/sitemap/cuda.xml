@@ -1,176 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://getmerged.abhishekco.de/karpathy/llm.c</loc>
-    <lastmod>2026-09-25T21:23:32Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/NVlabs/instant-ngp</loc>
-    <lastmod>2026-09-25T21:24:31Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/HazyResearch/ThunderKittens</loc>
-    <lastmod>2026-08-25T09:38:42Z</lastmod>
+    <lastmod>2026-09-21T03:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/BBuf/how-to-optim-algorithm-in-cuda</loc>
-    <lastmod>2026-08-25T09:38:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/computerhistory/AlexNet-Source-Code</loc>
-    <lastmod>2026-09-25T21:27:48Z</lastmod>
+    <lastmod>2026-09-21T03:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NVIDIA/CUDALibrarySamples</loc>
-    <lastmod>2026-08-25T09:38:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/mirage-project/mirage</loc>
-    <lastmod>2026-08-25T09:38:42Z</lastmod>
+    <lastmod>2026-09-21T03:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rapidsai/cugraph</loc>
-    <lastmod>2026-08-25T09:38:42Z</lastmod>
+    <lastmod>2026-09-24T08:53:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/CannyLab/tsne-cuda</loc>
-    <lastmod>2026-09-25T21:29:47Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/NVIDIA/nccl-tests</loc>
-    <lastmod>2026-08-30T02:25:18Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/graphdeco-inria/diff-gaussian-rasterization</loc>
-    <lastmod>2026-09-25T21:30:15Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/chengdazhi/Deformable-Convolution-V2-PyTorch</loc>
-    <lastmod>2026-09-04T22:42:32Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/mit-han-lab/torchsparse</loc>
-    <lastmod>2026-09-04T22:42:50Z</lastmod>
+    <lastmod>2026-09-23T09:54:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/alibaba/rtp-llm</loc>
-    <lastmod>2026-08-25T09:38:42Z</lastmod>
+    <lastmod>2026-09-24T11:56:45Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NVIDIA/raft</loc>
-    <lastmod>2026-08-25T09:38:42Z</lastmod>
+    <lastmod>2026-09-21T03:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NVIDIA/cuopt</loc>
-    <lastmod>2026-08-25T09:38:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/nv-tlabs/NKSR</loc>
-    <lastmod>2026-09-25T22:22:56Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/CoffeeBeforeArch/cuda_programming</loc>
-    <lastmod>2026-09-25T22:23:39Z</lastmod>
+    <lastmod>2026-09-24T10:51:31Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NVIDIA/cuvs</loc>
-    <lastmod>2026-08-22T20:39:38Z</lastmod>
+    <lastmod>2026-09-24T10:51:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/brucefan1983/GPUMD</loc>
-    <lastmod>2026-08-22T14:55:07Z</lastmod>
+    <lastmod>2026-09-25T21:54:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NVIDIA/cuCollections</loc>
-    <lastmod>2026-08-22T20:39:38Z</lastmod>
+    <lastmod>2026-09-21T03:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/owensgroup/RXMesh</loc>
-    <lastmod>2026-08-23T04:06:38Z</lastmod>
+    <lastmod>2026-09-21T03:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pyscf/gpu4pyscf</loc>
-    <lastmod>2026-08-23T04:06:39Z</lastmod>
+    <lastmod>2026-09-24T10:51:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NVIDIA-BioNeMo/nvMolKit</loc>
-    <lastmod>2026-08-23T04:06:38Z</lastmod>
+    <lastmod>2026-09-25T21:58:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/uccl-project/mKernel</loc>
-    <lastmod>2026-08-23T04:06:39Z</lastmod>
+    <lastmod>2026-09-26T15:57:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nerficg-project/faster-gaussian-splatting</loc>
-    <lastmod>2026-08-23T17:01:19Z</lastmod>
+    <lastmod>2026-09-21T03:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/openvdb/fvdb-core</loc>
-    <lastmod>2026-08-23T17:01:19Z</lastmod>
+    <lastmod>2026-09-24T09:54:58Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MIT-Lu-Lab/cuPDLPx</loc>
-    <lastmod>2026-08-23T17:01:19Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/BlinkDL/Albatross</loc>
-    <lastmod>2026-08-23T17:01:19Z</lastmod>
+    <lastmod>2026-09-21T03:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
