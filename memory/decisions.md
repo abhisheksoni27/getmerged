@@ -19,9 +19,14 @@
 - **Context**: Growth and distribution requires daily organic presence on X.com highlighting top repos, human responsiveness metrics, and open good first issues, without requiring paid API keys or manual copywriting.
 - **Decision**: Implemented `internal/spotlight` and `cmd/daily_x_post` with `daily_tweet_spotlights` table tracking. Integrated into the daily `morning_brief` Telegram pulse. Morning brief drops a pre-formatted tweet (<280 chars) and a 1-click `twitter.com/intent/tweet` URL. Also supports bulk CSV export (`-bulk 1000 -format csv`) for Buffer/Typefully.
 
-## ADR-004: High-Impact Open Graph Scorecard Redesign
-- **Date**: 2026-09-17
+## ADR-005: Directory of Awesomeness & Crawl Budget Optimization
+- **Date**: 2026-09-27
 - **Status**: Accepted
-- **Context**: Previous dynamic OG cards scaled down poorly on Twitter mobile feeds with unreadable small numbers, low contrast, and dynamic font fetch 400 errors for external unicode glyphs.
-- **Decision**: Redesigned `[owner]/[name]/opengraph-image.tsx` and `repo/[owner]/[name]/opengraph-image.tsx`. Replaced external unicode glyphs with inline SVGs, upgraded primary metrics into a high-visibility bento surface (`36px` Tier label, `32px` merge rate/first response/GFI highlights), and added dynamic tier verdict pills (`TOP-TIER WELCOMING`, `HIGHLY RESPONSIVE`, etc.) with radial backdrop lighting.
+- **Context**: Google Search Console showed 183k discovered pages but stalled indexed counts and flatlined impressions following an Aug 31 spike. Investigation revealed ~56% of Googlebot crawl requests were squandered on raw JSON API endpoints and SVG badges, legacy domain `opendoor.abhishekco.de` lacked a 301 redirect to `getmerged.abhishekco.de`, and sitemaps contained ~102k thin/dead graveyard repos (0% merge rate, 0 PRs) and 1-repo topic tags.
+- **Decision**: 
+  1. Updated `robots.txt` to disallow `/api/` completely, recapturing 100% of Googlebot's crawl budget for HTML pages.
+  2. Added Nginx 301 permanent redirect from `opendoor.abhishekco.de` to `getmerged.abhishekco.de`.
+  3. Implemented the "Directory of Awesomeness" filter in `sitemap_generator.go`: pruned sitemaps from 183,524 URLs down to 81,403 high-signal, active, scored repositories (Tier S/A/B, active GFIs, or 1000+ stars) and rich topic hubs with >= 3 repos.
+  4. Added `robots: { index: false, follow: true }` to repo detail metadata for unscored and dead/stale graveyard pages.
+  5. Added Nginx 301 redirect mapping legacy `main-[0-9].xml` sitemaps to unified `main.xml`.
 
