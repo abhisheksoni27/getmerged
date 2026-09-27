@@ -403,12 +403,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/easystats/performance</loc>
-    <lastmod>2026-09-23T11:53:14Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/thomasp85/ggraph</loc>
     <lastmod>2026-09-26T07:26:44Z</lastmod>
     <changefreq>daily</changefreq>
@@ -590,7 +584,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/easystats/parameters</loc>
-    <lastmod>2026-09-23T17:48:48Z</lastmod>
+    <lastmod>2026-09-28T03:08:51Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -974,7 +968,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mixOmics-org/mixOmics</loc>
-    <lastmod>2026-09-23T08:52:55Z</lastmod>
+    <lastmod>2026-09-28T01:59:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1346,7 +1340,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/yihui/xfun</loc>
-    <lastmod>2026-09-23T02:48:04Z</lastmod>
+    <lastmod>2026-09-28T00:06:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

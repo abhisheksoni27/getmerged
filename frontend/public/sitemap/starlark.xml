@@ -31,12 +31,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/owncloud-docker/server</loc>
-    <lastmod>2026-09-22T22:50:18Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/tweag/rules_nixpkgs</loc>
     <lastmod>2026-09-25T02:57:49Z</lastmod>
     <changefreq>daily</changefreq>
