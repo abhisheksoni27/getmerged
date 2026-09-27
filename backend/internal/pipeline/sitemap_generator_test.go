@@ -26,13 +26,13 @@ func TestGenerateStaticSitemaps_TopicURLs(t *testing.T) {
 	}
 
 	now := time.Now()
-	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('1', 'tokio-rs/tokio', 'tokio-rs', 'tokio', 'Rust', 25000, ?)`, now)
-	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('2', 'huggingface/transformers', 'huggingface', 'transformers', 'Python', 130000, ?)`, now)
-	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('3', 'neovim/neovim', 'neovim', 'neovim', 'Lua', 85000, ?)`, now)
-
-	database.MustExec(`INSERT INTO repository_topics (topic, repository_id) VALUES ('rust', '1')`)
-	database.MustExec(`INSERT INTO repository_topics (topic, repository_id) VALUES ('machine-learning', '2')`)
-	database.MustExec(`INSERT INTO repository_topics (topic, repository_id) VALUES ('ai', '2')`)
+	for i := 1; i <= 3; i++ {
+		database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES (?, ?, 'tokio-rs', ?, 'Rust', 25000, ?)`, fmt.Sprintf("rust-%d", i), fmt.Sprintf("tokio-rs/tokio-%d", i), fmt.Sprintf("tokio-%d", i), now)
+		database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES (?, ?, 'huggingface', ?, 'Python', 130000, ?)`, fmt.Sprintf("ml-%d", i), fmt.Sprintf("huggingface/transformers-%d", i), fmt.Sprintf("transformers-%d", i), now)
+		database.MustExec(`INSERT INTO repository_topics (topic, repository_id) VALUES ('rust', ?)`, fmt.Sprintf("rust-%d", i))
+		database.MustExec(`INSERT INTO repository_topics (topic, repository_id) VALUES ('machine-learning', ?)`, fmt.Sprintf("ml-%d", i))
+		database.MustExec(`INSERT INTO repository_topics (topic, repository_id) VALUES ('ai', ?)`, fmt.Sprintf("ml-%d", i))
+	}
 
 	tempDir, err := os.MkdirTemp("", "sitemap_topic_test_*")
 	if err != nil {
@@ -251,19 +251,24 @@ func TestGenerateStaticSitemaps_Chunking(t *testing.T) {
 	}
 
 	now := time.Now()
-	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('1', 'org/repo', 'org', 'repo', 'Go', 100, ?)`, now)
+	for i := 1; i <= 3; i++ {
+		database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES (?, ?, 'org', ?, 'Go', 10000, ?)`, fmt.Sprintf("%d", i), fmt.Sprintf("org/repo-%d", i), fmt.Sprintf("repo-%d", i), now)
+	}
 
 	// Insert 46,000 topics to exceed MaxURLsPerSitemap (45,000)
 	tx, err := database.Begin()
 	if err != nil {
 		t.Fatalf("failed to begin tx: %v", err)
 	}
-	stmt, err := tx.Prepare(`INSERT INTO repository_topics (topic, repository_id) VALUES (?, '1')`)
+	stmt, err := tx.Prepare(`INSERT INTO repository_topics (topic, repository_id) VALUES (?, ?)`)
 	if err != nil {
 		t.Fatalf("failed to prepare stmt: %v", err)
 	}
 	for i := 0; i < 46000; i++ {
-		_, _ = stmt.Exec(fmt.Sprintf("topic-%06d", i))
+		topic := fmt.Sprintf("topic-%06d", i)
+		for r := 1; r <= 3; r++ {
+			_, _ = stmt.Exec(topic, fmt.Sprintf("%d", r))
+		}
 	}
 	stmt.Close()
 	_ = tx.Commit()

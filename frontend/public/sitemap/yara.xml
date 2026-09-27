@@ -1,56 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://getmerged.abhishekco.de/Yara-Rules/rules</loc>
-    <lastmod>2026-09-25T21:26:47Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/eset/malware-ioc</loc>
-    <lastmod>2026-09-25T21:29:14Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/mthcht/awesome-lists</loc>
-    <lastmod>2026-08-20T05:20:53Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/elastic/protections-artifacts</loc>
-    <lastmod>2026-09-25T21:30:22Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/nsacyber/Mitigating-Web-Shells</loc>
-    <lastmod>2026-09-25T22:23:52Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/m-sec-org/d-eyes</loc>
-    <lastmod>2026-09-25T22:25:27Z</lastmod>
+    <lastmod>2026-09-21T03:37:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/HydraDragonAntivirus/HydraDragonAntivirus</loc>
-    <lastmod>2026-08-21T10:00:49Z</lastmod>
+    <lastmod>2026-09-21T14:49:18Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mgreen27/DetectRaptor</loc>
-    <lastmod>2026-08-21T17:12:49Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/pandare9x/Yara-Rules</loc>
-    <lastmod>2026-08-21T10:00:49Z</lastmod>
+    <lastmod>2026-09-21T16:48:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

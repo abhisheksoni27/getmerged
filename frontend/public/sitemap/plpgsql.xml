@@ -1,56 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://getmerged.abhishekco.de/pgpartman/pg_partman</loc>
-    <lastmod>2026-08-22T14:57:55Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/postgis/postgis</loc>
-    <lastmod>2026-08-22T14:57:55Z</lastmod>
+    <lastmod>2026-09-21T03:37:36Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/darold/pgFormatter</loc>
-    <lastmod>2026-09-25T21:29:47Z</lastmod>
+    <lastmod>2026-09-21T03:37:36Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/thanglequoc/vietnamese-provinces-database</loc>
-    <lastmod>2026-08-22T14:57:55Z</lastmod>
+    <lastmod>2026-09-21T03:37:36Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NixOS/hydra</loc>
-    <lastmod>2026-08-22T14:57:55Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/guchengwuyue/yshop-drink</loc>
-    <lastmod>2026-08-23T05:42:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/aneasystone/mysql-deadlocks</loc>
-    <lastmod>2026-09-25T21:30:22Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/1095071913/maozi-cloud</loc>
-    <lastmod>2026-09-04T22:42:17Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/wwenj/tripRecord</loc>
-    <lastmod>2026-09-04T22:42:50Z</lastmod>
+    <lastmod>2026-09-24T17:53:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

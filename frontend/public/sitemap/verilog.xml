@@ -2,163 +2,91 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/The-OpenROAD-Project/OpenROAD</loc>
-    <lastmod>2026-08-20T22:53:40Z</lastmod>
+    <lastmod>2026-09-24T20:53:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/analogdevicesinc/hdl</loc>
-    <lastmod>2026-08-20T22:53:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/ZipCPU/zipcpu</loc>
-    <lastmod>2026-08-20T22:53:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/XUANTIE-RV/openc910</loc>
-    <lastmod>2026-09-04T22:42:50Z</lastmod>
+    <lastmod>2026-09-24T23:54:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/chili-chips-ba/wireguard-fpga</loc>
-    <lastmod>2026-08-20T22:53:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/EttusResearch/uhd</loc>
-    <lastmod>2026-08-20T22:53:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/circuitvalley/USB_C_Industrial_Camera_FPGA_USB3</loc>
-    <lastmod>2026-08-24T01:07:55Z</lastmod>
+    <lastmod>2026-09-21T03:37:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/lnis-uofu/OpenFPGA</loc>
-    <lastmod>2026-08-20T22:53:40Z</lastmod>
+    <lastmod>2026-09-24T20:50:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Wren6991/Hazard3</loc>
-    <lastmod>2026-08-20T22:53:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/rejunity/z80-open-silicon</loc>
-    <lastmod>2026-09-25T22:24:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/ekknod/pcileech-wifi</loc>
-    <lastmod>2026-09-25T22:24:37Z</lastmod>
+    <lastmod>2026-09-21T03:37:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/The-OpenROAD-Project/OpenROAD-flow-scripts</loc>
-    <lastmod>2026-08-18T23:45:02Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/fguzman82/gateGPT</loc>
-    <lastmod>2026-09-25T22:25:13Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/dtysky/FPGA-Imaging-Library</loc>
-    <lastmod>2026-09-25T22:26:13Z</lastmod>
+    <lastmod>2026-09-21T03:37:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/The-OpenROAD-Project/OpenSTA</loc>
-    <lastmod>2026-08-19T18:45:27Z</lastmod>
+    <lastmod>2026-09-21T03:37:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pulp-platform/cheshire</loc>
-    <lastmod>2026-08-22T23:36:38Z</lastmod>
+    <lastmod>2026-09-21T03:37:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jotego/jtcores</loc>
-    <lastmod>2026-08-19T05:48:27Z</lastmod>
+    <lastmod>2026-09-25T05:57:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/GideonZ/1541ultimate</loc>
-    <lastmod>2026-08-19T05:48:27Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/openecos-projects/icsprout55-pdk</loc>
-    <lastmod>2026-08-22T23:36:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/furrtek/SiliconRE</loc>
-    <lastmod>2026-08-20T12:59:40Z</lastmod>
+    <lastmod>2026-09-24T22:52:13Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MiSTle-Dev/NanoMig</loc>
-    <lastmod>2026-08-21T09:42:49Z</lastmod>
+    <lastmod>2026-09-24T20:50:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MiSTer-devel/Minimig-AGA_MiSTer</loc>
-    <lastmod>2026-08-20T12:59:40Z</lastmod>
+    <lastmod>2026-09-24T20:50:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/najaeda/naja</loc>
-    <lastmod>2026-08-21T09:42:49Z</lastmod>
+    <lastmod>2026-09-21T03:37:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jotego/jt12</loc>
-    <lastmod>2026-08-20T12:59:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/KohakuBlueleaf/KohakuTPU</loc>
-    <lastmod>2026-08-20T12:59:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/andkorzh/PPU-LITE</loc>
-    <lastmod>2026-08-20T12:59:40Z</lastmod>
+    <lastmod>2026-09-21T03:37:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mole99/greyhound-ihp</loc>
-    <lastmod>2026-08-20T12:59:40Z</lastmod>
+    <lastmod>2026-09-21T03:37:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
