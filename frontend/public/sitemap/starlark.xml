@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/GoogleContainerTools/distroless</loc>
-    <lastmod>2026-09-25T02:52:11Z</lastmod>
+    <lastmod>2026-09-28T13:04:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14,61 +14,61 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bazel-contrib/rules_python</loc>
-    <lastmod>2026-09-24T23:57:07Z</lastmod>
+    <lastmod>2026-09-28T12:59:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/google/dotprompt</loc>
-    <lastmod>2026-09-24T20:54:23Z</lastmod>
+    <lastmod>2026-09-28T12:00:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ethpandaops/ethereum-package</loc>
-    <lastmod>2026-09-24T20:52:10Z</lastmod>
+    <lastmod>2026-09-28T12:00:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/tweag/rules_nixpkgs</loc>
-    <lastmod>2026-09-25T02:57:49Z</lastmod>
+    <lastmod>2026-09-28T13:05:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bazel-contrib/rules_scala</loc>
-    <lastmod>2026-09-25T02:54:18Z</lastmod>
+    <lastmod>2026-09-28T13:04:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bazelbuild/bazel-central-registry</loc>
-    <lastmod>2026-09-24T21:54:39Z</lastmod>
+    <lastmod>2026-09-28T12:03:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/aspect-build/rules_js</loc>
-    <lastmod>2026-09-24T20:54:23Z</lastmod>
+    <lastmod>2026-09-28T12:00:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bazel-contrib/toolchains_llvm</loc>
-    <lastmod>2026-09-25T00:54:41Z</lastmod>
+    <lastmod>2026-09-28T13:01:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bazel-contrib/rules_kotlin</loc>
-    <lastmod>2026-09-24T21:54:59Z</lastmod>
+    <lastmod>2026-09-28T12:03:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bazelbuild/rules_swift</loc>
-    <lastmod>2026-09-25T00:51:48Z</lastmod>
+    <lastmod>2026-09-28T13:00:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -86,7 +86,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hermeticbuild/hermetic-llvm</loc>
-    <lastmod>2026-09-24T21:55:09Z</lastmod>
+    <lastmod>2026-09-28T12:03:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -104,7 +104,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/aspect-build/rules_lint</loc>
-    <lastmod>2026-09-25T06:57:48Z</lastmod>
+    <lastmod>2026-09-28T14:00:58Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -122,13 +122,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bazel-contrib/rules_cuda</loc>
-    <lastmod>2026-09-24T22:54:09Z</lastmod>
+    <lastmod>2026-09-28T12:05:56Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/keith/rules_multirun</loc>
-    <lastmod>2026-09-23T20:49:13Z</lastmod>
+    <lastmod>2026-09-28T04:01:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -146,7 +146,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/eclipse-score/score</loc>
-    <lastmod>2026-09-25T06:57:48Z</lastmod>
+    <lastmod>2026-09-28T14:00:51Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
