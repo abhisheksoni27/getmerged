@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/uBlockOrigin/uAssets</loc>
-    <lastmod>2026-09-24T07:55:01Z</lastmod>
+    <lastmod>2026-09-28T07:02:04Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/easylist/easylist</loc>
-    <lastmod>2026-09-24T08:50:07Z</lastmod>
+    <lastmod>2026-09-28T07:02:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -37,8 +37,14 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/Silentely/AdBlock-Acceleration</loc>
+    <lastmod>2026-09-28T18:08:05Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/AdguardTeam/FiltersRegistry</loc>
-    <lastmod>2026-09-24T08:51:16Z</lastmod>
+    <lastmod>2026-09-28T07:02:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

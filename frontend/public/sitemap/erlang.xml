@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/emqx/emqx</loc>
-    <lastmod>2026-09-24T09:50:56Z</lastmod>
+    <lastmod>2026-09-28T07:06:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/erlang/otp</loc>
-    <lastmod>2026-09-24T09:50:56Z</lastmod>
+    <lastmod>2026-09-28T07:06:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/apache/couchdb</loc>
-    <lastmod>2026-09-24T11:56:57Z</lastmod>
+    <lastmod>2026-09-28T08:03:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -80,7 +80,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/esl/MongooseIM</loc>
-    <lastmod>2026-09-24T08:54:12Z</lastmod>
+    <lastmod>2026-09-28T07:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -224,7 +224,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/zotonic/zotonic</loc>
-    <lastmod>2026-09-24T09:55:03Z</lastmod>
+    <lastmod>2026-09-28T07:06:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -236,7 +236,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rabbitmq/khepri</loc>
-    <lastmod>2026-09-24T09:54:09Z</lastmod>
+    <lastmod>2026-09-28T07:06:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -332,7 +332,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/chef/chef-server</loc>
-    <lastmod>2026-09-24T11:51:54Z</lastmod>
+    <lastmod>2026-09-28T08:02:45Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

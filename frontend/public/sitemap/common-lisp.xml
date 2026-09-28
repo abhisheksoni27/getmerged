@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/open-goal/jak-project</loc>
-    <lastmod>2026-09-24T08:54:01Z</lastmod>
+    <lastmod>2026-09-28T07:04:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -44,7 +44,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/coalton-lang/coalton</loc>
-    <lastmod>2026-09-24T10:51:43Z</lastmod>
+    <lastmod>2026-09-28T07:59:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -92,7 +92,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/acl2/acl2</loc>
-    <lastmod>2026-09-25T23:57:58Z</lastmod>
+    <lastmod>2026-09-29T00:00:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -110,13 +110,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/stumpwm/mahogany</loc>
-    <lastmod>2026-09-25T21:54:39Z</lastmod>
+    <lastmod>2026-09-28T22:00:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/lambda-symbolics/autolith</loc>
-    <lastmod>2026-09-24T10:52:00Z</lastmod>
+    <lastmod>2026-09-28T07:59:32Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -151,6 +151,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/mark-watson/loving-common-lisp</loc>
+    <lastmod>2026-09-28T19:01:59Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/edicl/drakma</loc>
     <lastmod>2026-09-21T03:37:34Z</lastmod>
     <changefreq>daily</changefreq>
@@ -176,7 +182,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/kraison/vivace-graph</loc>
-    <lastmod>2026-09-24T10:52:00Z</lastmod>
+    <lastmod>2026-09-28T07:59:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

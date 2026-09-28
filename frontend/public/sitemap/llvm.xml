@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/llvm/llvm-project</loc>
-    <lastmod>2026-09-24T18:55:12Z</lastmod>
+    <lastmod>2026-09-28T11:04:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/EnzymeAD/Enzyme</loc>
-    <lastmod>2026-09-24T12:55:12Z</lastmod>
+    <lastmod>2026-09-28T08:59:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/intel/llvm</loc>
-    <lastmod>2026-09-24T12:55:06Z</lastmod>
+    <lastmod>2026-09-28T08:59:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -25,14 +25,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/xgo-dev/llgo</loc>
-    <lastmod>2026-09-24T14:50:36Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/KhronosGroup/SPIRV-LLVM-Translator</loc>
-    <lastmod>2026-09-24T11:56:45Z</lastmod>
+    <lastmod>2026-09-28T08:02:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -50,7 +44,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/CHIP-SPV/chipStar</loc>
-    <lastmod>2026-09-24T13:53:14Z</lastmod>
+    <lastmod>2026-09-28T09:01:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -62,19 +56,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/arm/arm-toolchain</loc>
-    <lastmod>2026-09-26T00:54:41Z</lastmod>
+    <lastmod>2026-09-29T00:58:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Xilinx/llvm-aie</loc>
-    <lastmod>2026-09-24T13:57:13Z</lastmod>
+    <lastmod>2026-09-28T09:02:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jeandle/jeandle-llvm</loc>
-    <lastmod>2026-09-24T13:52:00Z</lastmod>
+    <lastmod>2026-09-28T09:00:45Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
