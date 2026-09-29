@@ -2,13 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/macports/macports-ports</loc>
-    <lastmod>2026-09-26T05:57:49Z</lastmod>
+    <lastmod>2026-09-29T06:01:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/eloqdata/eloqkv</loc>
     <lastmod>2026-09-21T03:37:37Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/superpung/TJU-CourseSharing</loc>
+    <lastmod>2026-09-30T03:07:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -20,7 +26,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pavel-demin/red-pitaya-notes</loc>
-    <lastmod>2026-09-20T17:48:31Z</lastmod>
+    <lastmod>2026-09-29T22:06:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -32,7 +38,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Gcenx/macports-wine</loc>
-    <lastmod>2026-09-20T07:43:53Z</lastmod>
+    <lastmod>2026-09-29T19:03:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
