@@ -152,7 +152,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/argoproj/argoproj-deployments</loc>
-    <lastmod>2026-09-20T06:44:28Z</lastmod>
+    <lastmod>2026-09-29T18:07:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -183,6 +183,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/AlmaLinux/cloud-images</loc>
     <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/oracle-terraform-modules/terraform-oci-oke</loc>
+    <lastmod>2026-09-30T01:02:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -247,14 +253,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/cloudnative-pg/postgres-containers</loc>
-    <lastmod>2026-09-27T21:57:00Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/nats-io/nats-box</loc>
+    <lastmod>2026-09-23T03:50:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nats-io/nats-box</loc>
-    <lastmod>2026-09-23T03:50:44Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/cloudnative-pg/postgres-containers</loc>
+    <lastmod>2026-09-27T21:57:00Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -283,14 +289,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mirceanton/mikrotik-terraform</loc>
-    <lastmod>2026-09-20T05:48:15Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Azure/terraform-azurerm-avm-ptn-alz</loc>
+    <lastmod>2026-09-27T17:59:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Azure/terraform-azurerm-avm-ptn-alz</loc>
-    <lastmod>2026-09-27T17:59:38Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mirceanton/mikrotik-terraform</loc>
+    <lastmod>2026-09-29T18:03:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -331,14 +337,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/GoogleCloudPlatform/accelerated-platforms</loc>
-    <lastmod>2026-09-28T07:59:31Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/in4it/terraform-modules</loc>
+    <lastmod>2026-09-23T12:51:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/in4it/terraform-modules</loc>
-    <lastmod>2026-09-23T12:51:39Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/GoogleCloudPlatform/accelerated-platforms</loc>
+    <lastmod>2026-09-28T07:59:31Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

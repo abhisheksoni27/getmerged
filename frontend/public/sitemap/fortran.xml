@@ -7,12 +7,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/wrf-model/WRF</loc>
-    <lastmod>2026-09-26T09:24:54Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/ElmerCSC/elmerfem</loc>
     <lastmod>2026-09-28T07:04:30Z</lastmod>
     <changefreq>daily</changefreq>
@@ -20,7 +14,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fortran-lang/stdlib</loc>
-    <lastmod>2026-09-26T09:24:54Z</lastmod>
+    <lastmod>2026-09-29T13:04:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -56,7 +50,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/grimme-lab/xtb</loc>
-    <lastmod>2026-09-20T04:47:13Z</lastmod>
+    <lastmod>2026-09-29T18:02:56Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/nwchemgit/nwchem</loc>
+    <lastmod>2026-09-29T13:04:58Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/SPECFEM/specfem3d</loc>
+    <lastmod>2026-09-29T13:04:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -92,13 +98,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FluidityProject/fluidity</loc>
-    <lastmod>2026-09-27T00:54:39Z</lastmod>
+    <lastmod>2026-09-30T01:01:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jacobwilliams/json-fortran</loc>
-    <lastmod>2026-09-21T02:46:49Z</lastmod>
+    <lastmod>2026-09-30T00:07:22Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/m3g/packmol</loc>
+    <lastmod>2026-09-29T23:03:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -110,13 +122,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/USEPA/CMAQ</loc>
-    <lastmod>2026-09-21T02:46:49Z</lastmod>
+    <lastmod>2026-09-30T00:07:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/opencollab/arpack-ng</loc>
     <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/crest-lab/crest</loc>
+    <lastmod>2026-09-29T23:03:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -152,7 +170,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/vmagnin/gtk-fortran</loc>
-    <lastmod>2026-09-20T20:47:58Z</lastmod>
+    <lastmod>2026-09-29T23:03:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -326,7 +344,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/geospace-code/h5fortran</loc>
-    <lastmod>2026-09-19T22:47:45Z</lastmod>
+    <lastmod>2026-09-29T16:00:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
