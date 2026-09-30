@@ -127,13 +127,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/AmberELEC/AmberELEC</loc>
+    <loc>https://getmerged.abhishekco.de/freebsd/freebsd-ports</loc>
     <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/freebsd/freebsd-ports</loc>
+    <loc>https://getmerged.abhishekco.de/AmberELEC/AmberELEC</loc>
     <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -188,7 +188,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/golang-templates/seed</loc>
-    <lastmod>2026-09-27T22:56:44Z</lastmod>
+    <lastmod>2026-10-01T00:10:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -350,7 +350,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/saidsef/grafana-loki-on-k8s</loc>
-    <lastmod>2026-09-27T14:01:46Z</lastmod>
+    <lastmod>2026-09-30T14:04:13Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -380,7 +380,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/plone/documentation</loc>
-    <lastmod>2026-09-27T07:55:06Z</lastmod>
+    <lastmod>2026-09-30T08:02:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -398,7 +398,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/josegonzalez/pakman</loc>
-    <lastmod>2026-09-27T20:02:52Z</lastmod>
+    <lastmod>2026-09-30T20:06:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

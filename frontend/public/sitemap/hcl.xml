@@ -199,14 +199,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/alphagov/govuk-infrastructure</loc>
-    <lastmod>2026-09-28T22:00:19Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/trussworks/terraform-layout-example</loc>
+    <lastmod>2026-09-28T03:00:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/trussworks/terraform-layout-example</loc>
-    <lastmod>2026-09-28T03:00:19Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/alphagov/govuk-infrastructure</loc>
+    <lastmod>2026-09-28T22:00:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -260,7 +260,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cloudnative-pg/postgres-containers</loc>
-    <lastmod>2026-09-27T21:57:00Z</lastmod>
+    <lastmod>2026-09-30T23:03:32Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -289,14 +289,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Azure/terraform-azurerm-avm-ptn-alz</loc>
-    <lastmod>2026-09-27T17:59:38Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mirceanton/mikrotik-terraform</loc>
+    <lastmod>2026-09-29T18:03:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mirceanton/mikrotik-terraform</loc>
-    <lastmod>2026-09-29T18:03:54Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Azure/terraform-azurerm-avm-ptn-alz</loc>
+    <lastmod>2026-09-30T18:04:43Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
