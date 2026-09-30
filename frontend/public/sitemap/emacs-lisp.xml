@@ -409,14 +409,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/emacs-evil/evil-surround</loc>
-    <lastmod>2026-09-29T14:02:49Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/bumblepup/highlight-indent-guides</loc>
+    <lastmod>2026-09-29T14:02:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/bumblepup/highlight-indent-guides</loc>
-    <lastmod>2026-09-29T14:02:50Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/emacs-evil/evil-surround</loc>
+    <lastmod>2026-09-29T14:02:49Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -559,14 +559,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/auto-complete/popup-el</loc>
-    <lastmod>2026-09-29T23:07:09Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/sshaw/git-link</loc>
+    <lastmod>2026-09-29T23:07:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/sshaw/git-link</loc>
-    <lastmod>2026-09-29T23:07:10Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/auto-complete/popup-el</loc>
+    <lastmod>2026-09-29T23:07:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -733,13 +733,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/seagle0128/grip-mode</loc>
+    <loc>https://getmerged.abhishekco.de/purcell/emacs-reformatter</loc>
     <lastmod>2026-09-30T00:06:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/purcell/emacs-reformatter</loc>
+    <loc>https://getmerged.abhishekco.de/seagle0128/grip-mode</loc>
     <lastmod>2026-09-30T00:06:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
