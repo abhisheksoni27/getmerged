@@ -8,7 +8,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/erlang/otp</loc>
-    <lastmod>2026-09-28T07:06:23Z</lastmod>
+    <lastmod>2026-10-02T03:12:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -56,7 +56,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/esl/MongooseIM</loc>
-    <lastmod>2026-09-28T07:04:30Z</lastmod>
+    <lastmod>2026-10-02T03:09:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -146,7 +146,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rabbitmq/khepri</loc>
-    <lastmod>2026-09-28T07:06:29Z</lastmod>
+    <lastmod>2026-10-02T03:12:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -297,12 +297,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/lpgauth/shackle</loc>
     <lastmod>2026-09-21T03:37:34Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/hexpm/hex_core</loc>
-    <lastmod>2026-09-28T03:01:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

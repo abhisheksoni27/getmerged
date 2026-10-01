@@ -44,19 +44,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nginx/ansible-role-nginx</loc>
-    <lastmod>2026-09-28T00:09:24Z</lastmod>
+    <lastmod>2026-10-01T09:09:57Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/konstruktoid/ansible-role-hardening</loc>
+    <lastmod>2026-10-01T16:04:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/open-telemetry/semantic-conventions</loc>
     <lastmod>2026-09-28T08:07:18Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/konstruktoid/ansible-role-hardening</loc>
-    <lastmod>2026-09-28T02:03:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -80,7 +80,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hassio-addons/app-plex</loc>
-    <lastmod>2026-09-28T04:01:36Z</lastmod>
+    <lastmod>2026-10-01T20:12:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -98,7 +98,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hassio-addons/app-zwave-js-ui</loc>
-    <lastmod>2026-09-28T04:01:41Z</lastmod>
+    <lastmod>2026-10-01T21:07:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -110,7 +110,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hassio-addons/app-zerotier</loc>
-    <lastmod>2026-09-28T04:01:37Z</lastmod>
+    <lastmod>2026-10-01T20:11:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

@@ -38,13 +38,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/OpenCentauri/cosmos</loc>
-    <lastmod>2026-09-28T07:02:43Z</lastmod>
+    <lastmod>2026-10-02T03:06:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Freescale/meta-freescale</loc>
-    <lastmod>2026-09-28T05:04:48Z</lastmod>
+    <lastmod>2026-10-01T23:06:58Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -56,7 +56,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/meta-flutter/meta-flutter</loc>
-    <lastmod>2026-09-28T05:59:11Z</lastmod>
+    <lastmod>2026-10-01T23:10:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -67,20 +67,20 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/oe-alliance/oe-alliance-core</loc>
-    <lastmod>2026-09-30T14:09:17Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/mendersoftware/meta-mender</loc>
     <lastmod>2026-09-22T15:48:56Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/oe-alliance/oe-alliance-core</loc>
+    <lastmod>2026-09-30T14:09:17Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/qualcomm-linux/meta-qcom</loc>
-    <lastmod>2026-09-28T07:02:47Z</lastmod>
+    <lastmod>2026-10-02T03:07:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

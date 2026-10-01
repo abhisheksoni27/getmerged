@@ -211,12 +211,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/NomicFoundation/solx</loc>
-    <lastmod>2026-09-28T12:07:10Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/delegatexyz/delegate-registry</loc>
     <lastmod>2026-09-21T03:37:37Z</lastmod>
     <changefreq>daily</changefreq>
@@ -229,20 +223,26 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/NomicFoundation/solx</loc>
+    <lastmod>2026-09-28T12:07:10Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/across-protocol/contracts</loc>
     <lastmod>2026-09-28T12:05:45Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/yieldnest/yieldnest-vault</loc>
-    <lastmod>2026-09-28T14:05:21Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Auditware/radar</loc>
+    <lastmod>2026-09-28T12:58:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Auditware/radar</loc>
-    <lastmod>2026-09-28T12:58:05Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/yieldnest/yieldnest-vault</loc>
+    <lastmod>2026-09-28T14:05:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

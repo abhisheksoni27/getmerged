@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/PostgresApp/PostgresApp</loc>
-    <lastmod>2026-09-28T01:57:46Z</lastmod>
+    <lastmod>2026-10-01T14:11:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -110,7 +110,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/beeware/Python-Apple-support</loc>
-    <lastmod>2026-09-28T05:05:58Z</lastmod>
+    <lastmod>2026-10-01T22:11:58Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -127,13 +127,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/freebsd/freebsd-ports</loc>
+    <loc>https://getmerged.abhishekco.de/AmberELEC/AmberELEC</loc>
     <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/AmberELEC/AmberELEC</loc>
+    <loc>https://getmerged.abhishekco.de/freebsd/freebsd-ports</loc>
     <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -182,7 +182,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cilium/cilium-cli</loc>
-    <lastmod>2026-09-28T01:57:29Z</lastmod>
+    <lastmod>2026-10-01T14:09:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -325,14 +325,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/OP-TEE/build</loc>
-    <lastmod>2026-09-28T21:03:23Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/moq-wg/moq-transport</loc>
+    <lastmod>2026-09-24T13:52:56Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/moq-wg/moq-transport</loc>
-    <lastmod>2026-09-24T13:52:56Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/OP-TEE/build</loc>
+    <lastmod>2026-09-28T21:03:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -386,7 +386,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pulumi/pulumi-hcloud</loc>
-    <lastmod>2026-09-28T00:59:01Z</lastmod>
+    <lastmod>2026-10-01T12:07:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
