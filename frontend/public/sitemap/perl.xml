@@ -421,14 +421,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/httpdss/collectd-web</loc>
-    <lastmod>2026-09-29T20:05:16Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/petdance/bobby-tables</loc>
+    <lastmod>2026-09-29T20:07:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/petdance/bobby-tables</loc>
-    <lastmod>2026-09-29T20:07:06Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/httpdss/collectd-web</loc>
+    <lastmod>2026-09-29T20:05:16Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -470,19 +470,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Cyclenerd/google-cloud-pricing-cost-calculator</loc>
-    <lastmod>2026-09-28T01:01:39Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/manwar/perlweeklychallenge-club</loc>
-    <lastmod>2026-09-29T01:01:13Z</lastmod>
+    <lastmod>2026-10-01T12:08:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/melmothx/amusewiki</loc>
     <lastmod>2026-09-21T03:37:35Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/manwar/perlweeklychallenge-club</loc>
+    <lastmod>2026-09-29T01:01:13Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -619,14 +619,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mschilli/log4perl</loc>
-    <lastmod>2026-09-22T02:47:26Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/perltidy/perltidy</loc>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/perltidy/perltidy</loc>
-    <lastmod>2026-09-21T03:37:35Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mschilli/log4perl</loc>
+    <lastmod>2026-09-22T02:47:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -656,7 +656,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/shogo82148/actions-setup-perl</loc>
-    <lastmod>2026-09-28T00:08:29Z</lastmod>
+    <lastmod>2026-10-01T10:06:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

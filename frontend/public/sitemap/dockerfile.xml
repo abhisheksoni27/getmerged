@@ -200,7 +200,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/carlossg/docker-maven</loc>
-    <lastmod>2026-09-27T23:13:26Z</lastmod>
+    <lastmod>2026-10-01T05:09:18Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -386,18 +386,18 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/klutchell/unbound-docker</loc>
-    <lastmod>2026-09-28T01:57:59Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-faster-whisper</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-01T14:11:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-freshrss</loc>
+    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-faster-whisper</loc>
     <lastmod>2026-09-21T03:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -410,7 +410,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/StaPH-B/docker-builds</loc>
-    <lastmod>2026-09-28T07:06:33Z</lastmod>
+    <lastmod>2026-10-02T03:12:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -487,13 +487,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-orcaslicer</loc>
+    <loc>https://getmerged.abhishekco.de/jauderho/dockerfiles</loc>
     <lastmod>2026-09-21T03:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jauderho/dockerfiles</loc>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-orcaslicer</loc>
     <lastmod>2026-09-21T03:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -506,7 +506,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gradle/docker-gradle</loc>
-    <lastmod>2026-09-28T03:00:18Z</lastmod>
+    <lastmod>2026-10-01T16:08:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -530,7 +530,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/klutchell/dnscrypt-proxy-docker</loc>
-    <lastmod>2026-09-28T00:58:50Z</lastmod>
+    <lastmod>2026-10-01T11:07:00Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -584,7 +584,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hassio-addons/app-uptime-kuma</loc>
-    <lastmod>2026-09-28T02:01:39Z</lastmod>
+    <lastmod>2026-10-01T14:09:32Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -620,7 +620,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/home-assistant/docker-base</loc>
-    <lastmod>2026-09-28T04:58:06Z</lastmod>
+    <lastmod>2026-10-01T22:05:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

@@ -373,14 +373,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/arrufat/zignal</loc>
-    <lastmod>2026-09-30T01:04:42Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/antflydb/antfly</loc>
+    <lastmod>2026-09-30T01:03:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/antflydb/antfly</loc>
-    <lastmod>2026-09-30T01:03:29Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/arrufat/zignal</loc>
+    <lastmod>2026-09-30T01:04:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -517,14 +517,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ziglibs/known-folders</loc>
-    <lastmod>2026-09-30T02:02:20Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/teamchong/turboquant-wasm</loc>
+    <lastmod>2026-09-30T02:05:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/teamchong/turboquant-wasm</loc>
-    <lastmod>2026-09-30T02:05:48Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/ziglibs/known-folders</loc>
+    <lastmod>2026-09-30T02:02:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -781,14 +781,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ryoppippi/zigcv</loc>
-    <lastmod>2026-09-30T01:07:24Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jiacai2050/zig-curl</loc>
+    <lastmod>2026-09-30T02:05:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jiacai2050/zig-curl</loc>
-    <lastmod>2026-09-30T02:05:41Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/ryoppippi/zigcv</loc>
+    <lastmod>2026-09-30T01:07:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -835,6 +835,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/linyows/octopass</loc>
+    <lastmod>2026-09-30T01:06:00Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/rockorager/zigdoc</loc>
     <lastmod>2026-09-30T01:06:04Z</lastmod>
     <changefreq>daily</changefreq>
@@ -843,12 +849,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/open-telemetry/opentelemetry-injector</loc>
     <lastmod>2026-09-30T01:06:36Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/linyows/octopass</loc>
-    <lastmod>2026-09-30T01:06:00Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -883,12 +883,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/no1msd/seance</loc>
-    <lastmod>2026-09-30T01:08:09Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/YoSTEALTH/Liburing</loc>
     <lastmod>2026-09-30T02:06:28Z</lastmod>
     <changefreq>daily</changefreq>
@@ -897,6 +891,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/silbinarywolf/zig-android-sdk</loc>
     <lastmod>2026-09-30T02:02:40Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/no1msd/seance</loc>
+    <lastmod>2026-09-30T01:08:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
