@@ -211,12 +211,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Project-Silicium/Mu-Silicium</loc>
-    <lastmod>2026-09-28T15:06:28Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/zeebo/blake3</loc>
     <lastmod>2026-09-30T02:03:09Z</lastmod>
     <changefreq>daily</changefreq>
@@ -242,7 +236,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ROCm/rocm-libraries</loc>
-    <lastmod>2026-09-28T08:00:50Z</lastmod>
+    <lastmod>2026-10-02T06:06:32Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -319,14 +313,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/riscv/riscv-fast-interrupt</loc>
-    <lastmod>2026-09-30T13:09:44Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mateoconlechuga/cesium</loc>
+    <lastmod>2026-09-30T02:04:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mateoconlechuga/cesium</loc>
-    <lastmod>2026-09-30T02:04:57Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/riscv/riscv-fast-interrupt</loc>
+    <lastmod>2026-09-30T13:09:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/dotnet/fsharp</loc>
-    <lastmod>2026-09-28T07:04:37Z</lastmod>
+    <lastmod>2026-10-02T04:08:25Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fable-compiler/Fable</loc>
-    <lastmod>2026-09-28T07:59:35Z</lastmod>
+    <lastmod>2026-10-02T06:06:31Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -110,7 +110,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fsprojects/fantomas</loc>
-    <lastmod>2026-09-28T07:06:29Z</lastmod>
+    <lastmod>2026-10-02T04:06:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -157,14 +157,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/B2R2-org/B2R2</loc>
-    <lastmod>2026-10-02T03:12:54Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/demystifyfp/FsToolkit.ErrorHandling</loc>
+    <lastmod>2026-09-21T03:37:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/demystifyfp/FsToolkit.ErrorHandling</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/B2R2-org/B2R2</loc>
+    <lastmod>2026-10-02T03:12:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -182,7 +182,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fsprojects/FSharp.Formatting</loc>
-    <lastmod>2026-09-28T07:06:44Z</lastmod>
+    <lastmod>2026-10-02T04:06:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

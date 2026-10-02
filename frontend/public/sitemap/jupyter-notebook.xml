@@ -44,7 +44,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/anthropics/claude-cookbooks</loc>
-    <lastmod>2026-09-28T09:05:56Z</lastmod>
+    <lastmod>2026-10-02T09:08:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -68,7 +68,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/lyogavin/airllm</loc>
-    <lastmod>2026-09-28T09:03:42Z</lastmod>
+    <lastmod>2026-10-02T09:05:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -92,7 +92,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/stefan-jansen/machine-learning-for-trading</loc>
-    <lastmod>2026-09-28T08:59:33Z</lastmod>
+    <lastmod>2026-10-02T08:05:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -110,7 +110,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/microsoft/mcp-for-beginners</loc>
-    <lastmod>2026-09-28T09:05:06Z</lastmod>
+    <lastmod>2026-10-02T09:06:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -128,7 +128,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jupyter/notebook</loc>
-    <lastmod>2026-09-28T08:07:27Z</lastmod>
+    <lastmod>2026-10-02T06:12:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -140,7 +140,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/unslothai/notebooks</loc>
-    <lastmod>2026-09-28T08:07:40Z</lastmod>
+    <lastmod>2026-10-02T07:06:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -163,6 +163,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/duoan/TorchCode</loc>
+    <lastmod>2026-10-02T20:43:08Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/huggingface/notebooks</loc>
     <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
@@ -170,7 +176,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/openvinotoolkit/openvino_notebooks</loc>
-    <lastmod>2026-09-28T08:59:06Z</lastmod>
+    <lastmod>2026-10-02T07:13:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -241,6 +247,24 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/honeyandme/RAGQnASystem</loc>
+    <lastmod>2026-10-02T21:39:54Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/yunwei37/ZJU-CS-GIS-ClassNotes</loc>
+    <lastmod>2026-10-02T21:39:54Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/szagoruyko/attention-transfer</loc>
+    <lastmod>2026-10-02T21:40:02Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/numerai/example-scripts</loc>
     <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
@@ -248,7 +272,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/elastic/elasticsearch-labs</loc>
-    <lastmod>2026-09-28T14:05:13Z</lastmod>
+    <lastmod>2026-10-03T00:08:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -301,14 +325,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/GoogleCloudPlatform/vertex-ai-samples</loc>
-    <lastmod>2026-09-21T17:50:25Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/langchain-ai/deep_research_from_scratch</loc>
+    <lastmod>2026-09-30T04:06:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/langchain-ai/deep_research_from_scratch</loc>
-    <lastmod>2026-09-30T04:06:12Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/GoogleCloudPlatform/vertex-ai-samples</loc>
+    <lastmod>2026-09-21T17:50:25Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
