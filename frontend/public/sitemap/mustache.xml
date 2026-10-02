@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/prometheus-community/helm-charts</loc>
-    <lastmod>2026-09-28T09:05:56Z</lastmod>
+    <lastmod>2026-10-02T09:09:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/argoproj/argo-helm</loc>
-    <lastmod>2026-09-28T09:01:07Z</lastmod>
+    <lastmod>2026-10-02T07:13:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/sentry-kubernetes/charts</loc>
-    <lastmod>2026-09-28T09:03:38Z</lastmod>
+    <lastmod>2026-10-02T09:05:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/kubecost/kubecost</loc>
-    <lastmod>2026-09-28T09:00:46Z</lastmod>
+    <lastmod>2026-10-02T07:12:13Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -80,7 +80,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/influxdata/helm-charts</loc>
-    <lastmod>2026-09-28T09:03:48Z</lastmod>
+    <lastmod>2026-10-02T09:09:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -110,7 +110,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/percona/percona-helm-charts</loc>
-    <lastmod>2026-09-28T08:07:24Z</lastmod>
+    <lastmod>2026-10-02T06:13:00Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -134,7 +134,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/renovatebot/helm-charts</loc>
-    <lastmod>2026-09-28T04:57:22Z</lastmod>
+    <lastmod>2026-10-02T23:06:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

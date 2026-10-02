@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover/lean4</loc>
-    <lastmod>2026-09-28T09:03:42Z</lastmod>
+    <lastmod>2026-10-02T09:05:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -20,13 +20,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/google-deepmind/formal-conjectures</loc>
-    <lastmod>2026-09-28T09:02:02Z</lastmod>
+    <lastmod>2026-10-02T08:10:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ImperialCollegeLondon/FLT</loc>
-    <lastmod>2026-09-28T08:07:17Z</lastmod>
+    <lastmod>2026-10-02T06:13:00Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -38,19 +38,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover/cslib</loc>
-    <lastmod>2026-09-28T09:02:02Z</lastmod>
+    <lastmod>2026-10-02T08:11:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover-community/batteries</loc>
-    <lastmod>2026-09-28T09:01:58Z</lastmod>
+    <lastmod>2026-10-02T08:11:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover/verso</loc>
-    <lastmod>2026-09-28T08:02:40Z</lastmod>
+    <lastmod>2026-10-02T05:10:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -62,7 +62,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Verified-zkEVM/ArkLib</loc>
-    <lastmod>2026-09-28T09:02:02Z</lastmod>
+    <lastmod>2026-10-02T08:11:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -86,13 +86,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FormalizedFormalLogic/Foundation</loc>
-    <lastmod>2026-09-28T09:02:08Z</lastmod>
+    <lastmod>2026-10-02T08:11:00Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dwrensha/compfiles</loc>
-    <lastmod>2026-09-28T09:05:06Z</lastmod>
+    <lastmod>2026-10-02T09:06:49Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -104,7 +104,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover-community/iris-lean</loc>
-    <lastmod>2026-09-28T08:07:17Z</lastmod>
+    <lastmod>2026-10-02T06:13:16Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -121,14 +121,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/cajal-technologies/talos</loc>
-    <lastmod>2026-09-21T03:37:35Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/TauCetiProject/TauCeti</loc>
+    <lastmod>2026-10-02T12:12:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/TauCetiProject/TauCeti</loc>
-    <lastmod>2026-09-28T10:58:48Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/cajal-technologies/talos</loc>
+    <lastmod>2026-09-21T03:37:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -140,19 +140,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/lfglabs-dev/verity</loc>
-    <lastmod>2026-09-28T09:02:01Z</lastmod>
+    <lastmod>2026-10-02T08:11:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Verified-zkEVM/VCVio</loc>
-    <lastmod>2026-09-28T09:01:13Z</lastmod>
+    <lastmod>2026-10-02T07:12:51Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/leanprover/reference-manual</loc>
-    <lastmod>2026-09-28T08:07:20Z</lastmod>
+    <lastmod>2026-10-02T06:13:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -170,7 +170,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fpvandoorn/carleson</loc>
-    <lastmod>2026-09-28T09:02:04Z</lastmod>
+    <lastmod>2026-10-02T08:10:51Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

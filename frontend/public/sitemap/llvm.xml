@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/llvm/llvm-project</loc>
-    <lastmod>2026-09-28T11:04:06Z</lastmod>
+    <lastmod>2026-10-02T14:08:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/EnzymeAD/Enzyme</loc>
-    <lastmod>2026-09-28T08:59:29Z</lastmod>
+    <lastmod>2026-10-02T08:05:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/intel/llvm</loc>
-    <lastmod>2026-09-28T08:59:29Z</lastmod>
+    <lastmod>2026-10-02T07:13:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -26,7 +26,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/KhronosGroup/SPIRV-LLVM-Translator</loc>
-    <lastmod>2026-09-28T08:02:41Z</lastmod>
+    <lastmod>2026-10-02T05:10:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -44,7 +44,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/CHIP-SPV/chipStar</loc>
-    <lastmod>2026-09-28T09:01:09Z</lastmod>
+    <lastmod>2026-10-02T08:05:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -62,13 +62,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Xilinx/llvm-aie</loc>
-    <lastmod>2026-09-28T09:02:05Z</lastmod>
+    <lastmod>2026-10-02T08:10:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jeandle/jeandle-llvm</loc>
-    <lastmod>2026-09-28T09:00:45Z</lastmod>
+    <lastmod>2026-10-02T07:12:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
