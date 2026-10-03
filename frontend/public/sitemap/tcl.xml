@@ -2,13 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/macports/macports-ports</loc>
-    <lastmod>2026-09-29T06:01:12Z</lastmod>
+    <lastmod>2026-10-04T03:34:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/eloqdata/eloqkv</loc>
-    <lastmod>2026-09-21T03:37:37Z</lastmod>
+    <lastmod>2026-10-04T03:34:14Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/BRL-CAD/brlcad</loc>
+    <lastmod>2026-10-04T03:34:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -20,7 +26,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/envmodules/modules</loc>
-    <lastmod>2026-09-21T03:37:37Z</lastmod>
+    <lastmod>2026-10-04T03:34:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -32,7 +38,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Xilinx/XilinxTclStore</loc>
-    <lastmod>2026-09-21T03:37:37Z</lastmod>
+    <lastmod>2026-10-04T03:34:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
