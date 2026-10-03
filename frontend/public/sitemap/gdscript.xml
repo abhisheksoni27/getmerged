@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://getmerged.abhishekco.de/Orama-Interactive/Pixelorama</loc>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/godotengine/godot-demo-projects</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dialogic-godot/dialogic</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nathanhoad/godot_dialogue_manager</loc>
-    <lastmod>2026-10-02T07:06:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ramokz/phantom-camera</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -44,19 +50,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MewPurPur/GodSVG</loc>
-    <lastmod>2026-10-02T03:13:01Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/hi-godot/godot-ai</loc>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bitwes/Gut</loc>
     <lastmod>2026-09-29T14:07:11Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/hi-godot/godot-ai</loc>
-    <lastmod>2026-10-02T05:10:25Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -74,7 +80,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Maaack/Godot-Game-Template</loc>
-    <lastmod>2026-10-02T04:06:39Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -110,7 +116,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cherriesandmochi/gdmaim</loc>
-    <lastmod>2026-10-02T03:12:45Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -123,12 +129,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/godot-gdunit-labs/gdUnit4</loc>
     <lastmod>2026-09-28T03:01:34Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/TheDuckCow/godot-road-generator</loc>
-    <lastmod>2026-09-29T14:07:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -157,14 +157,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ShadowBlip/OpenGamepadUI</loc>
-    <lastmod>2026-09-29T15:01:43Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Quaint-Studios/Reia</loc>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Quaint-Studios/Reia</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mewamew/my_ai_town</loc>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -175,14 +175,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mewamew/my_ai_town</loc>
-    <lastmod>2026-10-02T04:06:19Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/godot-escoria/escoria-demo-game</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -218,25 +212,25 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/GodotModding/godot-mod-loader</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/glass-brick/Scene-Manager</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ToumaKamijou/Yugens-Terrain-Authoring-Toolkit</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/poingstudios/godot-admob-plugin</loc>
-    <lastmod>2026-10-02T05:06:53Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -248,13 +242,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gdquest-demos/godot-2d-builder</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/InvadingOctopus/comedot</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -272,25 +266,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Maaack/Godot-Menus-Template</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/openfw-game/OpenLiberty</loc>
-    <lastmod>2026-10-02T03:12:54Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/alessandrofama/wwise-godot-integration</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/rsubtil/controller_icons</loc>
-    <lastmod>2026-09-29T23:04:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -301,8 +283,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/limbonaut/limbo_console</loc>
-    <lastmod>2026-09-21T04:48:21Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/alessandrofama/wwise-godot-integration</loc>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/rsubtil/controller_icons</loc>
+    <lastmod>2026-09-29T23:04:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -313,14 +301,20 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/limbonaut/limbo_console</loc>
+    <lastmod>2026-09-21T04:48:21Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/ExpiredPopsicle/SnekStudio</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MudkipWorld/PNGTuber-Remix</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -332,31 +326,31 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/carenalgas/popochiu</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Alexofp/BDCC</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Henrique-Henrique/Hengo</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/elliotfontaine/yard-godot</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hsk-dream/PVZ-Godot-Dream</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -374,7 +368,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/spicylobstergames/shotcaller-godot</loc>
-    <lastmod>2026-09-23T00:53:50Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -386,7 +380,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ReconWorldLab/godot-gaussian-splatting</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -421,38 +415,38 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Zylann/godot_editor_debugger_plugin</loc>
-    <lastmod>2026-09-30T00:06:24Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/Inspiaaa/ThemeGen</loc>
     <lastmod>2026-09-30T00:07:00Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/Zylann/godot_editor_debugger_plugin</loc>
+    <lastmod>2026-09-30T00:06:24Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/levinzonr/godot-asset-placer</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/TaloDev/godot</loc>
-    <lastmod>2026-09-21T03:37:34Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/HarmonyHoney/tiny_crate</loc>
-    <lastmod>2026-09-30T00:06:39Z</lastmod>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/DanTrz/TileMapLayer3D</loc>
     <lastmod>2026-09-21T04:48:24Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/HarmonyHoney/tiny_crate</loc>
+    <lastmod>2026-09-30T00:06:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -475,14 +469,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nathanhoad/godot_puzzle_dependencies</loc>
-    <lastmod>2026-09-21T03:50:14Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/TinyTakinTeller/GodotProjectZero</loc>
+    <lastmod>2026-09-22T04:51:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/TinyTakinTeller/GodotProjectZero</loc>
-    <lastmod>2026-09-22T04:51:34Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/nathanhoad/godot_puzzle_dependencies</loc>
+    <lastmod>2026-09-21T03:50:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

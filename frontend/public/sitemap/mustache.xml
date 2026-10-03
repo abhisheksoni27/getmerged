@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/prometheus-community/helm-charts</loc>
-    <lastmod>2026-10-02T09:09:24Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/argoproj/argo-helm</loc>
-    <lastmod>2026-10-02T07:13:15Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/sentry-kubernetes/charts</loc>
-    <lastmod>2026-10-02T09:05:35Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -26,25 +26,25 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/aws/eks-charts</loc>
-    <lastmod>2026-09-21T03:37:35Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/codecentric/helm-charts</loc>
-    <lastmod>2026-09-21T03:37:35Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/kubecost/kubecost</loc>
-    <lastmod>2026-10-02T07:12:13Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jenkinsci/helm-charts</loc>
-    <lastmod>2026-09-21T03:37:35Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -56,13 +56,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/temporalio/helm-charts</loc>
-    <lastmod>2026-09-21T03:37:35Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bancolombia/scaffold-clean-architecture</loc>
-    <lastmod>2026-09-21T03:37:35Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -74,25 +74,25 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/netbox-community/netbox-chart</loc>
-    <lastmod>2026-09-28T21:59:25Z</lastmod>
+    <lastmod>2026-10-03T13:14:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/influxdata/helm-charts</loc>
-    <lastmod>2026-10-02T09:09:24Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/acryldata/datahub-helm</loc>
-    <lastmod>2026-09-30T03:02:11Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mastodon/chart</loc>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/lfn-cnti/testsuite</loc>
-    <lastmod>2026-09-29T00:59:23Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -104,31 +104,31 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/getredash/contrib-helm-chart</loc>
-    <lastmod>2026-09-21T03:37:35Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/percona/percona-helm-charts</loc>
-    <lastmod>2026-10-02T06:13:00Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FairwindsOps/charts</loc>
-    <lastmod>2026-09-29T00:58:42Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/runatlantis/helm-charts</loc>
-    <lastmod>2026-09-21T03:37:35Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SigNoz/charts</loc>
-    <lastmod>2026-09-21T03:37:35Z</lastmod>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
