@@ -427,14 +427,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mirage/qubes-mirage-firewall</loc>
-    <lastmod>2026-10-04T14:10:35Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Deducteam/Dedukti</loc>
+    <lastmod>2026-10-04T14:15:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Deducteam/Dedukti</loc>
-    <lastmod>2026-10-04T14:15:08Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mirage/qubes-mirage-firewall</loc>
+    <lastmod>2026-10-04T14:10:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -469,14 +469,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/yawaramin/dream-html</loc>
-    <lastmod>2026-10-04T13:12:54Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/rocq-community/rocq-lsp</loc>
+    <lastmod>2026-10-04T13:12:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/rocq-community/rocq-lsp</loc>
-    <lastmod>2026-10-04T13:12:37Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/yawaramin/dream-html</loc>
+    <lastmod>2026-10-04T13:12:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -517,12 +517,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/talex5/wayland-proxy-virtwl</loc>
-    <lastmod>2026-10-04T14:10:14Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/ml-in-barcelona/server-reason-react</loc>
     <lastmod>2026-10-04T13:16:32Z</lastmod>
     <changefreq>daily</changefreq>
@@ -531,6 +525,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/ocsigen/tyxml</loc>
     <lastmod>2026-10-04T14:10:10Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/talex5/wayland-proxy-virtwl</loc>
+    <lastmod>2026-10-04T14:10:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -607,14 +607,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/anuragsoni/routes</loc>
-    <lastmod>2026-10-04T14:16:19Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/ocaml-mlx/mlx</loc>
+    <lastmod>2026-10-04T13:13:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ocaml-mlx/mlx</loc>
-    <lastmod>2026-10-04T13:13:23Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/anuragsoni/routes</loc>
+    <lastmod>2026-10-04T14:16:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -799,14 +799,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/camlp4/camlp4</loc>
-    <lastmod>2026-10-04T14:15:53Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/exercism/ocaml</loc>
+    <lastmod>2026-10-04T13:16:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/exercism/ocaml</loc>
-    <lastmod>2026-10-04T13:16:52Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/camlp4/camlp4</loc>
+    <lastmod>2026-10-04T14:15:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -859,13 +859,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/imandra-ai/fix-engine</loc>
+    <loc>https://getmerged.abhishekco.de/semgrep/ocaml-tree-sitter-core</loc>
     <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/semgrep/ocaml-tree-sitter-core</loc>
+    <loc>https://getmerged.abhishekco.de/imandra-ai/fix-engine</loc>
     <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

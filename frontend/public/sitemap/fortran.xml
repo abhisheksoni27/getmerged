@@ -127,14 +127,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/crest-lab/crest</loc>
-    <lastmod>2026-09-29T23:03:41Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/ESCOMP/CTSM</loc>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ESCOMP/CTSM</loc>
-    <lastmod>2026-10-04T03:34:11Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/crest-lab/crest</loc>
+    <lastmod>2026-09-29T23:03:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -314,7 +314,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cp2k/dbcsr</loc>
-    <lastmod>2026-09-30T22:04:55Z</lastmod>
+    <lastmod>2026-10-05T22:13:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -331,13 +331,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/NOAA-GFDL/FMS</loc>
+    <loc>https://getmerged.abhishekco.de/PrincetonUniversity/STELLOPT</loc>
     <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/PrincetonUniversity/STELLOPT</loc>
+    <loc>https://getmerged.abhishekco.de/NOAA-GFDL/FMS</loc>
     <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

@@ -325,14 +325,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/moq-wg/moq-transport</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/OP-TEE/build</loc>
+    <lastmod>2026-09-28T21:03:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/OP-TEE/build</loc>
-    <lastmod>2026-09-28T21:03:23Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/moq-wg/moq-transport</loc>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -350,18 +350,18 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/saidsef/grafana-loki-on-k8s</loc>
-    <lastmod>2026-09-30T14:04:13Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/woblerr/docker-pgbackrest</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-05T12:16:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/kickingvegas/elisp-for-python</loc>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/woblerr/docker-pgbackrest</loc>
     <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -380,7 +380,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/plone/documentation</loc>
-    <lastmod>2026-09-30T08:02:10Z</lastmod>
+    <lastmod>2026-10-05T04:14:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -398,7 +398,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/josegonzalez/pakman</loc>
-    <lastmod>2026-09-30T20:06:24Z</lastmod>
+    <lastmod>2026-10-05T20:14:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

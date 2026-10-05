@@ -314,7 +314,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ledermann/docker-rails-base</loc>
-    <lastmod>2026-09-30T22:08:17Z</lastmod>
+    <lastmod>2026-10-06T00:12:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -349,14 +349,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/crazy-max/docker-nextcloud</loc>
-    <lastmod>2026-09-22T04:47:20Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/MicrosoftDocs/azure-docs-powershell</loc>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/MicrosoftDocs/azure-docs-powershell</loc>
-    <lastmod>2026-10-04T03:34:11Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/crazy-max/docker-nextcloud</loc>
+    <lastmod>2026-09-22T04:47:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -385,12 +385,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/traefik/traefik-library-image</loc>
-    <lastmod>2026-09-24T00:49:23Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-faster-whisper</loc>
     <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
@@ -399,6 +393,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-freshrss</loc>
     <lastmod>2026-10-04T03:34:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/traefik/traefik-library-image</loc>
+    <lastmod>2026-09-24T00:49:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
