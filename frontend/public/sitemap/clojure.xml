@@ -313,13 +313,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/clojure/core.logic</loc>
+    <loc>https://getmerged.abhishekco.de/plumatic/plumbing</loc>
     <lastmod>2026-10-03T07:45:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/plumatic/plumbing</loc>
+    <loc>https://getmerged.abhishekco.de/clojure/core.logic</loc>
     <lastmod>2026-10-03T07:45:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -421,13 +421,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/datacrypt-project/hitchhiker-tree</loc>
+    <loc>https://getmerged.abhishekco.de/clojure/core.match</loc>
     <lastmod>2026-10-03T07:45:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/clojure/core.match</loc>
+    <loc>https://getmerged.abhishekco.de/datacrypt-project/hitchhiker-tree</loc>
     <lastmod>2026-10-03T07:45:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -710,7 +710,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/yetibot/yetibot</loc>
-    <lastmod>2026-09-30T22:09:32Z</lastmod>
+    <lastmod>2026-10-06T00:17:00Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
