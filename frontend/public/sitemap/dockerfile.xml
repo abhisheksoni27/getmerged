@@ -199,12 +199,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/carlossg/docker-maven</loc>
-    <lastmod>2026-10-01T05:09:18Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/commercialhaskell/stackage</loc>
     <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
@@ -349,14 +343,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/MicrosoftDocs/azure-docs-powershell</loc>
-    <lastmod>2026-10-04T03:34:11Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/crazy-max/docker-nextcloud</loc>
+    <lastmod>2026-09-22T04:47:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/crazy-max/docker-nextcloud</loc>
-    <lastmod>2026-09-22T04:47:20Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/MicrosoftDocs/azure-docs-powershell</loc>
+    <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -380,7 +374,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/klutchell/unbound-docker</loc>
-    <lastmod>2026-10-01T14:11:15Z</lastmod>
+    <lastmod>2026-10-07T02:20:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -481,13 +475,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jauderho/dockerfiles</loc>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-orcaslicer</loc>
     <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-orcaslicer</loc>
+    <loc>https://getmerged.abhishekco.de/jauderho/dockerfiles</loc>
     <lastmod>2026-10-04T03:34:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -524,7 +518,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/klutchell/dnscrypt-proxy-docker</loc>
-    <lastmod>2026-10-01T11:07:00Z</lastmod>
+    <lastmod>2026-10-06T22:21:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -559,14 +553,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/laravel/vapor-php-build</loc>
-    <lastmod>2026-09-28T21:01:59Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/streetsidesoftware/cspell-cli</loc>
+    <lastmod>2026-09-28T16:07:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/streetsidesoftware/cspell-cli</loc>
-    <lastmod>2026-09-28T16:07:40Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/laravel/vapor-php-build</loc>
+    <lastmod>2026-09-28T21:01:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -578,7 +572,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hassio-addons/app-uptime-kuma</loc>
-    <lastmod>2026-10-01T14:09:32Z</lastmod>
+    <lastmod>2026-10-07T02:19:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

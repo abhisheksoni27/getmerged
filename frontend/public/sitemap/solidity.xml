@@ -217,7 +217,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/delegatexyz/delegate-registry</loc>
+    <loc>https://getmerged.abhishekco.de/NomicFoundation/solx</loc>
     <lastmod>2026-10-04T03:34:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -229,8 +229,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/NomicFoundation/solx</loc>
+    <loc>https://getmerged.abhishekco.de/delegatexyz/delegate-registry</loc>
     <lastmod>2026-10-04T03:34:14Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/yieldnest/yieldnest-vault</loc>
+    <lastmod>2026-10-02T23:13:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -243,12 +249,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/across-protocol/contracts</loc>
     <lastmod>2026-10-04T03:34:14Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/yieldnest/yieldnest-vault</loc>
-    <lastmod>2026-10-02T23:13:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -283,13 +283,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/sparkdotfi/spark-spells</loc>
+    <loc>https://getmerged.abhishekco.de/morpho-org/midnight</loc>
     <lastmod>2026-10-04T03:34:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/morpho-org/midnight</loc>
+    <loc>https://getmerged.abhishekco.de/sparkdotfi/spark-spells</loc>
     <lastmod>2026-10-04T03:34:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

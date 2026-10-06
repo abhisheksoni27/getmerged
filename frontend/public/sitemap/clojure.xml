@@ -313,13 +313,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/plumatic/plumbing</loc>
+    <loc>https://getmerged.abhishekco.de/clojure/core.logic</loc>
     <lastmod>2026-10-03T07:45:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/clojure/core.logic</loc>
+    <loc>https://getmerged.abhishekco.de/plumatic/plumbing</loc>
     <lastmod>2026-10-03T07:45:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -374,7 +374,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/clojure-lsp/clojure-lsp</loc>
-    <lastmod>2026-10-01T10:05:54Z</lastmod>
+    <lastmod>2026-10-06T22:14:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

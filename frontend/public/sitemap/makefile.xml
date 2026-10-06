@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/PostgresApp/PostgresApp</loc>
-    <lastmod>2026-10-01T14:11:28Z</lastmod>
+    <lastmod>2026-10-07T02:22:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -188,7 +188,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/golang-templates/seed</loc>
-    <lastmod>2026-10-01T00:10:03Z</lastmod>
+    <lastmod>2026-10-06T07:20:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -325,14 +325,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/OP-TEE/build</loc>
-    <lastmod>2026-09-28T21:03:23Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/moq-wg/moq-transport</loc>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/moq-wg/moq-transport</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/OP-TEE/build</loc>
+    <lastmod>2026-09-28T21:03:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
