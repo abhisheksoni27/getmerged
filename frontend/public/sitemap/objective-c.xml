@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://getmerged.abhishekco.de/gnachman/iTerm2</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/keycastr/keycastr</loc>
     <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
@@ -259,14 +253,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/BranchMetrics/ios-branch-deep-linking-attribution</loc>
-    <lastmod>2026-09-29T12:04:37Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mineek/MuffinStore</loc>
+    <lastmod>2026-09-29T12:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mineek/MuffinStore</loc>
-    <lastmod>2026-09-29T12:04:30Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/BranchMetrics/ios-branch-deep-linking-attribution</loc>
+    <lastmod>2026-09-29T12:04:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -499,14 +493,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jessedc/JCTiledScrollView</loc>
-    <lastmod>2026-09-29T21:04:35Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/MaikuB/flutter_appauth</loc>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/MaikuB/flutter_appauth</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jessedc/JCTiledScrollView</loc>
+    <lastmod>2026-09-29T21:04:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -553,14 +547,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/square/Aardvark</loc>
-    <lastmod>2026-09-29T21:06:11Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/xbmc/Official-Kodi-Remote-iOS</loc>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/xbmc/Official-Kodi-Remote-iOS</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/square/Aardvark</loc>
+    <lastmod>2026-09-29T21:06:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
