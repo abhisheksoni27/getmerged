@@ -301,14 +301,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Gator96100/ProxSpace</loc>
-    <lastmod>2026-09-29T21:03:22Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/OCSInventory-NG/OCSInventory-Server</loc>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/OCSInventory-NG/OCSInventory-Server</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Gator96100/ProxSpace</loc>
+    <lastmod>2026-09-29T21:03:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -349,13 +349,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ko-ichi-h/khcoder</loc>
+    <loc>https://getmerged.abhishekco.de/centreon/centreon-plugins</loc>
     <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/centreon/centreon-plugins</loc>
+    <loc>https://getmerged.abhishekco.de/ko-ichi-h/khcoder</loc>
     <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -421,14 +421,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nebulous/infinitude</loc>
-    <lastmod>2026-09-21T11:50:21Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/petdance/bobby-tables</loc>
+    <lastmod>2026-09-29T20:07:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/petdance/bobby-tables</loc>
-    <lastmod>2026-09-29T20:07:06Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/nebulous/infinitude</loc>
+    <lastmod>2026-09-21T11:50:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -613,6 +613,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/perltidy/perltidy</loc>
+    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/mschilli/log4perl</loc>
     <lastmod>2026-09-22T02:47:26Z</lastmod>
     <changefreq>daily</changefreq>
@@ -620,12 +626,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/duckduckgo/duckduckgo-locales</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/perltidy/perltidy</loc>
     <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

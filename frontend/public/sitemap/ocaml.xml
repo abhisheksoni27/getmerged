@@ -235,14 +235,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ocaml-ppx/ppx_deriving</loc>
-    <lastmod>2026-10-04T14:09:48Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/c-cube/ocaml-containers</loc>
+    <lastmod>2026-10-04T13:15:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/c-cube/ocaml-containers</loc>
-    <lastmod>2026-10-04T13:15:21Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/ocaml-ppx/ppx_deriving</loc>
+    <lastmod>2026-10-04T14:09:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -427,14 +427,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mirage/qubes-mirage-firewall</loc>
-    <lastmod>2026-10-04T14:10:35Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Deducteam/Dedukti</loc>
+    <lastmod>2026-10-04T14:15:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Deducteam/Dedukti</loc>
-    <lastmod>2026-10-04T14:15:08Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mirage/qubes-mirage-firewall</loc>
+    <lastmod>2026-10-04T14:10:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -469,14 +469,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/rocq-community/rocq-lsp</loc>
-    <lastmod>2026-10-04T13:12:37Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/yawaramin/dream-html</loc>
+    <lastmod>2026-10-04T13:12:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/yawaramin/dream-html</loc>
-    <lastmod>2026-10-04T13:12:54Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/rocq-community/rocq-lsp</loc>
+    <lastmod>2026-10-04T13:12:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -619,14 +619,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mathiasbourgoin/Sarek</loc>
-    <lastmod>2026-10-04T14:10:50Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/OCamlPro/alt-ergo</loc>
+    <lastmod>2026-10-04T13:13:35Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/OCamlPro/alt-ergo</loc>
-    <lastmod>2026-10-04T13:13:35Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mathiasbourgoin/Sarek</loc>
+    <lastmod>2026-10-04T14:10:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -685,14 +685,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/kind2-mc/kind2</loc>
-    <lastmod>2026-10-06T09:20:58Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/janestreet/strace_ui</loc>
+    <lastmod>2026-10-04T14:14:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/janestreet/strace_ui</loc>
-    <lastmod>2026-10-04T14:14:11Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/kind2-mc/kind2</loc>
+    <lastmod>2026-10-06T09:20:58Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -709,8 +709,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/tarides/dune-release</loc>
-    <lastmod>2026-10-04T14:10:52Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/ocurrent/ocaml-ci</loc>
+    <lastmod>2026-10-04T13:11:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -721,20 +721,20 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ocurrent/ocaml-ci</loc>
-    <lastmod>2026-10-04T13:11:53Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/jbwinters/jacquard-lang</loc>
-    <lastmod>2026-10-04T12:15:22Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/tarides/dune-release</loc>
+    <lastmod>2026-10-04T14:10:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mirage/ocaml-dns</loc>
     <lastmod>2026-10-04T14:09:43Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jbwinters/jacquard-lang</loc>
+    <lastmod>2026-10-04T12:15:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -817,13 +817,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/b-rodrigues/tlang</loc>
+    <loc>https://getmerged.abhishekco.de/EmileTrotignon/gamelle</loc>
     <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/EmileTrotignon/gamelle</loc>
+    <loc>https://getmerged.abhishekco.de/b-rodrigues/tlang</loc>
     <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -841,13 +841,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/rems-project/cn</loc>
+    <loc>https://getmerged.abhishekco.de/ocaml-community/ocaml-mariadb</loc>
     <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ocaml-community/ocaml-mariadb</loc>
+    <loc>https://getmerged.abhishekco.de/rems-project/cn</loc>
     <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -859,13 +859,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/semgrep/ocaml-tree-sitter-core</loc>
+    <loc>https://getmerged.abhishekco.de/imandra-ai/fix-engine</loc>
     <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/imandra-ai/fix-engine</loc>
+    <loc>https://getmerged.abhishekco.de/semgrep/ocaml-tree-sitter-core</loc>
     <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
