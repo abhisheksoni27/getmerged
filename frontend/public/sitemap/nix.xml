@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/NixOS/nixpkgs</loc>
-    <lastmod>2026-10-04T03:34:13Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nix-community/home-manager</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -20,37 +20,37 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nix-community/disko</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NixOS/nixos-hardware</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Mic92/sops-nix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/microvm-nix/microvm.nix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nix-community/nixvim</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nix-community/stylix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -68,19 +68,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ryan4yin/nix-config</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/numtide/llm-agents.nix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/supabase/postgres</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -98,19 +98,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nix-community/nixos-apple-silicon</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NotAShelf/nvf</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/oxalica/rust-overlay</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -140,7 +140,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ipetkov/crane</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -158,13 +158,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nix-community/fenix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cloud-gouv/securix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -206,13 +206,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/0xc000022070/zen-browser-flake</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fufexan/nix-gaming</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -248,7 +248,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/joshsymonds/nix-config</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -260,7 +260,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/chaotic-cx/nyx</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -272,7 +272,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/juspay/services-flake</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -284,31 +284,31 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/wimpysworld/nix-config</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/openclaw/nix-openclaw</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/BirdeeHub/nixCats-nvim</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/numtide/treefmt-nix</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nvmd/nixos-raspberrypi</loc>
     <lastmod>2026-10-07T14:33:15Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/numtide/treefmt-nix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -320,7 +320,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/input-output-hk/haskell.nix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -338,7 +338,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/denful/den</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -350,31 +350,31 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/srid/nixos-config</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/kiriwalawren/nixflix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cynicsketch/nix-mineral</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/anotherhadi/nixy</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/finix-community/finix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -386,13 +386,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/schlarpc/re-shell</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/badele/nix-homelab</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -410,7 +410,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ibizaman/selfhostblocks</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -434,7 +434,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/anduril/jetpack-nixos</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -464,13 +464,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/lopsided98/nix-ros-overlay</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/AlexNabokikh/nix-config</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -481,8 +475,14 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/AlexNabokikh/nix-config</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/tadfisher/android-nixpkgs</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -494,7 +494,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nix-community/neovim-nightly-overlay</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -530,19 +530,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/arnarg/nixidy</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NixOS/infra</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mrshmllow/affinity-nix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -554,19 +554,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/srid/nixos-unified</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Lassulus/wrappers</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/denful/import-tree</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -578,7 +578,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/loqusion/typix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -608,13 +608,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cardano-foundation/cardano-token-registry</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/schizofox/schizofox</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -632,13 +632,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ornicar/dotfiles</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NobbZ/nixos-config</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -662,7 +662,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Kyure-A/agent-skills-nix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Naxdy/nix-bwrapper</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -673,14 +679,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Naxdy/nix-bwrapper</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/Maroka-chan/VPN-Confinement</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -698,7 +698,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bottlesdevs/bottles-next</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -710,7 +710,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/marienz/nix-doom-emacs-unstraightened</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -733,14 +733,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Baitinq/nixos-config</loc>
-    <lastmod>2026-09-22T09:49:03Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/yunfachi/denix</loc>
+    <lastmod>2026-09-29T21:03:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/yunfachi/denix</loc>
-    <lastmod>2026-09-29T21:03:38Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Baitinq/nixos-config</loc>
+    <lastmod>2026-09-22T09:49:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -752,13 +752,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/akirak/flake-templates</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pfassina/lazyvim-nix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -770,25 +770,25 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/graham33/nixos-dgx-spark</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Tarow/nix-podman-stacks</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/purcell/nix-emacs-ci</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/sdr-enthusiasts/gitbook-adsb-guide</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -800,19 +800,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nix-community/authentik-nix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/barrucadu/nixfiles</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/semi710/nvix</loc>
     <lastmod>2026-10-06T00:14:55Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/barrucadu/nixfiles</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -830,37 +830,31 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bobvanderlinden/nixpkgs-ruby</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jacopone/antigravity-nix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/snugnug/hjem-rum</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/utensils/comfyui-nix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/nix-community/ethereum.nix</loc>
-    <lastmod>2026-10-05T00:12:05Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NixNeovim/NixNeovimPlugins</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -878,7 +872,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/basnijholt/dotfiles</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -896,13 +890,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/typelevel/typelevel-nix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/nix-ocaml/nix-overlays</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -913,8 +901,14 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/nix-ocaml/nix-overlays</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/Platonic-Systems/secrix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -926,7 +920,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/LudovicoPiero/dotfiles</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -950,43 +944,43 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jpetrucciani/nix</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/datsfilipe/dotfiles</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Nix-QChem/NixOS-QChem</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/schembriaiden/helium-browser-nix-flake</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/terlar/nix-config</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/natsukium/dotfiles</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nix-community/nixpkgs-xr</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
