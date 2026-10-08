@@ -2,61 +2,61 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaLang/julia</loc>
-    <lastmod>2026-10-04T18:18:21Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FluxML/Flux.jl</loc>
-    <lastmod>2026-10-04T21:11:43Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/DifferentialEquations.jl</loc>
-    <lastmod>2026-10-04T22:15:02Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaLang/IJulia.jl</loc>
-    <lastmod>2026-10-05T01:18:20Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MakieOrg/Makie.jl</loc>
-    <lastmod>2026-10-04T19:10:35Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jump-dev/JuMP.jl</loc>
-    <lastmod>2026-10-04T20:12:46Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/GenieFramework/Genie.jl</loc>
-    <lastmod>2026-10-04T19:14:45Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/TuringLang/Turing.jl</loc>
-    <lastmod>2026-10-04T19:17:23Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPlots/Plots.jl</loc>
-    <lastmod>2026-10-04T19:10:56Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaAI/MLJ.jl</loc>
-    <lastmod>2026-10-04T20:15:33Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -68,103 +68,103 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaData/DataFrames.jl</loc>
-    <lastmod>2026-10-04T21:16:22Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/ModelingToolkit.jl</loc>
-    <lastmod>2026-10-04T19:10:42Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FluxML/Zygote.jl</loc>
-    <lastmod>2026-10-04T21:12:32Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaLang/PackageCompiler.jl</loc>
-    <lastmod>2026-10-04T19:18:14Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPlots/UnicodePlots.jl</loc>
-    <lastmod>2026-10-04T19:18:28Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaSymbolics/Symbolics.jl</loc>
-    <lastmod>2026-10-04T20:13:23Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPy/PyCall.jl</loc>
-    <lastmod>2026-10-04T23:18:22Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/CliMA/Oceananigans.jl</loc>
-    <lastmod>2026-10-04T19:10:34Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGPU/CUDA.jl</loc>
-    <lastmod>2026-10-04T19:10:13Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/timholy/Revise.jl</loc>
-    <lastmod>2026-10-04T19:10:55Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jonathan-laurent/AlphaZero.jl</loc>
-    <lastmod>2026-10-04T22:16:45Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/NeuralPDE.jl</loc>
-    <lastmod>2026-10-04T19:11:18Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaNLSolvers/Optim.jl</loc>
-    <lastmod>2026-10-04T21:11:57Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaStats/Distributions.jl</loc>
-    <lastmod>2026-10-04T21:12:24Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPy/PythonCall.jl</loc>
-    <lastmod>2026-10-04T19:18:00Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDocs/Franklin.jl</loc>
-    <lastmod>2026-10-04T23:18:43Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDiff/ForwardDiff.jl</loc>
-    <lastmod>2026-10-04T20:17:19Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -176,79 +176,79 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDynamics/DynamicalSystems.jl</loc>
-    <lastmod>2026-10-04T20:16:20Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/DiffEqFlux.jl</loc>
-    <lastmod>2026-10-04T20:14:03Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDocs/Documenter.jl</loc>
-    <lastmod>2026-10-04T21:15:11Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDynamics/Agents.jl</loc>
-    <lastmod>2026-10-04T21:18:22Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/joshday/OnlineStats.jl</loc>
-    <lastmod>2026-10-04T21:13:26Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/aviatesk/JET.jl</loc>
-    <lastmod>2026-10-04T18:17:32Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gridap/Gridap.jl</loc>
-    <lastmod>2026-10-04T20:15:28Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/WaterLily-jl/WaterLily.jl</loc>
-    <lastmod>2026-10-04T19:11:25Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/Optimization.jl</loc>
-    <lastmod>2026-10-04T19:11:23Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/KristofferC/OhMyREPL.jl</loc>
-    <lastmod>2026-10-04T22:15:28Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/astroautomata/SymbolicRegression.jl</loc>
-    <lastmod>2026-10-04T19:10:22Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaSIMD/LoopVectorization.jl</loc>
-    <lastmod>2026-10-05T02:12:20Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/timholy/ProgressMeter.jl</loc>
-    <lastmod>2026-10-04T21:12:04Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -260,103 +260,103 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaCollections/DataStructures.jl</loc>
-    <lastmod>2026-10-04T19:18:06Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/trixi-framework/Trixi.jl</loc>
-    <lastmod>2026-10-04T19:11:49Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaRegistries/General</loc>
-    <lastmod>2026-10-04T18:17:43Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/LuxDL/Lux.jl</loc>
-    <lastmod>2026-10-04T21:10:22Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/trixi-framework/Trixi.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaRegistries/General</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaParallel/Dagger.jl</loc>
-    <lastmod>2026-10-04T19:13:03Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/KristofferC/TimerOutputs.jl</loc>
-    <lastmod>2026-10-04T20:18:17Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDebug/Cthulhu.jl</loc>
-    <lastmod>2026-10-04T23:15:34Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaCI/PkgTemplates.jl</loc>
-    <lastmod>2026-10-04T21:17:48Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/OrdinaryDiffEq.jl</loc>
-    <lastmod>2026-10-04T19:11:07Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaWeb/HTTP.jl</loc>
-    <lastmod>2026-10-04T19:18:22Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaCI/BenchmarkTools.jl</loc>
-    <lastmod>2026-10-04T23:18:17Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ITensor/ITensors.jl</loc>
-    <lastmod>2026-10-04T21:10:27Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaPhysics/Unitful.jl</loc>
-    <lastmod>2026-10-04T22:18:09Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaLang/Pkg.jl</loc>
-    <lastmod>2026-10-04T19:17:02Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaPhysics/Unitful.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mcabbott/Tullio.jl</loc>
-    <lastmod>2026-10-05T02:11:15Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaEditorSupport/JuliaFormatter.jl</loc>
-    <lastmod>2026-10-04T22:17:58Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaIO/JLD2.jl</loc>
-    <lastmod>2026-10-04T21:16:56Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -374,25 +374,25 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/qojulia/QuantumOptics.jl</loc>
-    <lastmod>2026-10-04T22:14:51Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaStats/StatsBase.jl</loc>
-    <lastmod>2026-10-04T21:16:01Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/korsbo/Latexify.jl</loc>
-    <lastmod>2026-10-04T23:16:32Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jump-dev/Convex.jl</loc>
-    <lastmod>2026-10-04T23:16:06Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -404,109 +404,109 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/EnzymeAD/Enzyme.jl</loc>
-    <lastmod>2026-10-04T18:17:48Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fredrikekre/Literate.jl</loc>
-    <lastmod>2026-10-05T00:18:32Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaControl/ControlSystems.jl</loc>
-    <lastmod>2026-10-04T20:15:59Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/QuantumKitHub/TensorOperations.jl</loc>
-    <lastmod>2026-10-04T19:15:55Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaMath/Interpolations.jl</loc>
-    <lastmod>2026-10-04T23:13:23Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SpeedyWeather/SpeedyWeather.jl</loc>
-    <lastmod>2026-10-04T19:11:43Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaSymbolics/SymbolicUtils.jl</loc>
-    <lastmod>2026-10-04T20:14:53Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaApproximation/ApproxFun.jl</loc>
-    <lastmod>2026-10-04T20:15:38Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaSymbolics/SymbolicUtils.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/QuantEcon/QuantEcon.jl</loc>
-    <lastmod>2026-10-04T22:16:55Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaMolSim/DFTK.jl</loc>
-    <lastmod>2026-10-04T20:14:33Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGraphs/Graphs.jl</loc>
-    <lastmod>2026-10-04T22:17:37Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPhysics/Measurements.jl</loc>
-    <lastmod>2026-10-04T21:12:26Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/Catalyst.jl</loc>
-    <lastmod>2026-10-04T19:18:08Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGPU/KernelAbstractions.jl</loc>
-    <lastmod>2026-10-04T19:10:05Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/oscar-system/Oscar.jl</loc>
-    <lastmod>2026-10-04T19:12:58Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/plotly/Dash.jl</loc>
-    <lastmod>2026-10-05T02:11:54Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MakieOrg/AlgebraOfGraphics.jl</loc>
-    <lastmod>2026-10-04T22:18:14Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDebug/Debugger.jl</loc>
-    <lastmod>2026-10-04T23:13:02Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -517,146 +517,134 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jump-dev/MathOptInterface.jl</loc>
-    <lastmod>2026-10-04T19:16:15Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/OxygenFramework/Oxygen.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/OxygenFramework/Oxygen.jl</loc>
-    <lastmod>2026-10-04T20:13:39Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jump-dev/MathOptInterface.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaSmoothOptimizers/Krylov.jl</loc>
-    <lastmod>2026-10-04T19:17:54Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaMolSim/Molly.jl</loc>
-    <lastmod>2026-10-04T19:10:30Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDebug/Infiltrator.jl</loc>
-    <lastmod>2026-10-04T23:18:33Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaMolSim/Molly.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FedeClaudi/Term.jl</loc>
-    <lastmod>2026-10-04T21:11:22Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/lanl-ansi/PowerModels.jl</loc>
-    <lastmod>2026-10-04T20:13:05Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ronisbr/PrettyTables.jl</loc>
-    <lastmod>2026-10-04T20:17:35Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaInterop/CxxWrap.jl</loc>
-    <lastmod>2026-10-05T02:12:23Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGeometry/Meshes.jl</loc>
-    <lastmod>2026-10-04T19:16:45Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/KristofferC/NearestNeighbors.jl</loc>
-    <lastmod>2026-10-04T22:17:53Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/BlackBoxOptim.jl</loc>
-    <lastmod>2026-10-04T20:14:00Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGPU/Metal.jl</loc>
-    <lastmod>2026-10-04T19:10:17Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaTesting/Aqua.jl</loc>
-    <lastmod>2026-10-04T21:15:37Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Jutho/KrylovKit.jl</loc>
-    <lastmod>2026-10-04T19:14:17Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Ferrite-FEM/Ferrite.jl</loc>
-    <lastmod>2026-10-04T19:10:37Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGPU/GPUArrays.jl</loc>
-    <lastmod>2026-10-04T19:11:05Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaStats/MixedModels.jl</loc>
-    <lastmod>2026-10-04T20:13:47Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaPlots/PlotlyJS.jl</loc>
-    <lastmod>2026-10-04T21:17:53Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaParallel/MPI.jl</loc>
-    <lastmod>2026-10-04T21:11:45Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGraphics/QML.jl</loc>
-    <lastmod>2026-10-05T01:17:32Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaManifolds/Manifolds.jl</loc>
-    <lastmod>2026-10-04T19:14:01Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/DataDrivenDiffEq.jl</loc>
-    <lastmod>2026-10-04T21:16:27Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPackaging/BinaryBuilder.jl</loc>
-    <lastmod>2026-10-04T22:18:20Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -668,133 +656,133 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaManifolds/Manopt.jl</loc>
-    <lastmod>2026-10-04T19:17:13Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mauro3/Parameters.jl</loc>
-    <lastmod>2026-10-05T02:11:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/QuantumKitHub/TensorKit.jl</loc>
-    <lastmod>2026-10-04T19:13:55Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/julia-vscode/LanguageServer.jl</loc>
-    <lastmod>2026-10-04T19:18:11Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/QuantumKitHub/TensorKit.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaMath/Roots.jl</loc>
-    <lastmod>2026-10-04T19:16:20Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaIO/HDF5.jl</loc>
-    <lastmod>2026-10-04T19:17:40Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/chalk-lab/Mooncake.jl</loc>
-    <lastmod>2026-10-04T19:10:04Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/queryverse/Query.jl</loc>
-    <lastmod>2026-10-04T21:13:46Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaSymbolics/Metatheory.jl</loc>
-    <lastmod>2026-10-04T20:18:28Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jheinen/GR.jl</loc>
-    <lastmod>2026-10-04T23:15:04Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/omlins/ParallelStencil.jl</loc>
-    <lastmod>2026-10-04T22:15:54Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/SciMLSensitivity.jl</loc>
-    <lastmod>2026-10-04T19:11:28Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDiff/ReverseDiff.jl</loc>
-    <lastmod>2026-10-04T19:11:42Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDiff/TaylorSeries.jl</loc>
-    <lastmod>2026-10-04T21:10:53Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaStats/MultivariateStats.jl</loc>
-    <lastmod>2026-10-04T21:18:03Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaNLSolvers/LsqFit.jl</loc>
-    <lastmod>2026-10-05T01:16:47Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/Surrogates.jl</loc>
-    <lastmod>2026-10-04T21:14:13Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaMath/SpecialFunctions.jl</loc>
-    <lastmod>2026-10-04T23:14:53Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/EnzymeAD/Reactant.jl</loc>
-    <lastmod>2026-10-04T19:11:40Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/ComponentArrays.jl</loc>
-    <lastmod>2026-10-04T20:14:24Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Sienna-Platform/PowerSystems.jl</loc>
-    <lastmod>2026-10-04T19:16:00Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/IBM/AutoMLPipeline.jl</loc>
-    <lastmod>2026-10-04T23:17:20Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -806,55 +794,55 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaNLSolvers/NLsolve.jl</loc>
-    <lastmod>2026-10-04T22:16:39Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bifurcationkit/BifurcationKit.jl</loc>
-    <lastmod>2026-10-04T18:18:00Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaIO/JSON.jl</loc>
-    <lastmod>2026-10-04T19:17:26Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/odow/SDDP.jl</loc>
-    <lastmod>2026-10-04T21:17:43Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/Evolutionary.jl</loc>
-    <lastmod>2026-10-04T21:11:02Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/SciMLBenchmarks.jl</loc>
-    <lastmod>2026-10-04T19:16:37Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGPU/AMDGPU.jl</loc>
-    <lastmod>2026-10-04T19:12:22Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaInterop/RCall.jl</loc>
-    <lastmod>2026-10-04T20:13:49Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rafaqz/DimensionalData.jl</loc>
-    <lastmod>2026-10-04T22:13:26Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -865,56 +853,56 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/infiniteopt/InfiniteOpt.jl</loc>
-    <lastmod>2026-10-04T21:11:17Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/JuliaDebug/SnoopCompile.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaDebug/SnoopCompile.jl</loc>
-    <lastmod>2026-10-04T23:12:52Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/infiniteopt/InfiniteOpt.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaIntervals/IntervalArithmetic.jl</loc>
-    <lastmod>2026-10-04T22:16:04Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/DiffEqDocs.jl</loc>
-    <lastmod>2026-10-04T20:18:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/DiffEqGPU.jl</loc>
-    <lastmod>2026-10-04T19:11:58Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaApproximation/FastGaussQuadrature.jl</loc>
-    <lastmod>2026-10-05T01:15:28Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaData/Tables.jl</loc>
-    <lastmod>2026-10-04T21:12:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaStats/HypothesisTests.jl</loc>
-    <lastmod>2026-10-04T20:15:48Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaMath/Polynomials.jl</loc>
-    <lastmod>2026-10-04T22:16:14Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaStats/HypothesisTests.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -926,13 +914,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDiff/FiniteDifferences.jl</loc>
-    <lastmod>2026-10-05T02:12:38Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Sienna-Platform/PowerSimulations.jl</loc>
-    <lastmod>2026-10-04T21:11:51Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -943,50 +931,38 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/aviatesk/JETLS.jl</loc>
-    <lastmod>2026-10-04T18:18:06Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/JuliaGPU/OpenCL.jl</loc>
-    <lastmod>2026-10-04T19:11:19Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/apache/arrow-julia</loc>
-    <lastmod>2026-10-04T22:17:01Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPluto/PlutoUI.jl</loc>
-    <lastmod>2026-10-05T00:18:37Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaDiff/DifferentiationInterface.jl</loc>
-    <lastmod>2026-10-04T21:13:02Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaData/XLSX.jl</loc>
-    <lastmod>2026-10-04T20:13:53Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/SciML/NonlinearSolve.jl</loc>
-    <lastmod>2026-10-04T19:11:14Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/aviatesk/JETLS.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaLinearAlgebra/LinearMaps.jl</loc>
-    <lastmod>2026-10-05T01:14:55Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/JuliaDiff/DifferentiationInterface.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -997,44 +973,56 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/SciML/NonlinearSolve.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaLinearAlgebra/LinearMaps.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/JuliaArrays/LazyArrays.jl</loc>
-    <lastmod>2026-10-04T19:14:35Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGraphs/GraphNeuralNetworks.jl</loc>
-    <lastmod>2026-10-04T23:14:32Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dmlc/XGBoost.jl</loc>
-    <lastmod>2026-10-04T23:14:05Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/thofma/Hecke.jl</loc>
-    <lastmod>2026-10-04T19:10:51Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaImGui/CImGui.jl</loc>
-    <lastmod>2026-10-04T22:15:49Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jmejia8/Metaheuristics.jl</loc>
-    <lastmod>2026-10-05T00:17:22Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDiff/FiniteDiff.jl</loc>
-    <lastmod>2026-10-04T21:17:01Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1046,91 +1034,91 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaLang/JuliaC.jl</loc>
-    <lastmod>2026-10-04T19:12:17Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/LinearSolve.jl</loc>
-    <lastmod>2026-10-04T20:14:35Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ClapeyronThermo/Clapeyron.jl</loc>
-    <lastmod>2026-10-04T19:13:24Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaIO/MAT.jl</loc>
-    <lastmod>2026-10-04T19:17:32Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaLang/JuliaSyntax.jl</loc>
-    <lastmod>2026-10-05T00:14:18Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/LAMPSPUC/StateSpaceModels.jl</loc>
-    <lastmod>2026-10-04T23:15:09Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/QuantumKitHub/MPSKit.jl</loc>
-    <lastmod>2026-10-04T20:14:27Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/TuringLang/DynamicPPL.jl</loc>
-    <lastmod>2026-10-04T19:11:10Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGaussianProcesses/AbstractGPs.jl</loc>
-    <lastmod>2026-10-04T21:17:58Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaInterop/MATLAB.jl</loc>
-    <lastmod>2026-10-05T01:13:25Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaApproximation/FastTransforms.jl</loc>
-    <lastmod>2026-10-04T20:15:43Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jump-dev/NLopt.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/TuringLang/Bijectors.jl</loc>
-    <lastmod>2026-10-04T21:14:08Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGaussianProcesses/KernelFunctions.jl</loc>
-    <lastmod>2026-10-04T19:18:03Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/TuringLang/MCMCChains.jl</loc>
-    <lastmod>2026-10-04T19:17:15Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/DataInterpolations.jl</loc>
-    <lastmod>2026-10-04T21:10:29Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1148,49 +1136,49 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/queryverse/VegaLite.jl</loc>
-    <lastmod>2026-10-04T21:14:54Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rafaqz/Rasters.jl</loc>
-    <lastmod>2026-10-04T22:12:51Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaParallel/ClusterManagers.jl</loc>
-    <lastmod>2026-10-04T22:18:04Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/modernjuliaworkflows/modernjuliaworkflows.github.io</loc>
-    <lastmod>2026-10-04T23:14:48Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaReach/LazySets.jl</loc>
-    <lastmod>2026-10-04T20:16:41Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FluxML/NNlib.jl</loc>
-    <lastmod>2026-10-04T23:13:38Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaArrays/BlockArrays.jl</loc>
-    <lastmod>2026-10-04T19:16:39Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaLang/AllocCheck.jl</loc>
-    <lastmod>2026-10-04T23:12:46Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1201,14 +1189,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/carlobaldassi/ArgParse.jl</loc>
-    <lastmod>2026-10-05T00:18:26Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/JuliaLang/PrecompileTools.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaLang/PrecompileTools.jl</loc>
-    <lastmod>2026-10-05T02:12:44Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/carlobaldassi/ArgParse.jl</loc>
+    <lastmod>2026-10-05T00:18:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1219,74 +1207,74 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/fredrikekre/Runic.jl</loc>
-    <lastmod>2026-10-04T20:15:09Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/GunnarFarneback/LocalRegistry.jl</loc>
-    <lastmod>2026-10-04T23:17:41Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/GiggleLiu/NiLang.jl</loc>
-    <lastmod>2026-10-04T22:17:06Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/fredrikekre/Runic.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/madsuite-org/MadNLP.jl</loc>
-    <lastmod>2026-10-04T21:13:21Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/GiggleLiu/NiLang.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FixedEffects/FixedEffectModels.jl</loc>
-    <lastmod>2026-10-04T19:17:51Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MadNLP/MadNLP.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/PumasAI/SimpleChains.jl</loc>
-    <lastmod>2026-10-04T22:15:13Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/finch-tensor/Finch.jl</loc>
-    <lastmod>2026-10-04T21:10:31Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/PumasAI/SimpleChains.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/Integrals.jl</loc>
-    <lastmod>2026-10-04T22:13:52Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaInterop/Clang.jl</loc>
-    <lastmod>2026-10-04T23:16:00Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaStats/StatsFuns.jl</loc>
-    <lastmod>2026-10-04T19:16:05Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaInterop/Clang.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jump-dev/Gurobi.jl</loc>
-    <lastmod>2026-10-04T22:17:21Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1298,37 +1286,37 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDatabases/SQLite.jl</loc>
-    <lastmod>2026-10-04T19:10:02Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/SciMLStyle</loc>
-    <lastmod>2026-10-05T02:11:41Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/RecursiveArrayTools.jl</loc>
-    <lastmod>2026-10-04T21:11:00Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaObjects/Accessors.jl</loc>
-    <lastmod>2026-10-04T23:13:33Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/ReservoirComputing.jl</loc>
-    <lastmod>2026-10-04T20:14:30Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaObjects/Accessors.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaStrings/LaTeXStrings.jl</loc>
-    <lastmod>2026-10-04T23:16:59Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1340,13 +1328,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/sisl/BayesNets.jl</loc>
-    <lastmod>2026-10-05T02:12:34Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bat/BAT.jl</loc>
-    <lastmod>2026-10-04T21:12:02Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1357,14 +1345,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaIO/FileIO.jl</loc>
-    <lastmod>2026-10-04T23:14:43Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/JuliaRegistries/Registrator.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaRegistries/Registrator.jl</loc>
-    <lastmod>2026-10-04T21:11:55Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/JuliaIO/FileIO.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1376,115 +1364,115 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaTopOpt/TopOpt.jl</loc>
-    <lastmod>2026-10-04T23:16:47Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaHomotopyContinuation/HomotopyContinuation.jl</loc>
-    <lastmod>2026-10-04T22:16:20Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Sienna-Platform/PowerSimulationsDynamics.jl</loc>
-    <lastmod>2026-10-04T23:17:36Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaHomotopyContinuation/HomotopyContinuation.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Nemocas/Nemo.jl</loc>
-    <lastmod>2026-10-04T19:14:40Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ReactiveBayes/Rocket.jl</loc>
-    <lastmod>2026-10-04T19:14:22Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/GenericMappingTools/GMT.jl</loc>
-    <lastmod>2026-10-04T20:12:52Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaHealth/KomaMRI.jl</loc>
-    <lastmod>2026-10-04T19:16:11Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gaurav-arya/StochasticAD.jl</loc>
-    <lastmod>2026-10-04T21:14:34Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MakieOrg/GeoMakie.jl</loc>
-    <lastmod>2026-10-04T23:13:59Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaReach/ReachabilityAnalysis.jl</loc>
-    <lastmod>2026-10-04T21:11:48Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGPU/oneAPI.jl</loc>
-    <lastmod>2026-10-04T19:10:39Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/Sundials.jl</loc>
-    <lastmod>2026-10-04T22:14:44Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/under-Peter/OMEinsum.jl</loc>
-    <lastmod>2026-10-05T02:14:54Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGeometry/GeometryBasics.jl</loc>
-    <lastmod>2026-10-04T21:15:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaSmoothOptimizers/LinearOperators.jl</loc>
-    <lastmod>2026-10-04T21:15:05Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDSP/Wavelets.jl</loc>
-    <lastmod>2026-10-04T21:13:57Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaSmoothOptimizers/LinearOperators.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mschauer/CausalInference.jl</loc>
-    <lastmod>2026-10-04T23:17:31Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/SciML/MethodOfLines.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MilesCranmer/DispatchDoctor.jl</loc>
     <lastmod>2026-10-04T21:18:16Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/SciML/MethodOfLines.jl</loc>
-    <lastmod>2026-10-04T19:11:31Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1496,25 +1484,25 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGPU/AcceleratedKernels.jl</loc>
-    <lastmod>2026-10-04T19:12:28Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Nemocas/AbstractAlgebra.jl</loc>
-    <lastmod>2026-10-04T19:14:50Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaFolds2/OhMyThreads.jl</loc>
-    <lastmod>2026-10-04T19:12:27Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Evovest/EvoTrees.jl</loc>
-    <lastmod>2026-10-04T21:11:37Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1525,56 +1513,74 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaCollections/Memoize.jl</loc>
-    <lastmod>2026-10-05T01:15:56Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/BioJulia/Automa.jl</loc>
     <lastmod>2026-10-05T02:11:27Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/JuliaCollections/Memoize.jl</loc>
+    <lastmod>2026-10-05T01:15:56Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/eschnett/SIMD.jl</loc>
-    <lastmod>2026-10-05T01:14:08Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGeo/NCDatasets.jl</loc>
-    <lastmod>2026-10-04T20:14:43Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaSmoothOptimizers/NLPModels.jl</loc>
-    <lastmod>2026-10-04T21:15:16Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaParallel/PETSc.jl</loc>
-    <lastmod>2026-10-04T19:15:16Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaArrays/FillArrays.jl</loc>
-    <lastmod>2026-10-04T21:10:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGPU/GPUCompiler.jl</loc>
-    <lastmod>2026-10-04T19:10:41Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPolyhedra/Polyhedra.jl</loc>
-    <lastmod>2026-10-04T20:15:04Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaCI/Coverage.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/QuantumSavory/QuantumClifford.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/plasmo-dev/Plasmo.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1585,80 +1591,62 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/QuantumSavory/QuantumClifford.jl</loc>
-    <lastmod>2026-10-04T20:12:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/plasmo-dev/Plasmo.jl</loc>
-    <lastmod>2026-10-05T01:17:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaCI/Coverage.jl</loc>
-    <lastmod>2026-10-04T23:17:10Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/JuliaPhysics/SolidStateDetectors.jl</loc>
-    <lastmod>2026-10-04T21:11:24Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/SciMLBase.jl</loc>
-    <lastmod>2026-10-04T19:11:30Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/akio-tomiya/LatticeQCD.jl</loc>
-    <lastmod>2026-10-04T22:16:32Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPhylo/PhyloNetworks.jl</loc>
-    <lastmod>2026-10-04T23:15:28Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/svilupp/PromptingTools.jl</loc>
-    <lastmod>2026-10-04T19:16:32Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/timholy/Rebugger.jl</loc>
-    <lastmod>2026-10-05T01:16:53Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPerf/PProf.jl</loc>
-    <lastmod>2026-10-04T23:18:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/qutip/QuantumToolbox.jl</loc>
-    <lastmod>2026-10-04T20:13:17Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaMath/DoubleFloats.jl</loc>
-    <lastmod>2026-10-05T00:14:31Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/ModelingToolkitStandardLibrary.jl</loc>
-    <lastmod>2026-10-04T22:14:31Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1670,91 +1658,91 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/wookay/Octo.jl</loc>
-    <lastmod>2026-10-04T21:14:03Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDynamics/ResumableFunctions.jl</loc>
-    <lastmod>2026-10-04T20:14:55Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jump-dev/Ipopt.jl</loc>
-    <lastmod>2026-10-04T22:17:27Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDebug/JuliaInterpreter.jl</loc>
-    <lastmod>2026-10-04T20:12:34Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mauro3/SimpleTraits.jl</loc>
-    <lastmod>2026-10-05T02:12:53Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaVTK/WriteVTK.jl</loc>
-    <lastmod>2026-10-05T01:18:05Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDocs/LiveServer.jl</loc>
-    <lastmod>2026-10-05T00:16:17Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FourierFlows/GeophysicalFlows.jl</loc>
-    <lastmod>2026-10-04T22:15:39Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDynamics/Associations.jl</loc>
-    <lastmod>2026-10-05T00:14:43Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaLinearAlgebra/GenericLinearAlgebra.jl</loc>
-    <lastmod>2026-10-04T22:18:44Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Deltares/Wflow.jl</loc>
-    <lastmod>2026-10-04T20:13:42Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/JuliaVTK/WriteVTK.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaCloud/AWS.jl</loc>
-    <lastmod>2026-10-04T21:14:48Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/QuantumKitHub/Strided.jl</loc>
-    <lastmod>2026-10-04T23:17:04Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/JuliaLinearAlgebra/GenericLinearAlgebra.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Deltares/Wflow.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/KristofferC/Crayons.jl</loc>
-    <lastmod>2026-10-04T20:13:09Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/QuantumKitHub/Strided.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/PetrKryslUCSD/FinEtools.jl</loc>
-    <lastmod>2026-10-04T22:17:42Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1766,85 +1754,79 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaAI/MLJBase.jl</loc>
-    <lastmod>2026-10-04T22:17:32Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/PSORLab/EAGO.jl</loc>
-    <lastmod>2026-10-04T21:18:08Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/BioJulia/BioSequences.jl</loc>
-    <lastmod>2026-10-04T23:13:45Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaTesting/TestEnv.jl</loc>
-    <lastmod>2026-10-04T23:13:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDynamics/NetworkDynamics.jl</loc>
-    <lastmod>2026-10-04T19:13:50Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/BioJulia/BioSequences.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaTesting/TestEnv.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Kyjor/JulGame.jl</loc>
-    <lastmod>2026-10-05T00:15:01Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/oxinabox/DataDeps.jl</loc>
-    <lastmod>2026-10-04T21:11:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/sintefmath/JutulDarcy.jl</loc>
-    <lastmod>2026-10-04T20:12:58Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/RimuQMC/Rimu.jl</loc>
-    <lastmod>2026-10-04T21:10:14Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/baggepinnen/LowLevelParticleFilters.jl</loc>
-    <lastmod>2026-10-04T19:12:33Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/QuantumKitHub/PEPSKit.jl</loc>
-    <lastmod>2026-10-04T20:12:51Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaNLSolvers/LineSearches.jl</loc>
-    <lastmod>2026-10-04T22:12:44Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/sintefmath/JutulDarcy.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/RimuQMC/Rimu.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/BioTurboNick/AbbreviatedStackTraces.jl</loc>
-    <lastmod>2026-10-04T23:14:22Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaNLSolvers/LineSearches.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPluto/PlutoSliderServer.jl</loc>
-    <lastmod>2026-10-05T01:13:19Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1855,74 +1837,80 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaMath/NFFT.jl</loc>
-    <lastmod>2026-10-04T23:13:07Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/sefffal/PairPlots.jl</loc>
-    <lastmod>2026-10-04T21:14:27Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaPhysics/DynamicQuantities.jl</loc>
-    <lastmod>2026-10-05T00:17:42Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/JuliaMath/NFFT.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/julia-vscode/StaticLint.jl</loc>
-    <lastmod>2026-10-05T02:11:24Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaLang/Compat.jl</loc>
-    <lastmod>2026-10-05T00:17:48Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mbaz/Gaston.jl</loc>
-    <lastmod>2026-10-05T01:15:11Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaPhysics/DynamicQuantities.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FluxML/MLJFlux.jl</loc>
-    <lastmod>2026-10-04T23:15:47Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mcabbott/AxisKeys.jl</loc>
-    <lastmod>2026-10-05T02:12:47Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SparqleSim/PauliPropagation.jl</loc>
-    <lastmod>2026-10-04T20:16:26Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaData/SplitApplyCombine.jl</loc>
-    <lastmod>2026-10-05T02:12:40Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Julia-Tempering/Pigeons.jl</loc>
-    <lastmod>2026-10-04T20:17:46Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaML/LossFunctions.jl</loc>
-    <lastmod>2026-10-04T21:10:44Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/baggepinnen/ControlSystemIdentification.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1933,104 +1921,98 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/baggepinnen/ControlSystemIdentification.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/SciML/JumpProcesses.jl</loc>
-    <lastmod>2026-10-04T21:10:46Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/jump-dev/HiGHS.jl</loc>
-    <lastmod>2026-10-04T20:17:25Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/MakieOrg/GraphMakie.jl</loc>
-    <lastmod>2026-10-04T20:18:22Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jump-dev/Hypatia.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/yeesian/ArchGDAL.jl</loc>
-    <lastmod>2026-10-04T22:13:31Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jump-dev/Hypatia.jl</loc>
-    <lastmod>2026-10-04T20:17:56Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/MakieOrg/GraphMakie.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/SciML/JumpProcesses.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ChifiSource/Olive.jl</loc>
-    <lastmod>2026-10-04T23:16:25Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaDebug/CodeTracking.jl</loc>
-    <lastmod>2026-10-04T22:18:38Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/thorek1/MacroModelling.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MasonProtter/ReplMaker.jl</loc>
-    <lastmod>2026-10-04T22:14:19Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Circuitscape/Circuitscape.jl</loc>
-    <lastmod>2026-10-04T22:15:23Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/JuliaDebug/CodeTracking.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gridap/GridapDistributed.jl</loc>
-    <lastmod>2026-10-05T00:14:25Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Circuitscape/Circuitscape.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MilesCranmer/AirspeedVelocity.jl</loc>
-    <lastmod>2026-10-05T00:15:07Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaPackaging/Preferences.jl</loc>
-    <lastmod>2026-10-04T22:14:13Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGPU/JACC.jl</loc>
-    <lastmod>2026-10-04T21:11:19Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaPackaging/Preferences.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaStats/Lasso.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaRegistries/CompatHelper.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaWeb/RemoteREPL.jl</loc>
     <lastmod>2026-10-05T02:10:37Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaStats/Lasso.jl</loc>
-    <lastmod>2026-10-05T00:14:37Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaRegistries/CompatHelper.jl</loc>
-    <lastmod>2026-10-04T22:17:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2042,79 +2024,79 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dillondaudert/UMAP.jl</loc>
-    <lastmod>2026-10-04T23:16:20Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SunnySuite/Sunny.jl</loc>
-    <lastmod>2026-10-04T21:15:55Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/eth-vaw-glaciology/course-101-0250-00</loc>
-    <lastmod>2026-10-04T20:14:48Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/queryverse/Queryverse.jl</loc>
-    <lastmod>2026-10-04T23:13:28Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/eth-vaw-glaciology/course-101-0250-00</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jump-dev/DiffOpt.jl</loc>
-    <lastmod>2026-10-04T21:12:36Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/QuantEcon/GameTheory.jl</loc>
-    <lastmod>2026-10-04T19:18:20Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/tkluck/StatProfilerHTML.jl</loc>
-    <lastmod>2026-10-04T23:14:17Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/matthieugomez/StringDistances.jl</loc>
-    <lastmod>2026-10-04T23:16:54Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/tkluck/StatProfilerHTML.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaLLVM/LLVM.jl</loc>
-    <lastmod>2026-10-04T19:12:05Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPy/CondaPkg.jl</loc>
-    <lastmod>2026-10-04T21:11:15Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/analytech-solutions/CBinding.jl</loc>
-    <lastmod>2026-10-04T22:13:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/ronisbr/TerminalPager.jl</loc>
-    <lastmod>2026-10-04T20:13:44Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/matthieugomez/EconPDEs.jl</loc>
-    <lastmod>2026-10-04T23:14:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ronisbr/TerminalPager.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2126,31 +2108,31 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaAlgebra/MultivariatePolynomials.jl</loc>
-    <lastmod>2026-10-04T21:12:42Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaFirstOrder/ProximalOperators.jl</loc>
-    <lastmod>2026-10-04T20:13:56Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaData/YAML.jl</loc>
-    <lastmod>2026-10-04T19:17:19Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaIO/Zarr.jl</loc>
-    <lastmod>2026-10-04T19:10:20Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jump-dev/Pajarito.jl</loc>
-    <lastmod>2026-10-04T21:16:51Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2161,44 +2143,44 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaLinearAlgebra/BandedMatrices.jl</loc>
-    <lastmod>2026-10-04T20:13:33Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/JuliaArrays/ArrayInterface.jl</loc>
-    <lastmod>2026-10-04T22:13:47Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jump-dev/CPLEX.jl</loc>
-    <lastmod>2026-10-05T00:15:18Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/PerezHz/TaylorIntegration.jl</loc>
-    <lastmod>2026-10-04T21:11:07Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaImages/ImageView.jl</loc>
-    <lastmod>2026-10-05T02:12:32Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/NBodySimulator.jl</loc>
-    <lastmod>2026-10-04T22:14:57Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaImages/ImageView.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaEnergy/PowerDynamics.jl</loc>
-    <lastmod>2026-10-04T19:15:00Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaData/CategoricalArrays.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2209,20 +2191,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaData/CategoricalArrays.jl</loc>
-    <lastmod>2026-10-05T00:14:55Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/JuliaControl/ModelPredictiveControl.jl</loc>
-    <lastmod>2026-10-04T19:12:18Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaIO/VideoIO.jl</loc>
-    <lastmod>2026-10-04T20:17:40Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2233,20 +2203,32 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jverzani/Mustache.jl</loc>
-    <lastmod>2026-10-04T21:12:06Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/JuliaIO/VideoIO.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/control-toolbox/OptimalControl.jl</loc>
-    <lastmod>2026-10-04T19:11:54Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jverzani/Mustache.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaLinearAlgebra/AlgebraicMultigrid.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaIO/DiskArrays.jl</loc>
-    <lastmod>2026-10-04T20:14:50Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2257,188 +2239,164 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaLinearAlgebra/AlgebraicMultigrid.jl</loc>
-    <lastmod>2026-10-04T23:12:57Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/JuliaDecisionFocusedLearning/InferOpt.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nathanaelbosch/ProbNumDiffEq.jl</loc>
-    <lastmod>2026-10-04T19:12:10Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaDecisionFocusedLearning/InferOpt.jl</loc>
-    <lastmod>2026-10-04T23:15:54Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaDataCubes/YAXArrays.jl</loc>
-    <lastmod>2026-10-04T20:14:16Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MichaelHatherly/InteractiveErrors.jl</loc>
-    <lastmod>2026-10-05T02:11:51Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/vtjnash/Glob.jl</loc>
-    <lastmod>2026-10-05T01:15:39Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/jump-dev/SumOfSquares.jl</loc>
-    <lastmod>2026-10-04T19:10:08Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaIntervals/IntervalRootFinding.jl</loc>
-    <lastmod>2026-10-05T01:17:26Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/LupoLab/Luna.jl</loc>
-    <lastmod>2026-10-04T21:12:14Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/SciML/ColPrac</loc>
-    <lastmod>2026-10-04T19:16:43Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/SymbolicNumericIntegration.jl</loc>
-    <lastmod>2026-10-04T22:14:37Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/SciML/ColPrac</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/StructuralIdentifiability.jl</loc>
-    <lastmod>2026-10-04T20:15:53Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/LupoLab/Luna.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/slimgroup/JUDI.jl</loc>
-    <lastmod>2026-10-05T00:15:59Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/milankl/ShallowWaters.jl</loc>
-    <lastmod>2026-10-04T22:17:11Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGPU/Vulkan.jl</loc>
-    <lastmod>2026-10-04T21:12:55Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/LuxDL/DocumenterVitepress.jl</loc>
-    <lastmod>2026-10-04T20:14:59Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/CliMA/ClimaAtmos.jl</loc>
-    <lastmod>2026-10-04T19:10:18Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaIO/Parquet.jl</loc>
-    <lastmod>2026-10-04T19:16:27Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ITensor/ITensorNetworks.jl</loc>
-    <lastmod>2026-10-04T22:16:09Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaBesties/BestieTemplate.jl</loc>
-    <lastmod>2026-10-04T23:17:25Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/CliMA/EnsembleKalmanProcesses.jl</loc>
-    <lastmod>2026-10-04T23:13:17Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/SciML/PreallocationTools.jl</loc>
-    <lastmod>2026-10-04T20:14:38Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaArrays/NamedDims.jl</loc>
-    <lastmod>2026-10-05T00:15:13Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/SciML/PreallocationTools.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaML/MLUtils.jl</loc>
-    <lastmod>2026-10-04T23:17:15Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaLinearAlgebra/AppleAccelerate.jl</loc>
-    <lastmod>2026-10-04T21:12:48Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JeffFessler/MIRT.jl</loc>
-    <lastmod>2026-10-05T00:16:11Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/SciML/LabelledArrays.jl</loc>
-    <lastmod>2026-10-04T20:13:04Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaInterop/JavaCall.jl</loc>
-    <lastmod>2026-10-05T00:13:11Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/JuliaLinearAlgebra/AppleAccelerate.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaStats/HiddenMarkovModels.jl</loc>
-    <lastmod>2026-10-04T20:14:22Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/SciML/LabelledArrays.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaInterop/JavaCall.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/DiffEqBayes.jl</loc>
-    <lastmod>2026-10-04T21:16:33Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaLang/FunctionWrappers.jl</loc>
-    <lastmod>2026-10-05T00:14:11Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2449,20 +2407,20 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/JuliaLang/FunctionWrappers.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/SciML/QuasiMonteCarlo.jl</loc>
-    <lastmod>2026-10-04T20:16:34Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPhysics/PhysicalConstants.jl</loc>
-    <lastmod>2026-10-05T00:15:30Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/LilithHafner/Chairmarks.jl</loc>
-    <lastmod>2026-10-04T21:17:11Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2474,37 +2432,37 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaClimate/Drifters.jl</loc>
-    <lastmod>2026-10-04T21:13:40Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/SciML/DiffEqProblemLibrary.jl</loc>
-    <lastmod>2026-10-04T21:10:48Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/LilithHafner/Chairmarks.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaClimate/ClimateTools.jl</loc>
-    <lastmod>2026-10-05T00:15:36Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/MasonProtter/SumTypes.jl</loc>
-    <lastmod>2026-10-04T22:18:25Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/SciML/DiffEqProblemLibrary.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/PolyChaos.jl</loc>
-    <lastmod>2026-10-04T21:11:30Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaHEP/UnROOT.jl</loc>
-    <lastmod>2026-10-04T20:13:37Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/MasonProtter/SumTypes.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2515,56 +2473,44 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/JuliaHEP/UnROOT.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/JuliaGPU/Adapt.jl</loc>
-    <lastmod>2026-10-04T19:16:52Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ReactiveBayes/ReactiveMP.jl</loc>
-    <lastmod>2026-10-04T21:11:33Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaML/OpenAI.jl</loc>
-    <lastmod>2026-10-05T02:11:49Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/joaquimg/BilevelJuMP.jl</loc>
-    <lastmod>2026-10-04T21:13:16Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaML/OpenAI.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaOptimalTransport/OptimalTransport.jl</loc>
-    <lastmod>2026-10-05T02:11:30Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/vtjeng/MIPVerify.jl</loc>
-    <lastmod>2026-10-04T19:13:40Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Julia-XAI/ExplainableAI.jl</loc>
-    <lastmod>2026-10-04T21:12:18Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaData/Parsers.jl</loc>
-    <lastmod>2026-10-04T19:16:57Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/CliMA/ClimaCore.jl</loc>
-    <lastmod>2026-10-04T19:12:00Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2575,14 +2521,32 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/lrnv/Copulas.jl</loc>
-    <lastmod>2026-10-04T19:16:21Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/CliMA/ClimaCore.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaData/Parsers.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/vtjeng/MIPVerify.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ZIB-IOL/FrankWolfe.jl</loc>
-    <lastmod>2026-10-04T20:17:51Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/lrnv/Copulas.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2600,13 +2564,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaStats/Loess.jl</loc>
-    <lastmod>2026-10-05T01:17:59Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Roger-luo/Moshi.jl</loc>
-    <lastmod>2026-10-04T21:10:34Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2617,8 +2575,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaDatabases/ODBC.jl</loc>
-    <lastmod>2026-10-04T19:17:08Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Roger-luo/Moshi.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2630,55 +2588,55 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaStats/PDMats.jl</loc>
-    <lastmod>2026-10-04T19:17:38Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/RuntimeGeneratedFunctions.jl</loc>
-    <lastmod>2026-10-04T21:10:58Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaGeometry/RegionTrees.jl</loc>
-    <lastmod>2026-10-05T00:17:28Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaCollections/OrderedCollections.jl</loc>
-    <lastmod>2026-10-04T19:18:17Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/JuliaDatabases/ODBC.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FluxML/IRTools.jl</loc>
-    <lastmod>2026-10-04T23:18:28Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaLinearAlgebra/ArnoldiMethod.jl</loc>
-    <lastmod>2026-10-05T02:13:19Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ranocha/SummationByPartsOperators.jl</loc>
-    <lastmod>2026-10-04T20:13:29Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaLinearAlgebra/ArnoldiMethod.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/julia-vscode/CSTParser.jl</loc>
-    <lastmod>2026-10-04T21:11:59Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaTesting/ReTest.jl</loc>
-    <lastmod>2026-10-04T21:15:00Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2690,13 +2648,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaDatabases/MySQL.jl</loc>
-    <lastmod>2026-10-04T22:14:24Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/arviz-devs/ArviZ.jl</loc>
-    <lastmod>2026-10-04T22:17:16Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaGizmos/Observables.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2707,50 +2671,56 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaGizmos/Observables.jl</loc>
-    <lastmod>2026-10-05T01:14:25Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaML/TableTransforms.jl</loc>
-    <lastmod>2026-10-04T22:15:44Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/JuliaGraphs/NetworkLayout.jl</loc>
-    <lastmod>2026-10-04T20:14:45Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/ExponentialUtilities.jl</loc>
-    <lastmod>2026-10-04T19:11:09Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaSparse/SparseArrays.jl</loc>
-    <lastmod>2026-10-04T18:17:27Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaML/TableTransforms.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/reworkhow/JWAS.jl</loc>
-    <lastmod>2026-10-05T00:18:03Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/baggepinnen/DynamicAxisWarping.jl</loc>
-    <lastmod>2026-10-05T02:12:55Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaMath/Primes.jl</loc>
-    <lastmod>2026-10-04T23:15:40Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/PumasAI/QuartoNotebookRunner.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/TuringLang/AdvancedVI.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2761,62 +2731,50 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/TuringLang/AdvancedVI.jl</loc>
-    <lastmod>2026-10-04T19:17:29Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/byuflowlab/FLOWVPM.jl</loc>
-    <lastmod>2026-10-04T21:17:29Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/PumasAI/QuartoNotebookRunner.jl</loc>
-    <lastmod>2026-10-04T19:15:06Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/BioJulia/BioStructures.jl</loc>
-    <lastmod>2026-10-04T19:17:46Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Kolaru/MathTeXEngine.jl</loc>
-    <lastmod>2026-10-05T02:10:41Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/FEniCS.jl</loc>
-    <lastmod>2026-10-04T22:16:26Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JuliaDatabases/Redis.jl</loc>
-    <lastmod>2026-10-04T21:11:28Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/BioJulia/BioStructures.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/ConcreteStructs.jl</loc>
-    <lastmod>2026-10-04T21:12:16Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaDatabases/Redis.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jump-dev/GLPK.jl</loc>
-    <lastmod>2026-10-05T02:12:50Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/PumasAI/SummaryTables.jl</loc>
-    <lastmod>2026-10-04T20:14:40Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/s-broda/ARCHModels.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2827,44 +2785,38 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jump-dev/Dualization.jl</loc>
-    <lastmod>2026-10-04T21:18:27Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/s-broda/ARCHModels.jl</loc>
-    <lastmod>2026-10-04T23:14:27Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/SciML/CurveFit.jl</loc>
-    <lastmod>2026-10-04T22:15:07Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/hyrodium/BasicBSpline.jl</loc>
-    <lastmod>2026-10-05T01:16:22Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/PumasAI/SummaryTables.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jump-dev/Dualization.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaData/XML.jl</loc>
-    <lastmod>2026-10-04T19:17:02Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/m3g/CellListMap.jl</loc>
-    <lastmod>2026-10-04T23:14:38Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/julia-testitems/TestItemRunner.jl</loc>
-    <lastmod>2026-10-04T22:13:37Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/hyrodium/BasicBSpline.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2875,8 +2827,14 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/julia-testitems/TestItemRunner.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/SciML/DiffEqCallbacks.jl</loc>
-    <lastmod>2026-10-04T21:17:06Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2888,67 +2846,67 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/EllipsisNotation.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JoeyT1994/TensorNetworkQuantumSimulator.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/SciML/HighDimPDE.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaPy/PythonPlot.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/SciML/HighDimPDE.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/FastBroadcast.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaLinearAlgebra/RecursiveFactorization.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ark-ecs/Ark.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/invenia/Impute.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NumericalEarth/Breeze.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/exercism/julia</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/julia-vscode/Salsa.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2960,79 +2918,79 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/QuantumSavory/QuantumSavory.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/ProjectTorreyPines/FastInterpolations.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/ADTypes.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ProjectTorreyPines/FastInterpolations.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaIO/gRPCClient.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/simonp0420/PSSFSS.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/DiffEqNoiseProcess.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/julia-actions/julia-runtest</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/BoundaryValueDiffEq.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JuliaSMLM/ModelContextProtocol.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/MinimallyDisruptiveCurves.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/sefffal/Octofitter.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JuliaNeuralGraphics/GaussianSplatting.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SciML/FiniteVolumeMethod.jl</loc>
-    <lastmod>2026-10-04T03:34:12Z</lastmod>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JuliaNeuralGraphics/GaussianSplatting.jl</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
