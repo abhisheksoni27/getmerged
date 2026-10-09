@@ -164,7 +164,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/duoan/TorchCode</loc>
-    <lastmod>2026-10-02T20:43:08Z</lastmod>
+    <lastmod>2026-10-09T20:59:45Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -217,6 +217,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/shsarv/Machine-Learning-Projects</loc>
+    <lastmod>2026-10-09T21:55:19Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/NVIDIA/accelerated-computing-hub</loc>
     <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
@@ -242,19 +248,25 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/honeyandme/RAGQnASystem</loc>
-    <lastmod>2026-10-02T21:39:54Z</lastmod>
+    <lastmod>2026-10-09T21:56:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/yunwei37/ZJU-CS-GIS-ClassNotes</loc>
-    <lastmod>2026-10-02T21:39:54Z</lastmod>
+    <lastmod>2026-10-09T21:56:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/szagoruyko/attention-transfer</loc>
-    <lastmod>2026-10-02T21:40:02Z</lastmod>
+    <lastmod>2026-10-09T21:57:03Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/datawhalechina/diy-llm</loc>
+    <lastmod>2026-10-09T21:57:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

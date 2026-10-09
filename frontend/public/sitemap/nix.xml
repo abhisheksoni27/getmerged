@@ -230,13 +230,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Mic92/nixos-shell</loc>
-    <lastmod>2026-10-04T03:08:42Z</lastmod>
+    <lastmod>2026-10-09T15:22:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cachix/git-hooks.nix</loc>
-    <lastmod>2026-10-04T02:17:03Z</lastmod>
+    <lastmod>2026-10-09T15:22:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -301,14 +301,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/numtide/treefmt-nix</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/nvmd/nixos-raspberrypi</loc>
+    <lastmod>2026-10-07T14:33:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nvmd/nixos-raspberrypi</loc>
-    <lastmod>2026-10-07T14:33:15Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/numtide/treefmt-nix</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -469,14 +469,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/BirdeeHub/nix-wrapper-modules</loc>
-    <lastmod>2026-09-27T22:57:05Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/AlexNabokikh/nix-config</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/AlexNabokikh/nix-config</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/BirdeeHub/nix-wrapper-modules</loc>
+    <lastmod>2026-09-27T22:57:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -626,7 +626,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/budimanjojo/nix-config</loc>
-    <lastmod>2026-10-01T12:08:22Z</lastmod>
+    <lastmod>2026-10-09T15:19:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -667,14 +667,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Naxdy/nix-bwrapper</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/srid/rust-nix-template</loc>
+    <lastmod>2026-09-29T20:04:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/srid/rust-nix-template</loc>
-    <lastmod>2026-09-29T20:04:55Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Naxdy/nix-bwrapper</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -692,7 +692,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/devon-systems/hoenn</loc>
-    <lastmod>2026-10-04T03:08:47Z</lastmod>
+    <lastmod>2026-10-09T15:23:16Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
