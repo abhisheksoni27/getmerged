@@ -511,13 +511,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/teamchong/turboquant-wasm</loc>
+    <loc>https://getmerged.abhishekco.de/ziglibs/known-folders</loc>
     <lastmod>2026-10-09T03:37:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ziglibs/known-folders</loc>
+    <loc>https://getmerged.abhishekco.de/teamchong/turboquant-wasm</loc>
     <lastmod>2026-10-09T03:37:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -637,13 +637,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/hendriknielaender/zBench</loc>
+    <loc>https://getmerged.abhishekco.de/dmtrKovalenko/zlob</loc>
     <lastmod>2026-10-09T03:37:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/dmtrKovalenko/zlob</loc>
+    <loc>https://getmerged.abhishekco.de/hendriknielaender/zBench</loc>
     <lastmod>2026-10-09T03:37:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -799,13 +799,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/rockorager/zigdoc</loc>
-    <lastmod>2026-10-08T16:26:33Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/ianprime0509/zig-gobject</loc>
+    <loc>https://getmerged.abhishekco.de/open-telemetry/opentelemetry-injector</loc>
     <lastmod>2026-10-09T03:37:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -817,8 +811,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/open-telemetry/opentelemetry-injector</loc>
+    <loc>https://getmerged.abhishekco.de/ianprime0509/zig-gobject</loc>
     <lastmod>2026-10-09T03:37:17Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/rockorager/zigdoc</loc>
+    <lastmod>2026-10-08T16:26:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -829,13 +829,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mnemnion/mvzr</loc>
+    <loc>https://getmerged.abhishekco.de/rdunnington/bytebox</loc>
     <lastmod>2026-10-09T03:37:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/rdunnington/bytebox</loc>
+    <loc>https://getmerged.abhishekco.de/mnemnion/mvzr</loc>
     <lastmod>2026-10-09T03:37:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -859,13 +859,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/silbinarywolf/zig-android-sdk</loc>
+    <loc>https://getmerged.abhishekco.de/jiacai2050/zigcli</loc>
     <lastmod>2026-10-09T03:37:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jiacai2050/zigcli</loc>
+    <loc>https://getmerged.abhishekco.de/silbinarywolf/zig-android-sdk</loc>
     <lastmod>2026-10-09T03:37:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -877,14 +877,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/CascadeOS/CascadeOS</loc>
-    <lastmod>2026-10-08T17:20:18Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/tree-sitter/zig-tree-sitter</loc>
+    <lastmod>2026-10-09T03:37:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/tree-sitter/zig-tree-sitter</loc>
-    <lastmod>2026-10-09T03:37:17Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/CascadeOS/CascadeOS</loc>
+    <lastmod>2026-10-08T17:20:18Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -901,14 +901,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/DanB91/Zig-Playdate-Template</loc>
-    <lastmod>2026-10-08T17:21:07Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/maxpoletaev/nupsx</loc>
+    <lastmod>2026-10-09T03:37:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/maxpoletaev/nupsx</loc>
-    <lastmod>2026-10-09T03:37:17Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/DanB91/Zig-Playdate-Template</loc>
+    <lastmod>2026-10-08T17:21:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
