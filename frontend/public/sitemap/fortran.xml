@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cp2k/cp2k</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-10T04:25:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -31,14 +31,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/OpenRadioss/OpenRadioss</loc>
+    <loc>https://getmerged.abhishekco.de/firemodels/fds</loc>
     <lastmod>2026-10-09T03:37:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/firemodels/fds</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/OpenRadioss/OpenRadioss</loc>
+    <lastmod>2026-10-10T06:22:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -104,7 +104,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MODFLOW-ORG/modflow6</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-10T11:22:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -127,12 +127,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/crest-lab/crest</loc>
-    <lastmod>2026-09-29T23:03:41Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/ESCOMP/CTSM</loc>
     <lastmod>2026-10-09T19:23:05Z</lastmod>
     <changefreq>daily</changefreq>
@@ -141,6 +135,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/NOAA-EMC/WW3</loc>
     <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/crest-lab/crest</loc>
+    <lastmod>2026-09-29T23:03:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -253,6 +253,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/nasa/cea</loc>
+    <lastmod>2026-10-09T21:29:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/esmf-org/esmf</loc>
     <lastmod>2026-10-09T03:37:14Z</lastmod>
     <changefreq>daily</changefreq>
@@ -267,12 +273,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/Cambridge-ICCS/FTorch</loc>
     <lastmod>2026-10-09T03:37:14Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/nasa/cea</loc>
-    <lastmod>2026-10-09T21:29:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

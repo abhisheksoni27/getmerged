@@ -26,7 +26,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/kstenerud/KSCrash</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <lastmod>2026-10-10T20:23:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -62,7 +62,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Tunnelblick/Tunnelblick</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <lastmod>2026-10-10T12:23:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -133,6 +133,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/blendbyte/Textual</loc>
+    <lastmod>2026-10-10T09:59:54Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/nfzerox/VirtualMacOniPad</loc>
     <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
@@ -188,7 +194,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gnustep/libs-base</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <lastmod>2026-10-10T11:22:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -229,14 +235,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/BranchMetrics/ios-branch-deep-linking-attribution</loc>
-    <lastmod>2026-09-29T12:04:37Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mineek/MuffinStore</loc>
+    <lastmod>2026-09-29T12:04:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/mineek/MuffinStore</loc>
-    <lastmod>2026-09-29T12:04:30Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/BranchMetrics/ios-branch-deep-linking-attribution</loc>
+    <lastmod>2026-09-29T12:04:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -367,14 +373,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/tumblr/TMTumblrSDK</loc>
-    <lastmod>2026-09-29T21:02:39Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/missuo/koe</loc>
+    <lastmod>2026-10-07T04:20:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/missuo/koe</loc>
-    <lastmod>2026-10-07T04:20:52Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/tumblr/TMTumblrSDK</loc>
+    <lastmod>2026-09-29T21:02:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -464,7 +470,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gnustep/libs-gui</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <lastmod>2026-10-10T20:23:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -499,13 +505,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/LiveContainer/LiveExec32</loc>
-    <lastmod>2026-09-29T13:04:39Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/qonversion/qonversion-ios-sdk</loc>
+    <loc>https://getmerged.abhishekco.de/opa334/opainject</loc>
     <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -517,14 +517,20 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/SDWebImage/SDWebImageWebPCoder</loc>
-    <lastmod>2026-09-29T21:04:36Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/LiveContainer/LiveExec32</loc>
+    <lastmod>2026-09-29T13:04:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/opa334/opainject</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/qonversion/qonversion-ios-sdk</loc>
+    <lastmod>2026-10-10T11:22:33Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/SDWebImage/SDWebImageWebPCoder</loc>
+    <lastmod>2026-09-29T21:04:36Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -542,7 +548,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bugsnag/bugsnag-cocoa</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <lastmod>2026-10-10T20:23:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

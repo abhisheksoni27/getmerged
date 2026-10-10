@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/mindsdb/mindshub</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <lastmod>2026-10-10T20:24:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -20,13 +20,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/openwrt/packages</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <lastmod>2026-10-10T16:26:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/open-telemetry/opentelemetry-specification</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <lastmod>2026-10-10T11:23:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -50,7 +50,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/LibreELEC/LibreELEC.tv</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <lastmod>2026-10-10T11:23:45Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -92,7 +92,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/linuxboot/heads</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <lastmod>2026-10-10T12:24:18Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -127,20 +127,20 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/AmberELEC/AmberELEC</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/freebsd/freebsd-ports</loc>
     <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/awesome-selfhosted/awesome-selfhosted-data</loc>
+    <loc>https://getmerged.abhishekco.de/AmberELEC/AmberELEC</loc>
     <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/awesome-selfhosted/awesome-selfhosted-data</loc>
+    <lastmod>2026-10-10T12:25:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -158,7 +158,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/open-telemetry/opentelemetry-proto</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <lastmod>2026-10-10T20:22:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -266,7 +266,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/obophenotype/cell-ontology</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <lastmod>2026-10-10T18:25:49Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -290,7 +290,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cncf/people</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <lastmod>2026-10-10T11:22:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -325,14 +325,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/OP-TEE/build</loc>
-    <lastmod>2026-09-28T21:03:23Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/moq-wg/moq-transport</loc>
+    <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/moq-wg/moq-transport</loc>
-    <lastmod>2026-10-09T03:37:15Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/OP-TEE/build</loc>
+    <lastmod>2026-09-28T21:03:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -361,13 +361,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/kickingvegas/elisp-for-python</loc>
+    <loc>https://getmerged.abhishekco.de/woblerr/docker-pgbackrest</loc>
     <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/woblerr/docker-pgbackrest</loc>
+    <loc>https://getmerged.abhishekco.de/kickingvegas/elisp-for-python</loc>
     <lastmod>2026-10-09T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
