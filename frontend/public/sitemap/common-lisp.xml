@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/open-goal/jak-project</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-10T04:25:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/coalton-lang/coalton</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-10T11:22:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -85,6 +85,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/lambda-symbolics/autolith</loc>
+    <lastmod>2026-10-10T00:25:24Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/Interlisp/medley</loc>
     <lastmod>2026-10-09T03:37:14Z</lastmod>
     <changefreq>daily</changefreq>
@@ -121,12 +127,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/lambda-symbolics/autolith</loc>
-    <lastmod>2026-10-10T00:25:24Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/sasagawa888/eisl</loc>
     <lastmod>2026-09-29T23:07:16Z</lastmod>
     <changefreq>daily</changefreq>
@@ -139,14 +139,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/3b/cl-opengl</loc>
-    <lastmod>2026-09-30T00:07:53Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/hmxmilohax/rock-band-3-deluxe</loc>
+    <lastmod>2026-10-05T18:20:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/hmxmilohax/rock-band-3-deluxe</loc>
-    <lastmod>2026-10-05T18:20:07Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/3b/cl-opengl</loc>
+    <lastmod>2026-09-30T00:07:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
