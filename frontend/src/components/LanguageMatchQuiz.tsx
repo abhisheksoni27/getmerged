@@ -91,7 +91,7 @@ export function LanguageMatchQuiz() {
       const params = new URLSearchParams();
       params.set("languages", selected.join(","));
       params.set("level", level);
-      const res = await fetch(`${API_BASE_URL}/api/v1/repos/match?${params.toString()}`);
+      const res = await fetch(`${API_BASE_URL}/api/public/quiz-match?${params.toString()}`);
       if (!res.ok) {
         setError(true);
         setData(null);
