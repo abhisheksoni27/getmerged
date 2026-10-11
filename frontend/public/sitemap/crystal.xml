@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/iv-org/invidious</loc>
-    <lastmod>2026-10-09T19:23:57Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/crystal-lang/crystal</loc>
-    <lastmod>2026-10-09T18:22:32Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -20,7 +20,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/kemalcr/kemal</loc>
-    <lastmod>2026-10-10T06:22:18Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -44,19 +44,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/owasp-noir/noir</loc>
-    <lastmod>2026-10-09T18:22:32Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cloudamqp/lavinmq</loc>
-    <lastmod>2026-10-10T03:25:08Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/crystal-lang/shards</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -68,7 +68,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/crystal-ameba/ameba</loc>
-    <lastmod>2026-10-09T18:22:20Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -80,13 +80,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cloudamqp/amqproxy</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/crystal-lang/crystal-db</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -99,12 +99,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/mamantoha/crest</loc>
     <lastmod>2026-09-21T06:47:00Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/athena-framework/athena</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -122,19 +116,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hahwul/deadfinder</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/icyleaf/markd</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ysbaddaden/http2</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

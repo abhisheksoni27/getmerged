@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/dotnet/fsharp</loc>
-    <lastmod>2026-10-10T06:22:01Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fable-compiler/Fable</loc>
-    <lastmod>2026-10-09T19:22:57Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -26,19 +26,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/darklang/dark</loc>
-    <lastmod>2026-10-09T18:21:49Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/fsprojects/Paket</loc>
-    <lastmod>2026-10-04T05:13:46Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/bryanedds/Nu</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -62,7 +56,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fsbolero/Bolero</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -74,7 +68,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/razzmatazz/csharp-language-server</loc>
-    <lastmod>2026-10-09T18:21:55Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -92,7 +86,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ionide/ionide-vscode-fsharp</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -104,7 +98,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fsprojects/fantomas</loc>
-    <lastmod>2026-10-09T21:29:15Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -134,7 +128,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ScottArbeit/Grace</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -145,14 +139,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/demystifyfp/FsToolkit.ErrorHandling</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/B2R2-org/B2R2</loc>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/B2R2-org/B2R2</loc>
-    <lastmod>2026-10-09T18:21:55Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/demystifyfp/FsToolkit.ErrorHandling</loc>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -170,7 +164,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fsprojects/FSharp.Formatting</loc>
-    <lastmod>2026-10-09T19:23:10Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -188,25 +182,25 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Lanayx/Oxpecker</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fsprojects/FSharp.Data.GraphQL</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MoiraeSoftware/Myriad</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/microsoft/fsharplu</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -218,19 +212,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JetBrains/resharper-fsharp</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/esa/asn1scc</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fsprojects/pulsar-client-dotnet</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -260,19 +254,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JordanMarr/SqlHydra</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fsprojects/FSharp.Data.Adaptive</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fsprojects/FSharpx.Collections</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -296,13 +290,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fsprojects/FsLexYacc</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/slaveOftime/Fun.Blazor</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -314,13 +308,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fable-compiler/Fable.Python</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/JordanMarr/FSharp.SystemCommandLine</loc>
-    <lastmod>2026-10-09T03:37:14Z</lastmod>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
