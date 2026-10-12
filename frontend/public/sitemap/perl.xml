@@ -295,14 +295,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Gator96100/ProxSpace</loc>
-    <lastmod>2026-09-29T21:03:22Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/OCSInventory-NG/OCSInventory-Server</loc>
+    <lastmod>2026-10-12T03:35:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/OCSInventory-NG/OCSInventory-Server</loc>
-    <lastmod>2026-10-12T03:35:55Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Gator96100/ProxSpace</loc>
+    <lastmod>2026-09-29T21:03:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -571,13 +571,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/DFHack/df-structures</loc>
+    <loc>https://getmerged.abhishekco.de/librenms/librenms-agent</loc>
     <lastmod>2026-10-12T03:35:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/librenms/librenms-agent</loc>
+    <loc>https://getmerged.abhishekco.de/DFHack/df-structures</loc>
     <lastmod>2026-10-12T03:35:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -601,26 +601,26 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/perltidy/perltidy</loc>
-    <lastmod>2026-10-12T03:35:55Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/mschilli/log4perl</loc>
     <lastmod>2026-09-22T02:47:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/sp1ritCS/gtk-android-builder</loc>
-    <lastmod>2026-09-28T21:03:58Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/perltidy/perltidy</loc>
+    <lastmod>2026-10-12T03:35:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/PDLPorters/pdl</loc>
     <lastmod>2026-09-29T22:06:39Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/sp1ritCS/gtk-android-builder</loc>
+    <lastmod>2026-09-28T21:03:58Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
