@@ -49,14 +49,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/open-telemetry/semantic-conventions</loc>
-    <lastmod>2026-10-12T03:35:55Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/konstruktoid/ansible-role-hardening</loc>
+    <lastmod>2026-10-07T06:18:43Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/konstruktoid/ansible-role-hardening</loc>
-    <lastmod>2026-10-07T06:18:43Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/open-telemetry/semantic-conventions</loc>
+    <lastmod>2026-10-12T03:35:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -140,12 +140,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/saltstack-formulas/template-formula</loc>
-    <lastmod>2026-10-12T03:35:55Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/zimmertr/Kubernetes-Manifests</loc>
     <lastmod>2026-10-12T03:35:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
