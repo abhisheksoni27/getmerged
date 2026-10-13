@@ -463,14 +463,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/emacsorphanage/popwin</loc>
-    <lastmod>2026-09-29T14:04:17Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/renzmann/treesit-auto</loc>
+    <lastmod>2026-09-29T14:04:18Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/renzmann/treesit-auto</loc>
-    <lastmod>2026-09-29T14:04:18Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/emacsorphanage/popwin</loc>
+    <lastmod>2026-09-29T14:04:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -487,12 +487,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/editor-code-assistant/eca-emacs</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/casouri/valign</loc>
     <lastmod>2026-09-29T14:04:31Z</lastmod>
     <changefreq>daily</changefreq>
@@ -501,6 +495,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/radian-software/radian</loc>
     <lastmod>2026-09-29T14:04:34Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/editor-code-assistant/eca-emacs</loc>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -691,13 +691,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/purcell/emacs-reformatter</loc>
+    <loc>https://getmerged.abhishekco.de/seagle0128/grip-mode</loc>
     <lastmod>2026-09-30T00:06:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/seagle0128/grip-mode</loc>
+    <loc>https://getmerged.abhishekco.de/purcell/emacs-reformatter</loc>
     <lastmod>2026-09-30T00:06:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -769,14 +769,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/emacscollective/borg</loc>
-    <lastmod>2026-09-30T00:06:24Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/lafrenierejm/counsel-projectile</loc>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/lafrenierejm/counsel-projectile</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/emacscollective/borg</loc>
+    <lastmod>2026-09-30T00:06:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -805,14 +805,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/dnouri/pi-coding-agent</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/natrys/whisper.el</loc>
+    <lastmod>2026-09-29T23:08:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/natrys/whisper.el</loc>
-    <lastmod>2026-09-29T23:08:02Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/dnouri/pi-coding-agent</loc>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -925,14 +925,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jscheid/dtrt-indent</loc>
-    <lastmod>2026-09-29T23:03:31Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/d12frosted/flyspell-correct</loc>
+    <lastmod>2026-09-29T23:04:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/d12frosted/flyspell-correct</loc>
-    <lastmod>2026-09-29T23:04:41Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jscheid/dtrt-indent</loc>
+    <lastmod>2026-09-29T23:03:31Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
