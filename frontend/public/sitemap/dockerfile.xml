@@ -307,14 +307,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ledermann/docker-rails-base</loc>
-    <lastmod>2026-10-06T00:12:30Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/GuillaumeFalourd/useful-actions</loc>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/GuillaumeFalourd/useful-actions</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/ledermann/docker-rails-base</loc>
+    <lastmod>2026-10-06T00:12:30Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -379,6 +379,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/traefik/traefik-library-image</loc>
+    <lastmod>2026-09-24T00:49:23Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-freshrss</loc>
     <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
@@ -387,12 +393,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/linuxserver/docker-faster-whisper</loc>
     <lastmod>2026-10-12T03:35:54Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/traefik/traefik-library-image</loc>
-    <lastmod>2026-09-24T00:49:23Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -475,13 +475,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-orcaslicer</loc>
+    <loc>https://getmerged.abhishekco.de/jauderho/dockerfiles</loc>
     <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jauderho/dockerfiles</loc>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-orcaslicer</loc>
     <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
