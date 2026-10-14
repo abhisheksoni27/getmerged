@@ -44,7 +44,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/flycheck/flycheck</loc>
-    <lastmod>2026-10-04T05:14:16Z</lastmod>
+    <lastmod>2026-10-14T12:33:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -145,14 +145,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/emacs-dashboard/dashboard</loc>
-    <lastmod>2026-09-29T13:07:38Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/seagle0128/doom-modeline</loc>
+    <lastmod>2026-09-29T13:07:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/seagle0128/doom-modeline</loc>
-    <lastmod>2026-09-29T13:07:39Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/emacs-dashboard/dashboard</loc>
+    <lastmod>2026-09-29T13:07:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -182,7 +182,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/emacs-evil/evil-collection</loc>
-    <lastmod>2026-10-04T07:09:12Z</lastmod>
+    <lastmod>2026-10-14T19:35:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -255,12 +255,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/nex3/perspective-el</loc>
     <lastmod>2026-09-29T13:59:48Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/dakra/ghostel</loc>
-    <lastmod>2026-10-04T07:10:49Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -355,13 +349,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/radian-software/prescient.el</loc>
+    <loc>https://getmerged.abhishekco.de/pythonic-emacs/anaconda-mode</loc>
     <lastmod>2026-09-29T14:01:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/pythonic-emacs/anaconda-mode</loc>
+    <loc>https://getmerged.abhishekco.de/radian-software/prescient.el</loc>
     <lastmod>2026-09-29T14:01:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -487,6 +481,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/editor-code-assistant/eca-emacs</loc>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/casouri/valign</loc>
     <lastmod>2026-09-29T14:04:31Z</lastmod>
     <changefreq>daily</changefreq>
@@ -495,12 +495,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/radian-software/radian</loc>
     <lastmod>2026-09-29T14:04:34Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/editor-code-assistant/eca-emacs</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -769,14 +763,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/lafrenierejm/counsel-projectile</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/emacscollective/borg</loc>
+    <lastmod>2026-09-30T00:06:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/emacscollective/borg</loc>
-    <lastmod>2026-09-30T00:06:24Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/lafrenierejm/counsel-projectile</loc>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -931,14 +925,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jscheid/dtrt-indent</loc>
-    <lastmod>2026-09-29T23:03:31Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/emacs-grammarly/lsp-grammarly</loc>
+    <lastmod>2026-09-29T23:07:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/emacs-grammarly/lsp-grammarly</loc>
-    <lastmod>2026-09-29T23:07:33Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jscheid/dtrt-indent</loc>
+    <lastmod>2026-09-29T23:03:31Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
