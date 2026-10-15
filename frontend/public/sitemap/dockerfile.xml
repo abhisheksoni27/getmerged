@@ -475,13 +475,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jauderho/dockerfiles</loc>
+    <loc>https://getmerged.abhishekco.de/linuxserver/docker-orcaslicer</loc>
     <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/linuxserver/docker-orcaslicer</loc>
+    <loc>https://getmerged.abhishekco.de/jauderho/dockerfiles</loc>
     <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -553,14 +553,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/laravel/vapor-php-build</loc>
-    <lastmod>2026-09-28T21:01:59Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/streetsidesoftware/cspell-cli</loc>
+    <lastmod>2026-09-28T16:07:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/streetsidesoftware/cspell-cli</loc>
-    <lastmod>2026-09-28T16:07:40Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/laravel/vapor-php-build</loc>
+    <lastmod>2026-09-28T21:01:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

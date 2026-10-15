@@ -241,12 +241,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/yieldnest/yieldnest-vault</loc>
-    <lastmod>2026-10-08T04:25:07Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/across-protocol/contracts</loc>
     <lastmod>2026-10-12T19:35:14Z</lastmod>
     <changefreq>daily</changefreq>
@@ -255,6 +249,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/Auditware/radar</loc>
     <lastmod>2026-10-13T18:32:17Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/yieldnest/yieldnest-vault</loc>
+    <lastmod>2026-10-08T04:25:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
