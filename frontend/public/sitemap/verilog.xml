@@ -13,6 +13,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/riscv-mcu/e203_hbirdv2</loc>
+    <lastmod>2026-10-16T21:12:22Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/chili-chips-ba/wireguard-fpga</loc>
     <lastmod>2026-10-12T03:35:57Z</lastmod>
     <changefreq>daily</changefreq>

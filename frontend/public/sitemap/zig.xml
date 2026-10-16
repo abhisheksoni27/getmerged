@@ -337,14 +337,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/freref/fancy-cat</loc>
-    <lastmod>2026-10-15T08:37:48Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/meszmate/zigzag</loc>
+    <lastmod>2026-10-15T05:33:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/meszmate/zigzag</loc>
-    <lastmod>2026-10-15T05:33:39Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/freref/fancy-cat</loc>
+    <lastmod>2026-10-15T08:37:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -415,14 +415,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/TheAlgorithms/Zig</loc>
-    <lastmod>2026-10-15T08:35:28Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/unjs/md4x</loc>
+    <lastmod>2026-10-15T07:45:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/unjs/md4x</loc>
-    <lastmod>2026-10-15T07:45:12Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/TheAlgorithms/Zig</loc>
+    <lastmod>2026-10-15T08:35:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -547,14 +547,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/vancluever/z2d</loc>
-    <lastmod>2026-10-15T04:33:34Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/karlseguin/zul</loc>
+    <lastmod>2026-10-15T10:31:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/karlseguin/zul</loc>
-    <lastmod>2026-10-15T10:31:17Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/vancluever/z2d</loc>
+    <lastmod>2026-10-15T04:33:34Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -571,12 +571,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/barddoo/zedis</loc>
-    <lastmod>2026-10-15T07:37:29Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/kristoff-it/zig-okredis</loc>
     <lastmod>2026-10-15T09:33:29Z</lastmod>
     <changefreq>daily</changefreq>
@@ -585,6 +579,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/kassane/zig-esp-idf-sample</loc>
     <lastmod>2026-10-15T06:43:06Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/barddoo/zedis</loc>
+    <lastmod>2026-10-15T07:37:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -781,14 +781,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ypsvlq/wio</loc>
-    <lastmod>2026-10-15T05:34:39Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Zag-Research/Zag-Smalltalk</loc>
+    <lastmod>2026-10-15T06:42:32Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Zag-Research/Zag-Smalltalk</loc>
-    <lastmod>2026-10-15T06:42:32Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/ypsvlq/wio</loc>
+    <lastmod>2026-10-15T05:34:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -811,26 +811,26 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ianprime0509/zig-gobject</loc>
-    <lastmod>2026-10-15T05:34:51Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/psyclyx/fix</loc>
     <lastmod>2026-10-15T06:47:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/rockorager/zigdoc</loc>
-    <lastmod>2026-10-15T07:41:14Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/ianprime0509/zig-gobject</loc>
+    <lastmod>2026-10-15T05:34:51Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/open-telemetry/opentelemetry-injector</loc>
     <lastmod>2026-10-15T05:36:34Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/rockorager/zigdoc</loc>
+    <lastmod>2026-10-15T07:41:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -901,26 +901,20 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jacobsandlund/uucode</loc>
-    <lastmod>2026-10-15T07:33:24Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/Yueqing-Chen/complexweeper-A-minesweeper-game</loc>
     <lastmod>2026-10-15T04:39:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/maxpoletaev/nupsx</loc>
-    <lastmod>2026-10-15T07:42:02Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jacobsandlund/uucode</loc>
+    <lastmod>2026-10-15T07:33:24Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/adxdits/zigtui</loc>
-    <lastmod>2026-10-15T06:44:41Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/maxpoletaev/nupsx</loc>
+    <lastmod>2026-10-15T07:42:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -933,6 +927,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/DanB91/Zig-Playdate-Template</loc>
     <lastmod>2026-10-15T08:36:52Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/adxdits/zigtui</loc>
+    <lastmod>2026-10-15T06:44:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

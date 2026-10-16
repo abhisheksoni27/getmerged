@@ -55,6 +55,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/lyogavin/airllm</loc>
+    <lastmod>2026-10-12T03:35:55Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/patchy631/ai-engineering-hub</loc>
     <lastmod>2026-09-23T11:51:47Z</lastmod>
     <changefreq>daily</changefreq>
@@ -63,12 +69,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/microsoft/Data-Science-For-Beginners</loc>
     <lastmod>2026-09-23T11:50:51Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/lyogavin/airllm</loc>
-    <lastmod>2026-10-12T03:35:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -157,14 +157,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/AllenDowney/ThinkDSP</loc>
-    <lastmod>2026-09-30T01:03:27Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/duoan/TorchCode</loc>
+    <lastmod>2026-10-16T21:09:32Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/duoan/TorchCode</loc>
-    <lastmod>2026-10-09T20:59:45Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/AllenDowney/ThinkDSP</loc>
+    <lastmod>2026-09-30T01:03:27Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -205,6 +205,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/datawhalechina/whale-quant</loc>
+    <lastmod>2026-10-16T21:11:00Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/GoogleCloudPlatform/asl-ml-immersion</loc>
     <lastmod>2026-10-12T03:35:55Z</lastmod>
     <changefreq>daily</changefreq>
@@ -218,7 +224,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/shsarv/Machine-Learning-Projects</loc>
-    <lastmod>2026-10-09T21:55:19Z</lastmod>
+    <lastmod>2026-10-16T21:11:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -248,25 +254,43 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/honeyandme/RAGQnASystem</loc>
-    <lastmod>2026-10-09T21:56:38Z</lastmod>
+    <lastmod>2026-10-16T21:13:05Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/yunwei37/ZJU-CS-GIS-ClassNotes</loc>
-    <lastmod>2026-10-09T21:56:39Z</lastmod>
+    <lastmod>2026-10-16T21:13:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/szagoruyko/attention-transfer</loc>
-    <lastmod>2026-10-09T21:57:03Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/practical-nlp/practical-nlp-code</loc>
+    <lastmod>2026-10-16T21:13:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/datawhalechina/diy-llm</loc>
     <lastmod>2026-10-09T21:57:03Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/szagoruyko/attention-transfer</loc>
+    <lastmod>2026-10-16T21:13:41Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jax-md/jax-md</loc>
+    <lastmod>2026-10-16T21:13:41Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/AIM-Harvard/pyradiomics</loc>
+    <lastmod>2026-10-16T21:13:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -283,14 +307,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/monarch-initiative/ontogpt</loc>
-    <lastmod>2026-10-12T03:35:55Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Azure-Samples/AI-Gateway</loc>
+    <lastmod>2026-09-22T07:45:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Azure-Samples/AI-Gateway</loc>
-    <lastmod>2026-09-22T07:45:54Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/monarch-initiative/ontogpt</loc>
+    <lastmod>2026-10-12T03:35:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
