@@ -13,8 +13,14 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/webmachinelearning/webmcp</loc>
+    <lastmod>2026-10-16T21:09:37Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/w3c/webauthn</loc>
-    <lastmod>2026-10-09T21:56:47Z</lastmod>
+    <lastmod>2026-10-16T21:13:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

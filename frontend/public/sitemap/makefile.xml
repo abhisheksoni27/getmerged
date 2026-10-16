@@ -349,12 +349,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/bufbuild/makego</loc>
-    <lastmod>2026-10-12T03:35:55Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/kickingvegas/elisp-for-python</loc>
     <lastmod>2026-10-12T03:35:55Z</lastmod>
     <changefreq>daily</changefreq>
@@ -362,6 +356,12 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/woblerr/docker-pgbackrest</loc>
+    <lastmod>2026-10-12T03:35:55Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/bufbuild/makego</loc>
     <lastmod>2026-10-12T03:35:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -385,14 +385,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/josegonzalez/pakman</loc>
-    <lastmod>2026-10-05T20:14:59Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/oauth-wg/oauth-v2-1</loc>
+    <lastmod>2026-09-29T18:04:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/oauth-wg/oauth-v2-1</loc>
-    <lastmod>2026-09-29T18:04:47Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/josegonzalez/pakman</loc>
+    <lastmod>2026-10-05T20:14:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
