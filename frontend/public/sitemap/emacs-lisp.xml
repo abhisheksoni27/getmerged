@@ -145,14 +145,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/seagle0128/doom-modeline</loc>
-    <lastmod>2026-09-29T13:07:39Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/emacs-dashboard/dashboard</loc>
+    <lastmod>2026-09-29T13:07:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/emacs-dashboard/dashboard</loc>
-    <lastmod>2026-09-29T13:07:38Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/seagle0128/doom-modeline</loc>
+    <lastmod>2026-09-29T13:07:39Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -259,6 +259,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/dakra/ghostel</loc>
+    <lastmod>2026-10-14T19:34:31Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/s-kostyaev/ellama</loc>
     <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
@@ -343,6 +349,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/radian-software/prescient.el</loc>
+    <lastmod>2026-09-29T14:01:42Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/emacscollective/no-littering</loc>
     <lastmod>2026-09-29T14:01:44Z</lastmod>
     <changefreq>daily</changefreq>
@@ -350,12 +362,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pythonic-emacs/anaconda-mode</loc>
-    <lastmod>2026-09-29T14:01:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/radian-software/prescient.el</loc>
     <lastmod>2026-09-29T14:01:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -379,14 +385,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/emacs-exwm/exwm</loc>
-    <lastmod>2026-09-29T14:02:49Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/bumblepup/highlight-indent-guides</loc>
+    <lastmod>2026-09-29T14:02:50Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/bumblepup/highlight-indent-guides</loc>
-    <lastmod>2026-09-29T14:02:50Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/emacs-exwm/exwm</loc>
+    <lastmod>2026-09-29T14:02:49Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -409,14 +415,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/lizqwerscott/mcp.el</loc>
-    <lastmod>2026-09-29T14:04:54Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jdtsmith/indent-bars</loc>
+    <lastmod>2026-09-29T14:04:47Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jdtsmith/indent-bars</loc>
-    <lastmod>2026-09-29T14:04:47Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/lizqwerscott/mcp.el</loc>
+    <lastmod>2026-09-29T14:04:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -457,14 +463,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/emacsorphanage/popwin</loc>
-    <lastmod>2026-09-29T14:04:17Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/renzmann/treesit-auto</loc>
+    <lastmod>2026-09-29T14:04:18Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/renzmann/treesit-auto</loc>
-    <lastmod>2026-09-29T14:04:18Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/emacsorphanage/popwin</loc>
+    <lastmod>2026-09-29T14:04:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -523,14 +529,20 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/sshaw/git-link</loc>
+    <lastmod>2026-09-29T23:07:10Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/auto-complete/popup-el</loc>
     <lastmod>2026-09-29T23:07:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/sshaw/git-link</loc>
-    <lastmod>2026-09-29T23:07:10Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/d12frosted/vulpea</loc>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -543,12 +555,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/purcell/color-theme-sanityinc-tomorrow</loc>
     <lastmod>2026-09-29T23:07:11Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/d12frosted/vulpea</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -637,14 +643,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/zk-phi/indent-guide</loc>
-    <lastmod>2026-09-30T00:07:00Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/chenyanming/calibredb.el</loc>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/chenyanming/calibredb.el</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/zk-phi/indent-guide</loc>
+    <lastmod>2026-09-30T00:07:00Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -661,13 +667,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ArthurHeymans/emacs-tramp-rpc</loc>
+    <loc>https://getmerged.abhishekco.de/kickingvegas/casual</loc>
     <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/kickingvegas/casual</loc>
+    <loc>https://getmerged.abhishekco.de/ArthurHeymans/emacs-tramp-rpc</loc>
     <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -715,14 +721,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jeremy-compostella/org-msg</loc>
-    <lastmod>2026-09-30T00:06:40Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/dnouri/pilish</loc>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/dnouri/pilish</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jeremy-compostella/org-msg</loc>
+    <lastmod>2026-09-30T00:06:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -752,7 +758,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ahyatt/ekg</loc>
-    <lastmod>2026-10-04T20:16:52Z</lastmod>
+    <lastmod>2026-10-17T17:42:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -853,14 +859,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/atomontage/xterm-color</loc>
-    <lastmod>2026-09-29T23:03:31Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/emacsfodder/move-text</loc>
+    <lastmod>2026-09-29T23:07:55Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/emacsfodder/move-text</loc>
-    <lastmod>2026-09-29T23:07:55Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/atomontage/xterm-color</loc>
+    <lastmod>2026-09-29T23:03:31Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -925,14 +931,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/d12frosted/flyspell-correct</loc>
-    <lastmod>2026-09-29T23:04:41Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/emacs-grammarly/lsp-grammarly</loc>
+    <lastmod>2026-09-29T23:07:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/emacs-grammarly/lsp-grammarly</loc>
-    <lastmod>2026-09-29T23:07:33Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/d12frosted/flyspell-correct</loc>
+    <lastmod>2026-09-29T23:04:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
