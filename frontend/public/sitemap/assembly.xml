@@ -25,14 +25,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/SpinalHDL/VexRiscv</loc>
-    <lastmod>2026-10-12T03:35:53Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/virtualagc/virtualagc</loc>
+    <lastmod>2026-09-23T11:47:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/virtualagc/virtualagc</loc>
-    <lastmod>2026-09-23T11:47:01Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/SpinalHDL/VexRiscv</loc>
+    <lastmod>2026-10-12T03:35:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -163,25 +163,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/openhwgroup/core-v-verif</loc>
-    <lastmod>2026-10-12T03:35:53Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/memorysafety/rav1d</loc>
-    <lastmod>2026-10-12T03:35:53Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/PRoX2011/x16-PRos</loc>
     <lastmod>2026-09-29T15:04:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/openhwgroup/core-v-verif</loc>
+    <lastmod>2026-10-12T03:35:53Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/pret/pokeheartgold</loc>
+    <lastmod>2026-10-12T03:35:53Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/memorysafety/rav1d</loc>
     <lastmod>2026-10-12T03:35:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -205,14 +205,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/atesgoral/hrm-solutions</loc>
-    <lastmod>2026-09-21T03:43:26Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/z00m128/sjasmplus</loc>
+    <lastmod>2026-10-01T17:07:02Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/z00m128/sjasmplus</loc>
-    <lastmod>2026-10-01T17:07:02Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/atesgoral/hrm-solutions</loc>
+    <lastmod>2026-09-21T03:43:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

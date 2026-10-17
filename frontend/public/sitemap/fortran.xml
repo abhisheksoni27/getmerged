@@ -86,19 +86,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/FluidityProject/fluidity</loc>
-    <lastmod>2026-10-04T21:13:03Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/jacobwilliams/json-fortran</loc>
-    <lastmod>2026-09-30T00:07:22Z</lastmod>
+    <lastmod>2026-10-17T23:54:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MODFLOW-ORG/modflow6</loc>
     <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jacobwilliams/json-fortran</loc>
+    <lastmod>2026-09-30T00:07:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -121,12 +121,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ESCOMP/CTSM</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/crest-lab/crest</loc>
     <lastmod>2026-09-29T23:03:41Z</lastmod>
     <changefreq>daily</changefreq>
@@ -134,6 +128,12 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NOAA-EMC/WW3</loc>
+    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ESCOMP/CTSM</loc>
     <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -247,13 +247,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/esmf-org/esmf</loc>
+    <loc>https://getmerged.abhishekco.de/nasa/cea</loc>
     <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nasa/cea</loc>
+    <loc>https://getmerged.abhishekco.de/esmf-org/esmf</loc>
     <lastmod>2026-10-12T03:35:54Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

@@ -20,7 +20,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MIgHTy-alIeN/ethereum-flashloan-mev-bot</loc>
-    <lastmod>2026-10-10T09:58:59Z</lastmod>
+    <lastmod>2026-10-17T04:11:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -33,6 +33,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/foundry-rs/forge-std</loc>
     <lastmod>2026-10-13T20:40:43Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fulldecent/erc721</loc>
+    <lastmod>2026-10-17T04:20:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -241,12 +247,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/across-protocol/contracts</loc>
-    <lastmod>2026-10-12T19:35:14Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/Auditware/radar</loc>
     <lastmod>2026-10-13T18:32:17Z</lastmod>
     <changefreq>daily</changefreq>
@@ -255,6 +255,12 @@
   <url>
     <loc>https://getmerged.abhishekco.de/yieldnest/yieldnest-vault</loc>
     <lastmod>2026-10-08T04:25:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/across-protocol/contracts</loc>
+    <lastmod>2026-10-12T19:35:14Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -295,14 +301,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/sparkdotfi/spark-spells</loc>
-    <lastmod>2026-10-12T03:35:56Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/morpho-org/midnight</loc>
+    <lastmod>2026-10-12T20:27:27Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/morpho-org/midnight</loc>
-    <lastmod>2026-10-12T20:27:27Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/sparkdotfi/spark-spells</loc>
+    <lastmod>2026-10-12T03:35:56Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
