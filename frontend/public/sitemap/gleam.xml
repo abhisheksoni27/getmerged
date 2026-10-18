@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://getmerged.abhishekco.de/lustre-labs/lustre</loc>
-    <lastmod>2026-09-29T15:02:53Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/gleam-lang/awesome-gleam</loc>
     <lastmod>2026-09-29T15:03:05Z</lastmod>
     <changefreq>daily</changefreq>
@@ -14,19 +8,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gleam-wisp/wisp</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gleam-lang/stdlib</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/giacomocavalieri/squirrel</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -38,31 +32,31 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/CrowdHailer/eyg-lang</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gleam-lang/http</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/alii/arc</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gleam-lang/website</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/vshakitskiy/ewe</loc>
-    <lastmod>2026-10-12T03:35:54Z</lastmod>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
