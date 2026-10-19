@@ -253,14 +253,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/kelleyma49/PSFzf</loc>
-    <lastmod>2026-09-29T09:05:59Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/canix1/ADACLScanner</loc>
+    <lastmod>2026-09-29T09:05:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/canix1/ADACLScanner</loc>
-    <lastmod>2026-09-29T09:05:53Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/kelleyma49/PSFzf</loc>
+    <lastmod>2026-09-29T09:05:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -644,7 +644,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jenkinsci/docker-agents</loc>
-    <lastmod>2026-10-05T04:15:44Z</lastmod>
+    <lastmod>2026-10-19T17:45:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -673,13 +673,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/d365collaborative/d365fo.tools</loc>
+    <loc>https://getmerged.abhishekco.de/webmd-health-services/Carbon</loc>
     <lastmod>2026-10-19T03:36:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/webmd-health-services/Carbon</loc>
+    <loc>https://getmerged.abhishekco.de/d365collaborative/d365fo.tools</loc>
     <lastmod>2026-10-19T03:36:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -799,13 +799,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/JetBrains/meta-runner-power-pack</loc>
+    <loc>https://getmerged.abhishekco.de/cyberark/epv-api-scripts</loc>
     <lastmod>2026-10-19T03:36:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/cyberark/epv-api-scripts</loc>
+    <loc>https://getmerged.abhishekco.de/JetBrains/meta-runner-power-pack</loc>
     <lastmod>2026-10-19T03:36:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -847,6 +847,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/microsoft/Deploy-Your-AI-Application-In-Production</loc>
+    <lastmod>2026-10-07T18:17:25Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/ts-backend-meetup-ts/meetup</loc>
     <lastmod>2026-09-29T20:06:42Z</lastmod>
     <changefreq>daily</changefreq>
@@ -859,20 +865,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/microsoft/Deploy-Your-AI-Application-In-Production</loc>
-    <lastmod>2026-10-07T18:17:25Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/mlocati/powershell-phpmanager</loc>
+    <lastmod>2026-09-29T20:06:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dsccommunity/NetworkingDsc</loc>
     <lastmod>2026-09-29T20:06:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/mlocati/powershell-phpmanager</loc>
-    <lastmod>2026-09-29T20:06:41Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -907,14 +907,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/dsccommunity/DscWorkshop</loc>
-    <lastmod>2026-09-29T20:06:08Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/OfficeDev/O365-EDU-Tools</loc>
+    <lastmod>2026-09-29T20:05:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/OfficeDev/O365-EDU-Tools</loc>
-    <lastmod>2026-09-29T20:05:11Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/dsccommunity/DscWorkshop</loc>
+    <lastmod>2026-09-29T20:06:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -937,14 +937,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Galvnyz/M365-Assess</loc>
-    <lastmod>2026-10-06T12:15:19Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/jenkinsci/docker-ssh-agent</loc>
+    <lastmod>2026-10-08T11:25:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/jenkinsci/docker-ssh-agent</loc>
-    <lastmod>2026-10-08T11:25:21Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/Galvnyz/M365-Assess</loc>
+    <lastmod>2026-10-06T12:15:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1033,25 +1033,19 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/AArnott/Library.Template</loc>
-    <lastmod>2026-09-21T17:48:37Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/Azure-Samples/azuresandbox</loc>
     <lastmod>2026-10-19T03:36:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Microsoft365DSC/ReverseDSC</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/AArnott/Library.Template</loc>
+    <lastmod>2026-09-21T17:48:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/ConfigJon/Firmware-Management</loc>
+    <loc>https://getmerged.abhishekco.de/Microsoft365DSC/ReverseDSC</loc>
     <lastmod>2026-10-19T03:36:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1063,14 +1057,20 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/EvotecIT/O365Essentials</loc>
-    <lastmod>2026-10-07T12:20:29Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/ConfigJon/Firmware-Management</loc>
+    <lastmod>2026-10-19T03:36:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/psake/PowerShellBuild</loc>
     <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/EvotecIT/O365Essentials</loc>
+    <lastmod>2026-10-07T12:20:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
