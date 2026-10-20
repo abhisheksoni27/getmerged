@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://getmerged.abhishekco.de/mitchspano/trigger-actions-framework</loc>
+    <lastmod>2026-10-16T21:15:52Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/dangmai/prettier-plugin-apex</loc>
     <lastmod>2026-10-19T03:36:07Z</lastmod>
     <changefreq>daily</changefreq>

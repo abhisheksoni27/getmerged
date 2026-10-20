@@ -30,4 +30,22 @@
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/rust-lang/crates.io-index</loc>
+    <lastmod>2026-09-21T16:50:28Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/pavel-demin/red-pitaya-notes</loc>
+    <lastmod>2026-09-29T22:06:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Gcenx/macports-wine</loc>
+    <lastmod>2026-09-29T19:03:44Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

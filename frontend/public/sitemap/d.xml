@@ -37,6 +37,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/dlang/dub</loc>
+    <lastmod>2026-09-29T15:02:53Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/CyberShadow/btdu</loc>
     <lastmod>2026-10-19T03:36:07Z</lastmod>
     <changefreq>daily</changefreq>
@@ -51,6 +57,42 @@
   <url>
     <loc>https://getmerged.abhishekco.de/adamdruppe/arsd</loc>
     <lastmod>2026-09-29T15:02:34Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/dlang/dlang.org</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/dlang-community/DCD</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/intellij-dlanguage/intellij-dlanguage</loc>
+    <lastmod>2026-09-30T07:01:36Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/dlang/visuald</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Pure-D/serve-d</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/dlang/tools</loc>
+    <lastmod>2026-09-28T20:06:36Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

@@ -6,4 +6,16 @@
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/openhwfoundation/cvw</loc>
+    <lastmod>2026-10-16T21:15:21Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/openhwfoundation/cvfpu</loc>
+    <lastmod>2026-10-16T21:15:21Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

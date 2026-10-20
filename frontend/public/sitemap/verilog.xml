@@ -37,6 +37,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/WangXuan95/FPGA-FOC</loc>
+    <lastmod>2026-10-09T21:57:52Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/The-OpenROAD-Project/OpenROAD-flow-scripts</loc>
     <lastmod>2026-10-19T03:36:11Z</lastmod>
     <changefreq>daily</changefreq>
@@ -44,6 +50,54 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/The-OpenROAD-Project/OpenSTA</loc>
+    <lastmod>2026-10-19T03:36:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/pulp-platform/cheshire</loc>
+    <lastmod>2026-10-19T03:36:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jotego/jtcores</loc>
+    <lastmod>2026-10-19T03:36:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/GideonZ/1541ultimate</loc>
+    <lastmod>2026-10-19T03:36:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/MiSTle-Dev/NanoMig</loc>
+    <lastmod>2026-10-19T03:36:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/MiSTer-devel/Minimig-AGA_MiSTer</loc>
+    <lastmod>2026-10-19T03:36:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/najaeda/naja</loc>
+    <lastmod>2026-10-19T03:36:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jotego/jt12</loc>
+    <lastmod>2026-10-19T03:36:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/mole99/greyhound-ihp</loc>
     <lastmod>2026-10-19T03:36:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

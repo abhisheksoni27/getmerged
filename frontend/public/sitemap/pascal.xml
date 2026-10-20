@@ -49,6 +49,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/FrankBijnen/ExifToolGui</loc>
+    <lastmod>2026-09-20T07:43:56Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/rotators/Fo1in2</loc>
     <lastmod>2026-09-22T04:48:41Z</lastmod>
     <changefreq>daily</changefreq>
@@ -73,7 +79,139 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/devlooped/GitInfo</loc>
+    <lastmod>2026-09-20T13:47:29Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/keymanapp/keyman</loc>
+    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/graphics32/graphics32</loc>
+    <lastmod>2026-09-28T21:03:40Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/andrea-magni/MARS</loc>
+    <lastmod>2026-09-23T12:49:26Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/SuperDisk/hUGETracker</loc>
+    <lastmod>2026-09-29T18:01:48Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/pleriche/FastMM5</loc>
+    <lastmod>2026-09-28T21:04:31Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/cesarliws/dext</loc>
+    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/TurboPack/SynEdit</loc>
+    <lastmod>2026-10-05T22:15:25Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Xor-el/CryptoLib4Pascal</loc>
+    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/wppconnect-team/WPP4Delphi</loc>
+    <lastmod>2026-09-24T00:49:04Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/BeRo1985/pasvulkan</loc>
+    <lastmod>2026-09-22T02:51:43Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/tranquilit/OpenRSAT</loc>
+    <lastmod>2026-10-07T02:18:09Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/gustavoeenriquez/MakerAi</loc>
+    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/pleumann/pasta80</loc>
+    <lastmod>2026-09-22T02:50:44Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Alexey-T/ATSynEdit</loc>
+    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fangq/mcx</loc>
+    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/BGforgeNet/FO2tweaks</loc>
+    <lastmod>2026-09-28T18:08:46Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/OleksiyPenkov/MyHomeLib</loc>
+    <lastmod>2026-09-23T05:53:33Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/tebe6502/Mad-Pascal</loc>
+    <lastmod>2026-09-22T04:48:28Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/landgraf-dev/aws-sdk-delphi</loc>
+    <lastmod>2026-09-23T04:50:20Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/TurboPack/Orpheus</loc>
+    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/alonsobsd/bhyvemgr</loc>
+    <lastmod>2026-09-29T17:06:47Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/FactoryXCode/MfPack</loc>
     <lastmod>2026-10-19T03:36:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

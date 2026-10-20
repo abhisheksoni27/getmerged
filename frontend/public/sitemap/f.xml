@@ -91,6 +91,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/plotly/Plotly.NET</loc>
+    <lastmod>2026-09-29T13:05:34Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/fsprojects/fantomas</loc>
     <lastmod>2026-10-19T03:36:07Z</lastmod>
     <changefreq>daily</changefreq>
@@ -133,14 +139,20 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/demystifyfp/FsToolkit.ErrorHandling</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/B2R2-org/B2R2</loc>
     <lastmod>2026-10-19T03:36:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/demystifyfp/FsToolkit.ErrorHandling</loc>
-    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/CompositionalIT/farmer</loc>
+    <lastmod>2026-09-29T13:06:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -153,6 +165,168 @@
   <url>
     <loc>https://getmerged.abhishekco.de/jet/equinox</loc>
     <lastmod>2026-09-29T13:05:33Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fsprojects/FSharp.Formatting</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ionide/FsAutoComplete</loc>
+    <lastmod>2026-10-08T20:26:21Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/rfvgyhn/min-ed-launcher</loc>
+    <lastmod>2026-09-30T00:07:22Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Lanayx/Oxpecker</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fsprojects/FSharp.Data.GraphQL</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/MoiraeSoftware/Myriad</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/microsoft/fsharplu</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/Tarmil/FSharp.SystemTextJson</loc>
+    <lastmod>2026-09-30T00:07:53Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JetBrains/resharper-fsharp</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/esa/asn1scc</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fsprojects/pulsar-client-dotnet</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fsprojects/FSharp.TypeProviders.SDK</loc>
+    <lastmod>2026-10-07T14:32:54Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/hedgehogqa/fsharp-hedgehog</loc>
+    <lastmod>2026-09-29T23:03:33Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fsharp/fsharp-compiler-docs</loc>
+    <lastmod>2026-09-29T13:06:10Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fsprojects/SwaggerProvider</loc>
+    <lastmod>2026-10-04T06:11:06Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JordanMarr/SqlHydra</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fsprojects/FSharp.Data.Adaptive</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fsprojects/FSharpx.Collections</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/serilog-contrib/serilog-sinks-grafana-loki</loc>
+    <lastmod>2026-09-29T16:03:40Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fable-compiler/ts2fable</loc>
+    <lastmod>2026-09-30T00:07:59Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fslaborg/FSharp.Stats</loc>
+    <lastmod>2026-09-30T00:07:37Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fsprojects/FsLexYacc</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/slaveOftime/Fun.Blazor</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/cognitedata/oryx</loc>
+    <lastmod>2026-09-30T00:08:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/fable-compiler/Fable.Python</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/aardvark-platform/aardvark.rendering</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JordanMarr/FSharp.SystemCommandLine</loc>
+    <lastmod>2026-10-19T03:36:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
