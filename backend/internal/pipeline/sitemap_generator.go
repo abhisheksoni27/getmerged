@@ -74,8 +74,8 @@ type Sitemap struct {
 
 // MinTopicRepoThreshold defines the minimum number of indexed repositories
 // required before a topic landing page is published to Google sitemaps.
-// We set this to 3 so search engines only index rich topic hubs, not thin 1-repo tags.
-const MinTopicRepoThreshold = 3
+// We set this to 10 so search engines only index rich topic hubs with sufficient content.
+const MinTopicRepoThreshold = 10
 
 // MaxURLsPerSitemap defines the maximum number of URLs allowed per individual XML sitemap file.
 // Google Search Console strictly caps single sitemap files at 50,000 URLs / 50MB.
@@ -159,6 +159,7 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 
 	var repos []repoLang
 	// Directory of Awesomeness: Only index high-quality, vibrant, and scored open-source repositories.
+	// Repositories must have 500+ stars AND be scored in Tier S, A, or B (or have active GFIs / high stars).
 	// Filter out stale/dead graveyard repos (staleness_flag = 1) and unscored low-star repositories.
 	query := `
 		SELECT 
@@ -168,8 +169,8 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		FROM repositories r
 		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
 		WHERE (
-			(ls.c_rank_score > 0 AND ls.staleness_flag = 0 AND (ls.c_rank_tier IN ('S', 'A', 'B') OR ls.c_rank_tier IS NULL))
-			OR (ls.good_first_issue_count IS NOT NULL AND ls.good_first_issue_count > 0 AND ls.staleness_flag = 0)
+			(r.stars >= 500 AND ls.c_rank_score > 0 AND ls.staleness_flag = 0 AND (ls.c_rank_tier IN ('S', 'A', 'B') OR ls.c_rank_tier IS NULL))
+			OR (r.stars >= 500 AND ls.good_first_issue_count IS NOT NULL AND ls.good_first_issue_count > 0 AND ls.staleness_flag = 0)
 			OR (r.stars >= 1000 AND (ls.staleness_flag = 0 OR ls.repository_id IS NULL) AND (ls.c_rank_score IS NULL OR ls.c_rank_score > 0))
 		)
 		ORDER BY r.stars DESC
