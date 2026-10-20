@@ -2,37 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/kubernetes-sigs/kubespray</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <lastmod>2026-10-21T03:35:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/netbootxyz/netboot.xyz</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <lastmod>2026-10-21T03:35:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/spantaleev/matrix-docker-ansible-deploy</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <lastmod>2026-10-21T03:35:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dev-sec/ansible-collection-hardening</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <lastmod>2026-10-21T03:35:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/geerlingguy/internet-pi</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <lastmod>2026-10-21T03:35:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/iiab/iiab</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <lastmod>2026-10-21T03:35:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -44,55 +44,49 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nginx/ansible-role-nginx</loc>
-    <lastmod>2026-10-06T21:16:46Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/jekhokie/raspberry-noaa-v2</loc>
-    <lastmod>2026-09-23T20:51:07Z</lastmod>
+    <lastmod>2026-10-20T22:01:12Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/open-telemetry/semantic-conventions</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <lastmod>2026-10-21T03:35:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/konstruktoid/ansible-role-hardening</loc>
-    <lastmod>2026-10-07T06:18:43Z</lastmod>
+    <lastmod>2026-10-20T22:48:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nodejs/build</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <lastmod>2026-10-21T03:35:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hassio-addons/app-adguard-home</loc>
-    <lastmod>2026-10-08T17:20:08Z</lastmod>
+    <lastmod>2026-10-20T23:55:31Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hassio-addons/app-vaultwarden</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <lastmod>2026-10-21T03:35:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hassio-addons/app-plex</loc>
-    <lastmod>2026-10-07T17:22:55Z</lastmod>
+    <lastmod>2026-10-20T22:59:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Oefenweb/ansible-postfix</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <lastmod>2026-10-21T03:35:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -104,19 +98,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hassio-addons/app-zwave-js-ui</loc>
-    <lastmod>2026-10-07T17:15:59Z</lastmod>
+    <lastmod>2026-10-20T22:59:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/adoptium/installer</loc>
-    <lastmod>2026-10-05T15:19:32Z</lastmod>
+    <lastmod>2026-10-20T20:51:46Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hassio-addons/app-zerotier</loc>
-    <lastmod>2026-10-07T17:23:03Z</lastmod>
+    <lastmod>2026-10-20T22:59:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -128,7 +122,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hifis-net/ansible-collection-toolkit</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <lastmod>2026-10-21T03:35:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -140,19 +134,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Oefenweb/ansible-haproxy</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <lastmod>2026-10-21T03:35:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/saltstack-formulas/template-formula</loc>
-    <lastmod>2026-10-19T03:36:09Z</lastmod>
+    <lastmod>2026-10-21T03:35:21Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/netbirdio/addon-netbird</loc>
-    <lastmod>2026-10-06T12:17:31Z</lastmod>
+    <lastmod>2026-10-20T21:51:33Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
