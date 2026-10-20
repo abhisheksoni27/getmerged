@@ -311,6 +311,8 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
                       alt={orb.fullName}
                       width={orb.slot.size}
                       height={orb.slot.size}
+                      priority={!orb.slot.mobileHide}
+                      loading={orb.slot.mobileHide ? "lazy" : "eager"}
                       className="w-full h-full object-cover rounded-full transition-transform duration-300 group-hover:scale-105"
                       onError={() => {
                         setImageErrors((prev) => ({ ...prev, [orb.id]: true }));

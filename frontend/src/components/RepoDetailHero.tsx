@@ -83,6 +83,10 @@ export function RepoDetailHero({
           <img
             src={ownerAvatarUrl}
             alt={owner}
+            width={64}
+            height={64}
+            fetchPriority="high"
+            decoding="async"
             className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border border-white/[0.1] glass-card shrink-0 object-cover shadow-inner mt-1"
           />
 
