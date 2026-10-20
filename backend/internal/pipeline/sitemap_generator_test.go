@@ -26,7 +26,7 @@ func TestGenerateStaticSitemaps_TopicURLs(t *testing.T) {
 	}
 
 	now := time.Now()
-	for i := 1; i <= 3; i++ {
+	for i := 1; i <= 10; i++ {
 		database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES (?, ?, 'tokio-rs', ?, 'Rust', 25000, ?)`, fmt.Sprintf("rust-%d", i), fmt.Sprintf("tokio-rs/tokio-%d", i), fmt.Sprintf("tokio-%d", i), now)
 		database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES (?, ?, 'huggingface', ?, 'Python', 130000, ?)`, fmt.Sprintf("ml-%d", i), fmt.Sprintf("huggingface/transformers-%d", i), fmt.Sprintf("transformers-%d", i), now)
 		database.MustExec(`INSERT INTO repository_topics (topic, repository_id) VALUES ('rust', ?)`, fmt.Sprintf("rust-%d", i))
@@ -251,7 +251,7 @@ func TestGenerateStaticSitemaps_Chunking(t *testing.T) {
 	}
 
 	now := time.Now()
-	for i := 1; i <= 3; i++ {
+	for i := 1; i <= 10; i++ {
 		database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES (?, ?, 'org', ?, 'Go', 10000, ?)`, fmt.Sprintf("%d", i), fmt.Sprintf("org/repo-%d", i), fmt.Sprintf("repo-%d", i), now)
 	}
 
@@ -266,7 +266,7 @@ func TestGenerateStaticSitemaps_Chunking(t *testing.T) {
 	}
 	for i := 0; i < 46000; i++ {
 		topic := fmt.Sprintf("topic-%06d", i)
-		for r := 1; r <= 3; r++ {
+		for r := 1; r <= 10; r++ {
 			_, _ = stmt.Exec(topic, fmt.Sprintf("%d", r))
 		}
 	}
