@@ -24,4 +24,28 @@
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/scality/metalk8s</loc>
+    <lastmod>2026-10-19T03:36:10Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/jolt-lang/jolt</loc>
+    <lastmod>2026-10-19T03:36:10Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/guenchi/Igropyr</loc>
+    <lastmod>2026-10-06T06:14:10Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/arcfide/chez-srfi</loc>
+    <lastmod>2026-10-19T03:36:10Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

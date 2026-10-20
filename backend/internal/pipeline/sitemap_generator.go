@@ -159,7 +159,7 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 
 	var repos []repoLang
 	// Directory of Awesomeness: Only index high-quality, vibrant, and scored open-source repositories.
-	// Repositories must have 500+ stars AND be scored in Tier S, A, or B (or have active GFIs / high stars).
+	// Keep all Tier S, A, and B repos (or with active GFIs), plus any repos with 500+ stars.
 	// Filter out stale/dead graveyard repos (staleness_flag = 1) and unscored low-star repositories.
 	query := `
 		SELECT 
@@ -169,9 +169,9 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		FROM repositories r
 		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
 		WHERE (
-			(r.stars >= 500 AND ls.c_rank_score > 0 AND ls.staleness_flag = 0 AND (ls.c_rank_tier IN ('S', 'A', 'B') OR ls.c_rank_tier IS NULL))
-			OR (r.stars >= 500 AND ls.good_first_issue_count IS NOT NULL AND ls.good_first_issue_count > 0 AND ls.staleness_flag = 0)
-			OR (r.stars >= 1000 AND (ls.staleness_flag = 0 OR ls.repository_id IS NULL) AND (ls.c_rank_score IS NULL OR ls.c_rank_score > 0))
+			(ls.c_rank_score > 0 AND ls.staleness_flag = 0 AND (ls.c_rank_tier IN ('S', 'A', 'B') OR ls.c_rank_tier IS NULL))
+			OR (ls.good_first_issue_count IS NOT NULL AND ls.good_first_issue_count > 0 AND ls.staleness_flag = 0)
+			OR (r.stars >= 500 AND (ls.staleness_flag = 0 OR ls.repository_id IS NULL) AND (ls.c_rank_score IS NULL OR ls.c_rank_score > 0))
 		)
 		ORDER BY r.stars DESC
 	`
