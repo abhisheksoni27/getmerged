@@ -2,25 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/gradle/gradle</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rundeck/rundeck</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nextflow-io/nextflow</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/apache/grails-core</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/sonatype/docker-nexus3</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -86,7 +86,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/openboxes/openboxes</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -97,14 +97,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/docToolchain/docToolchain</loc>
-    <lastmod>2026-09-29T14:06:34Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/nebula-plugins/gradle-lint-plugin</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -116,7 +110,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/palantir/gradle-docker</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -140,13 +134,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NationalSecurityAgency/skills-service</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/allegro/axion-release-plugin</loc>
-    <lastmod>2026-10-07T00:14:41Z</lastmod>
+    <lastmod>2026-10-20T22:04:51Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -170,7 +164,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jaredsburrows/gradle-license-plugin</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -212,31 +206,31 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jenkins-infra/pipeline-library</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/asciidoctor/asciidoctor-gradle-plugin</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/SymmetricDevs/Supersymmetry</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gradle/test-retry-gradle-plugin</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nebula-plugins/nebula-release-plugin</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -260,13 +254,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gradlex-org/build-parameters</loc>
-    <lastmod>2026-10-06T06:18:24Z</lastmod>
+    <lastmod>2026-10-20T21:15:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/spotbugs/spotbugs-maven-plugin</loc>
-    <lastmod>2026-10-19T03:36:08Z</lastmod>
+    <lastmod>2026-10-21T03:35:19Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
