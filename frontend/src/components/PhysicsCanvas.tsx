@@ -48,10 +48,15 @@ export function PhysicsCanvas() {
       return;
     }
 
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d", { alpha: true });
-    if (!ctx) return;
+    let isCancelled = false;
+    let cleanupFn: (() => void) | undefined;
+
+    const startAnimation = () => {
+      if (isCancelled) return;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d", { alpha: true });
+      if (!ctx) return;
 
     let width = window.innerWidth;
     let height = window.innerHeight;
@@ -370,7 +375,7 @@ export function PhysicsCanvas() {
 
     animationFrameId = requestAnimationFrame(render);
 
-    return () => {
+    cleanupFn = () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
@@ -380,7 +385,28 @@ export function PhysicsCanvas() {
       window.removeEventListener("touchend", handleTouchEnd);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  };
+
+  // Defer canvas startup until after main thread settles (LCP optimization)
+  if ("requestIdleCallback" in window) {
+    const idleId = (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number })
+      .requestIdleCallback(startAnimation, { timeout: 1500 });
+    return () => {
+      isCancelled = true;
+      if ("cancelIdleCallback" in window) {
+        (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
+      }
+      if (cleanupFn) cleanupFn();
+    };
+  } else {
+    const timeoutId = setTimeout(startAnimation, 300);
+    return () => {
+      isCancelled = true;
+      clearTimeout(timeoutId);
+      if (cleanupFn) cleanupFn();
+    };
+  }
+}, []);
 
   return (
     <canvas

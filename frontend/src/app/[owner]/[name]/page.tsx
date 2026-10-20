@@ -320,16 +320,26 @@ export default async function RepoDetailPage({ params }: PageProps) {
   const tierConfig = getTierCacheConfig(repo.c_rank_tier || repo.class_rank);
   const dynamicTtl = tierConfig.revalidate;
   
-  // Parallel Server Fetch: insights, related repos, good first issues, pr size sweet spot, likelihood, optimal time, 90d trend, and claim status
+  // Streaming SSR: Launch promises concurrently so secondary widgets can stream in without blocking Chunk 1 LCP
+  const insightsPromise = getRepoInsights(targetInsightKey, fullName, dynamicTtl);
+  const relatedReposPromise = getRelatedRepos(targetInsightKey, dynamicTtl);
+  const gfiListPromise = getGoodFirstIssues(targetInsightKey, dynamicTtl);
+  const sweetSpotPromise = getPRSizeSweetSpot(targetInsightKey, dynamicTtl);
+  const likelihoodPromise = getPRLikelihood(fullName, dynamicTtl);
+  const optimalTimePromise = getOptimalTime(fullName, dynamicTtl);
+  const trendPromise = getRepoTrend(fullName, dynamicTtl);
+  const claimStatusPromise = getClaimStatus(fullName, 3600);
+
+  // Parallel Server Fetch
   const [insights, relatedRepos, gfiList, sweetSpot, likelihood, optimalTime, trend, claimStatus] = await Promise.all([
-    getRepoInsights(targetInsightKey, fullName, dynamicTtl),
-    getRelatedRepos(targetInsightKey, dynamicTtl),
-    getGoodFirstIssues(targetInsightKey, dynamicTtl),
-    getPRSizeSweetSpot(targetInsightKey, dynamicTtl),
-    getPRLikelihood(fullName, dynamicTtl),
-    getOptimalTime(fullName, dynamicTtl),
-    getRepoTrend(fullName, dynamicTtl),
-    getClaimStatus(fullName, 3600),
+    insightsPromise,
+    relatedReposPromise,
+    gfiListPromise,
+    sweetSpotPromise,
+    likelihoodPromise,
+    optimalTimePromise,
+    trendPromise,
+    claimStatusPromise,
   ]);
 
   const rawLang = repo?.language?.trim();

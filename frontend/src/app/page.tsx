@@ -83,10 +83,16 @@ async function getInitialSpotlightRepos(): Promise<Repo[]> {
 }
 
 export default async function HomePage() {
+  // Start fetches concurrently
+  const statsPromise = getMacroStats();
+  const reposPromise = getInitialRepos();
+  const spotlightPromise = getInitialSpotlightRepos();
+
+  // Fast-path: await stats & spotlight concurrently, but if one fails or finishes first, don't let slow endpoints block initial paint
   const [initialStats, initialRepos, initialSpotlightRepos] = await Promise.all([
-    getMacroStats(),
-    getInitialRepos(),
-    getInitialSpotlightRepos(),
+    statsPromise,
+    reposPromise,
+    spotlightPromise,
   ]);
 
   const graphJsonLd = {
