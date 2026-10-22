@@ -2,43 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/kubernetes-sigs/kubespray</loc>
-    <lastmod>2026-10-22T03:36:09Z</lastmod>
+    <lastmod>2026-10-23T03:35:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/netbootxyz/netboot.xyz</loc>
-    <lastmod>2026-10-22T03:36:09Z</lastmod>
+    <lastmod>2026-10-23T03:35:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/spantaleev/matrix-docker-ansible-deploy</loc>
-    <lastmod>2026-10-22T03:36:09Z</lastmod>
+    <lastmod>2026-10-23T03:35:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/dev-sec/ansible-collection-hardening</loc>
-    <lastmod>2026-10-22T03:36:09Z</lastmod>
+    <lastmod>2026-10-23T03:35:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/geerlingguy/internet-pi</loc>
-    <lastmod>2026-10-22T03:36:09Z</lastmod>
+    <lastmod>2026-10-23T03:35:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/iiab/iiab</loc>
-    <lastmod>2026-10-22T03:36:09Z</lastmod>
+    <lastmod>2026-10-23T03:35:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/twrpdtgen/twrpdtgen</loc>
-    <lastmod>2026-09-21T15:47:10Z</lastmod>
+    <lastmod>2026-10-22T18:51:36Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -56,13 +56,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/open-telemetry/semantic-conventions</loc>
-    <lastmod>2026-10-22T03:36:09Z</lastmod>
+    <lastmod>2026-10-23T03:35:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nodejs/build</loc>
-    <lastmod>2026-10-22T03:36:09Z</lastmod>
+    <lastmod>2026-10-23T03:35:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -74,7 +74,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hassio-addons/app-vaultwarden</loc>
-    <lastmod>2026-10-22T03:36:09Z</lastmod>
+    <lastmod>2026-10-23T03:35:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -86,13 +86,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Oefenweb/ansible-postfix</loc>
-    <lastmod>2026-10-22T03:36:09Z</lastmod>
+    <lastmod>2026-10-23T03:35:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/juju4/ansible-harden-windows</loc>
-    <lastmod>2026-09-23T06:52:53Z</lastmod>
+    <lastmod>2026-10-23T01:58:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -116,13 +116,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/pawamoy/copier-uv</loc>
-    <lastmod>2026-09-23T06:51:01Z</lastmod>
+    <lastmod>2026-10-23T01:59:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hifis-net/ansible-collection-toolkit</loc>
-    <lastmod>2026-10-22T03:36:09Z</lastmod>
+    <lastmod>2026-10-23T03:35:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -134,25 +134,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Oefenweb/ansible-haproxy</loc>
-    <lastmod>2026-10-22T03:36:09Z</lastmod>
+    <lastmod>2026-10-23T03:35:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/saltstack-formulas/template-formula</loc>
-    <lastmod>2026-10-22T03:36:09Z</lastmod>
+    <lastmod>2026-10-23T03:35:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/netbirdio/addon-netbird</loc>
     <lastmod>2026-10-20T21:51:33Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/tomquist/esphome-b2500</loc>
-    <lastmod>2026-09-28T18:05:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
