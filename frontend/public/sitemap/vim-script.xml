@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/neovim/neovim</loc>
-    <lastmod>2026-10-23T03:35:29Z</lastmod>
+    <lastmod>2026-10-24T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14,19 +14,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fatih/vim-go</loc>
-    <lastmod>2026-10-23T03:35:29Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Raimondi/delimitMate</loc>
-    <lastmod>2026-10-16T21:11:09Z</lastmod>
+    <lastmod>2026-10-24T03:37:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/lervag/wiki.vim</loc>
-    <lastmod>2026-09-23T17:54:22Z</lastmod>
+    <lastmod>2026-10-23T04:55:37Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
