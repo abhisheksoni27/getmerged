@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/terraform-aws-modules/terraform-aws-eks</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/terraform-aws-modules/terraform-aws-vpc</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/aws-ia/terraform-aws-eks-blueprints</loc>
-    <lastmod>2026-09-23T15:53:50Z</lastmod>
+    <lastmod>2026-10-23T04:03:58Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -26,7 +26,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/GoogleCloudPlatform/cloud-foundation-fabric</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -44,85 +44,85 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/btkrausen/hashicorp</loc>
-    <lastmod>2026-09-23T04:48:37Z</lastmod>
+    <lastmod>2026-10-23T18:00:49Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/terraform-google-modules/terraform-example-foundation</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/terraform-google-modules/terraform-google-kubernetes-engine</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/vmware/packer-examples-for-vsphere</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/kubernetes/k8s.io</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/JamesWoolfenden/pike</loc>
-    <lastmod>2026-10-20T21:53:27Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Azure/terraform</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/JamesWoolfenden/pike</loc>
+    <lastmod>2026-10-23T23:58:22Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hashicorp/agent-skills</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ministryofjustice/modernisation-platform</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hcloud-k8s/terraform-hcloud-kubernetes</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/chainguard-images/images</loc>
-    <lastmod>2026-10-20T22:54:27Z</lastmod>
+    <lastmod>2026-10-24T03:00:53Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/terrapkg/packages</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/aws-samples/eks-workshop-v2</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cloudposse/terraform-aws-eks-cluster</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -134,19 +134,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cirruslabs/macos-image-templates</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hcloud-talos/terraform-hcloud-talos</loc>
-    <lastmod>2026-10-20T22:01:07Z</lastmod>
+    <lastmod>2026-10-23T23:55:36Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hashicorp/terraform-provider-awscc</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -158,19 +158,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/terraform-google-modules/terraform-google-bootstrap</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/thomast1906/thomasthorntoncloud-examples</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cisco-open/forge</loc>
-    <lastmod>2026-10-20T20:45:28Z</lastmod>
+    <lastmod>2026-10-23T21:00:48Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -182,7 +182,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/AlmaLinux/cloud-images</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -194,67 +194,67 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Azure/alz-terraform-accelerator</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/trussworks/terraform-layout-example</loc>
-    <lastmod>2026-10-20T22:48:41Z</lastmod>
+    <lastmod>2026-10-24T02:00:57Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/alphagov/govuk-infrastructure</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/1Password/scim-examples</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rust-lang/simpleinfra</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/gettek/terraform-azurerm-policy-as-code</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ComputeCanada/magic_castle</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/RaJiska/terraform-aws-fck-nat</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cloudposse/terraform-aws-ecs-alb-service-task</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cashapp/hermit-packages</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cloudnative-pg/postgres-containers</loc>
-    <lastmod>2026-10-20T21:15:32Z</lastmod>
+    <lastmod>2026-10-23T22:59:28Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -266,31 +266,31 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/larivierec/home-cluster</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/getamis/vishwakarma</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Azure/sap-automation</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/terraform-google-modules/docs-examples</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Azure/terraform-azurerm-avm-ptn-alz</loc>
-    <lastmod>2026-10-20T20:55:19Z</lastmod>
+    <lastmod>2026-10-23T21:05:16Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -314,31 +314,31 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/CheckPointSW/CloudGuardIaaS</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/aws-ia/terraform-aws-vpc</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/nebius/nebius-solutions-library</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Pumba98/proxmox-packer-templates</loc>
-    <lastmod>2026-10-20T22:59:09Z</lastmod>
+    <lastmod>2026-10-24T03:04:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/GoogleCloudPlatform/accelerated-platforms</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -350,7 +350,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/hybridops-tech/terraform-proxmox-sdn</loc>
-    <lastmod>2026-10-23T03:35:25Z</lastmod>
+    <lastmod>2026-10-24T03:37:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
