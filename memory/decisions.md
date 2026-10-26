@@ -20,13 +20,18 @@
 - **Decision**: Implemented `internal/spotlight` and `cmd/daily_x_post` with `daily_tweet_spotlights` table tracking. Integrated into the daily `morning_brief` Telegram pulse. Morning brief drops a pre-formatted tweet (<280 chars) and a 1-click `twitter.com/intent/tweet` URL. Also supports bulk CSV export (`-bulk 1000 -format csv`) for Buffer/Typefully.
 
 ## ADR-005: Directory of Awesomeness & Crawl Budget Optimization
-- **Date**: 2026-09-27
+- **Date**: 2026-09-27 (Updated 2026-10-26)
 - **Status**: Accepted
-- **Context**: Google Search Console showed 183k discovered pages but stalled indexed counts and flatlined impressions following an Aug 31 spike. Investigation revealed ~56% of Googlebot crawl requests were squandered on raw JSON API endpoints and SVG badges, legacy domain `opendoor.abhishekco.de` lacked a 301 redirect to `getmerged.abhishekco.de`, and sitemaps contained ~102k thin/dead graveyard repos (0% merge rate, 0 PRs) and 1-repo topic tags.
+- **Context**: Google Search Console showed crawled/discovered disparity and crawl throttles post-Aug 31 broad core update. Sitemaps had grown to ~71,000 URLs, diluting Googlebot crawl priority on thousands of low-signal pages. Furthermore, dynamic `opengraph-image` endpoints lacked edge-level cache rules in Nginx, triggering edge cache misses and compute overhead.
 - **Decision**: 
   1. Updated `robots.txt` to disallow `/api/` completely, recapturing 100% of Googlebot's crawl budget for HTML pages.
-  2. Added Nginx 301 permanent redirect from `opendoor.abhishekco.de` to `getmerged.abhishekco.de`.
-  3. Implemented the "Directory of Awesomeness" filter in `sitemap_generator.go`: pruned sitemaps from 183,524 URLs down to 81,403 high-signal, active, scored repositories (Tier S/A/B, active GFIs, or 1000+ stars) and rich topic hubs with >= 3 repos.
+  2. Added dedicated Nginx caching rule for `/opengraph-image$` with `s-maxage=604800` (7 days edge) and `stale-while-revalidate=1209600` (14 days), cutting live response times from 1.6s down to 79ms on Cloudflare edge hits.
+  3. Pruned static sitemap generator to prioritize ~20,000 top repositories (19,895 repos + core landings = 24,896 URLs). Weighted criteria:
+     - User-watchlisted repositories (always included)
+     - S-Tier welcoming repos (stars >= 150)
+     - A-Tier responsive repos (stars >= 600)
+     - Active Good First Issues (stars >= 400)
+     - High search volume repositories (stars >= 1200)
   4. Added `robots: { index: false, follow: true }` to repo detail metadata for unscored and dead/stale graveyard pages.
   5. Added Nginx 301 redirect mapping legacy `main-[0-9].xml` sitemaps to unified `main.xml`.
 
