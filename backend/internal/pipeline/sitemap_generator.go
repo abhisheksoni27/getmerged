@@ -158,9 +158,9 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 	}
 
 	var repos []repoLang
-	// Directory of Awesomeness: Only index high-quality, vibrant, and scored open-source repositories.
-	// Keep all Tier S, A, and B repos (or with active GFIs), plus any repos with 500+ stars.
-	// Filter out stale/dead graveyard repos (staleness_flag = 1) and unscored low-star repositories.
+	// Directory of Awesomeness: Prioritize the top ~20,000 highest-value repositories.
+	// We heavily weight high search volume (stars), user watchlists, S & A tier responsiveness,
+	// and active Good First Issues, while cutting out stale or low-signal repos.
 	query := `
 		SELECT 
 			r.full_name, 
@@ -168,11 +168,16 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 			COALESCE(ls.updated_at, r.updated_at) as updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots ls ON r.id = ls.repository_id
-		WHERE (
-			(ls.c_rank_score > 0 AND ls.staleness_flag = 0 AND (ls.c_rank_tier IN ('S', 'A', 'B') OR ls.c_rank_tier IS NULL))
-			OR (ls.good_first_issue_count IS NOT NULL AND ls.good_first_issue_count > 0 AND ls.staleness_flag = 0)
-			OR (r.stars >= 500 AND (ls.staleness_flag = 0 OR ls.repository_id IS NULL) AND (ls.c_rank_score IS NULL OR ls.c_rank_score > 0))
-		)
+		LEFT JOIN (SELECT DISTINCT repo_id FROM user_watchlists) uw ON r.id = uw.repo_id
+		WHERE (ls.staleness_flag = 0 OR ls.repository_id IS NULL)
+		  AND (ls.c_rank_score IS NULL OR ls.c_rank_score > 0)
+		  AND (
+			uw.repo_id IS NOT NULL
+			OR (ls.c_rank_tier = 'S' AND r.stars >= 150)
+			OR (ls.c_rank_tier = 'A' AND r.stars >= 600)
+			OR (ls.good_first_issue_count IS NOT NULL AND ls.good_first_issue_count > 0 AND r.stars >= 400)
+			OR r.stars >= 1200
+		  )
 		ORDER BY r.stars DESC
 	`
 	if err := db.Select(&repos, query); err != nil {

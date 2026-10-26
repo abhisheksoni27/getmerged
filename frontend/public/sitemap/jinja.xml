@@ -37,20 +37,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/twrpdtgen/twrpdtgen</loc>
-    <lastmod>2026-10-22T18:51:36Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/nginx/ansible-role-nginx</loc>
     <lastmod>2026-10-24T00:01:09Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/konstruktoid/ansible-role-hardening</loc>
-    <lastmod>2026-10-24T02:01:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -61,86 +49,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/nodejs/build</loc>
-    <lastmod>2026-10-26T03:35:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/hassio-addons/app-adguard-home</loc>
-    <lastmod>2026-10-24T06:02:16Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/hassio-addons/app-vaultwarden</loc>
-    <lastmod>2026-10-26T03:35:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/hassio-addons/app-plex</loc>
-    <lastmod>2026-10-24T03:04:35Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Oefenweb/ansible-postfix</loc>
-    <lastmod>2026-10-26T03:35:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/juju4/ansible-harden-windows</loc>
-    <lastmod>2026-10-23T01:58:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/hassio-addons/app-zwave-js-ui</loc>
-    <lastmod>2026-10-24T03:05:59Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/hassio-addons/app-zerotier</loc>
-    <lastmod>2026-10-24T03:04:37Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/pawamoy/copier-uv</loc>
-    <lastmod>2026-10-23T01:59:22Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/hifis-net/ansible-collection-toolkit</loc>
-    <lastmod>2026-10-26T03:35:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/hassio-addons/app-airsonos</loc>
-    <lastmod>2026-10-24T17:00:13Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Oefenweb/ansible-haproxy</loc>
-    <lastmod>2026-10-26T03:35:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/saltstack-formulas/template-formula</loc>
-    <lastmod>2026-10-26T03:35:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/netbirdio/addon-netbird</loc>
-    <lastmod>2026-10-23T22:52:07Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/konstruktoid/ansible-role-hardening</loc>
+    <lastmod>2026-10-24T02:01:10Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

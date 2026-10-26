@@ -31,12 +31,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/NVIDIA/raft</loc>
-    <lastmod>2026-10-26T03:35:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/NVIDIA/cuopt</loc>
     <lastmod>2026-10-26T03:35:40Z</lastmod>
     <changefreq>daily</changefreq>
@@ -56,48 +50,6 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/NVIDIA/cuCollections</loc>
-    <lastmod>2026-10-26T03:35:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/owensgroup/RXMesh</loc>
-    <lastmod>2026-10-26T03:35:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/pyscf/gpu4pyscf</loc>
-    <lastmod>2026-10-26T03:35:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/NVIDIA-BioNeMo/nvMolKit</loc>
-    <lastmod>2026-10-26T03:35:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/uccl-project/mKernel</loc>
-    <lastmod>2026-10-24T10:53:25Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/nerficg-project/faster-gaussian-splatting</loc>
-    <lastmod>2026-10-26T03:35:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/openvdb/fvdb-core</loc>
-    <lastmod>2026-10-26T03:35:40Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/MIT-Lu-Lab/cuPDLPx</loc>
     <lastmod>2026-10-26T03:35:40Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
