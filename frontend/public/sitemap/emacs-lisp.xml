@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/syl20bnr/spacemacs</loc>
-    <lastmod>2026-10-27T03:35:14Z</lastmod>
+    <lastmod>2026-10-28T03:35:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/doomemacs/core</loc>
-    <lastmod>2026-10-27T03:35:14Z</lastmod>
+    <lastmod>2026-10-28T03:35:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -32,13 +32,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/melpa/melpa</loc>
-    <lastmod>2026-10-27T03:35:14Z</lastmod>
+    <lastmod>2026-10-28T03:35:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/rougier/nano-emacs</loc>
-    <lastmod>2026-10-23T02:04:59Z</lastmod>
+    <lastmod>2026-10-28T02:08:42Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -56,13 +56,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/copilot-emacs/copilot.el</loc>
-    <lastmod>2026-10-27T03:35:14Z</lastmod>
+    <lastmod>2026-10-28T03:35:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/company-mode/company-mode</loc>
-    <lastmod>2026-10-25T02:04:43Z</lastmod>
+    <lastmod>2026-10-28T02:08:15Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -74,7 +74,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/akermu/emacs-libvterm</loc>
-    <lastmod>2026-10-27T03:35:14Z</lastmod>
+    <lastmod>2026-10-28T03:35:20Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -93,12 +93,6 @@
   <url>
     <loc>https://getmerged.abhishekco.de/manateelazycat/lsp-bridge</loc>
     <lastmod>2026-10-25T02:04:29Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/LuxLang/lux</loc>
-    <lastmod>2026-10-22T18:59:51Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -170,7 +164,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/emacs-evil/evil-collection</loc>
-    <lastmod>2026-10-24T09:57:17Z</lastmod>
+    <lastmod>2026-10-27T10:03:26Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
