@@ -2,43 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/mindsdb/mindshub</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/ashishb/android-security-awesome</loc>
-    <lastmod>2026-10-26T22:31:56Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/openwrt/packages</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/open-telemetry/opentelemetry-specification</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/cilium/hubble</loc>
-    <lastmod>2026-10-27T04:59:25Z</lastmod>
+    <lastmod>2026-10-30T05:12:52Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/CodyReichert/awesome-cl</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/LibreELEC/LibreELEC.tv</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -50,7 +44,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/zigcc/awesome-zig</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -62,31 +56,31 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/CoreELEC/CoreELEC</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/riscv-non-isa/riscv-asm-manual</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/linuxboot/heads</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/container-storage-interface/spec</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ROCKNIX/distribution</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -98,25 +92,25 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/ustclug/Linux101-docs</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mxe/mxe</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/awesome-selfhosted/awesome-selfhosted-data</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/open-telemetry/opentelemetry-proto</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -133,14 +127,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/geneontology/go-ontology</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/OpenIndiana/oi-userland</loc>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/cncf/people</loc>
-    <lastmod>2026-10-30T03:36:17Z</lastmod>
+    <loc>https://getmerged.abhishekco.de/geneontology/go-ontology</loc>
+    <lastmod>2026-10-31T03:36:03Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

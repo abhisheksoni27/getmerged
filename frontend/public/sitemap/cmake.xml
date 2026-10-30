@@ -2,7 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/microsoft/vcpkg</loc>
-    <lastmod>2026-10-30T03:36:14Z</lastmod>
+    <lastmod>2026-10-31T03:36:01Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/OpenMoonRay/openmoonray</loc>
+    <lastmod>2026-10-31T03:36:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14,19 +20,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/WebAssembly/wasi-sdk</loc>
-    <lastmod>2026-10-30T03:36:14Z</lastmod>
+    <lastmod>2026-10-31T03:36:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/libbpf/libbpf-bootstrap</loc>
-    <lastmod>2026-10-30T03:36:14Z</lastmod>
+    <lastmod>2026-10-31T03:36:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/vixcpp/vix</loc>
-    <lastmod>2026-10-30T03:36:14Z</lastmod>
+    <lastmod>2026-10-31T03:36:01Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
