@@ -28,6 +28,27 @@ export interface RankedLanguage extends LanguageTierBreakdown {
 
 export type CategoryPreset = "hof" | "welcoming" | "giants" | "gfi" | "merge" | "firstTimer";
 
+const NON_ECOSYSTEM_LANGUAGES = new Set([
+  "yaml",
+  "json",
+  "markdown",
+  "mdx",
+  "mustache",
+  "dockerfile",
+  "makefile",
+  "hcl",
+  "cmake",
+  "bitbake",
+  "tex",
+  "jinja",
+  "starlark",
+  "nunjucks",
+  "go template",
+  "html",
+  "css",
+  "jupyter notebook",
+]);
+
 const FALLBACK_BREAKDOWN: LanguageTierBreakdown[] = [
   { language: "Python", total: 245, tier_map: { S: 35, A: 85, B: 95, C: 30 } },
   { language: "TypeScript", total: 210, tier_map: { S: 28, A: 72, B: 80, C: 30 } },
@@ -311,7 +332,12 @@ export function useHomeData({ initialStats, initialRepos = [], initialSpotlightR
           welcomingTotal,
         };
       })
-      .filter((item) => item.grandTotal >= 15 && item.sCount + item.aCount >= 3)
+      .filter(
+        (item) =>
+          item.grandTotal >= 50 &&
+          item.sCount + item.aCount >= 10 &&
+          !NON_ECOSYSTEM_LANGUAGES.has(item.language.trim().toLowerCase())
+      )
       .sort((a, b) => b.score - a.score)
       .slice(0, 10);
   }, [stats]);
