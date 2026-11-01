@@ -99,21 +99,57 @@ func ComputeAndCacheMacroStats(ctx context.Context, db *sqlx.DB) (*MacroStats, e
 		ORDER BY cnt DESC
 	`)
 
+	// Non-ecosystem / data / markup formats that should not compete as software ecosystems
+	nonEcosystemLanguages := map[string]bool{
+		"YAML":             true,
+		"JSON":             true,
+		"Markdown":         true,
+		"MDX":              true,
+		"Mustache":         true,
+		"Dockerfile":       true,
+		"Makefile":         true,
+		"HCL":              true,
+		"CMake":            true,
+		"BitBake":          true,
+		"TeX":              true,
+		"Jinja":            true,
+		"Starlark":         true,
+		"Nunjucks":         true,
+		"Go Template":      true,
+		"HTML":             true,
+		"CSS":              true,
+		"Jupyter Notebook": true,
+	}
+
 	langMap := make(map[string]*LanguageTierBreakdown)
+	// Track welcoming merge stats (S, A, B tiers) separately from dead/abandoned D tiers
+	type welcomingAgg struct {
+		weightedMergeSum float64
+		welcomingCount   int
+	}
+	welcomingMergeMap := make(map[string]*welcomingAgg)
+
 	for _, r := range langTierRows {
 		if _, exists := langMap[r.Language]; !exists {
 			langMap[r.Language] = &LanguageTierBreakdown{
-				Language:  r.Language,
-				TierMap:   make(map[string]int),
-				MergeRate: r.AvgMerge,
+				Language: r.Language,
+				TierMap:  make(map[string]int),
 			}
 		}
 		langMap[r.Language].TierMap[r.Tier] += r.Cnt
 		langMap[r.Language].Total += r.Cnt
 		stats.TopLanguageCounts[r.Language] += r.Cnt
+
+		if r.Tier == "S" || r.Tier == "A" || r.Tier == "B" {
+			if _, exists := welcomingMergeMap[r.Language]; !exists {
+				welcomingMergeMap[r.Language] = &welcomingAgg{}
+			}
+			welcomingMergeMap[r.Language].weightedMergeSum += r.AvgMerge * float64(r.Cnt)
+			welcomingMergeMap[r.Language].welcomingCount += r.Cnt
+		}
 	}
 
-	for _, item := range langMap {
+	for lang, item := range langMap {
 		sCount := item.TierMap["S"]
 		aCount := item.TierMap["A"]
 		bCount := item.TierMap["B"]
@@ -127,28 +163,40 @@ func ComputeAndCacheMacroStats(ctx context.Context, db *sqlx.DB) (*MacroStats, e
 			grandTotal = 1
 		}
 
+		// Calculate true welcoming merge rate from S, A, B tiers
+		if agg, ok := welcomingMergeMap[lang]; ok && agg.welcomingCount > 0 {
+			item.MergeRate = agg.weightedMergeSum / float64(agg.welcomingCount)
+		} else {
+			item.MergeRate = 50.0
+		}
+
 		sPct := (float64(sCount) / float64(grandTotal)) * 100.0
 		aPct := (float64(aCount) / float64(grandTotal)) * 100.0
 		bPct := (float64(bCount) / float64(grandTotal)) * 100.0
 		cPct := (float64(cCount) / float64(grandTotal)) * 100.0
 		dPct := (float64(dCount) / float64(grandTotal)) * 100.0
 
-		// 1. Maintainer Quality Density (85% weight): S/A concentration + merge velocity - zombie penalty
+		// 1. Maintainer Quality Density: S/A concentration + merge velocity - zombie penalty
 		avgMerge := item.MergeRate
 		if avgMerge <= 0 {
-			avgMerge = 75.0
+			avgMerge = 65.0
 		}
 		mergeBonus := math.Max(0, math.Min(15.0, ((avgMerge-50.0)/50.0)*15.0))
 		zombiePenalty := ((cPct + dPct) / 100.0) * 12.0
 		qualityDensity := math.Max(0, math.Min(100.0, sPct*1.0+aPct*0.75+bPct*0.35+mergeBonus-zombiePenalty))
 
-		// 2. Opportunity Depth Scale (15% weight): Logarithmic scale of active welcoming projects
+		// 2. Opportunity Depth Scale: Logarithmic scale of active welcoming projects
 		welcomingCount := sCount + aCount
 		scaleFactor := math.Min(100.0, (math.Log10(float64(welcomingCount)+1.0)/math.Log10(2000.0))*100.0)
 
 		// Proprietary Composite Ecosystem Index (0-100 pts)
-		item.Score = math.Round((qualityDensity*0.85+scaleFactor*0.15)*10.0) / 10.0
+		item.Score = math.Round((qualityDensity*0.50+scaleFactor*0.50)*10.0) / 10.0
 		item.WelcomingCount = welcomingCount
+
+		// Disqualify non-programming configuration/markup formats or micro-samples (< 25 repos) from software ecosystem rankings
+		if nonEcosystemLanguages[lang] || grandTotal < 25 || welcomingCount < 10 {
+			item.Score = 0.0
+		}
 
 		stats.LanguageBreakdown = append(stats.LanguageBreakdown, *item)
 	}
