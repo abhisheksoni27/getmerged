@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/prometheus-community/helm-charts</loc>
-    <lastmod>2026-11-01T03:37:20Z</lastmod>
+    <lastmod>2026-11-02T03:34:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/argoproj/argo-helm</loc>
-    <lastmod>2026-11-01T03:37:20Z</lastmod>
+    <lastmod>2026-11-02T03:34:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/sentry-kubernetes/charts</loc>
-    <lastmod>2026-11-01T03:37:20Z</lastmod>
+    <lastmod>2026-11-02T03:34:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -26,13 +26,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/aws/eks-charts</loc>
-    <lastmod>2026-11-01T03:37:20Z</lastmod>
+    <lastmod>2026-11-02T03:34:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/kubecost/kubecost</loc>
-    <lastmod>2026-11-01T03:37:20Z</lastmod>
+    <lastmod>2026-11-02T03:34:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -44,7 +44,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/lfn-cnti/testsuite</loc>
-    <lastmod>2026-11-01T03:37:20Z</lastmod>
+    <lastmod>2026-11-02T03:34:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
