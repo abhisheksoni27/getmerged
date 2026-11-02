@@ -1,0 +1,31 @@
+TITLE: Show HN: GetMerged – Telemetry on whether an open-source maintainer will merge your PR
+
+URL: https://getmerged.abhishekco.de
+
+--------------------------------------------------------------------------------
+TEXT / FIRST COMMENT:
+--------------------------------------------------------------------------------
+
+Hey HN,
+
+Like many of you, I've spent days debugging an open issue in an OSS repo, writing unit tests, making sure CI is green, and opening a clean PR with detailed reproduction notes—only for it to sit in review silence for 9 months until a bot eventually closes it as "stale."
+
+GitHub stars and follower counts don't tell you anything about whether a project actually welcomes outside contributions:
+
+- junegunn/fzf (83k stars, Go): Maintains an incredible 82.6% community merge rate with first responses often landing in under an hour.
+- caddyserver/caddy (78k stars, Go): A responsive A-Tier repo with a 51.4% merge rate and active maintainer feedback cycles (~11h).
+- istio/istio (38k stars, Go): An S-Tier powerhouse with a 70.8% community merge rate and a median first response under 7 hours.
+- home-assistant/core (91k stars, Python): S-Tier, merging 68.8% of external PRs with ~2h response times.
+- microsoft/vscode (194k stars, TypeScript): S-Tier with a 69.5% merge rate and ~3h review response.
+- Many 50k+ star projects look active on paper, but 99% of merges are internal team commits; community PRs go straight into the graveyard.
+
+I built GetMerged (https://getmerged.abhishekco.de) to surface maintainer review telemetry before you fork:
+
+- C-Rank (Contributor Readiness Score): A 0–100 rating that separates welcoming projects from ghost towns based on real external PR merge rate, median review latency (p50/p90), and reviewer bus factor.
+- Good First Issue Quality: Scans open beginner issues, verifying which ones actually have responsive maintainers attached rather than stale tickets abandoned months ago.
+- Community vs. Core Dynamics: Differentiates internal employee commits from outside community contributions, so you know if outside PRs have a realistic chance.
+- Welcoming Rankings by Language: Curated leaderboards across Go, Rust, Python, TypeScript, etc., filtered by tier and active review signals.
+
+The stack is Go + Next.js (SSR) + MySQL. Everything is rendered server-side with zero paywalls, email gates, or fake data.
+
+Try looking up a repo you frequently contribute to or maintain. I'd love your honest feedback on the scoring metrics—what other signals would save you from opening doomed PRs?
