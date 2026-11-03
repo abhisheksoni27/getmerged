@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/syl20bnr/spacemacs</loc>
-    <lastmod>2026-11-03T03:36:27Z</lastmod>
+    <lastmod>2026-11-04T03:36:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/doomemacs/core</loc>
-    <lastmod>2026-11-03T03:36:27Z</lastmod>
+    <lastmod>2026-11-04T03:36:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -32,7 +32,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/melpa/melpa</loc>
-    <lastmod>2026-11-03T03:36:27Z</lastmod>
+    <lastmod>2026-11-04T03:36:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -50,13 +50,13 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/redguardtoo/emacs.d</loc>
-    <lastmod>2026-10-29T15:06:56Z</lastmod>
+    <lastmod>2026-11-03T15:16:59Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/copilot-emacs/copilot.el</loc>
-    <lastmod>2026-11-03T03:36:27Z</lastmod>
+    <lastmod>2026-11-04T03:36:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -73,8 +73,14 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/xenodium/agent-shell</loc>
+    <lastmod>2026-11-04T03:36:06Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/akermu/emacs-libvterm</loc>
-    <lastmod>2026-11-03T03:36:27Z</lastmod>
+    <lastmod>2026-11-04T03:36:06Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -86,7 +92,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/auto-complete/auto-complete</loc>
-    <lastmod>2026-10-25T02:04:28Z</lastmod>
+    <lastmod>2026-11-04T02:17:17Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
