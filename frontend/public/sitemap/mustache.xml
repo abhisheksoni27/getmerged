@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/prometheus-community/helm-charts</loc>
-    <lastmod>2026-11-03T03:36:29Z</lastmod>
+    <lastmod>2026-11-04T03:36:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/argoproj/argo-helm</loc>
-    <lastmod>2026-11-03T03:36:29Z</lastmod>
+    <lastmod>2026-11-04T03:36:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/sentry-kubernetes/charts</loc>
-    <lastmod>2026-11-03T03:36:29Z</lastmod>
+    <lastmod>2026-11-04T03:36:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -26,25 +26,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/aws/eks-charts</loc>
-    <lastmod>2026-11-03T03:36:29Z</lastmod>
+    <lastmod>2026-11-04T03:36:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/kubecost/kubecost</loc>
-    <lastmod>2026-11-03T03:36:29Z</lastmod>
+    <lastmod>2026-11-04T03:36:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/netbox-community/netbox-chart</loc>
     <lastmod>2026-11-02T07:20:53Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/lfn-cnti/testsuite</loc>
-    <lastmod>2026-11-03T03:36:29Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
