@@ -2,31 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/llvm/llvm-project</loc>
-    <lastmod>2026-11-04T03:36:08Z</lastmod>
+    <lastmod>2026-11-05T03:36:09Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/EnzymeAD/Enzyme</loc>
-    <lastmod>2026-11-04T03:36:07Z</lastmod>
+    <lastmod>2026-11-05T03:36:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/intel/llvm</loc>
-    <lastmod>2026-11-04T03:36:07Z</lastmod>
+    <lastmod>2026-11-05T03:36:08Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/google/clspv</loc>
+    <lastmod>2026-11-05T03:36:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/KhronosGroup/SPIRV-LLVM-Translator</loc>
-    <lastmod>2026-11-04T03:36:07Z</lastmod>
+    <lastmod>2026-11-05T03:36:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/arm/arm-toolchain</loc>
-    <lastmod>2026-11-04T03:36:07Z</lastmod>
+    <lastmod>2026-11-05T03:36:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

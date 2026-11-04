@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/seanmorley15/AdventureLog</loc>
-    <lastmod>2026-11-04T03:36:10Z</lastmod>
+    <lastmod>2026-11-05T03:36:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -14,19 +14,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/primocms/primo</loc>
-    <lastmod>2026-11-04T03:36:10Z</lastmod>
+    <lastmod>2026-11-05T03:36:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/itswadesh/svelte-commerce</loc>
-    <lastmod>2026-11-04T03:36:10Z</lastmod>
+    <lastmod>2026-11-05T03:36:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/mhkeller/layercake</loc>
-    <lastmod>2026-11-04T03:36:10Z</lastmod>
+    <lastmod>2026-11-05T03:36:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/Niek/obs-web</loc>
-    <lastmod>2026-11-04T03:36:10Z</lastmod>
+    <lastmod>2026-11-05T03:36:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -56,13 +56,19 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/syntaxfm/website</loc>
-    <lastmod>2026-11-04T03:36:10Z</lastmod>
+    <lastmod>2026-11-05T03:36:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/jonasgeiler/svelte-tiny-virtual-list</loc>
     <lastmod>2026-11-02T03:22:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://getmerged.abhishekco.de/ieedan/shadcn-svelte-extras</loc>
+    <lastmod>2026-11-04T12:20:07Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
