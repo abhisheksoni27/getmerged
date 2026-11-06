@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getmerged.abhishekco.de/nim-lang/Nim</loc>
-    <lastmod>2026-11-06T03:36:59Z</lastmod>
+    <lastmod>2026-11-07T03:37:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -25,6 +25,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://getmerged.abhishekco.de/nim-lang/nimble</loc>
+    <lastmod>2026-11-07T03:37:38Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://getmerged.abhishekco.de/planety/prologue</loc>
     <lastmod>2026-11-02T03:16:33Z</lastmod>
     <changefreq>daily</changefreq>
@@ -32,37 +38,31 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/metacraft-labs/codetracer</loc>
-    <lastmod>2026-11-06T03:36:59Z</lastmod>
+    <lastmod>2026-11-07T03:37:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/fox0430/moe</loc>
-    <lastmod>2026-11-06T03:36:59Z</lastmod>
+    <lastmod>2026-11-07T03:37:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/status-im/nimbus-eth2</loc>
-    <lastmod>2026-11-06T03:36:59Z</lastmod>
+    <lastmod>2026-11-07T03:37:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/status-im/nimbus-eth1</loc>
-    <lastmod>2026-11-06T03:36:59Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/nim-lang/nimony</loc>
-    <lastmod>2026-11-06T03:36:59Z</lastmod>
+    <lastmod>2026-11-07T03:37:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/vacp2p/nim-libp2p</loc>
-    <lastmod>2026-11-06T03:36:59Z</lastmod>
+    <lastmod>2026-11-07T03:37:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
