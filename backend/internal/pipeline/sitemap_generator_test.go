@@ -44,9 +44,9 @@ func TestGenerateStaticSitemaps_TopicURLs(t *testing.T) {
 		t.Fatalf("expected GenerateStaticSitemaps to succeed, got: %v", err)
 	}
 
-	mainContent, err := os.ReadFile(filepath.Join(tempDir, "sitemap", "main.xml"))
+	sitemapContent, err := os.ReadFile(filepath.Join(tempDir, "sitemap.xml"))
 	if err != nil {
-		t.Fatalf("failed to read main.xml: %v", err)
+		t.Fatalf("failed to read sitemap.xml: %v", err)
 	}
 
 	for _, want := range []string{
@@ -55,14 +55,14 @@ func TestGenerateStaticSitemaps_TopicURLs(t *testing.T) {
 		"https://getmerged.abhishekco.de/topics/machine-learning",
 		"https://getmerged.abhishekco.de/topics/ai",
 	} {
-		if !strings.Contains(string(mainContent), want) {
-			t.Fatalf("expected main.xml to reference %q, got:\n%s", want, string(mainContent))
+		if !strings.Contains(string(sitemapContent), want) {
+			t.Fatalf("expected sitemap.xml to reference %q, got:\n%s", want, string(sitemapContent))
 		}
 	}
 
 	// A topic with zero indexed repositories must never be emitted (no 404 in sitemap)
-	if strings.Contains(string(mainContent), "/topics/never-indexed") {
-		t.Fatalf("main.xml must not reference /topics/never-indexed (no indexed repos):\n%s", string(mainContent))
+	if strings.Contains(string(sitemapContent), "/topics/never-indexed") {
+		t.Fatalf("sitemap.xml must not reference /topics/never-indexed (no indexed repos):\n%s", string(sitemapContent))
 	}
 }
 
@@ -105,76 +105,43 @@ func TestGenerateStaticSitemaps(t *testing.T) {
 		t.Fatalf("expected GenerateStaticSitemaps to succeed, got: %v", err)
 	}
 
-	// Verify master sitemap.xml exists
+	// Verify master sitemap.xml exists as unified single file
 	masterFile := filepath.Join(tempDir, "sitemap.xml")
 	if _, err := os.Stat(masterFile); os.IsNotExist(err) {
 		t.Fatalf("master sitemap.xml not generated")
 	}
 
-	// Verify typescript.xml and go.xml exist
-	tsFile := filepath.Join(tempDir, "sitemap", "typescript.xml")
-	if _, err := os.Stat(tsFile); os.IsNotExist(err) {
-		t.Fatalf("typescript.xml sitemap partition not generated")
-	}
-
-	goFile := filepath.Join(tempDir, "sitemap", "go.xml")
-	if _, err := os.Stat(goFile); os.IsNotExist(err) {
-		t.Fatalf("go.xml sitemap partition not generated")
-	}
-
-	content, err := os.ReadFile(goFile)
-	if err != nil || !strings.Contains(string(content), "https://getmerged.abhishekco.de/golang/go") {
-		t.Fatalf("expected go.xml to contain 'https://getmerged.abhishekco.de/golang/go', got: %s", string(content))
-	}
-
-	// C# and C++ must be slugged to csharp.xml / cpp.xml, never c#.xml / c++.xml
-	if _, err := os.Stat(filepath.Join(tempDir, "sitemap", "csharp.xml")); err != nil {
-		t.Fatalf("expected csharp.xml partition to be generated (C# must be slugged), got: %v", err)
-	}
-	if _, err := os.Stat(filepath.Join(tempDir, "sitemap", "cpp.xml")); err != nil {
-		t.Fatalf("expected cpp.xml partition to be generated (C++ must be slugged), got: %v", err)
-	}
-	if _, err := os.Stat(filepath.Join(tempDir, "sitemap", "c#.xml")); err == nil {
-		t.Fatalf("c#.xml must not exist (raw '#' breaks sitemap URLs)")
-	}
-	if _, err := os.Stat(filepath.Join(tempDir, "sitemap", "c++.xml")); err == nil {
-		t.Fatalf("c++.xml must not exist (raw '+' collides with URL decoding)")
-	}
-
-	// Master index must reference the slugged filenames, URL-escaped
-	masterContent, err := os.ReadFile(masterFile)
+	content, err := os.ReadFile(masterFile)
 	if err != nil {
 		t.Fatalf("failed to read master sitemap: %v", err)
 	}
+	contentStr := string(content)
+
+	// Verify repositories are included in the single unified sitemap
 	for _, want := range []string{
-		"https://getmerged.abhishekco.de/sitemap/csharp.xml",
-		"https://getmerged.abhishekco.de/sitemap/cpp.xml",
+		"https://getmerged.abhishekco.de/freeCodeCamp/freeCodeCamp",
+		"https://getmerged.abhishekco.de/golang/go",
+		"https://getmerged.abhishekco.de/dotnet/runtime",
+		"https://getmerged.abhishekco.de/electron/electron",
 	} {
-		if !strings.Contains(string(masterContent), want) {
-			t.Fatalf("expected master sitemap to reference %q, got:\n%s", want, string(masterContent))
+		if !strings.Contains(contentStr, want) {
+			t.Fatalf("expected unified sitemap.xml to contain %q, got:\n%s", want, contentStr)
 		}
 	}
-	if strings.Contains(string(masterContent), "c#.xml") || strings.Contains(string(masterContent), "c++.xml") {
-		t.Fatalf("master sitemap must not reference raw c#.xml/c++.xml:\n%s", string(masterContent))
-	}
 
-	// main.xml must reference the slugged /rankings and /good-first-issue URLs
-	mainContent, err := os.ReadFile(filepath.Join(tempDir, "sitemap", "main.xml"))
-	if err != nil {
-		t.Fatalf("failed to read main.xml: %v", err)
-	}
+	// C# and C++ must be slugged to /rankings/csharp and /rankings/cpp, never raw c#/c++
 	for _, want := range []string{
 		"https://getmerged.abhishekco.de/rankings/csharp",
 		"https://getmerged.abhishekco.de/rankings/cpp",
 		"https://getmerged.abhishekco.de/good-first-issue/csharp",
 		"https://getmerged.abhishekco.de/good-first-issue/cpp",
 	} {
-		if !strings.Contains(string(mainContent), want) {
-			t.Fatalf("expected main.xml to reference %q, got:\n%s", want, string(mainContent))
+		if !strings.Contains(contentStr, want) {
+			t.Fatalf("expected unified sitemap.xml to reference %q, got:\n%s", want, contentStr)
 		}
 	}
-	if strings.Contains(string(mainContent), "/rankings/c#") || strings.Contains(string(mainContent), "/rankings/c++") {
-		t.Fatalf("main.xml must not reference raw c#/c++ language URLs:\n%s", string(mainContent))
+	if strings.Contains(contentStr, "/rankings/c#") || strings.Contains(contentStr, "/rankings/c++") {
+		t.Fatalf("unified sitemap.xml must not reference raw c#/c++ language URLs:\n%s", contentStr)
 	}
 }
 
@@ -208,28 +175,19 @@ func TestGenerateStaticSitemaps_CompareSitemap(t *testing.T) {
 		t.Fatalf("expected GenerateStaticSitemaps to succeed, got: %v", err)
 	}
 
-	// 1. main.xml must contain /compare (the comparison tool landing page)
-	mainContent, err := os.ReadFile(filepath.Join(tempDir, "sitemap", "main.xml"))
-	if err != nil {
-		t.Fatalf("failed to read main.xml: %v", err)
-	}
-	if !strings.Contains(string(mainContent), "https://getmerged.abhishekco.de/compare") {
-		t.Fatalf("expected main.xml to contain https://getmerged.abhishekco.de/compare, got:\n%s", string(mainContent))
-	}
-
-	// 2. compare.xml must NOT exist (synthetic pairwise combinations excluded to preserve crawl budget)
-	compareFile := filepath.Join(tempDir, "sitemap", "compare.xml")
-	if _, err := os.Stat(compareFile); err == nil {
-		t.Fatalf("compare.xml should not exist (synthetic combinations excluded from sitemap)")
-	}
-
-	// 3. master sitemap.xml must NOT reference compare.xml
+	// 1. unified sitemap.xml must contain /compare (the comparison tool landing page)
 	masterContent, err := os.ReadFile(filepath.Join(tempDir, "sitemap.xml"))
 	if err != nil {
-		t.Fatalf("failed to read master sitemap: %v", err)
+		t.Fatalf("failed to read sitemap.xml: %v", err)
 	}
-	if strings.Contains(string(masterContent), "compare.xml") {
-		t.Fatalf("master sitemap should not reference compare.xml:\n%s", string(masterContent))
+	masterStr := string(masterContent)
+	if !strings.Contains(masterStr, "https://getmerged.abhishekco.de/compare<") && !strings.Contains(masterStr, "https://getmerged.abhishekco.de/compare\n") {
+		t.Fatalf("expected sitemap.xml to contain https://getmerged.abhishekco.de/compare, got:\n%s", masterStr)
+	}
+
+	// 2. pairwise showdowns must NOT be in sitemap.xml
+	if strings.Contains(masterStr, "/compare/") {
+		t.Fatalf("sitemap.xml should not contain /compare/ subpath showdowns:\n%s", masterStr)
 	}
 }
 
@@ -277,28 +235,25 @@ func TestGenerateStaticSitemaps_Chunking(t *testing.T) {
 		t.Fatalf("expected GenerateStaticSitemaps to succeed, got: %v", err)
 	}
 
-	// main-1.xml and main-2.xml should exist, monolithic main.xml should NOT exist
-	if _, err := os.Stat(filepath.Join(tempDir, "sitemap", "main-1.xml")); err != nil {
-		t.Fatalf("expected main-1.xml to be generated, got err: %v", err)
+	// chunk-1.xml and chunk-2.xml should exist when chunked
+	if _, err := os.Stat(filepath.Join(tempDir, "sitemap", "chunk-1.xml")); err != nil {
+		t.Fatalf("expected chunk-1.xml to be generated, got err: %v", err)
 	}
-	if _, err := os.Stat(filepath.Join(tempDir, "sitemap", "main-2.xml")); err != nil {
-		t.Fatalf("expected main-2.xml to be generated, got err: %v", err)
-	}
-	if _, err := os.Stat(filepath.Join(tempDir, "sitemap", "main.xml")); err == nil {
-		t.Fatalf("monolithic main.xml should not exist when chunked into main-1.xml and main-2.xml")
+	if _, err := os.Stat(filepath.Join(tempDir, "sitemap", "chunk-2.xml")); err != nil {
+		t.Fatalf("expected chunk-2.xml to be generated, got err: %v", err)
 	}
 
-	// master sitemap.xml must reference main-1.xml and main-2.xml
+	// master sitemap.xml must reference chunk-1.xml and chunk-2.xml
 	masterContent, err := os.ReadFile(filepath.Join(tempDir, "sitemap.xml"))
 	if err != nil {
 		t.Fatalf("failed to read master sitemap: %v", err)
 	}
 	masterStr := string(masterContent)
-	if !strings.Contains(masterStr, "https://getmerged.abhishekco.de/sitemap/main-1.xml") {
-		t.Fatalf("master sitemap missing main-1.xml:\n%s", masterStr)
+	if !strings.Contains(masterStr, "https://getmerged.abhishekco.de/sitemap/chunk-1.xml") {
+		t.Fatalf("master sitemap missing chunk-1.xml:\n%s", masterStr)
 	}
-	if !strings.Contains(masterStr, "https://getmerged.abhishekco.de/sitemap/main-2.xml") {
-		t.Fatalf("master sitemap missing main-2.xml:\n%s", masterStr)
+	if !strings.Contains(masterStr, "https://getmerged.abhishekco.de/sitemap/chunk-2.xml") {
+		t.Fatalf("master sitemap missing chunk-2.xml:\n%s", masterStr)
 	}
 }
 

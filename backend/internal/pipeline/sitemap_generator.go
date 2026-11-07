@@ -309,45 +309,58 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		}
 	}
 
-	mainSitemaps, err := writeSitemapPartition(sitemapDir, "main", mainUrls, baseUrl, today)
-	if err != nil {
-		slog.Error("sitemap generator: main sitemap generation failed", "err", err)
-	} else {
-		indexSitemaps = append(indexSitemaps, mainSitemaps...)
-		if len(mainUrls) > MaxURLsPerSitemap {
-			// Remove legacy oversized main.xml if chunked partitions were generated
-			_ = os.Remove(filepath.Join(sitemapDir, "main.xml"))
-		}
-	}
-
-	// 2. Generate consolidated language partition sitemaps
-	for lang, langRepos := range consolidatedLangMap {
-		var langUrls []URL
-		for _, r := range langRepos {
-			parts := strings.Split(r.FullName, "/")
-			if len(parts) == 2 {
-				lastMod := today
-				if r.UpdatedAt != nil && *r.UpdatedAt != "" {
-					lastMod = *r.UpdatedAt
-				}
-				langUrls = append(langUrls, URL{
-					Loc:        fmt.Sprintf("%s/%s/%s", baseUrl, parts[0], parts[1]),
-					LastMod:    lastMod,
-					ChangeFreq: "daily",
-					Priority:   "0.8",
-				})
+	// 2. Collect repository URLs for the top high-signal repositories
+	var repoUrls []URL
+	for _, r := range repos {
+		parts := strings.Split(r.FullName, "/")
+		if len(parts) == 2 {
+			lastMod := today
+			if r.UpdatedAt != nil && *r.UpdatedAt != "" {
+				lastMod = *r.UpdatedAt
 			}
+			repoUrls = append(repoUrls, URL{
+				Loc:        fmt.Sprintf("%s/%s/%s", baseUrl, parts[0], parts[1]),
+				LastMod:    lastMod,
+				ChangeFreq: "daily",
+				Priority:   "0.8",
+			})
 		}
-
-		langSitemaps, err := writeSitemapPartition(sitemapDir, lang, langUrls, baseUrl, today)
-		if err != nil {
-			slog.Error("sitemap generator: lang sitemap generation failed", "lang", lang, "err", err)
-			continue
-		}
-		indexSitemaps = append(indexSitemaps, langSitemaps...)
 	}
 
-	// Master sitemap.xml index (Notice: compare.xml is omitted to prevent crawling low-intent pairwise combinations)
+	// 3. Combine all eligible URLs: core pages, top languages, rich topics, and top repositories
+	var allUrls []URL
+	allUrls = append(allUrls, mainUrls...)
+	allUrls = append(allUrls, repoUrls...)
+
+	masterPath := filepath.Join(publicDir, "sitemap.xml")
+	xmlHeader := []byte(xml.Header)
+
+	// Single monolithic sitemap.xml: Google strictly allows up to 50,000 URLs AND 50MB per sitemap file.
+	// When under 45,000 URLs, serving ONE unified sitemap.xml eliminates 100% of sitemap index / sub-file request overhead.
+	if len(allUrls) <= MaxURLsPerSitemap {
+		urlset := URLSet{URLs: allUrls}
+		output, err := xml.MarshalIndent(urlset, "", "  ")
+		if err != nil {
+			return fmt.Errorf("master sitemap marshal: %w", err)
+		}
+		if err := os.WriteFile(masterPath, append(xmlHeader, output...), 0644); err != nil {
+			return fmt.Errorf("master sitemap write file: %w", err)
+		}
+		// Clean up sub-sitemap directory so no stale/fragmented child XMLs linger
+		_ = os.RemoveAll(sitemapDir)
+
+		slog.Info("sitemap generator: unified single sitemap.xml generated successfully", "master", masterPath, "urls", len(allUrls))
+		return nil
+	}
+
+	// Fallback to partitioned sitemaps ONLY if URLs ever exceed MaxURLsPerSitemap (45,000)
+	if err := os.MkdirAll(sitemapDir, 0755); err != nil {
+		return fmt.Errorf("create sitemap dir: %w", err)
+	}
+	indexSitemaps, err := writeSitemapPartition(sitemapDir, "chunk", allUrls, baseUrl, today)
+	if err != nil {
+		return fmt.Errorf("partition sitemap: %w", err)
+	}
 	masterIndex := SitemapIndex{
 		Sitemaps: indexSitemaps,
 	}
@@ -355,13 +368,10 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 	if err != nil {
 		return fmt.Errorf("master sitemap index marshal: %w", err)
 	}
-
-	masterPath := filepath.Join(publicDir, "sitemap.xml")
-	xmlHeader := []byte(xml.Header)
 	if err := os.WriteFile(masterPath, append(xmlHeader, indexOutput...), 0644); err != nil {
 		return fmt.Errorf("master sitemap write file: %w", err)
 	}
 
-	slog.Info("sitemap generator: static XMLs generated successfully", "master", masterPath, "partitions", len(indexSitemaps))
+	slog.Info("sitemap generator: partitioned sitemap index generated", "master", masterPath, "partitions", len(indexSitemaps))
 	return nil
 }
