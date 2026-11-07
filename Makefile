@@ -155,7 +155,10 @@ purge-cf-tags:
 RSYNC_FLAGS = -az \
 	--delete \
 	--exclude='.DS_Store' \
-	--exclude='._*'
+	--exclude='._*' \
+	--exclude='.next/cache' \
+	--exclude='.env*' \
+	--exclude='*.map'
 
 build-frontend:
 	cd frontend && npm run build
@@ -183,12 +186,17 @@ deploy-frontend: build-frontend
 		sudo systemctl status opendoor-frontend --no-pager'
 
 # Deploy from a checkout of this repo already on the server - no ssh, local rsync.
-LOCAL_RSYNC_FLAGS = -a --delete --exclude='.DS_Store' --exclude='._*'
+LOCAL_RSYNC_FLAGS = -a --delete \
+	--exclude='.DS_Store' \
+	--exclude='._*' \
+	--exclude='.next/cache' \
+	--exclude='.env*' \
+	--exclude='*.map'
 
 deploy-frontend-server: build-frontend
 	@echo "=== Sync standalone root ==="
 	rsync $(LOCAL_RSYNC_FLAGS) \
-		frontend/.next/standalone/frontend/ \
+		frontend/.next/standalone/ \
 		/opt/opendoor/frontend/
 
 	@echo "=== Sync static assets ==="

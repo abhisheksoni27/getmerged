@@ -21,53 +21,53 @@ export function getGradeColor(rank?: string): {
   switch (rank?.toUpperCase()) {
     case "S":
       return {
-        hex: "#10B981",
-        bgClass: "bg-[#10B981]",
-        textClass: "text-black",
-        borderClass: "border-black",
-        dotClass: "bg-black",
-        label: "ELITE",
+        hex: "#059669",
+        bgClass: "bg-emerald-50",
+        textClass: "text-emerald-700",
+        borderClass: "border-emerald-200",
+        dotClass: "bg-emerald-500",
+        label: "Elite",
         title: "Super Welcoming",
       };
     case "A":
       return {
-        hex: "#38BDF8",
-        bgClass: "bg-[#38BDF8]",
-        textClass: "text-black",
-        borderClass: "border-black",
-        dotClass: "bg-black",
-        label: "WELCOMING",
+        hex: "#0284C7",
+        bgClass: "bg-sky-50",
+        textClass: "text-sky-700",
+        borderClass: "border-sky-200",
+        dotClass: "bg-sky-500",
+        label: "Welcoming",
         title: "Very Welcoming",
       };
     case "B":
       return {
-        hex: "#A855F7",
-        bgClass: "bg-[#A855F7]",
-        textClass: "text-white",
-        borderClass: "border-black",
-        dotClass: "bg-white",
-        label: "SOLID",
+        hex: "#7C3AED",
+        bgClass: "bg-purple-50",
+        textClass: "text-purple-700",
+        borderClass: "border-purple-200",
+        dotClass: "bg-purple-500",
+        label: "Solid",
         title: "Welcoming",
       };
     case "C":
       return {
-        hex: "#FACC15",
-        bgClass: "bg-[#FACC15]",
-        textClass: "text-black",
-        borderClass: "border-black",
-        dotClass: "bg-black",
-        label: "MODERATE",
+        hex: "#D97706",
+        bgClass: "bg-amber-50",
+        textClass: "text-amber-700",
+        borderClass: "border-amber-200",
+        dotClass: "bg-amber-500",
+        label: "Moderate",
         title: "Slow Review",
       };
     case "D":
     default:
       return {
-        hex: "#EF4444",
-        bgClass: "bg-[#EF4444]",
-        textClass: "text-white",
-        borderClass: "border-black",
-        dotClass: "bg-white",
-        label: "RISKY",
+        hex: "#DC2626",
+        bgClass: "bg-rose-50",
+        textClass: "text-rose-700",
+        borderClass: "border-rose-200",
+        dotClass: "bg-rose-500",
+        label: "Risky",
         title: "High PR Stall Rate",
       };
   }
@@ -82,19 +82,19 @@ export function CRankBadge({
   const grade = getGradeColor(rank);
 
   const sizeClasses = {
-    sm: "px-2 py-0.5 text-xs font-mono font-black rounded-none border-2 border-black shadow-[2px_2px_0px_0px_#000]",
-    md: "px-2.5 py-1 text-sm font-mono font-black rounded-none border-2 border-black shadow-[2px_2px_0px_0px_#000]",
-    lg: "px-3.5 py-1.5 text-base font-mono font-black rounded-none border-2 border-black shadow-[3px_3px_0px_0px_#000]",
+    sm: "px-2 py-0.5 text-xs font-mono font-bold rounded-md border",
+    md: "px-2.5 py-1 text-xs font-mono font-bold rounded-lg border",
+    lg: "px-3.5 py-1.5 text-sm font-mono font-bold rounded-lg border",
   };
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 ${grade.bgClass} ${grade.textClass} ${sizeClasses[size]} ${className}`}
+      className={`inline-flex items-center gap-1.5 ${grade.bgClass} ${grade.textClass} ${grade.borderClass} ${sizeClasses[size]} ${className}`}
       title={`C-Rank: ${grade.title}`}
     >
-      <span className={`h-2 w-2 border border-black ${grade.dotClass}`} />
-      <span>{rank.toUpperCase()}</span>
-      {showLabel && <span className="font-mono font-bold tracking-tight text-[11px]">[{grade.label}]</span>}
+      <span className={`h-1.5 w-1.5 rounded-full ${grade.dotClass}`} />
+      <span>Tier {rank.toUpperCase()}</span>
+      {showLabel && <span className="text-[11px] font-sans font-medium text-zinc-500">· {grade.label}</span>}
     </span>
   );
 }

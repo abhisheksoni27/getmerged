@@ -17,46 +17,46 @@ export function MaintainerCta() {
   const { openSearch } = useSearch();
 
   return (
-    <HomeSection className="py-8">
-      <div className="rounded-none bg-white border-2 border-black p-8 sm:p-12 shadow-[4px_4px_0px_0px_#000]">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          <div className="space-y-4">
+    <HomeSection className="py-16 sm:py-24">
+      <div className="rounded-2xl bg-white border border-zinc-200/90 p-8 sm:p-12 shadow-xs">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          <div className="space-y-5">
             <Eyebrow>
-              <ShieldCheck className="h-3.5 w-3.5" /> For Maintainers
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> For Maintainers
             </Eyebrow>
-            <h2 className="text-2xl sm:text-4xl font-black text-black tracking-tight font-display uppercase">
-              Maintain an open source repo? See your contributor experience.
+            <h2 className="text-3xl sm:text-4xl font-bold text-zinc-950 tracking-tight font-sans leading-tight">
+              Maintain an open source repo?<br />See your contributor experience.
             </h2>
-            <p className="text-xs sm:text-sm text-neutral-800 font-mono leading-relaxed">
+            <p className="text-base text-zinc-600 font-sans leading-relaxed">
               Discover your review response grade, outside PR merge rates, and where prospective contributors might encounter bottlenecks.
             </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 pt-2">
               <button
                 type="button"
                 onClick={() => openSearch()}
-                className="inline-flex items-center gap-2 px-5 py-3 bg-black text-[#FACC15] hover:bg-[#FACC15] hover:text-black font-mono text-xs font-black uppercase rounded-none border-2 border-black shadow-[3px_3px_0px_0px_#000] cursor-pointer transition-all active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-zinc-900 text-white hover:bg-zinc-800 font-sans text-sm font-medium rounded-xl shadow-xs cursor-pointer transition-colors"
               >
-                <Search className="h-3.5 w-3.5" /> Check Your Repository
+                <Search className="h-4 w-4" /> Check Your Repository
               </button>
               <Link prefetch={false}
                 href="/guides/how-to-know-if-maintainer-will-review"
                 title="Maintainer Best Practices"
-                className="inline-flex items-center gap-2 px-5 py-3 bg-[#FFFDF8] border-2 border-black text-black font-mono text-xs font-black uppercase rounded-none hover:bg-neutral-100 shadow-[3px_3px_0px_0px_#000] transition-all active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-zinc-200 text-zinc-700 font-sans text-sm font-medium rounded-xl hover:bg-zinc-50 shadow-2xs transition-colors"
               >
-                Read Playbook <ArrowRight className="h-3.5 w-3.5" />
+                Read Playbook <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
 
-          <div className="bg-[#FFFDF8] border-2 border-black rounded-none p-6 sm:p-7 shadow-[3px_3px_0px_0px_#000] space-y-4 font-mono text-xs">
-            <div className="font-black uppercase tracking-wider text-black border-b-2 border-black pb-3 flex items-center justify-between">
+          <div className="bg-zinc-50/80 border border-zinc-200/80 rounded-xl p-6 sm:p-7 space-y-4">
+            <div className="font-semibold text-sm text-zinc-900 border-b border-zinc-200/60 pb-3 flex items-center justify-between">
               <span>Maintainer Health Check</span>
-              <span className="bg-[#10B981] text-black border border-black px-1.5 py-0.5 text-[10px]">Live</span>
+              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full text-xs font-medium">Live</span>
             </div>
-            <div className="space-y-2.5 pt-1">
+            <div className="space-y-3 pt-1">
               {HEALTH_CHECKS.map((check) => (
-                <div key={check} className="flex items-center gap-2.5 text-black font-bold uppercase">
-                  <CheckCircle2 className="h-4 w-4 text-black fill-[#10B981] shrink-0" />
+                <div key={check} className="flex items-center gap-3 text-zinc-800 font-medium text-sm">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                   <span>{check}</span>
                 </div>
               ))}
