@@ -104,30 +104,12 @@
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/0x6d69636b/windows_hardening</loc>
-    <lastmod>2026-10-26T22:12:48Z</lastmod>
+    <lastmod>2026-11-07T14:36:08Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://getmerged.abhishekco.de/MicrosoftDocs/PowerShell-Docs</loc>
-    <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/NetSPI/MicroBurst</loc>
-    <lastmod>2026-11-04T20:26:05Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Microsoft365DSC/Microsoft365DSC</loc>
-    <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/pnp/List-Formatting</loc>
     <lastmod>2026-11-07T03:37:38Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -139,32 +121,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/MicrosoftDocs/architecture-center</loc>
-    <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Romanitho/Winget-AutoUpdate</loc>
-    <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/ScoopInstaller/Main</loc>
     <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/psake/psake</loc>
-    <lastmod>2026-11-04T20:25:43Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/oschwartz10612/poppler-windows</loc>
-    <lastmod>2026-11-04T20:25:44Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -175,104 +133,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getmerged.abhishekco.de/Kiterlin/anti-defensive-writing</loc>
-    <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/ios12checker/Windows-Maintenance-Tool</loc>
-    <lastmod>2026-11-03T15:16:58Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/openhab/openhab-distro</loc>
-    <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/SharePoint/sp-dev-docs</loc>
-    <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/chocolatey-community/boxstarter</loc>
-    <lastmod>2026-11-04T02:17:26Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/chen0416ccc-cpu/codex-windows-fast-patch-skill</loc>
-    <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/microsoft/MSLab</loc>
-    <lastmod>2026-11-05T23:24:50Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/microsoft/CSS-Exchange</loc>
-    <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/EvotecIT/GPOZaurr</loc>
-    <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/chawyehsu/dorado</loc>
-    <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/The-Viper-One/PsMapExec</loc>
-    <lastmod>2026-11-04T20:26:44Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/microsoft/AL</loc>
-    <lastmod>2026-11-05T22:20:42Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/EvotecIT/PSWinReporting</loc>
-    <lastmod>2026-11-05T06:26:51Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/microsoft/finops-toolkit</loc>
-    <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://getmerged.abhishekco.de/Azure/Azure-Verified-Modules</loc>
     <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/Azure/PSRule.Rules.Azure</loc>
-    <lastmod>2026-11-07T03:37:38Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://getmerged.abhishekco.de/microsoft/AL-Go-PTE</loc>
-    <lastmod>2026-11-05T07:25:11Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
