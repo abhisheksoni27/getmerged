@@ -23,22 +23,22 @@ const STEPS = [
 /** How-it-works 3-column explainer. */
 export function HowItWorks() {
   return (
-    <HomeSection className="py-12">
-      <div className="max-w-3xl mb-10">
-        <h2 className="text-2xl sm:text-4xl font-black text-black tracking-tight font-display uppercase">How GetMerged works</h2>
-        <p className="text-xs sm:text-sm text-neutral-700 font-mono mt-2 leading-relaxed">
+    <HomeSection className="py-16 sm:py-24">
+      <div className="max-w-3xl mb-12">
+        <h2 className="text-3xl sm:text-4xl font-bold text-zinc-950 tracking-tight font-sans">How GetMerged works</h2>
+        <p className="text-base text-zinc-600 font-sans mt-3 leading-relaxed">
           We query raw GitHub GraphQL event streams to compute real maintainer velocity metrics.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
         {STEPS.map((step) => (
-          <div key={step.n} className="rounded-none bg-white border-2 border-black p-6 shadow-[4px_4px_0px_0px_#000] space-y-3">
-            <div className="inline-flex h-9 w-9 items-center justify-center rounded-none bg-[#FACC15] border-2 border-black text-black font-mono font-black text-xs shadow-[2px_2px_0px_0px_#000]">
+          <div key={step.n} className="rounded-2xl bg-white border border-zinc-200/90 p-7 sm:p-8 shadow-xs hover:border-zinc-300 hover:shadow-sm transition-all space-y-3.5">
+            <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-800 font-mono font-bold text-xs">
               {step.n}
             </div>
-            <h4 className="text-base sm:text-lg font-black text-black font-display uppercase tracking-tight">{step.title}</h4>
-            <p className="text-xs sm:text-sm text-neutral-800 font-mono leading-relaxed">{step.body}</p>
+            <h4 className="text-lg font-bold text-zinc-950 font-sans tracking-tight">{step.title}</h4>
+            <p className="text-sm text-zinc-600 font-sans leading-relaxed">{step.body}</p>
           </div>
         ))}
       </div>

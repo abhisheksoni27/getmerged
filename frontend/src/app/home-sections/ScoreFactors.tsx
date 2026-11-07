@@ -14,42 +14,42 @@ const SCORE_ROWS: Array<{ label: string; badge: string; badgeClass: string }> = 
 /** C-Rank scoring factors section. */
 export function ScoreFactors() {
   return (
-    <HomeSection className="py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+    <HomeSection className="py-16 sm:py-24">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
         {/* Left: Factor list */}
-        <div className="bg-white border-2 border-black rounded-none p-6 sm:p-7 shadow-[4px_4px_0px_0px_#000] space-y-4 font-mono text-xs">
-          <div className="flex justify-between items-center text-black border-b-2 border-black pb-3">
-            <span className="font-black uppercase tracking-wider">How We Score Repositories</span>
-            <span className="bg-[#10B981] text-black border-2 border-black px-2 py-0.5 font-black uppercase text-[11px] shadow-[2px_2px_0px_0px_#000]">Continuous</span>
+        <div className="bg-white border border-zinc-200/90 rounded-2xl p-7 sm:p-8 shadow-xs space-y-4">
+          <div className="flex justify-between items-center text-zinc-900 pb-3 border-b border-zinc-100">
+            <span className="font-sans font-semibold text-sm text-zinc-900">How We Score Repositories</span>
+            <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full font-sans text-xs font-medium">Continuous</span>
           </div>
           <div className="space-y-2.5">
             {SCORE_ROWS.map((row) => (
               <div
                 key={row.label}
-                className="flex justify-between items-center bg-[#FFFDF8] p-3 rounded-none border-2 border-black shadow-[2px_2px_0px_0px_#000]"
+                className="flex justify-between items-center bg-zinc-50/80 p-3.5 rounded-xl border border-zinc-100 hover:border-zinc-200 transition-colors"
               >
-                <span className="text-black font-bold uppercase tracking-tight">{row.label}</span>
-                <span className="font-mono font-black text-black bg-neutral-200 border border-black px-2 py-0.5 uppercase text-[10px]">{row.badge}</span>
+                <span className="text-zinc-800 font-medium text-sm">{row.label}</span>
+                <span className="font-mono text-xs text-zinc-600 bg-white border border-zinc-200 px-2.5 py-0.5 rounded-md shadow-2xs">{row.badge}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Right: Description */}
-        <div className="space-y-4">
+        <div className="space-y-5">
           <Eyebrow>
-            <Sparkles className="h-3.5 w-3.5" /> Transparent Metrics
+            <Sparkles className="h-3.5 w-3.5 text-emerald-600" /> Transparent Metrics
           </Eyebrow>
-          <h2 className="text-2xl sm:text-4xl font-black text-black tracking-tight leading-tight font-display uppercase">
-            9 real signals. Zero guesswork.
+          <h2 className="text-3xl sm:text-4xl font-bold text-zinc-950 tracking-tight leading-tight font-sans">
+            9 real signals.<br />Zero guesswork.
           </h2>
-          <p className="text-sm sm:text-base text-neutral-800 font-mono leading-relaxed">
+          <p className="text-base text-zinc-600 font-sans leading-relaxed">
             GetMerged tracks active pull requests across 20+ programming languages - measuring real review turnaround, newcomer acceptance, and maintainer responsiveness.
           </p>
           <Link prefetch={false}
             href="/how-c-rank-works"
             title="Learn how GetMerged scores repositories"
-            className="inline-flex items-center gap-2 rounded-none bg-black text-[#FACC15] hover:bg-[#FACC15] hover:text-black border-2 border-black px-5 py-2.5 font-mono text-xs font-black uppercase shadow-[3px_3px_0px_0px_#000] transition-all active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+            className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 text-white hover:bg-zinc-800 px-5 py-2.5 text-sm font-medium transition-colors"
           >
             <span>See how scoring works</span>
             <ArrowRight className="h-4 w-4" />

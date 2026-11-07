@@ -14,7 +14,7 @@ function CtaAction({ isLoggedIn, onExplore, onSignIn }: FinalCtaProps) {
     return (
       <button
         onClick={onExplore}
-        className="inline-flex items-center gap-2.5 rounded-none bg-black px-7 py-3.5 font-mono text-xs font-black uppercase text-[#FACC15] hover:bg-white hover:text-black border-2 border-black shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all shrink-0 cursor-pointer"
+        className="inline-flex items-center gap-2.5 rounded-xl bg-white px-7 py-3.5 font-sans text-sm font-semibold text-zinc-950 hover:bg-zinc-100 transition-colors shrink-0 shadow-sm cursor-pointer"
       >
         <span>Explore Repos</span>
         <ArrowRight className="h-4 w-4" />
@@ -25,9 +25,9 @@ function CtaAction({ isLoggedIn, onExplore, onSignIn }: FinalCtaProps) {
     <button
       onClick={onSignIn}
       title="Sign in to GetMerged"
-      className="inline-flex items-center gap-2.5 rounded-none bg-black px-7 py-3.5 font-mono text-xs font-black uppercase text-[#FACC15] hover:bg-white hover:text-black border-2 border-black shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all shrink-0 cursor-pointer"
+      className="inline-flex items-center gap-2.5 rounded-xl bg-white px-7 py-3.5 font-sans text-sm font-semibold text-zinc-950 hover:bg-zinc-100 transition-colors shrink-0 shadow-sm cursor-pointer"
     >
-      <span>Sign in to GetMerged</span>
+      <span>Sign in with GitHub</span>
       <ArrowRight className="h-4 w-4" />
     </button>
   );
@@ -36,13 +36,13 @@ function CtaAction({ isLoggedIn, onExplore, onSignIn }: FinalCtaProps) {
 /** Final bottom CTA banner. */
 export function FinalCta({ isLoggedIn, onExplore, onSignIn }: FinalCtaProps) {
   return (
-    <HomeSection className="py-12">
-      <div className="rounded-none bg-[#FACC15] border-2 border-black p-8 sm:p-12 shadow-[4px_4px_0px_0px_#000] flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+    <HomeSection className="py-16 sm:py-24">
+      <div className="rounded-3xl bg-zinc-950 text-white p-10 sm:p-14 shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-8 relative overflow-hidden">
         <div className="max-w-xl">
-          <h3 className="text-2xl sm:text-4xl font-black text-black tracking-tight leading-tight font-display uppercase">
+          <h3 className="text-3xl sm:text-4xl font-bold tracking-tight text-white font-sans leading-tight">
             Ready to find your next contribution?
           </h3>
-          <p className="mt-3 text-xs sm:text-sm text-black font-mono font-medium leading-relaxed">
+          <p className="mt-3 text-base text-zinc-400 font-sans leading-relaxed">
             {isLoggedIn
               ? "Explore indexed repositories above or filter by your favorite tech stack."
               : "Sign in with GitHub to watch repositories, unlock maintainer guidelines, and receive PR review alerts."}

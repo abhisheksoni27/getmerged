@@ -54,41 +54,41 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-[#FFFDF8]">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 sm:gap-4 px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full border-b border-zinc-200/80 bg-white/95 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Brand Logo & Navigation */}
-        <div className="flex items-center gap-3 md:gap-4 lg:gap-6 min-w-0">
+        <div className="flex items-center gap-4 lg:gap-8 min-w-0">
           <Link prefetch={false}
             href="/"
             title="GetMerged - Find Welcoming Open Source Repositories"
             className="flex items-center gap-2.5 group shrink-0"
           >
-            <div className="shrink-0 flex items-center justify-center h-9 w-9 bg-black border-2 border-black shadow-[2px_2px_0px_0px_#FACC15]">
-              <span className="font-mono font-black text-sm text-[#FACC15] tracking-tighter">&gt;_</span>
+            <div className="shrink-0 flex items-center justify-center h-8 w-8 rounded-lg bg-zinc-900 text-white shadow-xs">
+              <span className="font-mono font-bold text-xs tracking-tighter">&gt;_</span>
             </div>
-            <span className="font-space text-base font-black tracking-tighter text-black uppercase">
-              Get<span className="bg-[#FACC15] px-1 ml-0.5 border border-black shadow-[1px_1px_0px_0px_#000]">Merged</span>
+            <span className="text-base font-bold tracking-tight text-zinc-900 font-sans">
+              Get<span className="text-emerald-600">Merged</span>
             </span>
           </Link>
 
           {/* Desktop & Laptop Nav Links */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2 text-xs font-mono font-bold text-black shrink-0">
-            <Link prefetch={false} href="/repos" title="Explore All Open Source Repositories" className="px-2.5 py-1 border border-transparent hover:border-black hover:bg-[#F4F4EE] transition-all">
-              REPOSITORIES
+          <nav className="hidden md:flex items-center gap-1 text-xs font-medium text-zinc-600 shrink-0">
+            <Link prefetch={false} href="/repos" title="Explore All Open Source Repositories" className="px-3 py-1.5 rounded-lg hover:text-zinc-900 hover:bg-zinc-100 transition-colors">
+              Repositories
             </Link>
-            <Link prefetch={false} href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="px-2.5 py-1 border border-transparent hover:border-black hover:bg-[#F4F4EE] transition-all whitespace-nowrap">
-              GOOD FIRST ISSUES
+            <Link prefetch={false} href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="px-3 py-1.5 rounded-lg hover:text-zinc-900 hover:bg-zinc-100 transition-colors whitespace-nowrap">
+              Good First Issues
             </Link>
-            <Link prefetch={false} href="/stack" title="Find Good First Issues in Your Tech Stack" className="px-2.5 py-1 border border-black bg-[#10B981]/15 text-black hover:bg-[#10B981]/30 transition-all flex items-center gap-1.5 whitespace-nowrap shadow-[1px_1px_0px_0px_#000]">
-              <span className="w-2 h-2 bg-[#10B981] border border-black inline-block" />
-              STACK SCANNER
+            <Link prefetch={false} href="/stack" title="Find Good First Issues in Your Tech Stack" className="px-3 py-1.5 rounded-lg hover:text-zinc-900 hover:bg-zinc-100 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+              Stack Scanner
             </Link>
-            <Link prefetch={false} href="/maintainers" title="Claim Your Repository & PR Telemetry" className="px-2.5 py-1 border border-transparent hover:border-black hover:bg-[#F4F4EE] transition-all whitespace-nowrap">
-              MAINTAINERS
+            <Link prefetch={false} href="/maintainers" title="Claim Your Repository & PR Telemetry" className="px-3 py-1.5 rounded-lg hover:text-zinc-900 hover:bg-zinc-100 transition-colors whitespace-nowrap">
+              Maintainers
             </Link>
             {user && (
-              <Link prefetch={false} href="/dashboard" title="Contributor PR Tracker & Quests" className="px-2.5 py-1 border-2 border-black bg-[#FACC15] text-black font-black whitespace-nowrap shadow-[2px_2px_0px_0px_#000]">
-                DASHBOARD
+              <Link prefetch={false} href="/dashboard" title="Contributor PR Tracker & Quests" className="px-3 py-1.5 rounded-lg font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 whitespace-nowrap">
+                Dashboard
               </Link>
             )}
           </nav>
@@ -96,19 +96,19 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
 
         {/* Floating Search Button */}
         {isSearchVisible && (
-          <div className="flex-1 min-w-[140px] sm:min-w-[170px] md:min-w-[200px] max-w-[260px] mx-1 sm:mx-2 shrink-0 sm:shrink">
+          <div className="flex-1 min-w-[140px] sm:min-w-[180px] md:min-w-[220px] max-w-[280px] mx-2 shrink-0 sm:shrink">
             <button
               type="button"
               onClick={handleOpenSearch}
-              className="w-full relative flex items-center justify-between h-9 rounded-none border-2 border-black bg-white hover:bg-[#F4F4EE] px-3 transition-all cursor-pointer group text-left shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+              className="w-full relative flex items-center justify-between h-9 rounded-lg border border-zinc-200 bg-zinc-50 hover:bg-zinc-100/80 px-3 transition-colors cursor-pointer group text-left"
             >
               <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">
-                <Search className="h-3.5 w-3.5 text-black shrink-0" />
-                <span className="text-xs text-black font-mono truncate block">
-                  {displayQuery || placeholderText || "SEARCH..."}
+                <Search className="h-3.5 w-3.5 text-zinc-400 shrink-0" />
+                <span className="text-xs text-zinc-500 truncate block font-sans">
+                  {displayQuery || placeholderText || "Search repositories..."}
                 </span>
               </div>
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 border border-black bg-[#FACC15] px-1 py-0.2 font-mono text-[10px] font-bold text-black shrink-0">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 border border-zinc-200 bg-white px-1.5 py-0.5 rounded text-[10px] text-zinc-500 font-mono shrink-0">
                 <span>⌘</span>K
               </kbd>
             </button>
@@ -118,9 +118,9 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
         {/* Right Actions */}
         <div className="flex items-center gap-2.5 shrink-0">
           {authLoading ? (
-            <div className="h-8 w-16 sm:w-20 rounded-xl bg-[var(--bg-elevated)] animate-pulse border border-[var(--border-subtle)]" />
+            <div className="h-8 w-16 sm:w-20 rounded-lg bg-zinc-100 animate-pulse border border-zinc-200" />
           ) : user ? (
-            <div className="flex items-center gap-2 bg-white border-2 border-black rounded-none p-1 shrink-0 shadow-[2px_2px_0px_0px_#000]">
+            <div className="flex items-center gap-2 bg-white border border-zinc-200 rounded-lg p-1 shrink-0 shadow-xs">
               <Link prefetch={false}
                 href={user.slug ? `/u/${user.slug}` : `/dashboard`}
                 title={`Signed in as @${user.username} - View Profile`}
@@ -131,10 +131,10 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   <img
                     src={user.avatar_url}
                     alt={user.username}
-                    className="h-6 w-6 rounded-none border border-black shrink-0"
+                    className="h-6 w-6 rounded-full border border-zinc-200 shrink-0"
                   />
                 ) : (
-                  <div className="h-6 w-6 rounded-none bg-[#FACC15] border border-black flex items-center justify-center font-bold text-black text-[11px] shrink-0 font-mono">
+                  <div className="h-6 w-6 rounded-full bg-zinc-900 text-white flex items-center justify-center font-bold text-[11px] shrink-0 font-mono">
                     {(user.username || "U").slice(0, 1).toUpperCase()}
                   </div>
                 )}
@@ -143,7 +143,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <Link prefetch={false}
                 href="/watchlist"
                 title="My Watchlist"
-                className="flex items-center justify-center h-6 w-6 text-black hover:bg-[#F4F4EE] rounded-none transition-colors border-l-2 border-black ml-0.5 pl-1.5 shrink-0"
+                className="flex items-center justify-center h-6 w-6 text-zinc-600 hover:text-zinc-900 rounded-md transition-colors border-l border-zinc-200 ml-0.5 pl-1.5 shrink-0"
               >
                 <Bookmark className="h-3.5 w-3.5" />
               </Link>
@@ -157,9 +157,9 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   setIsAuthModalOpen(true);
                 }}
                 title="Sign in to GetMerged"
-                className="inline-flex items-center gap-2 rounded-none border-2 border-black bg-[#FACC15] text-black font-mono font-black uppercase px-4 py-2 text-xs shadow-[2px_2px_0px_0px_#000] hover:shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all whitespace-nowrap cursor-pointer shrink-0"
+                className="inline-flex items-center gap-2 rounded-lg bg-zinc-900 text-white font-medium px-4 py-2 text-xs shadow-xs hover:bg-zinc-800 transition-colors whitespace-nowrap cursor-pointer shrink-0"
               >
-                <span>SIGN IN</span>
+                <span>Sign in</span>
               </button>
               <AuthModal
                 isOpen={isAuthModalOpen}

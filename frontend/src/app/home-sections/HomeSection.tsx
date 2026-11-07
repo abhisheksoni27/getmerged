@@ -15,7 +15,7 @@ export function HomeSection({ children, maxWidth = "6xl", className = "", id, as
   const Tag = as;
   const widthClass = maxWidth === "7xl" ? "max-w-7xl" : "max-w-6xl";
   return (
-    <Tag id={id} className={`mx-auto ${widthClass} px-4 sm:px-6 lg:px-8 py-16 sm:py-20 ${className}`}>
+    <Tag id={id} className={`mx-auto ${widthClass} px-4 sm:px-6 lg:px-8 py-14 sm:py-20 ${className}`}>
       {children}
     </Tag>
   );
@@ -27,11 +27,11 @@ interface PanelProps {
   tone?: "solid" | "dashed";
 }
 
-/** Neo-Brutalist Panel: hard 2px black border with solid 4px black shadow. */
+/** Refined Panel with generous breathing room and clean border. */
 export function Panel({ children, className = "", tone = "solid" }: PanelProps) {
-  const border = tone === "dashed" ? "border-2 border-dashed border-black" : "border-2 border-black";
+  const border = tone === "dashed" ? "border-dashed border-zinc-300" : "border-zinc-200";
   return (
-    <div className={`rounded-none ${border} bg-white p-6 sm:p-8 shadow-[4px_4px_0px_0px_#000] ${className}`}>
+    <div className={`rounded-2xl border ${border} bg-white p-7 sm:p-10 shadow-xs ${className}`}>
       {children}
     </div>
   );
@@ -42,10 +42,10 @@ interface EyebrowProps {
   className?: string;
 }
 
-/** Shared mono section badge. */
+/** Subtle, elegant mono section badge. */
 export function Eyebrow({ children, className = "" }: EyebrowProps) {
   return (
-    <div className={`inline-flex items-center gap-1.5 text-xs font-mono font-black uppercase tracking-wider px-2 py-0.5 border-2 border-black bg-[#FACC15] text-black shadow-[2px_2px_0px_0px_#000] mb-3 ${className}`}>
+    <div className={`inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-zinc-700 bg-zinc-100 border border-zinc-200 rounded-md px-2.5 py-1 mb-4 ${className}`}>
       {children}
     </div>
   );
