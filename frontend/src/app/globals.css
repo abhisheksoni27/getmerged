@@ -6,57 +6,58 @@
   --font-display: var(--font-space-grotesk), var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
   --font-space: var(--font-space-grotesk), var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* Accessible Grade Colors calibrated for high contrast on light surfaces */
-  --color-grade-s: #059669;
-  --color-grade-a: #2563EB;
-  --color-grade-b: #7c3aed;
-  --color-grade-c: #d97706;
-  --color-grade-d: #dc2626;
+  /* Industrial Neo-Brutalist High-Saturation Signals */
+  --color-grade-s: #10B981;
+  --color-grade-a: #38BDF8;
+  --color-grade-b: #A855F7;
+  --color-grade-c: #FACC15;
+  --color-grade-d: #EF4444;
 
-  /* Brand Developer Electric Blue */
-  --color-primary: #2563eb;
+  /* Neo-Brutalist Primary Action */
+  --color-primary: #000000;
+  --color-accent: #FACC15;
 
-  /* Precision Neutral Palette (Swiss / Linear / FreeHire inspired) */
-  --color-neutral-50: #FBFBFA;
-  --color-neutral-100: #F3F4F6;
+  /* High Contrast Neutral Palette */
+  --color-neutral-50: #FFFDF8;
+  --color-neutral-100: #F4F4EE;
   --color-neutral-200: #E5E7EB;
-  --color-neutral-300: #D1D5DB;
-  --color-neutral-400: #9CA3AF;
-  --color-neutral-500: #6B7280;
-  --color-neutral-600: #4B5563;
-  --color-neutral-700: #374151;
-  --color-neutral-800: #1F2937;
-  --color-neutral-900: #111827;
-  --color-neutral-950: #030712;
+  --color-neutral-300: #000000;
+  --color-neutral-400: #4B5563;
+  --color-neutral-500: #374151;
+  --color-neutral-600: #1F2937;
+  --color-neutral-700: #111827;
+  --color-neutral-800: #000000;
+  --color-neutral-900: #000000;
+  --color-neutral-950: #000000;
 }
 
 :root {
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 2px;
+  --radius-xl: 4px;
 
-  /* Swiss Precision Canvas & Surface System */
-  --bg-canvas: #FBFBFA;
+  /* Industrial Paper & Solid Black Canvas System */
+  --bg-canvas: #FFFDF8;
   --bg-surface: #FFFFFF;
-  --bg-elevated: #F3F4F6;
-  --bg-accent-muted: #E5E7EB;
+  --bg-elevated: #F4F4EE;
+  --bg-accent-muted: #FDE047;
 
-  /* Crisp Border Hierarchy */
-  --border-subtle: #E5E7EB;
-  --border-hover: #D1D5DB;
-  --border-strong: #9CA3AF;
+  /* Hard Black Ink Borders */
+  --border-subtle: #000000;
+  --border-hover: #000000;
+  --border-strong: #000000;
 
-  /* High Contrast Deep Ink Typography Hierarchy */
-  --text-primary: #111827;
-  --text-secondary: #4B5563;
-  --text-tertiary: #6B7280;
+  /* Pure Black Ink Typography Hierarchy */
+  --text-primary: #000000;
+  --text-secondary: #1F2937;
+  --text-tertiary: #4B5563;
 
-  /* Semantic Feedback */
-  --accent-success: #059669;
-  --accent-info: #2563EB;
-  --accent-warning: #D97706;
-  --accent-danger: #DC2626;
+  /* Semantic Feedback Signals */
+  --accent-success: #10B981;
+  --accent-info: #38BDF8;
+  --accent-warning: #FACC15;
+  --accent-danger: #EF4444;
 }
 
 html {
@@ -86,20 +87,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  line-height: 1.6;
-  letter-spacing: -0.011em;
+  line-height: 1.5;
+  letter-spacing: -0.015em;
 }
 
-/* Confident Editorial Display Hierarchy */
+/* Bold Mechanical Display Hierarchy */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   color: var(--text-primary);
   text-wrap: balance;
+  font-weight: 800;
 }
 
-h1 { letter-spacing: -0.025em; line-height: 1.15; font-weight: 700; }
-h2 { letter-spacing: -0.02em; line-height: 1.2; font-weight: 700; }
-h3 { letter-spacing: -0.015em; line-height: 1.25; font-weight: 600; }
+h1 { letter-spacing: -0.04em; line-height: 1.05; font-weight: 900; text-transform: uppercase; }
+h2 { letter-spacing: -0.03em; line-height: 1.15; font-weight: 800; }
+h3 { letter-spacing: -0.02em; line-height: 1.2; font-weight: 700; }
 
 /* Data/mono numerals align cleanly (scores, %, counts). */
 .font-mono,
@@ -116,33 +118,91 @@ p, li {
   text-wrap: pretty;
 }
 
-/* Clean Editorial Surface System */
+/* Neo-Brutalist Hard Shadow & Surface System */
 .surface-base {
   background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  border: 2px solid #000000;
+  box-shadow: 4px 4px 0px 0px #000000;
+  border-radius: 0px;
 }
 
 .surface-elevated {
   background: var(--bg-elevated);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px 0px #000000;
+  border-radius: 0px;
 }
 
 .surface-glass,
 .glass-panel,
 .glass-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.02);
-  transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  box-shadow: 4px 4px 0px 0px #000000;
+  border-radius: 0px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 .glass-card:hover {
-  border-color: var(--border-hover);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 12px 28px rgba(0, 0, 0, 0.04);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px #000000;
+}
+
+/* Hard Brutalist Button & Badge Utilities */
+.brutal-btn-primary {
+  background-color: #000000;
+  color: #FFFFFF;
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px 0px #FACC15;
+  font-weight: 800;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.brutal-btn-primary:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px 0px #FACC15;
+}
+
+.brutal-btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.brutal-btn-yellow {
+  background-color: #FACC15;
+  color: #000000;
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px 0px #000000;
+  font-weight: 800;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.brutal-btn-yellow:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px 0px #000000;
+}
+
+.brutal-btn-yellow:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+/* Accessible focus ring */
+:focus-visible {
+  outline: 3px solid #000000;
+  outline-offset: 2px;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  box-shadow: 3px 3px 0px 0px #000000;
+}
+
+::selection {
+  background-color: #FACC15;
+  color: #000000;
 }
 
 /* Data Gauge Indicators */
@@ -170,18 +230,6 @@ p, li {
 .grade-c { --grade-color: var(--color-grade-c); }
 .grade-d { --grade-color: var(--color-grade-d); }
 
-/* Accessible focus ring */
-:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: none;
-}
-
 /* Custom scrollbar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
@@ -189,11 +237,6 @@ select:focus-visible {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-::selection {
-  background-color: rgba(212, 89, 15, 0.15);
-  color: var(--text-primary);
 }
 
 /* Reduced motion */

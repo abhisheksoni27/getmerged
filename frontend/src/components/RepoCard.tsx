@@ -138,11 +138,11 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
         href={`/${fullName}`}
         onClick={handleClick}
         title={`View ${fullName} C-Rank scorecard, PR response time & merge metrics`}
-        className="group relative flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-2xl bg-[var(--bg-surface)] p-5 sm:px-6 sm:py-5 border border-[var(--border-subtle)] hover:border-[var(--border-strong)] hover:shadow-md transition-all text-current no-underline cursor-pointer"
+        className="group relative flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-none bg-white p-5 sm:px-6 sm:py-4 border-2 border-black shadow-[4px_4px_0px_0px_#000] hover:shadow-[7px_7px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all text-current no-underline cursor-pointer"
       >
         {/* Left: Identity & Info */}
         <div className="flex items-start gap-4 min-w-0 flex-1">
-          <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] overflow-hidden shrink-0 shadow-2xs mt-0.5">
+          <div className="h-12 w-12 rounded-none border-2 border-black bg-[#F4F4EE] overflow-hidden shrink-0 shadow-[2px_2px_0px_0px_#000] mt-0.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`https://github.com/${ownerPart || "github"}.png?size=48`}
@@ -157,30 +157,29 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
             />
           </div>
           <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <span className="font-sans text-base sm:text-lg font-bold text-[var(--text-primary)] group-hover:text-[var(--color-primary)] transition-colors truncate">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-space text-base sm:text-xl font-black text-black group-hover:bg-[#FACC15] group-hover:px-1 transition-all truncate tracking-tight">
                 {displayName}
               </span>
-              <span className="text-xs font-mono text-[var(--text-tertiary)] hidden sm:inline truncate max-w-[200px]">
+              <span className="text-xs font-mono font-bold text-gray-600 hidden sm:inline truncate max-w-[200px]">
                 {fullName}
               </span>
               <CRankBadge rank={rank} size="sm" showLabel={true} />
               {repo.currently_active && (
-                <span className="h-2 w-2 rounded-full bg-[#0D9668] shrink-0" title="Active in last 30 days" />
+                <span className="h-2.5 w-2.5 bg-[#10B981] border border-black shrink-0" title="Active in last 30 days" />
               )}
             </div>
 
-            <p className="text-xs sm:text-sm text-[var(--text-secondary)] line-clamp-1 mt-1 font-sans">
+            <p className="text-xs sm:text-sm text-black line-clamp-1 mt-1 font-mono font-medium">
               {repo.description || "No repository description available."}
             </p>
 
-            <div className="flex flex-wrap items-center gap-2.5 mt-2 font-mono text-xs">
-              <span className="flex items-center gap-1 font-bold text-[var(--text-primary)]">
-                <Star className="h-3.5 w-3.5 fill-[#C4910A] text-[#C4910A]" />
+            <div className="flex flex-wrap items-center gap-2 mt-2 font-mono text-xs">
+              <span className="flex items-center gap-1 font-black text-black bg-[#FACC15] px-2 py-0.5 border border-black shadow-[1px_1px_0px_0px_#000]">
+                <Star className="h-3.5 w-3.5 fill-black text-black" />
                 {repo.stars >= 1_000 ? `${(repo.stars / 1_000).toFixed(1)}k` : repo.stars}
               </span>
-              <span className="text-[var(--border-strong)]">·</span>
-              <span className="flex items-center gap-1 text-[var(--text-secondary)] font-semibold">
+              <span className="flex items-center gap-1 text-black bg-white px-2 py-0.5 border border-black shadow-[1px_1px_0px_0px_#000] font-bold">
                 <LangLogo language={repo.language} />
                 <span>{repo.language || "Code"}</span>
               </span>
@@ -188,7 +187,7 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
                 <span
                   key={topic}
                   onClick={(e) => handleTopicChipClick(e, topic)}
-                  className="hidden lg:inline-flex items-center px-2 py-0.5 rounded-md bg-[var(--bg-elevated)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)] text-[11px] font-medium"
+                  className="hidden lg:inline-flex items-center px-2 py-0.5 border border-black bg-[#F4F4EE] text-black hover:bg-[#FACC15] text-[11px] font-mono font-bold"
                 >
                   #{topic}
                 </span>
@@ -198,23 +197,23 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
         </div>
 
         {/* Right: Telemetry data columns in crisp tabular alignment */}
-        <div className="flex items-center justify-between md:justify-end gap-5 sm:gap-7 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-[var(--border-subtle)] font-mono">
+        <div className="flex items-center justify-between md:justify-end gap-3 sm:gap-4 shrink-0 pt-3 md:pt-0 border-t-2 md:border-t-0 border-black font-mono">
           {/* Merge Rate */}
-          <div className="text-left md:text-right">
-            <div className="text-[11px] text-[var(--text-secondary)] font-medium">Merge rate</div>
-            <div className="text-sm sm:text-base font-bold text-[var(--text-primary)] tabular-nums mt-0.5">{mergeRateStr}</div>
+          <div className="text-left md:text-right border-2 border-black bg-[#F4F4EE] px-3 py-1 shadow-[2px_2px_0px_0px_#000]">
+            <div className="text-[10px] text-black font-black uppercase">Merge rate</div>
+            <div className="text-sm sm:text-base font-black text-black tabular-nums">{mergeRateStr}</div>
           </div>
 
           {/* Review Time */}
-          <div className="text-left md:text-right">
-            <div className="text-[11px] text-[var(--text-secondary)] font-medium">Review wait</div>
-            <div className="text-sm sm:text-base font-bold text-[var(--text-primary)] tabular-nums mt-0.5">{firstResponseStr}</div>
+          <div className="text-left md:text-right border-2 border-black bg-[#F4F4EE] px-3 py-1 shadow-[2px_2px_0px_0px_#000]">
+            <div className="text-[10px] text-black font-black uppercase">Review wait</div>
+            <div className="text-sm sm:text-base font-black text-black tabular-nums">{firstResponseStr}</div>
           </div>
 
           {/* 1st Timers */}
-          <div className="text-left md:text-right hidden sm:block">
-            <div className="text-[11px] text-[var(--text-secondary)] font-medium">1st-timers</div>
-            <div className="text-sm sm:text-base font-bold text-[var(--text-primary)] tabular-nums mt-0.5">{firstTimerStr}</div>
+          <div className="text-left md:text-right hidden sm:block border-2 border-black bg-[#F4F4EE] px-3 py-1 shadow-[2px_2px_0px_0px_#000]">
+            <div className="text-[10px] text-black font-black uppercase">1st-timers</div>
+            <div className="text-sm sm:text-base font-black text-black tabular-nums">{firstTimerStr}</div>
           </div>
 
           {/* Starter issues pill */}
@@ -225,7 +224,7 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
                 e.stopPropagation();
                 handleGfiClick();
               }}
-              className="hidden xl:inline-flex items-center gap-1 text-[#0D9668] bg-[#0D9668]/10 px-2.5 py-1 rounded-lg border border-[#0D9668]/20 font-bold text-xs hover:bg-[#0D9668]/20 transition-colors"
+              className="hidden xl:inline-flex items-center gap-1 text-black bg-[#10B981] px-2.5 py-1.5 border-2 border-black font-black text-xs shadow-[2px_2px_0px_0px_#000] hover:bg-[#FACC15] transition-colors"
               title={`View ${gfiCount} Good First Issues`}
             >
               <ShieldCheck className="h-3.5 w-3.5" />
@@ -235,8 +234,8 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
 
           {/* Scorecard Action */}
           <div className="pl-1">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--bg-elevated)] group-hover:bg-[var(--color-primary)] text-[var(--text-primary)] group-hover:text-white transition-all text-xs font-bold font-sans shadow-2xs">
-              <span>Scorecard</span>
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-2.5 border-2 border-black bg-black text-[#FACC15] group-hover:bg-[#FACC15] group-hover:text-black transition-all text-xs font-mono font-black uppercase shadow-[2px_2px_0px_0px_#000]">
+              <span>SCORECARD</span>
               <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
             </span>
           </div>
@@ -250,10 +249,8 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
       href={`/${fullName}`}
       onClick={handleClick}
       title={`View ${fullName} C-Rank scorecard, PR response time & merge metrics`}
-      className={`group relative flex h-full flex-col justify-between rounded-2xl bg-[var(--bg-surface)] p-6 sm:p-7 transition-all duration-200 block text-current no-underline cursor-pointer border border-[var(--border-subtle)] hover:border-[var(--border-hover)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.05)] hover:-translate-y-0.5 ${
-        isSpotlight
-          ? "ring-2 ring-[var(--color-primary)]/20 border-[var(--color-primary)]/30 shadow-[0_4px_16px_rgba(212,89,15,0.06)]"
-          : "shadow-[0_1px_3px_rgba(0,0,0,0.03)]"
+      className={`group relative flex h-full flex-col justify-between rounded-none bg-white p-6 transition-all duration-100 block text-current no-underline cursor-pointer border-2 border-black shadow-[4px_4px_0px_0px_#000] hover:shadow-[7px_7px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 ${
+        isSpotlight ? "bg-[#FFFDF8]" : ""
       }`}
     >
       <div className="flex flex-col flex-1">
@@ -357,7 +354,7 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
         </div>
 
         {/* Telemetry Metrics */}
-        <div className="grid grid-cols-3 gap-3 p-3.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] mb-5">
+        <div className="grid grid-cols-3 border-2 border-black bg-[#F4F4EE] divide-x-2 divide-black shadow-[2px_2px_0px_0px_#000] mb-5 p-2">
           <MetricGauge
             label="Merge Rate"
             value={mergeRateStr}
@@ -380,7 +377,7 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
       </div>
 
       {/* Card Footer */}
-      <div className="pt-4 border-t border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-[var(--text-secondary)]">
+      <div className="pt-4 border-t-2 border-black flex flex-wrap items-center justify-between gap-3 text-xs font-mono font-bold text-black">
         <div className="flex items-center gap-2 min-w-0">
           {gfiCount > 0 ? (
             <span
@@ -395,22 +392,22 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
                 handleGfiClick();
               }}
               onKeyDown={handleGfiKeyDown}
-              className="inline-flex items-center gap-1.5 text-[#0D9668] bg-[#0D9668]/10 px-3 py-1 rounded-lg border border-[#0D9668]/20 font-bold text-xs hover:bg-[#0D9668]/20 transition-colors cursor-pointer shrink-0 whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 text-black bg-[#10B981] px-2.5 py-1 border-2 border-black font-black text-xs shadow-[2px_2px_0px_0px_#000] hover:bg-[#FACC15] transition-colors cursor-pointer shrink-0 whitespace-nowrap"
             >
               <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
               <span>{gfiCount} GFI</span>
             </span>
           ) : repo.is_trending ? (
-            <span className="inline-flex items-center gap-1.5 text-[var(--color-primary)] bg-[var(--color-primary)]/10 px-3 py-1 rounded-lg border border-[var(--color-primary)]/20 font-bold text-xs shrink-0 whitespace-nowrap">
+            <span className="inline-flex items-center gap-1.5 text-black bg-[#FACC15] px-2.5 py-1 border-2 border-black font-black text-xs shadow-[2px_2px_0px_0px_#000] shrink-0 whitespace-nowrap">
               <Flame className="h-3.5 w-3.5 shrink-0" />
-              <span>Trending</span>
+              <span>TRENDING</span>
             </span>
           ) : (
-            <span className="text-[var(--text-tertiary)] text-xs font-medium">Tracked</span>
+            <span className="text-black text-xs font-mono font-bold">● SCORED</span>
           )}
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
             data-testid="compare-btn"
@@ -418,14 +415,13 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
             title={`Compare ${fullName} with other repos`}
             onClick={handleCompareClick}
             onKeyDown={handleCompareKeyDown}
-            className="inline-flex items-center gap-1.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2.5 py-1 rounded-lg hover:bg-[var(--bg-elevated)] transition-colors cursor-pointer text-xs font-semibold"
+            className="inline-flex items-center gap-1.5 border border-black bg-white px-2 py-1 text-black font-mono font-bold shadow-[1px_1px_0px_0px_#000] hover:bg-[#FACC15] transition-colors cursor-pointer text-xs"
           >
-            <Scale className="h-3.5 w-3.5" />
-            <span>Compare</span>
+            <Scale className="h-3 w-3" />
+            <span>VS</span>
           </button>
-          <span className="inline-flex items-center gap-1 text-[var(--color-primary)] font-bold hover:underline transition-colors text-xs">
-            <span>Scorecard</span>
-            <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+          <span className="inline-flex items-center gap-1 bg-black text-[#FACC15] border border-black px-2.5 py-1 font-mono font-black uppercase text-xs shadow-[1px_1px_0px_0px_#000]">
+            <span>SCORECARD →</span>
           </span>
         </div>
       </div>

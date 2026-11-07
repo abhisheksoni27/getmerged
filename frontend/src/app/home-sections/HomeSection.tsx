@@ -27,11 +27,11 @@ interface PanelProps {
   tone?: "solid" | "dashed";
 }
 
-/** Shared clean white card shell for repeated section markup. */
+/** Neo-Brutalist Panel: hard 2px black border with solid 4px black shadow. */
 export function Panel({ children, className = "", tone = "solid" }: PanelProps) {
-  const border = tone === "dashed" ? "border-dashed border-[var(--border-strong)]" : "border-[var(--border-subtle)]";
+  const border = tone === "dashed" ? "border-2 border-dashed border-black" : "border-2 border-black";
   return (
-    <div className={`rounded-2xl border ${border} bg-[var(--bg-surface)] p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.03)] ${className}`}>
+    <div className={`rounded-none ${border} bg-white p-6 sm:p-8 shadow-[4px_4px_0px_0px_#000] ${className}`}>
       {children}
     </div>
   );
@@ -42,10 +42,10 @@ interface EyebrowProps {
   className?: string;
 }
 
-/** Shared small mono section label row. */
+/** Shared mono section badge. */
 export function Eyebrow({ children, className = "" }: EyebrowProps) {
   return (
-    <div className={`flex items-center gap-1.5 text-xs font-mono font-medium text-[var(--text-secondary)] mb-2 ${className}`}>
+    <div className={`inline-flex items-center gap-1.5 text-xs font-mono font-black uppercase tracking-wider px-2 py-0.5 border-2 border-black bg-[#FACC15] text-black shadow-[2px_2px_0px_0px_#000] mb-3 ${className}`}>
       {children}
     </div>
   );
