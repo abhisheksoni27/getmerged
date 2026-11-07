@@ -23,10 +23,10 @@ interface TopicReposExplorerProps {
 }
 
 const chipClass = (active: boolean): string =>
-  `inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border border-white/[0.12] cursor-pointer ${
+  `inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border border-[var(--border-subtle)] cursor-pointer ${
     active
       ? "bg-amber-600 text-white shadow-sm"
-      : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+      : "glass-panel text-[var(--text-secondary)] hover:bg-slate-800 hover:shadow-sm"
   }`;
 
 export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
@@ -56,7 +56,7 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
     <div>
       <section aria-label="Language filter" data-testid="language-filter" className="mb-6">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-mono text-zinc-300 mr-1 flex items-center gap-1">
+          <span className="text-xs font-mono text-[var(--text-secondary)] mr-1 flex items-center gap-1">
             <Filter className="h-3.5 w-3.5" /> Filter by language
           </span>
           <button
@@ -83,7 +83,7 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
         </div>
 
         <div className="flex items-center gap-2 flex-wrap mt-3">
-          <span className="text-xs font-mono text-zinc-300 mr-1 flex items-center gap-1">
+          <span className="text-xs font-mono text-[var(--text-secondary)] mr-1 flex items-center gap-1">
             <BarChart3 className="h-3.5 w-3.5" /> Rankings
           </span>
           {languages.map(({ lang }) => (
@@ -99,7 +99,7 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
         </div>
       </section>
 
-      <p className="text-xs font-mono text-zinc-300 mb-3" aria-live="polite">
+      <p className="text-xs font-mono text-[var(--text-secondary)] mb-3" aria-live="polite">
         {selectedLang === "all"
           ? `${filteredRepos.length} repositories tagged #${topic}`
           : `${filteredRepos.length} of ${repos.length} repositories · ${selectedLang}`}
@@ -128,14 +128,14 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
           return (
             <div
               key={repo.id}
-              className="dev-card-glow p-5 sm:p-6 rounded-2xl border border-white/[0.1] glass-panel shadow-xs hover:border-white/[0.12] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-5 group"
+              className="dev-card-glow p-5 sm:p-6 rounded-2xl border border-[var(--border-subtle)] glass-panel shadow-xs hover:border-[var(--border-subtle)] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-5 group"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-2 flex-wrap">
                   <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md glass-card text-white shadow-2xs">
                     {rank} Tier
                   </span>
-                  <span className="text-xs font-mono glass-card text-zinc-300 px-2.5 py-0.5 rounded-md font-medium border border-white/[0.1]/60 flex items-center gap-1.5">
+                  <span className="text-xs font-mono glass-card text-[var(--text-secondary)] px-2.5 py-0.5 rounded-md font-medium border border-[var(--border-subtle)]/60 flex items-center gap-1.5">
                     <LangLogo language={repo.language} />
                     {repo.language || "Multi-language"}
                   </span>
@@ -149,46 +149,46 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
                   )}
                 </div>
 
-                <h2 className="font-space text-lg sm:text-xl font-bold text-white group-hover:text-zinc-300 transition-colors">
+                <h2 className="font-space text-lg sm:text-xl font-bold text-[var(--text-primary)] group-hover:text-[var(--text-secondary)] transition-colors">
                   <Link prefetch={false}
                     href={`/${repo.full_name}`}
                     title={`View contributor metrics for ${repo.full_name}`}
                     className="hover:underline flex items-center gap-1.5"
                   >
                     {repo.full_name}
-                    <ExternalLink className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity text-zinc-300" />
+                    <ExternalLink className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity text-[var(--text-secondary)]" />
                   </Link>
                 </h2>
 
                 {repo.description && (
-                  <p className="text-xs sm:text-sm text-zinc-300 mt-1.5 line-clamp-2 leading-relaxed font-sans">
+                  <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-1.5 line-clamp-2 leading-relaxed font-sans">
                     {repo.description}
                   </p>
                 )}
 
                 {/* Scorecard telemetry grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 py-2.5 px-3 glass-panel rounded-xl border border-white/[0.1] mt-3 text-center font-mono">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 py-2.5 px-3 glass-panel rounded-xl border border-[var(--border-subtle)] mt-3 text-center font-mono">
                   <div>
-                    <div className="text-xs font-bold text-white">{(repo.external_pr_merge_rate || 0).toFixed(1)}%</div>
-                    <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5 flex items-center justify-center gap-1">
+                    <div className="text-xs font-bold text-[var(--text-primary)]">{(repo.external_pr_merge_rate || 0).toFixed(1)}%</div>
+                    <div className="text-[10px] text-[var(--text-secondary)] font-medium whitespace-nowrap mt-0.5 flex items-center justify-center gap-1">
                       <GitPullRequest className="h-2.5 w-2.5 text-blue-500" /> Merge Rate
                     </div>
                   </div>
-                  <div className="border-l border-white/[0.1] pl-2">
-                    <div className="text-xs font-bold text-white">{responseFormatted}</div>
-                    <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5 flex items-center justify-center gap-1">
+                  <div className="border-l border-[var(--border-subtle)] pl-2">
+                    <div className="text-xs font-bold text-[var(--text-primary)]">{responseFormatted}</div>
+                    <div className="text-[10px] text-[var(--text-secondary)] font-medium whitespace-nowrap mt-0.5 flex items-center justify-center gap-1">
                       <Clock className="h-2.5 w-2.5 text-amber-500" /> First Review
                     </div>
                   </div>
-                  <div className="border-l border-white/[0.1] pl-2">
-                    <div className="text-xs font-bold text-white">{firstTimerRate || "-"}</div>
-                    <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5 flex items-center justify-center gap-1">
+                  <div className="border-l border-[var(--border-subtle)] pl-2">
+                    <div className="text-xs font-bold text-[var(--text-primary)]">{firstTimerRate || "-"}</div>
+                    <div className="text-[10px] text-[var(--text-secondary)] font-medium whitespace-nowrap mt-0.5 flex items-center justify-center gap-1">
                       <Sparkles className="h-2.5 w-2.5 text-emerald-500" /> 1st-Timers
                     </div>
                   </div>
-                  <div className="border-l border-white/[0.1] pl-2">
-                    <div className="text-xs font-bold text-white">{repo.bus_factor ?? 0}</div>
-                    <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5 flex items-center justify-center gap-1">
+                  <div className="border-l border-[var(--border-subtle)] pl-2">
+                    <div className="text-xs font-bold text-[var(--text-primary)]">{repo.bus_factor ?? 0}</div>
+                    <div className="text-[10px] text-[var(--text-secondary)] font-medium whitespace-nowrap mt-0.5 flex items-center justify-center gap-1">
                       <Users className="h-2.5 w-2.5 text-purple-500" /> Maintainers
                     </div>
                   </div>

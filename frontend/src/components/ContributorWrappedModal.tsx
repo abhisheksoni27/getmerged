@@ -85,7 +85,7 @@ Check out my proof of work: ${profileUrl}`;
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-5 top-5 p-2 rounded-full glass-card text-zinc-400 hover:text-white cursor-pointer"
+          className="absolute right-5 top-5 p-2 rounded-full glass-card text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>
@@ -100,10 +100,10 @@ Check out my proof of work: ${profileUrl}`;
               <Sparkles className="h-3.5 w-3.5" />
               <span>Contributor Wrapped · Social Brag Card</span>
             </div>
-            <h3 className="text-xl font-bold font-space text-white">
+            <h3 className="text-xl font-bold font-space text-[var(--text-primary)]">
               {monthName} Contributor Wrapped
             </h3>
-            <p className="text-xs text-zinc-400 font-sans mt-0.5">
+            <p className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
               Flex your verified open source PR merges and ranking with your network.
             </p>
           </div>
@@ -119,7 +119,7 @@ Check out my proof of work: ${profileUrl}`;
               <div className="w-6 h-6 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-xs font-black">
                 GM
               </div>
-              <span className="text-xs font-mono font-bold text-white tracking-wider">GetMerged League</span>
+              <span className="text-xs font-mono font-bold text-[var(--text-primary)] tracking-wider">GetMerged League</span>
             </div>
             <span className="text-[11px] font-mono text-amber-400 font-semibold">{monthName}</span>
           </div>
@@ -133,34 +133,34 @@ Check out my proof of work: ${profileUrl}`;
               className="w-12 h-12 rounded-full border border-white/20 object-cover"
             />
             <div>
-              <div className="text-base font-bold font-space text-white">{displayName}</div>
-              <div className="text-xs font-mono text-zinc-400">@{cleanUsername}</div>
+              <div className="text-base font-bold font-space text-[var(--text-primary)]">{displayName}</div>
+              <div className="text-xs font-mono text-[var(--text-secondary)]">@{cleanUsername}</div>
             </div>
           </div>
 
           {/* 3 Metric Pillars */}
           <div className="grid grid-cols-3 gap-2 text-center pt-1 font-mono">
             <div className="p-3 rounded-xl bg-black/40 border border-white/[0.06] space-y-0.5">
-              <div className="text-[10px] text-zinc-400 uppercase">League Rank</div>
+              <div className="text-[10px] text-[var(--text-secondary)] uppercase">League Rank</div>
               <div className="text-base font-black text-amber-400">#{rank}</div>
               <div className="text-[10px] text-emerald-400">{percentile}</div>
             </div>
 
             <div className="p-3 rounded-xl bg-black/40 border border-white/[0.06] space-y-0.5">
-              <div className="text-[10px] text-zinc-400 uppercase">Karma Score</div>
+              <div className="text-[10px] text-[var(--text-secondary)] uppercase">Karma Score</div>
               <div className="text-base font-black text-emerald-400">⚡ {karma.toLocaleString()}</div>
-              <div className="text-[10px] text-zinc-400">{topLang}</div>
+              <div className="text-[10px] text-[var(--text-secondary)]">{topLang}</div>
             </div>
 
             <div className="p-3 rounded-xl bg-black/40 border border-white/[0.06] space-y-0.5">
-              <div className="text-[10px] text-zinc-400 uppercase">Merged PRs</div>
+              <div className="text-[10px] text-[var(--text-secondary)] uppercase">Merged PRs</div>
               <div className="text-base font-black text-white">{mergedCount} PRs</div>
-              <div className="text-[10px] text-zinc-400">Production</div>
+              <div className="text-[10px] text-[var(--text-secondary)]">Production</div>
             </div>
           </div>
 
           {/* Card Footer Verification */}
-          <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 pt-2 border-t border-white/[0.06]">
+          <div className="flex items-center justify-between text-[11px] font-mono text-[var(--text-secondary)] pt-2 border-t border-white/[0.06]">
             <span className="flex items-center gap-1 text-emerald-400">
               <ShieldCheck className="h-3.5 w-3.5" />
               <span>Proof-of-Work Verified</span>
@@ -191,11 +191,11 @@ Check out my proof of work: ${profileUrl}`;
             </button>
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-white/[0.08]">
+          <div className="flex items-center justify-between pt-2 border-t border-[var(--border-subtle)]">
             <button
               type="button"
               onClick={handleCopy}
-              className="px-4 py-2 text-xs font-mono text-zinc-400 hover:text-white flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center gap-1.5 cursor-pointer"
             >
               {copied ? (
                 <>
@@ -213,7 +213,7 @@ Check out my proof of work: ${profileUrl}`;
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-mono text-zinc-400 hover:text-white cursor-pointer"
+              className="px-4 py-2 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
             >
               Done
             </button>

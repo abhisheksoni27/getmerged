@@ -49,7 +49,7 @@ export function QuestTrackCard() {
   if (loading || !track || track.quests.length === 0) return null;
 
   const renderIcon = (name: string, completed: boolean) => {
-    const cls = `h-4 w-4 ${completed ? "text-emerald-400" : "text-zinc-500"}`;
+    const cls = `h-4 w-4 ${completed ? "text-emerald-400" : "text-[var(--text-tertiary)]"}`;
     switch (name) {
       case "Radar":
         return <Radar className={cls} />;
@@ -65,7 +65,7 @@ export function QuestTrackCard() {
   };
 
   return (
-    <div className="rounded-3xl glass-panel border border-emerald-500/20 p-6 sm:p-7 bg-gradient-to-br from-emerald-950/20 via-zinc-950/70 to-zinc-900/40 shadow-xl space-y-6 text-white font-sans">
+    <div className="rounded-3xl glass-panel border border-emerald-500/20 p-6 sm:p-7 bg-gradient-to-br from-emerald-950/20 via-zinc-950/70 to-zinc-900/40 shadow-xl space-y-6 text-[var(--text-primary)] font-sans">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
@@ -73,10 +73,10 @@ export function QuestTrackCard() {
             <Target className="h-3.5 w-3.5" />
             <span>Contributor Onboarding</span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-bold font-space text-white">
+          <h3 className="text-xl sm:text-2xl font-bold font-space text-[var(--text-primary)]">
             Build Your Open Source Track Record
           </h3>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-[var(--text-secondary)]">
             Complete these quick steps to find welcoming repos and earn Karma points.
           </p>
         </div>
@@ -87,18 +87,18 @@ export function QuestTrackCard() {
               <Sparkles className="h-4 w-4" />
               {track.completed_quests} / {track.total_quests}
             </div>
-            <div className="text-[11px] font-mono text-zinc-400">Steps Completed</div>
+            <div className="text-[11px] font-mono text-[var(--text-secondary)]">Steps Completed</div>
           </div>
         </div>
       </div>
 
       {/* Progress Bar */}
       <div className="space-y-2">
-        <div className="flex justify-between text-xs font-mono text-zinc-400">
+        <div className="flex justify-between text-xs font-mono text-[var(--text-secondary)]">
           <span>Overall Mission Progress</span>
           <span>{Math.round(track.completion_rate)}% Complete</span>
         </div>
-        <div className="h-2.5 w-full bg-zinc-900 rounded-full overflow-hidden border border-white/[0.08] p-0.5">
+        <div className="h-2.5 w-full bg-zinc-900 rounded-full overflow-hidden border border-[var(--border-subtle)] p-0.5">
           <div
             className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500"
             style={{ width: `${Math.max(5, track.completion_rate)}%` }}
@@ -127,12 +127,12 @@ export function QuestTrackCard() {
               </div>
               <div className="space-y-0.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold font-space text-white">
+                  <span className="text-sm font-bold font-space text-[var(--text-primary)]">
                     {q.title}
                   </span>
                   {renderIcon(q.icon_name, q.is_completed)}
                 </div>
-                <p className="text-xs text-zinc-400 leading-relaxed">
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                   {q.description}
                 </p>
               </div>
@@ -143,7 +143,7 @@ export function QuestTrackCard() {
                 className={`inline-block px-2.5 py-1 rounded-lg text-xs font-mono font-bold ${
                   q.is_completed
                     ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                    : "bg-zinc-800 text-zinc-400"
+                    : "bg-zinc-800 text-[var(--text-secondary)]"
                 }`}
               >
                 +{q.karma_reward} Karma

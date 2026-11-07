@@ -19,10 +19,10 @@ export function MaintainersPane({ user, onCheckout }: MaintainersPaneProps) {
           <Activity className="h-3.5 w-3.5" />
           <span>For Repository Owners & Open Source Maintainers</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold font-space text-white tracking-tight mb-3">
+        <h1 className="text-3xl sm:text-4xl font-bold font-space text-[var(--text-primary)] tracking-tight mb-3">
           Claim Your Scorecard. Attract Better PRs.
         </h1>
-        <p className="text-sm sm:text-base text-zinc-300 font-sans leading-relaxed">
+        <p className="text-sm sm:text-base text-[var(--text-secondary)] font-sans leading-relaxed">
           Showcase your team&apos;s review speed, embed official C-Rank badges, and pre-screen contributor submissions.
         </p>
       </div>
@@ -34,7 +34,7 @@ export function MaintainersPane({ user, onCheckout }: MaintainersPaneProps) {
           footer={
             <Link prefetch={false}
               href="/maintainers"
-              className="w-full py-2.5 rounded-xl glass-card text-zinc-300 font-mono font-bold text-xs uppercase tracking-wider text-center hover:bg-white/[0.08] transition-colors"
+              className="w-full py-2.5 rounded-xl glass-card text-[var(--text-secondary)] font-mono font-bold text-xs uppercase tracking-wider text-center hover:bg-white/[0.08] transition-colors"
             >
               Claim Repository →
             </Link>

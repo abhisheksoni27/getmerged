@@ -98,7 +98,7 @@ export function AuditReportContent({
         key: "concentration",
         label: "Concentration Risk",
         value: rh.concentration_risk,
-        valueClass: `text-right max-w-[160px] ${isReviewerConcentrated ? "text-rose-400" : "text-zinc-300"}`,
+        valueClass: `text-right max-w-[160px] ${isReviewerConcentrated ? "text-rose-400" : "text-[var(--text-secondary)]"}`,
       },
     ];
   }, [rh, avgResponseH, isReviewerConcentrated]);

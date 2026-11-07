@@ -107,12 +107,12 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
               Guided Journey
             </span>
           </div>
-          <p className="mt-1 text-xs text-zinc-300">
+          <p className="mt-1 text-xs text-[var(--text-secondary)]">
             A step-by-step roadmap from repo discovery to your first merged pull request.
           </p>
         </div>
 
-        <div className="flex items-center gap-1.5 text-xs text-zinc-300">
+        <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)]">
           <span>Jump to:</span>
           {STEP_NUMBERS.map((s) => (
             <button
@@ -121,7 +121,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
               className={`h-6 w-6 rounded-md text-xs font-bold transition-colors ${
                 currentStep === s
                   ? "glass-card text-white"
-                  : "glass-card text-zinc-300 hover:bg-zinc-200"
+                  : "glass-card text-[var(--text-secondary)] hover:bg-zinc-200"
               }`}
               title={`Step ${s}`}
             >
@@ -137,7 +137,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
         onStepClick={track.handleManualAdvance}
       />
 
-      <div className="mt-5 rounded-xl border border-white/[0.1] glass-panel p-4 sm:p-5 shadow-xs">
+      <div className="mt-5 rounded-xl border border-[var(--border-subtle)] glass-panel p-4 sm:p-5 shadow-xs">
         {renderStepContent(currentStep, track)}
       </div>
     </section>

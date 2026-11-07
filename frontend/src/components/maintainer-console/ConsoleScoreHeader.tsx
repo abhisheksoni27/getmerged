@@ -11,12 +11,12 @@ interface ConsoleScoreHeaderProps {
 
 export function ConsoleScoreHeader({ score, tier }: ConsoleScoreHeaderProps) {
   return (
-    <div className="p-5 glass-card text-white rounded-3xl border border-white/[0.12] shadow-sm flex flex-wrap items-center justify-between gap-4">
+    <div className="p-5 glass-card text-white rounded-3xl border border-[var(--border-subtle)] shadow-sm flex flex-wrap items-center justify-between gap-4">
       <div>
-        <span className="text-xs font-mono uppercase tracking-wider text-zinc-300">Current Health Score</span>
+        <span className="text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">Current Health Score</span>
         <div className="flex items-baseline gap-2 mt-1">
-          <span className="text-3xl font-extrabold text-white">{Math.round(score)}</span>
-          <span className="text-zinc-300 text-sm">/100</span>
+          <span className="text-3xl font-extrabold text-[var(--text-primary)]">{Math.round(score)}</span>
+          <span className="text-[var(--text-secondary)] text-sm">/100</span>
           <TierBadge tier={tier} />
         </div>
       </div>

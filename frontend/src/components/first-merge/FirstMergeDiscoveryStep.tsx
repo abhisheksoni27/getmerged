@@ -31,11 +31,11 @@ export function FirstMergeDiscoveryStep({
     >
 
       {loadingMatches ? (
-        <div className="mt-4 py-8 text-center text-xs text-zinc-300 animate-pulse">
+        <div className="mt-4 py-8 text-center text-xs text-[var(--text-secondary)] animate-pulse">
           Finding highest-fit repositories for you...
         </div>
       ) : matches.length === 0 ? (
-        <div className="mt-4 rounded-lg border border-dashed border-white/[0.1] p-6 text-center text-xs text-zinc-300">
+        <div className="mt-4 rounded-lg border border-dashed border-[var(--border-subtle)] p-6 text-center text-xs text-[var(--text-secondary)]">
           No recommendations found yet. Search any welcoming repository to get started.
           <div className="mt-2">
             <Link prefetch={false}
@@ -51,20 +51,20 @@ export function FirstMergeDiscoveryStep({
           {matches.slice(0, 3).map((m) => (
             <div
               key={m.id || m.full_name}
-              className="flex flex-col justify-between rounded-lg border border-white/[0.1] glass-card/50 p-3.5 hover:border-emerald-400 hover:glass-panel transition-all"
+              className="flex flex-col justify-between rounded-lg border border-[var(--border-subtle)] glass-card/50 p-3.5 hover:border-emerald-400 hover:glass-panel transition-all"
             >
               <div>
                 <div className="flex items-start justify-between gap-1">
-                  <span className="truncate text-xs font-bold text-white" title={m.full_name}>
+                  <span className="truncate text-xs font-bold text-[var(--text-primary)]" title={m.full_name}>
                     {m.full_name}
                   </span>
                   {m.c_rank_tier && (
-                    <span className="shrink-0 rounded glass-card px-1.5 py-0.2 text-[10px] font-bold text-white">
+                    <span className="shrink-0 rounded glass-card px-1.5 py-0.2 text-[10px] font-bold text-[var(--text-primary)]">
                       {m.c_rank_tier}
                     </span>
                   )}
                 </div>
-                <p className="mt-1 line-clamp-2 text-[11px] text-zinc-300">
+                <p className="mt-1 line-clamp-2 text-[11px] text-[var(--text-secondary)]">
                   {m.description || "Active community with beginner friendly issues."}
                 </p>
                 {m.reasons && m.reasons.length > 0 && (

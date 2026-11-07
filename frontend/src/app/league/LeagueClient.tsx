@@ -208,7 +208,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
             onChange={(e) => setPrUrl(e.target.value)}
             placeholder="https://github.com/facebook/react/pull/12345"
             required
-            className="flex-1 rounded-xl glass-panel border border-white/[0.1] px-4 py-3 text-xs font-mono text-white placeholder:text-zinc-300 focus:outline-none focus:border-white/[0.2]"
+            className="flex-1 rounded-xl glass-panel border border-white/[0.1] px-4 py-3 text-xs font-mono text-[var(--text-primary)] placeholder:text-zinc-300 focus:outline-none focus:border-white/[0.2]"
           />
           <button
             type="submit"

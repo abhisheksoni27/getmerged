@@ -18,14 +18,14 @@ export function InsightsEpilogue({ insights }: { insights: AuditAIInsights }) {
 
 export function DiagnosticsSuite() {
   return (
-    <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
+    <section className="rounded-2xl border-2 border-[var(--border-subtle)] glass-panel p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
         <div>
-          <h2 className="text-base font-extrabold font-mono text-white flex items-center gap-2">
+          <h2 className="text-base font-extrabold font-mono text-[var(--text-primary)] flex items-center gap-2">
             <SlidersHorizontal className="h-4 w-4 text-emerald-400" />
             10-Dimension Maintainer Intelligence Suite
           </h2>
-          <p className="text-xs text-zinc-400 font-mono mt-0.5">
+          <p className="text-xs text-[var(--text-secondary)] font-mono mt-0.5">
             Comprehensive scan vectors analyzed using GitHub GraphQL & Maintainer Tokens
           </p>
         </div>

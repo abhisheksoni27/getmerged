@@ -46,14 +46,14 @@ export function IssueSniperTrigger({
               <Crosshair className="h-3.5 w-3.5 animate-pulse" />
               <span>Real-Time Radar</span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-bold font-space text-white">
+            <h3 className="text-xl sm:text-2xl font-bold font-space text-[var(--text-primary)]">
               {repoFullName
                 ? `Snipe fresh beginner issues in ${repoFullName}`
                 : language
                 ? `Arm Issue Sniper for fresh ${language} beginner issues`
                 : "Snipe top beginner issues before anyone claims them"}
             </h3>
-            <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
               Beginner issues in welcoming S/A-Tier repositories get snatched within 15 minutes.
               Receive instant alerts on Discord, Telegram, or Email the minute a maintainer opens a
               new task.

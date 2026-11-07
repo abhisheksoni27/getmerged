@@ -71,7 +71,7 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-transparent text-white font-sans">
+    <div className="min-h-screen  flex flex-col bg-transparent text-[var(--text-primary)] font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -145,7 +145,7 @@ export default function PricingPage() {
       </section>
 
       <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
-        <React.Suspense fallback={<div className="text-center py-20 text-zinc-400 font-mono text-xs">Loading pricing plans...</div>}>
+        <React.Suspense fallback={<div className="text-center py-20 text-[var(--text-secondary)] font-mono text-xs">Loading pricing plans...</div>}>
           <PricingClient />
         </React.Suspense>
       </main>

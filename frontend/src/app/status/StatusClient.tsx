@@ -36,33 +36,33 @@ export function StatusClient() {
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-transparent dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-transparent ">
       <Header />
-      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 flex-1 w-full font-sans text-zinc-200">
+      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 flex-1 w-full font-sans text-[var(--text-secondary)]">
         <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl surface-base border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.1] pb-6 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-6 mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-3 font-space">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)] flex items-center gap-3 font-space">
               <Server className="h-6 w-6 text-white" />
               GetMerged System Status
             </h1>
-            <p className="mt-1 text-xs text-zinc-300 font-sans">
+            <p className="mt-1 text-xs text-[var(--text-secondary)] font-sans">
               Real-time API operational status, latency metrics, and backend service health checks.
             </p>
           </div>
 
           <button
             onClick={checkHealth}
-            className="inline-flex items-center gap-2 rounded-xl glass-panel border border-white/[0.1] px-3.5 py-2 text-xs font-semibold text-zinc-300 hover:glass-card transition-all self-start sm:self-auto shadow-2xs cursor-pointer"
+            className="inline-flex items-center gap-2 rounded-xl surface-base border border-[var(--border-subtle)] px-3.5 py-2 text-xs font-semibold text-[var(--text-secondary)] hover:surface-elevated transition-all self-start sm:self-auto shadow-2xs cursor-pointer"
           >
-            <RefreshCw className={`h-3.5 w-3.5 ${healthStatus === "checking" ? "animate-spin text-white" : "text-zinc-300"}`} />
+            <RefreshCw className={`h-3.5 w-3.5 ${healthStatus === "checking" ? "animate-spin text-white" : "text-[var(--text-secondary)]"}`} />
             Refresh Status
           </button>
         </div>
@@ -76,14 +76,14 @@ export function StatusClient() {
               ? "bg-amber-950/70 border-amber-800/80/80 border-amber-200 text-amber-300"
               : healthStatus === "unhealthy"
               ? "bg-rose-950/70 border-rose-800/80/80 border-rose-200 text-rose-300"
-              : "glass-panel border-white/[0.1] text-white"
+              : "surface-base border-[var(--border-subtle)] text-white"
           }`}
         >
           <div className="flex items-center gap-4">
             {healthStatus === "healthy" && <CheckCircle2 className="h-8 w-8 text-emerald-600 shrink-0" />}
             {healthStatus === "degraded" && <AlertCircle className="h-8 w-8 text-amber-600 shrink-0" />}
             {healthStatus === "unhealthy" && <AlertCircle className="h-8 w-8 text-rose-600 shrink-0" />}
-            {healthStatus === "checking" && <RefreshCw className="h-8 w-8 text-zinc-300 animate-spin shrink-0" />}
+            {healthStatus === "checking" && <RefreshCw className="h-8 w-8 text-[var(--text-secondary)] animate-spin shrink-0" />}
 
             <div>
               <h2 className="text-lg font-bold font-space">
@@ -92,7 +92,7 @@ export function StatusClient() {
                 {healthStatus === "unhealthy" && "System Outage Detected"}
                 {healthStatus === "checking" && "Pinging API Health Endpoint..."}
               </h2>
-              <p className="text-xs font-sans text-zinc-300 mt-0.5">
+              <p className="text-xs font-sans text-[var(--text-secondary)] mt-0.5">
                 {lastChecked ? `Last checked at ${lastChecked}` : "Connecting to backend health check..."}
               </p>
             </div>
@@ -101,37 +101,37 @@ export function StatusClient() {
           {latencyMs !== null && (
             <div className="hidden sm:flex flex-col items-end font-mono">
               <span className="text-xl font-bold text-emerald-400">{latencyMs} ms</span>
-              <span className="text-[10px] text-zinc-300 uppercase tracking-wider font-sans">Latency</span>
+              <span className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-sans">Latency</span>
             </div>
           )}
         </div>
 
         {/* Service Health Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 font-sans">
-          <div className="rounded-3xl glass-panel p-6 shadow-xs border border-white/[0.1]">
+          <div className="rounded-3xl surface-base p-6 shadow-xs border border-[var(--border-subtle)]">
             <div className="flex items-center justify-between text-xs mb-3">
-              <span className="font-bold text-white flex items-center gap-2 font-space text-sm">
+              <span className="font-bold text-[var(--text-primary)] flex items-center gap-2 font-space text-sm">
                 <Zap className="h-4 w-4 text-amber-500" /> API Services
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[10px] font-bold font-mono bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border border-emerald-200">
                 OPERATIONAL
               </span>
             </div>
-            <p className="text-xs text-zinc-300 font-sans">
+            <p className="text-xs text-[var(--text-secondary)] font-sans">
               Repository scoring, telemetry analysis, and ranking query engine.
             </p>
           </div>
 
-          <div className="rounded-3xl glass-panel p-6 shadow-xs border border-white/[0.1]">
+          <div className="rounded-3xl surface-base p-6 shadow-xs border border-[var(--border-subtle)]">
             <div className="flex items-center justify-between text-xs mb-3">
-              <span className="font-bold text-white flex items-center gap-2 font-space text-sm">
+              <span className="font-bold text-[var(--text-primary)] flex items-center gap-2 font-space text-sm">
                 <ShieldCheck className="h-4 w-4 text-emerald-600" /> In-Memory Cache
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[10px] font-bold font-mono bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border border-emerald-200">
                 OPERATIONAL
               </span>
             </div>
-            <p className="text-xs text-zinc-300 font-sans">
+            <p className="text-xs text-[var(--text-secondary)] font-sans">
               High-throughput edge caching and automated score invalidation layer.
             </p>
           </div>

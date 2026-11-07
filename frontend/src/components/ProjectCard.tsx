@@ -62,7 +62,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
           {/* Photo count indicator */}
           {images.length > 1 && (
-            <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 text-[11px] font-mono text-white flex items-center gap-1">
+            <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 text-[11px] font-mono text-[var(--text-primary)] flex items-center gap-1">
               <ImageIcon className="h-3 w-3" />
               {activeImageIndex + 1}/{images.length}
             </div>

@@ -67,7 +67,7 @@ export function impactBadgeClass(impact: string): string {
     ? "bg-rose-950/80 text-rose-300 border border-rose-800"
     : impact === "High"
     ? "bg-amber-950/80 text-amber-300 border border-amber-800"
-    : "bg-zinc-800 text-zinc-300 border border-zinc-700";
+    : "bg-zinc-800 text-[var(--text-secondary)] border border-zinc-700";
 }
 
 export function statusBadgeClass(status: string): string {

@@ -158,7 +158,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                     className="h-6 w-6 rounded-full shrink-0 ring-1 ring-[var(--border-subtle)]"
                   />
                 ) : (
-                  <div className="h-6 w-6 rounded-full bg-[var(--color-primary)] flex items-center justify-center font-bold text-white text-[11px] shrink-0">
+                  <div className="h-6 w-6 rounded-full bg-[var(--color-primary)] flex items-center justify-center font-bold text-[var(--text-primary)] text-[11px] shrink-0">
                     {(user.username || "U").slice(0, 1).toUpperCase()}
                   </div>
                 )}

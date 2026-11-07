@@ -40,7 +40,7 @@ export function FirstMergeStepIndicator({
                 ? "border-emerald-500 glass-panel shadow-sm ring-1 ring-emerald-500"
                 : isDone
                 ? "border-emerald-200 bg-emerald-950/70 border-emerald-800/80/70 text-emerald-300"
-                : "border-white/[0.1] glass-card/60 opacity-60 hover:opacity-100"
+                : "border-[var(--border-subtle)] glass-card/60 opacity-60 hover:opacity-100"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -49,13 +49,13 @@ export function FirstMergeStepIndicator({
               ) : isCurrent ? (
                 <CircleDashed className="h-4 w-4 shrink-0 animate-spin text-emerald-600" />
               ) : (
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-zinc-200 text-[10px] font-bold text-zinc-300">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-zinc-200 text-[10px] font-bold text-[var(--text-secondary)]">
                   {s.num}
                 </span>
               )}
-              <span className="text-xs font-bold text-white">{s.title}</span>
+              <span className="text-xs font-bold text-[var(--text-primary)]">{s.title}</span>
             </div>
-            <p className="mt-1 line-clamp-1 text-[11px] text-zinc-300">{s.desc}</p>
+            <p className="mt-1 line-clamp-1 text-[11px] text-[var(--text-secondary)]">{s.desc}</p>
           </div>
         );
       })}

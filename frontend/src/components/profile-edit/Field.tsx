@@ -14,7 +14,7 @@ export function Field({ label, htmlFor, hint, error, children }: FieldProps) {
     <div>
       <label
         htmlFor={htmlFor}
-        className="block text-xs font-mono text-zinc-300 uppercase tracking-wider font-bold mb-1.5"
+        className="block text-xs font-mono text-[var(--text-secondary)] uppercase tracking-wider font-bold mb-1.5"
       >
         {label}
       </label>
@@ -22,7 +22,7 @@ export function Field({ label, htmlFor, hint, error, children }: FieldProps) {
       {error ? (
         <p className="text-[11px] font-mono text-rose-400 mt-1">{error}</p>
       ) : hint ? (
-        <p className="text-[11px] font-mono text-zinc-500 mt-1">{hint}</p>
+        <p className="text-[11px] font-mono text-[var(--text-tertiary)] mt-1">{hint}</p>
       ) : null}
     </div>
   );
@@ -40,7 +40,7 @@ export function TextInput({ label, hint, error, id, ...inputProps }: TextInputPr
       <input
         id={id}
         {...inputProps}
-        className="w-full px-3.5 py-2.5 rounded-lg bg-black/60 border border-white/[0.12] text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-amber-400 transition-colors"
+        className="w-full px-3.5 py-2.5 rounded-lg bg-black/60 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-amber-400 transition-colors"
       />
     </Field>
   );
@@ -58,7 +58,7 @@ export function TextAreaInput({ label, hint, error, id, ...areaProps }: TextArea
       <textarea
         id={id}
         {...areaProps}
-        className="w-full px-3.5 py-2.5 rounded-lg bg-black/60 border border-white/[0.12] text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-amber-400 transition-colors leading-relaxed"
+        className="w-full px-3.5 py-2.5 rounded-lg bg-black/60 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-amber-400 transition-colors leading-relaxed"
       />
     </Field>
   );

@@ -189,7 +189,7 @@ export function PRSimulatorClient() {
                   placeholder="e.g. facebook/react or golang/go"
                   value={repo}
                   onChange={(e) => setRepo(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-black/40 border border-white/[0.15] rounded text-white placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 font-mono"
+                  className="w-full px-3 py-2 text-sm bg-black/40 border border-white/[0.15] rounded text-[var(--text-primary)] placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 font-mono"
                 />
               </div>
 
@@ -204,7 +204,7 @@ export function PRSimulatorClient() {
                   placeholder="feat: add retry logic to event collector"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-black/40 border border-white/[0.15] rounded text-white placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 font-mono"
+                  className="w-full px-3 py-2 text-sm bg-black/40 border border-white/[0.15] rounded text-[var(--text-primary)] placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 font-mono"
                 />
                 <p className="text-[11px] text-zinc-500 mt-1">
                   Conventional prefix (feat:/fix:), 10-72 characters, no WIP marker.
@@ -221,7 +221,7 @@ export function PRSimulatorClient() {
                   placeholder="Explain what this PR solves, which issues it closes, and how you tested it..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-black/40 border border-white/[0.15] rounded text-white placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 text-sm bg-black/40 border border-white/[0.15] rounded text-[var(--text-primary)] placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 font-sans"
                 />
               </div>
 

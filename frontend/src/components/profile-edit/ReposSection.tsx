@@ -14,7 +14,7 @@ export function ReposSection({ repos, pinnedRepos, loading, onTogglePin }: Repos
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-sm font-bold font-sans text-white">Public Repositories</h3>
-          <p className="text-xs text-zinc-400 font-sans mt-0.5">
+          <p className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
             Select repositories to pin at the top of your profile.
           </p>
         </div>
@@ -22,7 +22,7 @@ export function ReposSection({ repos, pinnedRepos, loading, onTogglePin }: Repos
       </div>
 
       {repos.length === 0 ? (
-        <div className="p-8 rounded-xl border border-dashed border-white/[0.12] text-center text-xs text-zinc-400 font-sans">
+        <div className="p-8 rounded-xl border border-dashed border-[var(--border-subtle)] text-center text-xs text-[var(--text-secondary)] font-sans">
           No public repositories found. Connect your GitHub account to auto-import your top-starred projects.
         </div>
       ) : (
@@ -37,21 +37,21 @@ export function ReposSection({ repos, pinnedRepos, loading, onTogglePin }: Repos
                 className={`p-3 rounded-xl border text-left flex items-start justify-between gap-2 transition-all cursor-pointer ${
                   isPinned
                     ? "bg-amber-950/30 border-amber-500/60 text-white"
-                    : "bg-black/40 border-white/[0.08] text-zinc-300 hover:bg-black/60"
+                    : "bg-black/40 border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-black/60"
                 }`}
               >
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-white truncate">
-                    <Globe className="h-3.5 w-3.5 text-zinc-400 shrink-0" />
+                  <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-[var(--text-primary)] truncate">
+                    <Globe className="h-3.5 w-3.5 text-[var(--text-secondary)] shrink-0" />
                     <span className="truncate">{repo.name || repo.full_name}</span>
                   </div>
                   {repo.description && (
-                    <p className="text-[11px] text-zinc-400 font-sans line-clamp-2 mt-1">
+                    <p className="text-[11px] text-[var(--text-secondary)] font-sans line-clamp-2 mt-1">
                       {repo.description}
                     </p>
                   )}
-                  <div className="flex items-center gap-3 mt-2 text-[10px] font-mono text-zinc-400">
-                    {repo.language && <span className="text-zinc-300">{repo.language}</span>}
+                  <div className="flex items-center gap-3 mt-2 text-[10px] font-mono text-[var(--text-secondary)]">
+                    {repo.language && <span className="text-[var(--text-secondary)]">{repo.language}</span>}
                     <span className="flex items-center gap-1 text-amber-400">
                       <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                       {repo.stars}
@@ -63,7 +63,7 @@ export function ReposSection({ repos, pinnedRepos, loading, onTogglePin }: Repos
                   className={`p-1.5 rounded-md ${
                     isPinned
                       ? "bg-amber-500 text-black"
-                      : "bg-white/[0.06] text-zinc-400 hover:text-white"
+                      : "bg-white/[0.06] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                   }`}
                 >
                   <Pin className="h-3.5 w-3.5" />

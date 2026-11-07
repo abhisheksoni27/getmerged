@@ -22,7 +22,7 @@ interface ClaimTabPaneProps {
 
 function ClaimIntro({ fullName }: { fullName: string }) {
   return (
-    <div className="glass-card p-5 rounded-2xl border border-white/[0.1] text-sm text-zinc-300 leading-relaxed">
+    <div className="glass-card p-5 rounded-2xl border border-[var(--border-subtle)] text-sm text-[var(--text-secondary)] leading-relaxed">
       <p className="font-semibold text-white mb-1">
         Verify ownership of <span className="font-mono text-blue-600">{fullName}</span>
       </p>
@@ -47,7 +47,7 @@ export function ClaimTabPane({
     return (
       <div className="space-y-6">
         <ClaimIntro fullName={fullName} />
-        <div className="py-12 flex flex-col items-center justify-center gap-3 text-zinc-300">
+        <div className="py-12 flex flex-col items-center justify-center gap-3 text-[var(--text-secondary)]">
           <RefreshCw className="w-6 h-6 animate-spin text-white" />
           <span className="text-sm font-medium">Generating verification token...</span>
         </div>
@@ -67,19 +67,19 @@ export function ClaimTabPane({
     <div className="space-y-6">
       <ClaimIntro fullName={fullName} />
       <div className="space-y-4">
-        <div className="border border-white/[0.12] rounded-2xl p-4 bg-amber-950/70 border-amber-800/80/60 shadow-sm">
+        <div className="border border-[var(--border-subtle)] rounded-2xl p-4 bg-amber-950/70 border-amber-800/80/60 shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-1.5">
               <FileCode className="w-4 h-4 text-amber-600" /> Method 1: Proof File (Recommended)
             </span>
-            <span className="text-[11px] font-mono text-zinc-300 glass-panel px-2 py-0.5 rounded-md border border-white/[0.1]">
+            <span className="text-[11px] font-mono text-[var(--text-secondary)] glass-panel px-2 py-0.5 rounded-md border border-[var(--border-subtle)]">
               Expires in 24 hours
             </span>
           </div>
-          <p className="text-xs text-zinc-300 mb-3">
-            Create a file named <code className="px-1.5 py-0.5 glass-panel border border-white/[0.12] rounded font-mono font-bold text-white">{claimData.file_instructions.file_name}</code> in your repository root with this exact content:
+          <p className="text-xs text-[var(--text-secondary)] mb-3">
+            Create a file named <code className="px-1.5 py-0.5 glass-panel border border-[var(--border-subtle)] rounded font-mono font-bold text-[var(--text-primary)]">{claimData.file_instructions.file_name}</code> in your repository root with this exact content:
           </p>
-          <div className="relative glass-card text-emerald-400 p-3.5 rounded-xl font-mono text-xs break-all flex items-center justify-between border border-white/[0.1]">
+          <div className="relative glass-card text-emerald-400 p-3.5 rounded-xl font-mono text-xs break-all flex items-center justify-between border border-[var(--border-subtle)]">
             <code>{claimData.file_instructions.file_content}</code>
             <button
               onClick={onCopy}
@@ -91,15 +91,15 @@ export function ClaimTabPane({
           </div>
         </div>
 
-        <div className="border border-white/[0.1] rounded-2xl p-4 glass-card flex items-center justify-between text-xs text-zinc-300">
+        <div className="border border-[var(--border-subtle)] rounded-2xl p-4 glass-card flex items-center justify-between text-xs text-[var(--text-secondary)]">
           <span>Or verify automatically if your GitHub account has push/admin permission on this repository.</span>
-          <span className="font-mono font-bold text-white">Automatic on GitHub Login</span>
+          <span className="font-mono font-bold text-[var(--text-primary)]">Automatic on GitHub Login</span>
         </div>
 
         <button
           onClick={onVerify}
           disabled={verifying}
-          className="w-full py-3.5 px-4 bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-sm rounded-2xl border border-white/[0.12] shadow-sm hover:shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-3.5 px-4 bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-sm rounded-2xl border border-[var(--border-subtle)] shadow-sm hover:shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
           {verifying ? (
             <>

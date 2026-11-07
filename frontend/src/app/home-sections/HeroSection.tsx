@@ -9,7 +9,6 @@ import { useSearch } from "@/context/SearchContext";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 import { MacroStats, Repo } from "@/types/opendoor";
 import { CountUp } from "./CountUp";
-import { PillarGrid } from "./PillarGrid";
 import { formatReviewTime } from "./useHomeData";
 
 interface HeroSectionProps {
@@ -201,9 +200,6 @@ export function HeroSection({
           </div>
         </div>
       </motion.div>
-
-      {/* 3-Pillar Platform Interlinking Grid */}
-      <PillarGrid />
     </section>
   );
 }
