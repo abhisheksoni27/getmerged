@@ -115,7 +115,7 @@ export function HeroSection({
 
         {/* Quick-explore chips */}
         <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs">
-          <span className="font-mono text-xs text-zinc-400 uppercase tracking-wider mr-1">Quick:</span>
+          <span className="font-mono text-xs text-zinc-500 uppercase tracking-wider mr-1">Quick:</span>
           {QUICK_TERMS.map((term) => (
             <button
               key={term}

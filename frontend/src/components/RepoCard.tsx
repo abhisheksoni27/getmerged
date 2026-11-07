@@ -200,19 +200,19 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
         <div className="flex items-center justify-between md:justify-end gap-3 sm:gap-6 shrink-0 pt-4 md:pt-0 border-t md:border-t-0 border-zinc-100">
           {/* Merge Rate */}
           <div className="text-left md:text-right px-2">
-            <div className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">Merge rate</div>
+            <div className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Merge rate</div>
             <div className="text-sm sm:text-base font-bold font-mono text-zinc-900 tabular-nums">{mergeRateStr}</div>
           </div>
 
           {/* Review Time */}
           <div className="text-left md:text-right px-2">
-            <div className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">Review wait</div>
+            <div className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Review wait</div>
             <div className="text-sm sm:text-base font-bold font-mono text-zinc-900 tabular-nums">{firstResponseStr}</div>
           </div>
 
           {/* 1st Timers */}
           <div className="text-left md:text-right hidden sm:block px-2">
-            <div className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">1st-timers</div>
+            <div className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">1st-timers</div>
             <div className="text-sm sm:text-base font-bold font-mono text-zinc-900 tabular-nums">{firstTimerStr}</div>
           </div>
 
@@ -314,7 +314,7 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
             <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-500" />
             {repo.stars >= 1_000 ? `${(repo.stars / 1_000).toFixed(1)}k` : repo.stars}
           </span>
-          <span className="text-zinc-300">·</span>
+          <span className="text-zinc-400">·</span>
           <span className="flex items-center gap-1.5 truncate text-zinc-700 bg-zinc-50 px-2.5 py-1 rounded-lg border border-zinc-200/80 font-medium">
             <LangLogo language={repo.language} />
             <span className="truncate">{repo.language || "Code"}</span>

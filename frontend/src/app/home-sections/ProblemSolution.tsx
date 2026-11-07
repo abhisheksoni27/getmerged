@@ -34,7 +34,7 @@ export function ProblemSolution() {
         <div className="bg-white border border-zinc-200/90 rounded-2xl p-7 sm:p-8 shadow-xs space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-zinc-100">
             <span className="text-zinc-900 font-semibold text-sm">Real GitHub Activity</span>
-            <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full font-sans text-xs font-medium">Live Telemetry</span>
+            <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-full font-sans text-xs font-medium">Live Telemetry</span>
           </div>
           <div className="space-y-3">
             <div className="p-4 rounded-xl bg-rose-50/50 border border-rose-100">
