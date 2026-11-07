@@ -261,12 +261,6 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 					ChangeFreq: "daily",
 					Priority:   "0.9",
 				})
-				mainUrls = append(mainUrls, URL{
-					Loc:        fmt.Sprintf("%s/contribute/%s", baseUrl, lang),
-					LastMod:    today,
-					ChangeFreq: "daily",
-					Priority:   "0.9",
-				})
 			}
 		}
 	}

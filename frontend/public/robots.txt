@@ -4,6 +4,8 @@ Allow: /
 Disallow: /api/
 Allow: /compare$
 Disallow: /compare/
+Allow: /contribute$
+Disallow: /contribute/
 Disallow: /feeds/
 Disallow: /embed/
 Disallow: /*/opengraph-image$
@@ -14,6 +16,8 @@ Allow: /
 Disallow: /api/
 Allow: /compare$
 Disallow: /compare/
+Allow: /contribute$
+Disallow: /contribute/
 Disallow: /feeds/
 Disallow: /embed/
 Disallow: /*/opengraph-image$
@@ -24,6 +28,8 @@ Allow: /
 Disallow: /api/
 Allow: /compare$
 Disallow: /compare/
+Allow: /contribute$
+Disallow: /contribute/
 Disallow: /feeds/
 Disallow: /embed/
 Disallow: /*/opengraph-image$
@@ -34,6 +40,8 @@ Allow: /
 Disallow: /api/
 Allow: /compare$
 Disallow: /compare/
+Allow: /contribute$
+Disallow: /contribute/
 Disallow: /feeds/
 Disallow: /embed/
 Disallow: /*/opengraph-image$
@@ -44,6 +52,8 @@ Allow: /
 Disallow: /api/
 Allow: /compare$
 Disallow: /compare/
+Allow: /contribute$
+Disallow: /contribute/
 Disallow: /feeds/
 Disallow: /embed/
 Disallow: /*/opengraph-image$

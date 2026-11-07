@@ -60,6 +60,10 @@ function buildMetadata(language: string, level: string): Metadata {
   return {
     title,
     description,
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: {
       canonical: `${SITE_URL}/contribute/${language}`,
     },
