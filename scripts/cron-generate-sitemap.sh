@@ -32,7 +32,7 @@ echo "[$(date -u +%FT%TZ)] sitemap-cron: broadcast complete for ${SITEMAP_URL}."
 cd "$REPO_DIR"
 if [[ -n $(git status -s frontend/public/sitemap.xml frontend/public/sitemap/) ]]; then
   echo "[$(date -u +%FT%TZ)] sitemap-cron: git changes detected in public sitemaps, committing..." >> "$LOG_FILE"
-  git add frontend/public/sitemap.xml frontend/public/sitemap/
+  git add -A frontend/public/sitemap.xml frontend/public/sitemap/
   git commit -m "chore(seo): auto-generate updated static XML sitemaps [skip ci]" >> "$LOG_FILE" 2>&1 || true
   git pull --rebase || true
   git push origin main >> "$LOG_FILE" 2>&1 || true
