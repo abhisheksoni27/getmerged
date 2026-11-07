@@ -105,6 +105,7 @@ type RepoRepository interface {
 	TopicExists(ctx context.Context, topic string) (bool, error)
 	GetAllTopicStats(ctx context.Context) ([]TopicStat, error)
 	GetMaintainerEvents(ctx context.Context, repoID string) ([]scoring.MaintainerEvent, error)
+	UpdateGoodFirstIssueCount(ctx context.Context, repoID string, count int) error
 }
 
 type sqlxRepoRepository struct {
@@ -867,4 +868,9 @@ func (r *sqlxRepoRepository) GetMaintainerEvents(ctx context.Context, repoID str
 		})
 	}
 	return events, nil
+}
+
+func (r *sqlxRepoRepository) UpdateGoodFirstIssueCount(ctx context.Context, repoID string, count int) error {
+	_, err := r.db.ExecContext(ctx, `UPDATE latest_snapshots SET good_first_issue_count = ? WHERE repository_id = ?`, count, repoID)
+	return err
 }

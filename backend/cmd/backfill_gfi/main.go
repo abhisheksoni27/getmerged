@@ -15,6 +15,7 @@ import (
 
 func main() {
 	limitFlag := flag.Int("limit", 100, "Maximum number of repositories to backfill in this run")
+	timeoutFlag := flag.Duration("timeout", 60*time.Minute, "Execution timeout")
 	flag.Parse()
 
 	cfg, err := config.Load()
@@ -32,10 +33,10 @@ func main() {
 	gh := github.NewClient(cfg.GithubToken, nil)
 	backfillService := pipeline.NewGFIBackfillService(database, gh)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Minute)
+	ctx, cancel := context.WithTimeout(context.Background(), *timeoutFlag)
 	defer cancel()
 
-	slog.Info("starting good first issues backfill", "limit", *limitFlag)
+	slog.Info("starting good first issues backfill", "limit", *limitFlag, "timeout", *timeoutFlag)
 	synced, err := backfillService.RunSweep(ctx, *limitFlag)
 	if err != nil {
 		slog.Error("backfill finished with error", "err", err, "synced", synced)
