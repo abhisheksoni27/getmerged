@@ -74,4 +74,5 @@
   2. Removed `sitemap/` directory completely. Retained fallback chunking only if total URLs ever exceed 45,000.
   3. Added Nginx 301 redirect for all legacy child sitemaps (`/sitemap/.*\.xml$`) to `https://getmerged.abhishekco.de/sitemap.xml`.
   4. Pinged IndexNow and Bing protocols for instant discovery.
+  5. Purged `/contribute/[language]` from sitemaps, added `Allow: /contribute$` and `Disallow: /contribute/` to `robots.txt`, and injected `<meta name="robots" content="noindex, follow">` to drain Google's thin-page discovery queue.
 
