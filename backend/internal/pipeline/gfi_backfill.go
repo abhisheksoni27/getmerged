@@ -48,7 +48,7 @@ func (s *GFIBackfillService) RunSweep(ctx context.Context, batchSize int) (int, 
 		WHERE (COALESCE(s.good_first_issue_count, 0) > 0 OR r.id IN (SELECT repository_id FROM repo_good_first_issues WHERE is_open = 1))
 		  AND r.id NOT IN (
 			SELECT repository_id FROM repo_good_first_issues
-			WHERE synced_at > DATE_SUB(NOW(), INTERVAL 3 DAY)
+			WHERE synced_at > DATE_SUB(NOW(), INTERVAL 12 HOUR)
 		  )
 		ORDER BY COALESCE(s.c_rank_score, 0) DESC, r.stars DESC
 		LIMIT ?
@@ -61,7 +61,7 @@ func (s *GFIBackfillService) RunSweep(ctx context.Context, batchSize int) (int, 
 			WHERE (COALESCE(s.good_first_issue_count, 0) > 0 OR r.id IN (SELECT repository_id FROM repo_good_first_issues WHERE is_open = 1))
 			  AND r.id NOT IN (
 				SELECT repository_id FROM repo_good_first_issues
-				WHERE synced_at > datetime('now', '-3 days')
+				WHERE synced_at > datetime('now', '-12 hours')
 			  )
 			ORDER BY COALESCE(s.c_rank_score, 0) DESC, r.stars DESC
 			LIMIT ?
@@ -88,23 +88,10 @@ func (s *GFIBackfillService) RunSweep(ctx context.Context, batchSize int) (int, 
 		default:
 		}
 
-		parts := strings.Split(target.FullName, "/")
-		if len(parts) != 2 {
+		if _, err := s.SyncRepo(ctx, target.ID, target.FullName); err != nil {
+			slog.Warn("gfi-backfill: sync failed", "repo", target.FullName, "err", err)
 			continue
 		}
-		owner, name := parts[0], parts[1]
-
-		issues, count, err := s.gh.FetchGoodFirstIssuesList(owner, name, 8)
-		if err != nil {
-			slog.Warn("gfi-backfill: fetch failed", "repo", target.FullName, "err", err)
-			continue
-		}
-
-		if err := s.gfiRepo.UpsertIssues(ctx, target.ID, issues); err != nil {
-			slog.Error("gfi-backfill: upsert failed", "repo", target.FullName, "err", err)
-			continue
-		}
-		_, _ = s.db.ExecContext(ctx, `UPDATE latest_snapshots SET good_first_issue_count = ? WHERE repository_id = ?`, count, target.ID)
 		syncedCount++
 
 		// Rate limiter safety delay: 200ms between repos (max 5 reqs/sec)
@@ -113,4 +100,24 @@ func (s *GFIBackfillService) RunSweep(ctx context.Context, batchSize int) (int, 
 
 	slog.Info("gfi-backfill: batch sweep complete", "synced", syncedCount, "scanned", len(targets))
 	return syncedCount, nil
+}
+
+// SyncRepo reconciles the good first issues for a single repository.
+func (s *GFIBackfillService) SyncRepo(ctx context.Context, repoID, fullName string) (int, error) {
+	parts := strings.Split(fullName, "/")
+	if len(parts) != 2 {
+		return 0, nil
+	}
+	owner, name := parts[0], parts[1]
+
+	issues, count, err := s.gh.FetchGoodFirstIssuesList(owner, name, 8)
+	if err != nil {
+		return 0, err
+	}
+
+	if err := s.gfiRepo.UpsertIssues(ctx, repoID, issues); err != nil {
+		return 0, err
+	}
+	_, _ = s.db.ExecContext(ctx, `UPDATE latest_snapshots SET good_first_issue_count = ? WHERE repository_id = ?`, count, repoID)
+	return count, nil
 }

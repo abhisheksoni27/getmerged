@@ -5,9 +5,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
-	"time"
 
-	ghclient "github.com/abhisheksoni27/opendoor/internal/github"
 	"github.com/abhisheksoni27/opendoor/internal/repository"
 	"github.com/gin-gonic/gin"
 )
@@ -47,11 +45,7 @@ func ListGoodFirstIssues(gfiRepo repository.GFIRepository, boostRepo repository.
 // Supports bounty=1 for the Paid filter tab (AC3). Cache TTL is capped at
 // 5 minutes so boosts appear immediately while non-boost fields stay cached
 // (AC4).
-func GetRepoGoodFirstIssues(gfiRepo repository.GFIRepository, repoStore repository.RepoRepository, optionalGH ...*ghclient.Client) gin.HandlerFunc {
-	var gh *ghclient.Client
-	if len(optionalGH) > 0 {
-		gh = optionalGH[0]
-	}
+func GetRepoGoodFirstIssues(gfiRepo repository.GFIRepository, repoStore repository.RepoRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		identifier := c.Param("id")
 		if unescaped, err := url.QueryUnescape(identifier); err == nil {
@@ -70,31 +64,6 @@ func GetRepoGoodFirstIssues(gfiRepo repository.GFIRepository, repoStore reposito
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch repository good first issues"})
 			return
-		}
-
-		// Self-healing: if issues are stale (>24h since synced) or repo has GoodFirstIssueCount > 0 but 0 active issues,
-		// do a quick live refresh from GitHub so every repo loaded by a user is guaranteed accurate.
-		shouldRefresh := false
-		if len(issues) == 0 {
-			if repo.GoodFirstIssueCount > 0 {
-				shouldRefresh = true
-			}
-		} else if time.Since(issues[0].SyncedAt) > 24*time.Hour {
-			shouldRefresh = true
-		}
-
-		if gh != nil && shouldRefresh {
-			parts := strings.Split(repo.FullName, "/")
-			if len(parts) == 2 {
-				fresh, count, ferr := gh.FetchGoodFirstIssuesList(parts[0], parts[1], 8)
-				if ferr == nil {
-					_ = gfiRepo.UpsertIssues(c.Request.Context(), repo.ID, fresh)
-					_ = repoStore.UpdateGoodFirstIssueCount(c.Request.Context(), repo.ID, count)
-					if reloaded, rerr := gfiRepo.ListByRepoID(c.Request.Context(), repo.ID, 5, bountyOnly); rerr == nil {
-						issues = reloaded
-					}
-				}
-			}
 		}
 
 		c.JSON(http.StatusOK, gin.H{

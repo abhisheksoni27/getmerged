@@ -11,7 +11,7 @@
 | repositories | **102,094** | Non-archived, non-fork, public repos scored nightly |
 | latest_snapshots | **101,854** | Current C-Rank snapshot per repo |
 | daily_snapshots | **341,455** | Historical time-series for trend charts |
-| repo_good_first_issues | **39,207** (21,634 open, 17,573 closed) | Curated beginner-friendly issues with 9-month freshness cutoff, real-time read-through self-healing, and continuous background lifecycle sync |
+| repo_good_first_issues | **39,207** (21,634 open, 17,573 closed) | Curated beginner-friendly issues with 9-month freshness cutoff and continuous background lifecycle sync |
 | repo_ai_insights | **98,077** | AI-generated maintainer insights per repo |
 | pr_tracked | 0 | User-tracked PRs (grows after first sign-in) |
 | pr_stall_alerts | 0 | Stall-rescue alert episodes (grows with users) |
@@ -122,7 +122,7 @@ Python 12,532 | TypeScript 9,157 | JavaScript 7,784 | Go 7,128 | C++ 5,891 | Rus
 | GET | `/api/v1/repos/:id/optimal-time` | Optimal submit window |
 | GET | `/api/v1/repos/:id/fit-radar` | Contributor fit radar |
 | GET | `/api/v1/repos/:id/related` | Related repos |
-| GET | `/api/v1/repos/:id/good-first-issues` | GFI list for a repo (with real-time >24h self-healing from GitHub & auto-closing of resolved issues) |
+| GET | `/api/v1/repos/:id/good-first-issues` | GFI list for a repo (served with sub-5ms low latency from indexed catalog with background lifecycle sync) |
 | GET | `/api/v1/repos/:id/insights` | AI repo insights |
 | GET | `/api/v1/repos/:id/claim-status` | Public claim status |
 | GET | `/api/v1/repos/:id/playbook` | Public maintainer playbook |

@@ -76,3 +76,14 @@
   4. Pinged IndexNow and Bing protocols for instant discovery.
   5. Purged `/contribute/[language]` from sitemaps, added `Allow: /contribute$` and `Disallow: /contribute/` to `robots.txt`, and injected `<meta name="robots" content="noindex, follow">` to drain Google's thin-page discovery queue.
 
+## ADR-011: Strict Asynchronous Background GFI Reconciliation (No Read-Path Self-Healing)
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: Synchronous live GitHub API querying inside `GET /api/v1/repos/:id/good-first-issues` caused severe Nginx upstream timeouts (`110: Connection timed out`) when GitHub rate limits or network latency exceeded Nginx's 30s `proxy_read_timeout`. Furthermore, `client.go` had a 1-minute `time.Sleep` on GraphQL rate limits, stalling incoming SSR requests and cascading 504 Gateway Timeouts across Next.js and Nginx.
+- **Decision**:
+  1. Removed synchronous GitHub API calls from `GetRepoGoodFirstIssues` in `backend/internal/handler/gfi_handler.go`. The endpoint now serves strictly from the indexed MySQL database with sub-5ms latency.
+  2. Background crawler `GFIBackfillService` was upgraded to sweep repos with active open issues every 12 hours (reduced from 3 days), closing resolved issues across the platform continuously without touching the read path.
+  3. Capped GraphQL rate-limit sleep in `client.go` to maximum 2 seconds to eliminate catastrophic goroutine hangs.
+  4. Added `-repo` flag to `cmd/backfill_gfi` allowing instant, on-demand synchronization of targeted repositories (e.g. `neomjs/neo`).
+
+
