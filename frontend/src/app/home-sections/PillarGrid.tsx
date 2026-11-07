@@ -17,7 +17,7 @@ export function PillarGrid() {
             <div className="p-2.5 rounded-xl bg-zinc-50 text-zinc-900 border border-zinc-200/80 shadow-2xs">
               <GitPullRequest className="h-5 w-5" />
             </div>
-            <span className="text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+            <span className="text-xs font-medium text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
               For Contributors
             </span>
           </div>
@@ -44,7 +44,7 @@ export function PillarGrid() {
             <div className="p-2.5 rounded-xl bg-zinc-50 text-zinc-900 border border-zinc-200/80 shadow-2xs">
               <Activity className="h-5 w-5" />
             </div>
-            <span className="text-xs font-medium text-sky-700 bg-sky-50 border border-sky-200 px-2.5 py-0.5 rounded-full">
+            <span className="text-xs font-medium text-sky-800 bg-sky-50 border border-sky-200 px-2.5 py-0.5 rounded-full">
               For Maintainers
             </span>
           </div>
@@ -71,7 +71,7 @@ export function PillarGrid() {
             <div className="p-2.5 rounded-xl bg-zinc-50 text-zinc-900 border border-zinc-200/80 shadow-2xs">
               <Sparkles className="h-5 w-5 text-amber-500" />
             </div>
-            <span className="text-xs font-medium text-purple-700 bg-purple-50 border border-purple-200 px-2.5 py-0.5 rounded-full">
+            <span className="text-xs font-medium text-purple-800 bg-purple-50 border border-purple-200 px-2.5 py-0.5 rounded-full">
               Beginner Friendly
             </span>
           </div>

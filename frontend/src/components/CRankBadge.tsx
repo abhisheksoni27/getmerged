@@ -23,7 +23,7 @@ export function getGradeColor(rank?: string): {
       return {
         hex: "#059669",
         bgClass: "bg-emerald-50",
-        textClass: "text-emerald-700",
+        textClass: "text-emerald-800",
         borderClass: "border-emerald-200",
         dotClass: "bg-emerald-500",
         label: "Elite",
@@ -33,7 +33,7 @@ export function getGradeColor(rank?: string): {
       return {
         hex: "#0284C7",
         bgClass: "bg-sky-50",
-        textClass: "text-sky-700",
+        textClass: "text-sky-800",
         borderClass: "border-sky-200",
         dotClass: "bg-sky-500",
         label: "Welcoming",
@@ -43,7 +43,7 @@ export function getGradeColor(rank?: string): {
       return {
         hex: "#7C3AED",
         bgClass: "bg-purple-50",
-        textClass: "text-purple-700",
+        textClass: "text-purple-800",
         borderClass: "border-purple-200",
         dotClass: "bg-purple-500",
         label: "Solid",
@@ -53,7 +53,7 @@ export function getGradeColor(rank?: string): {
       return {
         hex: "#D97706",
         bgClass: "bg-amber-50",
-        textClass: "text-amber-700",
+        textClass: "text-amber-800",
         borderClass: "border-amber-200",
         dotClass: "bg-amber-500",
         label: "Moderate",
@@ -64,7 +64,7 @@ export function getGradeColor(rank?: string): {
       return {
         hex: "#DC2626",
         bgClass: "bg-rose-50",
-        textClass: "text-rose-700",
+        textClass: "text-rose-800",
         borderClass: "border-rose-200",
         dotClass: "bg-rose-500",
         label: "Risky",

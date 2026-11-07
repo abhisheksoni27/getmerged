@@ -17,7 +17,7 @@ export function ContributorsPane({ billingCycle, onBillingChange, user, onChecko
   return (
     <div className="space-y-10">
       <div className="text-center max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-semibold mb-4">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-mono font-semibold mb-4">
           <Sparkles className="h-3.5 w-3.5" />
           <span>For Open Source Contributors & Developers</span>
         </div>
@@ -48,10 +48,10 @@ export function ContributorsPane({ billingCycle, onBillingChange, user, onChecko
         <PlanCard
           plan={PRO_CONTRIBUTOR_PLAN}
           billingCycle={billingCycle}
-          icon={<Zap className="h-4 w-4 text-emerald-400 fill-emerald-400" />}
+          icon={<Zap className="h-4 w-4 text-emerald-600 fill-emerald-600" />}
           footer={
             user?.is_pro ? (
-              <div className="w-full py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono font-bold text-xs uppercase tracking-wider text-center flex items-center justify-center gap-1.5">
+              <div className="w-full py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-mono font-bold text-xs uppercase tracking-wider text-center flex items-center justify-center gap-1.5">
                 <Check className="h-4 w-4" />
                 <span>Pro Plan Active ({user.billing_cycle ?? "yearly"})</span>
               </div>

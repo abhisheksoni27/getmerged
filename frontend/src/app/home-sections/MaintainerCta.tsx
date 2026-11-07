@@ -51,7 +51,7 @@ export function MaintainerCta() {
           <div className="bg-zinc-50/80 border border-zinc-200/80 rounded-xl p-6 sm:p-7 space-y-4">
             <div className="font-semibold text-sm text-zinc-900 border-b border-zinc-200/60 pb-3 flex items-center justify-between">
               <span>Maintainer Health Check</span>
-              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full text-xs font-medium">Live</span>
+              <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-full text-xs font-medium">Live</span>
             </div>
             <div className="space-y-3 pt-1">
               {HEALTH_CHECKS.map((check) => (

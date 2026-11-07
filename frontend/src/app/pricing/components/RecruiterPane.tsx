@@ -18,7 +18,7 @@ export function RecruiterPane({ billingCycle, onBillingChange, user, onCheckout 
   return (
     <div className="space-y-10">
       <div className="text-center max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-mono font-semibold mb-4">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-sky-800 text-xs font-mono font-semibold mb-4">
           <Briefcase className="h-3.5 w-3.5" />
           <span>For Technical Founders, CTOs & Engineering Leaders</span>
         </div>
@@ -49,10 +49,10 @@ export function RecruiterPane({ billingCycle, onBillingChange, user, onCheckout 
         <PlanCard
           plan={FOUNDER_PASS_PLAN}
           billingCycle={billingCycle}
-          icon={<Briefcase className="h-4 w-4 text-blue-400" />}
+          icon={<Briefcase className="h-4 w-4 text-sky-700" />}
           footer={
             user?.has_recruiter_pass ? (
-              <div className="w-full py-2.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400 font-mono font-bold text-xs uppercase tracking-wider text-center flex items-center justify-center gap-1.5">
+              <div className="w-full py-2.5 rounded-xl bg-sky-50 border border-sky-200 text-sky-800 font-mono font-bold text-xs uppercase tracking-wider text-center flex items-center justify-center gap-1.5">
                 <Check className="h-4 w-4" />
                 <span>Founder Pass Active</span>
               </div>

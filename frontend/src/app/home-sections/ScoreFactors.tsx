@@ -20,7 +20,7 @@ export function ScoreFactors() {
         <div className="bg-white border border-zinc-200/90 rounded-2xl p-7 sm:p-8 shadow-xs space-y-4">
           <div className="flex justify-between items-center text-zinc-900 pb-3 border-b border-zinc-100">
             <span className="font-sans font-semibold text-sm text-zinc-900">How We Score Repositories</span>
-            <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full font-sans text-xs font-medium">Continuous</span>
+            <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-full font-sans text-xs font-medium">Continuous</span>
           </div>
           <div className="space-y-2.5">
             {SCORE_ROWS.map((row) => (

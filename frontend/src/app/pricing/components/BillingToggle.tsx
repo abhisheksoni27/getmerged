@@ -4,8 +4,8 @@ import { BillingCycle } from "./pricing-types";
 type ToggleAccent = "emerald" | "blue";
 
 const SAVE_BADGE: Record<ToggleAccent, string> = {
-  emerald: "bg-emerald-50 text-[#0D9668] border border-emerald-200 text-[10px] px-1.5 py-0.2 rounded-full font-bold",
-  blue: "bg-sky-50 text-[#2D8ABF] border border-sky-200 text-[10px] px-1.5 py-0.2 rounded-full font-bold",
+  emerald: "bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] px-1.5 py-0.5 rounded-full font-bold",
+  blue: "bg-sky-50 text-sky-800 border border-sky-200 text-[10px] px-1.5 py-0.5 rounded-full font-bold",
 };
 
 interface BillingToggleProps {

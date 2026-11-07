@@ -85,11 +85,11 @@ export function EcosystemRankings({ languages }: { languages: RankedLanguage[] }
 
                     <div className="flex items-center gap-6 text-right shrink-0">
                       <div>
-                        <div className="text-[11px] text-zinc-400 uppercase font-medium">Welcoming</div>
+                        <div className="text-[11px] text-zinc-500 uppercase font-medium">Welcoming</div>
                         <div className="text-sm font-bold font-mono text-zinc-900">{item.sCount + item.aCount}</div>
                       </div>
                       <div>
-                        <div className="text-[11px] text-zinc-400 uppercase font-medium">Score</div>
+                        <div className="text-[11px] text-zinc-500 uppercase font-medium">Score</div>
                         <div className="inline-block px-3 py-1 rounded-full bg-zinc-100 text-zinc-800 font-mono font-semibold text-xs">
                           {item.score.toFixed(1)} pts
                         </div>

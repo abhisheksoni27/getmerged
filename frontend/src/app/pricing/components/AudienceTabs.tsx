@@ -14,10 +14,10 @@ export function AudienceTabs({ activeTab, onChange }: AudienceTabsProps) {
         <button
           type="button"
           onClick={() => onChange("contributors")}
-          className={`flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-all shrink-0 cursor-pointer whitespace-nowrap ${
+          className={`flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-sans font-medium transition-colors shrink-0 cursor-pointer whitespace-nowrap ${
             activeTab === "contributors"
-              ? "bg-[#0D9668] text-white shadow-xs"
-              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border-subtle)]"
+              ? "bg-zinc-900 text-white shadow-xs"
+              : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-200/50"
           }`}
         >
           <GitPullRequest className="h-4 w-4 shrink-0" />
@@ -26,10 +26,10 @@ export function AudienceTabs({ activeTab, onChange }: AudienceTabsProps) {
         <button
           type="button"
           onClick={() => onChange("recruiter")}
-          className={`flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-all shrink-0 cursor-pointer whitespace-nowrap ${
+          className={`flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-sans font-medium transition-colors shrink-0 cursor-pointer whitespace-nowrap ${
             activeTab === "recruiter"
-              ? "bg-[#2D8ABF] text-white shadow-xs"
-              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border-subtle)]"
+              ? "bg-zinc-900 text-white shadow-xs"
+              : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-200/50"
           }`}
         >
           <Briefcase className="h-4 w-4 shrink-0" />
@@ -38,10 +38,10 @@ export function AudienceTabs({ activeTab, onChange }: AudienceTabsProps) {
         <button
           type="button"
           onClick={() => onChange("maintainers")}
-          className={`flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-all shrink-0 cursor-pointer whitespace-nowrap ${
+          className={`flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-sans font-medium transition-colors shrink-0 cursor-pointer whitespace-nowrap ${
             activeTab === "maintainers"
-              ? "bg-[var(--brand-terracotta)] text-[var(--text-primary)] shadow-xs"
-              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border-subtle)]"
+              ? "bg-zinc-900 text-white shadow-xs"
+              : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-200/50"
           }`}
         >
           <Activity className="h-4 w-4 shrink-0" />

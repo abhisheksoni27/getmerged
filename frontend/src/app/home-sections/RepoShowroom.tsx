@@ -94,16 +94,16 @@ function ShowroomBody({
       )}
 
       {/* Bottom CTA with Generous Space */}
-      <div className="my-10 rounded-2xl bg-zinc-900 text-white p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+      <div className="my-10 rounded-2xl border border-zinc-200/90 bg-white p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs">
         <div>
-          <h3 className="text-xl sm:text-2xl font-bold font-display tracking-tight text-white">Looking for custom languages or merge rates?</h3>
-          <p className="text-xs sm:text-sm text-zinc-400 mt-1 font-sans">Filter across 20+ ecosystems with full pagination and multi-variable criteria.</p>
+          <h3 className="text-xl sm:text-2xl font-bold font-sans tracking-tight text-zinc-950">Looking for custom languages or merge rates?</h3>
+          <p className="text-sm text-zinc-500 mt-1 font-sans">Filter across 20+ ecosystems with full pagination and multi-variable criteria.</p>
         </div>
 
         <Link prefetch={false}
           href="/repos"
           title="Browse full repository database with all filters"
-          className="inline-flex items-center gap-2 rounded-xl bg-white text-zinc-900 hover:bg-zinc-100 px-6 py-3 text-xs font-bold font-sans shrink-0 shadow-xs transition-colors"
+          className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 text-white hover:bg-zinc-800 px-6 py-3 text-xs font-semibold font-sans shrink-0 shadow-xs transition-colors"
         >
           <span>Open Full Directory</span>
           <ArrowRight className="h-4 w-4" />
