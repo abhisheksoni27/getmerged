@@ -14,7 +14,7 @@ function CtaAction({ isLoggedIn, onExplore, onSignIn }: FinalCtaProps) {
     return (
       <button
         onClick={onExplore}
-        className="inline-flex items-center gap-2.5 rounded-xl bg-[var(--color-primary)] px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-[var(--color-primary)]/90 shadow-sm active:scale-[0.98] transition-all shrink-0 cursor-pointer"
+        className="inline-flex items-center gap-2.5 rounded-none bg-black px-7 py-3.5 font-mono text-xs font-black uppercase text-[#FACC15] hover:bg-white hover:text-black border-2 border-black shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all shrink-0 cursor-pointer"
       >
         <span>Explore Repos</span>
         <ArrowRight className="h-4 w-4" />
@@ -25,7 +25,7 @@ function CtaAction({ isLoggedIn, onExplore, onSignIn }: FinalCtaProps) {
     <button
       onClick={onSignIn}
       title="Sign in to GetMerged"
-      className="inline-flex items-center gap-2.5 rounded-xl bg-[var(--color-primary)] px-7 py-3.5 font-sans text-sm font-semibold text-white hover:bg-[var(--color-primary)]/90 shadow-sm active:scale-[0.98] transition-all shrink-0 cursor-pointer"
+      className="inline-flex items-center gap-2.5 rounded-none bg-black px-7 py-3.5 font-mono text-xs font-black uppercase text-[#FACC15] hover:bg-white hover:text-black border-2 border-black shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all shrink-0 cursor-pointer"
     >
       <span>Sign in to GetMerged</span>
       <ArrowRight className="h-4 w-4" />
@@ -37,12 +37,12 @@ function CtaAction({ isLoggedIn, onExplore, onSignIn }: FinalCtaProps) {
 export function FinalCta({ isLoggedIn, onExplore, onSignIn }: FinalCtaProps) {
   return (
     <HomeSection className="py-12">
-      <div className="rounded-3xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] p-8 sm:p-12 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+      <div className="rounded-none bg-[#FACC15] border-2 border-black p-8 sm:p-12 shadow-[4px_4px_0px_0px_#000] flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
         <div className="max-w-xl">
-          <h3 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)] tracking-tight leading-tight font-display">
+          <h3 className="text-2xl sm:text-4xl font-black text-black tracking-tight leading-tight font-display uppercase">
             Ready to find your next contribution?
           </h3>
-          <p className="mt-3 text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed font-sans">
+          <p className="mt-3 text-xs sm:text-sm text-black font-mono font-medium leading-relaxed">
             {isLoggedIn
               ? "Explore indexed repositories above or filter by your favorite tech stack."
               : "Sign in with GitHub to watch repositories, unlock maintainer guidelines, and receive PR review alerts."}

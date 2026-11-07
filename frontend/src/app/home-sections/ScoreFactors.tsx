@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
-import { EASE_OUT_EXPO } from "@/lib/motion";
 import { Eyebrow, HomeSection } from "./HomeSection";
 
 const SCORE_ROWS: Array<{ label: string; badge: string; badgeClass: string }> = [
@@ -17,24 +15,21 @@ const SCORE_ROWS: Array<{ label: string; badge: string; badgeClass: string }> = 
 export function ScoreFactors() {
   return (
     <HomeSection className="py-12">
-      <motion.div
-        className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start"
-        transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-      >
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         {/* Left: Factor list */}
-        <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl p-7 shadow-sm space-y-4 font-mono text-xs">
-          <div className="flex justify-between items-center text-[var(--text-secondary)] border-b border-[var(--border-subtle)] pb-3">
-            <span>How We Score Repositories</span>
-            <span className="text-[#0D9668] font-bold">Continuous</span>
+        <div className="bg-white border-2 border-black rounded-none p-6 sm:p-7 shadow-[4px_4px_0px_0px_#000] space-y-4 font-mono text-xs">
+          <div className="flex justify-between items-center text-black border-b-2 border-black pb-3">
+            <span className="font-black uppercase tracking-wider">How We Score Repositories</span>
+            <span className="bg-[#10B981] text-black border-2 border-black px-2 py-0.5 font-black uppercase text-[11px] shadow-[2px_2px_0px_0px_#000]">Continuous</span>
           </div>
           <div className="space-y-2.5">
             {SCORE_ROWS.map((row) => (
               <div
                 key={row.label}
-                className="flex justify-between items-center bg-[var(--bg-elevated)] p-3 rounded-xl border border-[var(--border-subtle)]"
+                className="flex justify-between items-center bg-[#FFFDF8] p-3 rounded-none border-2 border-black shadow-[2px_2px_0px_0px_#000]"
               >
-                <span className="text-[var(--text-primary)] font-medium">{row.label}</span>
-                <span className={`${row.badgeClass} font-bold`}>{row.badge}</span>
+                <span className="text-black font-bold uppercase tracking-tight">{row.label}</span>
+                <span className="font-mono font-black text-black bg-neutral-200 border border-black px-2 py-0.5 uppercase text-[10px]">{row.badge}</span>
               </div>
             ))}
           </div>
@@ -42,25 +37,25 @@ export function ScoreFactors() {
 
         {/* Right: Description */}
         <div className="space-y-4">
-          <Eyebrow className="text-[#2D8ABF]">
+          <Eyebrow>
             <Sparkles className="h-3.5 w-3.5" /> Transparent Metrics
           </Eyebrow>
-          <h2 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)] tracking-tight leading-tight font-display">
+          <h2 className="text-2xl sm:text-4xl font-black text-black tracking-tight leading-tight font-display uppercase">
             9 real signals. Zero guesswork.
           </h2>
-          <p className="text-base text-[var(--text-secondary)] font-sans leading-relaxed">
+          <p className="text-sm sm:text-base text-neutral-800 font-mono leading-relaxed">
             GetMerged tracks active pull requests across 20+ programming languages - measuring real review turnaround, newcomer acceptance, and maintainer responsiveness.
           </p>
           <Link prefetch={false}
             href="/how-c-rank-works"
             title="Learn how GetMerged scores repositories"
-            className="inline-flex items-center gap-2 rounded-xl bg-[var(--text-primary)] text-[var(--bg-canvas)] px-5 py-2.5 font-sans text-xs font-semibold hover:bg-[var(--color-neutral-800)] shadow-sm transition-all"
+            className="inline-flex items-center gap-2 rounded-none bg-black text-[#FACC15] hover:bg-[#FACC15] hover:text-black border-2 border-black px-5 py-2.5 font-mono text-xs font-black uppercase shadow-[3px_3px_0px_0px_#000] transition-all active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
           >
             <span>See how scoring works</span>
-            <ArrowRight className="h-3.5 w-3.5" />
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-      </motion.div>
+      </div>
     </HomeSection>
   );
 }

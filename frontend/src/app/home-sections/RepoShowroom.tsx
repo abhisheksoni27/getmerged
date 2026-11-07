@@ -33,18 +33,19 @@ interface ChipDef {
 
 function CategoryChip({ def, onSelect }: { def: ChipDef; onSelect: (preset: CategoryPreset) => void }) {
   return (
-    <motion.button
+    <button
       type="button"
       aria-pressed={def.isActive}
       title={def.title}
       onClick={() => onSelect(def.preset)}
-      whileTap={{ scale: 0.96 }}
-      className={`px-4 py-2 rounded-xl font-semibold transition-all shrink-0 cursor-pointer border text-xs ${
-        def.isActive ? def.activeClass : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)]"
+      className={`px-3.5 py-1.5 rounded-none font-mono font-bold uppercase transition-all shrink-0 cursor-pointer border-2 border-black text-xs ${
+        def.isActive
+          ? "bg-black text-[#FACC15] shadow-none translate-x-0.5 translate-y-0.5"
+          : "bg-[#FFFDF8] text-black shadow-[2px_2px_0px_0px_#000] hover:bg-[#F4F4EE]"
       }`}
     >
       {def.label}
-    </motion.button>
+    </button>
   );
 }
 
@@ -56,26 +57,21 @@ function ShowroomBody({
 }: Pick<RepoShowroomProps, "visibleRepos" | "isLoggedIn" | "onResetFilters"> & { viewMode?: "row" | "card" }) {
   if (visibleRepos.length === 0) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
-        className="rounded-2xl border border-dashed border-[var(--border-strong)] p-12 text-center bg-[var(--bg-surface)] my-4 shadow-sm"
-      >
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--bg-elevated)] text-[var(--text-secondary)] mb-3">
+      <div className="rounded-none border-2 border-dashed border-black p-12 text-center bg-white my-4 shadow-[4px_4px_0px_0px_#000]">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-none bg-[#FACC15] border-2 border-black text-black mb-3 shadow-[2px_2px_0px_0px_#000]">
           <Search className="h-5 w-5" />
         </div>
-        <h3 className="text-base font-bold text-[var(--text-primary)] font-display">No open doors found</h3>
-        <p className="mt-1 text-xs text-[var(--text-secondary)] font-sans max-w-sm mx-auto leading-relaxed">
+        <h3 className="text-base font-black text-black font-display uppercase tracking-tight">No open doors found</h3>
+        <p className="mt-1 text-xs text-neutral-700 font-mono max-w-sm mx-auto leading-relaxed">
           No repositories matched your filters.
         </p>
         <button
           onClick={onResetFilters}
-          className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] px-4 py-2 text-xs font-mono font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-surface)] active:scale-95 transition-all cursor-pointer"
+          className="mt-4 inline-flex items-center gap-1.5 rounded-none bg-[#FFFDF8] border-2 border-black px-4 py-2 text-xs font-mono font-black text-black hover:bg-[#FACC15] shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer uppercase"
         >
           Reset all filters
         </button>
-      </motion.div>
+      </div>
     );
   }
 
@@ -100,16 +96,16 @@ function ShowroomBody({
       )}
 
       {/* Bottom CTA */}
-      <div className="my-8 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+      <div className="my-8 rounded-none bg-[#FFFDF8] border-2 border-black p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-[4px_4px_0px_0px_#000]">
         <div>
-          <h3 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] font-display">Looking for custom languages or merge rates?</h3>
-          <p className="text-xs text-[var(--text-secondary)] mt-1 font-sans">Filter across 20+ ecosystems with full pagination and multi-variable criteria.</p>
+          <h3 className="text-lg sm:text-xl font-black text-black font-display uppercase tracking-tight">Looking for custom languages or merge rates?</h3>
+          <p className="text-xs text-neutral-700 mt-1 font-mono">Filter across 20+ ecosystems with full pagination and multi-variable criteria.</p>
         </div>
 
         <Link prefetch={false}
           href="/repos"
           title="Browse full repository database with all filters"
-          className="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/90 px-6 py-3 text-xs font-bold font-sans shrink-0 shadow-sm transition-colors"
+          className="inline-flex items-center gap-2 rounded-none bg-black text-[#FACC15] hover:bg-[#FACC15] hover:text-black px-6 py-3 text-xs font-mono font-black border-2 border-black shadow-[3px_3px_0px_0px_#000] uppercase shrink-0 transition-all active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
         >
           <span>Open Full Directory</span>
           <ArrowRight className="h-4 w-4" />
@@ -182,52 +178,52 @@ export function RepoShowroom({
   return (
     <HomeSection maxWidth="7xl" as="main" id="leaderboard-grid" className="flex-1 w-full pt-4">
       {/* Category Switcher & Layout Toggle */}
-      <div className="mb-6 rounded-2xl bg-[var(--bg-surface)] p-5 sm:p-6 border border-[var(--border-subtle)] shadow-sm space-y-4">
+      <div className="mb-6 rounded-none bg-white p-5 sm:p-6 border-2 border-black shadow-[4px_4px_0px_0px_#000] space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] font-display tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-black text-black font-display uppercase tracking-tight">
               Verified Welcoming Repositories
             </h2>
-            <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans mt-0.5">
+            <p className="text-xs sm:text-sm text-neutral-700 font-mono mt-0.5">
               Live telemetry scored by real PR response speed and external author acceptance rates.
             </p>
           </div>
 
           <div className="flex items-center gap-2 self-start sm:self-auto">
             {/* View Mode Toggle: Rows vs Cards */}
-            <div className="flex items-center rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] p-1 text-xs">
+            <div className="flex items-center rounded-none bg-[#FFFDF8] border-2 border-black p-0.5 text-xs shadow-[2px_2px_0px_0px_#000]">
               <button
                 type="button"
                 onClick={() => setViewMode("row")}
                 title="List View (high density)"
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none font-mono transition-all cursor-pointer ${
                   viewMode === "row"
-                    ? "bg-[var(--bg-surface)] text-[var(--text-primary)] font-bold shadow-2xs"
-                    : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+                    ? "bg-black text-white font-black"
+                    : "text-black hover:bg-neutral-200 font-bold"
                 }`}
               >
                 <List className="h-4 w-4" />
-                <span className="hidden sm:inline">Rows</span>
+                <span className="hidden sm:inline">ROWS</span>
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode("card")}
                 title="Grid View (showcase cards)"
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none font-mono transition-all cursor-pointer ${
                   viewMode === "card"
-                    ? "bg-[var(--bg-surface)] text-[var(--text-primary)] font-bold shadow-2xs"
-                    : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+                    ? "bg-black text-white font-black"
+                    : "text-black hover:bg-neutral-200 font-bold"
                 }`}
               >
                 <LayoutGrid className="h-4 w-4" />
-                <span className="hidden sm:inline">Cards</span>
+                <span className="hidden sm:inline">CARDS</span>
               </button>
             </div>
 
             <Link prefetch={false}
               href="/repos"
               title="Open full multi-filter repository directory"
-              className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[var(--text-primary)] hover:bg-[var(--color-neutral-800)] text-[var(--bg-canvas)] px-4 py-2 text-xs font-semibold shadow-2xs transition-all whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-1.5 rounded-none bg-[#FACC15] hover:bg-black hover:text-[#FACC15] text-black border-2 border-black px-4 py-2 text-xs font-mono font-black shadow-[2px_2px_0px_0px_#000] uppercase transition-all whitespace-nowrap active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
             >
               <span>Explore All {stats?.total_repos ? `${stats.total_repos.toLocaleString()}` : "102k"}</span>
               <ArrowRight className="h-3.5 w-3.5" />
@@ -236,7 +232,7 @@ export function RepoShowroom({
         </div>
 
         {/* Category Chips */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-sans scrollbar-none">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-mono scrollbar-none">
           {chips.map((chip) => (
             <CategoryChip key={chip.preset} def={chip} onSelect={onSelectCategory} />
           ))}
@@ -247,7 +243,7 @@ export function RepoShowroom({
       {loading ? (
         <div className="flex flex-col gap-3 mb-10">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="h-24 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 shadow-sm animate-pulse" />
+            <div key={i} className="h-24 rounded-none border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_#000] animate-pulse" />
           ))}
         </div>
       ) : (

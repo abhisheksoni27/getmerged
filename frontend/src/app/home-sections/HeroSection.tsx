@@ -2,11 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import { Search } from "lucide-react";
-import { motion } from "framer-motion";
 import posthog from "posthog-js";
 import { TopMatches } from "@/components/TopMatches";
 import { useSearch } from "@/context/SearchContext";
-import { EASE_OUT_EXPO } from "@/lib/motion";
 import { MacroStats, Repo } from "@/types/opendoor";
 import { CountUp } from "./CountUp";
 import { formatReviewTime } from "./useHomeData";
@@ -58,71 +56,62 @@ export function HeroSection({
   }, [setHeroSearchVisible]);
 
   return (
-    <section className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-8 text-center overflow-visible">
+    <section className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-12 text-center overflow-visible">
       {/* Live radar badge */}
-      <motion.div
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-        className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3.5 py-1 text-xs font-mono text-[var(--text-secondary)] mb-6"
-      >
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#059669] opacity-75" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-[#059669]" />
-        </span>
+      <div className="inline-flex items-center gap-2 border-2 border-black bg-[#FACC15] px-3.5 py-1 text-xs font-mono font-black text-black shadow-[2px_2px_0px_0px_#000] uppercase mb-6">
+        <span className="w-2.5 h-2.5 bg-black inline-block animate-pulse" />
         <span>
-          Live telemetry: {stats?.total_repos ? `${stats.total_repos.toLocaleString()}+` : "100,000+"} repositories indexed
+          TELEMETRY ACTIVE: {stats?.total_repos ? `${stats.total_repos.toLocaleString()}` : "102,000+"} REPOSITORIES INDEXED
         </span>
-      </motion.div>
+      </div>
 
-      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--text-primary)] font-display leading-[1.12] text-balance">
-        Find open-source repos that merge your PRs.
+      <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tighter text-black font-display uppercase leading-[0.95] text-balance">
+        STOP WASTING PRS.<br />
+        <span className="bg-[#10B981] px-2 py-0.5 border-2 border-black shadow-[3px_3px_0px_0px_#000] inline-block mt-2">
+          FIND ACTIVE MERGERS.
+        </span>
       </h1>
 
-      <motion.p
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: EASE_OUT_EXPO, delay: 0.08 }}
-        className="mx-auto mt-4 max-w-2xl text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed font-sans font-normal text-balance"
-      >
-        Verified PR merge rates, reviewer response turnaround, and beginner-friendly maintainers across 102,000+ GitHub projects.
-      </motion.p>
+      <div className="mx-auto mt-6 max-w-2xl bg-white border-2 border-black p-4 shadow-[4px_4px_0px_0px_#000] text-left">
+        <p className="text-xs sm:text-sm font-mono font-bold text-black uppercase leading-relaxed">
+          &gt; Real reviewer latency, merge rates, and first-timer acceptance across 102,000+ open-source GitHub projects. No ghosting.
+        </p>
+      </div>
 
-      {/* Hero Search Bar - Prominent Silicon Valley Card */}
-      <motion.div
+      {/* Hero Search Bar - Industrial Brutalist Console */}
+      <div
         id="hero-search-container"
         ref={heroSearchRef}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: EASE_OUT_EXPO, delay: 0.15 }}
-        className="mt-8 max-w-2xl mx-auto"
+        className="mt-8 max-w-3xl mx-auto"
       >
         <div
           onClick={() => openSearch(searchQuery)}
-          className="relative flex items-center rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-5 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:border-[var(--border-hover)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all cursor-pointer group"
+          className="relative flex items-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#000] hover:shadow-[6px_6px_0px_0px_#000] transition-all cursor-pointer group"
         >
-          <Search className="h-5 w-5 text-[var(--text-tertiary)] group-hover:text-[var(--color-primary)] shrink-0 transition-colors mr-3" />
+          <div className="bg-black text-[#FACC15] p-3.5 sm:p-4 border-r-2 border-black flex items-center justify-center shrink-0">
+            <Search className="h-5 w-5" />
+          </div>
           <input
             ref={searchInputRef}
             type="text"
             readOnly
-            placeholder={`Search repositories, e.g. ${famousRepos[placeholderIndex] || "react, rust, fastify..."}`}
+            placeholder={`SEARCH 102,000+ REPOSITORIES, e.g. ${famousRepos[placeholderIndex]?.toUpperCase() || "FASTAPI, RUST, NEXTJS..."}`}
             value={searchQuery}
-            className="w-full text-base sm:text-lg text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none font-sans bg-transparent cursor-pointer"
+            className="w-full px-4 text-xs sm:text-sm text-black placeholder:text-gray-500 font-mono font-bold uppercase focus:outline-none bg-transparent cursor-pointer"
           />
-          <div className="flex items-center gap-2 pointer-events-none shrink-0 ml-2">
+          <div className="flex items-center gap-2 pointer-events-none shrink-0 pr-4">
             {searchQuery ? (
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onClearSearch();
                 }}
-                className="pointer-events-auto text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] mr-1 cursor-pointer"
+                className="pointer-events-auto text-xs font-mono font-bold text-black border border-black bg-[#FACC15] px-2 py-0.5 mr-1 cursor-pointer shadow-[1px_1px_0px_0px_#000]"
               >
-                Clear
+                CLEAR
               </button>
             ) : null}
-            <kbd className="hidden sm:inline-flex items-center gap-1 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-2.5 py-1 font-mono text-xs font-medium text-[var(--text-secondary)]">
+            <kbd className="hidden sm:inline-flex items-center gap-1 border-2 border-black bg-[#FACC15] px-2 py-1 font-mono text-xs font-black text-black shadow-[1px_1px_0px_0px_#000]">
               <span>⌘</span>K
             </kbd>
           </div>
@@ -130,15 +119,10 @@ export function HeroSection({
 
         {/* Quick-explore chips */}
         <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs">
-          <span className="font-mono text-[var(--text-tertiary)] font-medium">Quick explore:</span>
-          {QUICK_TERMS.map((term, i) => (
-            <motion.button
+          <span className="font-mono font-bold text-black uppercase text-[11px] mr-1">QUICK JUMP:</span>
+          {QUICK_TERMS.map((term) => (
+            <button
               key={term}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, ease: EASE_OUT_EXPO, delay: 0.25 + i * 0.04 }}
-              whileHover={{ y: -1, scale: 1.02 }}
-              whileTap={{ scale: 0.96 }}
               onClick={() => {
                 onQuickSearch(term);
                 posthog.capture("repo_searched", { query: term, source: "hero_chip" });
@@ -147,59 +131,56 @@ export function HeroSection({
                   gridEl.scrollIntoView({ behavior: "smooth" });
                 }
               }}
-              className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3.5 py-1 text-xs font-mono font-medium text-[var(--text-secondary)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] cursor-pointer transition-all shadow-2xs"
+              className="border-2 border-black bg-white px-3 py-1 font-mono font-black text-xs text-black uppercase shadow-[2px_2px_0px_0px_#000] hover:bg-[#FACC15] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
             >
-              {term}
-            </motion.button>
+              #{term.toUpperCase()}
+            </button>
           ))}
         </div>
-      </motion.div>
+      </div>
 
       {/* Personalized matches from GitHub-imported skills (hidden when signed out or empty) */}
       {isLoggedIn && (
-        <div className="mt-12">
+        <div className="mt-8">
           <TopMatches />
         </div>
       )}
 
-      {/* Macro Telemetry Grid - Expansive White Surface */}
-      <motion.div
-        className="mt-8 sm:mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-4xl mx-auto rounded-2xl bg-[var(--bg-surface)] p-4 sm:p-6 border border-[var(--border-subtle)] shadow-xs items-center text-center"
-        transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-      >
-        <div className="p-2">
-          <div className="text-2xl sm:text-3xl font-bold font-mono text-[var(--text-primary)] tracking-tight">
+      {/* Macro Telemetry Strip - Industrial 2px Black Grid */}
+      <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 max-w-4xl mx-auto border-2 border-black bg-white shadow-[4px_4px_0px_0px_#000] divide-x-2 divide-y-2 sm:divide-y-0 divide-black text-center">
+        <div className="p-4 flex flex-col justify-between">
+          <div className="text-3xl sm:text-4xl font-black font-mono text-black tracking-tighter">
             {stats?.avg_response_hours ? "82%" : <TelemetrySkeleton />}
           </div>
-          <div className="text-xs font-sans text-[var(--text-secondary)] mt-1 font-medium">
-            Avg merge rate
+          <div className="text-[11px] font-mono font-black uppercase text-black bg-[#FACC15] border-t-2 border-black py-1 mt-3">
+            AVG MERGE RATE
           </div>
         </div>
-        <div className="p-2">
-          <div className="text-2xl sm:text-3xl font-bold font-mono text-[var(--text-primary)] tracking-tight">
+        <div className="p-4 flex flex-col justify-between">
+          <div className="text-3xl sm:text-4xl font-black font-mono text-black tracking-tighter">
             {stats?.avg_response_hours ? formatReviewTime(stats.avg_response_hours) : <TelemetrySkeleton />}
           </div>
-          <div className="text-xs font-sans text-[var(--text-secondary)] mt-1 font-medium">
-            Median review turnaround
+          <div className="text-[11px] font-mono font-black uppercase text-black bg-[#38BDF8] border-t-2 border-black py-1 mt-3">
+            MEDIAN TURNAROUND
           </div>
         </div>
-        <div className="p-2">
-          <div className="text-2xl sm:text-3xl font-bold font-mono text-[var(--text-primary)] tracking-tight">
+        <div className="p-4 flex flex-col justify-between">
+          <div className="text-3xl sm:text-4xl font-black font-mono text-black tracking-tighter">
             {stats?.s_class_count !== undefined ? <CountUp value={stats.s_class_count} /> : <TelemetrySkeleton />}
           </div>
-          <div className="text-xs font-sans text-[var(--text-secondary)] mt-1 font-medium">
-            S & A tier repos
+          <div className="text-[11px] font-mono font-black uppercase text-black bg-[#10B981] border-t-2 border-black py-1 mt-3">
+            S &amp; A TIER REPOS
           </div>
         </div>
-        <div className="p-2">
-          <div className="text-2xl sm:text-3xl font-bold font-mono text-[var(--text-primary)] tracking-tight">
+        <div className="p-4 flex flex-col justify-between">
+          <div className="text-3xl sm:text-4xl font-black font-mono text-black tracking-tighter">
             {stats?.total_repos ? <CountUp value={stats.total_repos} /> : <TelemetrySkeleton />}
           </div>
-          <div className="text-xs font-sans text-[var(--text-secondary)] mt-1 font-medium">
-            Repositories scored
+          <div className="text-[11px] font-mono font-black uppercase text-black bg-[#A855F7] text-white border-t-2 border-black py-1 mt-3">
+            REPOS SCORED
           </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

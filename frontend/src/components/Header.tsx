@@ -11,7 +11,6 @@ import posthog from "posthog-js";
 import { AuthModal } from "@/components/AuthModal";
 
 import { useSearch } from "@/context/SearchContext";
-import { EASE_OUT_EXPO, useReducedMotion } from "@/lib/motion";
 import { PAYMENTS_ENABLED } from "@/lib/flags";
 
 interface HeaderProps {
@@ -26,7 +25,6 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
   const [authLoading, setAuthLoading] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const reduceMotion = useReducedMotion();
 
   const { openSearch, heroSearchVisible, searchQuery: contextQuery } = useSearch();
 
@@ -56,7 +54,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[var(--border-subtle)] bg-[var(--bg-canvas)]/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-[#FFFDF8]">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 sm:gap-4 px-4 sm:px-6 lg:px-8">
         {/* Brand Logo & Navigation */}
         <div className="flex items-center gap-3 md:gap-4 lg:gap-6 min-w-0">
@@ -65,54 +63,32 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             title="GetMerged - Find Welcoming Open Source Repositories"
             className="flex items-center gap-2.5 group shrink-0"
           >
-            <motion.div
-              className="shrink-0"
-              whileHover={reduceMotion ? undefined : { scale: 1.05 }}
-              transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
-              aria-hidden="true"
-            >
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="shrink-0"
-              >
-                <rect width="32" height="32" rx="8" fill="var(--text-primary)" stroke="var(--border-subtle)" strokeWidth="1" />
-                <rect x="5" y="9" width="6" height="3" rx="0.5" fill="#0D9668" />
-                <rect x="12" y="11" width="4" height="3" rx="0.5" fill="#34d399" />
-                <rect x="5" y="20" width="6" height="3" rx="0.5" fill="#c4463a" />
-                <rect x="12" y="18" width="4" height="3" rx="0.5" fill="#d4590f" />
-                <rect x="17" y="13.5" width="7" height="5" rx="0.75" fill="#0D9668" />
-                <rect x="25" y="15" width="2" height="2" fill="#ffffff" />
-                <rect x="19" y="9.5" width="2" height="2" fill="#2D8ABF" />
-                <rect x="19" y="20.5" width="2" height="2" fill="#c4910a" />
-              </svg>
-            </motion.div>
-            <span className="font-space text-sm font-bold tracking-tight text-[var(--text-primary)] transition-colors">
-              Get<span className="text-[#059669]">Merged</span>
+            <div className="shrink-0 flex items-center justify-center h-9 w-9 bg-black border-2 border-black shadow-[2px_2px_0px_0px_#FACC15]">
+              <span className="font-mono font-black text-sm text-[#FACC15] tracking-tighter">&gt;_</span>
+            </div>
+            <span className="font-space text-base font-black tracking-tighter text-black uppercase">
+              Get<span className="bg-[#FACC15] px-1 ml-0.5 border border-black shadow-[1px_1px_0px_0px_#000]">Merged</span>
             </span>
           </Link>
 
           {/* Desktop & Laptop Nav Links */}
-          <nav className="hidden md:flex items-center gap-3 lg:gap-4 xl:gap-5 text-sm font-sans font-medium text-[var(--text-secondary)] shrink-0">
-            <Link prefetch={false} href="/repos" title="Explore All Open Source Repositories" className="hover:text-[var(--text-primary)] transition-colors">
-              Repositories
+          <nav className="hidden md:flex items-center gap-1 lg:gap-2 text-xs font-mono font-bold text-black shrink-0">
+            <Link prefetch={false} href="/repos" title="Explore All Open Source Repositories" className="px-2.5 py-1 border border-transparent hover:border-black hover:bg-[#F4F4EE] transition-all">
+              REPOSITORIES
             </Link>
-            <Link prefetch={false} href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="hover:text-[var(--text-primary)] transition-colors whitespace-nowrap">
-              Good First Issues
+            <Link prefetch={false} href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="px-2.5 py-1 border border-transparent hover:border-black hover:bg-[#F4F4EE] transition-all whitespace-nowrap">
+              GOOD FIRST ISSUES
             </Link>
-            <Link prefetch={false} href="/stack" title="Find Good First Issues in Your Tech Stack" className="text-[#059669] hover:text-[#047857] font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-pulse" />
-              Stalk Stack
+            <Link prefetch={false} href="/stack" title="Find Good First Issues in Your Tech Stack" className="px-2.5 py-1 border border-black bg-[#10B981]/15 text-black hover:bg-[#10B981]/30 transition-all flex items-center gap-1.5 whitespace-nowrap shadow-[1px_1px_0px_0px_#000]">
+              <span className="w-2 h-2 bg-[#10B981] border border-black inline-block" />
+              STACK SCANNER
             </Link>
-            <Link prefetch={false} href="/maintainers" title="Claim Your Repository & PR Telemetry" className="hover:text-[var(--text-primary)] font-medium transition-colors whitespace-nowrap">
-              Maintainers
+            <Link prefetch={false} href="/maintainers" title="Claim Your Repository & PR Telemetry" className="px-2.5 py-1 border border-transparent hover:border-black hover:bg-[#F4F4EE] transition-all whitespace-nowrap">
+              MAINTAINERS
             </Link>
             {user && (
-              <Link prefetch={false} href="/dashboard" title="Contributor PR Tracker & Quests" className="hover:text-[var(--color-primary)] font-bold text-[var(--text-primary)] transition-colors whitespace-nowrap">
-                Dashboard
+              <Link prefetch={false} href="/dashboard" title="Contributor PR Tracker & Quests" className="px-2.5 py-1 border-2 border-black bg-[#FACC15] text-black font-black whitespace-nowrap shadow-[2px_2px_0px_0px_#000]">
+                DASHBOARD
               </Link>
             )}
           </nav>
@@ -124,15 +100,15 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             <button
               type="button"
               onClick={handleOpenSearch}
-              className="w-full relative flex items-center justify-between h-9 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--border-hover)] hover:bg-[var(--bg-elevated)] px-3 transition-all cursor-pointer group text-left shadow-sm"
+              className="w-full relative flex items-center justify-between h-9 rounded-none border-2 border-black bg-white hover:bg-[#F4F4EE] px-3 transition-all cursor-pointer group text-left shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
             >
               <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">
-                <Search className="h-3.5 w-3.5 text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] shrink-0 transition-colors" />
-                <span className="text-xs text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] truncate font-sans block">
-                  {displayQuery || placeholderText || "Search repositories..."}
+                <Search className="h-3.5 w-3.5 text-black shrink-0" />
+                <span className="text-xs text-black font-mono truncate block">
+                  {displayQuery || placeholderText || "SEARCH..."}
                 </span>
               </div>
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-md border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-1.5 py-0.5 font-mono text-[10px] font-medium text-[var(--text-secondary)] shrink-0">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 border border-black bg-[#FACC15] px-1 py-0.2 font-mono text-[10px] font-bold text-black shrink-0">
                 <span>⌘</span>K
               </kbd>
             </button>
@@ -144,7 +120,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
           {authLoading ? (
             <div className="h-8 w-16 sm:w-20 rounded-xl bg-[var(--bg-elevated)] animate-pulse border border-[var(--border-subtle)]" />
           ) : user ? (
-            <div className="flex items-center gap-1.5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl p-1 shrink-0 shadow-sm">
+            <div className="flex items-center gap-2 bg-white border-2 border-black rounded-none p-1 shrink-0 shadow-[2px_2px_0px_0px_#000]">
               <Link prefetch={false}
                 href={user.slug ? `/u/${user.slug}` : `/dashboard`}
                 title={`Signed in as @${user.username} - View Profile`}
@@ -155,10 +131,10 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   <img
                     src={user.avatar_url}
                     alt={user.username}
-                    className="h-6 w-6 rounded-full shrink-0 ring-1 ring-[var(--border-subtle)]"
+                    className="h-6 w-6 rounded-none border border-black shrink-0"
                   />
                 ) : (
-                  <div className="h-6 w-6 rounded-full bg-[var(--color-primary)] flex items-center justify-center font-bold text-[var(--text-primary)] text-[11px] shrink-0">
+                  <div className="h-6 w-6 rounded-none bg-[#FACC15] border border-black flex items-center justify-center font-bold text-black text-[11px] shrink-0 font-mono">
                     {(user.username || "U").slice(0, 1).toUpperCase()}
                   </div>
                 )}
@@ -167,7 +143,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <Link prefetch={false}
                 href="/watchlist"
                 title="My Watchlist"
-                className="flex items-center justify-center h-6 w-6 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] rounded-md transition-colors border-l border-[var(--border-subtle)] ml-0.5 pl-1.5 shrink-0"
+                className="flex items-center justify-center h-6 w-6 text-black hover:bg-[#F4F4EE] rounded-none transition-colors border-l-2 border-black ml-0.5 pl-1.5 shrink-0"
               >
                 <Bookmark className="h-3.5 w-3.5" />
               </Link>
@@ -181,9 +157,9 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   setIsAuthModalOpen(true);
                 }}
                 title="Sign in to GetMerged"
-                className="inline-flex items-center gap-2 rounded-xl bg-[var(--text-primary)] text-[var(--bg-canvas)] hover:bg-[var(--color-neutral-800)] px-4 py-2 text-xs font-semibold active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer shrink-0 shadow-sm"
+                className="inline-flex items-center gap-2 rounded-none border-2 border-black bg-[#FACC15] text-black font-mono font-black uppercase px-4 py-2 text-xs shadow-[2px_2px_0px_0px_#000] hover:shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all whitespace-nowrap cursor-pointer shrink-0"
               >
-                <span>Sign in</span>
+                <span>SIGN IN</span>
               </button>
               <AuthModal
                 isOpen={isAuthModalOpen}
