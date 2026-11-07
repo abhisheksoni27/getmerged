@@ -146,6 +146,10 @@ export async function generateMetadata({ params }: ComparePageProps): Promise<Me
       description: `Deep maintainer responsiveness, review sweet spot, and merge velocity comparison between ${repoA} and ${repoB}.`,
       images: [ogImage],
     },
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

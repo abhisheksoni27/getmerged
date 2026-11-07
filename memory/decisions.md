@@ -65,3 +65,14 @@
   3. Ensured background pipelines (`gfi_backfill`, `cron`, `seed`, `scan`) always invoke `UpsertIssues` even when 0 issues remain, and update `latest_snapshots.good_first_issue_count` to reflect the live count.
   4. Reduced Next.js SSR cache TTL for `getGoodFirstIssues` to 300s (aligned with backend `max-age=300`) so stale issues do not persist for 24 hours.
 
+## ADR-009: Lean Crawl Budget & High-Signal Sitemap Consolidation
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: Google Search Console crawl budget was heavily diluted across 24,924 URLs and 150+ tiny child sitemaps (many with 1-2 repos). Googlebot access logs revealed crawl capacity being wasted on low-intent programmatic combinations (`/compare/repoA/vs/repoB`), thin topic pages, and obscure single-repo languages (`/rankings/squirrel`).
+- **Decision**:
+  1. Consolidated 150+ fragmented child sitemaps into 26 clean, high-density files: `main.xml` (769 core URLs), 24 top language hubs (`python.xml`, `go.xml`, etc.), and `other.xml`.
+  2. Total indexed URLs pruned from 24,924 down to 11,677 high-authority URLs.
+  3. Increased topic landing page threshold from `>= 10` repos to `>= 50` repos, eliminating ~3,000 thin programmatic topic listings from sitemaps and adding `robots: { index: false, follow: true }` metadata for topics with `< 15` repos.
+  4. Dropped 1,000 synthetic `/compare/*/vs/*` URLs from sitemaps completely; added `robots: { index: false, follow: true }` to `/compare/[...slug]` page metadata.
+  5. Added explicit disallow directives in `robots.txt` for `/compare/` (allowing `/compare$`), `/feeds/`, `/embed/`, and `/*/opengraph-image$` to provide upfront signal to search engines.
+

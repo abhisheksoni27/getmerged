@@ -2,26 +2,50 @@ User-agent: *
 Content-Signal: search=yes, ai-train=no, ai-input=yes
 Allow: /
 Disallow: /api/
+Allow: /compare$
+Disallow: /compare/
+Disallow: /feeds/
+Disallow: /embed/
+Disallow: /*/opengraph-image$
 
 User-agent: GPTBot
 Content-Signal: search=yes, ai-train=no, ai-input=yes
 Allow: /
 Disallow: /api/
+Allow: /compare$
+Disallow: /compare/
+Disallow: /feeds/
+Disallow: /embed/
+Disallow: /*/opengraph-image$
 
 User-agent: ClaudeBot
 Content-Signal: search=yes, ai-train=no, ai-input=yes
 Allow: /
 Disallow: /api/
+Allow: /compare$
+Disallow: /compare/
+Disallow: /feeds/
+Disallow: /embed/
+Disallow: /*/opengraph-image$
 
 User-agent: PerplexityBot
 Content-Signal: search=yes, ai-train=no, ai-input=yes
 Allow: /
 Disallow: /api/
+Allow: /compare$
+Disallow: /compare/
+Disallow: /feeds/
+Disallow: /embed/
+Disallow: /*/opengraph-image$
 
 User-agent: Anthropic-ai
 Content-Signal: search=yes, ai-train=no, ai-input=yes
 Allow: /
 Disallow: /api/
+Allow: /compare$
+Disallow: /compare/
+Disallow: /feeds/
+Disallow: /embed/
+Disallow: /*/opengraph-image$
 
 Sitemap: https://getmerged.abhishekco.de/sitemap.xml
-Sitemap: https://getmerged.abhishekco.de/sitemap/main.xml

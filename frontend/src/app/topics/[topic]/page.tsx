@@ -62,6 +62,10 @@ export async function generateMetadata({ params }: TopicPageProps): Promise<Meta
       siteName: "GetMerged",
       type: "website",
     },
+    robots: repos.length < 15 ? {
+      index: false,
+      follow: true,
+    } : undefined,
   };
 }
 

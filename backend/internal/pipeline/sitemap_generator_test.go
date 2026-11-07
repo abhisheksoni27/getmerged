@@ -208,7 +208,7 @@ func TestGenerateStaticSitemaps_CompareSitemap(t *testing.T) {
 		t.Fatalf("expected GenerateStaticSitemaps to succeed, got: %v", err)
 	}
 
-	// 1. main.xml must contain /compare
+	// 1. main.xml must contain /compare (the comparison tool landing page)
 	mainContent, err := os.ReadFile(filepath.Join(tempDir, "sitemap", "main.xml"))
 	if err != nil {
 		t.Fatalf("failed to read main.xml: %v", err)
@@ -217,25 +217,19 @@ func TestGenerateStaticSitemaps_CompareSitemap(t *testing.T) {
 		t.Fatalf("expected main.xml to contain https://getmerged.abhishekco.de/compare, got:\n%s", string(mainContent))
 	}
 
-	// 2. compare.xml must exist in sitemap directory
+	// 2. compare.xml must NOT exist (synthetic pairwise combinations excluded to preserve crawl budget)
 	compareFile := filepath.Join(tempDir, "sitemap", "compare.xml")
-	compareContent, err := os.ReadFile(compareFile)
-	if err != nil {
-		t.Fatalf("failed to read sitemap/compare.xml: %v", err)
+	if _, err := os.Stat(compareFile); err == nil {
+		t.Fatalf("compare.xml should not exist (synthetic combinations excluded from sitemap)")
 	}
 
-	compareStr := string(compareContent)
-	if !strings.Contains(compareStr, "https://getmerged.abhishekco.de/compare/") {
-		t.Fatalf("expected compare.xml to contain compare URLs, got:\n%s", compareStr)
-	}
-
-	// 3. master sitemap.xml must include compare.xml
+	// 3. master sitemap.xml must NOT reference compare.xml
 	masterContent, err := os.ReadFile(filepath.Join(tempDir, "sitemap.xml"))
 	if err != nil {
 		t.Fatalf("failed to read master sitemap: %v", err)
 	}
-	if !strings.Contains(string(masterContent), "https://getmerged.abhishekco.de/sitemap/compare.xml") {
-		t.Fatalf("expected master sitemap to reference compare.xml, got:\n%s", string(masterContent))
+	if strings.Contains(string(masterContent), "compare.xml") {
+		t.Fatalf("master sitemap should not reference compare.xml:\n%s", string(masterContent))
 	}
 }
 

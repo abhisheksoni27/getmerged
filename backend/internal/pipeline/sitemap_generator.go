@@ -74,8 +74,13 @@ type Sitemap struct {
 
 // MinTopicRepoThreshold defines the minimum number of indexed repositories
 // required before a topic landing page is published to Google sitemaps.
-// We set this to 10 so search engines only index rich topic hubs with sufficient content.
-const MinTopicRepoThreshold = 10
+// We set this to 50 so search engines only index rich topic hubs with high content density.
+var MinTopicRepoThreshold = 50
+
+// MinLanguageRepoThreshold defines the minimum number of indexed repositories
+// required before a language rankings/GFI/contribute hub is published to sitemaps.
+// We set this to 20 so search engines are not flooded with single-repo language pages.
+var MinLanguageRepoThreshold = 20
 
 // MaxURLsPerSitemap defines the maximum number of URLs allowed per individual XML sitemap file.
 // Google Search Console strictly caps single sitemap files at 50,000 URLs / 50MB.
@@ -148,6 +153,15 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		return fmt.Errorf("create sitemap dir: %w", err)
 	}
 
+	// Clean up stale sitemap files in sitemapDir before generating fresh partitions
+	if entries, err := os.ReadDir(sitemapDir); err == nil {
+		for _, entry := range entries {
+			if strings.HasSuffix(entry.Name(), ".xml") {
+				_ = os.Remove(filepath.Join(sitemapDir, entry.Name()))
+			}
+		}
+	}
+
 	indexSitemaps := []Sitemap{}
 
 	// 1. Fetch distinct languages
@@ -158,8 +172,8 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 	}
 
 	var repos []repoLang
-	// Directory of Awesomeness: Prioritize the top ~20,000 highest-value repositories.
-	// We heavily weight high search volume (stars), user watchlists, S & A tier responsiveness,
+	// Directory of Awesomeness: Prioritize the top highest-value repositories.
+	// We heavily weight high search volume (stars >= 2500), user watchlists, S-tier responsiveness,
 	// and active Good First Issues, while cutting out stale or low-signal repos.
 	query := `
 		SELECT 
@@ -173,10 +187,9 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		  AND (ls.c_rank_score IS NULL OR ls.c_rank_score > 0)
 		  AND (
 			uw.repo_id IS NOT NULL
-			OR (ls.c_rank_tier = 'S' AND r.stars >= 150)
-			OR (ls.c_rank_tier = 'A' AND r.stars >= 600)
-			OR (ls.good_first_issue_count IS NOT NULL AND ls.good_first_issue_count > 0 AND r.stars >= 400)
-			OR r.stars >= 1200
+			OR (ls.c_rank_tier = 'S' AND r.stars >= 300)
+			OR (ls.good_first_issue_count IS NOT NULL AND ls.good_first_issue_count > 0 AND r.stars >= 600)
+			OR r.stars >= 2500
 		  )
 		ORDER BY r.stars DESC
 	`
@@ -194,12 +207,23 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		langMap[slug] = append(langMap[slug], r)
 	}
 
+	// Consolidate small languages into "other" in production (len(repos) >= 50)
+	// so search engines aren't bombarded with 120+ single-repo XML files.
+	consolidatedLangMap := make(map[string][]repoLang)
+	for slug, list := range langMap {
+		if len(repos) >= 50 && slug != "other" && len(list) < MinLanguageRepoThreshold {
+			consolidatedLangMap["other"] = append(consolidatedLangMap["other"], list...)
+		} else {
+			consolidatedLangMap[slug] = list
+		}
+	}
+
 	// Generate main partition for core landing pages, hubs, and topics
 	mainUrls := []URL{
 		{Loc: baseUrl, LastMod: today, ChangeFreq: "daily", Priority: "1.0"},
 		{Loc: fmt.Sprintf("%s/repos", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "1.0"},
 		{Loc: fmt.Sprintf("%s/rankings", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "0.9"},
-		{Loc: fmt.Sprintf("%s/compare", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "0.9"},
+		{Loc: fmt.Sprintf("%s/compare", baseUrl), LastMod: today, ChangeFreq: "monthly", Priority: "0.8"},
 		{Loc: fmt.Sprintf("%s/pricing", baseUrl), LastMod: today, ChangeFreq: "monthly", Priority: "0.9"},
 		{Loc: fmt.Sprintf("%s/maintainers", baseUrl), LastMod: today, ChangeFreq: "monthly", Priority: "0.8"},
 		{Loc: fmt.Sprintf("%s/community-powerhouses", baseUrl), LastMod: today, ChangeFreq: "weekly", Priority: "0.8"},
@@ -221,31 +245,38 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 	}
 
 	// Add language rankings, GFI hubs, and matchmaker pages to main sitemap
-	for lang := range langMap {
+	// Only for languages with >= MinLanguageRepoThreshold repos (or small test DBs)
+	for lang, list := range langMap {
 		if lang != "" && lang != "other" {
-			mainUrls = append(mainUrls, URL{
-				Loc:        fmt.Sprintf("%s/rankings/%s", baseUrl, lang),
-				LastMod:    today,
-				ChangeFreq: "daily",
-				Priority:   "0.9",
-			})
-			mainUrls = append(mainUrls, URL{
-				Loc:        fmt.Sprintf("%s/good-first-issue/%s", baseUrl, lang),
-				LastMod:    today,
-				ChangeFreq: "daily",
-				Priority:   "0.9",
-			})
-			mainUrls = append(mainUrls, URL{
-				Loc:        fmt.Sprintf("%s/contribute/%s", baseUrl, lang),
-				LastMod:    today,
-				ChangeFreq: "daily",
-				Priority:   "0.9",
-			})
+			if len(repos) < 50 || len(list) >= MinLanguageRepoThreshold {
+				mainUrls = append(mainUrls, URL{
+					Loc:        fmt.Sprintf("%s/rankings/%s", baseUrl, lang),
+					LastMod:    today,
+					ChangeFreq: "daily",
+					Priority:   "0.9",
+				})
+				mainUrls = append(mainUrls, URL{
+					Loc:        fmt.Sprintf("%s/good-first-issue/%s", baseUrl, lang),
+					LastMod:    today,
+					ChangeFreq: "daily",
+					Priority:   "0.9",
+				})
+				mainUrls = append(mainUrls, URL{
+					Loc:        fmt.Sprintf("%s/contribute/%s", baseUrl, lang),
+					LastMod:    today,
+					ChangeFreq: "daily",
+					Priority:   "0.9",
+				})
+			}
 		}
 	}
 
 	// Add topic landings (/topics/[topic]) to main sitemap - only for distinct
 	// topics with >= MinTopicRepoThreshold indexed repositories so search engines never hit a 404 or thin content.
+	topicThreshold := MinTopicRepoThreshold
+	if len(repos) < 50 && topicThreshold > 5 {
+		topicThreshold = 5
+	}
 	var topics []string
 	topicQuery := `
 		SELECT rt.topic
@@ -261,7 +292,7 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		HAVING COUNT(rt.repository_id) >= ?
 		ORDER BY COUNT(rt.repository_id) DESC, rt.topic ASC
 	`
-	if err := db.Select(&topics, topicQuery, MinTopicRepoThreshold); err != nil {
+	if err := db.Select(&topics, topicQuery, topicThreshold); err != nil {
 		slog.Warn("sitemap generator: could not fetch topics", "err", err)
 	} else {
 		for _, t := range topics {
@@ -289,8 +320,8 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		}
 	}
 
-	// 2. Generate language partition sitemaps
-	for lang, langRepos := range langMap {
+	// 2. Generate consolidated language partition sitemaps
+	for lang, langRepos := range consolidatedLangMap {
 		var langUrls []URL
 		for _, r := range langRepos {
 			parts := strings.Split(r.FullName, "/")
@@ -316,95 +347,7 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		indexSitemaps = append(indexSitemaps, langSitemaps...)
 	}
 
-	// 3. Generate compare partition sitemaps
-	type rankedRepo struct {
-		FullName string  `db:"full_name"`
-		Language string  `db:"language"`
-		RankTier string  `db:"c_rank_tier"`
-		Score    float64 `db:"c_rank_score"`
-	}
-
-	var rankedRepos []rankedRepo
-	rankedQuery := `
-		SELECT
-			r.full_name,
-			COALESCE(r.language, 'other') as language,
-			COALESCE(s.c_rank_tier, 'A') as c_rank_tier,
-			COALESCE(s.c_rank_score, 0) as c_rank_score
-		FROM repositories r
-		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
-		WHERE COALESCE(s.c_rank_tier, 'A') IN ('S', 'A')
-		ORDER BY COALESCE(s.c_rank_score, 0) DESC, r.stars DESC
-	`
-	if err := db.Select(&rankedRepos, rankedQuery); err != nil {
-		slog.Warn("sitemap generator: could not fetch ranked repos for compare sitemap", "err", err)
-	} else {
-		langRanked := make(map[string][]rankedRepo)
-		for _, rr := range rankedRepos {
-			l := languageSlug(rr.Language)
-			if l == "" {
-				l = "other"
-			}
-			langRanked[l] = append(langRanked[l], rr)
-		}
-
-		var compareUrls []URL
-		seenPairs := make(map[string]bool)
-
-		for _, list := range langRanked {
-			limit := len(list)
-			if limit > 10 {
-				limit = 10
-			}
-			for i := 0; i < limit; i++ {
-				for j := i + 1; j <= i+3 && j < len(list); j++ {
-					if len(compareUrls) >= 1000 {
-						break
-					}
-					repoA := list[i].FullName
-					repoB := list[j].FullName
-					partsA := strings.Split(repoA, "/")
-					partsB := strings.Split(repoB, "/")
-					if len(partsA) != 2 || len(partsB) != 2 {
-						continue
-					}
-					// Sort lexicographically to ensure canonical URL
-					if strings.ToLower(repoA) > strings.ToLower(repoB) {
-						repoA, repoB = repoB, repoA
-					}
-					pairKey := fmt.Sprintf("%s vs %s", strings.ToLower(repoA), strings.ToLower(repoB))
-					if seenPairs[pairKey] {
-						continue
-					}
-					seenPairs[pairKey] = true
-
-					compareUrls = append(compareUrls, URL{
-						Loc:        fmt.Sprintf("%s/compare/%s/vs/%s", baseUrl, repoA, repoB),
-						LastMod:    today,
-						ChangeFreq: "daily",
-						Priority:   "0.7",
-					})
-				}
-				if len(compareUrls) >= 1000 {
-					break
-				}
-			}
-			if len(compareUrls) >= 1000 {
-				break
-			}
-		}
-
-		if len(compareUrls) > 0 {
-			compSitemaps, err := writeSitemapPartition(sitemapDir, "compare", compareUrls, baseUrl, today)
-			if err != nil {
-				slog.Error("sitemap generator: compare sitemap generation failed", "err", err)
-			} else {
-				indexSitemaps = append(indexSitemaps, compSitemaps...)
-			}
-		}
-	}
-
-	// Master sitemap.xml index
+	// Master sitemap.xml index (Notice: compare.xml is omitted to prevent crawling low-intent pairwise combinations)
 	masterIndex := SitemapIndex{
 		Sitemaps: indexSitemaps,
 	}
