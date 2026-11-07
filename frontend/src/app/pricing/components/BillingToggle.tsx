@@ -4,8 +4,8 @@ import { BillingCycle } from "./pricing-types";
 type ToggleAccent = "emerald" | "blue";
 
 const SAVE_BADGE: Record<ToggleAccent, string> = {
-  emerald: "bg-emerald-500/20 text-emerald-400 text-[10px] px-1.5 py-0.2 rounded-full font-bold",
-  blue: "bg-blue-500/20 text-blue-400 text-[10px] px-1.5 py-0.2 rounded-full font-bold",
+  emerald: "bg-emerald-50 text-[#0D9668] border border-emerald-200 text-[10px] px-1.5 py-0.2 rounded-full font-bold",
+  blue: "bg-sky-50 text-[#2D8ABF] border border-sky-200 text-[10px] px-1.5 py-0.2 rounded-full font-bold",
 };
 
 interface BillingToggleProps {
@@ -17,12 +17,12 @@ interface BillingToggleProps {
 
 export function BillingToggle({ billingCycle, onChange, accent, saveLabel }: BillingToggleProps) {
   return (
-    <div className="inline-flex items-center gap-2 p-1 bg-[#141414] rounded-xl mt-6 border border-white/[0.1] font-mono text-xs">
+    <div className="inline-flex items-center gap-2 p-1 bg-[var(--bg-elevated)] rounded-xl mt-6 border border-[var(--border-subtle)] font-mono text-xs">
       <button
         type="button"
         onClick={() => onChange("monthly")}
         className={`px-4 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-          billingCycle === "monthly" ? "bg-white/[0.1] text-white shadow-sm" : "text-zinc-400 hover:text-white"
+          billingCycle === "monthly" ? "bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-xs border border-[var(--border-subtle)]" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
         }`}
       >
         Monthly Billing
@@ -31,7 +31,7 @@ export function BillingToggle({ billingCycle, onChange, accent, saveLabel }: Bil
         type="button"
         onClick={() => onChange("yearly")}
         className={`px-4 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-          billingCycle === "yearly" ? "bg-white/[0.1] text-white shadow-sm" : "text-zinc-400 hover:text-white"
+          billingCycle === "yearly" ? "bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-xs border border-[var(--border-subtle)]" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
         }`}
       >
         Annual Billing

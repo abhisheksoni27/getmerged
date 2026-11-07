@@ -35,3 +35,15 @@
   4. Added `robots: { index: false, follow: true }` to repo detail metadata for unscored and dead/stale graveyard pages.
   5. Added Nginx 301 redirect mapping legacy `main-[0-9].xml` sitemaps to unified `main.xml`.
 
+## ADR-006: Warm Editorial Frontend Redesign & Anti-Cramming Standard
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: The existing UI used harsh pitch-black canvas (`#0a0a0a`), micro typography (`text-[10px]`, `text-[11px]`), glass-morphism blurs, and tight padding (`p-3.5`), creating an intimidating, cramped developer-dashboard aesthetic that repels beginners.
+- **Decision**: Adopt a "Warm Precision" design system inspired by FreeHire, Granola, and Kinfolk-style tech publications:
+  1. Default canvas set to warm off-white/sand (`#FAFAF7`), pure white cards (`#FFFFFF`), warm borders (`#E8E4DD`), dark warm text (`#1A1A18`), and warm terracotta accents (`#D4590F`).
+  2. Banned micro-font cramming: minimum body font size `15px` / `text-base`, card padding minimum `p-6` (24px), section spacing `py-16` to `py-20` (80px).
+  3. Purged dated dark-mode tropes: eliminated glass morphism (`backdrop-blur-*`), neon ambient glows, physics canvas overhead, and text shimmer animations.
+  4. Preserved strict SSR-First architecture and zero-CLS rendering for all crawlers and public routes.
+  5. Codified complete autonomous agent execution plan in [`docs/plans/2026-11-07-design-overhaul-warm-editorial.md`](../docs/plans/2026-11-07-design-overhaul-warm-editorial.md).
+
+

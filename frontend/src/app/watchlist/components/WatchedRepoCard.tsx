@@ -99,7 +99,7 @@ export function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts
 
   return (
     <div
-      className={`group p-5 rounded-2xl border border-white/[0.1] glass-panel hover:border-emerald-500/80 hover:shadow-xs transition-all flex flex-col justify-between gap-4 ${
+      className={`group p-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--brand-terracotta)] hover:shadow-md transition-all flex flex-col justify-between gap-4 shadow-sm ${
         isRemoving ? "opacity-40 pointer-events-none scale-[0.98]" : ""
       }`}
     >
@@ -107,7 +107,7 @@ export function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts
         {/* Header Row */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3 min-w-0 flex-1">
-            <div className="h-10 w-10 rounded-xl border border-white/[0.1] glass-card overflow-hidden shrink-0 shadow-2xs group-hover:border-white/[0.12] transition-colors">
+            <div className="h-10 w-10 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] overflow-hidden shrink-0 shadow-xs">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`https://github.com/${ownerPart}.png?size=64`}
@@ -123,18 +123,18 @@ export function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts
               <Link prefetch={false}
                 href={`/${ownerPart}/${namePart}`}
                 title={`View ${repo.full_name} scorecard`}
-                className="font-space text-base font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-1 min-w-0 no-underline"
+                className="font-space text-base font-bold text-[var(--text-primary)] group-hover:text-[var(--brand-terracotta)] transition-colors flex items-center gap-1 min-w-0 no-underline"
               >
                 <h3 className="truncate text-base font-bold">{repo.full_name}</h3>
-                <ArrowUpRight className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-zinc-300 shrink-0" />
+                <ArrowUpRight className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-[var(--text-muted)] shrink-0" />
               </Link>
-              <div className="flex items-center gap-2 mt-0.5 font-mono text-[11px] text-zinc-300">
-                <span className="flex items-center gap-1 font-semibold text-zinc-300">
+              <div className="flex items-center gap-2 mt-0.5 font-mono text-[11px] text-[var(--text-secondary)]">
+                <span className="flex items-center gap-1 font-semibold text-[var(--text-secondary)]">
                   <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                   {repo.stars >= 1_000 ? `${(repo.stars / 1_000).toFixed(1)}k` : repo.stars}
                 </span>
                 <span>•</span>
-                <span className="flex items-center gap-1 truncate text-zinc-300">
+                <span className="flex items-center gap-1 truncate text-[var(--text-secondary)]">
                   <LangLogo language={repo.language} />
                   <span className="truncate">{repo.language || "Code"}</span>
                 </span>
@@ -152,8 +152,8 @@ export function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts
               data-testid={`alerts-toggle-${ownerPart}-${namePart}`}
               className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
                 alertsOn
-                  ? "border-emerald-200 text-emerald-400 bg-emerald-950/70 border-emerald-800/80 hover:bg-emerald-950/80 border-emerald-800/80"
-                  : "border-white/[0.1] text-zinc-300 hover:text-zinc-300 hover:glass-card"
+                  ? "border-emerald-200 text-[#0D9668] bg-emerald-50 hover:bg-emerald-100"
+                  : "border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
               }`}
             >
               {alertsOn ? <Bell className="h-4 w-4" /> : <BellOff className="h-4 w-4" />}
@@ -163,7 +163,7 @@ export function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts
               onClick={handleUnwatchClick}
               aria-label={`Unwatch ${repo.full_name}`}
               title={`Remove ${repo.full_name} from watchlist`}
-              className="p-1.5 rounded-lg border border-white/[0.1] text-zinc-300 hover:text-red-600 hover:border-red-200 hover:bg-red-50 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[#C4463A] hover:border-red-200 hover:bg-red-50 transition-colors cursor-pointer"
             >
               <BookmarkX className="h-4 w-4" />
             </button>
@@ -178,8 +178,8 @@ export function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts
           >
             <span className={`h-1.5 w-1.5 rounded-full ${badgeStyle.indicatorColor}`} />
             <span>Tier {rank}</span>
-            <span className="text-zinc-300 font-normal">|</span>
-            <span className="text-white font-extrabold">{scoreDisplay}</span>
+            <span className="text-[var(--text-muted)] font-normal">|</span>
+            <span className="font-extrabold">{scoreDisplay}</span>
           </div>
 
           {/* Delta Indicator Chip */}
@@ -187,32 +187,32 @@ export function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts
         </div>
 
         {/* Description */}
-        <p className="text-xs text-zinc-300 line-clamp-2 leading-relaxed font-sans font-normal mb-4 min-h-[2.5rem]">
+        <p className="text-xs sm:text-sm text-[var(--text-secondary)] line-clamp-2 leading-relaxed font-sans font-normal mb-4 min-h-[2.5rem]">
           {repo.description || "No repository description available."}
         </p>
 
         {/* Telemetry Metrics Scorecard */}
-        <div className="grid grid-cols-3 gap-3 py-3 px-3.5 glass-panel rounded-xl border border-white/[0.1]/90 my-auto text-center font-mono">
+        <div className="grid grid-cols-3 gap-3 py-3 px-3.5 bg-[var(--bg-elevated)] rounded-xl border border-[var(--border-subtle)] my-auto text-center font-mono">
           <div className="pr-1">
-            <div className="text-xs font-bold text-white">{mergeRate}</div>
-            <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5">Merge Rate</div>
+            <div className="text-xs font-bold text-[var(--text-primary)]">{mergeRate}</div>
+            <div className="text-[10px] text-[var(--text-muted)] font-medium whitespace-nowrap mt-0.5">Merge Rate</div>
           </div>
-          <div className="border-x border-white/[0.1] px-1">
-            <div className="text-xs font-bold text-white">{firstResponse}</div>
-            <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5">First Review</div>
+          <div className="border-x border-[var(--border-subtle)] px-1">
+            <div className="text-xs font-bold text-[var(--text-primary)]">{firstResponse}</div>
+            <div className="text-[10px] text-[var(--text-muted)] font-medium whitespace-nowrap mt-0.5">First Review</div>
           </div>
           <div className="pl-1">
-            <div className="text-xs font-bold text-white">{firstTimerRate}</div>
-            <div className="text-[10px] text-zinc-300 font-medium whitespace-nowrap mt-0.5">1st-Timers</div>
+            <div className="text-xs font-bold text-[var(--text-primary)]">{firstTimerRate}</div>
+            <div className="text-[10px] text-[var(--text-muted)] font-medium whitespace-nowrap mt-0.5">1st-Timers</div>
           </div>
         </div>
       </div>
 
       {/* Footer Row */}
-      <div className="pt-3 border-t border-white/[0.1] flex items-center justify-between text-xs font-mono text-zinc-300">
+      <div className="pt-3 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs font-mono text-[var(--text-secondary)]">
         <div className="flex items-center gap-2">
           {gfiCount > 0 ? (
-            <span className="inline-flex items-center gap-1 text-emerald-400 bg-emerald-950/70 border-emerald-800/80 px-2 py-0.5 rounded border border-emerald-200/60 font-medium text-[10px]">
+            <span className="inline-flex items-center gap-1 text-[#0D9668] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded font-medium text-[10px]">
               <ShieldCheck className="h-3 w-3" />
               {gfiLabel}
             </span>
@@ -222,7 +222,7 @@ export function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts
               Trending
             </span>
           ) : (
-            <span className="text-[11px]">
+            <span className="text-[11px] text-[var(--text-muted)]">
               {repo.snapshot_date ? `Snapshot ${repo.snapshot_date}` : "Telemetry active"}
             </span>
           )}
@@ -235,7 +235,7 @@ export function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts
             title={`Compare ${repo.full_name} with another repository`}
             aria-label={`Compare ${repo.full_name}`}
             onClick={handleCompareClick}
-            className="inline-flex items-center gap-1 text-xs font-medium text-zinc-300 hover:text-emerald-400 glass-card/70 hover:bg-emerald-950/70 border-emerald-800/80 px-2 py-1 rounded-md border border-white/[0.1]/60 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1 text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--brand-terracotta)] bg-[var(--bg-elevated)] hover:bg-[var(--border-subtle)] px-2 py-1 rounded-md border border-[var(--border-subtle)] transition-colors cursor-pointer"
           >
             <Scale className="h-3 w-3" />
             <span>Compare</span>
@@ -243,7 +243,7 @@ export function WatchedRepoCard({ item, onUnwatch, alertsEnabled, onToggleAlerts
           <Link prefetch={false}
             href={`/${ownerPart}/${namePart}`}
             title={`View ${repo.full_name} details and C-Rank breakdown`}
-            className="font-semibold text-white hover:text-emerald-400 transition-colors flex items-center gap-0.5 no-underline"
+            className="font-semibold text-[var(--text-primary)] hover:text-[var(--brand-terracotta)] transition-colors flex items-center gap-0.5 no-underline"
           >
             View details →
           </Link>

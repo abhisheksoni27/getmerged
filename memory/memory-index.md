@@ -5,7 +5,7 @@
 | File | Topic / Scope | Last Updated | Status |
 |---|---|---|---|
 | [architecture.md](./architecture.md) | Core system architecture, SSR rules, database schemas, and stack constraints | 2026-09-02 | Active |
-| [decisions.md](./decisions.md) | Architecture Decision Records (ADRs) & major technical choices | 2026-09-17 | Active |
+| [decisions.md](./decisions.md) | Architecture Decision Records (ADRs) & major technical choices | 2026-11-07 | Active |
 
 ## Key Directives Summary
 - **SSR-First**: All public SEO routes must fetch data during server-side render in `page.tsx`.

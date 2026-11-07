@@ -26,10 +26,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   };
 
   return (
-    <div className="group relative flex flex-col rounded-xl border border-white/[0.1] bg-[#141414]/90 hover:bg-[#1a1a1a] transition-all duration-300 hover:border-white/[0.2] overflow-hidden shadow-sm">
+    <div className="group relative flex flex-col rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--brand-terracotta)] transition-all duration-300 overflow-hidden shadow-sm">
       {/* Project Image / Photo Showcase */}
       {hasImages ? (
-        <div className="relative w-full h-48 sm:h-52 bg-black/60 overflow-hidden border-b border-white/[0.08]">
+        <div className="relative w-full h-48 sm:h-52 bg-[var(--bg-elevated)] overflow-hidden border-b border-[var(--border-subtle)]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={images[activeImageIndex]}
@@ -45,7 +45,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                 type="button"
                 onClick={prevImage}
                 aria-label="Previous screenshot"
-                className="p-1 rounded-full bg-black/70 text-white/80 hover:text-white hover:bg-black transition-colors"
+                className="p-1 rounded-full bg-black/60 text-white hover:bg-black/80 transition-colors"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -53,7 +53,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                 type="button"
                 onClick={nextImage}
                 aria-label="Next screenshot"
-                className="p-1 rounded-full bg-black/70 text-white/80 hover:text-white hover:bg-black transition-colors"
+                className="p-1 rounded-full bg-black/60 text-white hover:bg-black/80 transition-colors"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
@@ -62,7 +62,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
           {/* Photo count indicator */}
           {images.length > 1 && (
-            <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/80 text-[11px] font-mono text-zinc-300 border border-white/[0.1] flex items-center gap-1">
+            <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 text-[11px] font-mono text-white flex items-center gap-1">
               <ImageIcon className="h-3 w-3" />
               {activeImageIndex + 1}/{images.length}
             </div>
@@ -70,14 +70,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
           {/* Private project badge over image */}
           {project.is_private && (
-            <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-amber-950/90 border border-amber-700/80 text-amber-300 text-[10px] font-mono font-bold flex items-center gap-1">
+            <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-amber-50 border border-amber-200 text-[#C4910A] text-[10px] font-mono font-bold flex items-center gap-1">
               <Lock className="h-3 w-3" /> Private Project Showcase
             </div>
           )}
         </div>
       ) : project.is_private ? (
         <div className="px-5 pt-4">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-950/80 border border-amber-700/80 text-amber-300 text-[10px] font-mono font-bold">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-50 border border-amber-200 text-[#C4910A] text-[10px] font-mono font-bold">
             <Lock className="h-3 w-3" /> Private Project Showcase
           </span>
         </div>
@@ -87,18 +87,18 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       <div className="p-5 flex-1 flex flex-col justify-between">
         <div>
           <div className="flex items-start justify-between gap-3 mb-2">
-            <h3 className="text-base font-bold font-sans text-white group-hover:text-amber-400 transition-colors">
+            <h3 className="text-base font-bold font-sans text-[var(--text-primary)] group-hover:text-[var(--brand-terracotta)] transition-colors">
               {project.title}
             </h3>
             {typeof project.stars === "number" && project.stars > 0 && (
-              <span className="inline-flex items-center gap-1 text-xs font-mono text-amber-400 bg-amber-950/40 border border-amber-800/40 px-2 py-0.5 rounded">
-                <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+              <span className="inline-flex items-center gap-1 text-xs font-mono text-[#C4910A] bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
+                <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                 {project.stars}
               </span>
             )}
           </div>
 
-          <p className="text-xs text-zinc-300 font-sans leading-relaxed line-clamp-3 mb-4">
+          <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans leading-relaxed line-clamp-3 mb-4">
             {project.description}
           </p>
 
@@ -108,7 +108,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono text-zinc-300"
+                  className="px-2 py-0.5 rounded-md bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[11px] font-mono text-[var(--text-secondary)]"
                 >
                   {tag}
                 </span>
@@ -118,13 +118,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         </div>
 
         {/* Action Links */}
-        <div className="flex items-center gap-3 pt-3 border-t border-white/[0.06] text-xs font-mono">
+        <div className="flex items-center gap-3 pt-3 border-t border-[var(--border-subtle)] text-xs font-mono">
           {project.demo_url && (
             <a
               href={project.demo_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 transition-colors font-semibold"
+              className="inline-flex items-center gap-1 text-[#0D9668] hover:text-[#0D9668]/80 transition-colors font-semibold"
             >
               <Sparkles className="h-3.5 w-3.5" />
               Live Demo
@@ -136,7 +136,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               href={project.repo_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-zinc-300 hover:text-white transition-colors ml-auto"
+              className="inline-flex items-center gap-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors ml-auto"
             >
               <Code2 className="h-3.5 w-3.5" />
               Code

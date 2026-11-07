@@ -136,17 +136,17 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       href={`/${fullName}`}
       onClick={handleClick}
       title={`View ${fullName} C-Rank scorecard, PR response time & merge metrics`}
-      className={`group card-specular-bevel relative flex h-full flex-col justify-between rounded-xl bg-[#141414]/70 backdrop-blur-md p-6 transition-all duration-200 block text-current no-underline cursor-pointer border border-white/[0.08] hover:border-white/[0.22] hover:bg-[#1a1a1a]/90 hover:shadow-[0_12px_36px_rgba(0,0,0,0.45),inset_0_1px_0_0_rgba(255,255,255,0.1)] hover:-translate-y-0.5 ${
+      className={`group relative flex h-full flex-col justify-between rounded-2xl bg-[var(--bg-surface)] p-6 sm:p-7 transition-all duration-200 block text-current no-underline cursor-pointer border border-[var(--border-subtle)] hover:border-[var(--border-hover)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.05)] hover:-translate-y-0.5 ${
         isSpotlight
-          ? "ring-1 ring-[#ff6b00]/50 border-[#ff6b00]/30 shadow-[0_0_24px_rgba(255,107,0,0.1)]"
-          : "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]"
+          ? "ring-2 ring-[var(--color-primary)]/20 border-[var(--color-primary)]/30 shadow-[0_4px_16px_rgba(212,89,15,0.06)]"
+          : "shadow-[0_1px_3px_rgba(0,0,0,0.03)]"
       }`}
     >
       <div className="flex flex-col flex-1">
         {/* Top Bar: Identity & Grade Badge */}
         <div className="flex items-start justify-between gap-4 mb-4">
           <div className="flex items-center gap-3.5 min-w-0 flex-1">
-            <div className="h-12 w-12 rounded-lg border border-white/[0.08] bg-[#1c1c1c] overflow-hidden shrink-0">
+            <div className="h-12 w-12 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] overflow-hidden shrink-0 shadow-2xs">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`https://github.com/${ownerPart || "github"}.png?size=48`}
@@ -164,11 +164,11 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
               />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="font-sans text-lg sm:text-xl font-bold text-white group-hover:text-[#ff6b00] transition-colors flex items-center gap-1.5 min-w-0 tracking-tight" title={fullName}>
+              <div className="font-sans text-lg sm:text-xl font-bold text-[var(--text-primary)] group-hover:text-[var(--color-primary)] transition-colors flex items-center gap-1.5 min-w-0 tracking-tight" title={fullName}>
                 <span className="truncate">{displayName}</span>
-                <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity text-[#ff6b00] shrink-0" />
+                <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity text-[var(--color-primary)] shrink-0" />
               </div>
-              <div className="text-xs font-mono text-[#737373] truncate mt-0.5">
+              <div className="text-xs font-mono text-[var(--text-tertiary)] truncate mt-0.5">
                 {fullName}
               </div>
             </div>
@@ -180,8 +180,8 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
                 title={repo.currently_active ? "Active in last 30 days" : "No PR activity in last 30 days"}
                 className={`h-2 w-2 rounded-full shrink-0 ${
                   repo.currently_active
-                    ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]"
-                    : "bg-zinc-600"
+                    ? "bg-[#0D9668]"
+                    : "bg-[var(--border-strong)]"
                 }`}
               />
             )}
@@ -189,7 +189,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
             {repo.low_sample && (
               <span
                 title="Low sample size (under 20 PRs in lookback window). Capped at Tier B."
-                className="px-2 py-0.5 rounded-md font-mono text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30"
+                className="px-2 py-0.5 rounded-md font-mono text-[10px] font-bold bg-[#C4910A]/10 text-[#C4910A] border border-[#C4910A]/20"
               >
                 Low Sample
               </span>
@@ -198,20 +198,20 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
         </div>
 
         {/* Sub-meta: Stars & Language */}
-        <div className="flex items-center gap-3 mb-4 font-mono text-xs">
-          <span className="flex items-center gap-1.5 font-bold text-white bg-[#1c1c1c] px-2.5 py-1 rounded-lg border border-white/[0.08]">
-            <Star className="h-3.5 w-3.5 fill-[#fbbf24] text-[#fbbf24]" />
+        <div className="flex items-center gap-2.5 mb-4 font-mono text-xs">
+          <span className="flex items-center gap-1.5 font-bold text-[var(--text-primary)] bg-[var(--bg-elevated)] px-2.5 py-1 rounded-lg border border-[var(--border-subtle)]">
+            <Star className="h-3.5 w-3.5 fill-[#C4910A] text-[#C4910A]" />
             {repo.stars >= 1_000 ? `${(repo.stars / 1_000).toFixed(1)}k` : repo.stars}
           </span>
-          <span className="text-[#525252]">·</span>
-          <span className="flex items-center gap-1.5 truncate text-white bg-[#1c1c1c] px-2.5 py-1 rounded-lg border border-white/[0.08]">
+          <span className="text-[var(--border-strong)]">·</span>
+          <span className="flex items-center gap-1.5 truncate text-[var(--text-primary)] bg-[var(--bg-elevated)] px-2.5 py-1 rounded-lg border border-[var(--border-subtle)]">
             <LangLogo language={repo.language} />
             <span className="truncate font-bold">{repo.language || "Code"}</span>
           </span>
         </div>
 
         {/* Description */}
-        <p className="text-sm text-[#a3a3a3] line-clamp-2 leading-relaxed font-sans mb-5 min-h-[2.75rem]">
+        <p className="text-sm text-[var(--text-secondary)] line-clamp-2 leading-relaxed font-sans mb-5 min-h-[2.75rem]">
           {repo.description || "No repository description available."}
         </p>
 
@@ -227,14 +227,14 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
               title={`Explore ${topic} repositories`}
               onClick={(e) => handleTopicChipClick(e, topic)}
               onKeyDown={(e) => handleTopicChipKeyDown(e, topic)}
-              className="inline-flex items-center px-3 py-1 rounded-lg bg-[#1c1c1c] text-[#d4d4d4] border border-white/[0.08] font-mono text-xs font-semibold hover:bg-[#262626] hover:text-white hover:border-white/[0.16] transition-colors cursor-pointer shrink-0 whitespace-nowrap"
+              className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-[var(--bg-elevated)] text-[var(--text-secondary)] border border-[var(--border-subtle)] font-mono text-xs font-medium hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] transition-colors cursor-pointer shrink-0 whitespace-nowrap"
             >
               #{topic}
             </span>
           ))}
           {topicOverflow > 0 && (
             <span
-              className="inline-flex items-center px-2 py-1 rounded-lg bg-[#141414] text-[#737373] border border-white/[0.04] font-mono text-xs font-medium shrink-0"
+              className="inline-flex items-center px-2 py-0.5 rounded-md bg-[var(--bg-elevated)] text-[var(--text-tertiary)] border border-[var(--border-subtle)] font-mono text-xs font-medium shrink-0"
               aria-hidden="true"
             >
               +{topicOverflow}
@@ -243,7 +243,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
         </div>
 
         {/* Telemetry Metrics */}
-        <div className="grid grid-cols-3 gap-2.5 sm:gap-3 p-2.5 rounded-lg bg-[#0a0a0a] border border-white/[0.04] mb-5">
+        <div className="grid grid-cols-3 gap-3 p-3.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] mb-5">
           <MetricGauge
             label="Merge Rate"
             value={mergeRateStr}
@@ -266,7 +266,7 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
       </div>
 
       {/* Card Footer */}
-      <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-[#a3a3a3]">
+      <div className="pt-4 border-t border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-[var(--text-secondary)]">
         <div className="flex items-center gap-2 min-w-0">
           {gfiCount > 0 ? (
             <span
@@ -281,18 +281,18 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
                 handleGfiClick();
               }}
               onKeyDown={handleGfiKeyDown}
-              className="inline-flex items-center gap-1.5 text-[#10b981] bg-[#10b981]/10 px-3 py-1 rounded-lg border border-[#10b981]/20 font-bold text-xs hover:bg-[#10b981]/20 transition-colors cursor-pointer shrink-0 whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 text-[#0D9668] bg-[#0D9668]/10 px-3 py-1 rounded-lg border border-[#0D9668]/20 font-bold text-xs hover:bg-[#0D9668]/20 transition-colors cursor-pointer shrink-0 whitespace-nowrap"
             >
               <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
               <span>{gfiCount} GFI</span>
             </span>
           ) : repo.is_trending ? (
-            <span className="inline-flex items-center gap-1.5 text-[#ff6b00] bg-[#ff6b00]/10 px-3 py-1 rounded-lg border border-[#ff6b00]/20 font-bold text-xs shrink-0 whitespace-nowrap">
+            <span className="inline-flex items-center gap-1.5 text-[var(--color-primary)] bg-[var(--color-primary)]/10 px-3 py-1 rounded-lg border border-[var(--color-primary)]/20 font-bold text-xs shrink-0 whitespace-nowrap">
               <Flame className="h-3.5 w-3.5 shrink-0" />
               <span>Trending</span>
             </span>
           ) : (
-            <span className="text-[#737373] text-xs font-medium">Tracked</span>
+            <span className="text-[var(--text-tertiary)] text-xs font-medium">Tracked</span>
           )}
         </div>
 
@@ -304,12 +304,12 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
             title={`Compare ${fullName} with other repos`}
             onClick={handleCompareClick}
             onKeyDown={handleCompareKeyDown}
-            className="inline-flex items-center gap-1.5 text-[#a3a3a3] hover:text-white px-2.5 py-1 rounded-lg hover:bg-[#1c1c1c] transition-colors cursor-pointer text-xs font-semibold"
+            className="inline-flex items-center gap-1.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2.5 py-1 rounded-lg hover:bg-[var(--bg-elevated)] transition-colors cursor-pointer text-xs font-semibold"
           >
             <Scale className="h-3.5 w-3.5" />
             <span>Compare</span>
           </button>
-          <span className="inline-flex items-center gap-1 text-[#ff6b00] font-bold hover:text-[#ff8a33] transition-colors text-xs">
+          <span className="inline-flex items-center gap-1 text-[var(--color-primary)] font-bold hover:underline transition-colors text-xs">
             <span>Scorecard</span>
             <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
           </span>

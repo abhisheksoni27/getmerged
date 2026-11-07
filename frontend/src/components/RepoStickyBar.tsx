@@ -59,23 +59,23 @@ export function RepoStickyBar({
   const getRankBadgeClasses = (r: string) => {
     switch (r?.toUpperCase()) {
       case "S":
-        return "bg-emerald-500/15 text-emerald-300 border-emerald-500/30";
+        return "bg-emerald-50 text-[#0D9668] border-emerald-200";
       case "A":
-        return "bg-sky-500/15 text-sky-300 border-sky-500/30";
+        return "bg-sky-50 text-[#2D8ABF] border-sky-200";
       case "B":
-        return "bg-purple-500/15 text-purple-300 border-purple-500/30";
+        return "bg-purple-50 text-[#8B6BB5] border-purple-200";
       case "C":
-        return "bg-amber-500/15 text-amber-300 border-amber-500/30";
+        return "bg-amber-50 text-[#C4910A] border-amber-200";
       case "D":
-        return "bg-rose-500/15 text-rose-300 border-rose-500/30";
+        return "bg-rose-50 text-[#C4463A] border-rose-200";
       default:
-        return "bg-zinc-800 text-zinc-300 border-zinc-700";
+        return "bg-[var(--bg-elevated)] text-[var(--text-secondary)] border-[var(--border-subtle)]";
     }
   };
 
   return (
     <div
-      className={`fixed top-16 left-0 right-0 z-40 w-full bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/[0.12] shadow-md transition-all duration-300 ${
+      className={`fixed top-16 left-0 right-0 z-40 w-full bg-[var(--bg-canvas)]/95 backdrop-blur-md border-b border-[var(--border-subtle)] shadow-sm transition-all duration-300 ${
         visible ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"
       }`}
     >
@@ -89,17 +89,17 @@ export function RepoStickyBar({
               alt={owner}
               width={26}
               height={26}
-              className="w-6.5 h-6.5 rounded-lg border border-white/[0.12] glass-card object-cover shrink-0"
+              className="w-6.5 h-6.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] object-cover shrink-0"
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=64";
               }}
             />
             <div className="flex items-center gap-2 min-w-0">
-              <span className="font-space font-bold text-xs sm:text-sm text-white truncate max-w-[200px] sm:max-w-[360px]">
+              <span className="font-space font-bold text-xs sm:text-sm text-[var(--text-primary)] truncate max-w-[200px] sm:max-w-[360px]">
                 {fullName}
               </span>
               <span
-                className={`inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[10px] font-bold rounded-md border ${getRankBadgeClasses(
+                className={`inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[11px] font-bold rounded-md border ${getRankBadgeClasses(
                   rank
                 )}`}
               >
@@ -108,7 +108,7 @@ export function RepoStickyBar({
                 <span className="font-sans font-semibold">{rankLabel}</span>
               </span>
               {typeof repo?.stars === "number" && (
-                <span className="inline-flex items-center gap-1 font-mono text-[10px] font-semibold text-zinc-300">
+                <span className="inline-flex items-center gap-1 font-mono text-[11px] font-semibold text-[var(--text-secondary)]">
                   <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                   {repo.stars >= 1000 ? `${(repo.stars / 1000).toFixed(1)}k` : repo.stars}
                 </span>
@@ -123,13 +123,13 @@ export function RepoStickyBar({
               onClick={onWatchToggle}
               disabled={watchLoading}
               title={isWatching ? "Watching repository" : "Watch repository"}
-              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all border border-white/[0.12] cursor-pointer ${
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all border border-[var(--border-subtle)] cursor-pointer ${
                 isWatching
-                  ? "bg-amber-500/15 border border-amber-500/30 text-amber-300 hover:bg-amber-200"
-                  : "glass-panel text-zinc-200 hover:glass-card"
+                  ? "bg-amber-50 border border-amber-200 text-[#C4910A] hover:bg-amber-100"
+                  : "bg-[var(--bg-elevated)] text-[var(--text-primary)] hover:bg-[var(--border-subtle)]"
               }`}
             >
-              <Bookmark className={`h-3 w-3 ${isWatching ? "fill-amber-500 text-amber-600" : "text-zinc-300"}`} />
+              <Bookmark className={`h-3 w-3 ${isWatching ? "fill-amber-500 text-amber-600" : "text-[var(--text-muted)]"}`} />
               <span className="hidden sm:inline">{isWatching ? "Watching" : "Watch"}</span>
             </button>
             <a
@@ -137,7 +137,7 @@ export function RepoStickyBar({
               target="_blank"
               rel="noopener noreferrer"
               title={`View ${fullName} on GitHub`}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-black text-white hover:bg-zinc-800 transition-colors border border-white/[0.1]"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-[var(--text-primary)] text-white hover:bg-[var(--text-primary)]/90 transition-colors border border-[var(--text-primary)]"
             >
               <GitPullRequest className="h-3 w-3" />
               <span>GitHub</span>
@@ -162,11 +162,11 @@ export function RepoStickyBar({
                 title={`Jump to ${tab.label}`}
                 className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono transition-all shrink-0 cursor-pointer ${
                   isActive
-                    ? "bg-orange-500/15 text-orange-400 font-bold border border-orange-500/30 shadow-sm"
-                    : "glass-panel text-zinc-300 hover:glass-card border border-white/[0.12] font-medium hover:text-white"
+                    ? "bg-orange-50 text-[var(--brand-terracotta)] font-bold border border-orange-200 shadow-xs"
+                    : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border-subtle)] border border-[var(--border-subtle)] font-medium"
                 }`}
               >
-                <Icon className={`h-3 w-3 ${isActive ? "text-orange-400 font-bold" : "text-zinc-300"}`} />
+                <Icon className={`h-3 w-3 ${isActive ? "text-[var(--brand-terracotta)] font-bold" : "text-[var(--text-muted)]"}`} />
                 <span>{tab.label}</span>
               </button>
             );

@@ -12,8 +12,8 @@ const POPULAR_LINKS = [
 
 export function PopularLinksSection() {
   return (
-    <section aria-label="Explore other popular comparisons" className="pt-6 border-t border-white/[0.08]">
-      <h3 className="text-xs font-mono uppercase tracking-wider text-zinc-400 font-bold mb-4">
+    <section aria-label="Explore other popular comparisons" className="pt-6 border-t border-[var(--border-subtle)]">
+      <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--text-muted)] font-bold mb-4">
         Compare More High-Profile Repositories
       </h3>
       <div className="flex flex-wrap gap-2 text-xs font-mono">
@@ -21,7 +21,7 @@ export function PopularLinksSection() {
           <Link prefetch={false}
             key={link.href}
             href={link.href}
-            className="px-3 py-1.5 rounded-xl glass-card text-zinc-300 hover:text-white hover:border-white/[0.2] transition-colors"
+            className="px-3.5 py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--brand-terracotta)] shadow-xs transition-colors"
           >
             {link.label}
           </Link>

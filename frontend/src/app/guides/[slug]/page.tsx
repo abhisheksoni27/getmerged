@@ -112,7 +112,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
   }
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-transparent text-white font-sans">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-canvas)] text-[var(--text-primary)] font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -121,18 +121,18 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
         {/* Navigation Breadcrumb */}
-        <div className="flex items-center gap-2 text-xs font-mono text-zinc-300 mb-6">
-          <Link prefetch={false} href="/" title="GetMerged Home" className="hover:text-white font-bold">Home</Link>
+        <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-tertiary)] mb-6">
+          <Link prefetch={false} href="/" title="GetMerged Home" className="hover:text-[var(--text-primary)] font-medium">Home</Link>
           <span>/</span>
-          <Link prefetch={false} href="/guides" title="GetMerged Guides Directory" className="hover:text-white font-bold">Guides</Link>
+          <Link prefetch={false} href="/guides" title="GetMerged Guides Directory" className="hover:text-[var(--text-primary)] font-medium">Guides</Link>
           <span>/</span>
-          <span className="text-zinc-200 font-bold truncate">{guide.title}</span>
+          <span className="text-[var(--text-primary)] font-semibold truncate">{guide.title}</span>
         </div>
 
         {/* Header Title Box */}
-        <div className="border border-white/[0.1] glass-panel p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-8">
-          <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-zinc-300 mb-4">
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-950/80 border border-amber-700 font-bold text-amber-300 rounded">
+        <div className="border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-10 rounded-2xl shadow-sm mb-8">
+          <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-[var(--text-tertiary)] mb-4">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#C4910A]/10 border border-[#C4910A]/30 font-bold text-[#C4910A] rounded-lg">
               {guide.section}
             </span>
             <span className="flex items-center gap-1">
@@ -141,22 +141,22 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
             <span className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" /> {guide.readingTime}
             </span>
-            <span className="flex items-center gap-1.5 text-zinc-200">
-              <span className="h-5 w-5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center font-bold text-[10px]">
+            <span className="flex items-center gap-1.5 text-[var(--text-secondary)]">
+              <span className="h-5 w-5 rounded-full bg-[#0D9668]/15 border border-[#0D9668]/30 text-[#0D9668] flex items-center justify-center font-bold text-[10px]">
                 AS
               </span>
               <span>{guide.author}</span>
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight font-sans text-white mb-4 leading-tight">
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight font-display text-[var(--text-primary)] mb-4 leading-tight">
             {guide.title}
           </h1>
-          <p className="text-zinc-300 text-sm sm:text-base leading-relaxed mb-6">
+          <p className="text-[var(--text-secondary)] text-base sm:text-lg leading-relaxed mb-6 font-sans">
             {guide.description}
           </p>
 
-          <div className="overflow-hidden rounded border border-white/[0.1] bg-slate-800 shadow-sm">
+          <div className="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] shadow-xs">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`/images/guides/${guide.slug}.jpg`}
@@ -169,65 +169,65 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
         </div>
 
         {/* Content Body */}
-        <article className="border border-white/[0.1] glass-panel p-6 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-10 text-zinc-200">
+        <article className="border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-10 rounded-2xl shadow-sm mb-10 text-[var(--text-primary)]">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             /* eslint-disable @typescript-eslint/no-unused-vars */
             components={{
               h1: ({ node, ...props }) => (
-                <h2 className="text-2xl sm:text-3xl font-bold font-sans text-white mt-8 mb-4 leading-tight border-b border-white/[0.1] pb-3" {...props} />
+                <h2 className="text-2xl sm:text-3xl font-bold font-display text-[var(--text-primary)] mt-8 mb-4 leading-tight border-b border-[var(--border-subtle)] pb-3" {...props} />
               ),
               h2: ({ node, ...props }) => (
-                <h2 className="text-xl sm:text-2xl font-bold font-sans text-white mt-10 mb-4 leading-snug border-b border-white/[0.1] pb-2 flex items-center gap-2" {...props} />
+                <h2 className="text-xl sm:text-2xl font-bold font-display text-[var(--text-primary)] mt-10 mb-4 leading-snug border-b border-[var(--border-subtle)] pb-2 flex items-center gap-2" {...props} />
               ),
               h3: ({ node, ...props }) => (
-                <h3 className="text-lg sm:text-xl font-bold font-sans text-white mt-6 mb-3" {...props} />
+                <h3 className="text-lg sm:text-xl font-bold font-display text-[var(--text-primary)] mt-6 mb-3" {...props} />
               ),
               p: ({ node, ...props }) => (
-                <p className="text-sm sm:text-base leading-relaxed text-zinc-300 my-4 font-sans" {...props} />
+                <p className="text-base leading-relaxed text-[var(--text-secondary)] my-4 font-sans" {...props} />
               ),
               ul: ({ node, ...props }) => (
-                <ul className="list-disc list-outside ml-6 my-4 space-y-2 text-sm sm:text-base text-zinc-300" {...props} />
+                <ul className="list-disc list-outside ml-6 my-4 space-y-2 text-base text-[var(--text-secondary)]" {...props} />
               ),
               ol: ({ node, ...props }) => (
-                <ol className="list-decimal list-outside ml-6 my-4 space-y-2 text-sm sm:text-base text-zinc-300" {...props} />
+                <ol className="list-decimal list-outside ml-6 my-4 space-y-2 text-base text-[var(--text-secondary)]" {...props} />
               ),
               li: ({ node, ...props }) => (
                 <li className="leading-relaxed" {...props} />
               ),
               blockquote: ({ node, ...props }) => (
-                <div className="border-l-4 border-l-orange-500 bg-slate-800/80 p-5 my-6 rounded-r text-zinc-200">
-                  <blockquote className="space-y-2 text-sm sm:text-base italic" {...props} />
+                <div className="border-l-4 border-l-[var(--color-primary)] bg-[var(--bg-elevated)] p-5 my-6 rounded-r text-[var(--text-secondary)]">
+                  <blockquote className="space-y-2 text-base italic font-serif" {...props} />
                 </div>
               ),
               table: ({ node, ...props }) => (
-                <div className="my-6 overflow-x-auto border border-white/[0.1] rounded">
-                  <table className="w-full text-left text-xs sm:text-sm font-sans divide-y divide-slate-800 glass-panel" {...props} />
+                <div className="my-6 overflow-x-auto border border-[var(--border-subtle)] rounded-xl">
+                  <table className="w-full text-left text-xs sm:text-sm font-sans divide-y divide-[var(--border-subtle)] bg-[var(--bg-surface)]" {...props} />
                 </div>
               ),
               thead: ({ node, ...props }) => (
-                <thead className="bg-slate-800 text-zinc-200 font-mono font-bold uppercase tracking-wider text-xs border-b border-white/[0.12]" {...props} />
+                <thead className="bg-[var(--bg-elevated)] text-[var(--text-secondary)] font-mono font-bold uppercase tracking-wider text-xs border-b border-[var(--border-subtle)]" {...props} />
               ),
               tbody: ({ node, ...props }) => (
-                <tbody className="divide-y divide-slate-800" {...props} />
+                <tbody className="divide-y divide-[var(--border-subtle)]" {...props} />
               ),
               tr: ({ node, ...props }) => (
-                <tr className="hover:bg-slate-800/60 transition-colors" {...props} />
+                <tr className="hover:bg-[var(--bg-elevated)]/60 transition-colors" {...props} />
               ),
               th: ({ node, ...props }) => (
-                <th className="py-3 px-4 font-bold border-r border-white/[0.1] last:border-r-0" {...props} />
+                <th className="py-3 px-4 font-bold border-r border-[var(--border-subtle)] last:border-r-0" {...props} />
               ),
               td: ({ node, ...props }) => (
-                <td className="py-3 px-4 text-zinc-300 border-r border-white/[0.1] last:border-r-0" {...props} />
+                <td className="py-3 px-4 text-[var(--text-secondary)] border-r border-[var(--border-subtle)] last:border-r-0" {...props} />
               ),
               code: ({ node, className, children, ...props }) => {
                 const isInline = !className;
                 return isInline ? (
-                  <code className="px-1.5 py-0.5 rounded bg-slate-800 border border-white/[0.12] font-mono text-xs font-bold text-orange-400" {...props}>
+                  <code className="px-2 py-0.5 rounded-md bg-[var(--bg-elevated)] border border-[var(--border-subtle)] font-mono text-xs font-semibold text-[var(--color-primary)]" {...props}>
                     {children}
                   </code>
                 ) : (
-                  <pre className="p-4 my-4 overflow-x-auto rounded border border-white/[0.1] glass-card text-emerald-400 font-mono text-xs shadow-sm">
+                  <pre className="p-4 my-4 overflow-x-auto rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-[var(--text-primary)] font-mono text-xs shadow-xs">
                     <code className={className} {...props}>
                       {children}
                     </code>
@@ -242,7 +242,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
                       href={href}
                       prefetch={false}
                       title={typeof children === "string" ? children : "Learn more on GetMerged"}
-                      className="font-semibold text-orange-400 underline underline-offset-4 hover:text-orange-300 transition-all"
+                      className="font-semibold text-[var(--color-primary)] underline underline-offset-4 hover:opacity-80 transition-all"
                       {...props}
                     >
                       {children}
@@ -255,7 +255,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
                     target="_blank"
                     rel="noopener noreferrer"
                     title={typeof children === "string" ? children : "Authoritative reference"}
-                    className="font-semibold text-orange-400 underline underline-offset-4 hover:text-orange-300 transition-all"
+                    className="font-semibold text-[var(--color-primary)] underline underline-offset-4 hover:opacity-80 transition-all"
                     {...props}
                   >
                     {children}

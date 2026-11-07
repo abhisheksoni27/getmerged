@@ -172,37 +172,37 @@ export function PitchModal({
             </span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#09090b] border border-violet-500/20 space-y-3 font-mono text-xs text-zinc-200 selection:bg-violet-500/30">
-            <div className="pb-2 border-b border-white/[0.06] text-zinc-300">
-              <span className="text-zinc-500">Subject: </span>
-              <strong className="text-white">{pitch.subject}</strong>
+          <div className="p-4 rounded-2xl bg-[var(--bg-canvas)] border border-[var(--border-subtle)] space-y-3 font-mono text-xs text-[var(--text-primary)]">
+            <div className="pb-2 border-b border-[var(--border-subtle)] text-[var(--text-secondary)]">
+              <span className="text-[var(--text-muted)]">Subject: </span>
+              <strong className="text-[var(--text-primary)]">{pitch.subject}</strong>
             </div>
-            <div className="whitespace-pre-wrap leading-relaxed font-sans text-sm text-zinc-200">
+            <div className="whitespace-pre-wrap leading-relaxed font-sans text-sm text-[var(--text-primary)]">
               {pitch.body}
             </div>
           </div>
         </div>
 
         {/* Modal Actions */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/[0.08]">
-          <div className="text-[11px] font-mono text-zinc-400">
-            Direct Candidate Email: <span className="blur-[4px] select-none text-zinc-300">masked@private.dev</span>
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-[var(--border-subtle)]">
+          <div className="text-xs font-mono text-[var(--text-muted)]">
+            Direct Candidate Email: <span className="blur-[4px] select-none text-[var(--text-secondary)]">masked@private.dev</span>
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
             <button
               type="button"
               onClick={onCopy}
-              className="px-5 py-2.5 rounded-xl glass-panel border border-white/[0.15] hover:bg-white/[0.08] text-white font-mono text-xs font-bold transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98]"
+              className="px-5 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] hover:bg-[var(--border-subtle)] text-[var(--text-primary)] font-mono text-xs font-bold transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98]"
             >
               {copied ? (
                 <>
-                  <Check className="h-4 w-4 text-emerald-400" />
-                  <span className="text-emerald-400">Copied Pitch!</span>
+                  <Check className="h-4 w-4 text-[#0D9668]" />
+                  <span className="text-[#0D9668]">Copied Pitch!</span>
                 </>
               ) : (
                 <>
-                  <Copy className="h-4 w-4 text-zinc-300" />
+                  <Copy className="h-4 w-4 text-[var(--text-secondary)]" />
                   <span>Copy Pitch</span>
                 </>
               )}
@@ -211,7 +211,7 @@ export function PitchModal({
             <button
               type="button"
               onClick={() => onSendEmail(candidate)}
-              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold transition-all flex items-center gap-2 shadow-lg shadow-blue-950/40 cursor-pointer active:scale-[0.98]"
+              className="px-5 py-2.5 rounded-xl bg-[var(--brand-terracotta)] hover:bg-[var(--brand-terracotta)]/90 text-white font-mono text-xs font-bold transition-all flex items-center gap-2 shadow-xs cursor-pointer active:scale-[0.98]"
             >
               <Send className="h-3.5 w-3.5" />
               <span>Send Direct Email ($49/mo)</span>

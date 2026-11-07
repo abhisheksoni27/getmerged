@@ -100,14 +100,14 @@ export function CompareShareBar({ repoA, repoB }: CompareShareBarProps) {
     <div
       role="region"
       aria-label="Repository comparison sharing and export tools"
-      className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl glass-panel border border-white/[0.1] shadow-xs mb-8"
+      className="flex flex-wrap items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm mb-8"
     >
-      <div className="flex items-center gap-2 text-xs font-mono text-zinc-300">
-        <span className="font-semibold text-white font-sans text-sm">
+      <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-secondary)]">
+        <span className="font-semibold text-[var(--text-primary)] font-sans text-sm">
           Export & Share
         </span>
-        <span className="hidden sm:inline text-zinc-300">•</span>
-        <span className="hidden sm:inline text-zinc-300">
+        <span className="hidden sm:inline text-[var(--text-muted)]">•</span>
+        <span className="hidden sm:inline text-[var(--text-muted)]">
           Share head-to-head metrics on GitHub or social media
         </span>
       </div>
@@ -120,18 +120,18 @@ export function CompareShareBar({ repoA, repoB }: CompareShareBarProps) {
           aria-live="polite"
           className={
             copied
-              ? "inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border border-emerald-300 transition-all duration-150 cursor-pointer shadow-2xs"
-              : "inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl glass-card text-white hover:bg-zinc-800 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2 cursor-pointer shadow-xs"
+              ? "inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-emerald-50 border border-emerald-300 text-[#0D9668] transition-all duration-150 cursor-pointer shadow-xs"
+              : "inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)] hover:bg-[var(--border-subtle)] active:scale-[0.98] transition-all duration-150 cursor-pointer shadow-xs"
           }
         >
           {copied ? (
             <>
-              <Check className="h-3.5 w-3.5 text-emerald-600" />
+              <Check className="h-3.5 w-3.5 text-[#0D9668]" />
               <span>Copied Markdown!</span>
             </>
           ) : (
             <>
-              <Copy className="h-3.5 w-3.5" />
+              <Copy className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
               <span>Copy Markdown Summary</span>
             </>
           )}
@@ -143,11 +143,11 @@ export function CompareShareBar({ repoA, repoB }: CompareShareBarProps) {
           onClick={handleShare}
           title="Share repository comparison on X or external platforms"
           aria-label="Share comparison on social media or external platforms"
-          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl glass-card text-zinc-200 hover:bg-zinc-200 border border-white/[0.1]/60 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 cursor-pointer shadow-2xs"
+          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[var(--brand-terracotta)] text-white hover:bg-[var(--brand-terracotta)]/90 active:scale-[0.98] transition-all duration-150 cursor-pointer shadow-xs"
         >
-          <Share2 className="h-3.5 w-3.5 text-zinc-300" />
+          <Share2 className="h-3.5 w-3.5 text-white" />
           <span>Share Comparison</span>
-          <ExternalLink className="h-3 w-3 text-zinc-300" />
+          <ExternalLink className="h-3 w-3 text-white/80" />
         </button>
       </div>
     </div>

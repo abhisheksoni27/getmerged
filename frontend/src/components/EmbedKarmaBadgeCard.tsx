@@ -38,32 +38,31 @@ export function EmbedKarmaBadgeCard({
 
   return (
     <div
-      className="rounded-2xl glass-panel border bg-gradient-to-br from-emerald-950/20 via-zinc-950/80 to-zinc-900/50 p-6 sm:p-7 space-y-6 shadow-xl relative overflow-hidden"
-      style={{ borderColor: `${badgeColor}40` }}
+      className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-7 space-y-6 shadow-sm relative overflow-hidden"
     >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-semibold">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-[#0D9668] text-xs font-mono font-semibold">
             <Sparkles className="h-3.5 w-3.5" />
             <span>GitHub Profile README Badge · Viral Proof of Work</span>
           </div>
-          <h3 className="text-lg font-bold font-space text-white">
+          <h3 className="text-lg font-bold font-space text-[var(--text-primary)]">
             Embed Your Live Karma Badge on GitHub
           </h3>
-          <p className="text-xs text-zinc-400 font-sans">
+          <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans">
             Showcase your open-source contributor reputation directly on your GitHub profile and resume.
           </p>
         </div>
 
-        <span className="glass-card px-3 py-1 rounded-xl text-xs font-mono text-emerald-400 shrink-0 self-start sm:self-auto flex items-center gap-1">
+        <span className="bg-[var(--bg-elevated)] border border-[var(--border-subtle)] px-3 py-1 rounded-xl text-xs font-mono text-[#0D9668] shrink-0 self-start sm:self-auto flex items-center gap-1">
           <Flame className="h-3.5 w-3.5" /> Live Auto-Sync
         </span>
       </div>
 
       {/* Live Badge Preview Box */}
-      <div className="p-5 rounded-xl bg-[#09090b] border border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="p-5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="space-y-1.5 text-center sm:text-left">
-          <div className="text-[11px] font-mono text-emerald-400 uppercase tracking-wider font-semibold">
+          <div className="text-xs font-mono text-[#0D9668] uppercase tracking-wider font-semibold">
             Live Badge Preview:
           </div>
           <div className="pt-1">
@@ -80,7 +79,7 @@ export function EmbedKarmaBadgeCard({
           href={profileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs font-mono text-emerald-400 hover:text-emerald-300 flex items-center gap-1.5 shrink-0"
+          className="text-xs font-mono text-[#0D9668] hover:underline flex items-center gap-1.5 shrink-0"
         >
           <span>View Live Profile</span>
           <ExternalLink className="h-3.5 w-3.5" />
@@ -89,15 +88,15 @@ export function EmbedKarmaBadgeCard({
 
       {/* Snippet Format Selector & Copy Bar */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="inline-flex items-center gap-1 p-1 bg-[#121214] rounded-xl border border-white/[0.08] font-mono text-xs">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="inline-flex items-center gap-1 p-1 bg-[var(--bg-elevated)] rounded-xl border border-[var(--border-subtle)] font-mono text-xs">
             <button
               type="button"
               onClick={() => setEmbedType("markdown")}
               className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
                 embedType === "markdown"
-                  ? "bg-emerald-600 text-white font-bold shadow-sm"
-                  : "text-zinc-400 hover:text-white"
+                  ? "bg-[var(--bg-surface)] text-[var(--text-primary)] font-bold shadow-xs border border-[var(--border-subtle)]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
               Markdown (README.md)
@@ -107,8 +106,8 @@ export function EmbedKarmaBadgeCard({
               onClick={() => setEmbedType("html")}
               className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
                 embedType === "html"
-                  ? "bg-emerald-600 text-white font-bold shadow-sm"
-                  : "text-zinc-400 hover:text-white"
+                  ? "bg-[var(--bg-surface)] text-[var(--text-primary)] font-bold shadow-xs border border-[var(--border-subtle)]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
               HTML
@@ -118,8 +117,8 @@ export function EmbedKarmaBadgeCard({
               onClick={() => setEmbedType("url")}
               className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
                 embedType === "url"
-                  ? "bg-emerald-600 text-white font-bold shadow-sm"
-                  : "text-zinc-400 hover:text-white"
+                  ? "bg-[var(--bg-surface)] text-[var(--text-primary)] font-bold shadow-xs border border-[var(--border-subtle)]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
               SVG URL
@@ -129,7 +128,7 @@ export function EmbedKarmaBadgeCard({
           <button
             type="button"
             onClick={handleCopy}
-            className="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold transition-all flex items-center gap-1.5 shadow-lg shadow-emerald-950/40 cursor-pointer active:scale-[0.98]"
+            className="px-4 py-1.5 rounded-xl bg-[#0D9668] hover:bg-[#0D9668]/90 text-white font-mono text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-[0.98]"
           >
             {copied ? (
               <>
@@ -147,7 +146,7 @@ export function EmbedKarmaBadgeCard({
 
         {/* Code Snippet Box */}
         <div className="relative">
-          <pre className="p-3.5 rounded-xl bg-[#0a0a0c] border border-white/[0.1] font-mono text-xs text-zinc-300 overflow-x-auto whitespace-pre-wrap selection:bg-emerald-500/30">
+          <pre className="p-3.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] font-mono text-xs text-[var(--text-primary)] overflow-x-auto whitespace-pre-wrap">
             <code>{currentSnippet}</code>
           </pre>
         </div>

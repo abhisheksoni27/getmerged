@@ -293,8 +293,8 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
                     tier: orb.tier,
                   });
                 }}
-                className={`relative flex items-center justify-center rounded-full bg-[#18181b]/80 dark:bg-[#18181b]/90 backdrop-blur-xl border border-white/[0.18] p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.45)] transition-all duration-300 transform group-hover:scale-115 group-hover:border-emerald-500/70 group-hover:shadow-[0_0_28px_rgba(16,185,129,0.4)] ${
-                  isHovered ? "z-50 ring-2 ring-emerald-400/80" : "z-10"
+                className={`relative flex items-center justify-center rounded-full bg-[var(--bg-surface)] backdrop-blur-md border border-[var(--border-subtle)] p-1.5 shadow-md transition-all duration-300 transform group-hover:scale-115 group-hover:border-[var(--brand-terracotta)] group-hover:shadow-lg ${
+                  isHovered ? "z-50 ring-2 ring-[var(--brand-terracotta)]/80" : "z-10"
                 }`}
                 style={{
                   width: orb.slot.size,

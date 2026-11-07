@@ -30,39 +30,39 @@ export function getBadgeStyle(rank?: string) {
   switch (rank) {
     case "S":
       return {
-        badgeClass: "bg-emerald-600 text-white border border-white/[0.12] font-bold shadow-sm",
+        badgeClass: "bg-emerald-50 text-[#0D9668] border border-emerald-200 font-bold shadow-xs",
         label: "Super Welcoming",
-        indicatorColor: "bg-emerald-600",
+        indicatorColor: "bg-[#0D9668]",
       };
     case "A":
       return {
-        badgeClass: "bg-blue-600 text-white border border-white/[0.12] font-bold shadow-sm",
+        badgeClass: "bg-sky-50 text-[#2D8ABF] border border-sky-200 font-bold shadow-xs",
         label: "Welcoming",
-        indicatorColor: "bg-blue-600",
+        indicatorColor: "bg-[#2D8ABF]",
       };
     case "B":
       return {
-        badgeClass: "bg-amber-600 text-white border border-white/[0.12] font-bold shadow-sm",
+        badgeClass: "bg-purple-50 text-[#8B6BB5] border border-purple-200 font-bold shadow-xs",
         label: "Moderate",
-        indicatorColor: "bg-amber-600",
+        indicatorColor: "bg-[#8B6BB5]",
       };
     case "C":
       return {
-        badgeClass: "bg-violet-600 text-white border border-white/[0.12] font-bold shadow-sm",
+        badgeClass: "bg-amber-50 text-[#C4910A] border border-amber-200 font-bold shadow-xs",
         label: "Slow Review",
-        indicatorColor: "bg-purple-600",
+        indicatorColor: "bg-[#C4910A]",
       };
     case "D":
       return {
-        badgeClass: "bg-rose-600 text-white border border-white/[0.12] font-bold shadow-sm",
+        badgeClass: "bg-rose-50 text-[#C4463A] border border-rose-200 font-bold shadow-xs",
         label: "Unmaintained",
-        indicatorColor: "bg-rose-600",
+        indicatorColor: "bg-[#C4463A]",
       };
     default:
       return {
-        badgeClass: "bg-black text-white border border-white/[0.12] font-bold shadow-sm",
+        badgeClass: "bg-[var(--bg-elevated)] text-[var(--text-primary)] border border-[var(--border-subtle)] font-bold shadow-xs",
         label: "Scored",
-        indicatorColor: "bg-zinc-600",
+        indicatorColor: "bg-[var(--text-muted)]",
       };
   }
 }

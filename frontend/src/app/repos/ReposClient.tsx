@@ -131,42 +131,42 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
   const filteredRepos = useMemo(() => repos, [repos]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-transparent dev-grid-pattern text-white overflow-x-hidden font-sans">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-canvas)] text-[var(--text-primary)] overflow-x-hidden font-sans">
       <Header />
 
       <main className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex-1">
         {/* Breadcrumb Navigation */}
-        <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-zinc-300">
-          <Link prefetch={false} href="/" title="Back to GetMerged Home" className="hover:text-white transition-colors">
+        <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-[var(--text-tertiary)]">
+          <Link prefetch={false} href="/" title="Back to GetMerged Home" className="hover:text-[var(--text-primary)] transition-colors">
             Home
           </Link>
           <span>/</span>
-          <span className="text-white font-semibold">Repository Directory</span>
+          <span className="text-[var(--text-primary)] font-semibold">Repository Directory</span>
         </nav>
 
         {/* Header Hero Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-white/[0.1] pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-[var(--border-subtle)] pb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-mono text-orange-400 font-bold mb-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-primary)]/10 border border-[var(--color-primary)]/20 text-xs font-mono text-[var(--color-primary)] font-bold mb-3">
               <Sparkles className="h-3.5 w-3.5" />
               <span>C-Rank™ Scored Repositories</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-black font-space text-white tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-5xl font-bold font-display text-[var(--text-primary)] tracking-tight leading-tight">
               Open-Source Repository Explorer
             </h1>
-            <p className="text-sm sm:text-base text-zinc-300 font-sans mt-3 max-w-2xl leading-relaxed">
+            <p className="text-base text-[var(--text-secondary)] font-sans mt-3 max-w-2xl leading-relaxed">
               Browse public GitHub repositories scored on merge velocity, maintainer responsiveness, and first-time PR welcome rates.
             </p>
           </div>
 
           {/* Quick Counter Badge */}
-          <div className="flex items-center gap-3.5 glass-panel rounded-2xl px-6 py-4 shadow-lg shrink-0 self-start md:self-auto">
-            <ShieldCheck className="h-6 w-6 text-emerald-400" />
+          <div className="flex items-center gap-3.5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl px-6 py-4 shadow-sm shrink-0 self-start md:self-auto">
+            <ShieldCheck className="h-6 w-6 text-[#0D9668]" />
             <div>
-              <span className="block text-[11px] font-mono text-zinc-300 uppercase tracking-wider font-semibold">
+              <span className="block text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider font-semibold">
                 Total Repositories
               </span>
-              <span className="text-2xl font-bold font-mono text-white">
+              <span className="text-2xl font-bold font-mono text-[var(--text-primary)]">
                 {totalCount.toLocaleString()}
               </span>
             </div>

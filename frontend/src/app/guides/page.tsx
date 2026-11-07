@@ -60,7 +60,7 @@ export default function GuidesHubPage() {
   };
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-transparent text-white font-sans">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-canvas)] text-[var(--text-primary)] font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -75,21 +75,21 @@ export default function GuidesHubPage() {
         <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 glass-panel border border-white/[0.12] text-xs text-zinc-200 hover:text-white hover:bg-slate-800 rounded transition-colors mb-6 font-semibold shadow-sm"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] rounded-xl transition-colors mb-6 font-semibold shadow-xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Banner */}
-        <div className="border border-white/[0.1] glass-panel p-8 sm:p-10 rounded-md border-t-2 border-t-slate-700 shadow-sm mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-950/80 border border-emerald-700 text-emerald-300 rounded font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+        <div className="border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-8 sm:p-10 rounded-2xl shadow-sm mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#0D9668]/10 border border-[#0D9668]/30 text-[#0D9668] rounded-xl font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 text-[#0D9668]" />
             Developer Guides &middot; Actionable Playbooks
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight font-sans text-white mb-4">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight font-display text-[var(--text-primary)] mb-4">
             Open Source Contribution Guides
           </h1>
-          <p className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-3xl">
+          <p className="text-[var(--text-secondary)] text-base leading-relaxed max-w-3xl">
             Stop guessing whether maintainers will review your work. Our practical guides help you find active repositories looking for help, write clean pull requests, and get your code merged into main.
           </p>
         </div>
@@ -101,19 +101,19 @@ export default function GuidesHubPage() {
               key={guide.slug}
               href={`/guides/${guide.slug}`}
               title={`Read guide: ${guide.title}`}
-              className="border border-white/[0.1] glass-panel p-6 rounded-md border-t-2 border-t-slate-700 shadow-sm hover:border-slate-500 hover:scale-[1.01] transition-all flex flex-col justify-between"
+              className="border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-7 rounded-2xl shadow-sm hover:border-[var(--border-hover)] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-950/80 border border-amber-700 text-amber-300 rounded font-mono text-xs font-semibold">
-                    <BookOpen className="w-3.5 h-3.5 text-amber-400" /> {guide.section}
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#C4910A]/10 border border-[#C4910A]/30 text-[#C4910A] rounded-lg font-mono text-xs font-semibold">
+                    <BookOpen className="w-3.5 h-3.5 text-[#C4910A]" /> {guide.section}
                   </span>
-                  <span className="flex items-center gap-1 font-mono text-xs text-zinc-300">
+                  <span className="flex items-center gap-1 font-mono text-xs text-[var(--text-tertiary)]">
                     <Clock className="w-3.5 h-3.5" /> {guide.readingTime}
                   </span>
                 </div>
 
-                <div className="mb-4 overflow-hidden rounded border border-white/[0.1] bg-slate-800 shadow-sm">
+                <div className="mb-4 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] shadow-xs">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`/images/guides/${guide.slug}.jpg`}
@@ -124,19 +124,19 @@ export default function GuidesHubPage() {
                   />
                 </div>
 
-                <h2 className="text-xl font-bold font-sans tracking-tight text-white mb-2.5 leading-snug">
+                <h2 className="text-xl font-bold font-display tracking-tight text-[var(--text-primary)] mb-2.5 leading-snug">
                   {guide.title}
                 </h2>
-                <p className="text-sm text-zinc-300 font-sans leading-relaxed mb-6 line-clamp-2">
+                <p className="text-sm text-[var(--text-secondary)] font-sans leading-relaxed mb-6 line-clamp-2">
                   {guide.description}
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-white/[0.1] flex items-center justify-between">
-                <span className="font-mono text-xs text-zinc-300">
+              <div className="pt-4 border-t border-[var(--border-subtle)] flex items-center justify-between">
+                <span className="font-mono text-xs text-[var(--text-tertiary)]">
                   By {guide.author} &middot; {guide.lastUpdated}
                 </span>
-                <span className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-orange-400 hover:text-orange-300">
+                <span className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-[var(--color-primary)]">
                   Read Guide <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
@@ -145,15 +145,15 @@ export default function GuidesHubPage() {
         </div>
 
         {/* C-Rank Extractable Definition Box */}
-        <div className="border border-white/[0.1] glass-panel text-white p-6 sm:p-8 rounded-md border-t-2 border-t-orange-500 shadow-sm">
-          <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs font-bold uppercase tracking-wider mb-2">
+        <div className="border border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-[var(--text-primary)] p-6 sm:p-8 rounded-2xl shadow-sm">
+          <div className="flex items-center gap-2 text-[#0D9668] font-mono text-xs font-bold uppercase tracking-wider mb-2">
             <ShieldCheck className="w-4 h-4" />
             Empirical C-Rank Benchmark Standard
           </div>
-          <h3 className="text-xl font-bold font-sans text-white mb-2">
+          <h3 className="text-xl font-bold font-display text-[var(--text-primary)] mb-2">
             How OpenDoor Benchmarks Repository Openness
           </h3>
-          <p className="text-zinc-300 text-sm leading-relaxed">
+          <p className="text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed">
             Every repository in these guides is continuously audited across PR turnaround latency, first-time contributor conversion rates, maintainer bus factor, and external PR merge velocity.
           </p>
         </div>

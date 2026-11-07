@@ -56,7 +56,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-[#0a0a0a]/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 w-full border-b border-[var(--border-subtle)] bg-[var(--bg-canvas)]/95 backdrop-blur-sm">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 sm:gap-4 px-4 sm:px-6 lg:px-8">
         {/* Brand Logo & Navigation */}
         <div className="flex items-center gap-3 md:gap-4 lg:gap-6 min-w-0">
@@ -79,39 +79,39 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                 xmlns="http://www.w3.org/2000/svg"
                 className="shrink-0"
               >
-                <rect width="32" height="32" rx="8" fill="#0a0f0d" stroke="rgba(16,185,129,0.3)" strokeWidth="1" />
-                <rect x="5" y="9" width="6" height="3" rx="0.5" fill="#10b981" />
+                <rect width="32" height="32" rx="8" fill="var(--text-primary)" stroke="var(--border-subtle)" strokeWidth="1" />
+                <rect x="5" y="9" width="6" height="3" rx="0.5" fill="#0D9668" />
                 <rect x="12" y="11" width="4" height="3" rx="0.5" fill="#34d399" />
-                <rect x="5" y="20" width="6" height="3" rx="0.5" fill="#ff3b30" />
-                <rect x="12" y="18" width="4" height="3" rx="0.5" fill="#ff9500" />
-                <rect x="17" y="13.5" width="7" height="5" rx="0.75" fill="#10b981" />
+                <rect x="5" y="20" width="6" height="3" rx="0.5" fill="#c4463a" />
+                <rect x="12" y="18" width="4" height="3" rx="0.5" fill="#d4590f" />
+                <rect x="17" y="13.5" width="7" height="5" rx="0.75" fill="#0D9668" />
                 <rect x="25" y="15" width="2" height="2" fill="#ffffff" />
-                <rect x="19" y="9.5" width="2" height="2" fill="#38bdf8" />
-                <rect x="19" y="20.5" width="2" height="2" fill="#f59e0b" />
+                <rect x="19" y="9.5" width="2" height="2" fill="#2D8ABF" />
+                <rect x="19" y="20.5" width="2" height="2" fill="#c4910a" />
               </svg>
             </motion.div>
-            <span className="font-space text-sm font-bold tracking-tight text-white group-hover:text-white transition-colors">
-              Get<span className="text-[#10b981]">Merged</span>
+            <span className="font-space text-sm font-bold tracking-tight text-[var(--text-primary)] transition-colors">
+              Get<span className="text-[#0D9668]">Merged</span>
             </span>
           </Link>
 
           {/* Desktop & Laptop Nav Links */}
-          <nav className="hidden md:flex items-center gap-2.5 lg:gap-3.5 xl:gap-4 text-xs font-sans font-medium text-[#a3a3a3] shrink-0">
-            <Link prefetch={false} href="/repos" title="Explore All Open Source Repositories" className="hover:text-white transition-colors">
+          <nav className="hidden md:flex items-center gap-3 lg:gap-4 xl:gap-5 text-sm font-sans font-medium text-[var(--text-secondary)] shrink-0">
+            <Link prefetch={false} href="/repos" title="Explore All Open Source Repositories" className="hover:text-[var(--text-primary)] transition-colors">
               Repositories
             </Link>
-            <Link prefetch={false} href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="hover:text-white transition-colors whitespace-nowrap">
+            <Link prefetch={false} href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="hover:text-[var(--text-primary)] transition-colors whitespace-nowrap">
               Good First Issues
             </Link>
-            <Link prefetch={false} href="/stack" title="Find Good First Issues in Your Tech Stack" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1 whitespace-nowrap">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <Link prefetch={false} href="/stack" title="Find Good First Issues in Your Tech Stack" className="text-[#0D9668] hover:text-[#0b7a54] font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0D9668] animate-pulse" />
               Stalk Stack
             </Link>
-            <Link prefetch={false} href="/maintainers" title="Claim Your Repository & PR Telemetry" className="hover:text-white font-medium transition-colors whitespace-nowrap">
+            <Link prefetch={false} href="/maintainers" title="Claim Your Repository & PR Telemetry" className="hover:text-[var(--text-primary)] font-medium transition-colors whitespace-nowrap">
               Maintainers
             </Link>
             {user && (
-              <Link prefetch={false} href="/dashboard" title="Contributor PR Tracker & Quests" className="hover:text-white font-bold text-white transition-colors whitespace-nowrap">
+              <Link prefetch={false} href="/dashboard" title="Contributor PR Tracker & Quests" className="hover:text-[var(--color-primary)] font-bold text-[var(--text-primary)] transition-colors whitespace-nowrap">
                 Dashboard
               </Link>
             )}
@@ -120,19 +120,19 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
 
         {/* Floating Search Button */}
         {isSearchVisible && (
-          <div className="flex-1 min-w-[120px] sm:min-w-[150px] md:min-w-[170px] max-w-[240px] mx-1 sm:mx-2 shrink-0 sm:shrink">
+          <div className="flex-1 min-w-[140px] sm:min-w-[170px] md:min-w-[200px] max-w-[260px] mx-1 sm:mx-2 shrink-0 sm:shrink">
             <button
               type="button"
               onClick={handleOpenSearch}
-              className="w-full relative flex items-center justify-between h-9 rounded-lg border border-white/[0.08] bg-[#141414] hover:border-white/[0.16] hover:bg-[#1c1c1c] px-2.5 sm:px-3 transition-all cursor-pointer group text-left"
+              className="w-full relative flex items-center justify-between h-9 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--border-hover)] hover:bg-[var(--bg-elevated)] px-3 transition-all cursor-pointer group text-left shadow-sm"
             >
               <div className="flex items-center gap-2 overflow-hidden flex-1 min-w-0 mr-2">
-                <Search className="h-3.5 w-3.5 text-[#a3a3a3] group-hover:text-[#d4d4d4] shrink-0 transition-colors" />
-                <span className="text-xs text-[#a3a3a3] group-hover:text-[#d4d4d4] truncate font-sans block">
+                <Search className="h-3.5 w-3.5 text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] shrink-0 transition-colors" />
+                <span className="text-xs text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] truncate font-sans block">
                   {displayQuery || placeholderText || "Search repositories..."}
                 </span>
               </div>
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-md border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] font-medium text-[#a3a3a3] shrink-0">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-md border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-1.5 py-0.5 font-mono text-[10px] font-medium text-[var(--text-secondary)] shrink-0">
                 <span>⌘</span>K
               </kbd>
             </button>
@@ -140,11 +140,11 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
         )}
 
         {/* Right Actions */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2.5 shrink-0">
           {authLoading ? (
-            <div className="h-8 w-16 sm:w-20 rounded-lg bg-[#1c1c1c] animate-pulse border border-white/[0.04]" />
+            <div className="h-8 w-16 sm:w-20 rounded-xl bg-[var(--bg-elevated)] animate-pulse border border-[var(--border-subtle)]" />
           ) : user ? (
-            <div className="flex items-center gap-1.5 bg-[#141414] border border-white/[0.08] rounded-lg p-1 shrink-0">
+            <div className="flex items-center gap-1.5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl p-1 shrink-0 shadow-sm">
               <Link prefetch={false}
                 href={user.slug ? `/u/${user.slug}` : `/dashboard`}
                 title={`Signed in as @${user.username} - View Profile`}
@@ -155,10 +155,10 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   <img
                     src={user.avatar_url}
                     alt={user.username}
-                    className="h-6 w-6 rounded-full shrink-0 ring-1 ring-white/[0.12]"
+                    className="h-6 w-6 rounded-full shrink-0 ring-1 ring-[var(--border-subtle)]"
                   />
                 ) : (
-                  <div className="h-6 w-6 rounded-full bg-orange-600 flex items-center justify-center font-bold text-white text-[11px] shrink-0">
+                  <div className="h-6 w-6 rounded-full bg-[var(--color-primary)] flex items-center justify-center font-bold text-white text-[11px] shrink-0">
                     {(user.username || "U").slice(0, 1).toUpperCase()}
                   </div>
                 )}
@@ -167,7 +167,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <Link prefetch={false}
                 href="/watchlist"
                 title="My Watchlist"
-                className="flex items-center justify-center h-6 w-6 text-[#a3a3a3] hover:text-white rounded-md transition-colors border-l border-white/[0.08] ml-0.5 pl-1.5 shrink-0"
+                className="flex items-center justify-center h-6 w-6 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] rounded-md transition-colors border-l border-[var(--border-subtle)] ml-0.5 pl-1.5 shrink-0"
               >
                 <Bookmark className="h-3.5 w-3.5" />
               </Link>
@@ -181,7 +181,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   setIsAuthModalOpen(true);
                 }}
                 title="Sign in to GetMerged"
-                className="inline-flex items-center gap-2 rounded-lg bg-[#1c1c1c] border border-white/[0.08] text-white hover:bg-[#262626] hover:border-white/[0.16] px-3.5 sm:px-4 py-1.5 text-xs font-semibold active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer shrink-0"
+                className="inline-flex items-center gap-2 rounded-xl bg-[var(--text-primary)] text-[var(--bg-canvas)] hover:bg-[var(--color-neutral-800)] px-4 py-2 text-xs font-semibold active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer shrink-0 shadow-sm"
               >
                 <span>Sign in</span>
               </button>
@@ -200,7 +200,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             type="button"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
             aria-label="Toggle navigation menu"
-            className="md:hidden flex items-center justify-center h-9 w-9 rounded-lg border border-white/[0.08] bg-[#141414] text-[#a3a3a3] hover:text-white hover:border-white/[0.16] hover:bg-[#1c1c1c] transition-colors"
+            className="md:hidden flex items-center justify-center h-9 w-9 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-hover)] hover:bg-[var(--bg-elevated)] transition-colors shadow-sm"
           >
             {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -215,49 +215,49 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="md:hidden border-t border-white/[0.08] bg-[#0d0d0e]/95 backdrop-blur-2xl px-4 py-4 space-y-3 overflow-hidden"
+            className="md:hidden border-t border-[var(--border-subtle)] bg-[var(--bg-canvas)] px-4 py-4 space-y-3 overflow-hidden shadow-lg"
           >
-            <nav className="flex flex-col space-y-2.5 text-sm font-medium text-[#a3a3a3]">
+            <nav className="flex flex-col space-y-2 text-sm font-medium text-[var(--text-secondary)]">
               <Link prefetch={false}
                 href="/repos"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
+                className="px-3 py-2 rounded-lg hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors"
               >
                 Repositories
               </Link>
               <Link prefetch={false}
                 href="/how-c-rank-works"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
+                className="px-3 py-2 rounded-lg hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors"
               >
                 How C-Rank Works
               </Link>
               <Link prefetch={false}
                 href="/rankings"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
+                className="px-3 py-2 rounded-lg hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors"
               >
                 Ecosystems
               </Link>
               <Link prefetch={false}
                 href="/good-first-issue"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
+                className="px-3 py-2 rounded-lg hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors"
               >
                 Good First Issues
               </Link>
               <Link prefetch={false}
                 href="/stack"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-emerald-400 font-semibold transition-colors flex items-center gap-2"
+                className="px-3 py-2 rounded-lg hover:bg-[var(--bg-elevated)] text-[#0D9668] font-semibold transition-colors flex items-center gap-2"
               >
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-[#0D9668] animate-pulse" />
                 Stalk Stack
               </Link>
               <Link prefetch={false}
                 href="/maintainers"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
+                className="px-3 py-2 rounded-lg hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors"
               >
                 For Maintainers ⚡
               </Link>
@@ -265,7 +265,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                 <Link prefetch={false}
                   href="/pricing"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-emerald-400 font-semibold transition-colors"
+                  className="px-3 py-2 rounded-lg hover:bg-[var(--bg-elevated)] text-[#0D9668] font-semibold transition-colors"
                 >
                   Pricing & Plans 💳
                 </Link>
@@ -273,16 +273,16 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <Link prefetch={false}
                 href="/dashboard"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-white font-bold transition-colors"
+                className="px-3 py-2 rounded-lg hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] font-bold transition-colors"
               >
                 Dashboard
               </Link>
               <Link prefetch={false}
                 href="/league"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2.5 py-1.5 rounded-lg hover:bg-white/[0.06] text-[#ff6b00] font-semibold transition-colors flex items-center gap-2"
+                className="px-3 py-2 rounded-lg hover:bg-[var(--bg-elevated)] text-[var(--color-primary)] font-semibold transition-colors flex items-center gap-2"
               >
-                <span className="w-2 h-2 rounded-full bg-[#ff6b00] animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-[var(--color-primary)] animate-pulse" />
                 Monthly League
               </Link>
             </nav>

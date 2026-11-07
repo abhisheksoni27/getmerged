@@ -90,25 +90,25 @@ export function NotificationBell({ user }: { user: User | null }) {
         title="Notifications"
         aria-label="Open notifications"
         onClick={() => setOpen((o) => !o)}
-        className="relative flex h-6 w-6 items-center justify-center rounded-md text-[#a3a3a3] hover:text-white transition-colors shrink-0"
+        className="relative flex h-6 w-6 items-center justify-center rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0"
       >
         <Bell className="h-3.5 w-3.5" />
         {unread > 0 && (
-          <span className="absolute -right-1 -top-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-bold text-white ring-2 ring-[#141414]">
+          <span className="absolute -right-1 -top-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-bold text-white ring-2 ring-[var(--bg-canvas)]">
             {formatBadge(unread)}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-2 w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border border-white/[0.12] bg-[#141414] shadow-2xl backdrop-blur-2xl">
-          <div className="flex items-center justify-between border-b border-white/[0.1] px-4 py-3">
+        <div className="absolute right-0 z-50 mt-2 w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-2xl">
+          <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-4 py-3">
             <div className="flex items-center gap-2">
-              <span className="font-sans text-sm font-semibold text-white">
+              <span className="font-sans text-sm font-semibold text-[var(--text-primary)]">
                 Notifications
               </span>
               {live && (
-                <span className="flex items-center gap-1 rounded-full bg-emerald-950/70 border-emerald-800/80 px-2 py-0.5 text-[10px] font-medium text-emerald-600">
+                <span className="flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-medium text-[#0D9668]">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> live
                 </span>
               )}
@@ -118,7 +118,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 type="button"
                 title="Notification settings"
                 onClick={() => setShowPrefs((s) => !s)}
-                className="rounded-lg p-1.5 text-zinc-300 hover:glass-card hover:text-zinc-200"
+                className="rounded-lg p-1.5 text-[var(--text-muted)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]"
               >
                 <Settings2 className="h-4 w-4" />
               </button>
@@ -126,7 +126,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 type="button"
                 title="Mark all read"
                 onClick={() => void markRead([], true)}
-                className="rounded-lg p-1.5 text-zinc-300 hover:glass-card hover:text-zinc-200"
+                className="rounded-lg p-1.5 text-[var(--text-muted)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]"
               >
                 <Check className="h-4 w-4" />
               </button>
@@ -134,7 +134,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                 type="button"
                 title="Close"
                 onClick={() => setOpen(false)}
-                className="rounded-lg p-1.5 text-zinc-300 hover:glass-card hover:text-zinc-200"
+                className="rounded-lg p-1.5 text-[var(--text-muted)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -142,8 +142,8 @@ export function NotificationBell({ user }: { user: User | null }) {
           </div>
 
           {showPrefs && (
-            <div className="border-b border-white/[0.1] glass-card/60 px-4 py-3">
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-zinc-300">
+            <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-4 py-3">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-[var(--text-muted)]">
                 In-app notifications
               </p>
               <div className="space-y-1.5">
@@ -152,12 +152,12 @@ export function NotificationBell({ user }: { user: User | null }) {
                   return (
                     <label
                       key={cat}
-                      className="flex cursor-pointer items-center justify-between gap-3 text-xs text-zinc-300"
+                      className="flex cursor-pointer items-center justify-between gap-3 text-xs text-[var(--text-secondary)]"
                     >
                       <span>{CATEGORY_LABELS[cat].label}</span>
                       <input
                         type="checkbox"
-                        className="h-4 w-4 accent-zinc-900"
+                        className="h-4 w-4 accent-[var(--brand-terracotta)]"
                         checked={on}
                         disabled={prefsBusy}
                         onChange={() => togglePref(cat)}
@@ -166,13 +166,13 @@ export function NotificationBell({ user }: { user: User | null }) {
                   );
                 })}
               </div>
-              <p className="mt-2 text-[10px] text-zinc-300">
+              <p className="mt-2 text-[10px] text-[var(--text-muted)]">
                 In-app alerts are independent of email, Slack &amp; Discord.
               </p>
               <Link prefetch={false}
                 href="/settings/notifications"
                 onClick={() => setOpen(false)}
-                className="mt-1 inline-block text-[10px] font-medium text-zinc-300 underline hover:text-zinc-200"
+                className="mt-1 inline-block text-[10px] font-medium text-[var(--brand-terracotta)] underline hover:text-[var(--text-primary)]"
               >
                 Manage all notification settings
               </Link>
@@ -183,7 +183,7 @@ export function NotificationBell({ user }: { user: User | null }) {
             <Link prefetch={false}
               href="/pricing"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-2 bg-amber-950/70 border-amber-800/80 px-4 py-2 text-[11px] font-medium text-amber-700 hover:bg-amber-950/80 border-amber-800/80"
+              className="flex items-center gap-2 bg-amber-50 border-y border-amber-200 px-4 py-2 text-[11px] font-medium text-[#C4910A] hover:bg-amber-100"
             >
               <Zap className="h-3.5 w-3.5" />
               Upgrade for instant notifications
@@ -193,28 +193,28 @@ export function NotificationBell({ user }: { user: User | null }) {
           <div className="max-h-[420px] overflow-y-auto">
             {error ? (
               <div className="flex flex-col items-center gap-2 px-4 py-10 text-center">
-                <p className="text-sm text-zinc-300">Couldn&apos;t load notifications.</p>
+                <p className="text-sm text-[var(--text-secondary)]">Couldn&apos;t load notifications.</p>
                 <button
                   type="button"
                   onClick={() => void refresh()}
-                  className="rounded-lg glass-card px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-800"
+                  className="rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] px-3 py-1.5 text-xs font-medium text-[var(--text-primary)] hover:bg-[var(--border-subtle)]"
                 >
                   Retry
                 </button>
               </div>
             ) : items.length === 0 ? (
               <div className="px-4 py-10 text-center">
-                <p className="text-sm text-zinc-300">No notifications yet</p>
+                <p className="text-sm text-[var(--text-muted)]">No notifications yet</p>
               </div>
             ) : (
-              <ul className="divide-y divide-zinc-100">
+              <ul className="divide-y divide-[var(--border-subtle)]">
                 {items.map((n) => (
                   <li key={n.id}>
                     {n.payload.link_url ? (
                       <Link prefetch={false}
                         href={n.payload.link_url}
                         onClick={() => onItemClick(n.id, n.payload.link_url || "")}
-                        className="block px-4 py-3 transition-colors hover:glass-card"
+                        className="block px-4 py-3 transition-colors hover:bg-[var(--bg-elevated)]"
                       >
                         <NotificationRow n={n} />
                       </Link>
@@ -222,7 +222,7 @@ export function NotificationBell({ user }: { user: User | null }) {
                       <button
                         type="button"
                         onClick={() => onItemClick(n.id, "")}
-                        className="block w-full px-4 py-3 text-left transition-colors hover:glass-card"
+                        className="block w-full px-4 py-3 text-left transition-colors hover:bg-[var(--bg-elevated)]"
                       >
                         <NotificationRow n={n} />
                       </button>
@@ -234,12 +234,12 @@ export function NotificationBell({ user }: { user: User | null }) {
           </div>
 
           {hasMore && !error && (
-            <div className="border-t border-white/[0.1] px-4 py-2 text-center">
+            <div className="border-t border-[var(--border-subtle)] px-4 py-2 text-center">
               <button
                 type="button"
                 onClick={() => void loadMore()}
                 disabled={loading}
-                className="text-xs font-medium text-zinc-300 hover:text-white"
+                className="text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               >
                 {loading ? "Loading…" : "Load more"}
               </button>
@@ -255,12 +255,12 @@ function NotificationRow({ n }: { n: { payload: { title: string; message: string
   return (
     <div className="flex gap-3">
       <span
-        className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${n.read ? "bg-transparent" : "bg-rose-400"}`}
+        className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${n.read ? "bg-transparent" : "bg-[#C4463A]"}`}
       />
       <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-white">{n.payload.title}</p>
-        <p className="line-clamp-2 text-xs text-zinc-300">{n.payload.message}</p>
-        <p className="mt-0.5 text-[10px] text-zinc-300">{timeAgo(n.created_at)}</p>
+        <p className="truncate text-sm font-medium text-[var(--text-primary)]">{n.payload.title}</p>
+        <p className="line-clamp-2 text-xs text-[var(--text-secondary)]">{n.payload.message}</p>
+        <p className="mt-0.5 text-[10px] text-[var(--text-muted)]">{timeAgo(n.created_at)}</p>
       </div>
     </div>
   );

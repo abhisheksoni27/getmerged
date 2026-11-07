@@ -30,10 +30,10 @@ export function TierDeltaIndicatorChip({ repo, history }: TierDeltaProps) {
     return (
       <span
         data-testid={`tier-delta-chip-${repoSlug}`}
-        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border border-emerald-200/90 font-mono text-xs font-semibold"
+        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-[#0D9668] border border-emerald-200 font-mono text-xs font-semibold"
         title={`Tier improved from ${prevTier} to ${currentTier}`}
       >
-        <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
+        <TrendingUp className="h-3.5 w-3.5 text-[#0D9668]" />
         <span>Tier {prevTier} → {currentTier} (Improved)</span>
         <span className="sr-only">Tier improved from {prevTier} to {currentTier}</span>
       </span>
@@ -45,10 +45,10 @@ export function TierDeltaIndicatorChip({ repo, history }: TierDeltaProps) {
     return (
       <span
         data-testid={`tier-delta-chip-${repoSlug}`}
-        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-50 text-red-800 border border-red-200/90 font-mono text-xs font-semibold"
+        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-50 text-[#C4463A] border border-rose-200 font-mono text-xs font-semibold"
         title={`Tier shifted down from ${prevTier} to ${currentTier}`}
       >
-        <TrendingDown className="h-3.5 w-3.5 text-red-700" />
+        <TrendingDown className="h-3.5 w-3.5 text-[#C4463A]" />
         <span>Tier {prevTier} → {currentTier} (Shifted)</span>
         <span className="sr-only">Tier shifted from {prevTier} to {currentTier}</span>
       </span>
@@ -59,10 +59,10 @@ export function TierDeltaIndicatorChip({ repo, history }: TierDeltaProps) {
   return (
     <span
       data-testid={`tier-delta-chip-${repoSlug}`}
-      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full glass-card text-zinc-300 border border-white/[0.1] font-mono text-xs font-medium"
+      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[var(--bg-elevated)] text-[var(--text-secondary)] border border-[var(--border-subtle)] font-mono text-xs font-medium"
       title={`Tier ${currentTier} stable (no recent changes)`}
     >
-      <Minus className="h-3 w-3 text-zinc-300" />
+      <Minus className="h-3 w-3 text-[var(--text-muted)]" />
       <span>Tier {currentTier} · Stable</span>
       <span className="sr-only">Tier unchanged ({currentTier})</span>
     </span>

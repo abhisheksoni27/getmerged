@@ -67,33 +67,33 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="relative w-full max-w-3xl max-h-[90vh] flex flex-col rounded-2xl border border-white/[0.12] bg-[#121212] text-white shadow-2xl overflow-hidden font-sans">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="relative w-full max-w-3xl max-h-[90vh] flex flex-col rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-2xl overflow-hidden font-sans">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.08] bg-[#161616]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-amber-400" />
+            <Sparkles className="h-5 w-5 text-[var(--brand-terracotta)]" />
             <h2 className="text-lg font-bold font-sans">Customize Developer Profile</h2>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close modal"
-            className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="p-1 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--border-subtle)] transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-white/[0.08] px-6 bg-[#141414] text-xs font-mono">
+        <div className="flex border-b border-[var(--border-subtle)] px-6 bg-[var(--bg-surface)] text-xs font-mono">
           <button
             type="button"
             onClick={() => dispatch({ type: "setTab", tab: "about" })}
             className={`py-3 px-4 border-b-2 font-semibold transition-colors ${
               state.activeTab === "about"
-                ? "border-amber-400 text-amber-300"
-                : "border-transparent text-zinc-400 hover:text-zinc-200"
+                ? "border-[var(--brand-terracotta)] text-[var(--brand-terracotta)] font-bold"
+                : "border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
             }`}
           >
             Bio & Headline
@@ -103,8 +103,8 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
             onClick={() => dispatch({ type: "setTab", tab: "showcase" })}
             className={`py-3 px-4 border-b-2 font-semibold transition-colors flex items-center gap-1.5 ${
               state.activeTab === "showcase"
-                ? "border-amber-400 text-amber-300"
-                : "border-transparent text-zinc-400 hover:text-zinc-200"
+                ? "border-[var(--brand-terracotta)] text-[var(--brand-terracotta)] font-bold"
+                : "border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
             }`}
           >
             Showcase Projects ({state.showcaseProjects.length})
@@ -114,8 +114,8 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
             onClick={() => dispatch({ type: "setTab", tab: "repos" })}
             className={`py-3 px-4 border-b-2 font-semibold transition-colors flex items-center gap-1.5 ${
               state.activeTab === "repos"
-                ? "border-amber-400 text-amber-300"
-                : "border-transparent text-zinc-400 hover:text-zinc-200"
+                ? "border-[var(--brand-terracotta)] text-[var(--brand-terracotta)] font-bold"
+                : "border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
             }`}
           >
             Pinned Repos ({state.pinnedRepos.length})
@@ -162,12 +162,12 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-white/[0.08] bg-[#161616]">
+        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
           <button
             type="button"
             onClick={onClose}
             disabled={state.isSaving}
-            className="px-4 py-2 rounded-lg text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="px-4 py-2 rounded-lg text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
           >
             Cancel
           </button>
@@ -175,7 +175,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
             type="button"
             onClick={handleSave}
             disabled={state.isSaving}
-            className="px-5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold font-mono inline-flex items-center gap-2 transition-colors cursor-pointer shadow-md disabled:opacity-50"
+            className="px-5 py-2 rounded-lg bg-[var(--brand-terracotta)] hover:bg-[var(--brand-terracotta)]/90 text-white text-xs font-bold font-mono inline-flex items-center gap-2 transition-colors cursor-pointer shadow-xs disabled:opacity-50"
           >
             {state.isSaving ? (
               <>

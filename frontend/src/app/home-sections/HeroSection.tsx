@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { Search } from "lucide-react";
 import { motion } from "framer-motion";
 import posthog from "posthog-js";
-import { FloatingRepoCircles } from "@/components/FloatingRepoCircles";
 import { TopMatches } from "@/components/TopMatches";
 import { useSearch } from "@/context/SearchContext";
 import { EASE_OUT_EXPO } from "@/lib/motion";
@@ -27,12 +26,11 @@ interface HeroSectionProps {
 const QUICK_TERMS = ["nextjs", "react", "rust", "bun", "fastapi"];
 
 function TelemetrySkeleton() {
-  return <div className="h-6 w-12 bg-[#1c1c1c] rounded animate-pulse mx-auto" />;
+  return <div className="h-7 w-16 bg-[var(--bg-elevated)] rounded-lg animate-pulse mx-auto" />;
 }
 
 export function HeroSection({
   stats,
-  repos,
   searchQuery,
   isLoggedIn,
   famousRepos,
@@ -61,94 +59,87 @@ export function HeroSection({
   }, [setHeroSearchVisible]);
 
   return (
-    <section className="relative mx-auto max-w-6xl px-4 pt-20 pb-12 text-center sm:px-6 lg:px-8 overflow-visible">
-      {/* Ambient atmospheric glows */}
-      <div aria-hidden="true" className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 -z-10 h-[380px] w-[600px] max-w-full opacity-60 blur-3xl overflow-hidden">
-        <div className="h-full w-full rounded-full bg-gradient-to-tr from-emerald-500/10 via-amber-500/5 to-orange-500/15" />
-      </div>
-
-      {/* Dynamic floating circles of top S-tier repos */}
-      <FloatingRepoCircles repos={repos} />
-
+    <section className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center overflow-visible">
       {/* Live radar badge */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-        className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-mono font-medium text-emerald-400 backdrop-blur-md mb-6 shadow-[0_0_20px_rgba(16,185,129,0.15)]"
+        className="inline-flex items-center gap-2 rounded-full border border-[#0D9668]/20 bg-[#0D9668]/10 px-4 py-1.5 text-xs font-mono font-semibold text-[#0D9668] mb-8"
       >
         <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0D9668] opacity-75" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-[#0D9668]" />
         </span>
         <span>
-          RADAR: {stats?.total_repos ? `${stats.total_repos.toLocaleString()}+` : "1,000+"} REPOSITORIES MONITORED IN REAL-TIME
+          RADAR: {stats?.total_repos ? `${stats.total_repos.toLocaleString()}+` : "100,000+"} REPOSITORIES INDEXED
         </span>
       </motion.div>
 
-      <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl font-sans leading-[1.1]">
-        Find repos that <span className="text-shimmer font-extrabold">actually merge</span> your PRs.
+      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--text-primary)] font-display leading-[1.12] text-balance">
+        Find repos that <span className="text-[var(--color-primary)] font-extrabold">actually merge</span> your PRs.
       </h1>
+
       <motion.p
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: EASE_OUT_EXPO, delay: 0.1 }}
-        className="mx-auto mt-5 max-w-xl text-base text-[#a3a3a3] sm:text-lg leading-relaxed font-sans"
+        className="mx-auto mt-6 max-w-2xl text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed font-sans font-normal text-balance"
       >
-        GetMerged tracks real reviewer response times, merge rates, and beginner-friendly maintainers - so you never waste hours on ignored pull requests.
+        Real reviewer response times, merge rates, and beginner-friendly maintainers across 102,000+ open-source projects.
       </motion.p>
 
-      {/* Hero Search Bar */}
+      {/* Hero Search Bar - Prominent Silicon Valley Card */}
       <motion.div
         id="hero-search-container"
         ref={heroSearchRef}
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: EASE_OUT_EXPO, delay: 0.2 }}
-        className="mt-8 max-w-2xl mx-auto"
+        className="mt-10 max-w-2xl mx-auto"
       >
         <div
           onClick={() => openSearch(searchQuery)}
-          className="relative flex items-center rounded-xl border border-white/[0.12] bg-[#141414]/70 backdrop-blur-xl px-4 py-3.5 hover:border-white/[0.22] hover:bg-[#1a1a1a]/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_8px_30px_rgba(0,0,0,0.4)] transition-all cursor-pointer group"
+          className="relative flex items-center rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-5 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:border-[var(--border-hover)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all cursor-pointer group"
         >
-          <Search className="h-5 w-5 text-[#a3a3a3] group-hover:text-[#d4d4d4] shrink-0 transition-colors" />
+          <Search className="h-5 w-5 text-[var(--text-tertiary)] group-hover:text-[var(--color-primary)] shrink-0 transition-colors mr-3" />
           <input
             ref={searchInputRef}
             type="text"
             readOnly
-            placeholder={`Search repositories, e.g. ${famousRepos[placeholderIndex]}`}
+            placeholder={`Search repositories, e.g. ${famousRepos[placeholderIndex] || "react, rust, fastify..."}`}
             value={searchQuery}
-            className="w-full pl-3 pr-20 text-sm text-white placeholder-[#737373] focus:outline-none font-sans bg-transparent cursor-pointer"
+            className="w-full text-base sm:text-lg text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none font-sans bg-transparent cursor-pointer"
           />
-          <div className="absolute right-3 flex items-center gap-1.5 pointer-events-none">
+          <div className="flex items-center gap-2 pointer-events-none shrink-0 ml-2">
             {searchQuery ? (
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onClearSearch();
                 }}
-                className="pointer-events-auto text-xs font-mono text-[#a3a3a3] hover:text-[#d4d4d4] mr-1"
+                className="pointer-events-auto text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] mr-1 cursor-pointer"
               >
                 Clear
               </button>
             ) : null}
-            <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 font-mono text-[11px] font-semibold text-[#a3a3a3]">
+            <kbd className="hidden sm:inline-flex items-center gap-1 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-2.5 py-1 font-mono text-xs font-medium text-[var(--text-secondary)]">
               <span>⌘</span>K
             </kbd>
           </div>
         </div>
 
         {/* Quick-explore chips */}
-        <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5 text-xs">
-          <span className="font-mono text-[#737373]">Quick explore:</span>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs">
+          <span className="font-mono text-[var(--text-tertiary)] font-medium">Quick explore:</span>
           {QUICK_TERMS.map((term, i) => (
             <motion.button
               key={term}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: EASE_OUT_EXPO, delay: 0.3 + i * 0.05 }}
-              whileHover={{ y: -1.5, scale: 1.02 }}
-              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.3, ease: EASE_OUT_EXPO, delay: 0.25 + i * 0.04 }}
+              whileHover={{ y: -1, scale: 1.02 }}
+              whileTap={{ scale: 0.96 }}
               onClick={() => {
                 onQuickSearch(term);
                 posthog.capture("repo_searched", { query: term, source: "hero_chip" });
@@ -157,7 +148,7 @@ export function HeroSection({
                   gridEl.scrollIntoView({ behavior: "smooth" });
                 }
               }}
-              className="rounded-lg border border-white/[0.08] bg-[#141414]/60 backdrop-blur-md px-2.5 py-1 font-mono text-[#a3a3a3] hover:border-white/[0.18] hover:text-white hover:bg-[#1f1f1f]/80 cursor-pointer transition-all shadow-xs"
+              className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3.5 py-1 text-xs font-mono font-medium text-[var(--text-secondary)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] cursor-pointer transition-all shadow-2xs"
             >
               {term}
             </motion.button>
@@ -167,39 +158,47 @@ export function HeroSection({
 
       {/* Personalized matches from GitHub-imported skills (hidden when signed out or empty) */}
       {isLoggedIn && (
-        <div className="mt-10">
+        <div className="mt-12">
           <TopMatches />
         </div>
       )}
 
-      {/* Macro Telemetry Grid */}
+      {/* Macro Telemetry Grid - Expansive White Surface */}
       <motion.div
-        className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-3xl mx-auto rounded-2xl bg-[#141414]/70 backdrop-blur-xl p-4 sm:p-5 border border-white/[0.1] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_12px_32px_-8px_rgba(0,0,0,0.5)] items-center text-center"
+        className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4 max-w-4xl mx-auto rounded-3xl bg-[var(--bg-surface)] p-6 sm:p-8 border border-[var(--border-subtle)] shadow-[0_2px_12px_rgba(0,0,0,0.03)] items-center text-center"
         transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
       >
-        <div>
-          <div className="text-xl sm:text-2xl font-bold font-mono text-white">
+        <div className="p-2">
+          <div className="text-2xl sm:text-3xl font-bold font-mono text-[var(--text-primary)] tracking-tight">
             {stats?.avg_response_hours ? "82%" : <TelemetrySkeleton />}
           </div>
-          <div className="text-[11px] sm:text-xs text-[#a3a3a3] font-mono">Avg Merge Rate</div>
+          <div className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider mt-1 font-semibold">
+            Avg Merge Rate
+          </div>
         </div>
-        <div>
-          <div className="text-xl sm:text-2xl font-bold font-mono text-white">
+        <div className="p-2">
+          <div className="text-2xl sm:text-3xl font-bold font-mono text-[var(--text-primary)] tracking-tight">
             {stats?.avg_response_hours ? formatReviewTime(stats.avg_response_hours) : <TelemetrySkeleton />}
           </div>
-          <div className="text-[11px] sm:text-xs text-[#a3a3a3] font-mono">Avg First Review</div>
+          <div className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider mt-1 font-semibold">
+            Avg First Review
+          </div>
         </div>
-        <div>
-          <div className="text-xl sm:text-2xl font-bold font-mono text-white">
+        <div className="p-2">
+          <div className="text-2xl sm:text-3xl font-bold font-mono text-[var(--text-primary)] tracking-tight">
             {stats?.s_class_count !== undefined ? <CountUp value={stats.s_class_count} /> : <TelemetrySkeleton />}
           </div>
-          <div className="text-[11px] sm:text-xs text-[#a3a3a3] font-mono">Welcoming Repos</div>
+          <div className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider mt-1 font-semibold">
+            Welcoming Repos
+          </div>
         </div>
-        <div>
-          <div className="text-xl sm:text-2xl font-bold font-mono text-white">
+        <div className="p-2">
+          <div className="text-2xl sm:text-3xl font-bold font-mono text-[var(--text-primary)] tracking-tight">
             {stats?.total_repos ? <CountUp value={stats.total_repos} /> : <TelemetrySkeleton />}
           </div>
-          <div className="text-[11px] sm:text-xs text-[#a3a3a3] font-mono">Repos Scored</div>
+          <div className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider mt-1 font-semibold">
+            Repos Scored
+          </div>
         </div>
       </motion.div>
 
