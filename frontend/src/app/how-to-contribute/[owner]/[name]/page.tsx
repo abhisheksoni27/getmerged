@@ -201,7 +201,7 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
           <h2 className="font-space text-xl font-bold text-[var(--text-primary)]">Your game plan</h2>
           {steps.map((step, i) => (
             <div key={step.title} className="flex gap-4">
-              <div className="shrink-0 w-9 h-9 rounded-xl surface-elevated text-white font-space font-bold flex items-center justify-center text-sm">
+              <div className="shrink-0 w-9 h-9 rounded-xl surface-elevated text-[var(--text-primary)] font-space font-bold flex items-center justify-center text-sm">
                 {i + 1}
               </div>
               <div>
@@ -246,7 +246,7 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
           <Link prefetch={false}
             href={`/${fullName}`}
             title={`Open full contributor scorecard for ${fullName}`}
-            className="flex-1 px-5 py-3 rounded-xl surface-elevated hover:bg-zinc-800 text-white font-bold text-sm inline-flex items-center justify-center gap-2 transition-all shadow-xs"
+            className="flex-1 px-5 py-3 rounded-xl surface-elevated hover:bg-zinc-800 text-[var(--text-primary)] font-bold text-sm inline-flex items-center justify-center gap-2 transition-all shadow-xs"
           >
             View Full Scorecard <ArrowRight className="h-4 w-4" />
           </Link>

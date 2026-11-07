@@ -43,7 +43,7 @@ export function MaintainerConsoleModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[var(--bg-surface)] backdrop-blur-xs animate-in fade-in duration-200">
       <div className="relative w-full max-w-2xl max-h-[90vh] glass-panel rounded-3xl border border-[var(--border-subtle)] shadow-sm flex flex-col overflow-hidden">
         {/* Modal Header */}
         <div className="p-6 border-b border-[var(--border-subtle)] glass-panel flex items-center justify-between">
@@ -96,7 +96,7 @@ export function MaintainerConsoleModal({
           <span>Weekly rank-change reports sent automatically via email</span>
           <button
             onClick={onClose}
-            className="px-4 py-2 glass-card text-white rounded-xl font-bold hover:bg-zinc-800 transition-colors cursor-pointer"
+            className="px-4 py-2 glass-card text-[var(--text-primary)] rounded-xl font-bold hover:bg-zinc-800 transition-colors cursor-pointer"
           >
             Done
           </button>

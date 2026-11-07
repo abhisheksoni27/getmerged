@@ -114,7 +114,7 @@ export function QuestTrackCard() {
             className={`p-4 rounded-2xl border transition-all flex items-start justify-between gap-4 ${
               q.is_completed
                 ? "bg-emerald-950/20 border-emerald-500/30"
-                : "bg-zinc-900/60 border-white/[0.06] opacity-90"
+                : "bg-[var(--bg-surface)] border-[var(--border-subtle)] opacity-90"
             }`}
           >
             <div className="flex items-start gap-3.5">

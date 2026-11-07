@@ -19,13 +19,13 @@ export function VibeSection({
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
         {insights.maintainer_persona && (
-          <div className="rounded-xl border border-[var(--border-subtle)] bg-black/40 p-4 sm:col-span-1">
+          <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 sm:col-span-1">
             <p className="text-[10px] font-mono text-[var(--text-tertiary)] uppercase tracking-wider mb-1">Persona</p>
             <p className="text-sm font-bold font-mono text-[var(--text-primary)]">{insights.maintainer_persona}</p>
           </div>
         )}
         {scores.map((s) => (
-          <div key={s.key} className="rounded-xl border border-[var(--border-subtle)] bg-black/40 p-4">
+          <div key={s.key} className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4">
             <p className="text-[10px] font-mono text-[var(--text-tertiary)] uppercase tracking-wider mb-1">{s.label}</p>
             <div className="flex items-baseline gap-1">
               <span className={`text-2xl font-bold font-mono ${s.valueClass}`}>{s.value.toFixed(0)}</span>

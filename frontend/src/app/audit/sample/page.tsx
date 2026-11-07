@@ -228,12 +228,12 @@ export default function SampleAuditPage() {
           <Link prefetch={false}
             href="/"
             title="Back to home"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-300 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Back to GetMerged
           </Link>
-          <span className="text-[11px] font-mono text-zinc-400 bg-zinc-900 border border-white/[0.1] px-2.5 py-1 rounded-md">
+          <span className="text-[11px] font-mono text-[var(--text-secondary)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] px-2.5 py-1 rounded-md">
             Interactive Demo Mode
           </span>
         </div>

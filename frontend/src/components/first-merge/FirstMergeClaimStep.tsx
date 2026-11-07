@@ -87,7 +87,7 @@ export function FirstMergeClaimStep({
           {needsGitHubAuth && (
             <a
               href={`${API_BASE_URL}/api/v1/auth/github`}
-              className="mt-2 inline-flex items-center gap-1 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
+              className="mt-2 inline-flex items-center gap-1 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-[var(--text-primary)] hover:bg-zinc-800"
             >
               Sign in with GitHub to finish syncing
             </a>
@@ -129,7 +129,7 @@ export function FirstMergeClaimStep({
           <div className="mt-2 flex justify-center gap-2">
             <button
               onClick={() => onRestartStep(1)}
-              className="rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
+              className="rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-[var(--text-primary)] hover:bg-zinc-800"
             >
               Choose Another Repo
             </button>
@@ -164,7 +164,7 @@ export function FirstMergeClaimStep({
                       href={issue.html_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="truncate block text-xs font-semibold text-white hover:text-emerald-400"
+                      className="truncate block text-xs font-semibold text-[var(--text-primary)] hover:text-emerald-400"
                     >
                       {issue.title} <ExternalLink className="inline h-3 w-3 text-[var(--text-secondary)]" />
                     </a>
@@ -207,7 +207,7 @@ export function FirstMergeClaimStep({
               </p>
               <a
                 href={`${API_BASE_URL}/api/v1/auth/github`}
-                className="mt-2 inline-flex items-center gap-1 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
+                className="mt-2 inline-flex items-center gap-1 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-[var(--text-primary)] hover:bg-zinc-800"
               >
                 Sign in with GitHub
               </a>

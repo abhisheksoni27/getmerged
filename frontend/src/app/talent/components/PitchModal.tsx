@@ -53,7 +53,7 @@ export function PitchModal({
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-5 top-5 p-2 rounded-full glass-card text-zinc-400 hover:text-white cursor-pointer"
+          className="absolute right-5 top-5 p-2 rounded-full glass-card text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>
@@ -67,73 +67,73 @@ export function PitchModal({
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-300 text-[11px] font-mono mb-1">
               Founder-to-Engineer Pitch Engine · 80%+ Reply Rate
             </div>
-            <h3 className="text-xl font-bold font-space text-white">
+            <h3 className="text-xl font-bold font-space text-[var(--text-primary)]">
               Technical Pitch for {candidate.name}
             </h3>
-            <p className="text-xs text-zinc-400 font-sans mt-0.5">
-              Generates an ego-stroking, hyper-targeted peer-to-peer message analyzing their exact PR in <strong className="text-white">{candidate.top_repos[0]}</strong>.
+            <p className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
+              Generates an ego-stroking, hyper-targeted peer-to-peer message analyzing their exact PR in <strong className="text-[var(--text-primary)]">{candidate.top_repos[0]}</strong>.
             </p>
           </div>
         </div>
 
         {/* Config Controls Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-[#0a0a0c] border border-white/[0.08] text-xs font-sans">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-[#0a0a0c] border border-[var(--border-subtle)] text-xs font-sans">
           <div className="space-y-1.5">
-            <label className="text-zinc-400 font-mono text-[11px] flex items-center gap-1">
+            <label className="text-[var(--text-secondary)] font-mono text-[11px] flex items-center gap-1">
               <span>Your Company / Team Name:</span>
             </label>
             <input
               type="text"
               value={company}
               onChange={(e) => onCompanyChange(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-zinc-900 border border-white/[0.1] text-white text-xs font-mono focus:border-violet-500 focus:outline-none"
+              className="w-full px-3 py-2 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-mono focus:border-violet-500 focus:outline-none"
               placeholder="e.g. Acme Infra"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-zinc-400 font-mono text-[11px]">Your Role / Title:</label>
+            <label className="text-[var(--text-secondary)] font-mono text-[11px]">Your Role / Title:</label>
             <input
               type="text"
               value={senderTitle}
               onChange={(e) => onSenderTitleChange(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-zinc-900 border border-white/[0.1] text-white text-xs font-mono focus:border-violet-500 focus:outline-none"
+              className="w-full px-3 py-2 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-mono focus:border-violet-500 focus:outline-none"
               placeholder="e.g. CTO & Co-Founder"
             />
           </div>
 
           <div className="space-y-1.5 sm:col-span-2">
-            <label className="text-zinc-400 font-mono text-[11px]">Role & Target Comp:</label>
+            <label className="text-[var(--text-secondary)] font-mono text-[11px]">Role & Target Comp:</label>
             <input
               type="text"
               value={role}
               onChange={(e) => onRoleChange(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-zinc-900 border border-white/[0.1] text-white text-xs font-mono focus:border-violet-500 focus:outline-none"
+              className="w-full px-3 py-2 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-mono focus:border-violet-500 focus:outline-none"
               placeholder="e.g. Staff Distributed Systems Lead ($240k–$300k + equity)"
             />
           </div>
 
           <div className="space-y-1.5 sm:col-span-2">
-            <label className="text-zinc-400 font-mono text-[11px]">Your Core Technical Challenge (Symmetry Hook):</label>
+            <label className="text-[var(--text-secondary)] font-mono text-[11px]">Your Core Technical Challenge (Symmetry Hook):</label>
             <input
               type="text"
               value={challenge}
               onChange={(e) => onChallengeChange(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-zinc-900 border border-white/[0.1] text-white text-xs font-mono focus:border-violet-500 focus:outline-none"
+              className="w-full px-3 py-2 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-mono focus:border-violet-500 focus:outline-none"
               placeholder="e.g. scaling our low-latency distributed cluster architecture"
             />
           </div>
 
           {/* Pitch Tone Selector */}
           <div className="sm:col-span-2 pt-1 flex items-center gap-2 flex-wrap font-mono text-[11px]">
-            <span className="text-zinc-400">Pitch Style:</span>
+            <span className="text-[var(--text-secondary)]">Pitch Style:</span>
             <button
               type="button"
               onClick={() => onToneChange("peer")}
               className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
                 tone === "peer"
-                  ? "bg-violet-600 text-white font-bold"
-                  : "glass-card text-zinc-400 hover:text-white"
+                  ? "bg-violet-600 text-[var(--text-primary)] font-bold"
+                  : "glass-card text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
               Architecture Peer (Standard)
@@ -143,8 +143,8 @@ export function PitchModal({
               onClick={() => onToneChange("deep")}
               className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
                 tone === "deep"
-                  ? "bg-violet-600 text-white font-bold"
-                  : "glass-card text-zinc-400 hover:text-white"
+                  ? "bg-violet-600 text-[var(--text-primary)] font-bold"
+                  : "glass-card text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
               Deep Technical Flattery (PR Diffs)
@@ -154,8 +154,8 @@ export function PitchModal({
               onClick={() => onToneChange("coffee")}
               className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
                 tone === "coffee"
-                  ? "bg-violet-600 text-white font-bold"
-                  : "glass-card text-zinc-400 hover:text-white"
+                  ? "bg-violet-600 text-[var(--text-primary)] font-bold"
+                  : "glass-card text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
               Fast 2-Line Coffee Chat
@@ -165,7 +165,7 @@ export function PitchModal({
 
         {/* Live Generated Message Box */}
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
+          <div className="flex items-center justify-between text-xs font-mono text-[var(--text-secondary)]">
             <span>Generated Outreach Pitch (Ready to Send):</span>
             <span className="text-emerald-400 flex items-center gap-1">
               ✓ High-conversion peer format
@@ -211,7 +211,7 @@ export function PitchModal({
             <button
               type="button"
               onClick={() => onSendEmail(candidate)}
-              className="px-5 py-2.5 rounded-xl bg-[var(--brand-terracotta)] hover:bg-[var(--brand-terracotta)]/90 text-white font-mono text-xs font-bold transition-all flex items-center gap-2 shadow-xs cursor-pointer active:scale-[0.98]"
+              className="px-5 py-2.5 rounded-xl bg-[var(--brand-terracotta)] hover:bg-[var(--brand-terracotta)]/90 text-[var(--text-primary)] font-mono text-xs font-bold transition-all flex items-center gap-2 shadow-xs cursor-pointer active:scale-[0.98]"
             >
               <Send className="h-3.5 w-3.5" />
               <span>Send Direct Email ($49/mo)</span>

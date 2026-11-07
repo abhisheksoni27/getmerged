@@ -139,26 +139,26 @@ export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfil
 
       {/* Tier Merge Stats Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-white/[0.06] text-center">
+        <div className="p-3.5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-center">
           <div className="text-lg font-bold font-mono text-emerald-400">{karma.merged_tier_s_count}</div>
           <div className="text-[10px] font-mono text-[var(--text-secondary)]">Tier S Merges (+100)</div>
         </div>
-        <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-white/[0.06] text-center">
+        <div className="p-3.5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-center">
           <div className="text-lg font-bold font-mono text-blue-400">{karma.merged_tier_a_count}</div>
           <div className="text-[10px] font-mono text-[var(--text-secondary)]">Tier A Merges (+50)</div>
         </div>
-        <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-white/[0.06] text-center">
+        <div className="p-3.5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-center">
           <div className="text-lg font-bold font-mono text-purple-400">{karma.first_timer_bonuses}</div>
           <div className="text-[10px] font-mono text-[var(--text-secondary)]">First-Timer Bonus (+50)</div>
         </div>
-        <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-white/[0.06] text-center">
+        <div className="p-3.5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-center">
           <div className="text-lg font-bold font-mono text-amber-400">{karma.streak_multiplier.toFixed(1)}x</div>
           <div className="text-[10px] font-mono text-[var(--text-secondary)]">Streak Multiplier</div>
         </div>
       </div>
 
       {/* GitHub README Badge Embed Snippet & Live Preview */}
-      <div className="p-5 rounded-2xl bg-zinc-900/90 border border-[var(--border-subtle)] space-y-4">
+      <div className="p-5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-4">
         {/* Live Badge Preview */}
         <div className="space-y-1.5">
           <div className="text-[11px] font-mono text-emerald-400 uppercase tracking-wider font-semibold">
@@ -175,7 +175,7 @@ export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfil
         </div>
 
         {/* Copy Bar */}
-        <div className="space-y-2 pt-2 border-t border-white/[0.06]">
+        <div className="space-y-2 pt-2 border-t border-[var(--border-subtle)]">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono font-semibold text-[var(--text-secondary)] flex items-center gap-1.5">
               <Award className="h-3.5 w-3.5 text-emerald-400" /> Embed Karma on GitHub Profile README:
@@ -197,7 +197,7 @@ export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfil
               )}
             </button>
           </div>
-          <div className="p-2.5 rounded-xl bg-black/60 border border-white/[0.06] text-xs font-mono text-emerald-300 overflow-x-auto select-all">
+          <div className="p-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs font-mono text-emerald-300 overflow-x-auto select-all">
             {badgeMarkdown}
           </div>
         </div>

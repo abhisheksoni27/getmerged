@@ -27,7 +27,7 @@ export function GfiSection({ repo, fullName, gfiList, gfiTab, onTabChange }: Gfi
               onClick={() => onTabChange("all")}
               className={`px-2.5 py-1 rounded-lg transition-colors font-semibold ${
                 gfiTab === "all"
-                  ? "glass-panel text-white shadow-2xs"
+                  ? "glass-panel text-[var(--text-primary)] shadow-2xs"
                   : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
@@ -132,7 +132,7 @@ export function GfiSection({ repo, fullName, gfiList, gfiTab, onTabChange }: Gfi
                     target="_blank"
                     rel="noopener noreferrer"
                     title={`Contribute to ${issue.title} on GitHub`}
-                    className="px-3 py-1 rounded-lg glass-card hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1 transition-all active:scale-[0.99]"
+                    className="px-3 py-1 rounded-lg glass-card hover:bg-zinc-800 text-[var(--text-primary)] font-bold text-xs inline-flex items-center gap-1 transition-all active:scale-[0.99]"
                   >
                     Contribute <ArrowRight className="h-3 w-3" />
                   </a>

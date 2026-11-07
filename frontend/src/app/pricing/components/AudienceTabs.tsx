@@ -40,7 +40,7 @@ export function AudienceTabs({ activeTab, onChange }: AudienceTabsProps) {
           onClick={() => onChange("maintainers")}
           className={`flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-all shrink-0 cursor-pointer whitespace-nowrap ${
             activeTab === "maintainers"
-              ? "bg-[var(--brand-terracotta)] text-white shadow-xs"
+              ? "bg-[var(--brand-terracotta)] text-[var(--text-primary)] shadow-xs"
               : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border-subtle)]"
           }`}
         >

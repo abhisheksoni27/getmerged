@@ -31,7 +31,7 @@ export function CompareActionRow({ repoA, repoB, onCompare }: CompareActionRowPr
         onClick={onCompare}
         className={`w-full sm:w-auto px-6 py-3 rounded-2xl font-bold font-sans text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
           isReady
-            ? "bg-[var(--brand-terracotta)] text-white hover:bg-[var(--brand-terracotta)]/90 shadow-md active:scale-[0.98]"
+            ? "bg-[var(--brand-terracotta)] text-[var(--text-primary)] hover:bg-[var(--brand-terracotta)]/90 shadow-md active:scale-[0.98]"
             : "bg-[var(--bg-elevated)] text-[var(--text-muted)] cursor-not-allowed border border-[var(--border-subtle)]"
         }`}
       >

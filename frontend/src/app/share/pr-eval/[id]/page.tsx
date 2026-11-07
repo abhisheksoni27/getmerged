@@ -102,7 +102,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
 
           <Link prefetch={false}
             href={cRankUrl}
-            className="text-xs font-mono font-bold text-zinc-300 hover:text-emerald-400 flex items-center gap-1 transition-colors"
+            className="text-xs font-mono font-bold text-[var(--text-secondary)] hover:text-emerald-400 flex items-center gap-1 transition-colors"
           >
             <span>View {repoClean} C-Rank</span>
             <ExternalLink className="h-3 w-3" />
@@ -110,29 +110,29 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
         </div>
 
         {/* Main Result Card */}
-        <div className="rounded-2xl glass-panel p-6 sm:p-8 border-2 border-white/[0.1] shadow-sm mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-white/[0.1]">
+        <div className="rounded-2xl glass-panel p-6 sm:p-8 border-2 border-[var(--border-subtle)] shadow-sm mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-[var(--border-subtle)]">
             <div>
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300 block mb-1">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--text-secondary)] block mb-1">
                 Target Repository
               </span>
-              <h1 className="text-2xl sm:text-3xl font-black font-space text-white break-words">
+              <h1 className="text-2xl sm:text-3xl font-black font-space text-[var(--text-primary)] break-words">
                 {repoClean}
               </h1>
               {prNumber && (
-                <div className="flex items-center gap-1.5 mt-2 text-xs font-mono text-zinc-300">
+                <div className="flex items-center gap-1.5 mt-2 text-xs font-mono text-[var(--text-secondary)]">
                   <GitPullRequest className="h-3.5 w-3.5 text-emerald-600" />
                   <span>Pull Request #{prNumber}</span>
                 </div>
               )}
             </div>
 
-            <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2 glass-card sm:bg-transparent p-4 sm:p-0 rounded-xl border sm:border-0 border-white/[0.1]">
-              <div className="text-3xl sm:text-4xl font-extrabold font-mono text-white">
+            <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2 glass-card sm:bg-transparent p-4 sm:p-0 rounded-xl border sm:border-0 border-[var(--border-subtle)]">
+              <div className="text-3xl sm:text-4xl font-extrabold font-mono text-[var(--text-primary)]">
                 {Math.round(score)}
-                <span className="text-lg sm:text-xl text-zinc-300 font-normal">/100</span>
+                <span className="text-lg sm:text-xl text-[var(--text-secondary)] font-normal">/100</span>
               </div>
-              <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-300">
+              <div className="text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)]">
                 Pre-Flight Score
               </div>
             </div>
@@ -140,7 +140,7 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
 
           <div className="pt-6">
             <div className="mb-4">
-              <span className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider block mb-1.5">
+              <span className="text-xs font-mono font-bold text-[var(--text-secondary)] uppercase tracking-wider block mb-1.5">
                 Evaluation Verdict
               </span>
               <div className="inline-flex items-center gap-2">
@@ -158,15 +158,15 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
               </div>
             </div>
 
-            <p className="text-sm text-zinc-300 leading-relaxed font-sans mb-6">
+            <p className="text-sm text-[var(--text-secondary)] leading-relaxed font-sans mb-6">
               {isReady
                 ? "This pull request successfully met all static quality checks, convention tests, and merge readiness heuristics for this repository."
                 : "This pull request has recommendations for improving changeset scope, test coverage, or conventional naming prior to maintainer review."}
             </p>
 
             {/* Verified Outcome (AC1): live verdict synced from the PR tracker */}
-            <div className="mb-6 p-4 rounded-xl glass-card border border-white/[0.1]" data-testid="verified-outcome">
-              <span className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider block mb-2">
+            <div className="mb-6 p-4 rounded-xl glass-card border border-[var(--border-subtle)]" data-testid="verified-outcome">
+              <span className="text-xs font-mono font-bold text-[var(--text-secondary)] uppercase tracking-wider block mb-2">
                 Verified Outcome
               </span>
               {verdictView ? (
@@ -185,13 +185,13 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
                       </span>
                     )}
                     {verdictView.tone === "muted" && (
-                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono glass-card text-zinc-300 border border-white/[0.12]">
-                        <Hourglass className="h-4 w-4 text-zinc-300" />
+                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono glass-card text-[var(--text-secondary)] border border-[var(--border-subtle)]">
+                        <Hourglass className="h-4 w-4 text-[var(--text-secondary)]" />
                         {verdictView.text}
                       </span>
                     )}
                   </div>
-                  <div className="mt-2 text-[11px] font-mono text-zinc-300">
+                  <div className="mt-2 text-[11px] font-mono text-[var(--text-secondary)]">
                     {outcome?.creator_login && (
                       <span className="mr-2">@{outcome.creator_login}</span>
                     )}
@@ -199,18 +199,18 @@ export default async function SharePREvalPage({ params, searchParams }: PageProp
                   </div>
                 </>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono glass-card text-zinc-300 border border-white/[0.12]">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono glass-card text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                   Outcome unavailable
                 </span>
               )}
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-4 border-t border-white/[0.1]">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-4 border-t border-[var(--border-subtle)]">
               <Link prefetch={false}
                 href={cRankUrl}
                 data-testid="share-cta-crank"
-                className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-dark text-white font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-sm"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-dark text-[var(--text-primary)] font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-sm"
               >
                 <ShieldCheck className="h-4 w-4 text-emerald-400" />
                 <span>Explore {repoClean} C-Rank</span>

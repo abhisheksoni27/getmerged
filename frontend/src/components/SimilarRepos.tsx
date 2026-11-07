@@ -25,14 +25,14 @@ export function SimilarRepos({ relatedRepos, language }: SimilarReposProps) {
           </h3>
           <p className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
             Alternative open-source projects with active maintainers in{" "}
-            <strong className="text-white">{language || "this language"}</strong>.
+            <strong className="text-[var(--text-primary)]">{language || "this language"}</strong>.
           </p>
         </div>
         {language && (
           <Link prefetch={false}
             href={`/rankings/${getLanguageSlug(language)}`}
             title={`View all ${language} rankings on GetMerged`}
-            className="text-xs font-semibold text-white hover:text-[var(--text-secondary)] font-sans flex items-center gap-1 glass-card px-3 py-1.5 rounded-xl border border-[var(--border-subtle)]"
+            className="text-xs font-semibold text-[var(--text-primary)] hover:text-[var(--text-secondary)] font-sans flex items-center gap-1 glass-card px-3 py-1.5 rounded-xl border border-[var(--border-subtle)]"
           >
             View all {language} rankings <ArrowRight className="h-3.5 w-3.5" />
           </Link>

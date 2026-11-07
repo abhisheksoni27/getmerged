@@ -16,7 +16,7 @@ export function WatchlistEmptyState() {
         <Link prefetch={false}
           href="/repos"
           title="Browse all indexed open source repositories"
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--brand-terracotta)] text-white font-sans text-sm font-semibold hover:bg-[var(--brand-terracotta)]/90 active:scale-[0.98] transition-all shadow-xs no-underline"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--brand-terracotta)] text-[var(--text-primary)] font-sans text-sm font-semibold hover:bg-[var(--brand-terracotta)]/90 active:scale-[0.98] transition-all shadow-xs no-underline"
         >
           <Compass className="h-4 w-4" />
           <span>Browse Repositories</span>

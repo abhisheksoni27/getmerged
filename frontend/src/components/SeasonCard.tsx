@@ -90,7 +90,7 @@ export function SeasonCard() {
             onClick={shareSeason}
             data-testid="share-season"
             title="Share your season-rank card"
-            className="inline-flex items-center gap-1 rounded-lg glass-card px-2.5 py-1.5 text-[11px] font-semibold text-white hover:bg-zinc-800 cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-lg glass-card px-2.5 py-1.5 text-[11px] font-semibold text-[var(--text-primary)] hover:bg-zinc-800 cursor-pointer"
           >
             <Share2 className="h-3 w-3" /> Share card
           </button>

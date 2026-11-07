@@ -19,8 +19,8 @@ export function BenchmarkCard({ benchmark }: BenchmarkCardProps) {
     [benchmark]
   );
   return (
-    <div className="mt-3 rounded-lg glass-card border border-white/[0.1] px-3 py-2 text-xs text-zinc-300">
-      <span className="font-semibold text-zinc-300">Repo review pace:</span> p50 {parts.p50} · p90{" "}
+    <div className="mt-3 rounded-lg glass-card border border-[var(--border-subtle)] px-3 py-2 text-xs text-[var(--text-secondary)]">
+      <span className="font-semibold text-[var(--text-secondary)]">Repo review pace:</span> p50 {parts.p50} · p90{" "}
       {parts.p90} · merge {parts.merge}
     </div>
   );

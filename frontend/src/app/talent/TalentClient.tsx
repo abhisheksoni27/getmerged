@@ -197,17 +197,17 @@ ${pitchSenderTitle}, ${pitchCompany}`;
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold font-space text-white flex items-center gap-2">
+            <h2 className="text-2xl font-bold font-space text-[var(--text-primary)] flex items-center gap-2">
               <Code2 className="h-6 w-6 text-blue-400" />
               WorkDone Parametric Search
             </h2>
-            <p className="text-xs text-zinc-400 font-sans mt-0.5">
+            <p className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
               Search verified opt-in contributors by target codebase, language ecosystem, or Karma score.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
-            <span>Showing <strong className="text-white">{totalCount}</strong> verified opt-in engineers</span>
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-secondary)]">
+            <span>Showing <strong className="text-[var(--text-primary)]">{totalCount}</strong> verified opt-in engineers</span>
           </div>
         </div>
 

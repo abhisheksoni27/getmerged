@@ -116,7 +116,7 @@ export function WebhookChannels() {
           type="submit"
           disabled={busy || webhooks.length >= 5}
           title={webhooks.length >= 5 ? "Webhook limit reached (max 5)" : "Add webhook"}
-          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--brand-terracotta)] text-white text-sm font-sans font-semibold hover:bg-[var(--brand-terracotta)]/90 active:scale-[0.98] transition-all shadow-xs disabled:opacity-40 disabled:pointer-events-none"
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--brand-terracotta)] text-[var(--text-primary)] text-sm font-sans font-semibold hover:bg-[var(--brand-terracotta)]/90 active:scale-[0.98] transition-all shadow-xs disabled:opacity-40 disabled:pointer-events-none"
         >
           {busy ? "Adding…" : "Add Webhook"}
         </button>

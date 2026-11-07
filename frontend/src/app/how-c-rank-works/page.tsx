@@ -452,7 +452,7 @@ export default function HowCRankWorksPage() {
           </div>
 
           <div className="rounded-2xl surface-base p-6 sm:p-8 border border-[var(--border-subtle)] shadow-xs space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+            <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[var(--border-subtle)]">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-space text-xl font-bold text-[var(--text-primary)]">HeyPuter/puter</span>
@@ -475,26 +475,26 @@ export default function HowCRankWorksPage() {
 
             {/* Step-by-step breakdown */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.08]">
+              <div className="p-4 rounded-xl bg-white/[0.03] border border-[var(--border-subtle)]">
                 <div className="text-xs font-mono text-[var(--text-secondary)] mb-1">1. Outside Merge Rate</div>
                 <div className="text-xl font-bold font-space text-emerald-400">89.3%</div>
                 <p className="text-[11px] text-[var(--text-secondary)] mt-1">Nearly 9 out of 10 external PRs are merged. Tops the 93rd percentile of JavaScript repos.</p>
               </div>
 
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.08]">
+              <div className="p-4 rounded-xl bg-white/[0.03] border border-[var(--border-subtle)]">
                 <div className="text-xs font-mono text-[var(--text-secondary)] mb-1">2. First-Timer Success</div>
                 <div className="text-xl font-bold font-space text-blue-400">54.5%</div>
                 <p className="text-[11px] text-[var(--text-secondary)] mt-1">Over half of brand-new contributors have their initial PR accepted and merged into master.</p>
               </div>
 
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.08]">
+              <div className="p-4 rounded-xl bg-white/[0.03] border border-[var(--border-subtle)]">
                 <div className="text-xs font-mono text-[var(--text-secondary)] mb-1">3. Team Breadth (Bus Factor)</div>
                 <div className="text-xl font-bold font-space text-purple-400">34 Maintainers</div>
                 <p className="text-[11px] text-[var(--text-secondary)] mt-1">34 distinct maintainers actively review PRs. Far above the single-maintainer safety cap ceiling.</p>
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs font-mono space-y-2 text-[var(--text-secondary)]">
+            <div className="p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs font-mono space-y-2 text-[var(--text-secondary)]">
               <div className="text-[var(--text-primary)] font-bold font-space">The Calculation Flow:</div>
               <div>&bull; <span className="text-amber-300">Raw Composite:</span> 9 signals weighted &rarr; 67.8 points</div>
               <div>&bull; <span className="text-amber-300">Logarithmic GFI Bonus:</span> 3 curated GFIs &rarr; <code className="text-emerald-400">2.5 &times; ln(1 + 3) = +3.47</code> bonus points</div>

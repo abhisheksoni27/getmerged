@@ -199,7 +199,7 @@ export function IssueSniperModal({
                 onClick={() => setFrequency("instant")}
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                   frequency === "instant"
-                    ? "bg-emerald-950/30 border-emerald-500 text-white"
+                    ? "bg-emerald-950/30 border-emerald-500 text-[var(--text-primary)]"
                     : "bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
                 }`}
               >
@@ -214,7 +214,7 @@ export function IssueSniperModal({
                 onClick={() => setFrequency("weekly")}
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                   frequency === "weekly"
-                    ? "bg-emerald-950/30 border-emerald-500 text-white"
+                    ? "bg-emerald-950/30 border-emerald-500 text-[var(--text-primary)]"
                     : "bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
                 }`}
               >

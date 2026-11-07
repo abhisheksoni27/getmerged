@@ -91,7 +91,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               </svg>
             </motion.div>
             <span className="font-space text-sm font-bold tracking-tight text-[var(--text-primary)] transition-colors">
-              Get<span className="text-[#0D9668]">Merged</span>
+              Get<span className="text-[#059669]">Merged</span>
             </span>
           </Link>
 
@@ -103,8 +103,8 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             <Link prefetch={false} href="/good-first-issue" title="Explore Beginner Friendly Good First Issues" className="hover:text-[var(--text-primary)] transition-colors whitespace-nowrap">
               Good First Issues
             </Link>
-            <Link prefetch={false} href="/stack" title="Find Good First Issues in Your Tech Stack" className="text-[#0D9668] hover:text-[#0b7a54] font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#0D9668] animate-pulse" />
+            <Link prefetch={false} href="/stack" title="Find Good First Issues in Your Tech Stack" className="text-[#059669] hover:text-[#047857] font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-pulse" />
               Stalk Stack
             </Link>
             <Link prefetch={false} href="/maintainers" title="Claim Your Repository & PR Telemetry" className="hover:text-[var(--text-primary)] font-medium transition-colors whitespace-nowrap">

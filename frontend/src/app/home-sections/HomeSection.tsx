@@ -45,7 +45,7 @@ interface EyebrowProps {
 /** Shared small mono section label row. */
 export function Eyebrow({ children, className = "" }: EyebrowProps) {
   return (
-    <div className={`flex items-center gap-2 text-xs font-mono font-bold text-[var(--color-primary)] uppercase tracking-wider mb-2.5 ${className}`}>
+    <div className={`flex items-center gap-1.5 text-xs font-mono font-medium text-[var(--text-secondary)] mb-2 ${className}`}>
       {children}
     </div>
   );

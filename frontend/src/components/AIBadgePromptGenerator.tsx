@@ -36,7 +36,7 @@ This signals to external contributors that we actively review and merge pull req
   };
 
   return (
-    <div className="rounded-3xl glass-panel border border-[var(--border-subtle)] p-6 sm:p-7 bg-zinc-950/60 shadow-xl space-y-5 text-white font-sans">
+    <div className="rounded-3xl glass-panel border border-[var(--border-subtle)] p-6 sm:p-7 bg-[var(--bg-surface)] shadow-xl space-y-5 text-[var(--text-primary)] font-sans">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border-subtle)] pb-4">
         <div className="space-y-1">
@@ -93,7 +93,7 @@ This signals to external contributors that we actively review and merge pull req
             )}
           </button>
         </div>
-        <div className="p-3 rounded-xl bg-black/60 border border-[var(--border-subtle)] text-xs font-mono text-emerald-300 select-all overflow-x-auto">
+        <div className="p-3 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs font-mono text-emerald-300 select-all overflow-x-auto">
           {activeBadge}
         </div>
       </div>

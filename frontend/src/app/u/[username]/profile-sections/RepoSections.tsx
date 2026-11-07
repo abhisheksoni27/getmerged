@@ -30,7 +30,7 @@ export const RepoSections: React.FC<RepoSectionsProps> = ({
       {showcaseProjects.length > 0 && (
         <div className="mb-8">
           <div className="flex items-center justify-between gap-3 mb-4">
-            <h2 className="text-base font-bold font-sans text-white flex items-center gap-2">
+            <h2 className="text-base font-bold font-sans text-[var(--text-primary)] flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-amber-400" />
               Featured Project Showcases ({showcaseProjects.length})
             </h2>
@@ -54,14 +54,14 @@ export const RepoSections: React.FC<RepoSectionsProps> = ({
 
       {/* Section 3: Auto-Imported Public Repositories (Sorted by Stars) */}
       {publicRepos.length > 0 && (
-        <div className="mb-8 rounded-xl glass-panel p-6 border border-white/[0.1] shadow-sm border-t-2 border-t-slate-700">
+        <div className="mb-8 rounded-xl glass-panel p-6 border border-[var(--border-subtle)] shadow-sm border-t-2 border-t-slate-700">
           <div className="flex items-center justify-between gap-3 mb-4">
             <div>
-              <h2 className="text-base font-bold font-sans text-white flex items-center gap-2">
+              <h2 className="text-base font-bold font-sans text-[var(--text-primary)] flex items-center gap-2">
                 <FolderGit2 className="h-4 w-4 text-blue-400" />
                 Top Public Repositories ({publicRepos.length})
               </h2>
-              <p className="text-xs text-zinc-400 font-sans mt-0.5">
+              <p className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
                 Auto-imported from GitHub and ranked by community stars.
               </p>
             </div>

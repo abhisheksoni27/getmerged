@@ -13,7 +13,7 @@ export function ReposSection({ repos, pinnedRepos, loading, onTogglePin }: Repos
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-bold font-sans text-white">Public Repositories</h3>
+          <h3 className="text-sm font-bold font-sans text-[var(--text-primary)]">Public Repositories</h3>
           <p className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
             Select repositories to pin at the top of your profile.
           </p>
@@ -36,8 +36,8 @@ export function ReposSection({ repos, pinnedRepos, loading, onTogglePin }: Repos
                 onClick={() => onTogglePin(repo.full_name)}
                 className={`p-3 rounded-xl border text-left flex items-start justify-between gap-2 transition-all cursor-pointer ${
                   isPinned
-                    ? "bg-amber-950/30 border-amber-500/60 text-white"
-                    : "bg-black/40 border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-black/60"
+                    ? "bg-amber-950/30 border-amber-500/60 text-[var(--text-primary)]"
+                    : "bg-[var(--bg-surface)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface)]"
                 }`}
               >
                 <div className="min-w-0 flex-1">

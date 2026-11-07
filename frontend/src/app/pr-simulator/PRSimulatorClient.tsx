@@ -156,20 +156,20 @@ export function PRSimulatorClient() {
   }
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-transparent text-white font-sans">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-transparent text-[var(--text-primary)] font-sans">
       <Header />
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
         {/* Title Block */}
-        <div className="border border-white/[0.1] glass-panel p-6 sm:p-8 rounded-md border-t-2 border-t-emerald-500 shadow-sm mb-8">
+        <div className="border border-[var(--border-subtle)] glass-panel p-6 sm:p-8 rounded-md border-t-2 border-t-emerald-500 shadow-sm mb-8">
           <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 mb-2">
             <Gauge className="w-4 h-4" />
             <span>PR MERGE CHANCE SIMULATOR</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)] mb-2">
             Test Your Pull Request Before You Submit
           </h1>
-          <p className="text-zinc-400 text-sm sm:text-base leading-relaxed">
+          <p className="text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed">
             Score your PR diff, title, and description against the target repo&apos;s real review history and CONTRIBUTING.md conventions.
           </p>
         </div>
@@ -177,9 +177,9 @@ export function PRSimulatorClient() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Form (2 cols) */}
           <form onSubmit={submit} className="lg:col-span-2 space-y-5">
-            <div className="border border-white/[0.1] glass-panel p-6 rounded-md space-y-4">
+            <div className="border border-[var(--border-subtle)] glass-panel p-6 rounded-md space-y-4">
               <div>
-                <label htmlFor="sim-repo" className="block text-xs font-mono font-semibold uppercase text-zinc-300 mb-1.5">
+                <label htmlFor="sim-repo" className="block text-xs font-mono font-semibold uppercase text-[var(--text-secondary)] mb-1.5">
                   Target Repository (owner/name) <span className="text-red-400">*</span>
                 </label>
                 <input
@@ -189,12 +189,12 @@ export function PRSimulatorClient() {
                   placeholder="e.g. facebook/react or golang/go"
                   value={repo}
                   onChange={(e) => setRepo(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-black/40 border border-white/[0.15] rounded text-[var(--text-primary)] placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 font-mono"
+                  className="w-full px-3 py-2 text-sm bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded text-[var(--text-primary)] placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 font-mono"
                 />
               </div>
 
               <div>
-                <label htmlFor="sim-title" className="block text-xs font-mono font-semibold uppercase text-zinc-300 mb-1.5">
+                <label htmlFor="sim-title" className="block text-xs font-mono font-semibold uppercase text-[var(--text-secondary)] mb-1.5">
                   PR Title <span className="text-red-400">*</span>
                 </label>
                 <input
@@ -204,7 +204,7 @@ export function PRSimulatorClient() {
                   placeholder="feat: add retry logic to event collector"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-black/40 border border-white/[0.15] rounded text-[var(--text-primary)] placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 font-mono"
+                  className="w-full px-3 py-2 text-sm bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded text-[var(--text-primary)] placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 font-mono"
                 />
                 <p className="text-[11px] text-zinc-500 mt-1">
                   Conventional prefix (feat:/fix:), 10-72 characters, no WIP marker.
@@ -212,7 +212,7 @@ export function PRSimulatorClient() {
               </div>
 
               <div>
-                <label htmlFor="sim-desc" className="block text-xs font-mono font-semibold uppercase text-zinc-300 mb-1.5">
+                <label htmlFor="sim-desc" className="block text-xs font-mono font-semibold uppercase text-[var(--text-secondary)] mb-1.5">
                   PR Description / Body
                 </label>
                 <textarea
@@ -221,12 +221,12 @@ export function PRSimulatorClient() {
                   placeholder="Explain what this PR solves, which issues it closes, and how you tested it..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-black/40 border border-white/[0.15] rounded text-[var(--text-primary)] placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 text-sm bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded text-[var(--text-primary)] placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 font-sans"
                 />
               </div>
 
               <div>
-                <label htmlFor="sim-diff" className="block text-xs font-mono font-semibold uppercase text-zinc-300 mb-1.5">
+                <label htmlFor="sim-diff" className="block text-xs font-mono font-semibold uppercase text-[var(--text-secondary)] mb-1.5">
                   Git Unified Diff <span className="text-red-400">*</span>
                 </label>
                 <textarea
@@ -236,10 +236,10 @@ export function PRSimulatorClient() {
                   placeholder={`diff --git a/pkg/collector.go b/pkg/collector.go\nindex 1234567..89abcdef 100644\n--- a/pkg/collector.go\n+++ b/pkg/collector.go\n@@ -10,3 +10,7 @@\n+func Retry() error {\n+    return nil\n+}`}
                   value={diff}
                   onChange={(e) => setDiff(e.target.value)}
-                  className="w-full px-3 py-2 text-xs font-mono bg-black/60 border border-white/[0.15] rounded text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 text-xs font-mono bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded text-[var(--text-primary)] placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500"
                 />
                 <p className="text-[11px] text-zinc-500 mt-1">
-                  Run <code className="bg-zinc-800 px-1 py-0.5 rounded text-zinc-300 font-mono">git diff origin/main...HEAD</code> and paste here. Max 1MB.
+                  Run <code className="bg-zinc-800 px-1 py-0.5 rounded text-[var(--text-secondary)] font-mono">git diff origin/main...HEAD</code> and paste here. Max 1MB.
                 </p>
               </div>
 
@@ -272,11 +272,11 @@ export function PRSimulatorClient() {
           {/* Right Results / Guidance Panel (1 col) */}
           <div className="space-y-6">
             {result ? (
-              <div className="border border-white/[0.1] glass-panel p-6 rounded-md space-y-5">
-                <div className="text-center pb-4 border-b border-white/[0.1]">
-                  <div className="text-xs font-mono text-zinc-400 uppercase mb-1">Predicted Score</div>
+              <div className="border border-[var(--border-subtle)] glass-panel p-6 rounded-md space-y-5">
+                <div className="text-center pb-4 border-b border-[var(--border-subtle)]">
+                  <div className="text-xs font-mono text-[var(--text-secondary)] uppercase mb-1">Predicted Score</div>
                   <div className="flex items-center justify-center gap-3">
-                    <span className="text-5xl font-extrabold font-mono text-white">
+                    <span className="text-5xl font-extrabold font-mono text-[var(--text-primary)]">
                       {result.score}
                     </span>
                     <span className="text-zinc-500 text-2xl font-mono">/ 100</span>
@@ -296,7 +296,7 @@ export function PRSimulatorClient() {
 
                 {/* Score Breakdown */}
                 <div>
-                  <h3 className="text-xs font-mono font-semibold uppercase text-zinc-400 mb-2">
+                  <h3 className="text-xs font-mono font-semibold uppercase text-[var(--text-secondary)] mb-2">
                     Evaluation Breakdown
                   </h3>
                   <div className="space-y-2">
@@ -305,7 +305,7 @@ export function PRSimulatorClient() {
                       const pct = Math.min(100, Math.round((val / max) * 100));
                       return (
                         <div key={key} className="text-xs">
-                          <div className="flex justify-between text-zinc-300 font-mono mb-1">
+                          <div className="flex justify-between text-[var(--text-secondary)] font-mono mb-1">
                             <span>{label}</span>
                             <span>
                               {val} / {max}
@@ -325,8 +325,8 @@ export function PRSimulatorClient() {
 
                 {/* Turnaround Estimate */}
                 {result.turnaround && (
-                  <div className="p-3 bg-zinc-900/60 border border-white/[0.1] rounded text-xs space-y-1">
-                    <div className="flex items-center gap-1.5 text-zinc-300 font-mono font-semibold">
+                  <div className="p-3 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded text-xs space-y-1">
+                    <div className="flex items-center gap-1.5 text-[var(--text-secondary)] font-mono font-semibold">
                       <Clock className="w-3.5 h-3.5 text-blue-400" />
                       <span>Historical Turnaround</span>
                     </div>
@@ -335,9 +335,9 @@ export function PRSimulatorClient() {
                         Insufficient recent merged PRs in this repo to reliably project turnaround.
                       </p>
                     ) : typeof result.turnaround.median_hours === "number" ? (
-                      <p className="text-zinc-400">
+                      <p className="text-[var(--text-secondary)]">
                         Typical median first review on this repo arrives in{" "}
-                        <strong className="text-white font-mono">
+                        <strong className="text-[var(--text-primary)] font-mono">
                           {humanHours(result.turnaround.median_hours)}
                         </strong>{" "}
                         (sampled over {result.turnaround.samples} recent PRs).
@@ -353,7 +353,7 @@ export function PRSimulatorClient() {
                       <Lightbulb className="w-3.5 h-3.5" />
                       <span>Actionable Improvements</span>
                     </div>
-                    <ul className="space-y-1.5 text-xs text-zinc-300 list-disc list-inside">
+                    <ul className="space-y-1.5 text-xs text-[var(--text-secondary)] list-disc list-inside">
                       {result.suggestions.map((sug, i) => (
                         <li key={i} className="leading-relaxed">
                           {sug}
@@ -365,12 +365,12 @@ export function PRSimulatorClient() {
 
                 {/* Badge Share */}
                 {shareText && (
-                  <div className="pt-3 border-t border-white/[0.1]">
-                    <div className="text-xs font-mono text-zinc-400 mb-1.5">Shareable Badge</div>
+                  <div className="pt-3 border-t border-[var(--border-subtle)]">
+                    <div className="text-xs font-mono text-[var(--text-secondary)] mb-1.5">Shareable Badge</div>
                     <button
                       type="button"
                       onClick={copyBadgeUrl}
-                      className="w-full py-1.5 px-3 bg-zinc-800 hover:bg-zinc-700 border border-white/[0.15] text-xs font-mono rounded flex items-center justify-center gap-1.5 text-zinc-200"
+                      className="w-full py-1.5 px-3 bg-zinc-800 hover:bg-zinc-700 border border-[var(--border-subtle)] text-xs font-mono rounded flex items-center justify-center gap-1.5 text-[var(--text-primary)]"
                     >
                       {copied === "ok" ? (
                         <>
@@ -389,8 +389,8 @@ export function PRSimulatorClient() {
               </div>
             ) : (
               /* Instructions before running */
-              <div className="border border-white/[0.1] glass-panel p-6 rounded-md space-y-4 text-xs text-zinc-400">
-                <div className="flex items-center gap-2 text-zinc-200 font-mono font-bold text-sm">
+              <div className="border border-[var(--border-subtle)] glass-panel p-6 rounded-md space-y-4 text-xs text-[var(--text-secondary)]">
+                <div className="flex items-center gap-2 text-[var(--text-primary)] font-mono font-bold text-sm">
                   <FileDiff className="w-4 h-4 text-emerald-400" />
                   <span>How PR Scoring Works</span>
                 </div>
@@ -399,8 +399,8 @@ export function PRSimulatorClient() {
                 </p>
                 <div className="space-y-2 font-mono text-[11px]">
                   {WEIGHTS.map(({ label, max, hint }) => (
-                    <div key={label} className="border-b border-white/[0.05] pb-2 last:border-0">
-                      <div className="flex justify-between text-zinc-300 font-semibold">
+                    <div key={label} className="border-b border-[var(--border-subtle)] pb-2 last:border-0">
+                      <div className="flex justify-between text-[var(--text-secondary)] font-semibold">
                         <span>{label}</span>
                         <span className="text-emerald-400">+{max} pts</span>
                       </div>

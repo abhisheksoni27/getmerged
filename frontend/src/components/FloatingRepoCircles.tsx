@@ -352,7 +352,7 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
                       scale: 0.95,
                     }}
                     transition={{ duration: 0.18, ease: "easeOut" }}
-                    className={`absolute w-48 rounded-xl border border-white/[0.18] bg-[#121214]/95 backdrop-blur-2xl p-2.5 text-left shadow-[0_16px_40px_rgba(0,0,0,0.65)] z-50 pointer-events-none ${
+                    className={`absolute w-48 rounded-xl border border-[var(--border-subtle)] bg-[#121214]/95 backdrop-blur-2xl p-2.5 text-left shadow-[0_16px_40px_rgba(0,0,0,0.65)] z-50 pointer-events-none ${
                       isTopAligned ? "bottom-full mb-2.5" : "top-full mt-2.5"
                     } ${
                       isLeftAligned
@@ -371,7 +371,7 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
                       )}
                     </div>
                     
-                    <p className="font-semibold text-xs text-white truncate font-sans">
+                    <p className="font-semibold text-xs text-[var(--text-primary)] truncate font-sans">
                       {orb.fullName}
                     </p>
 
@@ -390,7 +390,7 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
                       )}
                     </div>
 
-                    <div className="mt-2 pt-1.5 border-t border-white/10 flex items-center justify-between text-[10px] text-emerald-400 font-medium font-sans">
+                    <div className="mt-2 pt-1.5 border-t border-[var(--border-subtle)] flex items-center justify-between text-[10px] text-emerald-400 font-medium font-sans">
                       <span>View C-Rank</span>
                       <ExternalLink className="h-2.5 w-2.5" />
                     </div>

@@ -20,7 +20,7 @@ export function DashboardCard({ as = "div", className = "", children }: Dashboar
 // Shared empty state for dashboard panels with no data.
 export function DashboardEmptyState({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-dashed border-white/[0.12] p-10 text-center text-sm text-zinc-300">
+    <div className="rounded-xl border border-dashed border-[var(--border-subtle)] p-10 text-center text-sm text-[var(--text-secondary)]">
       {children}
     </div>
   );

@@ -51,7 +51,7 @@ export default function TalentPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-transparent text-white font-sans dev-grid-pattern">
+    <div className="min-h-screen flex flex-col bg-transparent text-[var(--text-primary)] font-sans dev-grid-pattern">
       <Header />
       <script
         type="application/ld+json"

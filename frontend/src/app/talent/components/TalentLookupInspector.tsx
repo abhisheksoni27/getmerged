@@ -11,14 +11,14 @@ interface TalentLookupInspectorProps {
 
 export function TalentLookupInspector({ username, onUsernameChange, onSubmit }: TalentLookupInspectorProps) {
   return (
-    <div className="p-6 rounded-2xl glass-panel border border-white/[0.1] bg-[#121214]/90 space-y-4">
+    <div className="p-6 rounded-2xl glass-panel border border-[var(--border-subtle)] bg-[#121214]/90 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h3 className="text-base font-bold font-space text-white flex items-center gap-2">
+          <h3 className="text-base font-bold font-space text-[var(--text-primary)] flex items-center gap-2">
             <Search className="h-4 w-4 text-emerald-400" />
             Inspect Any GitHub Developer&apos;s WorkDone Dossier
           </h3>
-          <p className="text-xs text-zinc-400 font-sans mt-0.5">
+          <p className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
             Enter any public GitHub username to inspect their verified Karma score, merged PR history, and codebase seniority.
           </p>
         </div>
@@ -32,7 +32,7 @@ export function TalentLookupInspector({ username, onUsernameChange, onSubmit }: 
             value={username}
             onChange={(e) => onUsernameChange(e.target.value)}
             placeholder="e.g. torvalds, shadcn, or your candidate's username"
-            className="w-full pl-28 pr-4 py-2.5 rounded-xl bg-[#0a0a0c] border border-white/[0.12] text-[var(--text-primary)] text-xs font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 transition-colors"
+            className="w-full pl-28 pr-4 py-2.5 rounded-xl bg-[#0a0a0c] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 transition-colors"
           />
         </div>
         <button

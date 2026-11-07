@@ -64,19 +64,19 @@ export function HeroSection({
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-        className="inline-flex items-center gap-2 rounded-full border border-[#0D9668]/20 bg-[#0D9668]/10 px-3.5 py-1 text-xs font-mono font-semibold text-[#0D9668] mb-6"
+        className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3.5 py-1 text-xs font-mono text-[var(--text-secondary)] mb-6"
       >
         <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0D9668] opacity-75" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-[#0D9668]" />
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#059669] opacity-75" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-[#059669]" />
         </span>
         <span>
-          RADAR: {stats?.total_repos ? `${stats.total_repos.toLocaleString()}+` : "100,000+"} REPOSITORIES INDEXED
+          Live telemetry: {stats?.total_repos ? `${stats.total_repos.toLocaleString()}+` : "100,000+"} repositories indexed
         </span>
       </motion.div>
 
       <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--text-primary)] font-display leading-[1.12] text-balance">
-        Find repos that <span className="text-[var(--color-primary)] font-extrabold">actually merge</span> your PRs.
+        Find open-source repos that merge your PRs.
       </h1>
 
       <motion.p
@@ -85,7 +85,7 @@ export function HeroSection({
         transition={{ duration: 0.4, ease: EASE_OUT_EXPO, delay: 0.08 }}
         className="mx-auto mt-4 max-w-2xl text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed font-sans font-normal text-balance"
       >
-        Real reviewer response times, merge rates, and beginner-friendly maintainers across 102,000+ open-source projects.
+        Verified PR merge rates, reviewer response turnaround, and beginner-friendly maintainers across 102,000+ GitHub projects.
       </motion.p>
 
       {/* Hero Search Bar - Prominent Silicon Valley Card */}
@@ -171,32 +171,32 @@ export function HeroSection({
           <div className="text-2xl sm:text-3xl font-bold font-mono text-[var(--text-primary)] tracking-tight">
             {stats?.avg_response_hours ? "82%" : <TelemetrySkeleton />}
           </div>
-          <div className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider mt-1 font-semibold">
-            Avg Merge Rate
+          <div className="text-xs font-sans text-[var(--text-secondary)] mt-1 font-medium">
+            Avg merge rate
           </div>
         </div>
         <div className="p-2">
           <div className="text-2xl sm:text-3xl font-bold font-mono text-[var(--text-primary)] tracking-tight">
             {stats?.avg_response_hours ? formatReviewTime(stats.avg_response_hours) : <TelemetrySkeleton />}
           </div>
-          <div className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider mt-1 font-semibold">
-            Avg First Review
+          <div className="text-xs font-sans text-[var(--text-secondary)] mt-1 font-medium">
+            Median review turnaround
           </div>
         </div>
         <div className="p-2">
           <div className="text-2xl sm:text-3xl font-bold font-mono text-[var(--text-primary)] tracking-tight">
             {stats?.s_class_count !== undefined ? <CountUp value={stats.s_class_count} /> : <TelemetrySkeleton />}
           </div>
-          <div className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider mt-1 font-semibold">
-            Welcoming Repos
+          <div className="text-xs font-sans text-[var(--text-secondary)] mt-1 font-medium">
+            S & A tier repos
           </div>
         </div>
         <div className="p-2">
           <div className="text-2xl sm:text-3xl font-bold font-mono text-[var(--text-primary)] tracking-tight">
             {stats?.total_repos ? <CountUp value={stats.total_repos} /> : <TelemetrySkeleton />}
           </div>
-          <div className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider mt-1 font-semibold">
-            Repos Scored
+          <div className="text-xs font-sans text-[var(--text-secondary)] mt-1 font-medium">
+            Repositories scored
           </div>
         </div>
       </motion.div>

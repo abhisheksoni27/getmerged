@@ -27,22 +27,22 @@ export function TalentFilters({
   onOpenToWorkChange,
 }: TalentFiltersProps) {
   return (
-    <div className="p-5 rounded-2xl glass-panel border border-white/[0.1] bg-[#121214]/90 space-y-4">
+    <div className="p-5 rounded-2xl glass-panel border border-[var(--border-subtle)] bg-[#121214]/90 space-y-4">
       {/* Main Search Input */}
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search by repo (e.g. 'kubernetes', 'next.js'), skill, or candidate username..."
-          className="w-full pl-11 pr-4 py-3 rounded-xl bg-[#0a0a0c] border border-white/[0.1] text-[var(--text-primary)] text-sm font-sans placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-colors"
+          className="w-full pl-11 pr-4 py-3 rounded-xl bg-[#0a0a0c] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm font-sans placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-colors"
         />
         {searchQuery && (
           <button
             type="button"
             onClick={onClearSearch}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-400 hover:text-white px-2 py-1 cursor-pointer"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2 py-1 cursor-pointer"
           >
             Clear
           </button>
@@ -50,10 +50,10 @@ export function TalentFilters({
       </div>
 
       {/* Parametric Filters Grid */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-white/[0.06]">
+      <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-[var(--border-subtle)]">
         {/* Language Chips */}
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs font-mono text-zinc-400 mr-1">Ecosystem:</span>
+          <span className="text-xs font-mono text-[var(--text-secondary)] mr-1">Ecosystem:</span>
           {TALENT_LANGUAGES.map((lang) => (
             <button
               key={lang}
@@ -74,11 +74,11 @@ export function TalentFilters({
         <div className="flex items-center gap-4 flex-wrap">
           {/* Karma Filter */}
           <div className="flex items-center gap-2 text-xs font-mono">
-            <span className="text-zinc-400">Min Karma:</span>
+            <span className="text-[var(--text-secondary)]">Min Karma:</span>
             <select
               value={selectedMinKarma}
               onChange={(e) => onMinKarmaChange(Number(e.target.value))}
-              className="bg-[#0a0a0c] border border-white/[0.12] rounded-lg px-2.5 py-1 text-white text-xs font-mono focus:outline-none focus:border-blue-500"
+              className="bg-[#0a0a0c] border border-[var(--border-subtle)] rounded-lg px-2.5 py-1 text-white text-xs font-mono focus:outline-none focus:border-blue-500"
             >
               <option value={0}>All Levels</option>
               <option value={1500}>Level 4+ (Top 5% Senior)</option>
@@ -87,12 +87,12 @@ export function TalentFilters({
           </div>
 
           {/* Open to Work Toggle */}
-          <label className="flex items-center gap-2 cursor-pointer text-xs font-mono text-zinc-300">
+          <label className="flex items-center gap-2 cursor-pointer text-xs font-mono text-[var(--text-secondary)]">
             <input
               type="checkbox"
               checked={openToWorkOnly}
               onChange={(e) => onOpenToWorkChange(e.target.checked)}
-              className="rounded border-white/20 bg-zinc-900 text-blue-600 focus:ring-0"
+              className="rounded border-[var(--border-subtle)] bg-[var(--bg-surface)] text-blue-600 focus:ring-0"
             />
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />

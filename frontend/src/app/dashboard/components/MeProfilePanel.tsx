@@ -25,7 +25,7 @@ export function MeProfilePanel({
     <>
       {/* AC1: profile is private by default; explicit opt-in toggle */}
       <label
-        className="flex items-center gap-1.5 rounded-lg border border-white/[0.12] glass-panel px-2.5 py-2 text-xs font-semibold text-zinc-300 cursor-pointer select-none"
+        className="flex items-center gap-1.5 rounded-lg border border-[var(--border-subtle)] glass-panel px-2.5 py-2 text-xs font-semibold text-[var(--text-secondary)] cursor-pointer select-none"
         title="Anyone with your /u link can see your track record"
       >
         <input

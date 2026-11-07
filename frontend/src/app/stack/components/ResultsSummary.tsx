@@ -11,10 +11,10 @@ export function ResultsSummary({
   alertSaved: boolean;
 }) {
   return (
-    <div className="glass-panel border border-white/[0.1] rounded-2xl p-6 sm:p-8 space-y-6">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/[0.08] pb-6">
+    <div className="glass-panel border border-[var(--border-subtle)] rounded-2xl p-6 sm:p-8 space-y-6">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-6">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-secondary)] mb-1">
             <span>Manifest: {result.manifest_type}</span>
             {result.repo_full_name && (
               <>
@@ -25,7 +25,7 @@ export function ResultsSummary({
               </>
             )}
           </div>
-          <h2 className="text-2xl font-bold font-space text-white flex items-center gap-3">
+          <h2 className="text-2xl font-bold font-space text-[var(--text-primary)] flex items-center gap-3">
             <span>Stack Health Grade:</span>
             <span
               className={`inline-block px-3 py-0.5 rounded-lg font-mono text-xl font-black ${healthGradeStyle(result.summary.overall_health_grade)}`}
@@ -46,9 +46,9 @@ export function ResultsSummary({
 
       {/* Metrics Counters */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl bg-zinc-900/60 border border-white/[0.06]">
-          <div className="text-zinc-400 text-xs font-mono mb-1">Dependencies</div>
-          <div className="text-2xl font-bold font-mono text-white">
+        <div className="p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+          <div className="text-[var(--text-secondary)] text-xs font-mono mb-1">Dependencies</div>
+          <div className="text-2xl font-bold font-mono text-[var(--text-primary)]">
             {result.summary.total_dependencies}
           </div>
           <div className="text-[11px] text-zinc-500 mt-1">
@@ -80,7 +80,7 @@ export function ResultsSummary({
           <div className="text-emerald-300 text-xs font-mono mb-1 flex items-center gap-1">
             <Sparkles className="h-3.5 w-3.5 text-emerald-400" /> Open Good First Issues
           </div>
-          <div className="text-2xl font-bold font-mono text-white">
+          <div className="text-2xl font-bold font-mono text-[var(--text-primary)]">
             {result.summary.total_good_first_issues}
           </div>
           <div className="text-[11px] text-emerald-300/80 mt-1">Beginner Issues in Your Stack</div>

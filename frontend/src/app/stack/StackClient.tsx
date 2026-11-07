@@ -22,11 +22,11 @@ export default function StackClient() {
           <Radar className="h-3.5 w-3.5 animate-pulse text-emerald-400" />
           <span>In-Stack Opportunity & Dependency Health Radar</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-bold font-space tracking-tight text-white">
+        <h1 className="text-3xl sm:text-5xl font-bold font-space tracking-tight text-[var(--text-primary)]">
           Stalk Your Tech Stack.
           <span className="block text-emerald-400 mt-1">Find Openings in What You Run.</span>
         </h1>
-        <p className="text-sm sm:text-base text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
           Why scavenge 300 million random GitHub repos? GetMerged scans the packages in your
           codebase to reveal fragile maintainer bottlenecks and open beginner issues in the exact
           tools you use every day.

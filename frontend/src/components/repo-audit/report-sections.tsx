@@ -5,8 +5,8 @@ import type { DeepSection, PrioritizedFix } from "./types";
 
 export function PrioritizedFixItem({ fix }: { fix: PrioritizedFix }) {
   return (
-    <li className="flex items-start gap-3 rounded-xl border border-[var(--border-subtle)] bg-black/40 p-3.5">
-      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-800 border border-zinc-700 text-[11px] font-bold text-[var(--text-primary)] font-mono">
+    <li className="flex items-start gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3.5">
+      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-800 border border-[var(--border-subtle)] text-[11px] font-bold text-[var(--text-primary)] font-mono">
         {fix.priority}
       </span>
       <div className="text-xs text-[var(--text-secondary)]">

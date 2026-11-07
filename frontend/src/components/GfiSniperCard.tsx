@@ -359,7 +359,7 @@ export function GfiSniperCard({ defaultEmail = "" }: GfiSniperCardProps) {
             >
               {saveSuccess ? (
                 <>
-                  <Check className="h-4 w-4 text-white" />
+                  <Check className="h-4 w-4 text-[var(--text-primary)]" />
                   <span>Preferences Saved!</span>
                 </>
               ) : (

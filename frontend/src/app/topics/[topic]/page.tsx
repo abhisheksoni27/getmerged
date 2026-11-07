@@ -136,36 +136,36 @@ export default async function TopicPage({ params }: TopicPageProps) {
         <Link prefetch={false}
           href="/topics"
           title="Return to Topics Directory"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none glass-panel border border-white/[0.12] border-b text-xs text-white hover:glass-card transition-colors mb-6 font-sans font-bold"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none glass-panel border border-[var(--border-subtle)] border-b text-xs text-[var(--text-primary)] hover:glass-card transition-colors mb-6 font-sans font-bold"
         >
           <Tag className="h-3.5 w-3.5" /> Back to Topics Directory
         </Link>
 
         {/* Header Section */}
-        <div className="mb-8 p-6 sm:p-8 rounded-none glass-panel border border-white/[0.12] border-b shadow-sm">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-emerald-950/80 border-emerald-800/80 border border-white/[0.12] text-white text-xs font-mono font-bold mb-3">
+        <div className="mb-8 p-6 sm:p-8 rounded-none glass-panel border border-[var(--border-subtle)] border-b shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-emerald-950/80 border-emerald-800/80 border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-mono font-bold mb-3">
             <Tag className="h-3.5 w-3.5" /> Topic Hub
           </div>
-          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            #{topic} <span className="text-zinc-300 font-normal text-xl sm:text-2xl">({repos.length} Repositories)</span>
+          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight">
+            #{topic} <span className="text-[var(--text-secondary)] font-normal text-xl sm:text-2xl">({repos.length} Repositories)</span>
           </h1>
-          <p className="text-sm text-zinc-300 font-sans mt-2 max-w-2xl">
+          <p className="text-sm text-[var(--text-secondary)] font-sans mt-2 max-w-2xl">
             Ranked open-source repositories tagged with <strong>#{topic}</strong>, scored by pull request acceptance likelihood and maintainer engagement velocity.
           </p>
 
           {/* Topic Aggregated Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
-            <div className="p-4 rounded-none glass-panel border border-white/[0.12] border-b">
-              <span className="text-xs font-mono text-zinc-300 flex items-center gap-1.5">
+            <div className="p-4 rounded-none glass-panel border border-[var(--border-subtle)] border-b">
+              <span className="text-xs font-mono text-[var(--text-secondary)] flex items-center gap-1.5">
                 <GitPullRequest className="h-3.5 w-3.5 text-blue-600" /> Topic Avg Merge Rate
               </span>
-              <p className="font-space text-xl font-extrabold text-white mt-1">{avgMergeRate.toFixed(1)}%</p>
+              <p className="font-space text-xl font-extrabold text-[var(--text-primary)] mt-1">{avgMergeRate.toFixed(1)}%</p>
             </div>
-            <div className="p-4 rounded-none glass-panel border border-white/[0.12] border-b">
-              <span className="text-xs font-mono text-zinc-300 flex items-center gap-1.5">
+            <div className="p-4 rounded-none glass-panel border border-[var(--border-subtle)] border-b">
+              <span className="text-xs font-mono text-[var(--text-secondary)] flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5 text-amber-500" /> Avg Review Latency
               </span>
-              <p className="font-space text-xl font-extrabold text-white mt-1">{avgResponseHours.toFixed(1)}h</p>
+              <p className="font-space text-xl font-extrabold text-[var(--text-primary)] mt-1">{avgResponseHours.toFixed(1)}h</p>
             </div>
           </div>
         </div>

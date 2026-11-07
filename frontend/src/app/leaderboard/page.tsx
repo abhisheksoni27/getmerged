@@ -137,7 +137,7 @@ export default async function LeaderboardPage() {
 
         <div className="rounded-3xl surface-base p-6 sm:p-10 border border-[var(--border-subtle)] shadow-xs mb-8">
           <div className="flex items-center gap-2 mb-3.5">
-            <span className="inline-flex items-center gap-1.5 rounded-xl surface-elevated px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
+            <span className="inline-flex items-center gap-1.5 rounded-xl surface-elevated px-3 py-1 text-xs font-semibold text-[var(--text-primary)] font-mono shadow-xs">
               <Trophy className="h-3.5 w-3.5 text-amber-400" /> C-Rank™ Global Leaderboard
             </span>
           </div>

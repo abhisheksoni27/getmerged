@@ -14,13 +14,13 @@ export function RecruiterContactSection({ username, slug }: RecruiterContactSect
 
   return (
     <>
-      <div className="rounded-2xl glass-panel text-white p-6 sm:p-8 shadow-sm border border-[var(--border-subtle)]">
+      <div className="rounded-2xl glass-panel text-[var(--text-primary)] p-6 sm:p-8 shadow-sm border border-[var(--border-subtle)]">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs font-bold mb-2">
               <Briefcase className="h-3.5 w-3.5" /> Recruiter & Sponsor Direct Signal
             </div>
-            <h3 className="text-xl sm:text-2xl font-bold font-sans text-white">
+            <h3 className="text-xl sm:text-2xl font-bold font-sans text-[var(--text-primary)]">
               Interested in hiring or sponsoring @{username}?
             </h3>
             <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans mt-1.5 max-w-lg">

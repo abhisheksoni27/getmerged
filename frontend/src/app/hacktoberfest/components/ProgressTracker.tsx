@@ -40,16 +40,16 @@ export function ProgressTracker({
   onCopyShareLink,
 }: ProgressTrackerProps) {
   return (
-    <div className="rounded-3xl glass-panel p-6 sm:p-8 border border-white/[0.1] shadow-xs">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.1]">
+    <div className="rounded-3xl glass-panel p-6 sm:p-8 border border-[var(--border-subtle)] shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-subtle)]">
         <div>
           <div className="flex items-center gap-2">
             <GitPullRequest className="h-5 w-5 text-orange-600" />
-            <h2 className="text-lg sm:text-xl font-bold text-white font-space">
+            <h2 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] font-space">
               Live Merge Progress Tracker
             </h2>
           </div>
-          <p className="text-xs text-zinc-300 mt-1">
+          <p className="text-xs text-[var(--text-secondary)] mt-1">
             Validates pull requests to public repositories merged between Oct 1–31 UTC (no spam/invalid labels).
           </p>
         </div>
@@ -60,7 +60,7 @@ export function ProgressTracker({
               type="button"
               onClick={onCheckMerges}
               disabled={isNudging}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/[0.1] text-xs font-mono text-zinc-300 hover:glass-card disabled:opacity-50 transition-all cursor-pointer shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-secondary)] hover:glass-card disabled:opacity-50 transition-all cursor-pointer shadow-2xs"
               title="Force refresh against GitHub search API (throttled to 1/min)"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${isNudging ? "animate-spin text-orange-600" : ""}`} />
@@ -70,7 +70,7 @@ export function ProgressTracker({
             <button
               type="button"
               onClick={onSignIn}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl glass-card text-white text-xs font-semibold hover:bg-zinc-800 transition-colors shadow-xs cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl glass-card text-[var(--text-primary)] text-xs font-semibold hover:bg-zinc-800 transition-colors shadow-xs cursor-pointer"
             >
               <span>Connect GitHub to Track</span>
             </button>
@@ -83,14 +83,14 @@ export function ProgressTracker({
       {isAuthenticated && (
         <div className="mt-6 space-y-6">
           {/* Progress Bar and Big Counter */}
-          <div className="glass-card rounded-2xl p-6 border border-white/[0.1]/60">
+          <div className="glass-card rounded-2xl p-6 border border-[var(--border-subtle)]/60">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
               <div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl sm:text-4xl font-bold font-space text-white">
+                  <span className="text-3xl sm:text-4xl font-bold font-space text-[var(--text-primary)]">
                     {mergedCount}
                   </span>
-                  <span className="text-lg font-bold text-zinc-300 font-space">
+                  <span className="text-lg font-bold text-[var(--text-secondary)] font-space">
                     of {target} PRs Merged
                   </span>
                   {progress?.total_qualifying && progress.total_qualifying > 4 ? (
@@ -99,7 +99,7 @@ export function ProgressTracker({
                     </span>
                   ) : null}
                 </div>
-                <div className="text-[11px] font-mono text-zinc-300 mt-1 flex items-center gap-2">
+                <div className="text-[11px] font-mono text-[var(--text-secondary)] mt-1 flex items-center gap-2">
                   <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
                   <span>
                     {progress?.updated_ago_min !== undefined
@@ -126,7 +126,7 @@ export function ProgressTracker({
                   <button
                     type="button"
                     onClick={() => onCopyShareLink(progress.card!.share_url)}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl glass-panel border border-white/[0.1] text-xs font-mono text-zinc-300 hover:glass-card transition-colors shadow-2xs cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl glass-panel border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-secondary)] hover:glass-card transition-colors shadow-2xs cursor-pointer"
                     title="Copy Share Link"
                   >
                     <Share2 className="h-3.5 w-3.5" />
@@ -154,14 +154,14 @@ export function ProgressTracker({
                     className={`py-2 px-1 rounded-xl border flex flex-col items-center gap-1 transition-all ${
                       isDone
                         ? "bg-emerald-950/70 border-emerald-800/80 border-emerald-300 text-emerald-300 font-bold"
-                        : "glass-panel border-white/[0.1] text-zinc-300"
+                        : "glass-panel border-[var(--border-subtle)] text-[var(--text-secondary)]"
                     }`}
                   >
                     <div className="flex items-center gap-1">
                       {isDone ? (
                         <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
                       ) : (
-                        <div className="h-3.5 w-3.5 rounded-full border border-white/[0.12] flex items-center justify-center text-[9px]">
+                        <div className="h-3.5 w-3.5 rounded-full border border-[var(--border-subtle)] flex items-center justify-center text-[9px]">
                           {step}
                         </div>
                       )}
@@ -179,10 +179,10 @@ export function ProgressTracker({
           {/* Merged PR List */}
           {progress?.merges && progress.merges.length > 0 && (
             <div>
-              <h4 className="text-xs font-mono uppercase font-semibold text-zinc-300 mb-3 tracking-wider">
+              <h4 className="text-xs font-mono uppercase font-semibold text-[var(--text-secondary)] mb-3 tracking-wider">
                 Verified Qualifying Merges
               </h4>
-              <div className="divide-y divide-zinc-100 rounded-2xl border border-white/[0.1] overflow-hidden glass-panel">
+              <div className="divide-y divide-zinc-100 rounded-2xl border border-[var(--border-subtle)] overflow-hidden glass-panel">
                 {progress.merges.map((merge) => (
                   <div
                     key={merge.pr_id}
@@ -191,11 +191,11 @@ export function ProgressTracker({
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                        <span className="font-space text-xs sm:text-sm font-bold text-white truncate">
+                        <span className="font-space text-xs sm:text-sm font-bold text-[var(--text-primary)] truncate">
                           {merge.title || merge.pr_id}
                         </span>
                       </div>
-                      <div className="text-[11px] font-mono text-zinc-300 mt-1 flex items-center gap-2">
+                      <div className="text-[11px] font-mono text-[var(--text-secondary)] mt-1 flex items-center gap-2">
                         <span>{merge.repository_id}</span>
                         <span>•</span>
                         <span>PR #{merge.pr_number}</span>
@@ -213,7 +213,7 @@ export function ProgressTracker({
                         href={merge.html_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs font-mono text-zinc-300 hover:text-white transition-colors shrink-0"
+                        className="inline-flex items-center gap-1 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0"
                       >
                         <span>GitHub</span>
                         <ExternalLink className="h-3 w-3" />

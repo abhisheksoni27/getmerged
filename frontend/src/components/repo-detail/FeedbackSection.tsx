@@ -328,7 +328,7 @@ export function FeedbackSection({ repoId, fullName, currentUser, isLoggedIn, onR
                   setValue: setBeginnerRating,
                 },
               ].map((rating) => (
-                <div key={rating.label} className="rounded-xl border border-[var(--border-subtle)] bg-black/50 p-3.5 shadow-sm">
+                <div key={rating.label} className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3.5 shadow-sm">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <span className="font-mono text-xs font-bold text-[var(--text-primary)]">
                       {rating.label}
@@ -373,7 +373,7 @@ export function FeedbackSection({ repoId, fullName, currentUser, isLoggedIn, onR
                   type="button"
                   onClick={handleSubmit}
                   disabled={!allFeedbackRatingsSelected}
-                  className="flex ml-auto items-center justify-center gap-2 rounded-xl border border-[var(--border-subtle)] bg-white text-black hover:bg-zinc-200 px-6 py-3 font-mono text-xs font-bold shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-[var(--text-tertiary)] disabled:border-white/[0.06]"
+                  className="flex ml-auto items-center justify-center gap-2 rounded-xl border border-[var(--border-subtle)] bg-white text-black hover:bg-zinc-200 px-6 py-3 font-mono text-xs font-bold shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-[var(--text-tertiary)] disabled:border-[var(--border-subtle)]"
                 >
                   <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                   Submit Contributor Rating

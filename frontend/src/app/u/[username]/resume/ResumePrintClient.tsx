@@ -157,25 +157,25 @@ export function ResumePrintClient({ profile, karma }: ResumePrintClientProps) {
         {/* Featured Showcase Projects */}
         {showcases.length > 0 && (
           <section className="space-y-4">
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-400 print:text-zinc-600">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--text-secondary)] print:text-zinc-600">
               Featured Project Showcases
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {showcases.map((proj) => (
                 <div
                   key={proj.id}
-                  className="p-4 rounded-xl bg-zinc-950 print:bg-white border border-white/[0.06] print:border-zinc-200 space-y-1.5"
+                  className="p-4 rounded-xl bg-[var(--bg-surface)] print:bg-white border border-[var(--border-subtle)] print:border-zinc-200 space-y-1.5"
                 >
-                  <div className="font-space font-bold text-sm text-white print:text-black">
+                  <div className="font-space font-bold text-sm text-[var(--text-primary)] print:text-black">
                     {proj.title}
                   </div>
-                  <p className="text-xs text-zinc-300 print:text-zinc-700 leading-relaxed line-clamp-2">
+                  <p className="text-xs text-[var(--text-secondary)] print:text-zinc-700 leading-relaxed line-clamp-2">
                     {proj.description}
                   </p>
                   {proj.tags && proj.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 pt-1">
                       {proj.tags.map((t, i) => (
-                        <span key={i} className="text-[10px] font-mono text-zinc-400 print:text-zinc-600">
+                        <span key={i} className="text-[10px] font-mono text-[var(--text-secondary)] print:text-zinc-600">
                           #{t}
                         </span>
                       ))}
@@ -188,10 +188,10 @@ export function ResumePrintClient({ profile, karma }: ResumePrintClientProps) {
         )}
 
         {/* Verification Footer */}
-        <footer className="border-t border-zinc-800 print:border-zinc-300 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500 print:text-zinc-500">
+        <footer className="border-t border-[var(--border-subtle)] print:border-zinc-300 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500 print:text-zinc-500">
           <div>
             <span>Verified by GetMerged Open Source Index · </span>
-            <span className="text-zinc-400 print:text-zinc-700">{profileUrl}</span>
+            <span className="text-[var(--text-secondary)] print:text-zinc-700">{profileUrl}</span>
           </div>
           <div>
             Timestamp: {new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}

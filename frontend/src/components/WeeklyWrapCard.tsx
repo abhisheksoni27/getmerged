@@ -86,7 +86,7 @@ export function WeeklyWrapCard({
             className={`px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
               isSubscribed
                 ? "bg-emerald-50 border border-emerald-200 text-[#0D9668]"
-                : "bg-[var(--brand-terracotta)] text-white hover:bg-[var(--brand-terracotta)]/90 shadow-xs"
+                : "bg-[var(--brand-terracotta)] text-[var(--text-primary)] hover:bg-[var(--brand-terracotta)]/90 shadow-xs"
             }`}
           >
             {isSubscribed ? "Subscribed ✓" : "Enable"}
@@ -129,7 +129,7 @@ export function WeeklyWrapCard({
 
       {/* Interactive Wrap Preview Modal */}
       {showPreview && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto font-sans">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-surface)] backdrop-blur-sm p-4 overflow-y-auto font-sans">
           <div className="relative w-full max-w-lg rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-6 sm:p-7 space-y-5 shadow-2xl text-[var(--text-primary)]">
             <button
               type="button"

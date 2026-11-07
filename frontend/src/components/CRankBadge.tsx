@@ -21,52 +21,52 @@ export function getGradeColor(rank?: string): {
   switch (rank?.toUpperCase()) {
     case "S":
       return {
-        hex: "#0D9668",
-        bgClass: "bg-[#0D9668]/10",
-        textClass: "text-[#0D9668]",
-        borderClass: "border-[#0D9668]/30",
-        dotClass: "bg-[#0D9668]",
+        hex: "#059669",
+        bgClass: "bg-[#059669]/10",
+        textClass: "text-[#059669]",
+        borderClass: "border-[#059669]/30",
+        dotClass: "bg-[#059669]",
         label: "Elite",
         title: "Super Welcoming",
       };
     case "A":
       return {
-        hex: "#2D8ABF",
-        bgClass: "bg-[#2D8ABF]/10",
-        textClass: "text-[#2D8ABF]",
-        borderClass: "border-[#2D8ABF]/30",
-        dotClass: "bg-[#2D8ABF]",
+        hex: "#2563EB",
+        bgClass: "bg-[#2563EB]/10",
+        textClass: "text-[#2563EB]",
+        borderClass: "border-[#2563EB]/30",
+        dotClass: "bg-[#2563EB]",
         label: "Welcoming",
         title: "Very Welcoming",
       };
     case "B":
       return {
-        hex: "#8B6BB5",
-        bgClass: "bg-[#8B6BB5]/10",
-        textClass: "text-[#8B6BB5]",
-        borderClass: "border-[#8B6BB5]/30",
-        dotClass: "bg-[#8B6BB5]",
+        hex: "#7C3AED",
+        bgClass: "bg-[#7C3AED]/10",
+        textClass: "text-[#7C3AED]",
+        borderClass: "border-[#7C3AED]/30",
+        dotClass: "bg-[#7C3AED]",
         label: "Solid",
         title: "Welcoming",
       };
     case "C":
       return {
-        hex: "#C4910A",
-        bgClass: "bg-[#C4910A]/10",
-        textClass: "text-[#C4910A]",
-        borderClass: "border-[#C4910A]/30",
-        dotClass: "bg-[#C4910A]",
+        hex: "#D97706",
+        bgClass: "bg-[#D97706]/10",
+        textClass: "text-[#D97706]",
+        borderClass: "border-[#D97706]/30",
+        dotClass: "bg-[#D97706]",
         label: "Moderate",
         title: "Slow Review",
       };
     case "D":
     default:
       return {
-        hex: "#C4463A",
-        bgClass: "bg-[#C4463A]/10",
-        textClass: "text-[#C4463A]",
-        borderClass: "border-[#C4463A]/30",
-        dotClass: "bg-[#C4463A]",
+        hex: "#DC2626",
+        bgClass: "bg-[#DC2626]/10",
+        textClass: "text-[#DC2626]",
+        borderClass: "border-[#DC2626]/30",
+        dotClass: "bg-[#DC2626]",
         label: "Risky",
         title: "High PR Stall Rate",
       };

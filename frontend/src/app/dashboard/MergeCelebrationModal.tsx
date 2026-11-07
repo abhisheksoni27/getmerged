@@ -151,7 +151,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[var(--bg-surface)] backdrop-blur-xs"
       role="dialog"
       aria-modal="true"
       aria-label="Prediction verified celebration"
@@ -162,7 +162,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
         className="w-full max-w-lg rounded-2xl glass-panel border-2 border-violet-400 shadow-sm overflow-hidden max-h-[92vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-5 py-3 bg-violet-600 text-white">
+        <div className="flex items-center justify-between px-5 py-3 bg-violet-600 text-[var(--text-primary)]">
           <div className="flex items-center gap-2 font-bold text-sm font-mono uppercase tracking-wider">
             <PartyPopper className="h-4 w-4" /> Prediction Verified
           </div>
@@ -170,17 +170,17 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
             type="button"
             onClick={dismiss}
             aria-label="Dismiss celebration"
-            className="text-white/80 hover:text-white cursor-pointer"
+            className="text-[var(--text-primary)]/80 hover:text-[var(--text-primary)] cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         <div className="p-5">
-          <p className="text-lg font-bold text-white mb-1">
+          <p className="text-lg font-bold text-[var(--text-primary)] mb-1">
             {links.headline} 🎉
           </p>
-          <p className="text-xs text-zinc-300 mb-4">
+          <p className="text-xs text-[var(--text-secondary)] mb-4">
             {celebrating.full_name}#{celebrating.pr_number} merged. Your pre-flight call is now a
             publicly verifiable fact - brag about it.
           </p>
@@ -192,7 +192,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
               src={links.ogCardUrl}
               alt={`Share card: ${links.headline} for ${celebrating.full_name}`}
               onError={() => setCardFailed(true)}
-              className="w-full rounded-xl border border-white/[0.1] mb-4"
+              className="w-full rounded-xl border border-[var(--border-subtle)] mb-4"
               data-testid="merge-celebration-card"
             />
           )}
@@ -228,8 +228,8 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
             </a>
           </div>
 
-          <div className="pt-3 border-t border-white/[0.1]">
-            <label className="block text-[11px] font-mono font-bold text-zinc-300 uppercase mb-1">
+          <div className="pt-3 border-t border-[var(--border-subtle)]">
+            <label className="block text-[11px] font-mono font-bold text-[var(--text-secondary)] uppercase mb-1">
               Share link (with your referral credit)
             </label>
             <div className="flex items-center gap-2">
@@ -237,7 +237,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
                 readOnly
                 value={links.destinationUrl}
                 onFocus={(e) => e.currentTarget.select()}
-                className="flex-1 min-w-0 rounded-xl border border-white/[0.12] glass-card px-3 py-2 text-xs font-mono text-zinc-300"
+                className="flex-1 min-w-0 rounded-xl border border-[var(--border-subtle)] glass-card px-3 py-2 text-xs font-mono text-[var(--text-secondary)]"
               />
               <button
                 type="button"
@@ -249,7 +249,7 @@ export function MergeCelebrationModal({ prs }: { prs: CelebratablePR[] }) {
                     setTimeout(() => setCopied(false), 2000);
                   }
                 }}
-                className="px-3 py-2 rounded-xl glass-card border border-white/[0.12] hover:bg-zinc-200 text-xs font-mono font-bold text-zinc-200 flex items-center gap-1 shrink-0 cursor-pointer"
+                className="px-3 py-2 rounded-xl glass-card border border-[var(--border-subtle)] hover:bg-zinc-200 text-xs font-mono font-bold text-[var(--text-primary)] flex items-center gap-1 shrink-0 cursor-pointer"
               >
                 {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
                 <span>{copied ? "Copied" : "Copy"}</span>

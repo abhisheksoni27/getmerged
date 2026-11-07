@@ -54,7 +54,7 @@ export function RecruiterInterestModal({ username, slug, isOpen, onClose }: Recr
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md rounded-2xl glass-panel p-6 sm:p-8 shadow-2xl border border-[var(--border-subtle)] text-white font-sans">
+      <div className="relative w-full max-w-md rounded-2xl glass-panel p-6 sm:p-8 shadow-2xl border border-[var(--border-subtle)] text-[var(--text-primary)] font-sans">
         <button
           type="button"
           onClick={onClose}

@@ -60,7 +60,7 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
-      <div className="relative w-full max-w-lg bg-zinc-950 border border-[var(--border-subtle)] rounded-2xl shadow-2xl p-6 text-white font-sans overflow-hidden">
+      <div className="relative w-full max-w-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-2xl p-6 text-[var(--text-primary)] font-sans overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-2">
@@ -120,7 +120,7 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
                 id="dispute-reason"
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-white focus:outline-hidden focus:border-amber-400"
+                className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] focus:outline-hidden focus:border-amber-400"
               >
                 <option value="stale_metric">Stale or outdated snapshot metrics</option>
                 <option value="bot_pollution">Automated bots counted as external PRs</option>
@@ -141,7 +141,7 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
                   placeholder="e.g. octocat"
                   value={githubUsername}
                   onChange={(e) => setGithubUsername(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-white focus:outline-hidden focus:border-amber-400 font-mono"
+                  className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] focus:outline-hidden focus:border-amber-400 font-mono"
                 />
               </div>
               <div>
@@ -154,7 +154,7 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-white focus:outline-hidden focus:border-amber-400 font-mono"
+                  className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] focus:outline-hidden focus:border-amber-400 font-mono"
                 />
               </div>
             </div>
@@ -169,7 +169,7 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
                 placeholder="https://github.com/.../pull/..."
                 value={evidenceUrl}
                 onChange={(e) => setEvidenceUrl(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-white focus:outline-hidden focus:border-amber-400 font-mono"
+                className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] focus:outline-hidden focus:border-amber-400 font-mono"
               />
             </div>
 
@@ -184,7 +184,7 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
                 placeholder="Provide context on what numbers look wrong and why..."
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-white focus:outline-hidden focus:border-amber-400"
+                className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] focus:outline-hidden focus:border-amber-400"
               />
             </div>
 

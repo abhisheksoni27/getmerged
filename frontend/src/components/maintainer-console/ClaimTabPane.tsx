@@ -23,7 +23,7 @@ interface ClaimTabPaneProps {
 function ClaimIntro({ fullName }: { fullName: string }) {
   return (
     <div className="glass-card p-5 rounded-2xl border border-[var(--border-subtle)] text-sm text-[var(--text-secondary)] leading-relaxed">
-      <p className="font-semibold text-white mb-1">
+      <p className="font-semibold text-[var(--text-primary)] mb-1">
         Verify ownership of <span className="font-mono text-blue-600">{fullName}</span>
       </p>
       <p>
@@ -48,7 +48,7 @@ export function ClaimTabPane({
       <div className="space-y-6">
         <ClaimIntro fullName={fullName} />
         <div className="py-12 flex flex-col items-center justify-center gap-3 text-[var(--text-secondary)]">
-          <RefreshCw className="w-6 h-6 animate-spin text-white" />
+          <RefreshCw className="w-6 h-6 animate-spin text-[var(--text-primary)]" />
           <span className="text-sm font-medium">Generating verification token...</span>
         </div>
       </div>
@@ -83,7 +83,7 @@ export function ClaimTabPane({
             <code>{claimData.file_instructions.file_content}</code>
             <button
               onClick={onCopy}
-              className="ml-3 px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg text-xs font-sans font-medium flex items-center gap-1 shrink-0 border border-zinc-700 cursor-pointer"
+              className="ml-3 px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-[var(--text-primary)] rounded-lg text-xs font-sans font-medium flex items-center gap-1 shrink-0 border border-[var(--border-subtle)] cursor-pointer"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               {copied ? "Copied" : "Copy"}

@@ -73,14 +73,14 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
           }
           sub="Combined repo reach"
         />
-        <div className="rounded-xl border border-white/[0.1] glass-panel p-5 shadow-sm border-t-2 border-t-purple-500">
-          <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-zinc-300">
+        <div className="rounded-xl border border-[var(--border-subtle)] glass-panel p-5 shadow-sm border-t-2 border-t-purple-500">
+          <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-[var(--text-secondary)]">
             <Zap className="h-4 w-4 text-purple-400" /> Skill Level
           </div>
-          <div className="mt-2 text-xl sm:text-2xl font-bold font-mono text-white break-words">
+          <div className="mt-2 text-xl sm:text-2xl font-bold font-mono text-[var(--text-primary)] break-words">
             {dna?.skill_level || (profile.merged_count > 0 ? "Active" : "Novice")}
           </div>
-          <div className="text-xs text-zinc-400 font-sans mt-1">
+          <div className="text-xs text-[var(--text-secondary)] font-sans mt-1">
             {dna?.pr_size_preference || "Standard"} PR scope
           </div>
         </div>
@@ -90,7 +90,7 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
       {profile.season && !!profile.level && profile.level > 0 && (
         <SectionShell>
           <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-1.5">
               <Flame className="h-4 w-4 text-amber-400" /> Contributor Season · {profile.season}
             </h2>
             <Link prefetch={false}
@@ -103,8 +103,8 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <SeasonStat label="Season Level" value={profile.level} />
-            <div className="rounded border border-white/[0.12] bg-slate-800/80 px-4 py-3">
-              <div className="text-xs font-mono uppercase text-zinc-300">Season XP</div>
+            <div className="rounded border border-[var(--border-subtle)] bg-slate-800/80 px-4 py-3">
+              <div className="text-xs font-mono uppercase text-[var(--text-secondary)]">Season XP</div>
               <div className="text-xl font-bold font-mono text-emerald-400 mt-1">
                 {profile.season_xp ?? 0}
               </div>
@@ -114,12 +114,12 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
               value={
                 <>
                   {profile.streak_weeks ?? 0}
-                  <span className="text-xs font-normal text-zinc-300 ml-1">wk</span>
+                  <span className="text-xs font-normal text-[var(--text-secondary)] ml-1">wk</span>
                 </>
               }
             />
-            <div className="rounded border border-white/[0.12] bg-slate-800/80 px-4 py-3">
-              <div className="text-xs font-mono uppercase text-zinc-300">Global Rank</div>
+            <div className="rounded border border-[var(--border-subtle)] bg-slate-800/80 px-4 py-3">
+              <div className="text-xs font-mono uppercase text-[var(--text-secondary)]">Global Rank</div>
               <div className="text-xl font-bold font-mono text-purple-400 mt-1">
                 {typeof profile.season_rank === "number" ? `#${profile.season_rank}` : " - "}
               </div>
@@ -131,7 +131,7 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
       {/* Section 6: Ecosystem & Language Proficiency Radar */}
       {languages.length > 0 && (
         <SectionShell>
-          <h2 className="text-base font-bold font-sans text-white mb-4 flex items-center gap-2">
+          <h2 className="text-base font-bold font-sans text-[var(--text-primary)] mb-4 flex items-center gap-2">
             <Code2 className="h-4 w-4 text-blue-400" />
             Ecosystem & Language Proficiency
           </h2>
@@ -141,10 +141,10 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
               return (
                 <div key={lang} className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs font-mono">
-                    <span className="flex items-center gap-2 font-bold text-zinc-200">
+                    <span className="flex items-center gap-2 font-bold text-[var(--text-primary)]">
                       <LangLogo language={lang} /> {lang}
                     </span>
-                    <span className="text-zinc-400">
+                    <span className="text-[var(--text-secondary)]">
                       {pct}% ({count} PRs)
                     </span>
                   </div>
@@ -164,7 +164,7 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
       {/* Section 8: Contributor Work Rhythm & Temporal Focus */}
       {dna?.temporal && (
         <SectionShell>
-          <h2 className="text-base font-bold font-sans text-white mb-4 flex items-center gap-2">
+          <h2 className="text-base font-bold font-sans text-[var(--text-primary)] mb-4 flex items-center gap-2">
             <Clock className="h-4 w-4 text-amber-400" />
             Contribution Rhythm & Code Review Dynamics
           </h2>
@@ -195,7 +195,7 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
       {/* Section 9: Verified Pull Request History */}
       {hasEvals && evalFeed.length > 0 && (
         <SectionShell>
-          <h2 className="text-base font-bold font-sans text-white mb-4 flex items-center gap-2">
+          <h2 className="text-base font-bold font-sans text-[var(--text-primary)] mb-4 flex items-center gap-2">
             <GitPullRequest className="h-4 w-4 text-emerald-400" />
             Latest Verified PR Forecasts & Outcomes
           </h2>
@@ -206,13 +206,13 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
                 className="py-3.5 flex items-center justify-between gap-3"
               >
                 <div className="min-w-0">
-                  <span className="block truncate text-sm font-semibold text-white font-sans">
+                  <span className="block truncate text-sm font-semibold text-[var(--text-primary)] font-sans">
                     {ev.repository_full_name}
                     {ev.pr_number ? (
-                      <span className="text-zinc-400 font-mono"> #{ev.pr_number}</span>
+                      <span className="text-[var(--text-secondary)] font-mono"> #{ev.pr_number}</span>
                     ) : null}
                   </span>
-                  <span className="text-xs font-mono text-zinc-400">
+                  <span className="text-xs font-mono text-[var(--text-secondary)]">
                     forecast score: {ev.predicted_score} •{" "}
                     {new Date(ev.created_at).toLocaleDateString("en-US", {
                       year: "numeric",
@@ -227,7 +227,7 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
                       ? "bg-emerald-950 text-emerald-400 border border-emerald-800"
                       : ev.outcome === "miss"
                         ? "bg-rose-950 text-rose-400 border border-rose-800"
-                        : "bg-slate-800 text-zinc-300 border border-white/[0.12]"
+                        : "bg-slate-800 text-[var(--text-secondary)] border border-[var(--border-subtle)]"
                   }`}
                 >
                   {ev.outcome === "hit" ? "MERGED ✓" : ev.outcome === "miss" ? "CLOSED" : "PENDING"}
@@ -241,14 +241,14 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
       {/* Section 10: Contributor Badges & Endorsements */}
       <SectionShell>
         <div className="flex items-center justify-between gap-3 mb-4">
-          <h2 className="text-base font-bold font-sans text-white flex items-center gap-2">
+          <h2 className="text-base font-bold font-sans text-[var(--text-primary)] flex items-center gap-2">
             <Award className="h-4 w-4 text-amber-400" />
             Earned Contributor Badges ({totalBadges}/3)
           </h2>
         </div>
 
         {totalBadges === 0 ? (
-          <div className="rounded border border-dashed border-white/[0.1] p-6 text-center text-xs text-zinc-400 font-sans">
+          <div className="rounded border border-dashed border-[var(--border-subtle)] p-6 text-center text-xs text-[var(--text-secondary)] font-sans">
             No badges unlocked yet. Merge PRs into S-Tier repos or across multiple languages to earn verified badges.
           </div>
         ) : (

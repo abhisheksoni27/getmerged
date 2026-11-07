@@ -9,14 +9,14 @@ export function LeaderboardRow({ repo, rank }: { repo: LeaderboardRepo; rank: nu
   const [owner, name] = repo.full_name.split("/");
   return (
     <tr className="hover:glass-card/60 transition-colors">
-      <td className="py-3.5 px-4 text-center font-bold text-zinc-300">
+      <td className="py-3.5 px-4 text-center font-bold text-[var(--text-secondary)]">
         #{rank}
       </td>
       <td className="py-3.5 px-4">
         <div className="flex items-center gap-2 flex-wrap">
           <Link prefetch={false}
             href={`/${owner}/${name}`}
-            className="hover:text-orange-600 transition-colors font-space text-sm font-bold text-white"
+            className="hover:text-orange-600 transition-colors font-space text-sm font-bold text-[var(--text-primary)]"
           >
             {repo.full_name}
           </Link>
@@ -25,7 +25,7 @@ export function LeaderboardRow({ repo, rank }: { repo: LeaderboardRepo; rank: nu
           )}
         </div>
         {repo.description && (
-          <div className="text-[11px] font-normal text-zinc-300 font-sans truncate max-w-md mt-0.5">
+          <div className="text-[11px] font-normal text-[var(--text-secondary)] font-sans truncate max-w-md mt-0.5">
             {repo.description}
           </div>
         )}
@@ -33,16 +33,16 @@ export function LeaderboardRow({ repo, rank }: { repo: LeaderboardRepo; rank: nu
       <td className="py-3.5 px-4 text-center">
         <TierPill tier={repo.c_rank_tier} />
       </td>
-      <td className="py-3.5 px-4 text-right font-bold text-white">
+      <td className="py-3.5 px-4 text-right font-bold text-[var(--text-primary)]">
         <span className="inline-flex items-center gap-1">
           <Sparkles className="h-3 w-3 text-amber-500" />
           {repo.gfi_quality_score ? `${repo.gfi_quality_score}/100` : "N/A"}
         </span>
       </td>
-      <td className="py-3.5 px-4 text-right text-zinc-300">
+      <td className="py-3.5 px-4 text-right text-[var(--text-secondary)]">
         {repo.first_timer_success_rate ? `${repo.first_timer_success_rate.toFixed(1)}%` : "0.0%"}
       </td>
-      <td className="py-3.5 px-4 text-right text-zinc-300">
+      <td className="py-3.5 px-4 text-right text-[var(--text-secondary)]">
         <span className="inline-flex items-center gap-1">
           <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
           {repo.stars.toLocaleString()}
@@ -51,7 +51,7 @@ export function LeaderboardRow({ repo, rank }: { repo: LeaderboardRepo; rank: nu
       <td className="py-3.5 px-4 text-center">
         <Link prefetch={false}
           href={`/${owner}/${name}`}
-          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg glass-card hover:bg-zinc-200 text-zinc-200 text-[11px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg glass-card hover:bg-zinc-200 text-[var(--text-primary)] text-[11px] font-semibold transition-colors"
         >
           <span>View Issues</span>
         </Link>
@@ -62,24 +62,24 @@ export function LeaderboardRow({ repo, rank }: { repo: LeaderboardRepo; rank: nu
 
 export function LeaderboardTable({ repos }: { repos: LeaderboardRepo[] }) {
   return (
-    <div className="rounded-3xl glass-panel p-6 sm:p-8 border border-white/[0.1] shadow-xs">
+    <div className="rounded-3xl glass-panel p-6 sm:p-8 border border-[var(--border-subtle)] shadow-xs">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center gap-2">
             <Trophy className="h-5 w-5 text-amber-500" />
-            <h2 className="text-lg sm:text-xl font-bold text-white font-space">
+            <h2 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] font-space">
               Top Welcoming Repositories
             </h2>
           </div>
-          <p className="text-xs text-zinc-300 mt-1">
+          <p className="text-xs text-[var(--text-secondary)] mt-1">
             Ranked by <strong>C-Rank™ (S/A/B)</strong> and <strong>Good First Issue quality</strong>. Repositories with &gt;60% first-timer merge rates are highlighted with the Welcoming badge.
           </p>
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-white/[0.1] shadow-xs">
-        <table className="w-full text-left text-xs text-zinc-300">
-          <thead className="glass-card text-zinc-200 border-b border-white/[0.1] font-semibold uppercase tracking-wider font-space text-[11px]">
+      <div className="overflow-x-auto rounded-2xl border border-[var(--border-subtle)] shadow-xs">
+        <table className="w-full text-left text-xs text-[var(--text-secondary)]">
+          <thead className="glass-card text-[var(--text-primary)] border-b border-[var(--border-subtle)] font-semibold uppercase tracking-wider font-space text-[11px]">
             <tr>
               <th className="py-3.5 px-4 text-center">Rank</th>
               <th className="py-3.5 px-4">Repository</th>

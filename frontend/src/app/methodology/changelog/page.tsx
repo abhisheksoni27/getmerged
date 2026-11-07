@@ -47,7 +47,7 @@ export default async function MethodologyChangelogPage() {
   const disputes = await getDisputes();
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-transparent dev-grid-pattern text-white font-sans">
+    <div className="relative min-h-screen flex flex-col bg-transparent dev-grid-pattern text-[var(--text-primary)] font-sans">
       <Header />
 
       <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
@@ -101,7 +101,7 @@ export default async function MethodologyChangelogPage() {
               </ul>
             </div>
 
-            <div className="rounded-2xl surface-base p-6 border border-white/[0.08] opacity-75 shadow-xs">
+            <div className="rounded-2xl surface-base p-6 border border-[var(--border-subtle)] opacity-75 shadow-xs">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <div className="flex items-center gap-3">
                   <span className="font-mono text-xs font-bold text-[var(--text-secondary)] bg-zinc-800 border border-[var(--border-subtle)] px-2.5 py-1 rounded-md">
@@ -135,7 +135,7 @@ export default async function MethodologyChangelogPage() {
           </div>
 
           {disputes.length === 0 ? (
-            <div className="rounded-2xl surface-base p-8 text-center border border-white/[0.08]">
+            <div className="rounded-2xl surface-base p-8 text-center border border-[var(--border-subtle)]">
               <CheckCircle2 className="h-8 w-8 text-emerald-400 mx-auto mb-2" />
               <p className="text-sm font-space text-[var(--text-primary)] font-semibold">Zero Pending Queue Backlog</p>
               <p className="text-xs text-[var(--text-secondary)] mt-1 max-w-sm mx-auto">
@@ -147,10 +147,10 @@ export default async function MethodologyChangelogPage() {
               {disputes.map((d) => (
                 <div
                   key={d.id}
-                  className="rounded-xl surface-base p-4 border border-white/[0.08] flex items-center justify-between gap-4 text-xs font-mono"
+                  className="rounded-xl surface-base p-4 border border-[var(--border-subtle)] flex items-center justify-between gap-4 text-xs font-mono"
                 >
                   <div>
-                    <span className="text-white font-bold">{d.repo_full_name}</span>
+                    <span className="text-[var(--text-primary)] font-bold">{d.repo_full_name}</span>
                     <span className="text-[var(--text-secondary)] ml-2">({d.reason})</span>
                   </div>
                   <div className="flex items-center gap-3">

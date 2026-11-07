@@ -63,7 +63,7 @@ export function OrgConsoleCard({ org }: { org: string }) {
         <p className="text-sm text-[var(--text-secondary)] font-sans">No repositories tracked for <strong>{org}</strong> yet.</p>
         <Link prefetch={false}
           href="/repos"
-          className="mt-3 inline-flex px-4 py-2 rounded-xl glass-card hover:bg-zinc-800 text-white font-bold text-xs items-center gap-1.5"
+          className="mt-3 inline-flex px-4 py-2 rounded-xl glass-card hover:bg-zinc-800 text-[var(--text-primary)] font-bold text-xs items-center gap-1.5"
         >
           <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /> Claim a repository
         </Link>
@@ -90,7 +90,7 @@ export function OrgConsoleCard({ org }: { org: string }) {
   return (
     <div className="mb-8 p-5 sm:p-6 rounded-2xl border border-[var(--border-subtle)] glass-panel shadow-xs">
       <div className="flex flex-wrap items-center gap-2 mb-4">
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-card text-white text-xs font-mono font-bold">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-card text-[var(--text-primary)] text-xs font-mono font-bold">
           <TrendingUp className="h-3.5 w-3.5 text-emerald-400" /> Org C-Rank™ Console
         </span>
         <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-md ${tierColor}`}>

@@ -143,11 +143,11 @@ export function CompareShareBar({ repoA, repoB }: CompareShareBarProps) {
           onClick={handleShare}
           title="Share repository comparison on X or external platforms"
           aria-label="Share comparison on social media or external platforms"
-          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[var(--brand-terracotta)] text-white hover:bg-[var(--brand-terracotta)]/90 active:scale-[0.98] transition-all duration-150 cursor-pointer shadow-xs"
+          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[var(--brand-terracotta)] text-[var(--text-primary)] hover:bg-[var(--brand-terracotta)]/90 active:scale-[0.98] transition-all duration-150 cursor-pointer shadow-xs"
         >
-          <Share2 className="h-3.5 w-3.5 text-white" />
+          <Share2 className="h-3.5 w-3.5 text-[var(--text-primary)]" />
           <span>Share Comparison</span>
-          <ExternalLink className="h-3 w-3 text-white/80" />
+          <ExternalLink className="h-3 w-3 text-[var(--text-primary)]/80" />
         </button>
       </div>
     </div>

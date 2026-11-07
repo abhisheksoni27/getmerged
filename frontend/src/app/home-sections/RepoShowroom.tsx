@@ -140,14 +140,14 @@ export function RepoShowroom({
       label: "Welcoming (A & S Tier)",
       title: "Filter repositories by Welcoming tiers",
       isActive: selectedTier === "A" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All",
-      activeClass: "bg-[#0D9668] text-white border-[#0D9668]",
+      activeClass: "bg-[#059669] text-white border-[#059669]",
     },
     {
       preset: "hof",
       label: "S-Tier Hall of Fame",
       title: "Filter repositories by S-Tier Hall of Fame",
       isActive: selectedTier === "S" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All",
-      activeClass: "bg-[#C4910A] text-white border-[#C4910A]",
+      activeClass: "bg-[#D97706] text-white border-[#D97706]",
     },
     {
       preset: "merge",
@@ -161,21 +161,21 @@ export function RepoShowroom({
       label: "Beginner Issues Open",
       title: "Filter repositories with good first issues",
       isActive: selectedFirstTimerBucket === "has_gfi",
-      activeClass: "bg-[#2D8ABF] text-white border-[#2D8ABF]",
+      activeClass: "bg-[#2563EB] text-white border-[#2563EB]",
     },
     {
       preset: "firstTimer",
       label: "First-Timer Friendly",
       title: "Filter repositories with high first-timer success",
       isActive: selectedFirstTimerBucket === "60-80%",
-      activeClass: "bg-[#8B6BB5] text-white border-[#8B6BB5]",
+      activeClass: "bg-[#7C3AED] text-white border-[#7C3AED]",
     },
     {
       preset: "giants",
       label: "50k+ Stars",
       title: "Filter repositories with 50k+ stars",
       isActive: selectedBucket === "50k+",
-      activeClass: "bg-[#4A4540] text-white border-[#4A4540]",
+      activeClass: "bg-[var(--text-primary)] text-white border-[var(--text-primary)]",
     },
   ];
 

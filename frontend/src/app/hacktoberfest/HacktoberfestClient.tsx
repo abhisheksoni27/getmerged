@@ -125,10 +125,10 @@ function HeroHeader() {
   return (
     <div className="rounded-3xl surface-base p-6 sm:p-10 border border-[var(--border-subtle)] shadow-xs">
       <div className="flex flex-wrap items-center gap-2 mb-3.5">
-        <span className="inline-flex items-center gap-1.5 rounded-xl bg-orange-600 px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
+        <span className="inline-flex items-center gap-1.5 rounded-xl bg-orange-600 px-3 py-1 text-xs font-semibold text-[var(--text-primary)] font-mono shadow-xs">
           <Flame className="h-3.5 w-3.5" /> Hacktoberfest 2026 Welcome Hub
         </span>
-        <span className="inline-flex items-center gap-1.5 rounded-xl surface-elevated px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
+        <span className="inline-flex items-center gap-1.5 rounded-xl surface-elevated px-3 py-1 text-xs font-semibold text-[var(--text-primary)] font-mono shadow-xs">
           <Sparkles className="h-3.5 w-3.5 text-amber-400" /> C-Rank™ S/A/B Rated
         </span>
       </div>
