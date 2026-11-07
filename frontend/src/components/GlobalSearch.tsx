@@ -54,7 +54,7 @@ export function GlobalSearch() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/70 backdrop-blur-md"
+          className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-neutral-900/40 backdrop-blur-sm"
           onClick={closeSearch}
           role="dialog"
           aria-modal="true"
@@ -66,20 +66,20 @@ export function GlobalSearch() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -8 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className="w-full max-w-2xl rounded-2xl border border-white/[0.12] bg-[#111111]/95 shadow-[0_24px_60px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.06)] overflow-hidden"
+            className="w-full max-w-2xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[0_24px_60px_rgba(0,0,0,0.12)] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={handleKeyDown}
           >
             {/* Search Input Bar */}
-            <div className="flex items-center px-4 py-3.5 border-b border-white/[0.08] gap-3">
-              <Search className="h-5 w-5 text-zinc-300 shrink-0" />
+            <div className="flex items-center px-4 py-3.5 border-b border-[var(--border-subtle)] gap-3">
+              <Search className="h-5 w-5 text-[var(--text-tertiary)] shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={`Search or paste GitHub URL (e.g. ${FAMOUS_REPOS[placeholderIndex]})`}
-                className="w-full bg-transparent text-sm text-white placeholder-zinc-300 focus:outline-none font-sans"
+                className="w-full bg-transparent text-sm sm:text-base text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none font-sans"
                 aria-autocomplete="list"
                 aria-controls="search-results-list"
                 aria-activedescendant={
@@ -88,7 +88,7 @@ export function GlobalSearch() {
                     : undefined
                 }
               />
-              {loading && <Loader2 className="h-4 w-4 text-zinc-300 animate-spin shrink-0" />}
+              {loading && <Loader2 className="h-4 w-4 text-[var(--color-primary)] animate-spin shrink-0" />}
               {searchQuery && !loading && (
                 <button
                   type="button"
@@ -98,12 +98,12 @@ export function GlobalSearch() {
                     inputRef.current?.focus();
                   }}
                   aria-label="Clear search query"
-                  className="text-zinc-300 hover:text-white transition-colors cursor-pointer p-0.5 rounded"
+                  className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer p-0.5 rounded"
                 >
                   <X className="h-4 w-4" />
                 </button>
               )}
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] font-medium text-zinc-300">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-2 py-0.5 font-mono text-[11px] font-medium text-[var(--text-secondary)]">
                 ESC
               </kbd>
             </div>
@@ -122,7 +122,7 @@ export function GlobalSearch() {
             />
 
             {/* Modal Footer Controls */}
-            <div className="flex items-center justify-between px-4 py-2.5 border-t border-white/[0.06] bg-black/40 text-[11px] font-mono text-zinc-300">
+            <div className="flex items-center justify-between px-4 py-2.5 border-t border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-xs font-mono text-[var(--text-secondary)]">
               <div className="flex items-center gap-3">
                 <span className="flex items-center gap-1">
                   <ArrowUpDown className="h-3 w-3" /> Navigate

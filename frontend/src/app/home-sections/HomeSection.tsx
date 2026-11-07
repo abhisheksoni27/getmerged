@@ -10,12 +10,12 @@ interface HomeSectionProps {
   as?: "section" | "main";
 }
 
-/** Shared page-section shell: centered container with standard gutters. */
+/** Shared page-section shell: centered container with generous editorial gutters. */
 export function HomeSection({ children, maxWidth = "6xl", className = "", id, as = "section" }: HomeSectionProps) {
   const Tag = as;
   const widthClass = maxWidth === "7xl" ? "max-w-7xl" : "max-w-6xl";
   return (
-    <Tag id={id} className={`mx-auto ${widthClass} px-4 sm:px-6 lg:px-8 ${className}`}>
+    <Tag id={id} className={`mx-auto ${widthClass} px-4 sm:px-6 lg:px-8 py-16 sm:py-20 ${className}`}>
       {children}
     </Tag>
   );
@@ -27,10 +27,14 @@ interface PanelProps {
   tone?: "solid" | "dashed";
 }
 
-/** Shared dark card shell for repeated section markup. */
+/** Shared clean white card shell for repeated section markup. */
 export function Panel({ children, className = "", tone = "solid" }: PanelProps) {
-  const border = tone === "dashed" ? "border-dashed border-white/[0.12]" : "border-white/[0.08]";
-  return <div className={`rounded-xl border ${border} bg-[#141414] ${className}`}>{children}</div>;
+  const border = tone === "dashed" ? "border-dashed border-[var(--border-strong)]" : "border-[var(--border-subtle)]";
+  return (
+    <div className={`rounded-2xl border ${border} bg-[var(--bg-surface)] p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.03)] ${className}`}>
+      {children}
+    </div>
+  );
 }
 
 interface EyebrowProps {
@@ -40,5 +44,9 @@ interface EyebrowProps {
 
 /** Shared small mono section label row. */
 export function Eyebrow({ children, className = "" }: EyebrowProps) {
-  return <div className={`flex items-center gap-2 text-xs font-mono font-bold ${className}`}>{children}</div>;
+  return (
+    <div className={`flex items-center gap-2 text-xs font-mono font-bold text-[var(--color-primary)] uppercase tracking-wider mb-2.5 ${className}`}>
+      {children}
+    </div>
+  );
 }

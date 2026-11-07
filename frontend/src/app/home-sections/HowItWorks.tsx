@@ -25,20 +25,20 @@ export function HowItWorks() {
   return (
     <HomeSection className="py-12">
       <div className="max-w-3xl mb-10">
-        <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight font-sans">How GetMerged works</h2>
-        <p className="text-xs sm:text-sm text-[#737373] font-sans mt-2 leading-relaxed">
+        <h2 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-display">How GetMerged works</h2>
+        <p className="text-sm sm:text-base text-[var(--text-secondary)] font-sans mt-2 leading-relaxed">
           We query raw GitHub GraphQL event streams to compute real maintainer velocity metrics.
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 font-sans">
         {STEPS.map((step) => (
-          <div key={step.n} className="space-y-2.5">
-            <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#1c1c1c] border border-white/[0.08] text-white font-mono font-bold text-xs">
+          <div key={step.n} className="rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-6 shadow-sm space-y-3">
+            <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--color-primary)] font-mono font-bold text-xs">
               {step.n}
             </div>
-            <h4 className="text-base font-bold text-white">{step.title}</h4>
-            <p className="text-xs text-[#a3a3a3] leading-relaxed">{step.body}</p>
+            <h4 className="text-base sm:text-lg font-bold text-[var(--text-primary)] font-display">{step.title}</h4>
+            <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{step.body}</p>
           </div>
         ))}
       </div>

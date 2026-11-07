@@ -31,7 +31,7 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
   if (showLoading) {
     body = (
       <div className="py-20 flex justify-center items-center">
-        <div className="h-8 w-8 rounded-full border-2 border-white/[0.12] border-t-transparent animate-spin" />
+        <div className="h-8 w-8 rounded-full border-2 border-[var(--border-subtle)] border-t-[var(--brand-terracotta)] animate-spin" />
       </div>
     );
   } else if (hasItems) {
@@ -53,21 +53,21 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
   }
 
   return (
-    <div className="min-h-screen bg-black py-10">
+    <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Watchlist Hero Header */}
-        <div className="mb-8 border-b border-white/[0.1] pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="mb-8 border-b border-[var(--border-subtle)] pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight">
                 My Watchlist
               </h1>
-              <span className="bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border border-emerald-200/80 text-xs font-mono font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+              <span className="bg-emerald-50 text-[#0D9668] border border-emerald-200 text-xs font-mono font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
                 <Bookmark className="h-3 w-3" />
                 <span>{savedCount} saved</span>
               </span>
             </div>
-            <p className="text-sm text-zinc-300 font-sans mt-2 max-w-2xl">
+            <p className="text-sm sm:text-base text-[var(--text-secondary)] font-sans mt-2 max-w-2xl">
               Track live C-Rank™ tier shifts, maintainer response velocity, and telemetry changes for your saved open-source repositories.
             </p>
           </div>
@@ -76,9 +76,9 @@ export function WatchlistClient({ initialItems }: WatchlistClientProps) {
             <Link prefetch={false}
               href="/repos"
               title="Explore all indexed open source repositories"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl glass-panel border border-white/[0.1] text-zinc-200 hover:glass-card hover:border-white/[0.12] font-sans text-xs font-semibold shadow-2xs transition-all no-underline"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--brand-terracotta)] hover:text-[var(--brand-terracotta)] font-sans text-xs font-semibold shadow-xs transition-all no-underline"
             >
-              <Compass className="h-3.5 w-3.5 text-zinc-300" />
+              <Compass className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
               <span>Explore More Repos</span>
             </Link>
           </div>

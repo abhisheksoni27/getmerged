@@ -75,7 +75,7 @@ export function RepoDetailHero({
   };
 
   return (
-    <div className="glass-panel p-6 sm:p-8 rounded-2xl mb-8">
+    <div className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-8 shadow-sm mb-8">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         {/* Left: Identity & Metadata */}
         <div className="flex items-start gap-4 sm:gap-5 flex-1 min-w-0">
@@ -87,18 +87,18 @@ export function RepoDetailHero({
             height={64}
             fetchPriority="high"
             decoding="async"
-            className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border border-white/[0.1] glass-card shrink-0 object-cover shadow-inner mt-1"
+            className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] shrink-0 object-cover shadow-sm mt-1"
           />
 
           <div className="flex-1 min-w-0">
             {/* Title & Stars */}
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-space truncate">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-display truncate">
                 {fullName}
               </h1>
               {repo?.stars !== undefined && (
-                <div className="flex items-center gap-1 text-zinc-300 text-xs font-mono">
-                  <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                <div className="flex items-center gap-1 text-[var(--text-secondary)] text-xs font-mono">
+                  <Star className="h-3.5 w-3.5 fill-[#C4910A] text-[#C4910A]" />
                   <span>{repo.stars.toLocaleString()}</span>
                 </div>
               )}
@@ -111,13 +111,13 @@ export function RepoDetailHero({
                   {repo?.currently_active !== undefined && (
                     <span
                       title={repo.currently_active ? "Active maintainer PR activity in the last 30 days" : "No PR activity in the last 30 days"}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-mono text-zinc-300"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-secondary)]"
                     >
                       <span
                         className={`h-2 w-2 rounded-full shrink-0 ${
                           repo.currently_active
-                            ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]"
-                            : "bg-zinc-600"
+                            ? "bg-[#0D9668]"
+                            : "bg-[var(--text-tertiary)]"
                         }`}
                       />
                       <span>{repo.currently_active ? "Active (30d)" : "Inactive"}</span>
@@ -125,31 +125,31 @@ export function RepoDetailHero({
                   )}
                   <CRankBadge rank={rank} size="sm" showLabel />
                   {roundedScore > 0 && (
-                    <span className="text-xs font-mono text-zinc-300">
+                    <span className="text-xs font-mono text-[var(--text-secondary)]">
                       ({roundedScore}/100)
                     </span>
                   )}
                   {repo?.low_sample && (
                     <span
                       title="Sample size under 20 PRs in rolling window. Capped at Tier B until more contributions are recorded."
-                      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono text-xs"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#C4910A]/10 text-[#C4910A] border border-[#C4910A]/30 font-mono text-xs"
                     >
-                      <AlertTriangle className="h-3 w-3 text-amber-400 shrink-0" />
+                      <AlertTriangle className="h-3 w-3 text-[#C4910A] shrink-0" />
                       <span>Low Sample (&lt;20 PRs)</span>
                     </span>
                   )}
                   {isBusFactorCapped && (
                     <span
                       title={`Score (${roundedScore}/100) qualifies for ${roundedScore >= 70 ? "S" : "A"} Tier, but safety-capped at B because this repo has a single active maintainer (Bus Factor: ${busFactor}).`}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/25 font-mono text-xs cursor-help"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#C4910A]/10 text-[#C4910A] border border-[#C4910A]/25 font-mono text-xs cursor-help"
                     >
-                      <AlertTriangle className="h-3 w-3 text-amber-400 shrink-0" />
+                      <AlertTriangle className="h-3 w-3 text-[#C4910A] shrink-0" />
                       <span>Capped at B (Bus Factor: {busFactor})</span>
                     </span>
                   )}
                 </>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] text-zinc-300 border border-white/[0.09] font-mono text-xs">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-elevated)] text-[var(--text-secondary)] border border-[var(--border-subtle)] font-mono text-xs">
                   Unscored
                 </span>
               )}
@@ -158,7 +158,7 @@ export function RepoDetailHero({
                 <Link prefetch={false}
                   href={`/rankings/${getLanguageSlug(repo.language)}`}
                   title={`View top ranked ${repo.language} repositories`}
-                  className="inline-flex items-center gap-1.5 border border-white/[0.1] bg-white/[0.04] px-3 py-1 font-mono text-xs font-medium rounded-full text-zinc-300 hover:text-white hover:bg-white/[0.08] transition-colors shrink-0"
+                  className="inline-flex items-center gap-1.5 border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3 py-1 font-mono text-xs font-medium rounded-full text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-strong)] transition-colors shrink-0"
                 >
                   <LangLogo language={repo.language} />
                   <span>{repo.language}</span>
@@ -166,7 +166,7 @@ export function RepoDetailHero({
               )}
 
               {isVerified && (
-                <span className="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 rounded-full text-xs font-mono font-medium">
+                <span className="inline-flex items-center gap-1 bg-[#0D9668]/10 text-[#0D9668] border border-[#0D9668]/20 px-2.5 py-0.5 rounded-full text-xs font-mono font-medium">
                   <Check className="h-3 w-3" />
                   <span>Verified Contributor</span>
                 </span>
@@ -174,7 +174,7 @@ export function RepoDetailHero({
             </div>
 
             {/* Description */}
-            <p className="mt-3 text-sm text-zinc-300 leading-relaxed font-sans max-w-3xl">
+            <p className="mt-3 text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed font-sans max-w-3xl">
               {repo?.description || "Open-source repository analyzed with precision C-Rank telemetry."}
             </p>
           </div>
@@ -190,11 +190,11 @@ export function RepoDetailHero({
               title={isWatching ? "Remove from watchlist" : "Add to watchlist"}
               className={`flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-mono font-semibold rounded-xl border transition-all cursor-pointer ${
                 isWatching
-                  ? "bg-orange-500/15 text-orange-400 border-orange-500/30 hover:bg-orange-500/25"
-                  : "bg-white/[0.04] text-zinc-300 border-white/[0.1] hover:text-white hover:bg-white/[0.08]"
+                  ? "bg-[var(--color-primary)]/10 text-[var(--color-primary)] border-[var(--color-primary)]/30 hover:bg-[var(--color-primary)]/20"
+                  : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)]"
               }`}
             >
-              <Bookmark className={`h-3.5 w-3.5 ${isWatching ? "fill-orange-400 text-orange-400" : ""}`} />
+              <Bookmark className={`h-3.5 w-3.5 ${isWatching ? "fill-[var(--color-primary)] text-[var(--color-primary)]" : ""}`} />
               <span>{isWatching ? "Watchlisted" : "Watchlist"}</span>
             </button>
 
@@ -202,9 +202,9 @@ export function RepoDetailHero({
               type="button"
               onClick={handleShareX}
               title="Share scorecard on X / Twitter"
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-mono font-semibold rounded-xl bg-white/[0.04] text-zinc-300 border border-white/[0.1] hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-mono font-semibold rounded-xl bg-[var(--bg-elevated)] text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] transition-all cursor-pointer"
             >
-              <Share2 className="h-3.5 w-3.5 text-[#38bdf8]" />
+              <Share2 className="h-3.5 w-3.5 text-[#2D8ABF]" />
               <span>Share</span>
             </button>
 
@@ -212,9 +212,9 @@ export function RepoDetailHero({
               type="button"
               onClick={handleCopyBadge}
               title="Copy Markdown badge embed code for GitHub README"
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-mono font-semibold rounded-xl bg-white/[0.04] text-zinc-300 border border-white/[0.1] hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-mono font-semibold rounded-xl bg-[var(--bg-elevated)] text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] transition-all cursor-pointer"
             >
-              {copiedBadge ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Shield className="h-3.5 w-3.5 text-amber-400" />}
+              {copiedBadge ? <Check className="h-3.5 w-3.5 text-[#0D9668]" /> : <Shield className="h-3.5 w-3.5 text-[#C4910A]" />}
               <span>{copiedBadge ? "Badge Copied!" : "Badge"}</span>
             </button>
 
@@ -222,9 +222,9 @@ export function RepoDetailHero({
               type="button"
               onClick={handleCopyLink}
               title="Copy link to scorecard"
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-mono font-semibold rounded-xl bg-white/[0.04] text-zinc-300 border border-white/[0.1] hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-mono font-semibold rounded-xl bg-[var(--bg-elevated)] text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] transition-all cursor-pointer"
             >
-              {copiedLink ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+              {copiedLink ? <Check className="h-3.5 w-3.5 text-[#0D9668]" /> : <Copy className="h-3.5 w-3.5" />}
               <span>{copiedLink ? "Copied" : "Link"}</span>
             </button>
 
@@ -234,18 +234,18 @@ export function RepoDetailHero({
               rel="noopener noreferrer"
               onClick={onGithubClick}
               title={`View ${fullName} on GitHub`}
-              className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-mono font-semibold rounded-xl glass-card text-white hover:bg-white/[0.1] hover:text-white transition-all shadow-sm cursor-pointer"
+              className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-mono font-semibold rounded-xl bg-[var(--text-primary)] hover:bg-[var(--color-neutral-800)] text-[var(--bg-canvas)] shadow-sm transition-all cursor-pointer"
             >
-              <GitPullRequest className="h-3.5 w-3.5 text-zinc-300" />
+              <GitPullRequest className="h-3.5 w-3.5" />
               <span>GitHub</span>
             </a>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono text-zinc-300">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-tertiary)]">
             <Link prefetch={false}
               href={`/compare?a=${encodeURIComponent(fullName)}`}
               title={`Compare ${fullName} against another repository`}
-              className="inline-flex items-center gap-1 hover:text-zinc-300 transition-colors"
+              className="inline-flex items-center gap-1 hover:text-[var(--text-primary)] transition-colors"
             >
               <Scale className="h-3 w-3" />
               <span>Compare</span>
@@ -257,7 +257,7 @@ export function RepoDetailHero({
                   type="button"
                   onClick={onClaimClick}
                   title="Claim repository maintainership"
-                  className="inline-flex items-center gap-1 hover:text-orange-400 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 hover:text-[var(--color-primary)] transition-colors cursor-pointer"
                 >
                   <CircleDot className="h-3 w-3" />
                   <span>Claim</span>
@@ -271,7 +271,7 @@ export function RepoDetailHero({
                   type="button"
                   onClick={onDisputeClick}
                   title="Report or dispute telemetry accuracy (48h SLA)"
-                  className="inline-flex items-center gap-1 text-zinc-400 hover:text-amber-400 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 hover:text-[#C4910A] transition-colors cursor-pointer"
                 >
                   <ShieldAlert className="h-3 w-3" />
                   <span>Dispute</span>

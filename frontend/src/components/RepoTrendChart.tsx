@@ -44,7 +44,7 @@ export function RepoTrendChart({ repoId, initialTrend = null }: { repoId: string
   if (error) return null;
   if (trend === null) {
     return (
-      <div className="h-48 rounded-xl border border-white/[0.08] bg-[#141414] animate-pulse" aria-busy="true" />
+      <div className="h-48 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] animate-pulse" aria-busy="true" />
     );
   }
   if (trend.length < 2) {
@@ -97,29 +97,29 @@ export function RepoTrendChart({ repoId, initialTrend = null }: { repoId: string
 
   return (
     <section
-      className="rounded-xl border border-white/[0.08] bg-[#141414]/80 backdrop-blur-md p-5 shadow-sm"
+      className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 shadow-sm"
       aria-label="90-day C-Rank score trajectory"
     >
       <div className="flex items-start justify-between mb-4">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="font-sans text-sm font-semibold text-white">90-Day C-Rank Trajectory</h3>
-            <span className="rounded bg-white/[0.06] border border-white/[0.08] px-1.5 py-0.5 font-mono text-[10px] text-[#a3a3a3]">
+            <h3 className="font-sans text-sm font-semibold text-[var(--text-primary)]">90-Day C-Rank Trajectory</h3>
+            <span className="rounded bg-[var(--bg-elevated)] border border-[var(--border-subtle)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--text-muted)]">
               {trend.length} snapshots
             </span>
           </div>
-          <p className="text-xs text-[#737373] mt-0.5">Historical health &amp; responsiveness evolution</p>
+          <p className="text-xs text-[var(--text-muted)] mt-0.5">Historical health &amp; responsiveness evolution</p>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <div className="font-mono text-sm font-bold text-white flex items-center justify-end gap-1">
+            <div className="font-mono text-sm font-bold text-[var(--text-primary)] flex items-center justify-end gap-1">
               <span>{selectedPoint.c_rank_score.toFixed(1)}/100</span>
               <span className={`text-xs px-1.5 py-0.2 rounded border ${getGradeColor(selectedPoint.c_rank_tier).borderClass} ${getGradeColor(selectedPoint.c_rank_tier).textClass}`}>
                 {selectedPoint.c_rank_tier}
               </span>
             </div>
-            <div className="text-[10px] font-mono text-[#a3a3a3]">
+            <div className="text-[10px] font-mono text-[var(--text-muted)]">
               {formatDate(selectedPoint.snapshot_date)}
             </div>
           </div>
@@ -127,10 +127,10 @@ export function RepoTrendChart({ repoId, initialTrend = null }: { repoId: string
           <div
             className={`flex items-center gap-1 font-mono text-xs font-bold px-2 py-1 rounded-lg border ${
               delta > 0
-                ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+                ? "bg-emerald-50 border-emerald-200 text-[#0D9668]"
                 : delta < 0
-                ? "bg-rose-500/10 border-rose-500/30 text-rose-400"
-                : "bg-zinc-800 border-zinc-700 text-zinc-300"
+                ? "bg-rose-50 border-rose-200 text-[#C4463A]"
+                : "bg-[var(--bg-elevated)] border-[var(--border-subtle)] text-[var(--text-secondary)]"
             }`}
             title={`Score change: ${delta >= 0 ? "+" : ""}${delta.toFixed(1)} points over 90 days`}
           >
@@ -164,7 +164,7 @@ export function RepoTrendChart({ repoId, initialTrend = null }: { repoId: string
                 y1={t.y}
                 x2={W - PAD_RIGHT}
                 y2={t.y}
-                stroke="rgba(255,255,255,0.12)"
+                stroke="#E8E4DD"
                 strokeDasharray="4 4"
               />
               {/* Left Y-axis tick mark */}
@@ -173,7 +173,7 @@ export function RepoTrendChart({ repoId, initialTrend = null }: { repoId: string
                 y1={t.y}
                 x2={PAD_LEFT}
                 y2={t.y}
-                stroke="rgba(255,255,255,0.25)"
+                stroke="#D1CCC2"
                 strokeWidth="1"
               />
               {/* High-contrast Y-axis numeric label */}
@@ -181,7 +181,7 @@ export function RepoTrendChart({ repoId, initialTrend = null }: { repoId: string
                 x={PAD_LEFT - 8}
                 y={t.y + 3.5}
                 textAnchor="end"
-                fill="#a3a3a3"
+                fill="#78716C"
                 fontSize="10"
                 fontFamily="monospace"
                 fontWeight="500"
@@ -198,7 +198,7 @@ export function RepoTrendChart({ repoId, initialTrend = null }: { repoId: string
             y1={PAD_TOP}
             x2={PAD_LEFT}
             y2={H - PAD_BOTTOM}
-            stroke="rgba(255,255,255,0.18)"
+            stroke="#D1CCC2"
             strokeWidth="1"
           />
 
@@ -222,7 +222,7 @@ export function RepoTrendChart({ repoId, initialTrend = null }: { repoId: string
               y1={PAD_TOP}
               x2={points[activeIdx].x}
               y2={H - PAD_BOTTOM}
-              stroke="rgba(255,255,255,0.25)"
+              stroke="#D1CCC2"
               strokeDasharray="2 2"
               strokeWidth="1"
             />
@@ -247,7 +247,7 @@ export function RepoTrendChart({ repoId, initialTrend = null }: { repoId: string
                 {(isHovered || isLatest) && (
                   <>
                     <circle cx={p.x} cy={p.y} r="6" fill={latestGrade.hex} fillOpacity="0.35" />
-                    <circle cx={p.x} cy={p.y} r="3.5" fill={latestGrade.hex} stroke="#0a0a0a" strokeWidth="1.5" />
+                    <circle cx={p.x} cy={p.y} r="3.5" fill={latestGrade.hex} stroke="#FAFAF7" strokeWidth="1.5" />
                   </>
                 )}
               </g>
@@ -257,10 +257,10 @@ export function RepoTrendChart({ repoId, initialTrend = null }: { repoId: string
       </div>
 
       {/* Axis Footer */}
-      <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.06] font-mono text-[11px] text-[#737373]">
+      <div className="flex items-center justify-between mt-2 pt-2 border-t border-[var(--border-subtle)] font-mono text-[11px] text-[var(--text-muted)]">
         <span className="pl-10">{formatDate(firstPoint.snapshot_date)}</span>
         <span>
-          Range: <strong className="text-[#a3a3a3]">{minRaw.toFixed(1)} – {maxRaw.toFixed(1)}</strong> pts
+          Range: <strong className="text-[var(--text-secondary)]">{minRaw.toFixed(1)} – {maxRaw.toFixed(1)}</strong> pts
         </span>
         <span>{formatDate(latestPoint.snapshot_date)}</span>
       </div>

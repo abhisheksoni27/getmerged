@@ -34,7 +34,7 @@ export function SearchResults({
       id="search-results-list"
       role="listbox"
       aria-label="Search results"
-      className="max-h-[380px] overflow-y-auto divide-y divide-white/[0.04] p-1.5"
+      className="max-h-[380px] overflow-y-auto divide-y divide-[var(--border-subtle)] p-2"
     >
       {results.length > 0 ? (
         results.map((repo, idx) => (
@@ -53,11 +53,11 @@ export function SearchResults({
           />
         ))
       ) : searchQuery.trim() && !loading ? (
-        <div className="px-4 py-8 text-center text-xs text-zinc-300 font-mono">
+        <div className="px-4 py-8 text-center text-xs text-[var(--text-secondary)] font-mono">
           No indexed repositories matching &ldquo;{searchQuery}&rdquo;.
-          <div className="mt-2 text-zinc-300 font-sans">
+          <div className="mt-2 text-[var(--text-tertiary)] font-sans">
             Press{" "}
-            <kbd className="px-1.5 py-0.5 rounded bg-white/[0.06] border border-white/[0.08] text-[10px]">
+            <kbd className="px-2 py-0.5 rounded-md bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[11px] font-mono text-[var(--text-primary)]">
               Enter
             </kbd>{" "}
             to run an instant scan on GitHub.

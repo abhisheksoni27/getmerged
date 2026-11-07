@@ -177,7 +177,7 @@ export function ClientRepoDetail({
         <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 text-xs font-sans text-zinc-300 hover:text-white transition-colors mb-3"
+          className="inline-flex items-center gap-1.5 text-xs font-sans text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-3"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Explorer
@@ -204,7 +204,7 @@ export function ClientRepoDetail({
 
           {/* In-Page Quick Navigation Tabs Bar */}
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-2 px-1 mb-2">
-            <span className="text-xs font-mono text-zinc-300 font-bold shrink-0 mr-1 flex items-center gap-1">
+            <span className="text-xs font-mono text-[var(--text-tertiary)] font-bold shrink-0 mr-1 flex items-center gap-1">
               Jump to:
             </span>
             {tabs.map((tab) => {
@@ -216,13 +216,13 @@ export function ClientRepoDetail({
                   type="button"
                   onClick={() => scrollToSection(tab.id)}
                   title={`Scroll to ${tab.label}`}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all shrink-0 cursor-pointer border border-white/[0.12] ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all shrink-0 cursor-pointer border ${
                     isActive
-                      ? "glass-card text-white shadow-sm"
-                      : "glass-panel text-zinc-200 hover:bg-slate-800 hover:shadow-sm"
+                      ? "bg-[var(--text-primary)] text-[var(--bg-canvas)] border-[var(--text-primary)] shadow-sm"
+                      : "bg-[var(--bg-surface)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]"
                   }`}
                 >
-                  <Icon className={`h-3.5 w-3.5 ${isActive ? "text-white" : "text-zinc-300"}`} />
+                  <Icon className={`h-3.5 w-3.5 ${isActive ? "text-[var(--bg-canvas)]" : "text-[var(--text-tertiary)]"}`} />
                   <span>{tab.label}</span>
                 </button>
               );

@@ -55,23 +55,23 @@ export function WebhookChannels() {
   };
 
   return (
-    <div className="mb-8 p-5 rounded-2xl border border-white/[0.1] glass-panel">
+    <div className="mb-8 p-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm">
       <div className="flex items-center gap-2 mb-3">
-        <Webhook className="h-4 w-4 text-emerald-400" />
-        <h2 className="font-space text-base font-bold text-white">Webhook Alerts</h2>
-        <span className="text-xs text-zinc-300 font-sans">Slack &amp; Discord pings when a watched repo crosses a tier or jumps 10+ C-Rank points</span>
+        <Webhook className="h-4 w-4 text-[#0D9668]" />
+        <h2 className="font-space text-base font-bold text-[var(--text-primary)]">Webhook Alerts</h2>
+        <span className="text-xs text-[var(--text-secondary)] font-sans">Slack &amp; Discord pings when a watched repo crosses a tier or jumps 10+ C-Rank points</span>
       </div>
 
       {webhooks.length > 0 && (
         <ul className="flex flex-col gap-2 mb-4">
           {webhooks.map((wh) => (
-            <li key={wh.id} className="flex items-center justify-between gap-3 px-3 py-2 rounded-xl border border-white/[0.1] glass-card/60">
+            <li key={wh.id} className="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
               <div className="flex items-center gap-2 min-w-0">
-                <span className="px-2 py-0.5 rounded-md glass-card text-white text-[10px] font-mono font-bold uppercase shrink-0">{wh.label}</span>
-                <span className="font-mono text-xs text-zinc-300 truncate">{wh.url}</span>
+                <span className="px-2 py-0.5 rounded-md bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-[10px] font-mono font-bold uppercase shrink-0">{wh.label}</span>
+                <span className="font-mono text-xs text-[var(--text-secondary)] truncate">{wh.url}</span>
                 {!wh.enabled && (
                   <span
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-50 text-red-800 border border-red-200/90 font-mono text-[10px] font-semibold shrink-0"
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-50 text-[#C4463A] border border-rose-200 font-mono text-[10px] font-semibold shrink-0"
                     title="Auto-disabled after repeated delivery failures - re-add it to resume alerts"
                   >
                     <AlertTriangle className="h-3 w-3" />
@@ -84,7 +84,7 @@ export function WebhookChannels() {
                 onClick={() => handleRemove(wh.id)}
                 aria-label={`Remove ${wh.label} webhook`}
                 title="Remove webhook"
-                className="p-1.5 rounded-lg border border-white/[0.1] text-zinc-300 hover:text-red-600 hover:border-red-200 hover:bg-red-50 transition-colors cursor-pointer shrink-0"
+                className="p-1.5 rounded-lg border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[#C4463A] hover:border-rose-200 hover:bg-rose-50 transition-colors cursor-pointer shrink-0"
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </button>
@@ -98,7 +98,7 @@ export function WebhookChannels() {
           value={label}
           onChange={(e) => setLabel(e.target.value as "slack" | "discord")}
           aria-label="Webhook type"
-          className="px-3 py-2 rounded-xl border border-white/[0.1] glass-panel text-sm font-sans text-zinc-200 focus:outline-none focus:border-emerald-500"
+          className="px-3 py-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-sm font-sans text-[var(--text-primary)] focus:outline-none focus:border-[var(--brand-terracotta)]"
         >
           <option value="slack">Slack</option>
           <option value="discord">Discord</option>
@@ -110,18 +110,18 @@ export function WebhookChannels() {
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://hooks.slack.com/services/..."
           aria-label="Webhook URL"
-          className="flex-1 px-3 py-2 rounded-xl border border-white/[0.1] glass-panel text-sm font-sans text-zinc-200 placeholder:text-zinc-300 focus:outline-none focus:border-emerald-500"
+          className="flex-1 px-3 py-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-sm font-sans text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--brand-terracotta)]"
         />
         <button
           type="submit"
           disabled={busy || webhooks.length >= 5}
           title={webhooks.length >= 5 ? "Webhook limit reached (max 5)" : "Add webhook"}
-          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl glass-card text-white text-sm font-sans font-semibold hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-xs disabled:opacity-40 disabled:pointer-events-none"
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--brand-terracotta)] text-white text-sm font-sans font-semibold hover:bg-[var(--brand-terracotta)]/90 active:scale-[0.98] transition-all shadow-xs disabled:opacity-40 disabled:pointer-events-none"
         >
           {busy ? "Adding…" : "Add Webhook"}
         </button>
       </form>
-      {error && <p className="mt-2 text-xs text-red-600 font-sans">{error}</p>}
+      {error && <p className="mt-2 text-xs text-[#C4463A] font-sans">{error}</p>}
     </div>
   );
 }

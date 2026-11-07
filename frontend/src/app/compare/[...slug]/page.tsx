@@ -206,7 +206,7 @@ export default async function ComparePage({ params }: ComparePageProps) {
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(repoA, repoB);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-[#fafafa] flex flex-col font-sans">
+    <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] flex flex-col font-sans">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
@@ -219,29 +219,29 @@ export default async function ComparePage({ params }: ComparePageProps) {
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Navigation Breadcrumb */}
-        <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-zinc-400">
-          <Link prefetch={false} href="/" title="Home" className="hover:text-white transition-colors">
+        <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-[var(--text-muted)]">
+          <Link prefetch={false} href="/" title="Home" className="hover:text-[var(--text-primary)] transition-colors">
             Home
           </Link>
           <span>/</span>
-          <Link prefetch={false} href="/compare" title="All Comparisons" className="hover:text-white transition-colors">
+          <Link prefetch={false} href="/compare" title="All Comparisons" className="hover:text-[var(--text-primary)] transition-colors">
             Compare
           </Link>
           <span>/</span>
-          <span className="text-white font-semibold">{`${repoA.full_name} vs ${repoB.full_name}`}</span>
+          <span className="text-[var(--text-primary)] font-semibold">{`${repoA.full_name} vs ${repoB.full_name}`}</span>
         </nav>
 
         {/* Header */}
         <div className="mb-8 text-center sm:text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono font-bold mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#0D9668] text-xs font-mono font-bold mb-3">
             <Scale className="h-3.5 w-3.5" /> Repository Head-to-Head
           </div>
-          <h1 className="font-space text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="font-space text-2xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight">
             {`${repoA.full_name} `}
-            <span className="text-zinc-500 font-normal">vs</span>
+            <span className="text-[var(--text-muted)] font-normal">vs</span>
             {` ${repoB.full_name}`}
           </h1>
-          <p className="text-sm text-zinc-400 font-sans mt-2 max-w-2xl">
+          <p className="text-sm sm:text-base text-[var(--text-secondary)] font-sans mt-2 max-w-2xl">
             Objective C-Rank™ telemetry comparison benchmarked across PR merge rates, reviewer latency, PR size sweet spots, maintainer availability, and newcomer hospitality.
           </p>
         </div>

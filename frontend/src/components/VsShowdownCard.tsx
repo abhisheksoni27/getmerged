@@ -109,18 +109,18 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
   return (
     <section
       aria-label="Repo vs Repo showdown verdict"
-      className="rounded-3xl border border-white/[0.1] glass-panel p-6 shadow-xs mb-12"
+      className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-8 shadow-sm mb-12"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300/80 text-amber-300 text-xs font-mono font-bold">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C4910A]/10 border border-[#C4910A]/30 text-[#C4910A] text-xs font-mono font-bold">
           <Trophy className="h-3.5 w-3.5" /> Should I Contribute? Showdown Verdict
         </div>
         <span
           data-testid="vs-verdict-badge"
           className={
             verdict.isTie
-              ? "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold glass-card text-zinc-300 border border-white/[0.12]"
-              : "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border border-emerald-300"
+              ? "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-[var(--bg-elevated)] text-[var(--text-secondary)] border border-[var(--border-subtle)]"
+              : "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-[#0D9668]/10 text-[#0D9668] border border-[#0D9668]/30"
           }
         >
           <Scale className="h-3.5 w-3.5" />
@@ -137,16 +137,16 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
           return (
             <div
               key={m.key}
-              className="rounded-2xl glass-card border border-white/[0.1] p-4 font-mono text-xs"
+              className="rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] p-4 font-mono text-xs"
             >
-              <p className="text-zinc-300 font-sans font-semibold mb-2">{m.label}</p>
+              <p className="text-[var(--text-secondary)] font-sans font-semibold mb-2">{m.label}</p>
               <div className="flex items-center justify-between gap-2">
-                <span className={decided && aWins ? "text-emerald-400 font-bold" : "text-white"}>
+                <span className={decided && aWins ? "text-[#0D9668] font-bold" : "text-[var(--text-primary)] font-medium"}>
                   {formatMetricValue(m.valueA, m.format)}
                 </span>
-                <span className="text-zinc-300">vs</span>
+                <span className="text-[var(--text-tertiary)]">vs</span>
                 <span
-                  className={decided && !aWins ? "text-emerald-400 font-bold" : "text-white"}
+                  className={decided && !aWins ? "text-[#0D9668] font-bold" : "text-[var(--text-primary)] font-medium"}
                 >
                   {formatMetricValue(m.valueB, m.format)}
                 </span>
@@ -157,18 +157,18 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
       </div>
 
       {/* Share actions */}
-      <div className="flex flex-wrap items-center gap-2.5 pt-4 border-t border-white/[0.1]">
+      <div className="flex flex-wrap items-center gap-2.5 pt-4 border-t border-[var(--border-subtle)]">
         <button
           type="button"
           data-testid="vs-copy-button"
           onClick={handleCopy}
           aria-live="polite"
           title="Copy comparison link"
-          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl glass-card text-white hover:bg-zinc-800 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2 cursor-pointer shadow-xs"
+          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[var(--text-primary)] text-[var(--bg-canvas)] hover:bg-[var(--color-neutral-800)] active:scale-[0.98] transition-all duration-150 cursor-pointer shadow-xs"
         >
           {copied ? (
             <>
-              <Check className="h-3.5 w-3.5 text-emerald-400" />
+              <Check className="h-3.5 w-3.5 text-[#0D9668]" />
               <span>Link Copied!</span>
             </>
           ) : (
@@ -179,9 +179,9 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
           )}
         </button>
 
-        <button type="button" onClick={() => openShare("x")} title="Share verdict on X" className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl glass-card text-zinc-200 hover:bg-zinc-200 border border-white/[0.1]/60 active:scale-[0.98] transition-all cursor-pointer shadow-2xs">X</button>
-        <button type="button" onClick={() => openShare("linkedin")} title="Share verdict on LinkedIn" className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl glass-card text-zinc-200 hover:bg-zinc-200 border border-white/[0.1]/60 active:scale-[0.98] transition-all cursor-pointer shadow-2xs">LinkedIn</button>
-        <button type="button" onClick={() => openShare("reddit")} title="Share verdict on Reddit" className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl glass-card text-zinc-200 hover:bg-zinc-200 border border-white/[0.1]/60 active:scale-[0.98] transition-all cursor-pointer shadow-2xs">Reddit</button>
+        <button type="button" onClick={() => openShare("x")} title="Share verdict on X" className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] active:scale-[0.98] transition-all cursor-pointer shadow-2xs">X</button>
+        <button type="button" onClick={() => openShare("linkedin")} title="Share verdict on LinkedIn" className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] active:scale-[0.98] transition-all cursor-pointer shadow-2xs">LinkedIn</button>
+        <button type="button" onClick={() => openShare("reddit")} title="Share verdict on Reddit" className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold font-mono rounded-xl bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] active:scale-[0.98] transition-all cursor-pointer shadow-2xs">Reddit</button>
       </div>
 
       {copyFailed && (
@@ -192,13 +192,13 @@ export function VsShowdownCard({ repoA, repoB }: VsShowdownCardProps) {
           value={shareUrl}
           onFocus={(e) => e.target.select()}
           aria-label="Comparison share link - select and copy manually"
-          className="mt-3 w-full rounded-xl border border-white/[0.1] glass-card px-3 py-2 font-mono text-xs text-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="mt-3 w-full rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3 py-2 font-mono text-xs text-[var(--text-primary)] focus:outline-none"
         />
       )}
 
-      <p className="mt-4 text-xs text-zinc-300">
+      <p className="mt-4 text-xs text-[var(--text-tertiary)]">
         Verdict computed from external PR merge rate, median review latency, and 90-day bus factor; ties broken by recent commit (PR) velocity.{" "}
-        <a href={`/api/og/vs?a=${encodeURIComponent(repoA.full_name)}&b=${encodeURIComponent(repoB.full_name)}`} className="text-emerald-400 hover:underline font-mono">
+        <a href={`/api/og/vs?a=${encodeURIComponent(repoA.full_name)}&b=${encodeURIComponent(repoB.full_name)}`} className="text-[var(--color-primary)] hover:underline font-mono">
           View share card image
         </a>
       </p>

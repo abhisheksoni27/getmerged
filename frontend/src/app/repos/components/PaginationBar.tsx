@@ -44,10 +44,10 @@ export function PaginationBar({ loading, page, totalPages, totalCount, onPageCha
   };
 
   return (
-    <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/[0.1] pt-8">
-      <div className="text-xs font-mono text-zinc-300">
-        Showing page <span className="text-white font-bold">{page}</span> of{" "}
-        <span className="text-white font-bold">{totalPages}</span> ({totalCount.toLocaleString()} total repos)
+    <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[var(--border-subtle)] pt-8">
+      <div className="text-xs font-mono text-[var(--text-secondary)]">
+        Showing page <span className="text-[var(--text-primary)] font-bold">{page}</span> of{" "}
+        <span className="text-[var(--text-primary)] font-bold">{totalPages}</span> ({totalCount.toLocaleString()} total repos)
       </div>
 
       <div className="flex items-center gap-1.5">
@@ -55,7 +55,7 @@ export function PaginationBar({ loading, page, totalPages, totalCount, onPageCha
           type="button"
           disabled={page <= 1}
           onClick={() => goToPage(Math.max(1, page - 1))}
-          className="p-2 rounded-xl border border-white/[0.1] bg-black/60 text-zinc-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+          className="p-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
           aria-label="Previous Page"
         >
           <ChevronLeft className="h-4 w-4" />
@@ -65,7 +65,7 @@ export function PaginationBar({ loading, page, totalPages, totalCount, onPageCha
           {pageNumbers.map((num, idx) => {
             if (num < 0) {
               return (
-                <span key={`ellipsis-${idx}`} className="px-2 text-zinc-300 text-xs">
+                <span key={`ellipsis-${idx}`} className="px-2 text-[var(--text-tertiary)] text-xs">
                   ...
                 </span>
               );
@@ -78,8 +78,8 @@ export function PaginationBar({ loading, page, totalPages, totalCount, onPageCha
                 onClick={() => goToPage(num)}
                 className={`min-w-[36px] h-9 px-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                   isCurrent
-                    ? "bg-white text-zinc-950 shadow-sm"
-                    : "bg-black/60 border border-white/[0.1] text-zinc-300 hover:text-white hover:border-white/[0.2]"
+                    ? "bg-[var(--text-primary)] text-[var(--bg-canvas)] shadow-sm"
+                    : "bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
                 }`}
               >
                 {num}
@@ -92,7 +92,7 @@ export function PaginationBar({ loading, page, totalPages, totalCount, onPageCha
           type="button"
           disabled={page >= totalPages}
           onClick={() => goToPage(Math.min(totalPages, page + 1))}
-          className="p-2 rounded-xl border border-white/[0.1] bg-black/60 text-zinc-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+          className="p-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
           aria-label="Next Page"
         >
           <ChevronRight className="h-4 w-4" />

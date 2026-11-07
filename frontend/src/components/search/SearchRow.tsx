@@ -30,7 +30,7 @@ export function SearchRow(props: SearchRowProps) {
         key={term}
         type="button"
         onClick={() => onPick(term)}
-        className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-2.5 py-1 text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/[0.08] cursor-pointer transition-all"
+        className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3 py-1.5 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-strong)] hover:bg-[var(--bg-surface)] cursor-pointer transition-all"
       >
         {term}
       </button>
@@ -47,14 +47,14 @@ export function SearchRow(props: SearchRowProps) {
       href={`/${repo.full_name}`}
       onClick={() => onSelect(repo)}
       onMouseEnter={() => onHover(index)}
-      className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
-        isSelected ? "bg-white/[0.08] text-white" : "hover:bg-white/[0.04] text-zinc-300"
+      className={`flex items-center justify-between px-4 py-3 rounded-xl transition-all ${
+        isSelected ? "bg-[var(--bg-elevated)] text-[var(--text-primary)] border-l-2 border-[var(--color-primary)]" : "hover:bg-[var(--bg-elevated)]/60 text-[var(--text-secondary)]"
       }`}
     >
       <div className="flex flex-col min-w-0 pr-3">
-        <span className="text-sm font-semibold font-mono text-white truncate">{repo.full_name}</span>
+        <span className="text-sm font-semibold font-mono text-[var(--text-primary)] truncate">{repo.full_name}</span>
         {repo.description && (
-          <span className="text-xs text-zinc-300 font-sans truncate mt-0.5 max-w-md">
+          <span className="text-xs text-[var(--text-secondary)] font-sans truncate mt-0.5 max-w-md">
             {repo.description}
           </span>
         )}
@@ -62,19 +62,19 @@ export function SearchRow(props: SearchRowProps) {
 
       <div className="flex items-center gap-2 shrink-0">
         {repo.language && (
-          <span className="text-[11px] font-mono text-zinc-300 px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06]">
+          <span className="text-xs font-mono text-[var(--text-secondary)] px-2.5 py-0.5 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
             {repo.language}
           </span>
         )}
         <span
-          className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${
+          className={`text-xs font-mono font-bold px-2.5 py-0.5 rounded-lg ${
             repo.c_rank_tier === "S"
-              ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+              ? "bg-[#0D9668]/10 text-[#0D9668] border border-[#0D9668]/30"
               : repo.c_rank_tier === "A"
-              ? "bg-sky-500/15 text-sky-400 border border-sky-500/30"
+              ? "bg-[#2D8ABF]/10 text-[#2D8ABF] border border-[#2D8ABF]/30"
               : repo.c_rank_tier === "B"
-              ? "bg-violet-500/15 text-violet-400 border border-violet-500/30"
-              : "bg-amber-500/15 text-amber-400 border border-amber-500/30"
+              ? "bg-[#8B6BB5]/10 text-[#8B6BB5] border border-[#8B6BB5]/30"
+              : "bg-[#C4910A]/10 text-[#C4910A] border border-[#C4910A]/30"
           }`}
         >
           {repo.c_rank_tier || "A"}

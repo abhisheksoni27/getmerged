@@ -21,90 +21,80 @@ export function getGradeColor(rank?: string): {
   switch (rank?.toUpperCase()) {
     case "S":
       return {
-        hex: "#10b981",
-        bgClass: "bg-emerald-500/15",
-        textClass: "text-emerald-300",
-        borderClass: "border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)]",
-        dotClass: "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]",
+        hex: "#0D9668",
+        bgClass: "bg-[#0D9668]/10",
+        textClass: "text-[#0D9668]",
+        borderClass: "border-[#0D9668]/30",
+        dotClass: "bg-[#0D9668]",
         label: "Elite",
         title: "Super Welcoming",
       };
     case "A":
       return {
-        hex: "#38bdf8",
-        bgClass: "bg-sky-500/15",
-        textClass: "text-sky-300",
-        borderClass: "border-sky-500/30 shadow-[0_0_12px_rgba(56,189,248,0.15)]",
-        dotClass: "bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.8)]",
+        hex: "#2D8ABF",
+        bgClass: "bg-[#2D8ABF]/10",
+        textClass: "text-[#2D8ABF]",
+        borderClass: "border-[#2D8ABF]/30",
+        dotClass: "bg-[#2D8ABF]",
         label: "Welcoming",
         title: "Very Welcoming",
       };
     case "B":
       return {
-        hex: "#c084fc",
-        bgClass: "bg-purple-500/15",
-        textClass: "text-purple-300",
-        borderClass: "border-purple-500/30 shadow-[0_0_12px_rgba(192,132,252,0.15)]",
-        dotClass: "bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.8)]",
+        hex: "#8B6BB5",
+        bgClass: "bg-[#8B6BB5]/10",
+        textClass: "text-[#8B6BB5]",
+        borderClass: "border-[#8B6BB5]/30",
+        dotClass: "bg-[#8B6BB5]",
         label: "Solid",
         title: "Welcoming",
       };
     case "C":
       return {
-        hex: "#fbbf24",
-        bgClass: "bg-amber-500/15",
-        textClass: "text-amber-300",
-        borderClass: "border-amber-500/30 shadow-[0_0_12px_rgba(251,191,36,0.15)]",
-        dotClass: "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]",
+        hex: "#C4910A",
+        bgClass: "bg-[#C4910A]/10",
+        textClass: "text-[#C4910A]",
+        borderClass: "border-[#C4910A]/30",
+        dotClass: "bg-[#C4910A]",
         label: "Moderate",
-        title: "Selective",
+        title: "Slow Review",
       };
     case "D":
-      return {
-        hex: "#f87171",
-        bgClass: "bg-rose-500/15",
-        textClass: "text-rose-300",
-        borderClass: "border-rose-500/30 shadow-[0_0_12px_rgba(248,113,113,0.15)]",
-        dotClass: "bg-rose-400 shadow-[0_0_8px_rgba(248,113,113,0.8)]",
-        label: "Risky",
-        title: "Hard Going",
-      };
     default:
       return {
-        hex: "#a1a1aa",
-        bgClass: "bg-zinc-800/60",
-        textClass: "text-zinc-300",
-        borderClass: "border-zinc-700/60",
-        dotClass: "bg-zinc-400",
-        label: "Unranked",
-        title: "Unranked",
+        hex: "#C4463A",
+        bgClass: "bg-[#C4463A]/10",
+        textClass: "text-[#C4463A]",
+        borderClass: "border-[#C4463A]/30",
+        dotClass: "bg-[#C4463A]",
+        label: "Risky",
+        title: "High PR Stall Rate",
       };
   }
 }
 
-export function CRankBadge({ rank = "A", size = "md", showLabel = true, className = "" }: CRankBadgeProps) {
+export function CRankBadge({
+  rank = "B",
+  size = "md",
+  showLabel = false,
+  className = "",
+}: CRankBadgeProps) {
   const grade = getGradeColor(rank);
-  const normalizedRank = rank?.toUpperCase() || "A";
 
   const sizeClasses = {
-    sm: "px-2.5 py-0.5 text-xs gap-1.5",
-    md: "px-3 py-1 text-xs gap-2",
-    lg: "px-4 py-2 text-sm gap-2.5",
-  }[size];
+    sm: "px-2 py-0.5 text-xs font-mono font-bold rounded-md",
+    md: "px-2.5 py-1 text-sm font-mono font-bold rounded-lg",
+    lg: "px-3.5 py-1.5 text-base font-mono font-extrabold rounded-xl",
+  };
 
   return (
     <span
-      className={`inline-flex items-center whitespace-nowrap shrink-0 rounded-full font-mono font-bold border backdrop-blur-xl transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] cursor-default select-none ${grade.bgClass} ${grade.textClass} ${grade.borderClass} ${sizeClasses} ${className}`}
-      title={`C-Rank Grade ${normalizedRank} (${grade.title})`}
+      className={`inline-flex items-center gap-1.5 border ${grade.bgClass} ${grade.textClass} ${grade.borderClass} ${sizeClasses[size]} ${className}`}
+      title={`C-Rank: ${grade.title}`}
     >
-      <span className={`h-1.5 w-1.5 rounded-full shrink-0 animate-pulse ${grade.dotClass}`} />
-      <span className="font-extrabold tracking-tight shrink-0">{normalizedRank}</span>
-      {showLabel && (
-        <span className="font-sans font-semibold tracking-normal text-white whitespace-nowrap inline-flex items-center gap-1">
-          <span>•</span>
-          <span>{grade.label}</span>
-        </span>
-      )}
+      <span className={`h-1.5 w-1.5 rounded-full ${grade.dotClass}`} />
+      <span>{rank.toUpperCase()}</span>
+      {showLabel && <span className="opacity-80 font-normal">· {grade.label}</span>}
     </span>
   );
 }

@@ -263,7 +263,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-transparent text-white font-sans selection:bg-orange-500/30">
+    <div className="relative min-h-screen flex flex-col bg-[var(--bg-canvas)] text-[var(--text-primary)] font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -282,40 +282,40 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-16 flex-1 w-full text-zinc-100 font-sans">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-16 flex-1 w-full text-[var(--text-primary)] font-sans">
         {/* Navigation Breadcrumb */}
-        <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-zinc-400">
-          <Link prefetch={false} href="/" title="Home" className="hover:text-white transition-colors">
+        <nav className="mb-6 flex items-center gap-2 text-xs font-mono text-[var(--text-tertiary)]">
+          <Link prefetch={false} href="/" title="Home" className="hover:text-[var(--text-primary)] transition-colors">
             Home
           </Link>
           <span>/</span>
-          <Link prefetch={false} href="/rankings" title="All Ecosystem Rankings" className="hover:text-white transition-colors">
+          <Link prefetch={false} href="/rankings" title="All Ecosystem Rankings" className="hover:text-[var(--text-primary)] transition-colors">
             Rankings
           </Link>
           <span>/</span>
-          <span className="text-white font-semibold">{languageName}</span>
+          <span className="text-[var(--text-primary)] font-semibold">{languageName}</span>
         </nav>
 
         {/* Hero Section */}
-        <div className="rounded-3xl glass-panel p-6 sm:p-12 shadow-2xl mb-12 relative overflow-hidden">
+        <div className="rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-6 sm:p-12 shadow-sm mb-12 relative overflow-hidden">
           <div className="flex flex-wrap items-center gap-3 mb-5">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.1] px-4 py-1.5 text-xs font-bold text-white font-mono shadow-sm">
-              <Trophy className="h-4 w-4 text-amber-400" /> Welcoming Repositories Index
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#C4910A]/10 border border-[#C4910A]/30 px-4 py-1.5 text-xs font-bold text-[#C4910A] font-mono shadow-xs">
+              <Trophy className="h-4 w-4 text-[#C4910A]" /> Welcoming Repositories Index
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-sky-500/15 border border-sky-500/30 px-4 py-1.5 text-xs font-bold text-sky-300 font-mono">
-              <Code2 className="h-4 w-4 text-sky-400" /> {languageName} Ecosystem
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#2D8ABF]/10 border border-[#2D8ABF]/30 px-4 py-1.5 text-xs font-bold text-[#2D8ABF] font-mono">
+              <Code2 className="h-4 w-4 text-[#2D8ABF]" /> {languageName} Ecosystem
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-6xl font-black text-white tracking-tight font-space leading-[1.1] max-w-4xl">
+          <h1 className="text-3xl sm:text-5xl font-bold text-[var(--text-primary)] tracking-tight font-display leading-[1.12] max-w-4xl">
             {`Top Welcoming Open-Source ${languageName} Repositories`}
           </h1>
-          <p className="mt-4 text-base sm:text-lg text-zinc-200 max-w-3xl leading-relaxed font-sans">
+          <p className="mt-4 text-base sm:text-lg text-[var(--text-secondary)] max-w-3xl leading-relaxed font-sans">
             Top welcoming {languageName} repositories. Scored by real 90-day external PR merge rates, maintainer review turnaround speed, and first-time contributor success.
           </p>
 
-          <div className="mt-4 flex items-center gap-2 text-xs font-mono text-zinc-400">
-            <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="mt-4 flex items-center gap-2 text-xs font-mono text-[var(--text-tertiary)]">
+            <RefreshCw className="w-3.5 h-3.5 text-[#0D9668]" />
             <span>Updated daily • {latestSnapshotDate ? latestSnapshotDate.toUTCString().slice(0, 16) : "Live"} UTC</span>
           </div>
 
@@ -323,7 +323,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             <Link prefetch={false}
               href={`/good-first-issue/${canonicalLang}`}
               title={`Browse open ${languageName} good first issues`}
-              className="inline-flex items-center gap-2 rounded-xl bg-orange-500 hover:bg-orange-600 px-6 py-3.5 text-xs font-bold font-mono text-white transition-all shadow-lg hover:shadow-orange-500/20 cursor-pointer active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90 px-6 py-3.5 text-xs font-bold font-mono text-white transition-all shadow-sm cursor-pointer active:scale-[0.98]"
             >
               <Sprout className="h-4 w-4" />
               <span>Browse {totalGFIs > 0 ? `${totalGFIs} Good First Issues` : `Good First Issues`} in {languageName}</span>
@@ -331,9 +331,9 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
             <Link prefetch={false}
               href="/compare"
               title="Compare repository maintainer velocity"
-              className="inline-flex items-center gap-2 rounded-xl glass-card px-6 py-3.5 text-xs font-bold font-mono text-zinc-200 hover:text-white transition-all shadow-sm cursor-pointer active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] hover:bg-[var(--bg-surface)] px-6 py-3.5 text-xs font-bold font-mono text-[var(--text-primary)] transition-all shadow-xs cursor-pointer active:scale-[0.98]"
             >
-              <GitPullRequest className="h-4 w-4 text-orange-400" />
+              <GitPullRequest className="h-4 w-4 text-[var(--color-primary)]" />
               <span>Compare Two {languageName} Repos</span>
             </Link>
           </div>
@@ -341,74 +341,74 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
 
         {/* Ecosystem Live Telemetry Snapshot KPI Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-12">
-          <div className="glass-panel p-6 rounded-2xl shadow-md">
-            <div className="text-xs font-mono font-semibold text-zinc-400 uppercase tracking-wider">Tracked Repos</div>
-            <div className="mt-2 text-3xl sm:text-4xl font-black font-space text-white">
+          <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-6 rounded-2xl shadow-sm">
+            <div className="text-xs font-mono font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Tracked Repos</div>
+            <div className="mt-2 text-3xl sm:text-4xl font-bold font-mono text-[var(--text-primary)]">
               {totalTrackedRepos > 0 ? totalTrackedRepos.toLocaleString() : rankedItems.length}
             </div>
-            <div className="text-xs text-zinc-400 font-sans mt-1">&gt;100 stars verified</div>
+            <div className="text-xs text-[var(--text-secondary)] font-sans mt-1">&gt;100 stars verified</div>
           </div>
-          <div className="glass-panel p-6 rounded-2xl shadow-md">
-            <div className="text-xs font-mono font-semibold text-zinc-400 uppercase tracking-wider">Avg Merge Rate</div>
-            <div className="mt-2 text-3xl sm:text-4xl font-black font-space text-emerald-400">{avgMergeRate}%</div>
-            <div className="text-xs text-zinc-400 font-sans mt-1">90-day external PRs</div>
+          <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-6 rounded-2xl shadow-sm">
+            <div className="text-xs font-mono font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Avg Merge Rate</div>
+            <div className="mt-2 text-3xl sm:text-4xl font-bold font-mono text-[#0D9668]">{avgMergeRate}%</div>
+            <div className="text-xs text-[var(--text-secondary)] font-sans mt-1">90-day external PRs</div>
           </div>
-          <div className="glass-panel p-6 rounded-2xl shadow-md">
-            <div className="text-xs font-mono font-semibold text-zinc-400 uppercase tracking-wider">Open GFIs</div>
-            <div className="mt-2 text-3xl sm:text-4xl font-black font-space text-amber-400">{totalGFIs}</div>
-            <div className="text-xs text-zinc-400 font-sans mt-1">Beginner friendly issues</div>
+          <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-6 rounded-2xl shadow-sm">
+            <div className="text-xs font-mono font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Open GFIs</div>
+            <div className="mt-2 text-3xl sm:text-4xl font-bold font-mono text-[#C4910A]">{totalGFIs}</div>
+            <div className="text-xs text-[var(--text-secondary)] font-sans mt-1">Beginner friendly issues</div>
           </div>
-          <div className="glass-panel p-6 rounded-2xl shadow-md">
-            <div className="text-xs font-mono font-semibold text-zinc-400 uppercase tracking-wider">Welcoming Tier</div>
-            <div className="mt-2 text-3xl sm:text-4xl font-black font-space text-sky-400">{superWelcomingCount}</div>
-            <div className="text-xs text-zinc-400 font-sans mt-1">S & A Tier maintainers</div>
+          <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-6 rounded-2xl shadow-sm">
+            <div className="text-xs font-mono font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Welcoming Tier</div>
+            <div className="mt-2 text-3xl sm:text-4xl font-bold font-mono text-[#2D8ABF]">{superWelcomingCount}</div>
+            <div className="text-xs text-[var(--text-secondary)] font-sans mt-1">S & A Tier maintainers</div>
           </div>
         </div>
 
         {/* Repositories Header with count note */}
-        <div className="mb-6 flex items-center justify-between border-b border-white/[0.1] pb-4">
+        <div className="mb-6 flex items-center justify-between border-b border-[var(--border-subtle)] pb-4">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 font-space">
-              <Activity className="h-5 w-5 text-orange-400" />
+            <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2 font-display">
+              <Activity className="h-5 w-5 text-[var(--color-primary)]" />
               Ranked {languageName} Repositories
             </h2>
             {rankedItems.length > 0 && (
-              <p className="text-xs text-zinc-400 font-sans mt-1">
+              <p className="text-xs text-[var(--text-secondary)] font-sans mt-1">
                 Showing top {rankedItems.length} of {totalTrackedRepos > 0 ? totalTrackedRepos.toLocaleString() : rankedItems.length} ranked repositories
               </p>
             )}
           </div>
-          <span className="text-xs text-zinc-400 font-mono hidden sm:inline">Telemetry Updated Daily</span>
+          <span className="text-xs text-[var(--text-tertiary)] font-mono hidden sm:inline">Telemetry Updated Daily</span>
         </div>
 
         {/* Repositories Table or Error State */}
         {isDataAbsentOrFailed ? (
-          <div className="rounded-3xl glass-panel p-8 sm:p-12 text-center text-zinc-200 mb-12 border border-dashed border-rose-500/30 shadow-md">
-            <div className="mx-auto w-12 h-12 rounded-2xl bg-rose-500/10 flex items-center justify-center mb-4">
-              <AlertTriangle className="h-6 w-6 text-rose-400" />
+          <div className="rounded-3xl bg-[var(--bg-surface)] p-8 sm:p-12 text-center text-[var(--text-primary)] mb-12 border border-dashed border-[#C4463A]/30 shadow-sm">
+            <div className="mx-auto w-12 h-12 rounded-2xl bg-[#C4463A]/10 flex items-center justify-center mb-4">
+              <AlertTriangle className="h-6 w-6 text-[#C4463A]" />
             </div>
-            <h3 className="text-base font-bold text-white mb-2 font-space">
+            <h3 className="text-base font-bold text-[var(--text-primary)] mb-2 font-display">
               Unable to load {languageName} rankings snapshot
             </h3>
-            <p className="text-xs sm:text-sm text-zinc-300 max-w-md mx-auto mb-4 font-sans leading-relaxed">
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-md mx-auto mb-4 font-sans leading-relaxed">
               {isDataStale
                 ? `Snapshot data is stale (>7 days old).`
                 : `No snapshot data currently available for ${languageName}.`}
               {latestSnapshotDate && (
-                <span className="block mt-1 text-zinc-400 font-mono text-xs">
+                <span className="block mt-1 text-[var(--text-tertiary)] font-mono text-xs">
                   Last successful snapshot: {latestSnapshotDate.toUTCString()}
                 </span>
               )}
             </p>
-            <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-300 bg-zinc-900 border border-white/[0.08] px-3 py-1.5 rounded-lg">
-              <RefreshCw className="h-3.5 w-3.5 animate-spin text-zinc-400" />
+            <div className="inline-flex items-center gap-2 text-xs font-mono text-[var(--text-secondary)] bg-[var(--bg-elevated)] border border-[var(--border-subtle)] px-3 py-1.5 rounded-lg">
+              <RefreshCw className="h-3.5 w-3.5 animate-spin text-[var(--text-tertiary)]" />
               <span>Please retry in a few moments or run the snapshot pipeline.</span>
             </div>
           </div>
         ) : (
-          <div className="overflow-x-auto rounded-3xl glass-panel shadow-2xl mb-14 border border-white/[0.12]">
-            <table className="w-full text-left text-sm text-zinc-200">
-              <thead className="bg-white/[0.04] text-zinc-200 border-b border-white/[0.1] font-bold uppercase tracking-wider font-space text-xs">
+          <div className="overflow-x-auto rounded-2xl bg-[var(--bg-surface)] shadow-sm mb-14 border border-[var(--border-subtle)]">
+            <table className="w-full text-left text-sm text-[var(--text-primary)]">
+              <thead className="bg-[var(--bg-elevated)] text-[var(--text-secondary)] border-b border-[var(--border-subtle)] font-bold uppercase tracking-wider font-mono text-xs">
                 <tr>
                   <th className="py-4.5 px-6 text-center w-16">Rank</th>
                   <th className="py-4.5 px-6">Repository</th>
@@ -418,34 +418,34 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                   <th className="py-4.5 px-6 text-right">Good First Issues</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.06] font-mono">
+              <tbody className="divide-y divide-[var(--border-subtle)] font-mono">
                 {rankedItems.map((item, idx) => {
                   const [owner, name] = item.repo.full_name.split("/");
                   const tier = item.repo.c_rank_tier || "A";
 
                   return (
-                    <tr key={item.repo.id} className="hover:bg-white/[0.04] transition-colors group">
-                      <td className="py-5 px-6 text-center font-bold text-zinc-400 text-sm">
+                    <tr key={item.repo.id} className="hover:bg-[var(--bg-elevated)]/60 transition-colors group">
+                      <td className="py-5 px-6 text-center font-bold text-[var(--text-tertiary)] text-sm">
                         #{idx + 1}
                       </td>
-                      <td className="py-5 px-6 font-bold text-white font-sans">
+                      <td className="py-5 px-6 font-bold text-[var(--text-primary)] font-sans">
                         <div className="flex items-center gap-3">
                           <Link prefetch={false}
                             href={`/${owner}/${name}`}
                             title={`View ${item.repo.full_name} C-Rank scorecard and merge metrics`}
-                            className="text-white group-hover:text-orange-400 transition-colors font-space text-base font-bold underline-offset-2 hover:underline cursor-pointer"
+                            className="text-[var(--text-primary)] group-hover:text-[var(--color-primary)] transition-colors font-display text-base font-bold underline-offset-2 hover:underline cursor-pointer"
                           >
                             {item.repo.full_name}
                           </Link>
                           {item.repo.stars !== undefined && (
-                            <span className="inline-flex items-center gap-1 text-xs font-mono font-bold text-zinc-300 bg-white/[0.08] px-2.5 py-0.5 rounded-md border border-white/[0.1]">
-                              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                            <span className="inline-flex items-center gap-1 text-xs font-mono font-bold text-[var(--text-secondary)] bg-[var(--bg-elevated)] px-2.5 py-0.5 rounded-md border border-[var(--border-subtle)]">
+                              <Star className="h-3 w-3 fill-[#C4910A] text-[#C4910A]" />
                               {item.repo.stars.toLocaleString()}
                             </span>
                           )}
                         </div>
                         {item.repo.description && (
-                          <div className="text-xs font-normal text-zinc-300 font-sans line-clamp-1 max-w-xl mt-1">
+                          <div className="text-xs font-normal text-[var(--text-secondary)] font-sans line-clamp-1 max-w-xl mt-1">
                             {item.repo.description}
                           </div>
                         )}

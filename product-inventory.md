@@ -593,5 +593,6 @@ GetMerged
 
 ## 10. Change Log
  
+- **2026-11-07** — Warm Editorial Design Overhaul. Replaced legacy pitch-black (`#0a0a0a`) theme and dark glassmorphic styling across all public routes, components, and scorecards with a high-contrast editorial aesthetic inspired by modern Silicon Valley products (`freehire.me`, Granola): linen/sand canvas (`#FAFAF7`), solid crisp white cards (`#FFFFFF`), warm parchment elevated wells (`#F5F3EE`), warm terracotta brand accents (`#D4590F`), WCAG AA light-mode grade colors, min 14px body text, min 12px badges, zero CLS, and full SSR compliance.
 - **2026-09-16** — Added Daily X (Twitter) Spotlight Engine (`backend/internal/spotlight`, `cmd/daily_x_post`, `morning_brief` integration) for zero-jargon daily posts on X with 1-click Telegram drops and 1,000+ bulk CSV exporter.
 - **2026-09-05** — Initial full product inventory. DB counts, 30 public routes, 113 API endpoints, 70+ components, 28 hidden feature areas, gap check against launch plan.

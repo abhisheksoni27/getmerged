@@ -3,88 +3,88 @@
 import Link from "next/link";
 import { Activity, ArrowRight, GitPullRequest, Sparkles } from "lucide-react";
 
-/** 3-Pillar Platform Interlinking Grid */
+/** 3-Pillar Platform Interlinking Grid - Expansive Warm Editorial Cards */
 export function PillarGrid() {
   return (
-    <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto text-left">
+    <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
       {/* Pillar 1: Contributors & PR Tracking */}
       <Link prefetch={false}
         href="/dashboard"
-        className="p-5 rounded-xl border border-white/[0.1] bg-[#141414]/90 hover:bg-[#1c1c1c] hover:border-emerald-500/40 transition-all group flex flex-col justify-between"
+        className="p-7 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--border-hover)] hover:shadow-md transition-all group flex flex-col justify-between"
       >
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-2.5 rounded-xl bg-[var(--bg-elevated)] text-[#0D9668] border border-[var(--border-subtle)]">
               <GitPullRequest className="h-5 w-5" />
             </div>
-            <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-mono font-semibold text-[#0D9668] bg-[#0D9668]/10 px-2.5 py-1 rounded-full">
               For Contributors
             </span>
           </div>
-          <h3 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">
+          <h3 className="text-lg font-bold text-[var(--text-primary)] group-hover:text-[#0D9668] transition-colors">
             Track Open PRs & Forecasts
           </h3>
-          <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed font-sans">
+          <p className="text-sm text-[var(--text-secondary)] mt-2 leading-relaxed font-sans">
             Real-time review velocity alerts, merge probability scores, and contributor onboarding quests.
           </p>
         </div>
-        <div className="mt-4 flex items-center text-xs font-mono font-semibold text-emerald-400 group-hover:translate-x-1 transition-transform">
+        <div className="mt-6 flex items-center text-xs font-mono font-semibold text-[#0D9668] group-hover:translate-x-1 transition-transform">
           <span>Open Dashboard</span>
-          <ArrowRight className="h-3.5 w-3.5 ml-1" />
+          <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
         </div>
       </Link>
 
       {/* Pillar 2: For Maintainers */}
       <Link prefetch={false}
         href="/maintainers"
-        className="p-5 rounded-xl border border-white/[0.1] bg-[#141414]/90 hover:bg-[#1c1c1c] hover:border-amber-500/40 transition-all group flex flex-col justify-between"
+        className="p-7 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--border-hover)] hover:shadow-md transition-all group flex flex-col justify-between"
       >
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-2.5 rounded-xl bg-[var(--bg-elevated)] text-[var(--color-primary)] border border-[var(--border-subtle)]">
               <Activity className="h-5 w-5" />
             </div>
-            <span className="text-[11px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-mono font-semibold text-[var(--color-primary)] bg-[var(--color-primary)]/10 px-2.5 py-1 rounded-full">
               For Maintainers
             </span>
           </div>
-          <h3 className="text-base font-bold text-white group-hover:text-amber-400 transition-colors">
+          <h3 className="text-lg font-bold text-[var(--text-primary)] group-hover:text-[var(--color-primary)] transition-colors">
             Claim Repo & Boost Turnaround
           </h3>
-          <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed font-sans">
+          <p className="text-sm text-[var(--text-secondary)] mt-2 leading-relaxed font-sans">
             Claim your C-Rank scorecard, embed review SLAs, and attract high-quality beginner PRs.
           </p>
         </div>
-        <div className="mt-4 flex items-center text-xs font-mono font-semibold text-amber-400 group-hover:translate-x-1 transition-transform">
+        <div className="mt-6 flex items-center text-xs font-mono font-semibold text-[var(--color-primary)] group-hover:translate-x-1 transition-transform">
           <span>Maintainer Console</span>
-          <ArrowRight className="h-3.5 w-3.5 ml-1" />
+          <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
         </div>
       </Link>
 
       {/* Pillar 3: Good First Issues & Stack */}
       <Link prefetch={false}
         href="/good-first-issue"
-        className="p-5 rounded-xl border border-white/[0.1] bg-[#141414]/90 hover:bg-[#1c1c1c] hover:border-blue-500/40 transition-all group flex flex-col justify-between"
+        className="p-7 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--border-hover)] hover:shadow-md transition-all group flex flex-col justify-between"
       >
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-2.5 rounded-xl bg-[var(--bg-elevated)] text-[#2D8ABF] border border-[var(--border-subtle)]">
               <Sparkles className="h-5 w-5" />
             </div>
-            <span className="text-[11px] font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-mono font-semibold text-[#2D8ABF] bg-[#2D8ABF]/10 px-2.5 py-1 rounded-full">
               Beginner Friendly
             </span>
           </div>
-          <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors">
+          <h3 className="text-lg font-bold text-[var(--text-primary)] group-hover:text-[#2D8ABF] transition-colors">
             Good First Issues
           </h3>
-          <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed font-sans">
+          <p className="text-sm text-[var(--text-secondary)] mt-2 leading-relaxed font-sans">
             Curated, active beginner issues ranked by maintainer responsiveness and real merge probability.
           </p>
         </div>
-        <div className="mt-4 flex items-center text-xs font-mono font-semibold text-blue-400 group-hover:translate-x-1 transition-transform">
+        <div className="mt-6 flex items-center text-xs font-mono font-semibold text-[#2D8ABF] group-hover:translate-x-1 transition-transform">
           <span>Explore Issues</span>
-          <ArrowRight className="h-3.5 w-3.5 ml-1" />
+          <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
         </div>
       </Link>
     </div>

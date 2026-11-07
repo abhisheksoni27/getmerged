@@ -419,7 +419,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
   const firstTimerRate = repo.first_timer_success_rate ? `${Math.round(repo.first_timer_success_rate)}%` : " - ";
 
   return (
-    <div className="relative min-h-screen dev-grid-pattern flex flex-col bg-transparent text-white font-sans">
+    <div className="relative min-h-screen flex flex-col bg-[var(--bg-canvas)] text-[var(--text-primary)] font-sans">
       <Header />
       <script
         type="application/ld+json"
