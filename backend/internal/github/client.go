@@ -919,7 +919,10 @@ func (c *Client) do(query string, vars map[string]any, out any) (fromCache bool,
 						resRest.Body.Close()
 					}
 				}
-				slog.Warn("github: graphql rate limit hit - sleeping dynamically until resetAt", "sleep_duration", resetSleep.String())
+				if resetSleep > 2*time.Second {
+					resetSleep = 2 * time.Second
+				}
+				slog.Warn("github: graphql rate limit hit", "sleep_duration", resetSleep.String())
 				time.Sleep(resetSleep)
 			}
 		}
