@@ -14,9 +14,10 @@ interface RepoCardProps {
   isLoggedIn?: boolean;
   isSpotlight?: boolean;
   spotlightIndex?: number;
+  layout?: "card" | "row";
 }
 
-export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
+export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCardProps) {
   const router = useRouter();
   const rank = repo.class_rank || repo.c_rank_tier || "A";
   
@@ -130,6 +131,119 @@ export function RepoCard({ repo, isSpotlight = false }: RepoCardProps) {
 
   const topicChips = (repo.topics || []).filter(Boolean).slice(0, 3);
   const topicOverflow = (repo.topics || []).length - topicChips.length;
+
+  if (layout === "row") {
+    return (
+      <a
+        href={`/${fullName}`}
+        onClick={handleClick}
+        title={`View ${fullName} C-Rank scorecard, PR response time & merge metrics`}
+        className="group relative flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-2xl bg-[var(--bg-surface)] p-5 sm:px-6 sm:py-5 border border-[var(--border-subtle)] hover:border-[var(--border-strong)] hover:shadow-md transition-all text-current no-underline cursor-pointer"
+      >
+        {/* Left: Identity & Info */}
+        <div className="flex items-start gap-4 min-w-0 flex-1">
+          <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] overflow-hidden shrink-0 shadow-2xs mt-0.5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`https://github.com/${ownerPart || "github"}.png?size=48`}
+              alt={ownerPart}
+              width={48}
+              height={48}
+              className="h-full w-full object-cover"
+              loading="lazy"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "https://github.com/github.png?size=48";
+              }}
+            />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="font-sans text-base sm:text-lg font-bold text-[var(--text-primary)] group-hover:text-[var(--color-primary)] transition-colors truncate">
+                {displayName}
+              </span>
+              <span className="text-xs font-mono text-[var(--text-tertiary)] hidden sm:inline truncate max-w-[200px]">
+                {fullName}
+              </span>
+              <CRankBadge rank={rank} size="sm" showLabel={true} />
+              {repo.currently_active && (
+                <span className="h-2 w-2 rounded-full bg-[#0D9668] shrink-0" title="Active in last 30 days" />
+              )}
+            </div>
+
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] line-clamp-1 mt-1 font-sans">
+              {repo.description || "No repository description available."}
+            </p>
+
+            <div className="flex flex-wrap items-center gap-2.5 mt-2 font-mono text-xs">
+              <span className="flex items-center gap-1 font-bold text-[var(--text-primary)]">
+                <Star className="h-3.5 w-3.5 fill-[#C4910A] text-[#C4910A]" />
+                {repo.stars >= 1_000 ? `${(repo.stars / 1_000).toFixed(1)}k` : repo.stars}
+              </span>
+              <span className="text-[var(--border-strong)]">·</span>
+              <span className="flex items-center gap-1 text-[var(--text-secondary)] font-semibold">
+                <LangLogo language={repo.language} />
+                <span>{repo.language || "Code"}</span>
+              </span>
+              {topicChips.slice(0, 3).map((topic) => (
+                <span
+                  key={topic}
+                  onClick={(e) => handleTopicChipClick(e, topic)}
+                  className="hidden lg:inline-flex items-center px-2 py-0.5 rounded-md bg-[var(--bg-elevated)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)] text-[11px] font-medium"
+                >
+                  #{topic}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Telemetry data columns in crisp tabular alignment */}
+        <div className="flex items-center justify-between md:justify-end gap-5 sm:gap-7 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-[var(--border-subtle)] font-mono">
+          {/* Merge Rate */}
+          <div className="text-left md:text-right">
+            <div className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-wider font-semibold">Merge Rate</div>
+            <div className="text-sm sm:text-base font-bold text-[var(--text-primary)] tabular-nums mt-0.5">{mergeRateStr}</div>
+          </div>
+
+          {/* Review Time */}
+          <div className="text-left md:text-right">
+            <div className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-wider font-semibold">Review Wait</div>
+            <div className="text-sm sm:text-base font-bold text-[var(--text-primary)] tabular-nums mt-0.5">{firstResponseStr}</div>
+          </div>
+
+          {/* 1st Timers */}
+          <div className="text-left md:text-right hidden sm:block">
+            <div className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-wider font-semibold">1st-Timers</div>
+            <div className="text-sm sm:text-base font-bold text-[var(--text-primary)] tabular-nums mt-0.5">{firstTimerStr}</div>
+          </div>
+
+          {/* Starter issues pill */}
+          {gfiCount > 0 && (
+            <span
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleGfiClick();
+              }}
+              className="hidden xl:inline-flex items-center gap-1 text-[#0D9668] bg-[#0D9668]/10 px-2.5 py-1 rounded-lg border border-[#0D9668]/20 font-bold text-xs hover:bg-[#0D9668]/20 transition-colors"
+              title={`View ${gfiCount} Good First Issues`}
+            >
+              <ShieldCheck className="h-3.5 w-3.5" />
+              <span>{gfiCount} GFI</span>
+            </span>
+          )}
+
+          {/* Scorecard Action */}
+          <div className="pl-1">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--bg-elevated)] group-hover:bg-[var(--color-primary)] text-[var(--text-primary)] group-hover:text-white transition-all text-xs font-bold font-sans shadow-2xs">
+              <span>Scorecard</span>
+              <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </span>
+          </div>
+        </div>
+      </a>
+    );
+  }
 
   return (
     <a

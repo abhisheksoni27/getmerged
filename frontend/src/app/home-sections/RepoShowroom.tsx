@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, Search, List, LayoutGrid } from "lucide-react";
 import { motion } from "framer-motion";
 import { RepoCard } from "@/components/RepoCard";
 import { EASE_OUT_EXPO } from "@/lib/motion";
@@ -47,7 +48,12 @@ function CategoryChip({ def, onSelect }: { def: ChipDef; onSelect: (preset: Cate
   );
 }
 
-function ShowroomBody({ visibleRepos, isLoggedIn, onResetFilters }: Pick<RepoShowroomProps, "visibleRepos" | "isLoggedIn" | "onResetFilters">) {
+function ShowroomBody({
+  visibleRepos,
+  isLoggedIn,
+  onResetFilters,
+  viewMode = "row",
+}: Pick<RepoShowroomProps, "visibleRepos" | "isLoggedIn" | "onResetFilters"> & { viewMode?: "row" | "card" }) {
   if (visibleRepos.length === 0) {
     return (
       <motion.div
@@ -72,21 +78,32 @@ function ShowroomBody({ visibleRepos, isLoggedIn, onResetFilters }: Pick<RepoSho
       </motion.div>
     );
   }
+
   return (
     <>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-8">
-        {visibleRepos.map((repo, index) => (
-          <motion.div key={repo.id} transition={{ duration: 0.4, ease: EASE_OUT_EXPO, delay: index * 0.04 }}>
-            <RepoCard repo={repo} isLoggedIn={isLoggedIn} />
-          </motion.div>
-        ))}
-      </div>
+      {viewMode === "row" ? (
+        <div className="flex flex-col gap-3 mb-8">
+          {visibleRepos.map((repo, index) => (
+            <motion.div key={repo.id || repo.full_name} transition={{ duration: 0.3, ease: EASE_OUT_EXPO, delay: index * 0.02 }}>
+              <RepoCard repo={repo} isLoggedIn={isLoggedIn} layout="row" />
+            </motion.div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+          {visibleRepos.map((repo, index) => (
+            <motion.div key={repo.id || repo.full_name} transition={{ duration: 0.4, ease: EASE_OUT_EXPO, delay: index * 0.03 }}>
+              <RepoCard repo={repo} isLoggedIn={isLoggedIn} layout="card" />
+            </motion.div>
+          ))}
+        </div>
+      )}
 
       {/* Bottom CTA */}
       <div className="my-8 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
         <div>
           <h3 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] font-display">Looking for custom languages or merge rates?</h3>
-          <p className="text-xs text-[var(--text-secondary)] mt-1 font-sans">Filter across 20+ ecosystems with full pagination.</p>
+          <p className="text-xs text-[var(--text-secondary)] mt-1 font-sans">Filter across 20+ ecosystems with full pagination and multi-variable criteria.</p>
         </div>
 
         <Link prefetch={false}
@@ -94,7 +111,7 @@ function ShowroomBody({ visibleRepos, isLoggedIn, onResetFilters }: Pick<RepoSho
           title="Browse full repository database with all filters"
           className="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/90 px-6 py-3 text-xs font-bold font-sans shrink-0 shadow-sm transition-colors"
         >
-          <span>Open Explorer</span>
+          <span>Open Full Directory</span>
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
@@ -115,87 +132,126 @@ export function RepoShowroom({
   onSelectCategory,
   onResetFilters,
 }: RepoShowroomProps) {
+  const [viewMode, setViewMode] = useState<"row" | "card">("row");
+
   const chips: ChipDef[] = [
     {
+      preset: "welcoming",
+      label: "Welcoming (A & S Tier)",
+      title: "Filter repositories by Welcoming tiers",
+      isActive: selectedTier === "A" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All",
+      activeClass: "bg-[#0D9668] text-white border-[#0D9668]",
+    },
+    {
       preset: "hof",
-      label: "Hall of Fame",
+      label: "S-Tier Hall of Fame",
       title: "Filter repositories by S-Tier Hall of Fame",
       isActive: selectedTier === "S" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All",
       activeClass: "bg-[#C4910A] text-white border-[#C4910A]",
     },
     {
-      preset: "welcoming",
-      label: "Welcoming",
-      title: "Filter repositories by Welcoming (A-Tier)",
-      isActive: selectedTier === "A" && selectedFirstTimerBucket === "All" && selectedMinMergeRate === "All" && selectedBucket === "All",
-      activeClass: "bg-[#0D9668] text-white border-[#0D9668]",
-    },
-    {
-      preset: "giants",
-      label: "Star Giants",
-      title: "Filter repositories with 50k+ stars",
-      isActive: selectedBucket === "50k+",
-      activeClass: "bg-[#8B6BB5] text-white border-[#8B6BB5]",
+      preset: "merge",
+      label: "High Merge Rate (>70%)",
+      title: "Filter repositories with high merge rate",
+      isActive: selectedMinMergeRate === "60%",
+      activeClass: "bg-[var(--color-primary)] text-white border-[var(--color-primary)]",
     },
     {
       preset: "gfi",
-      label: "Has Good First Issue",
+      label: "Beginner Issues Open",
       title: "Filter repositories with good first issues",
       isActive: selectedFirstTimerBucket === "has_gfi",
       activeClass: "bg-[#2D8ABF] text-white border-[#2D8ABF]",
     },
     {
-      preset: "merge",
-      label: "High Merge Rate",
-      title: "Filter repositories with high merge rate (>= 60%)",
-      isActive: selectedMinMergeRate === "60%",
-      activeClass: "bg-[#C4463A] text-white border-[#C4463A]",
+      preset: "firstTimer",
+      label: "First-Timer Friendly",
+      title: "Filter repositories with high first-timer success",
+      isActive: selectedFirstTimerBucket === "60-80%",
+      activeClass: "bg-[#8B6BB5] text-white border-[#8B6BB5]",
     },
     {
-      preset: "firstTimer",
-      label: "First Timer Awesome",
-      title: "Filter repositories with awesome first-timer acceptance (> 60%)",
-      isActive: selectedFirstTimerBucket === "60-80%",
-      activeClass: "bg-[var(--color-primary)] text-white border-[var(--color-primary)]",
+      preset: "giants",
+      label: "50k+ Stars",
+      title: "Filter repositories with 50k+ stars",
+      isActive: selectedBucket === "50k+",
+      activeClass: "bg-[#4A4540] text-white border-[#4A4540]",
     },
   ];
 
   return (
     <HomeSection maxWidth="7xl" as="main" id="leaderboard-grid" className="flex-1 w-full pt-4">
-      {/* Category Switcher */}
-      <div className="mb-8 rounded-2xl bg-[var(--bg-surface)] p-6 sm:p-7 border border-[var(--border-subtle)] shadow-sm space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Category Switcher & Layout Toggle */}
+      <div className="mb-6 rounded-2xl bg-[var(--bg-surface)] p-5 sm:p-6 border border-[var(--border-subtle)] shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)] font-display">Explore Open Doors by Category</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] font-display tracking-tight">
+              Verified Welcoming Repositories
+            </h2>
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans mt-0.5">
+              Live telemetry scored by real PR response speed and external author acceptance rates.
+            </p>
           </div>
 
-          <Link prefetch={false}
-            href="/repos"
-            title="Open full multi-filter repository directory"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--text-primary)] hover:bg-[var(--color-neutral-800)] text-[var(--bg-canvas)] px-5 py-2.5 text-xs font-semibold shadow-sm transition-all self-start md:self-auto"
-          >
-            <span>Explore All {stats?.total_repos ? `${stats.total_repos.toLocaleString()} ` : ""}Repositories</span>
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            {/* View Mode Toggle: Rows vs Cards */}
+            <div className="flex items-center rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] p-1 text-xs">
+              <button
+                type="button"
+                onClick={() => setViewMode("row")}
+                title="List View (high density)"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
+                  viewMode === "row"
+                    ? "bg-[var(--bg-surface)] text-[var(--text-primary)] font-bold shadow-2xs"
+                    : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+                }`}
+              >
+                <List className="h-4 w-4" />
+                <span className="hidden sm:inline">Rows</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("card")}
+                title="Grid View (showcase cards)"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
+                  viewMode === "card"
+                    ? "bg-[var(--bg-surface)] text-[var(--text-primary)] font-bold shadow-2xs"
+                    : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+                }`}
+              >
+                <LayoutGrid className="h-4 w-4" />
+                <span className="hidden sm:inline">Cards</span>
+              </button>
+            </div>
+
+            <Link prefetch={false}
+              href="/repos"
+              title="Open full multi-filter repository directory"
+              className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[var(--text-primary)] hover:bg-[var(--color-neutral-800)] text-[var(--bg-canvas)] px-4 py-2 text-xs font-semibold shadow-2xs transition-all whitespace-nowrap"
+            >
+              <span>Explore All {stats?.total_repos ? `${stats.total_repos.toLocaleString()}` : "102k"}</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
 
         {/* Category Chips */}
-        <div className="flex items-center gap-2.5 overflow-x-auto pb-2 text-xs font-sans">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-sans scrollbar-none">
           {chips.map((chip) => (
             <CategoryChip key={chip.preset} def={chip} onSelect={onSelectCategory} />
           ))}
         </div>
       </div>
 
-      {/* Repos Cards Grid */}
+      {/* Repos Cards/Rows Grid */}
       {loading ? (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-10">
+        <div className="flex flex-col gap-3 mb-10">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 h-[280px] shadow-sm animate-pulse" />
+            <div key={i} className="h-24 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 shadow-sm animate-pulse" />
           ))}
         </div>
       ) : (
-        <ShowroomBody visibleRepos={visibleRepos} isLoggedIn={isLoggedIn} onResetFilters={onResetFilters} />
+        <ShowroomBody visibleRepos={visibleRepos} isLoggedIn={isLoggedIn} onResetFilters={onResetFilters} viewMode={viewMode} />
       )}
     </HomeSection>
   );

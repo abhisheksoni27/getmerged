@@ -9,6 +9,8 @@ import { Repo } from "@/types/opendoor";
 import {
   Sparkles,
   ShieldCheck,
+  List,
+  LayoutGrid,
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 import { AuthModal } from "@/components/AuthModal";
@@ -49,6 +51,7 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
   const [repos, setRepos] = useState<Repo[]>(initialRepos);
   const [totalCount, setTotalCount] = useState<number>(initialTotal);
   const [loading, setLoading] = useState<boolean>(false);
+  const [viewMode, setViewMode] = useState<"row" | "card">("row");
 
   // Auth Modal State
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -205,8 +208,43 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
           onReset={resetFilters}
         />
 
+        {/* View Mode & Repositories List/Grid */}
+        <div className="flex items-center justify-between gap-4 mb-4">
+          <div className="text-xs font-mono text-[var(--text-tertiary)] font-semibold uppercase tracking-wider">
+            Showing {filteredRepos.length} of {totalCount.toLocaleString()} repositories
+          </div>
+          <div className="flex items-center rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] p-1 text-xs">
+            <button
+              type="button"
+              onClick={() => setViewMode("row")}
+              title="List View (high density)"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
+                viewMode === "row"
+                  ? "bg-[var(--bg-surface)] text-[var(--text-primary)] font-bold shadow-2xs"
+                  : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+              }`}
+            >
+              <List className="h-4 w-4" />
+              <span className="hidden sm:inline">Rows</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("card")}
+              title="Grid View (showcase cards)"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
+                viewMode === "card"
+                  ? "bg-[var(--bg-surface)] text-[var(--text-primary)] font-bold shadow-2xs"
+                  : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+              }`}
+            >
+              <LayoutGrid className="h-4 w-4" />
+              <span className="hidden sm:inline">Cards</span>
+            </button>
+          </div>
+        </div>
+
         {/* Repositories Grid */}
-        <RepoGrid loading={loading} repos={filteredRepos} isLoggedIn={isLoggedIn} onReset={resetFilters} />
+        <RepoGrid loading={loading} repos={filteredRepos} isLoggedIn={isLoggedIn} onReset={resetFilters} viewMode={viewMode} />
 
         {/* Pagination Bar */}
         <PaginationBar

@@ -58,13 +58,13 @@ export function HeroSection({
   }, [setHeroSearchVisible]);
 
   return (
-    <section className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center overflow-visible">
+    <section className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-8 text-center overflow-visible">
       {/* Live radar badge */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-        className="inline-flex items-center gap-2 rounded-full border border-[#0D9668]/20 bg-[#0D9668]/10 px-4 py-1.5 text-xs font-mono font-semibold text-[#0D9668] mb-8"
+        className="inline-flex items-center gap-2 rounded-full border border-[#0D9668]/20 bg-[#0D9668]/10 px-3.5 py-1 text-xs font-mono font-semibold text-[#0D9668] mb-6"
       >
         <span className="relative flex h-2 w-2">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0D9668] opacity-75" />
@@ -80,10 +80,10 @@ export function HeroSection({
       </h1>
 
       <motion.p
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: EASE_OUT_EXPO, delay: 0.1 }}
-        className="mx-auto mt-6 max-w-2xl text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed font-sans font-normal text-balance"
+        transition={{ duration: 0.4, ease: EASE_OUT_EXPO, delay: 0.08 }}
+        className="mx-auto mt-4 max-w-2xl text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed font-sans font-normal text-balance"
       >
         Real reviewer response times, merge rates, and beginner-friendly maintainers across 102,000+ open-source projects.
       </motion.p>
@@ -92,10 +92,10 @@ export function HeroSection({
       <motion.div
         id="hero-search-container"
         ref={heroSearchRef}
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: EASE_OUT_EXPO, delay: 0.2 }}
-        className="mt-10 max-w-2xl mx-auto"
+        transition={{ duration: 0.4, ease: EASE_OUT_EXPO, delay: 0.15 }}
+        className="mt-8 max-w-2xl mx-auto"
       >
         <div
           onClick={() => openSearch(searchQuery)}
@@ -164,8 +164,8 @@ export function HeroSection({
 
       {/* Macro Telemetry Grid - Expansive White Surface */}
       <motion.div
-        className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4 max-w-4xl mx-auto rounded-3xl bg-[var(--bg-surface)] p-6 sm:p-8 border border-[var(--border-subtle)] shadow-[0_2px_12px_rgba(0,0,0,0.03)] items-center text-center"
-        transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+        className="mt-8 sm:mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-4xl mx-auto rounded-2xl bg-[var(--bg-surface)] p-4 sm:p-6 border border-[var(--border-subtle)] shadow-xs items-center text-center"
+        transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
       >
         <div className="p-2">
           <div className="text-2xl sm:text-3xl font-bold font-mono text-[var(--text-primary)] tracking-tight">
