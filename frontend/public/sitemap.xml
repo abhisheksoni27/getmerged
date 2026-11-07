@@ -5,19 +5,39 @@
     <lastmod>2026-11-07</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/c.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/vue.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/haskell.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
     <loc>https://getmerged.abhishekco.de/sitemap/cpp.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/rust.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/lua.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/php.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/shell.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/scala.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/html.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/go.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/elixir.xml</loc>
     <lastmod>2026-11-07</lastmod>
   </sitemap>
   <sitemap>
@@ -25,7 +45,23 @@
     <lastmod>2026-11-07</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/javascript.xml</loc>
+    <loc>https://getmerged.abhishekco.de/sitemap/kotlin.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/powershell.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/typescript.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/ruby.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/haskell.xml</loc>
     <lastmod>2026-11-07</lastmod>
   </sitemap>
   <sitemap>
@@ -37,59 +73,7 @@
     <lastmod>2026-11-07</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/go.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/rust.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/ruby.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/dart.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/lua.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
     <loc>https://getmerged.abhishekco.de/sitemap/other.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/scala.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/typescript.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/kotlin.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/elixir.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/java.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/shell.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/swift.xml</loc>
-    <lastmod>2026-11-07</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/html.xml</loc>
     <lastmod>2026-11-07</lastmod>
   </sitemap>
   <sitemap>
@@ -97,11 +81,27 @@
     <lastmod>2026-11-07</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/powershell.xml</loc>
+    <loc>https://getmerged.abhishekco.de/sitemap/java.xml</loc>
     <lastmod>2026-11-07</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://getmerged.abhishekco.de/sitemap/php.xml</loc>
+    <loc>https://getmerged.abhishekco.de/sitemap/vue.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/dart.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/swift.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/c.xml</loc>
+    <lastmod>2026-11-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://getmerged.abhishekco.de/sitemap/javascript.xml</loc>
     <lastmod>2026-11-07</lastmod>
   </sitemap>
 </sitemapindex>
