@@ -463,7 +463,7 @@ func (s *Service) run(owner, name string) {
 		return
 	}
 
-	if len(gfiIssues) > 0 && s.db != nil {
+	if s.db != nil {
 		_ = repository.NewGFIRepository(s.db).UpsertIssues(ctx, repoID, gfiIssues)
 	}
 	if len(meta.Topics) > 0 {

@@ -462,7 +462,7 @@ func gfiSimilarOpenIssues(ctx context.Context, db *sqlx.DB, repoID string, exclu
 		SELECT g.title, g.url, r.full_name
 		FROM repo_good_first_issues g
 		JOIN repositories r ON r.id = g.repository_id
-		WHERE g.repository_id = ? AND g.issue_number <> ?
+		WHERE g.repository_id = ? AND g.is_open = 1 AND g.issue_number <> ?
 		ORDER BY g.quality_score DESC, g.created_at DESC
 		LIMIT 3
 	`, repoID, excludeIssue); err != nil {

@@ -152,7 +152,7 @@ export function GfiSection({ repo, fullName, gfiList, gfiTab, onTabChange }: Gfi
                 <code className="bg-emerald-950/70 border-emerald-800/80 px-1.5 py-0.5 rounded text-emerald-400 font-mono">good first issue</code> tickets available for newcomers.
               </>
             ) : (
-              <>No cached good first issues currently tracked for <strong>{fullName}</strong>.</>
+              <>No active good first issues currently open for <strong>{fullName}</strong>.</>
             )}
           </p>
           <p className="text-xs text-[var(--text-secondary)] mt-2">
@@ -163,7 +163,7 @@ export function GfiSection({ repo, fullName, gfiList, gfiTab, onTabChange }: Gfi
               title="View all good first issues directly on GitHub"
               className="text-emerald-600 hover:text-emerald-400 font-semibold inline-flex items-center gap-1 underline underline-offset-2"
             >
-              View all good first issues directly on GitHub <ArrowRight className="h-3 w-3 inline" />
+              Check GitHub for newly opened issues <ArrowRight className="h-3 w-3 inline" />
             </a>
           </p>
         </div>

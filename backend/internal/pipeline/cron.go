@@ -85,21 +85,23 @@ func UpdateScores(db *sqlx.DB, gh *ghclient.Client) error {
 				gfiIssues, gfiCount, err := gh.FetchGoodFirstIssuesList(r.Owner, r.Name, 5)
 				if err != nil {
 					slog.Warn("cron: FetchGoodFirstIssuesList failed - assuming none", "repo", r.FullName, "err", err)
-				} else if len(gfiIssues) > 0 {
+				} else {
 					gfiRepo := repository.NewGFIRepository(db)
 					if err := gfiRepo.UpsertIssues(context.Background(), r.ID, gfiIssues); err != nil {
 						slog.Warn("cron: UpsertIssues failed", "repo", r.FullName, "err", err)
 					}
 					// Fan out instant alerts for freshly ingested issues;
 					// insert-or-ignore dedupe makes this idempotent.
-					nums := make([]int, 0, len(gfiIssues))
-					for _, gi := range gfiIssues {
-						nums = append(nums, gi.Number)
-					}
-					if n, err := notification.EnqueueGFIInstantAlerts(context.Background(), db, r.ID, nums, time.Now()); err != nil {
-						slog.Warn("cron: GFI instant alert enqueue failed", "repo", r.FullName, "err", err)
-					} else if n > 0 {
-						slog.Info("cron: queued GFI instant alerts", "repo", r.FullName, "count", n)
+					if len(gfiIssues) > 0 {
+						nums := make([]int, 0, len(gfiIssues))
+						for _, gi := range gfiIssues {
+							nums = append(nums, gi.Number)
+						}
+						if n, err := notification.EnqueueGFIInstantAlerts(context.Background(), db, r.ID, nums, time.Now()); err != nil {
+							slog.Warn("cron: GFI instant alert enqueue failed", "repo", r.FullName, "err", err)
+						} else if n > 0 {
+							slog.Info("cron: queued GFI instant alerts", "repo", r.FullName, "count", n)
+						}
 					}
 				}
 

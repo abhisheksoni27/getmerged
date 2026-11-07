@@ -1037,7 +1037,7 @@ func swapInNextMatch(ctx context.Context, db *sqlx.DB, cfg GFIAlertConfig, subID
 		FROM repo_good_first_issues g
 		JOIN repositories r ON r.id = g.repository_id
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
-		WHERE g.repository_id = ?
+		WHERE g.repository_id = ? AND g.is_open = 1
 		ORDER BY g.quality_score DESC, g.created_at DESC
 		LIMIT 15
 	`
@@ -1311,7 +1311,7 @@ func selectDigestMatches(ctx context.Context, db *sqlx.DB, sub gfiSubscriber, wi
 		FROM repo_good_first_issues g
 		JOIN repositories r ON r.id = g.repository_id
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
-		WHERE g.created_at >= ? AND g.quality_score >= 0
+		WHERE g.is_open = 1 AND g.created_at >= ? AND g.quality_score >= 0
 		  AND LOWER(r.language) IN (?)
 		  AND COALESCE(s.c_rank_tier,'') IN (?)
 		  AND NOT EXISTS (

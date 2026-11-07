@@ -425,7 +425,7 @@ func enrichAlert(ctx context.Context, db *sqlx.DB, a *RepoAlert) {
 	}
 	err := db.GetContext(ctx, &gfi, `
 		SELECT title, url FROM repo_good_first_issues
-		WHERE repository_id = ? AND quality_score > 0
+		WHERE repository_id = ? AND is_open = 1 AND quality_score > 0
 		ORDER BY quality_score DESC, created_at DESC LIMIT 1
 	`, a.RepoID)
 	if err == nil && gfi.URL != "" {
