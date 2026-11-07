@@ -94,19 +94,18 @@ func (s *GFIBackfillService) RunSweep(ctx context.Context, batchSize int) (int, 
 		}
 		owner, name := parts[0], parts[1]
 
-		issues, _, err := s.gh.FetchGoodFirstIssuesList(owner, name, 8)
+		issues, count, err := s.gh.FetchGoodFirstIssuesList(owner, name, 8)
 		if err != nil {
 			slog.Warn("gfi-backfill: fetch failed", "repo", target.FullName, "err", err)
 			continue
 		}
 
-		if len(issues) > 0 {
-			if err := s.gfiRepo.UpsertIssues(ctx, target.ID, issues); err != nil {
-				slog.Error("gfi-backfill: upsert failed", "repo", target.FullName, "err", err)
-				continue
-			}
-			syncedCount++
+		if err := s.gfiRepo.UpsertIssues(ctx, target.ID, issues); err != nil {
+			slog.Error("gfi-backfill: upsert failed", "repo", target.FullName, "err", err)
+			continue
 		}
+		_, _ = s.db.ExecContext(ctx, `UPDATE latest_snapshots SET good_first_issue_count = ? WHERE repository_id = ?`, count, target.ID)
+		syncedCount++
 
 		// Rate limiter safety delay: 200ms between repos (max 5 reqs/sec)
 		time.Sleep(200 * time.Millisecond)

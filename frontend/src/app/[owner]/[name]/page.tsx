@@ -65,7 +65,7 @@ async function getRelatedRepos(targetIdOrName: string | number, revalidate = 864
   return [];
 }
 
-async function getGoodFirstIssues(targetIdOrName: string | number, revalidate = 86400): Promise<GoodFirstIssueItem[]> {
+async function getGoodFirstIssues(targetIdOrName: string | number, revalidate = 300): Promise<GoodFirstIssueItem[]> {
   try {
     const target = String(targetIdOrName);
     const res = await fetch(
@@ -323,7 +323,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
   // Streaming SSR: Launch promises concurrently so secondary widgets can stream in without blocking Chunk 1 LCP
   const insightsPromise = getRepoInsights(targetInsightKey, fullName, dynamicTtl);
   const relatedReposPromise = getRelatedRepos(targetInsightKey, dynamicTtl);
-  const gfiListPromise = getGoodFirstIssues(targetInsightKey, dynamicTtl);
+  const gfiListPromise = getGoodFirstIssues(targetInsightKey, Math.min(dynamicTtl, 300));
   const sweetSpotPromise = getPRSizeSweetSpot(targetInsightKey, dynamicTtl);
   const likelihoodPromise = getPRLikelihood(fullName, dynamicTtl);
   const optimalTimePromise = getOptimalTime(fullName, dynamicTtl);

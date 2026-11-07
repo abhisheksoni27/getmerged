@@ -55,5 +55,13 @@
   4. Executed systematic 125-file audit via `scripts/audit_and_fix_contrast.py`, eliminating all white-on-white text while preserving contrast on solid action buttons.
   5. Kept strict SSR-First architecture and zero-CLS performance across all 45 routes.
 
-
+## ADR-008: Good First Issue Lifecycle Sync & is_open Integrity
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: Closed Good First Issues on GitHub remained visible as active tickets on repo detail pages (e.g. `strelov1/freehire`) because `UpsertIssues` only updated open issues, ignored empty lists when all issues closed, and queries (`ListByRepoID`, `ListByLanguage`, `ListFeed`, alert matchers) lacked `is_open = 1` checks.
+- **Decision**:
+  1. Updated `gfiRepo.UpsertIssues` in `backend/internal/repository/gfi_repository.go` to mark issues `is_open = 0` when they are closed or absent from the latest GitHub GraphQL search, and mark all repo issues closed when `issues` is empty.
+  2. Updated `ListByRepoID`, `ListByLanguage`, and `ListFeed` to strictly filter `g.is_open = 1`.
+  3. Ensured background pipelines (`gfi_backfill`, `cron`, `seed`, `scan`) always invoke `UpsertIssues` even when 0 issues remain, and update `latest_snapshots.good_first_issue_count` to reflect the live count.
+  4. Reduced Next.js SSR cache TTL for `getGoodFirstIssues` to 300s (aligned with backend `max-age=300`) so stale issues do not persist for 24 hours.
 

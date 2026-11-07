@@ -78,15 +78,22 @@ func GFICutoffUTC() time.Time {
 
 func (r *sqlxGFIRepository) UpsertIssues(ctx context.Context, repoID string, issues []github.GoodFirstIssue) error {
 	if len(issues) == 0 {
-		return nil
+		_, err := r.db.ExecContext(ctx, `
+			UPDATE repo_good_first_issues
+			SET is_open = 0, synced_at = CURRENT_TIMESTAMP
+			WHERE repository_id = ?
+		`, repoID)
+		return err
 	}
 
 	cutoff := GFICutoffUTC()
+	openNumbers := make([]int, 0, len(issues))
 
 	for _, issue := range issues {
 		if !issue.CreatedAt.IsZero() && issue.CreatedAt.UTC().Before(cutoff) {
 			continue
 		}
+		openNumbers = append(openNumbers, issue.Number)
 
 		isBounty, bountyAmt := bounty.Detect(issue.LabelsJSON)
 		bountyStatus := "closed"
@@ -143,6 +150,25 @@ func (r *sqlxGFIRepository) UpsertIssues(ctx context.Context, repoID string, iss
 			return err
 		}
 	}
+
+	if len(openNumbers) > 0 {
+		closeQuery, closeArgs, err := sqlx.In(`
+			UPDATE repo_good_first_issues
+			SET is_open = 0, synced_at = CURRENT_TIMESTAMP
+			WHERE repository_id = ? AND issue_number NOT IN (?)
+		`, repoID, openNumbers)
+		if err == nil {
+			closeQuery = r.db.Rebind(closeQuery)
+			_, _ = r.db.ExecContext(ctx, closeQuery, closeArgs...)
+		}
+	} else {
+		_, _ = r.db.ExecContext(ctx, `
+			UPDATE repo_good_first_issues
+			SET is_open = 0, synced_at = CURRENT_TIMESTAMP
+			WHERE repository_id = ?
+		`, repoID)
+	}
+
 	return nil
 }
 
@@ -174,7 +200,7 @@ func (r *sqlxGFIRepository) ListByLanguage(ctx context.Context, language string,
 
 	cutoff := GFICutoffUTC()
 	now := time.Now().UTC()
-	whereClause := "g.created_at >= ?"
+	whereClause := "g.is_open = 1 AND g.created_at >= ?"
 	args := []interface{}{now, cutoff}
 	if language != "" && stringsToLower(language) != "all" {
 		whereClause += " AND LOWER(rep.language) = LOWER(?)"
@@ -216,7 +242,7 @@ func (r *sqlxGFIRepository) ListByRepoID(ctx context.Context, repoID string, lim
 		fetchLimit = limit * 10
 	}
 	query := gfiListSelect + `
-		WHERE g.repository_id = ? AND g.created_at >= ?
+		WHERE g.repository_id = ? AND g.is_open = 1 AND g.created_at >= ?
 		ORDER BY (rep.boost_expires_at > CURRENT_TIMESTAMP) DESC, rep.boost_expires_at ASC,
 			boosted DESC,
 			g.created_at DESC,
@@ -245,7 +271,7 @@ func (r *sqlxGFIRepository) ListFeed(ctx context.Context, filter GFIFeedFilter, 
 
 	// gfiListSelect carries a `b.expires_at > ?` placeholder (boost join) as
 	// its first argument, so `now` must be args[0].
-	where := "g.created_at >= ?"
+	where := "g.is_open = 1 AND g.created_at >= ?"
 	args := []interface{}{now, cutoff}
 	if filter.Language != "" {
 		where += " AND LOWER(rep.language) = LOWER(?)"

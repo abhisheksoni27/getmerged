@@ -134,13 +134,13 @@ func ScoreRepo(gh *ghclient.Client, repoStore repository.RepoRepository, aiClien
 			repoID = uuid.New().String()
 		}
 
-		if len(gfiIssues) > 0 {
-			if v, exists := c.Get("db"); exists && v != nil {
-				if database, ok := v.(*sqlx.DB); ok {
-					gfiRepo := repository.NewGFIRepository(database)
-					_ = gfiRepo.UpsertIssues(c.Request.Context(), repoID, gfiIssues)
-					// Fan out instant alerts for freshly ingested issues;
-					// insert-or-ignore dedupe makes repeated scans idempotent.
+		if v, exists := c.Get("db"); exists && v != nil {
+			if database, ok := v.(*sqlx.DB); ok {
+				gfiRepo := repository.NewGFIRepository(database)
+				_ = gfiRepo.UpsertIssues(c.Request.Context(), repoID, gfiIssues)
+				// Fan out instant alerts for freshly ingested issues;
+				// insert-or-ignore dedupe makes repeated scans idempotent.
+				if len(gfiIssues) > 0 {
 					nums := make([]int, 0, len(gfiIssues))
 					for _, gi := range gfiIssues {
 						nums = append(nums, gi.Number)

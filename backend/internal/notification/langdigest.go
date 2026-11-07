@@ -333,7 +333,7 @@ func LangDigestBuildMatches(ctx context.Context, db *sqlx.DB, language string) [
 	q := `SELECT r.full_name, r.language, r.c_rank_tier, r.external_pr_merge_rate,
 			(SELECT g.url FROM repo_good_first_issues g
 				JOIN repositories r2 ON r2.id = g.repository_id
-				WHERE r2.language = r.language AND g.bounty_status = 'active'
+				WHERE r2.language = r.language AND g.is_open = 1 AND g.bounty_status = 'active'
 				ORDER BY g.created_at DESC LIMIT 1) AS gfi_url
 		FROM repositories r
 		WHERE r.language = ? AND r.score_source <> 'fallback' AND r.stars >= 100
@@ -349,7 +349,7 @@ func LangDigestBuildMatches(ctx context.Context, db *sqlx.DB, language string) [
 		if e := db.SelectContext(ctx, &gfi,
 			`SELECT r.full_name, g.url, g.title FROM repo_good_first_issues g
 			 JOIN repositories r ON r.id = g.repository_id
-			 WHERE r.language = ? AND g.bounty_status = 'active'
+			 WHERE r.language = ? AND g.is_open = 1 AND g.bounty_status = 'active'
 			 ORDER BY g.created_at DESC LIMIT 3`, language); e == nil && len(gfi) > 0 {
 			matches := make([]MatchCandidate, 0, len(gfi))
 			for _, x := range gfi {

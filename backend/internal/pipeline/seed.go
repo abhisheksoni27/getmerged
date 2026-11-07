@@ -223,7 +223,7 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 	gfiIssues, gfiCount, err := gh.FetchGoodFirstIssuesList(owner, name, 5)
 	if err != nil {
 		slog.Warn("scoreAndSaveRepo: FetchGoodFirstIssuesList failed - assuming none", "repo", fullName, "err", err)
-	} else if len(gfiIssues) > 0 {
+	} else {
 		gfiRepo := repository.NewGFIRepository(db)
 		_ = gfiRepo.UpsertIssues(context.Background(), repoID, gfiIssues)
 	}

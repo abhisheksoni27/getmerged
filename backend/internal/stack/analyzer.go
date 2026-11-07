@@ -530,7 +530,7 @@ func (a *Analyzer) resolvePackageRepo(pkgName string) StackRepoInfo {
 	issueQuery := `
 		SELECT id, title, url, COALESCE(comments_count, 0) as comments_count, created_at
 		FROM repo_good_first_issues
-		WHERE repository_id = ? AND state = 'OPEN'
+		WHERE repository_id = ? AND is_open = 1
 		ORDER BY created_at DESC LIMIT 3
 	`
 	_ = a.db.Select(&issues, issueQuery, repo.ID)

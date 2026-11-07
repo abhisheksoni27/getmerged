@@ -141,3 +141,71 @@ func TestGFIRepository_ListByRepoID_FiltersOlderThan9Months(t *testing.T) {
 		t.Fatalf("expected issue #202, got #%d", items[0].IssueNumber)
 	}
 }
+
+func TestGFIRepository_UpsertIssues_MarksClosedIssues(t *testing.T) {
+	database, _ := setupTestDB(t)
+	defer database.Close()
+
+	gfiRepo := repository.NewGFIRepository(database)
+	ctx := context.Background()
+
+	repoID := "test-repo-closing"
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+		repoID, "org/closing", "org", "closing", "TypeScript", 400, time.Now())
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score) VALUES (?, ?, ?, ?)`,
+		repoID, "2026-08-18", "A", 88.0)
+
+	now := time.Now().UTC()
+
+	// Initial batch: issues #1 and #2 open
+	initialIssues := []github.GoodFirstIssue{
+		{Number: 1, Title: "Issue 1", URL: "url1", CreatedAt: now.AddDate(0, -1, 0), QualityScore: 80},
+		{Number: 2, Title: "Issue 2", URL: "url2", CreatedAt: now.AddDate(0, -1, 0), QualityScore: 85},
+	}
+	if err := gfiRepo.UpsertIssues(ctx, repoID, initialIssues); err != nil {
+		t.Fatalf("initial UpsertIssues failed: %v", err)
+	}
+
+	items, err := gfiRepo.ListByRepoID(ctx, repoID, 10, false)
+	if err != nil || len(items) != 2 {
+		t.Fatalf("expected 2 open issues, got %d (err: %v)", len(items), err)
+	}
+
+	// Next sync: issue #1 was closed on GitHub, only #2 remains
+	nextIssues := []github.GoodFirstIssue{
+		{Number: 2, Title: "Issue 2", URL: "url2", CreatedAt: now.AddDate(0, -1, 0), QualityScore: 85},
+	}
+	if err := gfiRepo.UpsertIssues(ctx, repoID, nextIssues); err != nil {
+		t.Fatalf("second UpsertIssues failed: %v", err)
+	}
+
+	items, err = gfiRepo.ListByRepoID(ctx, repoID, 10, false)
+	if err != nil || len(items) != 1 {
+		t.Fatalf("expected 1 open issue after closing #1, got %d", len(items))
+	}
+	if items[0].IssueNumber != 2 {
+		t.Fatalf("expected remaining issue to be #2, got #%d", items[0].IssueNumber)
+	}
+
+	// Verify #1 in DB has is_open = 0
+	var isOpen int
+	err = database.GetContext(ctx, &isOpen, `SELECT is_open FROM repo_good_first_issues WHERE repository_id = ? AND issue_number = 1`, repoID)
+	if err != nil || isOpen != 0 {
+		t.Fatalf("expected is_open = 0 for issue #1, got %d (err: %v)", isOpen, err)
+	}
+
+	// Final sync: all issues closed (empty list returned by GitHub)
+	if err := gfiRepo.UpsertIssues(ctx, repoID, []github.GoodFirstIssue{}); err != nil {
+		t.Fatalf("empty UpsertIssues failed: %v", err)
+	}
+
+	items, err = gfiRepo.ListByRepoID(ctx, repoID, 10, false)
+	if err != nil || len(items) != 0 {
+		t.Fatalf("expected 0 open issues after closing all, got %d", len(items))
+	}
+
+	err = database.GetContext(ctx, &isOpen, `SELECT is_open FROM repo_good_first_issues WHERE repository_id = ? AND issue_number = 2`, repoID)
+	if err != nil || isOpen != 0 {
+		t.Fatalf("expected is_open = 0 for issue #2, got %d (err: %v)", isOpen, err)
+	}
+}

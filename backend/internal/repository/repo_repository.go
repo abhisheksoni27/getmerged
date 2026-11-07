@@ -154,7 +154,7 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 			placeholders = append(placeholders, "?")
 		}
 		if len(placeholders) > 0 {
-			where += " AND r.language IN (" + strings.Join(placeholders, ",") + ")"
+			where += " AND LOWER(r.language) IN (" + strings.Join(placeholders, ",") + ")"
 		}
 	}
 
@@ -472,7 +472,7 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
-		WHERE r.full_name = ? OR r.id = ?
+		WHERE LOWER(r.full_name) = LOWER(?) OR r.id = ?
 		LIMIT 1
 	`
 	var repo RepoRecord

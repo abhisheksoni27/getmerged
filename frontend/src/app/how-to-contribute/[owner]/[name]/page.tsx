@@ -45,7 +45,7 @@ async function getGoodFirstIssues(repoId: string): Promise<GoodFirstIssueItem[]>
   try {
     const res = await fetch(
       `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(repoId)}/good-first-issues`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 300 } }
     );
     if (!res.ok) return [];
     const data = await res.json();
