@@ -38,7 +38,7 @@ export function InsightsSection({ insights, fullName }: InsightsSectionProps) {
                   {insights.maintainer_persona || `${fullName.split("/")[1] || "Core"} Maintainer Team`}
                 </h3>
               </div>
-              <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t-2 sm:border-t-0 sm:border-l-2 border-white/30 pt-2 sm:pt-0 sm:pl-4">
+              <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t-2 sm:border-t-0 sm:border-l-2 border-[var(--border-subtle)] pt-2 sm:pt-0 sm:pl-4">
                 {insights.warmth_score != null && insights.warmth_score > 0 && (
                   <div>
                     <div className="text-[var(--text-secondary)] text-[10px]">Warmth Score</div>
@@ -62,7 +62,7 @@ export function InsightsSection({ insights, fullName }: InsightsSectionProps) {
 
             {/* Description */}
             {insights.maintainer_vibe && (
-              <div className="p-4 rounded-xl glass-card/60 border border-white/[0.09] rounded-xl">
+              <div className="p-4 rounded-xl glass-card/60 border border-[var(--border-subtle)] rounded-xl">
                 <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
                   {insights.maintainer_vibe}
                 </p>

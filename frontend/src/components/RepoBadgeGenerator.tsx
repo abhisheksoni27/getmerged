@@ -129,7 +129,7 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
             }}
             className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
               activeTab === tab
-                ? "glass-card text-white shadow-xs"
+                ? "glass-card text-[var(--text-primary)] shadow-xs"
                 : "glass-card text-[var(--text-secondary)] hover:bg-zinc-200"
             }`}
           >
@@ -145,7 +145,7 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
           <button
             onClick={handleCopy}
             title={`Copy ${activeTab === "markdown" ? "markdown" : "HTML"} badge embed code`}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl glass-card hover:bg-zinc-800 active:scale-95 text-white font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-xs inline-flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl glass-card hover:bg-zinc-800 active:scale-95 text-[var(--text-primary)] font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-xs inline-flex items-center justify-center gap-2"
           >
             {copied ? (
               <span className="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
@@ -172,7 +172,7 @@ Why:
               copyText(prompt, "badge_prompt_copied", { repo_full_name: fullName });
             }}
             title="Copy AI prompt to add GetMerged badge to your repo README via Cursor, Copilot, or Claude"
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl glass-panel hover:glass-card active:scale-95 text-white border border-[var(--border-subtle)] font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-2xs inline-flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl glass-panel hover:glass-card active:scale-95 text-[var(--text-primary)] border border-[var(--border-subtle)] font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-2xs inline-flex items-center justify-center gap-2"
           >
             <span className="inline-flex items-center gap-1.5">
               <Copy className="h-3.5 w-3.5" /> Copy AI Prompt (for LLMs)

@@ -23,7 +23,7 @@ function ChecklistItem({ item }: { item: MaintainerChecklistItem }) {
   return (
     <div className="p-4 glass-panel border border-[var(--border-subtle)] rounded-2xl shadow-sm hover:border-[var(--border-subtle)] transition-all">
       <div className="flex items-start justify-between gap-3 mb-1.5">
-        <div className="font-bold text-sm text-white">{item.title}</div>
+        <div className="font-bold text-sm text-[var(--text-primary)]">{item.title}</div>
         <span className="px-2.5 py-0.5 bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono text-xs font-bold rounded-lg border border-emerald-300 shrink-0">
           +{item.impact_pts} pts
         </span>

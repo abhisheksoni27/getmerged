@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 
 export default function MaintainersPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-transparent text-white font-sans dev-grid-pattern">
+    <div className="min-h-screen flex flex-col bg-transparent text-[var(--text-primary)] font-sans dev-grid-pattern">
       <Header />
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
@@ -39,7 +39,7 @@ export default function MaintainersPage() {
             <span>For Open Source Maintainers</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-black font-space tracking-tight text-white max-w-3xl mx-auto leading-tight">
+          <h1 className="text-3xl sm:text-5xl font-black font-space tracking-tight text-[var(--text-primary)] max-w-3xl mx-auto leading-tight">
             Tired of Low-Effort PRs? <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-300">
               Attract Contributors Who Ship.
@@ -62,7 +62,7 @@ export default function MaintainersPage() {
             </Link>
             <Link prefetch={false}
               href="/how-c-rank-works"
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl surface-base border border-white/[0.14] text-white font-mono text-xs font-bold uppercase tracking-wider hover:bg-white/[0.08] transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl surface-base border border-[var(--border-subtle)] text-[var(--text-primary)] font-mono text-xs font-bold uppercase tracking-wider hover:bg-white/[0.08] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>How C-Rank Is Calculated</span>
               <ArrowRight className="h-4 w-4" />
@@ -72,7 +72,7 @@ export default function MaintainersPage() {
 
         {/* 3 Pillars of Value */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-7 rounded-3xl surface-base border border-white/[0.08] bg-zinc-950/50 space-y-4">
+          <div className="p-7 rounded-3xl surface-base border border-[var(--border-subtle)] bg-[var(--bg-surface)] space-y-4">
             <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
               <Zap className="h-6 w-6" />
             </div>
@@ -85,7 +85,7 @@ export default function MaintainersPage() {
             </p>
           </div>
 
-          <div className="p-7 rounded-3xl surface-base border border-white/[0.08] bg-zinc-950/50 space-y-4">
+          <div className="p-7 rounded-3xl surface-base border border-[var(--border-subtle)] bg-[var(--bg-surface)] space-y-4">
             <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
               <Sparkles className="h-6 w-6" />
             </div>
@@ -98,7 +98,7 @@ export default function MaintainersPage() {
             </p>
           </div>
 
-          <div className="p-7 rounded-3xl surface-base border border-white/[0.08] bg-zinc-950/50 space-y-4">
+          <div className="p-7 rounded-3xl surface-base border border-[var(--border-subtle)] bg-[var(--bg-surface)] space-y-4">
             <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
               <TrendingUp className="h-6 w-6" />
             </div>

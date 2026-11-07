@@ -28,7 +28,7 @@ export function FunnelSection({
 
       {/* First-timer insight */}
       {ghostRate !== null && (
-        <div className={`rounded-xl border p-3.5 ${ghostRate > 50 ? "border-rose-800/60 bg-rose-950/20" : "border-white/[0.06] bg-black/20"}`}>
+        <div className={`rounded-xl border p-3.5 ${ghostRate > 50 ? "border-rose-800/60 bg-rose-950/20" : "border-[var(--border-subtle)] bg-black/20"}`}>
           <p className="text-xs font-mono text-[var(--text-secondary)]">
             <span className="font-bold text-[var(--text-primary)]">First-Timer Journey: </span>
             {pf.first_timer_success_rate.toFixed(0)}% of newcomers get merged. Of those who don&apos;t,{" "}

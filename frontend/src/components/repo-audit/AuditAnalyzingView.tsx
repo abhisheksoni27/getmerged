@@ -88,7 +88,7 @@ export function AuditAnalyzingView({
                 isActive
                   ? "bg-emerald-950/40 border border-emerald-500/30"
                   : isComplete
-                  ? "bg-black/20 border border-white/[0.04]"
+                  ? "bg-black/20 border border-[var(--border-subtle)]"
                   : "border border-transparent"
               }`}
             >
@@ -98,7 +98,7 @@ export function AuditAnalyzingView({
                   isComplete
                     ? "text-[var(--text-secondary)]"
                     : isActive
-                    ? "text-white font-bold"
+                    ? "text-[var(--text-primary)] font-bold"
                     : "text-zinc-600"
                 }`}
               >

@@ -218,7 +218,7 @@ export default async function OrgPage({ params }: OrgPageProps) {
                 <Link prefetch={false}
                   href={`/${repo.full_name}`}
                   title={`Open full scorecard for ${repo.full_name}`}
-                  className="px-4 py-2 rounded-xl surface-elevated hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
+                  className="px-4 py-2 rounded-xl surface-elevated hover:bg-zinc-800 text-[var(--text-primary)] font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
                 >
                   View Scorecard <ArrowRight className="h-3.5 w-3.5" />
                 </Link>

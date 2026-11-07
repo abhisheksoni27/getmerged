@@ -55,7 +55,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-[var(--border-subtle)] bg-amber-400/20 text-white shadow-sm -rotate-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-[var(--border-subtle)] bg-amber-400/20 text-[var(--text-primary)] shadow-sm -rotate-2">
               <TrendingUp className="h-4 w-4" />
             </div>
             <h2 className="font-space text-base font-extrabold text-[var(--text-primary)]">Raise Your C-Rank</h2>
@@ -90,7 +90,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
     >
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-[var(--border-subtle)] bg-amber-400/20 text-white shadow-sm -rotate-2">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-[var(--border-subtle)] bg-amber-400/20 text-[var(--text-primary)] shadow-sm -rotate-2">
             <TrendingUp className="h-4 w-4" />
           </div>
           <h2 className="font-space text-base font-extrabold text-[var(--text-primary)]">Raise Your C-Rank</h2>
@@ -127,7 +127,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
                     <Icon className="w-4 h-4" />
                   </span>
                   <div className="min-w-0">
-                    <div className="font-bold text-sm text-white">{item.title}</div>
+                    <div className="font-bold text-sm text-[var(--text-primary)]">{item.title}</div>
                     <div
                       className={`text-xs mt-1 font-mono break-words ${
                         item.status === "ok" ? "text-emerald-400" : "text-[var(--text-secondary)]"

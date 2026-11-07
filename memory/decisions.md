@@ -37,13 +37,23 @@
 
 ## ADR-006: Warm Editorial Frontend Redesign & Anti-Cramming Standard
 - **Date**: 2026-11-07
-- **Status**: Accepted
+- **Status**: Superseded by ADR-007
 - **Context**: The existing UI used harsh pitch-black canvas (`#0a0a0a`), micro typography (`text-[10px]`, `text-[11px]`), glass-morphism blurs, and tight padding (`p-3.5`), creating an intimidating, cramped developer-dashboard aesthetic that repels beginners.
-- **Decision**: Adopt a "Warm Precision" design system inspired by FreeHire, Granola, and Kinfolk-style tech publications:
-  1. Default canvas set to warm off-white/sand (`#FAFAF7`), pure white cards (`#FFFFFF`), warm borders (`#E8E4DD`), dark warm text (`#1A1A18`), and warm terracotta accents (`#D4590F`).
-  2. Banned micro-font cramming: minimum body font size `15px` / `text-base`, card padding minimum `p-6` (24px), section spacing `py-16` to `py-20` (80px).
-  3. Purged dated dark-mode tropes: eliminated glass morphism (`backdrop-blur-*`), neon ambient glows, physics canvas overhead, and text shimmer animations.
-  4. Preserved strict SSR-First architecture and zero-CLS rendering for all crawlers and public routes.
-  5. Codified complete autonomous agent execution plan in [`docs/plans/2026-11-07-design-overhaul-warm-editorial.md`](../docs/plans/2026-11-07-design-overhaul-warm-editorial.md).
+- **Decision**: Adopted initial warm off-white canvas, but left hundreds of dark-mode classes intact.
+
+## ADR-007: Swiss Minimalist Data Workbench & 125-File Design Overhaul
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: The previous iteration left 125 files with dark-mode classes (`text-white`, `text-zinc-300`, `border-white/[0.1]`) on light surfaces, causing white-on-white text bugs across all inner pages (`/contribute`, `/docs`, `/community-powerhouses`, `/talent`, `/dashboard`, etc.) and relied on generic AI marketing layouts.
+- **Decision**:
+  1. Installed and integrated `ui-ux-pro-max` (146k stars) and Anthropic official `frontend-design` skills to govern design tokens and layouts.
+  2. Adopted Swiss Minimalist Data Workbench design system codified in [`design-system/getmerged/MASTER.md`](../design-system/getmerged/MASTER.md):
+     - Crisp light canvas (`#FBFBFA`), pure white surfaces (`#FFFFFF`), subtle hairline borders (`#E5E7EB`).
+     - Deep neutral ink (`#111827`, 16.2:1 contrast ratio) and secondary slate text (`#4B5563`, 7.1:1 contrast ratio).
+     - Developer electric blue primary action (`#2563EB`) and emerald green tier S signal (`#059669`).
+  3. Replaced generic AI cliches: eliminated all-caps tracking-wider labels, single-word colored accent highlights, and 11-section marketing carousels.
+  4. Executed systematic 125-file audit via `scripts/audit_and_fix_contrast.py`, eliminating all white-on-white text while preserving contrast on solid action buttons.
+  5. Kept strict SSR-First architecture and zero-CLS performance across all 45 routes.
+
 
 

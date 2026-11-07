@@ -17,7 +17,7 @@ export function RecruiterUnlockModal({ candidate, onClose }: RecruiterUnlockModa
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-5 top-5 p-2 rounded-full glass-card text-zinc-400 hover:text-white cursor-pointer"
+          className="absolute right-5 top-5 p-2 rounded-full glass-card text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>
@@ -27,27 +27,27 @@ export function RecruiterUnlockModal({ candidate, onClose }: RecruiterUnlockModa
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-xl font-bold font-space text-white">
+          <h3 className="text-xl font-bold font-space text-[var(--text-primary)]">
             Unlock Direct Contact for {candidate.name}
           </h3>
-          <p className="text-xs text-zinc-300 font-sans leading-relaxed">
+          <p className="text-xs text-[var(--text-secondary)] font-sans leading-relaxed">
             Connect directly with {candidate.name} via verified work email and LinkedIn.
           </p>
         </div>
 
         {/* Blurred Contact Preview */}
-        <div className="p-4 rounded-xl bg-[#0a0a0c] border border-white/[0.08] space-y-2 text-left font-mono text-xs">
-          <div className="flex items-center justify-between text-zinc-400">
+        <div className="p-4 rounded-xl bg-[#0a0a0c] border border-[var(--border-subtle)] space-y-2 text-left font-mono text-xs">
+          <div className="flex items-center justify-between text-[var(--text-secondary)]">
             <span className="flex items-center gap-2">
               <Mail className="h-3.5 w-3.5" /> Email:
             </span>
-            <span className="blur-[5px] select-none text-zinc-300">masked@private.dev</span>
+            <span className="blur-[5px] select-none text-[var(--text-secondary)]">masked@private.dev</span>
           </div>
-          <div className="flex items-center justify-between text-zinc-400">
+          <div className="flex items-center justify-between text-[var(--text-secondary)]">
             <span className="flex items-center gap-2">
               <LinkedinIcon className="h-3.5 w-3.5" /> LinkedIn:
             </span>
-            <span className="blur-[5px] select-none text-zinc-300">linkedin.com/in/private-url</span>
+            <span className="blur-[5px] select-none text-[var(--text-secondary)]">linkedin.com/in/private-url</span>
           </div>
         </div>
 
@@ -59,7 +59,7 @@ export function RecruiterUnlockModal({ candidate, onClose }: RecruiterUnlockModa
             <span>Get WorkDone Founder Pass ($49/mo)</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
-          <p className="text-[11px] font-sans text-zinc-400">
+          <p className="text-[11px] font-sans text-[var(--text-secondary)]">
             Includes 25 verified direct contact unlocks, ATS exports, and instant alerts when new Tier-S contributors open up.
           </p>
         </div>

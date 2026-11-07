@@ -67,7 +67,7 @@ export function ProofOfMergeModal({
         </div>
 
         {/* Verified Certificate Card */}
-        <div className="p-5 rounded-2xl bg-zinc-900/90 border border-emerald-500/30 space-y-3 relative overflow-hidden">
+        <div className="p-5 rounded-2xl bg-[var(--bg-surface)] border border-emerald-500/30 space-y-3 relative overflow-hidden">
           <div className="flex items-start justify-between gap-3">
             <div>
               <div className="text-[11px] font-mono text-[var(--text-secondary)]">Repository</div>
@@ -100,7 +100,7 @@ export function ProofOfMergeModal({
               href={xShareUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="py-2.5 px-4 rounded-xl bg-black hover:bg-zinc-800 border border-white/[0.14] text-xs font-mono font-bold text-[var(--text-primary)] flex items-center justify-center gap-2 transition-all cursor-pointer no-underline"
+              className="py-2.5 px-4 rounded-xl bg-black hover:bg-zinc-800 border border-[var(--border-subtle)] text-xs font-mono font-bold text-[var(--text-primary)] flex items-center justify-center gap-2 transition-all cursor-pointer no-underline"
             >
               <span>Share on X</span>
               <ExternalLink className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
@@ -112,7 +112,7 @@ export function ProofOfMergeModal({
               className="py-2.5 px-4 rounded-xl bg-[#0a66c2] hover:bg-[#084e96] text-xs font-mono font-bold text-[var(--text-primary)] flex items-center justify-center gap-2 transition-all cursor-pointer no-underline"
             >
               <span>Post to LinkedIn</span>
-              <ExternalLink className="h-3.5 w-3.5 text-white/80" />
+              <ExternalLink className="h-3.5 w-3.5 text-[var(--text-primary)]/80" />
             </a>
           </div>
 

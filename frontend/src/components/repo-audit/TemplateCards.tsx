@@ -16,7 +16,7 @@ export function TemplateCards({ cards }: { cards: TemplateCard[] }) {
   return (
     <div className="space-y-4">
       {cards.map((t) => (
-        <div key={t.key} className="rounded-xl border border-[var(--border-subtle)] bg-black/50 p-4">
+        <div key={t.key} className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4">
           <div className="flex justify-between items-center mb-2">
             <span className="text-xs font-mono font-bold text-[var(--text-secondary)]">{t.filename}</span>
             <button
@@ -28,7 +28,7 @@ export function TemplateCards({ cards }: { cards: TemplateCard[] }) {
               {copiedTemplate === t.key ? "Copied!" : "Copy"}
             </button>
           </div>
-          <pre className="text-[11px] font-mono text-[var(--text-secondary)] whitespace-pre-wrap bg-zinc-950/80 p-3 rounded-lg border border-white/[0.05] overflow-x-auto">
+          <pre className="text-[11px] font-mono text-[var(--text-secondary)] whitespace-pre-wrap bg-[var(--bg-surface)] p-3 rounded-lg border border-[var(--border-subtle)] overflow-x-auto">
             {t.text}
           </pre>
         </div>

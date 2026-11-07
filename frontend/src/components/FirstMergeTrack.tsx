@@ -102,7 +102,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-xs font-black text-white">
               ★
             </span>
-            <h2 className="text-lg font-bold tracking-tight text-white">First-Merge Track</h2>
+            <h2 className="text-lg font-bold tracking-tight text-[var(--text-primary)]">First-Merge Track</h2>
             <span className="rounded-full bg-emerald-950/80 border-emerald-800/80 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
               Guided Journey
             </span>
@@ -120,7 +120,7 @@ export function FirstMergeTrack({ trackedPRs = [] }: Props) {
               onClick={() => track.handleManualAdvance(s)}
               className={`h-6 w-6 rounded-md text-xs font-bold transition-colors ${
                 currentStep === s
-                  ? "glass-card text-white"
+                  ? "glass-card text-[var(--text-primary)]"
                   : "glass-card text-[var(--text-secondary)] hover:bg-zinc-200"
               }`}
               title={`Step ${s}`}

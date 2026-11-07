@@ -132,7 +132,7 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-2 flex-wrap">
-                  <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md glass-card text-white shadow-2xs">
+                  <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md glass-card text-[var(--text-primary)] shadow-2xs">
                     {rank} Tier
                   </span>
                   <span className="text-xs font-mono glass-card text-[var(--text-secondary)] px-2.5 py-0.5 rounded-md font-medium border border-[var(--border-subtle)]/60 flex items-center gap-1.5">
@@ -199,7 +199,7 @@ export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
                 <Link prefetch={false}
                   href={`/${repo.full_name}`}
                   title={`Open full scorecard for ${repo.full_name}`}
-                  className="px-4 py-2.5 rounded-xl glass-card hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center gap-1.5 transition-all shadow-2xs hover:shadow-xs"
+                  className="px-4 py-2.5 rounded-xl glass-card hover:bg-zinc-800 text-[var(--text-primary)] font-bold text-xs inline-flex items-center gap-1.5 transition-all shadow-2xs hover:shadow-xs"
                 >
                   View Scorecard <ArrowRight className="h-3.5 w-3.5" />
                 </Link>

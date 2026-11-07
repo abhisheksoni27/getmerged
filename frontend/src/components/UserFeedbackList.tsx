@@ -108,21 +108,21 @@ export function UserFeedbackList({
               <span className="text-[var(--text-secondary)] text-[11px] block">Maintainer</span>
               <div className="flex items-center gap-1 mt-0.5">
                 <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
-                <strong className="text-white font-mono">{item.maintainer_rating}/5</strong>
+                <strong className="text-[var(--text-primary)] font-mono">{item.maintainer_rating}/5</strong>
               </div>
             </div>
             <div>
               <span className="text-[var(--text-secondary)] text-[11px] block">Review Speed</span>
               <div className="flex items-center gap-1 mt-0.5">
                 <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
-                <strong className="text-white font-mono">{item.review_speed_rating}/5</strong>
+                <strong className="text-[var(--text-primary)] font-mono">{item.review_speed_rating}/5</strong>
               </div>
             </div>
             <div>
               <span className="text-[var(--text-secondary)] text-[11px] block">Beginner Friendly</span>
               <div className="flex items-center gap-1 mt-0.5">
                 <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
-                <strong className="text-white font-mono">{item.beginner_rating}/5</strong>
+                <strong className="text-[var(--text-primary)] font-mono">{item.beginner_rating}/5</strong>
               </div>
             </div>
           </div>

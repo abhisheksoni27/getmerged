@@ -40,7 +40,7 @@ export function FirstMergeDiscoveryStep({
           <div className="mt-2">
             <Link prefetch={false}
               href="/repos"
-              className="inline-flex items-center gap-1 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
+              className="inline-flex items-center gap-1 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-[var(--text-primary)] hover:bg-zinc-800"
             >
               <Search className="h-3.5 w-3.5" /> Explore Repositories
             </Link>

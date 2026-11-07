@@ -55,7 +55,7 @@ export default function StackPage() {
   };
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-transparent text-white font-sans">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-transparent text-[var(--text-primary)] font-sans">
       <Header />
       <script
         type="application/ld+json"

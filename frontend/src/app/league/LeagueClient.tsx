@@ -132,16 +132,16 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                 <Flame className="h-3.5 w-3.5" />
                 <span>Active Monthly Sprint</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-card border border-white/[0.1] text-zinc-300 font-mono text-xs">
-                <Clock className="h-3.5 w-3.5 text-zinc-300" />
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-card border border-[var(--border-subtle)] text-[var(--text-secondary)] font-mono text-xs">
+                <Clock className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
                 <span>{daysRemaining} Days Remaining</span>
               </div>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-black font-space text-white tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-5xl font-black font-space text-[var(--text-primary)] tracking-tight leading-tight">
               {monthName}
             </h1>
-            <p className="text-sm sm:text-base text-zinc-300 leading-relaxed font-sans">
+            <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed font-sans">
               Merge pull requests into top-ranked, welcoming open-source repositories this month. Level up from Bronze to Gold and earn verified Proof-of-Merge resume badges.
             </p>
           </div>
@@ -150,7 +150,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
             <button
               type="button"
               onClick={handleShare}
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl glass-card hover:bg-white/[0.08] text-xs font-mono font-bold text-zinc-200 hover:text-white transition-all cursor-pointer shadow-sm"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl glass-card hover:bg-white/[0.08] text-xs font-mono font-bold text-[var(--text-primary)] hover:text-[var(--text-primary)] transition-all cursor-pointer shadow-sm"
             >
               <Share2 className="h-4 w-4 text-orange-400" />
               <span>{copiedShare ? "Copied Share Link!" : "Share Sprint League"}</span>
@@ -159,32 +159,32 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
         </div>
 
         {/* Milestone Targets Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 pt-8 border-t border-white/[0.1]">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 pt-8 border-t border-[var(--border-subtle)]">
           <div className="glass-card p-4 rounded-xl">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold text-amber-500 uppercase">Bronze Milestone</span>
-              <span className="text-xs font-mono text-zinc-300">1 Merged PR</span>
+              <span className="text-xs font-mono text-[var(--text-secondary)]">1 Merged PR</span>
             </div>
-            <div className="text-lg font-bold font-space text-white mt-1">Contributor Debut</div>
-            <p className="text-xs text-zinc-300 mt-1">Get your first pull request merged into any indexed repository.</p>
+            <div className="text-lg font-bold font-space text-[var(--text-primary)] mt-1">Contributor Debut</div>
+            <p className="text-xs text-[var(--text-secondary)] mt-1">Get your first pull request merged into any indexed repository.</p>
           </div>
 
           <div className="glass-card p-4 rounded-xl">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono font-bold text-zinc-300 uppercase">Silver Milestone</span>
-              <span className="text-xs font-mono text-zinc-300">3 Merged PRs</span>
+              <span className="text-xs font-mono font-bold text-[var(--text-secondary)] uppercase">Silver Milestone</span>
+              <span className="text-xs font-mono text-[var(--text-secondary)]">3 Merged PRs</span>
             </div>
-            <div className="text-lg font-bold font-space text-white mt-1">Active Builder</div>
-            <p className="text-xs text-zinc-300 mt-1">Deliver 3 quality pull requests across active open-source codebases.</p>
+            <div className="text-lg font-bold font-space text-[var(--text-primary)] mt-1">Active Builder</div>
+            <p className="text-xs text-[var(--text-secondary)] mt-1">Deliver 3 quality pull requests across active open-source codebases.</p>
           </div>
 
           <div className="glass-card p-4 rounded-xl">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold text-amber-400 uppercase">Gold Milestone</span>
-              <span className="text-xs font-mono text-zinc-300">5+ Merged PRs</span>
+              <span className="text-xs font-mono text-[var(--text-secondary)]">5+ Merged PRs</span>
             </div>
-            <div className="text-lg font-bold font-space text-white mt-1">Monthly Champion</div>
-            <p className="text-xs text-zinc-300 mt-1">Top-tier contributor status with verified Gold badge on your profile.</p>
+            <div className="text-lg font-bold font-space text-[var(--text-primary)] mt-1">Monthly Champion</div>
+            <p className="text-xs text-[var(--text-secondary)] mt-1">Top-tier contributor status with verified Gold badge on your profile.</p>
           </div>
         </div>
       </div>
@@ -193,11 +193,11 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
       <div className="glass-panel p-6 sm:p-8 rounded-2xl">
         <div className="flex items-center gap-2 mb-2">
           <GitPullRequest className="h-5 w-5 text-orange-400" />
-          <h2 className="text-lg font-bold font-space text-white">
+          <h2 className="text-lg font-bold font-space text-[var(--text-primary)]">
             Track PR for {monthName}
           </h2>
         </div>
-        <p className="text-xs text-zinc-300 mb-4">
+        <p className="text-xs text-[var(--text-secondary)] mb-4">
           Paste any public GitHub PR link to count it toward your monthly contributor sprint goal.
         </p>
 
@@ -208,12 +208,12 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
             onChange={(e) => setPrUrl(e.target.value)}
             placeholder="https://github.com/facebook/react/pull/12345"
             required
-            className="flex-1 rounded-xl glass-panel border border-white/[0.1] px-4 py-3 text-xs font-mono text-[var(--text-primary)] placeholder:text-zinc-300 focus:outline-none focus:border-white/[0.2]"
+            className="flex-1 rounded-xl glass-panel border border-[var(--border-subtle)] px-4 py-3 text-xs font-mono text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:outline-none focus:border-[var(--border-subtle)]"
           />
           <button
             type="submit"
             disabled={trackingLoading}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500 hover:bg-orange-600 px-6 py-3 text-xs font-mono font-bold text-white transition-all disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500 hover:bg-orange-600 px-6 py-3 text-xs font-mono font-bold text-[var(--text-primary)] transition-all disabled:opacity-50 cursor-pointer"
           >
             <Plus className="h-4 w-4" />
             <span>{trackingLoading ? "Tracking..." : "Track PR"}</span>
@@ -235,14 +235,14 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
       </div>
 
       {/* Dual Tab Navigation (Welcoming Repos vs Contributor MVPs) */}
-      <div className="flex items-center gap-3 border-b border-white/[0.1] pb-4">
+      <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] pb-4">
         <button
           type="button"
           onClick={() => setActiveTab("repos")}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
             activeTab === "repos"
               ? "bg-white text-zinc-950 shadow-sm"
-              : "glass-card text-zinc-300 hover:text-white"
+              : "glass-card text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
           }`}
         >
           <Trophy className="h-4 w-4" />
@@ -254,7 +254,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
             activeTab === "mvps"
               ? "bg-white text-zinc-950 shadow-sm"
-              : "glass-card text-zinc-300 hover:text-white"
+              : "glass-card text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
           }`}
         >
           <Users className="h-4 w-4" />
@@ -272,11 +272,11 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
           {/* Language Filter Bar */}
           <div className="flex items-center justify-between gap-4 flex-wrap pb-2">
             <div>
-              <h2 className="text-xl font-bold font-space text-white flex items-center gap-2">
+              <h2 className="text-xl font-bold font-space text-[var(--text-primary)] flex items-center gap-2">
                 <Trophy className="h-5 w-5 text-amber-400" />
                 Ranked Repositories for {monthName}
               </h2>
-              <p className="text-xs text-zinc-300 font-sans mt-0.5">
+              <p className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
                 Ranked by PR merge acceptance velocity, first-timer hospitality, and open issues.
               </p>
             </div>
@@ -288,7 +288,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                 className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
                   selectedLang === "all"
                     ? "bg-white text-zinc-950 shadow-sm"
-                    : "bg-white/[0.04] text-zinc-300 hover:text-white"
+                    : "bg-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 All Languages
@@ -301,7 +301,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                   className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer whitespace-nowrap ${
                     selectedLang === lang
                       ? "bg-white text-zinc-950 shadow-sm"
-                      : "bg-white/[0.04] text-zinc-300 hover:text-white"
+                      : "bg-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                   }`}
                 >
                   {lang}
@@ -315,16 +315,16 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
             {filteredRepos.map((repo, idx) => (
               <div
                 key={repo.id}
-                className="glass-panel p-5 rounded-2xl flex flex-col justify-between hover:border-white/[0.16] transition-all group"
+                className="glass-panel p-5 rounded-2xl flex flex-col justify-between hover:border-[var(--border-subtle)] transition-all group"
               >
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="font-mono text-xs text-zinc-300 font-bold">#{idx + 1}</span>
+                      <span className="font-mono text-xs text-[var(--text-secondary)] font-bold">#{idx + 1}</span>
                       <Link prefetch={false}
                         href={`/${repo.full_name}`}
                         title={`View ${repo.full_name} scorecard`}
-                        className="font-space font-bold text-sm text-white hover:text-orange-400 transition-colors truncate"
+                        className="font-space font-bold text-sm text-[var(--text-primary)] hover:text-orange-400 transition-colors truncate"
                       >
                         {repo.full_name}
                       </Link>
@@ -332,27 +332,27 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                     <CRankBadge rank={repo.c_rank_tier || "A"} size="sm" />
                   </div>
 
-                  <p className="text-xs text-zinc-300 line-clamp-2 leading-relaxed mb-4">
+                  <p className="text-xs text-[var(--text-secondary)] line-clamp-2 leading-relaxed mb-4">
                     {repo.description || "Active open-source repository indexed by GetMerged."}
                   </p>
                 </div>
 
-                <div className="space-y-3 pt-3 border-t border-white/[0.09]">
+                <div className="space-y-3 pt-3 border-t border-[var(--border-subtle)]">
                   <div className="grid grid-cols-3 gap-2 text-center">
                     <div className="glass-card p-2 rounded-lg">
-                      <div className="text-[10px] font-mono text-zinc-300 uppercase">Stars</div>
-                      <div className="text-xs font-mono font-bold text-zinc-200 mt-0.5">
+                      <div className="text-[10px] font-mono text-[var(--text-secondary)] uppercase">Stars</div>
+                      <div className="text-xs font-mono font-bold text-[var(--text-primary)] mt-0.5">
                         {repo.stars >= 1000 ? `${(repo.stars / 1000).toFixed(1)}k` : repo.stars}
                       </div>
                     </div>
                     <div className="glass-card p-2 rounded-lg">
-                      <div className="text-[10px] font-mono text-zinc-300 uppercase">1st-Timer</div>
+                      <div className="text-[10px] font-mono text-[var(--text-secondary)] uppercase">1st-Timer</div>
                       <div className="text-xs font-mono font-bold text-emerald-400 mt-0.5">
                         {repo.first_timer_success_rate ? `${Math.round(repo.first_timer_success_rate)}%` : " - "}
                       </div>
                     </div>
                     <div className="glass-card p-2 rounded-lg">
-                      <div className="text-[10px] font-mono text-zinc-300 uppercase">Issues</div>
+                      <div className="text-[10px] font-mono text-[var(--text-secondary)] uppercase">Issues</div>
                       <div className="text-xs font-mono font-bold text-amber-400 mt-0.5">
                         {repo.gfi_count || " - "}
                       </div>
@@ -360,7 +360,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                   </div>
 
                   <div className="flex items-center justify-between pt-1">
-                    <span className="text-[11px] font-mono text-zinc-300">
+                    <span className="text-[11px] font-mono text-[var(--text-secondary)]">
                       {repo.language || "Code"}
                     </span>
                     <Link prefetch={false}
@@ -381,11 +381,11 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
         /* Contributor MVPs Section */
         <div className="space-y-4">
           <div>
-            <h2 className="text-xl font-bold font-space text-white flex items-center gap-2">
+            <h2 className="text-xl font-bold font-space text-[var(--text-primary)] flex items-center gap-2">
               <Award className="h-5 w-5 text-orange-400" />
               Top Contributor MVPs for {monthName}
             </h2>
-            <p className="text-xs text-zinc-300 font-sans mt-0.5">
+            <p className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
               Ranked by verified quality pull request points merged into C-Rank scored repositories.
             </p>
           </div>
@@ -399,9 +399,9 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                     <img
                       src={c.avatar_url}
                       alt={c.username}
-                      className="w-12 h-12 rounded-xl border border-white/[0.1] object-cover glass-card"
+                      className="w-12 h-12 rounded-xl border border-[var(--border-subtle)] object-cover glass-card"
                     />
-                    <span className="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full glass-card border border-white/[0.12] flex items-center justify-center font-mono text-[10px] font-bold text-zinc-200">
+                    <span className="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full glass-card border border-[var(--border-subtle)] flex items-center justify-center font-mono text-[10px] font-bold text-[var(--text-primary)]">
                       #{c.rank}
                     </span>
                   </div>
@@ -409,11 +409,11 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                     <Link prefetch={false}
                       href={`/u/${c.slug}`}
                       title={`View ${c.username} profile`}
-                      className="font-space font-bold text-sm text-white hover:text-orange-400 transition-colors truncate block"
+                      className="font-space font-bold text-sm text-[var(--text-primary)] hover:text-orange-400 transition-colors truncate block"
                     >
                       @{c.username}
                     </Link>
-                    <div className="flex items-center gap-2 mt-0.5 text-xs font-mono text-zinc-300">
+                    <div className="flex items-center gap-2 mt-0.5 text-xs font-mono text-[var(--text-secondary)]">
                       <span>{c.merged_count} PRs</span>
                       <span>•</span>
                       <span className="text-amber-400">{c.monthly_points} pts</span>
@@ -426,7 +426,7 @@ export function LeagueClient({ initialRepos, contributors = [], monthName, curre
                     type="button"
                     onClick={() => setWrappedUser(c)}
                     title="Share Contributor Wrapped Card"
-                    className="p-2 rounded-xl glass-card hover:bg-amber-500/20 text-zinc-400 hover:text-amber-400 border border-white/[0.08] hover:border-amber-500/30 transition-all cursor-pointer"
+                    className="p-2 rounded-xl glass-card hover:bg-amber-500/20 text-zinc-400 hover:text-amber-400 border border-[var(--border-subtle)] hover:border-amber-500/30 transition-all cursor-pointer"
                   >
                     <Share2 className="h-4 w-4" />
                   </button>

@@ -82,7 +82,7 @@ export function TrackedPRCard({ pr }: TrackedPRCardProps) {
                 stale
               </span>
             )}
-            <span className="rounded-full glass-card text-white px-1.5 py-0.5 text-[10px] font-bold">
+            <span className="rounded-full glass-card text-[var(--text-primary)] px-1.5 py-0.5 text-[10px] font-bold">
               {pr.c_rank_tier}
             </span>
           </div>
@@ -90,15 +90,15 @@ export function TrackedPRCard({ pr }: TrackedPRCardProps) {
             href={pr.html_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="block truncate font-semibold text-sm text-white hover:text-emerald-400"
+            className="block truncate font-semibold text-sm text-[var(--text-primary)] hover:text-emerald-400"
           >
-            {pr.title} <ExternalLink className="inline h-3 w-3 text-zinc-300" />
+            {pr.title} <ExternalLink className="inline h-3 w-3 text-[var(--text-secondary)]" />
           </a>
-          <div className="text-xs text-zinc-300 mt-0.5">
+          <div className="text-xs text-[var(--text-secondary)] mt-0.5">
             {pr.full_name}#{pr.pr_number}
           </div>
         </div>
-        <div className="text-right text-xs text-zinc-300 shrink-0 flex items-center gap-1">
+        <div className="text-right text-xs text-[var(--text-secondary)] shrink-0 flex items-center gap-1">
           <Clock className="h-3 w-3" /> open {fmtHours(pr.age_hours)}
         </div>
       </div>
@@ -114,7 +114,7 @@ export function TrackedPRCard({ pr }: TrackedPRCardProps) {
             {verdictView.text}
           </span>
           {accuracyView && (
-            <span className="text-[11px] font-mono text-zinc-300">{accuracyView.label}</span>
+            <span className="text-[11px] font-mono text-[var(--text-secondary)]">{accuracyView.label}</span>
           )}
         </div>
       )}

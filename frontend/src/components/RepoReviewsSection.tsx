@@ -108,7 +108,7 @@ export function RepoReviewsSection({ repoId, fullName }: RepoReviewsSectionProps
   };
 
   return (
-    <div className="rounded-3xl glass-panel border border-[var(--border-subtle)] p-6 sm:p-8 bg-zinc-950/60 shadow-xl space-y-6 text-[var(--text-primary)] font-sans">
+    <div className="rounded-3xl glass-panel border border-[var(--border-subtle)] p-6 sm:p-8 bg-[var(--bg-surface)] shadow-xl space-y-6 text-[var(--text-primary)] font-sans">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-5">
         <div className="space-y-1">
@@ -141,7 +141,7 @@ export function RepoReviewsSection({ repoId, fullName }: RepoReviewsSectionProps
 
       {/* Review Submission Form */}
       {showForm && (
-        <form onSubmit={handleSubmitReview} className="p-6 rounded-2xl bg-zinc-900/90 border border-emerald-500/30 space-y-4">
+        <form onSubmit={handleSubmitReview} className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-emerald-500/30 space-y-4">
           <h4 className="text-sm font-bold font-space text-[var(--text-primary)]">
             Review Your Contribution Experience
           </h4>
@@ -230,7 +230,7 @@ export function RepoReviewsSection({ repoId, fullName }: RepoReviewsSectionProps
       ) : (
         <div className="space-y-3.5">
           {reviews.map((r) => (
-            <div key={r.id} className="p-4 rounded-2xl bg-zinc-900/60 border border-white/[0.06] space-y-3">
+            <div key={r.id} className="p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-3">
                   {r.verified_contributor && (

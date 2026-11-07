@@ -159,14 +159,14 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Header */}
-        <div className="mb-6 border-b border-white/[0.1] pb-6">
+        <div className="mb-6 border-b border-[var(--border-subtle)] pb-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300/80 text-emerald-300 text-xs font-mono font-bold mb-3">
             <Compass className="h-3.5 w-3.5" /> Contributor Matchmaker
           </div>
-          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight">
             Best {canonicalLang} Repos to Contribute To
           </h1>
-          <p className="text-sm text-zinc-300 font-sans mt-2 max-w-2xl">
+          <p className="text-sm text-[var(--text-secondary)] font-sans mt-2 max-w-2xl">
             Matched to your experience level using real merge rates, maintainer response times, and first-PR success data.
           </p>
         </div>
@@ -180,8 +180,8 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
               title={`Show best ${canonicalLang} repositories for ${lv.label.toLowerCase()}s`}
               className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
                 lv.value === level
-                  ? "glass-card text-white border-white/[0.12]"
-                  : "glass-panel text-zinc-300 border-white/[0.1] hover:border-white/[0.18]"
+                  ? "glass-card text-[var(--text-primary)] border-[var(--border-subtle)]"
+                  : "glass-panel text-[var(--text-secondary)] border-[var(--border-subtle)] hover:border-[var(--border-subtle)]"
               }`}
             >
               {lv.label}
@@ -194,12 +194,12 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
           {visibleRepos.map((repo) => (
             <div
               key={repo.id}
-              className="p-5 rounded-2xl border border-b border-white/[0.1]/10 border-white/[0.1] glass-panel hover:border-emerald-500/80 hover:border-b-emerald-700 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+              className="p-5 rounded-2xl border border-b border-[var(--border-subtle)]/10 border-[var(--border-subtle)] glass-panel hover:border-emerald-500/80 hover:border-b-emerald-700 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                   {typeof repo.match_score === "number" && (
-                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md glass-card text-white">
+                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md glass-card text-[var(--text-primary)]">
                       {Math.round(repo.match_score)}% match
                     </span>
                   )}
@@ -212,7 +212,7 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
                     </span>
                   )}
                 </div>
-                <h2 className="font-space text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
+                <h2 className="font-space text-lg font-bold text-[var(--text-primary)] group-hover:text-emerald-400 transition-colors">
                   <Link prefetch={false}
                     href={`/${repo.full_name}`}
                     title={`View contributor metrics for ${repo.full_name}`}
@@ -223,14 +223,14 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
                   </Link>
                 </h2>
                 {repo.description && (
-                  <p className="text-xs text-zinc-300 mt-1 line-clamp-2 leading-relaxed">{repo.description}</p>
+                  <p className="text-xs text-[var(--text-secondary)] mt-1 line-clamp-2 leading-relaxed">{repo.description}</p>
                 )}
 
                 {/* Why this repo matches you */}
                 {repo.reasons && repo.reasons.length > 0 && (
                   <ul className="mt-2 space-y-1">
                     {repo.reasons.slice(0, 3).map((reason) => (
-                      <li key={reason} className="text-xs text-zinc-300 flex items-start gap-1.5">
+                      <li key={reason} className="text-xs text-[var(--text-secondary)] flex items-start gap-1.5">
                         <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0 mt-px" />
                         {reason}
                       </li>
@@ -243,14 +243,14 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
                 <Link prefetch={false}
                   href={`/${repo.full_name}`}
                   title={`Open full scorecard for ${repo.full_name}`}
-                  className="px-4 py-2 rounded-xl glass-card hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
+                  className="px-4 py-2 rounded-xl glass-card hover:bg-zinc-800 text-[var(--text-primary)] font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
                 >
                   View Scorecard <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <Link prefetch={false}
                   href={`/how-to-contribute/${repo.full_name}`}
                   title={`Read how to contribute to ${repo.full_name}`}
-                  className="px-4 py-2 rounded-xl border border-white/[0.12] hover:border-zinc-500 text-zinc-300 font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all"
+                  className="px-4 py-2 rounded-xl border border-[var(--border-subtle)] hover:border-zinc-500 text-[var(--text-secondary)] font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all"
                 >
                   How to Contribute
                 </Link>
@@ -263,10 +263,10 @@ export default async function ContributeLangPage({ params, searchParams }: Contr
         {gatedCount > 0 && (
           <div className="rounded-3xl border-2 border-dashed border-emerald-300 bg-emerald-950/70 border-emerald-800/80/50 p-6 text-center mb-8">
             <Lock className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
-            <h3 className="font-space text-lg font-bold text-white">
+            <h3 className="font-space text-lg font-bold text-[var(--text-primary)]">
               Unlock {gatedCount}+ More {displayNameFromSlug(canonicalLang)} Opportunities
             </h3>
-            <p className="text-xs text-zinc-300 font-sans mt-1 max-w-md mx-auto">
+            <p className="text-xs text-[var(--text-secondary)] font-sans mt-1 max-w-md mx-auto">
               Sign in with GitHub to view personalized matches, your Contributor Fit Radar, and weekly digest alerts.
             </p>
             <div className="mt-4">

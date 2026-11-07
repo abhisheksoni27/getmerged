@@ -158,7 +158,7 @@ export function TopicDirectoryGrid({
                 href={`/topics/${stat.name}`}
                 title={`Explore #${stat.name} repositories and contributor metrics`}
                 aria-label={`Explore trending topic #${stat.name}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none glass-panel hover:bg-emerald-950/70 border-emerald-800/80 text-white border border-[var(--border-subtle)] font-sans text-xs font-bold transition-colors group"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none glass-panel hover:bg-emerald-950/70 border-emerald-800/80 text-[var(--text-primary)] border border-[var(--border-subtle)] font-sans text-xs font-bold transition-colors group"
               >
                 #{stat.name}
                 <span className="font-mono text-[10px] text-[var(--text-secondary)] group-hover:text-emerald-300">
@@ -174,7 +174,7 @@ export function TopicDirectoryGrid({
         {/* Inner relative wrapper spans ONLY the input row so the search icon
             stays vertically centered (fixes icon hanging below input). */}
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-white">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-primary)]">
             <Search className="h-4 w-4" strokeWidth={2.5} />
           </div>
           <input
@@ -272,7 +272,7 @@ export function TopicDirectoryGrid({
           <button
             type="button"
             onClick={() => setQuery("")}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border border-[var(--border-subtle)] border-b glass-panel text-white font-sans text-sm font-bold hover:glass-card active:translate-y-0.5 active:border-b-2 transition-all focus:outline-none cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border border-[var(--border-subtle)] border-b glass-panel text-[var(--text-primary)] font-sans text-sm font-bold hover:glass-card active:translate-y-0.5 active:border-b-2 transition-all focus:outline-none cursor-pointer"
           >
             Clear search
           </button>
@@ -289,7 +289,7 @@ export function TopicDirectoryGrid({
               aria-controls="topics-grid"
               aria-expanded={!hasMore}
               aria-label={`Show more topics, ${remainingCount.toLocaleString()} remaining`}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border border-[var(--border-subtle)] border-b glass-panel text-white font-sans text-sm font-bold hover:bg-emerald-950/70 border-emerald-800/80 active:translate-y-0.5 active:border-b-2 transition-all focus:outline-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border border-[var(--border-subtle)] border-b glass-panel text-[var(--text-primary)] font-sans text-sm font-bold hover:bg-emerald-950/70 border-emerald-800/80 active:translate-y-0.5 active:border-b-2 transition-all focus:outline-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {loadingMore ? (
                 <>

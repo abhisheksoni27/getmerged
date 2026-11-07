@@ -50,7 +50,7 @@ export function StatusClient() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-6 mb-8">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)] flex items-center gap-3 font-space">
-              <Server className="h-6 w-6 text-white" />
+              <Server className="h-6 w-6 text-[var(--text-primary)]" />
               GetMerged System Status
             </h1>
             <p className="mt-1 text-xs text-[var(--text-secondary)] font-sans">
@@ -62,7 +62,7 @@ export function StatusClient() {
             onClick={checkHealth}
             className="inline-flex items-center gap-2 rounded-xl surface-base border border-[var(--border-subtle)] px-3.5 py-2 text-xs font-semibold text-[var(--text-secondary)] hover:surface-elevated transition-all self-start sm:self-auto shadow-2xs cursor-pointer"
           >
-            <RefreshCw className={`h-3.5 w-3.5 ${healthStatus === "checking" ? "animate-spin text-white" : "text-[var(--text-secondary)]"}`} />
+            <RefreshCw className={`h-3.5 w-3.5 ${healthStatus === "checking" ? "animate-spin text-[var(--text-primary)]" : "text-[var(--text-secondary)]"}`} />
             Refresh Status
           </button>
         </div>
@@ -76,7 +76,7 @@ export function StatusClient() {
               ? "bg-amber-950/70 border-amber-800/80/80 border-amber-200 text-amber-300"
               : healthStatus === "unhealthy"
               ? "bg-rose-950/70 border-rose-800/80/80 border-rose-200 text-rose-300"
-              : "surface-base border-[var(--border-subtle)] text-white"
+              : "surface-base border-[var(--border-subtle)] text-[var(--text-primary)]"
           }`}
         >
           <div className="flex items-center gap-4">

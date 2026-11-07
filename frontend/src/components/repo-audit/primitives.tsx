@@ -19,7 +19,7 @@ export function MetricTile({
     amber: "text-amber-400",
   };
   return (
-    <div className="rounded-xl border border-[var(--border-subtle)] p-4 bg-black/40">
+    <div className="rounded-xl border border-[var(--border-subtle)] p-4 bg-[var(--bg-surface)]">
       <div className={`text-2xl font-bold font-mono ${colorMap[color]}`}>{value}</div>
       <div className="text-xs text-[var(--text-secondary)] mt-1 font-medium">{label}</div>
       {note && <div className="text-[11px] text-[var(--text-tertiary)] mt-0.5">{note}</div>}

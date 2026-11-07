@@ -45,15 +45,15 @@ export function RepoPicker({
   onAnalyzeDirect,
 }: RepoPickerProps) {
   return (
-    <div className="max-w-3xl mx-auto glass-panel border border-white/[0.1] rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+    <div className="max-w-3xl mx-auto glass-panel border border-[var(--border-subtle)] rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
       {/* Navigation Tabs */}
-      <div className="flex border-b border-white/[0.08] mb-6">
+      <div className="flex border-b border-[var(--border-subtle)] mb-6">
         <button
           onClick={() => onTabChange("github")}
           className={`pb-3 px-4 font-mono text-xs font-bold transition-all flex items-center gap-2 border-b-2 ${
             activeTab === "github"
               ? "border-emerald-500 text-emerald-400"
-              : "border-transparent text-zinc-400 hover:text-zinc-200"
+              : "border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
           }`}
         >
           <GithubIcon className="h-4 w-4" />
@@ -64,7 +64,7 @@ export function RepoPicker({
           className={`pb-3 px-4 font-mono text-xs font-bold transition-all flex items-center gap-2 border-b-2 ${
             activeTab === "manual"
               ? "border-emerald-500 text-emerald-400"
-              : "border-transparent text-zinc-400 hover:text-zinc-200"
+              : "border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
           }`}
         >
           <FileCode className="h-4 w-4" />
@@ -80,10 +80,10 @@ export function RepoPicker({
                 <GithubIcon className="h-6 w-6" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-base font-bold text-white">
+                <h3 className="text-base font-bold text-[var(--text-primary)]">
                   Connect GitHub to Scan Your Repos
                 </h3>
-                <p className="text-xs text-zinc-400 max-w-md mx-auto">
+                <p className="text-xs text-[var(--text-secondary)] max-w-md mx-auto">
                   Sign in with GitHub to select your projects directly. We will analyze your stack
                   and notify you when your dependencies need help.
                 </p>
@@ -98,7 +98,7 @@ export function RepoPicker({
             </div>
           ) : (
             <div className="space-y-4">
-              <label className="block text-xs font-mono text-zinc-300 font-semibold">
+              <label className="block text-xs font-mono text-[var(--text-secondary)] font-semibold">
                 Select One of Your Repositories:
               </label>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -106,7 +106,7 @@ export function RepoPicker({
                   value={selectedRepo}
                   onChange={(e) => onSelectRepo(e.target.value)}
                   disabled={loadingRepos || analyzing}
-                  className="flex-1 bg-zinc-900 border border-white/[0.12] rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-emerald-500"
+                  className="flex-1 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl px-3.5 py-2.5 text-sm text-[var(--text-primary)] font-mono focus:outline-none focus:border-emerald-500"
                 >
                   {userRepos.map((r) => (
                     <option key={r.full_name} value={r.full_name}>
@@ -131,8 +131,8 @@ export function RepoPicker({
           )}
 
           {/* Manual Repo Lookup Form */}
-          <div className="pt-4 border-t border-white/[0.08]">
-            <label className="block text-xs font-mono text-zinc-400 mb-2">
+          <div className="pt-4 border-t border-[var(--border-subtle)]">
+            <label className="block text-xs font-mono text-[var(--text-secondary)] mb-2">
               Or Scan Any Public GitHub Repo:
             </label>
             <div className="flex flex-col sm:flex-row gap-3">
@@ -142,12 +142,12 @@ export function RepoPicker({
                 value={customRepoInput}
                 onChange={(e) => onCustomRepoInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && onScanRepository(customRepoInput)}
-                className="flex-1 bg-zinc-900 border border-white/[0.12] rounded-xl px-3.5 py-2.5 text-sm text-[var(--text-primary)] font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500"
+                className="flex-1 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl px-3.5 py-2.5 text-sm text-[var(--text-primary)] font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500"
               />
               <button
                 onClick={() => onScanRepository(customRepoInput)}
                 disabled={analyzing || !customRepoInput.trim()}
-                className="px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 disabled:opacity-50 text-white font-mono text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer border border-white/[0.1]"
+                className="px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 disabled:opacity-50 text-[var(--text-primary)] font-mono text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer border border-[var(--border-subtle)]"
               >
                 <span>Scan Public Repo</span>
               </button>
@@ -157,7 +157,7 @@ export function RepoPicker({
       ) : (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-mono text-zinc-300 font-semibold">
+            <label className="text-xs font-mono text-[var(--text-secondary)] font-semibold">
               Paste package.json, go.mod, Cargo.toml, or requirements.txt:
             </label>
             <label className="cursor-pointer text-xs font-mono text-emerald-400 hover:underline flex items-center gap-1">
@@ -176,7 +176,7 @@ export function RepoPicker({
             placeholder={`{\n  "dependencies": {\n    "next": "15.0.0",\n    "tailwindcss": "^3.4.0",\n    "prisma": "^5.0.0"\n  }\n}`}
             value={manifestContent}
             onChange={(e) => onManifestContent(e.target.value)}
-            className="w-full bg-zinc-900 border border-white/[0.12] rounded-xl p-3.5 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+            className="w-full bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl p-3.5 text-xs text-[var(--text-primary)] font-mono focus:outline-none focus:border-emerald-500"
           />
           <div className="flex justify-between items-center pt-2">
             <span className="text-[11px] text-zinc-500">

@@ -17,7 +17,7 @@ export function FirstMergeTrackCard({ item, onCopyShareLink }: FirstMergeTrackCa
           href={item.html_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="truncate block text-xs font-semibold text-white hover:text-emerald-400"
+          className="truncate block text-xs font-semibold text-[var(--text-primary)] hover:text-emerald-400"
         >
           {item.owner}/{item.repo}#{item.pr_number}
         </a>
@@ -31,7 +31,7 @@ export function FirstMergeTrackCard({ item, onCopyShareLink }: FirstMergeTrackCa
             href={item.share_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-md bg-violet-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-violet-800"
+            className="inline-flex items-center gap-1 rounded-md bg-violet-700 px-3 py-1.5 text-xs font-semibold text-[var(--text-primary)] hover:bg-violet-800"
           >
             <ExternalLink className="h-3 w-3" /> Merged via OpenDoor card
           </a>

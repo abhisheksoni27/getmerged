@@ -47,7 +47,7 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-transparent text-white font-sans">
+    <div className="min-h-screen dev-grid-pattern flex flex-col bg-transparent text-[var(--text-primary)] font-sans">
       <Header />
       <script
         type="application/ld+json"
@@ -146,7 +146,7 @@ export default function AboutPage() {
               href="https://github.com/GetMergedApp"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-zinc-900 border border-[var(--border-subtle)] text-white font-mono text-xs font-bold rounded-xl hover:bg-zinc-800 transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] font-mono text-xs font-bold rounded-xl hover:bg-zinc-800 transition-colors shadow-sm"
             >
               <Code2 className="w-4 h-4" />
               GitHub Organization

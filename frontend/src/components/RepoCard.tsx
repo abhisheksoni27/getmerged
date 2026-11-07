@@ -201,19 +201,19 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
         <div className="flex items-center justify-between md:justify-end gap-5 sm:gap-7 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-[var(--border-subtle)] font-mono">
           {/* Merge Rate */}
           <div className="text-left md:text-right">
-            <div className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-wider font-semibold">Merge Rate</div>
+            <div className="text-[11px] text-[var(--text-secondary)] font-medium">Merge rate</div>
             <div className="text-sm sm:text-base font-bold text-[var(--text-primary)] tabular-nums mt-0.5">{mergeRateStr}</div>
           </div>
 
           {/* Review Time */}
           <div className="text-left md:text-right">
-            <div className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-wider font-semibold">Review Wait</div>
+            <div className="text-[11px] text-[var(--text-secondary)] font-medium">Review wait</div>
             <div className="text-sm sm:text-base font-bold text-[var(--text-primary)] tabular-nums mt-0.5">{firstResponseStr}</div>
           </div>
 
           {/* 1st Timers */}
           <div className="text-left md:text-right hidden sm:block">
-            <div className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-wider font-semibold">1st-Timers</div>
+            <div className="text-[11px] text-[var(--text-secondary)] font-medium">1st-timers</div>
             <div className="text-sm sm:text-base font-bold text-[var(--text-primary)] tabular-nums mt-0.5">{firstTimerStr}</div>
           </div>
 

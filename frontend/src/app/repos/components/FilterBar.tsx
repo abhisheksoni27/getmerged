@@ -115,7 +115,7 @@ export function FilterBar({
                 : "bg-[var(--bg-elevated)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
             }`}
           >
-            <Flame className={`h-4 w-4 ${trendingOnly ? "text-white fill-white" : "text-[var(--text-tertiary)]"}`} />
+            <Flame className={`h-4 w-4 ${trendingOnly ? "text-[var(--text-primary)] fill-white" : "text-[var(--text-tertiary)]"}`} />
             <span>Trending</span>
           </button>
 

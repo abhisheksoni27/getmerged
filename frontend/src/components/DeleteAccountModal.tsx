@@ -140,7 +140,7 @@ export const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
               disabled={isDeleting}
               placeholder={CONFIRMATION_PHRASE}
               autoComplete="off"
-              className="w-full px-3 py-2 bg-slate-950 border border-white/10 rounded-lg text-sm text-[var(--text-primary)] font-mono placeholder:text-zinc-600 focus:outline-none focus:border-rose-500/60 focus:ring-1 focus:ring-rose-500/60 transition-all"
+              className="w-full px-3 py-2 bg-slate-950 border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-primary)] font-mono placeholder:text-zinc-600 focus:outline-none focus:border-rose-500/60 focus:ring-1 focus:ring-rose-500/60 transition-all"
             />
           </div>
 
@@ -149,7 +149,7 @@ export const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
               type="button"
               onClick={handleClose}
               disabled={isDeleting}
-              className="px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-white/10 text-xs font-mono font-medium transition-all"
+              className="px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)] text-xs font-mono font-medium transition-all"
             >
               Cancel
             </button>

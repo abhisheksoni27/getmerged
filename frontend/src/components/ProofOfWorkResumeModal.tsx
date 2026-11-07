@@ -61,7 +61,7 @@ ${(profile.skills || ["Go", "TypeScript", "Python", "Rust"]).join(", ")}
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-surface)] backdrop-blur-sm p-4 overflow-y-auto">
       <div className="relative w-full max-w-2xl rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] p-6 sm:p-8 space-y-6 shadow-2xl">
         <button
           type="button"

@@ -65,7 +65,7 @@ export default function DisputePage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-transparent dev-grid-pattern text-white font-sans">
+    <div className="relative min-h-screen flex flex-col bg-transparent dev-grid-pattern text-[var(--text-primary)] font-sans">
       <Header />
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
@@ -152,7 +152,7 @@ export default function DisputePage() {
                   placeholder="e.g. facebook/react or https://github.com/gin-gonic/gin"
                   value={repoFullName}
                   onChange={(e) => setRepoFullName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
+                  className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
                 />
               </div>
 
@@ -165,7 +165,7 @@ export default function DisputePage() {
                     id="category-select"
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-[var(--border-subtle)] text-sm text-white focus:outline-hidden focus:border-amber-400 font-sans"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] focus:outline-hidden focus:border-amber-400 font-sans"
                   >
                     <option value="stale_metric">Stale / outdated metrics</option>
                     <option value="bot_pollution">Automated bots counted as external PRs</option>
@@ -185,7 +185,7 @@ export default function DisputePage() {
                     placeholder="octocat"
                     value={githubUsername}
                     onChange={(e) => setGithubUsername(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
                   />
                 </div>
               </div>
@@ -201,7 +201,7 @@ export default function DisputePage() {
                     placeholder="maintainer@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
                   />
                 </div>
 
@@ -215,7 +215,7 @@ export default function DisputePage() {
                     placeholder="https://github.com/..."
                     value={evidenceUrl}
                     onChange={(e) => setEvidenceUrl(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
                   />
                 </div>
               </div>
@@ -231,11 +231,11 @@ export default function DisputePage() {
                   placeholder="Explain why the current metric is incorrect, e.g. 'We merge outside PRs into develop instead of main' or 'A spam campaign submitted 40 bogus PRs that were mass-closed in July'..."
                   value={details}
                   onChange={(e) => setDetails(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-900/80 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 focus:outline-hidden focus:border-amber-400 font-sans"
+                  className="w-full px-4 py-3 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder-zinc-500 focus:outline-hidden focus:border-amber-400 font-sans"
                 />
               </div>
 
-              <div className="flex items-center justify-between pt-4 border-t border-white/[0.08]">
+              <div className="flex items-center justify-between pt-4 border-t border-[var(--border-subtle)]">
                 <Link prefetch={false}
                   href="/how-c-rank-works"
                   className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-secondary)] transition-colors"

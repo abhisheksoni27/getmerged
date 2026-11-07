@@ -11,7 +11,7 @@ interface ConsoleScoreHeaderProps {
 
 export function ConsoleScoreHeader({ score, tier }: ConsoleScoreHeaderProps) {
   return (
-    <div className="p-5 glass-card text-white rounded-3xl border border-[var(--border-subtle)] shadow-sm flex flex-wrap items-center justify-between gap-4">
+    <div className="p-5 glass-card text-[var(--text-primary)] rounded-3xl border border-[var(--border-subtle)] shadow-sm flex flex-wrap items-center justify-between gap-4">
       <div>
         <span className="text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">Current Health Score</span>
         <div className="flex items-baseline gap-2 mt-1">

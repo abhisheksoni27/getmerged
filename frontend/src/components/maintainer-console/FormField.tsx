@@ -43,7 +43,7 @@ interface TierBadgeProps {
 export function TierBadge({ tier }: TierBadgeProps) {
   return (
     <span
-      className={`ml-2 px-2.5 py-0.5 rounded-lg text-xs font-bold font-mono border text-white ${tierBadgeClass(tier)}`}
+      className={`ml-2 px-2.5 py-0.5 rounded-lg text-xs font-bold font-mono border text-[var(--text-primary)] ${tierBadgeClass(tier)}`}
     >
       Tier {tier}
     </span>

@@ -58,7 +58,7 @@ export function ReferralCard() {
         <button
           onClick={copy}
           title="Copy referral link"
-          className="inline-flex items-center justify-center gap-2 rounded-xl glass-card hover:bg-zinc-800 text-white px-4 py-2 text-xs font-semibold cursor-pointer transition-all active:scale-[0.98]"
+          className="inline-flex items-center justify-center gap-2 rounded-xl glass-card hover:bg-zinc-800 text-[var(--text-primary)] px-4 py-2 text-xs font-semibold cursor-pointer transition-all active:scale-[0.98]"
         >
           {copied ? (
             <>

@@ -5,16 +5,16 @@ import { UserCheck } from "lucide-react";
 
 export function TalentEmptyState() {
   return (
-    <div className="p-12 text-center rounded-3xl glass-panel border border-white/[0.08] bg-[#0c0c0e]/80 space-y-5">
-      <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.1] flex items-center justify-center mx-auto text-zinc-400">
+    <div className="p-12 text-center rounded-3xl glass-panel border border-[var(--border-subtle)] bg-[#0c0c0e]/80 space-y-5">
+      <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-[var(--border-subtle)] flex items-center justify-center mx-auto text-[var(--text-secondary)]">
         <UserCheck className="h-6 w-6 text-emerald-400" />
       </div>
 
       <div className="space-y-2 max-w-md mx-auto">
-        <h3 className="text-lg font-bold font-space text-white">
+        <h3 className="text-lg font-bold font-space text-[var(--text-primary)]">
           Zero Fake Profiles · Real Opt-Ins Only
         </h3>
-        <p className="text-xs text-zinc-400 font-sans leading-relaxed">
+        <p className="text-xs text-[var(--text-secondary)] font-sans leading-relaxed">
           WorkDone Database never scrapes fake profiles or sells scraped emails. Only verified GitHub contributors who explicitly opt in through their dashboard appear here.
         </p>
       </div>
@@ -29,7 +29,7 @@ export function TalentEmptyState() {
         </Link>
         <Link prefetch={false}
           href="/pricing?tab=recruiter"
-          className="px-6 py-2.5 rounded-xl glass-panel border border-white/[0.14] hover:bg-white/[0.08] text-white font-mono text-xs font-bold uppercase tracking-wider transition-all"
+          className="px-6 py-2.5 rounded-xl glass-panel border border-[var(--border-subtle)] hover:bg-white/[0.08] text-[var(--text-primary)] font-mono text-xs font-bold uppercase tracking-wider transition-all"
         >
           <span>Set Up Founder Talent Alert ($49/mo)</span>
         </Link>

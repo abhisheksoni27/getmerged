@@ -101,7 +101,7 @@ export function LangDigestSignup({ language, languageName }: LangDigestSignupPro
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
           autoComplete="email"
-          className="flex-1 rounded-xl border border-[var(--border-subtle)] px-3.5 py-2.5 text-sm text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500"
+          className="flex-1 rounded-xl border border-[var(--border-subtle)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500"
         />
         {/* Honeypot: hidden from humans, bots auto-fill it (AC3). */}
         <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
@@ -118,7 +118,7 @@ export function LangDigestSignup({ language, languageName }: LangDigestSignupPro
         <button
           type="submit"
           disabled={status === "submitting"}
-          className="inline-flex items-center justify-center rounded-xl bg-sky-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-sky-700 disabled:opacity-60 transition-colors shadow-xs"
+          className="inline-flex items-center justify-center rounded-xl bg-sky-600 px-4 py-2.5 text-xs font-semibold text-[var(--text-primary)] hover:bg-sky-700 disabled:opacity-60 transition-colors shadow-xs"
         >
           {status === "submitting" ? "Subscribing…" : "Send me the digest"}
         </button>

@@ -158,12 +158,12 @@ export default function PrReadinessPage() {
           <Gauge className="w-8 h-8 text-brand-dark" aria-hidden />
           PR Readiness Simulator
         </h1>
-        <p className="mt-2 text-zinc-300">
+        <p className="mt-2 text-[var(--text-secondary)]">
           Paste your PR title, diff size, summary, or issue link - get an instant acceptance score
           and a tailored checklist before you open the PR.
         </p>
 
-        <section className="mt-6 p-6 glass-panel border-2 border-white/[0.1] rounded-2xl shadow-sm space-y-4">
+        <section className="mt-6 p-6 glass-panel border-2 border-[var(--border-subtle)] rounded-2xl shadow-sm space-y-4">
           <div>
             <label htmlFor="pr-title" className="flex items-center gap-1.5 text-sm font-semibold text-brand-dark mb-1">
               <Type className="w-4 h-4" aria-hidden /> PR title
@@ -173,7 +173,7 @@ export default function PrReadinessPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="feat: add retry logic to webhook delivery"
-              className="w-full px-3 py-2 rounded-xl border-2 border-white/[0.1] focus:outline-none focus:ring-2 focus:ring-brand-dark"
+              className="w-full px-3 py-2 rounded-xl border-2 border-[var(--border-subtle)] focus:outline-none focus:ring-2 focus:ring-brand-dark"
             />
           </div>
 
@@ -189,7 +189,7 @@ export default function PrReadinessPage() {
                 value={files}
                 onChange={(e) => setFiles(e.target.value)}
                 placeholder="e.g. 3"
-                className="w-full px-3 py-2 rounded-xl border-2 border-white/[0.1] focus:outline-none focus:ring-2 focus:ring-brand-dark"
+                className="w-full px-3 py-2 rounded-xl border-2 border-[var(--border-subtle)] focus:outline-none focus:ring-2 focus:ring-brand-dark"
               />
             </div>
             <div>
@@ -203,7 +203,7 @@ export default function PrReadinessPage() {
                 value={lines}
                 onChange={(e) => setLines(e.target.value)}
                 placeholder="e.g. 120"
-                className="w-full px-3 py-2 rounded-xl border-2 border-white/[0.1] focus:outline-none focus:ring-2 focus:ring-brand-dark"
+                className="w-full px-3 py-2 rounded-xl border-2 border-[var(--border-subtle)] focus:outline-none focus:ring-2 focus:ring-brand-dark"
               />
             </div>
           </div>
@@ -218,7 +218,7 @@ export default function PrReadinessPage() {
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               placeholder="What changed, why, and how it was tested…"
-              className="w-full px-3 py-2 rounded-xl border-2 border-white/[0.1] focus:outline-none focus:ring-2 focus:ring-brand-dark"
+              className="w-full px-3 py-2 rounded-xl border-2 border-[var(--border-subtle)] focus:outline-none focus:ring-2 focus:ring-brand-dark"
             />
           </div>
 
@@ -232,7 +232,7 @@ export default function PrReadinessPage() {
               onChange={(e) => setIssueLink(e.target.value)}
               placeholder="https://github.com/owner/repo/issues/123"
               className={`w-full px-3 py-2 rounded-xl border-2 focus:outline-none focus:ring-2 focus:ring-brand-dark ${
-                issueLink && !issue.valid ? "border-red-500" : "border-white/[0.1]"
+                issueLink && !issue.valid ? "border-red-500" : "border-[var(--border-subtle)]"
               }`}
             />
             {issueLink && !issue.valid && (
@@ -248,7 +248,7 @@ export default function PrReadinessPage() {
           </div>
         </section>
 
-        <section className="mt-6 p-6 glass-panel border-2 border-white/[0.1] rounded-2xl shadow-sm" aria-live="polite">
+        <section className="mt-6 p-6 glass-panel border-2 border-[var(--border-subtle)] rounded-2xl shadow-sm" aria-live="polite">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-lg font-bold text-brand-dark flex items-center gap-2">
               <Zap className="w-5 h-5 text-amber-500" aria-hidden /> Acceptance score
@@ -257,7 +257,7 @@ export default function PrReadinessPage() {
               {score}%
             </span>
           </div>
-          <div className="w-full h-4 rounded-full bg-zinc-200 overflow-hidden border border-white/[0.1]">
+          <div className="w-full h-4 rounded-full bg-zinc-200 overflow-hidden border border-[var(--border-subtle)]">
             <div
               data-testid="score-bar"
               className={`h-full ${probability.bar} transition-all duration-300`}
@@ -266,7 +266,7 @@ export default function PrReadinessPage() {
           </div>
           <p className={`mt-2 text-sm font-semibold ${probability.color}`}>{probability.label}</p>
 
-          <h3 className="mt-5 mb-2 text-sm font-bold uppercase tracking-wide text-zinc-300">
+          <h3 className="mt-5 mb-2 text-sm font-bold uppercase tracking-wide text-[var(--text-secondary)]">
             Tailored checklist
           </h3>
           <ul className="space-y-2">
@@ -275,11 +275,11 @@ export default function PrReadinessPage() {
                 {item.done ? (
                   <CheckCircle2 className="w-5 h-5 mt-0.5 text-emerald-600 shrink-0" aria-label="done" />
                 ) : (
-                  <Circle className="w-5 h-5 mt-0.5 text-zinc-300 shrink-0" aria-label="todo" />
+                  <Circle className="w-5 h-5 mt-0.5 text-[var(--text-secondary)] shrink-0" aria-label="todo" />
                 )}
                 <span>
                   <span className={item.done ? "text-zinc-200 font-medium" : "text-zinc-300"}>{item.label}</span>
-                  {!item.done && <span className="block text-xs text-zinc-300">{item.hint}</span>}
+                  {!item.done && <span className="block text-xs text-[var(--text-secondary)]">{item.hint}</span>}
                 </span>
               </li>
             ))}

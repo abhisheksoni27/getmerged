@@ -96,7 +96,7 @@ export function FirstMergeTrackedPRStep({
             value={prUrl}
             onChange={(e) => onPrUrlChange(e.target.value)}
             placeholder="https://github.com/owner/repo/pull/123"
-            className="w-full flex-1 rounded-md border border-[var(--border-subtle)] glass-panel px-3 py-2 text-xs text-white outline-none focus:border-emerald-500"
+            className="w-full flex-1 rounded-md border border-[var(--border-subtle)] glass-panel px-3 py-2 text-xs text-[var(--text-primary)] outline-none focus:border-emerald-500"
           />
           <button
             onClick={onTrackPR}
@@ -114,7 +114,7 @@ export function FirstMergeTrackedPRStep({
         {trackNeedsAuth && (
           <a
             href={`${API_BASE_URL}/api/v1/auth/github`}
-            className="mt-2 inline-flex items-center gap-1 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800"
+            className="mt-2 inline-flex items-center gap-1 rounded-md glass-card px-3 py-1.5 text-xs font-semibold text-[var(--text-primary)] hover:bg-zinc-800"
           >
             Connect GitHub to track
           </a>
@@ -173,7 +173,7 @@ export function FirstMergeTrackedPRStep({
               href={trackState.trackedPR.htmlUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 rounded-md bg-violet-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-violet-800"
+              className="inline-flex items-center gap-1 rounded-md bg-violet-700 px-3 py-1.5 text-xs font-semibold text-[var(--text-primary)] hover:bg-violet-800"
             >
               View Merged PR <ExternalLink className="h-3 w-3" />
             </a>

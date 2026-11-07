@@ -23,7 +23,7 @@ export function ReviewerHealthSection({
         {reviewerRows.map((row, i) => (
           <div
             key={row.key}
-            className={`flex justify-between items-center ${i < reviewerRows.length - 1 ? "border-b border-white/[0.06] pb-2" : "pb-1"}`}
+            className={`flex justify-between items-center ${i < reviewerRows.length - 1 ? "border-b border-[var(--border-subtle)] pb-2" : "pb-1"}`}
           >
             <span className="text-[var(--text-secondary)]">{row.label}</span>
             <span className={`font-bold ${row.valueClass}`}>{row.value}</span>
@@ -67,7 +67,7 @@ export function FrictionBreakdownSection({
         ))}
       </div>
       {/* Friction insight */}
-      <div className="rounded-xl border border-white/[0.06] bg-black/20 p-3">
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-black/20 p-3">
         <p className="text-[11px] font-mono text-[var(--text-secondary)]">
           {ff.formatting_and_style_pct >= 40
             ? <>

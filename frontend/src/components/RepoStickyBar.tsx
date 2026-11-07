@@ -137,7 +137,7 @@ export function RepoStickyBar({
               target="_blank"
               rel="noopener noreferrer"
               title={`View ${fullName} on GitHub`}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-[var(--text-primary)] text-white hover:bg-[var(--text-primary)]/90 transition-colors border border-[var(--text-primary)]"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-[var(--text-primary)] text-[var(--text-primary)] hover:bg-[var(--text-primary)]/90 transition-colors border border-[var(--text-primary)]"
             >
               <GitPullRequest className="h-3 w-3" />
               <span>GitHub</span>

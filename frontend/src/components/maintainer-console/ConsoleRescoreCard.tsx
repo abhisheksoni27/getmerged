@@ -72,7 +72,7 @@ export function ConsoleRescoreCard({ fullName, rescoring, rescore, onRescore }: 
     <div className="p-4 glass-panel border border-[var(--border-subtle)] rounded-2xl shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <div className="font-bold text-sm text-white flex items-center gap-2">
+          <div className="font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-emerald-600" /> Automated Re-score
           </div>
           <p className="text-xs text-[var(--text-secondary)] mt-0.5">
@@ -84,7 +84,7 @@ export function ConsoleRescoreCard({ fullName, rescoring, rescore, onRescore }: 
           type="button"
           onClick={onRescore}
           disabled={rescoring}
-          className="px-4 py-2.5 glass-card hover:bg-zinc-800 text-white font-bold text-xs rounded-xl border border-[var(--border-subtle)] shadow-sm disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed flex items-center gap-2 shrink-0"
+          className="px-4 py-2.5 glass-card hover:bg-zinc-800 text-[var(--text-primary)] font-bold text-xs rounded-xl border border-[var(--border-subtle)] shadow-sm disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed flex items-center gap-2 shrink-0"
         >
           {rescoring ? (
             <>

@@ -130,7 +130,7 @@ Check out my proof of work: ${profileUrl}`;
             <img
               src={avatarUrl}
               alt={displayName}
-              className="w-12 h-12 rounded-full border border-white/20 object-cover"
+              className="w-12 h-12 rounded-full border border-[var(--border-subtle)] object-cover"
             />
             <div>
               <div className="text-base font-bold font-space text-[var(--text-primary)]">{displayName}</div>
@@ -140,27 +140,27 @@ Check out my proof of work: ${profileUrl}`;
 
           {/* 3 Metric Pillars */}
           <div className="grid grid-cols-3 gap-2 text-center pt-1 font-mono">
-            <div className="p-3 rounded-xl bg-black/40 border border-white/[0.06] space-y-0.5">
+            <div className="p-3 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-0.5">
               <div className="text-[10px] text-[var(--text-secondary)] uppercase">League Rank</div>
               <div className="text-base font-black text-amber-400">#{rank}</div>
               <div className="text-[10px] text-emerald-400">{percentile}</div>
             </div>
 
-            <div className="p-3 rounded-xl bg-black/40 border border-white/[0.06] space-y-0.5">
+            <div className="p-3 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-0.5">
               <div className="text-[10px] text-[var(--text-secondary)] uppercase">Karma Score</div>
               <div className="text-base font-black text-emerald-400">⚡ {karma.toLocaleString()}</div>
               <div className="text-[10px] text-[var(--text-secondary)]">{topLang}</div>
             </div>
 
-            <div className="p-3 rounded-xl bg-black/40 border border-white/[0.06] space-y-0.5">
+            <div className="p-3 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-0.5">
               <div className="text-[10px] text-[var(--text-secondary)] uppercase">Merged PRs</div>
-              <div className="text-base font-black text-white">{mergedCount} PRs</div>
+              <div className="text-base font-black text-[var(--text-primary)]">{mergedCount} PRs</div>
               <div className="text-[10px] text-[var(--text-secondary)]">Production</div>
             </div>
           </div>
 
           {/* Card Footer Verification */}
-          <div className="flex items-center justify-between text-[11px] font-mono text-[var(--text-secondary)] pt-2 border-t border-white/[0.06]">
+          <div className="flex items-center justify-between text-[11px] font-mono text-[var(--text-secondary)] pt-2 border-t border-[var(--border-subtle)]">
             <span className="flex items-center gap-1 text-emerald-400">
               <ShieldCheck className="h-3.5 w-3.5" />
               <span>Proof-of-Work Verified</span>
@@ -175,7 +175,7 @@ Check out my proof of work: ${profileUrl}`;
             <button
               type="button"
               onClick={handleShareTwitter}
-              className="py-2.5 px-4 rounded-xl bg-[#0a0a0c] hover:bg-black border border-white/[0.15] text-white font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md active:scale-[0.98]"
+              className="py-2.5 px-4 rounded-xl bg-[#0a0a0c] hover:bg-black border border-[var(--border-subtle)] text-white font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md active:scale-[0.98]"
             >
               <TwitterIcon className="h-4 w-4 text-sky-400" />
               <span>Share on X (Twitter)</span>

@@ -74,16 +74,16 @@ export default async function CommunityPowerhousesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
       />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-200 font-sans">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-[var(--text-primary)] font-sans">
         <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-white/[0.1] shadow-xs mb-10">
+        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-[var(--border-subtle)] shadow-xs mb-10">
           <div className="flex items-center gap-2 mb-3.5">
             <span
               data-testid="powerhouse-badge"
@@ -99,23 +99,23 @@ export default async function CommunityPowerhousesPage() {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight font-space">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] tracking-tight font-space">
             Community Powerhouses
           </h1>
-          <p className="mt-3 text-xs sm:text-sm text-zinc-300 max-w-3xl leading-relaxed font-sans">
+          <p className="mt-3 text-xs sm:text-sm text-[var(--text-secondary)] max-w-3xl leading-relaxed font-sans">
             Repositories sustained by many hands. Each project here is reviewed by{" "}
             {MIN_MAINTAINERS}+ distinct active maintainers - no single-person bottleneck,
             faster reviews, and a healthier contribution experience.
           </p>
-          <p data-testid="collection-repo-count" className="mt-4 text-sm font-mono font-bold text-white">
+          <p data-testid="collection-repo-count" className="mt-4 text-sm font-mono font-bold text-[var(--text-primary)]">
             {total} repositories in this collection
           </p>
         </div>
 
         {repos.length === 0 ? (
-          <div className="rounded-2xl glass-panel p-10 border border-white/[0.1] shadow-xs text-center">
-            <Users className="h-8 w-8 mx-auto text-zinc-300 mb-3" />
-            <p className="text-sm text-zinc-300">
+          <div className="rounded-2xl glass-panel p-10 border border-[var(--border-subtle)] shadow-xs text-center">
+            <Users className="h-8 w-8 mx-auto text-[var(--text-secondary)] mb-3" />
+            <p className="text-sm text-[var(--text-secondary)]">
               No repositories currently meet the {MIN_MAINTAINERS}+ maintainer threshold. Check back after the next scoring snapshot.
             </p>
           </div>
@@ -128,15 +128,15 @@ export default async function CommunityPowerhousesPage() {
                   key={repo.id}
                   href={`/${repo.full_name}`}
                   title={`View ${repo.full_name} on GetMerged`}
-                  className="group rounded-2xl glass-panel p-6 border border-white/[0.1] shadow-xs hover:border-white/[0.12] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+                  className="group rounded-2xl glass-panel p-6 border border-[var(--border-subtle)] shadow-xs hover:border-[var(--border-subtle)] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="h-10 w-10 rounded-xl border border-white/[0.1] glass-card flex items-center justify-center shrink-0">
+                      <div className="h-10 w-10 rounded-xl border border-[var(--border-subtle)] glass-card flex items-center justify-center shrink-0">
                         <LangLogo language={repo.language} />
                       </div>
                       <div className="min-w-0">
-                        <h3 className="font-space text-base font-bold text-white group-hover:text-zinc-300 transition-colors truncate">
+                        <h3 className="font-space text-base font-bold text-[var(--text-primary)] group-hover:text-[var(--text-secondary)] transition-colors truncate">
                           {ownerPart}/{namePart}
                         </h3>
                         <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-2 py-0.5 text-[11px] font-mono font-semibold text-emerald-300">
@@ -145,12 +145,12 @@ export default async function CommunityPowerhousesPage() {
                         </span>
                       </div>
                     </div>
-                    <p className="text-xs text-zinc-300 leading-relaxed font-sans line-clamp-2">
+                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-sans line-clamp-2">
                       {repo.description || "No description available."}
                     </p>
                   </div>
 
-                  <div className="pt-4 mt-4 border-t border-white/[0.1] flex items-center justify-between text-xs font-mono font-semibold text-white group-hover:text-zinc-300">
+                  <div className="pt-4 mt-4 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs font-mono font-semibold text-[var(--text-primary)] group-hover:text-[var(--text-secondary)]">
                     <span className="inline-flex items-center gap-1">
                       <Star className="h-3.5 w-3.5" /> {repo.stars.toLocaleString()}
                     </span>

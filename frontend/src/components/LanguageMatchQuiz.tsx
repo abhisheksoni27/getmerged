@@ -120,7 +120,7 @@ export function LanguageMatchQuiz() {
     >
       <div className="flex items-center gap-2.5 mb-2">
         <Sparkles className="h-5 w-5 text-emerald-400" />
-        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white font-space">
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--text-primary)] font-space">
           Find your first issue in 10 seconds
         </h2>
       </div>
@@ -144,7 +144,7 @@ export function LanguageMatchQuiz() {
                   className={`rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                     active
                       ? "bg-emerald-500 text-black font-bold shadow-[0_0_16px_rgba(16,185,129,0.4)]"
-                      : "border border-[var(--border-subtle)] bg-white/[0.05] text-[var(--text-secondary)] hover:border-white/[0.3] hover:text-[var(--text-primary)]"
+                      : "border border-[var(--border-subtle)] bg-white/[0.05] text-[var(--text-secondary)] hover:border-[var(--border-subtle)] hover:text-[var(--text-primary)]"
                   }`}
                 >
                   {displayNameFromSlug(lang)}
@@ -165,7 +165,7 @@ export function LanguageMatchQuiz() {
                 aria-pressed={level === l.value}
                 className={`rounded-full px-4 py-2 text-xs font-semibold transition-all cursor-pointer ${
                   level === l.value
-                    ? "bg-white/[0.16] border border-white/[0.3] text-white font-bold"
+                    ? "bg-white/[0.16] border border-[var(--border-subtle)] text-[var(--text-primary)] font-bold"
                     : "border border-[var(--border-subtle)] bg-white/[0.03] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}
               >
@@ -205,11 +205,11 @@ export function LanguageMatchQuiz() {
             <button
               type="button"
               onClick={() => setError(false)}
-              className="rounded-xl glass-card px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800 cursor-pointer"
+              className="rounded-xl glass-card px-4 py-2 text-xs font-semibold text-[var(--text-primary)] hover:bg-zinc-800 cursor-pointer"
             >
               Try again
             </button>
-            <Link prefetch={false} href="/repos" className="rounded-xl border border-[var(--border-subtle)] px-4 py-2 text-xs font-semibold text-[var(--text-secondary)] hover:border-white/[0.25]">
+            <Link prefetch={false} href="/repos" className="rounded-xl border border-[var(--border-subtle)] px-4 py-2 text-xs font-semibold text-[var(--text-secondary)] hover:border-[var(--border-subtle)]">
               Browse all repos →
             </Link>
           </div>
@@ -223,7 +223,7 @@ export function LanguageMatchQuiz() {
               <p className="text-sm text-[var(--text-secondary)]">{data.message || "No strong matches yet."}</p>
               <a
                 href={githubAuthUrl(selected)}
-                className="mt-4 inline-flex items-center gap-1.5 rounded-xl glass-card px-4 py-2.5 text-xs font-semibold text-white hover:bg-zinc-800"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-xl glass-card px-4 py-2.5 text-xs font-semibold text-[var(--text-primary)] hover:bg-zinc-800"
               >
                 Connect GitHub for full matching →
               </a>
@@ -251,7 +251,7 @@ export function LanguageMatchQuiz() {
                       {m.description || "No description available."}
                     </p>
                     <div className="mt-3 flex items-center gap-3 text-xs text-[var(--text-secondary)]">
-                      {m.language && <span className="rounded-md glass-card px-2 py-0.5 font-medium capitalize text-white">{m.language}</span>}
+                      {m.language && <span className="rounded-md glass-card px-2 py-0.5 font-medium capitalize text-[var(--text-primary)]">{m.language}</span>}
                       <span className="inline-flex items-center gap-1 font-mono">
                         <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" /> {(m.stars || 0).toLocaleString()}
                       </span>
@@ -274,7 +274,7 @@ export function LanguageMatchQuiz() {
               </ul>
 
               <div className="mt-6 rounded-2xl border border-dashed border-emerald-400/40 glass-panel p-5">
-                <p className="text-sm font-semibold text-white">Save these matches &amp; unlock new-issue alerts</p>
+                <p className="text-sm font-semibold text-[var(--text-primary)]">Save these matches &amp; unlock new-issue alerts</p>
                 <p className="mt-1 text-xs text-[var(--text-secondary)]">
                   One-click GitHub auth pre-fills your language profile so your dashboard feed is ready immediately.
                 </p>

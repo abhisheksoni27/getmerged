@@ -40,7 +40,7 @@ export function TextInput({ label, hint, error, id, ...inputProps }: TextInputPr
       <input
         id={id}
         {...inputProps}
-        className="w-full px-3.5 py-2.5 rounded-lg bg-black/60 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-amber-400 transition-colors"
+        className="w-full px-3.5 py-2.5 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder-zinc-500 focus:outline-none focus:border-amber-400 transition-colors"
       />
     </Field>
   );
@@ -58,7 +58,7 @@ export function TextAreaInput({ label, hint, error, id, ...areaProps }: TextArea
       <textarea
         id={id}
         {...areaProps}
-        className="w-full px-3.5 py-2.5 rounded-lg bg-black/60 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-amber-400 transition-colors leading-relaxed"
+        className="w-full px-3.5 py-2.5 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder-zinc-500 focus:outline-none focus:border-amber-400 transition-colors leading-relaxed"
       />
     </Field>
   );

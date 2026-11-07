@@ -103,7 +103,7 @@ export function PayView({
           {/* Mini dimension grid teaser */}
           <div className="flex flex-wrap items-center justify-center gap-2 mb-6 max-w-lg mx-auto">
             {ANALYSIS_STEPS.map((s) => (
-              <span key={s.key} className="inline-flex items-center gap-1 text-[11px] font-mono text-[var(--text-secondary)] bg-zinc-900/60 border border-white/[0.06] px-2 py-0.5 rounded-md">
+              <span key={s.key} className="inline-flex items-center gap-1 text-[11px] font-mono text-[var(--text-secondary)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] px-2 py-0.5 rounded-md">
                 <span>{s.icon}</span> {s.label}
               </span>
             ))}
@@ -125,7 +125,7 @@ export function PayView({
             <Link prefetch={false}
               href="/audit/sample"
               target="_blank"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full glass-card border border-white/[0.15] px-6 py-3.5 text-xs font-mono font-bold text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-zinc-800/80 transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full glass-card border border-[var(--border-subtle)] px-6 py-3.5 text-xs font-mono font-bold text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-zinc-800/80 transition-all"
             >
               <ExternalLink className="h-4 w-4 text-sky-400" />
               View Sample Report
@@ -158,7 +158,7 @@ export function DimensionGrid() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
       {ANALYSIS_STEPS.map((step) => (
-        <div key={step.key} className="rounded-xl border border-[var(--border-subtle)] p-4 bg-black/40">
+        <div key={step.key} className="rounded-xl border border-[var(--border-subtle)] p-4 bg-[var(--bg-surface)]">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-xs font-bold font-mono text-[var(--text-primary)] flex items-center gap-1.5">
               <span>{step.icon}</span> {step.label}

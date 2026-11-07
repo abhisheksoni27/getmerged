@@ -46,28 +46,28 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   const dna = profile.dna;
 
   return (
-    <div className="mb-8 rounded-xl glass-panel p-6 sm:p-8 border border-white/[0.1] border-t-2 border-t-slate-700 shadow-sm relative overflow-hidden">
+    <div className="mb-8 rounded-xl glass-panel p-6 sm:p-8 border border-[var(--border-subtle)] border-t-2 border-t-slate-700 shadow-sm relative overflow-hidden">
       {/* Top Bar: Identity & Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/[0.06]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[var(--border-subtle)]">
         <div className="flex items-center gap-4 min-w-0">
           {profile.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={profile.avatar_url}
               alt={profile.username}
-              className="h-16 w-16 sm:h-18 sm:w-18 rounded-xl border border-white/[0.12] bg-slate-800 shadow-md object-cover shrink-0"
+              className="h-16 w-16 sm:h-18 sm:w-18 rounded-xl border border-[var(--border-subtle)] bg-slate-800 shadow-md object-cover shrink-0"
             />
           ) : (
-            <div className="h-16 w-16 sm:h-18 sm:w-18 rounded-xl bg-slate-800 text-white flex items-center justify-center font-sans font-bold text-2xl shrink-0 border border-white/[0.12]">
+            <div className="h-16 w-16 sm:h-18 sm:w-18 rounded-xl bg-slate-800 text-[var(--text-primary)] flex items-center justify-center font-sans font-bold text-2xl shrink-0 border border-[var(--border-subtle)]">
               {profile.username.slice(0, 2).toUpperCase()}
             </div>
           )}
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-bold font-sans text-white truncate">
+              <h1 className="text-xl sm:text-2xl font-bold font-sans text-[var(--text-primary)] truncate">
                 {profile.username}
               </h1>
-              <span className="inline-flex items-center px-2 py-0.5 rounded bg-slate-800 text-zinc-300 text-xs font-mono border border-white/[0.12]">
+              <span className="inline-flex items-center px-2 py-0.5 rounded bg-slate-800 text-[var(--text-secondary)] text-xs font-mono border border-[var(--border-subtle)]">
                 @{profile.slug}
               </span>
               {(profile.is_pro || (isOwner && currentUser?.is_pro)) && (
@@ -83,8 +83,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 </span>
               )}
             </div>
-            <p className="text-xs font-mono text-zinc-400 flex items-center gap-1.5 mt-1.5">
-              <Calendar className="h-3.5 w-3.5 text-zinc-400" />
+            <p className="text-xs font-mono text-[var(--text-secondary)] flex items-center gap-1.5 mt-1.5">
+              <Calendar className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
               Verified on GetMerged since{" "}
               {new Date(profile.member_since).toLocaleDateString("en-US", {
                 year: "numeric",
@@ -101,7 +101,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               <button
                 type="button"
                 onClick={onOpenEdit}
-                className="px-3 py-1.5 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-zinc-200 hover:text-white border border-white/[0.12] text-xs font-mono font-medium flex items-center gap-1.5 transition-all cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-[var(--text-primary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)] text-xs font-mono font-medium flex items-center gap-1.5 transition-all cursor-pointer"
               >
                 <Edit3 className="h-3.5 w-3.5 text-amber-400" />
                 Edit
@@ -136,13 +136,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 title="More profile options"
                 aria-label="More options"
                 aria-expanded={isMenuOpen}
-                className="p-1.5 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-zinc-300 hover:text-white border border-white/[0.12] transition-all cursor-pointer flex items-center justify-center"
+                className="p-1.5 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)] transition-all cursor-pointer flex items-center justify-center"
               >
                 <MoreVertical className="h-4 w-4" />
               </button>
 
               {isMenuOpen && (
-                <div className="absolute right-0 top-full mt-1.5 w-48 rounded-xl bg-slate-900/95 border border-white/[0.12] shadow-xl backdrop-blur-md py-1.5 z-30 animate-in fade-in zoom-in-95 duration-100">
+                <div className="absolute right-0 top-full mt-1.5 w-48 rounded-xl bg-slate-900/95 border border-[var(--border-subtle)] shadow-xl backdrop-blur-md py-1.5 z-30 animate-in fade-in zoom-in-95 duration-100">
                   <button
                     type="button"
                     onClick={onOpenDelete}
@@ -167,14 +167,14 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         )}
 
         {profile.bio ? (
-          <p className="mt-2 text-sm text-zinc-200 leading-relaxed font-sans whitespace-pre-line">
+          <p className="mt-2 text-sm text-[var(--text-primary)] leading-relaxed font-sans whitespace-pre-line">
             {profile.bio}
           </p>
         ) : isOwner ? (
           <button
             type="button"
             onClick={onOpenEdit}
-            className="mt-2 text-xs font-mono text-zinc-400 hover:text-amber-300 flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="mt-2 text-xs font-mono text-[var(--text-secondary)] hover:text-amber-300 flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Edit3 className="h-3 w-3 text-amber-400" /> Add your bio...
           </button>
@@ -183,17 +183,17 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
       {/* Owner Plan & Subscription Management Box */}
       {isOwner && currentUser?.is_pro && (
-        <div className="mt-4 pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        <div className="mt-4 pt-4 border-t border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-zinc-200">
+            <span className="text-[var(--text-primary)]">
               Active Subscription:{" "}
               <strong className="text-emerald-400 font-semibold uppercase">
                 Pro ({currentUser.billing_cycle || "yearly"})
               </strong>
             </span>
             {currentUser.subscription_expires_at && (
-              <span className="text-zinc-400">
+              <span className="text-[var(--text-secondary)]">
                 · Renews{" "}
                 {new Date(currentUser.subscription_expires_at).toLocaleDateString("en-US", {
                   month: "short",
@@ -206,7 +206,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <div className="flex items-center gap-2">
             <Link prefetch={false}
               href="/pricing"
-              className="px-2.5 py-1 rounded bg-white/[0.06] hover:bg-white/[0.12] text-zinc-300 hover:text-white transition-colors"
+              className="px-2.5 py-1 rounded bg-white/[0.06] hover:bg-white/[0.12] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
             >
               View Plans
             </Link>
