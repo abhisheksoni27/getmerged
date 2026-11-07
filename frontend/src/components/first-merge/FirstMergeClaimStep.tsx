@@ -49,7 +49,7 @@ export function FirstMergeClaimStep({
       description="Pick an open starter issue to work on, then proceed to Preflight evaluation."
       badge={
         trackState.selectedRepo && (
-          <span className="rounded-full glass-card px-2 py-0.5 text-xs font-mono font-semibold text-zinc-200">
+          <span className="rounded-full glass-card px-2 py-0.5 text-xs font-mono font-semibold text-[var(--text-secondary)]">
             {trackState.selectedRepo.fullName}
           </span>
         )
@@ -57,7 +57,7 @@ export function FirstMergeClaimStep({
       action={
         <button
           onClick={() => onRestartStep(1)}
-          className="text-xs text-zinc-300 hover:text-zinc-300 underline cursor-pointer"
+          className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-secondary)] underline cursor-pointer"
         >
           Change Repo
         </button>
@@ -67,8 +67,8 @@ export function FirstMergeClaimStep({
       {fitRadar && (
         <div className="mt-3 rounded-lg border border-emerald-100 bg-emerald-950/70 border-emerald-800/80/40 p-3 text-xs flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-zinc-300">Fit Radar:</span>
-            <span className="text-zinc-300">
+            <span className="font-semibold text-[var(--text-secondary)]">Fit Radar:</span>
+            <span className="text-[var(--text-secondary)]">
               Onboarding: {fitRadar.onboarding_quality}% · First-timer: {fitRadar.first_timer_receptivity}% · Merge prob: {fitRadar.merge_probability}%
             </span>
           </div>
@@ -96,7 +96,7 @@ export function FirstMergeClaimStep({
       )}
 
       {loadingIssues ? (
-        <div className="mt-4 py-8 text-center text-xs text-zinc-300 animate-pulse">
+        <div className="mt-4 py-8 text-center text-xs text-[var(--text-secondary)] animate-pulse">
           Fetching open Good First Issues for {fullName}...
         </div>
       ) : issuesError ? (
@@ -124,7 +124,7 @@ export function FirstMergeClaimStep({
           </div>
         </div>
       ) : issues.length === 0 ? (
-        <div className="mt-4 rounded-lg border border-dashed border-white/[0.1] p-6 text-center text-xs text-zinc-300">
+        <div className="mt-4 rounded-lg border border-dashed border-[var(--border-subtle)] p-6 text-center text-xs text-[var(--text-secondary)]">
           No good-first-issues returned.
           <div className="mt-2 flex justify-center gap-2">
             <button
@@ -135,7 +135,7 @@ export function FirstMergeClaimStep({
             </button>
             <button
               onClick={() => onManualAdvance(3)}
-              className="rounded-md border border-white/[0.12] px-3 py-1.5 text-xs font-semibold text-zinc-300 hover:glass-card"
+              className="rounded-md border border-[var(--border-subtle)] px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)] hover:glass-card"
             >
               Skip to Preflight →
             </button>
@@ -157,7 +157,7 @@ export function FirstMergeClaimStep({
               return (
                 <li
                   key={issue.id}
-                  className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-white/[0.1] glass-card/50 p-3 hover:glass-panel hover:border-emerald-400 transition-all"
+                  className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[var(--border-subtle)] glass-card/50 p-3 hover:glass-panel hover:border-emerald-400 transition-all"
                 >
                   <div className="min-w-0 flex-1">
                     <a
@@ -166,9 +166,9 @@ export function FirstMergeClaimStep({
                       rel="noopener noreferrer"
                       className="truncate block text-xs font-semibold text-white hover:text-emerald-400"
                     >
-                      {issue.title} <ExternalLink className="inline h-3 w-3 text-zinc-300" />
+                      {issue.title} <ExternalLink className="inline h-3 w-3 text-[var(--text-secondary)]" />
                     </a>
-                    <span className="text-[11px] text-zinc-300">
+                    <span className="text-[11px] text-[var(--text-secondary)]">
                       #{issueNumber}
                     </span>
                     {serverClaimed && (
@@ -220,7 +220,7 @@ export function FirstMergeClaimStep({
           )}
           {!needsGitHubAuth && claimState.result && (
             <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-950/70 border-emerald-800/80 p-3 text-xs text-emerald-300">
-              <div className="flex items-center gap-1.5 font-semibold text-zinc-300">
+              <div className="flex items-center gap-1.5 font-semibold text-[var(--text-secondary)]">
                 <Check className="h-4 w-4 text-emerald-600 shrink-0" />
                 {claimState.result.message}
               </div>

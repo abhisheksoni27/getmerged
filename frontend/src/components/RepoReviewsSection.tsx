@@ -108,18 +108,18 @@ export function RepoReviewsSection({ repoId, fullName }: RepoReviewsSectionProps
   };
 
   return (
-    <div className="rounded-3xl glass-panel border border-white/[0.1] p-6 sm:p-8 bg-zinc-950/60 shadow-xl space-y-6 text-white font-sans">
+    <div className="rounded-3xl glass-panel border border-[var(--border-subtle)] p-6 sm:p-8 bg-zinc-950/60 shadow-xl space-y-6 text-[var(--text-primary)] font-sans">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-5">
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-mono font-semibold">
             <MessageSquare className="h-3.5 w-3.5" />
             <span>Glassdoor for Open Source</span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-bold font-space text-white">
+          <h3 className="text-xl sm:text-2xl font-bold font-space text-[var(--text-primary)]">
             Contributor Vibe & Maintainer Reviews
           </h3>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-[var(--text-secondary)]">
             Real experiences from developers who contributed pull requests to {fullName}.
           </p>
         </div>
@@ -142,17 +142,17 @@ export function RepoReviewsSection({ repoId, fullName }: RepoReviewsSectionProps
       {/* Review Submission Form */}
       {showForm && (
         <form onSubmit={handleSubmitReview} className="p-6 rounded-2xl bg-zinc-900/90 border border-emerald-500/30 space-y-4">
-          <h4 className="text-sm font-bold font-space text-white">
+          <h4 className="text-sm font-bold font-space text-[var(--text-primary)]">
             Review Your Contribution Experience
           </h4>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-mono text-zinc-300">Maintainer Mentorship:</label>
+              <label className="text-xs font-mono text-[var(--text-secondary)]">Maintainer Mentorship:</label>
               <select
                 value={maintainerRating}
                 onChange={(e) => setMaintainerRating(Number(e.target.value))}
-                className="w-full bg-black border border-white/[0.12] rounded-xl p-2 text-xs text-white font-mono"
+                className="w-full bg-black border border-[var(--border-subtle)] rounded-xl p-2 text-xs text-white font-mono"
               >
                 <option value={5}>⭐⭐⭐⭐⭐ (5/5) Super Helpful</option>
                 <option value={4}>⭐⭐⭐⭐ (4/5) Welcoming</option>
@@ -163,11 +163,11 @@ export function RepoReviewsSection({ repoId, fullName }: RepoReviewsSectionProps
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-mono text-zinc-300">Review Speed:</label>
+              <label className="text-xs font-mono text-[var(--text-secondary)]">Review Speed:</label>
               <select
                 value={reviewSpeedRating}
                 onChange={(e) => setReviewSpeedRating(Number(e.target.value))}
-                className="w-full bg-black border border-white/[0.12] rounded-xl p-2 text-xs text-white font-mono"
+                className="w-full bg-black border border-[var(--border-subtle)] rounded-xl p-2 text-xs text-white font-mono"
               >
                 <option value={5}>⭐⭐⭐⭐⭐ Fast (&lt;24h)</option>
                 <option value={4}>⭐⭐⭐⭐ Moderate (2-3d)</option>
@@ -178,11 +178,11 @@ export function RepoReviewsSection({ repoId, fullName }: RepoReviewsSectionProps
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-mono text-zinc-300">Beginner Friendly:</label>
+              <label className="text-xs font-mono text-[var(--text-secondary)]">Beginner Friendly:</label>
               <select
                 value={beginnerRating}
                 onChange={(e) => setBeginnerRating(Number(e.target.value))}
-                className="w-full bg-black border border-white/[0.12] rounded-xl p-2 text-xs text-white font-mono"
+                className="w-full bg-black border border-[var(--border-subtle)] rounded-xl p-2 text-xs text-white font-mono"
               >
                 <option value={5}>⭐⭐⭐⭐⭐ Great for 1st timers</option>
                 <option value={4}>⭐⭐⭐⭐ Good onboarding</option>
@@ -194,13 +194,13 @@ export function RepoReviewsSection({ repoId, fullName }: RepoReviewsSectionProps
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-mono text-zinc-300">Your Feedback / Advice for Future Contributors:</label>
+            <label className="text-xs font-mono text-[var(--text-secondary)]">Your Feedback / Advice for Future Contributors:</label>
             <textarea
               rows={3}
               placeholder="What was it like getting your PR reviewed? Any tips for newcomers?"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className="w-full bg-black border border-white/[0.12] rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+              className="w-full bg-black border border-[var(--border-subtle)] rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
             />
           </div>
 
@@ -224,7 +224,7 @@ export function RepoReviewsSection({ repoId, fullName }: RepoReviewsSectionProps
 
       {/* Reviews Feed */}
       {reviews.length === 0 ? (
-        <div className="text-center py-8 text-zinc-500 text-xs font-mono">
+        <div className="text-center py-8 text-[var(--text-tertiary)] text-xs font-mono">
           No contributor reviews yet. Be the first to leave feedback on {fullName}!
         </div>
       ) : (
@@ -239,25 +239,25 @@ export function RepoReviewsSection({ repoId, fullName }: RepoReviewsSectionProps
                       <span>Verified Contributor</span>
                     </span>
                   )}
-                  <span className="text-[11px] font-mono text-zinc-500">
+                  <span className="text-[11px] font-mono text-[var(--text-tertiary)]">
                     {new Date(r.created_at).toLocaleDateString()}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-4 text-xs font-mono text-zinc-300">
+                <div className="flex items-center gap-4 text-xs font-mono text-[var(--text-secondary)]">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] text-zinc-400">Mentorship:</span>
+                    <span className="text-[11px] text-[var(--text-secondary)]">Mentorship:</span>
                     {renderStars(r.maintainer_rating)}
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] text-zinc-400">Speed:</span>
+                    <span className="text-[11px] text-[var(--text-secondary)]">Speed:</span>
                     {renderStars(r.review_speed_rating)}
                   </div>
                 </div>
               </div>
 
               {r.comment && (
-                <p className="text-xs text-zinc-200 leading-relaxed font-sans">
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-sans">
                   &ldquo;{r.comment}&rdquo;
                 </p>
               )}

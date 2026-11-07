@@ -16,9 +16,9 @@ export function TemplateCards({ cards }: { cards: TemplateCard[] }) {
   return (
     <div className="space-y-4">
       {cards.map((t) => (
-        <div key={t.key} className="rounded-xl border border-white/[0.08] bg-black/50 p-4">
+        <div key={t.key} className="rounded-xl border border-[var(--border-subtle)] bg-black/50 p-4">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-xs font-mono font-bold text-zinc-300">{t.filename}</span>
+            <span className="text-xs font-mono font-bold text-[var(--text-secondary)]">{t.filename}</span>
             <button
               type="button"
               onClick={() => handleCopy(t.key, t.text)}
@@ -28,7 +28,7 @@ export function TemplateCards({ cards }: { cards: TemplateCard[] }) {
               {copiedTemplate === t.key ? "Copied!" : "Copy"}
             </button>
           </div>
-          <pre className="text-[11px] font-mono text-zinc-300 whitespace-pre-wrap bg-zinc-950/80 p-3 rounded-lg border border-white/[0.05] overflow-x-auto">
+          <pre className="text-[11px] font-mono text-[var(--text-secondary)] whitespace-pre-wrap bg-zinc-950/80 p-3 rounded-lg border border-white/[0.05] overflow-x-auto">
             {t.text}
           </pre>
         </div>
@@ -39,11 +39,11 @@ export function TemplateCards({ cards }: { cards: TemplateCard[] }) {
 
 export function TemplateCardsSection({ cards }: { cards: TemplateCard[] }) {
   return (
-    <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
-      <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-white mb-2">
+    <section className="rounded-2xl border-2 border-[var(--border-subtle)] glass-panel p-6 shadow-sm">
+      <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-[var(--text-primary)] mb-2">
         <Copy className="h-4 w-4 text-purple-400" /> Ready-to-Commit GitHub Templates
       </h2>
-      <p className="text-xs text-zinc-400 mb-4">
+      <p className="text-xs text-[var(--text-secondary)] mb-4">
         Copy and commit these directly to your repo to reduce friction today.
       </p>
 

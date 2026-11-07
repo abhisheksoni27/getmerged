@@ -365,7 +365,7 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
                         TOP S-TIER
                       </span>
                       {orb.language && (
-                        <span className="text-[11px] text-zinc-400 truncate font-mono">
+                        <span className="text-[11px] text-[var(--text-secondary)] truncate font-mono">
                           {orb.language}
                         </span>
                       )}
@@ -375,7 +375,7 @@ export function FloatingRepoCircles({ repos = [] }: FloatingRepoCirclesProps) {
                       {orb.fullName}
                     </p>
 
-                    <div className="mt-1.5 flex items-center justify-between text-[11px] text-zinc-300 font-mono">
+                    <div className="mt-1.5 flex items-center justify-between text-[11px] text-[var(--text-secondary)] font-mono">
                       {orb.stars > 0 && (
                         <span className="flex items-center gap-1 text-amber-400">
                           <Star className="h-3 w-3 fill-amber-400" />

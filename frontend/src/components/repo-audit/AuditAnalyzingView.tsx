@@ -56,15 +56,15 @@ export function AuditAnalyzingView({
   const pct = Math.round((totalDone / ANALYSIS_STEPS.length) * 100);
 
   return (
-    <div className="rounded-2xl border-2 border-white/[0.1] glass-panel p-8 shadow-sm">
+    <div className="rounded-2xl border-2 border-[var(--border-subtle)] glass-panel p-8 shadow-sm">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-400/15 border border-emerald-500/30 text-emerald-400">
           <Sparkles className="h-5 w-5 animate-pulse" />
         </div>
         <div>
-          <h2 className="text-base font-bold font-mono text-white">Analyzing {fullName}</h2>
-          <p className="text-xs text-zinc-400 font-mono">Running 10-dimension maintainer intelligence scan…</p>
+          <h2 className="text-base font-bold font-mono text-[var(--text-primary)]">Analyzing {fullName}</h2>
+          <p className="text-xs text-[var(--text-secondary)] font-mono">Running 10-dimension maintainer intelligence scan…</p>
         </div>
       </div>
 
@@ -96,7 +96,7 @@ export function AuditAnalyzingView({
               <span
                 className={`text-xs font-mono flex-1 transition-colors ${
                   isComplete
-                    ? "text-zinc-400"
+                    ? "text-[var(--text-secondary)]"
                     : isActive
                     ? "text-white font-bold"
                     : "text-zinc-600"
@@ -122,7 +122,7 @@ export function AuditAnalyzingView({
         })}
       </div>
 
-      <div className="text-center text-xs font-mono text-zinc-500">
+      <div className="text-center text-xs font-mono text-[var(--text-tertiary)]">
         {done ? (
           <span className="text-emerald-400 animate-pulse">✓ Analysis complete - loading your report…</span>
         ) : (

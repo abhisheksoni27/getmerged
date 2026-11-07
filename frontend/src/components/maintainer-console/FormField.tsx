@@ -19,7 +19,7 @@ export function ErrorBanner({ message, conflict, disputing, onDispute }: ErrorBa
       <div className="flex-1">
         {message}
         {conflict && (
-          <div className="mt-3 pt-3 border-t border-red-200 text-xs text-zinc-300">
+          <div className="mt-3 pt-3 border-t border-red-200 text-xs text-[var(--text-secondary)]">
             Think you are the rightful maintainer?{" "}
             <button
               onClick={onDispute}
@@ -57,9 +57,9 @@ interface MetricTileProps {
 
 export function MetricTile({ label, value }: MetricTileProps) {
   return (
-    <div className="p-3 glass-card border border-white/[0.1] rounded-xl">
-      <span className="text-zinc-300 block text-[10px] uppercase">{label}</span>
-      <span className="font-bold text-white text-sm">{value}</span>
+    <div className="p-3 glass-card border border-[var(--border-subtle)] rounded-xl">
+      <span className="text-[var(--text-secondary)] block text-[10px] uppercase">{label}</span>
+      <span className="font-bold text-[var(--text-primary)] text-sm">{value}</span>
     </div>
   );
 }

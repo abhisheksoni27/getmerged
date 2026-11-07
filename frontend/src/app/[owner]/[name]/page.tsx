@@ -295,13 +295,13 @@ export default async function RepoDetailPage({ params }: PageProps) {
       notFound();
     }
     return (
-      <div className="relative min-h-screen dev-grid-pattern flex flex-col bg-transparent text-white font-sans">
+      <div className="relative min-h-screen  flex flex-col bg-transparent text-[var(--text-primary)] font-sans">
         <Header />
         <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-6">
-          <h1 className="font-space text-2xl font-extrabold text-white">
+          <h1 className="font-space text-2xl font-extrabold text-[var(--text-primary)]">
             {fullName} is not scored yet
           </h1>
-          <p className="mt-2 mb-6 font-sans text-sm text-zinc-300">
+          <p className="mt-2 mb-6 font-sans text-sm text-[var(--text-secondary)]">
             Run an on-demand C-Rank check to get the full verdict - merge rate, review turnaround,
             first-timer success and maintainer responsiveness - before you open a PR.
           </p>

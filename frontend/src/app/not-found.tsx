@@ -16,15 +16,15 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen dev-grid-pattern flex flex-col bg-transparent text-white">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-canvas)] text-[var(--text-primary)]">
       <Header />
       <main className="flex-1 flex items-center justify-center px-4 py-16 sm:py-24">
-        <div className="max-w-xl w-full glass-panel border border-white/[0.12] p-8 sm:p-10 shadow-sm text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#ffb3c7] border border-white/[0.12] shadow-sm mb-6">
-            <ShieldAlert className="w-8 h-8 text-white" />
+        <div className="max-w-xl w-full surface-base border border-[var(--border-subtle)] p-8 sm:p-10 shadow-sm text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#ffb3c7] border border-[var(--border-subtle)] shadow-sm mb-6">
+            <ShieldAlert className="w-8 h-8 text-[#C4463A]" />
           </div>
 
-          <div className="inline-block px-3 py-1 bg-[#ffd93d] border border-white/[0.12] font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+          <div className="inline-block px-3 py-1 bg-[#ffd93d] border border-[var(--border-subtle)] font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
             HTTP 404 &middot; Not Indexed
           </div>
 
@@ -32,7 +32,7 @@ export default function NotFound() {
             Repository Not Found
           </h1>
 
-          <p className="text-zinc-300 text-sm sm:text-base leading-relaxed mb-8">
+          <p className="text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed mb-8">
             This repository has not been indexed yet or the URL might be mistyped. Explore our active repository directory or search for welcoming projects below.
           </p>
 
@@ -40,7 +40,7 @@ export default function NotFound() {
             <Link prefetch={false}
               href="/"
               title="Return to GetMerged Home"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-black text-white font-mono text-sm font-bold border border-white/[0.12] shadow-sm hover:bg-zinc-800 transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-black text-white font-mono text-sm font-bold border border-[var(--border-subtle)] shadow-sm hover:bg-zinc-800 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Explore Welcoming Repos
@@ -49,7 +49,7 @@ export default function NotFound() {
             <Link prefetch={false}
               href="/repos"
               title="Search all indexed repositories"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-mono text-sm font-bold border border-white/[0.12] shadow-sm hover:bg-[#a6cbff] transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-mono text-sm font-bold border border-[var(--border-subtle)] shadow-sm hover:bg-[#a6cbff] transition-colors"
             >
               <Search className="w-4 h-4" />
               Browse Repository Directory

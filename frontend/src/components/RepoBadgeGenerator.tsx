@@ -96,18 +96,18 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
   };
 
   return (
-    <div className="rounded-3xl border border-white/[0.1] glass-panel p-6 sm:p-8 shadow-xs mb-8">
+    <div className="rounded-3xl border border-[var(--border-subtle)] glass-panel p-6 sm:p-8 shadow-xs mb-8">
       <div className="mb-4">
-        <h3 className="font-space text-lg font-bold text-white">
+        <h3 className="font-space text-lg font-bold text-[var(--text-primary)]">
           Embed C-Rank Badge
         </h3>
-        <p className="text-xs sm:text-sm text-zinc-300 font-sans mt-0.5">
+        <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans mt-0.5">
           Show contributors that your repository actively reviews and merges external pull requests.
         </p>
       </div>
 
       {/* Live badge preview */}
-      <div className="flex items-center min-h-10 p-4 glass-card border border-white/[0.1] rounded-2xl shadow-2xs mb-5">
+      <div className="flex items-center min-h-10 p-4 glass-card border border-[var(--border-subtle)] rounded-2xl shadow-2xs mb-5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={badgeSvgUrl}
@@ -130,7 +130,7 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
             className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
               activeTab === tab
                 ? "glass-card text-white shadow-xs"
-                : "glass-card text-zinc-300 hover:bg-zinc-200"
+                : "glass-card text-[var(--text-secondary)] hover:bg-zinc-200"
             }`}
           >
             {tab === "markdown" ? "Markdown" : "HTML"}
@@ -139,8 +139,8 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
       </div>
 
       {/* Snippet + copy action */}
-      <div className="p-4 glass-card border border-white/[0.1] rounded-2xl shadow-2xs">
-        <pre className="text-xs font-mono text-zinc-300 whitespace-pre-wrap break-all mb-4 select-all">{snippet}</pre>
+      <div className="p-4 glass-card border border-[var(--border-subtle)] rounded-2xl shadow-2xs">
+        <pre className="text-xs font-mono text-[var(--text-secondary)] whitespace-pre-wrap break-all mb-4 select-all">{snippet}</pre>
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={handleCopy}
@@ -172,7 +172,7 @@ Why:
               copyText(prompt, "badge_prompt_copied", { repo_full_name: fullName });
             }}
             title="Copy AI prompt to add GetMerged badge to your repo README via Cursor, Copilot, or Claude"
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl glass-panel hover:glass-card active:scale-95 text-white border border-white/[0.1] font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-2xs inline-flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl glass-panel hover:glass-card active:scale-95 text-white border border-[var(--border-subtle)] font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-2xs inline-flex items-center justify-center gap-2"
           >
             <span className="inline-flex items-center gap-1.5">
               <Copy className="h-3.5 w-3.5" /> Copy AI Prompt (for LLMs)

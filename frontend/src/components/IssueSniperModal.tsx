@@ -81,11 +81,11 @@ export function IssueSniperModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg glass-panel border border-emerald-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-white font-sans">
+      <div className="relative w-full max-w-lg glass-panel border border-emerald-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-[var(--text-primary)] font-sans">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-1.5 rounded-full bg-zinc-800/80 text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors"
+          className="absolute top-5 right-5 p-1.5 rounded-full bg-[var(--bg-elevated)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-zinc-700 transition-colors"
         >
           <X className="h-4 w-4" />
         </button>
@@ -96,10 +96,10 @@ export function IssueSniperModal({
             <Crosshair className="h-3.5 w-3.5 text-emerald-400" />
             <span>Instant Good First Issue Alerts</span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-bold font-space text-white">
+          <h3 className="text-xl sm:text-2xl font-bold font-space text-[var(--text-primary)]">
             Get Notified When Good First Issues Open.
           </h3>
-          <p className="text-xs text-zinc-400 leading-relaxed">
+          <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
             Good beginner issues in active open-source projects get claimed fast. Get
             an email or Discord notification the moment maintainers open a new starter task.
           </p>
@@ -111,8 +111,8 @@ export function IssueSniperModal({
               <CheckCircle2 className="h-8 w-8" />
             </div>
             <div className="space-y-1">
-              <h4 className="text-lg font-bold text-white">Alerts Activated!</h4>
-              <p className="text-xs text-zinc-400 max-w-sm mx-auto">
+              <h4 className="text-lg font-bold text-[var(--text-primary)]">Alerts Activated!</h4>
+              <p className="text-xs text-[var(--text-secondary)] max-w-sm mx-auto">
                 You&apos;re all set. We will notify you whenever new Good First Issues matching
                 your languages are opened on GitHub.
               </p>
@@ -128,7 +128,7 @@ export function IssueSniperModal({
           <form onSubmit={handleSubscribe} className="space-y-4">
             {/* Email Input */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-mono text-zinc-300 font-semibold">
+              <label className="block text-xs font-mono text-[var(--text-secondary)] font-semibold">
                 Your Email Address:
               </label>
               <input
@@ -137,13 +137,13 @@ export function IssueSniperModal({
                 placeholder="dev@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-zinc-900 border border-white/[0.12] rounded-xl px-3.5 py-2.5 text-sm text-white font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-xl px-3.5 py-2.5 text-sm text-[var(--text-primary)] font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500"
               />
             </div>
 
             {/* Target Languages */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-mono text-zinc-300 font-semibold">
+              <label className="block text-xs font-mono text-[var(--text-secondary)] font-semibold">
                 Target Languages:
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -155,7 +155,7 @@ export function IssueSniperModal({
                     className={`px-3 py-1 rounded-lg text-xs font-mono font-medium transition-all ${
                       languages.includes(lang)
                         ? "bg-emerald-600 text-white font-bold"
-                        : "bg-zinc-900 border border-white/[0.1] text-zinc-400 hover:text-white"
+                        : "bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                     }`}
                   >
                     {lang}
@@ -166,7 +166,7 @@ export function IssueSniperModal({
 
             {/* Target Repo (Optional) */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-mono text-zinc-400">
+              <label className="block text-xs font-mono text-[var(--text-secondary)]">
                 Specific Target Repo (Optional):
               </label>
               <input
@@ -174,13 +174,13 @@ export function IssueSniperModal({
                 placeholder="e.g. supabase/supabase (leave empty for all S-Tier repos)"
                 value={targetRepo}
                 onChange={(e) => setTargetRepo(e.target.value)}
-                className="w-full bg-zinc-900 border border-white/[0.12] rounded-xl px-3.5 py-2 text-xs text-white font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-xl px-3.5 py-2 text-xs text-[var(--text-primary)] font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500"
               />
             </div>
 
             {/* Webhook Dispatch (Optional) */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-mono text-zinc-400">
+              <label className="block text-xs font-mono text-[var(--text-secondary)]">
                 Discord / Slack / Telegram Webhook URL (Optional):
               </label>
               <input
@@ -188,7 +188,7 @@ export function IssueSniperModal({
                 placeholder="https://discord.com/api/webhooks/..."
                 value={webhookUrl}
                 onChange={(e) => setWebhookUrl(e.target.value)}
-                className="w-full bg-zinc-900 border border-white/[0.12] rounded-xl px-3.5 py-2 text-xs text-white font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-xl px-3.5 py-2 text-xs text-[var(--text-primary)] font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500"
               />
             </div>
 
@@ -200,13 +200,13 @@ export function IssueSniperModal({
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                   frequency === "instant"
                     ? "bg-emerald-950/30 border-emerald-500 text-white"
-                    : "bg-zinc-900/50 border-white/[0.08] text-zinc-400"
+                    : "bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
                 }`}
               >
                 <div className="text-xs font-bold font-mono flex items-center gap-1.5 text-emerald-400 mb-1">
                   <Sparkles className="h-3.5 w-3.5" /> Instant Alert
                 </div>
-                <div className="text-[11px] text-zinc-400">Pings within 5 minutes of issue drop</div>
+                <div className="text-[11px] text-[var(--text-secondary)]">Pings within 5 minutes of issue drop</div>
               </button>
 
               <button
@@ -215,13 +215,13 @@ export function IssueSniperModal({
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                   frequency === "weekly"
                     ? "bg-emerald-950/30 border-emerald-500 text-white"
-                    : "bg-zinc-900/50 border-white/[0.08] text-zinc-400"
+                    : "bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
                 }`}
               >
-                <div className="text-xs font-bold font-mono flex items-center gap-1.5 text-zinc-200 mb-1">
+                <div className="text-xs font-bold font-mono flex items-center gap-1.5 text-[var(--text-secondary)] mb-1">
                   <Bell className="h-3.5 w-3.5" /> Weekly Digest
                 </div>
-                <div className="text-[11px] text-zinc-400">Delivered Monday mornings at 8 AM</div>
+                <div className="text-[11px] text-[var(--text-secondary)]">Delivered Monday mornings at 8 AM</div>
               </button>
             </div>
 

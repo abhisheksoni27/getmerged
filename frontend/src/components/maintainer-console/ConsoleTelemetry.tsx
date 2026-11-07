@@ -24,7 +24,7 @@ export function ConsoleTelemetry({ breakdown }: ConsoleTelemetryProps) {
 
   return (
     <div>
-      <h3 className="text-sm font-bold text-white mb-3">Live Telemetry Breakdown</h3>
+      <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">Live Telemetry Breakdown</h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 font-mono text-xs">
         {metrics.map((metric) => (
           <MetricTile key={metric.label} label={metric.label} value={metric.value} />

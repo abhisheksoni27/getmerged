@@ -38,7 +38,7 @@ export function CopyBadgeButton({ text }: CopyBadgeButtonProps) {
       onClick={handleCopy}
       title="Copy markdown badge snippet"
       aria-label="Copy markdown badge snippet"
-      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] border border-white/[0.12] text-xs font-mono font-semibold text-zinc-200 hover:text-white transition-colors cursor-pointer shrink-0"
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] border border-[var(--border-subtle)] text-xs font-mono font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer shrink-0"
     >
       {copied ? (
         <>
@@ -47,7 +47,7 @@ export function CopyBadgeButton({ text }: CopyBadgeButtonProps) {
         </>
       ) : (
         <>
-          <Copy className="h-3.5 w-3.5 text-zinc-300" />
+          <Copy className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
           <span>Copy</span>
         </>
       )}

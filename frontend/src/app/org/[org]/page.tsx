@@ -134,36 +134,36 @@ export default async function OrgPage({ params }: OrgPageProps) {
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Header Section */}
-        <div className="mb-8 border-b border-white/[0.1] pb-6">
+        <div className="mb-8 border-b border-[var(--border-subtle)] pb-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300/80 text-emerald-300 text-xs font-mono font-bold mb-3">
             <Building2 className="h-3.5 w-3.5" /> Organization Intelligence
           </div>
-          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            {org} <span className="text-zinc-300 font-normal text-xl sm:text-2xl">({repos.length} Repositories)</span>
+          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight">
+            {org} <span className="text-[var(--text-secondary)] font-normal text-xl sm:text-2xl">({repos.length} Repositories)</span>
           </h1>
-          <p className="text-sm text-zinc-300 font-sans mt-2 max-w-2xl">
+          <p className="text-sm text-[var(--text-secondary)] font-sans mt-2 max-w-2xl">
             Maintainer responsiveness benchmarks, pull request merge probabilities, and beginner friendliness metrics for repositories maintained by <strong>{org}</strong>.
           </p>
 
           {/* Org Aggregated Macro Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
-            <div className="p-4 rounded-2xl glass-panel border border-white/[0.1] shadow-xs">
-              <span className="text-xs font-mono text-zinc-300 flex items-center gap-1.5">
+            <div className="p-4 rounded-2xl surface-base border border-[var(--border-subtle)] shadow-xs">
+              <span className="text-xs font-mono text-[var(--text-secondary)] flex items-center gap-1.5">
                 <GitPullRequest className="h-3.5 w-3.5 text-blue-500" /> Avg Merge Rate
               </span>
-              <p className="font-space text-xl font-bold text-white mt-1">{avgMergeRate.toFixed(1)}%</p>
+              <p className="font-space text-xl font-bold text-[var(--text-primary)] mt-1">{avgMergeRate.toFixed(1)}%</p>
             </div>
-            <div className="p-4 rounded-2xl glass-panel border border-white/[0.1] shadow-xs">
-              <span className="text-xs font-mono text-zinc-300 flex items-center gap-1.5">
+            <div className="p-4 rounded-2xl surface-base border border-[var(--border-subtle)] shadow-xs">
+              <span className="text-xs font-mono text-[var(--text-secondary)] flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5 text-amber-500" /> Avg Response Velocity
               </span>
-              <p className="font-space text-xl font-bold text-white mt-1">{avgResponseHours.toFixed(1)}h</p>
+              <p className="font-space text-xl font-bold text-[var(--text-primary)] mt-1">{avgResponseHours.toFixed(1)}h</p>
             </div>
-            <div className="p-4 rounded-2xl glass-panel border border-white/[0.1] shadow-xs">
-              <span className="text-xs font-mono text-zinc-300 flex items-center gap-1.5">
+            <div className="p-4 rounded-2xl surface-base border border-[var(--border-subtle)] shadow-xs">
+              <span className="text-xs font-mono text-[var(--text-secondary)] flex items-center gap-1.5">
                 <Users className="h-3.5 w-3.5 text-purple-500" /> Total GitHub Stars
               </span>
-              <p className="font-space text-xl font-bold text-white mt-1">{totalStars.toLocaleString()}</p>
+              <p className="font-space text-xl font-bold text-[var(--text-primary)] mt-1">{totalStars.toLocaleString()}</p>
             </div>
           </div>
         </div>
@@ -176,14 +176,14 @@ export default async function OrgPage({ params }: OrgPageProps) {
           {repos.map((repo) => (
             <div
               key={repo.id}
-              className="p-5 rounded-2xl border border-white/[0.1] glass-panel hover:border-emerald-500/80 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+              className="p-5 rounded-2xl border border-[var(--border-subtle)] surface-base hover:border-emerald-500/80 hover:shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                   <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
                     {repo.c_rank_tier || repo.class_rank || "A"} Tier
                   </span>
-                  <span className="text-xs font-mono glass-card text-zinc-300 px-2 py-0.5 rounded-md font-medium">
+                  <span className="text-xs font-mono surface-elevated text-[var(--text-secondary)] px-2 py-0.5 rounded-md font-medium">
                     {repo.language || "Multi-language"}
                   </span>
                   {(repo.good_first_issue_count ?? 0) > 0 && (
@@ -192,7 +192,7 @@ export default async function OrgPage({ params }: OrgPageProps) {
                     </span>
                   )}
                 </div>
-                <h2 className="font-space text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
+                <h2 className="font-space text-lg font-bold text-[var(--text-primary)] group-hover:text-emerald-400 transition-colors">
                   <Link prefetch={false}
                     href={`/${repo.full_name}`}
                     title={`View contributor metrics for ${repo.full_name}`}
@@ -203,14 +203,14 @@ export default async function OrgPage({ params }: OrgPageProps) {
                   </Link>
                 </h2>
                 {repo.description && (
-                  <p className="text-xs text-zinc-300 mt-1 line-clamp-2 leading-relaxed">
+                  <p className="text-xs text-[var(--text-secondary)] mt-1 line-clamp-2 leading-relaxed">
                     {repo.description}
                   </p>
                 )}
-                <div className="flex items-center gap-4 mt-3 text-xs font-mono text-zinc-300 flex-wrap">
-                  <span>Merge Rate: <strong className="text-white">{(repo.external_pr_merge_rate || 0).toFixed(1)}%</strong></span>
-                  <span>Response: <strong className="text-white">{(repo.response_p50_hours || repo.time_to_first_response_hours || 0).toFixed(1)}h</strong></span>
-                  <span>Bus Factor: <strong className="text-white">{repo.bus_factor ?? 0} maintainers</strong></span>
+                <div className="flex items-center gap-4 mt-3 text-xs font-mono text-[var(--text-secondary)] flex-wrap">
+                  <span>Merge Rate: <strong className="text-[var(--text-primary)]">{(repo.external_pr_merge_rate || 0).toFixed(1)}%</strong></span>
+                  <span>Response: <strong className="text-[var(--text-primary)]">{(repo.response_p50_hours || repo.time_to_first_response_hours || 0).toFixed(1)}h</strong></span>
+                  <span>Bus Factor: <strong className="text-[var(--text-primary)]">{repo.bus_factor ?? 0} maintainers</strong></span>
                 </div>
               </div>
 
@@ -218,7 +218,7 @@ export default async function OrgPage({ params }: OrgPageProps) {
                 <Link prefetch={false}
                   href={`/${repo.full_name}`}
                   title={`Open full scorecard for ${repo.full_name}`}
-                  className="px-4 py-2 rounded-xl glass-card hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
+                  className="px-4 py-2 rounded-xl surface-elevated hover:bg-zinc-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-xs"
                 >
                   View Scorecard <ArrowRight className="h-3.5 w-3.5" />
                 </Link>

@@ -116,7 +116,7 @@ export function LanguageMatchQuiz() {
     <section
       aria-label="Language match quiz"
       data-testid="language-match-quiz"
-      className="mx-auto max-w-4xl rounded-3xl border border-white/[0.12] glass-panel p-6 sm:p-10 shadow-2xl my-8 sm:my-10"
+      className="mx-auto max-w-4xl rounded-3xl border border-[var(--border-subtle)] glass-panel p-6 sm:p-10 shadow-2xl my-8 sm:my-10"
     >
       <div className="flex items-center gap-2.5 mb-2">
         <Sparkles className="h-5 w-5 text-emerald-400" />
@@ -127,7 +127,7 @@ export function LanguageMatchQuiz() {
 
       {!data && !error && (
         <>
-          <p className="mt-2 text-sm sm:text-base text-zinc-200 font-sans leading-relaxed">
+          <p className="mt-2 text-sm sm:text-base text-[var(--text-secondary)] font-sans leading-relaxed">
             Pick 2-3 languages you know - we&apos;ll instantly match you with top-ranked,
             beginner-welcoming repositories and live good first issues.
           </p>
@@ -144,7 +144,7 @@ export function LanguageMatchQuiz() {
                   className={`rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                     active
                       ? "bg-emerald-500 text-black font-bold shadow-[0_0_16px_rgba(16,185,129,0.4)]"
-                      : "border border-white/[0.12] bg-white/[0.05] text-zinc-200 hover:border-white/[0.3] hover:text-white"
+                      : "border border-[var(--border-subtle)] bg-white/[0.05] text-[var(--text-secondary)] hover:border-white/[0.3] hover:text-[var(--text-primary)]"
                   }`}
                 >
                   {displayNameFromSlug(lang)}
@@ -152,7 +152,7 @@ export function LanguageMatchQuiz() {
               );
             })}
           </div>
-          <p className="mt-2 text-xs font-mono text-zinc-400">
+          <p className="mt-2 text-xs font-mono text-[var(--text-secondary)]">
             {selected.length}/3 selected (pick at least 2)
           </p>
 
@@ -166,7 +166,7 @@ export function LanguageMatchQuiz() {
                 className={`rounded-full px-4 py-2 text-xs font-semibold transition-all cursor-pointer ${
                   level === l.value
                     ? "bg-white/[0.16] border border-white/[0.3] text-white font-bold"
-                    : "border border-white/[0.08] bg-white/[0.03] text-zinc-300 hover:text-white"
+                    : "border border-[var(--border-subtle)] bg-white/[0.03] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 {l.label}
@@ -180,7 +180,7 @@ export function LanguageMatchQuiz() {
               disabled={selected.length < 2 || loading}
               onClick={handleFind}
               data-testid="quiz-submit"
-              className="inline-flex items-center gap-2 rounded-xl bg-orange-500 px-6 py-3 text-xs sm:text-sm font-bold font-mono text-white transition-all hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-40 shadow-lg cursor-pointer active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-xl bg-orange-500 px-6 py-3 text-xs sm:text-sm font-bold font-mono text-[var(--text-primary)] transition-all hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-40 shadow-lg cursor-pointer active:scale-[0.98]"
             >
               {loading ? (
                 <>
@@ -200,7 +200,7 @@ export function LanguageMatchQuiz() {
 
       {error && (
         <div className="mt-5 rounded-2xl border border-dashed border-rose-500/30 glass-panel p-6 text-center">
-          <p className="text-sm text-zinc-200">Matching is unavailable right now.</p>
+          <p className="text-sm text-[var(--text-secondary)]">Matching is unavailable right now.</p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
             <button
               type="button"
@@ -209,7 +209,7 @@ export function LanguageMatchQuiz() {
             >
               Try again
             </button>
-            <Link prefetch={false} href="/repos" className="rounded-xl border border-white/[0.12] px-4 py-2 text-xs font-semibold text-zinc-200 hover:border-white/[0.25]">
+            <Link prefetch={false} href="/repos" className="rounded-xl border border-[var(--border-subtle)] px-4 py-2 text-xs font-semibold text-[var(--text-secondary)] hover:border-white/[0.25]">
               Browse all repos →
             </Link>
           </div>
@@ -219,8 +219,8 @@ export function LanguageMatchQuiz() {
       {data && (
         <>
           {data.matches.length === 0 ? (
-            <div className="mt-5 rounded-2xl border border-dashed border-white/[0.12] glass-panel p-8 text-center" data-testid="quiz-empty">
-              <p className="text-sm text-zinc-200">{data.message || "No strong matches yet."}</p>
+            <div className="mt-5 rounded-2xl border border-dashed border-[var(--border-subtle)] glass-panel p-8 text-center" data-testid="quiz-empty">
+              <p className="text-sm text-[var(--text-secondary)]">{data.message || "No strong matches yet."}</p>
               <a
                 href={githubAuthUrl(selected)}
                 className="mt-4 inline-flex items-center gap-1.5 rounded-xl glass-card px-4 py-2.5 text-xs font-semibold text-white hover:bg-zinc-800"
@@ -235,35 +235,35 @@ export function LanguageMatchQuiz() {
             <>
               <ul className="mt-5 space-y-3" data-testid="quiz-matches">
                 {data.matches.map((m) => (
-                  <li key={m.full_name} className="rounded-2xl border border-white/[0.1] glass-panel p-5 shadow-sm">
+                  <li key={m.full_name} className="rounded-2xl border border-[var(--border-subtle)] glass-panel p-5 shadow-sm">
                     <div className="flex items-start justify-between gap-2">
                       <a
                         href={`/${m.full_name}`}
-                        className="text-base font-bold text-white hover:text-orange-400 font-space"
+                        className="text-base font-bold text-[var(--text-primary)] hover:text-orange-400 font-space"
                       >
                         {m.full_name}
                       </a>
-                      <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-bold ${tierCls[m.c_rank_tier] ?? "glass-card text-zinc-300 border border-white/[0.12]"}`}>
+                      <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-bold ${tierCls[m.c_rank_tier] ?? "glass-card text-[var(--text-secondary)] border border-[var(--border-subtle)]"}`}>
                         {m.c_rank_tier}
                       </span>
                     </div>
-                    <p className="mt-1.5 line-clamp-2 text-xs sm:text-sm leading-relaxed text-zinc-200">
+                    <p className="mt-1.5 line-clamp-2 text-xs sm:text-sm leading-relaxed text-[var(--text-secondary)]">
                       {m.description || "No description available."}
                     </p>
-                    <div className="mt-3 flex items-center gap-3 text-xs text-zinc-300">
+                    <div className="mt-3 flex items-center gap-3 text-xs text-[var(--text-secondary)]">
                       {m.language && <span className="rounded-md glass-card px-2 py-0.5 font-medium capitalize text-white">{m.language}</span>}
                       <span className="inline-flex items-center gap-1 font-mono">
                         <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" /> {(m.stars || 0).toLocaleString()}
                       </span>
-                      <span className="ml-auto font-mono text-zinc-300">C-Rank <strong className="text-white">{Math.round(m.c_rank_score)}</strong></span>
+                      <span className="ml-auto font-mono text-[var(--text-secondary)]">C-Rank <strong className="text-[var(--text-primary)]">{Math.round(m.c_rank_score)}</strong></span>
                     </div>
                     {m.issues.length > 0 && (
-                      <ul className="mt-3 space-y-2 border-t border-white/[0.1] pt-3">
+                      <ul className="mt-3 space-y-2 border-t border-[var(--border-subtle)] pt-3">
                         {m.issues.map((issue) => (
                           <li key={issue.id} className="text-xs">
-                            <a href={issue.url} target="_blank" rel="noopener noreferrer" className="font-medium text-zinc-200 hover:text-emerald-400 flex items-center gap-1">
+                            <a href={issue.url} target="_blank" rel="noopener noreferrer" className="font-medium text-[var(--text-secondary)] hover:text-emerald-400 flex items-center gap-1">
                               <span>{issue.title}</span>
-                              <ExternalLink className="h-3 w-3 text-zinc-400 shrink-0" />
+                              <ExternalLink className="h-3 w-3 text-[var(--text-secondary)] shrink-0" />
                             </a>
                           </li>
                         ))}
@@ -275,13 +275,13 @@ export function LanguageMatchQuiz() {
 
               <div className="mt-6 rounded-2xl border border-dashed border-emerald-400/40 glass-panel p-5">
                 <p className="text-sm font-semibold text-white">Save these matches &amp; unlock new-issue alerts</p>
-                <p className="mt-1 text-xs text-zinc-300">
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">
                   One-click GitHub auth pre-fills your language profile so your dashboard feed is ready immediately.
                 </p>
                 <div className="mt-4 flex flex-wrap items-center gap-3">
                   <a
                     href={githubAuthUrl(selected)}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-4 py-2 text-xs font-bold text-white shadow-sm"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-4 py-2 text-xs font-bold text-[var(--text-primary)] shadow-sm"
                     data-testid="quiz-connect-github"
                   >
                     Connect with GitHub →

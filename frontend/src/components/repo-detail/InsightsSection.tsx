@@ -14,22 +14,22 @@ export function InsightsSection({ insights, fullName }: InsightsSectionProps) {
     <WidgetSection
       id="guidelines"
       show={Boolean(insights)}
-      className="scroll-mt-36 relative rounded-2xl border border-white/[0.1] glass-panel p-5 sm:p-6 rounded-2xl mb-10"
+      className="scroll-mt-36 relative rounded-2xl border border-[var(--border-subtle)] glass-panel p-5 sm:p-6 rounded-2xl mb-10"
     >
       {insights && (
         <>
           <div className="flex items-center gap-2 mb-4">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-white/[0.1] bg-orange-500/20 text-orange-400 border border-orange-500/30">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-[var(--border-subtle)] bg-orange-500/20 text-orange-400 border border-orange-500/30">
               <Sparkles className="h-4 w-4" />
             </div>
-            <h2 className="font-space text-base font-extrabold text-white">
+            <h2 className="font-space text-base font-extrabold text-[var(--text-primary)]">
               AI Maintainer Review Guidelines
             </h2>
           </div>
 
           <div className="space-y-6 pt-2 font-sans">
             {/* Persona Overview Banner */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl glass-panel border border-white/[0.1] rounded-xl text-white">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl glass-panel border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)]">
               <div>
                 <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
                   Review Persona
@@ -41,19 +41,19 @@ export function InsightsSection({ insights, fullName }: InsightsSectionProps) {
               <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t-2 sm:border-t-0 sm:border-l-2 border-white/30 pt-2 sm:pt-0 sm:pl-4">
                 {insights.warmth_score != null && insights.warmth_score > 0 && (
                   <div>
-                    <div className="text-zinc-300 text-[10px]">Warmth Score</div>
+                    <div className="text-[var(--text-secondary)] text-[10px]">Warmth Score</div>
                     <div className="text-emerald-400 font-bold text-sm">{insights.warmth_score.toFixed(1)}/10</div>
                   </div>
                 )}
                 {insights.patience_score != null && insights.patience_score > 0 && (
                   <div>
-                    <div className="text-zinc-300 text-[10px]">Patience Score</div>
+                    <div className="text-[var(--text-secondary)] text-[10px]">Patience Score</div>
                     <div className="text-blue-400 font-bold text-sm">{insights.patience_score.toFixed(1)}/10</div>
                   </div>
                 )}
                 {insights.nitpick_ratio != null && insights.nitpick_ratio > 0 && (
                   <div>
-                    <div className="text-zinc-300 text-[10px]">Nitpick Rate</div>
+                    <div className="text-[var(--text-secondary)] text-[10px]">Nitpick Rate</div>
                     <div className="text-amber-400 font-bold text-sm">{(insights.nitpick_ratio * 100).toFixed(0)}%</div>
                   </div>
                 )}
@@ -63,7 +63,7 @@ export function InsightsSection({ insights, fullName }: InsightsSectionProps) {
             {/* Description */}
             {insights.maintainer_vibe && (
               <div className="p-4 rounded-xl glass-card/60 border border-white/[0.09] rounded-xl">
-                <p className="text-xs sm:text-sm text-zinc-200 leading-relaxed">
+                <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
                   {insights.maintainer_vibe}
                 </p>
               </div>
@@ -82,13 +82,13 @@ export function InsightsSection({ insights, fullName }: InsightsSectionProps) {
                     : section.body.split(/\n+/).map(s => s.trim()).filter(Boolean);
 
                   return (
-                    <div key={idx} className="rounded-xl border-2 border-white/[0.1] glass-panel p-4 shadow-sm">
+                    <div key={idx} className="rounded-xl border-2 border-[var(--border-subtle)] glass-panel p-4 shadow-sm">
                       <h4 className="text-xs font-mono font-bold text-indigo-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
                         <Quote className="h-3.5 w-3.5 text-indigo-500" />
                         {section.title}
                       </h4>
                       {items.length > 1 ? (
-                        <ul className="space-y-2 text-xs sm:text-sm text-zinc-200 leading-relaxed font-sans">
+                        <ul className="space-y-2 text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed font-sans">
                           {items.map((item, itemIdx) => (
                             <li key={itemIdx} className="flex items-start gap-2">
                               <span className="text-indigo-600 font-bold font-mono shrink-0 select-none">•</span>
@@ -97,7 +97,7 @@ export function InsightsSection({ insights, fullName }: InsightsSectionProps) {
                           ))}
                         </ul>
                       ) : (
-                        <p className="text-xs sm:text-sm text-zinc-200 leading-relaxed whitespace-pre-line">
+                        <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
                           {section.body}
                         </p>
                       )}
@@ -117,7 +117,7 @@ export function InsightsSection({ insights, fullName }: InsightsSectionProps) {
                       <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                       Top PR Submission Do&apos;s
                     </h4>
-                    <ul className="space-y-2 text-xs text-zinc-300 font-sans">
+                    <ul className="space-y-2 text-xs text-[var(--text-secondary)] font-sans">
                       {insights.top_dos.map((doItem, idx) => (
                         <li key={idx} className="flex items-start gap-2">
                           <span className="text-emerald-600 font-bold">•</span>
@@ -135,7 +135,7 @@ export function InsightsSection({ insights, fullName }: InsightsSectionProps) {
                       <AlertCircle className="h-4 w-4 text-rose-600" />
                       Top PR Friction Pitfalls (Don&apos;ts)
                     </h4>
-                    <ul className="space-y-2 text-xs text-zinc-300 font-sans">
+                    <ul className="space-y-2 text-xs text-[var(--text-secondary)] font-sans">
                       {insights.top_donts.map((dontItem, idx) => (
                         <li key={idx} className="flex items-start gap-2">
                           <span className="text-rose-600 font-bold">•</span>

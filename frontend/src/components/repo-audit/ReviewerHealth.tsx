@@ -15,8 +15,8 @@ export function ReviewerHealthSection({
   busFactor: number;
 }) {
   return (
-    <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
-      <h2 className="flex items-center gap-2 text-sm font-extrabold font-mono text-white mb-3">
+    <section className="rounded-2xl border-2 border-[var(--border-subtle)] glass-panel p-6 shadow-sm">
+      <h2 className="flex items-center gap-2 text-sm font-extrabold font-mono text-[var(--text-primary)] mb-3">
         <Users className="h-4 w-4 text-sky-400" /> Reviewer Team Health
       </h2>
       <div className="space-y-2.5 text-xs font-mono mb-4">
@@ -25,7 +25,7 @@ export function ReviewerHealthSection({
             key={row.key}
             className={`flex justify-between items-center ${i < reviewerRows.length - 1 ? "border-b border-white/[0.06] pb-2" : "pb-1"}`}
           >
-            <span className="text-zinc-400">{row.label}</span>
+            <span className="text-[var(--text-secondary)]">{row.label}</span>
             <span className={`font-bold ${row.valueClass}`}>{row.value}</span>
           </div>
         ))}
@@ -57,8 +57,8 @@ export function FrictionBreakdownSection({
 }) {
   const ff = fingerprint;
   return (
-    <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
-      <h2 className="flex items-center gap-2 text-sm font-extrabold font-mono text-white mb-3">
+    <section className="rounded-2xl border-2 border-[var(--border-subtle)] glass-panel p-6 shadow-sm">
+      <h2 className="flex items-center gap-2 text-sm font-extrabold font-mono text-[var(--text-primary)] mb-3">
         <ShieldAlert className="h-4 w-4 text-rose-400" /> Review Friction Breakdown
       </h2>
       <div className="space-y-3 mb-4">
@@ -68,19 +68,19 @@ export function FrictionBreakdownSection({
       </div>
       {/* Friction insight */}
       <div className="rounded-xl border border-white/[0.06] bg-black/20 p-3">
-        <p className="text-[11px] font-mono text-zinc-300">
+        <p className="text-[11px] font-mono text-[var(--text-secondary)]">
           {ff.formatting_and_style_pct >= 40
             ? <>
-                <span className="font-bold text-white">Quick win:</span>{" "}
+                <span className="font-bold text-[var(--text-primary)]">Quick win:</span>{" "}
                 {ff.formatting_and_style_pct.toFixed(0)}% of review friction is style/lint - a shared <span className="text-sky-400">.editorconfig</span> or pre-commit hook eliminates most of it without any human review cost.
               </>
             : ff.missing_tests_and_ci_pct >= 35
             ? <>
-                <span className="font-bold text-white">Quick win:</span>{" "}
+                <span className="font-bold text-[var(--text-primary)]">Quick win:</span>{" "}
                 {ff.missing_tests_and_ci_pct.toFixed(0)}% of friction is missing tests. A required CI status check blocks this category before it reaches review.
               </>
             : <>
-                <span className="font-bold text-white">Architectural discussions</span> dominate your review friction - consider RFC or proposal templates for large changes.
+                <span className="font-bold text-[var(--text-primary)]">Architectural discussions</span> dominate your review friction - consider RFC or proposal templates for large changes.
               </>
           }
         </p>

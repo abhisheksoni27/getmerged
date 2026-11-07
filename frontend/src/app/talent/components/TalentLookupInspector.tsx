@@ -32,7 +32,7 @@ export function TalentLookupInspector({ username, onUsernameChange, onSubmit }: 
             value={username}
             onChange={(e) => onUsernameChange(e.target.value)}
             placeholder="e.g. torvalds, shadcn, or your candidate's username"
-            className="w-full pl-28 pr-4 py-2.5 rounded-xl bg-[#0a0a0c] border border-white/[0.12] text-white text-xs font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 transition-colors"
+            className="w-full pl-28 pr-4 py-2.5 rounded-xl bg-[#0a0a0c] border border-white/[0.12] text-[var(--text-primary)] text-xs font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500 transition-colors"
           />
         </div>
         <button

@@ -25,7 +25,7 @@ const TIER_CHIP_STYLES: Record<string, string> = {
   C: "bg-purple-950/70 border-purple-800/80 text-purple-300 border-purple-300",
   D: "bg-rose-950/70 border-rose-800/80 text-rose-300 border-rose-300",
 };
-const DEFAULT_TIER_CHIP_STYLE = "glass-card text-zinc-300 border-white/[0.1]";
+const DEFAULT_TIER_CHIP_STYLE = "glass-card text-[var(--text-secondary)] border-[var(--border-subtle)]";
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang } = await params;
@@ -182,7 +182,7 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-transparent dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-transparent ">
       <Header />
       <script
         type="application/ld+json"
@@ -193,18 +193,18 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-200 font-sans">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-[var(--text-secondary)] font-sans">
         {/* Navigation Breadcrumb */}
         <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
         {/* Hero Section */}
-        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-white/[0.1] shadow-xs mb-10">
+        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-[var(--border-subtle)] shadow-xs mb-10">
           <div className="flex flex-wrap items-center gap-2 mb-3.5">
             <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1 text-xs font-semibold text-emerald-300 font-mono">
               <Sprout className="h-3.5 w-3.5 text-emerald-400" /> Beginner Friendly Open-Source
@@ -214,13 +214,13 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight font-space">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] tracking-tight font-space">
             Good First Issues in {languageName}
           </h1>
-          <p className="mt-3 text-xs sm:text-sm text-zinc-300 max-w-3xl leading-relaxed font-sans">
+          <p className="mt-3 text-xs sm:text-sm text-[var(--text-secondary)] max-w-3xl leading-relaxed font-sans">
             Explore curated starter issues in high-scoring <strong>{languageName}</strong> repositories. Every listed issue belongs to a welcoming repository scored by C-Rank™ on PR merge rates, review responsiveness, and first-timer acceptance.
           </p>
-          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-zinc-300">
+          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-[var(--text-secondary)]">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
             <span>Updated: {new Date().toUTCString().slice(0, 16)} UTC (Live GitHub Sync)</span>
           </div>
@@ -233,12 +233,12 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
 
         {/* Real Live Issues Feed (Audit H9 Target Shape) */}
         <div>
-          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.1] pb-4">
-            <h2 className="text-sm font-bold text-white flex items-center gap-2 font-space">
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border-subtle)] pb-4">
+            <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2 font-space">
               <Sprout className="h-4 w-4 text-emerald-600" />
               Live Good First Issues ({issues.length})
             </h2>
-            <span className="text-xs text-zinc-300 font-mono">Real-Time Open GitHub Issues</span>
+            <span className="text-xs text-[var(--text-secondary)] font-mono">Real-Time Open GitHub Issues</span>
           </div>
 
           {issues.length > 0 ? (
@@ -256,7 +256,7 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
                   <div
                     key={`${iss.repository_id}-${iss.issue_number}`}
                     data-created-at={iss.created_at}
-                    className="group rounded-2xl glass-panel p-5 sm:p-7 border border-white/[0.1] shadow-xs hover:shadow-md hover:border-white/[0.12] hover:-translate-y-0.5 transition-all flex flex-col justify-between gap-5"
+                    className="group rounded-2xl glass-panel p-5 sm:p-7 border border-[var(--border-subtle)] shadow-xs hover:shadow-md hover:border-[var(--border-subtle)] hover:-translate-y-0.5 transition-all flex flex-col justify-between gap-5"
                   >
                     <div>
                       {/* Prominent meta badges: repo, stars, level rank, boosted */}
@@ -302,7 +302,7 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
                         )}
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2 text-[11px] font-mono text-zinc-300">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2 text-[11px] font-mono text-[var(--text-secondary)]">
                         <span>#{iss.issue_number}</span>
                         <span
                           data-freshness
@@ -318,13 +318,13 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         title={`Open issue #${iss.issue_number} on GitHub: ${iss.title}`}
-                        className="font-space text-base sm:text-lg font-bold text-white hover:text-blue-700 transition-colors line-clamp-2"
+                        className="font-space text-base sm:text-lg font-bold text-[var(--text-primary)] hover:text-blue-700 transition-colors line-clamp-2"
                       >
                         {iss.title}
                       </a>
 
                       {iss.body_text && (
-                        <p className="mt-2.5 text-xs sm:text-sm text-zinc-300 line-clamp-2 leading-relaxed font-sans">
+                        <p className="mt-2.5 text-xs sm:text-sm text-[var(--text-secondary)] line-clamp-2 leading-relaxed font-sans">
                           {iss.body_text}
                         </p>
                       )}
@@ -334,7 +334,7 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
                           {parsedLabels.slice(0, 4).map((l, idx) => (
                             <span
                               key={idx}
-                              className="px-2.5 py-1 rounded-md text-[10px] sm:text-[11px] font-mono font-medium border border-white/[0.1] glass-card text-zinc-300"
+                              className="px-2.5 py-1 rounded-md text-[10px] sm:text-[11px] font-mono font-medium border border-[var(--border-subtle)] glass-card text-[var(--text-secondary)]"
                             >
                               {l.name}
                             </span>
@@ -345,7 +345,7 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
 
                     <div className="flex items-center gap-3 shrink-0 self-end md:self-auto border-t md:border-t-0 pt-4 md:pt-0 w-full md:w-auto justify-between md:justify-end">
                       {iss.comments_count > 0 && (
-                        <span className="inline-flex items-center gap-1 text-xs font-mono text-zinc-300">
+                        <span className="inline-flex items-center gap-1 text-xs font-mono text-[var(--text-secondary)]">
                           <MessageSquare className="h-3.5 w-3.5" /> {iss.comments_count}
                         </span>
                       )}
@@ -368,19 +368,19 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
               })}
             </div>
           ) : (
-            <div className="rounded-2xl glass-panel p-8 text-center text-zinc-300 text-xs mb-10 border border-dashed border-white/[0.12] font-sans">
+            <div className="rounded-2xl glass-panel p-8 text-center text-[var(--text-secondary)] text-xs mb-10 border border-dashed border-[var(--border-subtle)] font-sans">
               No active good first issues found for {languageName}.
             </div>
           )}
         </div>
 
         {/* Repositories Grid Header */}
-        <div className="mb-6 flex items-center justify-between border-b border-white/[0.1] pb-4">
-          <h2 className="text-sm font-bold text-white flex items-center gap-2 font-space">
+        <div className="mb-6 flex items-center justify-between border-b border-[var(--border-subtle)] pb-4">
+          <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2 font-space">
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
             Top {languageName} Repositories with Beginner Issues ({repos.length})
           </h2>
-          <span className="text-xs text-zinc-300 font-mono">Updated Daily via GitHub GraphQL</span>
+          <span className="text-xs text-[var(--text-secondary)] font-mono">Updated Daily via GitHub GraphQL</span>
         </div>
 
         {repos.length > 0 ? (
@@ -390,18 +390,18 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl glass-panel p-12 text-center text-zinc-300 text-xs mb-12 border border-dashed border-white/[0.12] font-sans">
+          <div className="rounded-2xl glass-panel p-12 text-center text-[var(--text-secondary)] text-xs mb-12 border border-dashed border-[var(--border-subtle)] font-sans">
             No {languageName} repositories indexed yet. Check back soon!
           </div>
         )}
 
         {/* Informational Section */}
-        <section className="rounded-3xl glass-panel p-6 sm:p-8 border border-white/[0.1] font-sans shadow-xs">
-          <h3 className="text-base font-bold text-white mb-3 flex items-center gap-2 font-space">
+        <section className="rounded-3xl glass-panel p-6 sm:p-8 border border-[var(--border-subtle)] font-sans shadow-xs">
+          <h3 className="text-base font-bold text-[var(--text-primary)] mb-3 flex items-center gap-2 font-space">
             <Sparkles className="h-4 w-4 text-emerald-600" />
             How to make your first {languageName} open-source pull request
           </h3>
-          <div className="prose prose-sm text-zinc-300 leading-relaxed max-w-none space-y-3 text-xs sm:text-sm font-sans">
+          <div className="prose prose-sm text-[var(--text-secondary)] leading-relaxed max-w-none space-y-3 text-xs sm:text-sm font-sans">
             <p>
               Finding approachable <strong>Good First Issues in {languageName}</strong> allows you to build real-world software engineering experience. Instead of submitting PRs to abandoned repositories, GetMerged verifies maintainer review speeds and first-timer acceptance rates before you write a single line of code.
             </p>

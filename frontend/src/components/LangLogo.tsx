@@ -95,7 +95,7 @@ function LangLogoInner({ language, className = "h-4 w-4", size }: LangLogoProps)
 
   return (
     <span
-      className={`${className} inline-flex items-center justify-center font-mono font-bold text-[8px] rounded-xs bg-zinc-800 border border-white/[0.1] text-zinc-300 shrink-0 select-none`}
+      className={`${className} inline-flex items-center justify-center font-mono font-bold text-[8px] rounded-xs bg-zinc-800 border border-[var(--border-subtle)] text-[var(--text-secondary)] shrink-0 select-none`}
       title={language}
       aria-label={language}
       role="img"

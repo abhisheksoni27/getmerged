@@ -49,34 +49,34 @@ export default function TermsPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full font-sans text-zinc-200">
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full font-sans text-[var(--text-secondary)]">
         <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl surface-base border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-white/[0.1] shadow-xs mb-8">
-          <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-blue-300 bg-sky-500/10 border border-sky-500/30 text-sky-300 px-3 py-1 rounded-xl mb-3">
+        <div className="rounded-3xl surface-base p-6 sm:p-10 border border-[var(--border-subtle)] shadow-xs mb-8">
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-[#2D8ABF] bg-[#2D8ABF]/10 border border-[#2D8ABF]/20 px-3 py-1 rounded-xl mb-3">
             <FileText className="h-3.5 w-3.5 text-blue-700" /> Platform Terms of Service
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold font-space text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold font-space text-[var(--text-primary)] tracking-tight">
             Terms of Service
           </h1>
-          <p className="mt-2 text-xs sm:text-sm text-zinc-300 font-sans">
+          <p className="mt-2 text-xs sm:text-sm text-[var(--text-secondary)] font-sans">
             Last Updated: August 15, 2026
           </p>
         </div>
 
-        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-white/[0.1] shadow-xs prose prose-sm leading-relaxed text-zinc-300 max-w-none space-y-8 font-sans">
+        <div className="rounded-3xl surface-base p-6 sm:p-10 border border-[var(--border-subtle)] shadow-xs prose prose-sm leading-relaxed text-[var(--text-secondary)] max-w-none space-y-8 font-sans">
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">1. Acceptance of Terms</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">1. Acceptance of Terms</h2>
             <p>
               By accessing or using GetMerged (&quot;the Platform&quot;), you agree to be bound by these Terms of
               Service (&quot;Terms&quot;) and acknowledge our{" "}
-              <Link prefetch={false} href="/privacy" title="View GetMerged Privacy Policy" className="text-white underline font-semibold">
+              <Link prefetch={false} href="/privacy" title="View GetMerged Privacy Policy" className="text-[var(--text-primary)] underline font-semibold">
                 Privacy Policy
               </Link>
               . If you do not agree to these Terms, you may not access or use the Platform. GetMerged is an
@@ -86,7 +86,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">2. Description of the Service</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">2. Description of the Service</h2>
             <p>
               The Platform provides:
             </p>
@@ -103,7 +103,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">3. Eligibility & Accounts</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">3. Eligibility & Accounts</h2>
             <p>You must be at least 16 years old to use the Platform. By using it, you represent that you meet this requirement.</p>
             <p className="mt-3">
               Some features (sign-in, watchlists, feedback, AI insights) require an account. Accounts are created by
@@ -121,7 +121,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">4. Acceptable Use</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">4. Acceptable Use</h2>
             <p>You agree not to use the Platform to:</p>
             <ul className="list-disc pl-5 space-y-2 mt-2">
               <li>Violate any applicable law or regulation.</li>
@@ -138,7 +138,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">5. C-Rank™ Telemetry & Scoring</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">5. C-Rank™ Telemetry & Scoring</h2>
             <p>
               All repository scores, response times, and merge rates are derived from public GitHub GraphQL and REST
               data. Scores are objective telemetry indicators and do not represent personal endorsements, guarantees of
@@ -152,7 +152,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">6. User Feedback & Reviews</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">6. User Feedback & Reviews</h2>
             <p>When submitting contributor community feedback or reviews, you agree that:</p>
             <ul className="list-disc pl-5 space-y-2 mt-2">
               <li>You will provide honest, constructive feedback based on your actual pull request experience.</li>
@@ -163,7 +163,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">7. AI-Generated Insights</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">7. AI-Generated Insights</h2>
             <p>
               The Platform may display AI-generated summaries of repository community behavior, derived from public
               comment corpora. These insights are automated, may be inaccurate, incomplete, or contain errors, and are
@@ -173,7 +173,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">8. Intellectual Property</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">8. Intellectual Property</h2>
             <p>
               <strong>Our content:</strong> The Platform, including its design, the C-Rank™ name and methodology,
               trademarks, logos, and original content, is owned by or licensed to GetMerged. The open source code is
@@ -191,7 +191,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">9. Third-Party Services</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">9. Third-Party Services</h2>
             <p>
               The Platform relies on and links to third-party services, including GitHub, Google, and AI processing
               providers. Your use of those services is governed by their own terms and privacy policies. We are not
@@ -200,7 +200,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">10. Disclaimer of Warranties</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">10. Disclaimer of Warranties</h2>
             <p>
               The Platform is provided &quot;as is&quot; and &quot;as available&quot;, without warranties of any kind,
               whether express or implied, including but not limited to implied warranties of merchantability, fitness
@@ -210,7 +210,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">11. Limitation of Liability</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">11. Limitation of Liability</h2>
             <p>
               To the maximum extent permitted by law, GetMerged, its maintainers, and contributors shall not be liable
               for any indirect, incidental, special, consequential, or punitive damages, or for any loss of data,
@@ -227,11 +227,11 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">12. Open Source License</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">12. Open Source License</h2>
             <p>
               The GetMerged backend and frontend code bases are open source and licensed under the MIT License.
               Contributions are welcome on{" "}
-              <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" title="Contribute to opendoor on GitHub" className="text-white underline font-semibold">
+              <a href="https://github.com/abhisheksoni27/opendoor" target="_blank" rel="noreferrer" title="Contribute to opendoor on GitHub" className="text-[var(--text-primary)] underline font-semibold">
                 GitHub
               </a>
               . This section applies to the code only; it does not grant rights to the C-Rank™ trademark or branding.
@@ -239,7 +239,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">13. Suspension & Termination</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">13. Suspension & Termination</h2>
             <p>
               We may suspend or terminate your access to the Platform, in whole or in part, at any time and without
               notice if we reasonably believe you have violated these Terms, engaged in abuse or unlawful activity, or
@@ -249,7 +249,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">14. Indemnification</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">14. Indemnification</h2>
             <p>
               To the maximum extent permitted by law, you agree to indemnify and hold harmless GetMerged, its
               maintainers, contributors, and agents from and against any claims, damages, liabilities, and expenses
@@ -259,7 +259,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">15. Changes to These Terms</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">15. Changes to These Terms</h2>
             <p>
               We may update these Terms from time to time. Material changes will be posted on this page with an
               updated &quot;Last Updated&quot; date, and where required, we will notify you. Continued use of the
@@ -268,7 +268,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">16. Governing Law & Disputes</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">16. Governing Law & Disputes</h2>
             <p>
               These Terms are governed by the laws of the jurisdiction in which the maintainers are domiciled, without
               regard to conflict-of-law principles. Any dispute arising out of or relating to these Terms or the
@@ -279,7 +279,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">17. Severability & Entire Agreement</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">17. Severability & Entire Agreement</h2>
             <p>
               If any provision of these Terms is found to be unenforceable, that provision will be limited or removed
               to the minimum extent necessary, and the remaining provisions will remain in full force and effect.
@@ -289,16 +289,16 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-bold font-space text-white mb-3">18. Contact</h2>
+            <h2 className="text-lg font-bold font-space text-[var(--text-primary)] mb-3">18. Contact</h2>
             <p>
               Questions about these Terms? Please reach out via our official{" "}
-              <a href="https://github.com/GetMergedApp" target="_blank" rel="noreferrer" title="View GetMergedApp on GitHub" className="text-white underline font-semibold">
+              <a href="https://github.com/GetMergedApp" target="_blank" rel="noreferrer" title="View GetMergedApp on GitHub" className="text-[var(--text-primary)] underline font-semibold">
                 GitHub Organization
               </a>, email us at{" "}
-              <a href="mailto:hi@abhishekco.de" title="Email GetMerged support" className="text-white underline font-semibold">
+              <a href="mailto:hi@abhishekco.de" title="Email GetMerged support" className="text-[var(--text-primary)] underline font-semibold">
                 hi@abhishekco.de
               </a>, or review our{" "}
-              <Link prefetch={false} href="/privacy" title="View GetMerged Privacy Policy" className="text-white underline font-semibold">
+              <Link prefetch={false} href="/privacy" title="View GetMerged Privacy Policy" className="text-[var(--text-primary)] underline font-semibold">
                 Privacy Policy
               </Link>{" "}
               for details on how we handle your data.

@@ -57,7 +57,7 @@ export function PRAcceptanceWidget({ owner, name, initialData = null }: PRAccept
 
   if (loading) {
     return (
-      <div className="min-h-[220px] rounded-2xl glass-panel p-5 border-2 border-white/[0.1] shadow-sm mb-6 animate-pulse">
+      <div className="min-h-[220px] rounded-2xl glass-panel p-5 border-2 border-[var(--border-subtle)] shadow-sm mb-6 animate-pulse">
         <div className="h-5 bg-white/[0.08] rounded w-1/3 mb-4"></div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="h-16 glass-card rounded-xl"></div>
@@ -72,11 +72,11 @@ export function PRAcceptanceWidget({ owner, name, initialData = null }: PRAccept
   if (!data) return null;
 
   return (
-    <div className="min-h-[220px] rounded-2xl glass-panel p-5 border-2 border-white/[0.1] shadow-sm mb-6 font-mono">
+    <div className="min-h-[220px] rounded-2xl glass-panel p-5 border-2 border-[var(--border-subtle)] shadow-sm mb-6 font-mono">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-emerald-600" />
-          <h3 className="text-base font-bold text-white font-space">
+          <h3 className="text-base font-bold text-[var(--text-primary)] font-space">
             PR Acceptance & Review Speed Forecast
           </h3>
         </div>
@@ -87,7 +87,7 @@ export function PRAcceptanceWidget({ owner, name, initialData = null }: PRAccept
             readyToMerge={data.overall_acceptance_rate !== null ? data.overall_acceptance_rate >= 50 : undefined}
             variant="compact"
           />
-          <span className="text-[11px] font-sans text-zinc-300 glass-card px-2 py-0.5 rounded-full">
+          <span className="text-[11px] font-sans text-[var(--text-secondary)] glass-card px-2 py-0.5 rounded-full">
             Precomputed via Live PR Events
           </span>
         </div>
@@ -95,66 +95,66 @@ export function PRAcceptanceWidget({ owner, name, initialData = null }: PRAccept
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 font-sans">
         {/* Overall Acceptance Rate */}
-        <div className="glass-card border border-white/[0.1] rounded-xl p-3">
-          <div className="flex items-center gap-1 text-xs text-zinc-300 mb-1">
+        <div className="glass-card border border-[var(--border-subtle)] rounded-xl p-3">
+          <div className="flex items-center gap-1 text-xs text-[var(--text-secondary)] mb-1">
             <Percent className="h-3.5 w-3.5 text-emerald-600" />
             <span>Overall Merge Odds</span>
           </div>
-          <div className="text-xl font-bold font-mono text-white">
+          <div className="text-xl font-bold font-mono text-[var(--text-primary)]">
             {data.overall_acceptance_rate !== null ? `${data.overall_acceptance_rate.toFixed(1)}%` : "N/A"}
           </div>
-          <p className="text-[10px] text-zinc-300 mt-0.5">External PR acceptance</p>
+          <p className="text-[10px] text-[var(--text-secondary)] mt-0.5">External PR acceptance</p>
         </div>
 
         {/* First-Timer Acceptance Rate */}
-        <div className="glass-card border border-white/[0.1] rounded-xl p-3">
-          <div className="flex items-center gap-1 text-xs text-zinc-300 mb-1">
+        <div className="glass-card border border-[var(--border-subtle)] rounded-xl p-3">
+          <div className="flex items-center gap-1 text-xs text-[var(--text-secondary)] mb-1">
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
             <span>First-Timer Rate</span>
           </div>
-          <div className="text-xl font-bold font-mono text-white">
+          <div className="text-xl font-bold font-mono text-[var(--text-primary)]">
             {data.first_timer_acceptance_rate !== null ? `${data.first_timer_acceptance_rate.toFixed(1)}%` : "N/A"}
           </div>
-          <p className="text-[10px] text-zinc-300 mt-0.5">First PR success rate</p>
+          <p className="text-[10px] text-[var(--text-secondary)] mt-0.5">First PR success rate</p>
         </div>
 
         {/* Median Response Time (p50) */}
-        <div className="glass-card border border-white/[0.1] rounded-xl p-3">
-          <div className="flex items-center gap-1 text-xs text-zinc-300 mb-1">
+        <div className="glass-card border border-[var(--border-subtle)] rounded-xl p-3">
+          <div className="flex items-center gap-1 text-xs text-[var(--text-secondary)] mb-1">
             <Clock className="h-3.5 w-3.5 text-blue-600" />
             <span>Median Response (p50)</span>
           </div>
-          <div className="text-xl font-bold font-mono text-white">
+          <div className="text-xl font-bold font-mono text-[var(--text-primary)]">
             {data.response_time_p50_hours !== null
               ? data.response_time_p50_hours < 1
                 ? "<1h"
                 : `${Math.round(data.response_time_p50_hours)}h`
               : "N/A"}
           </div>
-          <p className="text-[10px] text-zinc-300 mt-0.5">50% receive response in</p>
+          <p className="text-[10px] text-[var(--text-secondary)] mt-0.5">50% receive response in</p>
         </div>
 
         {/* Long-tail Response Time (p90) */}
-        <div className="glass-card border border-white/[0.1] rounded-xl p-3">
-          <div className="flex items-center gap-1 text-xs text-zinc-300 mb-1">
+        <div className="glass-card border border-[var(--border-subtle)] rounded-xl p-3">
+          <div className="flex items-center gap-1 text-xs text-[var(--text-secondary)] mb-1">
             <Clock className="h-3.5 w-3.5 text-amber-600" />
             <span>Tail Latency (p90)</span>
           </div>
-          <div className="text-xl font-bold font-mono text-white">
+          <div className="text-xl font-bold font-mono text-[var(--text-primary)]">
             {data.response_time_p90_hours !== null
               ? data.response_time_p90_hours < 24
                 ? `${Math.round(data.response_time_p90_hours)}h`
                 : `${Math.round(data.response_time_p90_hours / 24)}d`
               : "N/A"}
           </div>
-          <p className="text-[10px] text-zinc-300 mt-0.5">90% receive response in</p>
+          <p className="text-[10px] text-[var(--text-secondary)] mt-0.5">90% receive response in</p>
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between text-[11px] font-sans text-zinc-300 pt-2 border-t border-white/[0.1]">
+      <div className="flex flex-wrap items-center justify-between text-[11px] font-sans text-[var(--text-secondary)] pt-2 border-t border-[var(--border-subtle)]">
         <span className="flex items-center gap-1.5">
-          <Users className="h-3.5 w-3.5 text-zinc-300" /> Active Maintainers:{" "}
-          <strong className="font-mono text-zinc-200">{data.bus_factor}</strong>
+          <Users className="h-3.5 w-3.5 text-[var(--text-secondary)]" /> Active Maintainers:{" "}
+          <strong className="font-mono text-[var(--text-secondary)]">{data.bus_factor}</strong>
         </span>
         {data.staleness_flag && (
           <span className="flex items-center gap-1 text-amber-700 bg-amber-950/70 border-amber-800/80 px-2 py-0.5 rounded">

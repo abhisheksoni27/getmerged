@@ -5,7 +5,7 @@ export function RepoDetailSkeleton() {
     <main className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8 py-10 sm:py-12 flex-1 w-full overflow-hidden font-sans">
       <div className="h-4 w-28 bg-white/[0.08] animate-pulse rounded mb-6" />
 
-      <div className="flex flex-col gap-4 border-b border-white/[0.1] pb-6 mb-8">
+      <div className="flex flex-col gap-4 border-b border-[var(--border-subtle)] pb-6 mb-8">
         <div className="flex gap-2">
           <div className="h-6 w-24 bg-white/[0.08] animate-pulse rounded-lg" />
           <div className="h-6 w-32 bg-white/[0.08] animate-pulse rounded-lg" />

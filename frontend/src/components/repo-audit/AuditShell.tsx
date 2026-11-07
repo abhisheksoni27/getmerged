@@ -11,7 +11,7 @@ export function AuditShell({ fullName, children }: { fullName: string; children:
         <Link prefetch={false}
           href={`/${fullName}`}
           title="Back to repository"
-          className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-300 hover:text-white transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-6"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to {fullName}

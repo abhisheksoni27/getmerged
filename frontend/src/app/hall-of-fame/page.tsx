@@ -78,7 +78,7 @@ export default async function HallOfFamePage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-transparent dev-grid-pattern">
+    <div className="relative min-h-screen flex flex-col bg-transparent ">
       <Header />
       <script
         type="application/ld+json"
@@ -89,40 +89,40 @@ export default async function HallOfFamePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-zinc-200">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full text-[var(--text-secondary)]">
         <Link prefetch={false}
           href="/"
           title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-white/[0.1] text-xs text-zinc-300 hover:text-white transition-colors mb-6 font-sans shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-6 font-sans shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-white/[0.1] shadow-xs mb-10">
+        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-[var(--border-subtle)] shadow-xs mb-10">
           <div className="flex items-center gap-2 mb-3.5">
             <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1 text-xs font-semibold text-emerald-300 font-mono">
               <Trophy className="h-3.5 w-3.5 text-emerald-400" /> S-Tier Showcase
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight font-space">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] tracking-tight font-space">
             Open Source Hall of Fame
           </h1>
-          <p className="mt-3 text-xs sm:text-sm text-zinc-300 max-w-3xl leading-relaxed font-sans">
+          <p className="mt-3 text-xs sm:text-sm text-[var(--text-secondary)] max-w-3xl leading-relaxed font-sans">
             These elite repositories have earned an <strong>S-Tier C-Rank™</strong> score. Maintainers in the Hall of Fame merge external PRs rapidly, communicate constructively, and provide standard-setting onboarding for new contributors.
           </p>
-          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-zinc-300">
+          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-[var(--text-secondary)]">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
             <span>Updated: {new Date().toUTCString().slice(0, 16)} UTC (Daily Sync)</span>
           </div>
         </div>
 
-        <div className="mb-6 flex items-center justify-between border-b border-white/[0.1] pb-4">
-          <h2 className="text-sm font-bold text-white flex items-center gap-2 font-space">
+        <div className="mb-6 flex items-center justify-between border-b border-[var(--border-subtle)] pb-4">
+          <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2 font-space">
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
             S-Tier Repositories ({repos.length})
           </h2>
-          <span className="text-xs text-zinc-300 font-mono">Updated Daily</span>
+          <span className="text-xs text-[var(--text-secondary)] font-mono">Updated Daily</span>
         </div>
 
         {repos.length > 0 ? (
@@ -132,7 +132,7 @@ export default async function HallOfFamePage() {
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl glass-panel p-12 text-center text-zinc-300 text-xs mb-12 border border-dashed border-white/[0.12] font-sans">
+          <div className="rounded-2xl glass-panel p-12 text-center text-[var(--text-secondary)] text-xs mb-12 border border-dashed border-[var(--border-subtle)] font-sans">
             No S-Tier repositories indexed yet.
           </div>
         )}

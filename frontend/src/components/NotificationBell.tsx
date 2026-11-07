@@ -94,7 +94,7 @@ export function NotificationBell({ user }: { user: User | null }) {
       >
         <Bell className="h-3.5 w-3.5" />
         {unread > 0 && (
-          <span className="absolute -right-1 -top-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-bold text-white ring-2 ring-[var(--bg-canvas)]">
+          <span className="absolute -right-1 -top-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-bold text-[var(--text-primary)] ring-2 ring-[var(--bg-canvas)]">
             {formatBadge(unread)}
           </span>
         )}

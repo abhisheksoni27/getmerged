@@ -44,23 +44,23 @@ export function MaintainerConsoleModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl max-h-[90vh] glass-panel rounded-3xl border border-white/[0.12] shadow-sm flex flex-col overflow-hidden">
+      <div className="relative w-full max-w-2xl max-h-[90vh] glass-panel rounded-3xl border border-[var(--border-subtle)] shadow-sm flex flex-col overflow-hidden">
         {/* Modal Header */}
-        <div className="p-6 border-b border-white/[0.1] glass-panel flex items-center justify-between">
+        <div className="p-6 border-b border-[var(--border-subtle)] glass-panel flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-black text-amber-400 rounded-2xl border border-white/[0.12] shadow-sm">
+            <div className="p-2.5 bg-black text-amber-400 rounded-2xl border border-[var(--border-subtle)] shadow-sm">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tight flex items-center gap-2">
                 Maintainer C-Rank Console
               </h2>
-              <p className="text-xs text-zinc-300 font-mono">{fullName}</p>
+              <p className="text-xs text-[var(--text-secondary)] font-mono">{fullName}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-zinc-300 hover:text-white hover:glass-card rounded-xl transition-colors border border-transparent hover:border-white/[0.1] cursor-pointer"
+            className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:glass-card rounded-xl transition-colors border border-transparent hover:border-[var(--border-subtle)] cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -92,7 +92,7 @@ export function MaintainerConsoleModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 border-t-2 border-white/[0.1] glass-card flex items-center justify-between text-xs text-zinc-300">
+        <div className="p-4 border-t-2 border-[var(--border-subtle)] glass-card flex items-center justify-between text-xs text-[var(--text-secondary)]">
           <span>Weekly rank-change reports sent automatically via email</span>
           <button
             onClick={onClose}

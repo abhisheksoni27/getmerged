@@ -40,11 +40,11 @@ export function ProofOfMergeModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg glass-panel border border-emerald-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-white font-sans bg-gradient-to-b from-emerald-950/40 via-zinc-950/90 to-zinc-950">
+      <div className="relative w-full max-w-lg glass-panel border border-emerald-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-[var(--text-primary)] font-sans bg-gradient-to-b from-emerald-950/40 via-zinc-950/90 to-zinc-950">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-1.5 rounded-full bg-zinc-800/80 text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors cursor-pointer"
+          className="absolute top-5 right-5 p-1.5 rounded-full bg-[var(--bg-elevated)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-zinc-700 transition-colors cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>
@@ -58,10 +58,10 @@ export function ProofOfMergeModal({
             <Sparkles className="h-3.5 w-3.5" />
             <span>PR Merged on GitHub</span>
           </div>
-          <h3 className="text-2xl font-black font-space text-white">
+          <h3 className="text-2xl font-black font-space text-[var(--text-primary)]">
             Pull Request Merged!
           </h3>
-          <p className="text-xs text-zinc-300 max-w-sm mx-auto">
+          <p className="text-xs text-[var(--text-secondary)] max-w-sm mx-auto">
             Your pull request to <strong>{repoFullName}</strong> was merged! You earned +{karmaEarned} Karma points.
           </p>
         </div>
@@ -70,29 +70,29 @@ export function ProofOfMergeModal({
         <div className="p-5 rounded-2xl bg-zinc-900/90 border border-emerald-500/30 space-y-3 relative overflow-hidden">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <div className="text-[11px] font-mono text-zinc-400">Repository</div>
-              <div className="text-sm font-bold font-mono text-white">{repoFullName}</div>
+              <div className="text-[11px] font-mono text-[var(--text-secondary)]">Repository</div>
+              <div className="text-sm font-bold font-mono text-[var(--text-primary)]">{repoFullName}</div>
             </div>
             <span className="px-2.5 py-0.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-mono text-xs font-bold">
               Tier {cRankTier}
             </span>
           </div>
 
-          <div className="border-t border-white/[0.08] pt-3 flex items-center justify-between">
+          <div className="border-t border-[var(--border-subtle)] pt-3 flex items-center justify-between">
             <div>
-              <div className="text-[11px] font-mono text-zinc-400">PR #{prNumber}</div>
-              <div className="text-xs text-zinc-200 truncate max-w-[220px]">{prTitle}</div>
+              <div className="text-[11px] font-mono text-[var(--text-secondary)]">PR #{prNumber}</div>
+              <div className="text-xs text-[var(--text-secondary)] truncate max-w-[220px]">{prTitle}</div>
             </div>
             <div className="text-right">
               <div className="text-base font-black font-mono text-emerald-400">+{karmaEarned} Karma</div>
-              <div className="text-[10px] font-mono text-zinc-400">Proof-of-Work Pts</div>
+              <div className="text-[10px] font-mono text-[var(--text-secondary)]">Proof-of-Work Pts</div>
             </div>
           </div>
         </div>
 
         {/* 1-Click Social Sharing */}
         <div className="space-y-2.5">
-          <div className="text-xs font-mono font-semibold text-zinc-300 text-center">
+          <div className="text-xs font-mono font-semibold text-[var(--text-secondary)] text-center">
             Brag & Build Your Developer Reputation:
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -100,16 +100,16 @@ export function ProofOfMergeModal({
               href={xShareUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="py-2.5 px-4 rounded-xl bg-black hover:bg-zinc-800 border border-white/[0.14] text-xs font-mono font-bold text-white flex items-center justify-center gap-2 transition-all cursor-pointer no-underline"
+              className="py-2.5 px-4 rounded-xl bg-black hover:bg-zinc-800 border border-white/[0.14] text-xs font-mono font-bold text-[var(--text-primary)] flex items-center justify-center gap-2 transition-all cursor-pointer no-underline"
             >
               <span>Share on X</span>
-              <ExternalLink className="h-3.5 w-3.5 text-zinc-400" />
+              <ExternalLink className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
             </a>
             <a
               href={linkedInShareUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="py-2.5 px-4 rounded-xl bg-[#0a66c2] hover:bg-[#084e96] text-xs font-mono font-bold text-white flex items-center justify-center gap-2 transition-all cursor-pointer no-underline"
+              className="py-2.5 px-4 rounded-xl bg-[#0a66c2] hover:bg-[#084e96] text-xs font-mono font-bold text-[var(--text-primary)] flex items-center justify-center gap-2 transition-all cursor-pointer no-underline"
             >
               <span>Post to LinkedIn</span>
               <ExternalLink className="h-3.5 w-3.5 text-white/80" />
@@ -118,7 +118,7 @@ export function ProofOfMergeModal({
 
           <button
             onClick={handleCopy}
-            className="w-full py-2.5 px-4 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.1] text-xs font-mono text-zinc-300 flex items-center justify-center gap-2 transition-all cursor-pointer"
+            className="w-full py-2.5 px-4 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-secondary)] flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
             {copied ? (
               <>

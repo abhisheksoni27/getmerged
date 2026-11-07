@@ -89,29 +89,29 @@ export const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
               <AlertTriangle className="w-5 h-5" />
             </div>
             <div>
-              <h2 id="delete-modal-title" className="text-base font-bold text-white font-sans">
+              <h2 id="delete-modal-title" className="text-base font-bold text-[var(--text-primary)] font-sans">
                 Delete Account
               </h2>
-              <p className="text-xs text-zinc-400 font-mono">@{username}</p>
+              <p className="text-xs text-[var(--text-secondary)] font-mono">@{username}</p>
             </div>
           </div>
           <button
             type="button"
             onClick={handleClose}
             disabled={isDeleting}
-            className="p-1 text-zinc-400 hover:text-white rounded-lg hover:bg-white/10 transition-colors disabled:opacity-50"
+            className="p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-lg hover:bg-white/10 transition-colors disabled:opacity-50"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="text-xs font-sans text-zinc-300 space-y-2 mb-5">
+        <div className="text-xs font-sans text-[var(--text-secondary)] space-y-2 mb-5">
           <p>
             This action is <strong className="text-rose-400">permanent and irreversible</strong>.
             Under global GDPR and privacy rights, this will:
           </p>
-          <ul className="list-disc list-inside text-zinc-400 space-y-1 pl-1">
+          <ul className="list-disc list-inside text-[var(--text-secondary)] space-y-1 pl-1">
             <li>Anonymize and soft-delete your user record immediately</li>
             <li>Purge all your OAuth tokens and saved watchlists</li>
             <li>Revoke access and invalidate your active session</li>
@@ -128,7 +128,7 @@ export const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
           <div>
             <label
               htmlFor="delete-confirm-input"
-              className="block text-xs font-mono text-zinc-300 mb-1.5"
+              className="block text-xs font-mono text-[var(--text-secondary)] mb-1.5"
             >
               To confirm, type <span className="text-rose-400 font-bold select-all">{CONFIRMATION_PHRASE}</span> below:
             </label>
@@ -140,7 +140,7 @@ export const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
               disabled={isDeleting}
               placeholder={CONFIRMATION_PHRASE}
               autoComplete="off"
-              className="w-full px-3 py-2 bg-slate-950 border border-white/10 rounded-lg text-sm text-white font-mono placeholder:text-zinc-600 focus:outline-none focus:border-rose-500/60 focus:ring-1 focus:ring-rose-500/60 transition-all"
+              className="w-full px-3 py-2 bg-slate-950 border border-white/10 rounded-lg text-sm text-[var(--text-primary)] font-mono placeholder:text-zinc-600 focus:outline-none focus:border-rose-500/60 focus:ring-1 focus:ring-rose-500/60 transition-all"
             />
           </div>
 
@@ -149,14 +149,14 @@ export const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
               type="button"
               onClick={handleClose}
               disabled={isDeleting}
-              className="px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-zinc-300 hover:text-white border border-white/10 text-xs font-mono font-medium transition-all"
+              className="px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-white/10 text-xs font-mono font-medium transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={!isConfirmed || isDeleting}
-              className="px-3.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 disabled:bg-rose-950 disabled:text-zinc-500 disabled:border-rose-900/40 text-white border border-rose-500/30 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer disabled:cursor-not-allowed shadow-sm"
+              className="px-3.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 disabled:bg-rose-950 disabled:text-[var(--text-tertiary)] disabled:border-rose-900/40 text-white border border-rose-500/30 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer disabled:cursor-not-allowed shadow-sm"
             >
               {isDeleting ? (
                 <>

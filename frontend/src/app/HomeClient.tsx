@@ -10,11 +10,12 @@ import { LanguageMatchQuiz } from "@/components/LanguageMatchQuiz";
 import {
   useHomeData,
   HeroSection,
-  ProblemSolution,
   SpotlightSection,
-  ScoreFactors,
-  MaintainerCta,
   RepoShowroom,
+  ScoreFactors,
+  ProblemSolution,
+  PillarGrid,
+  MaintainerCta,
   EcosystemRankings,
   HowItWorks,
   FinalCta,
@@ -91,14 +92,10 @@ export default function HomeClient({
         onQuickSearch={applyQuickSearch}
       />
 
-      <ProblemSolution />
-
+      {/* Featured Repositories Direct Discovery - Today's Open Doors */}
       <SpotlightSection spotlightVisible={spotlightVisible} loading={loading} isLoggedIn={isLoggedIn} />
 
-      <ScoreFactors />
-
-      <MaintainerCta />
-
+      {/* Active Repository Explorer */}
       <RepoShowroom
         visibleRepos={visibleRepos}
         loading={loading}
@@ -112,10 +109,27 @@ export default function HomeClient({
         onResetFilters={resetFilters}
       />
 
+      {/* Methodology: How C-Rank Works */}
+      <ScoreFactors />
+
+      {/* Data Insight: Beyond GitHub Stars */}
+      <ProblemSolution />
+
+      {/* Role Tracks: Contributors, Maintainers, Beginner Friendly */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+        <PillarGrid />
+      </section>
+
+      {/* Maintainer Verification Banner */}
+      <MaintainerCta />
+
+      {/* Ecosystem Language Leaderboards */}
       <EcosystemRankings languages={rankedLanguages} />
 
+      {/* How It Works Steps */}
       <HowItWorks />
 
+      {/* Final Action Banner */}
       <FinalCta
         isLoggedIn={isLoggedIn}
         onExplore={scrollToGrid}

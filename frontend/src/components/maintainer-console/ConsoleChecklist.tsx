@@ -11,26 +11,26 @@ interface ConsoleChecklistProps {
 function ChecklistHeader() {
   return (
     <div className="flex items-center justify-between mb-3">
-      <h3 className="text-base font-bold text-white flex items-center gap-2">
+      <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center gap-2">
         <Sparkles className="w-4 h-4 text-amber-500" /> Prioritized Actions to Raise C-Rank
       </h3>
-      <span className="text-xs font-mono text-zinc-300">Top 5 high-impact fixes</span>
+      <span className="text-xs font-mono text-[var(--text-secondary)]">Top 5 high-impact fixes</span>
     </div>
   );
 }
 
 function ChecklistItem({ item }: { item: MaintainerChecklistItem }) {
   return (
-    <div className="p-4 glass-panel border border-white/[0.12] rounded-2xl shadow-sm hover:border-white/[0.1] transition-all">
+    <div className="p-4 glass-panel border border-[var(--border-subtle)] rounded-2xl shadow-sm hover:border-[var(--border-subtle)] transition-all">
       <div className="flex items-start justify-between gap-3 mb-1.5">
         <div className="font-bold text-sm text-white">{item.title}</div>
         <span className="px-2.5 py-0.5 bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono text-xs font-bold rounded-lg border border-emerald-300 shrink-0">
           +{item.impact_pts} pts
         </span>
       </div>
-      <p className="text-xs text-zinc-300 mb-2 leading-relaxed">{item.description}</p>
-      <div className="flex items-center justify-between text-xs pt-2 border-t border-white/[0.1]">
-        <span className="text-zinc-300 font-mono text-[11px] glass-card px-2 py-0.5 rounded">
+      <p className="text-xs text-[var(--text-secondary)] mb-2 leading-relaxed">{item.description}</p>
+      <div className="flex items-center justify-between text-xs pt-2 border-t border-[var(--border-subtle)]">
+        <span className="text-[var(--text-secondary)] font-mono text-[11px] glass-card px-2 py-0.5 rounded">
           {item.fix_guidance}
         </span>
         {item.link_url && (

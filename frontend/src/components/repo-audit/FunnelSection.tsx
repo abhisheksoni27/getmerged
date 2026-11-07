@@ -16,8 +16,8 @@ export function FunnelSection({
 }) {
   const pf = funnel;
   return (
-    <section className="rounded-2xl border-2 border-white/[0.1] glass-panel p-6 shadow-sm">
-      <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-white mb-4">
+    <section className="rounded-2xl border-2 border-[var(--border-subtle)] glass-panel p-6 shadow-sm">
+      <h2 className="flex items-center gap-2 text-base font-extrabold font-mono text-[var(--text-primary)] mb-4">
         <TrendingUp className="h-4 w-4 text-emerald-400" /> PR Acceptance & Drop-off Funnel
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
@@ -29,8 +29,8 @@ export function FunnelSection({
       {/* First-timer insight */}
       {ghostRate !== null && (
         <div className={`rounded-xl border p-3.5 ${ghostRate > 50 ? "border-rose-800/60 bg-rose-950/20" : "border-white/[0.06] bg-black/20"}`}>
-          <p className="text-xs font-mono text-zinc-300">
-            <span className="font-bold text-white">First-Timer Journey: </span>
+          <p className="text-xs font-mono text-[var(--text-secondary)]">
+            <span className="font-bold text-[var(--text-primary)]">First-Timer Journey: </span>
             {pf.first_timer_success_rate.toFixed(0)}% of newcomers get merged. Of those who don&apos;t,{" "}
             {ghostRate > 50
               ? <span className="text-rose-400 font-bold">most never return</span>

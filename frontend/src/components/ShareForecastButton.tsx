@@ -176,8 +176,8 @@ export function ShareForecastButton({
           title="Sharing is disabled for private repositories to protect code confidentiality"
           className={
             variant === "compact"
-              ? `inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg glass-card text-zinc-300 border border-white/[0.1] cursor-not-allowed opacity-60 ${className}`
-              : `inline-flex items-center gap-2 px-4 py-2 rounded-xl glass-card border-2 border-white/[0.12] text-zinc-300 font-mono font-bold text-xs uppercase tracking-wider cursor-not-allowed opacity-60 ${className}`
+              ? `inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg glass-card text-[var(--text-secondary)] border border-[var(--border-subtle)] cursor-not-allowed opacity-60 ${className}`
+              : `inline-flex items-center gap-2 px-4 py-2 rounded-xl glass-card border-2 border-[var(--border-subtle)] text-[var(--text-secondary)] font-mono font-bold text-xs uppercase tracking-wider cursor-not-allowed opacity-60 ${className}`
           }
         >
           <Lock className="h-3.5 w-3.5" />
@@ -214,9 +214,9 @@ export function ShareForecastButton({
           data-testid="share-result-btn"
           aria-label={`Share result forecast for ${repoFullName}`}
           title="Share forecast result (X & LinkedIn intents)"
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg glass-card text-zinc-200 border border-white/[0.12] hover:bg-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 active:scale-[0.98] ${className}`}
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg glass-card text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:bg-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 active:scale-[0.98] ${className}`}
         >
-          {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5 text-zinc-300" />}
+          {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5 text-[var(--text-secondary)]" />}
           <span>{copied ? "Copied Link!" : "Share result"}</span>
         </button>
       ) : (
@@ -226,9 +226,9 @@ export function ShareForecastButton({
           data-testid="share-result-btn"
           aria-label={`Share result forecast for ${repoFullName}`}
           title="Share forecast result (X & LinkedIn intents)"
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl glass-panel border-2 border-white/[0.1] text-white font-mono font-bold text-xs uppercase tracking-wider hover:glass-card active:scale-[0.98] transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer ${className}`}
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl glass-panel border-2 border-[var(--border-subtle)] text-white font-mono font-bold text-xs uppercase tracking-wider hover:glass-card active:scale-[0.98] transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer ${className}`}
         >
-          {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Share2 className="h-4 w-4 text-zinc-300" />}
+          {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Share2 className="h-4 w-4 text-[var(--text-secondary)]" />}
           <span>{copied ? "URL Copied to Clipboard!" : "Share result"}</span>
         </button>
       )}
@@ -240,10 +240,10 @@ export function ShareForecastButton({
           onClick={() => setOpenModal(false)}
         >
           <div
-            className="w-full max-w-md rounded-2xl glass-panel border-2 border-white/[0.1] p-6 shadow-sm font-sans"
+            className="w-full max-w-md rounded-2xl glass-panel border-2 border-[var(--border-subtle)] p-6 shadow-sm font-sans"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.1] mb-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)] mb-4">
               <div className="flex items-center gap-2">
                 <Share2 className="h-4 w-4 text-emerald-600" />
                 <h3 className="font-space font-bold text-base text-white">Share PR Evaluation</h3>
@@ -251,13 +251,13 @@ export function ShareForecastButton({
               <button
                 type="button"
                 onClick={() => setOpenModal(false)}
-                className="text-zinc-300 hover:text-zinc-300 text-sm font-mono font-bold"
+                className="text-[var(--text-secondary)] hover:text-[var(--text-secondary)] text-sm font-mono font-bold"
               >
                 ✕
               </button>
             </div>
 
-            <p className="text-xs text-zinc-300 mb-4 font-sans">
+            <p className="text-xs text-[var(--text-secondary)] mb-4 font-sans">
               Social share card generated with C-Rank attribution and referral credits.
             </p>
 
@@ -285,8 +285,8 @@ export function ShareForecastButton({
               </a>
             </div>
 
-            <div className="pt-3 border-t border-white/[0.1]">
-              <label className="block text-[11px] font-mono font-bold text-zinc-300 uppercase mb-1">
+            <div className="pt-3 border-t border-[var(--border-subtle)]">
+              <label className="block text-[11px] font-mono font-bold text-[var(--text-secondary)] uppercase mb-1">
                 Direct Share Link (with referral attribution)
               </label>
               <div className="flex items-center gap-2">
@@ -294,7 +294,7 @@ export function ShareForecastButton({
                   readOnly
                   value={destinationUrl}
                   onFocus={(e) => e.currentTarget.select()}
-                  className="flex-1 min-w-0 rounded-xl border border-white/[0.12] glass-card px-3 py-2 text-xs font-mono text-zinc-300"
+                  className="flex-1 min-w-0 rounded-xl border border-[var(--border-subtle)] glass-card px-3 py-2 text-xs font-mono text-[var(--text-secondary)]"
                 />
                 <button
                   type="button"
@@ -306,7 +306,7 @@ export function ShareForecastButton({
                       setTimeout(() => setCopied(false), 2000);
                     }
                   }}
-                  className="px-3 py-2 rounded-xl glass-card border border-white/[0.12] hover:bg-zinc-200 text-xs font-mono font-bold text-zinc-200 flex items-center gap-1 shrink-0"
+                  className="px-3 py-2 rounded-xl glass-card border border-[var(--border-subtle)] hover:bg-zinc-200 text-xs font-mono font-bold text-[var(--text-secondary)] flex items-center gap-1 shrink-0"
                 >
                   {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
                   <span>{copied ? "Copied" : "Copy"}</span>

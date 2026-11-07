@@ -52,22 +52,22 @@ export function FirstMergeTrackedPRStep({
       action={
         <button
           onClick={() => onRestartStep(1)}
-          className="text-xs text-zinc-300 hover:text-zinc-300 underline cursor-pointer"
+          className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-secondary)] underline cursor-pointer"
         >
           Start New Track
         </button>
       }
     >
 
-      <div className="mt-4 rounded-xl border border-white/[0.1] glass-card/60 p-4">
+      <div className="mt-4 rounded-xl border border-[var(--border-subtle)] glass-card/60 p-4">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-emerald-600" />
-          <h4 className="text-sm font-bold text-white">Track a Pull Request</h4>
-          <span className="rounded-full glass-card px-2 py-0.5 text-[11px] font-semibold text-zinc-300">
+          <h4 className="text-sm font-bold text-[var(--text-primary)]">Track a Pull Request</h4>
+          <span className="rounded-full glass-card px-2 py-0.5 text-[11px] font-semibold text-[var(--text-secondary)]">
             Live status every 60s
           </span>
         </div>
-        <p className="mt-1 text-xs text-zinc-300">
+        <p className="mt-1 text-xs text-[var(--text-secondary)]">
           Paste a GitHub PR URL to monitor review &amp; merge status. On merge we mint a verifiable
           &ldquo;Merged via OpenDoor&rdquo; share card.
         </p>
@@ -96,7 +96,7 @@ export function FirstMergeTrackedPRStep({
             value={prUrl}
             onChange={(e) => onPrUrlChange(e.target.value)}
             placeholder="https://github.com/owner/repo/pull/123"
-            className="w-full flex-1 rounded-md border border-white/[0.12] glass-panel px-3 py-2 text-xs text-white outline-none focus:border-emerald-500"
+            className="w-full flex-1 rounded-md border border-[var(--border-subtle)] glass-panel px-3 py-2 text-xs text-white outline-none focus:border-emerald-500"
           />
           <button
             onClick={onTrackPR}
@@ -186,14 +186,14 @@ export function FirstMergeTrackedPRStep({
           </div>
         </div>
       ) : (
-        <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-950/70 border-emerald-800/80/40 p-4 text-xs text-zinc-300">
+        <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-950/70 border-emerald-800/80/40 p-4 text-xs text-[var(--text-secondary)]">
           <div className="flex items-center justify-between gap-2">
             <div className="font-semibold">PR Tracking Active</div>
             <span className="rounded-full bg-emerald-950/80 border-emerald-800/80 px-2 py-0.5 text-[11px] font-bold text-emerald-300">
               Awaiting Merge
             </span>
           </div>
-          <p className="mt-1 text-zinc-300 leading-relaxed">
+          <p className="mt-1 text-[var(--text-secondary)] leading-relaxed">
             Your pull request is being monitored via background sync. Live review metrics and median merge times are visible in the tracker below.
           </p>
         </div>

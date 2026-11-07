@@ -86,7 +86,7 @@ export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfil
       : 100;
 
   return (
-    <div className="rounded-3xl glass-panel border border-emerald-500/30 p-6 sm:p-8 bg-gradient-to-br from-emerald-950/20 via-zinc-950/80 to-zinc-900/60 shadow-xl space-y-6 text-white font-sans">
+    <div className="rounded-3xl glass-panel border border-emerald-500/30 p-6 sm:p-8 bg-gradient-to-br from-emerald-950/20 via-zinc-950/80 to-zinc-900/60 shadow-xl space-y-6 text-[var(--text-primary)] font-sans">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
@@ -94,10 +94,10 @@ export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfil
             <Sparkles className="h-3.5 w-3.5" />
             <span>Open Source Karma</span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-bold font-space text-white">
+          <h3 className="text-xl sm:text-2xl font-bold font-space text-[var(--text-primary)]">
             {karma.reputation_headline}
           </h3>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-[var(--text-secondary)]">
             Points earned from merged pull requests in welcoming open-source repositories.
           </p>
         </div>
@@ -107,7 +107,7 @@ export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfil
             <div className="text-2xl sm:text-3xl font-bold font-mono text-emerald-400">
               {karma.total_karma.toLocaleString()}
             </div>
-            <div className="text-xs font-mono text-zinc-400">Total Karma Points</div>
+            <div className="text-xs font-mono text-[var(--text-secondary)]">Total Karma Points</div>
           </div>
         </div>
       </div>
@@ -115,10 +115,10 @@ export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfil
       {/* Level Progress Bar */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs font-mono">
-          <span className="font-semibold text-zinc-200">
+          <span className="font-semibold text-[var(--text-secondary)]">
             Level {karma.rank.level} · {karma.rank.title}
           </span>
-          <span className="text-zinc-400">
+          <span className="text-[var(--text-secondary)]">
             {karma.rank.next_tier !== "Max Rank" ? (
               <>
                 <strong className="text-emerald-400">{karma.rank.points_to_next_tier}</strong> pts to{" "}
@@ -129,7 +129,7 @@ export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfil
             )}
           </span>
         </div>
-        <div className="h-2.5 w-full rounded-full bg-zinc-900 overflow-hidden border border-white/[0.08]">
+        <div className="h-2.5 w-full rounded-full bg-zinc-900 overflow-hidden border border-[var(--border-subtle)]">
           <div
             className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500"
             style={{ width: `${progressToNext}%` }}
@@ -141,24 +141,24 @@ export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfil
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-white/[0.06] text-center">
           <div className="text-lg font-bold font-mono text-emerald-400">{karma.merged_tier_s_count}</div>
-          <div className="text-[10px] font-mono text-zinc-400">Tier S Merges (+100)</div>
+          <div className="text-[10px] font-mono text-[var(--text-secondary)]">Tier S Merges (+100)</div>
         </div>
         <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-white/[0.06] text-center">
           <div className="text-lg font-bold font-mono text-blue-400">{karma.merged_tier_a_count}</div>
-          <div className="text-[10px] font-mono text-zinc-400">Tier A Merges (+50)</div>
+          <div className="text-[10px] font-mono text-[var(--text-secondary)]">Tier A Merges (+50)</div>
         </div>
         <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-white/[0.06] text-center">
           <div className="text-lg font-bold font-mono text-purple-400">{karma.first_timer_bonuses}</div>
-          <div className="text-[10px] font-mono text-zinc-400">First-Timer Bonus (+50)</div>
+          <div className="text-[10px] font-mono text-[var(--text-secondary)]">First-Timer Bonus (+50)</div>
         </div>
         <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-white/[0.06] text-center">
           <div className="text-lg font-bold font-mono text-amber-400">{karma.streak_multiplier.toFixed(1)}x</div>
-          <div className="text-[10px] font-mono text-zinc-400">Streak Multiplier</div>
+          <div className="text-[10px] font-mono text-[var(--text-secondary)]">Streak Multiplier</div>
         </div>
       </div>
 
       {/* GitHub README Badge Embed Snippet & Live Preview */}
-      <div className="p-5 rounded-2xl bg-zinc-900/90 border border-white/[0.1] space-y-4">
+      <div className="p-5 rounded-2xl bg-zinc-900/90 border border-[var(--border-subtle)] space-y-4">
         {/* Live Badge Preview */}
         <div className="space-y-1.5">
           <div className="text-[11px] font-mono text-emerald-400 uppercase tracking-wider font-semibold">
@@ -177,12 +177,12 @@ export function KarmaProfileBadge({ username, initialKarma = null }: KarmaProfil
         {/* Copy Bar */}
         <div className="space-y-2 pt-2 border-t border-white/[0.06]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono font-semibold text-zinc-300 flex items-center gap-1.5">
+            <span className="text-xs font-mono font-semibold text-[var(--text-secondary)] flex items-center gap-1.5">
               <Award className="h-3.5 w-3.5 text-emerald-400" /> Embed Karma on GitHub Profile README:
             </span>
             <button
               onClick={handleCopyBadge}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-xs font-mono text-zinc-200 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-xs font-mono text-[var(--text-secondary)] transition-colors cursor-pointer"
             >
               {copied ? (
                 <>

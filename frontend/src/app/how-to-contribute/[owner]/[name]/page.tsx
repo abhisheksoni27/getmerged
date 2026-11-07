@@ -172,11 +172,11 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
       <Header />
 
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 py-8 sm:py-12">
-        <div className="mb-8 border-b border-white/[0.1] pb-6">
-          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+        <div className="mb-8 border-b border-[var(--border-subtle)] pb-6">
+          <h1 className="font-space text-3xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight">
             How to Contribute to {fullName}
           </h1>
-          <p className="text-sm text-zinc-300 font-sans mt-2">
+          <p className="text-sm text-[var(--text-secondary)] font-sans mt-2">
             A practical guide backed by {fullName}&apos;s real pull-request history - not guesswork.
           </p>
         </div>
@@ -189,26 +189,26 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
             { label: "First-timer success", value: firstTimer > 0 ? `${firstTimer}%` : " - " },
             { label: "C-Rank", value: `${repo.c_rank_tier ?? "?"} Tier` },
           ].map((stat) => (
-            <div key={stat.label} className="rounded-xl border border-b border-white/[0.1]/20 border-white/[0.1] glass-panel p-3 text-center">
-              <div className="font-space text-lg font-extrabold text-white">{stat.value}</div>
-              <div className="text-[10px] font-mono uppercase tracking-wide text-zinc-300 mt-0.5">{stat.label}</div>
+            <div key={stat.label} className="rounded-xl border border-b border-[var(--border-subtle)]/20 border-[var(--border-subtle)] surface-base p-3 text-center">
+              <div className="font-space text-lg font-extrabold text-[var(--text-primary)]">{stat.value}</div>
+              <div className="text-[10px] font-mono uppercase tracking-wide text-[var(--text-secondary)] mt-0.5">{stat.label}</div>
             </div>
           ))}
         </div>
 
         {/* Steps */}
         <section className="space-y-6 mb-12">
-          <h2 className="font-space text-xl font-bold text-white">Your game plan</h2>
+          <h2 className="font-space text-xl font-bold text-[var(--text-primary)]">Your game plan</h2>
           {steps.map((step, i) => (
             <div key={step.title} className="flex gap-4">
-              <div className="shrink-0 w-9 h-9 rounded-xl glass-card text-white font-space font-bold flex items-center justify-center text-sm">
+              <div className="shrink-0 w-9 h-9 rounded-xl surface-elevated text-white font-space font-bold flex items-center justify-center text-sm">
                 {i + 1}
               </div>
               <div>
-                <h3 className="font-bold text-white text-sm flex items-center gap-1.5">
+                <h3 className="font-bold text-[var(--text-primary)] text-sm flex items-center gap-1.5">
                   <step.icon className="h-4 w-4 text-emerald-400" /> {step.title}
                 </h3>
-                <p className="text-sm text-zinc-300 mt-1 leading-relaxed">{step.body}</p>
+                <p className="text-sm text-[var(--text-secondary)] mt-1 leading-relaxed">{step.body}</p>
               </div>
             </div>
           ))}
@@ -217,7 +217,7 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
         {/* Open good first issues */}
         {issues.length > 0 && (
           <section className="mb-12">
-            <h2 className="font-space text-xl font-bold text-white mb-4">Open good first issues</h2>
+            <h2 className="font-space text-xl font-bold text-[var(--text-primary)] mb-4">Open good first issues</h2>
             <div className="space-y-3">
               {issues.slice(0, 5).map((issue) => (
                 <a
@@ -226,15 +226,15 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
                   title={`View good first issue #${issue.issue_number} on GitHub`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-4 rounded-xl border border-b border-white/[0.1]/10 border-white/[0.1] glass-panel hover:border-emerald-500 hover:border-b-emerald-700 transition-all group"
+                  className="block p-4 rounded-xl border border-b border-[var(--border-subtle)]/10 border-[var(--border-subtle)] surface-base hover:border-emerald-500 hover:border-b-emerald-700 transition-all group"
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <span className="text-sm font-medium text-zinc-200 group-hover:text-emerald-300 line-clamp-1">
+                    <span className="text-sm font-medium text-[var(--text-secondary)] group-hover:text-emerald-300 line-clamp-1">
                       {issue.title}
                     </span>
-                    <ExternalLink className="h-3.5 w-3.5 shrink-0 text-zinc-300 group-hover:text-emerald-600" />
+                    <ExternalLink className="h-3.5 w-3.5 shrink-0 text-[var(--text-secondary)] group-hover:text-emerald-600" />
                   </div>
-                  <span className="text-xs font-mono text-zinc-300 mt-1 block">#{issue.issue_number}</span>
+                  <span className="text-xs font-mono text-[var(--text-secondary)] mt-1 block">#{issue.issue_number}</span>
                 </a>
               ))}
             </div>
@@ -246,7 +246,7 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
           <Link prefetch={false}
             href={`/${fullName}`}
             title={`Open full contributor scorecard for ${fullName}`}
-            className="flex-1 px-5 py-3 rounded-xl glass-card hover:bg-zinc-800 text-white font-bold text-sm inline-flex items-center justify-center gap-2 transition-all shadow-xs"
+            className="flex-1 px-5 py-3 rounded-xl surface-elevated hover:bg-zinc-800 text-white font-bold text-sm inline-flex items-center justify-center gap-2 transition-all shadow-xs"
           >
             View Full Scorecard <ArrowRight className="h-4 w-4" />
           </Link>
@@ -255,14 +255,14 @@ export default async function HowToContributePage({ params }: GuidePageProps) {
             title={`Open ${fullName} on GitHub`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 px-5 py-3 rounded-xl border border-white/[0.12] hover:border-zinc-500 text-zinc-300 font-bold text-sm inline-flex items-center justify-center gap-2 transition-all"
+            className="flex-1 px-5 py-3 rounded-xl border border-[var(--border-subtle)] hover:border-zinc-500 text-[var(--text-secondary)] font-bold text-sm inline-flex items-center justify-center gap-2 transition-all"
           >
             Open on GitHub <ExternalLink className="h-4 w-4" />
           </a>
         </section>
 
         {langSlug && (
-          <p className="mt-8 text-xs text-zinc-300">
+          <p className="mt-8 text-xs text-[var(--text-secondary)]">
             Looking for more? See{" "}
             <Link prefetch={false}
               href={`/contribute/${langSlug}?level=beginner`}

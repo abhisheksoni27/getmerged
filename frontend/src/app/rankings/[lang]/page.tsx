@@ -453,16 +453,16 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                       <td className="py-5 px-6 text-center">
                         <CRankBadge rank={tier} size="sm" showLabel={true} />
                       </td>
-                      <td className="py-5 px-6 text-right font-black text-white text-base">
+                      <td className="py-5 px-6 text-right font-black text-[var(--text-primary)] text-base">
                         {item.score.toFixed(1)}
                       </td>
-                      <td className="py-5 px-6 text-right text-zinc-200">
+                      <td className="py-5 px-6 text-right text-[var(--text-secondary)]">
                         <span className="inline-flex items-center gap-1.5 font-bold text-sm text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-lg border border-emerald-500/20">
                           <GitPullRequest className="h-3.5 w-3.5 text-emerald-400" />
                           {item.mergeRate.toFixed(1)}%
                         </span>
                       </td>
-                      <td className="py-5 px-6 text-right text-zinc-200">
+                      <td className="py-5 px-6 text-right text-[var(--text-secondary)]">
                         {item.goodFirstIssues > 0 ? (
                           <Link prefetch={false}
                             href={`/${owner}/${name}#good-first-issues`}
@@ -473,7 +473,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                             <span>{item.goodFirstIssues}</span>
                           </Link>
                         ) : (
-                          <span className="text-zinc-500 text-sm font-mono"> - </span>
+                          <span className="text-[var(--text-tertiary)] text-sm font-mono"> - </span>
                         )}
                       </td>
                     </tr>
@@ -486,29 +486,29 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
 
         {/* Contributing Strategy Guide for this Ecosystem */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-14">
-          <div className="rounded-3xl glass-panel p-6 sm:p-10 font-sans shadow-lg">
-            <h3 className="text-lg sm:text-xl font-bold text-white mb-5 flex items-center gap-2 font-space">
+          <div className="rounded-3xl surface-base p-6 sm:p-10 font-sans shadow-lg">
+            <h3 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] mb-5 flex items-center gap-2 font-space">
               <Sparkles className="h-5 w-5 text-orange-400" />
               How to Get Your {languageName} PR Merged
             </h3>
-            <div className="space-y-4 text-xs sm:text-sm text-zinc-200 leading-relaxed font-sans">
+            <div className="space-y-4 text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed font-sans">
               <div className="flex items-start gap-3.5">
                 <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs font-bold text-emerald-400 font-mono mt-0.5">1</div>
-                <div><strong className="text-white font-semibold">Check C-Rank™ First:</strong> Pick projects with S or A tiers to avoid maintainer ghosts and slow review cycles.</div>
+                <div><strong className="text-[var(--text-primary)] font-semibold">Check C-Rank™ First:</strong> Pick projects with S or A tiers to avoid maintainer ghosts and slow review cycles.</div>
               </div>
               <div className="flex items-start gap-3.5">
                 <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs font-bold text-emerald-400 font-mono mt-0.5">2</div>
-                <div><strong className="text-white font-semibold">Run Local Verification:</strong> Ensure test suites and formatting linters pass before opening a pull request.</div>
+                <div><strong className="text-[var(--text-primary)] font-semibold">Run Local Verification:</strong> Ensure test suites and formatting linters pass before opening a pull request.</div>
               </div>
               <div className="flex items-start gap-3.5">
                 <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs font-bold text-emerald-400 font-mono mt-0.5">3</div>
-                <div><strong className="text-white font-semibold">Submit in Maintainer Windows:</strong> Check the repository report card to submit when maintainers are most active.</div>
+                <div><strong className="text-[var(--text-primary)] font-semibold">Submit in Maintainer Windows:</strong> Check the repository report card to submit when maintainers are most active.</div>
               </div>
             </div>
           </div>
 
-          <div className="rounded-3xl glass-panel p-6 sm:p-10 font-sans shadow-lg">
-            <h3 className="text-lg sm:text-xl font-bold text-white mb-5 flex items-center gap-2 font-space">
+          <div className="rounded-3xl surface-base p-6 sm:p-10 font-sans shadow-lg">
+            <h3 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] mb-5 flex items-center gap-2 font-space">
               <Trophy className="h-5 w-5 text-amber-400" />
               Top {languageName} Frameworks &amp; Stacks
             </h3>
@@ -519,7 +519,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                     key={fw.slug}
                     href={`/topics/${fw.slug}`}
                     title={`Browse open source ${fw.name} repositories`}
-                    className="px-4 py-2.5 rounded-xl glass-card text-zinc-100 hover:text-white font-mono cursor-pointer transition-colors"
+                    className="px-4 py-2.5 rounded-xl surface-elevated text-[var(--text-primary)] hover:text-[var(--color-primary)] font-mono cursor-pointer transition-colors"
                   >
                     {fw.tag}
                   </Link>
@@ -528,7 +528,7 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                 <Link prefetch={false}
                   href="/topics"
                   title={`Browse ${languageName} topics`}
-                  className="px-4 py-2.5 rounded-xl glass-card text-zinc-100 hover:text-white font-mono cursor-pointer transition-colors"
+                  className="px-4 py-2.5 rounded-xl surface-elevated text-[var(--text-primary)] hover:text-[var(--color-primary)] font-mono cursor-pointer transition-colors"
                 >
                   #all-topics
                 </Link>
@@ -543,26 +543,26 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
         </div>
 
         {/* Dynamic Schema-Generated FAQs */}
-        <section className="rounded-3xl glass-panel p-6 sm:p-12 font-sans shadow-xl">
-          <h3 className="text-2xl font-bold text-white font-space mb-8">
+        <section className="rounded-3xl surface-base p-6 sm:p-12 font-sans shadow-xl">
+          <h3 className="text-2xl font-bold text-[var(--text-primary)] font-space mb-8">
             Frequently Asked Questions: {languageName} Open Source
           </h3>
           <div className="space-y-8 text-sm">
             <div>
-              <h4 className="font-bold text-white font-space text-lg mb-2">
+              <h4 className="font-bold text-[var(--text-primary)] font-space text-lg mb-2">
                 What is the most welcoming {languageName} open-source repository?
               </h4>
-              <p className="text-zinc-200 leading-relaxed font-sans">
+              <p className="text-[var(--text-secondary)] leading-relaxed font-sans">
                 {rankedItems.length > 0
                   ? `The highest-ranked ${languageName} repository on GetMerged is currently ${rankedItems[0].repo.full_name}, with a C-Rank score of ${rankedItems[0].score.toFixed(1)}/100 and a ${rankedItems[0].mergeRate.toFixed(1)}% PR merge rate.`
                   : `Visit GetMerged to view the latest ranked ${languageName} repositories.`}
               </p>
             </div>
-            <div className="border-t border-white/[0.1] pt-8">
-              <h4 className="font-bold text-white font-space text-lg mb-2">
+            <div className="border-t border-[var(--border-subtle)] pt-8">
+              <h4 className="font-bold text-[var(--text-primary)] font-space text-lg mb-2">
                 How can I find good first issues in {languageName}?
               </h4>
-              <p className="text-zinc-200 leading-relaxed font-sans">
+              <p className="text-[var(--text-secondary)] leading-relaxed font-sans">
                 You can browse verified beginner-friendly issues in {languageName} by visiting our curated Good First Issues directory at{" "}
                 <Link prefetch={false}
                   href={`/good-first-issue/${canonicalLang}`}
@@ -574,11 +574,11 @@ export default async function LanguageRankingsPage({ params }: PageProps) {
                 .
               </p>
             </div>
-            <div className="border-t border-white/[0.1] pt-8">
-              <h4 className="font-bold text-white font-space text-lg mb-2">
+            <div className="border-t border-[var(--border-subtle)] pt-8">
+              <h4 className="font-bold text-[var(--text-primary)] font-space text-lg mb-2">
                 What makes a {languageName} repository &lsquo;Super Welcoming&rsquo; on GetMerged?
               </h4>
-              <p className="text-zinc-200 leading-relaxed font-sans">
+              <p className="text-[var(--text-secondary)] leading-relaxed font-sans">
                 A &lsquo;Super Welcoming&rsquo; (S-Tier) {languageName} repository demonstrates an external PR merge rate above 80%, a median first response time within 24 to 48 hours, active review feedback, and clear onboarding documentation.
               </p>
             </div>

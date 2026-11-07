@@ -4,7 +4,7 @@ import { BillingCycle } from "./pricing-types";
 import { PlanCardData, resolvePrice } from "./pricing-data";
 
 const CARD_SHELL: Record<string, string> = {
-  free: "rounded-2xl glass-panel p-6 sm:p-8 border border-white/[0.1] shadow-sm flex flex-col justify-between font-sans",
+  free: "rounded-2xl glass-panel p-6 sm:p-8 border border-[var(--border-subtle)] shadow-sm flex flex-col justify-between font-sans",
   emerald:
     "rounded-2xl glass-panel p-6 sm:p-8 border-2 border-emerald-500 shadow-xl shadow-emerald-950/20 flex flex-col justify-between relative font-sans",
   blue:
@@ -55,37 +55,37 @@ export function PlanCard({ plan, billingCycle, icon, footer }: PlanCardProps) {
 
       <div>
         <div className="flex items-center justify-between mb-2 font-mono">
-          <h2 className={`text-lg font-bold text-white${icon ? " flex items-center gap-1.5" : ""}`}>
+          <h2 className={`text-lg font-bold text-[var(--text-primary)]${icon ? " flex items-center gap-1.5" : ""}`}>
             {icon}
             {plan.title}
           </h2>
           {!featured && plan.badge && (
-            <span className="text-xs text-zinc-400 glass-card px-2 py-0.5 rounded">{plan.badge}</span>
+            <span className="text-xs text-[var(--text-secondary)] glass-card px-2 py-0.5 rounded">{plan.badge}</span>
           )}
         </div>
-        <p className={`text-xs ${featured ? "text-zinc-300" : "text-zinc-400"} mb-6`}>{plan.description}</p>
+        <p className={`text-xs ${featured ? "text-[var(--text-secondary)]" : "text-[var(--text-secondary)]"} mb-6`}>{plan.description}</p>
 
         {variablePrice ? (
           <div className="flex items-baseline gap-1 mb-6">
-            <span className="text-4xl font-bold font-mono text-white">{price}</span>
-            <span className="text-xs font-sans text-zinc-400">{suffix}</span>
+            <span className="text-4xl font-bold font-mono text-[var(--text-primary)]">{price}</span>
+            <span className="text-xs font-sans text-[var(--text-secondary)]">{suffix}</span>
           </div>
         ) : (
-          <div className="text-3xl font-bold font-mono text-white mb-6">
-            {price} <span className="text-xs font-normal font-sans text-zinc-400">{suffix}</span>
+          <div className="text-3xl font-bold font-mono text-[var(--text-primary)] mb-6">
+            {price} <span className="text-xs font-normal font-sans text-[var(--text-secondary)]">{suffix}</span>
           </div>
         )}
 
-        <ul className="space-y-3 text-xs text-zinc-300 mb-8">
+        <ul className="space-y-3 text-xs text-[var(--text-secondary)] mb-8">
           {plan.features.map((feature) =>
             feature.muted ? (
-              <li key={feature.text} className="flex items-center gap-2.5 text-zinc-500">
+              <li key={feature.text} className="flex items-center gap-2.5 text-[var(--text-tertiary)]">
                 <span>{feature.text}</span>
               </li>
             ) : (
               <li
                 key={feature.text}
-                className={`flex items-center gap-2.5${feature.highlight ? " font-medium text-white" : ""}`}
+                className={`flex items-center gap-2.5${feature.highlight ? " font-medium text-[var(--text-primary)]" : ""}`}
               >
                 <Check className={checkClass} />
                 <span>{feature.text}</span>

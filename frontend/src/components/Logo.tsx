@@ -42,7 +42,7 @@ export function Logo({ size = "md", showWordmark = true, className = "" }: LogoP
 
       {/* Wordmark */}
       {showWordmark && (
-        <span className="font-space text-sm font-bold tracking-tight text-white group-hover:text-white transition-colors">
+        <span className="font-space text-sm font-bold tracking-tight text-white group-hover:text-[var(--text-primary)] transition-colors">
           Get<span className="text-[#10b981]">Merged</span>
         </span>
       )}

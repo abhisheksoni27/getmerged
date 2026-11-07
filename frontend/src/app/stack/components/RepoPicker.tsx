@@ -142,7 +142,7 @@ export function RepoPicker({
                 value={customRepoInput}
                 onChange={(e) => onCustomRepoInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && onScanRepository(customRepoInput)}
-                className="flex-1 bg-zinc-900 border border-white/[0.12] rounded-xl px-3.5 py-2.5 text-sm text-white font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500"
+                className="flex-1 bg-zinc-900 border border-white/[0.12] rounded-xl px-3.5 py-2.5 text-sm text-[var(--text-primary)] font-mono placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500"
               />
               <button
                 onClick={() => onScanRepository(customRepoInput)}

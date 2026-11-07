@@ -80,12 +80,12 @@ export function LangDigestSignup({ language, languageName }: LangDigestSignupPro
   }
 
   return (
-    <section className="rounded-3xl glass-panel p-6 sm:p-8 border border-white/[0.1] font-sans shadow-xs">
-      <h3 className="text-base font-bold text-white mb-1.5 flex items-center gap-2 font-space">
+    <section className="rounded-3xl glass-panel p-6 sm:p-8 border border-[var(--border-subtle)] font-sans shadow-xs">
+      <h3 className="text-base font-bold text-[var(--text-primary)] mb-1.5 flex items-center gap-2 font-space">
         <Mail className="h-4 w-4 text-sky-600" />
         Get this week&apos;s top welcoming repos + fresh Good First Issues for {languageName}
       </h3>
-      <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed mb-4 font-sans">
+      <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed mb-4 font-sans">
         Free weekly email, scoped to {languageName}. No account needed - confirm once and
         unsubscribe anytime.
       </p>
@@ -101,7 +101,7 @@ export function LangDigestSignup({ language, languageName }: LangDigestSignupPro
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
           autoComplete="email"
-          className="flex-1 rounded-xl border border-white/[0.12] px-3.5 py-2.5 text-sm text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500"
+          className="flex-1 rounded-xl border border-[var(--border-subtle)] px-3.5 py-2.5 text-sm text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500"
         />
         {/* Honeypot: hidden from humans, bots auto-fill it (AC3). */}
         <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">

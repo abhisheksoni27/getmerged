@@ -123,20 +123,20 @@ export function HacktoberfestClient({ initialRepos }: { initialRepos: Leaderboar
 
 function HeroHeader() {
   return (
-    <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-white/[0.1] shadow-xs">
+    <div className="rounded-3xl surface-base p-6 sm:p-10 border border-[var(--border-subtle)] shadow-xs">
       <div className="flex flex-wrap items-center gap-2 mb-3.5">
         <span className="inline-flex items-center gap-1.5 rounded-xl bg-orange-600 px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
           <Flame className="h-3.5 w-3.5" /> Hacktoberfest 2026 Welcome Hub
         </span>
-        <span className="inline-flex items-center gap-1.5 rounded-xl glass-card px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
+        <span className="inline-flex items-center gap-1.5 rounded-xl surface-elevated px-3 py-1 text-xs font-semibold text-white font-mono shadow-xs">
           <Sparkles className="h-3.5 w-3.5 text-amber-400" /> C-Rank™ S/A/B Rated
         </span>
       </div>
 
-      <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight font-space">
+      <h1 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] tracking-tight font-space">
         Hacktoberfest 2026 Welcome Hub
       </h1>
-      <p className="mt-3 text-xs sm:text-sm text-zinc-300 max-w-3xl leading-relaxed font-sans">
+      <p className="mt-3 text-xs sm:text-sm text-[var(--text-secondary)] max-w-3xl leading-relaxed font-sans">
         Discover verified newcomer-welcoming repositories with responsive maintainers and track your live{" "}
         <strong>4 pull request merges</strong> in real time.
       </p>
@@ -146,14 +146,14 @@ function HeroHeader() {
 
 function PreEventBanner() {
   return (
-    <div className="rounded-3xl glass-panel p-6 sm:p-8 border border-white/[0.1] shadow-xs text-center">
+    <div className="rounded-3xl surface-base p-6 sm:p-8 border border-[var(--border-subtle)] shadow-xs text-center">
       <div className="inline-flex p-3 rounded-2xl bg-orange-500/10 text-orange-400 mb-3">
         <CalendarClock className="h-6 w-6" />
       </div>
-      <h2 className="text-lg sm:text-xl font-bold text-white font-space">
+      <h2 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] font-space">
         Hacktoberfest Starts October 1
       </h2>
-      <p className="text-xs text-zinc-300 max-w-md mx-auto mt-1">
+      <p className="text-xs text-[var(--text-secondary)] max-w-md mx-auto mt-1">
         Live merge tracking opens when the event begins. Until then, explore the welcoming
         repositories below and pick your first issues.
       </p>
@@ -171,14 +171,14 @@ function PostEventBanner({
   shareUrl?: string;
 }) {
   return (
-    <div className="rounded-3xl glass-panel p-6 sm:p-8 border border-white/[0.1] shadow-xs text-center">
+    <div className="rounded-3xl surface-base p-6 sm:p-8 border border-[var(--border-subtle)] shadow-xs text-center">
       <div className="inline-flex p-3 rounded-2xl bg-emerald-500/10 text-emerald-400 mb-3">
         <Trophy className="h-6 w-6" />
       </div>
-      <h2 className="text-lg sm:text-xl font-bold text-white font-space">
+      <h2 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] font-space">
         Hacktoberfest 2026 Has Ended
       </h2>
-      <p className="text-xs text-zinc-300 max-w-md mx-auto mt-1">
+      <p className="text-xs text-[var(--text-secondary)] max-w-md mx-auto mt-1">
         Merges are frozen at <strong>{mergedCount} verified PRs</strong>. The leaderboard below
         stays open year-round for finding welcoming repos.
       </p>

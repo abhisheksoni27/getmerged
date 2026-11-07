@@ -10,7 +10,7 @@ interface FirstMergeTrackCardProps {
 export function FirstMergeTrackCard({ item, onCopyShareLink }: FirstMergeTrackCardProps) {
   return (
     <li
-      className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-white/[0.1] glass-panel p-3"
+      className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[var(--border-subtle)] glass-panel p-3"
     >
       <div className="min-w-0">
         <a
@@ -21,7 +21,7 @@ export function FirstMergeTrackCard({ item, onCopyShareLink }: FirstMergeTrackCa
         >
           {item.owner}/{item.repo}#{item.pr_number}
         </a>
-        <span className="mt-0.5 inline-block rounded-full glass-card px-2 py-0.5 text-[10px] font-semibold uppercase text-zinc-300">
+        <span className="mt-0.5 inline-block rounded-full glass-card px-2 py-0.5 text-[10px] font-semibold uppercase text-[var(--text-secondary)]">
           {item.state}
         </span>
       </div>

@@ -22,21 +22,21 @@ export function FirstMergePreflightStep({
       action={
         <button
           onClick={() => onRestartStep(2)}
-          className="text-xs text-zinc-300 hover:text-zinc-300 underline cursor-pointer"
+          className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-secondary)] underline cursor-pointer"
         >
           Back to Issues
         </button>
       }
     >
 
-      <div className="mt-3 rounded-lg border border-white/[0.1] glass-card p-3 text-xs text-zinc-300 flex flex-wrap items-center justify-between gap-2">
+      <div className="mt-3 rounded-lg border border-[var(--border-subtle)] glass-card p-3 text-xs text-[var(--text-secondary)] flex flex-wrap items-center justify-between gap-2">
         <div>
           <span className="font-semibold">Target:</span>{" "}
-          <span className="font-mono text-white font-bold">
+          <span className="font-mono text-[var(--text-primary)] font-bold">
             {trackState.selectedRepo?.fullName || "Selected Repository"}
           </span>
           {trackState.claimedIssue && (
-            <span className="ml-2 text-zinc-300">
+            <span className="ml-2 text-[var(--text-secondary)]">
               · Issue:{" "}
               <a
                 href={trackState.claimedIssue.url}
@@ -52,9 +52,9 @@ export function FirstMergePreflightStep({
       </div>
 
       <div className="mt-4">
-        <div className="rounded-xl border border-white/[0.1] glass-card p-4">
-          <h4 className="text-xs font-bold text-white">Submitted your PR?</h4>
-          <p className="mt-1 text-[11px] text-zinc-300 leading-relaxed">
+        <div className="rounded-xl border border-[var(--border-subtle)] glass-card p-4">
+          <h4 className="text-xs font-bold text-[var(--text-primary)]">Submitted your PR?</h4>
+          <p className="mt-1 text-[11px] text-[var(--text-secondary)] leading-relaxed">
             Once your PR is created on GitHub, advance to monitor review benchmarks and merge tracking.
           </p>
           <div className="mt-3">

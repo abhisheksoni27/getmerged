@@ -60,21 +60,21 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
-      <div className="relative w-full max-w-lg bg-zinc-950 border border-white/[0.12] rounded-2xl shadow-2xl p-6 text-white font-sans overflow-hidden">
+      <div className="relative w-full max-w-lg bg-zinc-950 border border-[var(--border-subtle)] rounded-2xl shadow-2xl p-6 text-white font-sans overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
+        <div className="flex items-center justify-between pb-4 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-2">
             <ShieldAlert className="h-5 w-5 text-amber-400 shrink-0" />
             <div>
-              <h2 className="text-base font-bold font-space text-white">Dispute Score &amp; Telemetry</h2>
-              <p className="text-xs font-mono text-zinc-400">{fullName}</p>
+              <h2 className="text-base font-bold font-space text-[var(--text-primary)]">Dispute Score &amp; Telemetry</h2>
+              <p className="text-xs font-mono text-[var(--text-secondary)]">{fullName}</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close modal"
-            className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="p-1 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/[0.06] transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
@@ -83,8 +83,8 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
         {success ? (
           <div className="py-8 text-center space-y-4">
             <CheckCircle2 className="h-12 w-12 text-emerald-400 mx-auto" />
-            <h3 className="text-lg font-bold font-space text-white">Dispute Filed Under 48h SLA</h3>
-            <p className="text-xs text-zinc-300 max-w-sm mx-auto leading-relaxed">
+            <h3 className="text-lg font-bold font-space text-[var(--text-primary)]">Dispute Filed Under 48h SLA</h3>
+            <p className="text-xs text-[var(--text-secondary)] max-w-sm mx-auto leading-relaxed">
               Your inquiry has been submitted directly to the engineering review queue. If your evidence indicates crawler discrepancy or bot pollution, we trigger an out-of-band re-scan and post an entry to our public changelog.
             </p>
             <div className="pt-2">
@@ -113,14 +113,14 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
             )}
 
             <div>
-              <label htmlFor="dispute-reason" className="block text-xs font-mono text-zinc-300 mb-1">
+              <label htmlFor="dispute-reason" className="block text-xs font-mono text-[var(--text-secondary)] mb-1">
                 Dispute Category *
               </label>
               <select
                 id="dispute-reason"
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-white/[0.1] text-xs text-white focus:outline-hidden focus:border-amber-400"
+                className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-white focus:outline-hidden focus:border-amber-400"
               >
                 <option value="stale_metric">Stale or outdated snapshot metrics</option>
                 <option value="bot_pollution">Automated bots counted as external PRs</option>
@@ -132,7 +132,7 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label htmlFor="dispute-github" className="block text-xs font-mono text-zinc-300 mb-1">
+                <label htmlFor="dispute-github" className="block text-xs font-mono text-[var(--text-secondary)] mb-1">
                   Your GitHub Username
                 </label>
                 <input
@@ -141,11 +141,11 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
                   placeholder="e.g. octocat"
                   value={githubUsername}
                   onChange={(e) => setGithubUsername(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-white/[0.1] text-xs text-white focus:outline-hidden focus:border-amber-400 font-mono"
+                  className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-white focus:outline-hidden focus:border-amber-400 font-mono"
                 />
               </div>
               <div>
-                <label htmlFor="dispute-email" className="block text-xs font-mono text-zinc-300 mb-1">
+                <label htmlFor="dispute-email" className="block text-xs font-mono text-[var(--text-secondary)] mb-1">
                   Email (for status updates)
                 </label>
                 <input
@@ -154,13 +154,13 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-white/[0.1] text-xs text-white focus:outline-hidden focus:border-amber-400 font-mono"
+                  className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-white focus:outline-hidden focus:border-amber-400 font-mono"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="dispute-evidence" className="block text-xs font-mono text-zinc-300 mb-1">
+              <label htmlFor="dispute-evidence" className="block text-xs font-mono text-[var(--text-secondary)] mb-1">
                 Evidence Link (PR, commit, issue URL)
               </label>
               <input
@@ -169,12 +169,12 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
                 placeholder="https://github.com/.../pull/..."
                 value={evidenceUrl}
                 onChange={(e) => setEvidenceUrl(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-white/[0.1] text-xs text-white focus:outline-hidden focus:border-amber-400 font-mono"
+                className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-white focus:outline-hidden focus:border-amber-400 font-mono"
               />
             </div>
 
             <div>
-              <label htmlFor="dispute-details" className="block text-xs font-mono text-zinc-300 mb-1">
+              <label htmlFor="dispute-details" className="block text-xs font-mono text-[var(--text-secondary)] mb-1">
                 Explanation &amp; Findings *
               </label>
               <textarea
@@ -184,15 +184,15 @@ export function DisputeModal({ fullName, isOpen, onClose }: DisputeModalProps) {
                 placeholder="Provide context on what numbers look wrong and why..."
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-white/[0.1] text-xs text-white focus:outline-hidden focus:border-amber-400"
+                className="w-full px-3 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-white focus:outline-hidden focus:border-amber-400"
               />
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/[0.08]">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-[var(--border-subtle)]">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl text-xs font-mono text-zinc-400 hover:text-white transition-colors"
+                className="px-4 py-2 rounded-xl text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
               >
                 Cancel
               </button>

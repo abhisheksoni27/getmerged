@@ -17,10 +17,10 @@ export function StatusBanners({ isCheckoutSuccess, showVerificationNotice, notic
             <Sparkles className="h-4 w-4" />
             <span>MEMBERSHIP ACTIVATED</span>
           </div>
-          <h3 className="text-base font-bold text-white font-space">
+          <h3 className="text-base font-bold text-[var(--text-primary)] font-space">
             Welcome to GetMerged!
           </h3>
-          <p className="text-xs text-zinc-300 font-sans mt-1 leading-relaxed">
+          <p className="text-xs text-[var(--text-secondary)] font-sans mt-1 leading-relaxed">
             Your payment succeeded and your plan entitlements are now active on your profile and dashboard.
           </p>
         </div>
@@ -39,10 +39,10 @@ export function StatusBanners({ isCheckoutSuccess, showVerificationNotice, notic
             <Sparkles className="h-4 w-4" />
             <span>EARLY ACCESS PREVIEW</span>
           </div>
-          <h3 className="text-base font-bold text-white font-space">
+          <h3 className="text-base font-bold text-[var(--text-primary)] font-space">
             Payment Processing Verification Underway
           </h3>
-          <p className="text-xs text-zinc-300 font-sans mt-1.5 leading-relaxed">
+          <p className="text-xs text-[var(--text-secondary)] font-sans mt-1.5 leading-relaxed">
             Our merchant verification with Dodo Payments is completing. In the meantime, core features across GetMerged remain free to explore.
           </p>
         </div>

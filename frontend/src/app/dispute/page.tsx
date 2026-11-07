@@ -70,17 +70,17 @@ export default function DisputePage() {
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
         {/* Header Hero */}
-        <div className="rounded-3xl glass-panel p-8 sm:p-10 border border-white/[0.12] shadow-xs mb-10">
+        <div className="rounded-3xl surface-base p-8 sm:p-10 border border-[var(--border-subtle)] shadow-xs mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-300 font-mono text-xs font-semibold mb-4">
             <ShieldAlert className="h-3.5 w-3.5" /> Maintainer Integrity Guarantee
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold font-space text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold font-space text-[var(--text-primary)] tracking-tight">
             Report a Score or Telemetry Dispute
           </h1>
-          <p className="mt-3 text-sm sm:text-base text-zinc-300 max-w-2xl leading-relaxed">
+          <p className="mt-3 text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl leading-relaxed">
             We score 102,000+ repositories purely from public GitHub GraphQL signals. If bot pollution, spam storms, or crawler lag created an inaccurate C-Rank grade for your repository, report it directly below.
           </p>
-          <div className="mt-5 flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-400">
+          <div className="mt-5 flex flex-wrap items-center gap-4 text-xs font-mono text-[var(--text-secondary)]">
             <span className="inline-flex items-center gap-1.5 text-emerald-400">
               <Clock className="h-4 w-4" /> 48-Hour Human SLA
             </span>
@@ -89,7 +89,7 @@ export default function DisputePage() {
             </span>
             <Link prefetch={false}
               href="/methodology/changelog"
-              className="inline-flex items-center gap-1 text-zinc-300 hover:text-white underline"
+              className="inline-flex items-center gap-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] underline"
             >
               View Recalibration Log <ExternalLink className="h-3 w-3" />
             </Link>
@@ -97,12 +97,12 @@ export default function DisputePage() {
         </div>
 
         {/* Form Container */}
-        <div className="rounded-2xl glass-panel p-6 sm:p-8 border border-white/[0.1] shadow-xs">
+        <div className="rounded-2xl surface-base p-6 sm:p-8 border border-[var(--border-subtle)] shadow-xs">
           {success ? (
             <div className="py-12 text-center space-y-4">
               <CheckCircle2 className="h-14 w-14 text-emerald-400 mx-auto" />
-              <h2 className="text-2xl font-bold font-space text-white">Dispute Received Under 48h SLA</h2>
-              <p className="text-sm text-zinc-300 max-w-md mx-auto leading-relaxed">
+              <h2 className="text-2xl font-bold font-space text-[var(--text-primary)]">Dispute Received Under 48h SLA</h2>
+              <p className="text-sm text-[var(--text-secondary)] max-w-md mx-auto leading-relaxed">
                 Thank you for contributing to open-source data integrity. An engineer will inspect the historical pull-request events for <span className="font-mono text-amber-300">{repoFullName}</span>.
               </p>
               <div className="pt-4 flex justify-center gap-3">
@@ -113,7 +113,7 @@ export default function DisputePage() {
                     setDetails("");
                     setRepoFullName("");
                   }}
-                  className="px-5 py-2.5 rounded-xl glass-panel border border-white/[0.12] text-xs font-mono text-zinc-300 hover:text-white transition-colors"
+                  className="px-5 py-2.5 rounded-xl surface-base border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                 >
                   Submit Another
                 </button>
@@ -142,7 +142,7 @@ export default function DisputePage() {
               )}
 
               <div>
-                <label htmlFor="repo-input" className="block text-xs font-mono text-zinc-300 mb-1.5">
+                <label htmlFor="repo-input" className="block text-xs font-mono text-[var(--text-secondary)] mb-1.5">
                   Repository Full Name or GitHub URL *
                 </label>
                 <input
@@ -152,20 +152,20 @@ export default function DisputePage() {
                   placeholder="e.g. facebook/react or https://github.com/gin-gonic/gin"
                   value={repoFullName}
                   onChange={(e) => setRepoFullName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-white/[0.12] text-sm text-white placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
+                  className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="category-select" className="block text-xs font-mono text-zinc-300 mb-1.5">
+                  <label htmlFor="category-select" className="block text-xs font-mono text-[var(--text-secondary)] mb-1.5">
                     Dispute Reason / Category *
                   </label>
                   <select
                     id="category-select"
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-white/[0.12] text-sm text-white focus:outline-hidden focus:border-amber-400 font-sans"
+                    className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-[var(--border-subtle)] text-sm text-white focus:outline-hidden focus:border-amber-400 font-sans"
                   >
                     <option value="stale_metric">Stale / outdated metrics</option>
                     <option value="bot_pollution">Automated bots counted as external PRs</option>
@@ -176,7 +176,7 @@ export default function DisputePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="github-user" className="block text-xs font-mono text-zinc-300 mb-1.5">
+                  <label htmlFor="github-user" className="block text-xs font-mono text-[var(--text-secondary)] mb-1.5">
                     Your GitHub Username (optional)
                   </label>
                   <input
@@ -185,14 +185,14 @@ export default function DisputePage() {
                     placeholder="octocat"
                     value={githubUsername}
                     onChange={(e) => setGithubUsername(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-white/[0.12] text-sm text-white placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
+                    className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="contact-email" className="block text-xs font-mono text-zinc-300 mb-1.5">
+                  <label htmlFor="contact-email" className="block text-xs font-mono text-[var(--text-secondary)] mb-1.5">
                     Contact Email (for resolution notification)
                   </label>
                   <input
@@ -201,12 +201,12 @@ export default function DisputePage() {
                     placeholder="maintainer@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-white/[0.12] text-sm text-white placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
+                    className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="evidence-link" className="block text-xs font-mono text-zinc-300 mb-1.5">
+                  <label htmlFor="evidence-link" className="block text-xs font-mono text-[var(--text-secondary)] mb-1.5">
                     Evidence Link (PR, issue, or discussion)
                   </label>
                   <input
@@ -215,13 +215,13 @@ export default function DisputePage() {
                     placeholder="https://github.com/..."
                     value={evidenceUrl}
                     onChange={(e) => setEvidenceUrl(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-white/[0.12] text-sm text-white placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
+                    className="w-full px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 font-mono focus:outline-hidden focus:border-amber-400"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="dispute-explanation" className="block text-xs font-mono text-zinc-300 mb-1.5">
+                <label htmlFor="dispute-explanation" className="block text-xs font-mono text-[var(--text-secondary)] mb-1.5">
                   Detailed Findings &amp; Context *
                 </label>
                 <textarea
@@ -231,14 +231,14 @@ export default function DisputePage() {
                   placeholder="Explain why the current metric is incorrect, e.g. 'We merge outside PRs into develop instead of main' or 'A spam campaign submitted 40 bogus PRs that were mass-closed in July'..."
                   value={details}
                   onChange={(e) => setDetails(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-900/80 border border-white/[0.12] text-sm text-white placeholder-zinc-500 focus:outline-hidden focus:border-amber-400 font-sans"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-900/80 border border-[var(--border-subtle)] text-sm text-white placeholder-zinc-500 focus:outline-hidden focus:border-amber-400 font-sans"
                 />
               </div>
 
               <div className="flex items-center justify-between pt-4 border-t border-white/[0.08]">
                 <Link prefetch={false}
                   href="/how-c-rank-works"
-                  className="text-xs font-mono text-zinc-400 hover:text-zinc-200 transition-colors"
+                  className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-secondary)] transition-colors"
                 >
                   Review C-Rank Methodology &rarr;
                 </Link>

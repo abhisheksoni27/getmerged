@@ -21,10 +21,10 @@ export function ContributorsPane({ billingCycle, onBillingChange, user, onChecko
           <Sparkles className="h-3.5 w-3.5" />
           <span>For Open Source Contributors & Developers</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold font-space text-white tracking-tight mb-3">
+        <h1 className="text-3xl sm:text-4xl font-bold font-space text-[var(--text-primary)] tracking-tight mb-3">
           Stop Guessing. Get Your Pull Requests Merged.
         </h1>
-        <p className="text-sm sm:text-base text-zinc-300 font-sans leading-relaxed">
+        <p className="text-sm sm:text-base text-[var(--text-secondary)] font-sans leading-relaxed">
           Unlimited repository review velocity forecasts, live maintainer turnaround advice, and automated pre-flight checks.
         </p>
 
@@ -38,7 +38,7 @@ export function ContributorsPane({ billingCycle, onBillingChange, user, onChecko
           footer={
             <button
               disabled
-              className="w-full py-2.5 rounded-xl glass-card text-zinc-400 font-mono font-bold text-xs uppercase tracking-wider text-center"
+              className="w-full py-2.5 rounded-xl glass-card text-[var(--text-secondary)] font-mono font-bold text-xs uppercase tracking-wider text-center"
             >
               Current Plan
             </button>
