@@ -40,30 +40,30 @@ func (s *GFIBackfillService) RunSweep(ctx context.Context, batchSize int) (int, 
 		batchSize = 25
 	}
 
-	// Find repos with good_first_issue_count > 0 that haven't been synced recently in repo_good_first_issues
+	// Find repos with good_first_issue_count > 0 or with open issues that haven't been synced recently in repo_good_first_issues
 	query := `
 		SELECT r.id, r.full_name, r.stars, COALESCE(r.language, '') as language
 		FROM repositories r
-		INNER JOIN latest_snapshots s ON r.id = s.repository_id
-		WHERE s.good_first_issue_count > 0
+		LEFT JOIN latest_snapshots s ON r.id = s.repository_id
+		WHERE (COALESCE(s.good_first_issue_count, 0) > 0 OR r.id IN (SELECT repository_id FROM repo_good_first_issues WHERE is_open = 1))
 		  AND r.id NOT IN (
 			SELECT repository_id FROM repo_good_first_issues
 			WHERE synced_at > DATE_SUB(NOW(), INTERVAL 3 DAY)
 		  )
-		ORDER BY s.c_rank_score DESC, r.stars DESC
+		ORDER BY COALESCE(s.c_rank_score, 0) DESC, r.stars DESC
 		LIMIT ?
 	`
 	if s.db.DriverName() == "sqlite" {
 		query = `
 			SELECT r.id, r.full_name, r.stars, COALESCE(r.language, '') as language
 			FROM repositories r
-			INNER JOIN latest_snapshots s ON r.id = s.repository_id
-			WHERE s.good_first_issue_count > 0
+			LEFT JOIN latest_snapshots s ON r.id = s.repository_id
+			WHERE (COALESCE(s.good_first_issue_count, 0) > 0 OR r.id IN (SELECT repository_id FROM repo_good_first_issues WHERE is_open = 1))
 			  AND r.id NOT IN (
 				SELECT repository_id FROM repo_good_first_issues
 				WHERE synced_at > datetime('now', '-3 days')
 			  )
-			ORDER BY s.c_rank_score DESC, r.stars DESC
+			ORDER BY COALESCE(s.c_rank_score, 0) DESC, r.stars DESC
 			LIMIT ?
 		`
 	}

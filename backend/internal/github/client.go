@@ -1255,7 +1255,11 @@ func (c *Client) FetchGoodFirstIssuesList(owner, name string, limit int) ([]Good
 		})
 	}
 
-	return issues, resp.Data.Search.IssueCount, nil
+	count := resp.Data.Search.IssueCount
+	if len(resp.Data.Search.Nodes) == 0 && count > 0 {
+		count = 0
+	}
+	return issues, count, nil
 }
 
 // PRDetails holds the auto-fetchable metadata of a single pull request.
