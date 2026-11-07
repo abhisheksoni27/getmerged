@@ -45,7 +45,7 @@ Python 12,532 | TypeScript 9,157 | JavaScript 7,784 | Go 7,128 | C++ 5,891 | Rus
 | Route | What it does |
 |---|---|
 | `/` | Homepage: macro stats, top S-tier repos, spotlight repos, 90-day trend charts, SSR JSON-LD |
-| `/repos` | Paginated directory (102k repos) with SSR filters: language, tier, stars, merge rate, first-timer success, trending. CollectionPage + FAQ schema. Default sort `c_rank_score desc`. |
+| `/repos` | Paginated directory (102k repos) with SSR filters: language, tier, stars, merge rate, first-timer success, trending. Dual layout toggle (Rows/Cards). CollectionPage + FAQ schema. Default sort `c_rank_score desc`. |
 | `/rankings` | Ecosystem hub: 20 language leaderboard cards with aggregate stats |
 | `/rankings/[lang]` | Per-language top-50: C-Rank score, merge rate, GFI count, dataset download, FAQ, ItemList schema |
 | `/good-first-issue` | Beginner issue hub: 14 language ecosystems, LanguageMatchQuiz, GfiSniperCard |
@@ -340,7 +340,7 @@ Python 12,532 | TypeScript 9,157 | JavaScript 7,784 | Go 7,128 | C++ 5,891 | Rus
 | RepoAuditCTA | CTA to purchase/full Maintainer Intelligence Report |
 | RepoAuditReport | Full maintainer audit: PR funnel, burnout signals, AI fixes, templates |
 | RepoBadgeGenerator | Generates embeddable C-Rank badge snippets |
-| RepoCard | Standard repo card: name, language, tier, stars, merge rate, response time |
+| RepoCard | Dual-mode repo card (`layout="row" | "card"`): high-density tabular row view (FreeHire style) or showcase card with metric gauges |
 | RepoDetailHero | Hero section for repo detail pages |
 | RepoReviewsSection | Community contributor reviews with sentiment filters |
 | RepoScorecards | C-Rank breakdown, merge rate, response time, first-timer success |
