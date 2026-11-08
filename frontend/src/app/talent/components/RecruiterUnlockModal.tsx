@@ -52,16 +52,16 @@ export function RecruiterUnlockModal({ candidate, onClose }: RecruiterUnlockModa
         </div>
 
         <div className="space-y-3 pt-2">
-          <Link prefetch={false}
-            href="/pricing?tab=recruiter"
-            className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xl shadow-blue-950/60"
-          >
-            <span>Get WorkDone Founder Pass ($49/mo)</span>
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-          <p className="text-[11px] font-sans text-[var(--text-secondary)]">
-            Includes 25 verified direct contact unlocks, ATS exports, and instant alerts when new Tier-S contributors open up.
+          <p className="text-xs font-sans text-[var(--text-secondary)] text-center">
+            Candidate direct contact is currently in private preview.
           </p>
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.12] text-[var(--text-primary)] font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center cursor-pointer"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>

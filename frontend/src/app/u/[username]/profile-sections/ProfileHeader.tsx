@@ -204,12 +204,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             )}
           </div>
           <div className="flex items-center gap-2">
-            <Link prefetch={false}
-              href="/pricing"
-              className="px-2.5 py-1 rounded bg-white/[0.06] hover:bg-white/[0.12] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-            >
-              View Plans
-            </Link>
             <button
               type="button"
               onClick={async () => {

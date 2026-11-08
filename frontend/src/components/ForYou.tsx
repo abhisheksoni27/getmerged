@@ -213,12 +213,6 @@ export function ForYou() {
               </li>
             ))}
           </ul>
-          <Link prefetch={false}
-            href="/pricing"
-            className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-xs font-semibold text-white hover:bg-amber-600"
-          >
-            <Lock className="h-3 w-3" /> Unlock all {data.snapshot.length + data.locked_languages} languages with Pro - $9/mo
-          </Link>
         </div>
       )}
     </section>

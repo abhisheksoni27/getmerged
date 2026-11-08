@@ -237,15 +237,6 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               >
                 For Maintainers ⚡
               </Link>
-              {PAYMENTS_ENABLED && (
-                <Link prefetch={false}
-                  href="/pricing"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-3 py-2 rounded-lg hover:bg-[var(--bg-elevated)] text-[#0D9668] font-semibold transition-colors"
-                >
-                  Pricing & Plans 💳
-                </Link>
-              )}
               <Link prefetch={false}
                 href="/dashboard"
                 onClick={() => setMobileMenuOpen(false)}

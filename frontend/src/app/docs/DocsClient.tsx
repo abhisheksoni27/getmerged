@@ -101,10 +101,7 @@ export function DocsClient() {
             <code className="rounded glass-card px-1">Retry-After</code> headers.
           </div>
           <div className="rounded-lg border border-emerald-200 bg-emerald-950/70 border-emerald-800/80 px-3 py-2 text-emerald-300">
-            <span className="font-bold">Pro</span> - 600 requests/hour + 100 requests/min burst.{" "}
-            <Link prefetch={false} href="/pricing" className="font-semibold underline inline-flex items-center gap-0.5">
-              Upgrade <ExternalLink className="h-3 w-3" />
-            </Link>
+            <span className="font-bold">Pro</span> - 600 requests/hour + 100 requests/min burst available on request for high-volume integrations.
           </div>
         </div>
         {spec?.securityDefinitions && Object.keys(spec.securityDefinitions).length > 0 && (

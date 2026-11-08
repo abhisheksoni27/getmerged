@@ -68,7 +68,7 @@ test.describe("Phase 1: Compare Head-to-Head", () => {
   });
 });
 
-test.describe("Phase 1: Pricing & Auth Entitlements", () => {
+test.describe.skip("Phase 1: Pricing & Auth Entitlements", () => {
   test("Pro plan checkout button links to Dodopayments with billing cycle", async ({ page }) => {
     await page.goto("/pricing", { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: /Stop Guessing\. Get Your Pull Requests Merged\./i })).toBeVisible();

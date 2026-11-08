@@ -23,7 +23,6 @@ import { RepoStickyBar } from "@/components/RepoStickyBar";
 const AuthModal = dynamic(() => import("@/components/AuthModal").then((mod) => mod.AuthModal), { ssr: false });
 const MaintainerConsoleModal = dynamic(() => import("@/components/MaintainerConsoleModal").then((mod) => mod.MaintainerConsoleModal), { ssr: false });
 const DisputeModal = dynamic(() => import("@/components/DisputeModal").then((mod) => mod.DisputeModal), { ssr: false });
-import { RepoAuditCTA } from "@/components/RepoAuditCTA";
 import { isRepoScored } from "@/lib/repo-metadata";
 
 
@@ -250,26 +249,6 @@ export function ClientRepoDetail({
       {/* Unscored explainer + verified-welcoming alternatives (IDEA-20260820-02 AC2) */}
       {!isRepoScored(repo) && (
         <UnscoredExplainer fullName={fullName} language={repo?.language} />
-      )}
-
-      {/* One-Time $19 Repo Deep-Audit CTA (AC2/AC5): shown only for scored repos
-          the viewer has not yet purchased; hidden once paid. Unauthenticated
-          clicks force signup/login, then the audit page drives checkout. */}
-      {isRepoScored(repo) && (
-        <div className="mb-8">
-          <RepoAuditCTA
-            fullName={fullName}
-            isScored={isRepoScored(repo)}
-            isLoggedIn={isLoggedIn}
-            requireLogin={() =>
-              openAuthModal(
-                "Unlock the Full Deep-Audit",
-                "Sign in to purchase the one-time $19 repo deep-audit with the full C-Rank breakdown, peer percentiles and AI-prioritized fixes.",
-                "audit"
-              )
-            }
-          />
-        </div>
       )}
 
       {/* Raise Your C-Rank playbook: quantified gaps from live telemetry,

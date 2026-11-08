@@ -135,9 +135,7 @@ export function OrgConsoleCard({ org }: { org: string }) {
       )}
       {!data.entitled && (
         <p className="mt-4 text-xs font-mono text-[var(--text-secondary)]">
-          Peer benchmarks are part of Maintainer Pro.{" "}
-          <Link prefetch={false} href="/pricing" className="font-bold text-emerald-400 underline underline-offset-2">Upgrade</Link>{" "}
-          to compare {org} against every ranked org and earn the Verified Welcoming Org badge.
+          Peer benchmarks are being calculated for {org}.
         </p>
       )}
     </div>

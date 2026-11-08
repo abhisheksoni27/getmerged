@@ -25,13 +25,6 @@ export function ForecastCard({ forecast, forecastLocked }: ForecastCardProps) {
           </ul>
           <div className="mt-1 text-[var(--text-secondary)] italic">{forecast.basis}</div>
         </div>
-      ) : forecastLocked ? (
-        <Link prefetch={false}
-          href="/pricing"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--text-secondary)] hover:text-emerald-400"
-        >
-          <Lock className="h-3 w-3" /> Acceptance forecast - unlock with Pro
-        </Link>
       ) : null}
     </div>
   );
