@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Clock, Calendar, Sparkles, AlertCircle, CheckCircle2, Globe } from "lucide-react";
+import { Clock, Calendar } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 import { OptimalTimeResponse, OptimalTimeResult } from "@/types/opendoor";
-import { formatUTCHourToLocal, formatUTCRangeToLocal, getUserTimeZone, padZero } from "@/lib/timezone";
+import { formatUTCRangeToLocal, getUserTimeZone, padZero } from "@/lib/timezone";
 
 interface OptimalReviewWindowProps {
   fullName: string;
@@ -45,215 +45,51 @@ export function OptimalReviewWindow({ fullName, initialData = null }: OptimalRev
     return () => {
       isSubscribed = false;
     };
-  }, [fullName]);
+  }, [fullName, initialData]);
 
-  if (loading) {
-    return (
-      <div className="min-h-[220px] rounded-2xl glass-panel p-5 border-2 border-[var(--border-subtle)] shadow-sm mb-6 animate-pulse">
-        <div className="flex items-center justify-between mb-4">
-          <div className="h-5 bg-white/[0.08] animate-pulse rounded w-1/3"></div>
-          <div className="h-4 bg-white/[0.08] animate-pulse rounded w-24"></div>
-        </div>
-        <div className="h-24 glass-card rounded-xl mb-4"></div>
-        <div className="h-4 bg-white/[0.08] animate-pulse rounded w-1/2"></div>
-      </div>
-    );
-  }
+  if (loading || !data) return null;
 
-  if (!data || (data.active_maintainer_count === 0 && data.confidence_score === 0)) {
-    return (
-      <div className="min-h-[220px] rounded-2xl glass-panel p-5 sm:p-6 border-2 border-[var(--border-subtle)] shadow-sm mb-6 font-mono">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800 border border-[var(--border-subtle)] text-[var(--text-secondary)]">
-            <Clock className="h-4 w-4 text-[var(--text-secondary)]" />
-          </div>
-          <div>
-            <h3 className="text-base font-bold text-[var(--text-primary)] font-space">
-              Optimal PR Submission Window
-            </h3>
-            <p className="text-[11px] font-sans text-[var(--text-secondary)]">
-              Maintainer review activity heatmap
-            </p>
-          </div>
-        </div>
-        <div className="rounded-xl glass-card border border-[var(--border-subtle)] p-4 text-xs font-sans text-[var(--text-secondary)] flex items-center gap-2">
-          <AlertCircle className="h-4 w-4 text-[var(--text-secondary)] shrink-0" />
-          <span>
-            Insufficient maintainer review activity recorded in the last 90 days for <strong>{fullName}</strong>. Real submission window patterns will appear as maintainers review and merge incoming pull requests.
-          </span>
-        </div>
-      </div>
-    );
-  }
-
-  const isLowConfidence = data.confidence_score < 0.2;
-  const heatmap = data.hourly_heatmap || new Array(24).fill(0);
-  const peakHour = typeof data.peak_hour_utc === "number" && !Number.isNaN(data.peak_hour_utc) ? data.peak_hour_utc : 0;
-  const primaryStart = typeof data.primary_start_hour_utc === "number" && !Number.isNaN(data.primary_start_hour_utc) ? data.primary_start_hour_utc : 0;
-  const primaryEnd = typeof data.primary_end_hour_utc === "number" && !Number.isNaN(data.primary_end_hour_utc) ? data.primary_end_hour_utc : 0;
-  const dayWindow = data.recommended_day_window || "Monday - Friday";
-
-  const getBarColor = (val: number, isPeak: boolean) => {
-    if (isPeak) return "bg-emerald-500 hover:bg-emerald-400";
-    if (val > 0.6) return "bg-emerald-600 hover:bg-emerald-500";
-    if (val > 0.25) return "bg-emerald-700/80 hover:bg-emerald-600";
-    if (val > 0.05) return "bg-emerald-950/80 border border-emerald-800/80 hover:bg-emerald-900";
-    return "bg-white/[0.04] border border-white/[0.06] hover:bg-white/[0.1]";
-  };
-
-  const userTimezone = isMounted ? getUserTimeZone() : "UTC";
-  const localPeakTime = isMounted ? formatUTCHourToLocal(peakHour) : `${padZero(peakHour)}:00 UTC`;
-  const localWindow = isMounted ? formatUTCRangeToLocal(primaryStart, primaryEnd) : `${padZero(primaryStart)}:00 - ${padZero(primaryEnd)}:00 UTC`;
+  const startHour = data.primary_start_hour_utc ?? 14;
+  const endHour = data.primary_end_hour_utc ?? 19;
+  const dayWindow = data.recommended_day_window || "Tue & Thu";
+  const userTz = isMounted ? getUserTimeZone() : "UTC";
+  const localRangeStr = isMounted ? formatUTCRangeToLocal(startHour, endHour) : "";
 
   return (
-    <div className="rounded-2xl glass-panel p-5 sm:p-6 border-2 border-[var(--border-subtle)] shadow-sm mb-6 font-mono">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 shadow-sm">
-            <Clock className="h-4 w-4 text-emerald-400" />
+    <div className="card h-full flex flex-col justify-between">
+      <div>
+        <div className="flex items-center justify-between mb-1.5">
+          <div className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-1.5">
+            <Clock className="h-4 w-4 text-[var(--purple-bright)]" />
+            <span>Optimal Review Window</span>
           </div>
-          <div>
-            <h3 className="text-base font-bold text-[var(--text-primary)] font-space">
-              Optimal PR Submission Window
-            </h3>
-            <p className="text-[11px] font-sans text-[var(--text-secondary)]">
-              Maintainer review activity heatmap & prime window prediction
-            </p>
-          </div>
+          <span className="pill pill-purple font-mono">{data.active_maintainer_count ?? 1} Active</span>
         </div>
-
-        <div className="flex items-center gap-2">
-          <span
-            data-testid="recommended-day-window"
-            className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border border-emerald-200/80"
-          >
-            <Calendar className="h-3 w-3 text-emerald-600" />
-            {dayWindow}
-          </span>
-          <span
-            className={`text-[11px] font-sans px-2 py-0.5 rounded-full border ${
-              isLowConfidence
-                ? "bg-amber-950/70 border-amber-800/80 text-amber-300 border-amber-200"
-                : "bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border-emerald-200"
-            }`}
-          >
-            {isLowConfidence ? "Limited Sample Size" : `Confidence: ${(data.confidence_score * 100).toFixed(0)}%`}
-          </span>
-        </div>
-      </div>
-
-      {/* Metrics Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5 font-sans">
-        <div className="glass-card border border-[var(--border-subtle)] rounded-xl p-3">
-          <div className="text-xs text-[var(--text-secondary)] flex items-center gap-1 mb-1">
-            <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
-            <span>Peak Review Hour</span>
-          </div>
-          <div data-testid="peak-hour-metric" className="text-lg font-bold font-mono text-[var(--text-primary)]">
-            {padZero(peakHour)}:00 UTC
-          </div>
-          <p className="text-[11px] font-mono text-emerald-400 mt-0.5" suppressHydrationWarning>
-            {isMounted ? `≈ ${localPeakTime} (Local)` : "Calculating local time..."}
-          </p>
-        </div>
-
-        <div className="glass-card border border-[var(--border-subtle)] rounded-xl p-3">
-          <div className="text-xs text-[var(--text-secondary)] flex items-center gap-1 mb-1">
-            <Clock className="h-3.5 w-3.5 text-blue-600" />
-            <span>Primary Window</span>
-          </div>
-          <div className="text-lg font-bold font-mono text-[var(--text-primary)]">
-            {padZero(primaryStart)}:00 - {padZero(primaryEnd)}:00 UTC
-          </div>
-          <p className="text-[11px] font-mono text-blue-700 mt-0.5" suppressHydrationWarning>
-            {isMounted ? `≈ ${localWindow} (Local)` : "Calculating local time..."}
-          </p>
-        </div>
-
-        <div className="glass-card border border-[var(--border-subtle)] rounded-xl p-3">
-          <div className="text-xs text-[var(--text-secondary)] flex items-center gap-1 mb-1">
-            <Globe className="h-3.5 w-3.5 text-indigo-600" />
-            <span>Active Maintainers</span>
-          </div>
-          <div className="text-lg font-bold font-mono text-[var(--text-primary)]">
-            {data.active_maintainer_count} Tracked
-          </div>
-          <p className="text-[11px] text-[var(--text-secondary)] mt-0.5 truncate" title={userTimezone}>
-            Detected: {userTimezone}
-          </p>
-        </div>
-      </div>
-
-      {/* 24-Hour Activity Bar Heatmap */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between text-xs text-[var(--text-secondary)] mb-2 font-sans">
-          <span>24-Hour Maintainer Activity Heatmap (UTC)</span>
-          <div className="flex items-center gap-1 text-[10px] font-mono">
-            <span>Low</span>
-            <span className="inline-block w-2.5 h-2.5 bg-emerald-950/80 border-emerald-800/80 rounded-xs"></span>
-            <span className="inline-block w-2.5 h-2.5 bg-emerald-300 rounded-xs"></span>
-            <span className="inline-block w-2.5 h-2.5 bg-emerald-500 rounded-xs"></span>
-            <span className="inline-block w-2.5 h-2.5 bg-emerald-700 rounded-xs"></span>
-            <span>Peak</span>
-          </div>
-        </div>
-
-        <div className="glass-card border border-[var(--border-subtle)] rounded-xl p-3 sm:p-4">
-          <div className="flex items-end gap-1 sm:gap-1.5 h-24 w-full">
-            {heatmap.map((val, h) => {
-              const isPeak = h === peakHour;
-              const heightPercent = Math.max(12, Math.round(val * 100));
-              const localHourStr = isMounted ? formatUTCHourToLocal(h) : `${padZero(h)}:00 UTC`;
-              const activityLabel = isPeak
-                ? "Peak Activity (100%)"
-                : val > 0
-                ? `${Math.round(val * 100)}% Activity`
-                : "Inactive / Low Activity";
-
-              return (
-                <div
-                  key={h}
-                  data-testid={`heatmap-bar-${h}`}
-                  role="img"
-                  title={`${padZero(h)}:00 UTC (${localHourStr} Local) - ${activityLabel}`}
-                  aria-label={`${padZero(h)}:00 UTC (${localHourStr} Local) - ${activityLabel}`}
-                  tabIndex={0}
-                  className={`flex-1 rounded-t-sm transition-all duration-150 hover:-translate-y-0.5 cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 ${getBarColor(
-                    val,
-                    isPeak
-                  )}`}
-                  style={{ height: `${heightPercent}%` }}
-                />
-              );
-            })}
-          </div>
-
-          {/* Hour Labels */}
-          <div className="flex justify-between text-[10px] font-mono text-[var(--text-secondary)] mt-2 px-0.5">
-            <span>00:00</span>
-            <span>06:00</span>
-            <span>12:00</span>
-            <span>18:00</span>
-            <span>23:00</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Explanatory Copy & Timezone Notice */}
-      <div
-        data-testid="optimal-time-explanation"
-        className="rounded-xl glass-card border border-[var(--border-subtle)] p-3 text-xs font-sans text-[var(--text-secondary)] space-y-1.5"
-      >
-        <p className="flex items-start gap-1.5" suppressHydrationWarning>
-          <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-          <span suppressHydrationWarning>
-            Maintainers are most responsive around <strong>{padZero(peakHour)}:00 UTC</strong> (
-            <strong>{localPeakTime}</strong> in your timezone). Recommended submission window is{" "}
-            <strong>{dayWindow}</strong> from <strong>{padZero(primaryStart)}:00 to {padZero(primaryEnd)}:00 UTC</strong>{" "}
-            ({localWindow} local).
-          </span>
+        <p className="text-xs text-[var(--text-tertiary)] mb-4">
+          Maintainers are most responsive during these observed active hours:
         </p>
+
+        {/* Highlighted Primary Active Window */}
+        <div className="p-3.5 bg-[#0D111A] border border-[var(--border-accent)] rounded-md mb-3 shadow-[0_0_16px_var(--purple-glow)]">
+          <div className="tele-label">Primary Active Window</div>
+          <div className="font-mono text-base font-bold text-[var(--purple-bright)] my-1">
+            {dayWindow} • {padZero(startHour)}:00 – {padZero(endHour)}:00 UTC
+          </div>
+          {localRangeStr && (
+            <div className="text-xs text-[var(--text-secondary)] font-mono">
+              Local: {localRangeStr} ({userTz})
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-[var(--border-subtle)]">
+        <span className="pill pill-purple">
+          <Calendar className="h-3 w-3" />
+          <span>{dayWindow}</span>
+        </span>
+        <span className="pill font-mono">Peak: {padZero(data.peak_hour_utc ?? 16)}:00 UTC</span>
+        <span className="pill text-[var(--text-tertiary)] font-mono">Confidence: {Math.round((data.confidence_score ?? 1) * 100)}%</span>
       </div>
     </div>
   );

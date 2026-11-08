@@ -118,11 +118,23 @@
 }
 
 /* Precision DevEx Surfaces & Elevation */
+.card,
 .surface-base {
   background: rgba(17, 24, 39, 0.7);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
   backdrop-filter: blur(8px);
+  transition: border-color 0.15s ease;
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+}
+
+.card-highlight {
+  background: linear-gradient(180deg, rgba(130, 80, 223, 0.08) 0%, rgba(17, 24, 39, 0.75) 100%);
+  border: 1px solid var(--border-accent);
+  box-shadow: 0 0 24px var(--purple-glow);
 }
 
 .surface-elevated {
@@ -144,6 +156,214 @@
 .glass-card:hover {
   border-color: var(--border-hover);
   background: rgba(24, 32, 47, 0.85);
+}
+
+/* Precision Badges & Pills */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  padding: 2.5px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+}
+
+.pill-green {
+  background: rgba(63, 185, 80, 0.08);
+  border-color: rgba(63, 185, 80, 0.3);
+  color: var(--green-bright);
+}
+
+.pill-purple {
+  background: rgba(163, 113, 247, 0.1);
+  border-color: rgba(163, 113, 247, 0.35);
+  color: var(--purple-bright);
+}
+
+.pill-amber {
+  background: rgba(210, 153, 34, 0.1);
+  border-color: rgba(210, 153, 34, 0.35);
+  color: var(--accent-warning);
+}
+
+.pill-blue {
+  background: rgba(88, 166, 255, 0.1);
+  border-color: rgba(88, 166, 255, 0.35);
+  color: var(--accent-info);
+}
+
+/* Tier Badges */
+.tier-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+.tier-S {
+  background: rgba(163, 113, 247, 0.15);
+  border-color: rgba(163, 113, 247, 0.4);
+  color: var(--purple-bright);
+  box-shadow: 0 0 12px rgba(163, 113, 247, 0.2);
+}
+
+.tier-A {
+  background: rgba(63, 185, 80, 0.15);
+  border-color: rgba(63, 185, 80, 0.4);
+  color: var(--green-bright);
+}
+
+.tier-B {
+  background: rgba(210, 153, 34, 0.15);
+  border-color: rgba(210, 153, 34, 0.4);
+  color: var(--accent-warning);
+}
+
+.tier-C {
+  background: rgba(139, 148, 158, 0.15);
+  border-color: rgba(139, 148, 158, 0.4);
+  color: var(--text-secondary);
+}
+
+.tier-D {
+  background: rgba(248, 81, 73, 0.15);
+  border-color: rgba(248, 81, 73, 0.4);
+  color: var(--accent-danger);
+}
+
+/* Hero Badge */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(163, 113, 247, 0.1);
+  border: 1px solid rgba(163, 113, 247, 0.25);
+  color: var(--purple-bright);
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.hero-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--purple-bright);
+  box-shadow: 0 0 8px var(--purple-bright);
+}
+
+/* Benchmark & Proof Tables */
+.bench-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(17, 24, 39, 0.7);
+}
+
+.bench-table th {
+  text-align: left;
+  padding: 10px 14px;
+  background: #0D111A;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bench-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.bench-table tr:last-child td {
+  border-bottom: none;
+}
+
+.bench-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Terminal & Code Blocks */
+.code-terminal {
+  background: #04060A;
+  border: 1px solid var(--border-hover);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #79C0FF;
+}
+
+.copy-btn {
+  background: #21262D;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--border-hover);
+}
+
+/* Sticky Repo Subnav */
+.repo-subnav {
+  background: rgba(9, 13, 22, 0.9);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-hover);
+  border-radius: 6px;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  position: sticky;
+  top: 64px;
+  z-index: 40;
+}
+
+/* Telemetry Labels */
+.tele-label {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
 
 /* Precision Focus Ring */

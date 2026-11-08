@@ -39,6 +39,7 @@ bin/
 .code-review-graph
 
 .playwright-cli
+.baseline-screens/
 .claude
 backend/server
 .agents

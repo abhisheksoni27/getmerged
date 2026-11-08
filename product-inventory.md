@@ -54,7 +54,7 @@ Python 12,532 | TypeScript 9,157 | JavaScript 7,784 | Go 7,128 | C++ 5,891 | Rus
 | `/topics/[topic]` | Repos tagged with a topic: aggregate merge rate, review latency, TopicReposExplorer grid |
 | `/hall-of-fame` | Curated S-tier showcase: highest C-Rank repos, responsive RepoCard grid |
 | `/community-powerhouses` | Repos sustained by 5+ distinct active maintainers: bus-factor resilience, faster review cycles |
-| `/[owner]/[name]` | Full repo scorecard: SSR-fetched insights, related repos, GFI list, PR size sweet spot, acceptance likelihood, optimal review time, 90-day trend, comprehensive JSON-LD |
+| `/[owner]/[name]` | Full repo scorecard (Precision DevEx Workbench 4-Beat flow): Beat 1 Verdict banner (S/A/B/C/D grade box, score, policy pills), Beat 2 Observed 6-Month telemetry with sample sizes, Beat 3 Merged outside PRs proof table (`/api/v1/repos/:id/merged-prs`), Beat 4 Actionable workbench cards (PR sweet spot, review window, embed badge, related repos, community feedback) |
 | `/[owner]/[name]/audit` | Deep maintainer audit: PR drop-off funnel, reviewer burnout signals, first-timer journeys, AI-prioritized fixes, actionable templates, $10 report purchase |
 
 ### Contributor
@@ -130,6 +130,7 @@ Python 12,532 | TypeScript 9,157 | JavaScript 7,784 | Go 7,128 | C++ 5,891 | Rus
 | GET | `/api/v1/repos/:id/trend` | 90-day trend deltas |
 | GET | `/api/v1/repos/:id/history` | Score history |
 | GET | `/api/v1/repos/:id/feedback` | Repo feedback list |
+| GET | `/api/v1/repos/:id/merged-prs` | Recent merged outside pull requests with turnaround velocity for empirical proof table |
 | POST | `/api/v1/repos/queue` | Request on-demand repo indexing |
 | POST | `/api/v1/repos/:id/claim` | Submit maintainer claim |
 | POST | `/api/v1/repos/:id/verify` | Verify claim via GitHub |

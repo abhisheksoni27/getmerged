@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { Metadata } from "next";
 import Link from "next/link";
 import { getAllGuides } from "@/lib/guides";
-import { BookOpen, ArrowRight, ArrowLeft, Clock, ShieldCheck, Sparkles } from "lucide-react";
+import { BookOpen, ArrowRight, ArrowLeft, Clock } from "lucide-react";
 
 export const revalidate = 3600;
 
@@ -27,135 +27,77 @@ export const metadata: Metadata = {
 export default function GuidesHubPage() {
   const guides = getAllGuides();
 
-  const collectionJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "Open Source Contribution Guides",
-    description: "Practical developer guides for finding active open source projects and making successful pull requests.",
-    url: "https://getmerged.abhishekco.de/guides",
-    publisher: {
-      "@type": "Organization",
-      name: "GetMerged",
-      url: "https://getmerged.abhishekco.de",
-    },
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://getmerged.abhishekco.de",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Guides",
-        item: "https://getmerged.abhishekco.de/guides",
-      },
-    ],
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-canvas)] text-[var(--text-primary)] font-sans">
       <Header />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
 
-      <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
-        <Link prefetch={false}
+      <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10 flex-1 w-full font-sans">
+        <Link
+          prefetch={false}
           href="/"
-          title="Return to GetMerged Explorer Home"
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] rounded-xl transition-colors mb-6 font-semibold shadow-xs"
+          className="inline-flex items-center gap-1.5 text-xs font-mono text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors mb-4"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Explorer
         </Link>
 
-        {/* Hero Banner */}
-        <div className="border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-8 sm:p-10 rounded-2xl shadow-sm mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#0D9668]/10 border border-[#0D9668]/30 text-[#0D9668] rounded-xl font-mono text-xs font-bold uppercase tracking-wider mb-4 shadow-xs">
-            <Sparkles className="w-3.5 h-3.5 text-[#0D9668]" />
-            Developer Guides &middot; Actionable Playbooks
+        {/* Hero Section */}
+        <div className="card card-highlight p-6 sm:p-8 mb-8">
+          <div className="hero-badge">
+            <span className="dot" />
+            <span>DEVELOPER KNOWLEDGE &amp; PLAYBOOKS</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight font-display text-[var(--text-primary)] mb-4">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight font-display text-[var(--text-primary)] mb-2.5">
             Open Source Contribution Guides
           </h1>
-          <p className="text-[var(--text-secondary)] text-base leading-relaxed max-w-3xl">
-            Stop guessing whether maintainers will review your work. Our practical guides help you find active repositories looking for help, write clean pull requests, and get your code merged into main.
+          <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed max-w-3xl mb-4">
+            Practical, step-by-step field guides on finding welcoming repositories, crafting pull requests that maintainers merge in hours, and navigating open-source etiquette.
           </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="pill pill-green">✓ Sourced from 150k+ Repos</span>
+            <span className="pill pill-purple">✓ Empirical PR Advice</span>
+            <span className="pill font-mono">{guides.length} Published Playbooks</span>
+          </div>
         </div>
 
         {/* Guides Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
           {guides.map((guide) => (
-            <Link prefetch={false}
+            <Link
+              prefetch={false}
               key={guide.slug}
               href={`/guides/${guide.slug}`}
-              title={`Read guide: ${guide.title}`}
-              className="border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-7 rounded-2xl shadow-sm hover:border-[var(--border-hover)] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+              className="card p-5 hover:border-[var(--border-accent)] transition-all flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#C4910A]/10 border border-[#C4910A]/30 text-[#C4910A] rounded-lg font-mono text-xs font-semibold">
-                    <BookOpen className="w-3.5 h-3.5 text-[#C4910A]" /> {guide.section}
+                  <span className="pill pill-purple">
+                    <BookOpen className="w-3 h-3" />
+                    <span>{guide.section}</span>
                   </span>
-                  <span className="flex items-center gap-1 font-mono text-xs text-[var(--text-tertiary)]">
-                    <Clock className="w-3.5 h-3.5" /> {guide.readingTime}
+                  <span className="pill font-mono">
+                    <Clock className="w-3 h-3 text-[var(--text-tertiary)]" />
+                    <span>{guide.readingTime}</span>
                   </span>
                 </div>
 
-                <div className="mb-4 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] shadow-xs">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`/images/guides/${guide.slug}.jpg`}
-                    alt={guide.title}
-                    width={600}
-                    height={315}
-                    className="w-full h-44 object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-
-                <h2 className="text-xl font-bold font-display tracking-tight text-[var(--text-primary)] mb-2.5 leading-snug">
+                <h2 className="text-base font-bold font-sans tracking-tight text-[var(--text-primary)] group-hover:text-[var(--purple-bright)] transition-colors mb-2 leading-snug">
                   {guide.title}
                 </h2>
-                <p className="text-sm text-[var(--text-secondary)] font-sans leading-relaxed mb-6 line-clamp-2">
+                <p className="text-xs text-[var(--text-secondary)] font-sans leading-relaxed mb-4 line-clamp-3">
                   {guide.description}
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-[var(--border-subtle)] flex items-center justify-between">
-                <span className="font-mono text-xs text-[var(--text-tertiary)]">
-                  By {guide.author} &middot; {guide.lastUpdated}
+              <div className="pt-3 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs font-mono text-[var(--purple-bright)]">
+                <span className="text-[11px] text-[var(--text-tertiary)]">
+                  {guide.lastUpdated}
                 </span>
-                <span className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-[var(--color-primary)]">
-                  Read Guide <ArrowRight className="w-3.5 h-3.5" />
+                <span className="inline-flex items-center gap-1 font-semibold group-hover:translate-x-0.5 transition-transform">
+                  Read Playbook <ArrowRight className="w-3 h-3" />
                 </span>
               </div>
             </Link>
           ))}
-        </div>
-
-        {/* C-Rank Extractable Definition Box */}
-        <div className="border border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-[var(--text-primary)] p-6 sm:p-8 rounded-2xl shadow-sm">
-          <div className="flex items-center gap-2 text-[#0D9668] font-mono text-xs font-bold uppercase tracking-wider mb-2">
-            <ShieldCheck className="w-4 h-4" />
-            Empirical C-Rank Benchmark Standard
-          </div>
-          <h3 className="text-xl font-bold font-display text-[var(--text-primary)] mb-2">
-            How OpenDoor Benchmarks Repository Openness
-          </h3>
-          <p className="text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed">
-            Every repository in these guides is continuously audited across PR turnaround latency, first-time contributor conversion rates, maintainer bus factor, and external PR merge velocity.
-          </p>
         </div>
       </main>
 

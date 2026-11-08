@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Radar } from "lucide-react";
 import { useStackPicker } from "./components/useStackPicker";
 import { useStackAnalysis } from "./components/useStackAnalysis";
 import { RepoPicker } from "./components/RepoPicker";
@@ -17,20 +16,22 @@ export default function StackClient() {
   return (
     <div className="space-y-10">
       {/* Hero Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-4">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
-          <Radar className="h-3.5 w-3.5 animate-pulse text-emerald-400" />
-          <span>In-Stack Opportunity & Dependency Health Radar</span>
+      <div className="card card-highlight p-6 sm:p-8">
+        <div className="hero-badge">
+          <span className="dot" />
+          <span>PERSONALIZED CONTRIBUTOR MATCHING</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-bold font-space tracking-tight text-[var(--text-primary)]">
-          Stalk Your Tech Stack.
-          <span className="block text-emerald-400 mt-1">Find Openings in What You Run.</span>
+        <h1 className="text-3xl sm:text-4xl font-bold font-display tracking-tight text-[var(--text-primary)] mb-2">
+          Scan Your Tech Stack
         </h1>
-        <p className="text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
-          Why scavenge 300 million random GitHub repos? GetMerged scans the packages in your
-          codebase to reveal fragile maintainer bottlenecks and open beginner issues in the exact
-          tools you use every day.
+        <p className="text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl leading-relaxed mb-4">
+          Why scavenge millions of random repos? GetMerged inspects your project dependencies to reveal fragile maintainer bottlenecks and open beginner issues in the exact packages you use every day.
         </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="pill pill-green">✓ Supports package.json, go.mod, Cargo.toml</span>
+          <span className="pill pill-purple">✓ Instant Dependency Scan</span>
+          <span className="pill">100% Client-Side Private</span>
+        </div>
       </div>
 
       {/* Input Selection Box */}

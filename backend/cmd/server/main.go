@@ -452,6 +452,7 @@ func main() {
 		api.GET("/repos/:id/fit-radar", handler.GetFitRadarHandler(repoStore, profileRepo))
 		api.GET("/fit-radar", handler.GetFitRadarHandler(repoStore, profileRepo))
 		api.GET("/repos/:id/related", handler.GetRelatedReposHandler(repoStore))
+		api.GET("/repos/:id/merged-prs", handler.GetRepoMergedPRs(database.DB, repoStore))
 		api.GET("/repos/:id/good-first-issues", handler.GetRepoGoodFirstIssues(gfiRepo, repoStore))
 		api.GET("/issues/good-first", handler.ListGoodFirstIssues(gfiRepo, repoBoostRepo))
 		api.GET("/history/:id", handler.GetRepoHistory(repoStore))

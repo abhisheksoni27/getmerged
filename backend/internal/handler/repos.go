@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"net/url"
@@ -819,5 +820,94 @@ func PublicListDisputesHandler(db *sql.DB) gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, gin.H{"disputes": items})
+	}
+}
+
+// GetRepoMergedPRs handles GET /api/v1/repos/:id/merged-prs or /api/v1/repos/:owner/:name/merged-prs
+func GetRepoMergedPRs(db *sql.DB, repoStore repository.RepoRepository) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := c.Param("id")
+		owner := c.Param("owner")
+		name := c.Param("name")
+		if owner != "" && name != "" {
+			id = owner + "/" + name
+		}
+		if unescaped, err := url.QueryUnescape(id); err == nil && unescaped != "" {
+			id = unescaped
+		}
+		repo, err := repoStore.FindByIDOrName(c.Request.Context(), id)
+		if err == sql.ErrNoRows || repo == nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "repository not found"})
+			return
+		}
+
+		query := `
+			SELECT 
+				m.pr_number, 
+				COALESCE(o.actor_login, m.actor_login) as author_login, 
+				m.actor_login as merger_login, 
+				COALESCE(TIMESTAMPDIFF(MINUTE, o.event_at, m.event_at), 0) as turnaround_mins,
+				m.event_at as merged_at
+			FROM repo_pr_events m 
+			LEFT JOIN repo_pr_events o ON m.repository_id = o.repository_id AND m.pr_number = o.pr_number AND o.action = 'opened' 
+			WHERE m.repository_id = ? AND m.action = 'merged' 
+			ORDER BY m.event_at DESC LIMIT 10
+		`
+		rows, err := db.QueryContext(c.Request.Context(), query, repo.ID)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"repository_id": repo.ID,
+				"full_name":     repo.FullName,
+				"merged_prs":    []any{},
+			})
+			return
+		}
+		defer rows.Close()
+
+		type MergedPRItem struct {
+			PRNumber       int    `json:"pr_number"`
+			AuthorLogin    string `json:"author_login"`
+			MergerLogin    string `json:"merger_login"`
+			TurnaroundMins int    `json:"turnaround_minutes"`
+			TurnaroundStr  string `json:"turnaround_str"`
+			MergedAt       string `json:"merged_at"`
+			HTMLURL        string `json:"html_url"`
+		}
+
+		var items []MergedPRItem
+		for rows.Next() {
+			var it MergedPRItem
+			var mergedAt time.Time
+			if err := rows.Scan(&it.PRNumber, &it.AuthorLogin, &it.MergerLogin, &it.TurnaroundMins, &mergedAt); err == nil {
+				it.MergedAt = mergedAt.Format(time.RFC3339)
+				it.HTMLURL = fmt.Sprintf("https://github.com/%s/pull/%d", repo.FullName, it.PRNumber)
+				if it.TurnaroundMins > 0 {
+					if it.TurnaroundMins < 60 {
+						it.TurnaroundStr = fmt.Sprintf("%dm to merge", it.TurnaroundMins)
+					} else {
+						h := it.TurnaroundMins / 60
+						m := it.TurnaroundMins % 60
+						if m > 0 {
+							it.TurnaroundStr = fmt.Sprintf("%dh %dm to merge", h, m)
+						} else {
+							it.TurnaroundStr = fmt.Sprintf("%dh to merge", h)
+						}
+					}
+				} else {
+					it.TurnaroundStr = "Rapid merge"
+				}
+				items = append(items, it)
+			}
+		}
+
+		if items == nil {
+			items = []MergedPRItem{}
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"repository_id": repo.ID,
+			"full_name":     repo.FullName,
+			"merged_prs":    items,
+		})
 	}
 }

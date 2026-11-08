@@ -54,7 +54,7 @@ export function GlobalSearch() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-neutral-900/40 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-[#04060A]/80 backdrop-blur-md"
           onClick={closeSearch}
           role="dialog"
           aria-modal="true"
@@ -62,24 +62,24 @@ export function GlobalSearch() {
         >
           <motion.div
             ref={modalRef}
-            initial={{ opacity: 0, scale: 0.96, y: -8 }}
+            initial={{ opacity: 0, scale: 0.98, y: -6 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: -8 }}
-            transition={{ duration: 0.18, ease: "easeOut" }}
-            className="w-full max-w-2xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[0_24px_60px_rgba(0,0,0,0.12)] overflow-hidden"
+            exit={{ opacity: 0, scale: 0.98, y: -6 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="w-full max-w-2xl rounded-lg border border-[var(--border-hover)] bg-[#0D111A] shadow-[0_24px_60px_rgba(0,0,0,0.7)] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={handleKeyDown}
           >
             {/* Search Input Bar */}
-            <div className="flex items-center px-4 py-3.5 border-b border-[var(--border-subtle)] gap-3">
-              <Search className="h-5 w-5 text-[var(--text-tertiary)] shrink-0" />
+            <div className="flex items-center px-4 py-3 border-b border-[var(--border-subtle)] gap-3 bg-[#0D111A]">
+              <Search className="h-4 w-4 text-[var(--purple-bright)] shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={`Search or paste GitHub URL (e.g. ${FAMOUS_REPOS[placeholderIndex]})`}
-                className="w-full bg-transparent text-sm sm:text-base text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none font-sans"
+                className="w-full bg-transparent text-sm text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none font-mono"
                 aria-autocomplete="list"
                 aria-controls="search-results-list"
                 aria-activedescendant={
@@ -122,7 +122,7 @@ export function GlobalSearch() {
             />
 
             {/* Modal Footer Controls */}
-            <div className="flex items-center justify-between px-4 py-2.5 border-t border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-xs font-mono text-[var(--text-secondary)]">
+            <div className="flex items-center justify-between px-4 py-2 border-t border-[var(--border-subtle)] bg-[#04060A] text-[11px] font-mono text-[var(--text-tertiary)]">
               <div className="flex items-center gap-3">
                 <span className="flex items-center gap-1">
                   <ArrowUpDown className="h-3 w-3" /> Navigate

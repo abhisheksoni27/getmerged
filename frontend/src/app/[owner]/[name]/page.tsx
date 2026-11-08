@@ -1,7 +1,7 @@
 import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Repo, AIInsights, GoodFirstIssueItem, PRSizeSweetSpotData, OptimalTimeResult } from "@/types/opendoor";
+import { Repo, AIInsights, GoodFirstIssueItem, PRSizeSweetSpotData, OptimalTimeResult, MergedPRItem } from "@/types/opendoor";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { ClientRepoDetail } from "@/components/ClientRepoDetail";
@@ -61,6 +61,24 @@ async function getRelatedRepos(targetIdOrName: string | number, revalidate = 864
     return data?.repos || [];
   } catch (e) {
     console.error("SSR fetch failed for related repos:", targetIdOrName, e);
+  }
+  return [];
+}
+
+async function getMergedPRs(targetIdOrName: string | number, revalidate = 3600): Promise<MergedPRItem[]> {
+  try {
+    const target = String(targetIdOrName);
+    const res = await fetch(
+      `${API_BASE_URL}/api/v1/repos/${encodeURIComponent(target)}/merged-prs`,
+      {
+        next: { revalidate },
+      }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data?.merged_prs || [];
+  } catch (e) {
+    console.error("SSR fetch failed for merged PRs:", targetIdOrName, e);
   }
   return [];
 }
@@ -329,9 +347,10 @@ export default async function RepoDetailPage({ params }: PageProps) {
   const optimalTimePromise = getOptimalTime(fullName, dynamicTtl);
   const trendPromise = getRepoTrend(fullName, dynamicTtl);
   const claimStatusPromise = getClaimStatus(fullName, 3600);
+  const mergedPRsPromise = getMergedPRs(targetInsightKey, dynamicTtl);
 
   // Parallel Server Fetch
-  const [insights, relatedRepos, gfiList, sweetSpot, likelihood, optimalTime, trend, claimStatus] = await Promise.all([
+  const [insights, relatedRepos, gfiList, sweetSpot, likelihood, optimalTime, trend, claimStatus, mergedPRs] = await Promise.all([
     insightsPromise,
     relatedReposPromise,
     gfiListPromise,
@@ -340,6 +359,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
     optimalTimePromise,
     trendPromise,
     claimStatusPromise,
+    mergedPRsPromise,
   ]);
 
   const rawLang = repo?.language?.trim();
@@ -466,6 +486,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
         initialOptimalTime={optimalTime}
         initialTrend={trend}
         initialClaimStatus={claimStatus}
+        initialMergedPRs={mergedPRs}
       />
 
       <Footer />

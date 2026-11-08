@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Check, Copy } from "lucide-react";
+import { Check, Shield, Copy } from "lucide-react";
 import posthog from "posthog-js";
 
 const SITE_URL = "https://getmerged.abhishekco.de";
@@ -27,7 +27,6 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
 
   const snippet = activeTab === "markdown" ? markdownSnippet : htmlSnippet;
 
-  // Hide the whole block when the badge endpoint is unavailable (404/network error)
   useEffect(() => {
     if (!owner || !name) return;
     let cancelled = false;
@@ -45,140 +44,80 @@ export function RepoBadgeGenerator({ fullName }: RepoBadgeGeneratorProps) {
 
   if (!owner || !name || !badgeAvailable) return null;
 
-  const onCopied = (eventName: string, props?: Record<string, string>) => {
-    try {
-      posthog.capture(eventName, props);
-    } catch {
-      // analytics must never break copying
-    }
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const legacyCopy = (text: string) => {
-    try {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.setAttribute("readonly", "");
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-    } catch {
-      // best-effort fallback; nothing else to do
-    }
-  };
-
-  const copyText = (text: string, eventName: string, props?: Record<string, string>) => {
-    try {
-      if (navigator.clipboard?.writeText) {
-        navigator.clipboard
-          .writeText(text)
-          .then(() => onCopied(eventName, props))
-          .catch(() => {
-            legacyCopy(text);
-            onCopied(eventName, props);
-          });
-      } else {
-        legacyCopy(text);
-        onCopied(eventName, props);
-      }
-    } catch {
-      legacyCopy(text);
-      onCopied(eventName, props);
-    }
-  };
-
   const handleCopy = () => {
-    copyText(snippet, "badge_embed_copied", { repo_full_name: fullName, format: activeTab });
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(snippet);
+      setCopied(true);
+      posthog.capture("badge_embed_copied", { repo_full_name: fullName, format: activeTab });
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
-    <div className="rounded-3xl border border-[var(--border-subtle)] glass-panel p-6 sm:p-8 shadow-xs mb-8">
-      <div className="mb-4">
-        <h3 className="font-space text-lg font-bold text-[var(--text-primary)]">
-          Embed C-Rank Badge
-        </h3>
-        <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans mt-0.5">
-          Show contributors that your repository actively reviews and merges external pull requests.
-        </p>
+    <div className="card card-highlight mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+        <div className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-1.5">
+          <Shield className="h-4 w-4 text-[var(--purple-bright)]" />
+          <span>Embed Live C-Rank™ Badge</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => setActiveTab("markdown")}
+            className={`px-2.5 py-1 text-[11px] font-mono rounded cursor-pointer transition-colors ${
+              activeTab === "markdown"
+                ? "bg-[rgba(163,113,247,0.2)] text-[var(--purple-bright)] font-semibold border border-[var(--border-accent)]"
+                : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+            }`}
+          >
+            Markdown
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("html")}
+            className={`px-2.5 py-1 text-[11px] font-mono rounded cursor-pointer transition-colors ${
+              activeTab === "html"
+                ? "bg-[rgba(163,113,247,0.2)] text-[var(--purple-bright)] font-semibold border border-[var(--border-accent)]"
+                : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+            }`}
+          >
+            HTML
+          </button>
+        </div>
       </div>
 
-      {/* Live badge preview */}
-      <div className="flex items-center min-h-10 p-4 glass-card border border-[var(--border-subtle)] rounded-2xl shadow-2xs mb-5">
+      <p className="text-xs text-[var(--text-tertiary)] mb-3">
+        Showcase your verified welcoming reputation directly on your GitHub repository README:
+      </p>
+
+      {/* Live Badge Preview */}
+      <div className="mb-3 p-3 bg-[#0D111A] border border-[var(--border-subtle)] rounded-md inline-flex items-center gap-3">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={badgeSvgUrl}
           alt={`GetMerged C-Rank badge for ${fullName}`}
-          width={280}
-          height={28}
-          className="h-7 w-auto"
+          className="h-6"
+          loading="lazy"
         />
+        <span className="text-[11px] font-mono text-[var(--text-tertiary)]">Live SVG (auto-updates on rescore)</span>
       </div>
 
-      {/* Snippet format tabs */}
-      <div className="flex items-center gap-2 mb-3">
-        {(["markdown", "html"] as const).map((tab) => (
-          <button
-            key={tab}
-            onClick={() => {
-              setActiveTab(tab);
-              setCopied(false);
-            }}
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-              activeTab === tab
-                ? "glass-card text-[var(--text-primary)] shadow-xs"
-                : "glass-card text-[var(--text-secondary)] hover:bg-zinc-200"
-            }`}
-          >
-            {tab === "markdown" ? "Markdown" : "HTML"}
-          </button>
-        ))}
-      </div>
-
-      {/* Snippet + copy action */}
-      <div className="p-4 glass-card border border-[var(--border-subtle)] rounded-2xl shadow-2xs">
-        <pre className="text-xs font-mono text-[var(--text-secondary)] whitespace-pre-wrap break-all mb-4 select-all">{snippet}</pre>
-        <div className="flex flex-wrap items-center gap-3">
-          <button
-            onClick={handleCopy}
-            title={`Copy ${activeTab === "markdown" ? "markdown" : "HTML"} badge embed code`}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl glass-card hover:bg-zinc-800 active:scale-95 text-[var(--text-primary)] font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-xs inline-flex items-center justify-center gap-2"
-          >
-            {copied ? (
-              <span className="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
-                <Check className="h-3.5 w-3.5" /> Copied!
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1.5">
-                <Copy className="h-3.5 w-3.5" /> Copy {activeTab === "markdown" ? "Markdown" : "HTML"}
-              </span>
-            )}
-          </button>
-
-          <button
-            onClick={() => {
-              const prompt = `Add the GetMerged C-Rank™ maintainer badge to the top of our repository README.md (right below the main title/hero section):
-
-\`\`\`markdown
-${markdownSnippet}
-\`\`\`
-
-Why:
-- Shows contributors that our repo actively reviews and merges external pull requests.
-- Displays our live C-Rank scorecard and response time metrics directly from ${SITE_URL}/${fullName}.`;
-              copyText(prompt, "badge_prompt_copied", { repo_full_name: fullName });
-            }}
-            title="Copy AI prompt to add GetMerged badge to your repo README via Cursor, Copilot, or Claude"
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl glass-panel hover:glass-card active:scale-95 text-[var(--text-primary)] border border-[var(--border-subtle)] font-semibold text-xs shrink-0 transition-all cursor-pointer shadow-2xs inline-flex items-center justify-center gap-2"
-          >
-            <span className="inline-flex items-center gap-1.5">
-              <Copy className="h-3.5 w-3.5" /> Copy AI Prompt (for LLMs)
-            </span>
-          </button>
-        </div>
+      {/* Code Terminal */}
+      <div className="code-terminal">
+        <code className="truncate mr-3 select-all">{snippet}</code>
+        <button type="button" onClick={handleCopy} className="copy-btn shrink-0 flex items-center gap-1">
+          {copied ? (
+            <>
+              <Check className="h-3 w-3 text-[var(--green-bright)]" />
+              <span>Copied!</span>
+            </>
+          ) : (
+            <>
+              <Copy className="h-3 w-3" />
+              <span>Copy</span>
+            </>
+          )}
+        </button>
       </div>
     </div>
   );
