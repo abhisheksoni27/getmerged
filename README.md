@@ -13,8 +13,9 @@ Open-source projects ranked by **review speed**, **outside-PR merge rate**, and 
 [![Live Site](https://img.shields.io/badge/site-live-10b981?style=flat-square)](https://getmerged.abhishekco.de)
 [![GitHub Stars](https://img.shields.io/github/stars/abhisheksoni27/getmerged?style=flat-square&color=f59e0b)](https://github.com/abhisheksoni27/getmerged/stargazers)
 
-<!-- Hero screenshot or demo GIF -->
-<img width="1200" alt="GetMerged homepage preview" src="frontend/public/images/guides/header.png" />
+<p align="center">
+  <img width="1000" alt="GetMerged Homepage" src="docs/assets/hero-home.png" />
+</p>
 
 </div>
 
@@ -46,34 +47,24 @@ GetMerged scores repos on what maintainers actually do, using public GitHub acti
 | **PR preflight Action** | Forecasts merge odds on your PR in CI (see below) |
 | **Weekly digest / alerts** | Fresh issues for your language, no account needed |
 
-## How the score works
+### Product Previews
 
-C-Rank is computed from public GitHub data via the GraphQL API and recalculated daily. Bot and org-member PRs are excluded so the numbers reflect what an outside contributor experiences.
+#### 1. Repository Scorecard & Review Metrics
+Detailed 90-day review turnaround, outside PR merge odds, and optimal submission timing.
 
-| Signal | What it measures | Weight |
-|---|---|---|
-| **External PR merge rate** | Share of non-core PRs that get merged | 22.5% |
-| **Maintainer breadth** | Reviews spread across multiple active maintainers (not a solo bottleneck) | 15.0% |
-| **Review response time** | Median hours until a maintainer first replies | 12.5% |
-| **Activity recency** | How recently code, issues, or reviews actually moved | 12.5% |
-| **Time to merge** | Median days from PR submission to final merge | 10.0% |
-| **First-timer success** | Share of first-time contributors whose PRs are merged | 10.0% |
-| **Repeat contributor rate** | Share of outside contributors who come back for PR #2 | 10.0% |
-| **Review rounds** | How many back-and-forth review cycles before a verdict | 5.0% |
-| **Issue responsiveness** | Speed and consistency of triage on new issues | 2.5% |
+<img width="1000" alt="GetMerged Repository Scorecard" src="docs/assets/repo-scorecard.png" />
 
-Grades:
-- **S (Elite)**: 70–100 (Multi-maintainer teams with rapid turnaround and high acceptance)
-- **A (Responsive)**: 55–69 (Solid review turnaround and consistent merge velocity)
-- **B (Average)**: 40–54 (Active, but reviews may take days or backlog is growing)
-- **C / D (Slow / Stale)**: Below 40, or repos inactive for 90+ days (automatically capped at Tier D)
+#### 2. Active Good First Issues
+Curated beginner-friendly issues from responsive projects, filtered by language with PR-in-progress indicators.
 
-**Known limits** (we'd rather tell you than have you find out):
-- **Small samples are noisy**: Repos with fewer than 10 scored PRs are labeled with a low-sample warning, pulled toward a neutral 50-score baseline via Bayesian weighting, and capped at Tier B so 1 lucky merge can't fake an S-tier.
-- **Merge rate can reward trivial PRs**: A repo merging 100 single-character typo fixes can look great on paper. We weigh maintainer breadth (15%) and review rounds (5%) so rubber-stamp projects don't crowd out repos doing real, substantive reviews.
-- **Single-maintainer bottleneck (Bus Factor)**: If a single maintainer does 100% of the reviewing, the repo is capped at Tier A even if its raw score is 90+. Tier S is strictly reserved for projects where reviews continue when one person goes offline.
+<img width="1000" alt="Good First Issues Directory" src="docs/assets/good-first-issues.png" />
 
-Full methodology: [getmerged.abhishekco.de/how-c-rank-works](https://getmerged.abhishekco.de/how-c-rank-works)
+#### 3. Side-by-Side Repository Comparison
+Compare maintainer responsiveness, review turnaround, and acceptance velocity between two projects.
+
+<img width="1000" alt="Compare Repositories" src="docs/assets/compare-repos.png" />
+
+---
 
 ## Add the badge to your repo
 
@@ -211,6 +202,6 @@ Distributed under the [MIT License](LICENSE). The backend, frontend, scoring eng
 
 ## Author
 
-Built by [Abhishek Soni](https://github.com/abhisheksoni27) · [X / Twitter (@abhisheksoni27)](https://x.com/abhisheksoni27) · [Website](https://abhishekco.de)
+Built by [Abhishek Soni](https://github.com/abhisheksoni27) · [LinkedIn](https://www.linkedin.com/in/abhisheksonicode/) · [X / Twitter (@abhisheksoni27)](https://x.com/abhisheksoni27) · [Website](https://abhishekco.de)
 
 If GetMerged helped you land a PR, a star helps others find it.
