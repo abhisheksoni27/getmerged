@@ -119,14 +119,6 @@ export function FirstMergeTrackedPRStep({
             Connect GitHub to track
           </a>
         )}
-        {upgradeRequired && (
-          <Link prefetch={false}
-            href="/pricing"
-            className="mt-2 inline-flex items-center gap-1 rounded-md bg-amber-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-amber-700"
-          >
-            Upgrade for unlimited tracked PRs
-          </Link>
-        )}
 
         {trackedStatus.length > 0 && (
           <ul className="mt-3 space-y-2">

@@ -153,11 +153,6 @@ export function Footer() {
             </h3>
             <ul className="space-y-2.5 font-sans text-xs text-zinc-500">
               <li>
-                <Link prefetch={false} href="/pricing" title="Pro Contributor, Recruiter Pass & Maintainer Plans" className="text-zinc-900 font-medium hover:text-blue-600 transition-colors">
-                  Pricing & Plans
-                </Link>
-              </li>
-              <li>
                 <Link prefetch={false} href="/dashboard" title="Contributor PR Tracker, Quests & Reputation" className="hover:text-zinc-900 transition-colors">
                   Contributor Dashboard
                 </Link>
@@ -208,7 +203,6 @@ export function Footer() {
             <span className="font-medium text-zinc-700">GetMerged - Find welcoming open source projects that actually merge PRs</span>
           </div>
           <div className="flex items-center gap-4 text-zinc-500">
-            <Link prefetch={false} href="/pricing" title="Pricing & Plans" className="hover:text-zinc-900 transition-colors">Pricing</Link>
             <Link prefetch={false} href="/privacy" title="Privacy Policy" className="hover:text-zinc-900 transition-colors">Privacy</Link>
             <Link prefetch={false} href="/terms" title="Terms of Service" className="hover:text-zinc-900 transition-colors">Terms</Link>
             <a href="https://github.com" target="_blank" rel="noopener noreferrer" title="GitHub" className="hover:text-zinc-900 transition-colors">GitHub API</a>

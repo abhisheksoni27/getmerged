@@ -179,17 +179,6 @@ export function NotificationBell({ user }: { user: User | null }) {
             </div>
           )}
 
-          {upgradeAvailable && (
-            <Link prefetch={false}
-              href="/pricing"
-              onClick={() => setOpen(false)}
-              className="flex items-center gap-2 bg-amber-50 border-y border-amber-200 px-4 py-2 text-[11px] font-medium text-[#C4910A] hover:bg-amber-100"
-            >
-              <Zap className="h-3.5 w-3.5" />
-              Upgrade for instant notifications
-            </Link>
-          )}
-
           <div className="max-h-[420px] overflow-y-auto">
             {error ? (
               <div className="flex flex-col items-center gap-2 px-4 py-10 text-center">

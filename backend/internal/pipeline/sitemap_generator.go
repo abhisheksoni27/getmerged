@@ -224,7 +224,6 @@ func GenerateStaticSitemaps(db *sqlx.DB, publicDir string) error {
 		{Loc: fmt.Sprintf("%s/repos", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "1.0"},
 		{Loc: fmt.Sprintf("%s/rankings", baseUrl), LastMod: today, ChangeFreq: "daily", Priority: "0.9"},
 		{Loc: fmt.Sprintf("%s/compare", baseUrl), LastMod: today, ChangeFreq: "monthly", Priority: "0.8"},
-		{Loc: fmt.Sprintf("%s/pricing", baseUrl), LastMod: today, ChangeFreq: "monthly", Priority: "0.9"},
 		{Loc: fmt.Sprintf("%s/maintainers", baseUrl), LastMod: today, ChangeFreq: "monthly", Priority: "0.8"},
 		{Loc: fmt.Sprintf("%s/community-powerhouses", baseUrl), LastMod: today, ChangeFreq: "weekly", Priority: "0.8"},
 		{Loc: fmt.Sprintf("%s/how-c-rank-works", baseUrl), LastMod: today, ChangeFreq: "weekly", Priority: "0.9"},

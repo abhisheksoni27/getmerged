@@ -27,12 +27,6 @@ export function TalentEmptyState() {
           <UserCheck className="h-4 w-4" />
           <span>Opt In to Talent Pool (For Devs)</span>
         </Link>
-        <Link prefetch={false}
-          href="/pricing?tab=recruiter"
-          className="px-6 py-2.5 rounded-xl glass-panel border border-[var(--border-subtle)] hover:bg-white/[0.08] text-[var(--text-primary)] font-mono text-xs font-bold uppercase tracking-wider transition-all"
-        >
-          <span>Set Up Founder Talent Alert ($49/mo)</span>
-        </Link>
       </div>
     </div>
   );
