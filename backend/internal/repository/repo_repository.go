@@ -723,7 +723,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON r.id = s.repository_id
-		WHERE r.id != ? AND r.language = ?
+		WHERE r.id != ? AND r.language = ? AND s.c_rank_tier IN ('S', 'A', 'B') AND s.staleness_flag = 0
 		ORDER BY ABS(COALESCE(s.external_pr_merge_rate, 0) - ?) ASC,
 		         ABS(COALESCE(s.c_rank_score, 0) - ?) ASC,
 		         r.stars DESC

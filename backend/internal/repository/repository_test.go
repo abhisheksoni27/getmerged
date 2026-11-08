@@ -292,6 +292,10 @@ func TestRepoRepository_GetRelatedRepos(t *testing.T) {
 	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('3', 'facebook/react', 'facebook', 'react', 'JavaScript', 220000, ?)`, now)
 	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, external_pr_merge_rate) VALUES ('3', '2026-07-26', 'S', 90.0, 75.0)`)
 
+	// Insert a Tier D repo in Go to verify it gets excluded
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES ('4', 'stale/stale-go', 'stale', 'stale-go', 'Go', 10000, ?)`, now)
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score, external_pr_merge_rate) VALUES ('4', '2026-07-26', 'D', 15.0, 5.0)`)
+
 	target, err := repo.FindByIDOrName(ctx, "gin-gonic/gin")
 	if err != nil {
 		t.Fatalf("failed to find target repo: %v", err)
@@ -309,5 +313,12 @@ func TestRepoRepository_GetRelatedRepos(t *testing.T) {
 	// First match should be gofiber/fiber (same language Go)
 	if related[0].FullName != "gofiber/fiber" {
 		t.Fatalf("expected first related repo to be 'gofiber/fiber', got %s", related[0].FullName)
+	}
+
+	// Verify Tier D repo was filtered out
+	for _, r := range related {
+		if r.CRankTier != "S" && r.CRankTier != "A" && r.CRankTier != "B" {
+			t.Fatalf("expected only welcoming tiers S/A/B, got repo %s with tier %s", r.FullName, r.CRankTier)
+		}
 	}
 }
