@@ -110,18 +110,32 @@ export async function generateRepoBadgeSvg(owner: string, name: string) {
   let mergeRate = "";
 
   try {
-    const res = await fetch(`${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(fullName)}`);
-    if (res.ok) {
-      const data = await res.json();
-      const rawList = data.data || data.repos;
-      if (Array.isArray(rawList) && rawList.length > 0) {
-        const repo = rawList.find((r: { full_name: string }) => r.full_name.toLowerCase() === fullName.toLowerCase()) || rawList[0];
-        if (repo) {
-          tier = repo.c_rank_tier || tier;
-          if (repo.external_pr_merge_rate !== undefined) {
-            mergeRate = `${Math.round(repo.external_pr_merge_rate)}% Merge`;
-          }
+    // 1. Direct path lookup
+    let repo: { c_rank_tier?: string; external_pr_merge_rate?: number; full_name?: string } | null = null;
+    const directRes = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}`);
+    if (directRes.ok) {
+      const data = await directRes.json();
+      if (data?.c_rank_tier) {
+        repo = data;
+      }
+    }
+
+    // 2. Query param fallback lookup
+    if (!repo) {
+      const res = await fetch(`${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(fullName)}`);
+      if (res.ok) {
+        const data = await res.json();
+        const rawList = data.data || data.repos;
+        if (Array.isArray(rawList) && rawList.length > 0) {
+          repo = rawList.find((r: { full_name: string }) => r.full_name.toLowerCase() === fullName.toLowerCase()) || rawList[0];
         }
+      }
+    }
+
+    if (repo) {
+      tier = repo.c_rank_tier || tier;
+      if (repo.external_pr_merge_rate !== undefined && repo.external_pr_merge_rate !== null) {
+        mergeRate = `${Math.round(repo.external_pr_merge_rate)}% Merge`;
       }
     }
   } catch {}

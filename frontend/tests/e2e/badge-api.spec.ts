@@ -23,6 +23,22 @@ test.describe("Badge API Endpoints (GitHub Camo & Live Proxy)", () => {
     expect(body).toContain("#10b981");
   });
 
+  test("GET /api/badge/tembo/voxl returns SVG matching the repo's authoritative tier and merge rate", async ({ request }) => {
+    const res = await request.get("/api/badge/tembo/voxl", {
+      headers: {
+        "User-Agent": "GitHub-Camo",
+      },
+    });
+
+    expect(res.status()).toBe(200);
+    const body = await res.text();
+    expect(body).toContain("<svg");
+    expect(body).toContain("</svg>");
+    expect(body).toContain("GetMerged");
+    expect(body).toContain("Tier S");
+    expect(body).toContain("91% Merge");
+  });
+
   test("GET /api/badge/u/abhisheksoni27 serves valid user karma SVG badge", async ({ request }) => {
     const res = await request.get("/api/badge/u/abhisheksoni27", {
       headers: {
