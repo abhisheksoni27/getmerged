@@ -144,7 +144,7 @@ export async function generateRepoBadgeSvg(owner: string, name: string) {
   const tierThemes: Record<string, { color: string; verdict: string }> = {
     S: {
       color: "#8a63d2",
-      verdict: "Tier S · ★ Welcoming",
+      verdict: "Tier S · ★ Super Welcoming",
     },
     A: {
       color: "#3fb950",
@@ -152,11 +152,11 @@ export async function generateRepoBadgeSvg(owner: string, name: string) {
     },
     B: {
       color: "#d29922",
-      verdict: "Tier B · ★ Welcoming",
+      verdict: "Tier B · Active",
     },
     C: {
       color: "#f85149",
-      verdict: "Tier C · ★ Selective",
+      verdict: "Tier C · Selective",
     },
     D: {
       color: "#6e7681",
