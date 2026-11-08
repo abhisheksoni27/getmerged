@@ -25,8 +25,8 @@ interface TopicReposExplorerProps {
 const chipClass = (active: boolean): string =>
   `inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border border-[var(--border-subtle)] cursor-pointer ${
     active
-      ? "bg-amber-600 text-white shadow-sm"
-      : "glass-panel text-[var(--text-secondary)] hover:bg-slate-800 hover:shadow-sm"
+      ? "bg-zinc-900 text-white shadow-xs"
+      : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)] hover:shadow-2xs"
   }`;
 
 export function TopicReposExplorer({ topic, repos }: TopicReposExplorerProps) {
