@@ -286,7 +286,7 @@ export function useRepoDetail({
     { id: "scorecards", label: "Scorecards", icon: Activity },
     { id: "trends", label: "Trends & Forecast", icon: BarChart3 },
     { id: "good-first-issues", label: "Good First Issues", icon: ShieldCheck },
-    { id: "community-feedback", label: "Community Vibe", icon: Users },
+    { id: "community-feedback", label: "Contributor Reviews", icon: Users },
     ...(relatedRepos.length > 0 ? [{ id: "alternatives", label: "Similar Repos", icon: Scale }] : []),
     { id: "faqs", label: "FAQs & Guide", icon: FileCode2 },
   ], [insights, relatedRepos.length]);
