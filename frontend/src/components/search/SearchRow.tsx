@@ -47,36 +47,28 @@ export function SearchRow(props: SearchRowProps) {
       href={`/${repo.full_name}`}
       onClick={() => onSelect(repo)}
       onMouseEnter={() => onHover(index)}
-      className={`flex items-center justify-between px-4 py-3 rounded-xl transition-all ${
-        isSelected ? "bg-[var(--bg-elevated)] text-[var(--text-primary)] border-l-2 border-[var(--color-primary)]" : "hover:bg-[var(--bg-elevated)]/60 text-[var(--text-secondary)]"
+      className={`flex items-center justify-between px-4 py-2.5 rounded transition-all ${
+        isSelected
+          ? "bg-[rgba(163,113,247,0.12)] text-[var(--text-primary)] border-l-2 border-[var(--purple-bright)]"
+          : "hover:bg-white/5 text-[var(--text-secondary)]"
       }`}
     >
       <div className="flex flex-col min-w-0 pr-3">
-        <span className="text-sm font-semibold font-mono text-[var(--text-primary)] truncate">{repo.full_name}</span>
+        <span className="text-xs font-semibold font-mono text-[var(--text-primary)] truncate">{repo.full_name}</span>
         {repo.description && (
-          <span className="text-xs text-[var(--text-secondary)] font-sans truncate mt-0.5 max-w-md">
+          <span className="text-[11px] text-[var(--text-tertiary)] font-sans truncate mt-0.5 max-w-md">
             {repo.description}
           </span>
         )}
       </div>
 
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="flex items-center gap-1.5 shrink-0">
         {repo.language && (
-          <span className="text-xs font-mono text-[var(--text-secondary)] px-2.5 py-0.5 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+          <span className="pill text-[10px]">
             {repo.language}
           </span>
         )}
-        <span
-          className={`text-xs font-mono font-bold px-2.5 py-0.5 rounded-lg ${
-            repo.c_rank_tier === "S"
-              ? "bg-[#0D9668]/10 text-[#0D9668] border border-[#0D9668]/30"
-              : repo.c_rank_tier === "A"
-              ? "bg-[#2D8ABF]/10 text-[#2D8ABF] border border-[#2D8ABF]/30"
-              : repo.c_rank_tier === "B"
-              ? "bg-[#8B6BB5]/10 text-[#8B6BB5] border border-[#8B6BB5]/30"
-              : "bg-[#C4910A]/10 text-[#C4910A] border border-[#C4910A]/30"
-          }`}
-        >
+        <span className={`tier-badge tier-${repo.c_rank_tier || "A"} text-xs h-6 w-6`}>
           {repo.c_rank_tier || "A"}
         </span>
       </div>

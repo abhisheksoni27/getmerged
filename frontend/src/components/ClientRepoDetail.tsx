@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Repo, AIInsights, GoodFirstIssueItem, PRSizeSweetSpotData } from "@/types/opendoor";
+import { Repo, AIInsights, GoodFirstIssueItem, PRSizeSweetSpotData, MergedPRItem } from "@/types/opendoor";
 import {
   ArrowLeft,
 } from "lucide-react";
@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 import posthog from "posthog-js";
 import { RepoDetailHero } from "@/components/RepoDetailHero";
 import { RepoScorecards } from "@/components/RepoScorecards";
+import { RecentMergedPRsTable } from "@/components/RecentMergedPRsTable";
 import { RepoBadgeGenerator } from "@/components/RepoBadgeGenerator";
 import { SimilarRepos } from "@/components/SimilarRepos";
 import { RepoTrendChart } from "@/components/RepoTrendChart";
@@ -49,6 +50,7 @@ interface ClientRepoDetailProps {
   initialOptimalTime?: OptimalTimeResult | null;
   initialTrend?: TrendPoint[] | null;
   initialClaimStatus?: { is_claimed?: boolean; is_verified?: boolean } | null;
+  initialMergedPRs?: MergedPRItem[];
 }
 
 export function ClientRepoDetail({
@@ -62,6 +64,7 @@ export function ClientRepoDetail({
   initialOptimalTime = null,
   initialTrend = null,
   initialClaimStatus = null,
+  initialMergedPRs = [],
 }: ClientRepoDetailProps) {
   // Auth Modal State
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -257,11 +260,8 @@ export function ClientRepoDetail({
         <RaiseYourRank fullName={fullName} onClaimClick={handleClaimClick} />
       )}
 
-      {/* AI Insights & Maintainer Review Guidelines - moved up per Issue #80 */}
-      <InsightsSection insights={insights} fullName={fullName} />
-
-      {/* Scorecards & Macro Metrics */}
-      <section id="scorecards" className="scroll-mt-36 space-y-8 mb-10">
+      {/* Beat 2: Observed Contributor Metrics with Empirical Sample Sizes */}
+      <section id="scorecards" className="scroll-mt-36 mb-6">
         <RepoScorecards
           responseTimeStr={responseTimeStr}
           responseCommentary={responseCommentary}
@@ -275,14 +275,35 @@ export function ClientRepoDetail({
           onboardingScore={repo?.onboarding_score}
           score={score}
           rank={rank}
+          prCount6m={repo?.pr_count_6m}
+          distinctMaintainers={repo?.distinct_maintainer_count}
         />
+
+        {/* Beat 3: Proof - Recent Outside Merged Pull Requests */}
+        <RecentMergedPRsTable mergedPRs={initialMergedPRs} fullName={fullName} />
+
+        {/* Beat 4: Your Move - 2-Column DevEx Workbench Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+          {/* PR Velocity Sweet Spot Benchmark */}
+          <PRSizeSweetSpotCard
+            repoId={repo?.id ? String(repo.id) : fullName}
+            repoFullName={fullName}
+            initialData={initialSweetSpot}
+          />
+
+          {/* Optimal PR Submission Window */}
+          <OptimalReviewWindow fullName={fullName} initialData={initialOptimalTime} />
+        </div>
 
         {/* Interactive README C-Rank Live Badge Generator (Issue #50) */}
         <RepoBadgeGenerator fullName={fullName} />
       </section>
 
+      {/* AI Insights & Maintainer Review Guidelines */}
+      <InsightsSection insights={insights} fullName={fullName} />
+
       {/* Trends & Forecasts */}
-      <section id="trends" className="scroll-mt-36 space-y-8 mb-10">
+      <section id="trends" className="scroll-mt-36 space-y-6 mb-8">
         {/* C-Rank Trend */}
         <RepoTrendChart repoId={fullName} initialTrend={initialTrend} />
 
@@ -292,20 +313,10 @@ export function ClientRepoDetail({
           if (!owner || !name) return null;
           return <PRAcceptanceWidget owner={owner} name={name} initialData={initialLikelihood} />;
         })()}
-
-        {/* Optimal PR Submission Window & Maintainer Activity Heatmap (Story 7.1 / IDEA-20260819-01) */}
-        <OptimalReviewWindow fullName={fullName} initialData={initialOptimalTime} />
-
-        {/* PR Velocity Sweet Spot Benchmark (Story 2.1) */}
-        <PRSizeSweetSpotCard
-          repoId={repo?.id ? String(repo.id) : fullName}
-          repoFullName={fullName}
-          initialData={initialSweetSpot}
-        />
       </section>
 
       {/* Similar Repositories & Alternatives Interlinking (Issue #55) */}
-      <WidgetSection id="alternatives" show={relatedRepos.length > 0} className="scroll-mt-36 mb-10">
+      <WidgetSection id="alternatives" show={relatedRepos.length > 0} className="scroll-mt-36 mb-8">
         <SimilarRepos relatedRepos={relatedRepos} language={repo?.language} />
       </WidgetSection>
 

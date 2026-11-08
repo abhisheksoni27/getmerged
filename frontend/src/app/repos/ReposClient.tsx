@@ -7,8 +7,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Repo } from "@/types/opendoor";
 import {
-  Sparkles,
-  ShieldCheck,
   List,
   LayoutGrid,
 } from "lucide-react";
@@ -148,32 +146,24 @@ export function ReposClient({ initialRepos, initialTotal }: ReposClientProps) {
         </nav>
 
         {/* Header Hero Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-[var(--border-subtle)] pb-8">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-primary)]/10 border border-[var(--color-primary)]/20 text-xs font-mono text-[var(--color-primary)] font-bold mb-3">
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>C-Rank™ Scored Repositories</span>
+        <div className="card card-highlight p-6 sm:p-8 mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+            <div className="hero-badge mb-0">
+              <span className="dot" />
+              <span>{totalCount.toLocaleString()} SCORED REPOSITORIES</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-bold font-display text-[var(--text-primary)] tracking-tight leading-tight">
-              Open-Source Repository Explorer
-            </h1>
-            <p className="text-base text-[var(--text-secondary)] font-sans mt-3 max-w-2xl leading-relaxed">
-              Browse public GitHub repositories scored on merge velocity, maintainer responsiveness, and first-time PR welcome rates.
-            </p>
+            <div className="flex items-center gap-2">
+              <span className="pill pill-green">✓ Active in last 30d</span>
+              <span className="pill pill-purple">✓ Empirical 180d Telemetry</span>
+            </div>
           </div>
 
-          {/* Quick Counter Badge */}
-          <div className="flex items-center gap-3.5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl px-6 py-4 shadow-sm shrink-0 self-start md:self-auto">
-            <ShieldCheck className="h-6 w-6 text-[#0D9668]" />
-            <div>
-              <span className="block text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider font-semibold">
-                Total Repositories
-              </span>
-              <span className="text-2xl font-bold font-mono text-[var(--text-primary)]">
-                {totalCount.toLocaleString()}
-              </span>
-            </div>
-          </div>
+          <h1 className="text-3xl sm:text-4xl font-bold font-display text-[var(--text-primary)] tracking-tight mb-2">
+            Explore Open Source Repositories
+          </h1>
+          <p className="text-sm sm:text-base text-[var(--text-secondary)] font-sans max-w-3xl leading-relaxed">
+            Filter by language, C-Rank tier, outside merge rate, and stars to find welcoming projects where your code gets reviewed and merged.
+          </p>
         </div>
 
         {/* Filter Controls Bar */}

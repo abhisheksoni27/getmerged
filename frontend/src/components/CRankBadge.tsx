@@ -21,52 +21,52 @@ export function getGradeColor(rank?: string): {
   switch (rank?.toUpperCase()) {
     case "S":
       return {
-        hex: "#059669",
-        bgClass: "bg-emerald-50",
-        textClass: "text-emerald-800",
-        borderClass: "border-emerald-200",
-        dotClass: "bg-emerald-500",
+        hex: "#A371F7",
+        bgClass: "bg-[rgba(163,113,247,0.15)]",
+        textClass: "text-[var(--purple-bright)]",
+        borderClass: "border-[rgba(163,113,247,0.35)]",
+        dotClass: "bg-[var(--purple-bright)] shadow-[0_0_8px_var(--purple-bright)]",
         label: "Elite",
         title: "Super Welcoming",
       };
     case "A":
       return {
-        hex: "#0284C7",
-        bgClass: "bg-sky-50",
-        textClass: "text-sky-800",
-        borderClass: "border-sky-200",
-        dotClass: "bg-sky-500",
+        hex: "#3FB950",
+        bgClass: "bg-[rgba(63,185,80,0.15)]",
+        textClass: "text-[var(--green-bright)]",
+        borderClass: "border-[rgba(63,185,80,0.35)]",
+        dotClass: "bg-[var(--green-bright)]",
         label: "Welcoming",
         title: "Very Welcoming",
       };
     case "B":
       return {
-        hex: "#7C3AED",
-        bgClass: "bg-purple-50",
-        textClass: "text-purple-800",
-        borderClass: "border-purple-200",
-        dotClass: "bg-purple-500",
+        hex: "#D29922",
+        bgClass: "bg-[rgba(210,153,34,0.15)]",
+        textClass: "text-[var(--amber-bright)]",
+        borderClass: "border-[rgba(210,153,34,0.35)]",
+        dotClass: "bg-[var(--amber-bright)]",
         label: "Solid",
         title: "Welcoming",
       };
     case "C":
       return {
-        hex: "#D97706",
-        bgClass: "bg-amber-50",
-        textClass: "text-amber-800",
-        borderClass: "border-amber-200",
-        dotClass: "bg-amber-500",
+        hex: "#8B949E",
+        bgClass: "bg-[rgba(139,148,158,0.15)]",
+        textClass: "text-[var(--fg-muted)]",
+        borderClass: "border-[rgba(139,148,158,0.3)]",
+        dotClass: "bg-[var(--fg-muted)]",
         label: "Moderate",
         title: "Slow Review",
       };
     case "D":
     default:
       return {
-        hex: "#DC2626",
-        bgClass: "bg-rose-50",
-        textClass: "text-rose-800",
-        borderClass: "border-rose-200",
-        dotClass: "bg-rose-500",
+        hex: "#F85149",
+        bgClass: "bg-[rgba(248,81,73,0.15)]",
+        textClass: "text-[#F85149]",
+        borderClass: "border-[rgba(248,81,73,0.35)]",
+        dotClass: "bg-[#F85149]",
         label: "Risky",
         title: "High PR Stall Rate",
       };

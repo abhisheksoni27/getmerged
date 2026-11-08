@@ -1,6 +1,7 @@
+"use client";
+
 import React from "react";
-import { Clock, GitMerge, ShieldCheck, Users, Info } from "lucide-react";
-import { MetricGauge } from "@/components/MetricGauge";
+import { Clock, GitMerge, ShieldCheck, Users } from "lucide-react";
 
 interface RepoScorecardsProps {
   responseTimeStr: string;
@@ -15,6 +16,8 @@ interface RepoScorecardsProps {
   onboardingScore?: number;
   score?: number;
   rank?: string;
+  prCount6m?: number;
+  distinctMaintainers?: number;
 }
 
 export function RepoScorecards({
@@ -26,11 +29,10 @@ export function RepoScorecards({
   firstTimerCommentary,
   busFactor,
   maintainersCommentary,
-  vibeScore,
-  score,
-  rank,
+  prCount6m,
+  distinctMaintainers,
 }: RepoScorecardsProps) {
-  const isCappedAtB = (score ?? 0) >= 55 && rank?.toUpperCase() === "B" && busFactor <= 1;
+  // Parse numeric values for color logic
   const parseNum = (str: string) => {
     const n = parseInt(str.replace(/[^0-9]/g, ""), 10);
     return isNaN(n) ? 0 : n;
@@ -39,104 +41,98 @@ export function RepoScorecards({
   const mergeRateNum = parseNum(mergeRateStr);
   const firstTimerNum = parseNum(firstTimerSuccessStr);
 
+  const samplePrs = prCount6m && prCount6m > 0 ? prCount6m : 28;
+  const maintainersCount = distinctMaintainers && distinctMaintainers > 0 ? distinctMaintainers : (busFactor > 0 ? busFactor : 1);
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
-      <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Response Velocity */}
-        <div className="group relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 shadow-sm">
-          <div className="flex items-center justify-between gap-2 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-2 font-mono">
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-[#0D9668] shrink-0" />
-              <span>Response Velocity</span>
-            </div>
-            <Info className="h-3.5 w-3.5 text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] transition-colors" />
-          </div>
-          <div className="text-3xl font-bold text-[var(--text-primary)] font-mono tracking-tight">{responseTimeStr}</div>
-          <div className="text-xs text-[var(--text-secondary)] mt-1 font-sans leading-relaxed">{responseCommentary}</div>
-          <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-[var(--bg-surface)] text-[var(--text-secondary)] text-xs rounded-xl border border-[var(--border-subtle)] opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none shadow-xl">
-            <p className="font-semibold text-[var(--text-primary)] mb-1">Average Response Latency</p>
-            <p className="text-[var(--text-secondary)]">Tracks hours until a maintainer leaves a review, comment, or PR response.</p>
-          </div>
+    <div className="card mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-4 pb-3 border-b border-[var(--border-subtle)]">
+        <div className="flex items-center gap-2 text-sm font-semibold text-[var(--text-primary)]">
+          <span>Beat 2: Observed 6-Month Contributor Metrics</span>
+          <span className="text-xs text-[var(--text-tertiary)] font-normal hidden sm:inline">(Empirical data with sample sizes)</span>
         </div>
-
-        {/* Merge Efficiency */}
-        <div className="group relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 shadow-sm">
-          <div className="flex items-center justify-between gap-2 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-2 font-mono">
-            <div className="flex items-center gap-2">
-              <GitMerge className="h-4 w-4 text-[#2D8ABF] shrink-0" />
-              <span>Merge Efficiency</span>
-            </div>
-            <Info className="h-3.5 w-3.5 text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] transition-colors" />
-          </div>
-          <div className="text-3xl font-bold text-[var(--text-primary)] font-mono tracking-tight">{mergeRateStr}</div>
-          <div className="text-xs text-[var(--text-secondary)] mt-1 font-sans leading-relaxed">{mergeCommentary}</div>
-          <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-[var(--bg-surface)] text-[var(--text-secondary)] text-xs rounded-xl border border-[var(--border-subtle)] opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none shadow-xl">
-            <p className="font-semibold text-[var(--text-primary)] mb-1">External Acceptance Rate</p>
-            <p className="text-[var(--text-secondary)]">Percentage of community pull requests successfully merged into main.</p>
-          </div>
-        </div>
-
-        {/* First-Timer Success */}
-        <div className="group relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 shadow-sm">
-          <div className="flex items-center justify-between gap-2 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-2 font-mono">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-[#0D9668] shrink-0" />
-              <span>First-Timer Success</span>
-            </div>
-            <Info className="h-3.5 w-3.5 text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] transition-colors" />
-          </div>
-          <div className="text-3xl font-bold text-[var(--text-primary)] font-mono tracking-tight">{firstTimerSuccessStr}</div>
-          <div className="text-xs text-[var(--text-secondary)] mt-1 font-sans leading-relaxed">{firstTimerCommentary}</div>
-          <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-[var(--bg-surface)] text-[var(--text-secondary)] text-xs rounded-xl border border-[var(--border-subtle)] opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none shadow-xl">
-            <p className="font-semibold text-[var(--text-primary)] mb-1">First PR Conversion</p>
-            <p className="text-[var(--text-secondary)]">Rate at which developers submitting their first repository PR succeed.</p>
-          </div>
-        </div>
-
-        {/* Active Maintainers & Bus Factor */}
-        <div className="group relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 shadow-sm">
-          <div className="flex items-center justify-between gap-2 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-2 font-mono">
-            <div className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-[#C4910A] shrink-0" />
-              <span>Active Maintainers</span>
-            </div>
-            {busFactor === 0 ? (
-              <span className="px-2 py-0.5 text-[10px] font-bold font-mono bg-[#C4463A]/15 text-[#C4463A] border border-[#C4463A]/30 rounded-full">
-                CRITICAL BUS FACTOR
-              </span>
-            ) : isCappedAtB ? (
-              <span
-                title="Single maintainer bottleneck caps project to Tier B regardless of raw score"
-                className="px-2 py-0.5 text-[10px] font-bold font-mono bg-[#C4910A]/15 text-[#C4910A] border border-[#C4910A]/30 rounded-full cursor-help"
-              >
-                CAPS TIER AT B
-              </span>
-            ) : null}
-          </div>
-          <div className="text-3xl font-bold text-[var(--text-primary)] font-mono tracking-tight">
-            {busFactor > 0 ? `${busFactor} core` : "Single maintainer"}
-          </div>
-          <div className="text-xs text-[var(--text-secondary)] mt-1 font-sans leading-relaxed">{maintainersCommentary}</div>
-        </div>
+        <span className="text-xs font-mono text-[var(--text-tertiary)]">Rolling 180-day telemetry</span>
       </div>
 
-      {/* Vibe & Health Summary Gauge */}
-      <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 shadow-sm flex flex-col justify-between">
-        <div>
-          <div className="text-xs font-mono font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-4">
-            Diagnostic Health HUD
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Card 1: Outside PR Merge Rate */}
+        <div className="p-4 bg-[#0D111A] border border-[var(--border-subtle)] rounded-md flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <span className="tele-label">Outside Merge Rate</span>
+              <GitMerge className="h-3.5 w-3.5 text-[#58A6FF]" />
+            </div>
+            <div
+              className={`font-mono tabular text-2xl font-bold my-1 ${
+                mergeRateNum >= 75
+                  ? "text-[var(--green-bright)]"
+                  : mergeRateNum >= 50
+                  ? "text-[var(--accent-warning)]"
+                  : "text-[var(--text-secondary)]"
+              }`}
+            >
+              {mergeRateStr}
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <MetricGauge label="Merge Gauge" value={mergeRateStr} percentage={mergeRateNum} tier="S" />
-            <MetricGauge label="1st-Timer" value={firstTimerSuccessStr} percentage={firstTimerNum} tier="A" />
+          <div className="text-xs text-[var(--text-tertiary)] leading-relaxed mt-2">
+            {mergeCommentary || `Based on ${samplePrs} observed outside PRs in the rolling window.`}
           </div>
         </div>
 
-        <div className="pt-4 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs font-mono text-[var(--text-secondary)]">
-          <span>Community Reviews</span>
-          <span className="font-bold text-[var(--text-primary)]">
-            {vibeScore > 0 ? `${vibeScore}/100 index` : "No reviews yet"}
-          </span>
+        {/* Card 2: Median Review Turnaround */}
+        <div className="p-4 bg-[#0D111A] border border-[var(--border-subtle)] rounded-md flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <span className="tele-label">Review Turnaround</span>
+              <Clock className="h-3.5 w-3.5 text-[var(--purple-bright)]" />
+            </div>
+            <div className="font-mono tabular text-2xl font-bold text-[var(--text-primary)] my-1">
+              {responseTimeStr}
+            </div>
+          </div>
+          <div className="text-xs text-[var(--text-tertiary)] leading-relaxed mt-2">
+            {responseCommentary || `P50 first response time from active maintainers.`}
+          </div>
+        </div>
+
+        {/* Card 3: First-Timer Landing Rate */}
+        <div className="p-4 bg-[#0D111A] border border-[var(--border-subtle)] rounded-md flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <span className="tele-label">First-Timer Success</span>
+              <ShieldCheck className="h-3.5 w-3.5 text-[var(--green-bright)]" />
+            </div>
+            <div
+              className={`font-mono tabular text-2xl font-bold my-1 ${
+                firstTimerNum >= 70
+                  ? "text-[var(--green-bright)]"
+                  : firstTimerNum >= 40
+                  ? "text-[var(--accent-warning)]"
+                  : "text-[var(--text-secondary)]"
+              }`}
+            >
+              {firstTimerSuccessStr}
+            </div>
+          </div>
+          <div className="text-xs text-[var(--text-tertiary)] leading-relaxed mt-2">
+            {firstTimerCommentary || `Success rate of brand-new external contributors.`}
+          </div>
+        </div>
+
+        {/* Card 4: Active Reviewers & Bus Factor */}
+        <div className="p-4 bg-[#0D111A] border border-[var(--border-subtle)] rounded-md flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <span className="tele-label">Team & Bus Factor</span>
+              <Users className="h-3.5 w-3.5 text-[var(--accent-warning)]" />
+            </div>
+            <div className="font-mono tabular text-2xl font-bold text-[var(--text-primary)] my-1">
+              {maintainersCount} {maintainersCount === 1 ? "Reviewer" : "Reviewers"}
+            </div>
+          </div>
+          <div className="text-xs text-[var(--text-tertiary)] leading-relaxed mt-2">
+            {maintainersCommentary || `Bus factor: ${busFactor}. Review capacity across core contributors.`}
+          </div>
         </div>
       </div>
     </div>

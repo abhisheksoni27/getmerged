@@ -4,7 +4,6 @@ import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Scale } from "lucide-react";
 import posthog from "posthog-js";
 import { useCompareSelection } from "./hooks/useCompareSelection";
 import { RepoSlotPicker } from "./components/RepoSlotPicker";
@@ -68,20 +67,21 @@ export default function CompareClient() {
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-10 sm:py-16">
         {/* Header Hero */}
-        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#0D9668] text-xs font-mono font-bold mb-4">
-            <Scale className="h-3.5 w-3.5" /> Repository Head-to-Head Picker
+        <div className="card card-highlight p-6 sm:p-8 mb-8">
+          <div className="hero-badge">
+            <span className="dot" />
+            <span>SIDE-BY-SIDE BENCHMARK</span>
           </div>
-          <h1 className="font-space text-3xl sm:text-5xl font-black text-[var(--text-primary)] tracking-tight leading-tight">
-            Compare Open Source Repositories
+          <h1 className="font-display text-3xl sm:text-4xl font-bold text-[var(--text-primary)] tracking-tight mb-2.5">
+            Compare Contributor Experience
           </h1>
-          <p className="mt-3 text-sm sm:text-base text-[var(--text-secondary)] font-sans leading-relaxed">
-            Benchmark two projects side-by-side across pull request turnaround, maintainer responsiveness, 90-day bus factor, and newcomer merge likelihood.
+          <p className="text-sm sm:text-base text-[var(--text-secondary)] font-sans leading-relaxed max-w-2xl">
+            Deciding where to spend your weekend contributing? Compare two repositories side-by-side with objective merge rates, maintainer response time, and first-timer acceptance.
           </p>
         </div>
 
         {/* Dual Repo Picker Box */}
-        <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-3xl p-6 sm:p-8 shadow-sm mb-14">
+        <div className="card p-6 sm:p-8 mb-12">
           <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
             <RepoSlotPicker
               slotLabel="Repository A"

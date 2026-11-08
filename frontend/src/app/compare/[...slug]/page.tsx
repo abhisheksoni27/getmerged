@@ -8,7 +8,6 @@ import { CompareShareBar } from "@/components/CompareShareBar";
 import { VsShowdownCard } from "@/components/VsShowdownCard";
 import { Repo } from "@/types/opendoor";
 import { API_BASE_URL } from "@/lib/api";
-import { Scale } from "lucide-react";
 import {
   PRSizeSweetSpotData,
   OptimalTimeData,
@@ -236,16 +235,17 @@ export default async function ComparePage({ params }: ComparePageProps) {
         </nav>
 
         {/* Header */}
-        <div className="mb-8 text-center sm:text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#0D9668] text-xs font-mono font-bold mb-3">
-            <Scale className="h-3.5 w-3.5" /> Repository Head-to-Head
+        <div className="card card-highlight p-6 sm:p-8 mb-8">
+          <div className="hero-badge">
+            <span className="dot" />
+            <span>SIDE-BY-SIDE BENCHMARK</span>
           </div>
-          <h1 className="font-space text-2xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight">
+          <h1 className="font-display text-2xl sm:text-3xl font-bold text-[var(--text-primary)] tracking-tight mb-2">
             {`${repoA.full_name} `}
-            <span className="text-[var(--text-muted)] font-normal">vs</span>
+            <span className="text-[var(--text-tertiary)] font-normal">vs</span>
             {` ${repoB.full_name}`}
           </h1>
-          <p className="text-sm sm:text-base text-[var(--text-secondary)] font-sans mt-2 max-w-2xl">
+          <p className="text-sm text-[var(--text-secondary)] font-sans leading-relaxed max-w-2xl">
             Objective C-Rank™ telemetry comparison benchmarked across PR merge rates, reviewer latency, PR size sweet spots, maintainer availability, and newcomer hospitality.
           </p>
         </div>

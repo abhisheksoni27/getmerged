@@ -37,6 +37,7 @@ export interface Repo {
   is_scored?: boolean;
   low_sample?: boolean;
   currently_active?: boolean;
+  last_activity_days?: number;
 }
 
 export interface LanguageTierBreakdown {
@@ -47,6 +48,16 @@ export interface LanguageTierBreakdown {
   score?: number;
   welcoming_count?: number;
   rank?: number;
+}
+
+export interface MergedPRItem {
+  pr_number: number;
+  author_login: string;
+  merger_login: string;
+  turnaround_minutes: number;
+  turnaround_str: string;
+  merged_at: string;
+  html_url: string;
 }
 
 export interface MacroStats {

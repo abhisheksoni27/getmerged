@@ -29,34 +29,18 @@ export function InsightsSection({ insights, fullName }: InsightsSectionProps) {
 
           <div className="space-y-6 pt-2 font-sans">
             {/* Persona Overview Banner */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl glass-panel border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-[#0D111A] border border-[var(--border-subtle)] text-[var(--text-primary)]">
               <div>
-                <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-400">
-                  Review Persona
+                <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-[var(--purple-bright)]">
+                  Maintainer Review Telemetry
                 </span>
                 <h3 className="text-base font-space font-bold mt-0.5">
                   {insights.maintainer_persona || `${fullName.split("/")[1] || "Core"} Maintainer Team`}
                 </h3>
               </div>
-              <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t-2 sm:border-t-0 sm:border-l-2 border-[var(--border-subtle)] pt-2 sm:pt-0 sm:pl-4">
-                {insights.warmth_score != null && insights.warmth_score > 0 && (
-                  <div>
-                    <div className="text-[var(--text-secondary)] text-[10px]">Warmth Score</div>
-                    <div className="text-emerald-400 font-bold text-sm">{insights.warmth_score.toFixed(1)}/10</div>
-                  </div>
-                )}
-                {insights.patience_score != null && insights.patience_score > 0 && (
-                  <div>
-                    <div className="text-[var(--text-secondary)] text-[10px]">Patience Score</div>
-                    <div className="text-blue-400 font-bold text-sm">{insights.patience_score.toFixed(1)}/10</div>
-                  </div>
-                )}
-                {insights.nitpick_ratio != null && insights.nitpick_ratio > 0 && (
-                  <div>
-                    <div className="text-[var(--text-secondary)] text-[10px]">Nitpick Rate</div>
-                    <div className="text-amber-400 font-bold text-sm">{(insights.nitpick_ratio * 100).toFixed(0)}%</div>
-                  </div>
-                )}
+              <div className="flex items-center gap-4 text-xs font-mono shrink-0 border-t sm:border-t-0 sm:border-l border-[var(--border-subtle)] pt-2 sm:pt-0 sm:pl-4">
+                <span className="pill pill-green">Direct PRs Welcomed</span>
+                <span className="pill pill-purple">AI PRs Allowed</span>
               </div>
             </div>
 
