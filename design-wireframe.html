@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GetMerged — Precision DevEx Workbench Wireframe</title>
+  <title>GetMerged — Complete Precision DevEx Suite Wireframe</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Trigger.dev + Astral + GitHub Primer Dark Theme Tokens */
       --canvas: #090D16;
       --canvas-subtle: #0D111A;
       --card-bg: rgba(17, 24, 39, 0.7);
@@ -25,7 +24,6 @@
       --fg-muted: #8B949E;
       --fg-subtle: #6E7681;
 
-      /* GitHub / Trigger Brand Accents */
       --purple: #8250DF;
       --purple-bright: #A371F7;
       --purple-glow: rgba(163, 113, 247, 0.15);
@@ -39,10 +37,8 @@
       --red: #F85149;
       --blue: #58A6FF;
 
-      --radius-sm: 4px;
       --radius: 6px;
       --radius-md: 8px;
-      --radius-lg: 12px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -101,9 +97,9 @@
       background: transparent;
       color: var(--fg-muted);
       border: 1px solid transparent;
-      padding: 5px 12px;
+      padding: 4px 10px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
+      font-size: 11px;
       cursor: pointer;
       border-radius: 4px;
       transition: all 0.15s ease;
@@ -119,10 +115,10 @@
       font-weight: 600;
     }
 
-    /* GitHub Primer / Trigger Top Nav */
+    /* Top Nav */
     .top-nav {
       border-bottom: 1px solid var(--border);
-      background: rgba(9, 13, 22, 0.8);
+      background: rgba(9, 13, 22, 0.85);
       backdrop-filter: blur(12px);
       position: sticky;
       top: 41px;
@@ -131,10 +127,11 @@
     .top-nav-inner {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 12px 24px;
+      padding: 10px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 16px;
     }
     .brand {
       display: flex;
@@ -144,8 +141,8 @@
       color: var(--fg-default);
     }
     .brand-icon {
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       background: linear-gradient(135deg, var(--purple) 0%, #4F46E5 100%);
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 6px;
@@ -155,25 +152,44 @@
       color: white;
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
-      font-size: 13px;
+      font-size: 12px;
       box-shadow: 0 0 16px var(--purple-glow);
     }
-    .brand-name {
-      font-weight: 600;
-      font-size: 15px;
-      letter-spacing: -0.01em;
-    }
-    .nav-links {
+    .brand-name { font-weight: 600; font-size: 14px; letter-spacing: -0.01em; }
+
+    /* Nav Search Bar */
+    .nav-search {
+      flex: 1;
+      max-width: 380px;
+      background: #0D111A;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 12px;
       display: flex;
-      gap: 6px;
       align-items: center;
+      gap: 8px;
+      color: var(--fg-subtle);
+      font-size: 12px;
+      cursor: pointer;
     }
+    .nav-search:hover { border-color: var(--border-strong); }
+    .kbd {
+      background: #21262D;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--fg-muted);
+    }
+
+    .nav-links { display: flex; gap: 4px; align-items: center; }
     .nav-item {
       color: var(--fg-muted);
       font-size: 13px;
       font-weight: 500;
-      padding: 6px 12px;
-      border-radius: 6px;
+      padding: 5px 10px;
+      border-radius: 5px;
       text-decoration: none;
       cursor: pointer;
       transition: color 0.15s ease, background 0.15s ease;
@@ -186,51 +202,43 @@
       background: #21262D;
       border: 1px solid var(--border-strong);
       color: var(--fg-default);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
-      padding: 6px 14px;
-      border-radius: 6px;
+      padding: 5px 12px;
+      border-radius: 5px;
       text-decoration: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.15s ease;
-    }
-    .nav-cta:hover {
-      background: #30363D;
-      border-color: rgba(255, 255, 255, 0.3);
     }
 
     .container {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 36px 24px 80px;
+      padding: 32px 24px 80px;
     }
 
-    /* Cards & Bento Grid (Trigger / Astral Style) */
+    /* Cards */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       padding: 20px;
       backdrop-filter: blur(8px);
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      transition: border-color 0.15s ease;
     }
-    .card:hover {
-      border-color: var(--border-strong);
-    }
+    .card:hover { border-color: var(--border-strong); }
     .card-highlight {
       background: linear-gradient(180deg, rgba(130, 80, 223, 0.06) 0%, rgba(17, 24, 39, 0.7) 100%);
       border: 1px solid var(--border-accent);
       box-shadow: 0 0 24px rgba(130, 80, 223, 0.08);
     }
 
-    /* Hero Section */
+    /* Hero */
     .hero {
-      padding: 48px 0 40px;
+      padding: 40px 0 32px;
       text-align: left;
-      position: relative;
     }
     .hero-badge {
       display: inline-flex;
@@ -239,12 +247,12 @@
       background: rgba(163, 113, 247, 0.1);
       border: 1px solid rgba(163, 113, 247, 0.25);
       color: var(--purple-bright);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 500;
       font-family: 'JetBrains Mono', monospace;
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 999px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     .hero-badge .dot {
       width: 6px;
@@ -254,25 +262,25 @@
       box-shadow: 0 0 8px var(--purple-bright);
     }
     .hero-title {
-      font-size: 44px;
+      font-size: 40px;
       font-weight: 700;
       line-height: 1.15;
       letter-spacing: -0.03em;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       max-width: 820px;
     }
     .hero-subtitle {
-      font-size: 16px;
+      font-size: 15px;
       color: var(--fg-muted);
       line-height: 1.6;
       max-width: 680px;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
 
-    /* Terminal / Precision Scanner Bar */
+    /* Scanner Terminal */
     .scan-terminal {
       background: #0D1117;
       border: 1px solid var(--border-strong);
@@ -297,7 +305,7 @@
       border: none;
       color: var(--fg-default);
       font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
+      font-size: 13px;
       outline: none;
       padding: 8px 4px;
     }
@@ -307,37 +315,33 @@
       color: white;
       font-weight: 500;
       font-size: 13px;
-      padding: 8px 18px;
+      padding: 8px 16px;
       border-radius: 5px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: opacity 0.15s ease;
     }
-    .scan-btn:hover { opacity: 0.9; }
 
-    /* Bento Grid Layouts */
+    /* Grids */
     .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
     @media (max-width: 960px) {
       .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
-      .hero-title { font-size: 32px; }
+      .hero-title { font-size: 30px; }
       .scan-terminal { flex-direction: column; align-items: stretch; }
+      .nav-search { display: none; }
     }
 
-    /* Section Headers */
+    /* Section Header */
     .sec-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin: 40px 0 18px;
+      margin: 36px 0 16px;
       padding-bottom: 12px;
       border-bottom: 1px solid var(--border-subtle);
     }
     .sec-title {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 600;
       letter-spacing: -0.01em;
       color: var(--fg-default);
@@ -345,13 +349,9 @@
       align-items: center;
       gap: 8px;
     }
-    .sec-desc {
-      font-size: 13px;
-      color: var(--fg-muted);
-      margin-top: 4px;
-    }
+    .sec-desc { font-size: 13px; color: var(--fg-muted); margin-top: 3px; }
 
-    /* Precision Grade Badges */
+    /* Badges */
     .tier-badge {
       display: inline-flex;
       align-items: center;
@@ -380,18 +380,8 @@
       border-color: rgba(210, 153, 34, 0.4);
       color: var(--amber-bright);
     }
-    .tier-C {
-      background: rgba(139, 148, 158, 0.15);
-      border-color: rgba(139, 148, 158, 0.3);
-      color: var(--fg-muted);
-    }
-    .tier-D {
-      background: rgba(248, 81, 73, 0.15);
-      border-color: rgba(248, 81, 73, 0.4);
-      color: var(--red);
-    }
 
-    /* Precision Pills & Tags */
+    /* Pills */
     .pill {
       display: inline-flex;
       align-items: center;
@@ -421,7 +411,7 @@
       color: var(--amber-bright);
     }
 
-    /* Repo Bento Item */
+    /* Repo Item */
     .repo-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -442,20 +432,19 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .repo-name {
       font-family: 'JetBrains Mono', monospace;
       font-size: 14px;
       font-weight: 600;
       color: var(--fg-default);
-      text-decoration: none;
     }
     .repo-desc {
       font-size: 13px;
       color: var(--fg-muted);
       line-height: 1.45;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -490,7 +479,7 @@
       margin-left: 3px;
     }
 
-    /* Precision Astral Benchmark Tables */
+    /* Benchmark Tables */
     .bench-table {
       width: 100%;
       border-collapse: separate;
@@ -517,12 +506,11 @@
       padding: 12px 14px;
       border-bottom: 1px solid var(--border-subtle);
       color: var(--fg-default);
-      font-family: 'Geist', sans-serif;
     }
     .bench-table tr:last-child td { border-bottom: none; }
     .bench-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
 
-    /* Sticky Bar on Repo Page */
+    /* Sticky Subnav */
     .repo-subnav {
       background: rgba(9, 13, 22, 0.9);
       backdrop-filter: blur(12px);
@@ -538,7 +526,7 @@
       z-index: 80;
     }
 
-    /* Terminal Code Block */
+    /* Code Terminal */
     .code-terminal {
       background: #04060A;
       border: 1px solid var(--border-strong);
@@ -559,12 +547,9 @@
       border-radius: 4px;
       font-size: 11px;
       cursor: pointer;
-      font-family: 'Geist', sans-serif;
-      transition: background 0.15s ease;
     }
-    .copy-btn:hover { background: #30363D; }
 
-    /* Telemetry Dot */
+    /* Live Dot */
     .live-dot {
       display: inline-block;
       width: 6px;
@@ -574,45 +559,102 @@
       box-shadow: 0 0 8px var(--green-bright);
       margin-right: 6px;
     }
+
+    /* Enhanced 2-Col GFI Layout */
+    .gfi-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .gfi-layout { grid-template-columns: 1fr; }
+    }
+    .filter-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      position: sticky;
+      top: 106px;
+    }
+    .gfi-card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 1100px) {
+      .gfi-card-grid { grid-template-columns: 1fr; }
+    }
+    .issue-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.15s ease;
+    }
+    .issue-box:hover {
+      border-color: var(--border-strong);
+      background: var(--card-hover);
+    }
   </style>
 </head>
 <body>
 
-  <!-- 1. Prototype Navigation Toolbar -->
+  <!-- ================================================================= -->
+  <!-- 1. FULL PROTOTYPE NAVIGATION TOOLBAR                              -->
+  <!-- ================================================================= -->
   <div class="proto-bar">
     <div class="proto-title">
       <span>GETMERGED</span>
-      <span class="proto-tag">Precision DevEx Workbench</span>
-      <span style="color: var(--fg-subtle);">| Inspired by Trigger.dev + Astral + GitHub Primer</span>
+      <span class="proto-tag">Precision DevEx Suite (10 Views)</span>
     </div>
     <div class="proto-tabs">
       <button class="proto-btn active" onclick="switchView('home')">1. Homepage</button>
-      <button class="proto-btn" onclick="switchView('repo')">2. Repo Detail (All 9 Widgets)</button>
-      <button class="proto-btn" onclick="switchView('gfi')">3. Good First Issues</button>
-      <button class="proto-btn" onclick="switchView('rankings')">4. Ecosystem Rankings</button>
-      <button class="proto-btn" onclick="switchView('compare')">5. Repo Compare</button>
-      <button class="proto-btn" onclick="switchView('stack')">6. Stack Scanner</button>
+      <button class="proto-btn" onclick="switchView('repo')">2. Repo Detail (9 Widgets)</button>
+      <button class="proto-btn" onclick="switchView('gfi')">3. Good First Issues (Hub)</button>
+      <button class="proto-btn" onclick="switchView('repos')">4. Explore Repos (/repos)</button>
+      <button class="proto-btn" onclick="switchView('rankings')">5. Rankings Hub</button>
+      <button class="proto-btn" onclick="switchView('rankings-go')">6. /rankings/go</button>
+      <button class="proto-btn" onclick="switchView('compare')">7. Repo Compare</button>
+      <button class="proto-btn" onclick="switchView('stack')">8. Stack Scanner</button>
+      <button class="proto-btn" onclick="switchView('guides')">9. Guides &amp; Blog</button>
+      <button class="proto-btn" onclick="switchView('status')">10. System Status</button>
     </div>
   </div>
 
-  <!-- 2. Primary Navigation (GitHub / Trigger style) -->
+  <!-- ================================================================= -->
+  <!-- 2. PRIMARY TOP NAV BAR (With Search UI)                           -->
+  <!-- ================================================================= -->
   <header class="top-nav">
     <div class="top-nav-inner">
       <a href="#" class="brand" onclick="switchView('home')">
         <div class="brand-icon">⌘</div>
         <span class="brand-name">GetMerged</span>
       </a>
+
+      <!-- Global Search UI Modal Trigger (Astral/Trigger Command Bar) -->
+      <div class="nav-search" onclick="openSearch()">
+        <span style="font-family: 'JetBrains Mono', monospace;">⌕</span>
+        <span>Search 153k+ repos, languages, or issues...</span>
+        <span style="margin-left: auto;" class="kbd">⌘K</span>
+      </div>
+
       <nav class="nav-links">
         <span class="nav-item active" onclick="switchView('home')">Explore</span>
-        <span class="nav-item" onclick="switchView('gfi')">Good First Issues</span>
+        <span class="nav-item" onclick="switchView('gfi')">Issues</span>
+        <span class="nav-item" onclick="switchView('repos')">Directory</span>
         <span class="nav-item" onclick="switchView('rankings')">Rankings</span>
-        <span class="nav-item" onclick="switchView('compare')">Compare</span>
-        <span class="nav-item" onclick="switchView('stack')">Stack Scanner</span>
+        <span class="nav-item" onclick="switchView('guides')">Guides</span>
+        <span class="nav-item" onclick="switchView('status')">Status</span>
       </nav>
       <div style="display: flex; gap: 8px;">
         <span class="nav-cta" onclick="switchView('repo')">
           <span class="live-dot"></span>
-          <span>Analyze Any Repo</span>
+          <span>Analyze Repo</span>
         </span>
       </div>
     </div>
@@ -621,7 +663,7 @@
   <main class="container">
 
     <!-- ================================================================= -->
-    <!-- VIEW 1: HOMEPAGE                                                  -->
+    <!-- VIEW 1: HOMEPAGE (With "Today's Open Doors" Spotlight Preserved)  -->
     <!-- ================================================================= -->
     <section id="view-home">
       <div class="hero">
@@ -645,7 +687,7 @@
         </div>
       </div>
 
-      <!-- Live Macro Benchmarks (Astral Style Metric Grid) -->
+      <!-- Macro Benchmarks -->
       <div class="grid-4" style="margin-bottom: 36px;">
         <div class="card">
           <div class="tele-label">Indexed Repositories</div>
@@ -653,7 +695,7 @@
           <div style="font-size: 12px; color: var(--fg-subtle);">Continuous 6-month window</div>
         </div>
         <div class="card">
-          <div class="tele-label">Tier S & A Welcoming</div>
+          <div class="tele-label">Tier S &amp; A Welcoming</div>
           <div style="font-size: 26px; font-weight: 700; color: var(--purple-bright); margin: 4px 0;" class="font-mono tabular">14,290</div>
           <div style="font-size: 12px; color: var(--fg-subtle);">&gt;70% outside merge rate</div>
         </div>
@@ -669,20 +711,23 @@
         </div>
       </div>
 
-      <!-- Curated Welcoming Hidden Gems (No Hero Giants) -->
+      <!-- TODAY'S OPEN DOORS (Spotlight Section Preserved & Elevated) -->
       <div class="sec-header">
         <div>
           <h2 class="sec-title">
             <span class="live-dot"></span>
-            <span>Today's Welcoming Hidden Gems</span>
+            <span>Today's Open Doors</span>
           </h2>
-          <p class="sec-desc">Active projects (100–2,500 stars) with median review turnaround under 12 hours and verified merges this week.</p>
+          <p class="sec-desc">Verified active maintainers merging community contributions right now (100–2,500 stars, &lt;12h turnaround).</p>
         </div>
-        <span class="pill pill-green">Updated 8m ago</span>
+        <div style="display: flex; gap: 8px;">
+          <span class="pill pill-green">Verified Today</span>
+          <span class="pill" onclick="switchView('repos')" style="cursor: pointer;">Explore All 153k Repos →</span>
+        </div>
       </div>
 
       <div class="grid-3" style="margin-bottom: 36px;">
-        <!-- Gem 1 -->
+        <!-- Door 1 -->
         <div class="repo-card" onclick="switchView('repo')">
           <div>
             <div class="repo-header">
@@ -720,7 +765,7 @@
           </div>
         </div>
 
-        <!-- Gem 2 -->
+        <!-- Door 2 -->
         <div class="repo-card">
           <div>
             <div class="repo-header">
@@ -758,7 +803,7 @@
           </div>
         </div>
 
-        <!-- Gem 3 -->
+        <!-- Door 3 -->
         <div class="repo-card">
           <div>
             <div class="repo-header">
@@ -797,7 +842,7 @@
         </div>
       </div>
 
-      <!-- Telemetry Methodology Explainer (Trigger.dev / Astral Style) -->
+      <!-- Problem / Solution (Empirical Contributor Framework) -->
       <div class="card card-highlight">
         <h3 class="sec-title" style="margin-bottom: 8px;">The Contributor Paradox</h3>
         <p style="font-size: 14px; color: var(--fg-muted); margin-bottom: 20px; max-width: 800px;">
@@ -843,12 +888,10 @@
       <!-- WIDGET 1: Hero & Verdict Banner (Beat 1: The Verdict) -->
       <div class="card card-highlight" style="padding: 28px; margin-bottom: 20px;">
         <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
-          <!-- Score Badge -->
           <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 120px; padding: 18px; background: #0D111A; border: 1px solid var(--border-accent); border-radius: 8px; box-shadow: 0 0 20px var(--purple-glow);">
             <div style="font-family: 'JetBrains Mono', monospace; font-size: 48px; font-weight: 700; line-height: 1; color: var(--purple-bright);">S</div>
             <div style="font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', monospace; color: var(--fg-subtle); margin-top: 6px;">SCORE 83.1</div>
           </div>
-          <!-- Verdict Copy -->
           <div style="flex: 1; min-width: 280px;">
             <div style="display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;">
               <span class="pill pill-green">★ Highly Welcoming</span>
@@ -1090,7 +1133,7 @@
     </section>
 
     <!-- ================================================================= -->
-    <!-- VIEW 3: GOOD FIRST ISSUES                                         -->
+    <!-- VIEW 3: GOOD FIRST ISSUES (ENHANCED 2-COLUMN DESKTOP LAYOUT)     -->
     <!-- ================================================================= -->
     <section id="view-gfi" style="display: none;">
       <div class="hero" style="padding: 24px 0;">
@@ -1104,75 +1147,139 @@
         </p>
       </div>
 
-      <!-- Precision Filter Bar -->
-      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; padding: 12px 16px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
-        <span style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--fg-subtle); text-transform: uppercase;">Filters:</span>
-        <span class="pill pill-purple" style="cursor: pointer;">✓ Hide Issues with Open PRs</span>
-        <span class="pill pill-green" style="cursor: pointer;">Tier S &amp; A Only</span>
-        <span class="pill" style="cursor: pointer;">TypeScript</span>
-        <span class="pill" style="cursor: pointer;">Rust</span>
-        <span class="pill" style="cursor: pointer;">Go</span>
-        <span class="pill" style="cursor: pointer;">Python</span>
-      </div>
+      <!-- Enhanced 2-Column Layout: Sidebar Filters + Responsive Issue Cards -->
+      <div class="gfi-layout">
+        <!-- Sidebar Filter & Sniper Panel -->
+        <aside class="filter-panel">
+          <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; color: var(--fg-subtle); margin-bottom: 14px;">
+            Filter Issue Queue
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px;">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--fg-default); cursor: pointer;">
+              <input type="checkbox" checked style="accent-color: var(--purple);">
+              <span>Hide issues with open PRs</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--fg-default); cursor: pointer;">
+              <input type="checkbox" checked style="accent-color: var(--purple);">
+              <span>Tier S &amp; A Maintainers only</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--fg-default); cursor: pointer;">
+              <input type="checkbox" style="accent-color: var(--purple);">
+              <span>Recent (&lt; 7 days old)</span>
+            </label>
+          </div>
 
-      <!-- Issues List -->
-      <div style="display: flex; flex-direction: column; gap: 12px;">
-        <div class="card" style="padding: 16px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
-            <div style="flex: 1; min-width: 280px;">
-              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                <span class="tier-badge tier-S" style="width: 20px; height: 20px; font-size: 11px;">S</span>
-                <span class="font-mono" style="font-weight: 600; font-size: 13px;">bluenazgul/unifi-device-card</span>
+          <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; color: var(--fg-subtle); margin-bottom: 10px;">
+            Ecosystems
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px;">
+            <span class="pill pill-purple" style="cursor: pointer;">TypeScript (2,140)</span>
+            <span class="pill" style="cursor: pointer;">Rust (1,402)</span>
+            <span class="pill" style="cursor: pointer;">Go (980)</span>
+            <span class="pill" style="cursor: pointer;">Python (1,820)</span>
+            <span class="pill" style="cursor: pointer;">C++ (410)</span>
+          </div>
+
+          <!-- Live Sniper Alert Box -->
+          <div style="padding: 14px; background: #0D111A; border: 1px solid var(--border-accent); border-radius: 6px;">
+            <div style="font-size: 12px; font-weight: 600; color: var(--purple-bright); margin-bottom: 4px;">⚡ Instant Issue Sniper</div>
+            <p style="font-size: 11px; color: var(--fg-muted); margin-bottom: 10px;">Get alerted in Discord/Slack when a welcoming repo posts a new GFI.</p>
+            <input type="text" placeholder="your-email@domain.com" style="width: 100%; background: #04060A; border: 1px solid var(--border); border-radius: 4px; padding: 6px 8px; font-size: 12px; color: white; margin-bottom: 8px;">
+            <button class="scan-btn" style="width: 100%; padding: 6px; font-size: 12px; text-align: center; justify-content: center;">Create Sniper Alert</button>
+          </div>
+        </aside>
+
+        <!-- Main 2-Column Issue Grid (No more single stretched line!) -->
+        <div class="gfi-card-grid">
+          <!-- Issue Card 1 -->
+          <div class="issue-box">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <div style="display: flex; gap: 6px; align-items: center;">
+                  <span class="tier-badge tier-S" style="width: 22px; height: 22px; font-size: 11px;">S</span>
+                  <span class="font-mono" style="font-weight: 600; font-size: 13px;">bluenazgul/unifi-device-card</span>
+                </div>
                 <span class="pill pill-green">Unclaimed</span>
-                <span style="font-size: 11px; color: var(--fg-subtle);">2 hrs ago</span>
               </div>
-              <div style="font-size: 15px; font-weight: 600; color: var(--fg-default); margin-bottom: 4px;">
+              <h3 style="font-size: 14px; font-weight: 600; color: var(--fg-default); margin-bottom: 6px; line-height: 1.4;">
                 #148: Add dark-mode accent border on PoE port status icons
-              </div>
-              <p style="font-size: 13px; color: var(--fg-muted);">In dark mode, the PoE icon blends into card background. Needs 1px border token applied.</p>
+              </h3>
+              <p style="font-size: 12px; color: var(--fg-muted); line-height: 1.4; margin-bottom: 12px;">
+                In dark mode, the PoE icon blends into card background. Needs a 1px border token applied in <code>PoEIcon.ts</code>.
+              </p>
             </div>
-            <div>
-              <a href="#" class="nav-cta" style="white-space: nowrap; font-size: 12px;">View Issue on GitHub ↗</a>
+            <div style="display: flex; justify-content: space-between; align-items: center; pt-2; border-top: 1px solid var(--border-subtle); padding-top: 10px;">
+              <span style="font-size: 11px; color: var(--fg-subtle);">Opened 2 hrs ago • JavaScript</span>
+              <a href="#" class="nav-cta" style="font-size: 11px; padding: 3px 8px;">View Issue ↗</a>
             </div>
           </div>
-        </div>
 
-        <div class="card" style="padding: 16px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
-            <div style="flex: 1; min-width: 280px;">
-              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                <span class="tier-badge tier-S" style="width: 20px; height: 20px; font-size: 11px;">S</span>
-                <span class="font-mono" style="font-weight: 600; font-size: 13px;">lumen-oss/lux</span>
+          <!-- Issue Card 2 -->
+          <div class="issue-box">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <div style="display: flex; gap: 6px; align-items: center;">
+                  <span class="tier-badge tier-S" style="width: 22px; height: 22px; font-size: 11px;">S</span>
+                  <span class="font-mono" style="font-weight: 600; font-size: 13px;">lumen-oss/lux</span>
+                </div>
                 <span class="pill pill-green">Unclaimed</span>
-                <span style="font-size: 11px; color: var(--fg-subtle);">5 hrs ago</span>
               </div>
-              <div style="font-size: 15px; font-weight: 600; color: var(--fg-default); margin-bottom: 4px;">
+              <h3 style="font-size: 14px; font-weight: 600; color: var(--fg-default); margin-bottom: 6px; line-height: 1.4;">
                 #82: Support <code>--json</code> flag in lux search output
-              </div>
-              <p style="font-size: 13px; color: var(--fg-muted);">Allow consumers to format search results as structured JSON for CLI tooling integration.</p>
+              </h3>
+              <p style="font-size: 12px; color: var(--fg-muted); line-height: 1.4; margin-bottom: 12px;">
+                Allow consumers to format search results as structured JSON for CLI tooling integration. Great Rust starter task.
+              </p>
             </div>
-            <div>
-              <a href="#" class="nav-cta" style="white-space: nowrap; font-size: 12px;">View Issue on GitHub ↗</a>
+            <div style="display: flex; justify-content: space-between; align-items: center; pt-2; border-top: 1px solid var(--border-subtle); padding-top: 10px;">
+              <span style="font-size: 11px; color: var(--fg-subtle);">Opened 5 hrs ago • Rust</span>
+              <a href="#" class="nav-cta" style="font-size: 11px; padding: 3px 8px;">View Issue ↗</a>
             </div>
           </div>
-        </div>
 
-        <div class="card" style="padding: 16px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
-            <div style="flex: 1; min-width: 280px;">
-              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                <span class="tier-badge tier-S" style="width: 20px; height: 20px; font-size: 11px;">S</span>
-                <span class="font-mono" style="font-weight: 600; font-size: 13px;">amiantos/lurker</span>
-                <span class="pill pill-green">Unclaimed</span>
-                <span style="font-size: 11px; color: var(--fg-subtle);">1 day ago</span>
-              </div>
-              <div style="font-size: 15px; font-weight: 600; color: var(--fg-default); margin-bottom: 4px;">
-                #44: Add keyboard shortcut <code>Ctrl+K</code> to focus quick channel switcher
-              </div>
-              <p style="font-size: 13px; color: var(--fg-muted);">Add global keydown handler in Vue to trigger modal when not typing in text input.</p>
-            </div>
+          <!-- Issue Card 3 -->
+          <div class="issue-box">
             <div>
-              <a href="#" class="nav-cta" style="white-space: nowrap; font-size: 12px;">View Issue on GitHub ↗</a>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <div style="display: flex; gap: 6px; align-items: center;">
+                  <span class="tier-badge tier-S" style="width: 22px; height: 22px; font-size: 11px;">S</span>
+                  <span class="font-mono" style="font-weight: 600; font-size: 13px;">amiantos/lurker</span>
+                </div>
+                <span class="pill pill-green">Unclaimed</span>
+              </div>
+              <h3 style="font-size: 14px; font-weight: 600; color: var(--fg-default); margin-bottom: 6px; line-height: 1.4;">
+                #44: Add keyboard shortcut <code>Ctrl+K</code> to focus quick channel switcher
+              </h3>
+              <p style="font-size: 12px; color: var(--fg-muted); line-height: 1.4; margin-bottom: 12px;">
+                Add global keydown handler in Vue to trigger modal when not typing in text input.
+              </p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; pt-2; border-top: 1px solid var(--border-subtle); padding-top: 10px;">
+              <span style="font-size: 11px; color: var(--fg-subtle);">Opened 1 day ago • Vue / TS</span>
+              <a href="#" class="nav-cta" style="font-size: 11px; padding: 3px 8px;">View Issue ↗</a>
+            </div>
+          </div>
+
+          <!-- Issue Card 4 -->
+          <div class="issue-box">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <div style="display: flex; gap: 6px; align-items: center;">
+                  <span class="tier-badge tier-A" style="width: 22px; height: 22px; font-size: 11px;">A</span>
+                  <span class="font-mono" style="font-weight: 600; font-size: 13px;">l3montree-dev/devguard</span>
+                </div>
+                <span class="pill pill-green">Unclaimed</span>
+              </div>
+              <h3 style="font-size: 14px; font-weight: 600; color: var(--fg-default); margin-bottom: 6px; line-height: 1.4;">
+                #215: Add validation for SPDX license expression format in CLI
+              </h3>
+              <p style="font-size: 12px; color: var(--fg-muted); line-height: 1.4; margin-bottom: 12px;">
+                Validate license string input against canonical SPDX IDs before sending to policy engine.
+              </p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; pt-2; border-top: 1px solid var(--border-subtle); padding-top: 10px;">
+              <span style="font-size: 11px; color: var(--fg-subtle);">Opened 2 days ago • Go</span>
+              <a href="#" class="nav-cta" style="font-size: 11px; padding: 3px 8px;">View Issue ↗</a>
             </div>
           </div>
         </div>
@@ -1180,7 +1287,100 @@
     </section>
 
     <!-- ================================================================= -->
-    <!-- VIEW 4: ECOSYSTEM RANKINGS                                        -->
+    <!-- VIEW 4: EXPLORE REPOSITORIES DIRECTORY (/repos)                   -->
+    <!-- ================================================================= -->
+    <section id="view-repos" style="display: none;">
+      <div class="hero" style="padding: 24px 0;">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          <span>153,884 SCORED REPOSITORIES</span>
+        </div>
+        <h1 class="hero-title" style="font-size: 34px;">Explore Open Source Repositories</h1>
+        <p class="hero-subtitle" style="font-size: 14px; margin-bottom: 20px;">
+          Filter by language, C-Rank tier, outside merge rate, and stars to find your next contribution home.
+        </p>
+
+        <!-- Filter bar -->
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center; padding: 12px 16px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+          <input type="text" placeholder="Filter by repository name or topic..." style="background: #04060A; border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; color: white; font-family: 'JetBrains Mono', monospace; font-size: 12px; flex: 1; min-width: 220px;">
+          <span class="pill pill-purple">Tier: All</span>
+          <span class="pill">Language: All</span>
+          <span class="pill">Merge Rate: &gt; 70%</span>
+          <span class="pill">Stars: Any</span>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="repo-card" onclick="switchView('repo')">
+          <div class="repo-header">
+            <div>
+              <div class="repo-name">bluenazgul/unifi-device-card</div>
+              <div style="font-size: 12px; color: var(--fg-subtle); margin-top: 2px;">JavaScript • 197 stars</div>
+            </div>
+            <span class="tier-badge tier-S">S</span>
+          </div>
+          <p class="repo-desc">HA Dashboard Card for Unifi Devices. High maintainer responsiveness.</p>
+          <div class="repo-telemetry">
+            <div>
+              <div class="tele-label">Merge Rate</div>
+              <div class="tele-val" style="color: var(--green-bright);">86.4%</div>
+            </div>
+            <div>
+              <div class="tele-label">Review P50</div>
+              <div class="tele-val">22 mins</div>
+            </div>
+          </div>
+          <span class="pill pill-green">2 Open GFIs</span>
+        </div>
+
+        <div class="repo-card">
+          <div class="repo-header">
+            <div>
+              <div class="repo-name">lumen-oss/lux</div>
+              <div style="font-size: 12px; color: var(--fg-subtle); margin-top: 2px;">Rust • 1,008 stars</div>
+            </div>
+            <span class="tier-badge tier-S">S</span>
+          </div>
+          <p class="repo-desc">A luxurious package manager for Lua and Luau with fast multi-maintainer turnaround.</p>
+          <div class="repo-telemetry">
+            <div>
+              <div class="tele-label">Merge Rate</div>
+              <div class="tele-val" style="color: var(--green-bright);">85.6%</div>
+            </div>
+            <div>
+              <div class="tele-label">Review P50</div>
+              <div class="tele-val">3.5 hrs</div>
+            </div>
+          </div>
+          <span class="pill pill-green">5 Open GFIs</span>
+        </div>
+
+        <div class="repo-card">
+          <div class="repo-header">
+            <div>
+              <div class="repo-name">l3montree-dev/devguard</div>
+              <div style="font-size: 12px; color: var(--fg-subtle); margin-top: 2px;">Go • 195 stars</div>
+            </div>
+            <span class="tier-badge tier-S">S</span>
+          </div>
+          <p class="repo-desc">DevGuard Backend - Secure your Software Supply Chain with attestation compliance.</p>
+          <div class="repo-telemetry">
+            <div>
+              <div class="tele-label">Merge Rate</div>
+              <div class="tele-val" style="color: var(--green-bright);">75.9%</div>
+            </div>
+            <div>
+              <div class="tele-label">Review P50</div>
+              <div class="tele-val">3.4 hrs</div>
+            </div>
+          </div>
+          <span class="pill pill-green">6 Open GFIs</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 5: ECOSYSTEM RANKINGS HUB (/rankings)                        -->
     <!-- ================================================================= -->
     <section id="view-rankings" style="display: none;">
       <div class="hero" style="padding: 24px 0;">
@@ -1202,7 +1402,7 @@
             <th>Avg Outside Merge Rate</th>
             <th>Median First Response</th>
             <th>Tier S / A Repos</th>
-            <th>Active GFIs</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -1212,7 +1412,7 @@
             <td><span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">78.4%</span></td>
             <td><span class="font-mono tabular">4.1 hrs</span></td>
             <td><span class="font-mono tabular">3,842</span></td>
-            <td><span class="font-mono tabular">2,140</span></td>
+            <td><span class="pill" style="cursor: pointer;">View Rankings →</span></td>
           </tr>
           <tr>
             <td><span class="font-mono" style="color: var(--purple-bright); font-weight: 700;">#2</span></td>
@@ -1220,7 +1420,7 @@
             <td><span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">76.1%</span></td>
             <td><span class="font-mono tabular">5.2 hrs</span></td>
             <td><span class="font-mono tabular">2,190</span></td>
-            <td><span class="font-mono tabular">1,402</span></td>
+            <td><span class="pill" style="cursor: pointer;">View Rankings →</span></td>
           </tr>
           <tr>
             <td><span class="font-mono" style="color: var(--purple-bright); font-weight: 700;">#3</span></td>
@@ -1228,7 +1428,7 @@
             <td><span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">72.8%</span></td>
             <td><span class="font-mono tabular">6.0 hrs</span></td>
             <td><span class="font-mono tabular">2,410</span></td>
-            <td><span class="font-mono tabular">980</span></td>
+            <td><span class="pill pill-purple" onclick="switchView('rankings-go')" style="cursor: pointer;">View Go Rankings →</span></td>
           </tr>
           <tr>
             <td><span class="font-mono" style="color: var(--fg-subtle); font-weight: 700;">#4</span></td>
@@ -1236,14 +1436,101 @@
             <td><span class="font-mono tabular" style="color: var(--amber-bright); font-weight: 600;">64.3%</span></td>
             <td><span class="font-mono tabular">14.8 hrs</span></td>
             <td><span class="font-mono tabular">3,120</span></td>
-            <td><span class="font-mono tabular">1,820</span></td>
+            <td><span class="pill" style="cursor: pointer;">View Rankings →</span></td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <!-- ================================================================= -->
-    <!-- VIEW 5: REPO COMPARE                                              -->
+    <!-- VIEW 6: SPECIFIC LANGUAGE RANKING PAGE (/rankings/go)             -->
+    <!-- ================================================================= -->
+    <section id="view-rankings-go" style="display: none;">
+      <div class="hero" style="padding: 24px 0;">
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+          <span class="pill" onclick="switchView('rankings')" style="cursor: pointer;">← All Ecosystems</span>
+          <span class="pill pill-purple">Go Ecosystem</span>
+        </div>
+        <h1 class="hero-title" style="font-size: 34px;">Top Welcoming Go Repositories</h1>
+        <p class="hero-subtitle" style="font-size: 14px; margin-bottom: 20px;">
+          Ranked by empirical outside PR merge rate, P50 maintainer review turnaround, and beginner onboarding.
+        </p>
+
+        <div class="grid-4" style="margin-bottom: 24px;">
+          <div style="padding: 12px 14px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+            <div class="tele-label">Go Repos Tracked</div>
+            <div style="font-size: 20px; font-weight: 700;" class="font-mono">18,420</div>
+          </div>
+          <div style="padding: 12px 14px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+            <div class="tele-label">Avg Merge Rate</div>
+            <div style="font-size: 20px; font-weight: 700; color: var(--green-bright);" class="font-mono">72.8%</div>
+          </div>
+          <div style="padding: 12px 14px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+            <div class="tele-label">Median Review Time</div>
+            <div style="font-size: 20px; font-weight: 700;" class="font-mono">6.0 hrs</div>
+          </div>
+          <div style="padding: 12px 14px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+            <div class="tele-label">Active GFIs in Go</div>
+            <div style="font-size: 20px; font-weight: 700; color: var(--purple-bright);" class="font-mono">980</div>
+          </div>
+        </div>
+      </div>
+
+      <table class="bench-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Go Repository</th>
+            <th>Stars</th>
+            <th>Outside PR Merge</th>
+            <th>Median Review</th>
+            <th>First-Timer</th>
+            <th>Tier</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="font-mono" style="color: var(--purple-bright); font-weight: 700;">#1</span></td>
+            <td>
+              <strong class="font-mono">l3montree-dev/devguard</strong>
+              <div style="font-size: 11px; color: var(--fg-subtle);">Supply chain compliance as code</div>
+            </td>
+            <td><span class="font-mono">195</span></td>
+            <td><span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">75.9%</span></td>
+            <td><span class="font-mono">3.5 hrs</span></td>
+            <td><span class="font-mono" style="color: var(--green-bright);">75%</span></td>
+            <td><span class="tier-badge tier-S">S</span></td>
+          </tr>
+          <tr>
+            <td><span class="font-mono" style="color: var(--purple-bright); font-weight: 700;">#2</span></td>
+            <td>
+              <strong class="font-mono">charmbracelet/bubbletea</strong>
+              <div style="font-size: 11px; color: var(--fg-subtle);">TUI framework based on Elm architecture</div>
+            </td>
+            <td><span class="font-mono">24.2k</span></td>
+            <td><span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">74.1%</span></td>
+            <td><span class="font-mono">5.1 hrs</span></td>
+            <td><span class="font-mono">68%</span></td>
+            <td><span class="tier-badge tier-S">S</span></td>
+          </tr>
+          <tr>
+            <td><span class="font-mono" style="color: var(--purple-bright); font-weight: 700;">#3</span></td>
+            <td>
+              <strong class="font-mono">gofiber/fiber</strong>
+              <div style="font-size: 11px; color: var(--fg-subtle);">Express inspired web framework written in Go</div>
+            </td>
+            <td><span class="font-mono">35.1k</span></td>
+            <td><span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">71.4%</span></td>
+            <td><span class="font-mono">4.8 hrs</span></td>
+            <td><span class="font-mono">62%</span></td>
+            <td><span class="tier-badge tier-S">S</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 7: REPO COMPARE                                              -->
     <!-- ================================================================= -->
     <section id="view-compare" style="display: none;">
       <div class="hero" style="padding: 24px 0;">
@@ -1265,7 +1552,6 @@
       </div>
 
       <div class="grid-2">
-        <!-- Repo A -->
         <div class="card card-highlight">
           <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
             <span class="tier-badge tier-S">S</span>
@@ -1286,17 +1572,12 @@
             <span style="color: var(--fg-muted); font-size: 13px;">First-Timer Success</span>
             <span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">100% (6/6)</span>
           </div>
-          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
-            <span style="color: var(--fg-muted); font-size: 13px;">Access Gate</span>
-            <span class="pill pill-green">Direct PRs</span>
-          </div>
           <div style="display: flex; justify-content: space-between; padding: 8px 0;">
             <span style="color: var(--fg-muted); font-size: 13px;">AI Policy</span>
             <span class="pill pill-purple">Allowed</span>
           </div>
         </div>
 
-        <!-- Repo B -->
         <div class="card">
           <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
             <span class="tier-badge tier-S">S</span>
@@ -1317,10 +1598,6 @@
             <span style="color: var(--fg-muted); font-size: 13px;">First-Timer Success</span>
             <span class="font-mono tabular" style="color: var(--fg-default); font-weight: 600;">66.7% (12/18)</span>
           </div>
-          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
-            <span style="color: var(--fg-muted); font-size: 13px;">Access Gate</span>
-            <span class="pill pill-green">Direct PRs</span>
-          </div>
           <div style="display: flex; justify-content: space-between; padding: 8px 0;">
             <span style="color: var(--fg-muted); font-size: 13px;">AI Policy</span>
             <span class="pill">Disclose</span>
@@ -1330,7 +1607,7 @@
     </section>
 
     <!-- ================================================================= -->
-    <!-- VIEW 6: STACK SCANNER                                             -->
+    <!-- VIEW 8: STACK SCANNER                                             -->
     <!-- ================================================================= -->
     <section id="view-stack" style="display: none;">
       <div class="hero" style="padding: 24px 0;">
@@ -1390,11 +1667,189 @@
       </div>
     </section>
 
+    <!-- ================================================================= -->
+    <!-- VIEW 9: GUIDES & BLOG HUB (/guides)                               -->
+    <!-- ================================================================= -->
+    <section id="view-guides" style="display: none;">
+      <div class="hero" style="padding: 24px 0;">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          <span>DEVELOPER KNOWLEDGE &amp; PLAYBOOKS</span>
+        </div>
+        <h1 class="hero-title" style="font-size: 34px;">Open Source Contribution Guides</h1>
+        <p class="hero-subtitle" style="font-size: 14px; margin-bottom: 20px;">
+          Practical, step-by-step field guides on finding welcoming repositories, crafting pull requests that maintainers merge in hours, and navigating open-source etiquette.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+              <span class="pill pill-purple">Playbook</span>
+              <span style="font-size: 11px; color: var(--fg-subtle);">6 min read</span>
+            </div>
+            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">The 24-Hour PR Rule: How to Spot Maintainers Who Actually Review</h3>
+            <p style="font-size: 13px; color: var(--fg-muted); line-height: 1.45;">
+              Why GitHub stars deceive developers. How to evaluate outside PR merge rates and P50 review turnaround before writing a single line of code.
+            </p>
+          </div>
+          <div style="margin-top: 16px; padding-top: 10px; border-top: 1px solid var(--border-subtle);">
+            <a href="#" class="nav-cta" style="width: fit-content; font-size: 11px;">Read Guide →</a>
+          </div>
+        </div>
+
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+              <span class="pill pill-green">Tactics</span>
+              <span style="font-size: 11px; color: var(--fg-subtle);">8 min read</span>
+            </div>
+            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">PR Size Sweet Spot: Why 150 Lines Beats 800 Lines Every Time</h3>
+            <p style="font-size: 13px; color: var(--fg-muted); line-height: 1.45;">
+              Analyzing merge data across 150k repositories. How atomic PRs boost newcomer merge probability by 3.4x.
+            </p>
+          </div>
+          <div style="margin-top: 16px; padding-top: 10px; border-top: 1px solid var(--border-subtle);">
+            <a href="#" class="nav-cta" style="width: fit-content; font-size: 11px;">Read Guide →</a>
+          </div>
+        </div>
+
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+              <span class="pill">Ecosystem</span>
+              <span style="font-size: 11px; color: var(--fg-subtle);">5 min read</span>
+            </div>
+            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">First Rust Contribution: Finding Friendly Crates</h3>
+            <p style="font-size: 13px; color: var(--fg-muted); line-height: 1.45;">
+              A curated breakdown of Rust projects with dedicated newcomer mentors and active review queues.
+            </p>
+          </div>
+          <div style="margin-top: 16px; padding-top: 10px; border-top: 1px solid var(--border-subtle);">
+            <a href="#" class="nav-cta" style="width: fit-content; font-size: 11px;">Read Guide →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 10: SYSTEM STATUS & TELEMETRY (/status)                      -->
+    <!-- ================================================================= -->
+    <section id="view-status" style="display: none;">
+      <div class="hero" style="padding: 24px 0;">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          <span>LIVE TELEMETRY &amp; SERVICE HEALTH</span>
+        </div>
+        <h1 class="hero-title" style="font-size: 34px;">GetMerged System Status</h1>
+        <p class="hero-subtitle" style="font-size: 14px; margin-bottom: 20px;">
+          Real-time operational status for API servers, telemetry scan workers, and Redis cache clusters.
+        </p>
+
+        <!-- Master Status Banner -->
+        <div style="padding: 16px 20px; background: rgba(63, 185, 80, 0.08); border: 1px solid rgba(63, 185, 80, 0.3); border-radius: 8px; display: flex; align-items: center; justify-content: space-between; max-width: 800px; margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="live-dot" style="width: 10px; height: 10px;"></span>
+            <div>
+              <div style="font-weight: 600; color: var(--fg-default); font-size: 15px;">All Systems Operational</div>
+              <div style="font-size: 12px; color: var(--fg-subtle);">Last health check 14s ago • 100.0% uptime over past 30 days</div>
+            </div>
+          </div>
+          <span class="pill pill-green font-mono">18ms Latency</span>
+        </div>
+      </div>
+
+      <!-- Services List -->
+      <div style="max-width: 800px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+          <div>
+            <div style="font-weight: 600; font-size: 14px;">Core API Gateway</div>
+            <div style="font-size: 12px; color: var(--fg-subtle);">Go 1.23 • REST API /api/v1/*</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="pill pill-green">Operational</span>
+            <span class="font-mono" style="font-size: 12px; color: var(--fg-subtle);">14ms</span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+          <div>
+            <div style="font-weight: 600; font-size: 14px;">GitHub Telemetry Ingestion Worker</div>
+            <div style="font-size: 12px; color: var(--fg-subtle);">Active event queue &amp; C-Rank calculator</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="pill pill-green">Operational</span>
+            <span class="font-mono" style="font-size: 12px; color: var(--fg-subtle);">0 backlog</span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+          <div>
+            <div style="font-weight: 600; font-size: 14px;">PostgreSQL Primary Cluster</div>
+            <div style="font-size: 12px; color: var(--fg-subtle);">Database storage for 153k+ scored repos</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="pill pill-green">Operational</span>
+            <span class="font-mono" style="font-size: 12px; color: var(--fg-subtle);">2.1ms query p50</span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+          <div>
+            <div style="font-weight: 600; font-size: 14px;">Redis Telemetry Cache</div>
+            <div style="font-size: 12px; color: var(--fg-subtle);">In-memory cache &amp; rate limit bucket</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="pill pill-green">Operational</span>
+            <span class="font-mono" style="font-size: 12px; color: var(--fg-subtle);">0.4ms</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
+
+  <!-- SEARCH MODAL (Trigger.dev / Astral Style Cmd+K) -->
+  <div id="search-modal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 200; align-items: flex-start; justify-content: center; padding-top: 100px;" onclick="closeSearch(event)">
+    <div style="background: #0D1117; border: 1px solid var(--border-strong); border-radius: 8px; width: 100%; max-width: 600px; box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6); overflow: hidden;" onclick="event.stopPropagation()">
+      <div style="padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;">
+        <span style="color: var(--fg-subtle); font-family: 'JetBrains Mono', monospace;">⌕</span>
+        <input type="text" placeholder="Type a repository, language (e.g. 'go', 'rust'), or topic..." style="background: transparent; border: none; outline: none; color: white; font-size: 14px; flex: 1; font-family: 'Geist', sans-serif;">
+        <span class="kbd">ESC</span>
+      </div>
+      <div style="padding: 12px 16px; font-size: 11px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; color: var(--fg-subtle);">
+        Recent Searches / Shortcuts
+      </div>
+      <div style="display: flex; flex-direction: column;">
+        <div style="padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-left: 2px solid var(--purple-bright); background: rgba(255, 255, 255, 0.03);" onclick="switchView('repo'); closeSearchModal();">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="tier-badge tier-S" style="width: 20px; height: 20px; font-size: 10px;">S</span>
+            <span class="font-mono" style="font-weight: 600; font-size: 13px;">bluenazgul/unifi-device-card</span>
+          </div>
+          <span style="font-size: 11px; color: var(--fg-subtle);">Repository</span>
+        </div>
+        <div style="padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="switchView('rankings-go'); closeSearchModal();">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-family: 'JetBrains Mono', monospace; color: var(--purple-bright);">#</span>
+            <span style="font-weight: 500; font-size: 13px;">Go Ecosystem Rankings</span>
+          </div>
+          <span style="font-size: 11px; color: var(--fg-subtle);">Rankings</span>
+        </div>
+        <div style="padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="switchView('gfi'); closeSearchModal();">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-family: 'JetBrains Mono', monospace; color: var(--green-bright);">●</span>
+            <span style="font-weight: 500; font-size: 13px;">Good First Issues Directory</span>
+          </div>
+          <span style="font-size: 11px; color: var(--fg-subtle);">Curated Queue</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     function switchView(view) {
-      const views = ['home', 'repo', 'gfi', 'rankings', 'compare', 'stack'];
+      const views = ['home', 'repo', 'gfi', 'repos', 'rankings', 'rankings-go', 'compare', 'stack', 'guides', 'status'];
       views.forEach(v => {
         const el = document.getElementById('view-' + v);
         if (el) el.style.display = (v === view) ? 'block' : 'none';
@@ -1406,6 +1861,25 @@
       });
       window.scrollTo(0, 0);
     }
+
+    function openSearch() {
+      document.getElementById('search-modal').style.display = 'flex';
+    }
+    function closeSearch(e) {
+      document.getElementById('search-modal').style.display = 'none';
+    }
+    function closeSearchModal() {
+      document.getElementById('search-modal').style.display = 'none';
+    }
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape') {
+        closeSearchModal();
+      }
+    });
   </script>
 </body>
 </html>
