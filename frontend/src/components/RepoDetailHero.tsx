@@ -189,20 +189,13 @@ export function RepoDetailHero({
             </h1>
 
             {/* Narrative Verdict Paragraph */}
-            <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-3.5 max-w-2xl">
+            <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-2xl">
               <strong className="text-[var(--text-primary)]">Verdict: {verdictSummary}</strong>{" "}
               Outside contributors observe a median review response in{" "}
               <span className="font-mono text-[var(--text-primary)] font-medium">{responseTimeVal}</span>, and{" "}
               <span className="font-mono text-[var(--text-primary)] font-medium">{mergeRateVal}</span> of outside PRs
               are merged into main.
             </p>
-
-            {/* Access & AI Policy Pills */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="pill pill-green">✓ Open Access: Direct PRs welcomed</span>
-              <span className="pill pill-purple">✓ AI-Assisted PRs Allowed</span>
-              <span className="pill pill-amber">⚡ Sweet Spot: &lt; 150 lines</span>
-            </div>
           </div>
         </div>
 
