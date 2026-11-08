@@ -55,17 +55,17 @@ function ShowroomBody({
 }: Pick<RepoShowroomProps, "visibleRepos" | "isLoggedIn" | "onResetFilters"> & { viewMode?: "row" | "card" }) {
   if (visibleRepos.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-zinc-300 p-12 text-center bg-white my-6 shadow-xs">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 mb-3">
+      <div className="card p-12 text-center my-6">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-[#04060A] text-[var(--text-tertiary)] mb-3 border border-[var(--border-subtle)]">
           <Search className="h-5 w-5" />
         </div>
-        <h3 className="text-base font-bold text-zinc-900 font-display">No open doors found</h3>
-        <p className="mt-1 text-xs text-zinc-500 font-sans max-w-sm mx-auto leading-relaxed">
+        <h3 className="text-base font-bold text-[var(--text-primary)] font-display">No open doors found</h3>
+        <p className="mt-1 text-xs text-[var(--text-secondary)] font-sans max-w-sm mx-auto leading-relaxed">
           No repositories matched your selected criteria.
         </p>
         <button
           onClick={onResetFilters}
-          className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-4 py-2 text-xs font-medium text-white hover:bg-zinc-800 transition-colors cursor-pointer"
+          className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#21262D] border border-[var(--border-strong)] px-4 py-2 text-xs font-mono font-medium text-[var(--text-primary)] hover:bg-[#30363D] transition-colors cursor-pointer"
         >
           Reset all filters
         </button>
@@ -76,7 +76,7 @@ function ShowroomBody({
   return (
     <>
       {viewMode === "row" ? (
-        <div className="flex flex-col gap-4 mb-10">
+        <div className="flex flex-col gap-3 mb-10">
           {visibleRepos.map((repo) => (
             <div key={repo.id || repo.full_name}>
               <RepoCard repo={repo} isLoggedIn={isLoggedIn} layout="row" />
@@ -93,17 +93,17 @@ function ShowroomBody({
         </div>
       )}
 
-      {/* Bottom CTA with Generous Space */}
-      <div className="my-10 rounded-2xl border border-zinc-200/90 bg-white p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs">
+      {/* Bottom CTA */}
+      <div className="card card-highlight p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 my-10">
         <div>
-          <h3 className="text-xl sm:text-2xl font-bold font-sans tracking-tight text-zinc-950">Looking for custom languages or merge rates?</h3>
-          <p className="text-sm text-zinc-500 mt-1 font-sans">Filter across 20+ ecosystems with full pagination and multi-variable criteria.</p>
+          <h3 className="text-lg sm:text-xl font-bold font-display tracking-tight text-[var(--text-primary)]">Looking for custom languages or merge rates?</h3>
+          <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-1 font-sans">Filter across 20+ ecosystems with full pagination and multi-variable criteria.</p>
         </div>
 
         <Link prefetch={false}
           href="/repos"
           title="Browse full repository database with all filters"
-          className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 text-white hover:bg-zinc-800 px-6 py-3 text-xs font-semibold font-sans shrink-0 shadow-xs transition-colors"
+          className="scan-btn inline-flex items-center gap-2 text-xs font-semibold shrink-0 cursor-pointer"
         >
           <span>Open Full Directory</span>
           <ArrowRight className="h-4 w-4" />
@@ -241,7 +241,7 @@ export function RepoShowroom({
       {loading ? (
         <div className="flex flex-col gap-4 mb-10">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="h-24 rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs animate-pulse" />
+            <div key={i} className="h-24 rounded-xl border border-[var(--border-subtle)] bg-[#0D111A] p-6 shadow-xs animate-pulse" />
           ))}
         </div>
       ) : (

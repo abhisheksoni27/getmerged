@@ -72,14 +72,14 @@ export function GlobalSearch() {
           >
             {/* Search Input Bar */}
             <div className="flex items-center px-4 py-3 border-b border-[var(--border-subtle)] gap-3 bg-[#0D111A]">
-              <Search className="h-4 w-4 text-[var(--purple-bright)] shrink-0" />
+              <Search className="h-4 w-4 text-[var(--text-secondary)] shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={`Search or paste GitHub URL (e.g. ${FAMOUS_REPOS[placeholderIndex]})`}
-                className="w-full bg-transparent text-sm text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none font-mono"
+                className="w-full bg-transparent text-sm text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none focus:ring-0 border-0 font-mono"
                 aria-autocomplete="list"
                 aria-controls="search-results-list"
                 aria-activedescendant={

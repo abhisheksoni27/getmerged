@@ -11,7 +11,6 @@ import {
   RefreshCw,
   ShieldCheck,
   Star,
-  Users,
   Zap,
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
@@ -104,16 +103,14 @@ export function FeedbackSection({ repoId, fullName, currentUser, isLoggedIn, onR
   };
 
   return (
-    <section id="community-feedback" className="content-auto scroll-mt-36 rounded-2xl border-2 border-[var(--border-subtle)] glass-panel p-5 sm:p-8 shadow-sm mb-10 font-sans">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-[var(--border-subtle)] pb-5">
+    <section id="community-feedback" className="scroll-mt-36 card mb-8 font-sans">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-[var(--border-subtle)] pb-4">
         <div>
-          <h2 className="text-xl sm:text-2xl font-extrabold font-space text-[var(--text-primary)] flex items-center gap-2.5">
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-400 shadow-sm -rotate-2">
-              <Users className="h-5 w-5 text-sky-400 shrink-0" />
-            </span>
-            Contributor Reviews & Maintainer Feedback
+          <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
+            <span className="live-dot" />
+            <span>Contributor Reviews & Maintainer Feedback</span>
           </h2>
-          <p className="text-sm text-[var(--text-secondary)] mt-1 leading-relaxed">
+          <p className="text-xs text-[var(--text-secondary)] mt-1 leading-relaxed">
             Real contributor ratings on code review speed, maintainer helpfulness, and beginner receptivity.
           </p>
         </div>
@@ -161,7 +158,7 @@ export function FeedbackSection({ repoId, fullName, currentUser, isLoggedIn, onR
       </div>
 
       {/* Interactive Contributor Feedback Form / Thank You Widget */}
-      <div className="rounded-2xl border-2 border-[var(--border-subtle)] glass-panel p-5 sm:p-6 shadow-sm overflow-hidden relative">
+      <div className="bg-[#0D111A] border border-[var(--border-subtle)] rounded-lg p-5 overflow-hidden relative">
         {feedbackSubmitted && submittedScores ? (
           <div className="relative overflow-hidden rounded-xl border-2 border-[var(--border-subtle)] p-6 sm:p-8 animate-in zoom-in-95 duration-500 transition-all">
             {/* Dynamic Theme Gradients & Floating Particles Based on Rating */}

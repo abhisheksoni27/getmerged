@@ -70,6 +70,7 @@ export interface MacroStats {
   top_language_counts?: Record<string, number>;
   language_breakdown?: LanguageTierBreakdown[];
   updated_ms?: number;
+  good_first_issue_count?: number;
 }
 
 export interface AIInsights {

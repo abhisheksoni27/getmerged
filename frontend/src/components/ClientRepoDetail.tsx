@@ -14,7 +14,6 @@ import { RecentMergedPRsTable } from "@/components/RecentMergedPRsTable";
 import { RepoBadgeGenerator } from "@/components/RepoBadgeGenerator";
 import { SimilarRepos } from "@/components/SimilarRepos";
 import { RepoTrendChart } from "@/components/RepoTrendChart";
-import { PRAcceptanceWidget } from "@/components/PRAcceptanceWidget";
 import { OptimalReviewWindow } from "@/components/OptimalReviewWindow";
 import { PRSizeSweetSpotCard } from "@/components/PRSizeSweetSpotCard";
 import { UnscoredExplainer } from "@/components/UnscoredExplainer";
@@ -26,15 +25,12 @@ const MaintainerConsoleModal = dynamic(() => import("@/components/MaintainerCons
 const DisputeModal = dynamic(() => import("@/components/DisputeModal").then((mod) => mod.DisputeModal), { ssr: false });
 import { isRepoScored } from "@/lib/repo-metadata";
 
-
-import { PRLikelihoodData } from "@/components/PRAcceptanceWidget";
 import { OptimalTimeResult } from "@/types/opendoor";
 import { TrendPoint } from "@/components/RepoTrendChart";
 import { useRepoDetail } from "@/components/repo-detail/useRepoDetail";
 import { WidgetSection } from "@/components/repo-detail/WidgetSection";
 import { RepoDetailSkeleton } from "@/components/repo-detail/RepoDetailSkeleton";
 import { GithubNotFoundView, IndexingView } from "@/components/repo-detail/NotFoundView";
-import { InsightsSection } from "@/components/repo-detail/InsightsSection";
 import { GfiSection } from "@/components/repo-detail/GfiSection";
 import { FeedbackSection } from "@/components/repo-detail/FeedbackSection";
 import { FaqGuide } from "@/components/repo-detail/FaqGuide";
@@ -46,7 +42,7 @@ interface ClientRepoDetailProps {
   initialRelatedRepos?: Repo[];
   initialGfiList?: GoodFirstIssueItem[];
   initialSweetSpot?: PRSizeSweetSpotData | null;
-  initialLikelihood?: PRLikelihoodData | null;
+  initialLikelihood?: unknown;
   initialOptimalTime?: OptimalTimeResult | null;
   initialTrend?: TrendPoint[] | null;
   initialClaimStatus?: { is_claimed?: boolean; is_verified?: boolean } | null;
@@ -60,7 +56,6 @@ export function ClientRepoDetail({
   initialRelatedRepos = [],
   initialGfiList = [],
   initialSweetSpot = null,
-  initialLikelihood = null,
   initialOptimalTime = null,
   initialTrend = null,
   initialClaimStatus = null,
@@ -83,7 +78,6 @@ export function ClientRepoDetail({
 
   const {
     currentUser,
-    insights,
     isWatching,
     watchLoading,
     githubNotFound,
@@ -299,20 +293,9 @@ export function ClientRepoDetail({
         <RepoBadgeGenerator fullName={fullName} />
       </section>
 
-      {/* AI Insights & Maintainer Review Guidelines */}
-      <InsightsSection insights={insights} fullName={fullName} />
-
-      {/* Trends & Forecasts */}
-      <section id="trends" className="scroll-mt-36 space-y-6 mb-8">
-        {/* C-Rank Trend */}
+      {/* Historical C-Rank Trajectory */}
+      <section id="trends" className="scroll-mt-36 mb-6">
         <RepoTrendChart repoId={fullName} initialTrend={initialTrend} />
-
-        {/* PR Acceptance & Review Speed Forecast Widget (Epic 3, Story 3.4) */}
-        {fullName && (() => {
-          const [owner, name] = fullName.split("/");
-          if (!owner || !name) return null;
-          return <PRAcceptanceWidget owner={owner} name={name} initialData={initialLikelihood} />;
-        })()}
       </section>
 
       {/* Similar Repositories & Alternatives Interlinking (Issue #55) */}

@@ -146,7 +146,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               <Link prefetch={false}
                 href="/watchlist"
                 title="My Watchlist"
-                className="flex items-center justify-center h-6 w-6 text-zinc-600 hover:text-zinc-900 rounded-md transition-colors border-l border-zinc-200 ml-0.5 pl-1.5 shrink-0"
+                className="flex items-center justify-center h-6 w-6 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-md transition-colors border-l border-[var(--border-subtle)] ml-0.5 pl-1.5 shrink-0"
               >
                 <Bookmark className="h-3.5 w-3.5" />
               </Link>
