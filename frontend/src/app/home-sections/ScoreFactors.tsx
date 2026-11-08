@@ -17,19 +17,19 @@ export function ScoreFactors() {
     <HomeSection className="py-16 sm:py-24">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
         {/* Left: Factor list */}
-        <div className="bg-white border border-zinc-200/90 rounded-2xl p-7 sm:p-8 shadow-xs space-y-4">
-          <div className="flex justify-between items-center text-zinc-900 pb-3 border-b border-zinc-100">
-            <span className="font-sans font-semibold text-sm text-zinc-900">How We Score Repositories</span>
-            <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-full font-sans text-xs font-medium">Continuous</span>
+        <div className="bg-[rgba(17,24,39,0.7)] border border-[var(--border-subtle)] rounded-xl p-7 sm:p-8 shadow-xs space-y-4 backdrop-blur-md">
+          <div className="flex justify-between items-center text-[var(--text-primary)] pb-3 border-b border-[var(--border-subtle)]">
+            <span className="font-sans font-semibold text-sm">How We Score Repositories</span>
+            <span className="bg-[rgba(63,185,80,0.15)] text-[var(--green-bright)] border border-[rgba(63,185,80,0.3)] px-2.5 py-0.5 rounded-full font-mono text-xs font-medium">Continuous Telemetry</span>
           </div>
           <div className="space-y-2.5">
             {SCORE_ROWS.map((row) => (
               <div
                 key={row.label}
-                className="flex justify-between items-center bg-zinc-50/80 p-3.5 rounded-xl border border-zinc-100 hover:border-zinc-200 transition-colors"
+                className="flex justify-between items-center bg-[#0D111A] p-3.5 rounded-lg border border-[var(--border-subtle)] hover:border-[var(--border-hover)] transition-colors"
               >
-                <span className="text-zinc-800 font-medium text-sm">{row.label}</span>
-                <span className="font-mono text-xs text-zinc-600 bg-white border border-zinc-200 px-2.5 py-0.5 rounded-md shadow-2xs">{row.badge}</span>
+                <span className="text-[var(--text-primary)] font-medium text-sm">{row.label}</span>
+                <span className="font-mono text-xs text-[var(--text-secondary)] bg-[#111827] border border-[var(--border-subtle)] px-2.5 py-0.5 rounded-md">{row.badge}</span>
               </div>
             ))}
           </div>
@@ -38,18 +38,18 @@ export function ScoreFactors() {
         {/* Right: Description */}
         <div className="space-y-5">
           <Eyebrow>
-            <Sparkles className="h-3.5 w-3.5 text-emerald-600" /> Transparent Metrics
+            <Sparkles className="h-3.5 w-3.5 text-[var(--purple-bright)]" /> Transparent Metrics
           </Eyebrow>
-          <h2 className="text-3xl sm:text-4xl font-bold text-zinc-950 tracking-tight leading-tight font-sans">
-            9 real signals.<br />Zero guesswork.
+          <h2 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] tracking-tight leading-tight font-sans">
+            9 empirical signals.<br /><span className="text-[var(--purple-bright)]">Zero subjective guesswork.</span>
           </h2>
-          <p className="text-base text-zinc-600 font-sans leading-relaxed">
-            GetMerged tracks active pull requests across 20+ programming languages - measuring real review turnaround, newcomer acceptance, and maintainer responsiveness.
+          <p className="text-base text-[var(--text-secondary)] font-sans leading-relaxed">
+            GetMerged tracks active pull requests across 20+ programming languages - measuring real review turnaround, newcomer acceptance, and maintainer responsiveness with mandatory sample sizes.
           </p>
           <Link prefetch={false}
             href="/how-c-rank-works"
             title="Learn how GetMerged scores repositories"
-            className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 text-white hover:bg-zinc-800 px-5 py-2.5 text-sm font-medium transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#21262D] border border-[var(--border-strong)] text-[var(--text-primary)] hover:bg-[#30363D] px-5 py-2.5 text-sm font-medium transition-colors font-mono"
           >
             <span>See how scoring works</span>
             <ArrowRight className="h-4 w-4" />

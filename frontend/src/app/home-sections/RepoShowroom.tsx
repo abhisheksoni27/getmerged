@@ -36,10 +36,10 @@ function CategoryChip({ def, onSelect }: { def: ChipDef; onSelect: (preset: Cate
       aria-pressed={def.isActive}
       title={def.title}
       onClick={() => onSelect(def.preset)}
-      className={`px-4 py-2 rounded-xl text-xs font-medium transition-colors shrink-0 cursor-pointer ${
+      className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors shrink-0 cursor-pointer border ${
         def.isActive
-          ? "bg-zinc-900 text-white font-semibold shadow-xs"
-          : "bg-zinc-100/80 text-zinc-600 hover:bg-zinc-200/80 hover:text-zinc-900"
+          ? "bg-[rgba(163,113,247,0.2)] text-white border-[var(--purple-bright)] font-semibold shadow-xs"
+          : "bg-[#0D111A] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:border-[var(--border-hover)] hover:text-[var(--text-primary)]"
       }`}
     >
       {def.label}
@@ -176,28 +176,28 @@ export function RepoShowroom({
   return (
     <HomeSection maxWidth="7xl" as="main" id="leaderboard-grid" className="flex-1 w-full pt-4">
       {/* Category Switcher & Layout Toggle */}
-      <div className="mb-8 rounded-2xl bg-white p-6 sm:p-8 border border-zinc-200 shadow-xs space-y-5">
+      <div className="mb-8 rounded-xl bg-[rgba(17,24,39,0.7)] p-6 sm:p-8 border border-[var(--border-subtle)] shadow-xs space-y-5 backdrop-blur-md">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 font-display tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] font-display tracking-tight">
               Verified Welcoming Repositories
             </h2>
-            <p className="text-xs sm:text-sm text-zinc-500 font-sans mt-1">
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans mt-1">
               Live telemetry scored by real PR response speed and outside author acceptance rates.
             </p>
           </div>
 
           <div className="flex items-center gap-2 self-start sm:self-auto">
             {/* View Mode Toggle: Rows vs Cards */}
-            <div className="flex items-center rounded-lg bg-zinc-100 p-1 text-xs">
+            <div className="flex items-center rounded-lg bg-[#0D111A] border border-[var(--border-subtle)] p-1 text-xs">
               <button
                 type="button"
                 onClick={() => setViewMode("row")}
                 title="List View (high density)"
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-sans text-xs transition-colors cursor-pointer ${
                   viewMode === "row"
-                    ? "bg-white text-zinc-900 font-semibold shadow-xs"
-                    : "text-zinc-500 hover:text-zinc-900 font-medium"
+                    ? "bg-[#21262D] text-[var(--text-primary)] font-semibold shadow-xs"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium"
                 }`}
               >
                 <List className="h-3.5 w-3.5" />
@@ -209,8 +209,8 @@ export function RepoShowroom({
                 title="Grid View (showcase cards)"
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-sans text-xs transition-colors cursor-pointer ${
                   viewMode === "card"
-                    ? "bg-white text-zinc-900 font-semibold shadow-xs"
-                    : "text-zinc-500 hover:text-zinc-900 font-medium"
+                    ? "bg-[#21262D] text-[var(--text-primary)] font-semibold shadow-xs"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium"
                 }`}
               >
                 <LayoutGrid className="h-3.5 w-3.5" />
@@ -221,16 +221,16 @@ export function RepoShowroom({
             <Link prefetch={false}
               href="/repos"
               title="Open full multi-filter repository directory"
-              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white px-3.5 py-1.5 text-xs font-medium shadow-xs transition-colors whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#21262D] border border-[var(--border-strong)] hover:bg-[#30363D] text-[var(--text-primary)] px-3.5 py-1.5 text-xs font-mono font-medium shadow-xs transition-colors whitespace-nowrap"
             >
-              <span>Explore All {stats?.total_repos ? `${stats.total_repos.toLocaleString()}` : "102k"}</span>
+              <span>Explore All {stats?.total_repos ? `${stats.total_repos.toLocaleString()}` : "153k"}</span>
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
         </div>
 
         {/* Category Chips */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-sans scrollbar-none pt-2 border-t border-zinc-100">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-sans scrollbar-none pt-2 border-t border-[var(--border-subtle)]">
           {chips.map((chip) => (
             <CategoryChip key={chip.preset} def={chip} onSelect={onSelectCategory} />
           ))}

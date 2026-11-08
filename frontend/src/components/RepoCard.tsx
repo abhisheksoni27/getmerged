@@ -138,7 +138,7 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
         href={`/${fullName}`}
         onClick={handleClick}
         title={`View ${fullName} C-Rank scorecard, PR response time & merge metrics`}
-        className="group relative flex flex-col md:flex-row md:items-center justify-between gap-5 rounded-2xl bg-white p-5 sm:p-6 border border-zinc-200/90 hover:border-zinc-300 hover:shadow-sm transition-all text-current no-underline cursor-pointer"
+        className="group relative flex flex-col md:flex-row md:items-center justify-between gap-5 rounded-xl bg-[rgba(17,24,39,0.7)] p-5 sm:p-6 border border-[var(--border-subtle)] hover:border-[var(--border-hover)] hover:bg-[rgba(24,32,47,0.85)] transition-all text-current no-underline cursor-pointer backdrop-blur-md"
       >
         {/* Left: Identity & Info */}
         <div className="flex items-start gap-4 min-w-0 flex-1">
@@ -249,8 +249,8 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
       href={`/${fullName}`}
       onClick={handleClick}
       title={`View ${fullName} C-Rank scorecard, PR response time & merge metrics`}
-      className={`group relative flex h-full flex-col justify-between rounded-2xl bg-white p-6 sm:p-7 transition-all duration-150 block text-current no-underline cursor-pointer border border-zinc-200/90 shadow-xs hover:border-zinc-300 hover:shadow-md ${
-        isSpotlight ? "ring-1 ring-emerald-500/20" : ""
+      className={`group relative flex h-full flex-col justify-between rounded-xl bg-[rgba(17,24,39,0.7)] p-6 sm:p-7 transition-all duration-150 block text-current no-underline cursor-pointer border border-[var(--border-subtle)] shadow-xs hover:border-[var(--border-hover)] hover:bg-[rgba(24,32,47,0.85)] backdrop-blur-md ${
+        isSpotlight ? "ring-1 ring-[var(--border-accent)]" : ""
       }`}
     >
       <div className="flex flex-col flex-1">

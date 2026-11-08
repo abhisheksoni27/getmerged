@@ -69,24 +69,24 @@ export function StatusClient() {
 
         {/* Global Operational Status Banner */}
         <div
-          className={`rounded-3xl p-6 mb-8 flex items-center justify-between border shadow-xs transition-all ${
+          className={`rounded-xl p-6 mb-8 flex items-center justify-between border shadow-xs transition-all backdrop-blur-md ${
             healthStatus === "healthy"
-              ? "bg-emerald-950/70 border-emerald-800/80/80 border-emerald-200 text-emerald-300"
+              ? "bg-[rgba(63,185,80,0.1)] border-[rgba(63,185,80,0.3)] text-[var(--green-bright)]"
               : healthStatus === "degraded"
-              ? "bg-amber-950/70 border-amber-800/80/80 border-amber-200 text-amber-300"
+              ? "bg-[rgba(210,153,34,0.15)] border-[rgba(210,153,34,0.3)] text-[var(--amber-bright)]"
               : healthStatus === "unhealthy"
-              ? "bg-rose-950/70 border-rose-800/80/80 border-rose-200 text-rose-300"
-              : "surface-base border-[var(--border-subtle)] text-[var(--text-primary)]"
+              ? "bg-[rgba(248,81,73,0.15)] border-[rgba(248,81,73,0.3)] text-[#F85149]"
+              : "bg-[#0D111A] border-[var(--border-subtle)] text-[var(--text-primary)]"
           }`}
         >
           <div className="flex items-center gap-4">
-            {healthStatus === "healthy" && <CheckCircle2 className="h-8 w-8 text-emerald-600 shrink-0" />}
-            {healthStatus === "degraded" && <AlertCircle className="h-8 w-8 text-amber-600 shrink-0" />}
-            {healthStatus === "unhealthy" && <AlertCircle className="h-8 w-8 text-rose-600 shrink-0" />}
+            {healthStatus === "healthy" && <CheckCircle2 className="h-8 w-8 text-[var(--green-bright)] shrink-0" />}
+            {healthStatus === "degraded" && <AlertCircle className="h-8 w-8 text-[var(--amber-bright)] shrink-0" />}
+            {healthStatus === "unhealthy" && <AlertCircle className="h-8 w-8 text-[#F85149] shrink-0" />}
             {healthStatus === "checking" && <RefreshCw className="h-8 w-8 text-[var(--text-secondary)] animate-spin shrink-0" />}
 
             <div>
-              <h2 className="text-lg font-bold font-space">
+              <h2 className="text-lg font-bold font-space text-[var(--text-primary)]">
                 {healthStatus === "healthy" && "All Systems Operational"}
                 {healthStatus === "degraded" && "Degraded API Performance"}
                 {healthStatus === "unhealthy" && "System Outage Detected"}
@@ -100,7 +100,7 @@ export function StatusClient() {
 
           {latencyMs !== null && (
             <div className="hidden sm:flex flex-col items-end font-mono">
-              <span className="text-xl font-bold text-emerald-400">{latencyMs} ms</span>
+              <span className="text-xl font-bold text-[var(--green-bright)]">{latencyMs} ms</span>
               <span className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-sans">Latency</span>
             </div>
           )}
@@ -108,12 +108,12 @@ export function StatusClient() {
 
         {/* Service Health Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 font-sans">
-          <div className="rounded-3xl surface-base p-6 shadow-xs border border-[var(--border-subtle)]">
+          <div className="rounded-xl bg-[rgba(17,24,39,0.7)] p-6 shadow-xs border border-[var(--border-subtle)] backdrop-blur-md">
             <div className="flex items-center justify-between text-xs mb-3">
               <span className="font-bold text-[var(--text-primary)] flex items-center gap-2 font-space text-sm">
-                <Zap className="h-4 w-4 text-amber-500" /> API Services
+                <Zap className="h-4 w-4 text-[var(--purple-bright)]" /> API Services
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[10px] font-bold font-mono bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border border-emerald-200">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] font-bold font-mono bg-[rgba(63,185,80,0.15)] text-[var(--green-bright)] border border-[rgba(63,185,80,0.3)]">
                 OPERATIONAL
               </span>
             </div>
@@ -122,12 +122,12 @@ export function StatusClient() {
             </p>
           </div>
 
-          <div className="rounded-3xl surface-base p-6 shadow-xs border border-[var(--border-subtle)]">
+          <div className="rounded-xl bg-[rgba(17,24,39,0.7)] p-6 shadow-xs border border-[var(--border-subtle)] backdrop-blur-md">
             <div className="flex items-center justify-between text-xs mb-3">
               <span className="font-bold text-[var(--text-primary)] flex items-center gap-2 font-space text-sm">
-                <ShieldCheck className="h-4 w-4 text-emerald-600" /> In-Memory Cache
+                <ShieldCheck className="h-4 w-4 text-[var(--green-bright)]" /> In-Memory Cache
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[10px] font-bold font-mono bg-emerald-950/70 border-emerald-800/80 text-emerald-300 border border-emerald-200">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] font-bold font-mono bg-[rgba(63,185,80,0.15)] text-[var(--green-bright)] border border-[rgba(63,185,80,0.3)]">
                 OPERATIONAL
               </span>
             </div>

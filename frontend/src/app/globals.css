@@ -6,70 +6,82 @@
   --font-display: var(--font-space-grotesk), var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
   --font-space: var(--font-space-grotesk), var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* Refined Architectural Signals */
-  --color-grade-s: #059669;
-  --color-grade-a: #0284C7;
-  --color-grade-b: #7C3AED;
-  --color-grade-c: #D97706;
-  --color-grade-d: #DC2626;
+  /* Precision DevEx Signals */
+  --color-grade-s: #A371F7;
+  --color-grade-a: #3FB950;
+  --color-grade-b: #D29922;
+  --color-grade-c: #8B949E;
+  --color-grade-d: #F85149;
 
   /* Primary Action */
-  --color-primary: #09090B;
-  --color-accent: #059669;
+  --color-primary: #F0F6FC;
+  --color-accent: #8250DF;
 
-  /* Clean Architectural Neutral Palette */
-  --color-neutral-50: #FAFAF9;
-  --color-neutral-100: #F4F4F5;
-  --color-neutral-200: #E4E4E7;
-  --color-neutral-300: #D4D4D8;
-  --color-neutral-400: #A1A1AA;
-  --color-neutral-500: #71717A;
-  --color-neutral-600: #52525B;
-  --color-neutral-700: #3F3F46;
-  --color-neutral-800: #27272A;
-  --color-neutral-900: #18181B;
-  --color-neutral-950: #09090B;
+  /* Dark Precision Charcoal Palette */
+  --color-neutral-50: #04060A;
+  --color-neutral-100: #090D16;
+  --color-neutral-200: #0D111A;
+  --color-neutral-300: #111827;
+  --color-neutral-400: #1F2937;
+  --color-neutral-500: #6E7681;
+  --color-neutral-600: #8B949E;
+  --color-neutral-700: #C9D1D9;
+  --color-neutral-800: #E6EDF3;
+  --color-neutral-900: #F0F6FC;
+  --color-neutral-950: #FFFFFF;
 }
 
 :root {
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
 
-  /* Calm Architectural Canvas System */
-  --bg-canvas: #FAFAF9;
-  --bg-surface: #FFFFFF;
-  --bg-elevated: #F4F4F5;
-  --bg-accent-muted: #ECFDF5;
+  /* Precision Dark Canvas Tokens (Trigger.dev + Astral + GitHub Primer) */
+  --bg-canvas: #090D16;
+  --bg-surface: #0D111A;
+  --bg-elevated: #111827;
+  --bg-accent-muted: rgba(130, 80, 223, 0.12);
 
-  /* Delicate Architectural Borders */
-  --border-subtle: #E4E4E7;
-  --border-hover: #D4D4D8;
-  --border-strong: #A1A1AA;
+  /* Hairline Borders */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.15);
+  --border-strong: rgba(255, 255, 255, 0.25);
+  --border-accent: rgba(163, 113, 247, 0.35);
 
   /* High-Legibility Typography Hierarchy */
-  --text-primary: #09090B;
-  --text-secondary: #52525B;
-  --text-tertiary: #71717A;
+  --text-primary: #F0F6FC;
+  --text-secondary: #8B949E;
+  --text-tertiary: #6E7681;
 
   /* Semantic Feedback Signals */
-  --accent-success: #059669;
-  --accent-info: #0284C7;
-  --accent-warning: #D97706;
-  --accent-danger: #DC2626;
+  --accent-success: #3FB950;
+  --accent-info: #58A6FF;
+  --accent-warning: #D29922;
+  --accent-danger: #F85149;
+
+  /* Brand Accents */
+  --purple-bright: #A371F7;
+  --purple-glow: rgba(163, 113, 247, 0.15);
+  --green-bright: #3FB950;
+  --green-glow: rgba(63, 185, 80, 0.15);
 }
 
 @layer base {
   html {
     font-size: 16px;
     background-color: var(--bg-canvas);
-    color-scheme: light;
+    color-scheme: dark;
     scroll-behavior: smooth;
   }
 
   body {
     background-color: var(--bg-canvas);
+    background-image: 
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(130, 80, 223, 0.12), transparent),
+      linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px;
     color: var(--text-primary);
     font-family: var(--font-sans);
     min-height: 100vh;
@@ -79,7 +91,6 @@
     line-height: 1.6;
   }
 
-  /* Refined Display Hierarchy with Generous Breathing Room - color: inherit ensures utilities like text-white work */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     color: inherit;
@@ -92,7 +103,6 @@
   h2 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); line-height: 1.2; font-weight: 700; }
   h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); line-height: 1.3; font-weight: 600; }
 
-  /* Data/mono numerals align cleanly */
   .font-mono,
   code,
   kbd,
@@ -107,38 +117,38 @@
   }
 }
 
-/* Calm Surface & Elevation System */
+/* Precision DevEx Surfaces & Elevation */
 .surface-base {
-  background: var(--bg-surface);
+  background: rgba(17, 24, 39, 0.7);
   border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
 }
 
 .surface-elevated {
-  background: var(--bg-elevated);
+  background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: 12px;
+  border-radius: 6px;
 }
 
 .surface-glass,
 .glass-panel,
 .glass-card {
-  background: #FFFFFF;
+  background: rgba(17, 24, 39, 0.75);
   border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
 
 .glass-card:hover {
   border-color: var(--border-hover);
-  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.06);
+  background: rgba(24, 32, 47, 0.85);
 }
 
-/* Accessible focus ring */
+/* Precision Focus Ring */
 :focus-visible {
-  outline: 2px solid #09090B;
+  outline: 2px solid var(--purple-bright);
   outline-offset: 2px;
 }
 
@@ -146,31 +156,23 @@ input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
   outline: none;
-  border-color: #09090B;
-  box-shadow: 0 0 0 1px #09090B;
+  border-color: var(--purple-bright);
+  box-shadow: 0 0 0 1px var(--purple-bright);
 }
 
 ::selection {
-  background-color: #09090B;
-  color: #FFFFFF;
+  background-color: var(--purple-bright);
+  color: #04060A;
 }
 
-/* Data Gauge Indicators */
-.gauge-dot {
+/* Telemetry Dot Indicator */
+.telemetry-dot {
   display: inline-block;
   width: 6px;
   height: 6px;
-  margin: 0 1.5px;
   border-radius: 50%;
-  background-color: var(--grade-color, var(--color-neutral-400));
-}
-
-.gauge-dot-filled {
-  background-color: var(--grade-color);
-}
-
-.gauge-dot-empty {
-  background-color: var(--border-subtle);
+  background-color: var(--accent-success);
+  box-shadow: 0 0 8px var(--accent-success);
 }
 
 /* Grade Color Utilities */
@@ -201,7 +203,6 @@ select:focus-visible {
   }
 }
 
-/* Optimize initial mobile layout & rendering work for deep sections */
 .content-auto {
   content-visibility: auto;
   contain-intrinsic-size: 0 400px;

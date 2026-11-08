@@ -242,7 +242,7 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
           </div>
 
           {issues.length > 0 ? (
-            <div className="space-y-4 sm:space-y-5 mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
               {issues.map((iss) => {
                 let parsedLabels: { name: string; color: string }[] = [];
                 try {
@@ -256,28 +256,28 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
                   <div
                     key={`${iss.repository_id}-${iss.issue_number}`}
                     data-created-at={iss.created_at}
-                    className="group rounded-2xl glass-panel p-5 sm:p-7 border border-[var(--border-subtle)] shadow-xs hover:shadow-md hover:border-[var(--border-subtle)] hover:-translate-y-0.5 transition-all flex flex-col justify-between gap-5"
+                    className="group rounded-xl bg-[rgba(17,24,39,0.7)] p-5 sm:p-6 border border-[var(--border-subtle)] shadow-xs hover:border-[var(--border-hover)] hover:bg-[rgba(24,32,47,0.85)] hover:-translate-y-0.5 transition-all flex flex-col justify-between gap-4 backdrop-blur-md"
                   >
                     <div>
                       {/* Prominent meta badges: repo, stars, level rank, boosted */}
-                      <div className="flex flex-wrap items-center gap-2 mb-5">
+                      <div className="flex flex-wrap items-center gap-2 mb-3">
                         <Link prefetch={false}
                           href={`/${iss.repo_full_name}`}
                           title={`View ${iss.repo_full_name} contributor score breakdown`}
-                          className="inline-flex items-center px-3 py-1 rounded-full glass-card text-white text-[11px] sm:text-xs font-mono font-bold hover:bg-emerald-700 transition-colors"
+                          className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-[#0D111A] border border-[var(--border-subtle)] text-[var(--text-primary)] text-[11px] sm:text-xs font-mono font-semibold hover:border-[var(--border-hover)] transition-colors"
                         >
                           {iss.repo_full_name}
                         </Link>
                         {iss.stars > 0 && (
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/70 border-amber-800/80 border border-amber-300 text-[11px] sm:text-xs font-mono font-bold text-amber-300">
-                            <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#0D111A] border border-[var(--border-subtle)] text-[11px] font-mono font-medium text-[var(--text-secondary)]">
+                            <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
                             {iss.stars.toLocaleString()}
                           </span>
                         )}
                         <span
-                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] sm:text-xs font-mono font-bold ${tierChipClass}`}
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[11px] font-mono font-semibold ${tierChipClass}`}
                         >
-                          <Award className="h-3.5 w-3.5" /> Tier {iss.c_rank_tier} · {iss.c_rank_score.toFixed(0)} pts
+                          <Award className="h-3 w-3" /> Tier {iss.c_rank_tier} · {iss.c_rank_score.toFixed(0)} pts
                         </span>
 
                         {/* Boosted listing badge (AC4) */}
