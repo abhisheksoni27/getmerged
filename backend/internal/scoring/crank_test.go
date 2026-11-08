@@ -317,6 +317,17 @@ func TestComputeCRankWithBusFactor_UnifiedFormula(t *testing.T) {
 		t.Errorf("totalPRs=5 (<10) must be capped at Tier B, got tier=%s (score=%.2f)", tier5PR, score5PR)
 	}
 
+	// Case 6: High overall score but poor first timer rate (< 50.0 percentile) -> Capped at Tier A (not S)
+	poorFirstTimerNormed := perfectNormed
+	poorFirstTimerNormed.FirstTimer = 33.0
+	scoreLowFT, tierLowFT := scoring.ComputeCRankWithBusFactor(poorFirstTimerNormed, false, 0, 3, 50)
+	if tierLowFT == scoring.TierS {
+		t.Errorf("Repo with poor first timer rate (33.0 < 50.0) must NOT achieve Tier S, got %s (score=%.2f)", tierLowFT, scoreLowFT)
+	}
+	if tierLowFT != scoring.TierA {
+		t.Errorf("Repo with overall high score but poor first timer rate should be Tier A, got %s", tierLowFT)
+	}
+
 	// Verify IsLowSample utility
 	if !scoring.IsLowSample(9) {
 		t.Errorf("IsLowSample(9) should be true")
