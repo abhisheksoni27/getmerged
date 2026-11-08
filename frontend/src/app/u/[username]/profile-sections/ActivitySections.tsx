@@ -103,9 +103,9 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <SeasonStat label="Season Level" value={profile.level} />
-            <div className="rounded border border-[var(--border-subtle)] bg-slate-800/80 px-4 py-3">
+            <div className="rounded border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-4 py-3">
               <div className="text-xs font-mono uppercase text-[var(--text-secondary)]">Season XP</div>
-              <div className="text-xl font-bold font-mono text-emerald-400 mt-1">
+              <div className="text-xl font-bold font-mono text-emerald-600 mt-1">
                 {profile.season_xp ?? 0}
               </div>
             </div>
@@ -118,9 +118,9 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
                 </>
               }
             />
-            <div className="rounded border border-[var(--border-subtle)] bg-slate-800/80 px-4 py-3">
+            <div className="rounded border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-4 py-3">
               <div className="text-xs font-mono uppercase text-[var(--text-secondary)]">Global Rank</div>
-              <div className="text-xl font-bold font-mono text-purple-400 mt-1">
+              <div className="text-xl font-bold font-mono text-purple-600 mt-1">
                 {typeof profile.season_rank === "number" ? `#${profile.season_rank}` : " - "}
               </div>
             </div>
@@ -148,7 +148,7 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
                       {pct}% ({count} PRs)
                     </span>
                   </div>
-                  <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+                  <div className="h-2 w-full rounded-full bg-[var(--bg-elevated)] overflow-hidden">
                     <div
                       className="h-full rounded-full bg-blue-500 transition-all duration-500"
                       style={{ width: `${Math.max(5, pct)}%` }}
@@ -227,7 +227,7 @@ export const ActivitySections: React.FC<ActivitySectionsProps> = ({
                       ? "bg-emerald-950 text-emerald-400 border border-emerald-800"
                       : ev.outcome === "miss"
                         ? "bg-rose-950 text-rose-400 border border-rose-800"
-                        : "bg-slate-800 text-[var(--text-secondary)] border border-[var(--border-subtle)]"
+                        : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] border border-[var(--border-subtle)]"
                   }`}
                 >
                   {ev.outcome === "hit" ? "MERGED ✓" : ev.outcome === "miss" ? "CLOSED" : "PENDING"}

@@ -40,7 +40,7 @@ export function UnscoredExplainer({ fullName, language }: UnscoredExplainerProps
         <Link prefetch={false}
           href={rankingsHref}
           title={`Explore active, welcoming open-source ${language || "repositories"} on GetMerged`}
-          className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-emerald-400 hover:text-emerald-300 underline underline-offset-2 shrink-0 transition-colors"
+          className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-emerald-600 hover:text-emerald-700 underline underline-offset-2 shrink-0 transition-colors"
         >
           Explore active &amp; welcoming alternatives
           <ArrowRight className="h-3.5 w-3.5" />

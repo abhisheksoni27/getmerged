@@ -55,10 +55,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             <img
               src={profile.avatar_url}
               alt={profile.username}
-              className="h-16 w-16 sm:h-18 sm:w-18 rounded-xl border border-[var(--border-subtle)] bg-slate-800 shadow-md object-cover shrink-0"
+              className="h-16 w-16 sm:h-18 sm:w-18 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] shadow-xs object-cover shrink-0"
             />
           ) : (
-            <div className="h-16 w-16 sm:h-18 sm:w-18 rounded-xl bg-slate-800 text-[var(--text-primary)] flex items-center justify-center font-sans font-bold text-2xl shrink-0 border border-[var(--border-subtle)]">
+            <div className="h-16 w-16 sm:h-18 sm:w-18 rounded-xl bg-[var(--bg-elevated)] text-[var(--text-primary)] flex items-center justify-center font-sans font-bold text-2xl shrink-0 border border-[var(--border-subtle)]">
               {profile.username.slice(0, 2).toUpperCase()}
             </div>
           )}
@@ -67,18 +67,18 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               <h1 className="text-xl sm:text-2xl font-bold font-sans text-[var(--text-primary)] truncate">
                 {profile.username}
               </h1>
-              <span className="inline-flex items-center px-2 py-0.5 rounded bg-slate-800 text-[var(--text-secondary)] text-xs font-mono border border-[var(--border-subtle)]">
+              <span className="inline-flex items-center px-2 py-0.5 rounded bg-[var(--bg-elevated)] text-[var(--text-secondary)] text-xs font-mono border border-[var(--border-subtle)]">
                 @{profile.slug}
               </span>
               {(profile.is_pro || (isOwner && currentUser?.is_pro)) && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-mono font-bold border border-emerald-500/40 shadow-sm shadow-emerald-950/40">
-                  <Zap className="h-3 w-3 text-emerald-400 fill-emerald-400" />
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-mono font-bold border border-emerald-200 shadow-2xs">
+                  <Zap className="h-3 w-3 text-emerald-600 fill-emerald-600" />
                   PRO
                 </span>
               )}
               {dna?.persona && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 text-xs font-mono font-bold border border-emerald-700/80">
-                  <Sparkles className="h-3 w-3 text-emerald-400" />
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 text-xs font-mono font-bold border border-emerald-200">
+                  <Sparkles className="h-3 w-3 text-emerald-600" />
                   {dna.persona}
                 </span>
               )}
