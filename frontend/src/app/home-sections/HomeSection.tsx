@@ -10,12 +10,12 @@ interface HomeSectionProps {
   as?: "section" | "main";
 }
 
-/** Shared page-section shell: centered container with generous editorial gutters. */
+/** Shared page-section shell: centered container with generous gutters. */
 export function HomeSection({ children, maxWidth = "6xl", className = "", id, as = "section" }: HomeSectionProps) {
   const Tag = as;
   const widthClass = maxWidth === "7xl" ? "max-w-7xl" : "max-w-6xl";
   return (
-    <Tag id={id} className={`mx-auto ${widthClass} px-4 sm:px-6 lg:px-8 py-14 sm:py-20 ${className}`}>
+    <Tag id={id} className={`mx-auto ${widthClass} px-4 sm:px-6 lg:px-8 py-10 sm:py-14 ${className}`}>
       {children}
     </Tag>
   );
@@ -27,11 +27,10 @@ interface PanelProps {
   tone?: "solid" | "dashed";
 }
 
-/** Refined Panel with generous breathing room and clean border. */
-export function Panel({ children, className = "", tone = "solid" }: PanelProps) {
-  const border = tone === "dashed" ? "border-dashed border-zinc-300" : "border-zinc-200";
+/** Dark DevEx Panel */
+export function Panel({ children, className = "" }: PanelProps) {
   return (
-    <div className={`rounded-2xl border ${border} bg-white p-7 sm:p-10 shadow-xs ${className}`}>
+    <div className={`card p-6 sm:p-8 ${className}`}>
       {children}
     </div>
   );
@@ -45,7 +44,8 @@ interface EyebrowProps {
 /** Subtle, elegant mono section badge. */
 export function Eyebrow({ children, className = "" }: EyebrowProps) {
   return (
-    <div className={`inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-zinc-700 bg-zinc-100 border border-zinc-200 rounded-md px-2.5 py-1 mb-4 ${className}`}>
+    <div className={`hero-badge mb-3 ${className}`}>
+      <span className="dot" />
       {children}
     </div>
   );

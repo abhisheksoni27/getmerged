@@ -326,7 +326,7 @@ Python 12,532 | TypeScript 9,157 | JavaScript 7,784 | Go 7,128 | C++ 5,891 | Rus
 | OrgClaimButton | Org repo claim flow with verification |
 | OrgConsoleCard | Org-wide aggregate C-Rank, scored count, avg score |
 | PhysicsCanvas | Physics-based animated background |
-| PRAcceptanceWidget | Predicted PR acceptance likelihood + guidance |
+| PRAcceptanceWidget | [Deprecated / Removed] Formerly duplicate forecast widget on repo detail (Issue #121) |
 | ProfileEditModal | Edit public profile fields |
 | ProjectCard | Project/repo card with metrics, tier badge, action links |
 | ProofOfMergeModal | Verifiable proof-of-merge evidence with share |
@@ -463,7 +463,7 @@ Python 12,532 | TypeScript 9,157 | JavaScript 7,784 | Go 7,128 | C++ 5,891 | Rus
 | `/leaderboard` | LeagueClient, KarmaProfileBadge, RepoCard |
 | `/hall-of-fame` | RepoCard, CRankBadge |
 | `/community-powerhouses` | RepoCard, OrgConsoleCard |
-| `/[owner]/[name]` | ClientRepoDetail, RepoDetailHero, RepoScorecards, PRSizeSweetSpotCard, RepoTrendChart, SimilarRepos, RepoStickyBar, OptimalReviewWindow, PRAcceptanceWidget, RepoReviewsSection, UnscoredExplainer, RepoBadgeGenerator |
+| `/[owner]/[name]` | ClientRepoDetail, RepoDetailHero (Beat 1), RepoScorecards (Beat 2), RecentMergedPRsTable (Beat 3 Proof), PRSizeSweetSpotCard (Beat 4), OptimalReviewWindow (Beat 4), RepoBadgeGenerator, RepoTrendChart, SimilarRepos, RepoStickyBar, RepoReviewsSection/FeedbackSection, FaqGuide, UnscoredExplainer |
 | `/[owner]/[name]/audit` | RepoAuditReport, RepoAuditCTA |
 | `/compare/[...slug]` | VsShowdownCard, CompareShareBar, PRSizeSweetSpotCard, RepoTrendChart |
 | `/dashboard` | DashboardClient, FirstMergeTrack, SeasonCard, QuestTrackCard, EmbedKarmaBadgeCard, MergeCelebrationModal, ProofOfWorkResumeModal, WeeklyWrapCard |

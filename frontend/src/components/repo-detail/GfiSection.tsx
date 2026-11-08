@@ -13,7 +13,7 @@ interface GfiSectionProps {
 
 export function GfiSection({ repo, fullName, gfiList }: GfiSectionProps) {
   return (
-    <section id="good-first-issues" className="scroll-mt-36 rounded-2xl glass-panel p-4 sm:p-5 mb-10 border-2 border-[var(--border-subtle)] shadow-sm font-mono">
+    <section id="good-first-issues" className="scroll-mt-36 card mb-6 font-mono">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-3">
           <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center gap-2">

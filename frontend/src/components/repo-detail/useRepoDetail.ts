@@ -282,14 +282,13 @@ export function useRepoDetail({
 
   const tabs: RepoSectionTab[] = useMemo(() => [
     { id: "overview", label: "Overview", icon: Sparkles },
-    ...(insights ? [{ id: "guidelines", label: "AI Guidelines", icon: Sparkles }] : []),
     { id: "scorecards", label: "Scorecards", icon: Activity },
-    { id: "trends", label: "Trends & Forecast", icon: BarChart3 },
+    { id: "trends", label: "Historical Trends", icon: BarChart3 },
     { id: "good-first-issues", label: "Good First Issues", icon: ShieldCheck },
     { id: "community-feedback", label: "Contributor Reviews", icon: Users },
     ...(relatedRepos.length > 0 ? [{ id: "alternatives", label: "Similar Repos", icon: Scale }] : []),
     { id: "faqs", label: "FAQs & Guide", icon: FileCode2 },
-  ], [insights, relatedRepos.length]);
+  ], [relatedRepos.length]);
 
   // Scroll-spy
   const [activeSection, setActiveSection] = useState<string>("overview");

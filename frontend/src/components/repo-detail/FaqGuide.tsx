@@ -78,15 +78,13 @@ export function FaqGuide({
   ];
 
   return (
-    <section id="faqs" className="scroll-mt-36 space-y-8 font-sans border-t-2 border-[var(--border-subtle)] pt-8 text-[var(--text-secondary)]">
-      <section className="rounded-2xl border-2 border-[var(--border-subtle)] glass-panel p-5 sm:p-6 shadow-sm">
-        <h2 className="text-base sm:text-lg font-extrabold font-space text-[var(--text-primary)] mb-3 flex items-center gap-2">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 shadow-sm rotate-2">
-            <Activity className="h-4 w-4 text-emerald-400 shrink-0" />
-          </span>
-          {`Contributor Compatibility & Review Speed Analysis for ${fullName}`}
+    <section id="faqs" className="scroll-mt-36 space-y-6 font-sans border-t border-[var(--border-subtle)] pt-6 text-[var(--text-secondary)]">
+      <div className="card">
+        <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
+          <Activity className="h-4 w-4 text-[var(--green-bright)] shrink-0" />
+          <span>{`Contributor Compatibility & Review Speed Analysis for ${fullName}`}</span>
         </h2>
-        <div className="rounded-xl border-2 border-[var(--border-subtle)] glass-panel p-4 text-[var(--text-secondary)] leading-relaxed max-w-none space-y-3 font-sans shadow-sm">
+        <div className="p-4 bg-[#0D111A] border border-[var(--border-subtle)] rounded-md text-xs text-[var(--text-secondary)] leading-relaxed space-y-2">
           <p>
             When evaluating whether to contribute to <strong className="text-[var(--text-primary)]">{fullName}</strong>, response velocity and maintainer engagement are crucial. GetMerged continuously tracks pull request trajectories, first-comment latency, and code review rounds to help developers avoid submitting pull requests to backlogged repositories.
           </p>
@@ -96,27 +94,25 @@ export function FaqGuide({
             <strong className="text-[var(--text-primary)]">{mergeRateStr}</strong> were successfully merged into the primary branch.
           </p>
         </div>
-      </section>
+      </div>
 
-      <section className="content-auto rounded-2xl border-2 border-[var(--border-subtle)] glass-panel p-5 sm:p-6 rounded-2xl mb-8">
-        <h2 className="text-base sm:text-lg font-extrabold font-space text-[var(--text-primary)] mb-4 flex items-center gap-2">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-400 shadow-sm -rotate-2">
-            <FileCode2 className="h-4 w-4 text-sky-400 shrink-0" />
-          </span>
-          {`Frequently Asked Questions - Contributing to ${fullName}`}
+      <div className="card">
+        <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
+          <FileCode2 className="h-4 w-4 text-[var(--purple-bright)] shrink-0" />
+          <span>{`Frequently Asked Questions - Contributing to ${fullName}`}</span>
         </h2>
-        <div className="space-y-3.5">
+        <div className="space-y-3">
           {faqs.map((faq, i) => (
-            <div key={i} className="rounded-xl border-2 border-[var(--border-subtle)] glass-panel p-4 shadow-sm">
+            <div key={i} className="p-4 bg-[#0D111A] border border-[var(--border-subtle)] rounded-md">
               <div className="flex gap-3">
-                <span className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md shadow-sm ${FAQ_BADGES[i % FAQ_BADGES.length]}`}>
+                <span className={`inline-flex h-6 w-6 shrink-0 items-center justify-center rounded text-xs font-mono font-bold ${FAQ_BADGES[i % FAQ_BADGES.length]}`}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div>
-                  <h3 className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] font-space mb-1.5">
+                  <h3 className="text-xs font-mono font-bold text-[var(--text-primary)] mb-1">
                     {faq.q}
                   </h3>
-                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-sans">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                     {faq.a}
                   </p>
                 </div>
@@ -124,16 +120,16 @@ export function FaqGuide({
             </div>
           ))}
         </div>
-      </section>
+      </div>
 
-      <section className="rounded-2xl border-2 border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 sm:p-6 text-[var(--text-primary)] shadow-sm">
-        <h2 className="text-xs font-space font-extrabold text-yellow-200 uppercase tracking-wider mb-2">
+      <div className="card">
+        <h2 className="text-xs font-mono font-bold text-[var(--accent-warning)] uppercase tracking-wider mb-2">
           GetMerged C-Rank™ Indexing Standard
         </h2>
         <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-sans">
           All metrics displayed for {fullName} are automatically retrieved via the public GitHub API and recalculated daily. Insider pull requests submitted by repository owners or organization members are excluded from merge rate calculations to preserve objective external contributor statistics.
         </p>
-      </section>
+      </div>
     </section>
   );
 }

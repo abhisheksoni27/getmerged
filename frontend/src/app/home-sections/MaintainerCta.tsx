@@ -17,46 +17,46 @@ export function MaintainerCta() {
   const { openSearch } = useSearch();
 
   return (
-    <HomeSection className="py-16 sm:py-24">
-      <div className="rounded-2xl bg-white border border-zinc-200/90 p-8 sm:p-12 shadow-xs">
+    <HomeSection className="py-12 sm:py-16">
+      <div className="card card-highlight p-8 sm:p-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          <div className="space-y-5">
+          <div className="space-y-4">
             <Eyebrow>
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> For Maintainers
+              <ShieldCheck className="h-3.5 w-3.5 text-[var(--green-bright)]" /> For Maintainers
             </Eyebrow>
-            <h2 className="text-3xl sm:text-4xl font-bold text-zinc-950 tracking-tight font-sans leading-tight">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-display leading-tight">
               Maintain an open source repo?<br />See your contributor experience.
             </h2>
-            <p className="text-base text-zinc-600 font-sans leading-relaxed">
+            <p className="text-sm text-[var(--text-secondary)] font-sans leading-relaxed">
               Discover your review response grade, outside PR merge rates, and where prospective contributors might encounter bottlenecks.
             </p>
             <div className="flex flex-wrap gap-3 pt-2">
               <button
                 type="button"
                 onClick={() => openSearch()}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-zinc-900 text-white hover:bg-zinc-800 font-sans text-sm font-medium rounded-xl shadow-xs cursor-pointer transition-colors"
+                className="scan-btn inline-flex items-center gap-2 text-xs font-semibold cursor-pointer"
               >
                 <Search className="h-4 w-4" /> Check Your Repository
               </button>
               <Link prefetch={false}
                 href="/guides/how-to-know-if-maintainer-will-review"
                 title="Maintainer Best Practices"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-zinc-200 text-zinc-700 font-sans text-sm font-medium rounded-xl hover:bg-zinc-50 shadow-2xs transition-colors"
+                className="pill pill-purple hover:bg-[rgba(163,113,247,0.2)] transition-colors inline-flex items-center gap-1.5 px-4 py-2 cursor-pointer text-xs"
               >
-                Read Playbook <ArrowRight className="h-4 w-4" />
+                Read Playbook <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
           </div>
 
-          <div className="bg-zinc-50/80 border border-zinc-200/80 rounded-xl p-6 sm:p-7 space-y-4">
-            <div className="font-semibold text-sm text-zinc-900 border-b border-zinc-200/60 pb-3 flex items-center justify-between">
+          <div className="bg-[#04060A] border border-[var(--border-subtle)] rounded-xl p-6 sm:p-7 space-y-4">
+            <div className="font-semibold text-sm text-[var(--text-primary)] border-b border-[var(--border-subtle)] pb-3 flex items-center justify-between">
               <span>Maintainer Health Check</span>
-              <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-full text-xs font-medium">Live</span>
+              <span className="pill pill-green">Live Telemetry</span>
             </div>
             <div className="space-y-3 pt-1">
               {HEALTH_CHECKS.map((check) => (
-                <div key={check} className="flex items-center gap-3 text-zinc-800 font-medium text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                <div key={check} className="flex items-center gap-3 text-[var(--text-secondary)] font-medium text-xs font-mono">
+                  <CheckCircle2 className="h-4 w-4 text-[var(--green-bright)] shrink-0" />
                   <span>{check}</span>
                 </div>
               ))}

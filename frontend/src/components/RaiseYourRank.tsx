@@ -51,7 +51,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
     return (
       <section
         id="raise-your-rank"
-        className="scroll-mt-36 relative rounded-2xl border-2 border-[var(--border-subtle)] glass-panel p-5 shadow-sm mb-10"
+        className="scroll-mt-36 card mb-6"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
@@ -86,7 +86,7 @@ export function RaiseYourRank({ fullName, onClaimClick }: RaiseYourRankProps) {
   return (
     <section
       id="raise-your-rank"
-      className="scroll-mt-36 relative rounded-2xl border-2 border-[var(--border-subtle)] glass-panel p-5 sm:p-6 shadow-sm mb-10"
+      className="scroll-mt-36 card mb-6"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
