@@ -41,7 +41,6 @@ export function useRepoDetail({
   const [isCheckingGithub, setIsCheckingGithub] = useState(false);
   const [relatedRepos, setRelatedRepos] = useState<Repo[]>(initialRelatedRepos);
   const [gfiList, setGfiList] = useState<GoodFirstIssueItem[]>(initialGfiList);
-  const [gfiTab, setGfiTab] = useState<"all" | "paid">("all");
   const [isRepoClaimed, setIsRepoClaimed] = useState(Boolean(initialClaimStatus?.is_claimed));
   const [isRepoVerified, setIsRepoVerified] = useState(Boolean(initialClaimStatus?.is_verified));
 
@@ -151,10 +150,9 @@ export function useRepoDetail({
 
     const fetchGFI = async () => {
       if (!targetId) return;
-      if (initialGfiList.length > 0 && gfiTab === "all") return;
+      if (initialGfiList.length > 0) return;
       try {
-        const bountyParam = gfiTab === "paid" ? "?bounty=1" : "";
-        const res = await fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/good-first-issues${bountyParam}`, { credentials: "include" });
+        const res = await fetch(`${API_BASE_URL}/api/v1/repos/${targetId}/good-first-issues`, { credentials: "include" });
         if (!res.ok) return;
         const data = await res.json();
         if (data?.data && Array.isArray(data.data)) {
@@ -164,7 +162,7 @@ export function useRepoDetail({
     };
 
     Promise.allSettled([fetchWatchlist(), fetchInsights(), fetchRelated(), fetchClaimStatus(), fetchGFI()]);
-  }, [repo?.id, fullName, initialInsights, initialRelatedRepos.length, initialGfiList.length, gfiTab]);
+  }, [repo?.id, fullName, initialInsights, initialRelatedRepos.length, initialGfiList.length]);
 
   const handleWatchToggle = useCallback(async () => {
     if (!isLoggedIn) {
@@ -339,8 +337,6 @@ export function useRepoDetail({
     isCheckingGithub,
     relatedRepos,
     gfiList,
-    gfiTab,
-    setGfiTab,
     isRepoClaimed,
     setIsRepoClaimed,
     isRepoVerified,

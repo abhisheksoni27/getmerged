@@ -88,8 +88,6 @@ export function ClientRepoDetail({
     isCheckingGithub,
     relatedRepos,
     gfiList,
-    gfiTab,
-    setGfiTab,
     isRepoClaimed,
     setIsRepoClaimed,
     isRepoVerified,
@@ -337,8 +335,6 @@ export function ClientRepoDetail({
         repo={repo}
         fullName={fullName}
         gfiList={gfiList}
-        gfiTab={gfiTab}
-        onTabChange={setGfiTab}
       />
 
       {/* Issues #6, #7, #8: Contributor Community Feedback & Verification Module */}
