@@ -9,11 +9,9 @@ interface GfiSectionProps {
   repo: Repo;
   fullName: string;
   gfiList: GoodFirstIssueItem[];
-  gfiTab: "all" | "paid";
-  onTabChange: (tab: "all" | "paid") => void;
 }
 
-export function GfiSection({ repo, fullName, gfiList, gfiTab, onTabChange }: GfiSectionProps) {
+export function GfiSection({ repo, fullName, gfiList }: GfiSectionProps) {
   return (
     <section id="good-first-issues" className="scroll-mt-36 rounded-2xl glass-panel p-4 sm:p-5 mb-10 border-2 border-[var(--border-subtle)] shadow-sm font-mono">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
@@ -21,30 +19,6 @@ export function GfiSection({ repo, fullName, gfiList, gfiTab, onTabChange }: Gfi
           <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-emerald-600" /> Active Good First Issues ({gfiList.length > 0 ? gfiList.length : (repo?.good_first_issue_count ?? 0)})
           </h3>
-          <div className="inline-flex rounded-xl glass-card p-0.5 border border-[var(--border-subtle)] text-xs font-mono">
-            <button
-              type="button"
-              onClick={() => onTabChange("all")}
-              className={`px-2.5 py-1 rounded-lg transition-colors font-semibold ${
-                gfiTab === "all"
-                  ? "glass-panel text-[var(--text-primary)] shadow-2xs"
-                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              }`}
-            >
-              All
-            </button>
-            <button
-              type="button"
-              onClick={() => onTabChange("paid")}
-              className={`px-2.5 py-1 rounded-lg transition-colors font-semibold flex items-center gap-1 ${
-                gfiTab === "paid"
-                  ? "bg-emerald-600 text-white shadow-2xs"
-                  : "text-[var(--text-secondary)] hover:text-emerald-400"
-              }`}
-            >
-              <span>💰 Paid</span>
-            </button>
-          </div>
         </div>
         <a
           href={`https://github.com/${fullName}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2Cgood-first-issue`}
@@ -144,9 +118,7 @@ export function GfiSection({ repo, fullName, gfiList, gfiTab, onTabChange }: Gfi
       ) : (
         <div className="glass-card/60 border border-[var(--border-subtle)] rounded-lg p-6 text-center text-[var(--text-secondary)] font-sans">
           <p className="text-xs text-[var(--text-secondary)]">
-            {gfiTab === "paid" ? (
-              <>No cash-bounty issues currently open for <strong>{fullName}</strong>.</>
-            ) : repo?.good_first_issue_count ? (
+            {repo?.good_first_issue_count ? (
               <>
                 This repository currently has <strong>{repo.good_first_issue_count}</strong> open{" "}
                 <code className="bg-emerald-950/70 border-emerald-800/80 px-1.5 py-0.5 rounded text-emerald-400 font-mono">good first issue</code> tickets available for newcomers.
