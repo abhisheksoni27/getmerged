@@ -34,3 +34,33 @@ func TestFormatGoodFirstIssueQuery_CutoffDate(t *testing.T) {
 		t.Fatalf("expected query to contain %q, got: %s", expectedSub, queryStr)
 	}
 }
+
+func TestHandleRateLimit_DoesNotHoldMutexDuringSleep(t *testing.T) {
+	c := &Client{}
+	resetAt := time.Now().UTC().Add(100 * time.Millisecond).Format(time.RFC3339)
+	rl := rateLimitInfo{Remaining: 5, ResetAt: resetAt, Cost: 1}
+
+	done := make(chan struct{})
+	go func() {
+		c.handleRateLimit(rl)
+		close(done)
+	}()
+
+	time.Sleep(10 * time.Millisecond)
+
+	readDone := make(chan rateLimitInfo)
+	go func() {
+		readDone <- c.GetRateLimitInfo()
+	}()
+
+	select {
+	case info := <-readDone:
+		if info.Remaining != 5 {
+			t.Fatalf("expected remaining 5, got %d", info.Remaining)
+		}
+	case <-time.After(50 * time.Millisecond):
+		t.Fatal("GetRateLimitInfo was blocked by handleRateLimit holding the mutex!")
+	}
+
+	<-done
+}

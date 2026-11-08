@@ -940,9 +940,8 @@ func (c *Client) do(query string, vars map[string]any, out any) (fromCache bool,
 
 func (c *Client) handleRateLimit(rl rateLimitInfo) {
 	c.mu.Lock()
-	defer c.mu.Unlock()
-
 	c.rlInfo = rl
+	c.mu.Unlock()
 
 	if rl.Remaining == 0 && rl.Cost == 0 {
 		slog.Warn("github: rate limit info is all-zero - GitHub may have returned empty/null rateLimit (check repo name, token scope, or query errors)")
