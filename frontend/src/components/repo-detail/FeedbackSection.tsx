@@ -111,10 +111,10 @@ export function FeedbackSection({ repoId, fullName, currentUser, isLoggedIn, onR
             <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-400 shadow-sm -rotate-2">
               <Users className="h-5 w-5 text-sky-400 shrink-0" />
             </span>
-            Contributor Community Vibe Feedback
+            Contributor Reviews & Maintainer Feedback
           </h2>
           <p className="text-sm text-[var(--text-secondary)] mt-1 leading-relaxed">
-            Rate what actually matters after opening a pull request here.
+            Real contributor ratings on code review speed, maintainer helpfulness, and beginner receptivity.
           </p>
         </div>
         {currentUser ? (
@@ -293,10 +293,10 @@ export function FeedbackSection({ repoId, fullName, currentUser, isLoggedIn, onR
             <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between mb-5">
               <div>
                 <h3 className="font-space text-sm font-extrabold text-[var(--text-primary)] uppercase tracking-wider">
-                  Have you contributed to this repo?
+                  Have you contributed to {fullName.split("/")[1] || fullName}?
                 </h3>
                 <p className="text-xs text-[var(--text-secondary)] mt-1">
-                  Rate your first-hand PR experience (review speed, maintainer responsiveness, and onboarding ease) to help other contributors.
+                  Share your experience with code reviews, responsiveness, and onboarding to guide other external contributors.
                 </p>
               </div>
               <span

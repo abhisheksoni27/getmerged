@@ -133,8 +133,10 @@ export function RepoScorecards({
         </div>
 
         <div className="pt-4 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs font-mono text-[var(--text-secondary)]">
-          <span>Community Vibe</span>
-          <span className="font-bold text-[var(--text-primary)]">{vibeScore}/100</span>
+          <span>Community Reviews</span>
+          <span className="font-bold text-[var(--text-primary)]">
+            {vibeScore > 0 ? `${vibeScore}/100 index` : "No reviews yet"}
+          </span>
         </div>
       </div>
     </div>
