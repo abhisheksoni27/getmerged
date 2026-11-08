@@ -53,6 +53,30 @@ backend/eventstream
 backend/gharchive
 backend/generate_sitemap
 
+# Dependencies
+node_modules/
+
+# Python caches & bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Backups, swaps & temporary files
+*.bak
+*.swp
+*~
+
+# Agent / Tool scratch directories & configs
+.kilo/
+.commandcode/
+.hermes/
+.playwright/
+.opencode.json
+opencode.jsonc
+skills-lock.json
+gitleaks-report.json
+
 # OS & Environment
 .DS_Store
 Thumbs.db
