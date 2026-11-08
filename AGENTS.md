@@ -4,6 +4,11 @@
 - Tell crisply, using minimum tokens.
 - No corporate jargon, no fluff. Speak like a senior developer.
 - Do not make generic AI slop design. Align with the codebase, the product, the audience.
+- **🚨 PR-First Workflow (ZERO DIRECT PUSHES TO MAIN)**:
+  - **ALL code changes MUST go through a feature/fix branch and a GitHub Pull Request.** Never push commits directly to `main`.
+  - **Atomic, Cohesive PRs**: Group logically related changes together (e.g. backend endpoint + DB query + frontend consumption). Keep PRs scoped, focused, and reviewable. Do not lump unrelated refactors into a single PR.
+  - **Code the system properly, not hacky patches**: Build clean, maintainable architecture fitting the existing system conventions. This is an MVP—build real, robust primitives without over-engineering or going berserk with unnecessary abstractions.
+
 
 ## 1. 🚨 SSR-First Architecture Rule (ZERO EXCEPTIONS)
 - **ALL public page data, widgets, scorecards, benchmarks, and SEO content MUST be fetched server-side in `page.tsx` during SSR and passed down as props.**
