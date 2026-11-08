@@ -1,55 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GetMerged — Comprehensive Neobrutalist Wireframe & Component System</title>
+  <title>GetMerged — Precision DevEx Workbench Wireframe</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #FDFBF7;
-      --paper: #FFFFFF;
-      --paper-warm: #FFF9ED;
-      --ink: #18181B;
-      --ink-muted: #52525B;
-      --ink-faint: #A1A1AA;
-      --border: #18181B;
+      /* Trigger.dev + Astral + GitHub Primer Dark Theme Tokens */
+      --canvas: #090D16;
+      --canvas-subtle: #0D111A;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --card-bg-solid: #111827;
+      --card-hover: rgba(24, 32, 47, 0.85);
+      
+      --border: rgba(255, 255, 255, 0.08);
+      --border-subtle: rgba(255, 255, 255, 0.04);
+      --border-strong: rgba(255, 255, 255, 0.15);
+      --border-accent: rgba(163, 113, 247, 0.35);
+
+      --fg-default: #F0F6FC;
+      --fg-muted: #8B949E;
+      --fg-subtle: #6E7681;
+
+      /* GitHub / Trigger Brand Accents */
       --purple: #8250DF;
-      --purple-light: #F3EEFF;
-      --green: #15803D;
-      --green-light: #DCFCE7;
-      --amber: #B45309;
-      --amber-light: #FEF3C7;
-      --red: #B91C1C;
-      --red-light: #FEE2E2;
-      --shadow: 4px 4px 0px #18181B;
-      --shadow-sm: 2px 2px 0px #18181B;
-      --shadow-lg: 6px 6px 0px #18181B;
-      --radius: 8px;
+      --purple-bright: #A371F7;
+      --purple-glow: rgba(163, 113, 247, 0.15);
+      
+      --green: #238636;
+      --green-bright: #3FB950;
+      --green-glow: rgba(63, 185, 80, 0.15);
+
+      --amber: #D29922;
+      --amber-bright: #E3B341;
+      --red: #F85149;
+      --blue: #58A6FF;
+
+      --radius-sm: 4px;
+      --radius: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--canvas);
+      background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(130, 80, 223, 0.12), transparent),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 40px 40px, 40px 40px;
+      color: var(--fg-default);
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.5;
-      font-size: 15px;
+      font-size: 14px;
       -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
     }
 
     .tabular { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
-    .font-display { font-family: 'Bricolage Grotesque', sans-serif; letter-spacing: -0.02em; }
 
-    /* Top proto toolbar */
+    /* Top Prototype Switcher */
     .proto-bar {
-      background: var(--ink);
-      color: white;
-      padding: 10px 20px;
+      background: #04060A;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 24px;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -57,250 +77,368 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
-      border-bottom: 2px solid #000;
+      gap: 12px;
+      font-size: 12px;
     }
-    .proto-tabs {
+    .proto-title {
       display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      color: var(--fg-default);
+      font-family: 'JetBrains Mono', monospace;
     }
-    .proto-tab-btn {
-      background: #27272A;
-      color: #E4E4E7;
-      border: 1px solid #3F3F46;
-      padding: 6px 12px;
+    .proto-tag {
+      background: rgba(163, 113, 247, 0.15);
+      border: 1px solid var(--border-accent);
+      color: var(--purple-bright);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+    .proto-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+    .proto-btn {
+      background: transparent;
+      color: var(--fg-muted);
+      border: 1px solid transparent;
+      padding: 5px 12px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
       cursor: pointer;
       border-radius: 4px;
       transition: all 0.15s ease;
     }
-    .proto-tab-btn:hover { background: #3F3F46; }
-    .proto-tab-btn.active {
-      background: var(--purple);
-      color: white;
-      border-color: var(--purple);
-      font-weight: 700;
+    .proto-btn:hover {
+      color: var(--fg-default);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .proto-btn.active {
+      color: #FFFFFF;
+      background: rgba(163, 113, 247, 0.2);
+      border-color: var(--purple-bright);
+      font-weight: 600;
     }
 
-    /* Top nav */
+    /* GitHub Primer / Trigger Top Nav */
     .top-nav {
-      background: var(--paper);
-      border-bottom: 2px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: rgba(9, 13, 22, 0.8);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 41px;
+      z-index: 90;
     }
     .top-nav-inner {
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 12px 20px;
+      padding: 12px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .logo {
+    .brand {
       display: flex;
       align-items: center;
       gap: 10px;
       text-decoration: none;
-      color: var(--ink);
+      color: var(--fg-default);
     }
-    .logo-badge {
-      background: var(--purple);
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--purple) 0%, #4F46E5 100%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: white;
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
       font-size: 13px;
-      padding: 4px 8px;
-      border: 2px solid var(--border);
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 0 16px var(--purple-glow);
     }
-    .logo-text {
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
+    .brand-name {
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: -0.01em;
     }
     .nav-links {
       display: flex;
-      gap: 14px;
+      gap: 6px;
       align-items: center;
     }
-    .nav-link {
-      font-weight: 600;
-      font-size: 14px;
-      text-decoration: none;
-      color: var(--ink);
+    .nav-item {
+      color: var(--fg-muted);
+      font-size: 13px;
+      font-weight: 500;
       padding: 6px 12px;
-      border: 2px solid transparent;
-      border-radius: var(--radius);
+      border-radius: 6px;
+      text-decoration: none;
       cursor: pointer;
+      transition: color 0.15s ease, background 0.15s ease;
     }
-    .nav-link:hover, .nav-link.active {
-      border: 2px solid var(--border);
-      background: var(--paper-warm);
-      box-shadow: var(--shadow-sm);
+    .nav-item:hover, .nav-item.active {
+      color: var(--fg-default);
+      background: rgba(255, 255, 255, 0.05);
     }
     .nav-cta {
-      background: var(--purple);
-      color: white;
-      font-weight: 700;
+      background: #21262D;
+      border: 1px solid var(--border-strong);
+      color: var(--fg-default);
       font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
       text-decoration: none;
-      padding: 8px 14px;
-      border: 2px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      border-radius: var(--radius);
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .nav-cta:hover {
+      background: #30363D;
+      border-color: rgba(255, 255, 255, 0.3);
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 32px 20px 80px;
+      padding: 36px 24px 80px;
     }
 
-    /* Cards */
+    /* Cards & Bento Grid (Trigger / Astral Style) */
     .card {
-      background: var(--paper);
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 24px;
-      margin-bottom: 24px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
-    .card-warm { background: var(--paper-warm); }
+    .card:hover {
+      border-color: var(--border-strong);
+    }
+    .card-highlight {
+      background: linear-gradient(180deg, rgba(130, 80, 223, 0.06) 0%, rgba(17, 24, 39, 0.7) 100%);
+      border: 1px solid var(--border-accent);
+      box-shadow: 0 0 24px rgba(130, 80, 223, 0.08);
+    }
 
-    /* Hero */
+    /* Hero Section */
     .hero {
-      background: var(--paper-warm);
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-lg);
-      padding: 40px;
-      margin-bottom: 36px;
+      padding: 48px 0 40px;
+      text-align: left;
+      position: relative;
     }
-    .hero-eyebrow {
+    .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: var(--purple-light);
-      color: var(--purple);
-      border: 2px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      font-weight: 700;
+      background: rgba(163, 113, 247, 0.1);
+      border: 1px solid rgba(163, 113, 247, 0.25);
+      color: var(--purple-bright);
       font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      font-weight: 500;
+      font-family: 'JetBrains Mono', monospace;
       padding: 4px 10px;
-      border-radius: 4px;
-      margin-bottom: 16px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--purple-bright);
+      box-shadow: 0 0 8px var(--purple-bright);
     }
     .hero-title {
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: 42px;
-      line-height: 1.1;
-      font-weight: 800;
-      margin-bottom: 16px;
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.15;
       letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      max-width: 820px;
     }
     .hero-subtitle {
-      font-size: 17px;
-      color: var(--ink-muted);
-      max-width: 720px;
-      margin-bottom: 28px;
+      font-size: 16px;
+      color: var(--fg-muted);
+      line-height: 1.6;
+      max-width: 680px;
+      margin-bottom: 32px;
     }
 
-    /* Input / Scan */
-    .scan-box {
+    /* Terminal / Precision Scanner Bar */
+    .scan-terminal {
+      background: #0D1117;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 6px;
       display: flex;
-      gap: 10px;
-      max-width: 700px;
+      align-items: center;
+      gap: 8px;
+      max-width: 680px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    .scan-prompt {
+      color: var(--fg-subtle);
+      font-family: 'JetBrains Mono', monospace;
+      padding-left: 12px;
+      font-size: 13px;
+      user-select: none;
     }
     .scan-input {
       flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--fg-default);
       font-family: 'JetBrains Mono', monospace;
       font-size: 14px;
-      padding: 12px 16px;
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      background: white;
-      box-shadow: var(--shadow-sm);
       outline: none;
+      padding: 8px 4px;
     }
     .scan-btn {
-      background: var(--purple);
+      background: linear-gradient(180deg, var(--purple-bright) 0%, var(--purple) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      padding: 0 24px;
+      font-weight: 500;
+      font-size: 13px;
+      padding: 8px 18px;
+      border-radius: 5px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.15s ease;
     }
+    .scan-btn:hover { opacity: 0.9; }
 
-    /* Grids */
+    /* Bento Grid Layouts */
     .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    @media (max-width: 900px) {
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    @media (max-width: 960px) {
       .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
-      .hero { padding: 24px; }
-      .hero-title { font-size: 30px; }
-      .scan-box { flex-direction: column; }
+      .hero-title { font-size: 32px; }
+      .scan-terminal { flex-direction: column; align-items: stretch; }
     }
 
-    /* Section Head */
-    .sec-head {
+    /* Section Headers */
+    .sec-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin-bottom: 20px;
+      margin: 40px 0 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
     }
     .sec-title {
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--fg-default);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .sec-desc {
-      color: var(--ink-muted);
-      font-size: 14px;
+      font-size: 13px;
+      color: var(--fg-muted);
+      margin-top: 4px;
     }
 
-    /* Badges / Tiers */
+    /* Precision Grade Badges */
     .tier-badge {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-family: 'JetBrains Mono', monospace;
-      font-weight: 800;
-      font-size: 16px;
-      width: 36px;
-      height: 36px;
-      border: 2px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: 1px solid transparent;
     }
-    .tier-S { background: var(--purple); color: white; }
-    .tier-A { background: var(--green); color: white; }
-    .tier-B { background: var(--amber); color: white; }
-    .tier-C { background: #E2E8F0; color: var(--ink); }
-    .tier-D { background: var(--red); color: white; }
+    .tier-S {
+      background: rgba(163, 113, 247, 0.15);
+      border-color: rgba(163, 113, 247, 0.4);
+      color: var(--purple-bright);
+      box-shadow: 0 0 12px rgba(163, 113, 247, 0.2);
+    }
+    .tier-A {
+      background: rgba(63, 185, 80, 0.15);
+      border-color: rgba(63, 185, 80, 0.4);
+      color: var(--green-bright);
+    }
+    .tier-B {
+      background: rgba(210, 153, 34, 0.15);
+      border-color: rgba(210, 153, 34, 0.4);
+      color: var(--amber-bright);
+    }
+    .tier-C {
+      background: rgba(139, 148, 158, 0.15);
+      border-color: rgba(139, 148, 158, 0.3);
+      color: var(--fg-muted);
+    }
+    .tier-D {
+      background: rgba(248, 81, 73, 0.15);
+      border-color: rgba(248, 81, 73, 0.4);
+      color: var(--red);
+    }
 
-    /* Repo Card */
+    /* Precision Pills & Tags */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 500;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--fg-muted);
+    }
+    .pill-green {
+      background: rgba(63, 185, 80, 0.08);
+      border-color: rgba(63, 185, 80, 0.25);
+      color: var(--green-bright);
+    }
+    .pill-purple {
+      background: rgba(163, 113, 247, 0.08);
+      border-color: rgba(163, 113, 247, 0.25);
+      color: var(--purple-bright);
+    }
+    .pill-amber {
+      background: rgba(210, 153, 34, 0.08);
+      border-color: rgba(210, 153, 34, 0.25);
+      color: var(--amber-bright);
+    }
+
+    /* Repo Bento Item */
     .repo-card {
-      background: white;
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
       padding: 18px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      transition: all 0.15s ease;
+      cursor: pointer;
     }
-    .repo-top {
+    .repo-card:hover {
+      background: var(--card-hover);
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+    }
+    .repo-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -308,264 +446,274 @@
     }
     .repo-name {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--ink);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--fg-default);
       text-decoration: none;
     }
     .repo-desc {
-      color: var(--ink-muted);
       font-size: 13px;
-      margin-bottom: 12px;
-      line-height: 1.4;
+      color: var(--fg-muted);
+      line-height: 1.45;
+      margin-bottom: 14px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    .repo-stats {
+    .repo-telemetry {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      padding: 10px;
-      background: var(--bg);
-      border: 1.5px solid var(--border);
+      gap: 10px;
+      padding: 12px;
+      background: #0D111A;
+      border: 1px solid var(--border-subtle);
       border-radius: 6px;
       margin-bottom: 12px;
     }
-    .stat-label {
+    .tele-label {
       font-size: 11px;
-      color: var(--ink-muted);
+      color: var(--fg-subtle);
+      font-family: 'JetBrains Mono', monospace;
       text-transform: uppercase;
+    }
+    .tele-val {
+      font-size: 15px;
       font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--fg-default);
     }
-    .stat-val {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--ink);
-    }
-    .stat-sample {
-      font-size: 10px;
-      color: var(--ink-faint);
+    .tele-sample {
+      font-size: 11px;
+      color: var(--fg-subtle);
+      font-weight: 400;
       margin-left: 3px;
     }
 
-    /* Pills */
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
+    /* Precision Astral Benchmark Tables */
+    .bench-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 13px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--card-bg);
+    }
+    .bench-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: #0D111A;
+      border-bottom: 1px solid var(--border);
+      color: var(--fg-subtle);
+      font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1.5px solid var(--border);
-    }
-    .pill-green { background: var(--green-light); color: var(--green); }
-    .pill-amber { background: var(--amber-light); color: var(--amber); }
-    .pill-purple { background: var(--purple-light); color: var(--purple); }
-    .pill-gray { background: #F4F4F5; color: var(--ink-muted); }
-    .pills-row { display: flex; flex-wrap: wrap; gap: 8px; }
-
-    /* Tables */
-    .wire-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      margin-top: 12px;
-    }
-    .wire-table th {
-      text-align: left;
-      padding: 10px 12px;
-      background: var(--bg);
-      border: 1.5px solid var(--border);
-      font-size: 11px;
-      font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
-    .wire-table td {
-      padding: 12px;
-      border: 1.5px solid var(--border);
-      background: white;
+    .bench-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--fg-default);
+      font-family: 'Geist', sans-serif;
     }
+    .bench-table tr:last-child td { border-bottom: none; }
+    .bench-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
 
     /* Sticky Bar on Repo Page */
-    .sticky-bar-wire {
+    .repo-subnav {
+      background: rgba(9, 13, 22, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      padding: 8px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: white;
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      padding: 10px 16px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       position: sticky;
-      top: 60px;
-      z-index: 40;
+      top: 96px;
+      z-index: 80;
     }
 
-    /* Embed Badge Code Snippet */
-    .code-box {
-      background: #18181B;
-      color: #F4F4F5;
+    /* Terminal Code Block */
+    .code-terminal {
+      background: #04060A;
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      padding: 12px 16px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
-      padding: 12px 16px;
-      border-radius: 6px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 8px;
+      color: #79C0FF;
     }
+    .copy-btn {
+      background: #21262D;
+      border: 1px solid var(--border);
+      color: var(--fg-default);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: 'Geist', sans-serif;
+      transition: background 0.15s ease;
+    }
+    .copy-btn:hover { background: #30363D; }
 
-    /* Compare Matrix */
-    .compare-col {
-      background: white;
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 20px;
-    }
-    .compare-head {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding-bottom: 14px;
-      margin-bottom: 14px;
-      border-bottom: 2px solid var(--border);
-    }
-    .compare-metric {
-      padding: 10px 0;
-      border-bottom: 1px dashed #E4E4E7;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    /* Telemetry Dot */
+    .live-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green-bright);
+      box-shadow: 0 0 8px var(--green-bright);
+      margin-right: 6px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Top prototype page navigator -->
+  <!-- 1. Prototype Navigation Toolbar -->
   <div class="proto-bar">
-    <div style="font-weight: 700; display: flex; align-items: center; gap: 8px;">
-      <span>GETMERGED WIREFRAME SUITE</span>
-      <span style="background: #3F3F46; padding: 2px 6px; border-radius: 3px; font-size: 11px;">Issue #121 Master Overhaul</span>
+    <div class="proto-title">
+      <span>GETMERGED</span>
+      <span class="proto-tag">Precision DevEx Workbench</span>
+      <span style="color: var(--fg-subtle);">| Inspired by Trigger.dev + Astral + GitHub Primer</span>
     </div>
     <div class="proto-tabs">
-      <button class="proto-tab-btn active" onclick="switchView('home')">1. Homepage</button>
-      <button class="proto-tab-btn" onclick="switchView('repo')">2. Repo Detail (All 9 Widgets)</button>
-      <button class="proto-tab-btn" onclick="switchView('gfi')">3. Good First Issues</button>
-      <button class="proto-tab-btn" onclick="switchView('rankings')">4. Ecosystem Rankings</button>
-      <button class="proto-tab-btn" onclick="switchView('compare')">5. Repo Compare (A vs B)</button>
-      <button class="proto-tab-btn" onclick="switchView('stack')">6. Stack Scanner</button>
+      <button class="proto-btn active" onclick="switchView('home')">1. Homepage</button>
+      <button class="proto-btn" onclick="switchView('repo')">2. Repo Detail (All 9 Widgets)</button>
+      <button class="proto-btn" onclick="switchView('gfi')">3. Good First Issues</button>
+      <button class="proto-btn" onclick="switchView('rankings')">4. Ecosystem Rankings</button>
+      <button class="proto-btn" onclick="switchView('compare')">5. Repo Compare</button>
+      <button class="proto-btn" onclick="switchView('stack')">6. Stack Scanner</button>
     </div>
   </div>
 
-  <!-- Global Header -->
+  <!-- 2. Primary Navigation (GitHub / Trigger style) -->
   <header class="top-nav">
     <div class="top-nav-inner">
-      <a href="#" class="logo" onclick="switchView('home')">
-        <span class="logo-badge">C-RANK</span>
-        <span class="logo-text">GetMerged</span>
+      <a href="#" class="brand" onclick="switchView('home')">
+        <div class="brand-icon">⌘</div>
+        <span class="brand-name">GetMerged</span>
       </a>
       <nav class="nav-links">
-        <span class="nav-link" onclick="switchView('home')">Explore</span>
-        <span class="nav-link" onclick="switchView('gfi')">Good First Issues</span>
-        <span class="nav-link" onclick="switchView('rankings')">Rankings</span>
-        <span class="nav-link" onclick="switchView('compare')">Compare</span>
-        <span class="nav-link" onclick="switchView('stack')">Stack Scanner</span>
-        <span class="nav-cta" onclick="switchView('repo')">Check Repo</span>
+        <span class="nav-item active" onclick="switchView('home')">Explore</span>
+        <span class="nav-item" onclick="switchView('gfi')">Good First Issues</span>
+        <span class="nav-item" onclick="switchView('rankings')">Rankings</span>
+        <span class="nav-item" onclick="switchView('compare')">Compare</span>
+        <span class="nav-item" onclick="switchView('stack')">Stack Scanner</span>
       </nav>
+      <div style="display: flex; gap: 8px;">
+        <span class="nav-cta" onclick="switchView('repo')">
+          <span class="live-dot"></span>
+          <span>Analyze Any Repo</span>
+        </span>
+      </div>
     </div>
   </header>
 
   <main class="container">
 
-    <!-- ================= 1. HOMEPAGE ================= -->
+    <!-- ================================================================= -->
+    <!-- VIEW 1: HOMEPAGE                                                  -->
+    <!-- ================================================================= -->
     <section id="view-home">
       <div class="hero">
-        <div class="hero-eyebrow">
-          <span>●</span>
-          <span>Open-Source Contributor Workbench</span>
+        <div class="hero-badge">
+          <span class="dot"></span>
+          <span>EMPIRICAL OPEN-SOURCE CONTRIBUTOR TELEMETRY</span>
         </div>
         <h1 class="hero-title">Find welcoming repos.<br>Get your PR merged in 24 hours.</h1>
         <p class="hero-subtitle">
-          We track outside PR merge rates, review turnaround times, and first-timer success rates across 153,000+ GitHub repositories so you never waste hours on a dead PR again.
+          We continuously audit outside PR merge rates, review turnaround times, and first-timer success rates across 153,000+ GitHub repositories. Stop waiting weeks for reviews on dead PRs.
         </p>
 
-        <div class="scan-box">
-          <input type="text" class="scan-input" placeholder="github.com/owner/repo or paste repo URL..." value="github.com/bluenazgul/unifi-device-card" readonly>
-          <button class="scan-btn" onclick="switchView('repo')">Analyze Repo →</button>
+        <!-- Command Terminal Scanner -->
+        <div class="scan-terminal">
+          <span class="scan-prompt">repo &gt;</span>
+          <input type="text" class="scan-input" value="github.com/bluenazgul/unifi-device-card" readonly>
+          <button class="scan-btn" onclick="switchView('repo')">
+            <span>Analyze Telemetry</span>
+            <span style="font-family: 'JetBrains Mono', monospace;">↵</span>
+          </button>
         </div>
       </div>
 
-      <!-- Macro Stats Grid -->
-      <div class="grid-4" style="margin-bottom: 32px;">
-        <div class="card" style="padding: 16px; margin: 0;">
-          <div class="stat-label">Scored Repos</div>
-          <div style="font-size: 26px; font-weight: 800;" class="tabular font-mono">153,884</div>
-          <div style="font-size: 12px; color: var(--ink-faint);">Across 28 languages</div>
+      <!-- Live Macro Benchmarks (Astral Style Metric Grid) -->
+      <div class="grid-4" style="margin-bottom: 36px;">
+        <div class="card">
+          <div class="tele-label">Indexed Repositories</div>
+          <div style="font-size: 26px; font-weight: 700; margin: 4px 0;" class="font-mono tabular">153,884</div>
+          <div style="font-size: 12px; color: var(--fg-subtle);">Continuous 6-month window</div>
         </div>
-        <div class="card" style="padding: 16px; margin: 0;">
-          <div class="stat-label">Tier S & A Welcoming</div>
-          <div style="font-size: 26px; font-weight: 800; color: var(--purple);" class="tabular font-mono">14,290</div>
-          <div style="font-size: 12px; color: var(--ink-faint);">&gt;70% outside merge rate</div>
+        <div class="card">
+          <div class="tele-label">Tier S & A Welcoming</div>
+          <div style="font-size: 26px; font-weight: 700; color: var(--purple-bright); margin: 4px 0;" class="font-mono tabular">14,290</div>
+          <div style="font-size: 12px; color: var(--fg-subtle);">&gt;70% outside merge rate</div>
         </div>
-        <div class="card" style="padding: 16px; margin: 0;">
-          <div class="stat-label">Median First Review</div>
-          <div style="font-size: 26px; font-weight: 800; color: var(--green);" class="tabular font-mono">4.2 hrs</div>
-          <div style="font-size: 12px; color: var(--ink-faint);">In Tier S repositories</div>
+        <div class="card">
+          <div class="tele-label">Median First Review (Tier S)</div>
+          <div style="font-size: 26px; font-weight: 700; color: var(--green-bright); margin: 4px 0;" class="font-mono tabular">4.2 hrs</div>
+          <div style="font-size: 12px; color: var(--fg-subtle);">P50 maintainer response</div>
         </div>
-        <div class="card" style="padding: 16px; margin: 0;">
-          <div class="stat-label">Active Good First Issues</div>
-          <div style="font-size: 26px; font-weight: 800;" class="tabular font-mono">8,912</div>
-          <div style="font-size: 12px; color: var(--ink-faint);">Unclaimed & fresh</div>
+        <div class="card">
+          <div class="tele-label">Unclaimed Good First Issues</div>
+          <div style="font-size: 26px; font-weight: 700; margin: 4px 0;" class="font-mono tabular">8,912</div>
+          <div style="font-size: 12px; color: var(--fg-subtle);">Verified zero active PRs</div>
         </div>
       </div>
 
-      <!-- Today's Welcoming Hidden Gems (No Giants) -->
-      <div class="sec-head">
+      <!-- Curated Welcoming Hidden Gems (No Hero Giants) -->
+      <div class="sec-header">
         <div>
-          <h2 class="sec-title">Today's Welcoming Hidden Gems</h2>
-          <p class="sec-desc">Active repos with 100–2,500 stars, median review turnaround under 12 hours, and verified merged outside PRs this week.</p>
+          <h2 class="sec-title">
+            <span class="live-dot"></span>
+            <span>Today's Welcoming Hidden Gems</span>
+          </h2>
+          <p class="sec-desc">Active projects (100–2,500 stars) with median review turnaround under 12 hours and verified merges this week.</p>
         </div>
-        <span class="pill pill-green font-mono">Curated Daily</span>
+        <span class="pill pill-green">Updated 8m ago</span>
       </div>
 
       <div class="grid-3" style="margin-bottom: 36px;">
         <!-- Gem 1 -->
-        <div class="repo-card">
+        <div class="repo-card" onclick="switchView('repo')">
           <div>
-            <div class="repo-top">
+            <div class="repo-header">
               <div>
-                <a href="#" class="repo-name" onclick="switchView('repo')">bluenazgul/unifi-device-card</a>
-                <div style="font-size: 12px; color: var(--ink-faint); margin-top: 2px;">JavaScript • 197 stars</div>
+                <div class="repo-name">bluenazgul/unifi-device-card</div>
+                <div style="font-size: 12px; color: var(--fg-subtle); margin-top: 2px;">JavaScript • 197 stars</div>
               </div>
               <span class="tier-badge tier-S">S</span>
             </div>
             <p class="repo-desc">HA Dashboard Card for Unifi Devices (Gateways / Switches / APs). High maintainer responsiveness.</p>
           </div>
           <div>
-            <div class="repo-stats">
+            <div class="repo-telemetry">
               <div>
-                <div class="stat-label">Merge Rate</div>
-                <div class="stat-val tabular">86.4%<span class="stat-sample">(28 PRs)</span></div>
+                <div class="tele-label">Merge Rate</div>
+                <div class="tele-val" style="color: var(--green-bright);">86.4%<span class="tele-sample">(28 PRs)</span></div>
               </div>
               <div>
-                <div class="stat-label">Median Review</div>
-                <div class="stat-val tabular font-mono">22 mins</div>
+                <div class="tele-label">Median Review</div>
+                <div class="tele-val">22 mins</div>
               </div>
               <div>
-                <div class="stat-label">First-Timer Rate</div>
-                <div class="stat-val tabular">100%<span class="stat-sample">(6/6)</span></div>
+                <div class="tele-label">First-Timer Rate</div>
+                <div class="tele-val" style="color: var(--green-bright);">100%<span class="tele-sample">(6/6)</span></div>
               </div>
               <div>
-                <div class="stat-label">Active GFI</div>
-                <div class="stat-val tabular font-mono">2 open</div>
+                <div class="tele-label">Active GFI</div>
+                <div class="tele-val">2 open</div>
               </div>
             </div>
-            <div class="pills-row">
+            <div style="display: flex; gap: 6px;">
               <span class="pill pill-green">Open Access</span>
               <span class="pill pill-purple">AI Allowed</span>
             </div>
@@ -575,37 +723,37 @@
         <!-- Gem 2 -->
         <div class="repo-card">
           <div>
-            <div class="repo-top">
+            <div class="repo-header">
               <div>
-                <a href="#" class="repo-name">lumen-oss/lux</a>
-                <div style="font-size: 12px; color: var(--ink-faint); margin-top: 2px;">Rust • 1,008 stars</div>
+                <div class="repo-name">lumen-oss/lux</div>
+                <div style="font-size: 12px; color: var(--fg-subtle); margin-top: 2px;">Rust • 1,008 stars</div>
               </div>
               <span class="tier-badge tier-S">S</span>
             </div>
             <p class="repo-desc">A luxurious package manager for Lua and Luau with fast multi-maintainer turnaround.</p>
           </div>
           <div>
-            <div class="repo-stats">
+            <div class="repo-telemetry">
               <div>
-                <div class="stat-label">Merge Rate</div>
-                <div class="stat-val tabular">85.6%<span class="stat-sample">(87 PRs)</span></div>
+                <div class="tele-label">Merge Rate</div>
+                <div class="tele-val" style="color: var(--green-bright);">85.6%<span class="tele-sample">(87 PRs)</span></div>
               </div>
               <div>
-                <div class="stat-label">Median Review</div>
-                <div class="stat-val tabular font-mono">3.5 hrs</div>
+                <div class="tele-label">Median Review</div>
+                <div class="tele-val">3.5 hrs</div>
               </div>
               <div>
-                <div class="stat-label">First-Timer Rate</div>
-                <div class="stat-val tabular">66.7%<span class="stat-sample">(12/18)</span></div>
+                <div class="tele-label">First-Timer Rate</div>
+                <div class="tele-val">66.7%<span class="tele-sample">(12/18)</span></div>
               </div>
               <div>
-                <div class="stat-label">Active GFI</div>
-                <div class="stat-val tabular font-mono">5 open</div>
+                <div class="tele-label">Active GFI</div>
+                <div class="tele-val">5 open</div>
               </div>
             </div>
-            <div class="pills-row">
+            <div style="display: flex; gap: 6px;">
               <span class="pill pill-green">Open Access</span>
-              <span class="pill pill-gray">AI Disclose</span>
+              <span class="pill">AI Disclose</span>
             </div>
           </div>
         </div>
@@ -613,35 +761,35 @@
         <!-- Gem 3 -->
         <div class="repo-card">
           <div>
-            <div class="repo-top">
+            <div class="repo-header">
               <div>
-                <a href="#" class="repo-name">amiantos/lurker</a>
-                <div style="font-size: 12px; color: var(--ink-faint); margin-top: 2px;">TypeScript • 108 stars</div>
+                <div class="repo-name">amiantos/lurker</div>
+                <div style="font-size: 12px; color: var(--fg-subtle); margin-top: 2px;">TypeScript • 108 stars</div>
               </div>
               <span class="tier-badge tier-S">S</span>
             </div>
             <p class="repo-desc">Delightful self-hosted IRC bouncer and client with retro aesthetic and active maintainers.</p>
           </div>
           <div>
-            <div class="repo-stats">
+            <div class="repo-telemetry">
               <div>
-                <div class="stat-label">Merge Rate</div>
-                <div class="stat-val tabular">89.4%<span class="stat-sample">(52 PRs)</span></div>
+                <div class="tele-label">Merge Rate</div>
+                <div class="tele-val" style="color: var(--green-bright);">89.4%<span class="tele-sample">(52 PRs)</span></div>
               </div>
               <div>
-                <div class="stat-label">Median Review</div>
-                <div class="stat-val tabular font-mono">22 mins</div>
+                <div class="tele-label">Median Review</div>
+                <div class="tele-val">22 mins</div>
               </div>
               <div>
-                <div class="stat-label">First-Timer Rate</div>
-                <div class="stat-val tabular">80.0%<span class="stat-sample">(8/10)</span></div>
+                <div class="tele-label">First-Timer Rate</div>
+                <div class="tele-val" style="color: var(--green-bright);">80.0%<span class="tele-sample">(8/10)</span></div>
               </div>
               <div>
-                <div class="stat-label">Active GFI</div>
-                <div class="stat-val tabular font-mono">3 open</div>
+                <div class="tele-label">Active GFI</div>
+                <div class="tele-val">3 open</div>
               </div>
             </div>
-            <div class="pills-row">
+            <div style="display: flex; gap: 6px;">
               <span class="pill pill-green">Open Access</span>
               <span class="pill pill-purple">AI Allowed</span>
             </div>
@@ -649,129 +797,151 @@
         </div>
       </div>
 
-      <!-- Problem / Solution (Why C-Rank Matters) -->
-      <div class="card card-warm">
-        <h3 class="sec-title" style="margin-bottom: 12px;">The Open-Source Paradox</h3>
-        <p style="font-size: 15px; color: var(--ink-muted); margin-bottom: 20px;">
-          Most contributors pick repos by star count. But top repos often have closed triage rings, 3-month review delays, and close 80% of outside PRs unmerged. GetMerged reverses the formula:
+      <!-- Telemetry Methodology Explainer (Trigger.dev / Astral Style) -->
+      <div class="card card-highlight">
+        <h3 class="sec-title" style="margin-bottom: 8px;">The Contributor Paradox</h3>
+        <p style="font-size: 14px; color: var(--fg-muted); margin-bottom: 20px; max-width: 800px;">
+          Developers usually pick repositories by GitHub star count. But top repositories often have closed triage rings, 3-month review delays, and reject over 70% of outside community pull requests. GetMerged tracks empirical metrics that actually predict PR landing:
         </p>
         <div class="grid-3">
-          <div style="background: white; border: 1.5px solid var(--border); border-radius: 6px; padding: 16px;">
-            <div style="font-weight: 700; margin-bottom: 4px;">1. Outside PR Merge Rate</div>
-            <p style="font-size: 13px; color: var(--ink-muted);">We separate internal staff commits from external community PRs so you see actual newcomer acceptance.</p>
+          <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); border-radius: 6px; padding: 14px;">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--fg-default); margin-bottom: 4px;">01. External PR Merge Rate</div>
+            <p style="font-size: 12px; color: var(--fg-muted);">Filters out internal core-team commits to measure actual community pull request acceptance.</p>
           </div>
-          <div style="background: white; border: 1.5px solid var(--border); border-radius: 6px; padding: 16px;">
-            <div style="font-weight: 700; margin-bottom: 4px;">2. Review Turnaround P50</div>
-            <p style="font-size: 13px; color: var(--ink-muted);">We calculate the median time until an outside PR gets its first real review comment from a maintainer.</p>
+          <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); border-radius: 6px; padding: 14px;">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--fg-default); margin-bottom: 4px;">02. P50 First Maintainer Review</div>
+            <p style="font-size: 12px; color: var(--fg-muted);">Median elapsed time from PR submission until the first substantive human review comment.</p>
           </div>
-          <div style="background: white; border: 1.5px solid var(--border); border-radius: 6px; padding: 16px;">
-            <div style="font-weight: 700; margin-bottom: 4px;">3. First-Timer Success</div>
-            <p style="font-size: 13px; color: var(--ink-muted);">How often does someone with 0 previous commits in this repo get their first PR successfully merged?</p>
+          <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); border-radius: 6px; padding: 14px;">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--fg-default); margin-bottom: 4px;">03. First-Timer Landing Ratio</div>
+            <p style="font-size: 12px; color: var(--fg-muted);">Tracks whether developers with zero prior commits in this repository get their first PR merged.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= 2. REPO DETAIL (ALL 9 WIDGETS) ================= -->
+    <!-- ================================================================= -->
+    <!-- VIEW 2: REPO DETAIL (ALL 9 WIDGETS IN 4-BEAT NARRATIVE FLOW)      -->
+    <!-- ================================================================= -->
     <section id="view-repo" style="display: none;">
       <!-- Sticky Navigation Bar -->
-      <div class="sticky-bar-wire">
+      <div class="repo-subnav">
         <div style="display: flex; align-items: center; gap: 10px;">
-          <span class="tier-badge tier-S" style="width: 28px; height: 28px; font-size: 14px;">S</span>
-          <span class="font-mono" style="font-weight: 700;">bluenazgul/unifi-device-card</span>
+          <span class="tier-badge tier-S">S</span>
+          <span class="font-mono" style="font-weight: 600; font-size: 13px;">bluenazgul / unifi-device-card</span>
           <span class="pill pill-green">86.4% Merge Rate</span>
+          <span class="pill">22m Median Review</span>
         </div>
         <div style="display: flex; gap: 8px;">
-          <a href="#" class="nav-cta" style="padding: 6px 12px; font-size: 12px;">View on GitHub ↗</a>
+          <a href="https://github.com/bluenazgul/unifi-device-card" target="_blank" class="nav-cta" style="padding: 4px 10px; font-size: 12px;">
+            <span>GitHub</span>
+            <span style="font-family: 'JetBrains Mono', monospace;">↗</span>
+          </a>
         </div>
       </div>
 
-      <!-- WIDGET 1: Hero & Verdict Banner (Beat 1) -->
-      <div class="verdict-banner" style="background: var(--paper-warm); border: 2px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 28px; margin-bottom: 24px; display: flex; gap: 28px; align-items: center;">
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 140px; padding: 20px; background: white; border: 2px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);">
-          <div style="font-family: 'JetBrains Mono', monospace; font-size: 52px; font-weight: 800; line-height: 1; color: var(--purple);">S</div>
-          <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; margin-top: 4px;">Tier S • 83.1</div>
-        </div>
-        <div style="flex: 1;">
-          <div style="display: flex; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
-            <span class="pill pill-green">★ Highly Welcoming</span>
-            <span class="pill pill-gray font-mono">JavaScript</span>
-            <span class="pill pill-gray font-mono">197 stars</span>
-            <span class="pill pill-gray font-mono">Last active 3 days ago</span>
+      <!-- WIDGET 1: Hero & Verdict Banner (Beat 1: The Verdict) -->
+      <div class="card card-highlight" style="padding: 28px; margin-bottom: 20px;">
+        <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+          <!-- Score Badge -->
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 120px; padding: 18px; background: #0D111A; border: 1px solid var(--border-accent); border-radius: 8px; box-shadow: 0 0 20px var(--purple-glow);">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 48px; font-weight: 700; line-height: 1; color: var(--purple-bright);">S</div>
+            <div style="font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', monospace; color: var(--fg-subtle); margin-top: 6px;">SCORE 83.1</div>
           </div>
-          <h1 class="font-display" style="font-size: 32px; font-weight: 800; margin-bottom: 8px;">bluenazgul / unifi-device-card</h1>
-          <p style="font-size: 15px; color: var(--ink-muted); margin-bottom: 12px;">
-            <strong>Verdict: Exceptional place for your first PR.</strong> Outside contributors get their first review in a median of 22 minutes, and 86% of outside pull requests are merged.
-          </p>
-          <div class="pills-row">
-            <span class="pill pill-green">✓ Open Access: Direct PRs welcomed</span>
-            <span class="pill pill-purple">✓ AI-Assisted PRs Allowed</span>
-            <span class="pill pill-amber">⚡ PR Sweet Spot: &lt; 150 lines</span>
+          <!-- Verdict Copy -->
+          <div style="flex: 1; min-width: 280px;">
+            <div style="display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;">
+              <span class="pill pill-green">★ Highly Welcoming</span>
+              <span class="pill">JavaScript</span>
+              <span class="pill">197 stars</span>
+              <span class="pill">Active 3d ago</span>
+            </div>
+            <h1 style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px;">bluenazgul / unifi-device-card</h1>
+            <p style="font-size: 14px; color: var(--fg-muted); line-height: 1.5; margin-bottom: 14px;">
+              <strong style="color: var(--fg-default);">Verdict: Exceptional candidate for your first PR.</strong> Outside contributors get their first review in a median of 22 minutes, and 86% of outside pull requests are merged.
+            </p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <span class="pill pill-green">✓ Open Access: Direct PRs welcomed</span>
+              <span class="pill pill-purple">✓ AI-Assisted PRs Allowed</span>
+              <span class="pill pill-amber">⚡ Sweet Spot: &lt; 150 lines</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- WIDGET 2: Core Scorecards (Beat 2: Why) -->
-      <div class="card">
-        <h3 class="sec-title" style="margin-bottom: 16px;">Core Contributor Metrics (Observed 6-Month Data)</h3>
+      <!-- WIDGET 2: Core Scorecards (Beat 2: Why This Rating) -->
+      <div class="card" style="margin-bottom: 20px;">
+        <div class="sec-title" style="font-size: 16px; margin-bottom: 14px;">
+          <span>Beat 2: Observed 6-Month Contributor Metrics</span>
+          <span style="font-size: 12px; color: var(--fg-subtle); font-weight: 400;">(Empirical data with sample sizes)</span>
+        </div>
         <div class="grid-3">
-          <div style="padding: 16px; background: var(--bg); border: 2px solid var(--border); border-radius: 6px;">
-            <div class="stat-label">Outside PR Merge Rate</div>
-            <div style="font-size: 32px; font-weight: 800; color: var(--green);" class="tabular">86.4%</div>
-            <div style="font-size: 12px; color: var(--ink-muted); margin-top: 4px;">Based on 28 outside PRs (24 merged, 4 closed).</div>
+          <div style="padding: 16px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+            <div class="tele-label">Outside PR Merge Rate</div>
+            <div style="font-size: 30px; font-weight: 700; color: var(--green-bright); margin: 4px 0;" class="font-mono tabular">86.4%</div>
+            <div style="font-size: 12px; color: var(--fg-subtle);">Based on 28 outside PRs (24 merged, 4 closed unmerged).</div>
           </div>
-          <div style="padding: 16px; background: var(--bg); border: 2px solid var(--border); border-radius: 6px;">
-            <div class="stat-label">Median Review Turnaround</div>
-            <div style="font-size: 32px; font-weight: 800; color: var(--ink);" class="tabular font-mono">22 mins</div>
-            <div style="font-size: 12px; color: var(--ink-muted); margin-top: 4px;">P50 first response time from 6 active maintainers.</div>
+          <div style="padding: 16px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+            <div class="tele-label">Median Review Turnaround</div>
+            <div style="font-size: 30px; font-weight: 700; color: var(--fg-default); margin: 4px 0;" class="font-mono tabular">22 mins</div>
+            <div style="font-size: 12px; color: var(--fg-subtle);">P50 first response time from 6 distinct active maintainers.</div>
           </div>
-          <div style="padding: 16px; background: var(--bg); border: 2px solid var(--border); border-radius: 6px;">
-            <div class="stat-label">First-Timer Landing Rate</div>
-            <div style="font-size: 32px; font-weight: 800; color: var(--green);" class="tabular">100%</div>
-            <div style="font-size: 12px; color: var(--ink-muted); margin-top: 4px;">6 of 6 new external contributors merged their first PR.</div>
+          <div style="padding: 16px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+            <div class="tele-label">First-Timer Landing Rate</div>
+            <div style="font-size: 30px; font-weight: 700; color: var(--green-bright); margin: 4px 0;" class="font-mono tabular">100%</div>
+            <div style="font-size: 12px; color: var(--fg-subtle);">6 out of 6 brand-new external contributors landed their first PR.</div>
           </div>
         </div>
       </div>
 
-      <!-- WIDGET 3: Proof of Merged Outside PRs (Beat 3) -->
-      <div class="card">
-        <div class="sec-head" style="margin-bottom: 8px;">
-          <div>
-            <h3 class="sec-title">Recent Outside Merged PRs (Proof)</h3>
-            <p class="sec-desc">Direct evidence from GitHub showing real external contributor merges.</p>
+      <!-- WIDGET 3: Merged Outside PRs Table (Beat 3: Proof) -->
+      <div class="card" style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div class="sec-title" style="font-size: 16px;">
+            <span class="live-dot"></span>
+            <span>Beat 3: Proof — Recent Outside Merged PRs</span>
           </div>
-          <span class="pill pill-green font-mono">Live GitHub Data</span>
+          <span class="pill pill-green">Verified Merges</span>
         </div>
-        <table class="wire-table">
+        <table class="bench-table">
           <thead>
             <tr>
-              <th>PR Title</th>
+              <th>Pull Request</th>
               <th>Contributor</th>
-              <th>Size</th>
+              <th>Diff Size</th>
               <th>Turnaround</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>#142</strong>: Add support for U6-Enterprise channel width indicator</td>
-              <td><code>@kris-dev</code> (1st PR)</td>
-              <td><span class="font-mono tabular">+42 / -8</span></td>
-              <td class="font-mono">18 mins to merge</td>
+              <td>
+                <span class="font-mono" style="color: var(--purple-bright); font-weight: 600;">#142</span>
+                <span style="margin-left: 6px;">Add support for U6-Enterprise channel width indicator</span>
+              </td>
+              <td><span class="pill">@kris-dev (1st PR)</span></td>
+              <td><span class="font-mono" style="color: var(--green-bright);">+42</span> <span class="font-mono" style="color: var(--red);">-8</span></td>
+              <td><span class="font-mono">18m to merge</span></td>
               <td><span class="pill pill-green">Merged</span></td>
             </tr>
             <tr>
-              <td><strong>#139</strong>: Fix memory leak in topology polling interval</td>
-              <td><code>@stefan-m</code> (2nd PR)</td>
-              <td><span class="font-mono tabular">+18 / -12</span></td>
-              <td class="font-mono">45 mins to merge</td>
+              <td>
+                <span class="font-mono" style="color: var(--purple-bright); font-weight: 600;">#139</span>
+                <span style="margin-left: 6px;">Fix memory leak in topology polling interval</span>
+              </td>
+              <td><span class="pill">@stefan-m (2nd PR)</span></td>
+              <td><span class="font-mono" style="color: var(--green-bright);">+18</span> <span class="font-mono" style="color: var(--red);">-12</span></td>
+              <td><span class="font-mono">45m to merge</span></td>
               <td><span class="pill pill-green">Merged</span></td>
             </tr>
             <tr>
-              <td><strong>#135</strong>: Docs: update Lovelace custom card registration snippet</td>
-              <td><code>@home-alex</code> (1st PR)</td>
-              <td><span class="font-mono tabular">+6 / -2</span></td>
-              <td class="font-mono">12 mins to merge</td>
+              <td>
+                <span class="font-mono" style="color: var(--purple-bright); font-weight: 600;">#135</span>
+                <span style="margin-left: 6px;">Docs: update Lovelace custom card registration snippet</span>
+              </td>
+              <td><span class="pill">@home-alex (1st PR)</span></td>
+              <td><span class="font-mono" style="color: var(--green-bright);">+6</span> <span class="font-mono" style="color: var(--red);">-2</span></td>
+              <td><span class="font-mono">12m to merge</span></td>
               <td><span class="pill pill-green">Merged</span></td>
             </tr>
           </tbody>
@@ -779,226 +949,252 @@
       </div>
 
       <!-- 2-Column Section: Widgets 4 & 5 -->
-      <div class="grid-2">
+      <div class="grid-2" style="margin-bottom: 20px;">
         <!-- WIDGET 4: PR Size Sweet Spot -->
         <div class="card">
-          <h3 class="sec-title" style="font-size: 18px; margin-bottom: 12px;">PR Size Sweet Spot</h3>
-          <p style="font-size: 13px; color: var(--ink-muted); margin-bottom: 14px;">Historical merge rates categorized by lines of code changed:</p>
+          <div class="sec-title" style="font-size: 15px; margin-bottom: 6px;">PR Size Sweet Spot</div>
+          <p style="font-size: 12px; color: var(--fg-muted); margin-bottom: 14px;">Historical merge rates categorized by lines of code changed:</p>
           <div style="display: flex; flex-direction: column; gap: 8px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--green-light); border: 1.5px solid var(--border); border-radius: 6px;">
-              <div><strong>Small (&lt; 150 lines)</strong> <span style="font-size: 12px; color: var(--ink-muted);">(18 PRs)</span></div>
-              <div style="font-weight: 800; color: var(--green);" class="tabular">94.4% Merge</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(63, 185, 80, 0.08); border: 1px solid rgba(63, 185, 80, 0.25); border-radius: 6px;">
+              <div>
+                <strong style="color: var(--fg-default); font-size: 13px;">Small (&lt; 150 lines)</strong>
+                <span style="font-size: 12px; color: var(--fg-subtle); margin-left: 4px;">(18 PRs)</span>
+              </div>
+              <div style="font-weight: 700; color: var(--green-bright);" class="font-mono tabular">94.4% Merge</div>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: white; border: 1.5px solid var(--border); border-radius: 6px;">
-              <div><strong>Medium (150–500 lines)</strong> <span style="font-size: 12px; color: var(--ink-muted);">(8 PRs)</span></div>
-              <div style="font-weight: 700;" class="tabular">75.0% Merge</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+              <div>
+                <strong style="color: var(--fg-default); font-size: 13px;">Medium (150–500 lines)</strong>
+                <span style="font-size: 12px; color: var(--fg-subtle); margin-left: 4px;">(8 PRs)</span>
+              </div>
+              <div style="font-weight: 600; color: var(--fg-default);" class="font-mono tabular">75.0% Merge</div>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: white; border: 1.5px solid var(--border); border-radius: 6px;">
-              <div><strong>Large (&gt; 500 lines)</strong> <span style="font-size: 12px; color: var(--ink-muted);">(2 PRs)</span></div>
-              <div style="font-weight: 700; color: var(--amber);" class="tabular">50.0% Merge</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+              <div>
+                <strong style="color: var(--fg-default); font-size: 13px;">Large (&gt; 500 lines)</strong>
+                <span style="font-size: 12px; color: var(--fg-subtle); margin-left: 4px;">(2 PRs)</span>
+              </div>
+              <div style="font-weight: 600; color: var(--amber-bright);" class="font-mono tabular">50.0% Merge</div>
             </div>
           </div>
         </div>
 
         <!-- WIDGET 5: Optimal Review Window -->
         <div class="card">
-          <h3 class="sec-title" style="font-size: 18px; margin-bottom: 12px;">Optimal Review Window</h3>
-          <p style="font-size: 13px; color: var(--ink-muted); margin-bottom: 14px;">Maintainers are most responsive during these observed active hours:</p>
-          <div style="padding: 14px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 6px; margin-bottom: 12px;">
-            <div style="font-size: 13px; font-weight: 700; margin-bottom: 4px;">Primary Active Window:</div>
-            <div style="font-size: 18px; font-weight: 800; color: var(--purple);" class="font-mono">Tue & Thu • 14:00 – 19:00 UTC</div>
-            <div style="font-size: 12px; color: var(--ink-muted); margin-top: 4px;">Median response time drops to 14 minutes when submitted in this window.</div>
+          <div class="sec-title" style="font-size: 15px; margin-bottom: 6px;">Optimal Review Window</div>
+          <p style="font-size: 12px; color: var(--fg-muted); margin-bottom: 14px;">Maintainers are most responsive during these observed active hours:</p>
+          <div style="padding: 14px; background: #0D111A; border: 1px solid var(--border-accent); border-radius: 6px; margin-bottom: 12px;">
+            <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--fg-subtle); text-transform: uppercase;">Primary Active Window</div>
+            <div style="font-size: 17px; font-weight: 700; color: var(--purple-bright); margin: 4px 0;" class="font-mono">Tue &amp; Thu • 14:00 – 19:00 UTC</div>
+            <div style="font-size: 12px; color: var(--fg-subtle);">Median turnaround drops to 14 minutes when submitted during this window.</div>
           </div>
-          <span class="pill pill-purple">Europe / US East maintainer timezones</span>
+          <div style="display: flex; gap: 6px;">
+            <span class="pill pill-purple">UTC+1 / Central European Time</span>
+            <span class="pill">US East Overlap</span>
+          </div>
         </div>
       </div>
 
       <!-- WIDGET 6: Active Good First Issues in this Repo -->
-      <div class="card">
-        <div class="sec-head" style="margin-bottom: 8px;">
-          <div>
-            <h3 class="sec-title">Good First Issues in this Repo (2 Open)</h3>
-            <p class="sec-desc">Fresh beginner issues ready for contribution.</p>
+      <div class="card" style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div class="sec-title" style="font-size: 15px;">
+            <span>Good First Issues in this Repository</span>
+            <span style="font-size: 12px; color: var(--fg-subtle); font-weight: 400;">(2 unclaimed open issues)</span>
           </div>
         </div>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: white; border: 1.5px solid var(--border); border-radius: 6px;">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
             <div>
-              <div style="font-weight: 700; font-size: 14px;">#148: Add dark-mode accent border on PoE port status icons</div>
-              <div style="font-size: 12px; color: var(--ink-muted); margin-top: 2px;">Opened 2 days ago • No active PRs</div>
+              <div style="font-weight: 600; font-size: 13px; color: var(--fg-default);">
+                <span class="font-mono" style="color: var(--purple-bright);">#148</span>
+                <span style="margin-left: 6px;">Add dark-mode accent border on PoE port status icons</span>
+              </div>
+              <div style="font-size: 12px; color: var(--fg-subtle); margin-top: 2px;">Opened 2 days ago • No active PRs • JavaScript</div>
             </div>
-            <a href="#" class="nav-cta" style="padding: 6px 12px; font-size: 12px;">Claim on GitHub →</a>
+            <a href="#" class="nav-cta" style="padding: 4px 10px; font-size: 12px;">Claim on GitHub ↗</a>
           </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: white; border: 1.5px solid var(--border); border-radius: 6px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
             <div>
-              <div style="font-weight: 700; font-size: 14px;">#131: Add Danish localization for dashboard tooltips</div>
-              <div style="font-size: 12px; color: var(--ink-muted); margin-top: 2px;">Opened 5 days ago • No active PRs</div>
+              <div style="font-weight: 600; font-size: 13px; color: var(--fg-default);">
+                <span class="font-mono" style="color: var(--purple-bright);">#131</span>
+                <span style="margin-left: 6px;">Add Danish localization for dashboard tooltips</span>
+              </div>
+              <div style="font-size: 12px; color: var(--fg-subtle); margin-top: 2px;">Opened 5 days ago • No active PRs • JSON / i18n</div>
             </div>
-            <a href="#" class="nav-cta" style="padding: 6px 12px; font-size: 12px;">Claim on GitHub →</a>
+            <a href="#" class="nav-cta" style="padding: 4px 10px; font-size: 12px;">Claim on GitHub ↗</a>
           </div>
         </div>
       </div>
 
       <!-- WIDGET 7: Embed C-Rank Badge -->
-      <div class="card card-warm">
-        <h3 class="sec-title" style="font-size: 18px; margin-bottom: 8px;">Embed C-Rank Badge</h3>
-        <p style="font-size: 13px; color: var(--ink-muted); margin-bottom: 12px;">Showcase your welcoming reputation on your GitHub README:</p>
-        <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 12px;">
-          <img src="https://img.shields.io/badge/GetMerged_C--Rank-Tier_S-8250DF?style=for-the-badge&logo=github" alt="C-Rank Tier S Badge" style="border: 1.5px solid var(--border); border-radius: 4px;">
+      <div class="card card-highlight" style="margin-bottom: 20px;">
+        <div class="sec-title" style="font-size: 15px; margin-bottom: 6px;">Embed C-Rank Badge</div>
+        <p style="font-size: 13px; color: var(--fg-muted); margin-bottom: 12px;">Showcase your welcoming reputation on your GitHub repository README:</p>
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
+          <img src="https://img.shields.io/badge/GetMerged_C--Rank-Tier_S-8250DF?style=for-the-badge&logo=github" alt="C-Rank Tier S Badge" style="border-radius: 4px;">
         </div>
-        <div class="code-box">
+        <div class="code-terminal">
           <code>[![C-Rank Tier S](https://getmerged.io/api/v1/badge/bluenazgul/unifi-device-card)](https://getmerged.io/bluenazgul/unifi-device-card)</code>
-          <button style="background: var(--purple); color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer;">Copy</button>
+          <button class="copy-btn">Copy Markdown</button>
         </div>
       </div>
 
-      <!-- WIDGET 8: Similar Welcoming Repos -->
-      <div class="card">
-        <h3 class="sec-title" style="font-size: 18px; margin-bottom: 12px;">Similar Welcoming JavaScript Repos</h3>
-        <div class="grid-3">
-          <div style="padding: 14px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 6px;">
-            <div style="display: flex; justify-content: space-between;">
-              <span class="font-mono" style="font-weight: 700; font-size: 13px;">amiantos/lurker</span>
-              <span class="tier-badge tier-S" style="width: 24px; height: 24px; font-size: 12px;">S</span>
+      <!-- 2-Column Section: Widgets 8 & 9 -->
+      <div class="grid-2">
+        <!-- WIDGET 8: Similar Welcoming Repos -->
+        <div class="card">
+          <div class="sec-title" style="font-size: 15px; margin-bottom: 12px;">Similar Welcoming JavaScript Repos</div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="padding: 10px 14px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div class="font-mono" style="font-weight: 600; font-size: 13px;">amiantos/lurker</div>
+                <div style="font-size: 12px; color: var(--fg-subtle);">89.4% merge rate • 22m review</div>
+              </div>
+              <span class="tier-badge tier-S">S</span>
             </div>
-            <div style="font-size: 12px; color: var(--ink-muted); margin: 6px 0;">89.4% merge rate • 22m review</div>
-            <span class="pill pill-green">JavaScript / Vue</span>
-          </div>
-          <div style="padding: 14px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 6px;">
-            <div style="display: flex; justify-content: space-between;">
-              <span class="font-mono" style="font-weight: 700; font-size: 13px;">gentoo-zh/overlay</span>
-              <span class="tier-badge tier-S" style="width: 24px; height: 24px; font-size: 12px;">S</span>
+            <div style="padding: 10px 14px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div class="font-mono" style="font-weight: 600; font-size: 13px;">gentoo-zh/overlay</div>
+                <div style="font-size: 12px; color: var(--fg-subtle);">81.5% merge rate • 8h review</div>
+              </div>
+              <span class="tier-badge tier-S">S</span>
             </div>
-            <div style="font-size: 12px; color: var(--ink-muted); margin: 6px 0;">81.5% merge rate • 8h review</div>
-            <span class="pill pill-green">Shell / Config</span>
-          </div>
-          <div style="padding: 14px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 6px;">
-            <div style="display: flex; justify-content: space-between;">
-              <span class="font-mono" style="font-weight: 700; font-size: 13px;">first-tree-ai/first-tree</span>
-              <span class="tier-badge tier-S" style="width: 24px; height: 24px; font-size: 12px;">S</span>
+            <div style="padding: 10px 14px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div class="font-mono" style="font-weight: 600; font-size: 13px;">first-tree-ai/first-tree</div>
+                <div style="font-size: 12px; color: var(--fg-subtle);">69.7% merge rate • 23m review</div>
+              </div>
+              <span class="tier-badge tier-S">S</span>
             </div>
-            <div style="font-size: 12px; color: var(--ink-muted); margin: 6px 0;">69.7% merge rate • 23m review</div>
-            <span class="pill pill-green">TypeScript</span>
           </div>
         </div>
-      </div>
 
-      <!-- WIDGET 9: Verified Community Feedback -->
-      <div class="card">
-        <div class="sec-head" style="margin-bottom: 8px;">
-          <div>
-            <h3 class="sec-title">Community Contributor Reviews</h3>
-            <p class="sec-desc">Reviews from developers who submitted PRs to this repo.</p>
+        <!-- WIDGET 9: Verified Community Feedback -->
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div class="sec-title" style="font-size: 15px;">Contributor Feedback</div>
+            <span class="pill pill-purple">100% Positive (4 reviews)</span>
           </div>
-          <span class="pill pill-purple font-mono">100% Positive Feedback (4 reviews)</span>
-        </div>
-        <div style="padding: 14px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 6px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-            <span style="font-weight: 700; font-size: 13px;">@home-alex (Merged outside PR)</span>
-            <span style="font-size: 12px; color: var(--ink-faint);">2 weeks ago</span>
+          <div style="padding: 14px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+              <span class="font-mono" style="font-size: 12px; font-weight: 600; color: var(--fg-default);">@home-alex</span>
+              <span style="font-size: 11px; color: var(--fg-subtle);">Merged PR #135</span>
+            </div>
+            <p style="font-size: 12px; color: var(--fg-muted); line-height: 1.45;">
+              "Maintainer bluenazgul merged my PR within 30 minutes with clear guidance on card styling. Extremely welcoming to newcomers!"
+            </p>
           </div>
-          <p style="font-size: 13px; color: var(--ink-muted);">
-            "Maintainer bluenazgul merged my PR within 30 minutes with helpful guidance on card styling. Extremely welcoming to newcomers!"
-          </p>
         </div>
       </div>
     </section>
 
-    <!-- ================= 3. GOOD FIRST ISSUES ================= -->
+    <!-- ================================================================= -->
+    <!-- VIEW 3: GOOD FIRST ISSUES                                         -->
+    <!-- ================================================================= -->
     <section id="view-gfi" style="display: none;">
-      <div class="hero" style="padding: 28px 36px;">
-        <div class="hero-eyebrow">
-          <span>●</span>
-          <span>Curated Contributor Queue</span>
+      <div class="hero" style="padding: 24px 0;">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          <span>CURATED CONTRIBUTOR QUEUE</span>
         </div>
-        <h1 class="hero-title" style="font-size: 36px;">Good First Issues from Welcoming Repos</h1>
-        <p class="hero-subtitle" style="font-size: 16px; margin-bottom: 0;">
-          Strictly capped at 2–3 issues per repository to prevent farmable spam. Only from verified Tier S, A, and B maintainers.
+        <h1 class="hero-title" style="font-size: 34px;">Good First Issues from Welcoming Repos</h1>
+        <p class="hero-subtitle" style="font-size: 14px; margin-bottom: 0;">
+          Strictly capped at 2–3 issues per repository to prevent farmable spam. Only indexed from verified Tier S, A, and B maintainers.
         </p>
       </div>
 
-      <!-- Filters -->
-      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center;">
-        <span style="font-weight: 700; font-size: 12px; text-transform: uppercase;">Filters:</span>
+      <!-- Precision Filter Bar -->
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; padding: 12px 16px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+        <span style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--fg-subtle); text-transform: uppercase;">Filters:</span>
         <span class="pill pill-purple" style="cursor: pointer;">✓ Hide Issues with Open PRs</span>
-        <span class="pill pill-green" style="cursor: pointer;">Tier S & A Only</span>
-        <span class="pill pill-gray" style="cursor: pointer;">TypeScript</span>
-        <span class="pill pill-gray" style="cursor: pointer;">Rust</span>
-        <span class="pill pill-gray" style="cursor: pointer;">Go</span>
-        <span class="pill pill-gray" style="cursor: pointer;">Python</span>
+        <span class="pill pill-green" style="cursor: pointer;">Tier S &amp; A Only</span>
+        <span class="pill" style="cursor: pointer;">TypeScript</span>
+        <span class="pill" style="cursor: pointer;">Rust</span>
+        <span class="pill" style="cursor: pointer;">Go</span>
+        <span class="pill" style="cursor: pointer;">Python</span>
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 14px;">
-        <div class="repo-card" style="padding: 18px 20px;">
+      <!-- Issues List -->
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="card" style="padding: 16px;">
           <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
-            <div style="flex: 1;">
+            <div style="flex: 1; min-width: 280px;">
               <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                <span class="tier-badge tier-S" style="width: 24px; height: 24px; font-size: 12px;">S</span>
-                <span class="font-mono" style="font-weight: 700; font-size: 13px;">bluenazgul/unifi-device-card</span>
+                <span class="tier-badge tier-S" style="width: 20px; height: 20px; font-size: 11px;">S</span>
+                <span class="font-mono" style="font-weight: 600; font-size: 13px;">bluenazgul/unifi-device-card</span>
                 <span class="pill pill-green">Unclaimed</span>
-                <span class="pill pill-gray">2 hrs ago</span>
+                <span style="font-size: 11px; color: var(--fg-subtle);">2 hrs ago</span>
               </div>
-              <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 6px;">#148: Add dark-mode accent border on PoE port status icons</h3>
-              <p style="color: var(--ink-muted); font-size: 13px;">In dark mode, the PoE icon blends into card background. Needs 1px border token applied.</p>
+              <div style="font-size: 15px; font-weight: 600; color: var(--fg-default); margin-bottom: 4px;">
+                #148: Add dark-mode accent border on PoE port status icons
+              </div>
+              <p style="font-size: 13px; color: var(--fg-muted);">In dark mode, the PoE icon blends into card background. Needs 1px border token applied.</p>
             </div>
             <div>
-              <a href="#" class="nav-cta" style="white-space: nowrap;">View Issue on GitHub ↗</a>
+              <a href="#" class="nav-cta" style="white-space: nowrap; font-size: 12px;">View Issue on GitHub ↗</a>
             </div>
           </div>
         </div>
 
-        <div class="repo-card" style="padding: 18px 20px;">
+        <div class="card" style="padding: 16px;">
           <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
-            <div style="flex: 1;">
+            <div style="flex: 1; min-width: 280px;">
               <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                <span class="tier-badge tier-S" style="width: 24px; height: 24px; font-size: 12px;">S</span>
-                <span class="font-mono" style="font-weight: 700; font-size: 13px;">lumen-oss/lux</span>
+                <span class="tier-badge tier-S" style="width: 20px; height: 20px; font-size: 11px;">S</span>
+                <span class="font-mono" style="font-weight: 600; font-size: 13px;">lumen-oss/lux</span>
                 <span class="pill pill-green">Unclaimed</span>
-                <span class="pill pill-gray">5 hrs ago</span>
+                <span style="font-size: 11px; color: var(--fg-subtle);">5 hrs ago</span>
               </div>
-              <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 6px;">#82: Support <code>--json</code> flag in lux search output</h3>
-              <p style="color: var(--ink-muted); font-size: 13px;">Allow consumers to format search results as structured JSON for CLI tooling integration.</p>
+              <div style="font-size: 15px; font-weight: 600; color: var(--fg-default); margin-bottom: 4px;">
+                #82: Support <code>--json</code> flag in lux search output
+              </div>
+              <p style="font-size: 13px; color: var(--fg-muted);">Allow consumers to format search results as structured JSON for CLI tooling integration.</p>
             </div>
             <div>
-              <a href="#" class="nav-cta" style="white-space: nowrap;">View Issue on GitHub ↗</a>
+              <a href="#" class="nav-cta" style="white-space: nowrap; font-size: 12px;">View Issue on GitHub ↗</a>
             </div>
           </div>
         </div>
 
-        <div class="repo-card" style="padding: 18px 20px;">
+        <div class="card" style="padding: 16px;">
           <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
-            <div style="flex: 1;">
+            <div style="flex: 1; min-width: 280px;">
               <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                <span class="tier-badge tier-S" style="width: 24px; height: 24px; font-size: 12px;">S</span>
-                <span class="font-mono" style="font-weight: 700; font-size: 13px;">amiantos/lurker</span>
+                <span class="tier-badge tier-S" style="width: 20px; height: 20px; font-size: 11px;">S</span>
+                <span class="font-mono" style="font-weight: 600; font-size: 13px;">amiantos/lurker</span>
                 <span class="pill pill-green">Unclaimed</span>
-                <span class="pill pill-gray">1 day ago</span>
+                <span style="font-size: 11px; color: var(--fg-subtle);">1 day ago</span>
               </div>
-              <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 6px;">#44: Add keyboard shortcut <code>Ctrl+K</code> to focus quick channel switcher</h3>
-              <p style="color: var(--ink-muted); font-size: 13px;">Add global keydown handler in Vue to trigger modal when not typing in text input.</p>
+              <div style="font-size: 15px; font-weight: 600; color: var(--fg-default); margin-bottom: 4px;">
+                #44: Add keyboard shortcut <code>Ctrl+K</code> to focus quick channel switcher
+              </div>
+              <p style="font-size: 13px; color: var(--fg-muted);">Add global keydown handler in Vue to trigger modal when not typing in text input.</p>
             </div>
             <div>
-              <a href="#" class="nav-cta" style="white-space: nowrap;">View Issue on GitHub ↗</a>
+              <a href="#" class="nav-cta" style="white-space: nowrap; font-size: 12px;">View Issue on GitHub ↗</a>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= 4. ECOSYSTEM RANKINGS ================= -->
+    <!-- ================================================================= -->
+    <!-- VIEW 4: ECOSYSTEM RANKINGS                                        -->
+    <!-- ================================================================= -->
     <section id="view-rankings" style="display: none;">
-      <div class="hero" style="padding: 28px 36px;">
-        <div class="hero-eyebrow">
-          <span>●</span>
-          <span>Verified Benchmarks</span>
+      <div class="hero" style="padding: 24px 0;">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          <span>EMPIRICAL LANGUAGE BENCHMARKS</span>
         </div>
-        <h1 class="hero-title" style="font-size: 36px;">Ecosystem Welcoming Rankings</h1>
-        <p class="hero-subtitle" style="font-size: 16px; margin-bottom: 0;">
+        <h1 class="hero-title" style="font-size: 34px;">Ecosystem Welcoming Rankings</h1>
+        <p class="hero-subtitle" style="font-size: 14px; margin-bottom: 0;">
           Compare developer ecosystems by outside PR acceptance rate, response speed, and first-timer friendliness.
         </p>
       </div>
 
-      <table class="wire-table">
+      <table class="bench-table">
         <thead>
           <tr>
             <th>Rank</th>
@@ -1011,170 +1207,183 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>#1</strong></td>
+            <td><span class="font-mono" style="color: var(--purple-bright); font-weight: 700;">#1</span></td>
             <td><strong>TypeScript</strong></td>
-            <td class="tabular font-mono" style="color: var(--green); font-weight: 700;">78.4%</td>
-            <td class="tabular font-mono">4.1 hrs</td>
-            <td class="tabular font-mono">3,842</td>
-            <td class="tabular font-mono">2,140</td>
+            <td><span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">78.4%</span></td>
+            <td><span class="font-mono tabular">4.1 hrs</span></td>
+            <td><span class="font-mono tabular">3,842</span></td>
+            <td><span class="font-mono tabular">2,140</span></td>
           </tr>
           <tr>
-            <td><strong>#2</strong></td>
+            <td><span class="font-mono" style="color: var(--purple-bright); font-weight: 700;">#2</span></td>
             <td><strong>Rust</strong></td>
-            <td class="tabular font-mono" style="color: var(--green); font-weight: 700;">76.1%</td>
-            <td class="tabular font-mono">5.2 hrs</td>
-            <td class="tabular font-mono">2,190</td>
-            <td class="tabular font-mono">1,402</td>
+            <td><span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">76.1%</span></td>
+            <td><span class="font-mono tabular">5.2 hrs</span></td>
+            <td><span class="font-mono tabular">2,190</span></td>
+            <td><span class="font-mono tabular">1,402</span></td>
           </tr>
           <tr>
-            <td><strong>#3</strong></td>
+            <td><span class="font-mono" style="color: var(--purple-bright); font-weight: 700;">#3</span></td>
             <td><strong>Go</strong></td>
-            <td class="tabular font-mono" style="color: var(--green); font-weight: 700;">72.8%</td>
-            <td class="tabular font-mono">6.0 hrs</td>
-            <td class="tabular font-mono">2,410</td>
-            <td class="tabular font-mono">980</td>
+            <td><span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">72.8%</span></td>
+            <td><span class="font-mono tabular">6.0 hrs</span></td>
+            <td><span class="font-mono tabular">2,410</span></td>
+            <td><span class="font-mono tabular">980</span></td>
           </tr>
           <tr>
-            <td><strong>#4</strong></td>
+            <td><span class="font-mono" style="color: var(--fg-subtle); font-weight: 700;">#4</span></td>
             <td><strong>Python</strong></td>
-            <td class="tabular font-mono" style="color: var(--amber); font-weight: 700;">64.3%</td>
-            <td class="tabular font-mono">14.8 hrs</td>
-            <td class="tabular font-mono">3,120</td>
-            <td class="tabular font-mono">1,820</td>
+            <td><span class="font-mono tabular" style="color: var(--amber-bright); font-weight: 600;">64.3%</span></td>
+            <td><span class="font-mono tabular">14.8 hrs</span></td>
+            <td><span class="font-mono tabular">3,120</span></td>
+            <td><span class="font-mono tabular">1,820</span></td>
           </tr>
         </tbody>
       </table>
     </section>
 
-    <!-- ================= 5. REPO COMPARE (A vs B) ================= -->
+    <!-- ================================================================= -->
+    <!-- VIEW 5: REPO COMPARE                                              -->
+    <!-- ================================================================= -->
     <section id="view-compare" style="display: none;">
-      <div class="hero" style="padding: 28px 36px;">
-        <div class="hero-eyebrow">
-          <span>●</span>
-          <span>Side-by-Side Evaluation</span>
+      <div class="hero" style="padding: 24px 0;">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          <span>SIDE-BY-SIDE BENCHMARK</span>
         </div>
-        <h1 class="hero-title" style="font-size: 36px;">Compare Welcoming Potential</h1>
-        <p class="hero-subtitle" style="font-size: 16px; margin-bottom: 20px;">
+        <h1 class="hero-title" style="font-size: 34px;">Compare Contributor Experience</h1>
+        <p class="hero-subtitle" style="font-size: 14px; margin-bottom: 20px;">
           Deciding where to spend your weekend contributing? Compare two repositories side-by-side with objective merge data.
         </p>
 
-        <div style="display: flex; gap: 12px; max-width: 800px; flex-wrap: wrap;">
-          <input type="text" class="scan-input" style="flex: 1;" value="bluenazgul/unifi-device-card" readonly>
-          <span style="font-weight: 800; font-size: 20px; align-self: center;">vs</span>
-          <input type="text" class="scan-input" style="flex: 1;" value="lumen-oss/lux" readonly>
+        <div style="display: flex; gap: 8px; max-width: 720px; align-items: center; flex-wrap: wrap;">
+          <input type="text" class="scan-input" style="background: #0D1117; border: 1px solid var(--border-strong); border-radius: 6px; padding: 8px 12px; flex: 1;" value="bluenazgul/unifi-device-card" readonly>
+          <span style="font-family: 'JetBrains Mono', monospace; color: var(--fg-subtle); font-size: 13px;">vs</span>
+          <input type="text" class="scan-input" style="background: #0D1117; border: 1px solid var(--border-strong); border-radius: 6px; padding: 8px 12px; flex: 1;" value="lumen-oss/lux" readonly>
           <button class="scan-btn">Compare →</button>
         </div>
       </div>
 
       <div class="grid-2">
         <!-- Repo A -->
-        <div class="compare-col">
-          <div class="compare-head">
+        <div class="card card-highlight">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
             <span class="tier-badge tier-S">S</span>
             <div>
-              <div class="repo-name">bluenazgul/unifi-device-card</div>
-              <div style="font-size: 12px; color: var(--ink-faint);">JavaScript • 197 stars</div>
+              <div class="font-mono" style="font-weight: 600; font-size: 14px;">bluenazgul/unifi-device-card</div>
+              <div style="font-size: 12px; color: var(--fg-subtle);">JavaScript • 197 stars</div>
             </div>
           </div>
-          <div class="compare-metric">
-            <span style="font-size: 13px; color: var(--ink-muted);">Outside PR Merge Rate</span>
-            <span style="font-weight: 800; color: var(--green);" class="tabular">86.4%</span>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
+            <span style="color: var(--fg-muted); font-size: 13px;">Outside PR Merge Rate</span>
+            <span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">86.4%</span>
           </div>
-          <div class="compare-metric">
-            <span style="font-size: 13px; color: var(--ink-muted);">Median Review Speed</span>
-            <span style="font-weight: 800; color: var(--green);" class="tabular font-mono">22 mins</span>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
+            <span style="color: var(--fg-muted); font-size: 13px;">Median Review Speed</span>
+            <span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">22 mins</span>
           </div>
-          <div class="compare-metric">
-            <span style="font-size: 13px; color: var(--ink-muted);">First-Timer Success</span>
-            <span style="font-weight: 800; color: var(--green);" class="tabular">100% (6/6)</span>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
+            <span style="color: var(--fg-muted); font-size: 13px;">First-Timer Success</span>
+            <span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">100% (6/6)</span>
           </div>
-          <div class="compare-metric">
-            <span style="font-size: 13px; color: var(--ink-muted);">Access Gate</span>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
+            <span style="color: var(--fg-muted); font-size: 13px;">Access Gate</span>
             <span class="pill pill-green">Direct PRs</span>
           </div>
-          <div class="compare-metric">
-            <span style="font-size: 13px; color: var(--ink-muted);">AI Policy</span>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+            <span style="color: var(--fg-muted); font-size: 13px;">AI Policy</span>
             <span class="pill pill-purple">Allowed</span>
           </div>
         </div>
 
         <!-- Repo B -->
-        <div class="compare-col">
-          <div class="compare-head">
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
             <span class="tier-badge tier-S">S</span>
             <div>
-              <div class="repo-name">lumen-oss/lux</div>
-              <div style="font-size: 12px; color: var(--ink-faint);">Rust • 1,008 stars</div>
+              <div class="font-mono" style="font-weight: 600; font-size: 14px;">lumen-oss/lux</div>
+              <div style="font-size: 12px; color: var(--fg-subtle);">Rust • 1,008 stars</div>
             </div>
           </div>
-          <div class="compare-metric">
-            <span style="font-size: 13px; color: var(--ink-muted);">Outside PR Merge Rate</span>
-            <span style="font-weight: 800; color: var(--green);" class="tabular">85.6%</span>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
+            <span style="color: var(--fg-muted); font-size: 13px;">Outside PR Merge Rate</span>
+            <span class="font-mono tabular" style="color: var(--green-bright); font-weight: 600;">85.6%</span>
           </div>
-          <div class="compare-metric">
-            <span style="font-size: 13px; color: var(--ink-muted);">Median Review Speed</span>
-            <span style="font-weight: 800;" class="tabular font-mono">3.5 hrs</span>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
+            <span style="color: var(--fg-muted); font-size: 13px;">Median Review Speed</span>
+            <span class="font-mono tabular" style="color: var(--fg-default); font-weight: 600;">3.5 hrs</span>
           </div>
-          <div class="compare-metric">
-            <span style="font-size: 13px; color: var(--ink-muted);">First-Timer Success</span>
-            <span style="font-weight: 800;" class="tabular">66.7% (12/18)</span>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
+            <span style="color: var(--fg-muted); font-size: 13px;">First-Timer Success</span>
+            <span class="font-mono tabular" style="color: var(--fg-default); font-weight: 600;">66.7% (12/18)</span>
           </div>
-          <div class="compare-metric">
-            <span style="font-size: 13px; color: var(--ink-muted);">Access Gate</span>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
+            <span style="color: var(--fg-muted); font-size: 13px;">Access Gate</span>
             <span class="pill pill-green">Direct PRs</span>
           </div>
-          <div class="compare-metric">
-            <span style="font-size: 13px; color: var(--ink-muted);">AI Policy</span>
-            <span class="pill pill-gray">Disclose</span>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+            <span style="color: var(--fg-muted); font-size: 13px;">AI Policy</span>
+            <span class="pill">Disclose</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= 6. STACK SCANNER ================= -->
+    <!-- ================================================================= -->
+    <!-- VIEW 6: STACK SCANNER                                             -->
+    <!-- ================================================================= -->
     <section id="view-stack" style="display: none;">
-      <div class="hero" style="padding: 28px 36px;">
-        <div class="hero-eyebrow">
-          <span>●</span>
-          <span>Personalized Matcher</span>
+      <div class="hero" style="padding: 24px 0;">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          <span>PERSONALIZED CONTRIBUTOR MATCHING</span>
         </div>
-        <h1 class="hero-title" style="font-size: 36px;">Scan Your GitHub Profile Stack</h1>
-        <p class="hero-subtitle" style="font-size: 16px; margin-bottom: 20px;">
+        <h1 class="hero-title" style="font-size: 34px;">Scan Your GitHub Profile Stack</h1>
+        <p class="hero-subtitle" style="font-size: 14px; margin-bottom: 20px;">
           Enter your GitHub username. We inspect your top languages and dependencies to find welcoming repos you can contribute to immediately.
         </p>
 
-        <div class="scan-box">
-          <input type="text" class="scan-input" placeholder="github.com/your-username or enter username..." value="abhisheksoni27" readonly>
-          <button class="scan-btn">Match My Stack →</button>
+        <div class="scan-terminal">
+          <span class="scan-prompt">user &gt;</span>
+          <input type="text" class="scan-input" value="abhisheksoni27" readonly>
+          <button class="scan-btn">
+            <span>Match My Stack</span>
+            <span style="font-family: 'JetBrains Mono', monospace;">↵</span>
+          </button>
         </div>
       </div>
 
-      <div class="card">
-        <h3 class="sec-title" style="font-size: 18px; margin-bottom: 12px;">Matched Stack for @abhisheksoni27</h3>
-        <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+      <div class="card card-highlight">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div class="sec-title" style="font-size: 15px;">Detected Stack for @abhisheksoni27</div>
+          <span class="pill pill-purple">GitHub Profile Verified</span>
+        </div>
+        <div style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
           <span class="pill pill-purple">Go (42%)</span>
           <span class="pill pill-purple">TypeScript (34%)</span>
-          <span class="pill pill-purple">Docker / Kubernetes (18%)</span>
-          <span class="pill pill-gray">Python (6%)</span>
+          <span class="pill pill-purple">Docker / K8s (18%)</span>
+          <span class="pill">Python (6%)</span>
         </div>
 
-        <h4 style="font-size: 15px; font-weight: 700; margin-bottom: 12px;">Top Recommended Repos Matching Your Stack:</h4>
+        <div style="font-size: 13px; font-weight: 600; color: var(--fg-muted); margin-bottom: 12px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace;">
+          Recommended Repositories Matching Your Stack:
+        </div>
         <div class="grid-2">
-          <div style="padding: 14px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 6px;">
-            <div style="display: flex; justify-content: space-between;">
-              <span class="font-mono" style="font-weight: 700;">l3montree-dev/devguard</span>
-              <span class="tier-badge tier-S" style="width: 24px; height: 24px; font-size: 12px;">S</span>
+          <div style="padding: 14px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="font-mono" style="font-weight: 600; font-size: 13px;">l3montree-dev/devguard</span>
+              <span class="tier-badge tier-S" style="width: 22px; height: 22px; font-size: 11px;">S</span>
             </div>
-            <p style="font-size: 12px; color: var(--ink-muted); margin: 6px 0;">Go Backend & DevSecOps. 75.9% merge rate, 6 Good First Issues.</p>
+            <p style="font-size: 12px; color: var(--fg-muted); margin: 6px 0;">Go Backend &amp; DevSecOps. 75.9% merge rate, 6 Good First Issues.</p>
             <span class="pill pill-green">98% Stack Match</span>
           </div>
 
-          <div style="padding: 14px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 6px;">
-            <div style="display: flex; justify-content: space-between;">
-              <span class="font-mono" style="font-weight: 700;">first-tree-ai/first-tree</span>
-              <span class="tier-badge tier-S" style="width: 24px; height: 24px; font-size: 12px;">S</span>
+          <div style="padding: 14px; background: #0D111A; border: 1px solid var(--border); border-radius: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="font-mono" style="font-weight: 600; font-size: 13px;">first-tree-ai/first-tree</span>
+              <span class="tier-badge tier-S" style="width: 22px; height: 22px; font-size: 11px;">S</span>
             </div>
-            <p style="font-size: 12px; color: var(--ink-muted); margin: 6px 0;">TypeScript & AI agents CLI. 69.7% merge rate, 18 Good First Issues.</p>
+            <p style="font-size: 12px; color: var(--fg-muted); margin: 6px 0;">TypeScript &amp; AI agents CLI. 69.7% merge rate, 18 Good First Issues.</p>
             <span class="pill pill-green">94% Stack Match</span>
           </div>
         </div>
@@ -1191,7 +1400,7 @@
         if (el) el.style.display = (v === view) ? 'block' : 'none';
       });
 
-      const buttons = document.querySelectorAll('.proto-tab-btn');
+      const buttons = document.querySelectorAll('.proto-btn');
       buttons.forEach(b => {
         b.classList.toggle('active', b.getAttribute('onclick').includes(view));
       });
