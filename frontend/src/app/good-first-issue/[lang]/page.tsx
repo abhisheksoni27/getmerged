@@ -119,10 +119,22 @@ export default async function GoodFirstIssuePage({ params }: PageProps) {
   }
 
   const languageName = displayNameFromSlug(canonicalLang);
-  const [repos, issues] = await Promise.all([
+  const [repos, rawIssues] = await Promise.all([
     getGFIRepos(languageName),
     getGFIIssues(languageName),
   ]);
+
+  // Enforce 3-issue cap per repository to eliminate repo flooding (Issue #119 Point 1)
+  const repoCounts = new Map<string, number>();
+  const issues: GoodFirstIssueItem[] = [];
+  for (const iss of rawIssues) {
+    const key = iss.repo_full_name || iss.repository_id;
+    const count = repoCounts.get(key) || 0;
+    if (count < 3) {
+      repoCounts.set(key, count + 1);
+      issues.push(iss);
+    }
+  }
 
   return (
     <div className="relative min-h-screen flex flex-col bg-[var(--bg-canvas)] text-[var(--text-primary)] font-sans">

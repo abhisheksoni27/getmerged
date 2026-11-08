@@ -145,6 +145,11 @@ func ComputeCRankWithBusFactor(n NormalisedMetrics, staleness bool, gfiCount int
 		calculatedTier = TierB
 	}
 
+	// Welcoming guardrail: Tier S is strictly reserved for repos with welcoming first-timer reception (>= 50.0 percentile).
+	if n.FirstTimer < 50.0 && calculatedTier == TierS {
+		calculatedTier = TierA
+	}
+
 	return rawScore, calculatedTier
 }
 

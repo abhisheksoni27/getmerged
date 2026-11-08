@@ -19,7 +19,7 @@ async function getMacroStats(): Promise<MacroStats | null> {
 
 async function getInitialRepos(): Promise<Repo[]> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/v1/repos?page=1&per_page=30&sort=stars&order=desc&tier=S`, {
+    const res = await fetch(`${API_BASE_URL}/api/v1/repos?page=1&per_page=30&sort=c_rank_score&order=desc&tier=S`, {
       next: { revalidate: 3600 },
     });
     if (!res.ok) return [];

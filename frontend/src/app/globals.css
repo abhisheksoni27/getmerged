@@ -269,6 +269,33 @@
   box-shadow: 0 0 8px var(--purple-bright);
 }
 
+.hero-title {
+  font-size: 2.25rem;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin-top: 0.75rem;
+  margin-bottom: 1.25rem;
+  font-family: var(--font-display);
+}
+
+@media (min-width: 640px) {
+  .hero-title {
+    font-size: 3.25rem;
+  }
+}
+
+.hero-subtitle {
+  font-size: 1.0625rem;
+  line-height: 1.625;
+  color: var(--text-secondary);
+  max-width: 44rem;
+  margin-top: 0;
+  margin-bottom: 2.25rem;
+  font-family: var(--font-sans);
+}
+
 /* Benchmark & Proof Tables */
 .bench-table {
   width: 100%;
