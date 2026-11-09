@@ -190,6 +190,9 @@ export interface GoodFirstIssueItem {
   boosted?: boolean;
   has_linked_pr?: boolean;
   linked_pr_number?: number | null;
+  is_verified_free?: boolean;
+  verified_free_reason?: string | null;
+  verified_free_checked_at?: string | null;
 }
 
 export interface OptimalTimeResult {

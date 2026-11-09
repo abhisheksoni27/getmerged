@@ -51,6 +51,7 @@ type GoodFirstIssueItem struct {
 type GFIRepository interface {
 	UpsertIssues(ctx context.Context, repoID string, issues []github.GoodFirstIssue) error
 	ListByLanguage(ctx context.Context, language string, limit int, bountyOnly bool) ([]GoodFirstIssueItem, error)
+	ListByLanguageFiltered(ctx context.Context, language string, limit int, bountyOnly bool, verifiedFreeOnly bool) ([]GoodFirstIssueItem, error)
 	ListByRepoID(ctx context.Context, repoID string, limit int, bountyOnly bool) ([]GoodFirstIssueItem, error)
 	// ListFeed returns Good First Issues indexed within the last 7 days
 	// (AC3 inclusion window) filtered by an optional allow-listed language,
@@ -204,6 +205,10 @@ const gfiListSelect = `
 `
 
 func (r *sqlxGFIRepository) ListByLanguage(ctx context.Context, language string, limit int, bountyOnly bool) ([]GoodFirstIssueItem, error) {
+	return r.ListByLanguageFiltered(ctx, language, limit, bountyOnly, false)
+}
+
+func (r *sqlxGFIRepository) ListByLanguageFiltered(ctx context.Context, language string, limit int, bountyOnly bool, verifiedFreeOnly bool) ([]GoodFirstIssueItem, error) {
 	if limit <= 0 {
 		limit = 30
 	}
@@ -215,6 +220,9 @@ func (r *sqlxGFIRepository) ListByLanguage(ctx context.Context, language string,
 	if language != "" && stringsToLower(language) != "all" {
 		whereClause += " AND LOWER(rep.language) = LOWER(?)"
 		args = append(args, language)
+	}
+	if verifiedFreeOnly {
+		whereClause += " AND g.is_verified_free = 1"
 	}
 	// Bounty-only requests over-fetch then filter in Go: exact label matching
 	// cannot be expressed portably in SQL (AC1).
