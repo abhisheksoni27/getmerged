@@ -7,7 +7,7 @@ import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { User } from "@/types/opendoor";
 import { NotificationBell } from "@/components/NotificationBell";
-import GitHubButton from "react-github-btn";
+import { GitHubStarButton } from "@/components/GitHubStarButton";
 import posthog from "posthog-js";
 import { AuthModal } from "@/components/AuthModal";
 
@@ -133,18 +133,9 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
             </button>
           )}
 
-          {/* Official GitHub Star Button (with live automatic count) */}
-          <div className="hidden sm:flex items-center h-8">
-            <GitHubButton
-              href="https://github.com/abhisheksoni27/getmerged"
-              data-color-scheme="no-preference: dark; light: dark; dark: dark;"
-              data-icon="octicon-star"
-              data-size="large"
-              data-show-count="true"
-              aria-label="Star abhisheksoni27/getmerged on GitHub"
-            >
-              Star
-            </GitHubButton>
+          {/* Native GitHub Star Button */}
+          <div className="hidden sm:flex items-center">
+            <GitHubStarButton />
           </div>
 
           {authLoading ? (
@@ -284,16 +275,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
               </Link>
               <div className="pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between">
                 <span className="text-xs text-[var(--text-secondary)] font-mono">Support GetMerged:</span>
-                <GitHubButton
-                  href="https://github.com/abhisheksoni27/getmerged"
-                  data-color-scheme="no-preference: dark; light: dark; dark: dark;"
-                  data-icon="octicon-star"
-                  data-size="large"
-                  data-show-count="true"
-                  aria-label="Star abhisheksoni27/getmerged on GitHub"
-                >
-                  Star
-                </GitHubButton>
+                <GitHubStarButton />
               </div>
             </nav>
           </motion.div>
