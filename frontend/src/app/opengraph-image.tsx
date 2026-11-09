@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "GetMerged - Glassdoor for Open Source Repositories";
+export const alt = "GetMerged — Glassdoor for Open Source Repositories";
 export const size = {
   width: 1200,
   height: 630,
@@ -18,15 +18,28 @@ export default function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          backgroundColor: "#07080b",
-          backgroundImage: "radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.08) 1.5px, transparent 0)",
-          backgroundSize: "32px 32px",
-          padding: "50px 60px",
-          fontFamily: "sans-serif",
-          borderTop: "6px solid #10b981",
+          backgroundColor: "#07090e",
+          backgroundImage:
+            "radial-gradient(ellipse 900px 500px at 15% -10%, rgba(16, 185, 129, 0.18), transparent 60%), radial-gradient(ellipse 700px 400px at 85% 110%, rgba(56, 189, 248, 0.12), transparent 60%)",
+          padding: "48px 60px 42px 60px",
+          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          position: "relative",
+          boxSizing: "border-box",
         }}
       >
-        {/* Top Header Bar */}
+        {/* Top Accent Line */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "4px",
+            background: "linear-gradient(90deg, #10b981 0%, #38bdf8 55%, #a855f7 100%)",
+          }}
+        />
+
+        {/* ── TOP HEADER: Logo & Global Metric Badge ── */}
         <div
           style={{
             display: "flex",
@@ -35,99 +48,155 @@ export default function Image() {
             alignItems: "center",
           }}
         >
+          {/* Logo Mark + Brand */}
           <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
             <div
               style={{
-                width: "14px",
-                height: "14px",
-                borderRadius: "50%",
-                backgroundColor: "#10b981",
-                boxShadow: "0 0 16px #10b981",
-              }}
-            />
-            <span
-              style={{
-                color: "#ffffff",
-                fontSize: "26px",
-                fontWeight: 800,
-                letterSpacing: "-0.5px",
+                width: "42px",
+                height: "42px",
+                borderRadius: "12px",
+                background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 0 24px rgba(16, 185, 129, 0.35)",
               }}
             >
-              GetMerged
-            </span>
-            <span
-              style={{
-                color: "#10b981",
-                fontSize: "14px",
-                fontWeight: 700,
-                letterSpacing: "1.2px",
-                textTransform: "uppercase",
-                backgroundColor: "rgba(16, 185, 129, 0.12)",
-                border: "1px solid rgba(16, 185, 129, 0.3)",
-                padding: "4px 12px",
-                borderRadius: "999px",
-              }}
-            >
-              Open Source Telemetry
-            </span>
+              {/* Git PR merge icon */}
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <circle cx="6" cy="6" r="3" fill="#ffffff" />
+                <circle cx="6" cy="18" r="3" fill="#ffffff" />
+                <circle cx="18" cy="10" r="3" fill="#ffffff" />
+                <path d="M6 9v6" stroke="#ffffff" strokeWidth="2.4" strokeLinecap="round" />
+                <path d="M6 15c0-4 4-5 12-5" stroke="#ffffff" strokeWidth="2.4" strokeLinecap="round" />
+              </svg>
+            </div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
+              <span
+                style={{
+                  color: "#ffffff",
+                  fontSize: "28px",
+                  fontWeight: 900,
+                  letterSpacing: "-0.6px",
+                }}
+              >
+                GetMerged
+              </span>
+              <span
+                style={{
+                  color: "#10b981",
+                  fontSize: "12px",
+                  fontWeight: 800,
+                  letterSpacing: "1.2px",
+                  textTransform: "uppercase",
+                  backgroundColor: "rgba(16, 185, 129, 0.12)",
+                  border: "1px solid rgba(16, 185, 129, 0.3)",
+                  padding: "3px 9px",
+                  borderRadius: "6px",
+                }}
+              >
+                C-Rank™ Telemetry
+              </span>
+            </div>
           </div>
 
+          {/* Right Live Scope Pill */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
+              gap: "9px",
               backgroundColor: "rgba(255, 255, 255, 0.04)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              padding: "6px 16px",
+              border: "1px solid rgba(255, 255, 255, 0.09)",
+              padding: "7px 16px",
               borderRadius: "999px",
-              color: "#a1a1aa",
-              fontSize: "16px",
-              fontFamily: "monospace",
             }}
           >
-            <span>102,480 Repos Scored Nightly</span>
+            <div
+              style={{
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                backgroundColor: "#10b981",
+                boxShadow: "0 0 10px #10b981",
+              }}
+            />
+            <span
+              style={{
+                color: "#f4f4f5",
+                fontSize: "14px",
+                fontWeight: 700,
+                letterSpacing: "-0.2px",
+              }}
+            >
+              153,900+ Repos Scored Daily
+            </span>
           </div>
         </div>
 
-        {/* Hero Value Proposition */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxWidth: "1000px" }}>
+        {/* ── HERO HEADLINE & VALUE PROP ── */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "14px",
+            maxWidth: "1080px",
+            marginTop: "6px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "#38bdf8",
+              fontSize: "15px",
+              fontWeight: 800,
+              letterSpacing: "1.5px",
+              textTransform: "uppercase",
+            }}
+          >
+            <span>The Glassdoor for Open Source</span>
+          </div>
           <span
             style={{
-              color: "#f4f4f5",
-              fontSize: "54px",
+              color: "#ffffff",
+              fontSize: "50px",
               fontWeight: 900,
-              letterSpacing: "-1.5px",
+              letterSpacing: "-1.8px",
               lineHeight: 1.1,
             }}
           >
-            Where Pull Requests Don’t Go to Die.
+            Know if maintainers merge PRs before you write a single line of code.
           </span>
           <span
             style={{
-              color: "#a1a1aa",
-              fontSize: "23px",
+              color: "#94a3b8",
+              fontSize: "21px",
               lineHeight: 1.45,
               fontWeight: 400,
+              maxWidth: "960px",
             }}
           >
-            Stop guessing maintainer responsiveness. Live review latency, merge rates, and first-timer acceptance scores across 102k+ public GitHub repositories.
+            Independent contributor readiness scores, median review latency, real external merge rates, and first-timer acceptance across 150k+ GitHub projects.
           </span>
         </div>
 
-        {/* Dynamic Metric Telemetry Cards */}
+        {/* ── CARD: LIVE TELEMETRY SHOWCASE ── */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             width: "100%",
-            backgroundColor: "rgba(255, 255, 255, 0.03)",
-            border: "1px solid rgba(255, 255, 255, 0.09)",
-            borderRadius: "18px",
+            backgroundColor: "rgba(15, 23, 42, 0.65)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            borderRadius: "16px",
             padding: "18px 26px",
+            boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.5)",
           }}
         >
-          {/* Card 1: C-Rank */}
+          {/* Badge: C-Rank Welcoming */}
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
             <div
               style={{
@@ -136,79 +205,156 @@ export default function Image() {
                 alignItems: "center",
                 justifyContent: "center",
                 backgroundColor: "#10b981",
-                color: "#000000",
-                padding: "8px 20px",
+                padding: "8px 18px",
                 borderRadius: "10px",
+                boxShadow: "0 4px 14px rgba(16, 185, 129, 0.35)",
               }}
             >
-              <span style={{ fontSize: "11px", fontWeight: 900, letterSpacing: "1px", textTransform: "uppercase" }}>
+              <span
+                style={{
+                  color: "#022c22",
+                  fontSize: "10px",
+                  fontWeight: 900,
+                  letterSpacing: "1.2px",
+                  textTransform: "uppercase",
+                }}
+              >
                 C-Rank™
               </span>
-              <span style={{ fontSize: "28px", fontWeight: 900, lineHeight: 1 }}>
+              <span
+                style={{
+                  color: "#022c22",
+                  fontSize: "24px",
+                  fontWeight: 900,
+                  lineHeight: 1.1,
+                }}
+              >
                 TIER S
               </span>
             </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ color: "#ffffff", fontSize: "18px", fontWeight: 700 }}>
-                Contributor Readiness
-              </span>
-              <span style={{ color: "#71717a", fontSize: "13px" }}>
-                9-signal maintainer index
+            <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span style={{ color: "#ffffff", fontSize: "16px", fontWeight: 800 }}>
+                  ★ Super Welcoming
+                </span>
+                <span
+                  style={{
+                    color: "#34d399",
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    backgroundColor: "rgba(16, 185, 129, 0.15)",
+                    padding: "1px 6px",
+                    borderRadius: "4px",
+                  }}
+                >
+                  TOP 5%
+                </span>
+              </div>
+              <span style={{ color: "#64748b", fontSize: "12px", fontWeight: 500 }}>
+                High-confidence 9-signal contributor index
               </span>
             </div>
           </div>
 
-          <div style={{ width: "1px", height: "42px", backgroundColor: "rgba(255, 255, 255, 0.1)" }} />
+          {/* Divider */}
+          <div style={{ width: "1px", height: "46px", backgroundColor: "rgba(255, 255, 255, 0.08)" }} />
 
-          {/* Metric 1 */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-            <span style={{ color: "#71717a", fontSize: "12px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 700 }}>
-              Median Response
+          {/* Metric 1: Merge Rate */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
+            <span
+              style={{
+                color: "#64748b",
+                fontSize: "11px",
+                fontWeight: 800,
+                letterSpacing: "1px",
+                textTransform: "uppercase",
+              }}
+            >
+              External PR Merge Rate
             </span>
-            <span style={{ color: "#38bdf8", fontSize: "24px", fontWeight: 800 }}>
-              &lt; 2.4 hrs
-            </span>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
+              <span style={{ color: "#10b981", fontSize: "26px", fontWeight: 900, lineHeight: 1 }}>
+                89.4%
+              </span>
+              <span style={{ color: "#475569", fontSize: "12px", fontWeight: 600 }}>
+                vs 28% avg
+              </span>
+            </div>
           </div>
 
-          <div style={{ width: "1px", height: "42px", backgroundColor: "rgba(255, 255, 255, 0.1)" }} />
+          {/* Divider */}
+          <div style={{ width: "1px", height: "46px", backgroundColor: "rgba(255, 255, 255, 0.08)" }} />
 
-          {/* Metric 2 */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-            <span style={{ color: "#71717a", fontSize: "12px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 700 }}>
-              External Merge Rate
+          {/* Metric 2: Turnaround Latency */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
+            <span
+              style={{
+                color: "#64748b",
+                fontSize: "11px",
+                fontWeight: 800,
+                letterSpacing: "1px",
+                textTransform: "uppercase",
+              }}
+            >
+              Median Review Time
             </span>
-            <span style={{ color: "#10b981", fontSize: "24px", fontWeight: 800 }}>
-              88.4%
-            </span>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
+              <span style={{ color: "#38bdf8", fontSize: "26px", fontWeight: 900, lineHeight: 1 }}>
+                &lt; 3.2h
+              </span>
+              <span style={{ color: "#475569", fontSize: "12px", fontWeight: 600 }}>
+                turnaround
+              </span>
+            </div>
           </div>
 
-          <div style={{ width: "1px", height: "42px", backgroundColor: "rgba(255, 255, 255, 0.1)" }} />
+          {/* Divider */}
+          <div style={{ width: "1px", height: "46px", backgroundColor: "rgba(255, 255, 255, 0.08)" }} />
 
-          {/* Metric 3 */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-            <span style={{ color: "#71717a", fontSize: "12px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 700 }}>
-              First-Timer
+          {/* Metric 3: First-Timer Success */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
+            <span
+              style={{
+                color: "#64748b",
+                fontSize: "11px",
+                fontWeight: 800,
+                letterSpacing: "1px",
+                textTransform: "uppercase",
+              }}
+            >
+              First-Timer Success
             </span>
-            <span style={{ color: "#c084fc", fontSize: "24px", fontWeight: 800 }}>
-              Top 5%
-            </span>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
+              <span style={{ color: "#c084fc", fontSize: "26px", fontWeight: 900, lineHeight: 1 }}>
+                94.1%
+              </span>
+              <span style={{ color: "#475569", fontSize: "12px", fontWeight: 600 }}>
+                friendly
+              </span>
+            </div>
           </div>
 
-          <div style={{ width: "1px", height: "42px", backgroundColor: "rgba(255, 255, 255, 0.1)" }} />
+          {/* Divider */}
+          <div style={{ width: "1px", height: "46px", backgroundColor: "rgba(255, 255, 255, 0.08)" }} />
 
-          {/* Brand mark right */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              color: "#e4e4e7",
-              fontSize: "15px",
-              fontWeight: 700,
-              fontFamily: "monospace",
-            }}
-          >
-            getmerged.abhishekco.de
+          {/* Domain & Free Tag */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "3px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                color: "#ffffff",
+                fontSize: "15px",
+                fontWeight: 800,
+                fontFamily: "monospace",
+              }}
+            >
+              <span>getmerged.abhishekco.de</span>
+            </div>
+            <span style={{ color: "#10b981", fontSize: "12px", fontWeight: 700 }}>
+              100% Free &amp; Open
+            </span>
           </div>
         </div>
       </div>
