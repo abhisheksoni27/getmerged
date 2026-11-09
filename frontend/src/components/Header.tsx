@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Bookmark, Search, Menu, X, Star } from "lucide-react";
+import { Bookmark, Search, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { User } from "@/types/opendoor";
 import { NotificationBell } from "@/components/NotificationBell";
-import { GithubIcon } from "@/components/icons";
+import GitHubButton from "react-github-btn";
 import posthog from "posthog-js";
 import { AuthModal } from "@/components/AuthModal";
 
@@ -100,7 +100,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
 
         {/* Floating Search Button */}
         {isSearchVisible && (
-          <div className="flex-1 min-w-[140px] sm:min-w-[180px] md:min-w-[220px] max-w-[280px] mx-2 shrink-0 sm:shrink">
+          <div className="hidden sm:flex flex-1 min-w-[140px] md:min-w-[180px] max-w-[280px] mx-2 shrink">
             <button
               type="button"
               onClick={handleOpenSearch}
@@ -112,7 +112,7 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                   {displayQuery || placeholderText || "Search repositories..."}
                 </span>
               </div>
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 border border-[var(--border-subtle)] bg-[#21262D] px-1.5 py-0.5 rounded text-[10px] text-[var(--text-secondary)] font-mono shrink-0">
+              <kbd className="hidden md:inline-flex items-center gap-0.5 border border-[var(--border-subtle)] bg-[#21262D] px-1.5 py-0.5 rounded text-[10px] text-[var(--text-secondary)] font-mono shrink-0">
                 <span>⌘</span>K
               </kbd>
             </button>
@@ -120,20 +120,32 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
         )}
 
         {/* Right Actions */}
-        <div className="flex items-center gap-2.5 shrink-0">
-          {/* Star on GitHub Button */}
-          <a
-            href="https://github.com/abhisheksoni27/getmerged"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Star GetMerged on GitHub"
-            onClick={() => posthog.capture("github_star_clicked", { source: "header" })}
-            className="hidden sm:inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg border border-[var(--border-subtle)] bg-[#0D111A] hover:bg-[#161B22] hover:border-[var(--border-strong)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all text-xs font-mono group shrink-0"
-          >
-            <GithubIcon className="h-3.5 w-3.5" />
-            <span>Star</span>
-            <Star className="h-3 w-3 text-[#E3B341] fill-[#E3B341] group-hover:scale-110 transition-transform" />
-          </a>
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {/* Mobile Search Icon Button */}
+          {isSearchVisible && (
+            <button
+              type="button"
+              onClick={handleOpenSearch}
+              aria-label="Search repositories"
+              className="sm:hidden flex items-center justify-center h-9 w-9 rounded-lg border border-[var(--border-subtle)] bg-[#0D111A] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              <Search className="h-4 w-4" />
+            </button>
+          )}
+
+          {/* Official GitHub Star Button (with live automatic count) */}
+          <div className="hidden sm:flex items-center h-8">
+            <GitHubButton
+              href="https://github.com/abhisheksoni27/getmerged"
+              data-color-scheme="no-preference: dark; light: dark; dark: dark;"
+              data-icon="octicon-star"
+              data-size="large"
+              data-show-count="true"
+              aria-label="Star abhisheksoni27/getmerged on GitHub"
+            >
+              Star
+            </GitHubButton>
+          </div>
 
           {authLoading ? (
             <div className="h-8 w-16 sm:w-20 rounded-lg bg-[var(--bg-elevated)] animate-pulse border border-[var(--border-subtle)]" />
@@ -270,22 +282,19 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                 <span className="w-2 h-2 rounded-full bg-[var(--color-primary)] animate-pulse" />
                 Monthly League
               </Link>
-              <a
-                href="https://github.com/abhisheksoni27/getmerged"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => {
-                  posthog.capture("github_star_clicked", { source: "mobile_menu" });
-                  setMobileMenuOpen(false);
-                }}
-                className="px-3 py-2 rounded-lg border border-[var(--border-subtle)] bg-[#0D111A] text-[var(--text-primary)] font-medium transition-colors flex items-center justify-between"
-              >
-                <div className="flex items-center gap-2">
-                  <GithubIcon className="h-4 w-4" />
-                  <span>Star on GitHub</span>
-                </div>
-                <Star className="h-3.5 w-3.5 text-[#E3B341] fill-[#E3B341]" />
-              </a>
+              <div className="pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between">
+                <span className="text-xs text-[var(--text-secondary)] font-mono">Support GetMerged:</span>
+                <GitHubButton
+                  href="https://github.com/abhisheksoni27/getmerged"
+                  data-color-scheme="no-preference: dark; light: dark; dark: dark;"
+                  data-icon="octicon-star"
+                  data-size="large"
+                  data-show-count="true"
+                  aria-label="Star abhisheksoni27/getmerged on GitHub"
+                >
+                  Star
+                </GitHubButton>
+              </div>
             </nav>
           </motion.div>
         )}
