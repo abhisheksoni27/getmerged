@@ -246,9 +246,13 @@ query RepoGfiList($query: String!, $first: Int!) {
         url
         createdAt
         authorAssociation
-        comments(first: 3) {
+        assignees(first: 1) {
+          totalCount
+        }
+        comments(first: 5) {
           totalCount
           nodes {
+            bodyText
             createdAt
             authorAssociation
           }

@@ -209,3 +209,75 @@ func TestGFIRepository_UpsertIssues_MarksClosedIssues(t *testing.T) {
 		t.Fatalf("expected is_open = 0 for issue #2, got %d (err: %v)", isOpen, err)
 	}
 }
+
+func TestGFIRepository_UpsertAndList_VerifiedFree(t *testing.T) {
+	database, _ := setupTestDB(t)
+	defer database.Close()
+
+	gfiRepo := repository.NewGFIRepository(database)
+	ctx := context.Background()
+
+	repoID := "test-repo-vf"
+	database.MustExec(`INSERT INTO repositories (id, full_name, owner, name, language, stars, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+		repoID, "owner/test-repo-vf", "owner", "test-repo-vf", "Go", 300, time.Now())
+	database.MustExec(`INSERT INTO latest_snapshots (repository_id, snapshot_date, c_rank_tier, c_rank_score) VALUES (?, ?, ?, ?)`,
+		repoID, "2026-08-18", "A", 88.0)
+
+	now := time.Now().UTC()
+	issues := []github.GoodFirstIssue{
+		{
+			Number:             10,
+			Title:              "Unclaimed Good Issue",
+			URL:                "url10",
+			CreatedAt:          now.Add(-2 * 24 * time.Hour),
+			QualityScore:       90,
+			IsVerifiedFree:     true,
+			VerifiedFreeReason: "Unassigned, no linked PR, no recent claims",
+		},
+		{
+			Number:             20,
+			Title:              "Claimed Issue",
+			URL:                "url20",
+			CreatedAt:          now.Add(-1 * 24 * time.Hour),
+			QualityScore:       85,
+			HasLinkedPR:        true,
+			IsVerifiedFree:     false,
+			VerifiedFreeReason: "Has active linked pull request",
+		},
+	}
+
+	if err := gfiRepo.UpsertIssues(ctx, repoID, issues); err != nil {
+		t.Fatalf("UpsertIssues failed: %v", err)
+	}
+
+	items, err := gfiRepo.ListByRepoID(ctx, repoID, 10, false)
+	if err != nil {
+		t.Fatalf("ListByRepoID failed: %v", err)
+	}
+	if len(items) != 2 {
+		t.Fatalf("expected 2 issues, got %d", len(items))
+	}
+
+	var item10, item20 *repository.GoodFirstIssueItem
+	for i := range items {
+		if items[i].IssueNumber == 10 {
+			item10 = &items[i]
+		} else if items[i].IssueNumber == 20 {
+			item20 = &items[i]
+		}
+	}
+
+	if item10 == nil || !item10.IsVerifiedFree {
+		t.Fatalf("expected item #10 to be verified free")
+	}
+	if item10.VerifiedFreeReason == nil || *item10.VerifiedFreeReason != "Unassigned, no linked PR, no recent claims" {
+		t.Fatalf("unexpected verified free reason on #10: %v", item10.VerifiedFreeReason)
+	}
+
+	if item20 == nil || item20.IsVerifiedFree {
+		t.Fatalf("expected item #20 to NOT be verified free")
+	}
+	if item20.VerifiedFreeReason == nil || *item20.VerifiedFreeReason != "Has active linked pull request" {
+		t.Fatalf("unexpected verified free reason on #20: %v", item20.VerifiedFreeReason)
+	}
+}
