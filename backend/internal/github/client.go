@@ -1024,6 +1024,10 @@ type GoodFirstIssue struct {
 	QualityScore            int       `json:"quality_score"`
 	HasLinkedPR             bool      `json:"has_linked_pr"`
 	LinkedPRNumber          *int      `json:"linked_pr_number,omitempty"`
+	AssigneesCount          int       `json:"assignees_count"`
+	HasRecentClaimComment   bool      `json:"has_recent_claim_comment"`
+	IsVerifiedFree          bool      `json:"is_verified_free"`
+	VerifiedFreeReason      string    `json:"verified_free_reason,omitempty"`
 }
 
 // FetchGoodFirstIssueCount returns the number of open beginner-friendly issues for a repo.
@@ -1125,9 +1129,13 @@ func (c *Client) FetchGoodFirstIssuesList(owner, name string, limit int) ([]Good
 					URL               string `json:"url"`
 					CreatedAt         string `json:"createdAt"`
 					AuthorAssociation string `json:"authorAssociation"`
+					Assignees         struct {
+						TotalCount int `json:"totalCount"`
+					} `json:"assignees"`
 					Comments          struct {
 						TotalCount int `json:"totalCount"`
 						Nodes      []struct {
+							BodyText          string `json:"bodyText"`
 							CreatedAt         string `json:"createdAt"`
 							AuthorAssociation string `json:"authorAssociation"`
 						} `json:"nodes"`
@@ -1237,6 +1245,26 @@ func (c *Client) FetchGoodFirstIssuesList(owner, name string, limit int) ([]Good
 			}
 		}
 
+		// Evaluate claim comments & verified free status
+		var commentsSummary []IssueCommentSummary
+		for _, cm := range n.Comments.Nodes {
+			var cmCreatedAt time.Time
+			if ct, err := time.Parse(time.RFC3339, cm.CreatedAt); err == nil {
+				cmCreatedAt = ct
+			}
+			commentsSummary = append(commentsSummary, IssueCommentSummary{
+				BodyText:          cm.BodyText,
+				CreatedAt:         cmCreatedAt,
+				AuthorAssociation: cm.AuthorAssociation,
+			})
+		}
+
+		isVerifiedFree, verifiedFreeReason := EvaluateVerifiedFree(IssueVerifiedFreeInput{
+			HasLinkedPR:    hasLinkedPR,
+			AssigneesCount: n.Assignees.TotalCount,
+			Comments:       commentsSummary,
+		}, now)
+
 		issues = append(issues, GoodFirstIssue{
 			Number:                  n.Number,
 			Title:                   n.Title,
@@ -1254,6 +1282,9 @@ func (c *Client) FetchGoodFirstIssuesList(owner, name string, limit int) ([]Good
 			QualityScore:            qualityScore,
 			HasLinkedPR:             hasLinkedPR,
 			LinkedPRNumber:          linkedPRNumber,
+			AssigneesCount:          n.Assignees.TotalCount,
+			IsVerifiedFree:          isVerifiedFree,
+			VerifiedFreeReason:      verifiedFreeReason,
 		})
 	}
 

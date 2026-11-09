@@ -441,6 +441,11 @@ func AutoMigrate(db *sqlx.DB) error {
 			alert_refresh_fired_at DATETIME NULL,
 			issue_updated_at DATETIME NULL,
 			alert_last_updated_at DATETIME NULL,
+			has_linked_pr BOOLEAN NOT NULL DEFAULT FALSE,
+			linked_pr_number INTEGER NULL,
+			is_verified_free BOOLEAN NOT NULL DEFAULT FALSE,
+			verified_free_reason VARCHAR(255) NULL,
+			verified_free_checked_at DATETIME NULL,
 			UNIQUE(repository_id, issue_number)
 		);`, autoInc),
 		// Paid bounty boost entitlements: one row per payment (payment_id is
@@ -1491,6 +1496,12 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN ai_policy_url TEXT NULL`)
 	_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN ai_policy_reason TEXT NULL`)
 	_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_repositories_ai_policy ON repositories(ai_policy)`)
+
+	// Issue #120: Verified Free Good First Issues
+	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN is_verified_free BOOLEAN NOT NULL DEFAULT FALSE`)
+	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN verified_free_reason VARCHAR(255) NULL`)
+	_, _ = db.Exec(`ALTER TABLE repo_good_first_issues ADD COLUMN verified_free_checked_at DATETIME NULL`)
+	_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_gfi_verified_free ON repo_good_first_issues(is_verified_free)`)
 	// AC4: per-(user,boost) per-24h dedup of impressions/clicks. The UNIQUE key
 	// makes a refresh/dup delivery a no-op (fraud + double-count safe).
 	if db.DriverName() == "sqlite" {
