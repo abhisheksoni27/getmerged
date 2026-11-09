@@ -2,7 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
-import { ShieldCheck, Sparkles, Terminal } from "lucide-react";
+import { ShieldCheck, Sparkles, Terminal, Star } from "lucide-react";
+import { GithubIcon } from "@/components/icons";
+import posthog from "posthog-js";
 
 export function Footer() {
   const rankingLangs = [
@@ -200,7 +202,18 @@ export function Footer() {
           <div className="flex items-center gap-4 text-[var(--text-tertiary)]">
             <Link prefetch={false} href="/privacy" title="Privacy Policy" className="hover:text-[var(--text-primary)] transition-colors">Privacy</Link>
             <Link prefetch={false} href="/terms" title="Terms of Service" className="hover:text-[var(--text-primary)] transition-colors">Terms</Link>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" title="GitHub" className="hover:text-[var(--text-primary)] transition-colors">GitHub API</a>
+            <a
+              href="https://github.com/abhisheksoni27/getmerged"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Star GetMerged on GitHub"
+              onClick={() => posthog.capture("github_star_clicked", { source: "footer" })}
+              className="inline-flex items-center gap-1.5 hover:text-[var(--text-primary)] transition-colors"
+            >
+              <GithubIcon className="h-3.5 w-3.5" />
+              <span>Star on GitHub</span>
+              <Star className="h-3 w-3 text-[#E3B341] fill-[#E3B341]" />
+            </a>
           </div>
         </div>
       </div>
