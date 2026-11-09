@@ -49,12 +49,12 @@ Python 12,532 | TypeScript 9,157 | JavaScript 7,784 | Go 7,128 | C++ 5,891 | Rus
 | `/rankings` | Ecosystem hub: 20 language leaderboard cards with aggregate stats |
 | `/rankings/[lang]` | Per-language top-50: C-Rank score, merge rate, GFI count, dataset download, FAQ, ItemList schema |
 | `/good-first-issue` | Beginner issue hub: 14 language ecosystems, LanguageMatchQuiz, GfiSniperCard |
-| `/good-first-issue/[lang]` | Live GFI feed: repo grid, boosted badges, freshness labels, claim actions |
+| `/good-first-issue/[lang]` | Live GFI feed: repo grid, boosted badges, freshness labels, claim actions, Verified Free filter & indicators, stampede cap (max 3 issues/repo) |
 | `/topics` | Paginated topic directory (100+ topics) with search and stat badges |
 | `/topics/[topic]` | Repos tagged with a topic: aggregate merge rate, review latency, TopicReposExplorer grid |
 | `/hall-of-fame` | Curated S-tier showcase: highest C-Rank repos, responsive RepoCard grid |
 | `/community-powerhouses` | Repos sustained by 5+ distinct active maintainers: bus-factor resilience, faster review cycles |
-| `/[owner]/[name]` | Full repo scorecard (Precision DevEx Workbench 4-Beat flow): Beat 1 Verdict banner (S/A/B/C/D grade box, score, policy pills), Beat 2 Observed 6-Month telemetry with sample sizes, Beat 3 Merged outside PRs proof table (`/api/v1/repos/:id/merged-prs`), Beat 4 Actionable workbench cards (PR sweet spot, review window, embed badge, related repos, community feedback) |
+| `/[owner]/[name]` | Full repo scorecard (Precision DevEx Workbench 4-Beat flow): Beat 1 Verdict banner (S/A/B/C/D grade box, score, policy pills including verified External PR Access Status & AI Policy badges), Beat 2 Observed 6-Month telemetry with sample sizes, Beat 3 Merged outside PRs proof table (`/api/v1/repos/:id/merged-prs`), Beat 4 Actionable workbench cards (PR sweet spot, review window, embed badge, related repos, community feedback) |
 | `/[owner]/[name]/audit` | Deep maintainer audit: PR drop-off funnel, reviewer burnout signals, first-timer journeys, AI-prioritized fixes, actionable templates, $10 report purchase |
 
 ### Contributor
