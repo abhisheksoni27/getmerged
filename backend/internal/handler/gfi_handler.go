@@ -23,8 +23,9 @@ func ListGoodFirstIssues(gfiRepo repository.GFIRepository, boostRepo repository.
 			limit = 25
 		}
 		bountyOnly := c.Query("bounty") == "1" || strings.EqualFold(c.Query("bounty"), "true")
+		verifiedFreeOnly := c.Query("verified_free") == "1" || strings.EqualFold(c.Query("verified_free"), "true")
 
-		issues, err := gfiRepo.ListByLanguage(c.Request.Context(), language, limit, bountyOnly)
+		issues, err := gfiRepo.ListByLanguageFiltered(c.Request.Context(), language, limit, bountyOnly, verifiedFreeOnly)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch good first issues"})
 			return

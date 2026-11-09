@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, ExternalLink, Sparkles } from "lucide-react";
+import { ArrowRight, ExternalLink, Sparkles, Zap } from "lucide-react";
 import Link from "next/link";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { GoodFirstIssueItem, Repo } from "@/types/opendoor";
@@ -70,6 +70,15 @@ export function GfiSection({ repo, fullName, gfiList }: GfiSectionProps) {
                     {issue.boosted && (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-950/40 border border-indigo-500/20 border border-indigo-300 text-[10px] font-mono font-bold text-indigo-800">
                         🚀 Boosted
+                      </span>
+                    )}
+                    {issue.is_verified_free && (
+                      <span
+                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[rgba(130,80,223,0.15)] border border-[rgba(163,113,247,0.3)] text-[10px] font-mono font-bold text-[var(--purple-bright)]"
+                        title={issue.verified_free_reason || "Unassigned, no linked PR, no recent claims"}
+                      >
+                        <Zap className="h-2.5 w-2.5 fill-current" />
+                        <span>Verified Free</span>
                       </span>
                     )}
                     <a
