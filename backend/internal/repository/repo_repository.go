@@ -47,6 +47,9 @@ type RepoRecord struct {
 	IsScored                 bool      `db:"is_scored" json:"is_scored"`
 	AccessStatus             string    `db:"access_status" json:"access_status"`
 	AccessStatusReason       *string   `db:"access_status_reason" json:"access_status_reason"`
+	AIPolicy                 string    `db:"ai_policy" json:"ai_policy"`
+	AIPolicyURL              *string   `db:"ai_policy_url" json:"ai_policy_url"`
+	AIPolicyReason           *string   `db:"ai_policy_reason" json:"ai_policy_reason"`
 }
 
 type RepoFilter struct {
@@ -318,6 +321,9 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 			CASE WHEN COALESCE(s.c_rank_score, 0) > 0 THEN 1 ELSE 0 END as is_scored,
 			COALESCE(r.access_status, 'open') as access_status,
 			r.access_status_reason,
+			COALESCE(r.ai_policy, 'unspecified') as ai_policy,
+			r.ai_policy_url,
+			r.ai_policy_reason,
 			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
@@ -487,6 +493,9 @@ func (r *sqlxRepoRepository) FindByIDOrName(ctx context.Context, identifier stri
 			CASE WHEN COALESCE(s.c_rank_score, 0) > 0 THEN 1 ELSE 0 END as is_scored,
 			COALESCE(r.access_status, 'open') as access_status,
 			r.access_status_reason,
+			COALESCE(r.ai_policy, 'unspecified') as ai_policy,
+			r.ai_policy_url,
+			r.ai_policy_reason,
 			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON s.repository_id = r.id
@@ -739,6 +748,9 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 			CASE WHEN COALESCE(s.c_rank_score, 0) > 0 THEN 1 ELSE 0 END as is_scored,
 			COALESCE(r.access_status, 'open') as access_status,
 			r.access_status_reason,
+			COALESCE(r.ai_policy, 'unspecified') as ai_policy,
+			r.ai_policy_url,
+			r.ai_policy_reason,
 			r.updated_at
 		FROM repositories r
 		LEFT JOIN latest_snapshots s ON r.id = s.repository_id
@@ -766,7 +778,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 			&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
 			&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
 			&rec.DistinctMaintainerCount, &rec.BusFactor, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
-			&rec.OnboardingScore, &isScoredInt, &rec.AccessStatus, &rec.AccessStatusReason, &rec.UpdatedAt,
+			&rec.OnboardingScore, &isScoredInt, &rec.AccessStatus, &rec.AccessStatusReason, &rec.AIPolicy, &rec.AIPolicyURL, &rec.AIPolicyReason, &rec.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -827,7 +839,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 					&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
 					&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
 					&rec.DistinctMaintainerCount, &rec.BusFactor, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
-					&rec.OnboardingScore, &isScoredInt, &rec.AccessStatus, &rec.AccessStatusReason, &rec.UpdatedAt,
+					&rec.OnboardingScore, &isScoredInt, &rec.AccessStatus, &rec.AccessStatusReason, &rec.AIPolicy, &rec.AIPolicyURL, &rec.AIPolicyReason, &rec.UpdatedAt,
 				); err == nil {
 					rec.StalenessFlag = staleInt == 1
 					rec.IsScored = isScoredInt == 1
