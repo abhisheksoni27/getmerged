@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Bookmark, Search, Menu, X } from "lucide-react";
+import { Bookmark, Search, Menu, X, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { API_BASE_URL } from "@/lib/api";
 import { User } from "@/types/opendoor";
 import { NotificationBell } from "@/components/NotificationBell";
+import { GithubIcon } from "@/components/icons";
 import posthog from "posthog-js";
 import { AuthModal } from "@/components/AuthModal";
 
@@ -120,6 +121,20 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
 
         {/* Right Actions */}
         <div className="flex items-center gap-2.5 shrink-0">
+          {/* Star on GitHub Button */}
+          <a
+            href="https://github.com/abhisheksoni27/getmerged"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Star GetMerged on GitHub"
+            onClick={() => posthog.capture("github_star_clicked", { source: "header" })}
+            className="hidden sm:inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg border border-[var(--border-subtle)] bg-[#0D111A] hover:bg-[#161B22] hover:border-[var(--border-strong)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all text-xs font-mono group shrink-0"
+          >
+            <GithubIcon className="h-3.5 w-3.5" />
+            <span>Star</span>
+            <Star className="h-3 w-3 text-[#E3B341] fill-[#E3B341] group-hover:scale-110 transition-transform" />
+          </a>
+
           {authLoading ? (
             <div className="h-8 w-16 sm:w-20 rounded-lg bg-[var(--bg-elevated)] animate-pulse border border-[var(--border-subtle)]" />
           ) : user ? (
@@ -255,6 +270,22 @@ export function Header({ showSearchBar, onOpenSearch, searchQuery, placeholderTe
                 <span className="w-2 h-2 rounded-full bg-[var(--color-primary)] animate-pulse" />
                 Monthly League
               </Link>
+              <a
+                href="https://github.com/abhisheksoni27/getmerged"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => {
+                  posthog.capture("github_star_clicked", { source: "mobile_menu" });
+                  setMobileMenuOpen(false);
+                }}
+                className="px-3 py-2 rounded-lg border border-[var(--border-subtle)] bg-[#0D111A] text-[var(--text-primary)] font-medium transition-colors flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <GithubIcon className="h-4 w-4" />
+                  <span>Star on GitHub</span>
+                </div>
+                <Star className="h-3.5 w-3.5 text-[#E3B341] fill-[#E3B341]" />
+              </a>
             </nav>
           </motion.div>
         )}
