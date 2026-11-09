@@ -82,6 +82,7 @@ type RepoFilter struct {
 	MinTier                  string
 	AccessStatus             string
 	ExcludeClosed            bool
+	AIPolicy                 string
 }
 
 type SnapshotRecord struct {
@@ -267,6 +268,11 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 
 	if filter.ExcludeClosed {
 		where += " AND COALESCE(r.access_status, 'open') NOT IN ('closed', 'collaborator_only')"
+	}
+
+	if filter.AIPolicy != "" {
+		where += " AND COALESCE(r.ai_policy, 'unspecified') = ?"
+		args = append(args, filter.AIPolicy)
 	}
 
 	sortCol, ok := allowedSortFields[filter.SortBy]

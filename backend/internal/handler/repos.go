@@ -52,6 +52,9 @@ type repoResponse struct {
 	CurrentlyActive          bool    `json:"currently_active"`
 	AccessStatus             string  `json:"access_status"`
 	AccessStatusReason       *string `json:"access_status_reason,omitempty"`
+	AIPolicy                 string  `json:"ai_policy"`
+	AIPolicyURL              *string `json:"ai_policy_url,omitempty"`
+	AIPolicyReason           *string `json:"ai_policy_reason,omitempty"`
 }
 
 type metaResponse struct {
@@ -198,6 +201,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 		}
 
 		accessStatus := strings.ToLower(strings.TrimSpace(c.Query("access_status")))
+		aiPolicy := strings.ToLower(strings.TrimSpace(c.Query("ai_policy")))
 		excludeClosed := strings.ToLower(strings.TrimSpace(c.Query("exclude_closed"))) == "true"
 		// Default: if requesting top welcoming tiers (tier=S or tier=A or min_tier=A/S), exclude closed/collaborator-only repos by default
 		if (tierParam == "S" || tierParam == "A" || minTier == "S" || minTier == "A") && c.Query("exclude_closed") == "" {
@@ -233,6 +237,7 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			MinTier:                  minTier,
 			AccessStatus:             accessStatus,
 			ExcludeClosed:            excludeClosed,
+			AIPolicy:                 aiPolicy,
 		}
 
 		repos, total, err := repoStore.List(c.Request.Context(), filter)

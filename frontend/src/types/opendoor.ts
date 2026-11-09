@@ -40,6 +40,9 @@ export interface Repo {
   last_activity_days?: number;
   access_status?: "open" | "vouch_required" | "collaborator_only" | "closed";
   access_status_reason?: string;
+  ai_policy?: "allowed" | "disclosure_required" | "prohibited" | "unspecified";
+  ai_policy_url?: string;
+  ai_policy_reason?: string;
 }
 
 export interface LanguageTierBreakdown {
