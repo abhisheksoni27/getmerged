@@ -1485,6 +1485,12 @@ func AutoMigrate(db *sqlx.DB) error {
 	_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN access_status VARCHAR(25) NOT NULL DEFAULT 'open'`)
 	_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN access_status_reason TEXT NULL`)
 	_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_repositories_access_status ON repositories(access_status)`)
+
+	// Issue #120: Repo AI Contribution Policy ('allowed', 'disclosure_required', 'prohibited', 'unspecified')
+	_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN ai_policy VARCHAR(30) NOT NULL DEFAULT 'unspecified'`)
+	_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN ai_policy_url TEXT NULL`)
+	_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN ai_policy_reason TEXT NULL`)
+	_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_repositories_ai_policy ON repositories(ai_policy)`)
 	// AC4: per-(user,boost) per-24h dedup of impressions/clicks. The UNIQUE key
 	// makes a refresh/dup delivery a no-op (fraud + double-count safe).
 	if db.DriverName() == "sqlite" {
