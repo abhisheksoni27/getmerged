@@ -1480,6 +1480,11 @@ func AutoMigrate(db *sqlx.DB) error {
 	// is needed to expire a boost.
 	_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN boost_expires_at DATETIME NULL`)
 	_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_repositories_boost_expires ON repositories(boost_expires_at)`)
+
+	// Issue #120: Repo PR Access Status ('open', 'vouch_required', 'collaborator_only', 'closed')
+	_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN access_status VARCHAR(25) NOT NULL DEFAULT 'open'`)
+	_, _ = db.Exec(`ALTER TABLE repositories ADD COLUMN access_status_reason TEXT NULL`)
+	_, _ = db.Exec(`CREATE INDEX IF NOT EXISTS idx_repositories_access_status ON repositories(access_status)`)
 	// AC4: per-(user,boost) per-24h dedup of impressions/clicks. The UNIQUE key
 	// makes a refresh/dup delivery a no-op (fraud + double-count safe).
 	if db.DriverName() == "sqlite" {
