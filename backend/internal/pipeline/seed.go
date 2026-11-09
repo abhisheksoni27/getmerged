@@ -228,6 +228,12 @@ func scoreAndSaveRepo(db *sqlx.DB, gh *github.Client, repoID, owner, name, fullN
 		_ = gfiRepo.UpsertIssues(context.Background(), repoID, gfiIssues)
 	}
 
+	// Issue #120: Automatically detect and update repo External Access Status & AI Policy
+	ctxTimeout, cancelTimeout := context.WithTimeout(context.Background(), 10*time.Second)
+	_, _ = UpdateRepoAccessStatus(ctxTimeout, db, nil, "", repoID, owner, name)
+	_, _ = UpdateRepoAIPolicy(ctxTimeout, db, nil, "", repoID, owner, name)
+	cancelTimeout()
+
 	scoringPRs := make([]scoring.PR, len(prs))
 	for i, p := range prs {
 		scoringPRs[i] = p
