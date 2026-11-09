@@ -1,4 +1,4 @@
-import { NextResponse } from "next/navigation";
+import { NextResponse } from "next/server";
 
 export const revalidate = 3600; // Cache on edge/Next.js for 1 hour
 
