@@ -152,8 +152,15 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
         </div>
 
         <div className="flex flex-wrap items-center gap-1.5">
-          <span className="pill pill-green">Open Access</span>
-          <span className="pill pill-purple">AI Allowed</span>
+          {repo.access_status === "closed" ? (
+            <span className="pill pill-red" title={repo.access_status_reason || "Closed to external PRs"}>Closed Access</span>
+          ) : repo.access_status === "collaborator_only" ? (
+            <span className="pill pill-amber" title={repo.access_status_reason || "Collaborator only"}>Collaborator Only</span>
+          ) : repo.access_status === "vouch_required" ? (
+            <span className="pill pill-purple" title={repo.access_status_reason || "Vouch required"}>Vouch Required</span>
+          ) : (
+            <span className="pill pill-green">Open Access</span>
+          )}
           {gfiCount > 0 && (
             <span
               onClick={(e) => {

@@ -77,6 +77,8 @@ type RepoFilter struct {
 	ScoreSource              string
 	ExcludeFallback          bool
 	MinTier                  string
+	AccessStatus             string
+	ExcludeClosed            bool
 }
 
 type SnapshotRecord struct {
@@ -253,6 +255,15 @@ func (r *sqlxRepoRepository) List(ctx context.Context, filter RepoFilter) ([]Rep
 
 	if filter.ExcludeFallback {
 		where += " AND COALESCE(s.score_source, 'computed') != 'fallback'"
+	}
+
+	if filter.AccessStatus != "" {
+		where += " AND COALESCE(r.access_status, 'open') = ?"
+		args = append(args, filter.AccessStatus)
+	}
+
+	if filter.ExcludeClosed {
+		where += " AND COALESCE(r.access_status, 'open') NOT IN ('closed', 'collaborator_only')"
 	}
 
 	sortCol, ok := allowedSortFields[filter.SortBy]

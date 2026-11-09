@@ -38,6 +38,8 @@ export interface Repo {
   low_sample?: boolean;
   currently_active?: boolean;
   last_activity_days?: number;
+  access_status?: "open" | "vouch_required" | "collaborator_only" | "closed";
+  access_status_reason?: string;
 }
 
 export interface LanguageTierBreakdown {
