@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "GetMerged — Glassdoor for Open Source Repositories";
+export const alt = "GetMerged - Glassdoor for Open Source Repositories";
 export const size = {
   width: 1200,
   height: 630,
@@ -18,28 +18,16 @@ export default function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          backgroundColor: "#07090e",
+          backgroundColor: "#07090F",
           backgroundImage:
-            "radial-gradient(ellipse 900px 500px at 15% -10%, rgba(16, 185, 129, 0.18), transparent 60%), radial-gradient(ellipse 700px 400px at 85% 110%, rgba(56, 189, 248, 0.12), transparent 60%)",
-          padding: "48px 60px 42px 60px",
+            "radial-gradient(circle at 10% 0%, rgba(130, 80, 223, 0.22) 0%, transparent 45%), radial-gradient(circle at 90% 100%, rgba(88, 166, 255, 0.12) 0%, transparent 50%), linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)",
+          backgroundSize: "100% 100%, 100% 100%, 48px 48px, 48px 48px",
+          padding: "48px 56px",
           fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-          position: "relative",
           boxSizing: "border-box",
         }}
       >
-        {/* Top Accent Line */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "4px",
-            background: "linear-gradient(90deg, #10b981 0%, #38bdf8 55%, #a855f7 100%)",
-          }}
-        />
-
-        {/* ── TOP HEADER: Logo & Global Metric Badge ── */}
+        {/* ── TOP NAV BAR ── */}
         <div
           style={{
             display: "flex",
@@ -48,85 +36,95 @@ export default function Image() {
             alignItems: "center",
           }}
         >
-          {/* Logo Mark + Brand */}
-          <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          {/* Brand mark */}
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <div
               style={{
-                width: "42px",
-                height: "42px",
-                borderRadius: "12px",
-                background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                width: "40px",
+                height: "40px",
+                borderRadius: "10px",
+                background: "linear-gradient(135deg, #8250DF 0%, #4F46E5 100%)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 0 24px rgba(16, 185, 129, 0.35)",
+                boxShadow: "0 4px 20px rgba(130, 80, 223, 0.4)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
               }}
             >
-              {/* Git PR merge icon */}
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <circle cx="6" cy="6" r="3" fill="#ffffff" />
-                <circle cx="6" cy="18" r="3" fill="#ffffff" />
-                <circle cx="18" cy="10" r="3" fill="#ffffff" />
-                <path d="M6 9v6" stroke="#ffffff" strokeWidth="2.4" strokeLinecap="round" />
-                <path d="M6 15c0-4 4-5 12-5" stroke="#ffffff" strokeWidth="2.4" strokeLinecap="round" />
-              </svg>
-            </div>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
               <span
                 style={{
                   color: "#ffffff",
-                  fontSize: "28px",
+                  fontSize: "20px",
                   fontWeight: 900,
-                  letterSpacing: "-0.6px",
+                  fontFamily: "monospace",
                 }}
               >
-                GetMerged
+                ⌘
+              </span>
+            </div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "2px" }}>
+              <span
+                style={{
+                  color: "#F0F6FC",
+                  fontSize: "26px",
+                  fontWeight: 800,
+                  letterSpacing: "-0.5px",
+                }}
+              >
+                Get
               </span>
               <span
                 style={{
-                  color: "#10b981",
-                  fontSize: "12px",
+                  color: "#A371F7",
+                  fontSize: "26px",
                   fontWeight: 800,
-                  letterSpacing: "1.2px",
-                  textTransform: "uppercase",
-                  backgroundColor: "rgba(16, 185, 129, 0.12)",
-                  border: "1px solid rgba(16, 185, 129, 0.3)",
-                  padding: "3px 9px",
-                  borderRadius: "6px",
+                  letterSpacing: "-0.5px",
                 }}
               >
-                C-Rank™ Telemetry
+                Merged
               </span>
+            </div>
+            <div
+              style={{
+                marginLeft: "8px",
+                color: "#8B949E",
+                fontSize: "13px",
+                fontWeight: 600,
+                borderLeft: "1px solid rgba(255, 255, 255, 0.12)",
+                paddingLeft: "12px",
+              }}
+            >
+              Glassdoor for Open Source
             </div>
           </div>
 
-          {/* Right Live Scope Pill */}
+          {/* Right Live Scope Badge */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "9px",
+              gap: "8px",
               backgroundColor: "rgba(255, 255, 255, 0.04)",
-              border: "1px solid rgba(255, 255, 255, 0.09)",
-              padding: "7px 16px",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              padding: "6px 14px",
               borderRadius: "999px",
             }}
           >
             <div
               style={{
-                width: "8px",
-                height: "8px",
+                width: "7px",
+                height: "7px",
                 borderRadius: "50%",
-                backgroundColor: "#10b981",
-                boxShadow: "0 0 10px #10b981",
+                backgroundColor: "#3FB950",
+                boxShadow: "0 0 8px #3FB950",
               }}
             />
             <span
               style={{
-                color: "#f4f4f5",
-                fontSize: "14px",
-                fontWeight: 700,
-                letterSpacing: "-0.2px",
+                color: "#C9D1D9",
+                fontSize: "13px",
+                fontWeight: 600,
+                letterSpacing: "-0.1px",
               }}
             >
               153,900+ Repos Scored Daily
@@ -134,14 +132,14 @@ export default function Image() {
           </div>
         </div>
 
-        {/* ── HERO HEADLINE & VALUE PROP ── */}
+        {/* ── HERO HEADLINE ── */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "14px",
-            maxWidth: "1080px",
-            marginTop: "6px",
+            gap: "12px",
+            maxWidth: "1060px",
+            marginTop: "12px",
           }}
         >
           <div
@@ -149,212 +147,209 @@ export default function Image() {
               display: "flex",
               alignItems: "center",
               gap: "8px",
-              color: "#38bdf8",
-              fontSize: "15px",
+              color: "#A371F7",
+              fontSize: "13px",
               fontWeight: 800,
-              letterSpacing: "1.5px",
+              letterSpacing: "1.2px",
               textTransform: "uppercase",
             }}
           >
-            <span>The Glassdoor for Open Source</span>
+            <span>EMPIRICAL CONTRIBUTOR TELEMETRY</span>
           </div>
           <span
             style={{
-              color: "#ffffff",
-              fontSize: "50px",
+              color: "#F0F6FC",
+              fontSize: "52px",
               fontWeight: 900,
               letterSpacing: "-1.8px",
-              lineHeight: 1.1,
+              lineHeight: 1.08,
             }}
           >
-            Know if maintainers merge PRs before you write a single line of code.
+            Find welcoming repos.
+            <br />
+            Get your PR merged in 24 hours.
           </span>
           <span
             style={{
-              color: "#94a3b8",
-              fontSize: "21px",
+              color: "#8B949E",
+              fontSize: "20px",
               lineHeight: 1.45,
               fontWeight: 400,
               maxWidth: "960px",
             }}
           >
-            Independent contributor readiness scores, median review latency, real external merge rates, and first-timer acceptance across 150k+ GitHub projects.
+            Stop guessing maintainer responsiveness. Live review latency, outside merge rates, and first-timer acceptance scores across 150k+ GitHub projects.
           </span>
         </div>
 
-        {/* ── CARD: LIVE TELEMETRY SHOWCASE ── */}
+        {/* ── MOCK INSPECTOR CARD ── */}
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
-            backgroundColor: "rgba(15, 23, 42, 0.65)",
+            flexDirection: "column",
+            backgroundColor: "#0D111A",
             border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: "16px",
-            padding: "18px 26px",
-            boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.5)",
+            borderRadius: "14px",
+            overflow: "hidden",
+            boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.7)",
           }}
         >
-          {/* Badge: C-Rank Welcoming */}
-          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "#10b981",
-                padding: "8px 18px",
-                borderRadius: "10px",
-                boxShadow: "0 4px 14px rgba(16, 185, 129, 0.35)",
-              }}
-            >
+          {/* Card Titlebar */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "10px 18px",
+              backgroundColor: "rgba(255, 255, 255, 0.02)",
+              borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={{ display: "flex", gap: "6px" }}>
+                <div style={{ width: "9px", height: "9px", borderRadius: "50%", backgroundColor: "rgba(255, 255, 255, 0.15)" }} />
+                <div style={{ width: "9px", height: "9px", borderRadius: "50%", backgroundColor: "rgba(255, 255, 255, 0.15)" }} />
+                <div style={{ width: "9px", height: "9px", borderRadius: "50%", backgroundColor: "rgba(255, 255, 255, 0.15)" }} />
+              </div>
+              <span style={{ color: "#6E7681", fontSize: "12px", fontFamily: "monospace" }}>
+                c-rank-audit: astropy/astropy
+              </span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <span
                 style={{
-                  color: "#022c22",
-                  fontSize: "10px",
-                  fontWeight: 900,
-                  letterSpacing: "1.2px",
+                  color: "#3FB950",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  backgroundColor: "rgba(63, 185, 80, 0.12)",
+                  border: "1px solid rgba(63, 185, 80, 0.25)",
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                }}
+              >
+                TIER S · SUPER WELCOMING
+              </span>
+            </div>
+          </div>
+
+          {/* Card Body: 4 Columns */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "16px 24px",
+            }}
+          >
+            {/* Metric 1: C-Rank Index */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+              <span
+                style={{
+                  color: "#6E7681",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  letterSpacing: "0.8px",
                   textTransform: "uppercase",
                 }}
               >
-                C-Rank™
+                C-Rank™ Score
               </span>
-              <span
-                style={{
-                  color: "#022c22",
-                  fontSize: "24px",
-                  fontWeight: 900,
-                  lineHeight: 1.1,
-                }}
-              >
-                TIER S
-              </span>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <span style={{ color: "#ffffff", fontSize: "16px", fontWeight: 800 }}>
-                  ★ Super Welcoming
+              <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+                <span style={{ color: "#A371F7", fontSize: "30px", fontWeight: 900, lineHeight: 1 }}>
+                  89.4
                 </span>
-                <span
-                  style={{
-                    color: "#34d399",
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    backgroundColor: "rgba(16, 185, 129, 0.15)",
-                    padding: "1px 6px",
-                    borderRadius: "4px",
-                  }}
-                >
-                  TOP 5%
+                <span style={{ color: "#8B949E", fontSize: "13px", fontWeight: 600 }}>
+                  / 100
                 </span>
               </div>
-              <span style={{ color: "#64748b", fontSize: "12px", fontWeight: 500 }}>
-                High-confidence 9-signal contributor index
+            </div>
+
+            <div style={{ width: "1px", height: "42px", backgroundColor: "rgba(255, 255, 255, 0.08)" }} />
+
+            {/* Metric 2: PR Merge Rate */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+              <span
+                style={{
+                  color: "#6E7681",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  letterSpacing: "0.8px",
+                  textTransform: "uppercase",
+                }}
+              >
+                Outside Merge Rate
+              </span>
+              <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+                <span style={{ color: "#F0F6FC", fontSize: "30px", fontWeight: 900, lineHeight: 1 }}>
+                  88.4%
+                </span>
+                <span style={{ color: "#3FB950", fontSize: "12px", fontWeight: 700 }}>
+                  High
+                </span>
+              </div>
+            </div>
+
+            <div style={{ width: "1px", height: "42px", backgroundColor: "rgba(255, 255, 255, 0.08)" }} />
+
+            {/* Metric 3: First Response Latency */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+              <span
+                style={{
+                  color: "#6E7681",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  letterSpacing: "0.8px",
+                  textTransform: "uppercase",
+                }}
+              >
+                Median Review Time
+              </span>
+              <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+                <span style={{ color: "#58A6FF", fontSize: "30px", fontWeight: 900, lineHeight: 1 }}>
+                  &lt; 3.2h
+                </span>
+                <span style={{ color: "#8B949E", fontSize: "12px", fontWeight: 600 }}>
+                  turnaround
+                </span>
+              </div>
+            </div>
+
+            <div style={{ width: "1px", height: "42px", backgroundColor: "rgba(255, 255, 255, 0.08)" }} />
+
+            {/* Metric 4: First-Timer Success */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+              <span
+                style={{
+                  color: "#6E7681",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  letterSpacing: "0.8px",
+                  textTransform: "uppercase",
+                }}
+              >
+                First-Timer Success
+              </span>
+              <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+                <span style={{ color: "#D29922", fontSize: "30px", fontWeight: 900, lineHeight: 1 }}>
+                  94%
+                </span>
+                <span style={{ color: "#8B949E", fontSize: "12px", fontWeight: 600 }}>
+                  welcoming
+                </span>
+              </div>
+            </div>
+
+            <div style={{ width: "1px", height: "42px", backgroundColor: "rgba(255, 255, 255, 0.08)" }} />
+
+            {/* Domain */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "2px" }}>
+              <span style={{ color: "#F0F6FC", fontSize: "14px", fontWeight: 700, fontFamily: "monospace" }}>
+                getmerged.abhishekco.de
+              </span>
+              <span style={{ color: "#6E7681", fontSize: "12px" }}>
+                100% Free Developer Tool
               </span>
             </div>
-          </div>
-
-          {/* Divider */}
-          <div style={{ width: "1px", height: "46px", backgroundColor: "rgba(255, 255, 255, 0.08)" }} />
-
-          {/* Metric 1: Merge Rate */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
-            <span
-              style={{
-                color: "#64748b",
-                fontSize: "11px",
-                fontWeight: 800,
-                letterSpacing: "1px",
-                textTransform: "uppercase",
-              }}
-            >
-              External PR Merge Rate
-            </span>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
-              <span style={{ color: "#10b981", fontSize: "26px", fontWeight: 900, lineHeight: 1 }}>
-                89.4%
-              </span>
-              <span style={{ color: "#475569", fontSize: "12px", fontWeight: 600 }}>
-                vs 28% avg
-              </span>
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div style={{ width: "1px", height: "46px", backgroundColor: "rgba(255, 255, 255, 0.08)" }} />
-
-          {/* Metric 2: Turnaround Latency */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
-            <span
-              style={{
-                color: "#64748b",
-                fontSize: "11px",
-                fontWeight: 800,
-                letterSpacing: "1px",
-                textTransform: "uppercase",
-              }}
-            >
-              Median Review Time
-            </span>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
-              <span style={{ color: "#38bdf8", fontSize: "26px", fontWeight: 900, lineHeight: 1 }}>
-                &lt; 3.2h
-              </span>
-              <span style={{ color: "#475569", fontSize: "12px", fontWeight: 600 }}>
-                turnaround
-              </span>
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div style={{ width: "1px", height: "46px", backgroundColor: "rgba(255, 255, 255, 0.08)" }} />
-
-          {/* Metric 3: First-Timer Success */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
-            <span
-              style={{
-                color: "#64748b",
-                fontSize: "11px",
-                fontWeight: 800,
-                letterSpacing: "1px",
-                textTransform: "uppercase",
-              }}
-            >
-              First-Timer Success
-            </span>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
-              <span style={{ color: "#c084fc", fontSize: "26px", fontWeight: 900, lineHeight: 1 }}>
-                94.1%
-              </span>
-              <span style={{ color: "#475569", fontSize: "12px", fontWeight: 600 }}>
-                friendly
-              </span>
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div style={{ width: "1px", height: "46px", backgroundColor: "rgba(255, 255, 255, 0.08)" }} />
-
-          {/* Domain & Free Tag */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "3px" }}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                color: "#ffffff",
-                fontSize: "15px",
-                fontWeight: 800,
-                fontFamily: "monospace",
-              }}
-            >
-              <span>getmerged.abhishekco.de</span>
-            </div>
-            <span style={{ color: "#10b981", fontSize: "12px", fontWeight: 700 }}>
-              100% Free &amp; Open
-            </span>
           </div>
         </div>
       </div>
