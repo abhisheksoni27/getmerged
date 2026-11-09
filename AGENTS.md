@@ -7,7 +7,6 @@
 - **🚨 PR-First Workflow (ZERO DIRECT PUSHES TO MAIN & ZERO AUTO-MERGING)**:
   - **ALL code changes MUST go through a feature/fix branch and a GitHub Pull Request.** Never push commits directly to `main`.
   - **NEVER merge pull requests automatically.** Always present the created PR link to the user with full context, test verification, and visual proof. A PR can ONLY be merged when the user explicitly instructs to merge it.
-  - **Visual Verification Required for UI / Card PRs**: Whenever modifying UI components, layouts, or social cards (such as `opengraph-image.tsx`), the agent MUST render/capture a visual screenshot of the actual rendered output and attach it directly to the PR body so the user can verify before merging.
   - **Atomic, Cohesive PRs**: Group logically related changes together (e.g. backend endpoint + DB query + frontend consumption). Keep PRs scoped, focused, and reviewable. Do not lump unrelated refactors into a single PR.
   - **Code the system properly, not hacky patches**: Build clean, maintainable architecture fitting the existing system conventions. This is an MVP—build real, robust primitives without over-engineering or going berserk with unnecessary abstractions.
 - **🚨 Visual & Design Identity Compliance**:
@@ -30,4 +29,3 @@
 ## 3. 📋 Product Inventory Grounding & Maintenance (MANDATORY)
 - **Always check `product-inventory.md` before starting a task.** It is the authoritative ground truth for every feature, page, endpoint, and component in GetMerged. Reading it first prevents wasting tokens exploring or re-auditing existing features.
 - **MUST update `product-inventory.md` whenever a major feature lands, changes, or is removed.** Whenever any significant feature worth writing about is added, refactored, or deprecated in the codebase, the agent must update `product-inventory.md` in the same turn.
-
