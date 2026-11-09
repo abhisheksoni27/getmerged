@@ -84,7 +84,7 @@ export function GfiSniperCard({ defaultEmail = "" }: GfiSniperCardProps) {
 
     setSaving(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/alerts/subscribe`, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/alerts/subscribe-sniper`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
