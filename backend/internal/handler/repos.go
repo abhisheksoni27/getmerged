@@ -50,6 +50,8 @@ type repoResponse struct {
 	OnboardingScore          int     `json:"onboarding_score"`
 	LowSample                bool    `json:"low_sample"`
 	CurrentlyActive          bool    `json:"currently_active"`
+	AccessStatus             string  `json:"access_status"`
+	AccessStatusReason       *string `json:"access_status_reason,omitempty"`
 }
 
 type metaResponse struct {
@@ -195,6 +197,13 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			}
 		}
 
+		accessStatus := strings.ToLower(strings.TrimSpace(c.Query("access_status")))
+		excludeClosed := strings.ToLower(strings.TrimSpace(c.Query("exclude_closed"))) == "true"
+		// Default: if requesting top welcoming tiers (tier=S or tier=A or min_tier=A/S), exclude closed/collaborator-only repos by default
+		if (tierParam == "S" || tierParam == "A" || minTier == "S" || minTier == "A") && c.Query("exclude_closed") == "" {
+			excludeClosed = true
+		}
+
 		filter := repository.RepoFilter{
 			Language:                 lang,
 			Tier:                     tierParam,
@@ -222,6 +231,8 @@ func ListRepos(repoStore repository.RepoRepository) gin.HandlerFunc {
 			ScoreSource:              scoreSource,
 			ExcludeFallback:          excludeFallback,
 			MinTier:                  minTier,
+			AccessStatus:             accessStatus,
+			ExcludeClosed:            excludeClosed,
 		}
 
 		repos, total, err := repoStore.List(c.Request.Context(), filter)

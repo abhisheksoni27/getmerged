@@ -189,13 +189,50 @@ export function RepoDetailHero({
             </h1>
 
             {/* Narrative Verdict Paragraph */}
-            <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-2xl">
+            <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-2xl mb-3">
               <strong className="text-[var(--text-primary)]">Verdict: {verdictSummary}</strong>{" "}
               Outside contributors observe a median review response in{" "}
               <span className="font-mono text-[var(--text-primary)] font-medium">{responseTimeVal}</span>, and{" "}
               <span className="font-mono text-[var(--text-primary)] font-medium">{mergeRateVal}</span> of outside PRs
               are merged into main.
             </p>
+
+            {/* Access Status Indicator (Issue #120) */}
+            <div className="flex flex-wrap items-center gap-2">
+              {repo?.access_status === "closed" ? (
+                <span
+                  title={repo.access_status_reason || "Repository does not accept external pull requests"}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-red-950/60 text-red-300 border border-red-800/60"
+                >
+                  <ShieldAlert className="h-3.5 w-3.5 text-red-400" />
+                  <span>Closed to External PRs</span>
+                </span>
+              ) : repo?.access_status === "collaborator_only" ? (
+                <span
+                  title={repo.access_status_reason || "Contributions restricted to core collaborators"}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-950/60 text-amber-300 border border-amber-800/60"
+                >
+                  <ShieldAlert className="h-3.5 w-3.5 text-amber-400" />
+                  <span>Collaborator Only</span>
+                </span>
+              ) : repo?.access_status === "vouch_required" ? (
+                <span
+                  title={repo.access_status_reason || "Requires maintainer vouch or approved issue before submitting PR"}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-purple-950/60 text-purple-300 border border-purple-800/60"
+                >
+                  <Shield className="h-3.5 w-3.5 text-purple-400" />
+                  <span>Vouch / Pre-Approval Required</span>
+                </span>
+              ) : (
+                <span
+                  title={repo?.access_status_reason || "External contributions and direct pull requests welcomed"}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-950/50 text-emerald-300 border border-emerald-800/50"
+                >
+                  <Check className="h-3.5 w-3.5 text-emerald-400" />
+                  <span>Open Access: Outside PRs Welcomed</span>
+                </span>
+              )}
+            </div>
           </div>
         </div>
 

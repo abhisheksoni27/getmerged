@@ -31,6 +31,8 @@ func setupMatchTestDB(t *testing.T) *sqlx.DB {
 		stars INTEGER DEFAULT 0,
 		description TEXT,
 		github_url TEXT,
+		access_status TEXT DEFAULT 'open',
+		access_status_reason TEXT,
 		updated_at DATETIME NOT NULL
 	);
 
