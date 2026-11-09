@@ -4,10 +4,15 @@
 - Tell crisply, using minimum tokens.
 - No corporate jargon, no fluff. Speak like a senior developer.
 - Do not make generic AI slop design. Align with the codebase, the product, the audience.
-- **🚨 PR-First Workflow (ZERO DIRECT PUSHES TO MAIN)**:
+- **🚨 PR-First Workflow (ZERO DIRECT PUSHES TO MAIN & ZERO AUTO-MERGING)**:
   - **ALL code changes MUST go through a feature/fix branch and a GitHub Pull Request.** Never push commits directly to `main`.
+  - **NEVER merge pull requests automatically.** Always present the created PR link to the user with full context, test verification, and visual proof. A PR can ONLY be merged when the user explicitly instructs to merge it.
+  - **Visual Verification Required for UI / Card PRs**: Whenever modifying UI components, layouts, or social cards (such as `opengraph-image.tsx`), the agent MUST render/capture a visual screenshot of the actual rendered output and attach it directly to the PR body so the user can verify before merging.
   - **Atomic, Cohesive PRs**: Group logically related changes together (e.g. backend endpoint + DB query + frontend consumption). Keep PRs scoped, focused, and reviewable. Do not lump unrelated refactors into a single PR.
   - **Code the system properly, not hacky patches**: Build clean, maintainable architecture fitting the existing system conventions. This is an MVP—build real, robust primitives without over-engineering or going berserk with unnecessary abstractions.
+- **🚨 Visual & Design Identity Compliance**:
+  - The GetMerged product palette is **Obsidian & Precision Developer Slate** (`#090D16`, `#0D111A`, `#111827`, `#F0F6FC`, `#8B949E`) with **Brand Violet/Indigo** (`#8250DF`, `#A371F7`) as primary accents, inspired by Trigger.dev and GitHub Primer.
+  - **NEVER generate generic neon-green or template AI-slop themes.** Semantic colors (green for Welcoming / success, blue for latency, amber for warning, red for stalled) must be used judiciously as indicators, not as the dominant card or page background.
 
 
 ## 1. 🚨 SSR-First Architecture Rule (ZERO EXCEPTIONS)
