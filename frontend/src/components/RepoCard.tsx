@@ -161,6 +161,13 @@ export function RepoCard({ repo, isSpotlight = false, layout = "card" }: RepoCar
           ) : (
             <span className="pill pill-green">Open Access</span>
           )}
+          {repo.ai_policy === "prohibited" ? (
+            <span className="pill pill-red" title={repo.ai_policy_reason || "AI contributions prohibited"}>AI Prohibited</span>
+          ) : repo.ai_policy === "disclosure_required" ? (
+            <span className="pill pill-amber" title={repo.ai_policy_reason || "AI disclosure required"}>AI Disclose</span>
+          ) : repo.ai_policy === "allowed" ? (
+            <span className="pill pill-purple" title={repo.ai_policy_reason || "AI assisted welcome"}>AI Allowed</span>
+          ) : null}
           {gfiCount > 0 && (
             <span
               onClick={(e) => {

@@ -13,6 +13,8 @@ import {
   Copy,
   Shield,
   ShieldAlert,
+  Bot,
+  FileText,
 } from "lucide-react";
 import { getLanguageSlug } from "@/lib/languageSlug";
 import { Repo } from "@/types/opendoor";
@@ -197,7 +199,7 @@ export function RepoDetailHero({
               are merged into main.
             </p>
 
-            {/* Access Status Indicator (Issue #120) */}
+            {/* Access Status & AI Policy Indicators (Issue #120) */}
             <div className="flex flex-wrap items-center gap-2">
               {repo?.access_status === "closed" ? (
                 <span
@@ -232,6 +234,55 @@ export function RepoDetailHero({
                   <span>Open Access: Outside PRs Welcomed</span>
                 </span>
               )}
+
+              {/* AI Contribution Policy Badge */}
+              {repo?.ai_policy === "prohibited" ? (
+                <span
+                  title={repo.ai_policy_reason || "AI-generated code and pull requests are prohibited by maintainers"}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-red-950/60 text-red-300 border border-red-800/60"
+                >
+                  <Bot className="h-3.5 w-3.5 text-red-400" />
+                  <span>AI Contributions Prohibited</span>
+                  {repo.ai_policy_url && (
+                    <a
+                      href={repo.ai_policy_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-0.5 text-red-400 hover:text-red-200 underline"
+                      title="View repository AI policy document"
+                    >
+                      <FileText className="h-3 w-3 inline" />
+                    </a>
+                  )}
+                </span>
+              ) : repo?.ai_policy === "disclosure_required" ? (
+                <span
+                  title={repo.ai_policy_reason || "AI assistance must be explicitly disclosed in the PR description"}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-950/60 text-amber-300 border border-amber-800/60"
+                >
+                  <Bot className="h-3.5 w-3.5 text-amber-400" />
+                  <span>AI Disclosure Required</span>
+                  {repo.ai_policy_url && (
+                    <a
+                      href={repo.ai_policy_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-0.5 text-amber-400 hover:text-amber-200 underline"
+                      title="View repository AI policy document"
+                    >
+                      <FileText className="h-3 w-3 inline" />
+                    </a>
+                  )}
+                </span>
+              ) : repo?.ai_policy === "allowed" ? (
+                <span
+                  title={repo.ai_policy_reason || "AI-assisted contributions and tools are welcomed"}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-indigo-950/50 text-indigo-300 border border-indigo-800/50"
+                >
+                  <Bot className="h-3.5 w-3.5 text-indigo-400" />
+                  <span>AI Assisted Welcome</span>
+                </span>
+              ) : null}
             </div>
           </div>
         </div>

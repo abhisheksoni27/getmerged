@@ -33,6 +33,9 @@ func setupMatchTestDB(t *testing.T) *sqlx.DB {
 		github_url TEXT,
 		access_status TEXT DEFAULT 'open',
 		access_status_reason TEXT,
+		ai_policy TEXT DEFAULT 'unspecified',
+		ai_policy_url TEXT,
+		ai_policy_reason TEXT,
 		updated_at DATETIME NOT NULL
 	);
 
