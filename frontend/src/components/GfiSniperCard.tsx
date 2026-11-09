@@ -48,7 +48,9 @@ export function GfiSniperCard({ defaultEmail = "" }: GfiSniperCardProps) {
           if (sub.channel === "discord" || sub.channel === "webhook" || sub.channel === "email") {
             setChannel(sub.channel);
           }
-          if (sub.frequency) setFrequency(sub.frequency);
+          if (sub.frequency === "instant" || sub.frequency === "weekly") {
+            setFrequency(sub.frequency);
+          }
         }
       })
       .catch(() => {});
@@ -56,9 +58,8 @@ export function GfiSniperCard({ defaultEmail = "" }: GfiSniperCardProps) {
 
   const toggleLang = (lang: string) => {
     if (selectedLangs.includes(lang)) {
-      if (selectedLangs.length > 1) {
-        setSelectedLangs(selectedLangs.filter((l) => l !== lang));
-      }
+      if (selectedLangs.length === 1) return; // Keep at least one
+      setSelectedLangs(selectedLangs.filter((l) => l !== lang));
     } else {
       setSelectedLangs([...selectedLangs, lang]);
     }
@@ -66,50 +67,54 @@ export function GfiSniperCard({ defaultEmail = "" }: GfiSniperCardProps) {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSaving(true);
     setErrorMsg(null);
     setSaveSuccess(false);
 
+    if (channel === "discord" || channel === "webhook") {
+      if (!webhookUrl.startsWith("https://")) {
+        setErrorMsg("Please enter a valid HTTPS webhook URL");
+        return;
+      }
+    } else if (channel === "email") {
+      if (!email.includes("@")) {
+        setErrorMsg("Please enter a valid email address");
+        return;
+      }
+    }
+
+    setSaving(true);
     try {
       const res = await fetch(`${API_BASE_URL}/api/v1/alerts/subscribe-sniper`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          email: channel === "email" ? email : "",
-          webhook_url: channel !== "email" ? webhookUrl : "",
           channel,
-          frequency,
+          webhook_url: channel === "email" ? "" : webhookUrl,
+          email: channel === "email" ? email : "",
           languages: selectedLangs,
+          frequency,
         }),
       });
-      const data = await res.json();
+
       if (!res.ok) {
-        throw new Error(data.error || "Failed to save alert preferences");
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to save alert preferences");
       }
+
       setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
-    } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : "Failed to save alert preferences");
+      setTimeout(() => setSaveSuccess(false), 5000);
+    } catch (err) {
+      setErrorMsg(err instanceof Error ? err.message : "Failed to activate sniper");
     } finally {
       setSaving(false);
     }
   };
 
   const handleSendTest = async () => {
-    if (channel === "email") {
-      setTestResult({ success: true, message: "Email subscription preferences saved." });
-      return;
-    }
-
-    if (!webhookUrl) {
-      setErrorMsg("Please enter a Webhook URL first.");
-      return;
-    }
-
+    if (!webhookUrl) return;
     setTesting(true);
     setTestResult(null);
-    setErrorMsg(null);
 
     try {
       const res = await fetch(`${API_BASE_URL}/api/v1/alerts/test-webhook`, {
@@ -117,16 +122,18 @@ export function GfiSniperCard({ defaultEmail = "" }: GfiSniperCardProps) {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          webhook_url: webhookUrl,
           channel,
+          webhook_url: webhookUrl,
         }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Webhook delivery test failed");
+
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setTestResult({ success: true, message: "Test alert dispatched! Check your channel." });
+      } else {
+        setTestResult({ success: false, message: data.error || "Test dispatch failed." });
       }
-      setTestResult({ success: true, message: "✓ Live test alert dispatched to your webhook!" });
-    } catch (err: unknown) {
+    } catch (err) {
       setTestResult({ success: false, message: err instanceof Error ? err.message : "Delivery failed" });
     } finally {
       setTesting(false);
@@ -134,135 +141,140 @@ export function GfiSniperCard({ defaultEmail = "" }: GfiSniperCardProps) {
   };
 
   return (
-    <div className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-8 space-y-6 shadow-sm relative overflow-hidden">
+    <div className="card p-5 sm:p-6 space-y-5 relative overflow-hidden font-sans">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#0D9668]/10 border border-[#0D9668]/30 text-[#0D9668] text-xs font-mono font-semibold">
-            <Radio className="h-3.5 w-3.5" />
-            <span>Good First Issue Sniper · Webhook Radar</span>
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between gap-2">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[rgba(13,150,104,0.12)] border border-[rgba(13,150,104,0.3)] text-[#0D9668] text-[11px] font-mono font-semibold">
+            <Radio className="h-3 w-3 animate-pulse" />
+            <span>Webhook Radar</span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-bold font-display text-[var(--text-primary)]">
-            Never Miss a Beginner Issue in Your Tech Stack
-          </h3>
-          <p className="text-sm text-[var(--text-secondary)] font-sans">
-            Good first issues get claimed fast. The Sniper delivers instant webhook payloads to your Discord, Telegram bridge, or custom automation endpoint when maintainers label beginner tickets.
-          </p>
+          <span className="text-[11px] font-mono text-[var(--text-tertiary)] flex items-center gap-1">
+            <Flame className="h-3 w-3 text-[#C4910A]" /> Instant Alert
+          </span>
         </div>
-
-        <span className="bg-[var(--bg-elevated)] border border-[var(--border-subtle)] px-3 py-1 rounded-xl text-xs font-mono text-[var(--text-secondary)] shrink-0 self-start sm:self-auto flex items-center gap-1.5">
-          <Flame className="h-3.5 w-3.5 text-[#C4910A]" /> Webhook Powered
-        </span>
+        <h3 className="text-base sm:text-lg font-bold font-space text-[var(--text-primary)] tracking-tight">
+          Never Miss a Beginner Issue in Your Tech Stack
+        </h3>
+        <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+          Beginner tickets get claimed quickly. Get direct alerts to your Discord, Telegram bridge, or custom webhook.
+        </p>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-5 font-sans">
-        {/* Step 1: Destination Channel */}
-        <div className="space-y-2">
-          <label className="text-xs font-mono font-bold text-[var(--text-secondary)] uppercase tracking-wider">
-            1. Select Alert Destination:
+      <form onSubmit={handleSave} className="space-y-4 text-xs">
+        {/* Step 1: Alert Destination - Compact segmented buttons */}
+        <div className="space-y-1.5">
+          <label className="text-[11px] font-mono font-bold text-[var(--text-secondary)] uppercase tracking-wider block">
+            1. Alert Destination
           </label>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-2">
             <button
               type="button"
               onClick={() => setChannel("discord")}
-              className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
+              className={`px-3 py-2 rounded-lg border text-left transition-all cursor-pointer flex items-center gap-2 ${
                 channel === "discord"
-                  ? "bg-[var(--bg-elevated)] border-2 border-[var(--text-primary)] text-[var(--text-primary)] shadow-sm"
-                  : "bg-[var(--bg-surface)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
+                  ? "bg-[#161B26] border-[var(--purple-bright)] text-[var(--text-primary)] shadow-xs"
+                  : "bg-[#0D111A] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-hover)]"
               }`}
             >
-              <Bot className="h-5 w-5 text-[#2D8ABF] shrink-0" />
-              <div>
-                <div className="text-xs font-bold font-mono">Discord Webhook</div>
-                <div className="text-xs text-[var(--text-tertiary)]">Channel push alert</div>
+              <Bot className="h-4 w-4 text-[#5865F2] shrink-0" />
+              <div className="truncate">
+                <div className="text-xs font-semibold leading-tight truncate">Discord</div>
+                <div className="text-[10px] text-[var(--text-tertiary)] truncate">Webhook URL</div>
               </div>
             </button>
 
             <button
               type="button"
               onClick={() => setChannel("webhook")}
-              className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
+              className={`px-3 py-2 rounded-lg border text-left transition-all cursor-pointer flex items-center gap-2 ${
                 channel === "webhook"
-                  ? "bg-[var(--bg-elevated)] border-2 border-[var(--text-primary)] text-[var(--text-primary)] shadow-sm"
-                  : "bg-[var(--bg-surface)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
+                  ? "bg-[#161B26] border-[var(--purple-bright)] text-[var(--text-primary)] shadow-xs"
+                  : "bg-[#0D111A] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-hover)]"
               }`}
             >
-              <Send className="h-5 w-5 text-[#0D9668] shrink-0" />
-              <div>
-                <div className="text-xs font-bold font-mono">Telegram / Custom Hook</div>
-                <div className="text-xs text-[var(--text-tertiary)]">HTTPS Webhook link</div>
+              <Send className="h-4 w-4 text-[#229ED9] shrink-0" />
+              <div className="truncate">
+                <div className="text-xs font-semibold leading-tight truncate">Telegram / Hook</div>
+                <div className="text-[10px] text-[var(--text-tertiary)] truncate">Custom HTTPS</div>
               </div>
             </button>
 
             <button
               type="button"
               onClick={() => setChannel("email")}
-              className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
+              className={`px-3 py-2 rounded-lg border text-left transition-all cursor-pointer flex items-center gap-2 ${
                 channel === "email"
-                  ? "bg-[var(--bg-elevated)] border-2 border-[var(--text-primary)] text-[var(--text-primary)] shadow-sm"
-                  : "bg-[var(--bg-surface)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
+                  ? "bg-[#161B26] border-[var(--purple-bright)] text-[var(--text-primary)] shadow-xs"
+                  : "bg-[#0D111A] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-hover)]"
               }`}
             >
-              <Bell className="h-5 w-5 text-[var(--color-primary)] shrink-0" />
-              <div>
-                <div className="text-xs font-bold font-mono">Email Digest</div>
-                <div className="text-xs text-[var(--text-tertiary)]">Inbox summary</div>
+              <Bell className="h-4 w-4 text-[var(--purple-bright)] shrink-0" />
+              <div className="truncate">
+                <div className="text-xs font-semibold leading-tight truncate">Email</div>
+                <div className="text-[10px] text-[var(--text-tertiary)] truncate">Inbox digest</div>
               </div>
             </button>
           </div>
         </div>
 
         {/* Step 2: Channel Input Details */}
-        <div className="p-4 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] space-y-3">
+        <div className="space-y-1.5">
           {channel === "discord" && (
-            <div className="space-y-1.5">
-              <label className="text-xs font-mono text-[var(--text-secondary)] font-semibold">Discord Channel Webhook URL:</label>
+            <>
+              <label className="text-[11px] font-mono text-[var(--text-secondary)] font-semibold block">
+                Discord Webhook URL:
+              </label>
               <input
                 type="url"
                 required
                 value={webhookUrl}
                 onChange={(e) => setWebhookUrl(e.target.value)}
                 placeholder="https://discord.com/api/webhooks/..."
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder:[var(--text-tertiary)] text-xs font-mono focus:border-[var(--border-strong)] focus:outline-none"
+                className="w-full px-3 py-2 rounded-lg bg-[#0D111A] border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder:[var(--text-tertiary)] text-xs font-mono focus:border-[var(--purple-bright)] focus:outline-none transition-colors"
               />
-            </div>
+            </>
           )}
 
           {channel === "webhook" && (
-            <div className="space-y-1.5">
-              <label className="text-xs font-mono text-[var(--text-secondary)] font-semibold">Telegram Bridge or Custom Webhook URL (HTTPS):</label>
+            <>
+              <label className="text-[11px] font-mono text-[var(--text-secondary)] font-semibold block">
+                Telegram Bridge or Webhook URL (HTTPS):
+              </label>
               <input
                 type="url"
                 required
                 value={webhookUrl}
                 onChange={(e) => setWebhookUrl(e.target.value)}
-                placeholder="https://your-webhook-endpoint.com/receive or https://api.telegram.org/..."
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder:[var(--text-tertiary)] text-xs font-mono focus:border-[var(--border-strong)] focus:outline-none"
+                placeholder="https://your-server.com/webhook or Telegram bot bridge"
+                className="w-full px-3 py-2 rounded-lg bg-[#0D111A] border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder:[var(--text-tertiary)] text-xs font-mono focus:border-[var(--purple-bright)] focus:outline-none transition-colors"
               />
-            </div>
+            </>
           )}
 
           {channel === "email" && (
-            <div className="space-y-1.5">
-              <label className="text-xs font-mono text-[var(--text-secondary)] font-semibold">Alert Email Address:</label>
+            <>
+              <label className="text-[11px] font-mono text-[var(--text-secondary)] font-semibold block">
+                Alert Email Address:
+              </label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="developer@example.com"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder:[var(--text-tertiary)] text-xs font-mono focus:border-[var(--border-strong)] focus:outline-none"
+                className="w-full px-3 py-2 rounded-lg bg-[#0D111A] border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder:[var(--text-tertiary)] text-xs font-mono focus:border-[var(--purple-bright)] focus:outline-none transition-colors"
               />
-            </div>
+            </>
           )}
         </div>
 
         {/* Step 3: Target Languages */}
-        <div className="space-y-2">
-          <label className="text-xs font-mono font-bold text-[var(--text-secondary)] uppercase tracking-wider">
-            2. Monitored Languages & Ecosystems:
+        <div className="space-y-1.5">
+          <label className="text-[11px] font-mono font-bold text-[var(--text-secondary)] uppercase tracking-wider block">
+            2. Monitored Languages
           </label>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {availableLangs.map((lang) => {
               const active = selectedLangs.includes(lang);
               return (
@@ -270,10 +282,10 @@ export function GfiSniperCard({ defaultEmail = "" }: GfiSniperCardProps) {
                   key={lang}
                   type="button"
                   onClick={() => toggleLang(lang)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer border ${
+                  className={`px-2.5 py-1 rounded-md text-xs font-mono font-medium transition-all cursor-pointer border ${
                     active
-                      ? "bg-[var(--text-primary)] text-[var(--bg-canvas)] border-[var(--text-primary)] shadow-sm"
-                      : "bg-[var(--bg-surface)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
+                      ? "bg-[rgba(163,113,247,0.18)] text-[var(--purple-bright)] border-[var(--border-accent)] font-semibold"
+                      : "bg-[#0D111A] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5"
                   }`}
                 >
                   {active ? `✓ ${lang}` : lang}
@@ -284,92 +296,90 @@ export function GfiSniperCard({ defaultEmail = "" }: GfiSniperCardProps) {
         </div>
 
         {/* Step 4: Dispatch Frequency */}
-        <div className="p-4 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="text-xs font-mono font-bold text-[var(--text-primary)] flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-[var(--color-primary)]" />
-              <span>Sniper Alert Frequency:</span>
-            </div>
-            <p className="text-xs text-[var(--text-secondary)]">
-              Receive alerts the moment issues are indexed or batch into a weekly digest.
-            </p>
+        <div className="flex items-center justify-between gap-3 pt-1">
+          <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] font-mono">
+            <Clock className="h-3.5 w-3.5 text-[var(--purple-bright)]" />
+            <span>Frequency:</span>
           </div>
-
-          <div className="inline-flex items-center gap-1 p-1 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] font-mono text-xs shrink-0">
-            <button
-              type="button"
-              onClick={() => setFrequency("weekly")}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                frequency === "weekly" ? "bg-[var(--bg-elevated)] text-[var(--text-primary)] font-bold shadow-xs" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              }`}
-            >
-              Weekly Digest
-            </button>
+          <div className="inline-flex items-center gap-1 p-0.5 bg-[#0D111A] rounded-lg border border-[var(--border-subtle)] font-mono text-[11px]">
             <button
               type="button"
               onClick={() => setFrequency("instant")}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
+              className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center gap-1 ${
                 frequency === "instant"
-                  ? "bg-[var(--color-primary)] text-white font-bold shadow-xs"
+                  ? "bg-[var(--purple-bright)] text-[#04060A] font-bold shadow-xs"
                   : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
               <Zap className="h-3 w-3" />
-              <span>Instant Webhook</span>
+              <span>Instant</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setFrequency("weekly")}
+              className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                frequency === "weekly"
+                  ? "bg-[#21262D] text-[var(--text-primary)] font-bold shadow-xs"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              }`}
+            >
+              Weekly
             </button>
           </div>
         </div>
 
         {errorMsg && (
-          <div className="p-3 rounded-xl bg-[#C4463A]/10 border border-[#C4463A]/30 text-[#C4463A] text-xs font-mono flex items-center gap-2">
+          <div className="p-2.5 rounded-lg bg-[#C4463A]/10 border border-[#C4463A]/30 text-[#C4463A] text-xs font-mono flex items-center gap-2">
             <AlertCircle className="h-4 w-4 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         {testResult && (
-          <div className={`p-3 rounded-xl text-xs font-mono flex items-center gap-2 ${
-            testResult.success
-              ? "bg-[#0D9668]/10 border border-[#0D9668]/30 text-[#0D9668]"
-              : "bg-[#C4463A]/10 border border-[#C4463A]/30 text-[#C4463A]"
-          }`}>
+          <div
+            className={`p-2.5 rounded-lg text-xs font-mono flex items-center gap-2 ${
+              testResult.success
+                ? "bg-[#0D9668]/10 border border-[#0D9668]/30 text-[#0D9668]"
+                : "bg-[#C4463A]/10 border border-[#C4463A]/30 text-[#C4463A]"
+            }`}
+          >
             {testResult.success ? <Check className="h-4 w-4 shrink-0" /> : <AlertCircle className="h-4 w-4 shrink-0" />}
             <span>{testResult.message}</span>
           </div>
         )}
 
         {/* Submit Bar */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-[var(--border-subtle)]">
+        <div className="pt-2 flex items-center justify-between gap-3 border-t border-[var(--border-subtle)]">
           {channel !== "email" ? (
             <button
               type="button"
               disabled={testing || !webhookUrl}
               onClick={handleSendTest}
-              className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center gap-1 cursor-pointer disabled:opacity-50"
+              className="text-[11px] font-mono text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer disabled:opacity-40"
             >
-              <span>{testing ? "Testing delivery..." : "Send Test Webhook Alert"}</span>
+              {testing ? "Testing..." : "Send Test Alert"}
             </button>
-          ) : <div />}
+          ) : (
+            <div />
+          )}
 
-          <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-            <button
-              type="submit"
-              disabled={saving}
-              className="px-6 py-2.5 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90 disabled:opacity-50 text-white font-mono text-xs font-bold transition-all flex items-center gap-2 shadow-sm cursor-pointer active:scale-[0.98]"
-            >
-              {saveSuccess ? (
-                <>
-                  <Check className="h-4 w-4 text-[var(--text-primary)]" />
-                  <span>Preferences Saved!</span>
-                </>
-              ) : (
-                <>
-                  <Zap className="h-4 w-4" />
-                  <span>{saving ? "Saving..." : "Activate Sniper Radar"}</span>
-                </>
-              )}
-            </button>
-          </div>
+          <button
+            type="submit"
+            disabled={saving}
+            className="px-4 py-2 rounded-lg bg-[var(--purple-bright)] hover:brightness-110 disabled:opacity-50 text-[#04060A] font-mono text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-[0.98]"
+          >
+            {saveSuccess ? (
+              <>
+                <Check className="h-3.5 w-3.5" />
+                <span>Saved!</span>
+              </>
+            ) : (
+              <>
+                <Zap className="h-3.5 w-3.5" />
+                <span>{saving ? "Saving..." : "Activate Sniper"}</span>
+              </>
+            )}
+          </button>
         </div>
       </form>
     </div>
