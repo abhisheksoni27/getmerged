@@ -205,3 +205,5 @@ Distributed under the [MIT License](LICENSE). The backend, frontend, scoring eng
 Built by [Abhishek Soni](https://github.com/abhisheksoni27) · [LinkedIn](https://www.linkedin.com/in/abhisheksonicode/) · [X / Twitter (@abhisheksoni27)](https://x.com/abhisheksoni27) · [Website](https://abhishekco.de)
 
 If GetMerged helped you land a PR, a star helps others find it.
+
+<!-- coderabbit test -->
