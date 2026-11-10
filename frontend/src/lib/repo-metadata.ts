@@ -114,7 +114,7 @@ export function buildRepoFaqList(fullName: string, repo: Repo | null): RepoFaqIt
       q: `How fast can I expect code review feedback on my pull request?`,
       a: positiveResponseHours
         ? `Maintainers in ${fullName} respond to incoming external pull requests in approximately ${formatNarrativeLatency(positiveResponseHours)}. Keeping PRs focused on single tasks and ensuring tests pass helps maintainers review faster.`
-        : `Maintainers in ${fullName} typically review and merge incoming external pull requests directly without delay. Keeping PRs focused on single tasks and ensuring tests pass helps maintainers review faster.`,
+        : `Median maintainer response time is not yet recorded for ${fullName}. Keeping PRs focused on single tasks and ensuring tests pass helps maintainers review faster.`,
     },
     {
       q: `What does the ${(repo.c_rank_score || 0).toFixed(1)} C-Rank™ score (${repo.c_rank_tier || "A"} Tier) represent?`,

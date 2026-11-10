@@ -751,6 +751,8 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 			COALESCE(s.snapshot_date, '') as snapshot_date,
 			COALESCE(s.good_first_issue_count, 0) as good_first_issue_count,
 			COALESCE(s.onboarding_score, 0) as onboarding_score,
+			COALESCE(s.response_p50_hours, 0) as response_p50_hours,
+			COALESCE(s.response_p90_hours, 0) as response_p90_hours,
 			CASE WHEN COALESCE(s.c_rank_score, 0) > 0 THEN 1 ELSE 0 END as is_scored,
 			COALESCE(r.access_status, 'open') as access_status,
 			r.access_status_reason,
@@ -784,7 +786,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 			&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
 			&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
 			&rec.DistinctMaintainerCount, &rec.BusFactor, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
-			&rec.OnboardingScore, &isScoredInt, &rec.AccessStatus, &rec.AccessStatusReason, &rec.AIPolicy, &rec.AIPolicyURL, &rec.AIPolicyReason, &rec.UpdatedAt,
+			&rec.OnboardingScore, &rec.ResponseP50Hours, &rec.ResponseP90Hours, &isScoredInt, &rec.AccessStatus, &rec.AccessStatusReason, &rec.AIPolicy, &rec.AIPolicyURL, &rec.AIPolicyReason, &rec.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -821,6 +823,8 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 				COALESCE(s.snapshot_date, '') as snapshot_date,
 				COALESCE(s.good_first_issue_count, 0) as good_first_issue_count,
 				COALESCE(s.onboarding_score, 0) as onboarding_score,
+				COALESCE(s.response_p50_hours, 0) as response_p50_hours,
+				COALESCE(s.response_p90_hours, 0) as response_p90_hours,
 				CASE WHEN COALESCE(s.c_rank_score, 0) > 0 THEN 1 ELSE 0 END as is_scored,
 				COALESCE(r.access_status, 'open') as access_status,
 				r.access_status_reason,
@@ -845,7 +849,7 @@ func (r *sqlxRepoRepository) GetRelatedRepos(ctx context.Context, repo *RepoReco
 					&rec.TimeToMergeHours, &rec.FirstTimerSuccessRate, &rec.RepeatContributorRate,
 					&rec.MaintainerResponsiveness, &rec.LastActivityDays, &rec.ReviewRounds,
 					&rec.DistinctMaintainerCount, &rec.BusFactor, &staleInt, &rec.SnapshotDate, &rec.GoodFirstIssueCount,
-					&rec.OnboardingScore, &isScoredInt, &rec.AccessStatus, &rec.AccessStatusReason, &rec.AIPolicy, &rec.AIPolicyURL, &rec.AIPolicyReason, &rec.UpdatedAt,
+					&rec.OnboardingScore, &rec.ResponseP50Hours, &rec.ResponseP90Hours, &isScoredInt, &rec.AccessStatus, &rec.AccessStatusReason, &rec.AIPolicy, &rec.AIPolicyURL, &rec.AIPolicyReason, &rec.UpdatedAt,
 				); err == nil {
 					rec.StalenessFlag = staleInt == 1
 					rec.IsScored = isScoredInt == 1
