@@ -9,6 +9,11 @@
   - **NEVER merge pull requests automatically.** Always present the created PR link to the user with full context, test verification, and visual proof. A PR can ONLY be merged when the user explicitly instructs to merge it.
   - **Atomic, Cohesive PRs**: Group logically related changes together (e.g. backend endpoint + DB query + frontend consumption). Keep PRs scoped, focused, and reviewable. Do not lump unrelated refactors into a single PR.
   - **Code the system properly, not hacky patches**: Build clean, maintainable architecture fitting the existing system conventions. This is an MVP—build real, robust primitives without over-engineering or going berserk with unnecessary abstractions.
+- **🚨 Engineering Discipline: DRY, SOLID, KISS & Mandatory Tests (ZERO EXCEPTIONS)**:
+  - **Always Write Tests**: Every bug fix, helper, business logic change, API endpoint, or utility function MUST be accompanied by unit/integration tests before opening or updating a PR. Never consider a task done without automated test verification.
+  - **DRY (Don't Repeat Yourself)**: Never duplicate logic across components, routes, or files. Extract reusable utilities, helpers, types, and hooks into shared modules (`src/lib`, `internal/`, etc.) with comprehensive tests.
+  - **SOLID**: Respect Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion. Keep modules focused, modular, and decoupled.
+  - **KISS (Keep It Simple, Stupid)**: Favor clear, explicit, readable code over clever or premature abstractions. Avoid unnecessary complexity.
 - **🚨 Visual & Design Identity Compliance**:
   - The GetMerged product palette is **Obsidian & Precision Developer Slate** (`#090D16`, `#0D111A`, `#111827`, `#F0F6FC`, `#8B949E`) with **Brand Violet/Indigo** (`#8250DF`, `#A371F7`) as primary accents, inspired by Trigger.dev and GitHub Primer.
   - **NEVER generate generic neon-green or template AI-slop themes.** Semantic colors (green for Welcoming / success, blue for latency, amber for warning, red for stalled) must be used judiciously as indicators, not as the dominant card or page background.
