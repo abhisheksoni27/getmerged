@@ -57,11 +57,20 @@ export function RepoStickyBar({
     ? `${Math.round(repo.external_pr_merge_rate)}% Merge Rate`
     : null;
 
+  const rawResponseHours =
+    repo?.response_p50_hours && repo.response_p50_hours > 0
+      ? repo.response_p50_hours
+      : repo?.time_to_first_response_hours && repo.time_to_first_response_hours > 0
+      ? repo.time_to_first_response_hours
+      : undefined;
+
   const responseTimeStr =
-    repo?.time_to_first_response_hours !== undefined
-      ? repo.time_to_first_response_hours < 1
-        ? `${Math.round(repo.time_to_first_response_hours * 60)}m Review`
-        : `${repo.time_to_first_response_hours.toFixed(1)}h Review`
+    rawResponseHours !== undefined
+      ? rawResponseHours < 0.1
+        ? "<10m Review"
+        : rawResponseHours < 1
+        ? `${Math.round(rawResponseHours * 60)}m Review`
+        : `${rawResponseHours.toFixed(1)}h Review`
       : null;
 
   return (

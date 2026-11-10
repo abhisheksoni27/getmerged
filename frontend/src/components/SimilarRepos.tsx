@@ -40,11 +40,20 @@ export function SimilarRepos({ relatedRepos, language }: SimilarReposProps) {
             const mergeRate = relRepo.external_pr_merge_rate
               ? `${Math.round(relRepo.external_pr_merge_rate)}% merge rate`
               : "High merge rate";
+            const rawResp =
+              relRepo.response_p50_hours && relRepo.response_p50_hours > 0
+                ? relRepo.response_p50_hours
+                : relRepo.time_to_first_response_hours && relRepo.time_to_first_response_hours > 0
+                ? relRepo.time_to_first_response_hours
+                : undefined;
+
             const responseSpeed =
-              relRepo.time_to_first_response_hours !== undefined
-                ? relRepo.time_to_first_response_hours < 1
-                  ? `${Math.round(relRepo.time_to_first_response_hours * 60)}m review`
-                  : `${Math.round(relRepo.time_to_first_response_hours)}h review`
+              rawResp !== undefined
+                ? rawResp < 0.1
+                  ? "<10m review"
+                  : rawResp < 1
+                  ? `${Math.round(rawResp * 60)}m review`
+                  : `${Math.round(rawResp)}h review`
                 : "Active reviews";
 
             return (
