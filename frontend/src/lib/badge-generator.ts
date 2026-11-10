@@ -109,37 +109,54 @@ export async function generateUserBadgeSvg(username: string) {
 
 export async function generateRepoBadgeSvg(owner: string, name: string) {
   const fullName = `${owner}/${name}`;
-  let tier = "A";
+  let tier: string | null = null;
+  let repo: { c_rank_tier?: string; external_pr_merge_rate?: number; full_name?: string } | null = null;
 
+  // 1. Direct path lookup with isolated 3s timeout
   try {
-    // 1. Direct path lookup
-    let repo: { c_rank_tier?: string; external_pr_merge_rate?: number; full_name?: string } | null = null;
-    const directRes = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}`);
+    const directRes = await fetch(`${API_BASE_URL}/api/v1/repos/${encodeURIComponent(fullName)}`, {
+      signal: AbortSignal.timeout(3000),
+      next: { revalidate: 3600 },
+    });
     if (directRes.ok) {
       const data = await directRes.json();
       if (data?.c_rank_tier) {
         repo = data;
       }
     }
+  } catch {
+    // Direct path failed/timed out, allow fallback query lookup
+  }
 
-    // 2. Query param fallback lookup
-    if (!repo) {
-      const res = await fetch(`${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(fullName)}`);
+  // 2. Query param fallback lookup with isolated 3s timeout
+  if (!repo) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/repos?name=${encodeURIComponent(fullName)}`, {
+        signal: AbortSignal.timeout(3000),
+        next: { revalidate: 3600 },
+      });
       if (res.ok) {
         const data = await res.json();
-        const rawList = data.data || data.repos;
+        const rawList = data?.data || data?.repos;
         if (Array.isArray(rawList) && rawList.length > 0) {
-          repo = rawList.find((r: { full_name: string }) => r.full_name.toLowerCase() === fullName.toLowerCase()) || rawList[0];
+          const match = rawList.find(
+            (r: { full_name?: string }) => r.full_name?.toLowerCase() === fullName.toLowerCase()
+          );
+          if (match) {
+            repo = match;
+          }
         }
       }
+    } catch {
+      // Query param lookup failed or timed out
     }
+  }
 
-    if (repo && repo.c_rank_tier) {
-      tier = repo.c_rank_tier;
-    }
-  } catch {}
+  if (repo && repo.c_rank_tier) {
+    tier = repo.c_rank_tier;
+  }
 
-  const tierUpper = (tier || "A").toUpperCase();
+  const tierUpper = tier ? tier.toUpperCase() : null;
 
   const tierThemes: Record<string, { color: string; verdict: string }> = {
     S: {
@@ -164,9 +181,9 @@ export async function generateRepoBadgeSvg(owner: string, name: string) {
     },
   };
 
-  const theme = tierThemes[tierUpper] || {
-    color: "#0284c7",
-    verdict: "Indexed",
+  const theme = (tierUpper && tierThemes[tierUpper]) || {
+    color: "#58a6ff",
+    verdict: "Indexed · Welcoming",
   };
 
   const svg = renderShieldsBadge({
@@ -178,6 +195,6 @@ export async function generateRepoBadgeSvg(owner: string, name: string) {
 
   return {
     svg,
-    tier: tierUpper,
+    tier: tierUpper || "UNKNOWN",
   };
 }
