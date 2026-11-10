@@ -450,6 +450,7 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 
 	var prs []scoring.PR
 	var windows []struct{ open, close time.Time }
+	prIndexMap := make(map[int]int) // pr_number -> slice index in prs
 	for rows.Next() {
 		var prNumber int
 		var openedAt, closedAt sql.NullTime
@@ -477,13 +478,45 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 			pr.State = "OPEN"
 		}
 
+		prIndexMap[prNumber] = len(prs)
 		windows = append(windows, struct{ open, close time.Time }{openedAt.Time, closedAt.Time})
 		prs = append(prs, pr)
 	}
 
-	// Distinct-maintainer signal: attribute commenters to PRs whose lifecycle
-	// window contains the comment. repo_raw_comments carries no association,
-	// so any non-author commenter counts (bots are filtered at ingestion).
+	// 1. Precise PR-linked comments (repo_pr_comments): attribute directly by pr_number
+	// to prevent cross-PR latency leakage when PR lifecycle windows overlap.
+	if len(prs) > 0 {
+		prCRows, err := db.Query(`
+			SELECT pr_number, created_at, author_login
+			FROM repo_pr_comments
+			WHERE repository_id = ?
+			  AND created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+		`, repoID, days)
+		if err == nil {
+			defer prCRows.Close()
+			for prCRows.Next() {
+				var prNum int
+				var ca time.Time
+				var login string
+				if err := prCRows.Scan(&prNum, &ca, &login); err == nil {
+					if idx, ok := prIndexMap[prNum]; ok {
+						if login != prs[idx].AuthorLogin {
+							prs[idx].CommentAuthors = append(prs[idx].CommentAuthors, login)
+							if prs[idx].FirstCommentAt == nil || ca.Before(*prs[idx].FirstCommentAt) {
+								caCopy := ca
+								prs[idx].FirstCommentAt = &caCopy
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// 2. Distinct-maintainer signal: attribute commenters to PRs whose lifecycle
+	// window contains the comment for maintainer discovery.
+	// We only attribute CommentAuthors for maintainer counting, and do NOT assign
+	// unassociated raw comments to FirstCommentAt to avoid false latency across overlapping PRs.
 	if len(windows) > 0 {
 		cRows, err := db.Query(`
 			SELECT c.created_at, c.author_login
@@ -505,10 +538,6 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 				inWindow := ca.After(w.open) && (!w.close.IsZero() && ca.Before(w.close) || w.close.IsZero() && !ca.After(time.Now().UTC()))
 				if inWindow && login != prs[i].AuthorLogin {
 					prs[i].CommentAuthors = append(prs[i].CommentAuthors, login)
-					if prs[i].FirstCommentAt == nil || ca.Before(*prs[i].FirstCommentAt) {
-						caCopy := ca
-						prs[i].FirstCommentAt = &caCopy
-					}
 				}
 			}
 		}
