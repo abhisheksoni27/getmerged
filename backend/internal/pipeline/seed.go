@@ -318,8 +318,8 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
 			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, score_source, good_first_issue_count, onboarding_score,
-			response_p50_hours
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			response_p50_hours, response_p90_hours
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON DUPLICATE KEY UPDATE
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
 			time_to_first_response_hours  = VALUES(time_to_first_response_hours),
@@ -337,7 +337,8 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			score_source                  = VALUES(score_source),
 			good_first_issue_count        = VALUES(good_first_issue_count),
 			onboarding_score              = VALUES(onboarding_score),
-			response_p50_hours            = VALUES(response_p50_hours)
+			response_p50_hours            = VALUES(response_p50_hours),
+			response_p90_hours            = VALUES(response_p90_hours)
 	`,
 		uuid.New().String(),
 		repoID,
@@ -359,6 +360,7 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 		m.GoodFirstIssueCount,
 		m.OnboardingScore,
 		m.ResponseP50Hours,
+		m.ResponseP90Hours,
 	)
 	if err != nil {
 		return err
@@ -371,8 +373,8 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
 			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, onboarding_score,
-			pr_count_6m, issue_count_6m, response_p50_hours, updated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+			pr_count_6m, issue_count_6m, response_p50_hours, response_p90_hours, updated_at
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		ON DUPLICATE KEY UPDATE
 			snapshot_date                 = VALUES(snapshot_date),
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
@@ -393,6 +395,7 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			pr_count_6m                   = VALUES(pr_count_6m),
 			issue_count_6m                = VALUES(issue_count_6m),
 			response_p50_hours            = VALUES(response_p50_hours),
+			response_p90_hours            = VALUES(response_p90_hours),
 			updated_at                    = CURRENT_TIMESTAMP
 	`,
 		repoID,
@@ -415,6 +418,7 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 		m.PRsCreated6m,
 		m.IssuesCreated6m,
 		m.ResponseP50Hours,
+		m.ResponseP90Hours,
 	)
 	if err != nil {
 		return err
@@ -501,6 +505,10 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 				inWindow := ca.After(w.open) && (!w.close.IsZero() && ca.Before(w.close) || w.close.IsZero() && !ca.After(time.Now().UTC()))
 				if inWindow && login != prs[i].AuthorLogin {
 					prs[i].CommentAuthors = append(prs[i].CommentAuthors, login)
+					if prs[i].FirstCommentAt == nil || ca.Before(*prs[i].FirstCommentAt) {
+						caCopy := ca
+						prs[i].FirstCommentAt = &caCopy
+					}
 				}
 			}
 		}
