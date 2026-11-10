@@ -502,7 +502,7 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 					if idx, ok := prIndexMap[prNum]; ok {
 						if login != prs[idx].AuthorLogin {
 							prs[idx].CommentAuthors = append(prs[idx].CommentAuthors, login)
-							if prs[idx].FirstCommentAt == nil || ca.Before(*prs[idx].FirstCommentAt) {
+							if !github.IsBotLogin(login) && (prs[idx].FirstCommentAt == nil || ca.Before(*prs[idx].FirstCommentAt)) {
 								caCopy := ca
 								prs[idx].FirstCommentAt = &caCopy
 							}
