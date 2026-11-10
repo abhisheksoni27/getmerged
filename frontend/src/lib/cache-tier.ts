@@ -31,6 +31,15 @@ export function getTierCacheConfig(tier?: string | null) {
         sMaxAge: 432000, // 5 days CDN s-maxage
         staleWhileRevalidate: 259200, // 3 days SWR
       };
+    case "UNKNOWN":
+    case "FALLBACK":
+      // Unindexed, newly submitted, or transiently unreached repos: 10m cache
+      return {
+        revalidate: 600, // 10 minutes
+        maxAge: 60, // 1 minute browser max-age
+        sMaxAge: 600, // 10 minutes CDN s-maxage
+        staleWhileRevalidate: 1800, // 30 minutes SWR
+      };
     case "C":
     case "D":
     default:
