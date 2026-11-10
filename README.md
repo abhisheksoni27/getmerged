@@ -9,7 +9,6 @@ Open-source projects ranked by **review speed**, **outside-PR merge rate**, and 
 [**Live site**](https://getmerged.abhishekco.de?utm_source=github&utm_medium=readme&utm_campaign=hero) · [Good first issues](https://getmerged.abhishekco.de/good-first-issue?utm_source=github&utm_medium=readme) · [How scoring works](https://getmerged.abhishekco.de/how-c-rank-works?utm_source=github&utm_medium=readme) · [Browser extension](extension/)
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/abhisheksoni27/getmerged/check.yml?branch=main&label=build&style=flat-square)](https://github.com/abhisheksoni27/getmerged/actions)
 [![Live Site](https://img.shields.io/badge/site-live-10b981?style=flat-square)](https://getmerged.abhishekco.de)
 [![GitHub Stars](https://img.shields.io/github/stars/abhisheksoni27/getmerged?style=flat-square&color=f59e0b)](https://github.com/abhisheksoni27/getmerged/stargazers)
 
