@@ -5,6 +5,10 @@ import Link from "next/link";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { Repo } from "@/types/opendoor";
 import { getLanguageSlug } from "@/lib/languageSlug";
+import {
+  formatBadgeLatency,
+  getPositiveResponseHours,
+} from "@/lib/format-latency";
 
 interface SimilarReposProps {
   relatedRepos: Repo[];
@@ -40,21 +44,7 @@ export function SimilarRepos({ relatedRepos, language }: SimilarReposProps) {
             const mergeRate = relRepo.external_pr_merge_rate
               ? `${Math.round(relRepo.external_pr_merge_rate)}% merge rate`
               : "High merge rate";
-            const rawResp =
-              relRepo.response_p50_hours && relRepo.response_p50_hours > 0
-                ? relRepo.response_p50_hours
-                : relRepo.time_to_first_response_hours && relRepo.time_to_first_response_hours > 0
-                ? relRepo.time_to_first_response_hours
-                : undefined;
-
-            const responseSpeed =
-              rawResp !== undefined
-                ? rawResp < 0.1
-                  ? "<10m review"
-                  : rawResp < 1
-                  ? `${Math.round(rawResp * 60)}m review`
-                  : `${Math.round(rawResp)}h review`
-                : "Active reviews";
+            const responseSpeed = formatBadgeLatency(getPositiveResponseHours(relRepo))?.toLowerCase();
 
             return (
               <Link
@@ -68,7 +58,7 @@ export function SimilarRepos({ relatedRepos, language }: SimilarReposProps) {
                     {relRepo.full_name}
                   </div>
                   <div className="text-[11px] text-[var(--text-tertiary)] font-mono mt-0.5">
-                    {mergeRate} • {responseSpeed}
+                    {mergeRate}{responseSpeed ? ` • ${responseSpeed}` : ""}
                   </div>
                 </div>
                 <span className={`tier-badge tier-${tier} shrink-0 text-xs`}>{tier}</span>

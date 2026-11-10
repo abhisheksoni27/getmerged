@@ -335,8 +335,9 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, score_source, good_first_issue_count
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, score_source, good_first_issue_count,
+			response_p50_hours
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON DUPLICATE KEY UPDATE
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
 			time_to_first_response_hours  = VALUES(time_to_first_response_hours),
@@ -352,7 +353,8 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			c_rank_score                  = VALUES(c_rank_score),
 			c_rank_tier                   = VALUES(c_rank_tier),
 			score_source                  = VALUES(score_source),
-			good_first_issue_count        = VALUES(good_first_issue_count)
+			good_first_issue_count        = VALUES(good_first_issue_count),
+			response_p50_hours            = VALUES(response_p50_hours)
 	`,
 		uuid.New().String(),
 		repoID,
@@ -372,6 +374,7 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 		tier,
 		scoreSource,
 		m.GoodFirstIssueCount,
+		m.ResponseP50Hours,
 	)
 	if err != nil {
 		return err
@@ -384,8 +387,8 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
 			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, score_source, good_first_issue_count,
-			pr_count_6m, issue_count_6m, updated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+			pr_count_6m, issue_count_6m, response_p50_hours, updated_at
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		ON DUPLICATE KEY UPDATE
 			snapshot_date                 = VALUES(snapshot_date),
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
@@ -405,6 +408,7 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 			good_first_issue_count        = VALUES(good_first_issue_count),
 			pr_count_6m                   = VALUES(pr_count_6m),
 			issue_count_6m                = VALUES(issue_count_6m),
+			response_p50_hours            = VALUES(response_p50_hours),
 			updated_at                    = CURRENT_TIMESTAMP
 	`,
 		repoID,
@@ -426,6 +430,7 @@ func insertSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score floa
 		m.GoodFirstIssueCount,
 		m.PRsCreated6m,
 		m.IssuesCreated6m,
+		m.ResponseP50Hours,
 	)
 	if err != nil {
 		return err

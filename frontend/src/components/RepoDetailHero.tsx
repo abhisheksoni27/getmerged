@@ -20,6 +20,11 @@ import { getLanguageSlug } from "@/lib/languageSlug";
 import { Repo } from "@/types/opendoor";
 import posthog from "posthog-js";
 
+import {
+  formatNarrativeLatency,
+  getPositiveResponseHours,
+} from "@/lib/format-latency";
+
 interface RepoDetailHeroProps {
   fullName: string;
   repo: Repo | null;
@@ -89,21 +94,8 @@ export function RepoDetailHero({
 
   // Generate empirical verdict text
   const mergeRateVal = repo?.external_pr_merge_rate ? `${Math.round(repo.external_pr_merge_rate)}%` : "high";
-  const rawResponseHours =
-    repo?.response_p50_hours && repo.response_p50_hours > 0
-      ? repo.response_p50_hours
-      : repo?.time_to_first_response_hours && repo.time_to_first_response_hours > 0
-      ? repo.time_to_first_response_hours
-      : undefined;
-
-  const responseTimeVal =
-    rawResponseHours !== undefined
-      ? rawResponseHours < 0.1
-        ? "<10 minutes"
-        : rawResponseHours < 1
-        ? `${Math.round(rawResponseHours * 60)} minutes`
-        : `${rawResponseHours.toFixed(1)} hours`
-      : undefined;
+  const positiveResponseHours = getPositiveResponseHours(repo);
+  const responseTimeVal = formatNarrativeLatency(positiveResponseHours) ?? undefined;
 
   let verdictSummary = "Active candidate for outside pull requests.";
   if (rank === "S") {

@@ -7,6 +7,10 @@ import {
   Star,
 } from "lucide-react";
 import { Repo } from "@/types/opendoor";
+import {
+  formatBadgeLatency,
+  getPositiveResponseHours,
+} from "@/lib/format-latency";
 
 export interface RepoSectionTab {
   id: string;
@@ -57,21 +61,7 @@ export function RepoStickyBar({
     ? `${Math.round(repo.external_pr_merge_rate)}% Merge Rate`
     : null;
 
-  const rawResponseHours =
-    repo?.response_p50_hours && repo.response_p50_hours > 0
-      ? repo.response_p50_hours
-      : repo?.time_to_first_response_hours && repo.time_to_first_response_hours > 0
-      ? repo.time_to_first_response_hours
-      : undefined;
-
-  const responseTimeStr =
-    rawResponseHours !== undefined
-      ? rawResponseHours < 0.1
-        ? "<10m Review"
-        : rawResponseHours < 1
-        ? `${Math.round(rawResponseHours * 60)}m Review`
-        : `${rawResponseHours.toFixed(1)}h Review`
-      : null;
+  const responseTimeStr = formatBadgeLatency(getPositiveResponseHours(repo));
 
   return (
     <div
