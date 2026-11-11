@@ -492,24 +492,29 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 			WHERE repository_id = ?
 			  AND created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
 		`, repoID, days)
-		if err == nil {
-			defer prCRows.Close()
-			for prCRows.Next() {
-				var prNum int
-				var ca time.Time
-				var login string
-				if err := prCRows.Scan(&prNum, &ca, &login); err == nil {
-					if idx, ok := prIndexMap[prNum]; ok {
-						if login != prs[idx].AuthorLogin {
-							prs[idx].CommentAuthors = append(prs[idx].CommentAuthors, login)
-							if !github.IsBotLogin(login) && (prs[idx].FirstCommentAt == nil || ca.Before(*prs[idx].FirstCommentAt)) {
-								caCopy := ca
-								prs[idx].FirstCommentAt = &caCopy
-							}
-						}
+		if err != nil {
+			return nil, err
+		}
+		defer prCRows.Close()
+		for prCRows.Next() {
+			var prNum int
+			var ca time.Time
+			var login string
+			if err := prCRows.Scan(&prNum, &ca, &login); err != nil {
+				return nil, err
+			}
+			if idx, ok := prIndexMap[prNum]; ok {
+				if login != prs[idx].AuthorLogin {
+					prs[idx].CommentAuthors = append(prs[idx].CommentAuthors, login)
+					if !github.IsBotLogin(login) && (prs[idx].MergedAt == nil || !ca.After(*prs[idx].MergedAt)) && (prs[idx].FirstCommentAt == nil || ca.Before(*prs[idx].FirstCommentAt)) {
+						caCopy := ca
+						prs[idx].FirstCommentAt = &caCopy
 					}
 				}
 			}
+		}
+		if err := prCRows.Err(); err != nil {
+			return nil, err
 		}
 	}
 
