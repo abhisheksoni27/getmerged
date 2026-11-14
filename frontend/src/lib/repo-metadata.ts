@@ -1,4 +1,9 @@
 import { Repo } from "@/types/opendoor";
+import {
+  formatMetaLatency,
+  formatNarrativeLatency,
+  getPositiveResponseHours,
+} from "./format-latency";
 
 export function isRepoScored(repo: Repo | null): boolean {
   if (!repo) return false;
@@ -25,7 +30,8 @@ export function buildRepoMetadata(fullName: string, repo: Repo | null): RepoMeta
   const score = repo.c_rank_score !== undefined ? repo.c_rank_score.toFixed(1) : "0.0";
   const tier = repo.c_rank_tier || "D";
   const mergeRate = (repo.external_pr_merge_rate || 0).toFixed(0);
-  const respHours = (repo.response_p50_hours && repo.response_p50_hours > 0 ? repo.response_p50_hours : (repo.time_to_first_response_hours || 0)).toFixed(0);
+  const positiveResponseHours = getPositiveResponseHours(repo);
+  const metaLatency = formatMetaLatency(positiveResponseHours);
 
   // Dynamic Title Construction (Strictly <= 60 chars)
   const repoName = repo.name || fullName.split("/")[1] || fullName;
@@ -40,14 +46,20 @@ export function buildRepoMetadata(fullName: string, repo: Repo | null): RepoMeta
   const title = titleCandidates.find((t) => t.length <= 60) || `${fullName.slice(0, 48)} | GetMerged`;
 
   // Dynamic Description Construction (Strictly <= 154 chars)
-  const descCandidates = [
-    `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. Check review speed on GetMerged.`,
-    `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate & ~${respHours}h response. Check review speed on GetMerged.`,
-    `Will ${repoName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ~${respHours}h response time. Check review speed on GetMerged.`,
-    `Will ${repoName} merge your PR? ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate & ~${respHours}h response. Check review speed on GetMerged.`,
-    `${fullName} PR stats: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`,
-    `${repoName} PR stats: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`,
-  ];
+  const descCandidates = metaLatency
+    ? [
+        `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ${metaLatency} response time. Check review speed on GetMerged.`,
+        `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate & ${metaLatency} response. Check review speed on GetMerged.`,
+        `Will ${repoName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate & ${metaLatency} response time. Check review speed on GetMerged.`,
+        `Will ${repoName} merge your PR? ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate & ${metaLatency} response. Check review speed on GetMerged.`,
+        `${fullName} PR stats: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`,
+        `${repoName} PR stats: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`,
+      ]
+    : [
+        `Will ${fullName} merge your PR? ${score}/100 C-Rank (${tier}-Tier) with ${mergeRate}% merge rate telemetry. Check review speed & benchmarks on GetMerged.`,
+        `${fullName} PR stats: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`,
+        `${repoName} PR stats: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. View maintainer review speed on GetMerged.`,
+      ];
   let description = descCandidates.find((d) => d.length <= 154) || "";
   if (!description) {
     const base = `PR stats for ${fullName}: ${score}/100 C-Rank (${tier}-Tier), ${mergeRate}% merge rate. Review speed on GetMerged.`;
@@ -64,6 +76,7 @@ export interface RepoFaqItem {
 
 export function buildRepoFaqList(fullName: string, repo: Repo | null): RepoFaqItem[] {
   const scored = isRepoScored(repo);
+  const positiveResponseHours = getPositiveResponseHours(repo);
 
   if (!repo || !scored) {
     return [
@@ -99,7 +112,9 @@ export function buildRepoFaqList(fullName: string, repo: Repo | null): RepoFaqIt
     },
     {
       q: `How fast can I expect code review feedback on my pull request?`,
-      a: `Maintainers in ${fullName} respond to incoming external pull requests in approximately ${(repo.time_to_first_response_hours || 0).toFixed(1)} hours on average. Keeping PRs focused on single tasks and ensuring tests pass helps maintainers review faster.`,
+      a: positiveResponseHours
+        ? `Maintainers in ${fullName} respond to incoming external pull requests in approximately ${formatNarrativeLatency(positiveResponseHours)}. Keeping PRs focused on single tasks and ensuring tests pass helps maintainers review faster.`
+        : `Median maintainer response time is not yet recorded for ${fullName}. Keeping PRs focused on single tasks and ensuring tests pass helps maintainers review faster.`,
     },
     {
       q: `What does the ${(repo.c_rank_score || 0).toFixed(1)} C-Rank™ score (${repo.c_rank_tier || "A"} Tier) represent?`,

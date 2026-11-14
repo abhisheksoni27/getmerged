@@ -20,6 +20,11 @@ import { getLanguageSlug } from "@/lib/languageSlug";
 import { Repo } from "@/types/opendoor";
 import posthog from "posthog-js";
 
+import {
+  formatNarrativeLatency,
+  getPositiveResponseHours,
+} from "@/lib/format-latency";
+
 interface RepoDetailHeroProps {
   fullName: string;
   repo: Repo | null;
@@ -89,12 +94,8 @@ export function RepoDetailHero({
 
   // Generate empirical verdict text
   const mergeRateVal = repo?.external_pr_merge_rate ? `${Math.round(repo.external_pr_merge_rate)}%` : "high";
-  const responseTimeVal =
-    repo?.time_to_first_response_hours !== undefined
-      ? repo.time_to_first_response_hours < 1
-        ? `${Math.round(repo.time_to_first_response_hours * 60)} minutes`
-        : `${repo.time_to_first_response_hours.toFixed(1)} hours`
-      : "fast";
+  const positiveResponseHours = getPositiveResponseHours(repo);
+  const responseTimeVal = formatNarrativeLatency(positiveResponseHours) ?? undefined;
 
   let verdictSummary = "Active candidate for outside pull requests.";
   if (rank === "S") {
@@ -193,10 +194,19 @@ export function RepoDetailHero({
             {/* Narrative Verdict Paragraph */}
             <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-2xl mb-3">
               <strong className="text-[var(--text-primary)]">Verdict: {verdictSummary}</strong>{" "}
-              Outside contributors observe a median review response in{" "}
-              <span className="font-mono text-[var(--text-primary)] font-medium">{responseTimeVal}</span>, and{" "}
-              <span className="font-mono text-[var(--text-primary)] font-medium">{mergeRateVal}</span> of outside PRs
-              are merged into main.
+              {responseTimeVal ? (
+                <>
+                  Outside contributors observe a median review response in{" "}
+                  <span className="font-mono text-[var(--text-primary)] font-medium">{responseTimeVal}</span>, and{" "}
+                  <span className="font-mono text-[var(--text-primary)] font-medium">{mergeRateVal}</span> of outside PRs
+                  are merged into main.
+                </>
+              ) : (
+                <>
+                  <span className="font-mono text-[var(--text-primary)] font-medium">{mergeRateVal}</span> of outside PRs
+                  are merged into main.
+                </>
+              )}
             </p>
 
             {/* Access Status & AI Policy Indicators (Issue #120) */}

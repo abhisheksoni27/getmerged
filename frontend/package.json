@@ -10,8 +10,9 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "test:unit": "tsx --test src/**/*.test.ts",
     "test:e2e": "playwright test",
-    "check": "npm run lint && npm run typecheck"
+    "check": "npm run lint && npm run typecheck && npm run test:unit"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.20",
@@ -42,6 +43,7 @@
     "eslint": "^9.0.0",
     "eslint-config-next": "^15.5.22",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

@@ -317,8 +317,9 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			external_pr_merge_rate, time_to_first_response_hours, time_to_merge_hours,
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
-			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, score_source, good_first_issue_count, onboarding_score
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, score_source, good_first_issue_count, onboarding_score,
+			response_p50_hours, response_p90_hours
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON DUPLICATE KEY UPDATE
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
 			time_to_first_response_hours  = VALUES(time_to_first_response_hours),
@@ -335,7 +336,9 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			c_rank_tier                   = VALUES(c_rank_tier),
 			score_source                  = VALUES(score_source),
 			good_first_issue_count        = VALUES(good_first_issue_count),
-			onboarding_score              = VALUES(onboarding_score)
+			onboarding_score              = VALUES(onboarding_score),
+			response_p50_hours            = VALUES(response_p50_hours),
+			response_p90_hours            = VALUES(response_p90_hours)
 	`,
 		uuid.New().String(),
 		repoID,
@@ -356,6 +359,8 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 		scoreSource,
 		m.GoodFirstIssueCount,
 		m.OnboardingScore,
+		m.ResponseP50Hours,
+		m.ResponseP90Hours,
 	)
 	if err != nil {
 		return err
@@ -368,8 +373,8 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			first_timer_success_rate, repeat_contributor_rate,
 			maintainer_responsiveness, last_activity_days, review_rounds,
 			distinct_maintainer_count, bus_factor, staleness_flag, c_rank_score, c_rank_tier, good_first_issue_count, onboarding_score,
-			pr_count_6m, issue_count_6m, updated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+			pr_count_6m, issue_count_6m, response_p50_hours, response_p90_hours, updated_at
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		ON DUPLICATE KEY UPDATE
 			snapshot_date                 = VALUES(snapshot_date),
 			external_pr_merge_rate        = VALUES(external_pr_merge_rate),
@@ -389,6 +394,8 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 			onboarding_score              = VALUES(onboarding_score),
 			pr_count_6m                   = VALUES(pr_count_6m),
 			issue_count_6m                = VALUES(issue_count_6m),
+			response_p50_hours            = VALUES(response_p50_hours),
+			response_p90_hours            = VALUES(response_p90_hours),
 			updated_at                    = CURRENT_TIMESTAMP
 	`,
 		repoID,
@@ -410,6 +417,8 @@ func saveSnapshot(db *sqlx.DB, repoID string, m scoring.RawMetrics, score float6
 		m.OnboardingScore,
 		m.PRsCreated6m,
 		m.IssuesCreated6m,
+		m.ResponseP50Hours,
+		m.ResponseP90Hours,
 	)
 	if err != nil {
 		return err
@@ -427,6 +436,7 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 			MIN(CASE WHEN e.action = 'opened' THEN e.event_at END) AS opened_at,
 			MIN(CASE WHEN e.action IN ('closed','merged') THEN e.event_at END) AS closed_at,
 			MAX(CASE WHEN e.action = 'merged' THEN 1 ELSE 0 END) AS was_merged,
+			MIN(CASE WHEN e.action = 'merged' THEN e.event_at END) AS merged_at,
 			MIN(e.actor_login) AS actor_login
 		FROM repo_pr_events e
 		WHERE e.repository_id = ?
@@ -441,12 +451,13 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 
 	var prs []scoring.PR
 	var windows []struct{ open, close time.Time }
+	prIndexMap := make(map[int]int) // pr_number -> slice index in prs
 	for rows.Next() {
 		var prNumber int
-		var openedAt, closedAt sql.NullTime
+		var openedAt, closedAt, mergedAtCol sql.NullTime
 		var wasMerged int
 		var actorLogin string
-		if err := rows.Scan(&prNumber, &openedAt, &closedAt, &wasMerged, &actorLogin); err != nil {
+		if err := rows.Scan(&prNumber, &openedAt, &closedAt, &wasMerged, &mergedAtCol, &actorLogin); err != nil {
 			return nil, err
 		}
 
@@ -458,7 +469,10 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 
 		if wasMerged == 1 {
 			pr.State = "MERGED"
-			if closedAt.Valid {
+			if mergedAtCol.Valid {
+				mergedAt := mergedAtCol.Time
+				pr.MergedAt = &mergedAt
+			} else if closedAt.Valid {
 				mergedAt := closedAt.Time
 				pr.MergedAt = &mergedAt
 			}
@@ -468,13 +482,50 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 			pr.State = "OPEN"
 		}
 
+		prIndexMap[prNumber] = len(prs)
 		windows = append(windows, struct{ open, close time.Time }{openedAt.Time, closedAt.Time})
 		prs = append(prs, pr)
 	}
 
-	// Distinct-maintainer signal: attribute commenters to PRs whose lifecycle
-	// window contains the comment. repo_raw_comments carries no association,
-	// so any non-author commenter counts (bots are filtered at ingestion).
+	// 1. Precise PR-linked comments (repo_pr_comments): attribute directly by pr_number
+	// to prevent cross-PR latency leakage when PR lifecycle windows overlap.
+	if len(prs) > 0 {
+		prCRows, err := db.Query(`
+			SELECT pr_number, created_at, author_login
+			FROM repo_pr_comments
+			WHERE repository_id = ?
+			  AND created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+		`, repoID, days)
+		if err != nil {
+			return nil, err
+		}
+		defer prCRows.Close()
+		for prCRows.Next() {
+			var prNum int
+			var ca time.Time
+			var login string
+			if err := prCRows.Scan(&prNum, &ca, &login); err != nil {
+				return nil, err
+			}
+			if idx, ok := prIndexMap[prNum]; ok {
+				if login != prs[idx].AuthorLogin {
+					prs[idx].CommentAuthors = append(prs[idx].CommentAuthors, login)
+					if !github.IsBotLogin(login) && (prs[idx].MergedAt == nil || !ca.After(*prs[idx].MergedAt)) && (prs[idx].FirstCommentAt == nil || ca.Before(*prs[idx].FirstCommentAt)) {
+						caCopy := ca
+						prs[idx].FirstCommentAt = &caCopy
+					}
+				}
+			}
+		}
+		if err := prCRows.Err(); err != nil {
+			return nil, err
+		}
+	}
+
+	// 2. Distinct-maintainer signal: attribute commenters to PRs whose lifecycle
+	// window contains the comment for maintainer discovery.
+	// We only attribute CommentAuthors for maintainer counting, and do NOT assign
+	// unassociated raw comments to FirstCommentAt to avoid false latency across overlapping PRs.
 	if len(windows) > 0 {
 		cRows, err := db.Query(`
 			SELECT c.created_at, c.author_login
