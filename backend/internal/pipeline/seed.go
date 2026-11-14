@@ -436,6 +436,7 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 			MIN(CASE WHEN e.action = 'opened' THEN e.event_at END) AS opened_at,
 			MIN(CASE WHEN e.action IN ('closed','merged') THEN e.event_at END) AS closed_at,
 			MAX(CASE WHEN e.action = 'merged' THEN 1 ELSE 0 END) AS was_merged,
+			MIN(CASE WHEN e.action = 'merged' THEN e.event_at END) AS merged_at,
 			MIN(e.actor_login) AS actor_login
 		FROM repo_pr_events e
 		WHERE e.repository_id = ?
@@ -453,10 +454,10 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 	prIndexMap := make(map[int]int) // pr_number -> slice index in prs
 	for rows.Next() {
 		var prNumber int
-		var openedAt, closedAt sql.NullTime
+		var openedAt, closedAt, mergedAtCol sql.NullTime
 		var wasMerged int
 		var actorLogin string
-		if err := rows.Scan(&prNumber, &openedAt, &closedAt, &wasMerged, &actorLogin); err != nil {
+		if err := rows.Scan(&prNumber, &openedAt, &closedAt, &wasMerged, &mergedAtCol, &actorLogin); err != nil {
 			return nil, err
 		}
 
@@ -468,7 +469,10 @@ func fetchPRsFromDB(db *sqlx.DB, repoID string, days int) ([]scoring.PR, error) 
 
 		if wasMerged == 1 {
 			pr.State = "MERGED"
-			if closedAt.Valid {
+			if mergedAtCol.Valid {
+				mergedAt := mergedAtCol.Time
+				pr.MergedAt = &mergedAt
+			} else if closedAt.Valid {
 				mergedAt := closedAt.Time
 				pr.MergedAt = &mergedAt
 			}
