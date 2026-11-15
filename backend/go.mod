@@ -14,7 +14,7 @@ require (
 	github.com/swaggo/swag v1.16.6
 	github.com/valkey-io/valkey-go v1.0.79
 	golang.org/x/image v0.45.0
-	golang.org/x/sync v0.23.0
+	golang.org/x/sync v0.25.0
 	golang.org/x/time v0.15.0
 	modernc.org/sqlite v1.54.0
 )
