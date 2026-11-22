@@ -1,8 +1,8 @@
 # AGENTS.md — Rules & Architecture Standards for GetMerged
 
 ## 0. Communication & Execution Rules
-- Tell crisply, using minimum tokens.
-- No corporate jargon, no fluff. Speak like a senior developer.
+- Tell crisply, using minimum tokens. Less is more.
+- No corporate jargon, no fluff. Think and speak like a staff level developer.
 - Do not make generic AI slop design. Align with the codebase, the product, the audience.
 - **🚨 PR-First Workflow (ZERO DIRECT PUSHES TO MAIN & ZERO AUTO-MERGING)**:
   - **ALL code changes MUST go through a feature/fix branch and a GitHub Pull Request.** Never push commits directly to `main`.
